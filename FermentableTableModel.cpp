@@ -18,10 +18,14 @@
 
 #include <QAbstractTableModel>
 #include <QAbstractItemModel>
+#include <QAbstractItemView>
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
 #include <Qt>
+#include <QSize>
+#include <QComboBox>
+#include <QLineEdit>
 
 #include <vector>
 #include <QString>
@@ -31,6 +35,7 @@
 #include "fermentable.h"
 #include "FermentableTableModel.h"
 
+//=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(QWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
 {
@@ -209,4 +214,76 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          std::cerr << "Bad column: " << index.column() << std::endl;
          return false;
    }
+}
+
+//======================CLASS FermentableItemDelegate===========================
+
+FermentableItemDelegate::FermentableItemDelegate(QObject* parent)
+        : QItemDelegate(parent)
+{
+}
+        
+QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+   if( index.column() == FERMTYPECOL )
+   {
+      QComboBox *box = new QComboBox(parent);
+
+      box->addItem("Grain");
+      box->addItem("Sugar");
+      box->addItem("Extract");
+      box->addItem("Dry Extract");
+      box->addItem("Adjunct");
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+      //box->setMinimumSize(QSize(30, 80));
+      //box->setFont(box->font());
+      //box->adjustSize();
+      //box->view();
+      //box->view()->adjustSize();
+      return box;
+   }
+   else
+      return new QLineEdit(parent);
+}
+
+void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+   if( index.column() == FERMTYPECOL )
+   {
+      QComboBox* box = (QComboBox*)editor;
+      QString text = index.model()->data(index, Qt::DisplayRole).toString();
+      
+      int index = box->findText(text);
+      box->setCurrentIndex(index);
+   }
+   else
+   {
+      QLineEdit* line = (QLineEdit*)editor;
+      
+      line->setText(index.model()->data(index, Qt::DisplayRole).toString());
+   }
+   
+}
+
+void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+   if( index.column() == FERMTYPECOL )
+   {
+      QComboBox* box = (QComboBox*)editor;
+      QString value = box->currentText();
+      
+      model->setData(index, value, Qt::EditRole);
+   }
+   else
+   {
+      QLineEdit* line = (QLineEdit*)editor;
+      
+      model->setData(index, line->text(), Qt::EditRole);
+   }
+}
+
+void FermentableItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+   editor->setGeometry(option.rect);
 }
