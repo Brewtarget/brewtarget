@@ -19,7 +19,6 @@
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.pro</itemPath>
       </logicalFolder>
-      <itemPath>../../.h</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
       <itemPath>../../equipment.cpp</itemPath>
       <itemPath>../../equipment.h</itemPath>
@@ -52,13 +51,6 @@
       <itemPath>../../MiscTableModel.h</itemPath>
       <itemPath>../../MiscTableWidget.cpp</itemPath>
       <itemPath>../../MiscTableWidget.h</itemPath>
-      <itemPath>../../moc_FermentableTableModel.cpp</itemPath>
-      <itemPath>../../moc_FermentableTableWidget.cpp</itemPath>
-      <itemPath>../../moc_HopTableModel.cpp</itemPath>
-      <itemPath>../../moc_HopTableWidget.cpp</itemPath>
-      <itemPath>../../moc_miscEditor.cpp</itemPath>
-      <itemPath>../../moc_MiscTableModel.cpp</itemPath>
-      <itemPath>../../moc_MiscTableWidget.cpp</itemPath>
       <itemPath>../../observable.cpp</itemPath>
       <itemPath>../../observable.h</itemPath>
       <itemPath>../../observer.cpp</itemPath>
@@ -69,7 +61,6 @@
       <itemPath>../../style.cpp</itemPath>
       <itemPath>../../style.h</itemPath>
       <itemPath>../../tabletest.cpp</itemPath>
-      <itemPath>../../ui_miscEditor.h</itemPath>
       <itemPath>../../unit.cpp</itemPath>
       <itemPath>../../unit.h</itemPath>
       <itemPath>../../water.cpp</itemPath>
@@ -110,13 +101,18 @@
           <buildCommand>qmake brewtarget.pro &amp;&amp; make</buildCommand>
           <cleanCommand>make clean</cleanCommand>
           <executablePath>../../brewtarget</executablePath>
+          <ccCompilerTool>
+            <includeDirectories>
+              <directoryPath>/usr/include/qt4/Qt</directoryPath>
+              <directoryPath>/usr/include/qt4/QtCore</directoryPath>
+              <directoryPath>/usr/include/qt4/QtDesigner</directoryPath>
+              <directoryPath>/usr/include/qt4/QtGui</directoryPath>
+            </includeDirectories>
+          </ccCompilerTool>
         </makeTool>
         <requiredProjects>
         </requiredProjects>
       </makefileType>
-      <item path="../../.h">
-        <itemTool>3</itemTool>
-      </item>
       <item path="../../FermentableTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -240,27 +236,6 @@
       <item path="../../miscEditor.h">
         <itemTool>3</itemTool>
       </item>
-      <item path="../../moc_FermentableTableModel.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../moc_FermentableTableWidget.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../moc_HopTableModel.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../moc_HopTableWidget.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../moc_MiscTableModel.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../moc_MiscTableWidget.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../moc_miscEditor.cpp">
-        <itemTool>1</itemTool>
-      </item>
       <item path="../../observable.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -290,9 +265,6 @@
       </item>
       <item path="../../tabletest.cpp">
         <itemTool>1</itemTool>
-      </item>
-      <item path="../../ui_miscEditor.h">
-        <itemTool>3</itemTool>
       </item>
       <item path="../../unit.cpp">
         <itemTool>1</itemTool>
