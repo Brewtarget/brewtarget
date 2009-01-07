@@ -25,11 +25,13 @@
 #include <QVariant>
 #include <Qt>
 #include <QStringList>
+#include <QItemDelegate>
 #include <vector>
 #include "fermentable.h"
 #include "observable.h"
 
 class FermentableTableModel;
+class FermentableItemDelegate;
 
 enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
@@ -53,6 +55,22 @@ public:
    
 private:
    std::vector<Fermentable*> fermObs;
+};
+
+class FermentableItemDelegate : public QItemDelegate
+{
+   Q_OBJECT
+           
+public:
+   FermentableItemDelegate(QObject* parent = 0);
+   
+   // Inherited functions.
+   virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+   virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+   virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   
+private:
 };
 
 #endif	/* _FERMENTABLETABLEMODEL_H */
