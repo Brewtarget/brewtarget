@@ -1,0 +1,15 @@
+std::string name
+double boilSize_l
+double batchSize_l
+double tunVolume_l
+double tunWeight_kg
+double tunSpecificHeat_calGC
+double topUpWater_l
+double trubChillerLoss_l
+double evapRate_pctHr
+double boilTime_hrs
+bool calcBoilVolume
+double lauterDeadspace_l
+double topUpKettle_l
+double hopUtilization_pct
+std::string notes
