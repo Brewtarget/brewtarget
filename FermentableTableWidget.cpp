@@ -24,6 +24,7 @@ FermentableTableWidget::FermentableTableWidget(QWidget* parent)
 {
    model = new FermentableTableModel(this);
    setModel(model);
+   setItemDelegate(new FermentableItemDelegate(this));
 }
 
 FermentableTableModel* FermentableTableWidget::getModel()
