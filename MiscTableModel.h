@@ -20,15 +20,19 @@
 #define	_MISCTABLEMODEL_H
 
 #include <QAbstractTableModel>
+#include <QAbstractItemModel>
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
 #include <Qt>
+#include <QItemDelegate>
+#include <QStyleOptionViewItem>
 #include <vector>
 #include "misc.h"
 #include "observable.h"
 
 class MiscTableModel;
+class MiscItemDelegate;
 
 enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCOLS /*This one MUST be last*/};
 
@@ -52,6 +56,22 @@ public:
    
 private:
    std::vector<Misc*> miscObs;
+};
+
+class MiscItemDelegate : public QItemDelegate
+{
+   Q_OBJECT
+           
+public:
+   MiscItemDelegate(QObject* parent = 0);
+   
+   // Inherited functions.
+   virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+   virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+   virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   
+private:
 };
 
 #endif	/* _MISCTABLEMODEL_H */

@@ -22,6 +22,10 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <Qt>
+#include <QItemDelegate>
+#include <QStyleOptionViewItem>
+#include <QComboBox>
+#include <QLineEdit>
 
 #include "hop.h"
 #include <vector>
@@ -210,4 +214,71 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          std::cerr << "Bad column: " << index.column() << std::endl;
          return false;
    }
+}
+
+//==========================CLASS HopItemDelegate===============================
+
+HopItemDelegate::HopItemDelegate(QObject* parent)
+        : QItemDelegate(parent)
+{
+}
+        
+QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+   if( index.column() == HOPUSECOL )
+   {
+      QComboBox *box = new QComboBox(parent);
+
+      box->addItem("Boil");
+      box->addItem("Dry Hop");
+      box->addItem("Mash");
+      box->addItem("First Wort");
+      box->addItem("Aroma");
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+      return box;
+   }
+   else
+      return new QLineEdit(parent);
+}
+
+void HopItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+   if( index.column() == HOPUSECOL )
+   {
+      QComboBox* box = (QComboBox*)editor;
+      QString text = index.model()->data(index, Qt::DisplayRole).toString();
+      
+      int index = box->findText(text);
+      box->setCurrentIndex(index);
+   }
+   else
+   {
+      QLineEdit* line = (QLineEdit*)editor;
+      
+      line->setText(index.model()->data(index, Qt::DisplayRole).toString());
+   }
+   
+}
+
+void HopItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+   if( index.column() == HOPUSECOL )
+   {
+      QComboBox* box = (QComboBox*)editor;
+      QString value = box->currentText();
+      
+      model->setData(index, value, Qt::EditRole);
+   }
+   else
+   {
+      QLineEdit* line = (QLineEdit*)editor;
+      
+      model->setData(index, line->text(), Qt::EditRole);
+   }
+}
+
+void HopItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+   editor->setGeometry(option.rect);
 }

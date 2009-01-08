@@ -23,6 +23,10 @@
 #include <QVariant>
 #include <Qt>
 #include <QString>
+#include <QItemDelegate>
+#include <QStyleOptionViewItem>
+#include <QComboBox>
+#include <QLineEdit>
 #include <vector>
 #include <iostream>
 #include "misc.h"
@@ -229,3 +233,85 @@ void MiscTableModel::notify(Observable* notifier) // Gets called when an observa
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                            QAbstractItemModel::createIndex(i, MISCNUMCOLS) );
 }
+
+//======================CLASS MiscItemDelegate===========================
+
+MiscItemDelegate::MiscItemDelegate(QObject* parent)
+        : QItemDelegate(parent)
+{
+}
+        
+QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+   if( index.column() == MISCTYPECOL )
+   {
+      QComboBox *box = new QComboBox(parent);
+      box->addItem("Spice");
+      box->addItem("Fining");
+      box->addItem("Water Agent");
+      box->addItem("Herb");
+      box->addItem("Flavor");
+      box->addItem("Other");
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+      return box;
+   }
+   else if( index.column() == MISCUSECOL )
+   {
+      QComboBox *box = new QComboBox(parent);
+
+      box->addItem("Boil");
+      box->addItem("Mash");
+      box->addItem("Primary");
+      box->addItem("Secondary");
+      box->addItem("Bottling");
+      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+      return box;
+   }
+   else
+      return new QLineEdit(parent);
+}
+
+void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+   int column = index.column();
+   
+   if( column == MISCTYPECOL ||  column == MISCUSECOL )
+   {
+      QComboBox* box = (QComboBox*)editor;
+      QString text = index.model()->data(index, Qt::DisplayRole).toString();
+      
+      int index = box->findText(text);
+      box->setCurrentIndex(index);
+   }
+   else
+   {
+      QLineEdit* line = (QLineEdit*)editor;
+      
+      line->setText(index.model()->data(index, Qt::DisplayRole).toString());
+   }
+   
+}
+
+void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+   int column = index.column();
+   if( column == MISCTYPECOL || column == MISCUSECOL )
+   {
+      QComboBox* box = (QComboBox*)editor;
+      QString value = box->currentText();
+      
+      model->setData(index, value, Qt::EditRole);
+   }
+   else
+   {
+      QLineEdit* line = (QLineEdit*)editor;
+      
+      model->setData(index, line->text(), Qt::EditRole);
+   }
+}
+
+void MiscItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+   editor->setGeometry(option.rect);
+}
+

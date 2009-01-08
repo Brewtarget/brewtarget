@@ -235,12 +235,6 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
       box->addItem("Dry Extract");
       box->addItem("Adjunct");
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-
-      //box->setMinimumSize(QSize(30, 80));
-      //box->setFont(box->font());
-      //box->adjustSize();
-      //box->view();
-      //box->view()->adjustSize();
       return box;
    }
    else

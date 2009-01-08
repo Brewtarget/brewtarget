@@ -19,27 +19,27 @@
 #include <QApplication>
 #include <vector>
 #include <iostream>
-#include "FermentableTableWidget.h"
-#include "FermentableTableModel.h"
+#include "MiscTableWidget.h"
+#include "MiscTableModel.h"
 #include "xmltree.h"
 #include "xmlnode.h"
-#include "fermentable.h"
+#include "hop.h"
 
 int main( int argc, char **argv )
 {
    std::vector<const XmlNode*> nodes;
-   Fermentable *ferm;
+   Misc *misc;
    XmlTree tree = XmlTree( std::cin );
    std::cout << "Is valid: " << tree.isValid() << std::endl;
    
-   tree.getNodesWithTag( nodes, "FERMENTABLE" );
-   ferm = new Fermentable(nodes[0]);
+   tree.getNodesWithTag( nodes, "MISC" );
+   misc = new Misc(nodes[0]);
 
    QApplication app(argc,argv);
-   FermentableTableWidget* table = new FermentableTableWidget();
-   FermentableTableModel* model = table->getModel();
-   model->addFermentable(ferm);
-   model->notify(ferm);
+   MiscTableWidget* table = new MiscTableWidget();
+   MiscTableModel* model = table->getModel();
+   model->addMisc(misc);
+   model->notify(misc);
 
    table->show();
    return app.exec();

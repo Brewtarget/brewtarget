@@ -24,11 +24,13 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <Qt>
+#include <QItemDelegate>
 #include <vector>
 #include "hop.h"
 #include "observable.h"
 
 class HopTableModel;
+class HopItemDelegate;
 
 enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
@@ -52,6 +54,22 @@ public:
    
 private:
    std::vector<Hop*> hopObs;
+};
+
+class HopItemDelegate : public QItemDelegate
+{
+   Q_OBJECT
+           
+public:
+   HopItemDelegate(QObject* parent = 0);
+   
+   // Inherited functions.
+   virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+   virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+   virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   
+private:
 };
 
 #endif	/* _HOPTABLEMODEL_H */

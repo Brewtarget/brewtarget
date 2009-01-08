@@ -26,6 +26,7 @@ MiscTableWidget::MiscTableWidget(QWidget *parent)
 {
    model = new MiscTableModel(this);
    setModel(model);
+   setItemDelegate(new MiscItemDelegate());
 }
 
 MiscTableModel* MiscTableWidget::getModel()
