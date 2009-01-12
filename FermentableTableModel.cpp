@@ -52,6 +52,7 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
          return;
    
    fermObs.push_back(ferm);
+   addObserved(ferm);
    reset(); // Tell everybody that the table has changed.
 }
 
@@ -63,6 +64,7 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
       if( *iter == ferm )
       {
          fermObs.erase(iter);
+         removeObserved(ferm);
          reset(); // Tell everybody the table has changed.
          return true;
       }

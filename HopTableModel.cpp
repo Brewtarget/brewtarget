@@ -52,6 +52,7 @@ void HopTableModel::addHop(Hop* hop)
          return;
    
    hopObs.push_back(hop);
+   addObserved(hop);
    reset(); // Tell everybody that the table has changed.
 }
 
@@ -63,6 +64,7 @@ bool HopTableModel::removeHop(Hop* hop)
       if( *iter == hop )
       {
          hopObs.erase(iter);
+         removeObserved(hop);
          reset(); // Tell everybody the table has changed.
          return true;
       }
