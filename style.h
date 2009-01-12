@@ -21,11 +21,12 @@
 #include <string>
 #include <exception>
 #include "xmlnode.h"
+#include "observable.h"
 
 class Style;
 class StyleException;
 
-class Style
+class Style : public Observable
 {
 public:
 

@@ -33,6 +33,7 @@ bool isWhiteSpace( char c );
 class XmlNode;
 class XmlNodeException;
 
+// TODO: better communication b/w data objects and XmlNodes
 class XmlNode
 {
    public:

@@ -165,6 +165,7 @@ Water::Water( XmlNode *node )
 void Water::setName( const std::string &var )
 {
    name = std::string(var);
+   hasChanged();
 }
 
 void Water::setAmount_l( double var )
@@ -172,7 +173,10 @@ void Water::setAmount_l( double var )
    if( var < 0.0 )
       throw WaterException("amount cannot be negative: " + doubleToString(var) );
    else
+   {
       amount_l = var;
+      hasChanged();
+   }
 }
 
 void Water::setCalcium_ppm( double var )
@@ -180,7 +184,10 @@ void Water::setCalcium_ppm( double var )
    if( var < 0.0 )
       throw WaterException("calcium cannot be negative: " + doubleToString(var) );
    else
+   {
       calcium_ppm = var;
+      hasChanged();
+   }
 }
 
 void Water::setBicarbonate_ppm( double var )
@@ -188,7 +195,10 @@ void Water::setBicarbonate_ppm( double var )
    if( var < 0.0 )
       throw WaterException("bicarbonate cannot be negative: " + doubleToString(var) );
    else
+   {
       bicarbonate_ppm = var;
+      hasChanged();
+   }
 }
 
 void Water::setChloride_ppm( double var )
@@ -196,7 +206,10 @@ void Water::setChloride_ppm( double var )
    if( var < 0.0 )
       throw WaterException("chloride cannot be negative: " + doubleToString(var) );
    else
+   {
       chloride_ppm = var;
+      hasChanged();
+   }
 }
 
 void Water::setSodium_ppm( double var )
@@ -204,7 +217,10 @@ void Water::setSodium_ppm( double var )
    if( var < 0.0 )
       throw WaterException("sodium cannot be negative: " + doubleToString(var) );
    else
+   {
       sodium_ppm = var;
+      hasChanged();
+   }
 }
 
 void Water::setMagnesium_ppm( double var )
@@ -212,7 +228,10 @@ void Water::setMagnesium_ppm( double var )
    if( var < 0.0 )
       throw WaterException("magnesium cannot be negative: " + doubleToString(var) );
    else
+   {
       magnesium_ppm = var;
+      hasChanged();
+   }
 }
 
 void Water::setPh( double var )
@@ -220,7 +239,10 @@ void Water::setPh( double var )
    if( var < 0.0 || var > 14.0 )
       throw WaterException("pH was not in [0,14]: " + doubleToString(var) );
    else
+   {
       ph = var;
+      hasChanged();
+   }
 }
 
 void Water::setSulfate_ppm( double var )
@@ -228,12 +250,16 @@ void Water::setSulfate_ppm( double var )
    if( var < 0.0 )
       throw WaterException("sulfate cannot be negative: " + doubleToString(var));
    else
+   {
       sulfate_ppm = var;
+      hasChanged();
+   }
 }
 
 void Water::setNotes( const std::string &var )
 {
    notes = std::string(var);
+   hasChanged();
 }
 
 //=========================="GET" METHODS=======================================

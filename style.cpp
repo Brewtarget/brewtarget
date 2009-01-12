@@ -234,26 +234,31 @@ Style::Style(XmlNode *node)
 void Style::setName( const std::string& var )
 {
    name = std::string(var);
+   hasChanged();
 }
 
 void Style::setCategory( const std::string& var )
 {
    category = std::string(var);
+   hasChanged();
 }
 
 void Style::setCategoryNumber( const std::string& var )
 {
    categoryNumber = std::string(var);
+   hasChanged();
 }
 
 void Style::setStyleLetter( const std::string& var )
 {
    styleLetter= std::string(var);
+   hasChanged();
 }
 
 void Style::setStyleGuide( const std::string& var )
 {
    styleGuide = std::string(var);
+   hasChanged();
 }
 
 void Style::setType( const std::string& var )
@@ -261,7 +266,10 @@ void Style::setType( const std::string& var )
    if( ! isValidType(var) )
       throw StyleException("invalid style: " + var );
    else
+   {
       type = std::string(var);
+      hasChanged();
+   }
 }
 
 void Style::setOgMin( double var )
@@ -269,7 +277,10 @@ void Style::setOgMin( double var )
    if( var < 0.0 )
       throw StyleException("bad OG: " + doubleToString(var));
    else
+   {
       ogMin = var;
+      hasChanged();
+   }
 }
 
 void Style::setOgMax( double var )
@@ -277,7 +288,10 @@ void Style::setOgMax( double var )
    if( var < 0.0 )
       throw StyleException("bad OG: " + doubleToString(var));
    else
+   {
       ogMax = var;
+      hasChanged();
+   }
 }
 
 void Style::setFgMin( double var )
@@ -285,7 +299,10 @@ void Style::setFgMin( double var )
    if( var < 0.0 )
       throw StyleException("bad FG: " + doubleToString(var));
    else
+   {
       fgMin = var;
+      hasChanged();
+   }
 }
 
 void Style::setFgMax( double var )
@@ -293,7 +310,10 @@ void Style::setFgMax( double var )
    if( var < 0.0 )
       throw StyleException("bad FG: " + doubleToString(var));
    else
+   {
       fgMax = var;
+      hasChanged();
+   }
 }
 
 void Style::setIbuMin( double var )
@@ -301,7 +321,10 @@ void Style::setIbuMin( double var )
    if( var < 0.0 )
       throw StyleException("bad IBU: " + doubleToString(var));
    else
+   {
       ibuMin = var;
+      hasChanged();
+   }
 }
 
 void Style::setIbuMax( double var )
@@ -309,7 +332,10 @@ void Style::setIbuMax( double var )
    if( var < 0.0 )
       throw StyleException("bad IBU: " + doubleToString(var));
    else
+   {
       ibuMax = var;
+      hasChanged();
+   }
 }
 
 void Style::setColorMin_srm( double var )
@@ -317,7 +343,10 @@ void Style::setColorMin_srm( double var )
    if( var < 0.0 )
       throw StyleException("bad color: " + doubleToString(var));
    else
+   {
       colorMin_srm = var;
+      hasChanged();
+   }
 }
 
 void Style::setColorMax_srm( double var )
@@ -325,7 +354,10 @@ void Style::setColorMax_srm( double var )
    if( var < 0.0 )
       throw StyleException("bad color: " + doubleToString(var));
    else
+   {
       colorMax_srm = var;
+      hasChanged();
+   }
 }
 
 void Style::setCarbMin_vol( double var )
@@ -333,7 +365,10 @@ void Style::setCarbMin_vol( double var )
    if( var < 0.0 )
       throw StyleException("bad carb: " + doubleToString(var));
    else
+   {
       carbMin_vol = var;
+      hasChanged();
+   }
 }
 
 void Style::setCarbMax_vol( double var )
@@ -341,7 +376,10 @@ void Style::setCarbMax_vol( double var )
    if( var < 0.0 )
       throw StyleException("bad carb: " + doubleToString(var));
    else
+   {
       carbMax_vol = var;
+      hasChanged();
+   }
 }
 
 void Style::setAbvMin_pct( double var )
@@ -349,7 +387,10 @@ void Style::setAbvMin_pct( double var )
    if( var < 0.0 || var > 100.0 )
       throw StyleException("bad ABV: " + doubleToString(var));
    else
+   {
       abvMin_pct = var;
+      hasChanged();
+   }
 }
 
 void Style::setAbvMax_pct( double var )
@@ -357,27 +398,34 @@ void Style::setAbvMax_pct( double var )
    if( var < 0.0 || var > 100.0 )
       throw StyleException("bad ABV: " + doubleToString(var));
    else
+   {
       abvMax_pct = var;
+      hasChanged();
+   }
 }
 
 void Style::setNotes( const std::string& var )
 {
    notes = std::string(var);
+   hasChanged();
 }
 
 void Style::setProfile( const std::string& var )
 {
    profile = std::string(var);
+   hasChanged();
 }
 
 void Style::setIngredients( const std::string& var )
 {
    ingredients = std::string(var);
+   hasChanged();
 }
 
 void Style::setExamples( const std::string& var )
 {
    examples = std::string(var);
+   hasChanged();
 }
 
 //============================="GET" METHODS====================================

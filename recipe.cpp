@@ -410,12 +410,15 @@ Recipe::Recipe(const XmlNode *node)
       else
          std::cerr << "Warning: unsupported RECIPE tag: " << tag << std::endl;
    }// end for()
+
+   // TODO: Make sure we have a valid RECIPE before continuing.
 } // end Recipe()
 
 //================================"SET" METHODS=================================
 void Recipe::setName( const std::string &var )
 {
    name = std::string(var);
+   hasChanged();
 }
 
 void Recipe::setType( const std::string &var )

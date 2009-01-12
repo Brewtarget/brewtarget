@@ -22,11 +22,12 @@
 #include <string>
 #include <exception>
 #include "xmlnode.h"
+#include "observable.h"
 
 class Yeast;
 class YeastException;
 
-class Yeast
+class Yeast : public Observable
 {
 public:
    Yeast();

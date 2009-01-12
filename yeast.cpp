@@ -170,21 +170,21 @@ Yeast::Yeast( XmlNode *node )
       throw YeastException("missing required fields.");
 } // end Yeast()
 
-   
-// Set
+//============================="SET" METHODS====================================
 void Yeast::setName( const std::string& var )
 {
    name = std::string(var);
+   hasChanged();
 }
 
 void Yeast::setType( const std::string& var )
 {
-   type = std::string(var);
-   
-   if( !isValidType(type) )
+   if( !isValidType(var) )
+      throw YeastException("invalid type \"" + var + "\".");
+   else
    {
-      type = "";
-      throw YeastException("invalid type \"" + type + "\".");
+      type = std::string(var);
+      hasChanged();
    }
 }
 
@@ -193,7 +193,10 @@ void Yeast::setForm( const std::string& var )
    if( ! isValidForm(var) )
       throw YeastException("invalid form \"" + var + "\".");
    else
+   {
       form = std::string(var);
+      hasChanged();
+   }
 }
 
 void Yeast::setAmount( double var )
@@ -201,32 +204,42 @@ void Yeast::setAmount( double var )
    if( var < 0.0 )
       throw YeastException("amount cannot be negative: " + doubleToString(var) );
    else
+   {
       amount = var;
+      hasChanged();
+   }
 }
 
 void Yeast::setAmountIsWeight( bool var )
 {
    amountIsWeight = var;
+   hasChanged();
 }
 
 void Yeast::setLaboratory( const std::string& var )
 {
    laboratory = std::string(var);
+   hasChanged();
 }
 
 void Yeast::setProductID( const std::string& var )
 {
    productID = std::string(var);
+   hasChanged();
 }
+
+// TODO: check temperatures.
 
 void Yeast::setMinTemperature_c( double var )
 {
    minTemperature_c = var;
+   hasChanged();
 }
 
 void Yeast::setMaxTemperature_c( double var )
 {
    maxTemperature_c = var;
+   hasChanged();
 }
 
 void Yeast::setFlocculation( const std::string& var )
@@ -234,7 +247,10 @@ void Yeast::setFlocculation( const std::string& var )
    if( ! isValidFlocculation(var) )
       throw YeastException("invalid flocculation \"" + var + "\".");
    else
+   {
       flocculation = std::string(var);
+      hasChanged();
+   }
 }
 
 void Yeast::setAttenuation_pct( double var )
@@ -242,17 +258,22 @@ void Yeast::setAttenuation_pct( double var )
    if( var < 0.0 || var > 100.0 )
       throw YeastException("invalid attenuation percentage: " + doubleToString(var) );
    else
+   {
       attenuation_pct = var;
+      hasChanged();
+   }
 }
 
 void Yeast::setNotes( const std::string& var )
 {
    notes = std::string(var);
+   hasChanged();
 }
 
 void Yeast::setBestFor( const std::string& var )
 {
    bestFor = std::string(var);
+   hasChanged();
 }
 
 void Yeast::setTimesCultured( int var )
@@ -260,22 +281,29 @@ void Yeast::setTimesCultured( int var )
    if( var < 0 )
       throw YeastException("times cultured cannot be negative: " +  intToString(var) );
    else
+   {
       timesCultured = var;
+      hasChanged();
+   }
 }
 void Yeast::setMaxReuse( int var )
 {
    if( var < 0 )
       throw YeastException("max reuse cannot be negative: " +  intToString(var) );
    else
+   {
       maxReuse = var;
+      hasChanged();
+   }
 }
 
 void Yeast::setAddToSecondary( bool var )
 {
    addToSecondary = var;
+   hasChanged();
 }
    
-// Get
+//============================="GET" METHODS====================================
 std::string Yeast::getName() const { return name; }
 std::string Yeast::getType() const { return type; }
 std::string Yeast::getForm() const { return form; }

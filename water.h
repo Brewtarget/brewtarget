@@ -22,11 +22,12 @@
 #include <string>
 #include <exception>
 #include "xmlnode.h"
+#include "observable.h"
 
 class Water;
 class WaterException;
 
-class Water
+class Water : public Observable
 {
 public:
    Water();
