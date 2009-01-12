@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="45">
+<configurationDescriptor version="51">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <logicalFolder name="branches" displayName="branches" projectFiles="true">
     </logicalFolder>
@@ -28,7 +28,6 @@
       <itemPath>../../FermentableTableModel.h</itemPath>
       <itemPath>../../FermentableTableWidget.cpp</itemPath>
       <itemPath>../../FermentableTableWidget.h</itemPath>
-      <itemPath>../../FermentableTableWidget.pro</itemPath>
       <itemPath>../../guitest.cpp</itemPath>
       <itemPath>../../hop.cpp</itemPath>
       <itemPath>../../hop.h</itemPath>
@@ -87,11 +86,11 @@
     <Elem>../../../tags</Elem>
     <Elem>../../../branches</Elem>
   </sourceRootList>
-  <sourceEncoding>UTF-8</sourceEncoding>
   <projectmakefile>brewtarget-Makefile.mk</projectmakefile>
   <confs>
     <conf name="Default" type="0">
       <toolsSet>
+        <developmentServer>localhost</developmentServer>
         <compilerSet>GNU|GNU</compilerSet>
         <platform>2</platform>
       </toolsSet>
@@ -123,9 +122,6 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../FermentableTableWidget.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../FermentableTableWidget.pro">
         <itemTool>3</itemTool>
       </item>
       <item path="../../HopTableModel.cpp">
