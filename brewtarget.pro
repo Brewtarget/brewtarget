@@ -17,6 +17,7 @@ HEADERS += equipment.h \
            HopTableWidget.h \
            mash.h \
            mashstep.h \
+           MashStepTableModel.h \
            matrix.h \
            misc.h \
            miscEditor.h \
@@ -32,7 +33,7 @@ HEADERS += equipment.h \
            xmlnode.h \
            xmltree.h \
            yeast.h
-FORMS += miscEditor.ui
+FORMS +=   miscEditor.ui
 SOURCES += equipment.cpp \
            fermentable.cpp \
            FermentableTableModel.cpp \
@@ -43,6 +44,7 @@ SOURCES += equipment.cpp \
            HopTableWidget.cpp \
            mash.cpp \
            mashstep.cpp \
+           MashStepTableModel.cpp \
            matrix.cpp \
            misc.cpp \
            miscEditor.cpp \

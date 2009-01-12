@@ -141,6 +141,7 @@ MashStep::MashStep( const XmlNode *node)
 void MashStep::setName( const std::string &var )
 {
    name = std::string(var);
+   hasChanged();
 }
 
 void MashStep::setType( const std::string &var )
@@ -148,7 +149,10 @@ void MashStep::setType( const std::string &var )
    if( ! isValidType(var) )
       throw MashStepException("invalid type: " + var );
    else
+   {
       type = std::string(var);
+      hasChanged();
+   }
 }
 
 void MashStep::setInfuseAmount_l( double var )
@@ -156,12 +160,17 @@ void MashStep::setInfuseAmount_l( double var )
    if( var < 0.0 )
       throw MashStepException("number cannot be negative: "+ doubleToString(var) );
    else
+   {
       infuseAmount_l = var;
+      hasChanged();
+   }
 }
 
+// TODO: ensure temp is above absolute zero.
 void MashStep::setStepTemp_c( double var )
 {
    stepTemp_c = var;
+   hasChanged();
 }
 
 void MashStep::setStepTime_min( double var )
@@ -169,7 +178,10 @@ void MashStep::setStepTime_min( double var )
    if( var < 0.0 )
       throw MashStepException("number cannot be negative: "+ doubleToString(var) );
    else
+   {
       stepTime_min = var;
+      hasChanged();
+   }
 }
 
 void MashStep::setRampTime_min( double var )
@@ -177,12 +189,16 @@ void MashStep::setRampTime_min( double var )
    if( var < 0.0 )
       throw MashStepException("number cannot be negative: "+ doubleToString(var) );
    else
+   {
       rampTime_min = var;
+      hasChanged();
+   }
 }
 
 void MashStep::setEndTemp_c( double var )
 {
    endTemp_c = var;
+   hasChanged();
 }
 
 

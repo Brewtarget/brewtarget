@@ -39,6 +39,8 @@
       <itemPath>../../mash.h</itemPath>
       <itemPath>../../mashstep.cpp</itemPath>
       <itemPath>../../mashstep.h</itemPath>
+      <itemPath>../../MashStepTableModel.cpp</itemPath>
+      <itemPath>../../MashStepTableModel.h</itemPath>
       <itemPath>../../matrix.cpp</itemPath>
       <itemPath>../../matrix.h</itemPath>
       <itemPath>../../matrixtest.cpp</itemPath>
@@ -134,6 +136,235 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashStepTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashStepTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MiscTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MiscTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MiscTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MiscTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/FermentableTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/FermentableTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/FermentableTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/HopTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/HopTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/HopTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../brewtarget.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../equipment.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../equipment.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../fermentable.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../fermentable.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../guitest.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../hop.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../hop.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../mash.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../mash.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../mashstep.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../mashstep.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../matrix.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../matrix.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../matrixtest.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../misc.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../misc.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../miscEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../miscEditor.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../observable.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../observable.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../observer.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../recipe.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../recipe.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../stringparsing.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../stringparsing.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../style.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../style.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../tabletest.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../unit.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../unit.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../water.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../water.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../xml.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../xml.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../xmlnode.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../xmlnode.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../xmltest.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../xmltree.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../xmltree.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../yeast.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../yeast.h">
+        <itemTool>3</itemTool>
+      </item>
+    </conf>
+    <conf name="Plugins" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>../../QtDesignerPlugins</buildCommandWorkingDir>
+          <buildCommand>qmake FermentableTableWidgetPlugin.pro &amp;&amp; \
+make &amp;&amp; \
+gksudo make install &amp;&amp; \
+make clean &amp;&amp; \
+qmake HopTableWidgetPlugin.pro &amp;&amp; \
+make &amp;&amp; \
+gksudo make install &amp;&amp; \
+make clean &amp;&amp; \
+qmake MiscTableWidgetPlugin.pro &amp;&amp; \
+make &amp;&amp; \
+gksudo make install &amp;&amp; \
+make clean</buildCommand>
+          <cleanCommand></cleanCommand>
+          <executablePath></executablePath>
+        </makeTool>
+        <requiredProjects>
+        </requiredProjects>
+      </makefileType>
+      <item path="../../FermentableTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../FermentableTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../FermentableTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../FermentableTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../HopTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HopTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../HopTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashStepTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashStepTableModel.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscTableModel.cpp">

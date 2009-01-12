@@ -21,11 +21,12 @@
 #include <string>
 #include <exception>
 #include "xmlnode.h"
+#include "observable.h"
 
 class MashStep;
 class MashStepException;
 
-class MashStep
+class MashStep : public Observable
 {
 public:
 
