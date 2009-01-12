@@ -41,6 +41,8 @@
       <itemPath>../../mashstep.h</itemPath>
       <itemPath>../../MashStepTableModel.cpp</itemPath>
       <itemPath>../../MashStepTableModel.h</itemPath>
+      <itemPath>../../MashStepTableWidget.cpp</itemPath>
+      <itemPath>../../MashStepTableWidget.h</itemPath>
       <itemPath>../../matrix.cpp</itemPath>
       <itemPath>../../matrix.h</itemPath>
       <itemPath>../../matrixtest.cpp</itemPath>
@@ -80,7 +82,6 @@
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>brewtarget-Makefile.mk</itemPath>
-      <itemPath>../../Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -142,6 +143,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MashStepTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashStepTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashStepTableWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscTableModel.cpp">
@@ -365,6 +372,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MashStepTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashStepTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashStepTableWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscTableModel.cpp">
