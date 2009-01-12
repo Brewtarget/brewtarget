@@ -15,6 +15,9 @@
         <itemPath>../../QtDesignerPlugins/HopTableWidgetPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/HopTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/HopTableWidgetPlugin.pro</itemPath>
+        <itemPath>../../QtDesignerPlugins/MashStepTableWidgetPlugin.cpp</itemPath>
+        <itemPath>../../QtDesignerPlugins/MashStepTableWidgetPlugin.h</itemPath>
+        <itemPath>../../QtDesignerPlugins/MashStepTableWidgetPlugin.pro</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.pro</itemPath>
@@ -181,6 +184,15 @@
       <item path="../../QtDesignerPlugins/HopTableWidgetPlugin.pro">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../QtDesignerPlugins/MashStepTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MashStepTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MashStepTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -337,6 +349,10 @@ make clean &amp;&amp; \
 qmake MiscTableWidgetPlugin.pro &amp;&amp; \
 make &amp;&amp; \
 gksudo make install &amp;&amp; \
+make clean &amp;&amp; \
+qmake MashStepTableWidgetPlugin.pro &amp;&amp; \
+make &amp;&amp; \
+gksudo make install &amp;&amp; \
 make clean</buildCommand>
           <cleanCommand></cleanCommand>
           <executablePath></executablePath>
@@ -408,6 +424,15 @@ make clean</buildCommand>
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/HopTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MashStepTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MashStepTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/MashStepTableWidgetPlugin.pro">
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.cpp">
