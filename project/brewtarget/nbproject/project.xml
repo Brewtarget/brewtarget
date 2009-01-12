@@ -8,4 +8,7 @@
             <make-dep-projects/>
         </data>
     </configuration>
+    <properties>
+        <netbeans.hint.license>gpl3</netbeans.hint.license>
+    </properties>
 </project>
