@@ -55,6 +55,10 @@ make clean && \
 qmake MiscTableWidgetPlugin.pro && \
 make && \
 gksudo make install && \
+make clean && \
+qmake MashStepTableWidgetPlugin.pro && \
+make && \
+gksudo make install && \
 make clean
 
 # Subprojects

@@ -23,7 +23,7 @@
 #include <string>
 #include "miscEditor.h"
 
-miscEditor::miscEditor( QWidget *parent )
+miscEditor::miscEditor( QWidget* /*parent*/ )
 {
    setupUi(this);
    

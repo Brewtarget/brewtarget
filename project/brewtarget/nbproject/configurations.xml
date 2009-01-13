@@ -71,6 +71,8 @@
       <itemPath>../../unit.h</itemPath>
       <itemPath>../../water.cpp</itemPath>
       <itemPath>../../water.h</itemPath>
+      <itemPath>../../WaterTableModel.cpp</itemPath>
+      <itemPath>../../WaterTableModel.h</itemPath>
       <itemPath>../../xml.cpp</itemPath>
       <itemPath>../../xml.h</itemPath>
       <itemPath>../../xmlnode.cpp</itemPath>
@@ -200,6 +202,12 @@
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../WaterTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../WaterTableModel.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
@@ -442,6 +450,12 @@ make clean</buildCommand>
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../WaterTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../WaterTableModel.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
