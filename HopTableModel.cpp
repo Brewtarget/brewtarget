@@ -85,12 +85,12 @@ void HopTableModel::notify(Observable* notifier)
    }
 }
 
-int HopTableModel::rowCount(const QModelIndex& parent) const
+int HopTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
    return hopObs.size();
 }
 
-int HopTableModel::columnCount(const QModelIndex& parent) const
+int HopTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
    return HOPNUMCOLS;
 }
@@ -155,7 +155,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
       return QVariant();
 }
 
-Qt::ItemFlags HopTableModel::flags(const QModelIndex& index ) const
+Qt::ItemFlags HopTableModel::flags(const QModelIndex& /*index*/ ) const
 {
    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
           Qt::ItemIsEnabled;
@@ -225,7 +225,7 @@ HopItemDelegate::HopItemDelegate(QObject* parent)
 {
 }
         
-QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex &index) const
 {
    if( index.column() == HOPUSECOL )
    {
@@ -280,7 +280,7 @@ void HopItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, c
    }
 }
 
-void HopItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void HopItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
 {
    editor->setGeometry(option.rect);
 }

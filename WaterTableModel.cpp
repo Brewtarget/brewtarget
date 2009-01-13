@@ -258,7 +258,7 @@ WaterItemDelegate::WaterItemDelegate(QObject* parent)
 {
 }
 
-QWidget* WaterItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex &index) const
+QWidget* WaterItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
    return new QLineEdit(parent);
 }
@@ -275,7 +275,7 @@ void WaterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
    model->setData(index, line->text(), Qt::EditRole);
 }
 
-void HopItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
+void WaterItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
 {
    editor->setGeometry(option.rect);
 }
