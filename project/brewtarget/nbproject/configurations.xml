@@ -21,6 +21,12 @@
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.pro</itemPath>
+        <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp</itemPath>
+        <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.h</itemPath>
+        <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.pro</itemPath>
+        <itemPath>../../QtDesignerPlugins/YeastTableWidgetPlugin.cpp</itemPath>
+        <itemPath>../../QtDesignerPlugins/YeastTableWidgetPlugin.h</itemPath>
+        <itemPath>../../QtDesignerPlugins/YeastTableWidgetPlugin.pro</itemPath>
       </logicalFolder>
       <itemPath>../../brewtarget.pro</itemPath>
       <itemPath>../../equipment.cpp</itemPath>
@@ -73,6 +79,8 @@
       <itemPath>../../water.h</itemPath>
       <itemPath>../../WaterTableModel.cpp</itemPath>
       <itemPath>../../WaterTableModel.h</itemPath>
+      <itemPath>../../WaterTableWidget.cpp</itemPath>
+      <itemPath>../../WaterTableWidget.h</itemPath>
       <itemPath>../../xml.cpp</itemPath>
       <itemPath>../../xml.h</itemPath>
       <itemPath>../../xmlnode.cpp</itemPath>
@@ -82,6 +90,10 @@
       <itemPath>../../xmltree.h</itemPath>
       <itemPath>../../yeast.cpp</itemPath>
       <itemPath>../../yeast.h</itemPath>
+      <itemPath>../../YeastTableModel.cpp</itemPath>
+      <itemPath>../../YeastTableModel.h</itemPath>
+      <itemPath>../../YeastTableWidget.cpp</itemPath>
+      <itemPath>../../YeastTableWidget.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -204,10 +216,46 @@
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.pro">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../WaterTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
       <item path="../../WaterTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../WaterTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../WaterTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastTableWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
@@ -361,6 +409,14 @@ make clean &amp;&amp; \
 qmake MashStepTableWidgetPlugin.pro &amp;&amp; \
 make &amp;&amp; \
 gksudo make install &amp;&amp; \
+make clean &amp;&amp; \
+qmake WaterTableWidgetPlugin.pro &amp;&amp; \
+make &amp;&amp; \
+gksudo make install &amp;&amp; \
+make clean &amp;&amp; \
+qmake YeastTableWidgetPlugin.pro &amp;&amp; \
+make &amp;&amp; \
+gksudo make install &amp;&amp; \
 make clean</buildCommand>
           <cleanCommand></cleanCommand>
           <executablePath></executablePath>
@@ -452,10 +508,46 @@ make clean</buildCommand>
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.pro">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../WaterTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
       <item path="../../WaterTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../WaterTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../WaterTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastTableModel.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastTableModel.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastTableWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastTableWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">

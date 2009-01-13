@@ -26,10 +26,14 @@ HEADERS += equipment.h \
            style.h \
            unit.h \
            water.h \
+           WaterTableModel.h \
+           WaterTableWidget.h \
            xml.h \
            xmlnode.h \
            xmltree.h \
-           yeast.h
+           yeast.h \
+           YeastTableModel.h \
+           YeastTableWidget.h
 FORMS +=   miscEditor.ui
 SOURCES += equipment.cpp \
            fermentable.cpp \
@@ -55,7 +59,11 @@ SOURCES += equipment.cpp \
            style.cpp \
            unit.cpp \
            water.cpp \
+           WaterTableModel.cpp \
+           WaterTableWidget.cpp \
            xml.cpp \
            xmlnode.cpp \
            xmltree.cpp \
-           yeast.cpp
+           yeast.cpp \
+           YeastTableModel.cpp \
+           YeastTableWidget.cpp
