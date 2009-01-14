@@ -62,6 +62,10 @@ void MainWindow::notify(Observable* notifier)
 
 void MainWindow::showChanges()
 {
+   if( recipeObs == 0 )
+      return;
+
+   recipeObs->recalculate();
    // TODO: fill in this method to change the widgets to reflect
    // the current recipe.
    lineEdit_name->setText(recipeObs->getName().c_str());

@@ -1011,7 +1011,7 @@ void Recipe::recalculate()
 
    // Conversion factor for lb/gal to kg/l = 8.34538.
    points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
-   setOg(1 + points/1000.0);
+   og = 1 + points/1000.0;
 
    // Calculage FG
    for( i = 0; i < yeasts.size(); ++i )
@@ -1024,8 +1024,8 @@ void Recipe::recalculate()
    if( yeasts.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
 
-   points = points*attenuation_pct/100.0;
-   setFg( 1 + points/1000.0 );
+   points = points*(1.0 - attenuation_pct/100.0);
+   fg =  1 + points/1000.0;
 
    // Calculate ABV
    /* No need, just call getABV_pct() */
@@ -1055,5 +1055,5 @@ double Recipe::getColor_srm()
 
 double Recipe::getABV_pct()
 {
-   return 0.130*(getOg()-getFg());
+   return 0.130*((getOg()-1)-(getFg()-1))*1000.0;
 }

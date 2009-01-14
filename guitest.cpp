@@ -18,15 +18,29 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <QApplication>
 #include <QWidget>
 #include "MainWindow.h"
+#include "recipe.h"
+#include "xmlnode.h"
+#include "xmltree.h"
 
 int main(int argc, char **argv)
 {
+   XmlTree* tree;
+   std::vector<const XmlNode*> nodes;
+   Recipe* rec;
+
    QApplication app(argc,argv);
    MainWindow *dialog = new MainWindow();
-   
+   tree = new XmlTree(std::cin);
+
+   tree->getNodesWithTag(nodes, std::string("RECIPE"));
+   rec = new Recipe(nodes[0]);
+   dialog->setRecipe(rec);
+   dialog->notify(rec);
+
    dialog->show();
    return app.exec();
 }
