@@ -203,7 +203,7 @@ Recipe::Recipe(const XmlNode *node)
       }
       else if( tag == "STYLE" )
       {
-         style = new Style(children[i]);
+         setStyle(new Style(children[i]));
       }
       else if( tag == "BATCH_SIZE" )
       {
@@ -237,7 +237,7 @@ Recipe::Recipe(const XmlNode *node)
          for( j = 0; j < tmpVec.size(); ++j )
          {
             h = new Hop(tmpVec[j]);
-            hops.push_back(h);
+            addHop(h);
          }
       }
       else if( tag == "FERMENTABLES" )
@@ -245,32 +245,32 @@ Recipe::Recipe(const XmlNode *node)
          unsigned int j;
          
          for( j = 0; j < tmpVec.size(); ++j )
-            fermentables.push_back(new Fermentable(tmpVec[j]));
+            addFermentable(new Fermentable(tmpVec[j]));
       }
       else if( tag == "MISCS" )
       {
          unsigned int j;
          
          for( j = 0; j < tmpVec.size(); ++j )
-            miscs.push_back(new Misc(tmpVec[j]));
+            addMisc(new Misc(tmpVec[j]));
       }
       else if( tag == "YEASTS" )
       {
          unsigned int j;
          
          for( j = 0; j < tmpVec.size(); ++j )
-            yeasts.push_back(new Yeast(tmpVec[j]));
+            addYeast(new Yeast(tmpVec[j]));
       }
       else if( tag == "WATERS" )
       {
          unsigned int j;
          
          for( j = 0; j < tmpVec.size(); ++j )
-            waters.push_back(new Water(tmpVec[j]));
+            addWater(new Water(tmpVec[j]));
       }
       else if( tag == "MASH" )
       {
-         mash = new Mash(children[i]);
+         setMash(new Mash(children[i]));
       }
       else if( tag == "ASST_BREWER" )
       {
@@ -280,7 +280,7 @@ Recipe::Recipe(const XmlNode *node)
       }
       else if( tag == "EQUIPMENT" )
       {
-         equipment = new Equipment(children[i]);
+         setEquipment(new Equipment(children[i]));
       }
       else if( tag == "NOTES" )
       {
@@ -501,6 +501,7 @@ void Recipe::addHop( Hop *var )
    else
    {
       hops.push_back(var);
+      addObserved(var);
       hasChanged();
    }
 }
@@ -512,6 +513,7 @@ void Recipe::addFermentable( Fermentable* var )
    else
    {
       fermentables.push_back(var);
+      addObserved(var);
       hasChanged();
    }
 }
@@ -522,6 +524,7 @@ void Recipe::addMisc( Misc* var )
    else
    {
       miscs.push_back(var);
+      addObserved(var);
       hasChanged();
    }
 }
@@ -533,6 +536,7 @@ void Recipe::addYeast( Yeast* var )
    else
    {
       yeasts.push_back(var);
+      addObserved(var);
       hasChanged();
    }
 }
@@ -544,10 +548,12 @@ void Recipe::addWater( Water* var )
    else
    {
       waters.push_back(var);
+      addObserved(var);
       hasChanged();
    }
 }
 
+// TODO: need to make mash an observable and do the addObserved() call here.
 void Recipe::setMash( Mash *var )
 {
    if( var == NULL )
@@ -1056,4 +1062,96 @@ double Recipe::getColor_srm()
 double Recipe::getABV_pct()
 {
    return 0.130*((getOg()-1)-(getFg()-1))*1000.0;
+}
+
+void Recipe::notify(Observable* /*notifier*/)
+{
+   recalculate();
+   hasChanged();
+}
+
+// Returns true if var is found and removed.
+bool Recipe::removeHop( Hop *var )
+{
+   std::vector<Hop*>::iterator iter;
+
+   for( iter = hops.begin(); iter != hops.end(); iter++ )
+   {
+      if( *iter == var )
+      {
+         hops.erase(iter);
+         removeObserved(var);
+         return true;
+      }
+   }
+
+   return false;
+}
+
+bool Recipe::removeFermentable(Fermentable* var)
+{
+   std::vector<Fermentable*>::iterator iter;
+
+   for( iter = fermentables.begin(); iter != fermentables.end(); iter++ )
+   {
+      if( *iter == var )
+      {
+         fermentables.erase(iter);
+         removeObserved(var);
+         return true;
+      }
+   }
+
+   return false;
+}
+
+bool Recipe::removeMisc(Misc* var)
+{
+   std::vector<Misc*>::iterator iter;
+
+   for( iter = miscs.begin(); iter != miscs.end(); iter++ )
+   {
+      if( *iter == var )
+      {
+         miscs.erase(iter);
+         removeObserved(var);
+         return true;
+      }
+   }
+
+   return false;
+}
+
+bool Recipe::removeWater(Water* var)
+{
+   std::vector<Water*>::iterator iter;
+
+   for( iter = waters.begin(); iter != waters.end(); iter++ )
+   {
+      if( *iter == var )
+      {
+         waters.erase(iter);
+         removeObserved(var);
+         return true;
+      }
+   }
+
+   return false;
+}
+
+bool Recipe::removeYeast(Yeast* var)
+{
+   std::vector<Yeast*>::iterator iter;
+
+   for( iter = yeasts.begin(); iter != yeasts.end(); iter++ )
+   {
+      if( *iter == var )
+      {
+         yeasts.erase(iter);
+         removeObserved(var);
+         return true;
+      }
+   }
+
+   return false;
 }

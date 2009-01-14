@@ -35,7 +35,7 @@
 class Recipe;
 class RecipeException;
 
-class Recipe : public Observable
+class Recipe : public Observable, public MultipleObserver
 {
 public:
 
@@ -43,6 +43,7 @@ public:
    Recipe(const XmlNode *node);
 
    std::string toXml();
+   virtual void notify(Observable *notifier); // Inherited from MultipleObserver.
    
    void setName( const std::string &var );
    void setType( const std::string &var );
@@ -54,10 +55,15 @@ public:
    void setEfficiency_pct( double var );
    
    void addHop( Hop *var );
+   bool removeHop( Hop *var );
    void addFermentable( Fermentable* var );
+   bool removeFermentable( Fermentable* var );
    void addMisc( Misc* var );
+   bool removeMisc( Misc* var );
    void addYeast( Yeast* var );
+   bool removeYeast( Yeast* var );
    void addWater( Water* var );
+   bool removeWater( Water* var );
    
    void setMash( Mash *var );
 

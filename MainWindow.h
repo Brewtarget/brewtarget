@@ -21,6 +21,8 @@
 
 #include <QWidget>
 #include <QMainWindow>
+#include <QString>
+#include <QFileDialog>
 #include "ui_mainWindow.h"
 #include "AboutDialog.h"
 #include "observable.h"
@@ -41,9 +43,17 @@ public slots:
    void save();
    void clear();
 
+   void updateRecipeName();
+   void updateRecipeStyle();
+   void updateRecipeEquipment();
+   void updateRecipeBatchSize();
+   void updateRecipeBoilSize();
+   void updateRecipeEfficiency();
+
 private:
    Recipe* recipeObs;
    AboutDialog* dialog_about;
+   QFileDialog* fileOpener;
    
    void showChanges();
 };

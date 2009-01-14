@@ -1,0 +1,13 @@
+==Making==
+rm brewtarget
+qmake brewtarget.pro
+make
+
+==Running==
+./brewtarget < recipe.txt
+
+==Definitions==
+"unix" must be defined before compiling on unix-like systems.
+"windows" ...
+"mac" ...
+

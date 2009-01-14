@@ -19,6 +19,8 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QtGui>
+#include <QString>
+#include <QFileDialog>
 
 #include "recipe.h"
 #include "MainWindow.h"
@@ -36,9 +38,30 @@ MainWindow::MainWindow(QWidget* parent)
 
    dialog_about = new AboutDialog(this);
 
-   // Connect some signals.
+   // Set up the fileOpener dialog.
+   fileOpener = new QFileDialog(this, tr("Open"),
+                                #if defined(unix)
+                                tr("~/"),
+                                #elif defined(windows)
+                                tr("c:\\"),
+                                #elif defined(mac)
+                                tr("~/"),
+                                #else
+                                tr(""),
+                                #endif
+                                tr("xml")
+                                );
+   fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
+   fileOpener->setFileMode(QFileDialog::ExistingFile);
+   fileOpener->setViewMode(QFileDialog::List);
+
+   // Connect signals.
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
+   connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
+   connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
+   connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
+   connect( lineEdit_efficiency, SIGNAL( editingFinished() ), this, SLOT( updateRecipeEfficiency() ) );
 }
 
 void MainWindow::setRecipe(Recipe* recipe)
@@ -47,8 +70,40 @@ void MainWindow::setRecipe(Recipe* recipe)
    if( recipe == 0 )
       return;
 
+   unsigned int i;
+   Fermentable *ferm;
+   Hop *hop;
+   Misc *misc;
+   Yeast *yeast;
+
+   // Make sure this MainWindow is paying attention...
    recipeObs = recipe;
    setObserved(recipeObs);
+
+   // Make sure the fermentableTable is paying attention...
+   for( i = 0; i < recipeObs->getNumFermentables(); ++i )
+   {
+      ferm = recipeObs->getFermentable(i);
+      fermentableTable->getModel()->addFermentable(ferm);
+   }
+
+   for( i = 0; i < recipeObs->getNumHops(); ++i )
+   {
+      hop = recipeObs->getHop(i);
+      hopTable->getModel()->addHop(hop);
+   }
+
+   for( i = 0; i < recipeObs->getNumMiscs(); ++i )
+   {
+      misc = recipeObs->getMisc(i);
+      miscTable->getModel()->addMisc(misc);
+   }
+
+   for( i = 0; i < recipeObs->getNumYeasts(); ++i )
+   {
+      yeast = recipeObs->getYeast(i);
+      yeastTable->getModel()->addYeast(yeast);
+   }
 }
 
 void MainWindow::notify(Observable* notifier)
@@ -88,4 +143,34 @@ void MainWindow::save()
 void MainWindow::clear()
 {
    // TODO: this method should clear the recipe I guess.
+}
+
+void MainWindow::updateRecipeName()
+{
+   recipeObs->setName(lineEdit_name->text().toStdString());
+}
+
+void MainWindow::updateRecipeStyle()
+{
+
+}
+
+void MainWindow::updateRecipeEquipment()
+{
+
+}
+
+void MainWindow::updateRecipeBatchSize()
+{
+   recipeObs->setBatchSize_l( parseDouble(lineEdit_batchSize->text().toStdString()) );
+}
+
+void MainWindow::updateRecipeBoilSize()
+{
+   recipeObs->setBoilSize_l( parseDouble(lineEdit_boilSize->text().toStdString()) );
+}
+
+void MainWindow::updateRecipeEfficiency()
+{
+   recipeObs->setEfficiency_pct( parseDouble(lineEdit_efficiency->text().toStdString()) );
 }

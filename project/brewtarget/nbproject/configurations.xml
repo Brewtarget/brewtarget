@@ -28,6 +28,8 @@
         <itemPath>../../QtDesignerPlugins/YeastTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/YeastTableWidgetPlugin.pro</itemPath>
       </logicalFolder>
+      <itemPath>../../AboutDialog.h</itemPath>
+      <itemPath>../../aboutDialog.ui</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
       <itemPath>../../equipment.cpp</itemPath>
       <itemPath>../../equipment.h</itemPath>
@@ -44,6 +46,9 @@
       <itemPath>../../HopTableModel.h</itemPath>
       <itemPath>../../HopTableWidget.cpp</itemPath>
       <itemPath>../../HopTableWidget.h</itemPath>
+      <itemPath>../../MainWindow.cpp</itemPath>
+      <itemPath>../../MainWindow.h</itemPath>
+      <itemPath>../../mainWindow.ui</itemPath>
       <itemPath>../../mash.cpp</itemPath>
       <itemPath>../../mash.h</itemPath>
       <itemPath>../../mashstep.cpp</itemPath>
@@ -132,6 +137,9 @@
         <requiredProjects>
         </requiredProjects>
       </makefileType>
+      <item path="../../AboutDialog.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -154,6 +162,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MainWindow.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MainWindow.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MashStepTableModel.cpp">
@@ -258,6 +272,9 @@
       <item path="../../YeastTableWidget.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../aboutDialog.ui">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../brewtarget.pro">
         <itemTool>3</itemTool>
       </item>
@@ -280,6 +297,9 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../hop.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../mainWindow.ui">
         <itemTool>3</itemTool>
       </item>
       <item path="../../mash.cpp">
@@ -424,6 +444,9 @@ make clean</buildCommand>
         <requiredProjects>
         </requiredProjects>
       </makefileType>
+      <item path="../../AboutDialog.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -446,6 +469,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MainWindow.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MainWindow.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MashStepTableModel.cpp">
@@ -550,6 +579,9 @@ make clean</buildCommand>
       <item path="../../YeastTableWidget.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../aboutDialog.ui">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../brewtarget.pro">
         <itemTool>3</itemTool>
       </item>
@@ -572,6 +604,9 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../hop.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../mainWindow.ui">
         <itemTool>3</itemTool>
       </item>
       <item path="../../mash.cpp">
