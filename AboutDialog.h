@@ -1,5 +1,5 @@
 /*
- * guitest.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * AboutDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,17 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <vector>
-#include <QApplication>
-#include <QWidget>
-#include "MainWindow.h"
+#ifndef _ABOUTDIALOG_H
+#define	_ABOUTDIALOG_H
 
-int main(int argc, char **argv)
+#include <QDialog>
+#include <QWidget>
+#include "ui_aboutDialog.h"
+
+class AboutDialog;
+
+class AboutDialog : public QDialog, public Ui::aboutDialog
 {
-   QApplication app(argc,argv);
-   MainWindow *dialog = new MainWindow();
-   
-   dialog->show();
-   return app.exec();
-}
+public:
+   AboutDialog(QWidget* parent=0)
+           : QDialog(parent)
+           { setupUi(this); }
+};
+
+#endif	/* _ABOUTDIALOG_H */
+

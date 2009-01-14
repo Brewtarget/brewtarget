@@ -1,5 +1,5 @@
 /*
- * guitest.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * MainWindow.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,17 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <vector>
-#include <QApplication>
-#include <QWidget>
-#include "MainWindow.h"
+#ifndef _MAINWINDOW_H
+#define	_MAINWINDOW_H
 
-int main(int argc, char **argv)
+#include <QWidget>
+#include <QMainWindow>
+#include "ui_mainWindow.h"
+#include "AboutDialog.h"
+#include "observable.h"
+#include "recipe.h"
+
+class MainWindow;
+
+class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
-   QApplication app(argc,argv);
-   MainWindow *dialog = new MainWindow();
+   Q_OBJECT
+
+public:
+   MainWindow(QWidget* parent=0);
+   void setRecipe(Recipe* recipe);
+   virtual void notify(Observable* notifier); // Inherited from Observer
+
+public slots:
+   void save();
+   void clear();
+
+private:
+   Recipe* recipeObs;
+   AboutDialog* dialog_about;
    
-   dialog->show();
-   return app.exec();
-}
+   void showChanges();
+};
+
+#endif	/* _MAINWINDOW_H */
+
