@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef _RECIPE_H
+#define _RECIPE_H
 
 #include <string>
 #include <exception>
@@ -129,6 +131,9 @@ public:
    double getPrimingSugarEquiv() const;
    double getKegPrimingFactor() const;
 
+   void recalculate(); // Calculates some parameters.
+   double getABV_pct();
+   double getColor_srm();
 private:
 
    std::string name;
@@ -195,3 +200,5 @@ private:
 
    std::string _err;
 };
+
+#endif /* _RECIPE_H */

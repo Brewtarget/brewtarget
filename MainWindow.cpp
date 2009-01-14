@@ -19,8 +19,11 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QtGui>
+
+#include "recipe.h"
 #include "MainWindow.h"
 #include "AboutDialog.h"
+#include "stringparsing.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -61,6 +64,15 @@ void MainWindow::showChanges()
 {
    // TODO: fill in this method to change the widgets to reflect
    // the current recipe.
+   lineEdit_name->setText(recipeObs->getName().c_str());
+   lineEdit_batchSize->setText(doubleToString(recipeObs->getBatchSize_l()).c_str());
+   lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
+   lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());
+
+   lcdNumber_og->display(recipeObs->getOg());
+   lcdNumber_fg->display(recipeObs->getFg());
+   lcdNumber_abv->display(recipeObs->getABV_pct());
+   lcdNumber_srm->display(recipeObs->getColor_srm());
 }
 
 void MainWindow::save()

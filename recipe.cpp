@@ -20,6 +20,7 @@
 #include <vector>
 #include <vector>
 #include <iostream>
+#include <cmath>
 #include "xmlnode.h"
 #include "stringparsing.h"
 #include "recipe.h"
@@ -990,4 +991,69 @@ bool Recipe::isValidType( const std::string &str )
          return true;
    
    return false;
+}
+
+void Recipe::recalculate()
+{
+   unsigned int i;
+   double points = 0;
+   double sugar_kg = 0;
+   double attenuation_pct = 0.0;
+   Fermentable* ferm;
+   Yeast* yeast;
+
+   // Calculate OG
+   for( i = 0; i < fermentables.size(); ++i )
+   {
+      ferm = fermentables[i];
+      sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+   }
+
+   // Conversion factor for lb/gal to kg/l = 8.34538.
+   points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
+   setOg(1 + points/1000.0);
+
+   // Calculage FG
+   for( i = 0; i < yeasts.size(); ++i )
+   {
+      yeast = yeasts[i];
+      // Get the yeast with the greatest attenuation.
+      if( yeast->getAttenuation_pct() > attenuation_pct )
+         attenuation_pct = yeast->getAttenuation_pct();
+   }
+   if( yeasts.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
+      attenuation_pct = 75.0; // 75% is an average attenuation.
+
+   points = points*attenuation_pct/100.0;
+   setFg( 1 + points/1000.0 );
+
+   // Calculate ABV
+   /* No need, just call getABV_pct() */
+
+   // Calculate color
+   /* No need, just call getColor_srm() */
+
+   // Calculate IBUs
+   // TODO: Get my C code to implement this part.
+}
+
+double Recipe::getColor_srm()
+{
+   Fermentable *ferm;
+   double mcu = 0.0;
+   unsigned int i;
+
+   for( i = 0; i < fermentables.size(); ++i )
+   {
+      ferm = fermentables[i];
+      // Conversion factor for lb/gal to kg/l = 8.34538.
+      mcu += ferm->getColor_srm()*8.34538 * ferm->getAmount_kg()/getBatchSize_l();
+   }
+   // Morey color calculation.
+   return 1.4922 * pow( mcu, 0.6859 );
+}
+
+double Recipe::getABV_pct()
+{
+   return 0.130*(getOg()-getFg());
 }
