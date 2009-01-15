@@ -38,11 +38,11 @@ class XmlNode
 {
    public:
       XmlNode();
-      XmlNode( std::string::const_iterator &iter, const XmlNode* parent );
+      XmlNode( std::string::const_iterator &iter, XmlNode* parent );
       bool isLeaf() const;
       void printLeaves() const;
       void printParentTags() const;
-      void getNodesWithTag( std::vector<const XmlNode*> &nodes, const std::string &inTag ) const;
+      void getNodesWithTag( std::vector<XmlNode*> &nodes, const std::string &inTag );
       void getChildren( std::vector<XmlNode*>& v) const;
       const std::string& getTag() const;
       std::string getLeafText() const;

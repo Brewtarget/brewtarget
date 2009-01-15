@@ -131,7 +131,7 @@ void XmlTree::initMembers()
 }
 
 // Returns the size of the nodes vector.
-unsigned int XmlTree::getNodesWithTag( std::vector<const XmlNode*> &nodes, const std::string &tag )
+unsigned int XmlTree::getNodesWithTag( std::vector<XmlNode*> &nodes, const std::string &tag )
 {
    nodes.clear();
    

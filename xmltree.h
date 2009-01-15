@@ -33,7 +33,7 @@ public:
    XmlTree();
    XmlTree( std::istream &in );
    bool isValid();
-   unsigned int getNodesWithTag( std::vector<const XmlNode*> &nodes, const std::string &tag );
+   unsigned int getNodesWithTag( std::vector<XmlNode*> &nodes, const std::string &tag );
    
 private:
    std::string xmlText;

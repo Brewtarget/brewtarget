@@ -29,7 +29,7 @@
 int main(int argc, char **argv)
 {
    XmlTree* tree;
-   std::vector<const XmlNode*> nodes;
+   std::vector<XmlNode*> nodes;
    Recipe* rec;
 
    QApplication app(argc,argv);

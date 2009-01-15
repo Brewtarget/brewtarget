@@ -23,6 +23,8 @@
 #include <exception>
 #include <ostream>
 
+#include "xmlnode.h"
+
 class Equipment;
 class EquipmentException;
 

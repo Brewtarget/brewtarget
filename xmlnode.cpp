@@ -97,7 +97,7 @@ std::string getNextTag( std::string::const_iterator &iter )
 
 // iter should be on the end of the previous tag or
 // the beginning of this tag.
-XmlNode::XmlNode( std::string::const_iterator &iter, const XmlNode* parent )
+XmlNode::XmlNode( std::string::const_iterator &iter, XmlNode* parent )
 {
    std::string::const_iterator b;
    std::string tmpTag;
@@ -171,7 +171,7 @@ void XmlNode::printLeaves() const
       children[i]->printLeaves();
 }
 
-void XmlNode::getNodesWithTag( std::vector<const XmlNode*> &nodes, const std::string &inTag ) const
+void XmlNode::getNodesWithTag( std::vector<XmlNode*> &nodes, const std::string &inTag )
 {
    if( tag == inTag )
       nodes.push_back(this);
