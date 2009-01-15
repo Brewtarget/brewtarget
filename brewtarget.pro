@@ -25,6 +25,7 @@ HEADERS += AboutDialog.h \
            MiscTableWidget.h \
            observable.h \
            recipe.h \
+           RecipeComboBox.h \
            stringparsing.h \
            style.h \
            unit.h \
@@ -62,6 +63,7 @@ SOURCES += database.cpp \
            observable.cpp \
            observer.cpp \
            recipe.cpp \
+           RecipeComboBox.cpp \
            stringparsing.cpp \
            style.cpp \
            unit.cpp \
