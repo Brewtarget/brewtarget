@@ -36,6 +36,25 @@
 #include "xmlnode.h"
 #include "xmltree.h"
 
+// Grrr... stupid C++. Have to define these outside the class AGAIN.
+std::vector<Equipment*> Database::equipments;
+std::vector<Fermentable*> Database::fermentables;
+std::vector<Hop*> Database::hops;
+std::vector<Mash*> Database::mashs;
+std::vector<MashStep*> Database::mashSteps;
+std::vector<Misc*> Database::miscs;
+std::vector<Recipe*> Database::recipes;
+std::vector<Style*> Database::styles;
+std::vector<Water*> Database::waters;
+std::vector<Yeast*> Database::yeasts;
+bool Database::initialized = false;
+std::fstream Database::dbFile;
+const char* Database::dbFileName = "database.xml";
+std::fstream Database::recipeFile;
+const char* Database::recipeFileName = "recipes.xml";
+std::fstream Database::mashFile;
+const char* Database::mashFileName = "mash.xml";
+
 Database::Database()
 {
    
@@ -48,9 +67,9 @@ bool Database::isInitialized()
 
 void Database::initialize()
 {
-   dbFile.open("database.xml");
-   recipeFile.open("recipes.xml"); // Why are these separate from the dbFile? To prevent duplicates.
-   mashFile.open("mashs.xml"); // Why are these separate from the dbFile? To prevent duplicates.
+   dbFile.open(dbFileName);
+   recipeFile.open(recipeFileName); // Why are these separate from the dbFile? To prevent duplicates.
+   mashFile.open(mashFileName); // Why are these separate from the dbFile? To prevent duplicates.
    
    unsigned int i, size;
    std::vector<XmlNode*> nodes;
@@ -98,6 +117,89 @@ void Database::initialize()
       recipes.push_back(new Recipe(nodes[i]));
 
    delete tree;
-
+   dbFile.close();
+   recipeFile.close();
+   mashFile.close();
+   
    Database::initialized = true;
+}
+
+void Database::savePersistent()
+{
+   dbFile.open( dbFileName, ios::out | ios::trunc );
+   recipeFile.open( recipeFileName, ios::out | ios::trunc );
+   mashFile.open( mashFileName, ios::out | ios::trunc );
+
+   unsigned int i, size;
+   dbFile << "<?xml verion=\"1.0\"?>" << std::endl;
+   recipeFile << "<?xml verion=\"1.0\"?>" << std::endl;
+   mashFile << "<?xml verion=\"1.0\"?>" << std::endl;
+
+   //=====================dbFile entries=============================
+
+   size = equipments.size();
+   dbFile << "<EQUIPMENTS>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << equipments[i]->toXml();
+   dbFile << "</EQUIPMENTS>" << std::endl;
+
+   size = fermentables.size();
+   dbFile << "<FERMENTABLES>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << fermentables[i]->toXml();
+   dbFile << "</FERMENTABLES>" << std::endl;
+
+   size = hops.size();
+   dbFile << "<HOPS>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << hops[i]->toXml();
+   dbFile << "</HOPS>" << std::endl;
+
+   size = mashSteps.size();
+   dbFile << "<MASH_STEPS>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << mashSteps[i]->toXml();
+   dbFile << "</MASH_STEPS>" << std::endl;
+
+   size = miscs.size();
+   dbFile << "<MISCS>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << miscs[i]->toXml();
+   dbFile << "</MISCS>" << std::endl;
+
+   size = styles.size();
+   dbFile << "<STYLES>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << styles[i]->toXml();
+   dbFile << "</STYLES>" << std::endl;
+
+   size = waters.size();
+   dbFile << "<WATERS>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << waters[i]->toXml();
+   dbFile << "</WATERS>" << std::endl;
+
+   size = yeasts.size();
+   dbFile << "<YEASTS>" << std::endl;
+   for( i = 0; i < size; ++i )
+      dbFile << yeasts[i]->toXml();
+   dbFile << "</YEASTS>" << std::endl;
+
+   //============================mashFile entries===============================
+   size = mashs.size();
+   mashFile << "<MASHS>" << std::endl;
+   for( i = 0; i < size; ++i )
+      mashFile << mashs[i]->toXml();
+   mashFile << "</MASHS>" << std::endl;
+
+   //==========================recipeFile entries===============================
+   size = recipes.size();
+   recipeFile << "<RECIPES>" << std::endl;
+   for( i = 0; i < size; ++i )
+      recipeFile << recipes[i]->toXml();
+   recipeFile << "</RECIPES>" << std::endl;
+
+   dbFile.close();
+   recipeFile.close();
+   mashFile.close();
 }

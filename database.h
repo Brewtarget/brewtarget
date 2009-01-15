@@ -41,6 +41,7 @@ public:
    Database();
    static void initialize();
    static bool isInitialized();
+   static void savePersistent(); // Save to the persistent medium.
 
    // The stuff we care about...
    static std::vector<Equipment*> equipments;
@@ -57,25 +58,12 @@ public:
 private:
    static bool initialized;
    static std::fstream dbFile;
+   static const char* dbFileName;
    static std::fstream recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
+   static const char* recipeFileName;
    static std::fstream mashFile; // Why are these separate from the dbFile? To prevent duplicates.
+   static const char* mashFileName;
 };
-
-// Grrr... stupid C++. Have to define these outside the class AGAIN.
-std::vector<Equipment*> Database::equipments;
-std::vector<Fermentable*> Database::fermentables;
-std::vector<Hop*> Database::hops;
-std::vector<Mash*> Database::mashs;
-std::vector<MashStep*> Database::mashSteps;
-std::vector<Misc*> Database::miscs;
-std::vector<Recipe*> Database::recipes;
-std::vector<Style*> Database::styles;
-std::vector<Water*> Database::waters;
-std::vector<Yeast*> Database::yeasts;
-bool Database::initialized = false;
-std::fstream Database::dbFile;
-std::fstream Database::recipeFile;
-std::fstream Database::mashFile;
 
 #endif	/* _DATABASE_H */
 

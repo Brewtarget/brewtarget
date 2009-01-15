@@ -22,10 +22,13 @@
 #include <QString>
 #include <QFileDialog>
 
+#include <iostream>
+
 #include "recipe.h"
 #include "MainWindow.h"
 #include "AboutDialog.h"
 #include "stringparsing.h"
+#include "database.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -55,13 +58,45 @@ MainWindow::MainWindow(QWidget* parent)
    fileOpener->setFileMode(QFileDialog::ExistingFile);
    fileOpener->setViewMode(QFileDialog::List);
 
+   // Setup some of the widgets.
+   if( Database::isInitialized() )
+   {
+      unsigned int size, i;
+
+      size = Database::recipes.size();
+      for( i = 0; i < size; ++i )
+         comboBox_recipe->addItem(tr(Database::recipes[i]->getName().c_str()));
+      size = Database::styles.size();
+      for( i = 0; i < size; ++i )
+         comboBox_style->addItem(tr(Database::styles[i]->getName().c_str()));
+      size = Database::equipments.size();
+      for( i = 0; i < size; ++i )
+         comboBox_equipment->addItem(tr(Database::equipments[i]->getName().c_str()));
+   }
+   else
+      std::cerr << "MainWindow warning: the database was not initialized." << std::endl;
+
    // Connect signals.
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
+   connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
    connect( lineEdit_efficiency, SIGNAL( editingFinished() ), this, SLOT( updateRecipeEfficiency() ) );
+}
+
+void MainWindow::setRecipeByName(const string& name)
+{
+   if(  ! Database::isInitialized() )
+      return;
+
+   unsigned int i, size;
+
+   size = Database::recipes.size();
+   for( i = 0; i < size; ++i )
+      if( Database::recipes[i]->getName() == name )
+         setRecipe(Database::recipes[i]);
 }
 
 void MainWindow::setRecipe(Recipe* recipe)
@@ -78,7 +113,7 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    // Make sure this MainWindow is paying attention...
    recipeObs = recipe;
-   setObserved(recipeObs);
+   setObserved(recipeObs); // Automatically removes the previous observer.
 
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )
@@ -136,8 +171,7 @@ void MainWindow::showChanges()
 
 void MainWindow::save()
 {
-   // TODO: make this method write the recipe (and maybe other stuff)
-   // out to the xml files.
+   Database::savePersistent();
 }
 
 void MainWindow::clear()

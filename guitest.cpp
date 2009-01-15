@@ -25,9 +25,11 @@
 #include "recipe.h"
 #include "xmlnode.h"
 #include "xmltree.h"
+#include "database.h"
 
 int main(int argc, char **argv)
 {
+   /*
    XmlTree* tree;
    std::vector<XmlNode*> nodes;
    Recipe* rec;
@@ -42,5 +44,15 @@ int main(int argc, char **argv)
    dialog->notify(rec);
 
    dialog->show();
+   return app.exec();
+    */
+
+   MainWindow *mainWindow;
+   QApplication app(argc, argv);
+   Database::initialize();
+
+   mainWindow = new MainWindow();
+
+   mainWindow->show();
    return app.exec();
 }

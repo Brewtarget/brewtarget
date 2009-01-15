@@ -31,6 +31,8 @@
       <itemPath>../../AboutDialog.h</itemPath>
       <itemPath>../../aboutDialog.ui</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
+      <itemPath>../../database.cpp</itemPath>
+      <itemPath>../../database.h</itemPath>
       <itemPath>../../equipment.cpp</itemPath>
       <itemPath>../../equipment.h</itemPath>
       <itemPath>../../fermentable.cpp</itemPath>
@@ -276,6 +278,12 @@
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../database.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../database.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../equipment.cpp">
@@ -583,6 +591,12 @@ make clean</buildCommand>
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../database.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../database.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../equipment.cpp">
