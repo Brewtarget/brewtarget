@@ -65,7 +65,7 @@ void Database::initialize()
    size = tree->getNodesWithTag(nodes, "HOP");
    for( i = 0; i < size; ++i )
       hops.push_back(new Hop(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "MASHSTEP");
+   size = tree->getNodesWithTag(nodes, "MASH_STEP");
    for( i = 0; i < size; ++i )
       mashSteps.push_back(new MashStep(nodes[i]));
    size = tree->getNodesWithTag(nodes, "MISC");

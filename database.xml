@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<HOPS>
+<HOP>
+ <NAME>Cascade</NAME>
+ <VERSION>1</VERSION>
+ <ALPHA>5.0</ALPHA>
+ <AMOUNT>0.100</AMOUNT>
+ <USE>Boil</USE>
+ <TIME>60</TIME>
+</HOP>
+</HOPS>
+
+<FERMENTABLES>
+<FERMENTABLE>
+ <NAME>Crystal 40 L</NAME>
+ <VERSION>1</VERSION>
+ <AMOUNT>0.50</AMOUNT>
+ <TYPE>Grain</TYPE>
+ <YIELD>74.0</YIELD>
+ <COLOR>40.0</COLOR>
+ <ORIGIN>United Kingdom</ORIGIN>
+ <SUPPLIER>Fussybrewer Malting</SUPPLIER>
+ <NOTES>Darker crystal malt.
+Adds body and improves head retention.
+Also called caramel malt.
+ </NOTES>
+ <COARSE_FINE_DIFF>1.5</COARSE_FINE_DIFF>
+ <MOISTURE>4.0</MOISTURE>
+ <DIASTATIC_POWER>0.0</DIASTATIC_POWER>
+ <PROTEIN>13.2</PROTEIN>
+ <MAX_IN_BATCH>10.0</MAX_IN_BATCH>
+ <RECOMMEND_MASH>FALSE</RECOMMEND_MASH>
+</FERMENTABLE>
+</FERMENTABLES>
+
+<YEASTS>
+<YEAST>
+ <NAME>German Ale</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.250</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1007</PRODUCT_ID>
+ <MIN_TEMPERATURE>12.8</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>20.0</MAX_TEMPERATURE>
+ <ATTENUATION>75.0</ATTENUATION>
+ <NOTES>Crisp dry flavor with a hint of mild flavor.
+  Great for many continental ales.
+ </NOTES>
+ <BEST_FOR>German Ales, Alts, Kolsch, Dry Stouts </BEST_FOR>
+ <FLOCCULATION>Low</FLOCCULATION>
+</YEAST>
+</YEASTS>
+
+<MISCS>
+<MISC>
+ <NAME>Irish Moss</NAME>
+ <VERSION>1</VERSION>
+ <TYPE>Fining</TYPE>
+ <USE>Boil</USE>
+ <TIME>15.0</TIME>
+ <AMOUNT>0.010</AMOUNT>
+</MISC>
+</MISCS>
+
+<WATERS>
+<WATER>
+ <NAME>Burton on Trent, UK</NAME>
+ <VERSION>1</VERSION>
+ <AMOUNT>20.0</AMOUNT>
+ <CALCIUM>295.0</CALCIUM>
+ <MAGNESIUM>45.0</MAGNESIUM>
+ <SODIUM>55.0</SODIUM>
+ <SULFATE>725.0</SULFATE>
+ <CHLORIDE>25.0</CHLORIDE>
+ <BICARBONATE>300.0</BICARBONATE>
+ <PH>8.0</PH>
+ <NOTES>
+Use for distinctive pale ales strongly hopped.  Very hard water accentuates the hops flavor. Example: Bass Ale
+</NOTES>
+</WATER>
+</WATERS>
+
+<EQUIPMENTS>
+<EQUIPMENT>
+ <NAME>8 Gal pot with 5 gal Igloo Cooler</NAME>
+ <VERSION>1</VERSION>
+ <TUN_VOLUME>18.93</MASH_TUN_VOLUME>
+ <TUN_WEIGHT>2.0</MASH_TUN_WEIGHT>
+ <TUN_SPECIFIC_HEAT>0.3</TUN_SPECIFIC_HEAT>
+ <BATCH_SIZE>18.93</BATCH_SIZE>
+ <BOIL_SIZE>22.71</BOIL_SIZE>
+ <TOP_UP_WATER>0.0</TOP_UP_WATER>
+ <TRUB_CHILLER_LOSS>0.95</TRUB_CHILLER_LOSS>
+ <EVAP_RATE>9.0</EVAP_RATE>
+ <BOIL_TIME>60.0</BOIL_TIME>
+ <CALC_BOIL_VOLUME>TRUE</CALC_BOIL_VOLUME>
+ <LAUTER_DEADSPACE>0.95</LAUTER_DEADSPACE>
+ <TOP_UP_KETTLE>0.0</TOP_UP_KETTLE>
+ <HOP_UTILIZATION>100.0</HOP_UTILIZATION>
+ <NOTES>Popular all grain setup.  5 Gallon Gott or Igloo cooler as mash tun with false bottom, and 7-9 gallon brewpot capable of boiling at least 6 gallons of wort.  Primarily used for single infusion mashes.</NOTES>
+</EQUIPMENT>
+</EQUIPMENTS>
+
+<STYLES>
+<STYLE>
+ <NAME>Bohemian Pilsner</NAME>
+ <CATEGORY>European Pale Ale</CATEGORY>
+ <CATEGORY_NUMBER>2</CATEGORY_NUMBER>
+ <STYLE_LETTER>A</STYLE_LETTER>
+ <STYLE_GUIDE>BJCP</STYLE_GUIDE>
+ <VERSION>1</VERSION>
+ <TYPE>Lager</TYPE>
+ <OG_MIN>1.044</OG_MIN>
+ <OG_MAX>1.056</OG_MAX>
+ <FG_MIN>1.013</FG_MIN>
+ <FG_MAX>1.017</FG_MAX>
+ <IBU_MIN>35.0</IBU_MIN>
+ <IBU_MAX>45.0</IBU_MAX>
+ <COLOR_MIN>3.0</COLOR_MIN>
+ <COLOR_MAX>5.0</COLOR_MAX>
+ <NOTES>Famous beer of Pilsen, Czech republic.  Light to medium body with some sweetness.  Saaz hop flavor and aroma with no lingering bitterness.
+ </NOTES>
+</STYLE>
+</STYLES>
+
+<MASH_STEPS>
+<MASH_STEP>
+ <NAME>Conversion step</NAME>
+ <VERSION>1</VERSION>
+ <TYPE>Infusion</TYPE>
+ <STEP_TEMP>68.0</STEP_TEMP>
+ <STEP_TIME>70.0</STEP_TIME>
+ <INFUSE_AMOUNT>5.0</INFUSE_AMOUNT>
+</MASH_STEP>
+</MASH_STEPS>
+
