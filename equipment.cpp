@@ -118,6 +118,7 @@ Equipment::Equipment(XmlNode *node)
       {
          if( parseInt(leafText) != version )
             std::cerr << "Warning: XML EQUIPMENT version is not " << version << std::endl;
+         hasVersion = true;
       }
       else if( tag == "BOIL_SIZE" )
       {

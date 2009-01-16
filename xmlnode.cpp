@@ -97,14 +97,15 @@ std::string getNextTag( std::string::const_iterator &iter )
 
 // iter should be on the end of the previous tag or
 // the beginning of this tag.
-XmlNode::XmlNode( std::string::const_iterator &iter, XmlNode* parent )
+XmlNode::XmlNode( std::string::const_iterator &iter, XmlNode* par )
 {
    std::string::const_iterator b;
-   std::string tmpTag;
    XmlNode *tmpNode;
    
    initMembers();
-   
+
+   parent = par;
+
    while(true)
    {
       iterateUntilNotDelimiter(iter);
@@ -243,6 +244,14 @@ void XmlNode::toXml( std::ostream& os, int indentLevel ) const
    os << indent << "</" + tag + ">" << std::endl;
    
    return;
+}
+
+void XmlNode::addChild(XmlNode* child)
+{
+   if( child == 0 )
+      return;
+
+   children.push_back(child);
 }
 
 std::string XmlNode::getLeafText() const

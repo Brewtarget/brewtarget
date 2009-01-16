@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <iostream>
 
 void iterateUntilDelimiter( std::string::const_iterator &iter );
 void iterateUntilNotDelimiter( std::string::const_iterator &iter );
@@ -36,9 +37,11 @@ class XmlNodeException;
 // TODO: better communication b/w data objects and XmlNodes
 class XmlNode
 {
+   friend class XmlTree;
+   
    public:
       XmlNode();
-      XmlNode( std::string::const_iterator &iter, XmlNode* parent );
+      XmlNode( std::string::const_iterator &iter, XmlNode* par );
       bool isLeaf() const;
       void printLeaves() const;
       void printParentTags() const;
@@ -56,6 +59,7 @@ class XmlNode
       std::string leafText; // Only valid if node has no children.
       
       void initMembers();
+      void addChild(XmlNode* child);
 };
 
 class XmlNodeException : public std::exception

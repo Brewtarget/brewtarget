@@ -112,7 +112,17 @@ XmlTree::XmlTree( std::istream &in )
       return;
    }
    
-   root = XmlNode(iter, NULL);
+   //root = XmlNode(iter, NULL);
+   root = XmlNode();
+   while( iter != xmlText.end() )
+   {
+      if( *iter != '<' )
+      {
+         iter++;
+         continue;
+      }
+      root.addChild( new XmlNode(iter, &root ) );
+   }
 }
 
 bool XmlTree::isValid()
