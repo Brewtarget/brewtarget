@@ -34,7 +34,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_recipe" />
+         <widget class="RecipeComboBox" name="recipeComboBox" />
         </item>
         <item>
          <spacer name="verticalSpacer_2" >
@@ -801,6 +801,11 @@
    <class>MiscTableWidget</class>
    <extends>QTableView</extends>
    <header>MiscTableWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RecipeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>RecipeComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>YeastTableWidget</class>

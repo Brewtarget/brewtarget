@@ -25,6 +25,7 @@ public:
    MashStepTableModel(QWidget* parent=0);
    void addMashStep(MashStep* step);
    bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.
+   void removeAll();
    virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver.
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel

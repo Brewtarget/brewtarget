@@ -72,6 +72,16 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
    return false;
 }
 
+void FermentableTableModel::removeAll()
+{
+   unsigned int i;
+
+   for( i = 0; i < fermObs.size(); ++i )
+      removeObserved(fermObs[i]);
+
+   fermObs.clear();
+}
+
 void FermentableTableModel::notify(Observable* notifier)
 {
    int i;

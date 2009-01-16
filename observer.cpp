@@ -77,5 +77,8 @@ void MultipleObserver::removeObserved(Observable* obs)
    obs->removeObserver(this);
    for( iter = obsVec.begin(); iter != obsVec.end(); iter++ )
       if( *iter == obs )
+      {
          obsVec.erase(iter);
+         return;
+      }
 }

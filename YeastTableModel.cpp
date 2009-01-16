@@ -70,6 +70,16 @@ bool YeastTableModel::removeYeast(Yeast* yeast)
    return false;
 }
 
+void YeastTableModel::removeAll()
+{
+   unsigned int i;
+
+   for( i = 0; i < yeastObs.size(); ++i )
+      removeObserved(yeastObs[i]);
+
+   yeastObs.clear();
+}
+
 void YeastTableModel::notify(Observable* notifier)
 {
    int i;

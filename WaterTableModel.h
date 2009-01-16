@@ -44,6 +44,7 @@ public:
    WaterTableModel(QWidget* parent=0);
    void addWater(Water* water);
    bool removeWater(Water* water); // Returns true if "water" is successfully found and removed.
+   void removeAll();
    virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver.
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel

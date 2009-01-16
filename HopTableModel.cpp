@@ -72,6 +72,16 @@ bool HopTableModel::removeHop(Hop* hop)
    return false;
 }
 
+void HopTableModel::removeAll()
+{
+   unsigned int i;
+
+   for( i = 0; i < hopObs.size(); ++i )
+      removeObserved(hopObs[i]);
+
+   hopObs.clear();
+}
+
 void HopTableModel::notify(Observable* notifier)
 {
    int i;

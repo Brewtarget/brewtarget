@@ -67,6 +67,16 @@ bool MashStepTableModel::removeMashStep(MashStep* step)
    return false;
 }
 
+void MashStepTableModel::removeAll()
+{
+   unsigned int i;
+
+   for( i = 0; i < stepObs.size(); ++i )
+      removeObserved(stepObs[i]);
+
+   stepObs.clear();
+}
+
 void MashStepTableModel::notify(Observable* notifier)
 {
    int i;

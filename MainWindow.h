@@ -37,11 +37,11 @@ class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 public:
    MainWindow(QWidget* parent=0);
    void setRecipe(Recipe* recipe);
-   void setRecipeByName(const string& name);
    virtual void notify(Observable* notifier); // Inherited from Observer
 
 public slots:
    void save();
+   void setRecipeByName(const QString& name);
    void clear();
 
    void updateRecipeName();

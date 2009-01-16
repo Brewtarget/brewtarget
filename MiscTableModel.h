@@ -44,6 +44,7 @@ public:
    MiscTableModel(QWidget* parent=0);
    void addMisc(Misc* misc);
    bool removeMisc(Misc* misc);
+   void removeAll();
    virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver
    
    // Inherit the following from QAbstractItemModel via QAbstractTableModel

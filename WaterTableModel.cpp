@@ -69,6 +69,16 @@ bool WaterTableModel::removeWater(Water* water)
    return false;
 }
 
+void WaterTableModel::removeAll()
+{
+   unsigned int i;
+
+   for( i = 0; i < waterObs.size(); ++i )
+      removeObserved(waterObs[i]);
+
+   waterObs.clear();
+}
+
 void WaterTableModel::notify(Observable* notifier)
 {
    int i;

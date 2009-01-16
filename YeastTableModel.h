@@ -42,6 +42,7 @@ public:
    YeastTableModel(QWidget* parent=0);
    void addYeast(Yeast* yeast);
    bool removeYeast(Yeast* yeast); // Returns true if "hop" is successfully found and removed.
+   void removeAll();
    virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver.
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel

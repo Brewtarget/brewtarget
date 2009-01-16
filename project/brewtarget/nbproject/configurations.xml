@@ -21,6 +21,9 @@
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/MiscTableWidgetPlugin.pro</itemPath>
+        <itemPath>../../QtDesignerPlugins/RecipeComboBoxPlugin.cpp</itemPath>
+        <itemPath>../../QtDesignerPlugins/RecipeComboBoxPlugin.h</itemPath>
+        <itemPath>../../QtDesignerPlugins/RecipeComboBoxPlugin.pro</itemPath>
         <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.pro</itemPath>
@@ -75,6 +78,8 @@
       <itemPath>../../observer.cpp</itemPath>
       <itemPath>../../recipe.cpp</itemPath>
       <itemPath>../../recipe.h</itemPath>
+      <itemPath>../../RecipeComboBox.cpp</itemPath>
+      <itemPath>../../RecipeComboBox.h</itemPath>
       <itemPath>../../stringparsing.cpp</itemPath>
       <itemPath>../../stringparsing.h</itemPath>
       <itemPath>../../style.cpp</itemPath>
@@ -232,6 +237,15 @@
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.pro">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -248,6 +262,12 @@
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../RecipeComboBox.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../RecipeComboBox.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../WaterTableModel.cpp">
@@ -445,6 +465,10 @@ make clean &amp;&amp; \
 qmake YeastTableWidgetPlugin.pro &amp;&amp; \
 make &amp;&amp; \
 gksudo make install &amp;&amp; \
+make clean &amp;&amp;
+qmake RecipeComboBoxPlugin.pro &amp;&amp; \
+make &amp;&amp; \
+gksudo make install &amp;&amp; \
 make clean</buildCommand>
           <cleanCommand></cleanCommand>
           <executablePath></executablePath>
@@ -545,6 +569,15 @@ make clean</buildCommand>
       <item path="../../QtDesignerPlugins/MiscTableWidgetPlugin.pro">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -561,6 +594,12 @@ make clean</buildCommand>
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/YeastTableWidgetPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../RecipeComboBox.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../RecipeComboBox.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../WaterTableModel.cpp">

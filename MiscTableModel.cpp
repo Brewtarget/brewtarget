@@ -75,6 +75,16 @@ bool MiscTableModel::removeMisc(Misc* misc)
    return false;
 }
 
+void MiscTableModel::removeAll()
+{
+   unsigned int i;
+
+   for( i = 0; i < miscObs.size(); ++i )
+      removeObserved(miscObs[i]);
+
+   miscObs.clear();
+}
+
 int MiscTableModel::rowCount(const QModelIndex& parent) const
 {
    return miscObs.size();

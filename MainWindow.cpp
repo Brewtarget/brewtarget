@@ -63,9 +63,14 @@ MainWindow::MainWindow(QWidget* parent)
    {
       unsigned int size, i;
 
+      // Set up the recipeComboBox widget.
       size = Database::recipes.size();
       for( i = 0; i < size; ++i )
-         comboBox_recipe->addItem(tr(Database::recipes[i]->getName().c_str()));
+         recipeComboBox->addRecipe(Database::recipes[i]);
+      recipeComboBox->repopulateList();
+      if( size > 0 )
+         setRecipe(Database::recipes[0]);
+      
       size = Database::styles.size();
       for( i = 0; i < size; ++i )
          comboBox_style->addItem(tr(Database::styles[i]->getName().c_str()));
@@ -79,6 +84,7 @@ MainWindow::MainWindow(QWidget* parent)
    // Connect signals.
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
+   connect( recipeComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
@@ -86,7 +92,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( lineEdit_efficiency, SIGNAL( editingFinished() ), this, SLOT( updateRecipeEfficiency() ) );
 }
 
-void MainWindow::setRecipeByName(const string& name)
+void MainWindow::setRecipeByName(const QString& name)
 {
    if(  ! Database::isInitialized() )
       return;
@@ -95,7 +101,7 @@ void MainWindow::setRecipeByName(const string& name)
 
    size = Database::recipes.size();
    for( i = 0; i < size; ++i )
-      if( Database::recipes[i]->getName() == name )
+      if( Database::recipes[i]->getName() == name.toStdString() )
          setRecipe(Database::recipes[i]);
 }
 
@@ -110,6 +116,12 @@ void MainWindow::setRecipe(Recipe* recipe)
    Hop *hop;
    Misc *misc;
    Yeast *yeast;
+
+   // First, remove any previous recipe shit.
+   fermentableTable->getModel()->removeAll();
+   hopTable->getModel()->removeAll();
+   miscTable->getModel()->removeAll();
+   yeastTable->getModel()->removeAll();
 
    // Make sure this MainWindow is paying attention...
    recipeObs = recipe;
@@ -139,6 +151,8 @@ void MainWindow::setRecipe(Recipe* recipe)
       yeast = recipeObs->getYeast(i);
       yeastTable->getModel()->addYeast(yeast);
    }
+
+   showChanges();
 }
 
 void MainWindow::notify(Observable* notifier)
@@ -181,30 +195,44 @@ void MainWindow::clear()
 
 void MainWindow::updateRecipeName()
 {
+   if( recipeObs == 0 )
+      return;
+   
    recipeObs->setName(lineEdit_name->text().toStdString());
 }
 
 void MainWindow::updateRecipeStyle()
 {
-
+   if( recipeObs == 0 )
+      return;
 }
 
 void MainWindow::updateRecipeEquipment()
 {
-
+   if( recipeObs == 0 )
+      return;
 }
 
 void MainWindow::updateRecipeBatchSize()
 {
+   if( recipeObs == 0 )
+      return;
+   
    recipeObs->setBatchSize_l( parseDouble(lineEdit_batchSize->text().toStdString()) );
 }
 
 void MainWindow::updateRecipeBoilSize()
 {
+   if( recipeObs == 0 )
+      return;
+   
    recipeObs->setBoilSize_l( parseDouble(lineEdit_boilSize->text().toStdString()) );
 }
 
 void MainWindow::updateRecipeEfficiency()
 {
+   if( recipeObs == 0 )
+      return;
+   
    recipeObs->setEfficiency_pct( parseDouble(lineEdit_efficiency->text().toStdString()) );
 }
