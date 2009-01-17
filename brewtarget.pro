@@ -24,6 +24,7 @@ HEADERS += AboutDialog.h \
            matrix.h \
            misc.h \
            miscEditor.h \
+           MiscDialog.h \
            MiscTableModel.h \
            MiscTableWidget.h \
            observable.h \
@@ -45,7 +46,8 @@ FORMS +=   aboutDialog.ui \
            mainWindow.ui \
            miscEditor.ui \
            fermentableDialog.ui \
-           hopDialog.ui
+           hopDialog.ui \
+           miscDialog.ui
 SOURCES += database.cpp \
            equipment.cpp \
            fermentable.cpp \
@@ -66,6 +68,7 @@ SOURCES += database.cpp \
            matrix.cpp \
            misc.cpp \
            miscEditor.cpp \
+           MiscDialog.cpp \
            MiscTableModel.cpp \
            MiscTableWidget.cpp \
            observable.cpp \

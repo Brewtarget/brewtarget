@@ -244,6 +244,11 @@ void MiscTableModel::notify(Observable* notifier) // Gets called when an observa
                            QAbstractItemModel::createIndex(i, MISCNUMCOLS) );
 }
 
+Misc* MiscTableModel::getMisc(unsigned int i)
+{
+   return miscObs[i];
+}
+
 //======================CLASS MiscItemDelegate===========================
 
 MiscItemDelegate::MiscItemDelegate(QObject* parent)

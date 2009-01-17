@@ -28,6 +28,7 @@ class MainWindow;
 #include "ui_mainWindow.h"
 #include "FermentableDialog.h"
 #include "HopDialog.h"
+#include "MiscDialog.h"
 #include "AboutDialog.h"
 #include "observable.h"
 #include "recipe.h"
@@ -55,6 +56,7 @@ public slots:
 
    void addFermentableToRecipe(Fermentable* ferm);
    void addHopToRecipe(Hop *hop);
+   void addMiscToRecipe(Misc* misc);
 
 private:
    Recipe* recipeObs;
@@ -62,6 +64,7 @@ private:
    QFileDialog* fileOpener;
    FermentableDialog* fermDialog;
    HopDialog* hopDialog;
+   MiscDialog* miscDialog;
    Database* db;
    
    void showChanges();

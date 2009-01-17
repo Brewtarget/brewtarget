@@ -1,5 +1,5 @@
 /*
- * MiscTableWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * MiscDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,26 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MISCTABLEWIDGET_H
-#define	_MISCTABLEWIDGET_H
+#ifndef _MISCDIALOG_H
+#define	_MISCDIALOG_H
 
-#include <QTableView>
+class MiscDialog;
+
 #include <QWidget>
-#include "MiscTableModel.h"
+#include <QDialog>
+#include "ui_miscDialog.h"
+#include "observable.h"
+#include "database.h"
+#include "MainWindow.h"
 
-class MiscTableWidget;
-
-class MiscTableWidget : public QTableView
+class MiscDialog : public QDialog, public Ui::miscDialog, public Observer
 {
    Q_OBJECT
-   friend class MiscDialog;
+
 public:
-   MiscTableWidget(QWidget *parent=0);
-   MiscTableModel* getModel();
-   
+   MiscDialog(MainWindow* parent);
+   void startObservingDB();
+   virtual void notify(Observable *notifier); // From Observer
+
+public slots:
+
+   void addMisc();
+
 private:
-   MiscTableModel* model;
+   Database* dbObs;
+   MainWindow* mainWindow;
+   unsigned int numMiscs;
+
+   void populateTable();
 };
 
-#endif	/* _MISCTABLEWIDGET_H */
+#endif	/* _MISCDIALOG_H */
 

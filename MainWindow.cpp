@@ -18,6 +18,8 @@
 
 #include <QWidget>
 #include <QMainWindow>
+
+#include "MiscTableModel.h"
 #include <QtGui>
 
 #include "style.h"
@@ -31,6 +33,7 @@
 #include "AboutDialog.h"
 #include "stringparsing.h"
 #include "database.h"
+#include "MiscTableWidget.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -44,6 +47,7 @@ MainWindow::MainWindow(QWidget* parent)
    dialog_about = new AboutDialog(this);
    fermDialog = new FermentableDialog(this);
    hopDialog = new HopDialog(this);
+   miscDialog = new MiscDialog(this);
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"),
@@ -71,10 +75,11 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    // Setup some of the widgets.
-   // Setup the recipeComboBox widget.
    recipeComboBox->startObservingDB();
    fermDialog->startObservingDB();
    hopDialog->startObservingDB();
+   miscDialog->startObservingDB();
+   
    if( db->getNumRecipes() > 0 )
       setRecipe(db->getRecipe(0));
 
@@ -89,6 +94,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( lineEdit_efficiency, SIGNAL( editingFinished() ), this, SLOT( updateRecipeEfficiency() ) );
    connect( pushButton_addFerm, SIGNAL( clicked() ), fermDialog, SLOT( show() ) );
    connect( pushButton_addHop, SIGNAL( clicked() ), hopDialog, SLOT( show() ) );
+   connect( pushButton_addMisc, SIGNAL( clicked() ), miscDialog, SLOT( show() ) );
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -259,4 +265,10 @@ void MainWindow::addHopToRecipe(Hop *hop)
 {
    recipeObs->addHop(hop);
    hopTable->getModel()->addHop(hop);
+}
+
+void MainWindow::addMiscToRecipe(Misc* misc)
+{
+   recipeObs->addMisc(misc);
+   miscTable->getModel()->addMisc(misc);
 }

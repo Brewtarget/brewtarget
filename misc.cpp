@@ -59,6 +59,20 @@ Misc::Misc() : Observable()
    setDefaults();
 }
 
+Misc::Misc(Misc& other)
+        : Observable()
+{
+   name = other.name;
+   type = other.type;
+   use = other.use;
+   time = other.time;
+   amount = other.amount;
+
+   amountIsWeight = other.amountIsWeight;
+   useFor = other.useFor;
+   notes = other.notes;
+}
+
 Misc::Misc( const XmlNode * node ) : Observable()
 {
    std::vector<XmlNode *> children;

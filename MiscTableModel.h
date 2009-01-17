@@ -39,10 +39,11 @@ enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCO
 class MiscTableModel : public QAbstractTableModel, public MultipleObserver
 {
    Q_OBJECT
-           
+   
 public:
    MiscTableModel(QWidget* parent=0);
    void addMisc(Misc* misc);
+   Misc* getMisc(unsigned int i);
    bool removeMisc(Misc* misc);
    void removeAll();
    virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver

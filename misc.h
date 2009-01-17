@@ -31,6 +31,7 @@ class Misc : public Observable
 {
 public:
    Misc();
+   Misc(Misc& other);
    Misc( const XmlNode *node );
 
    std::string toXml();
