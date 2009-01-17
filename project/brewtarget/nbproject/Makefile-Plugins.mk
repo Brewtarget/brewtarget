@@ -59,6 +59,18 @@ make clean && \
 qmake MashStepTableWidgetPlugin.pro && \
 make && \
 gksudo make install && \
+make clean && \
+qmake WaterTableWidgetPlugin.pro && \
+make && \
+gksudo make install && \
+make clean && \
+qmake YeastTableWidgetPlugin.pro && \
+make && \
+gksudo make install && \
+make clean && \
+qmake RecipeComboBoxPlugin.pro && \
+make && \
+gksudo make install && \
 make clean
 
 # Subprojects

@@ -465,7 +465,7 @@ make clean &amp;&amp; \
 qmake YeastTableWidgetPlugin.pro &amp;&amp; \
 make &amp;&amp; \
 gksudo make install &amp;&amp; \
-make clean &amp;&amp;
+make clean &amp;&amp; \
 qmake RecipeComboBoxPlugin.pro &amp;&amp; \
 make &amp;&amp; \
 gksudo make install &amp;&amp; \

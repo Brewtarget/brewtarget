@@ -58,28 +58,26 @@ MainWindow::MainWindow(QWidget* parent)
    fileOpener->setFileMode(QFileDialog::ExistingFile);
    fileOpener->setViewMode(QFileDialog::List);
 
-   // Setup some of the widgets.
    if( Database::isInitialized() )
-   {
-      unsigned int size, i;
-
-      // Set up the recipeComboBox widget.
-      size = Database::recipes.size();
-      for( i = 0; i < size; ++i )
-         recipeComboBox->addRecipe(Database::recipes[i]);
-      recipeComboBox->repopulateList();
-      if( size > 0 )
-         setRecipe(Database::recipes[0]);
-      
-      size = Database::styles.size();
-      for( i = 0; i < size; ++i )
-         comboBox_style->addItem(tr(Database::styles[i]->getName().c_str()));
-      size = Database::equipments.size();
-      for( i = 0; i < size; ++i )
-         comboBox_equipment->addItem(tr(Database::equipments[i]->getName().c_str()));
-   }
+      db = Database::getDatabase();
    else
-      std::cerr << "MainWindow warning: the database was not initialized." << std::endl;
+   {
+      Database::initialize();
+      db = Database::getDatabase();
+   }
+
+   // Setup some of the widgets.
+   unsigned int size, i;
+   // Set up the recipeComboBox widget.
+   recipeComboBox->startObservingDB();
+   if( db->getNumRecipes() > 0 )
+      setRecipe(db->getRecipe(0));
+   size = db->getNumStyles();
+   for( i = 0; i < size; ++i )
+      comboBox_style->addItem(tr(db->getStyle(i)->getName().c_str()));
+   size = db->getNumEquipments();
+   for( i = 0; i < size; ++i )
+      comboBox_equipment->addItem(tr(db->getEquipment(i)->getName().c_str()));
 
    // Connect signals.
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
@@ -99,10 +97,10 @@ void MainWindow::setRecipeByName(const QString& name)
 
    unsigned int i, size;
 
-   size = Database::recipes.size();
+   size = db->getNumRecipes();
    for( i = 0; i < size; ++i )
-      if( Database::recipes[i]->getName() == name.toStdString() )
-         setRecipe(Database::recipes[i]);
+      if( db->getRecipe(i)->getName() == name.toStdString() )
+         setRecipe(db->getRecipe(i));
 }
 
 void MainWindow::setRecipe(Recipe* recipe)
@@ -180,6 +178,7 @@ void MainWindow::showChanges()
    lcdNumber_og->display(recipeObs->getOg());
    lcdNumber_fg->display(recipeObs->getFg());
    lcdNumber_abv->display(recipeObs->getABV_pct());
+   lcdNumber_ibu->display(recipeObs->getIBU());
    lcdNumber_srm->display(recipeObs->getColor_srm());
 }
 

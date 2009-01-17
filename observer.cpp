@@ -82,3 +82,14 @@ void MultipleObserver::removeObserved(Observable* obs)
          return;
       }
 }
+
+void MultipleObserver::removeAllObserved()
+{
+   unsigned int i, size;
+
+   size = obsVec.size();
+   for( i = 0; i < size; ++i )
+      obsVec[i]->removeObserver(this);
+
+   obsVec.clear();
+}

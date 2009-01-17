@@ -24,6 +24,7 @@
 #include <vector>
 #include "observable.h"
 #include "recipe.h"
+#include "database.h"
 
 class RecipeComboBox;
 
@@ -33,13 +34,16 @@ class RecipeComboBox : public QComboBox, public MultipleObserver
 
 public:
    RecipeComboBox(QWidget* parent=0);
+   void startObservingDB();
    void addRecipe(Recipe* recipe);
+   void removeAllRecipes();
    void repopulateList();
 
    virtual void notify(Observable *notifier); // This will get called by observed whenever it changes.
 
 private:
    std::vector<Recipe*> recipeObs;
+   Database* dbObs;
 };
 
 #endif	/* _RECIPECOMBOBOX_H */

@@ -32,16 +32,69 @@
 #include "style.h"
 #include "water.h"
 #include "yeast.h"
+#include "observable.h"
 
 class Database;
 
-class Database
+/*
+ * This class is a singleton, meaning that there should only ever be one
+ * instance of this in the whole damn program.
+ *
+ * It only calls hasChanged() when a new ingredient or whatever gets added,
+ * not when any of them actually changed.
+ */
+
+class Database : public Observable
 {
 public:
-   Database();
+   Database(); // Don't EVER use this method to get the database!!!
+   static Database* getDatabase(); // This should be the ONLY way you get an instance!!!
    static void initialize();
    static bool isInitialized();
    static void savePersistent(); // Save to the persistent medium.
+
+   void addEquipment(Equipment* equip);
+   void addFermentable(Fermentable* ferm);
+   void addHop(Hop* hop);
+   void addMash(Mash* mash);
+   void addMashStep(MashStep* mashStep);
+   void addMisc(Misc* misc);
+   void addRecipe(Recipe* rec);
+   void addStyle(Style* style);
+   void addWater(Water* water);
+   void addYeast(Yeast* yeast);
+
+   unsigned int getNumEquipments();
+   unsigned int getNumFermentables();
+   unsigned int getNumHops();
+   unsigned int getNumMashs();
+   unsigned int getNumMashSteps();
+   unsigned int getNumMiscs();
+   unsigned int getNumRecipes();
+   unsigned int getNumStyles();
+   unsigned int getNumWaters();
+   unsigned int getNumYeasts();
+
+   Equipment* getEquipment(unsigned int i);
+   Fermentable* getFermentable(unsigned int i);
+   Hop* getHop(unsigned int i);
+   Mash* getMash(unsigned int i);
+   MashStep* getMashStep(unsigned int i);
+   Misc* getMisc(unsigned int i);
+   Recipe* getRecipe(unsigned int i);
+   Style* getStyle(unsigned int i);
+   Water* getWater(unsigned int i);
+   Yeast* getYeast(unsigned int i);
+
+private:
+   static bool initialized;
+   static Database* internalDBInstance;
+   static std::fstream dbFile;
+   static const char* dbFileName;
+   static std::fstream recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
+   static const char* recipeFileName;
+   static std::fstream mashFile; // Why are these separate from the dbFile? To prevent duplicates.
+   static const char* mashFileName;
 
    // The stuff we care about...
    static std::vector<Equipment*> equipments;
@@ -54,15 +107,6 @@ public:
    static std::vector<Style*> styles;
    static std::vector<Water*> waters;
    static std::vector<Yeast*> yeasts;
-
-private:
-   static bool initialized;
-   static std::fstream dbFile;
-   static const char* dbFileName;
-   static std::fstream recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static const char* recipeFileName;
-   static std::fstream mashFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static const char* mashFileName;
 };
 
 #endif	/* _DATABASE_H */

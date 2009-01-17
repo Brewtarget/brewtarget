@@ -48,6 +48,7 @@ std::vector<Style*> Database::styles;
 std::vector<Water*> Database::waters;
 std::vector<Yeast*> Database::yeasts;
 bool Database::initialized = false;
+Database* Database::internalDBInstance = 0;
 std::fstream Database::dbFile;
 const char* Database::dbFileName = "database.xml";
 std::fstream Database::recipeFile;
@@ -57,7 +58,15 @@ const char* Database::mashFileName = "mash.xml";
 
 Database::Database()
 {
-   
+   // Don't EVER use this method to get the database!!!
+}
+
+Database* Database::getDatabase()
+{
+   if( initialized )
+      return internalDBInstance;
+   else
+      return 0;
 }
 
 bool Database::isInitialized()
@@ -120,7 +129,8 @@ void Database::initialize()
    dbFile.close();
    recipeFile.close();
    mashFile.close();
-   
+
+   internalDBInstance = new Database();
    Database::initialized = true;
 }
 
@@ -202,4 +212,197 @@ void Database::savePersistent()
    dbFile.close();
    recipeFile.close();
    mashFile.close();
+}
+
+//=========================accessor methods=====================================
+void Database::addEquipment(Equipment* equip)
+{
+   if( equip != 0 )
+   {
+      equipments.push_back(equip);
+      hasChanged();
+   }
+}
+
+void Database::addFermentable(Fermentable* ferm)
+{
+   if( ferm != 0 )
+   {
+      fermentables.push_back(ferm);
+      hasChanged();
+   }
+}
+
+void Database::addHop(Hop* hop)
+{
+   if( hop != 0 )
+   {
+      hops.push_back(hop);
+      hasChanged();
+   }
+}
+
+void Database::addMash(Mash* mash)
+{
+   if( mash != 0 )
+   {
+      mashs.push_back(mash);
+      hasChanged();
+   }
+}
+
+void Database::addMashStep(MashStep* mashStep)
+{
+   if( mashStep != 0 )
+   {
+      mashSteps.push_back(mashStep);
+      hasChanged();
+   }
+}
+
+void Database::addMisc(Misc* misc)
+{
+   if( misc != 0 )
+   {
+      miscs.push_back(misc);
+      hasChanged();
+   }
+}
+
+void Database::addRecipe(Recipe* rec)
+{
+   if( rec != 0 )
+   {
+      recipes.push_back(rec);
+      hasChanged();
+   }
+}
+
+void Database::addStyle(Style* style)
+{
+   if( style != 0 )
+   {
+      styles.push_back(style);
+      hasChanged();
+   }
+}
+
+void Database::addWater(Water* water)
+{
+   if( water != 0 )
+   {
+      waters.push_back(water);
+      hasChanged();
+   }
+}
+
+void Database::addYeast(Yeast* yeast)
+{
+   if( yeast != 0 )
+   {
+      yeasts.push_back(yeast);
+      hasChanged();
+   }
+}
+
+
+unsigned int Database::getNumEquipments()
+{
+   return equipments.size();
+}
+
+unsigned int Database::getNumFermentables()
+{
+   return fermentables.size();
+}
+
+unsigned int Database::getNumHops()
+{
+   return hops.size();
+}
+
+unsigned int Database::getNumMashs()
+{
+   return mashs.size();
+}
+
+unsigned int Database::getNumMashSteps()
+{
+   return mashSteps.size();
+}
+
+unsigned int Database::getNumMiscs()
+{
+   return miscs.size();
+}
+
+unsigned int Database::getNumRecipes()
+{
+   return recipes.size();
+}
+
+unsigned int Database::getNumStyles()
+{
+   return styles.size();
+}
+
+unsigned int Database::getNumWaters()
+{
+   return waters.size();
+}
+
+unsigned int Database::getNumYeasts()
+{
+   return yeasts.size();
+}
+
+
+Equipment* Database::getEquipment(unsigned int i)
+{
+   return equipments[i];
+}
+
+Fermentable* Database::getFermentable(unsigned int i)
+{
+   return fermentables[i];
+}
+
+Hop* Database::getHop(unsigned int i)
+{
+   return hops[i];
+}
+
+Mash* Database::getMash(unsigned int i)
+{
+   return mashs[i];
+}
+
+MashStep* Database::getMashStep(unsigned int i)
+{
+   return mashSteps[i];
+}
+
+Misc* Database::getMisc(unsigned int i)
+{
+   return miscs[i];
+}
+
+Recipe* Database::getRecipe(unsigned int i)
+{
+   return recipes[i];
+}
+
+Style* Database::getStyle(unsigned int i)
+{
+   return styles[i];
+}
+
+Water* Database::getWater(unsigned int i)
+{
+   return waters[i];
+}
+
+Yeast* Database::getYeast(unsigned int i)
+{
+   return yeasts[i];
 }

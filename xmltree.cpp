@@ -112,10 +112,10 @@ XmlTree::XmlTree( std::istream &in )
       return;
    }
    
-   //root = XmlNode(iter, NULL);
    root = XmlNode();
    while( iter != xmlText.end() )
    {
+      // This 'if' statement prevents us from going past xmlText.end()
       if( *iter != '<' )
       {
          iter++;

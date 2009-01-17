@@ -55,6 +55,7 @@ private:
    Recipe* recipeObs;
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
+   Database* db;
    
    void showChanges();
 };

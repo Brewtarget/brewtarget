@@ -32,6 +32,7 @@
 #include "equipment.h"
 #include "yeast.h"
 #include "water.h"
+#include "hoputilization.h"
 
 std::string Recipe::toXml()
 {
@@ -1155,3 +1156,46 @@ bool Recipe::removeYeast(Yeast* var)
 
    return false;
 }
+
+double Recipe::getWortGrav()
+{
+   unsigned int i;
+   Fermentable* ferm;
+   double sugar_kg = 0.0;
+   double points = 0.0;
+
+   // Calculate OG
+   for( i = 0; i < fermentables.size(); ++i )
+   {
+      ferm = fermentables[i];
+      if( ! ferm->getAddAfterBoil() )
+         sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+   }
+
+   // Conversion factor for lb/gal to kg/l = 8.34538.
+   points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
+   return (1.0 + points/1000.0);
+}
+
+double Recipe::getIBU()
+{
+   unsigned int i;
+   double ibus = 0.0;
+
+   // Bitterness due to hops...
+   for( i = 0; i < hops.size(); ++i )
+      ibus += IBU( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
+                   batchSize_l, getWortGrav(), hops[i]->getTime_min() );
+
+   // Bitterness due to hopped extracts...
+   for( i = 0; i < fermentables.size(); ++i )
+   {
+      // Conversion factor for lb/gal to kg/l = 8.34538.
+      ibus +=
+              fermentables[i]->getIbuGalPerLb() *
+              (fermentables[i]->getAmount_kg() / batchSize_l) / 8.34538;
+   }
+
+   return ibus;
+}
+

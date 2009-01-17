@@ -17,7 +17,9 @@ HEADERS = ../RecipeComboBox.h \
           ../water.h \
           ../mash.h \
           ../equipment.h \
-          ../mashstep.h
+          ../mashstep.h \
+          ../database.h \
+          ../xmltree.h
 SOURCES = ../RecipeComboBox.cpp \
           RecipeComboBoxPlugin.cpp \
           ../recipe.cpp \
@@ -34,7 +36,9 @@ SOURCES = ../RecipeComboBox.cpp \
           ../water.cpp \
           ../mash.cpp \
           ../equipment.cpp \
-          ../mashstep.cpp
+          ../mashstep.cpp \
+          ../database.cpp \
+          ../xmltree.cpp
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 INSTALLS += target

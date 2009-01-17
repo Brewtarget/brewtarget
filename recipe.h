@@ -140,6 +140,9 @@ public:
    void recalculate(); // Calculates some parameters.
    double getABV_pct();
    double getColor_srm();
+   double getWortGrav();
+   double getIBU();
+
 private:
 
    std::string name;

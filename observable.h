@@ -60,6 +60,7 @@ public:
    MultipleObserver(Observable* obs);
    void addObserved(Observable* obs);
    void removeObserved(Observable* obs);
+   void removeAllObserved();
    
    // virtual void notify(Observable* notifier); // Don't forget to overload from class Observer.
    
