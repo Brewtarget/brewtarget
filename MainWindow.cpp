@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    dialog_about = new AboutDialog(this);
    fermDialog = new FermentableDialog(this);
+   hopDialog = new HopDialog(this);
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"),
@@ -73,6 +74,7 @@ MainWindow::MainWindow(QWidget* parent)
    // Setup the recipeComboBox widget.
    recipeComboBox->startObservingDB();
    fermDialog->startObservingDB();
+   hopDialog->startObservingDB();
    if( db->getNumRecipes() > 0 )
       setRecipe(db->getRecipe(0));
 
@@ -86,6 +88,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
    connect( lineEdit_efficiency, SIGNAL( editingFinished() ), this, SLOT( updateRecipeEfficiency() ) );
    connect( pushButton_addFerm, SIGNAL( clicked() ), fermDialog, SLOT( show() ) );
+   connect( pushButton_addHop, SIGNAL( clicked() ), hopDialog, SLOT( show() ) );
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -250,4 +253,10 @@ void MainWindow::addFermentableToRecipe(Fermentable* ferm)
 {
    recipeObs->addFermentable(ferm);
    fermentableTable->getModel()->addFermentable(ferm);
+}
+
+void MainWindow::addHopToRecipe(Hop *hop)
+{
+   recipeObs->addHop(hop);
+   hopTable->getModel()->addHop(hop);
 }

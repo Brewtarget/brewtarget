@@ -119,6 +119,28 @@ Hop::Hop()
    setDefaults();
 }
 
+Hop::Hop( Hop& other )
+        : Observable()
+{
+   name = other.name;
+   alpha_pct = other.alpha_pct;
+   amount_kg = other.amount_kg;
+   use = other.use;
+   time_min = other.time_min;
+
+   notes = other.notes;
+   type = other.type;
+   form = other.form;
+   beta_pct = other.beta_pct;
+   hsi_pct = other.hsi_pct;
+   origin = other.origin;
+   substitutes = other.substitutes;
+   humulene_pct = other.humulene_pct;
+   caryophyllene_pct = other.caryophyllene_pct;
+   cohumulone_pct = other.cohumulone_pct;
+   myrcene_pct = other.myrcene_pct;
+}
+
 Hop::Hop( const XmlNode *node )
 {
    std::vector<XmlNode *> children;

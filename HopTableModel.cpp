@@ -228,6 +228,11 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
    }
 }
 
+Hop* HopTableModel::getHop(unsigned int i)
+{
+   return hopObs[i];
+}
+
 //==========================CLASS HopItemDelegate===============================
 
 HopItemDelegate::HopItemDelegate(QObject* parent)

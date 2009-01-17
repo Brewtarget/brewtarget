@@ -34,6 +34,7 @@ class Hop : public Observable
    
    public:
       Hop();
+      Hop( Hop& other );
       Hop( const XmlNode *node );
  
       std::string toXml();

@@ -1,5 +1,5 @@
 /*
- * HopTableWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * HopDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,26 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _HOPTABLEWIDGET_H
-#define	_HOPTABLEWIDGET_H
+#ifndef _HOPDIALOG_H
+#define	_HOPDIALOG_H
 
-#include <QTableView>
+class HopDialog;
+
 #include <QWidget>
-#include "HopTableModel.h"
+#include <QDialog>
+#include "ui_hopDialog.h"
+#include "observable.h"
+#include "database.h"
+#include "MainWindow.h"
 
-class HopTableWidget;
-
-class HopTableWidget : public QTableView
+class HopDialog : public QDialog, public Ui::hopDialog, public Observer
 {
    Q_OBJECT
-   friend class HopDialog;
+
 public:
-   HopTableWidget(QWidget* parent=0);
-   HopTableModel* getModel();
-   
+   HopDialog(MainWindow* parent);
+   void startObservingDB();
+   virtual void notify(Observable *notifier); // From Observer
+
+public slots:
+
+   void addHop();
+
 private:
-   HopTableModel* model;
+   Database* dbObs;
+   MainWindow* mainWindow;
+   unsigned int numHops;
+
+   void populateTable();
 };
 
-#endif	/* _HOPTABLEWIDGET_H */
+
+#endif	/* _HOPDIALOG_H */
 

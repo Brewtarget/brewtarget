@@ -13,6 +13,7 @@ HEADERS += AboutDialog.h \
            FermentableTableWidget.h \
            hop.h \
            hoputilization.h \
+           HopDialog.h \
            HopTableModel.h \
            HopTableWidget.h \
            MainWindow.h \
@@ -43,7 +44,8 @@ HEADERS += AboutDialog.h \
 FORMS +=   aboutDialog.ui \
            mainWindow.ui \
            miscEditor.ui \
-           fermentableDialog.ui
+           fermentableDialog.ui \
+           hopDialog.ui
 SOURCES += database.cpp \
            equipment.cpp \
            fermentable.cpp \
@@ -53,6 +55,7 @@ SOURCES += database.cpp \
            guitest.cpp \
            hop.cpp \
            hoputilization.cpp \
+           HopDialog.cpp \
            HopTableModel.cpp \
            HopTableWidget.cpp \
            MainWindow.cpp \

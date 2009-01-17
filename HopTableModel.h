@@ -41,6 +41,7 @@ class HopTableModel : public QAbstractTableModel, public MultipleObserver
 public:
    HopTableModel(QWidget* parent=0);
    void addHop(Hop* hop);
+   Hop* getHop(unsigned int i);
    bool removeHop(Hop* hop); // Returns true if "hop" is successfully found and removed.
    void removeAll();
    virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver.
