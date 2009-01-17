@@ -1,5 +1,5 @@
 /*
- * YeastTableWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * YeastDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,26 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _YEASTTABLEWIDGET_H
-#define	_YEASTTABLEWIDGET_H
+#ifndef _YEASTDIALOG_H
+#define	_YEASTDIALOG_H
 
-#include <QTableView>
+class YeastDialog;
+
 #include <QWidget>
-#include "YeastTableModel.h"
+#include <QDialog>
+#include "ui_yeastDialog.h"
+#include "observable.h"
+#include "database.h"
+#include "MainWindow.h"
 
-class YeastTableWidget;
-
-class YeastTableWidget : public QTableView
+class YeastDialog : public QDialog, public Ui::yeastDialog, public Observer
 {
    Q_OBJECT
-   friend class YeastDialog;
+
 public:
-   YeastTableWidget(QWidget* parent=0);
-   YeastTableModel* getModel();
+   YeastDialog(MainWindow* parent);
+   void startObservingDB();
+   virtual void notify(Observable *notifier); // From Observer
+
+public slots:
+
+   void addYeast();
 
 private:
-   YeastTableModel* model;
+   Database* dbObs;
+   MainWindow* mainWindow;
+   unsigned int numYeasts;
+
+   void populateTable();
 };
 
-#endif	/* _YEASTTABLEWIDGET_H */
+#endif	/* _YEASTDIALOG_H */
 

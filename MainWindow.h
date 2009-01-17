@@ -29,6 +29,7 @@ class MainWindow;
 #include "FermentableDialog.h"
 #include "HopDialog.h"
 #include "MiscDialog.h"
+#include "YeastDialog.h"
 #include "AboutDialog.h"
 #include "observable.h"
 #include "recipe.h"
@@ -57,6 +58,7 @@ public slots:
    void addFermentableToRecipe(Fermentable* ferm);
    void addHopToRecipe(Hop *hop);
    void addMiscToRecipe(Misc* misc);
+   void addYeastToRecipe(Yeast* yeast);
 
 private:
    Recipe* recipeObs;
@@ -65,6 +67,7 @@ private:
    FermentableDialog* fermDialog;
    HopDialog* hopDialog;
    MiscDialog* miscDialog;
+   YeastDialog* yeastDialog;
    Database* db;
    
    void showChanges();

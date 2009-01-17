@@ -215,6 +215,11 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
    }
 }
 
+Yeast* YeastTableModel::getYeast(unsigned int i)
+{
+   return yeastObs[i];
+}
+
 //==========================CLASS YeastItemDelegate===============================
 
 YeastItemDelegate::YeastItemDelegate(QObject* parent)

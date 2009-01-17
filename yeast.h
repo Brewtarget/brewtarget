@@ -31,6 +31,7 @@ class Yeast : public Observable
 {
 public:
    Yeast();
+   Yeast(Yeast& other);
    Yeast( XmlNode *node );
    
    std::string toXml();

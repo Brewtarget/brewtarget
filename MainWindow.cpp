@@ -19,6 +19,8 @@
 #include <QWidget>
 #include <QMainWindow>
 
+#include "YeastTableModel.h"
+
 #include "MiscTableModel.h"
 #include <QtGui>
 
@@ -34,6 +36,8 @@
 #include "stringparsing.h"
 #include "database.h"
 #include "MiscTableWidget.h"
+#include "YeastTableWidget.h"
+#include "YeastDialog.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -48,6 +52,7 @@ MainWindow::MainWindow(QWidget* parent)
    fermDialog = new FermentableDialog(this);
    hopDialog = new HopDialog(this);
    miscDialog = new MiscDialog(this);
+   yeastDialog = new YeastDialog(this);
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"),
@@ -79,6 +84,7 @@ MainWindow::MainWindow(QWidget* parent)
    fermDialog->startObservingDB();
    hopDialog->startObservingDB();
    miscDialog->startObservingDB();
+   yeastDialog->startObservingDB();
    
    if( db->getNumRecipes() > 0 )
       setRecipe(db->getRecipe(0));
@@ -95,6 +101,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_addFerm, SIGNAL( clicked() ), fermDialog, SLOT( show() ) );
    connect( pushButton_addHop, SIGNAL( clicked() ), hopDialog, SLOT( show() ) );
    connect( pushButton_addMisc, SIGNAL( clicked() ), miscDialog, SLOT( show() ) );
+   connect( pushButton_addYeast, SIGNAL( clicked() ), yeastDialog, SLOT( show() ) );
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -271,4 +278,10 @@ void MainWindow::addMiscToRecipe(Misc* misc)
 {
    recipeObs->addMisc(misc);
    miscTable->getModel()->addMisc(misc);
+}
+
+void MainWindow::addYeastToRecipe(Yeast* yeast)
+{
+   recipeObs->addYeast(yeast);
+   yeastTable->getModel()->addYeast(yeast);
 }

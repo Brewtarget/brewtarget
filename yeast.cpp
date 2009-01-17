@@ -76,6 +76,28 @@ Yeast::Yeast()
    setDefaults();
 }
 
+Yeast::Yeast(Yeast& other)
+        : Observable()
+{
+   name = other.name;
+   type = other.type;
+   form = other.form;
+   amount = other.amount;
+
+   amountIsWeight = other.amountIsWeight;
+   laboratory = other.laboratory;
+   productID = other.productID;
+   minTemperature_c = other.minTemperature_c;
+   maxTemperature_c = other.maxTemperature_c;
+   flocculation = other.flocculation;
+   attenuation_pct = other.attenuation_pct;
+   notes = other.notes;
+   bestFor = other.bestFor;
+   timesCultured = other.timesCultured;
+   maxReuse = other.maxReuse;
+   addToSecondary = other.addToSecondary;
+}
+
 Yeast::Yeast( XmlNode *node )
 {
    std::vector<XmlNode *> children;
