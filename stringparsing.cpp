@@ -81,6 +81,17 @@ std::string doubleToString( double num )
    return std::string(s);
 }
 
+std::string doubleToStringPrec( double num, unsigned int prec )
+{
+   static char s[32];
+   static char format[32];
+
+   sprintf( format, "%%.%ldlf", prec );
+   sprintf( s, format, num );
+
+   return std::string(s);
+}
+
 std::string intToString( int num )
 {
    static char s[32];

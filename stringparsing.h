@@ -30,6 +30,7 @@ long parseLong( const std::string &str );
 double parseDouble( const std::string &str );
 bool parseBool( const std::string &str );
 std::string doubleToString( double num );
+std::string doubleToStringPrec( double num, unsigned int prec );
 std::string intToString( int num );
 std::string boolToString( bool b );
 

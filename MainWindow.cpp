@@ -175,8 +175,8 @@ void MainWindow::showChanges()
    lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
    lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());
 
-   lcdNumber_og->display(recipeObs->getOg());
-   lcdNumber_fg->display(recipeObs->getFg());
+   lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
+   lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
    lcdNumber_abv->display(recipeObs->getABV_pct());
    lcdNumber_ibu->display(recipeObs->getIBU());
    lcdNumber_srm->display(recipeObs->getColor_srm());
