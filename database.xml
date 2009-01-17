@@ -34,23 +34,75 @@ Also called caramel malt.
 </FERMENTABLES>
 
 <YEASTS>
+
 <YEAST>
- <NAME>German Ale</NAME>
+ <NAME>Wyeast - German Ale</NAME>
  <TYPE>Ale</TYPE>
  <VERSION>1</VERSION>
  <FORM>Liquid</FORM>
- <AMOUNT>0.250</AMOUNT>
+ <AMOUNT>0.125</AMOUNT>
  <LABORATORY>Wyeast Labs</LABORATORY>
  <PRODUCT_ID>1007</PRODUCT_ID>
- <MIN_TEMPERATURE>12.8</MIN_TEMPERATURE>
- <MAX_TEMPERATURE>20.0</MAX_TEMPERATURE>
- <ATTENUATION>75.0</ATTENUATION>
- <NOTES>Crisp dry flavor with a hint of mild flavor.
-  Great for many continental ales.
+ <MIN_TEMPERATURE>13</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>20</MAX_TEMPERATURE>
+ <ATTENUATION>76</ATTENUATION>
+ <NOTES>True top-cropping yeast, low ester formation, broad temperature range affects styles. Cold fermentation will produce lager characteristics including sulfur production. Fermentation at higher temperatures may produce some mild fruitiness. Generally, yeast remains significantly in suspension. Beers mature rapidly, even when cold fermentation is used. Low or no detectable diacetyl.
  </NOTES>
- <BEST_FOR>German Ales, Alts, Kolsch, Dry Stouts </BEST_FOR>
+ <BEST_FOR>Kolsch, American Wheat, American Rye, North German Altbier, Dusseldorf Altbier, Berliner Weisse</BEST_FOR>
  <FLOCCULATION>Low</FLOCCULATION>
 </YEAST>
+
+<YEAST>
+ <NAME>Wyeast - American Wheat</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1010</PRODUCT_ID>
+ <MIN_TEMPERATURE>14</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>23</MAX_TEMPERATURE>
+ <ATTENUATION>76</ATTENUATION>
+ <NOTES>A dry fermenting, true top-cropping yeast which produces a dry, slightly tart, crisp beer. Ideal for beers where a low ester profile is desirable.
+ </NOTES>
+ <BEST_FOR>Cream Ale, Kolsch, American Wheat, American Rye, North German Altbier, Dusseldorf Altbier</BEST_FOR>
+ <FLOCCULATION>Low</FLOCCULATION>
+</YEAST>
+
+<YEAST>
+ <NAME>Wyeast - London Ale</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1028</PRODUCT_ID>
+ <MIN_TEMPERATURE>15</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>22</MAX_TEMPERATURE>
+ <ATTENUATION>75</ATTENUATION>
+ <NOTES>Rich with a dry finish, minerally profile, bold and crisp, with some fruitiness. Often used for higher gravity ales and when a high level of attenuation is desired for the style.
+ </NOTES>
+ <BEST_FOR>Mild, Northern English Brown Ale, Brown Porter, Robust Porter, Dry Stout, Foreign Extra Stout, Russian Imperial Stout, Old Ale, English Barleywine</BEST_FOR>
+ <FLOCCULATION>Low</FLOCCULATION>
+</YEAST>
+
+<YEAST>
+ <NAME>Wyeast - American Ale</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1056</PRODUCT_ID>
+ <MIN_TEMPERATURE>15</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>22</MAX_TEMPERATURE>
+ <ATTENUATION>75</ATTENUATION>
+ <NOTES>Very clean, crisp flavor characteristics. Low fruitiness and mild ester production. Slightly citrus-like with cool (15-19C) fermentation. Versatile yeast, which produces many beer styles allowing malt and hop character to dominate the beer profile. Flocculation improves with dark malts in grain bill. Normally requires filtration for bright beers.
+ </NOTES>
+ <BEST_FOR>Everything :)</BEST_FOR>
+ <FLOCCULATION>Low</FLOCCULATION>
+</YEAST>
+
 </YEASTS>
 
 <MISCS>
@@ -86,8 +138,8 @@ Use for distinctive pale ales strongly hopped.  Very hard water accentuates the 
 <EQUIPMENT>
  <NAME>8 Gal pot with 5 gal Igloo Cooler</NAME>
  <VERSION>1</VERSION>
- <TUN_VOLUME>18.93</MASH_TUN_VOLUME>
- <TUN_WEIGHT>2.0</MASH_TUN_WEIGHT>
+ <TUN_VOLUME>18.93</TUN_VOLUME>
+ <TUN_WEIGHT>2.0</TUN_WEIGHT>
  <TUN_SPECIFIC_HEAT>0.3</TUN_SPECIFIC_HEAT>
  <BATCH_SIZE>18.93</BATCH_SIZE>
  <BOIL_SIZE>22.71</BOIL_SIZE>
