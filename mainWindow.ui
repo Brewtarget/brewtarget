@@ -100,7 +100,7 @@
              <item>
               <widget class="QLabel" name="label_2" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+                <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -111,18 +111,15 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox_style" >
+              <widget class="QPushButton" name="pushButton_style" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>80</width>
-                 <height>0</height>
-                </size>
+               <property name="text" >
+                <string>PushButton</string>
                </property>
               </widget>
              </item>
@@ -133,7 +130,7 @@
              <item>
               <widget class="QLabel" name="label_3" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+                <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -144,18 +141,15 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBox_equipment" >
+              <widget class="QPushButton" name="pushButton_equipment" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
-                <size>
-                 <width>80</width>
-                 <height>0</height>
-                </size>
+               <property name="text" >
+                <string>PushButton</string>
                </property>
               </widget>
              </item>
@@ -523,13 +517,13 @@
         <number>5</number>
        </property>
        <property name="topMargin" >
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="rightMargin" >
         <number>5</number>
        </property>
        <property name="bottomMargin" >
-        <number>5</number>
+        <number>1</number>
        </property>
        <item>
         <widget class="QGroupBox" name="groupBox_3" >
@@ -540,7 +534,7 @@
           <item>
            <widget class="FermentableTableWidget" name="fermentableTable" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
+             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>

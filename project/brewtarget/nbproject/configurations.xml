@@ -51,6 +51,8 @@
       <itemPath>../../HopTableModel.h</itemPath>
       <itemPath>../../HopTableWidget.cpp</itemPath>
       <itemPath>../../HopTableWidget.h</itemPath>
+      <itemPath>../../hoputilization.cpp</itemPath>
+      <itemPath>../../hoputilization.h</itemPath>
       <itemPath>../../MainWindow.cpp</itemPath>
       <itemPath>../../MainWindow.h</itemPath>
       <itemPath>../../mainWindow.ui</itemPath>
@@ -325,6 +327,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../hop.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../hoputilization.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../hoputilization.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../mainWindow.ui">
@@ -657,6 +665,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../hop.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../hoputilization.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../hoputilization.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../mainWindow.ui">

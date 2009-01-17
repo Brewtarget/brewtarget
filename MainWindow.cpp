@@ -19,6 +19,8 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QtGui>
+
+#include "style.h"
 #include <QString>
 #include <QFileDialog>
 
@@ -72,12 +74,6 @@ MainWindow::MainWindow(QWidget* parent)
    recipeComboBox->startObservingDB();
    if( db->getNumRecipes() > 0 )
       setRecipe(db->getRecipe(0));
-   size = db->getNumStyles();
-   for( i = 0; i < size; ++i )
-      comboBox_style->addItem(tr(db->getStyle(i)->getName().c_str()));
-   size = db->getNumEquipments();
-   for( i = 0; i < size; ++i )
-      comboBox_equipment->addItem(tr(db->getEquipment(i)->getName().c_str()));
 
    // Connect signals.
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
@@ -162,18 +158,30 @@ void MainWindow::notify(Observable* notifier)
    showChanges();
 }
 
+// This method should update all the widgets in the window (except the tables)
+// to reflect the currently observed recipe.
 void MainWindow::showChanges()
 {
    if( recipeObs == 0 )
       return;
 
    recipeObs->recalculate();
-   // TODO: fill in this method to change the widgets to reflect
-   // the current recipe.
+
    lineEdit_name->setText(recipeObs->getName().c_str());
    lineEdit_batchSize->setText(doubleToString(recipeObs->getBatchSize_l()).c_str());
    lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
    lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());
+
+   pushButton_style->setText(tr(recipeObs->getStyle()->getName().c_str()));
+   pushButton_style->adjustSize();
+   
+   // Recipe's equipment is optional, so might be null.
+   Equipment* equip = recipeObs->getEquipment();
+   if( equip )
+      pushButton_equipment->setText(tr(equip->getName().c_str()));
+   else
+      pushButton_equipment->setText(tr("No equipment"));
+   pushButton_equipment->adjustSize();
 
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());

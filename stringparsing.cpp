@@ -86,7 +86,7 @@ std::string doubleToStringPrec( double num, unsigned int prec )
    static char s[32];
    static char format[32];
 
-   sprintf( format, "%%.%ldlf", prec );
+   sprintf( format, "%%.%dlf", prec );
    sprintf( s, format, num );
 
    return std::string(s);
