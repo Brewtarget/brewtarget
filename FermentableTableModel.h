@@ -44,6 +44,7 @@ public:
    void addFermentable(Fermentable* ferm);
    bool removeFermentable(Fermentable* ferm); // Returns true if "ferm" is successfully found and removed.
    void removeAll();
+   Fermentable* getFermentable(unsigned int i);
    virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver.
    
    // Inherit the following from QAbstractItemModel via QAbstractTableModel

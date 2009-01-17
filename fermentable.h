@@ -30,6 +30,7 @@ class Fermentable : public Observable
 {
 public:
    Fermentable();
+   Fermentable( Fermentable& other );
    Fermentable( const XmlNode* node );
    
    std::string toXml();

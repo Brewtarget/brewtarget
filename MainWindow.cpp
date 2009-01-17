@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeObs = 0;
 
    dialog_about = new AboutDialog(this);
+   fermDialog = new FermentableDialog(this);
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"),
@@ -69,9 +70,9 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    // Setup some of the widgets.
-   unsigned int size, i;
-   // Set up the recipeComboBox widget.
+   // Setup the recipeComboBox widget.
    recipeComboBox->startObservingDB();
+   fermDialog->startObservingDB();
    if( db->getNumRecipes() > 0 )
       setRecipe(db->getRecipe(0));
 
@@ -84,6 +85,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
    connect( lineEdit_efficiency, SIGNAL( editingFinished() ), this, SLOT( updateRecipeEfficiency() ) );
+   connect( pushButton_addFerm, SIGNAL( clicked() ), fermDialog, SLOT( show() ) );
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -242,4 +244,10 @@ void MainWindow::updateRecipeEfficiency()
       return;
    
    recipeObs->setEfficiency_pct( parseDouble(lineEdit_efficiency->text().toStdString()) );
+}
+
+void MainWindow::addFermentableToRecipe(Fermentable* ferm)
+{
+   recipeObs->addFermentable(ferm);
+   fermentableTable->getModel()->addFermentable(ferm);
 }

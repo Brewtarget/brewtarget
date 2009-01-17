@@ -8,6 +8,7 @@ HEADERS += AboutDialog.h \
            database.h \
            equipment.h \
            fermentable.h \
+           FermentableDialog.h \
            FermentableTableModel.h \
            FermentableTableWidget.h \
            hop.h \
@@ -41,10 +42,12 @@ HEADERS += AboutDialog.h \
            YeastTableWidget.h
 FORMS +=   aboutDialog.ui \
            mainWindow.ui \
-           miscEditor.ui
+           miscEditor.ui \
+           fermentableDialog.ui
 SOURCES += database.cpp \
            equipment.cpp \
            fermentable.cpp \
+           FermentableDialog.cpp \
            FermentableTableModel.cpp \
            FermentableTableWidget.cpp \
            guitest.cpp \

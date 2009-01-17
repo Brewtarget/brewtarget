@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>About Brewtarget</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" >
    <item>

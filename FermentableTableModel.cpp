@@ -228,6 +228,11 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
    }
 }
 
+Fermentable* FermentableTableModel::getFermentable(unsigned int i)
+{
+   return fermObs[i];
+}
+
 //======================CLASS FermentableItemDelegate===========================
 
 FermentableItemDelegate::FermentableItemDelegate(QObject* parent)

@@ -19,16 +19,17 @@
 #ifndef _MAINWINDOW_H
 #define	_MAINWINDOW_H
 
+class MainWindow;
+
 #include <QWidget>
 #include <QMainWindow>
 #include <QString>
 #include <QFileDialog>
 #include "ui_mainWindow.h"
+#include "FermentableDialog.h"
 #include "AboutDialog.h"
 #include "observable.h"
 #include "recipe.h"
-
-class MainWindow;
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -51,10 +52,13 @@ public slots:
    void updateRecipeBoilSize();
    void updateRecipeEfficiency();
 
+   void addFermentableToRecipe(Fermentable* ferm);
+
 private:
    Recipe* recipeObs;
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
+   FermentableDialog* fermDialog;
    Database* db;
    
    void showChanges();

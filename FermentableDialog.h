@@ -1,5 +1,5 @@
 /*
- * FermentableTableWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * FermentableDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,25 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _FERMENTABLETABLEWIDGET_H
-#define	_FERMENTABLETABLEWIDGET_H
+#ifndef _FERMENTABLEDIALOG_H
+#define	_FERMENTABLEDIALOG_H
 
-#include <QTableView>
+class FermentableDialog;
+
 #include <QWidget>
-#include "FermentableTableModel.h"
+#include <QDialog>
+#include "ui_fermentableDialog.h"
+#include "observable.h"
+#include "database.h"
+#include "MainWindow.h"
 
-class FermentableTableWidget;
-
-class FermentableTableWidget : public QTableView
+class FermentableDialog : public QDialog, public Ui::fermentableDialog, public Observer
 {
    Q_OBJECT
-   friend class FermentableDialog;
+
 public:
-   FermentableTableWidget(QWidget* parent=0);
-   FermentableTableModel* getModel();
-   
+   FermentableDialog(MainWindow* parent);
+   void startObservingDB();
+   virtual void notify(Observable *notifier); // From Observer
+
+public slots:
+
+   void addFermentable();
+
 private:
-   FermentableTableModel* model;
+   Database* dbObs;
+   MainWindow* mainWindow;
+   unsigned int numFerms;
+
+   void populateTable();
 };
 
-#endif	/* _FERMENTABLETABLEWIDGET_H */
+#endif	/* _FERMENTABLEDIALOG_H */
+

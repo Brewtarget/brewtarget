@@ -52,6 +52,28 @@ Fermentable::Fermentable()
    setDefaults();
 }
 
+Fermentable::Fermentable( Fermentable& other )
+        : Observable()
+{
+   name = other.name;
+   type = other.type;
+   amount_kg = other.amount_kg;
+   yield_pct = other.yield_pct;
+   color_srm = other.color_srm;
+
+   addAfterBoil = other.addAfterBoil;
+   origin = other.origin;
+   supplier = other.supplier;
+   notes = other.notes;
+   coarseFineDiff_pct = other.coarseFineDiff_pct;
+   moisture_pct = other.moisture_pct;
+   diastaticPower_lintner = other.diastaticPower_lintner;
+   protein_pct = other.protein_pct;
+   maxInBatch_pct = other.maxInBatch_pct;
+   recommendMash = other.recommendMash;
+   ibuGalPerLb = other.ibuGalPerLb;
+}
+
 Fermentable::Fermentable( const XmlNode* node )
 {
    std::vector<XmlNode *> children;
