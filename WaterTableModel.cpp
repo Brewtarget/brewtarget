@@ -77,6 +77,7 @@ void WaterTableModel::removeAll()
       removeObserved(waterObs[i]);
 
    waterObs.clear();
+   reset();
 }
 
 void WaterTableModel::notify(Observable* notifier)

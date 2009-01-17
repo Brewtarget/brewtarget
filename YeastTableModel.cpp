@@ -78,6 +78,7 @@ void YeastTableModel::removeAll()
       removeObserved(yeastObs[i]);
 
    yeastObs.clear();
+   reset();
 }
 
 void YeastTableModel::notify(Observable* notifier)

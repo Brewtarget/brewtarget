@@ -80,6 +80,7 @@ void FermentableTableModel::removeAll()
       removeObserved(fermObs[i]);
 
    fermObs.clear();
+   reset();
 }
 
 void FermentableTableModel::notify(Observable* notifier)

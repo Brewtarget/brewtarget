@@ -75,6 +75,7 @@ void MashStepTableModel::removeAll()
       removeObserved(stepObs[i]);
 
    stepObs.clear();
+   reset();
 }
 
 void MashStepTableModel::notify(Observable* notifier)

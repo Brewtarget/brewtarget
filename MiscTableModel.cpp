@@ -83,6 +83,7 @@ void MiscTableModel::removeAll()
       removeObserved(miscObs[i]);
 
    miscObs.clear();
+   reset();
 }
 
 int MiscTableModel::rowCount(const QModelIndex& parent) const

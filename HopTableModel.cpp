@@ -80,6 +80,7 @@ void HopTableModel::removeAll()
       removeObserved(hopObs[i]);
 
    hopObs.clear();
+   reset();
 }
 
 void HopTableModel::notify(Observable* notifier)
