@@ -29,6 +29,7 @@ class MiscTableWidget : public QTableView
 {
    Q_OBJECT
    friend class MiscDialog;
+   friend class MainWindow;
 public:
    MiscTableWidget(QWidget *parent=0);
    MiscTableModel* getModel();

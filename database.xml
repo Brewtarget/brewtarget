@@ -103,6 +103,91 @@ Also called caramel malt.
  <FLOCCULATION>Low</FLOCCULATION>
 </YEAST>
 
+<YEAST>
+ <NAME>Wyeast - Irish Ale</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1084</PRODUCT_ID>
+ <MIN_TEMPERATURE>16</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>22</MAX_TEMPERATURE>
+ <ATTENUATION>73</ATTENUATION>
+ <NOTES>This yeast ferments extremely well in dark worts. Beers fermented in the lower temperature range produce dry and crisp beers to fruity beers with nice complexity using fermentation temperatures above 18C.
+ </NOTES>
+ <BEST_FOR>Scottish Light 60/-, Scottish Heavy 70/-, Scottish Export 80/-, Irish Red Ale, Strong Scotch Ale, American Amber Ale, Robust Porter, Baltic Porter, Dry Stout, Sweet Stout, Oatmeal Stout, Foreign Extra Stout, Imperial IPA, American Barleywine, Spice/Herb/Vegetable Beer, Other Smoked Beer, Wood-Aged Beer</BEST_FOR>
+ <FLOCCULATION>Medium</FLOCCULATION>
+</YEAST>
+
+<YEAST>
+ <NAME>Wyeast - British Ale</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1098</PRODUCT_ID>
+ <MIN_TEMPERATURE>18</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>22</MAX_TEMPERATURE>
+ <ATTENUATION>74</ATTENUATION>
+ <NOTES>Produces beers with a clean neutral finish allowing malt and hop character to dominate. Ferments dry and crips, slightly tart, fruity and well-balanced. Ferments well down to 18C.
+ </NOTES>
+ <BEST_FOR>Blonde Ale, Scottish Light 60/-, Scottish Heavy 70/-, Scottish Export 80/-, Mild, Northern English Brown, Robust Porter, English IPA, English Barleywine</BEST_FOR>
+ <FLOCCULATION>Medium</FLOCCULATION>
+</YEAST>
+
+<YEAST>
+ <NAME>Wyeast - Whitbread Ale</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1099</PRODUCT_ID>
+ <MIN_TEMPERATURE>18</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>24</MAX_TEMPERATURE>
+ <ATTENUATION>70</ATTENUATION>
+ <NOTES>Very clean, crisp flavor characteristics. Low fruitiness and mild ester production. Slightly citrus-like with cool (15-19C) fermentation. Versatile yeast, which produces many beer styles allowing malt and hop character to dominate the beer profile. Flocculation improves with dark malts in grain bill. Normally requires filtration for bright beers.
+ </NOTES>
+ <BEST_FOR>Everything :)</BEST_FOR>
+ <FLOCCULATION>Medium</FLOCCULATION>
+</YEAST>
+
+<YEAST>
+ <NAME>Wyeast - Ringwood Ale</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1178</PRODUCT_ID>
+ <MIN_TEMPERATURE>18</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>23</MAX_TEMPERATURE>
+ <ATTENUATION>70</ATTENUATION>
+ <NOTES>Unique fermentation and flavor characteristics. Distinct fruit ester and high flocculation provide a malty complex profile, also clears well. Thorough diacetyl rest is recommended after fermentation is complete.
+ </NOTES>
+ <BEST_FOR>American Brown Ale, Mild, Southern English Brown Ale, Robust Porter, Baltic Porter, Sweet Stout, Oatmeal Stout, American Stout, American IPA, Fruit Beer</BEST_FOR>
+ <FLOCCULATION>High</FLOCCULATION>
+</YEAST>
+
+<YEAST>
+ <NAME>Wyeast - American Ale II</NAME>
+ <TYPE>Ale</TYPE>
+ <VERSION>1</VERSION>
+ <FORM>Liquid</FORM>
+ <AMOUNT>0.125</AMOUNT>
+ <LABORATORY>Wyeast Labs</LABORATORY>
+ <PRODUCT_ID>1272</PRODUCT_ID>
+ <MIN_TEMPERATURE>15</MIN_TEMPERATURE>
+ <MAX_TEMPERATURE>22</MAX_TEMPERATURE>
+ <ATTENUATION>74</ATTENUATION>
+ <NOTES>Consistent performance. Fruitier and more flocculent than 1056. SLightly nutty, soft, clean, with a slightly tart finish. Ferment at warmer temperatures to accentuate hop character with intense fruitiness, or ferment cool for clean, light citrus character. Expect good attenuation, but this will vary with grist, mash, and other wort characteristics. Reliably flocculent, producing bright beer without filtration.
+ </NOTES>
+ <BEST_FOR>American Pale Ale, American Strong Pale Ale, American Amber Ale, American Brown Ale, American IPA, Imperial IPA, American Barleywine, American Stout, Porter, Cream Ale, Strong Scotch Ale, Irish Ale, Imperial Stout, other strong Ales, Christmas/Winter Ale, Spice/Herb/Vegetable Ale, Smoked Ale, Wood-Aged Ale, Fruit Ale</BEST_FOR>
+ <FLOCCULATION>Medium</FLOCCULATION>
+</YEAST>
+
 </YEASTS>
 
 <MISCS>

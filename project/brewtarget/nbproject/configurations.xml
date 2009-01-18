@@ -40,6 +40,8 @@
       <itemPath>../../equipment.h</itemPath>
       <itemPath>../../fermentable.cpp</itemPath>
       <itemPath>../../fermentable.h</itemPath>
+      <itemPath>../../FermentableDialog.cpp</itemPath>
+      <itemPath>../../FermentableDialog.h</itemPath>
       <itemPath>../../FermentableTableModel.cpp</itemPath>
       <itemPath>../../FermentableTableModel.h</itemPath>
       <itemPath>../../FermentableTableWidget.cpp</itemPath>
@@ -47,6 +49,8 @@
       <itemPath>../../guitest.cpp</itemPath>
       <itemPath>../../hop.cpp</itemPath>
       <itemPath>../../hop.h</itemPath>
+      <itemPath>../../HopDialog.cpp</itemPath>
+      <itemPath>../../HopDialog.h</itemPath>
       <itemPath>../../HopTableModel.cpp</itemPath>
       <itemPath>../../HopTableModel.h</itemPath>
       <itemPath>../../HopTableWidget.cpp</itemPath>
@@ -69,6 +73,8 @@
       <itemPath>../../matrixtest.cpp</itemPath>
       <itemPath>../../misc.cpp</itemPath>
       <itemPath>../../misc.h</itemPath>
+      <itemPath>../../MiscDialog.cpp</itemPath>
+      <itemPath>../../MiscDialog.h</itemPath>
       <itemPath>../../miscEditor.cpp</itemPath>
       <itemPath>../../miscEditor.h</itemPath>
       <itemPath>../../MiscTableModel.cpp</itemPath>
@@ -104,6 +110,8 @@
       <itemPath>../../xmltree.h</itemPath>
       <itemPath>../../yeast.cpp</itemPath>
       <itemPath>../../yeast.h</itemPath>
+      <itemPath>../../YeastDialog.cpp</itemPath>
+      <itemPath>../../YeastDialog.h</itemPath>
       <itemPath>../../YeastTableModel.cpp</itemPath>
       <itemPath>../../YeastTableModel.h</itemPath>
       <itemPath>../../YeastTableWidget.cpp</itemPath>
@@ -149,6 +157,12 @@
       <item path="../../AboutDialog.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../FermentableDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../FermentableDialog.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -159,6 +173,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../FermentableTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../HopDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HopDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../HopTableModel.cpp">
@@ -189,6 +209,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MashStepTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MiscDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MiscDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscTableModel.cpp">
@@ -282,6 +308,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../WaterTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../YeastTableModel.cpp">
@@ -487,6 +519,12 @@ make clean</buildCommand>
       <item path="../../AboutDialog.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../FermentableDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../FermentableDialog.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -497,6 +535,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../FermentableTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../HopDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HopDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../HopTableModel.cpp">
@@ -527,6 +571,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MashStepTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MiscDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MiscDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscTableModel.cpp">
@@ -620,6 +670,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../WaterTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../YeastTableModel.cpp">

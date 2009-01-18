@@ -29,6 +29,7 @@ class HopTableWidget : public QTableView
 {
    Q_OBJECT
    friend class HopDialog;
+   friend class MainWindow;
 public:
    HopTableWidget(QWidget* parent=0);
    HopTableModel* getModel();

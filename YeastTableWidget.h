@@ -29,6 +29,7 @@ class YeastTableWidget : public QTableView
 {
    Q_OBJECT
    friend class YeastDialog;
+   friend class MainWindow;
 public:
    YeastTableWidget(QWidget* parent=0);
    YeastTableModel* getModel();

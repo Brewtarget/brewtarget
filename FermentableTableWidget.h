@@ -29,6 +29,7 @@ class FermentableTableWidget : public QTableView
 {
    Q_OBJECT
    friend class FermentableDialog;
+   friend class MainWindow;
 public:
    FermentableTableWidget(QWidget* parent=0);
    FermentableTableModel* getModel();

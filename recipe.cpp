@@ -1083,6 +1083,7 @@ bool Recipe::removeHop( Hop *var )
       {
          hops.erase(iter);
          removeObserved(var);
+         hasChanged();
          return true;
       }
    }
@@ -1100,6 +1101,7 @@ bool Recipe::removeFermentable(Fermentable* var)
       {
          fermentables.erase(iter);
          removeObserved(var);
+         hasChanged();
          return true;
       }
    }
@@ -1117,6 +1119,7 @@ bool Recipe::removeMisc(Misc* var)
       {
          miscs.erase(iter);
          removeObserved(var);
+         hasChanged();
          return true;
       }
    }
@@ -1134,6 +1137,7 @@ bool Recipe::removeWater(Water* var)
       {
          waters.erase(iter);
          removeObserved(var);
+         hasChanged();
          return true;
       }
    }
@@ -1151,6 +1155,7 @@ bool Recipe::removeYeast(Yeast* var)
       {
          yeasts.erase(iter);
          removeObserved(var);
+         hasChanged();
          return true;
       }
    }

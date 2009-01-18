@@ -110,6 +110,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_addHop, SIGNAL( clicked() ), hopDialog, SLOT( show() ) );
    connect( pushButton_addMisc, SIGNAL( clicked() ), miscDialog, SLOT( show() ) );
    connect( pushButton_addYeast, SIGNAL( clicked() ), yeastDialog, SLOT( show() ) );
+   connect( pushButton_removeFerm, SIGNAL( clicked() ), this, SLOT( removeSelectedFermentable() ) );
+   connect( pushButton_removeHop, SIGNAL( clicked() ), this, SLOT( removeSelectedHop() ) );
+   connect( pushButton_removeMisc, SIGNAL( clicked() ), this, SLOT( removeSelectedMisc() ) );
+   connect( pushButton_removeYeast, SIGNAL( clicked() ), this, SLOT( removeSelectedYeast() ) );
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -310,4 +314,92 @@ void MainWindow::exportRecipe()
    out << recipeObs->toXml();
 
    out.close();
+}
+
+void MainWindow::removeSelectedFermentable()
+{
+   QModelIndexList selected = fermentableTable->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Fermentable* ferm = fermentableTable->getModel()->getFermentable(row);
+   fermentableTable->getModel()->removeFermentable(ferm);
+   recipeObs->removeFermentable(ferm);
+}
+
+void MainWindow::removeSelectedHop()
+{
+   QModelIndexList selected = hopTable->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Hop* hop = hopTable->getModel()->getHop(row);
+   hopTable->getModel()->removeHop(hop);
+   recipeObs->removeHop(hop);
+}
+
+void MainWindow::removeSelectedMisc()
+{
+   QModelIndexList selected = miscTable->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Misc* misc = miscTable->getModel()->getMisc(row);
+   miscTable->getModel()->removeMisc(misc);
+   recipeObs->removeMisc(misc);
+}
+
+void MainWindow::removeSelectedYeast()
+{
+   QModelIndexList selected = yeastTable->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Yeast* yeast = yeastTable->getModel()->getYeast(row);
+   yeastTable->getModel()->removeYeast(yeast);
+   recipeObs->removeYeast(yeast);
 }

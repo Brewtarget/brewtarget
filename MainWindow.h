@@ -58,9 +58,13 @@ public slots:
    void updateRecipeEfficiency();
 
    void addFermentableToRecipe(Fermentable* ferm);
+   void removeSelectedFermentable();
    void addHopToRecipe(Hop *hop);
+   void removeSelectedHop();
    void addMiscToRecipe(Misc* misc);
+   void removeSelectedMisc();
    void addYeastToRecipe(Yeast* yeast);
+   void removeSelectedYeast();
 
    void exportRecipe();
 
