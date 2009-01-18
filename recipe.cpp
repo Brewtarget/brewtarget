@@ -71,7 +71,8 @@ std::string Recipe::toXml()
    ret += mash->toXml();
    
    ret += "<ASST_BREWER>"+asstBrewer+"</ASST_BREWER>\n";
-   ret += equipment->toXml();
+   if( equipment )
+      ret += equipment->toXml();
    ret += "<NOTES>"+notes+"</NOTES>\n";
    ret += "<TASTE_NOTES>"+tasteNotes+"</TASTE_NOTES>\n";
    ret += "<TASTE_RATING>"+doubleToString(tasteRating)+"</TASTE_RATING>\n";

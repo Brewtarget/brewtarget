@@ -754,6 +754,7 @@
     <property name="title" >
      <string>File</string>
     </property>
+    <addaction name="actionExportRecipe" />
    </widget>
    <widget class="QMenu" name="menuAbout" >
     <property name="title" >
@@ -777,6 +778,11 @@
   <action name="actionAbout_BrewTarget" >
    <property name="text" >
     <string>About BrewTarget</string>
+   </property>
+  </action>
+  <action name="actionExportRecipe" >
+   <property name="text" >
+    <string>Export Recipe</string>
    </property>
   </action>
  </widget>

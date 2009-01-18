@@ -43,6 +43,8 @@ public:
    void setRecipe(Recipe* recipe);
    virtual void notify(Observable* notifier); // Inherited from Observer
 
+   static const char* homedir;
+
 public slots:
    void save();
    void setRecipeByName(const QString& name);
@@ -60,10 +62,13 @@ public slots:
    void addMiscToRecipe(Misc* misc);
    void addYeastToRecipe(Yeast* yeast);
 
+   void exportRecipe();
+
 private:
    Recipe* recipeObs;
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
+   QFileDialog* fileSaver;
    FermentableDialog* fermDialog;
    HopDialog* hopDialog;
    MiscDialog* miscDialog;

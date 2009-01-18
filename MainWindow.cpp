@@ -29,6 +29,7 @@
 #include <QFileDialog>
 
 #include <iostream>
+#include <fstream>
 
 #include "recipe.h"
 #include "MainWindow.h"
@@ -39,12 +40,23 @@
 #include "YeastTableWidget.h"
 #include "YeastDialog.h"
 
+const char* MainWindow::homedir =
+#if defined(unix)
+"/home";
+#elif defined(windows)
+"c:\\";
+#elif defined(mac)
+"/home";
+#else
+"";
+#endif
+
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
 {
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
-   
+
    // Null out the recipe
    recipeObs = 0;
 
@@ -55,21 +67,16 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
 
    // Set up the fileOpener dialog.
-   fileOpener = new QFileDialog(this, tr("Open"),
-                                #if defined(unix)
-                                tr("~/"),
-                                #elif defined(windows)
-                                tr("c:\\"),
-                                #elif defined(mac)
-                                tr("~/"),
-                                #else
-                                tr(""),
-                                #endif
-                                tr("xml")
-                                );
+   fileOpener = new QFileDialog(this, tr("Open"), tr(homedir), tr(".xml"));
    fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
    fileOpener->setFileMode(QFileDialog::ExistingFile);
    fileOpener->setViewMode(QFileDialog::List);
+
+   // Set up the fileSaver dialog.
+   fileSaver = new QFileDialog(this, tr("Save"), tr(homedir), tr(".xml") );
+   fileSaver->setAcceptMode(QFileDialog::AcceptSave);
+   fileSaver->setFileMode(QFileDialog::AnyFile);
+   fileSaver->setViewMode(QFileDialog::List);
 
    if( Database::isInitialized() )
       db = Database::getDatabase();
@@ -94,6 +101,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
    connect( recipeComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
+   connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -284,4 +292,22 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
 {
    recipeObs->addYeast(yeast);
    yeastTable->getModel()->addYeast(yeast);
+}
+
+void MainWindow::exportRecipe()
+{
+   const char* filename;
+   std::ofstream out;
+
+   if( fileSaver->exec() )
+      filename = fileSaver->selectedFiles()[0].toStdString().c_str();
+   else
+      return;
+
+   out.open(filename, ios::trunc);
+
+   out << "<?xml version=\"1.0\"?>" << std::endl;
+   out << recipeObs->toXml();
+
+   out.close();
 }
