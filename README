@@ -3,8 +3,11 @@ rm brewtarget
 qmake brewtarget.pro
 make
 
+==Installing==
+mv brewtarget *.xml /dir/of/your/choice
+
 ==Running==
-./brewtarget < recipe.txt
+./brewtarget
 
 ==Definitions==
 "unix" must be defined before compiling on unix-like systems.
