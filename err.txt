@@ -1,4 +1,0 @@
-recipe.cpp: In constructor ‘Recipe::Recipe(const XmlNode*)’:
-recipe.cpp:157: warning: unused variable ‘hasName’
-recipe.cpp:157: warning: unused variable ‘hasGrainTemp’
-recipe.cpp:157: warning: unused variable ‘hasMashStep’

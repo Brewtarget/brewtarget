@@ -99,6 +99,7 @@ MainWindow::MainWindow(QWidget* parent)
    // Connect signals.
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
+   connect( pushButton_clear, SIGNAL( clicked() ), this, SLOT( clear() ));
    connect( recipeComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
@@ -228,7 +229,8 @@ void MainWindow::save()
 
 void MainWindow::clear()
 {
-   // TODO: this method should clear the recipe I guess.
+   recipeObs->clear();
+   setRecipe(recipeObs); // This will update tables and everything.
 }
 
 void MainWindow::updateRecipeName()
@@ -409,9 +411,12 @@ void MainWindow::newRecipe()
 {
    Recipe* recipe = new Recipe();
    std::string name = "New Recipe";
+
+   // Set the following stuff so everything appears nice
+   // and the calculations don't divide by zero... things like that.
    recipe->setName(name);
-   recipe->setBatchSize_l(18.93);
-   recipe->setBoilSize_l(23.47);
+   recipe->setBatchSize_l(18.93); // 5 gallons
+   recipe->setBoilSize_l(23.47);  // 6.2 gallons
    recipe->setEfficiency_pct(70.0);
 
    db->addRecipe(recipe);

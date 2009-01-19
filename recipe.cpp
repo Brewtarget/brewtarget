@@ -103,8 +103,8 @@ std::string Recipe::toXml()
 void Recipe::setDefaults()
 {
    name = "";
-   type = "";
-   brewer = "";
+   type = "All Grain";
+   brewer = "Nobody";
    style = new Style();
    batchSize_l = 0.0;
    boilSize_l = 0.0;
@@ -171,9 +171,10 @@ Recipe::Recipe(const XmlNode *node)
       children[i]->getChildren( tmpVec );
       
       if( tmpVec.size() == 0 )
-         throw RecipeException("Tag \""+tag+"\" has no children.");
-
-      leaf = tmpVec[0]; // May not really be a leaf.
+         leaf = &XmlNode();
+      else
+         leaf = tmpVec[0]; // May not really be a leaf.
+      
       if( leaf->isLeaf() )
          leafText = leaf->getLeafText();
 
@@ -398,7 +399,7 @@ Recipe::Recipe(const XmlNode *node)
             throw RecipeException("expected a leaf");
          setCarbonationTemp_c(parseDouble(leafText));
       }
-      else if( tag == "PRIMING_SUGAR_EQUI" )
+      else if( tag == "PRIMING_SUGAR_EQUIV" )
       {
          if( !leaf->isLeaf())
             throw RecipeException("expected a leaf");
@@ -1203,5 +1204,13 @@ double Recipe::getIBU()
    }
 
    return ibus;
+}
+
+void Recipe::clear()
+{
+   std::string name = getName();
+   setDefaults();
+   setName(name);
+   hasChanged();
 }
 

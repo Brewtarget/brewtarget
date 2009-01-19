@@ -128,7 +128,7 @@ XmlNode::XmlNode( std::string::const_iterator &iter, XmlNode* par )
       }
       else if( beginsWith(tag, "/") ) // Previous XmlNode should have parsed its own ending tag.
       {
-         throw XmlNodeException("unexpected end tag: " + tag);
+         throw XmlNodeException("unexpected end tag: " + tag + "\nParent tag: " + parent->tag);
       }
       else
          break;

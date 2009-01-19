@@ -27,6 +27,7 @@ std::string Fermentable::toXml()
    
    ret += "<NAME>"+name+"</NAME>\n";
    ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
+   ret += "<TYPE>"+type+"</TYPE>\n";
    ret += "<AMOUNT>"+doubleToString(amount_kg)+"</AMOUNT>\n";
    ret += "<YIELD>"+doubleToString(yield_pct)+"</YIELD>\n";
    ret += "<COLOR>"+doubleToString(color_srm)+"</COLOR>\n";
@@ -96,11 +97,18 @@ Fermentable::Fermentable( const XmlNode* node )
       tag = children[i]->getTag();
       children[i]->getChildren( tmpVec );
       
-      // All valid children of FERMENTABLE only have one child.
-      if( tmpVec.size() != 1 )
+      // All valid children of FERMENTABLE only have zero or one child.
+      if( tmpVec.size() > 1 )
+      {
+         children[i]->printParentTags();
          throw FermentableException("Tag \""+tag+"\" has more than one child.");
+      }
+
+      if( tmpVec.size() == 1 )
+         leaf = tmpVec[0];
+      else
+         leaf = &XmlNode();
       
-      leaf = tmpVec[0];
       // It must be a leaf if it is a valid BeerXML entry.
       if( ! leaf->isLeaf() )
          throw FermentableException("Should have been a leaf but is not.");

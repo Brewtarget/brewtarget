@@ -82,11 +82,17 @@ MashStep::MashStep( const XmlNode *node)
       tag = children[i]->getTag();
       children[i]->getChildren( tmpVec );
       
-      // All valid children of YEAST only have one child.
-      if( tmpVec.size() != 1 )
+      // All valid children of YEAST only have zero or one child.
+      if( tmpVec.size() > 1 )
          throw MashStepException("Tag \""+tag+"\" has more than one child.");
       
-      leaf = tmpVec[0];
+      // Have to deal with the fact that this node might not have
+      // and children at all.
+      if( tmpVec.size() == 1 )
+         leaf = tmpVec[0];
+      else
+         leaf = &XmlNode();
+
       // It must be a leaf if it is a valid BeerXML entry.
       if( ! leaf->isLeaf() )
          throw MashStepException("Should have been a leaf but is not.");

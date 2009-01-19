@@ -45,8 +45,8 @@ std::string Misc::toXml()
 void Misc::setDefaults()
 {
    name = "";
-   type = "";
-   use = "";
+   type = "Other";
+   use = "Boil";
    amount = 0.0;
    
    amountIsWeight=false;
@@ -96,11 +96,17 @@ Misc::Misc( const XmlNode * node ) : Observable()
       tag = children[i]->getTag();
       children[i]->getChildren( tmpVec );
       
-      // All valid children of MISC only have one child.
-      if( tmpVec.size() != 1 )
+      // All valid children of MISC only have zero or one child.
+      if( tmpVec.size() > 1 )
          throw MiscException("Tag \""+tag+"\" has more than one child.");
       
-      leaf = tmpVec[0];
+      // Have to deal with the fact that this node might not have
+      // and children at all.
+      if( tmpVec.size() == 1 )
+         leaf = tmpVec[0];
+      else
+         leaf = &XmlNode();
+
       // It must be a leaf if it is a valid BeerXML entry.
       if( ! leaf->isLeaf() )
          throw MiscException("Should have been a leaf but is not.");

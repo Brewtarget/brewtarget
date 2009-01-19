@@ -39,7 +39,7 @@ std::string Mash::toXml()
    ret += "<NOTES>"+notes+"</NOTES>\n";
    ret += "<TUN_TEMP>"+doubleToString(tunTemp_c)+"</TUN_TEMP>\n";
    ret += "<SPARGE_TEMP>"+doubleToString(spargeTemp_c)+"</SPARGE_TEMP>\n";
-   ret += "<PH>"+doubleToString(ph)+"<PH>\n";
+   ret += "<PH>"+doubleToString(ph)+"</PH>\n";
    ret += "<TUN_WEIGHT>"+doubleToString(tunWeight_kg)+"</TUN_WEIGHT>\n";
    ret += "<TUN_SPECIFIC_HEAT>"+doubleToString(tunSpecificHeat_calGC)+"</TUN_SPECIFIC_HEAT>\n";
    ret += "<EQUIP_ADJUST>"+boolToString(equipAdjust)+"</EQUIP_ADJUST>\n";
@@ -92,9 +92,10 @@ Mash::Mash(const XmlNode *node)
       children[i]->getChildren( tmpVec );
       
       if( tmpVec.size() == 0 )
-         throw MashException("Tag \""+tag+"\" has no children.");
-
-      leaf = tmpVec[0]; // May not really be a leaf.
+         leaf = &XmlNode();
+      else
+         leaf = tmpVec[0]; // May not really be a leaf.
+      
       if( leaf->isLeaf() )
          leafText = leaf->getLeafText();
 

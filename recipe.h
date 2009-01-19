@@ -43,6 +43,7 @@ public:
    Recipe(const XmlNode *node);
 
    std::string toXml();
+   void clear(); // Retains only the name, but sets everything else to defaults.
    virtual void notify(Observable *notifier); // Inherited from MultipleObserver.
    
    void setName( const std::string &var );

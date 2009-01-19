@@ -64,7 +64,7 @@ void Style::setDefaults()
    categoryNumber = "";
    styleLetter = "";
    styleGuide = "";
-   type = "";
+   type = "Ale";
    ogMin = 0.0;
    ogMax = 0.0;
    fgMin = 0.0;
@@ -116,11 +116,17 @@ Style::Style(XmlNode *node)
       tag = children[i]->getTag();
       children[i]->getChildren( tmpVec );
       
-      // All valid children of YEAST only have one child.
-      if( tmpVec.size() != 1 )
+      // All valid children of YEAST only have zero or one child.
+      if( tmpVec.size() > 1 )
          throw StyleException("Tag \""+tag+"\" has more than one child.");
+
+      // Have to deal with the fact that this node might not have
+      // and children at all.
+      if( tmpVec.size() == 1 )
+         leaf = tmpVec[0];
+      else
+         leaf = &XmlNode();
       
-      leaf = tmpVec[0];
       // It must be a leaf if it is a valid BeerXML entry.
       if( ! leaf->isLeaf() )
          throw StyleException("Should have been a leaf but is not.");
@@ -542,7 +548,7 @@ std::string Style::getExamples() const
 bool Style::isValidType( const std::string &str )
 {
    static const std::string types[] = {"Lager", "Ale", "Mead", "Wheat", "Mixed", "Cider"};
-   static const unsigned int size = 6;
+   static const unsigned int size = 7;
    unsigned int i;
    
    for( i = 0; i < size; ++i )

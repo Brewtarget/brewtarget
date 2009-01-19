@@ -54,8 +54,8 @@ bool Hop::isValidType(const string &str)
 
 bool Hop::isValidForm(const string &str)
 {
-   static const string forms[] = {"Pellet", "Plug", "Leaf"};
-   static const int length = 3;
+   static const string forms[] = {"Pellet", "Plug", "Leaf", ""};
+   static const int length = 4;
    
    int i;
    for( i = 0; i < length; ++i )
@@ -77,7 +77,8 @@ std::string Hop::toXml()
    ret += "<TIME>" + doubleToString(time_min) + "</TIME>\n";
    
    ret += "<NOTES>" + notes + "</NOTES>\n";
-   ret += "<TYPE>" + type + "</TYPE>\n";
+   if( type != "" )
+      ret += "<TYPE>" + type + "</TYPE>\n";
    ret += "<FORM>" + form + "</FORM>\n";
    ret += "<BETA>" + doubleToString(beta_pct) + "</BETA>\n";
    ret += "<HSI>" + doubleToString(hsi_pct) + "</HSI>\n";
@@ -96,7 +97,7 @@ std::string Hop::toXml()
 void Hop::setDefaults()
 {
    name = "";
-   use = "";
+   use = "Boil";
    notes = "";
    type = "";
    form = "";
@@ -167,14 +168,20 @@ Hop::Hop( const XmlNode *node )
    {
       tag = children[i]->getTag();
       children[i]->getChildren( tmpVec );
-      // All valid children of HOP only have one child.
-      if( tmpVec.size() != 1 )
+      // All valid children of HOP only have zero or one child.
+      if( tmpVec.size() > 1 )
       {
          cerr << formatErr << endl;
          return;
       }
+
+      // Have to deal with the fact that this node might not have
+      // and children at all.
+      if( tmpVec.size() == 1 )
+         leaf = tmpVec[0];
+      else
+         leaf = &XmlNode();
       
-      leaf = tmpVec[0];
       // It must be a leaf if it is a valid BeerXML entry.
       if( ! leaf->isLeaf() )
       {
@@ -193,6 +200,8 @@ Hop::Hop( const XmlNode *node )
          if( parseInt(leaf->getLeafText()) != version )
             cerr << "Warning: hop is version " << parseInt(leaf->getLeafText())
                     << " instead of " << version << endl;
+         else
+            haveVersion = true;
       }
       else if( tag == "ALPHA" )
       {

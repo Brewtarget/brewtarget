@@ -54,7 +54,7 @@ const char* Database::dbFileName = "database.xml";
 std::fstream Database::recipeFile;
 const char* Database::recipeFileName = "recipes.xml";
 std::fstream Database::mashFile;
-const char* Database::mashFileName = "mash.xml";
+const char* Database::mashFileName = "mashs.xml";
 
 Database::Database()
 {
@@ -141,9 +141,9 @@ void Database::savePersistent()
    mashFile.open( mashFileName, ios::out | ios::trunc );
 
    unsigned int i, size;
-   dbFile << "<?xml verion=\"1.0\"?>" << std::endl;
-   recipeFile << "<?xml verion=\"1.0\"?>" << std::endl;
-   mashFile << "<?xml verion=\"1.0\"?>" << std::endl;
+   dbFile << "<?xml version=\"1.0\"?>" << std::endl;
+   recipeFile << "<?xml version=\"1.0\"?>" << std::endl;
+   mashFile << "<?xml version=\"1.0\"?>" << std::endl;
 
    //=====================dbFile entries=============================
 
