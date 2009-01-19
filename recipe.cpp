@@ -1043,7 +1043,7 @@ void Recipe::recalculate()
    /* No need, just call getColor_srm() */
 
    // Calculate IBUs
-   // TODO: Get my C code to implement this part.
+   /* No need, just call getIBU() */
 }
 
 double Recipe::getColor_srm()

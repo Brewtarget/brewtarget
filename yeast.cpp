@@ -256,18 +256,26 @@ void Yeast::setProductID( const std::string& var )
    hasChanged();
 }
 
-// TODO: check temperatures.
-
 void Yeast::setMinTemperature_c( double var )
 {
-   minTemperature_c = var;
-   hasChanged();
+   if( var < -273.15 )
+      throw YeastException("Temperature below absolute zero: " + doubleToString(var));
+   else
+   {
+      minTemperature_c = var;
+      hasChanged();
+   }
 }
 
 void Yeast::setMaxTemperature_c( double var )
 {
-   maxTemperature_c = var;
-   hasChanged();
+   if( var < -273.15 )
+      throw YeastException("Temperature below absolute zero: " + doubleToString(var));
+   else
+   {
+      maxTemperature_c = var;
+      hasChanged();
+   }
 }
 
 void Yeast::setFlocculation( const std::string& var )

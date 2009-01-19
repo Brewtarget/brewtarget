@@ -172,11 +172,15 @@ void MashStep::setInfuseAmount_l( double var )
    }
 }
 
-// TODO: ensure temp is above absolute zero.
 void MashStep::setStepTemp_c( double var )
 {
-   stepTemp_c = var;
-   hasChanged();
+   if( var < -273.15 )
+      throw MashException("Temperature below absolute zero: " + doubleToString(var));
+   else
+   {
+      stepTemp_c = var;
+      hasChanged();
+   }
 }
 
 void MashStep::setStepTime_min( double var )
@@ -203,8 +207,13 @@ void MashStep::setRampTime_min( double var )
 
 void MashStep::setEndTemp_c( double var )
 {
-   endTemp_c = var;
-   hasChanged();
+   if( var < -273.15 )
+      throw MashException("Temperature below absolute zero: " + doubleToString(var));
+   else
+   {
+      endTemp_c = var;
+      hasChanged();
+   }
 }
 
 
