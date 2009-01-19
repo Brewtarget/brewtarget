@@ -104,6 +104,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
+   connect( actionFermentables, SIGNAL( triggered() ), fermDialog, SLOT( show() ) );
+   connect( actionHops, SIGNAL( triggered() ), hopDialog, SLOT( show() ) );
+   connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );
+   connect( actionYeasts, SIGNAL( triggered() ), yeastDialog, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );

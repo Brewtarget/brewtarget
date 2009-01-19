@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>BrewTarget</string>
+   <string>Brewtarget - 1.0a</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <property name="geometry" >
@@ -764,7 +764,17 @@
     </property>
     <addaction name="actionAbout_BrewTarget" />
    </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>View</string>
+    </property>
+    <addaction name="actionFermentables" />
+    <addaction name="actionHops" />
+    <addaction name="actionMiscs" />
+    <addaction name="actionYeasts" />
+   </widget>
    <addaction name="menuFile" />
+   <addaction name="menuView" />
    <addaction name="menuAbout" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
@@ -790,6 +800,26 @@
   <action name="actionNewRecipe" >
    <property name="text" >
     <string>New Recipe</string>
+   </property>
+  </action>
+  <action name="actionFermentables" >
+   <property name="text" >
+    <string>Fermentables</string>
+   </property>
+  </action>
+  <action name="actionHops" >
+   <property name="text" >
+    <string>Hops</string>
+   </property>
+  </action>
+  <action name="actionMiscs" >
+   <property name="text" >
+    <string>Miscs</string>
+   </property>
+  </action>
+  <action name="actionYeasts" >
+   <property name="text" >
+    <string>Yeasts</string>
    </property>
   </action>
  </widget>
