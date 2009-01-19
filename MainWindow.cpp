@@ -101,6 +101,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
    connect( recipeComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
+   connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
@@ -402,4 +403,19 @@ void MainWindow::removeSelectedYeast()
    Yeast* yeast = yeastTable->getModel()->getYeast(row);
    yeastTable->getModel()->removeYeast(yeast);
    recipeObs->removeYeast(yeast);
+}
+
+void MainWindow::newRecipe()
+{
+   Recipe* recipe = new Recipe();
+   std::string name = "New Recipe";
+   recipe->setName(name);
+   recipe->setBatchSize_l(18.93);
+   recipe->setBoilSize_l(23.47);
+   recipe->setEfficiency_pct(70.0);
+
+   db->addRecipe(recipe);
+   setRecipe(recipe);
+
+   recipeComboBox->setIndexByRecipeName(name);
 }

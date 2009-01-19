@@ -19,6 +19,7 @@
 #include <QComboBox>
 #include <QWidget>
 #include <Qt>
+#include <string>
 
 #include "database.h"
 #include <QString>
@@ -84,6 +85,17 @@ void RecipeComboBox::notify(Observable *notifier)
             setItemText(i, tr(recipeObs[i]->getName().c_str()));
          }
    }
+}
+
+void RecipeComboBox::setIndexByRecipeName(std::string& name)
+{
+   int ndx;
+
+   ndx = findText( tr(name.c_str()), Qt::MatchExactly );
+   if( ndx == -1 )
+      return;
+
+   setCurrentIndex(ndx);
 }
 
 void RecipeComboBox::repopulateList()

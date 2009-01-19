@@ -22,6 +22,7 @@
 #include <QComboBox>
 #include <QWidget>
 #include <vector>
+#include <string>
 #include "observable.h"
 #include "recipe.h"
 #include "database.h"
@@ -36,6 +37,7 @@ public:
    RecipeComboBox(QWidget* parent=0);
    void startObservingDB();
    void addRecipe(Recipe* recipe);
+   void setIndexByRecipeName(std::string& name);
    void removeAllRecipes();
    void repopulateList();
 

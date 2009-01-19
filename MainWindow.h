@@ -66,6 +66,7 @@ public slots:
    void addYeastToRecipe(Yeast* yeast);
    void removeSelectedYeast();
 
+   void newRecipe();
    void exportRecipe();
 
 private:

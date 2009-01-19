@@ -105,7 +105,7 @@ void Recipe::setDefaults()
    name = "";
    type = "";
    brewer = "";
-   style = NULL;
+   style = new Style();
    batchSize_l = 0.0;
    boilSize_l = 0.0;
    boilTime_min = 0.0;
@@ -115,7 +115,7 @@ void Recipe::setDefaults()
    miscs = std::vector<Misc*>();
    yeasts = std::vector<Yeast*>();
    waters = std::vector<Water*>();
-   mash = NULL;
+   mash = new Mash();
 
    asstBrewer = "";
    equipment = NULL;
