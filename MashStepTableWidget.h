@@ -19,11 +19,11 @@
 #ifndef _MASHSTEPTABLEWIDGET_H
 #define	_MASHSTEPTABLEWIDGET_H
 
+class MashStepTableWidget;
+
 #include <QTableView>
 #include <QWidget>
 #include "MashStepTableModel.h"
-
-class MashStepTableWidget;
 
 class MashStepTableWidget : public QTableView
 {

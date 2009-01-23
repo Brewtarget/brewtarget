@@ -19,6 +19,9 @@
 #ifndef _FERMENTABLETABLEMODEL_H
 #define	_FERMENTABLETABLEMODEL_H
 
+class FermentableTableModel;
+class FermentableItemDelegate;
+
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
@@ -28,10 +31,8 @@
 #include <QItemDelegate>
 #include <vector>
 #include "fermentable.h"
+#include "FermentableTableWidget.h"
 #include "observable.h"
-
-class FermentableTableModel;
-class FermentableItemDelegate;
 
 enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
@@ -40,7 +41,7 @@ class FermentableTableModel : public QAbstractTableModel, public MultipleObserve
    Q_OBJECT
            
 public:
-   FermentableTableModel(QWidget* parent=0);
+   FermentableTableModel(FermentableTableWidget* parent=0);
    void addFermentable(Fermentable* ferm);
    bool removeFermentable(Fermentable* ferm); // Returns true if "ferm" is successfully found and removed.
    void removeAll();
@@ -57,6 +58,7 @@ public:
    
 private:
    std::vector<Fermentable*> fermObs;
+   FermentableTableWidget* parentTableWidget;
 };
 
 class FermentableItemDelegate : public QItemDelegate

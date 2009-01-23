@@ -19,6 +19,9 @@
 #ifndef _HOPTABLEMODEL_H
 #define	_HOPTABLEMODEL_H
 
+class HopTableModel;
+class HopItemDelegate;
+
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
@@ -28,9 +31,7 @@
 #include <vector>
 #include "hop.h"
 #include "observable.h"
-
-class HopTableModel;
-class HopItemDelegate;
+#include "HopTableWidget.h"
 
 enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
@@ -39,7 +40,7 @@ class HopTableModel : public QAbstractTableModel, public MultipleObserver
    Q_OBJECT
            
 public:
-   HopTableModel(QWidget* parent=0);
+   HopTableModel(HopTableWidget* parent=0);
    void addHop(Hop* hop);
    Hop* getHop(unsigned int i);
    bool removeHop(Hop* hop); // Returns true if "hop" is successfully found and removed.
@@ -56,6 +57,7 @@ public:
    
 private:
    std::vector<Hop*> hopObs;
+   HopTableWidget* parentTableWidget;
 };
 
 class HopItemDelegate : public QItemDelegate

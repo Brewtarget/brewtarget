@@ -19,6 +19,9 @@
 #ifndef _YEASTTABLEMODEL_H
 #define	_YEASTTABLEMODEL_H
 
+class YeastTableModel;
+class YeastItemDelegate;
+
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
@@ -28,9 +31,7 @@
 #include <vector>
 #include "yeast.h"
 #include "observable.h"
-
-class YeastTableModel;
-class YeastItemDelegate;
+#include "YeastTableWidget.h"
 
 enum{ YEASTNAMECOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTNUMCOLS /*This one MUST be last*/};
 
@@ -39,7 +40,7 @@ class YeastTableModel : public QAbstractTableModel, public MultipleObserver
    Q_OBJECT
 
 public:
-   YeastTableModel(QWidget* parent=0);
+   YeastTableModel(YeastTableWidget* parent=0);
    void addYeast(Yeast* yeast);
    Yeast* getYeast(unsigned int i);
    bool removeYeast(Yeast* yeast); // Returns true if "hop" is successfully found and removed.
@@ -56,6 +57,7 @@ public:
 
 private:
    std::vector<Yeast*> yeastObs;
+   YeastTableWidget* parentTableWidget;
 };
 
 class YeastItemDelegate : public QItemDelegate

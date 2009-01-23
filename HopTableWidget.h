@@ -19,11 +19,11 @@
 #ifndef _HOPTABLEWIDGET_H
 #define	_HOPTABLEWIDGET_H
 
+class HopTableWidget;
+
 #include <QTableView>
 #include <QWidget>
 #include "HopTableModel.h"
-
-class HopTableWidget;
 
 class HopTableWidget : public QTableView
 {

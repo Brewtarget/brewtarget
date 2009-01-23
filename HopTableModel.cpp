@@ -36,10 +36,11 @@
 #include "observable.h"
 #include "HopTableModel.h"
 
-HopTableModel::HopTableModel(QWidget* parent)
+HopTableModel::HopTableModel(HopTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
 {
    hopObs.clear();
+   parentTableWidget = parent;
 }
 
 void HopTableModel::addHop(Hop* hop)
@@ -53,6 +54,12 @@ void HopTableModel::addHop(Hop* hop)
    
    hopObs.push_back(hop);
    addObserved(hop);
+
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
    reset(); // Tell everybody that the table has changed.
 }
 
@@ -65,6 +72,11 @@ bool HopTableModel::removeHop(Hop* hop)
       {
          hopObs.erase(iter);
          removeObserved(hop);
+         if( parentTableWidget )
+         {
+            parentTableWidget->resizeColumnsToContents();
+            parentTableWidget->resizeRowsToContents();
+         }
          reset(); // Tell everybody the table has changed.
          return true;
       }

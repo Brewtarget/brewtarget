@@ -19,11 +19,11 @@
 #ifndef _MISCTABLEWIDGET_H
 #define	_MISCTABLEWIDGET_H
 
+class MiscTableWidget;
+
 #include <QTableView>
 #include <QWidget>
 #include "MiscTableModel.h"
-
-class MiscTableWidget;
 
 class MiscTableWidget : public QTableView
 {

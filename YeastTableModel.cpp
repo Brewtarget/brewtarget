@@ -34,10 +34,11 @@
 #include "observable.h"
 #include "YeastTableModel.h"
 
-YeastTableModel::YeastTableModel(QWidget* parent)
+YeastTableModel::YeastTableModel(YeastTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
 {
    yeastObs.clear();
+   parentTableWidget = parent;
 }
 
 void YeastTableModel::addYeast(Yeast* yeast)
@@ -51,6 +52,13 @@ void YeastTableModel::addYeast(Yeast* yeast)
 
    yeastObs.push_back(yeast);
    addObserved(yeast);
+
+   if(parentTableWidget)
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+   
    reset(); // Tell everybody that the table has changed.
 }
 
@@ -63,6 +71,11 @@ bool YeastTableModel::removeYeast(Yeast* yeast)
       {
          yeastObs.erase(iter);
          removeObserved(yeast);
+         if(parentTableWidget)
+         {
+            parentTableWidget->resizeColumnsToContents();
+            parentTableWidget->resizeRowsToContents();
+         }
          reset(); // Tell everybody the table has changed.
          return true;
       }

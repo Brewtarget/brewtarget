@@ -19,11 +19,11 @@
 #ifndef _WATERTABLEWIDGET_H
 #define	_WATERTABLEWIDGET_H
 
+class WaterTableWidget;
+
 #include <QTableView>
 #include <QWidget>
 #include "WaterTableModel.h"
-
-class WaterTableWidget;
 
 class WaterTableWidget : public QTableView
 {

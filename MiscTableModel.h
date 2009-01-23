@@ -19,6 +19,9 @@
 #ifndef _MISCTABLEMODEL_H
 #define	_MISCTABLEMODEL_H
 
+class MiscTableModel;
+class MiscItemDelegate;
+
 #include <QAbstractTableModel>
 #include <QAbstractItemModel>
 #include <QWidget>
@@ -30,9 +33,7 @@
 #include <vector>
 #include "misc.h"
 #include "observable.h"
-
-class MiscTableModel;
-class MiscItemDelegate;
+#include "MiscTableWidget.h"
 
 enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCOLS /*This one MUST be last*/};
 
@@ -41,7 +42,7 @@ class MiscTableModel : public QAbstractTableModel, public MultipleObserver
    Q_OBJECT
    
 public:
-   MiscTableModel(QWidget* parent=0);
+   MiscTableModel(MiscTableWidget* parent=0);
    void addMisc(Misc* misc);
    Misc* getMisc(unsigned int i);
    bool removeMisc(Misc* misc);
@@ -58,6 +59,7 @@ public:
    
 private:
    std::vector<Misc*> miscObs;
+   MiscTableWidget* parentTableWidget;
 };
 
 class MiscItemDelegate : public QItemDelegate

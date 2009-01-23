@@ -19,6 +19,9 @@
 #ifndef _WATERTABLEMODEL_H
 #define	_WATERTABLEMODEL_H
 
+class WaterTableModel;
+class WaterItemDelegate;
+
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
@@ -28,9 +31,7 @@
 #include <vector>
 #include "water.h"
 #include "observable.h"
-
-class WaterTableModel;
-class WaterItemDelegate;
+#include "WaterTableWidget.h"
 
 enum{ WATERNAMECOL, WATERAMOUNTCOL, WATERCALCIUMCOL, WATERBICARBONATECOL,
       WATERSULFATECOL, WATERCHLORIDECOL, WATERSODIUMCOL, WATERMAGNESIUMCOL,
@@ -41,7 +42,7 @@ class WaterTableModel : public QAbstractTableModel, public MultipleObserver
    Q_OBJECT
 
 public:
-   WaterTableModel(QWidget* parent=0);
+   WaterTableModel(WaterTableWidget* parent=0);
    void addWater(Water* water);
    bool removeWater(Water* water); // Returns true if "water" is successfully found and removed.
    void removeAll();
@@ -57,6 +58,7 @@ public:
 
 private:
    std::vector<Water*> waterObs;
+   WaterTableWidget* parentTableWidget;
 };
 
 class WaterItemDelegate : public QItemDelegate

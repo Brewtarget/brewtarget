@@ -31,10 +31,11 @@
 #include "observable.h"
 #include "MashStepTableModel.h"
 
-MashStepTableModel::MashStepTableModel(QWidget* parent)
+MashStepTableModel::MashStepTableModel(MashStepTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
 {
    stepObs.clear();
+   parentTableWidget = parent;
 }
 
 void MashStepTableModel::addMashStep(MashStep* step)
@@ -48,6 +49,12 @@ void MashStepTableModel::addMashStep(MashStep* step)
 
    stepObs.push_back(step);
    addObserved(step);
+
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
    reset(); // Tell everybody that the table has changed.
 }
 
@@ -60,6 +67,11 @@ bool MashStepTableModel::removeMashStep(MashStep* step)
       {
          stepObs.erase(iter);
          removeObserved(step);
+         if( parentTableWidget )
+         {
+            parentTableWidget->resizeColumnsToContents();
+            parentTableWidget->resizeRowsToContents();
+         }
          reset(); // Tell everybody the table has changed.
          return true;
       }

@@ -19,11 +19,11 @@
 #ifndef _YEASTTABLEWIDGET_H
 #define	_YEASTTABLEWIDGET_H
 
+class YeastTableWidget;
+
 #include <QTableView>
 #include <QWidget>
 #include "YeastTableModel.h"
-
-class YeastTableWidget;
 
 class YeastTableWidget : public QTableView
 {

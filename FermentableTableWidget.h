@@ -19,11 +19,11 @@
 #ifndef _FERMENTABLETABLEWIDGET_H
 #define	_FERMENTABLETABLEWIDGET_H
 
+class FermentableTableWidget;
+
 #include <QTableView>
 #include <QWidget>
 #include "FermentableTableModel.h"
-
-class FermentableTableWidget;
 
 class FermentableTableWidget : public QTableView
 {

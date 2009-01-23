@@ -19,6 +19,9 @@
 #ifndef _MASHSTEPTABLEMODEL_H
 #define	_MASHSTEPTABLEMODEL_H
 
+class MashStepTableModel;
+class MashStepItemDelegate;
+
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
@@ -28,9 +31,7 @@
 #include <vector>
 #include "mashstep.h"
 #include "observable.h"
-
-class MashStepTableModel;
-class MashStepItemDelegate;
+#include "MashStepTableWidget.h"
 
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 
@@ -39,7 +40,7 @@ class MashStepTableModel : public QAbstractTableModel, public MultipleObserver
    Q_OBJECT
 
 public:
-   MashStepTableModel(QWidget* parent=0);
+   MashStepTableModel(MashStepTableWidget* parent=0);
    void addMashStep(MashStep* step);
    bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.
    void removeAll();
@@ -55,6 +56,7 @@ public:
 
 private:
    std::vector<MashStep*> stepObs;
+   MashStepTableWidget* parentTableWidget;
 };
 
 class MashStepItemDelegate : public QItemDelegate

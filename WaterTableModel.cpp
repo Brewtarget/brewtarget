@@ -33,10 +33,11 @@
 #include "WaterTableModel.h"
 #include "water.h"
 
-WaterTableModel::WaterTableModel(QWidget* parent)
+WaterTableModel::WaterTableModel(WaterTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
 {
    waterObs.clear();
+   parentTableWidget = parent;
 }
 
 void WaterTableModel::addWater(Water* water)
@@ -50,6 +51,13 @@ void WaterTableModel::addWater(Water* water)
 
    waterObs.push_back(water);
    addObserved(water);
+
+   if(parentTableWidget)
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+   
    reset(); // Tell everybody that the table has changed.
 }
 
@@ -62,6 +70,12 @@ bool WaterTableModel::removeWater(Water* water)
       {
          waterObs.erase(iter);
          removeObserved(water);
+
+         if(parentTableWidget)
+         {
+            parentTableWidget->resizeColumnsToContents();
+            parentTableWidget->resizeRowsToContents();
+         }
          reset(); // Tell everybody the table has changed.
          return true;
       }

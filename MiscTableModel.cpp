@@ -33,10 +33,11 @@
 #include "observable.h"
 #include "MiscTableModel.h"
 
-MiscTableModel::MiscTableModel(QWidget *parent)
+MiscTableModel::MiscTableModel(MiscTableWidget* parent)
    : QAbstractTableModel(parent), MultipleObserver()
 {
    miscObs.clear();
+   parentTableWidget = parent;
 }
 
 void MiscTableModel::addMisc(Misc* misc)
@@ -49,6 +50,11 @@ void MiscTableModel::addMisc(Misc* misc)
    
    miscObs.push_back(misc);
    addObserved(misc);
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
    reset();
 
 }
@@ -64,9 +70,11 @@ bool MiscTableModel::removeMisc(Misc* misc)
          miscObs.erase(iter);
          removeObserved(misc);
          
-         //NOTE: I'm not sure if I really have to emit this signal here.
-         //emit dataChanged(QAbstractItemModel::createIndex(0,0),
-         //                 QAbstractItemModel::createIndex(miscObs.size()-1, MISCNUMCOLS));
+         if( parentTableWidget )
+         {
+            parentTableWidget->resizeColumnsToContents();
+            parentTableWidget->resizeRowsToContents();
+         }
          reset();
          
          return true;

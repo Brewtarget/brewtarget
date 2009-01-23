@@ -36,10 +36,11 @@
 #include "FermentableTableModel.h"
 
 //=====================CLASS FermentableTableModel==============================
-FermentableTableModel::FermentableTableModel(QWidget* parent)
+FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
 {
    fermObs.clear();
+   parentTableWidget = parent;
 }
 
 void FermentableTableModel::addFermentable(Fermentable* ferm)
@@ -53,6 +54,12 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    
    fermObs.push_back(ferm);
    addObserved(ferm);
+
+   if(parentTableWidget)
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
    reset(); // Tell everybody that the table has changed.
 }
 
@@ -65,6 +72,11 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
       {
          fermObs.erase(iter);
          removeObserved(ferm);
+         if(parentTableWidget)
+         {
+            parentTableWidget->resizeColumnsToContents();
+            parentTableWidget->resizeRowsToContents();
+         }
          reset(); // Tell everybody the table has changed.
          return true;
       }
