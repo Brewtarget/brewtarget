@@ -54,13 +54,13 @@ void HopTableModel::addHop(Hop* hop)
    
    hopObs.push_back(hop);
    addObserved(hop);
+   reset(); // Tell everybody that the table has changed.
 
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   reset(); // Tell everybody that the table has changed.
 }
 
 bool HopTableModel::removeHop(Hop* hop)
@@ -72,12 +72,14 @@ bool HopTableModel::removeHop(Hop* hop)
       {
          hopObs.erase(iter);
          removeObserved(hop);
+         reset(); // Tell everybody the table has changed.
+         
          if( parentTableWidget )
          {
             parentTableWidget->resizeColumnsToContents();
             parentTableWidget->resizeRowsToContents();
          }
-         reset(); // Tell everybody the table has changed.
+         
          return true;
       }
    

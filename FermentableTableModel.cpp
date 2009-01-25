@@ -54,13 +54,13 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    
    fermObs.push_back(ferm);
    addObserved(ferm);
-
+   reset(); // Tell everybody that the table has changed.
+   
    if(parentTableWidget)
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   reset(); // Tell everybody that the table has changed.
 }
 
 bool FermentableTableModel::removeFermentable(Fermentable* ferm)
@@ -72,12 +72,14 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
       {
          fermObs.erase(iter);
          removeObserved(ferm);
+         reset(); // Tell everybody the table has changed.
+         
          if(parentTableWidget)
          {
             parentTableWidget->resizeColumnsToContents();
             parentTableWidget->resizeRowsToContents();
          }
-         reset(); // Tell everybody the table has changed.
+         
          return true;
       }
    

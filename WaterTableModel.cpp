@@ -51,14 +51,13 @@ void WaterTableModel::addWater(Water* water)
 
    waterObs.push_back(water);
    addObserved(water);
-
+   reset(); // Tell everybody that the table has changed.
+   
    if(parentTableWidget)
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   
-   reset(); // Tell everybody that the table has changed.
 }
 
 bool WaterTableModel::removeWater(Water* water)
@@ -70,13 +69,14 @@ bool WaterTableModel::removeWater(Water* water)
       {
          waterObs.erase(iter);
          removeObserved(water);
-
+         reset(); // Tell everybody the table has changed.
+         
          if(parentTableWidget)
          {
             parentTableWidget->resizeColumnsToContents();
             parentTableWidget->resizeRowsToContents();
          }
-         reset(); // Tell everybody the table has changed.
+         
          return true;
       }
 

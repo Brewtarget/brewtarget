@@ -52,14 +52,13 @@ void YeastTableModel::addYeast(Yeast* yeast)
 
    yeastObs.push_back(yeast);
    addObserved(yeast);
-
+   reset(); // Tell everybody that the table has changed.
+   
    if(parentTableWidget)
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   
-   reset(); // Tell everybody that the table has changed.
 }
 
 bool YeastTableModel::removeYeast(Yeast* yeast)
@@ -71,12 +70,14 @@ bool YeastTableModel::removeYeast(Yeast* yeast)
       {
          yeastObs.erase(iter);
          removeObserved(yeast);
+         reset(); // Tell everybody the table has changed.
+
          if(parentTableWidget)
          {
             parentTableWidget->resizeColumnsToContents();
             parentTableWidget->resizeRowsToContents();
          }
-         reset(); // Tell everybody the table has changed.
+         
          return true;
       }
 

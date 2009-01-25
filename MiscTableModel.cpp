@@ -50,13 +50,13 @@ void MiscTableModel::addMisc(Misc* misc)
    
    miscObs.push_back(misc);
    addObserved(misc);
+   reset();
+   
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
-   reset();
-
 }
 
 // Returns true when misc is successfully found and removed.
@@ -69,13 +69,13 @@ bool MiscTableModel::removeMisc(Misc* misc)
       {
          miscObs.erase(iter);
          removeObserved(misc);
-         
+         reset();
+
          if( parentTableWidget )
          {
             parentTableWidget->resizeColumnsToContents();
             parentTableWidget->resizeRowsToContents();
          }
-         reset();
          
          return true;
       }

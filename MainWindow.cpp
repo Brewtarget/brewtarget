@@ -221,9 +221,9 @@ void MainWindow::showChanges()
 
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
-   lcdNumber_abv->display(recipeObs->getABV_pct());
-   lcdNumber_ibu->display(recipeObs->getIBU());
-   lcdNumber_srm->display(recipeObs->getColor_srm());
+   lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(),1).c_str());
+   lcdNumber_ibu->display(doubleToStringPrec(recipeObs->getIBU(),1).c_str());
+   lcdNumber_srm->display(doubleToStringPrec(recipeObs->getColor_srm(),1).c_str());
 }
 
 void MainWindow::save()
