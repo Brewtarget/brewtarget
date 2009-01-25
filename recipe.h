@@ -18,6 +18,10 @@
 #ifndef _RECIPE_H
 #define _RECIPE_H
 
+class Recipe;
+class RecipeException;
+
+#include <QColor>
 #include <string>
 #include <exception>
 #include "xmlnode.h"
@@ -30,10 +34,6 @@
 #include "yeast.h"
 #include "water.h"
 #include "observable.h"
-
-
-class Recipe;
-class RecipeException;
 
 class Recipe : public Observable, public MultipleObserver
 {
@@ -143,6 +143,7 @@ public:
    double getColor_srm();
    double getWortGrav();
    double getIBU();
+   QColor getSRMColor();
 
 private:
 

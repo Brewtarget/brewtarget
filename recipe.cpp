@@ -1214,3 +1214,35 @@ void Recipe::clear()
    hasChanged();
 }
 
+QColor Recipe::getSRMColor()
+{
+   double SRM = getColor_srm();
+   
+   // Luminance Y
+   double Y = 94.6914*exp(-0.131272*SRM);
+   // Chroma x
+   double x = 0.73978 - 0.25442*exp(-0.037865*SRM) - 0.017511*exp(-0.24307*SRM);
+   // Chroma y
+   double y = 0.197785 + 0.260472*exp( -pow( (x-0.491021)/.214194, 2)   );
+   // Chroma z
+   double z = 1 - x - y;
+
+   double X = (Y/y)*x;
+   double Z = (Y/y)*z;
+
+   // Get [0,255] RGB values.
+   int R = (int)ceil(1.910*X  - 0.533*Y - 0.288*Z);
+   R = (R<0)?0:((R>255)?255:R);
+
+   int G = (int)ceil(-0.985*X + 2.000*Y - 0.0280*Z);
+   G = (G<0)?0:((G>255)?255:G);
+
+   int B = (int)ceil(0.058*X -0.118*Y + 0.896*Z);
+   B = (B<0)?0:((B>255)?255:B);
+
+   QColor ret;
+
+   ret.setRgb( R, G, B, 255 );
+
+   return ret;
+}
