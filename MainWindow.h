@@ -33,6 +33,7 @@ class MainWindow;
 #include "AboutDialog.h"
 #include "observable.h"
 #include "recipe.h"
+#include "BeerColorWidget.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -79,6 +80,7 @@ private:
    MiscDialog* miscDialog;
    YeastDialog* yeastDialog;
    Database* db;
+   BeerColorWidget beerColorWidget;
    
    void showChanges();
 };

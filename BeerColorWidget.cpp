@@ -1,5 +1,5 @@
 /*
- * guitest.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * BeerColorWidget.cpp is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,40 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <QApplication>
 #include <QWidget>
-#include "MainWindow.h"
-#include "recipe.h"
-#include "xmlnode.h"
-#include "xmltree.h"
-#include "database.h"
-
 #include <QPixmap>
-#include <QLabel>
-
+#include <QPaintEvent>
+#include <QPainter>
+#include <QRect>
+#include <QColor>
+#include <QSize>
 #include "BeerColorWidget.h"
 
-int main(int argc, char **argv)
+// TODO: make the size adjust inside the container.
+BeerColorWidget::BeerColorWidget()
 {
-   MainWindow *mainWindow;
-   QApplication app(argc, argv);
-   Database::initialize();
+   setFixedSize(QSize(100,100));
+}
 
-   mainWindow = new MainWindow();
+// TODO: color seems too dark.
+void BeerColorWidget::paintEvent(QPaintEvent *)
+{
+   QPainter painter(this);
+   QRect rect;
 
-   mainWindow->show();
-   return app.exec();
+   rect.setCoords(0,0,100,100);
+   painter.setBrush(color);
+   painter.drawRect(rect);
+}
 
-   /*
-   QApplication app(argc, argv);
-   QPixmap img("/home/philip/Desktop/glass.png");
-   QLabel lbl;
-   lbl.setPixmap(img);
-
-   lbl.show();
-   return app.exec();
-    */
+void BeerColorWidget::setColor( QColor newColor )
+{
+   color = QColor(newColor);
+   
+   repaint();
 }

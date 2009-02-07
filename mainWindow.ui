@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
-    <height>538</height>
+    <width>574</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,8 +17,8 @@
     <rect>
      <x>0</x>
      <y>26</y>
-     <width>645</width>
-     <height>489</height>
+     <width>574</width>
+     <height>490</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_9" >
@@ -34,7 +34,14 @@
          </widget>
         </item>
         <item>
-         <widget class="RecipeComboBox" name="recipeComboBox" />
+         <widget class="RecipeComboBox" name="recipeComboBox" >
+          <property name="maximumSize" >
+           <size>
+            <width>124</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="verticalSpacer_2" >
@@ -278,10 +285,23 @@
              </item>
             </layout>
            </item>
+           <item>
+            <spacer name="verticalSpacer_7" >
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0" >
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout" >
+          <layout class="QVBoxLayout" name="verticalLayout_lcd" >
            <property name="spacing" >
             <number>1</number>
            </property>
@@ -553,7 +573,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>623</width>
+         <width>552</width>
          <height>172</height>
         </rect>
        </property>
@@ -625,7 +645,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>572</width>
+         <width>623</width>
          <height>172</height>
         </rect>
        </property>
@@ -680,6 +700,14 @@
        </layout>
       </widget>
       <widget class="QWidget" name="miscTab" >
+       <property name="geometry" >
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>623</width>
+         <height>172</height>
+        </rect>
+       </property>
        <attribute name="title" >
         <string>Miscellaneous</string>
        </attribute>
@@ -731,6 +759,14 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_3" >
+       <property name="geometry" >
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>623</width>
+         <height>172</height>
+        </rect>
+       </property>
        <attribute name="title" >
         <string>Yeast</string>
        </attribute>
@@ -780,7 +816,6 @@
          </layout>
         </item>
        </layout>
-       <zorder>yeastTable</zorder>
        <zorder></zorder>
        <zorder>yeastTable</zorder>
       </widget>
@@ -831,7 +866,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>645</width>
+     <width>574</width>
      <height>26</height>
     </rect>
    </property>
@@ -866,8 +901,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>515</y>
-     <width>645</width>
+     <y>516</y>
+     <width>574</width>
      <height>23</height>
     </rect>
    </property>

@@ -39,6 +39,7 @@
 #include "MiscTableWidget.h"
 #include "YeastTableWidget.h"
 #include "YeastDialog.h"
+#include "BeerColorWidget.h"
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -77,6 +78,9 @@ MainWindow::MainWindow(QWidget* parent)
    fileSaver->setAcceptMode(QFileDialog::AcceptSave);
    fileSaver->setFileMode(QFileDialog::AnyFile);
    fileSaver->setViewMode(QFileDialog::List);
+
+   // Set up and place the BeerColorWidget
+   verticalLayout_lcd->insertWidget( 5, &beerColorWidget);
 
    if( Database::isInitialized() )
       db = Database::getDatabase();
@@ -224,6 +228,7 @@ void MainWindow::showChanges()
    lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(),1).c_str());
    lcdNumber_ibu->display(doubleToStringPrec(recipeObs->getIBU(),1).c_str());
    lcdNumber_srm->display(doubleToStringPrec(recipeObs->getColor_srm(),1).c_str());
+   beerColorWidget.setColor( recipeObs->getSRMColor() );
 }
 
 void MainWindow::save()

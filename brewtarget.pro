@@ -5,6 +5,7 @@ INCLUDEPATH += .
 
 # Input
 HEADERS += AboutDialog.h \
+           BeerColorWidget.h \
            database.h \
            equipment.h \
            fermentable.h \
@@ -51,6 +52,7 @@ FORMS +=   aboutDialog.ui \
            miscDialog.ui \
            yeastDialog.ui
 SOURCES += database.cpp \
+           BeerColorWidget.cpp \
            equipment.cpp \
            fermentable.cpp \
            FermentableDialog.cpp \
