@@ -40,7 +40,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit" >
+           <widget class="QLineEdit" name="lineEdit_name" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
               <horstretch>0</horstretch>
@@ -73,7 +73,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox" >
+           <widget class="QComboBox" name="comboBox_type" >
             <item>
              <property name="text" >
               <string>Ale</string>
@@ -119,7 +119,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_2" >
+           <widget class="QComboBox" name="comboBox_form" >
             <item>
              <property name="text" >
               <string>Liquid</string>
@@ -154,7 +154,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_2" >
+           <widget class="QLineEdit" name="lineEdit_amount" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
               <horstretch>0</horstretch>
@@ -206,7 +206,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox" >
+        <widget class="QCheckBox" name="checkBox_amountIsWeight" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
@@ -230,7 +230,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_3" >
+        <widget class="QLineEdit" name="lineEdit_laboratory" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
            <horstretch>0</horstretch>
@@ -257,7 +257,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_4" >
+        <widget class="QLineEdit" name="lineEdit_productID" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
            <horstretch>0</horstretch>
@@ -284,7 +284,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_5" >
+        <widget class="QLineEdit" name="lineEdit_minTemperature" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
            <horstretch>0</horstretch>
@@ -311,7 +311,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_6" >
+        <widget class="QLineEdit" name="lineEdit_maxTemperature" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
            <horstretch>0</horstretch>
@@ -364,7 +364,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_3" >
+        <widget class="QComboBox" name="comboBox_flocculation" >
          <item>
           <property name="text" >
            <string>Low</string>
@@ -399,7 +399,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_7" >
+        <widget class="QLineEdit" name="lineEdit_attenuation" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
            <horstretch>0</horstretch>
@@ -426,7 +426,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_8" >
+        <widget class="QLineEdit" name="lineEdit_timesCultured" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
            <horstretch>0</horstretch>
@@ -453,7 +453,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_9" >
+        <widget class="QLineEdit" name="lineEdit_maxReuse" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
            <horstretch>0</horstretch>
@@ -486,7 +486,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_2" >
+        <widget class="QCheckBox" name="checkBox_addToSecondary" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
@@ -508,7 +508,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QTextEdit" name="textEdit" >
+      <widget class="QTextEdit" name="textEdit_bestFor" >
        <property name="sizePolicy" >
         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
          <horstretch>0</horstretch>
@@ -531,7 +531,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QTextEdit" name="textEdit_2" >
+      <widget class="QTextEdit" name="textEdit_notes" >
        <property name="sizePolicy" >
         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
          <horstretch>0</horstretch>
