@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
-    <height>934</height>
+    <width>645</width>
+    <height>538</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,8 +17,8 @@
     <rect>
      <x>0</x>
      <y>26</y>
-     <width>809</width>
-     <height>885</height>
+     <width>645</width>
+     <height>489</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_9" >
@@ -80,7 +80,7 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_name" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -89,6 +89,12 @@
                 <size>
                  <width>80</width>
                  <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
                 </size>
                </property>
               </widget>
@@ -100,7 +106,7 @@
              <item>
               <widget class="QLabel" name="label_2" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -130,7 +136,7 @@
              <item>
               <widget class="QLabel" name="label_3" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -160,7 +166,7 @@
              <item>
               <widget class="QLabel" name="label_4" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -173,7 +179,7 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_batchSize" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -182,6 +188,12 @@
                 <size>
                  <width>80</width>
                  <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
                 </size>
                </property>
               </widget>
@@ -193,7 +205,7 @@
              <item>
               <widget class="QLabel" name="label_5" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -206,7 +218,7 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_boilSize" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -215,6 +227,12 @@
                 <size>
                  <width>80</width>
                  <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
                 </size>
                </property>
               </widget>
@@ -226,7 +244,7 @@
              <item>
               <widget class="QLabel" name="label_6" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -239,7 +257,7 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_efficiency" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -248,6 +266,12 @@
                 <size>
                  <width>80</width>
                  <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
                 </size>
                </property>
               </widget>
@@ -491,9 +515,12 @@
            <property name="orientation" >
             <enum>Qt::Horizontal</enum>
            </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::MinimumExpanding</enum>
+           </property>
            <property name="sizeHint" stdset="0" >
             <size>
-             <width>40</width>
+             <width>5</width>
              <height>20</height>
             </size>
            </property>
@@ -505,200 +532,258 @@
      </layout>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBox_2" >
-      <property name="title" >
-       <string>Recipe Ingredients</string>
+     <widget class="QTabWidget" name="tabWidget" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_7" >
-       <property name="spacing" >
-        <number>1</number>
+      <property name="minimumSize" >
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="fermentableTab" >
+       <property name="geometry" >
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>623</width>
+         <height>172</height>
+        </rect>
        </property>
-       <property name="leftMargin" >
-        <number>5</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>5</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>1</number>
-       </property>
-       <item>
-        <widget class="QGroupBox" name="groupBox_3" >
-         <property name="title" >
-          <string>Fermentables</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_13" >
+       <attribute name="title" >
+        <string>Fermentables</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_19" >
+        <item>
+         <widget class="FermentableTableWidget" name="fermentableTable" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3" >
+          <property name="spacing" >
+           <number>1</number>
+          </property>
           <item>
-           <widget class="FermentableTableWidget" name="fermentableTable" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>0</width>
-              <height>20</height>
-             </size>
+           <widget class="QPushButton" name="pushButton_addFerm" >
+            <property name="text" >
+             <string>Add</string>
             </property>
            </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3" >
-            <property name="spacing" >
-             <number>1</number>
+           <widget class="QPushButton" name="pushButton_removeFerm" >
+            <property name="text" >
+             <string>Remove</string>
             </property>
-            <item>
-             <widget class="QPushButton" name="pushButton_addFerm" >
-              <property name="text" >
-               <string>Add</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_removeFerm" >
-              <property name="text" >
-               <string>Remove</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_editFerm" >
-              <property name="text" >
-               <string>Edit</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_editFerm" >
+            <property name="text" >
+             <string>Edit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3" >
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_4" >
-         <property name="title" >
-          <string>Hops</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_14" >
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="hopsTab" >
+       <property name="geometry" >
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>572</width>
+         <height>172</height>
+        </rect>
+       </property>
+       <attribute name="title" >
+        <string>Hops</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_20" >
+        <item>
+         <widget class="HopTableWidget" name="hopTable" />
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4" >
+          <property name="spacing" >
+           <number>1</number>
+          </property>
           <item>
-           <widget class="HopTableWidget" name="hopTable" />
+           <widget class="QPushButton" name="pushButton_addHop" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_4" >
-            <property name="spacing" >
-             <number>1</number>
+           <widget class="QPushButton" name="pushButton_removeHop" >
+            <property name="text" >
+             <string>Remove</string>
             </property>
-            <item>
-             <widget class="QPushButton" name="pushButton_addHop" >
-              <property name="text" >
-               <string>Add</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_removeHop" >
-              <property name="text" >
-               <string>Remove</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_editHop" >
-              <property name="text" >
-               <string>Edit</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_editHop" >
+            <property name="text" >
+             <string>Edit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4" >
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_5" >
-         <property name="title" >
-          <string>Miscellaneous</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_15" >
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="miscTab" >
+       <attribute name="title" >
+        <string>Miscellaneous</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_21" >
+        <item>
+         <widget class="MiscTableWidget" name="miscTable" />
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5" >
+          <property name="spacing" >
+           <number>1</number>
+          </property>
           <item>
-           <widget class="MiscTableWidget" name="miscTable" />
+           <widget class="QPushButton" name="pushButton_addMisc" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_5" >
-            <property name="spacing" >
-             <number>1</number>
+           <widget class="QPushButton" name="pushButton_removeMisc" >
+            <property name="text" >
+             <string>Remove</string>
             </property>
-            <item>
-             <widget class="QPushButton" name="pushButton_addMisc" >
-              <property name="text" >
-               <string>Add</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_removeMisc" >
-              <property name="text" >
-               <string>Remove</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_editMisc" >
-              <property name="text" >
-               <string>Edit</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_editMisc" >
+            <property name="text" >
+             <string>Edit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_5" >
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_6" >
-         <property name="title" >
-          <string>Yeast</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_16" >
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3" >
+       <attribute name="title" >
+        <string>Yeast</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_13" >
+        <item>
+         <widget class="YeastTableWidget" name="yeastTable" />
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6" >
+          <property name="spacing" >
+           <number>1</number>
+          </property>
           <item>
-           <widget class="YeastTableWidget" name="yeastTable" />
+           <widget class="QPushButton" name="pushButton_addYeast" >
+            <property name="text" >
+             <string>Add</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6" >
-            <property name="spacing" >
-             <number>1</number>
+           <widget class="QPushButton" name="pushButton_removeYeast" >
+            <property name="text" >
+             <string>Remove</string>
             </property>
-            <item>
-             <widget class="QPushButton" name="pushButton_addYeast" >
-              <property name="text" >
-               <string>Add</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_removeYeast" >
-              <property name="text" >
-               <string>Remove</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_editYeast" >
-              <property name="text" >
-               <string>Edit</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_editYeast" >
+            <property name="text" >
+             <string>Edit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_6" >
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
-        </widget>
-       </item>
-      </layout>
+        </item>
+       </layout>
+       <zorder>yeastTable</zorder>
+       <zorder></zorder>
+       <zorder>yeastTable</zorder>
+      </widget>
      </widget>
     </item>
     <item>
@@ -746,7 +831,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>809</width>
+     <width>645</width>
      <height>26</height>
     </rect>
    </property>
@@ -781,8 +866,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>911</y>
-     <width>809</width>
+     <y>515</y>
+     <width>645</width>
      <height>23</height>
     </rect>
    </property>
