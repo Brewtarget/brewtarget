@@ -24,12 +24,8 @@
 #include <exception>
 #include <iostream>
 
-void iterateUntilDelimiter( std::string::const_iterator &iter );
-void iterateUntilNotDelimiter( std::string::const_iterator &iter );
-void iterateUntilCharFound( std::string::const_iterator &iter, char c );
 std::string getNextTag( std::string::const_iterator &iter );
 void getAttributes( std::vector<std::string>& attrib, std::string::const_iterator &iter );
-bool isWhiteSpace( char c );
 
 class XmlNode;
 class XmlNodeException;

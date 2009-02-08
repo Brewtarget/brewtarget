@@ -100,3 +100,45 @@ std::string intToString( int num )
    
    return std::string(s);
 }
+
+std::string& trim( std::string &str )
+{
+   static const std::string white(" \f\n\r\t\v");
+   std::string::size_type lastNonSpace, firstNonSpace;
+
+   firstNonSpace = str.find_first_not_of(white);
+   if( firstNonSpace == std::string::npos )
+      return str;
+   str.erase( 0, firstNonSpace );
+
+   lastNonSpace = str.find_last_not_of(white);
+   if( lastNonSpace == std::string::npos )
+      return str;
+   str.erase( lastNonSpace+1, str.size()-lastNonSpace-1 );
+
+   return str;
+}
+
+bool isWhiteSpace( char c )
+{
+   return (c == ' ' || c == '\f' || c == '\n' || c == '\r' || c == '\t'
+           || c == '\v' );
+}
+
+void iterateUntilDelimiter( std::string::const_iterator &iter )
+{
+   while( !(isWhiteSpace(*iter) || *iter == '=' || *iter == '>') )
+          ++iter;
+}
+
+void iterateUntilNotDelimiter( std::string::const_iterator &iter )
+{
+   while( isWhiteSpace(*iter) || *iter == '=' || *iter == '>' )
+          ++iter;
+}
+
+void iterateUntilCharFound( std::string::const_iterator &iter, char c )
+{
+   while( *iter != c )
+      ++iter;
+}

@@ -34,6 +34,12 @@ std::string doubleToStringPrec( double num, unsigned int prec );
 std::string intToString( int num );
 std::string boolToString( bool b );
 
+std::string& trim( std::string &str );
+void iterateUntilDelimiter( std::string::const_iterator &iter );
+void iterateUntilNotDelimiter( std::string::const_iterator &iter );
+void iterateUntilCharFound( std::string::const_iterator &iter, char c );
+bool isWhiteSpace( char c );
+
 //==========================ParseException======================================
 class ParseException : std::exception
 {

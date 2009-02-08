@@ -34,6 +34,9 @@ class TablespoonUnit;
 class TeaspoonUnit;
 class SecondUnit;
 class MinuteUnit;
+class CelsiusUnit;
+class FahrenheitUnit;
+class KelvinUnit;
 
 #include <string>
 #include <map>
@@ -49,8 +52,9 @@ class Unit
       virtual const std::string& getSIUnitName() const { return 0; };
 
       static double convert( double amount, const std::string& fromUnit, const std::string& toUnit );
+      static double stringToSI( std::string& input );
    private:
-      static std::map<std::string, Unit> nameToUnit;
+      static std::map<std::string, Unit*> nameToUnit;
       static bool isMapSetup;
       static void setupMap();
 };
@@ -70,7 +74,7 @@ class KilogramUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Kilograms;
+};
 
 class GramUnit : public Unit
 {
@@ -86,7 +90,7 @@ class GramUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Grams;
+};
 
 class MilligramUnit : public Unit
 {
@@ -102,7 +106,7 @@ class MilligramUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Milligrams;
+};
 
 class PoundUnit : public Unit
 {
@@ -118,7 +122,7 @@ class PoundUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Pounds;
+};
 
 class OunceUnit : public Unit
 {
@@ -134,7 +138,7 @@ class OunceUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Ounces;
+};
 
 // ================ Volume ================
 class LiterUnit : public Unit
@@ -151,7 +155,7 @@ class LiterUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Liters;
+};
 
 class MilliliterUnit : public Unit
 {
@@ -167,7 +171,7 @@ class MilliliterUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Milliliters;
+};
 
 class GallonUnit : public Unit
 {
@@ -183,7 +187,7 @@ class GallonUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Gallons;
+};
 
 class QuartUnit : public Unit
 {
@@ -199,7 +203,7 @@ class QuartUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Quarts;
+};
 
 class CupUnit : public Unit
 {
@@ -215,7 +219,7 @@ class CupUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Cups;
+};
 
 class TablespoonUnit : public Unit
 {
@@ -231,7 +235,7 @@ class TablespoonUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Tablespoons;
+};
 
 class TeaspoonUnit : public Unit
 {
@@ -247,7 +251,7 @@ class TeaspoonUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Teaspoons;
+};
 
 // ================ Time ================
 class SecondUnit : public Unit
@@ -264,7 +268,7 @@ class SecondUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Seconds;
+};
 
 class MinuteUnit : public Unit
 {
@@ -280,6 +284,56 @@ class MinuteUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
-} Minutes;
+};
+
+// ================ Temperature ================
+
+class CelsiusUnit : public Unit
+{
+   public:
+      CelsiusUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+};
+
+class KelvinUnit : public Unit
+{
+   public:
+      KelvinUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+};
+
+class FahrenheitUnit : public Unit
+{
+   public:
+      FahrenheitUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+};
 
 #endif // _UNIT_H

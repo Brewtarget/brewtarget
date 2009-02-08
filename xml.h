@@ -22,6 +22,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "stringparsing.h"
 
 using namespace std;
 
@@ -31,8 +32,6 @@ bool beginsWith( const string &str1, const string &str2 );
 // or apos. Returns a blank string if there is no matching second quote or apo.
 std::string removeQuotes( const std::string &str );
 std::string replaceXmlCodes( const std::string &str );
-
-string& trim( string &str );
 
 struct ToLower
 {

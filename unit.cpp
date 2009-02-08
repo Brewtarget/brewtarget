@@ -17,10 +17,30 @@
  */
 
 #include <string>
+#include <iostream>
 #include "unit.h"
+#include "stringparsing.h"
 
-std::map<std::string, Unit> Unit::nameToUnit;
-bool Unit::isMapSetup;
+std::map<std::string, Unit*> Unit::nameToUnit;
+bool Unit::isMapSetup = false;
+
+KilogramUnit kilograms;
+GramUnit grams;
+MilligramUnit milligrams;
+PoundUnit pounds;
+OunceUnit ounces;
+LiterUnit liters;
+MilliliterUnit milliliters;
+GallonUnit gallons;
+QuartUnit quarts;
+CupUnit cups;
+TablespoonUnit tablespoons;
+TeaspoonUnit teaspoons;
+SecondUnit seconds;
+MinuteUnit minutes;
+CelsiusUnit celsius;
+FahrenheitUnit fahrenheit;
+KelvinUnit kelvin;
 
 double Unit::convert( double amount, const std::string& fromUnit, const std::string& toUnit )
 {
@@ -30,26 +50,46 @@ double Unit::convert( double amount, const std::string& fromUnit, const std::str
       Unit::setupMap();
 
    // TODO: warn somebody if the units aren't in the map.
-   SI = Unit::nameToUnit[fromUnit].toSI(amount);
-   return Unit::nameToUnit[toUnit].fromSI(SI);
+   SI = Unit::nameToUnit[fromUnit]->toSI(amount);
+   return Unit::nameToUnit[toUnit]->fromSI(SI);
+}
+
+double Unit::stringToSI( std::string& input )
+{
+   size_t pos;
+   std::string num, units;
+
+   if( ! Unit::isMapSetup )
+      Unit::setupMap();
+   
+   pos = input.find_first_of(' ');
+   num = input.substr( 0, pos );
+   units = input.substr(pos);
+   trim(num);
+   trim(units);
+
+   return Unit::nameToUnit["lb"]->toSI(parseDouble(num));
 }
 
 void Unit::setupMap()
 {
-   Unit::nameToUnit[Kilograms.getUnitName()] = Kilograms;
-   Unit::nameToUnit[Grams.getUnitName()] = Grams;
-   Unit::nameToUnit[Milligrams.getUnitName()] = Milligrams;
-   Unit::nameToUnit[Pounds.getUnitName()] = Pounds;
-   Unit::nameToUnit[Ounces.getUnitName()] = Ounces;
-   Unit::nameToUnit[Liters.getUnitName()] = Liters;
-   Unit::nameToUnit[Milliliters.getUnitName()] = Milliliters;
-   Unit::nameToUnit[Gallons.getUnitName()] = Gallons;
-   Unit::nameToUnit[Quarts.getUnitName()] = Quarts;
-   Unit::nameToUnit[Cups.getUnitName()] = Cups;
-   Unit::nameToUnit[Tablespoons.getUnitName()] = Tablespoons;
-   Unit::nameToUnit[Teaspoons.getUnitName()] = Teaspoons;
-   Unit::nameToUnit[Seconds.getUnitName()] = Seconds;
-   Unit::nameToUnit[Minutes.getUnitName()] = Minutes;
+   Unit::nameToUnit[kilograms.getUnitName()] = &kilograms;
+   Unit::nameToUnit[grams.getUnitName()] = &grams;
+   Unit::nameToUnit[milligrams.getUnitName()] = &milligrams;
+   Unit::nameToUnit[pounds.getUnitName()] = &pounds;
+   Unit::nameToUnit[ounces.getUnitName()] = &ounces;
+   Unit::nameToUnit[liters.getUnitName()] = &liters;
+   Unit::nameToUnit[milliliters.getUnitName()] = &milliliters;
+   Unit::nameToUnit[gallons.getUnitName()] = &gallons;
+   Unit::nameToUnit[quarts.getUnitName()] = &quarts;
+   Unit::nameToUnit[cups.getUnitName()] = &cups;
+   Unit::nameToUnit[tablespoons.getUnitName()] = &tablespoons;
+   Unit::nameToUnit[teaspoons.getUnitName()] = &teaspoons;
+   Unit::nameToUnit[seconds.getUnitName()] = &seconds;
+   Unit::nameToUnit[minutes.getUnitName()] = &minutes;
+   Unit::nameToUnit[celsius.getUnitName()] = &celsius;
+   Unit::nameToUnit[kelvin.getUnitName()] = &kelvin;
+   Unit::nameToUnit[fahrenheit.getUnitName()] = &fahrenheit;
 
    Unit::isMapSetup = true;
 }
@@ -290,4 +330,55 @@ double MinuteUnit::toSI( double amt ) const
 double MinuteUnit::fromSI( double amt ) const
 {
    return amt / 60.0;
+}
+
+// === Celsius ===
+CelsiusUnit::CelsiusUnit()
+{
+   unitName = "C";
+   SIUnitName = "C";
+}
+
+double CelsiusUnit::toSI( double amt ) const
+{
+   return amt;
+}
+
+double CelsiusUnit::fromSI( double amt ) const
+{
+   return amt;
+}
+
+// === Celsius ===
+FahrenheitUnit::FahrenheitUnit()
+{
+   unitName = "F";
+   SIUnitName = "C";
+}
+
+double FahrenheitUnit::toSI( double amt ) const
+{
+   return (amt-32)*5/9;
+}
+
+double FahrenheitUnit::fromSI( double amt ) const
+{
+   return amt*9/5 + 32;
+}
+
+// === Kelvin ===
+KelvinUnit::KelvinUnit()
+{
+   unitName = "K";
+   SIUnitName = "C";
+}
+
+double KelvinUnit::toSI( double amt ) const
+{
+   return amt - 273.15;
+}
+
+double KelvinUnit::fromSI( double amt ) const
+{
+   return amt + 273.15;
 }

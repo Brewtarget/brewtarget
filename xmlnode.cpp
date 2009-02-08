@@ -20,6 +20,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include "stringparsing.h"
 #include "xmlnode.h"
 #include "xml.h"
 
@@ -35,12 +36,6 @@ void XmlNode::initMembers()
 XmlNode::XmlNode()
 {
    initMembers();
-}
-
-bool isWhiteSpace( char c )
-{
-   return (c == ' ' || c == '\f' || c == '\n' || c == '\r' || c == '\t'
-           || c == '\v' );
 }
 
 void getAttributes( std::vector<std::string>& attrib, std::string::const_iterator &iter )
@@ -62,24 +57,6 @@ void getAttributes( std::vector<std::string>& attrib, std::string::const_iterato
       if( *iter == '=' )
          attrib.push_back("=");
    }
-}
-
-void iterateUntilDelimiter( std::string::const_iterator &iter )
-{
-   while( !(isWhiteSpace(*iter) || *iter == '=' || *iter == '>') )
-          ++iter;
-}
-
-void iterateUntilNotDelimiter( std::string::const_iterator &iter )
-{
-   while( isWhiteSpace(*iter) || *iter == '=' || *iter == '>' )
-          ++iter;
-}
-
-void iterateUntilCharFound( std::string::const_iterator &iter, char c )
-{
-   while( *iter != c )
-      ++iter;
 }
 
 std::string getNextTag( std::string::const_iterator &iter )

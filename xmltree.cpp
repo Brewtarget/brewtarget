@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 #include "xmltree.h"
+#include "stringparsing.h"
 
 std::ostream& operator<<(std::ostream& os, const XmlTree &rhs)
 {

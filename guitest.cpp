@@ -31,6 +31,7 @@
 #include <QLabel>
 
 #include "BeerColorWidget.h"
+#include "unit.h"
 
 int main(int argc, char **argv)
 {

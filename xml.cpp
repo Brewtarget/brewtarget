@@ -109,24 +109,6 @@ std::string removeQuotes( const std::string &str )
    return ret;
 }
 
-string& trim( string &str )
-{
-   static const string white(" \f\n\r\t\v");
-   string::size_type lastNonSpace, firstNonSpace;
-
-   firstNonSpace = str.find_first_not_of(white);
-   if( firstNonSpace == std::string::npos )
-      return str;
-   str.erase( 0, firstNonSpace );
-
-   lastNonSpace = str.find_last_not_of(white);
-   if( lastNonSpace == std::string::npos )
-      return str;
-   str.erase( lastNonSpace+1, str.size()-lastNonSpace-1 );
-
-   return str;
-}
-
 Xml::Xml( istream &in )
 {
    string tmp;
