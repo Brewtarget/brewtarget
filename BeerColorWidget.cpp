@@ -31,7 +31,6 @@ BeerColorWidget::BeerColorWidget()
    setFixedSize(QSize(100,100));
 }
 
-// TODO: color seems too dark.
 void BeerColorWidget::paintEvent(QPaintEvent *)
 {
    QPainter painter(this);

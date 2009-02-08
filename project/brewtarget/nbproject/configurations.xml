@@ -33,6 +33,8 @@
       </logicalFolder>
       <itemPath>../../AboutDialog.h</itemPath>
       <itemPath>../../aboutDialog.ui</itemPath>
+      <itemPath>../../BeerColorWidget.cpp</itemPath>
+      <itemPath>../../BeerColorWidget.h</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
       <itemPath>../../database.cpp</itemPath>
       <itemPath>../../database.h</itemPath>
@@ -155,6 +157,12 @@
         </requiredProjects>
       </makefileType>
       <item path="../../AboutDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../BeerColorWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../BeerColorWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../FermentableDialog.cpp">
@@ -517,6 +525,12 @@ make clean</buildCommand>
         </requiredProjects>
       </makefileType>
       <item path="../../AboutDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../BeerColorWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../BeerColorWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../FermentableDialog.cpp">

@@ -1216,6 +1216,7 @@ void Recipe::clear()
 
 QColor Recipe::getSRMColor()
 {
+   /**** Original method from a website: Came out dark. ***
    double SRM = getColor_srm();
    
    // Luminance Y
@@ -1243,6 +1244,22 @@ QColor Recipe::getSRMColor()
    QColor ret;
 
    ret.setRgb( R, G, B, 255 );
+
+   return ret;
+   ***********/
+
+   //==========My approximation from a photo and spreadsheet===========
+   double SRM = getColor_srm();
+
+   double red = 232.9 * pow( (double)0.93, SRM );
+   double green = (double)-106.25 * log(SRM) + 280.9;
+
+   int r = (red < 0)? 0 : ((red > 255)? 255 : (int)round(red));
+   int g = (green < 0)? 0 : ((green > 255)? 255 : (int)round(green));
+   int b = 0;
+
+   QColor ret;
+   ret.setRgb( r, g, b );
 
    return ret;
 }
