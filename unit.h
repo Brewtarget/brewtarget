@@ -18,21 +18,91 @@
 
 #ifndef _UNIT_H
 #define _UNIT_H
-#include <string>
-
-using namespace std;
 
 class Unit;
+class KilogramUnit;
+class GramUnit;
+class MilligramUnit;
 class PoundUnit;
+class OunceUnit;
+class LiterUnit;
+class MilliliterUnit;
+class GallonUnit;
+class QuartUnit;
+class CupUnit;
+class TablespoonUnit;
+class TeaspoonUnit;
+class SecondUnit;
+class MinuteUnit;
+
+#include <string>
+#include <map>
 
 class Unit
 {
    public:
-      virtual double toSI( double amt ) const = 0;
-      virtual double fromSI( double amt ) const = 0;
-      virtual const string& getUnitName() const = 0;
-      virtual const string& getSIUnitName() const = 0;
+      // Seems these can't be PURE virtuals b/c of some issue with std::map.
+      virtual double toSI( double amt ) const { return amt; };
+      virtual double fromSI( double amt ) const { return amt; };
+      // The unit name will be the singular of the commonly used abbreviation.
+      virtual const std::string& getUnitName() const { return 0; };
+      virtual const std::string& getSIUnitName() const { return 0; };
+
+      static double convert( double amount, const std::string& fromUnit, const std::string& toUnit );
+   private:
+      static std::map<std::string, Unit> nameToUnit;
+      static bool isMapSetup;
+      static void setupMap();
 };
+
+// ================ Weight/Mass ================
+class KilogramUnit : public Unit
+{
+   public:
+      KilogramUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Kilograms;
+
+class GramUnit : public Unit
+{
+   public:
+      GramUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Grams;
+
+class MilligramUnit : public Unit
+{
+   public:
+      MilligramUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Milligrams;
 
 class PoundUnit : public Unit
 {
@@ -42,13 +112,159 @@ class PoundUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const string& getUnitName() const { return unitName; }
-      const string& getSIUnitName() const { return SIUnitName; }
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
       
    private:
-      string unitName;
-      string SIUnitName;
+      std::string unitName;
+      std::string SIUnitName;
 } Pounds;
+
+class OunceUnit : public Unit
+{
+   public:
+      OunceUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Ounces;
+
+// ================ Volume ================
+class LiterUnit : public Unit
+{
+   public:
+      LiterUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Liters;
+
+class MilliliterUnit : public Unit
+{
+   public:
+      MilliliterUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Milliliters;
+
+class GallonUnit : public Unit
+{
+   public:
+      GallonUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Gallons;
+
+class QuartUnit : public Unit
+{
+   public:
+      QuartUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Quarts;
+
+class CupUnit : public Unit
+{
+   public:
+      CupUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Cups;
+
+class TablespoonUnit : public Unit
+{
+   public:
+      TablespoonUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Tablespoons;
+
+class TeaspoonUnit : public Unit
+{
+   public:
+      TeaspoonUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Teaspoons;
+
+// ================ Time ================
+class SecondUnit : public Unit
+{
+   public:
+      SecondUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+} Seconds;
 
 class MinuteUnit : public Unit
 {
@@ -58,12 +274,12 @@ class MinuteUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const string& getUnitName() const { return unitName; }
-      const string& getSIUnitName() const { return SIUnitName; }
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
       
    private:
-      string unitName;
-      string SIUnitName;
+      std::string unitName;
+      std::string SIUnitName;
 } Minutes;
 
 #endif // _UNIT_H
