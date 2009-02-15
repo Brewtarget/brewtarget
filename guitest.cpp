@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
    /*
    QApplication app(argc, argv);
-   QPixmap img("/home/philip/Desktop/glass.png");
+   QPixmap img("images/glass.png");
    QLabel lbl;
    lbl.setPixmap(img);
 
