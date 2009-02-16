@@ -27,6 +27,7 @@ class FermentableDialog;
 #include "observable.h"
 #include "database.h"
 #include "MainWindow.h"
+#include "FermentableEditor.h"
 
 class FermentableDialog : public QDialog, public Ui::fermentableDialog, public Observer
 {
@@ -38,12 +39,14 @@ public:
    virtual void notify(Observable *notifier); // From Observer
 
 public slots:
-
    void addFermentable();
+   void editSelected();
+   void newFermentable();
 
 private:
    Database* dbObs;
    MainWindow* mainWindow;
+   FermentableEditor *fermEdit;
    unsigned int numFerms;
 
    void populateTable();

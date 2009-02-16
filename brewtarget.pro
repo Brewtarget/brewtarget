@@ -9,6 +9,7 @@ HEADERS += AboutDialog.h \
            database.h \
            equipment.h \
            fermentable.h \
+           FermentableEditor.h \
            FermentableDialog.h \
            FermentableTableModel.h \
            FermentableTableWidget.h \
@@ -47,6 +48,7 @@ HEADERS += AboutDialog.h \
 FORMS +=   aboutDialog.ui \
            mainWindow.ui \
            miscEditor.ui \
+           fermentableEditor.ui \
            fermentableDialog.ui \
            hopDialog.ui \
            miscDialog.ui \
@@ -55,6 +57,7 @@ SOURCES += database.cpp \
            BeerColorWidget.cpp \
            equipment.cpp \
            fermentable.cpp \
+           FermentableEditor.cpp \
            FermentableDialog.cpp \
            FermentableTableModel.cpp \
            FermentableTableWidget.cpp \

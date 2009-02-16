@@ -32,8 +32,33 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
    mainWindow = parent;
    dbObs = 0;
    numFerms = 0;
+   fermEdit = new FermentableEditor(this);
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addFermentable() ) );
+   connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
+}
+
+void FermentableDialog::editSelected()
+{
+   QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(row);
+   fermEdit->setFermentable(ferm);
+   fermEdit->show();
 }
 
 void FermentableDialog::notify(Observable *notifier)
@@ -51,6 +76,7 @@ void FermentableDialog::notify(Observable *notifier)
 void FermentableDialog::startObservingDB()
 {
    dbObs = Database::getDatabase();
+   setObserved(dbObs);
    populateTable();
 }
 
@@ -85,4 +111,13 @@ void FermentableDialog::addFermentable()
 
    Fermentable *ferm = fermentableTableWidget->getModel()->getFermentable(row);
    mainWindow->addFermentableToRecipe(new Fermentable(*ferm) ); // Need to add a copy so we don't change the database.
+}
+
+void FermentableDialog::newFermentable()
+{
+   Fermentable *ferm = new Fermentable();
+
+   Database::getDatabase()->addFermentable(ferm);
+   fermEdit->setFermentable(ferm);
+   fermEdit->show();
 }

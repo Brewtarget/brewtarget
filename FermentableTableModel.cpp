@@ -105,8 +105,14 @@ void FermentableTableModel::notify(Observable* notifier)
    for( i = 0; i < (int)fermObs.size(); ++i )
    {
       if( notifier == fermObs[i] )
+      {
+         /*
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                            QAbstractItemModel::createIndex(i, FERMNUMCOLS));
+          */
+         reset();
+         break;
+      }
    }
 }
 

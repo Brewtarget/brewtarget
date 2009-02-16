@@ -22,6 +22,7 @@
 void Observable::setDefaults()
 {
    observers = std::vector<Observer*>();
+   doNotify = true;
 }
 
 Observable::Observable()
@@ -62,7 +63,25 @@ void Observable::hasChanged()
 void Observable::notifyObservers()
 {
    unsigned int i, size=observers.size();
-   
+
+   if( ! doNotify )
+      return;
+
    for( i = 0; i < size; ++i )
       observers[i]->notify(this);
+}
+
+void Observable::forceNotify()
+{
+   notifyObservers();
+}
+
+void Observable::disableNotification()
+{
+   doNotify = false;
+}
+
+void Observable::reenableNotification()
+{
+   doNotify = true;
 }

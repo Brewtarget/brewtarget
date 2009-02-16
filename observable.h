@@ -32,9 +32,17 @@ public:
    void addObserver(Observer* obs);
    bool removeObserver(Observer* obs); // Returns true if successful.
    void hasChanged();
+
+   // In case notification causes weird problems.
+   void disableNotification();
+   void reenableNotification();
+
+   // In case you need it. Forces a notification of observers.
+   void forceNotify();
    
 private:
    std::vector<Observer*> observers;
+   bool doNotify;
    
    void notifyObservers();
    void setDefaults();
