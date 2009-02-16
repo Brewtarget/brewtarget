@@ -25,7 +25,7 @@ HEADERS += AboutDialog.h \
            MashStepTableWidget.h \
            matrix.h \
            misc.h \
-           miscEditor.h \
+           MiscEditor.h \
            MiscDialog.h \
            MiscTableModel.h \
            MiscTableWidget.h \
@@ -74,7 +74,7 @@ SOURCES += database.cpp \
            MashStepTableWidget.cpp \
            matrix.cpp \
            misc.cpp \
-           miscEditor.cpp \
+           MiscEditor.cpp \
            MiscDialog.cpp \
            MiscTableModel.cpp \
            MiscTableWidget.cpp \

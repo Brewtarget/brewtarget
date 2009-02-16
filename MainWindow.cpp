@@ -20,6 +20,7 @@
 #include <QMainWindow>
 
 #include "FermentableEditor.h"
+#include "MiscEditor.h"
 
 #include "YeastTableModel.h"
 
@@ -68,6 +69,7 @@ MainWindow::MainWindow(QWidget* parent)
    fermEditor = new FermentableEditor(this);
    hopDialog = new HopDialog(this);
    miscDialog = new MiscDialog(this);
+   miscEditor = new MiscEditor(this);
    yeastDialog = new YeastDialog(this);
 
    // Set up the fileOpener dialog.
@@ -128,6 +130,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_removeMisc, SIGNAL( clicked() ), this, SLOT( removeSelectedMisc() ) );
    connect( pushButton_removeYeast, SIGNAL( clicked() ), this, SLOT( removeSelectedYeast() ) );
    connect( pushButton_editFerm, SIGNAL(clicked()), this, SLOT( editSelectedFermentable() ) );
+   connect( pushButton_editMisc, SIGNAL( clicked() ), this, SLOT( editSelectedMisc() ) );
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -374,6 +377,28 @@ void MainWindow::editSelectedFermentable()
    Fermentable* ferm = fermentableTable->getModel()->getFermentable(row);
    fermEditor->setFermentable(ferm);
    fermEditor->show();
+}
+
+void MainWindow::editSelectedMisc()
+{
+   QModelIndexList selected = miscTable->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Misc* m = miscTable->getModel()->getMisc(row);
+   miscEditor->setMisc(m);
+   miscEditor->show();
 }
 
 void MainWindow::removeSelectedHop()

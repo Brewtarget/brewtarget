@@ -21,9 +21,10 @@
 #include <QtGui>
 #include <iostream>
 #include <string>
-#include "miscEditor.h"
+#include "MiscEditor.h"
+#include "stringparsing.h"
 
-miscEditor::miscEditor( QWidget* /*parent*/ )
+MiscEditor::MiscEditor( QWidget* /*parent*/ )
 {
    setupUi(this);
    
@@ -33,7 +34,7 @@ miscEditor::miscEditor( QWidget* /*parent*/ )
    obsMisc = 0;
 }
 
-void miscEditor::setMisc( Misc* m )
+void MiscEditor::setMisc( Misc* m )
 {
    if( m && m != obsMisc )
    {
@@ -43,33 +44,48 @@ void miscEditor::setMisc( Misc* m )
    }
 }
 
-void miscEditor::save()
+void MiscEditor::save()
 {
    Misc *m = obsMisc;
    
    if( m == 0 )
       return;
    
+   // Need to disable notification since every "set" method will cause a "showChanges" that
+   // will revert any changes made.
+   m->disableNotification();
+
    m->setName(lineEdit_name->text().toStdString());
    m->setType(comboBox_type->currentText().toStdString());
+   m->setUse(comboBox_use->currentText().toStdString());
    // TODO: fill in the rest of the "set" methods.
+   m->setTime(parseDouble(lineEdit_time->text().toStdString()));
+   m->setAmount(parseDouble(lineEdit_amount->text().toStdString()));
+   m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
+   m->setUseFor(textEdit_useFor->toPlainText().toStdString());
+   m->setNotes( textEdit_notes->toPlainText().toStdString() );
+
+   m->reenableNotification();
+   m->forceNotify();
 }
 
-void miscEditor::clearAndClose()
+void MiscEditor::clearAndClose()
 {
-   lineEdit_name->setText("");
-   
-   
+   if( obsMisc )
+   {
+      obsMisc->removeObserver(this);
+      obsMisc = 0;
+   }
    setVisible(false); // Hide the window.
 }
 
-void miscEditor::notify(Observable* notifier)
+void MiscEditor::notify(Observable* notifier)
 {
    if( notifier == obsMisc ) 
       showChanges();
 }
 
-void miscEditor::showChanges()
+void MiscEditor::showChanges()
 {
    int tmp;
    

@@ -1,5 +1,5 @@
 /*
- * miscEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * fermentableEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,31 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MISCEDITOR_H
-#define	_MISCEDITOR_H
+#ifndef _FERMENTABLEEDITOR_H
+#define	_FERMENTABLEEDITOR_H
 
-#include "ui_miscEditor.h"
-#include "misc.h"
+class FermentableEditor;
+
+#include "ui_fermentableEditor.h"
+#include "fermentable.h"
 #include "observable.h"
 
-class miscEditor : public QDialog, private Ui::miscEditor, Observer
+class FermentableEditor : public QDialog, private Ui::fermentableEditor, Observer
 {
    Q_OBJECT
 
 public:
-   miscEditor( QWidget *parent=0 );
-   void setMisc( Misc* m );
-   
+   FermentableEditor( QWidget *parent=0 );
+   void setFermentable( Fermentable* f );
+
 public slots:
    void save();
    void clearAndClose();
-   
+
 private:
-   Misc* obsMisc;
-   
+   Fermentable* obsFerm;
+
    virtual void notify(Observable* notifier); // Inherited from Observer
    void showChanges();
 };
 
-#endif	/* _MISCEDITOR_H */
+#endif	/* _FERMENTABLEEDITOR_H */
 

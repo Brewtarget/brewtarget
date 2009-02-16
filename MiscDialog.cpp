@@ -24,6 +24,7 @@
 #include "recipe.h"
 #include "MainWindow.h"
 #include "misc.h"
+#include "MiscEditor.h"
 
 MiscDialog::MiscDialog(MainWindow* parent)
         : QDialog(parent)
@@ -32,8 +33,11 @@ MiscDialog::MiscDialog(MainWindow* parent)
    mainWindow = parent;
    dbObs = 0;
    numMiscs = 0;
+   miscEdit = new MiscEditor(this);
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
+   connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
+   connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
 }
 
 void MiscDialog::notify(Observable *notifier)
@@ -51,6 +55,7 @@ void MiscDialog::notify(Observable *notifier)
 void MiscDialog::startObservingDB()
 {
    dbObs = Database::getDatabase();
+   setObserved(dbObs);
    populateTable();
 }
 
@@ -85,4 +90,35 @@ void MiscDialog::addMisc()
 
    Misc *misc = miscTableWidget->getModel()->getMisc(row);
    mainWindow->addMiscToRecipe(new Misc(*misc) ); // Need to add a copy so we don't change the database.
+}
+
+void MiscDialog::editSelected()
+{
+   QModelIndexList selected = miscTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Misc* m = miscTableWidget->getModel()->getMisc(row);
+   miscEdit->setMisc(m);
+   miscEdit->show();
+}
+
+void MiscDialog::newMisc()
+{
+   Misc *m = new Misc();
+
+   Database::getDatabase()->addMisc(m);
+   miscEdit->setMisc(m);
+   miscEdit->show();
 }

@@ -35,6 +35,7 @@ class MainWindow;
 #include "recipe.h"
 #include "BeerColorWidget.h"
 #include "FermentableEditor.h"
+#include "MiscEditor.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -66,6 +67,7 @@ public slots:
    void removeSelectedHop();
    void addMiscToRecipe(Misc* misc);
    void removeSelectedMisc();
+   void editSelectedMisc();
    void addYeastToRecipe(Yeast* yeast);
    void removeSelectedYeast();
 
@@ -81,6 +83,7 @@ private:
    FermentableEditor* fermEditor;
    HopDialog* hopDialog;
    MiscDialog* miscDialog;
+   MiscEditor* miscEditor;
    YeastDialog* yeastDialog;
    Database* db;
    BeerColorWidget beerColorWidget;

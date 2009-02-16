@@ -1,5 +1,5 @@
 /*
- * MiscDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * miscEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,41 +16,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MISCDIALOG_H
-#define	_MISCDIALOG_H
+#ifndef _MISCEDITOR_H
+#define	_MISCEDITOR_H
 
-class MiscDialog;
-
-#include <QWidget>
-#include <QDialog>
-#include "ui_miscDialog.h"
+#include "ui_miscEditor.h"
+#include "misc.h"
 #include "observable.h"
-#include "database.h"
-#include "MainWindow.h"
-#include "MiscEditor.h"
 
-class MiscDialog : public QDialog, public Ui::miscDialog, public Observer
+class MiscEditor : public QDialog, private Ui::miscEditor, Observer
 {
    Q_OBJECT
 
 public:
-   MiscDialog(MainWindow* parent);
-   void startObservingDB();
-   virtual void notify(Observable *notifier); // From Observer
-
+   MiscEditor( QWidget *parent=0 );
+   void setMisc( Misc* m );
+   
 public slots:
-   void addMisc();
-   void editSelected();
-   void newMisc();
-
+   void save();
+   void clearAndClose();
+   
 private:
-   Database* dbObs;
-   MainWindow* mainWindow;
-   unsigned int numMiscs;
-   MiscEditor* miscEdit;
-
-   void populateTable();
+   Misc* obsMisc;
+   
+   virtual void notify(Observable* notifier); // Inherited from Observer
+   void showChanges();
 };
 
-#endif	/* _MISCDIALOG_H */
+#endif	/* _MISCEDITOR_H */
 
