@@ -23,17 +23,21 @@
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
-#include "hop.h"
+#include "yeast.h"
+#include "YeastEditor.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
         : QDialog(parent)
 {
    setupUi(this);
    mainWindow = parent;
+   yeastEditor = new YeastEditor(this);
    dbObs = 0;
    numYeasts = 0;
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
+   connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
+   connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
 }
 
 void YeastDialog::notify(Observable *notifier)
@@ -85,4 +89,35 @@ void YeastDialog::addYeast()
 
    Yeast *yeast = yeastTableWidget->getModel()->getYeast(row);
    mainWindow->addYeastToRecipe(new Yeast(*yeast) ); // Need to add a copy so we don't change the database.
+}
+
+void YeastDialog::editSelected()
+{
+   QModelIndexList selected = yeastTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Yeast *yeast = yeastTableWidget->getModel()->getYeast(row);
+   yeastEditor->setYeast(yeast);
+   yeastEditor->show();
+}
+
+void YeastDialog::newYeast()
+{
+   Yeast* y = new Yeast();
+
+   Database::getDatabase()->addYeast(y);
+   yeastEditor->setYeast(y);
+   yeastEditor->show();
 }

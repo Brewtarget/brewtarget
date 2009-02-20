@@ -1,5 +1,5 @@
 /*
- * YeastDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * YeastEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,41 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _YEASTDIALOG_H
-#define	_YEASTDIALOG_H
+#ifndef _YEASTEDITOR_H
+#define	_YEASTEDITOR_H
 
-class YeastDialog;
+class YeastEditor;
 
-#include <QWidget>
-#include <QDialog>
-#include "ui_yeastDialog.h"
+#include "ui_yeastEditor.h"
+#include "yeast.h"
 #include "observable.h"
-#include "database.h"
-#include "MainWindow.h"
-#include "YeastEditor.h"
 
-class YeastDialog : public QDialog, public Ui::yeastDialog, public Observer
+class YeastEditor : public QDialog, private Ui::yeastEditor, Observer
 {
    Q_OBJECT
 
 public:
-   YeastDialog(MainWindow* parent);
-   void startObservingDB();
-   virtual void notify(Observable *notifier); // From Observer
+   YeastEditor( QWidget *parent=0 );
+   void setYeast( Yeast* y );
 
 public slots:
-   void addYeast();
-   void editSelected();
-   void newYeast();
+   void save();
+   void clearAndClose();
 
 private:
-   Database* dbObs;
-   MainWindow* mainWindow;
-   YeastEditor* yeastEditor;
-   unsigned int numYeasts;
+   Yeast* obsYeast;
 
-   void populateTable();
+   virtual void notify(Observable* notifier); // Inherited from Observer
+   void showChanges();
 };
 
-#endif	/* _YEASTDIALOG_H */
+#endif	/* _YEASTEDITOR_H */
 

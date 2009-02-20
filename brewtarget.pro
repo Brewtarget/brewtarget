@@ -44,6 +44,7 @@ HEADERS += AboutDialog.h \
            xmltree.h \
            yeast.h \
            YeastDialog.h \
+           YeastEditor.h \
            YeastTableModel.h \
            YeastTableWidget.h
 FORMS +=   aboutDialog.ui \
@@ -54,7 +55,8 @@ FORMS +=   aboutDialog.ui \
            hopDialog.ui \
            hopEditor.ui \
            miscDialog.ui \
-           yeastDialog.ui
+           yeastDialog.ui \
+           yeastEditor.ui
 SOURCES += database.cpp \
            BeerColorWidget.cpp \
            equipment.cpp \
@@ -96,5 +98,6 @@ SOURCES += database.cpp \
            xmltree.cpp \
            yeast.cpp \
            YeastDialog.cpp \
+           YeastEditor.cpp \
            YeastTableModel.cpp \
            YeastTableWidget.cpp

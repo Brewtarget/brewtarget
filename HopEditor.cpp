@@ -55,7 +55,7 @@ void HopEditor::save()
 
    h->setName(lineEdit_name->text().toStdString());
    h->setAlpha_pct(parseDouble(lineEdit_alpha->text().toStdString()));
-   h->setAmount_kg(parseDouble(lineEdit_alpha->text().toStdString()));
+   h->setAmount_kg(parseDouble(lineEdit_amount->text().toStdString()));
    h->setUse(comboBox_use->currentText().toStdString());
    h->setTime_min(parseDouble(lineEdit_time->text().toStdString()));
    h->setType(comboBox_type->currentText().toStdString());
