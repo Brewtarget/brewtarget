@@ -101,7 +101,9 @@ void FermentableEditor::showChanges()
    lineEdit_color->setText(QString::number(obsFerm->getColor_srm()));
    checkBox_addAfterBoil->setCheckState( obsFerm->getAddAfterBoil()? Qt::Checked : Qt::Unchecked );
    lineEdit_origin->setText(obsFerm->getOrigin().c_str());
+   lineEdit_origin->setCursorPosition(0);
    lineEdit_supplier->setText(obsFerm->getSupplier().c_str());
+   lineEdit_supplier->setCursorPosition(0);
    lineEdit_coarseFineDiff->setText(QString::number(obsFerm->getCoarseFineDiff_pct()));
    lineEdit_moisture->setText(QString::number(obsFerm->getMoisture_pct()));
    lineEdit_diastaticPower->setText(QString::number(obsFerm->getDiastaticPower_lintner()));

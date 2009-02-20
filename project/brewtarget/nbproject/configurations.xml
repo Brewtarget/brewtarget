@@ -44,6 +44,8 @@
       <itemPath>../../fermentable.h</itemPath>
       <itemPath>../../FermentableDialog.cpp</itemPath>
       <itemPath>../../FermentableDialog.h</itemPath>
+      <itemPath>../../FermentableEditor.cpp</itemPath>
+      <itemPath>../../FermentableEditor.h</itemPath>
       <itemPath>../../FermentableTableModel.cpp</itemPath>
       <itemPath>../../FermentableTableModel.h</itemPath>
       <itemPath>../../FermentableTableWidget.cpp</itemPath>
@@ -77,8 +79,8 @@
       <itemPath>../../misc.h</itemPath>
       <itemPath>../../MiscDialog.cpp</itemPath>
       <itemPath>../../MiscDialog.h</itemPath>
-      <itemPath>../../miscEditor.cpp</itemPath>
-      <itemPath>../../miscEditor.h</itemPath>
+      <itemPath>../../MiscEditor.cpp</itemPath>
+      <itemPath>../../MiscEditor.h</itemPath>
       <itemPath>../../MiscTableModel.cpp</itemPath>
       <itemPath>../../MiscTableModel.h</itemPath>
       <itemPath>../../MiscTableWidget.cpp</itemPath>
@@ -171,6 +173,12 @@
       <item path="../../FermentableDialog.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../FermentableEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../FermentableEditor.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -223,6 +231,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MiscDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MiscEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MiscEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscTableModel.cpp">
@@ -403,12 +417,6 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../misc.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../miscEditor.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../miscEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../observable.cpp">
@@ -539,6 +547,12 @@ make clean</buildCommand>
       <item path="../../FermentableDialog.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../FermentableEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../FermentableEditor.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -591,6 +605,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MiscDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MiscEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MiscEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscTableModel.cpp">
@@ -771,12 +791,6 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../misc.h">
-        <itemTool>3</itemTool>
-      </item>
-      <item path="../../miscEditor.cpp">
-        <itemTool>1</itemTool>
-      </item>
-      <item path="../../miscEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../observable.cpp">

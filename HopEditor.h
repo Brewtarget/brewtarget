@@ -1,5 +1,5 @@
 /*
- * HopDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * HopEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,42 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _HOPDIALOG_H
-#define	_HOPDIALOG_H
+#ifndef _HOPEDITOR_H
+#define	_HOPEDITOR_H
 
-class HopDialog;
+class HopEditor;
 
-#include <QWidget>
-#include <QDialog>
-#include "ui_hopDialog.h"
+#include "ui_hopEditor.h"
+#include "hop.h"
 #include "observable.h"
-#include "database.h"
-#include "MainWindow.h"
-#include "HopEditor.h"
 
-class HopDialog : public QDialog, public Ui::hopDialog, public Observer
+class HopEditor : public QDialog, private Ui::hopEditor, Observer
 {
    Q_OBJECT
 
 public:
-   HopDialog(MainWindow* parent);
-   void startObservingDB();
-   virtual void notify(Observable *notifier); // From Observer
+   HopEditor( QWidget *parent=0 );
+   void setHop( Hop* h );
 
 public slots:
-   void addHop();
-   void editSelected();
-   void newHop();
+   void save();
+   void clearAndClose();
 
 private:
-   Database* dbObs;
-   MainWindow* mainWindow;
-   HopEditor* hopEditor;
-   unsigned int numHops;
+   Hop* obsHop;
 
-   void populateTable();
+   virtual void notify(Observable* notifier); // Inherited from Observer
+   void showChanges();
 };
 
-
-#endif	/* _HOPDIALOG_H */
+#endif	/* _HOPEDITOR_H */
 

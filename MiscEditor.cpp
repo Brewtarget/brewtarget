@@ -93,6 +93,7 @@ void MiscEditor::showChanges()
       return;
    
    lineEdit_name->setText(obsMisc->getName().c_str());
+   lineEdit_name->setCursorPosition(0);
    tmp = comboBox_type->findText(obsMisc->getType().c_str());
    comboBox_type->setCurrentIndex(tmp);
    tmp = comboBox_use->findText(obsMisc->getUse().c_str());
