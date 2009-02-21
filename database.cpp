@@ -18,7 +18,7 @@
 
 #include "database.h"
 
-#include <vector>
+#include <list>
 #include <iostream>
 #include <fstream>
 
@@ -37,16 +37,16 @@
 #include "xmltree.h"
 
 // Grrr... stupid C++. Have to define these outside the class AGAIN.
-std::vector<Equipment*> Database::equipments;
-std::vector<Fermentable*> Database::fermentables;
-std::vector<Hop*> Database::hops;
-std::vector<Mash*> Database::mashs;
-std::vector<MashStep*> Database::mashSteps;
-std::vector<Misc*> Database::miscs;
-std::vector<Recipe*> Database::recipes;
-std::vector<Style*> Database::styles;
-std::vector<Water*> Database::waters;
-std::vector<Yeast*> Database::yeasts;
+std::list<Equipment*> Database::equipments;
+std::list<Fermentable*> Database::fermentables;
+std::list<Hop*> Database::hops;
+std::list<Mash*> Database::mashs;
+std::list<MashStep*> Database::mashSteps;
+std::list<Misc*> Database::miscs;
+std::list<Recipe*> Database::recipes;
+std::list<Style*> Database::styles;
+std::list<Water*> Database::waters;
+std::list<Yeast*> Database::yeasts;
 bool Database::initialized = false;
 Database* Database::internalDBInstance = 0;
 std::fstream Database::dbFile;
@@ -140,73 +140,82 @@ void Database::savePersistent()
    recipeFile.open( recipeFileName, ios::out | ios::trunc );
    mashFile.open( mashFileName, ios::out | ios::trunc );
 
-   unsigned int i, size;
    dbFile << "<?xml version=\"1.0\"?>" << std::endl;
    recipeFile << "<?xml version=\"1.0\"?>" << std::endl;
    mashFile << "<?xml version=\"1.0\"?>" << std::endl;
 
    //=====================dbFile entries=============================
 
-   size = equipments.size();
+   std::list<Equipment*>::iterator eqit, eqend;
+   eqend = equipments.end();
    dbFile << "<EQUIPMENTS>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << equipments[i]->toXml();
+   for( eqit = equipments.begin(); eqit != eqend; ++eqit )
+      dbFile << (*eqit)->toXml();
    dbFile << "</EQUIPMENTS>" << std::endl;
 
-   size = fermentables.size();
+   std::list<Fermentable*>::iterator fit, fend;
+   fend = fermentables.end();
    dbFile << "<FERMENTABLES>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << fermentables[i]->toXml();
+   for( fit = fermentables.begin(); fit != fend; ++fit )
+      dbFile << (*fit)->toXml();
    dbFile << "</FERMENTABLES>" << std::endl;
 
-   size = hops.size();
+   std::list<Hop*>::iterator hit, hend;
+   hend = hops.end();
    dbFile << "<HOPS>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << hops[i]->toXml();
+   for( hit = hops.begin(); hit != hend; ++hit )
+      dbFile << (*hit)->toXml();
    dbFile << "</HOPS>" << std::endl;
 
-   size = mashSteps.size();
+   std::list<MashStep*>::iterator msit, msend;
+   msend = mashSteps.end();
    dbFile << "<MASH_STEPS>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << mashSteps[i]->toXml();
+   for( msit = mashSteps.begin(); msit != msend; ++msit )
+      dbFile << (*msit)->toXml();
    dbFile << "</MASH_STEPS>" << std::endl;
 
-   size = miscs.size();
+   std::list<Misc*>::iterator miscit, miscend;
+   miscend = miscs.end();
    dbFile << "<MISCS>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << miscs[i]->toXml();
+   for( miscit = miscs.begin(); miscit != miscend; ++miscit )
+      dbFile << (*miscit)->toXml();
    dbFile << "</MISCS>" << std::endl;
 
-   size = styles.size();
+   std::list<Style*>::iterator sit, send;
+   send = styles.end();
    dbFile << "<STYLES>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << styles[i]->toXml();
+   for( sit = styles.begin(); sit != send; ++sit )
+      dbFile << (*sit)->toXml();
    dbFile << "</STYLES>" << std::endl;
 
-   size = waters.size();
+   std::list<Water*>::iterator wit, wend;
+   wend = waters.end();
    dbFile << "<WATERS>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << waters[i]->toXml();
+   for( wit = waters.begin(); wit != wend; ++wit )
+      dbFile << (*wit)->toXml();
    dbFile << "</WATERS>" << std::endl;
 
-   size = yeasts.size();
+   std::list<Yeast*>::iterator yit, yend;
+   yend = yeasts.end();
    dbFile << "<YEASTS>" << std::endl;
-   for( i = 0; i < size; ++i )
-      dbFile << yeasts[i]->toXml();
+   for( yit = yeasts.begin(); yit != yend; ++yit )
+      dbFile << (*yit)->toXml();
    dbFile << "</YEASTS>" << std::endl;
 
    //============================mashFile entries===============================
-   size = mashs.size();
+   std::list<Mash*>::iterator mait, maend;
+   maend = mashs.end();
    mashFile << "<MASHS>" << std::endl;
-   for( i = 0; i < size; ++i )
-      mashFile << mashs[i]->toXml();
+   for( mait = mashs.begin(); mait != maend; ++mait )
+      mashFile << (*mait)->toXml();
    mashFile << "</MASHS>" << std::endl;
 
    //==========================recipeFile entries===============================
-   size = recipes.size();
+   std::list<Recipe*>::iterator rit, rend;
+   rend = recipes.end();
    recipeFile << "<RECIPES>" << std::endl;
-   for( i = 0; i < size; ++i )
-      recipeFile << recipes[i]->toXml();
+   for( rit = recipes.begin(); rit != rend; ++rit )
+      recipeFile << (*rit)->toXml();
    recipeFile << "</RECIPES>" << std::endl;
 
    dbFile.close();
@@ -357,52 +366,102 @@ unsigned int Database::getNumYeasts()
 }
 
 
-Equipment* Database::getEquipment(unsigned int i)
+std::list<Equipment*>::iterator Database::getEquipmentBegin()
 {
-   return equipments[i];
+   return equipments.begin();
 }
 
-Fermentable* Database::getFermentable(unsigned int i)
+std::list<Equipment*>::iterator Database::getEquipmentEnd()
 {
-   return fermentables[i];
+   return equipments.end();
 }
 
-Hop* Database::getHop(unsigned int i)
+std::list<Fermentable*>::iterator Database::getFermentableBegin()
 {
-   return hops[i];
+   return fermentables.begin();
 }
 
-Mash* Database::getMash(unsigned int i)
+std::list<Fermentable*>::iterator Database::getFermentableEnd()
 {
-   return mashs[i];
+   return fermentables.end();
 }
 
-MashStep* Database::getMashStep(unsigned int i)
+std::list<Hop*>::iterator Database::getHopBegin()
 {
-   return mashSteps[i];
+   return hops.begin();
 }
 
-Misc* Database::getMisc(unsigned int i)
+std::list<Hop*>::iterator Database::getHopEnd()
 {
-   return miscs[i];
+   return hops.end();
 }
 
-Recipe* Database::getRecipe(unsigned int i)
+std::list<Mash*>::iterator Database::getMashBegin()
 {
-   return recipes[i];
+   return mashs.begin();
 }
 
-Style* Database::getStyle(unsigned int i)
+std::list<Mash*>::iterator Database::getMashEnd()
 {
-   return styles[i];
+   return mashs.end();
 }
 
-Water* Database::getWater(unsigned int i)
+std::list<MashStep*>::iterator Database::getMashStepBegin()
 {
-   return waters[i];
+   return mashSteps.begin();
 }
 
-Yeast* Database::getYeast(unsigned int i)
+std::list<MashStep*>::iterator Database::getMashStepEnd()
 {
-   return yeasts[i];
+   return mashSteps.end();
+}
+
+std::list<Misc*>::iterator Database::getMiscBegin()
+{
+   return miscs.begin();
+}
+
+std::list<Misc*>::iterator Database::getMiscEnd()
+{
+   return miscs.end();
+}
+
+std::list<Recipe*>::iterator Database::getRecipeBegin()
+{
+   return recipes.begin();
+}
+
+std::list<Recipe*>::iterator Database::getRecipeEnd()
+{
+   return recipes.end();
+}
+
+std::list<Style*>::iterator Database::getStyleBegin()
+{
+   return styles.begin();
+}
+
+std::list<Style*>::iterator Database::getStyleEnd()
+{
+   return styles.end();
+}
+
+std::list<Water*>::iterator Database::getWaterBegin()
+{
+   return waters.begin();
+}
+
+std::list<Water*>::iterator Database::getWaterEnd()
+{
+   return waters.end();
+}
+
+std::list<Yeast*>::iterator Database::getYeastBegin()
+{
+   return yeasts.begin();
+}
+
+std::list<Yeast*>::iterator Database::getYeastEnd()
+{
+   return yeasts.end();
 }

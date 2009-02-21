@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>539</height>
+    <width>433</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,47 +17,47 @@
     <rect>
      <x>0</x>
      <y>26</y>
-     <width>574</width>
-     <height>490</height>
+     <width>433</width>
+     <height>555</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_9" >
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_18" >
+     <layout class="QVBoxLayout" name="verticalLayout_8" >
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_8" >
-        <item>
-         <widget class="QLabel" name="label_12" >
-          <property name="text" >
-           <string>Recipe</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="RecipeComboBox" name="recipeComboBox" >
-          <property name="maximumSize" >
-           <size>
-            <width>124</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_2" >
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0" >
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+       <widget class="QLabel" name="label_12" >
+        <property name="text" >
+         <string>Recipe</string>
+        </property>
+       </widget>
       </item>
+      <item>
+       <widget class="RecipeComboBox" name="recipeComboBox" >
+        <property name="maximumSize" >
+         <size>
+          <width>124</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_2" >
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_18" >
       <item>
        <widget class="QGroupBox" name="groupBox" >
         <property name="title" >
@@ -87,14 +87,14 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_name" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>80</width>
+                 <width>100</width>
                  <height>0</height>
                 </size>
                </property>
@@ -186,14 +186,14 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_batchSize" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>80</width>
+                 <width>100</width>
                  <height>0</height>
                 </size>
                </property>
@@ -225,14 +225,14 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_boilSize" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>80</width>
+                 <width>100</width>
                  <height>0</height>
                 </size>
                </property>
@@ -264,14 +264,14 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_efficiency" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>80</width>
+                 <width>100</width>
                  <height>0</height>
                 </size>
                </property>
@@ -317,7 +317,7 @@
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>20</width>
+                 <width>80</width>
                  <height>0</height>
                 </size>
                </property>
@@ -359,7 +359,7 @@
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>20</width>
+                 <width>80</width>
                  <height>0</height>
                 </size>
                </property>
@@ -401,7 +401,7 @@
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>20</width>
+                 <width>80</width>
                  <height>0</height>
                 </size>
                </property>
@@ -443,7 +443,7 @@
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>20</width>
+                 <width>80</width>
                  <height>0</height>
                 </size>
                </property>
@@ -485,7 +485,7 @@
                </property>
                <property name="minimumSize" >
                 <size>
-                 <width>20</width>
+                 <width>80</width>
                  <height>0</height>
                 </size>
                </property>
@@ -573,7 +573,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>552</width>
+         <width>411</width>
          <height>172</height>
         </rect>
        </property>
@@ -645,7 +645,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>623</width>
+         <width>411</width>
          <height>172</height>
         </rect>
        </property>
@@ -704,7 +704,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>623</width>
+         <width>411</width>
          <height>172</height>
         </rect>
        </property>
@@ -763,7 +763,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>623</width>
+         <width>411</width>
          <height>172</height>
         </rect>
        </property>
@@ -866,7 +866,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>574</width>
+     <width>433</width>
      <height>26</height>
     </rect>
    </property>
@@ -901,8 +901,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>516</y>
-     <width>574</width>
+     <y>581</y>
+     <width>433</width>
      <height>23</height>
     </rect>
    </property>

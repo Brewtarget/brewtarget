@@ -18,6 +18,7 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <list>
 #include "MiscDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -61,14 +62,15 @@ void MiscDialog::startObservingDB()
 
 void MiscDialog::populateTable()
 {
-   unsigned int i;
+   std::list<Misc*>::iterator it, end;
 
    if( ! Database::isInitialized() )
       return;
 
    numMiscs = dbObs->getNumMiscs();
-   for( i = 0; i < numMiscs; ++i )
-      miscTableWidget->getModel()->addMisc(dbObs->getMisc(i));
+   end = dbObs->getMiscEnd();
+   for( it = dbObs->getMiscBegin(); it != end; ++it )
+      miscTableWidget->getModel()->addMisc(*it);
 }
 
 void MiscDialog::addMisc()

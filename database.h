@@ -19,7 +19,7 @@
 #ifndef _DATABASE_H
 #define	_DATABASE_H
 
-#include <vector>
+#include <list>
 #include <iostream>
 #include <fstream>
 #include "equipment.h"
@@ -75,16 +75,26 @@ public:
    unsigned int getNumWaters();
    unsigned int getNumYeasts();
 
-   Equipment* getEquipment(unsigned int i);
-   Fermentable* getFermentable(unsigned int i);
-   Hop* getHop(unsigned int i);
-   Mash* getMash(unsigned int i);
-   MashStep* getMashStep(unsigned int i);
-   Misc* getMisc(unsigned int i);
-   Recipe* getRecipe(unsigned int i);
-   Style* getStyle(unsigned int i);
-   Water* getWater(unsigned int i);
-   Yeast* getYeast(unsigned int i);
+   std::list<Equipment*>::iterator getEquipmentBegin();
+   std::list<Equipment*>::iterator getEquipmentEnd();
+   std::list<Fermentable*>::iterator getFermentableBegin();
+   std::list<Fermentable*>::iterator getFermentableEnd();
+   std::list<Hop*>::iterator getHopBegin();
+   std::list<Hop*>::iterator getHopEnd();
+   std::list<Mash*>::iterator getMashBegin();
+   std::list<Mash*>::iterator getMashEnd();
+   std::list<MashStep*>::iterator getMashStepBegin();
+   std::list<MashStep*>::iterator getMashStepEnd();
+   std::list<Misc*>::iterator getMiscBegin();
+   std::list<Misc*>::iterator getMiscEnd();
+   std::list<Recipe*>::iterator getRecipeBegin();
+   std::list<Recipe*>::iterator getRecipeEnd();
+   std::list<Style*>::iterator getStyleBegin();
+   std::list<Style*>::iterator getStyleEnd();
+   std::list<Water*>::iterator getWaterBegin();
+   std::list<Water*>::iterator getWaterEnd();
+   std::list<Yeast*>::iterator getYeastBegin();
+   std::list<Yeast*>::iterator getYeastEnd();
 
 private:
    static bool initialized;
@@ -97,16 +107,16 @@ private:
    static const char* mashFileName;
 
    // The stuff we care about...
-   static std::vector<Equipment*> equipments;
-   static std::vector<Fermentable*> fermentables;
-   static std::vector<Hop*> hops;
-   static std::vector<Mash*> mashs;
-   static std::vector<MashStep*> mashSteps;
-   static std::vector<Misc*> miscs;
-   static std::vector<Recipe*> recipes;
-   static std::vector<Style*> styles;
-   static std::vector<Water*> waters;
-   static std::vector<Yeast*> yeasts;
+   static std::list<Equipment*> equipments;
+   static std::list<Fermentable*> fermentables;
+   static std::list<Hop*> hops;
+   static std::list<Mash*> mashs;
+   static std::list<MashStep*> mashSteps;
+   static std::list<Misc*> miscs;
+   static std::list<Recipe*> recipes;
+   static std::list<Style*> styles;
+   static std::list<Water*> waters;
+   static std::list<Yeast*> yeasts;
 };
 
 #endif	/* _DATABASE_H */

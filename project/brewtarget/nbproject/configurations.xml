@@ -55,6 +55,8 @@
       <itemPath>../../hop.h</itemPath>
       <itemPath>../../HopDialog.cpp</itemPath>
       <itemPath>../../HopDialog.h</itemPath>
+      <itemPath>../../HopEditor.cpp</itemPath>
+      <itemPath>../../HopEditor.h</itemPath>
       <itemPath>../../HopTableModel.cpp</itemPath>
       <itemPath>../../HopTableModel.h</itemPath>
       <itemPath>../../HopTableWidget.cpp</itemPath>
@@ -116,6 +118,8 @@
       <itemPath>../../yeast.h</itemPath>
       <itemPath>../../YeastDialog.cpp</itemPath>
       <itemPath>../../YeastDialog.h</itemPath>
+      <itemPath>../../YeastEditor.cpp</itemPath>
+      <itemPath>../../YeastEditor.h</itemPath>
       <itemPath>../../YeastTableModel.cpp</itemPath>
       <itemPath>../../YeastTableModel.h</itemPath>
       <itemPath>../../YeastTableWidget.cpp</itemPath>
@@ -195,6 +199,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../HopEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HopEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../HopTableModel.cpp">
@@ -336,6 +346,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../YeastDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../YeastTableModel.cpp">
@@ -571,6 +587,12 @@ make clean</buildCommand>
       <item path="../../HopDialog.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../HopEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HopEditor.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../HopTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -710,6 +732,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../YeastDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../YeastEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../YeastEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../YeastTableModel.cpp">

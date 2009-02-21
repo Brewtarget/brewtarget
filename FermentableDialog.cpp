@@ -18,6 +18,7 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <list>
 #include "FermentableDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -82,14 +83,15 @@ void FermentableDialog::startObservingDB()
 
 void FermentableDialog::populateTable()
 {
-   unsigned int i;
+   std::list<Fermentable*>::iterator it, end;
 
    if( ! Database::isInitialized() )
       return;
 
    numFerms = dbObs->getNumFermentables();
-   for( i = 0; i < numFerms; ++i )
-      fermentableTableWidget->getModel()->addFermentable(dbObs->getFermentable(i));
+   end = dbObs->getFermentableEnd();
+   for( it = dbObs->getFermentableBegin(); it != end; ++it )
+      fermentableTableWidget->getModel()->addFermentable(*it);
 }
 
 void FermentableDialog::addFermentable()

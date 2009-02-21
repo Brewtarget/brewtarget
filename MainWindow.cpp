@@ -35,6 +35,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <list>
 
 #include "recipe.h"
 #include "MainWindow.h"
@@ -107,7 +108,7 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog->startObservingDB();
    
    if( db->getNumRecipes() > 0 )
-      setRecipe(db->getRecipe(0));
+      setRecipe( *(db->getRecipeBegin()) );
 
    // Connect signals.
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
@@ -144,12 +145,12 @@ void MainWindow::setRecipeByName(const QString& name)
    if(  ! Database::isInitialized() )
       return;
 
-   unsigned int i, size;
+   std::list<Recipe*>::iterator it, end;
 
-   size = db->getNumRecipes();
-   for( i = 0; i < size; ++i )
-      if( db->getRecipe(i)->getName() == name.toStdString() )
-         setRecipe(db->getRecipe(i));
+   end = db->getRecipeEnd();
+   for( it = db->getRecipeBegin(); it != end; ++it )
+      if( (*it)->getName() == name.toStdString() )
+         setRecipe(*it);
 }
 
 void MainWindow::setRecipe(Recipe* recipe)

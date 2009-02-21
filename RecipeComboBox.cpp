@@ -19,6 +19,7 @@
 #include <QComboBox>
 #include <QWidget>
 #include <Qt>
+#include <list>
 #include <string>
 
 #include "database.h"
@@ -34,13 +35,15 @@ void RecipeComboBox::startObservingDB()
 {
    if( Database::isInitialized() )
    {
-      unsigned int i, size;
       dbObs = Database::getDatabase();
       addObserved(dbObs);
 
-      size = dbObs->getNumRecipes();
-      for( i = 0; i < size; ++i )
-         addRecipe(dbObs->getRecipe(i));
+      std::list<Recipe*>::iterator it, end;
+
+      end = dbObs->getRecipeEnd();
+
+      for( it = dbObs->getRecipeBegin(); it != end; ++it )
+         addRecipe(*it);
       repopulateList();
    }
 }
@@ -69,9 +72,12 @@ void RecipeComboBox::notify(Observable *notifier)
    if( notifier == dbObs && dbObs->getNumRecipes() != recipeObs.size() )
    {
       removeAllRecipes();
-      size = dbObs->getNumRecipes();
-      for( i = 0; i < size; ++i )
-         addRecipe(dbObs->getRecipe(i));
+      std::list<Recipe*>::iterator it, end;
+
+      end = dbObs->getRecipeEnd();
+
+      for( it = dbObs->getRecipeBegin(); it != end; ++it )
+         addRecipe(*it);
       repopulateList();
    }
    else // Otherwise, we know that one of the recipes changed.

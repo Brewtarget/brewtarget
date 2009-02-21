@@ -18,6 +18,7 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <list>
 #include "YeastDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -60,14 +61,15 @@ void YeastDialog::startObservingDB()
 
 void YeastDialog::populateTable()
 {
-   unsigned int i;
+   std::list<Yeast*>::iterator it, end;
 
    if( ! Database::isInitialized() )
       return;
 
    numYeasts = dbObs->getNumYeasts();
-   for( i = 0; i < numYeasts; ++i )
-      yeastTableWidget->getModel()->addYeast(dbObs->getYeast(i));
+   end = dbObs->getYeastEnd();
+   for( it = dbObs->getYeastBegin(); it != end; ++it )
+      yeastTableWidget->getModel()->addYeast(*it);
 }
 
 void YeastDialog::addYeast()

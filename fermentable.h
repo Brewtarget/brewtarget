@@ -34,7 +34,10 @@ public:
    Fermentable( const XmlNode* node );
    
    std::string toXml();
-   
+
+   // Operators
+   friend bool operator<(Fermentable &f1, Fermentable &f2);
+
    // Get
    const std::string& getName() const;
    int getVersion() const;
@@ -120,6 +123,14 @@ public:
 private:
    
    std::string _err;
+};
+
+struct Fermentable_ptr_cmp
+{
+   bool operator()( Fermentable* lhs, Fermentable* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif

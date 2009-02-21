@@ -18,6 +18,7 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <list>
 #include "HopDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -60,14 +61,16 @@ void HopDialog::startObservingDB()
 
 void HopDialog::populateTable()
 {
-   unsigned int i;
+   std::list<Hop*>::iterator it, end;
+
 
    if( ! Database::isInitialized() )
       return;
 
    numHops = dbObs->getNumHops();
-   for( i = 0; i < numHops; ++i )
-      hopTableWidget->getModel()->addHop(dbObs->getHop(i));
+   end = dbObs->getHopEnd();
+   for( it = dbObs->getHopBegin(); it != end; ++it )
+      hopTableWidget->getModel()->addHop(*it);
 }
 
 void HopDialog::addHop()
