@@ -34,6 +34,8 @@ public:
    Misc(Misc& other);
    Misc( const XmlNode *node );
 
+   friend bool operator<(Misc &m1, Misc &m2);
+
    std::string toXml();
    
    // Set
@@ -98,6 +100,14 @@ public:
 private:
    
    std::string _err;
+};
+
+struct Misc_ptr_cmp
+{
+   bool operator()( Misc* lhs, Misc* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif	/* _MISC_H */

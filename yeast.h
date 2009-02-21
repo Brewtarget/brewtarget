@@ -33,7 +33,9 @@ public:
    Yeast();
    Yeast(Yeast& other);
    Yeast( XmlNode *node );
-   
+
+   friend bool operator<(Yeast &y1, Yeast &y2);
+
    std::string toXml();
    
    // Set
@@ -122,6 +124,14 @@ public:
 private:
    
    std::string _err;
+};
+
+struct Yeast_ptr_cmp
+{
+   bool operator()( Yeast* lhs, Yeast* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif	/* _YEAST_H */

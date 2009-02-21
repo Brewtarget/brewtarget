@@ -42,6 +42,8 @@ public:
    Recipe();
    Recipe(const XmlNode *node);
 
+   friend bool operator<(Recipe &r1, Recipe &r2 );
+
    std::string toXml();
    void clear(); // Retains only the name, but sets everything else to defaults.
    virtual void notify(Observable *notifier); // Inherited from MultipleObserver.
@@ -210,6 +212,14 @@ public:
 private:
 
    std::string _err;
+};
+
+struct Recipe_ptr_cmp
+{
+   bool operator()( Recipe* lhs, Recipe* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif /* _RECIPE_H */

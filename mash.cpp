@@ -24,6 +24,11 @@
 #include "mash.h"
 #include "mashstep.h"
 
+bool operator<(Mash &m1, Mash &m2)
+{
+   return m1.name < m2.name;
+}
+
 std::string Mash::toXml()
 {
    unsigned int i, size = mashSteps.size();

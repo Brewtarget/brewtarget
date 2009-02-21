@@ -36,7 +36,10 @@ public:
    Equipment(XmlNode *node);
    
    std::string toXml();
-   
+
+   // Operators
+   friend bool operator<(Equipment &e1, Equipment &e2);
+
    // Set
    void setName( const std::string &var );
    void setBoilSize_l( double var );
@@ -113,6 +116,14 @@ public:
 private:
    
    std::string _err;
+};
+
+struct Equipment_ptr_cmp
+{
+   bool operator()( Equipment* lhs, Equipment* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif	/* _EQUIPMENT_H */

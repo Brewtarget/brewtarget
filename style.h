@@ -33,6 +33,8 @@ public:
    Style();
    Style(XmlNode *node);
 
+   friend bool operator<(Style &s1, Style &s2);
+
    std::string toXml();
    
    void setName( const std::string& var );
@@ -133,6 +135,14 @@ public:
 private:
 
    std::string _err;
+};
+
+struct Style_ptr_cmp
+{
+   bool operator()( Style* lhs, Style* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif //_STYLE_H

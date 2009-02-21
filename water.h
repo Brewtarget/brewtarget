@@ -32,7 +32,9 @@ class Water : public Observable
 public:
    Water();
    Water(XmlNode *node);
-   
+
+   friend bool operator<(Water &w1, Water &w2);
+
    std::string toXml();
    
    void setName( const std::string &var );
@@ -94,6 +96,14 @@ public:
 private:
    
    std::string _err;
+};
+
+struct Water_ptr_cmp
+{
+   bool operator()( Water* lhs, Water* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif	/* _WATER_H */

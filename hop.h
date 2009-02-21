@@ -36,7 +36,9 @@ class Hop : public Observable
       Hop();
       Hop( Hop& other );
       Hop( const XmlNode *node );
- 
+
+      friend bool operator<( Hop &h1, Hop &h2 );
+
       std::string toXml();
       
       const string& getName() const;
@@ -128,6 +130,14 @@ public:
 private:
    
    std::string _err;
+};
+
+struct Hop_ptr_cmp
+{
+   bool operator()( Hop* lhs, Hop* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif // _HOP_H

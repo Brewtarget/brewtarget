@@ -26,6 +26,11 @@
 
 using namespace std;
 
+bool operator<( Hop &h1, Hop &h2 )
+{
+   return h1.name < h2.name;
+}
+
 bool Hop::isValidUse(const string &str)
 {
    static const string uses[] = {"Boil", "Dry Hop", "Mash", "First Wort", "Aroma"};

@@ -33,6 +33,8 @@ public:
    Mash();
    Mash( const XmlNode *node);
 
+   friend bool operator<(Mash &m1, Mash &m2);
+
    std::string toXml();
    
    void setName( const std::string &var );
@@ -94,6 +96,14 @@ public:
 private:
 
    std::string _err;
+};
+
+struct Mash_ptr_cmp
+{
+   bool operator()( Mash* lhs, Mash* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif //_MASH_H

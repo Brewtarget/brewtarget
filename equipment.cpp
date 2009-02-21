@@ -23,6 +23,11 @@
 #include "stringparsing.h"
 #include "equipment.h"
 
+bool operator<(Equipment &e1, Equipment &e2)
+{
+   return e1.name < e2.name;
+}
+
 std::string Equipment::toXml()
 {
    std::string ret = "<EQUIPMENT>\n";

@@ -33,6 +33,8 @@ public:
    MashStep();
    MashStep(const XmlNode *node);
 
+   friend bool operator<(MashStep &m1, MashStep &m2);
+
    std::string toXml();
    
    void setName( const std::string &var );
@@ -85,6 +87,14 @@ public:
 private:
 
    std::string _err;
+};
+
+struct MashStep_ptr_cmp
+{
+   bool operator()( MashStep* lhs, MashStep* rhs)
+   {
+      return *lhs < *rhs;
+   }
 };
 
 #endif //_MASHSTEP_H
