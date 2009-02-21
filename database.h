@@ -64,6 +64,8 @@ public:
    void addWater(Water* water);
    void addYeast(Yeast* yeast);
 
+   void resortAll(); // Sorts all the lists by their compare methods.
+
    unsigned int getNumEquipments();
    unsigned int getNumFermentables();
    unsigned int getNumHops();

@@ -21,6 +21,7 @@
 #include <string>
 #include "HopEditor.h"
 #include "stringparsing.h"
+#include "database.h"
 
 HopEditor::HopEditor( QWidget* /*parent*/ )
 {
@@ -73,6 +74,8 @@ void HopEditor::save()
 
    h->reenableNotification();
    h->forceNotify();
+
+   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
 }
 
 void HopEditor::clearAndClose()

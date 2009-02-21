@@ -130,8 +130,37 @@ void Database::initialize()
    recipeFile.close();
    mashFile.close();
 
+   // Sort everything by name.
+   equipments.sort(Equipment_ptr_cmp());
+   fermentables.sort(Fermentable_ptr_cmp());
+   hops.sort(Hop_ptr_cmp());
+   mashs.sort(Mash_ptr_cmp());
+   mashSteps.sort(MashStep_ptr_cmp());
+   miscs.sort(Misc_ptr_cmp());
+   recipes.sort(Recipe_ptr_cmp());
+   styles.sort(Style_ptr_cmp());
+   waters.sort(Water_ptr_cmp());
+   yeasts.sort(Yeast_ptr_cmp());
+
    internalDBInstance = new Database();
    Database::initialized = true;
+}
+
+void Database::resortAll()
+{
+   // Sort everything by name.
+   equipments.sort(Equipment_ptr_cmp());
+   fermentables.sort(Fermentable_ptr_cmp());
+   hops.sort(Hop_ptr_cmp());
+   mashs.sort(Mash_ptr_cmp());
+   mashSteps.sort(MashStep_ptr_cmp());
+   miscs.sort(Misc_ptr_cmp());
+   recipes.sort(Recipe_ptr_cmp());
+   styles.sort(Style_ptr_cmp());
+   waters.sort(Water_ptr_cmp());
+   yeasts.sort(Yeast_ptr_cmp());
+
+   hasChanged();
 }
 
 void Database::savePersistent()
@@ -229,6 +258,7 @@ void Database::addEquipment(Equipment* equip)
    if( equip != 0 )
    {
       equipments.push_back(equip);
+      equipments.sort(Equipment_ptr_cmp());
       hasChanged();
    }
 }
@@ -238,6 +268,7 @@ void Database::addFermentable(Fermentable* ferm)
    if( ferm != 0 )
    {
       fermentables.push_back(ferm);
+      fermentables.sort(Fermentable_ptr_cmp());
       hasChanged();
    }
 }
@@ -247,6 +278,7 @@ void Database::addHop(Hop* hop)
    if( hop != 0 )
    {
       hops.push_back(hop);
+      hops.sort(Hop_ptr_cmp());
       hasChanged();
    }
 }
@@ -256,6 +288,7 @@ void Database::addMash(Mash* mash)
    if( mash != 0 )
    {
       mashs.push_back(mash);
+      mashs.sort(Mash_ptr_cmp());
       hasChanged();
    }
 }
@@ -265,6 +298,7 @@ void Database::addMashStep(MashStep* mashStep)
    if( mashStep != 0 )
    {
       mashSteps.push_back(mashStep);
+      mashSteps.sort(MashStep_ptr_cmp());
       hasChanged();
    }
 }
@@ -274,6 +308,7 @@ void Database::addMisc(Misc* misc)
    if( misc != 0 )
    {
       miscs.push_back(misc);
+      miscs.sort(Misc_ptr_cmp());
       hasChanged();
    }
 }
@@ -283,6 +318,7 @@ void Database::addRecipe(Recipe* rec)
    if( rec != 0 )
    {
       recipes.push_back(rec);
+      recipes.sort(Recipe_ptr_cmp());
       hasChanged();
    }
 }
@@ -292,6 +328,7 @@ void Database::addStyle(Style* style)
    if( style != 0 )
    {
       styles.push_back(style);
+      styles.sort(Style_ptr_cmp());
       hasChanged();
    }
 }
@@ -301,6 +338,7 @@ void Database::addWater(Water* water)
    if( water != 0 )
    {
       waters.push_back(water);
+      waters.sort(Water_ptr_cmp());
       hasChanged();
    }
 }
@@ -310,6 +348,7 @@ void Database::addYeast(Yeast* yeast)
    if( yeast != 0 )
    {
       yeasts.push_back(yeast);
+      yeasts.sort(Yeast_ptr_cmp());
       hasChanged();
    }
 }

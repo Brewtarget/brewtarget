@@ -23,6 +23,7 @@
 #include <string>
 #include "MiscEditor.h"
 #include "stringparsing.h"
+#include "database.h"
 
 MiscEditor::MiscEditor( QWidget* /*parent*/ )
 {
@@ -67,6 +68,8 @@ void MiscEditor::save()
 
    m->reenableNotification();
    m->forceNotify();
+
+   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
 }
 
 void MiscEditor::clearAndClose()

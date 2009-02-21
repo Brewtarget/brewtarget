@@ -20,6 +20,7 @@
 #include <string>
 #include "YeastEditor.h"
 #include "stringparsing.h"
+#include "database.h"
 
 YeastEditor::YeastEditor( QWidget* /*parent*/ )
 {
@@ -71,6 +72,8 @@ void YeastEditor::save()
 
    y->reenableNotification();
    y->forceNotify();
+
+   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
 }
 
 void YeastEditor::clearAndClose()

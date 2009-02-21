@@ -20,6 +20,7 @@
 #include "fermentable.h"
 #include "observable.h"
 #include "stringparsing.h"
+#include "database.h"
 
 FermentableEditor::FermentableEditor( QWidget* /*parent*/ )
 {
@@ -69,6 +70,8 @@ void FermentableEditor::save()
 
    obsFerm->reenableNotification();
    obsFerm->forceNotify();
+
+   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
 }
 
 void FermentableEditor::clearAndClose()
