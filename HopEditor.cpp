@@ -23,10 +23,12 @@
 #include "stringparsing.h"
 #include "database.h"
 
-HopEditor::HopEditor( QWidget* /*parent*/ )
+HopEditor::HopEditor( QWidget* parent )
 {
    setupUi(this);
 
+   setWindowIcon(parent->windowIcon());
+   
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
 

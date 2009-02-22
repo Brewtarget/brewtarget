@@ -22,9 +22,11 @@
 #include "stringparsing.h"
 #include "database.h"
 
-FermentableEditor::FermentableEditor( QWidget* /*parent*/ )
+FermentableEditor::FermentableEditor( QWidget* parent )
 {
    setupUi(this);
+
+   setWindowIcon(parent->windowIcon());
 
    connect( this, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( this, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));

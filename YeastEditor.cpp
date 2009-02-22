@@ -22,10 +22,12 @@
 #include "stringparsing.h"
 #include "database.h"
 
-YeastEditor::YeastEditor( QWidget* /*parent*/ )
+YeastEditor::YeastEditor( QWidget* parent )
 {
    setupUi(this);
 
+   setWindowIcon(parent->windowIcon());
+   
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
 

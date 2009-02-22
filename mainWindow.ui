@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>433</width>
-    <height>604</height>
+    <width>473</width>
+    <height>630</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,42 +17,66 @@
     <rect>
      <x>0</x>
      <y>26</y>
-     <width>433</width>
-     <height>555</height>
+     <width>473</width>
+     <height>581</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_9" >
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_8" >
+     <layout class="QHBoxLayout" name="horizontalLayout_14" >
       <item>
-       <widget class="QLabel" name="label_12" >
-        <property name="text" >
-         <string>Recipe</string>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_8" >
+        <item>
+         <widget class="QLabel" name="label_12" >
+          <property name="text" >
+           <string>Recipe</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="RecipeComboBox" name="recipeComboBox" >
+          <property name="maximumSize" >
+           <size>
+            <width>124</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="RecipeComboBox" name="recipeComboBox" >
-        <property name="maximumSize" >
-         <size>
-          <width>124</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_2" >
+       <spacer name="horizontalSpacer_3" >
         <property name="orientation" >
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0" >
          <size>
-          <width>20</width>
-          <height>40</height>
+          <width>40</width>
+          <height>20</height>
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_Icon" >
+        <property name="text" >
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -547,6 +571,7 @@
           </spacer>
          </item>
         </layout>
+        <zorder>label_13</zorder>
        </widget>
       </item>
      </layout>
@@ -573,8 +598,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>411</width>
-         <height>172</height>
+         <width>451</width>
+         <height>180</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -645,8 +670,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>411</width>
-         <height>172</height>
+         <width>451</width>
+         <height>180</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -704,8 +729,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>411</width>
-         <height>172</height>
+         <width>451</width>
+         <height>180</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -763,8 +788,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>411</width>
-         <height>172</height>
+         <width>451</width>
+         <height>180</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -860,13 +885,15 @@
      </layout>
     </item>
    </layout>
+   <zorder>tabWidget</zorder>
+   <zorder>label_13</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>433</width>
+     <width>473</width>
      <height>26</height>
     </rect>
    </property>
@@ -901,8 +928,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>581</y>
-     <width>433</width>
+     <y>607</y>
+     <width>473</width>
      <height>23</height>
     </rect>
    </property>

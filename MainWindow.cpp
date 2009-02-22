@@ -32,6 +32,8 @@
 #include "style.h"
 #include <QString>
 #include <QFileDialog>
+#include <QIcon>
+#include <QPixmap>
 
 #include <iostream>
 #include <fstream>
@@ -63,6 +65,9 @@ MainWindow::MainWindow(QWidget* parent)
 {
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
+
+   setWindowIcon(QIcon(tr("images/BrewtargetIcon.png")));
+   label_Icon->setPixmap(QPixmap(tr("images/BrewtargetIcon_96.png")));
 
    // Null out the recipe
    recipeObs = 0;
