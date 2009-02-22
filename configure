@@ -1,0 +1,247 @@
+#!/usr/bin/perl
+
+# configure is part of Brewtarget, and is Copyright Philip G. Lee
+# (rocketman768@gmail.com), 2009.
+#
+# Brewtarget is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Brewtarget is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+$targetpath="";
+$datapath="";
+$docpath="";
+$qprofile="brewtarget.pro";
+$make="";
+$qmake="";
+
+sub getOptions;
+sub printUsageExit;
+sub isLinux;
+sub isMac;
+sub isWindows;
+sub findExec;
+sub findMake;
+sub findQmake;
+sub modifyInPlace;
+
+#===========================Main Routine Below==============================
+
+print "\nConfigure script for Brewtarget\n";
+
+getOptions(); # Get any options provided by user.
+findMake();   # Won't overwrite user options.
+findQmake();  # Won't overwrite user options.
+
+# ---Configure defaults.---
+if( isLinux() )
+{
+   print "OS: Linux...yay!\n";
+   $datapath = "/usr/local/share/brewtarget/";
+}
+elsif( isMac() )
+{
+   print "OS: Mac\n";
+   $datapath = "Contents/Resources/"; # Is this right?
+}
+elsif( isWindows() )
+{
+   print "OS: Windows\n";
+   $datapath = "release/";
+}
+else
+{
+   print STDERR "Unrecognized OS: $^O\n";
+   print STDERR "Post on brewtarget.sourceforge.net if you need support for your OS.\n";
+   exit 1;
+}
+# ---Done configuring defaults.---
+
+# ---Modify the config.h file.---
+$dbxml      = join '', $datapath, 'database.xml';
+$recipesxml = join '', $datapath, 'recipes.xml';
+$mashsxml   = join '', $datapath, 'mashs.xml';
+
+modifyInPlace('config.h', '#define DATADIR.*$', qq(#define DATADIR "$datapath"));
+modifyInPlace('config.h', '#define DBXML.*$', qq(#define DBXML "$dbxml"));
+modifyInPlace('config.h', '#define RECIPESXML.*$', qq(#define RECIPESXML "$recipesxml"));
+modifyInPlace('config.h', '#define MASHSXML.*$', qq(#define MASHSXML "$mashsxml"));
+# ---Done modifying config.h.---
+
+# --- Modify brewtarget.pro if needed. ---
+if( $datapath ) # User might have passed an option.
+{
+   modifyInPlace( 'brewtarget.pro', 'data.path =.*$', qq(data.path = $datapath) );
+}
+if( $targetpath ) # User might have passed an option.
+{
+   modifyInPlace( 'brewtarget.pro', 'target.path =.*$', qq(target.path = $targetpath) );
+}
+if( $docpath ) # User might have passed an option.
+{
+   modifyInPlace( 'brewtarget.pro', 'doc.path =.*$', qq(doc.path = $docpath) );
+}
+# --- Done modifying brewtarget.pro. ---
+
+# Make the makefile.
+print "$qmake $qprofile\n";
+`$qmake $qprofile`;
+
+# NOTE: NEED TO FIND A BETTER WAY TO DO THIS.
+# Seems qmake wants to install in mode 644 which is not cool for brewtarget.
+modifyInPlace( 'Makefile', '^INSTALL_FILE\s*=.*$', q(INSTALL_FILE = install -m 666 -p));
+
+print "\nYou are now ready to run $make.\n";
+exit 0;
+#===============================END OF CONFIGURATION==================================
+
+#=========Subroutines Below==========
+sub modifyInPlace
+{
+   ($file, $oldstr, $newstr) = @_;
+   
+   $^I = '.orig'; # Sets the backup suffix for in-place editing.
+   @oldargv = @ARGV;
+   @ARGV = ($file);
+   while( <> )
+   {
+      s/$oldstr/$newstr/g;
+      print;
+   }
+   @ARGV = @oldargv;
+}
+
+sub getOptions
+{
+   foreach $arg (@ARGV)
+   {
+      ($opt, $val) = split $arg, '=';
+      if( $opt == '--target-path' )
+      {
+         $targetpath = $val;
+         print "target.path = $val\n";
+      }
+      elsif( $opt == '--data-path' )
+      {
+         $datapath = $val;
+         print "data.path = $val\n";
+      }
+      elsif( $opt == '--doc-path' )
+      {
+         $docpath = $val;
+         print "doc.path = $val\n";
+      }
+      elsif( $opt == '--make' )
+      {
+         $make = $val;
+         print "make = $val\n";
+      }
+      elsif( $opt == '--qmake' )
+      {
+         $qmake = $val;
+         print "qmake = $val\n";
+      }
+      elsif( $opt == '--help' )
+      {
+         printUsageExit(0);
+      }
+      else
+      {
+         print STDERR "Cannot recognize option '$opt'\n";
+         printUsageExit(1);
+      }
+   }
+}
+
+# printUsageExit(a) exits with code a.
+sub printUsageExit
+{
+   print "Usage\n",
+         "   Options:\n",
+         "      --target-path=T Sets the binary install dir to T.\n",
+         "      --data-path=T   Sets the data install dir to T.\n",
+         "      --doc-path=T    Sets the documentation install dir to T.\n",
+         "      --make=T        Uses T as the make executable.\n",
+         "      --qmake=T       Uses T as the qmake executable.\n",
+         "      --help          Print this message.\n";
+   exit $_[0];
+}
+
+sub isLinux
+{
+   return $^O =~ /linux/i;
+}
+
+sub isMac
+{
+   return $^O =~ /mac/i;
+}
+
+sub isWindows
+{
+   return $^O =~ /win/i;
+}
+
+sub findExec
+{
+   $exec = $_[0];
+   
+   if( isWindows() )
+   {
+      print "findExec is not yet implemented for Windows\n";
+      exit 1;
+   }
+   else
+   {
+      $_ = `which $exec`;
+      chomp($_);
+      return $_;
+   }
+}
+
+sub findMake
+{
+   if( $make )
+   {
+      return;
+   }
+
+   foreach $m ('gmake', 'make')
+   {
+      $make = findExec($m);
+      if( $make )
+      {
+         break;
+      }
+   }
+   
+   if( ! $make )
+   {
+      print STDERR "ERROR: you do not have a make" ;
+      exit 1;
+   }
+}
+
+sub findQmake
+{
+   if( $qmake )
+   {
+      return;
+   }
+
+   $qmake = findExec('qmake');
+   if( ! $qmake )
+   {
+      print STDERR "ERROR: you do not have a qmake";
+      exit 1;
+   }
+}
+

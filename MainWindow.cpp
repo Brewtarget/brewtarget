@@ -48,6 +48,7 @@
 #include "YeastTableWidget.h"
 #include "YeastDialog.h"
 #include "BeerColorWidget.h"
+#include "config.h"
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -66,8 +67,8 @@ MainWindow::MainWindow(QWidget* parent)
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
 
-   setWindowIcon(QIcon(tr("images/BrewtargetIcon.png")));
-   label_Icon->setPixmap(QPixmap(tr("images/BrewtargetIcon_96.png")));
+   setWindowIcon(QIcon(ICON48));
+   label_Icon->setPixmap(QPixmap(ICON96));
 
    // Null out the recipe
    recipeObs = 0;

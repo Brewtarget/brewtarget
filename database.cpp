@@ -35,6 +35,7 @@
 
 #include "xmlnode.h"
 #include "xmltree.h"
+#include "config.h"
 
 // Grrr... stupid C++. Have to define these outside the class AGAIN.
 std::list<Equipment*> Database::equipments;
@@ -50,11 +51,11 @@ std::list<Yeast*> Database::yeasts;
 bool Database::initialized = false;
 Database* Database::internalDBInstance = 0;
 std::fstream Database::dbFile;
-const char* Database::dbFileName = "database.xml";
+const char* Database::dbFileName = DBXML;
 std::fstream Database::recipeFile;
-const char* Database::recipeFileName = "recipes.xml";
+const char* Database::recipeFileName = RECIPESXML;
 std::fstream Database::mashFile;
-const char* Database::mashFileName = "mashs.xml";
+const char* Database::mashFileName = MASHSXML;
 
 Database::Database()
 {

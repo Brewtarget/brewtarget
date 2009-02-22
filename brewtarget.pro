@@ -1,11 +1,78 @@
+# brewtarget.pro is part of Brewtarget, and is Copyright Philip G. Lee
+# (rocketman768@gmail.com), 2009.
+#
+# Brewtarget is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Brewtarget is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 TEMPLATE = app
-TARGET = 
+TARGET = brewtarget
+CONFIG += qt release warn_on
 DEPENDPATH += .
 INCLUDEPATH += .
+RESOURCES = brewtarget.qrc
+
+unix:!macx {
+   target.path = /usr/local/bin
+   data.path = /usr/local/share/brewtarget/
+   doc.path = /usr/local/share/doc/brewtarget
+   
+   data.files = *.xml
+   doc.files = README COPYING
+   INSTALLS += target data doc
+}
+
+macx {
+    CONFIG += x86 ppc
+    #QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.4
+    #QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.4u.sdk
+
+    #DEFINES += HAVE_ROUND
+    #LIBS += -dead-strip
+    #QMAKE_POST_LINK=strip brewtarget.app/Contents/MacOS/brewtarget
+
+    # Install everything into an app bundle.
+    data.path = /usr/local/share/brewtarget/
+    data.files = *.xml
+
+    doc.path = brewtarget.app/Contents/Resources/en.lproj
+    doc.files = README COPYING
+
+    misc.path = brewtarget.app/Contents
+    #misc.files = mac/Info.plist mac/PkgInfo
+
+    INSTALLS += data doc misc
+}
+
+win32 {
+    #RC_FILE = win\icon.rc
+    CONFIG -= console
+
+    target.path = release
+
+    data.path = /usr/local/share/brewtarget/
+    #data.files = *.xml win/brewtarget.ico README COPYING
+    data.files = *.xml README COPYING
+
+    doc.path = release/doc
+    doc.files = README COPYING
+
+    INSTALLS += target data doc 
+}
 
 # Input
 HEADERS += AboutDialog.h \
            BeerColorWidget.h \
+           config.h \
            database.h \
            equipment.h \
            fermentable.h \
