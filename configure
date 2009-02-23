@@ -65,7 +65,7 @@ if( isLinux() )
 elsif( isMac() )
 {
    print "OS: Mac\n";
-   $datapath = "brewtarget.app/Contents/Resources/"; # Is this right?
+   $datapath = "Contents/Resources/"; # Is this right?
 }
 elsif( isWindows() )
 {
