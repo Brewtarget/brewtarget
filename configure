@@ -41,6 +41,21 @@ getOptions(); # Get any options provided by user.
 findMake();   # Won't overwrite user options.
 findQmake();  # Won't overwrite user options.
 
+# --- Modify brewtarget.pro if needed. ---
+if( $datapath ) # User might have passed an option.
+{
+   modifyInPlace( 'brewtarget.pro', 'data.path =.*$', qq(data.path = $datapath) );
+}
+if( $targetpath ) # User might have passed an option.
+{
+   modifyInPlace( 'brewtarget.pro', 'target.path =.*$', qq(target.path = $targetpath) );
+}
+if( $docpath ) # User might have passed an option.
+{
+   modifyInPlace( 'brewtarget.pro', 'doc.path =.*$', qq(doc.path = $docpath) );
+}
+# --- Done modifying brewtarget.pro. ---
+
 # ---Configure defaults.---
 if( isLinux() )
 {
@@ -50,7 +65,7 @@ if( isLinux() )
 elsif( isMac() )
 {
    print "OS: Mac\n";
-   $datapath = "Contents/Resources/"; # Is this right?
+   $datapath = "brewtarget.app/Contents/Resources/"; # Is this right?
 }
 elsif( isWindows() )
 {
@@ -75,21 +90,6 @@ modifyInPlace('config.h', '#define DBXML.*$', qq(#define DBXML "$dbxml"));
 modifyInPlace('config.h', '#define RECIPESXML.*$', qq(#define RECIPESXML "$recipesxml"));
 modifyInPlace('config.h', '#define MASHSXML.*$', qq(#define MASHSXML "$mashsxml"));
 # ---Done modifying config.h.---
-
-# --- Modify brewtarget.pro if needed. ---
-if( $datapath ) # User might have passed an option.
-{
-   modifyInPlace( 'brewtarget.pro', 'data.path =.*$', qq(data.path = $datapath) );
-}
-if( $targetpath ) # User might have passed an option.
-{
-   modifyInPlace( 'brewtarget.pro', 'target.path =.*$', qq(target.path = $targetpath) );
-}
-if( $docpath ) # User might have passed an option.
-{
-   modifyInPlace( 'brewtarget.pro', 'doc.path =.*$', qq(doc.path = $docpath) );
-}
-# --- Done modifying brewtarget.pro. ---
 
 # Make the makefile.
 print "$qmake $qprofile\n";

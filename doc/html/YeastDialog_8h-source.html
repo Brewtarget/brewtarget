@@ -41,32 +41,35 @@
 <a name="l00027"></a>00027 <span class="preprocessor">#include "observable.h"</span>
 <a name="l00028"></a>00028 <span class="preprocessor">#include "database.h"</span>
 <a name="l00029"></a>00029 <span class="preprocessor">#include "MainWindow.h"</span>
-<a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <span class="keyword">class </span>YeastDialog : <span class="keyword">public</span> QDialog, <span class="keyword">public</span> Ui::yeastDialog, <span class="keyword">public</span> Observer
-<a name="l00032"></a>00032 {
-<a name="l00033"></a>00033    Q_OBJECT
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <span class="keyword">public</span>:
-<a name="l00036"></a>00036    YeastDialog(MainWindow* parent);
-<a name="l00037"></a>00037    <span class="keywordtype">void</span> startObservingDB();
-<a name="l00038"></a>00038    <span class="keyword">virtual</span> <span class="keywordtype">void</span> notify(Observable *notifier); <span class="comment">// From Observer</span>
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040 <span class="keyword">public</span> slots:
-<a name="l00041"></a>00041 
+<a name="l00030"></a>00030 <span class="preprocessor">#include "YeastEditor.h"</span>
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032 <span class="keyword">class </span>YeastDialog : <span class="keyword">public</span> QDialog, <span class="keyword">public</span> Ui::yeastDialog, <span class="keyword">public</span> Observer
+<a name="l00033"></a>00033 {
+<a name="l00034"></a>00034    Q_OBJECT
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 <span class="keyword">public</span>:
+<a name="l00037"></a>00037    YeastDialog(MainWindow* parent);
+<a name="l00038"></a>00038    <span class="keywordtype">void</span> startObservingDB();
+<a name="l00039"></a>00039    <span class="keyword">virtual</span> <span class="keywordtype">void</span> notify(Observable *notifier); <span class="comment">// From Observer</span>
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="keyword">public</span> slots:
 <a name="l00042"></a>00042    <span class="keywordtype">void</span> addYeast();
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 <span class="keyword">private</span>:
-<a name="l00045"></a>00045    Database* dbObs;
-<a name="l00046"></a>00046    MainWindow* mainWindow;
-<a name="l00047"></a>00047    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> numYeasts;
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049    <span class="keywordtype">void</span> populateTable();
-<a name="l00050"></a>00050 };
+<a name="l00043"></a>00043    <span class="keywordtype">void</span> editSelected();
+<a name="l00044"></a>00044    <span class="keywordtype">void</span> newYeast();
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046 <span class="keyword">private</span>:
+<a name="l00047"></a>00047    Database* dbObs;
+<a name="l00048"></a>00048    MainWindow* mainWindow;
+<a name="l00049"></a>00049    YeastEditor* yeastEditor;
+<a name="l00050"></a>00050    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> numYeasts;
 <a name="l00051"></a>00051 
-<a name="l00052"></a>00052 <span class="preprocessor">#endif  </span><span class="comment">/* _YEASTDIALOG_H */</span>
-<a name="l00053"></a>00053 
+<a name="l00052"></a>00052    <span class="keywordtype">void</span> populateTable();
+<a name="l00053"></a>00053 };
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055 <span class="preprocessor">#endif  </span><span class="comment">/* _YEASTDIALOG_H */</span>
+<a name="l00056"></a>00056 
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sun Jan 25 10:19:22 2009 for Brewtarget by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 22 17:57:02 2009 for Brewtarget by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

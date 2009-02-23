@@ -47,63 +47,73 @@
 <a name="l00033"></a>00033    MashStep();
 <a name="l00034"></a>00034    MashStep(<span class="keyword">const</span> XmlNode *node);
 <a name="l00035"></a>00035 
-<a name="l00036"></a>00036    std::string toXml();
-<a name="l00037"></a>00037    
-<a name="l00038"></a>00038    <span class="keywordtype">void</span> setName( <span class="keyword">const</span> std::string &amp;var );
-<a name="l00039"></a>00039    <span class="keywordtype">void</span> setType( <span class="keyword">const</span> std::string &amp;var );
-<a name="l00040"></a>00040    <span class="keywordtype">void</span> setInfuseAmount_l( <span class="keywordtype">double</span> var );
-<a name="l00041"></a>00041    <span class="keywordtype">void</span> setStepTemp_c( <span class="keywordtype">double</span> var );
-<a name="l00042"></a>00042    <span class="keywordtype">void</span> setStepTime_min( <span class="keywordtype">double</span> var );
-<a name="l00043"></a>00043    <span class="keywordtype">void</span> setRampTime_min( <span class="keywordtype">double</span> var );
-<a name="l00044"></a>00044    <span class="keywordtype">void</span> setEndTemp_c( <span class="keywordtype">double</span> var );
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046    std::string getName() <span class="keyword">const</span>;
-<a name="l00047"></a>00047    std::string getType() <span class="keyword">const</span>;
-<a name="l00048"></a>00048    <span class="keywordtype">double</span> getInfuseAmount_l() <span class="keyword">const</span>;
-<a name="l00049"></a>00049    <span class="keywordtype">double</span> getStepTemp_c() <span class="keyword">const</span>;
-<a name="l00050"></a>00050    <span class="keywordtype">double</span> getStepTime_min() <span class="keyword">const</span>;
-<a name="l00051"></a>00051    <span class="keywordtype">double</span> getRampTime_min() <span class="keyword">const</span>;
-<a name="l00052"></a>00052    <span class="keywordtype">double</span> getEndTemp_c() <span class="keyword">const</span>;
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <span class="keyword">private</span>:
+<a name="l00036"></a>00036    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator&lt;(MashStep &amp;m1, MashStep &amp;m2);
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038    std::string toXml();
+<a name="l00039"></a>00039    
+<a name="l00040"></a>00040    <span class="keywordtype">void</span> setName( <span class="keyword">const</span> std::string &amp;var );
+<a name="l00041"></a>00041    <span class="keywordtype">void</span> setType( <span class="keyword">const</span> std::string &amp;var );
+<a name="l00042"></a>00042    <span class="keywordtype">void</span> setInfuseAmount_l( <span class="keywordtype">double</span> var );
+<a name="l00043"></a>00043    <span class="keywordtype">void</span> setStepTemp_c( <span class="keywordtype">double</span> var );
+<a name="l00044"></a>00044    <span class="keywordtype">void</span> setStepTime_min( <span class="keywordtype">double</span> var );
+<a name="l00045"></a>00045    <span class="keywordtype">void</span> setRampTime_min( <span class="keywordtype">double</span> var );
+<a name="l00046"></a>00046    <span class="keywordtype">void</span> setEndTemp_c( <span class="keywordtype">double</span> var );
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048    std::string getName() <span class="keyword">const</span>;
+<a name="l00049"></a>00049    std::string getType() <span class="keyword">const</span>;
+<a name="l00050"></a>00050    <span class="keywordtype">double</span> getInfuseAmount_l() <span class="keyword">const</span>;
+<a name="l00051"></a>00051    <span class="keywordtype">double</span> getStepTemp_c() <span class="keyword">const</span>;
+<a name="l00052"></a>00052    <span class="keywordtype">double</span> getStepTime_min() <span class="keyword">const</span>;
+<a name="l00053"></a>00053    <span class="keywordtype">double</span> getRampTime_min() <span class="keyword">const</span>;
+<a name="l00054"></a>00054    <span class="keywordtype">double</span> getEndTemp_c() <span class="keyword">const</span>;
 <a name="l00055"></a>00055 
-<a name="l00056"></a>00056    std::string name;
-<a name="l00057"></a>00057    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> version = 1;
-<a name="l00058"></a>00058    std::string type;
-<a name="l00059"></a>00059    <span class="keywordtype">double</span> infuseAmount_l;
-<a name="l00060"></a>00060    <span class="keywordtype">double</span> stepTemp_c;
-<a name="l00061"></a>00061    <span class="keywordtype">double</span> stepTime_min;
-<a name="l00062"></a>00062    <span class="keywordtype">double</span> rampTime_min;
-<a name="l00063"></a>00063    <span class="keywordtype">double</span> endTemp_c;
-<a name="l00064"></a>00064 
-<a name="l00065"></a>00065    <span class="keywordtype">bool</span> isValidType( <span class="keyword">const</span> std::string &amp;str ) <span class="keyword">const</span>;
-<a name="l00066"></a>00066    <span class="keywordtype">void</span> setDefaults();
-<a name="l00067"></a>00067 };
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 <span class="keyword">class </span>MashStepException : <span class="keyword">public</span> std::exception
-<a name="l00070"></a>00070 {
-<a name="l00071"></a>00071 <span class="keyword">public</span>:
-<a name="l00072"></a>00072 
-<a name="l00073"></a>00073    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* what() <span class="keyword">const</span> throw()
-<a name="l00074"></a>00074    {
-<a name="l00075"></a>00075       <span class="keywordflow">return</span> std::string(<span class="stringliteral">"BeerXML MASH_STEP error: "</span> + _err + <span class="stringliteral">"\n"</span>).c_str();
-<a name="l00076"></a>00076    }
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078    MashStepException( std::string message )
-<a name="l00079"></a>00079    {
-<a name="l00080"></a>00080       _err = message;
-<a name="l00081"></a>00081    }
-<a name="l00082"></a>00082 
-<a name="l00083"></a>00083    ~MashStepException() throw() {}
+<a name="l00056"></a>00056 <span class="keyword">private</span>:
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058    std::string name;
+<a name="l00059"></a>00059    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> version = 1;
+<a name="l00060"></a>00060    std::string type;
+<a name="l00061"></a>00061    <span class="keywordtype">double</span> infuseAmount_l;
+<a name="l00062"></a>00062    <span class="keywordtype">double</span> stepTemp_c;
+<a name="l00063"></a>00063    <span class="keywordtype">double</span> stepTime_min;
+<a name="l00064"></a>00064    <span class="keywordtype">double</span> rampTime_min;
+<a name="l00065"></a>00065    <span class="keywordtype">double</span> endTemp_c;
+<a name="l00066"></a>00066 
+<a name="l00067"></a>00067    <span class="keywordtype">bool</span> isValidType( <span class="keyword">const</span> std::string &amp;str ) <span class="keyword">const</span>;
+<a name="l00068"></a>00068    <span class="keywordtype">void</span> setDefaults();
+<a name="l00069"></a>00069 };
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 <span class="keyword">class </span>MashStepException : <span class="keyword">public</span> std::exception
+<a name="l00072"></a>00072 {
+<a name="l00073"></a>00073 <span class="keyword">public</span>:
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* what() <span class="keyword">const</span> throw()
+<a name="l00076"></a>00076    {
+<a name="l00077"></a>00077       <span class="keywordflow">return</span> std::string(<span class="stringliteral">"BeerXML MASH_STEP error: "</span> + _err + <span class="stringliteral">"\n"</span>).c_str();
+<a name="l00078"></a>00078    }
+<a name="l00079"></a>00079 
+<a name="l00080"></a>00080    MashStepException( std::string message )
+<a name="l00081"></a>00081    {
+<a name="l00082"></a>00082       _err = message;
+<a name="l00083"></a>00083    }
 <a name="l00084"></a>00084 
-<a name="l00085"></a>00085 <span class="keyword">private</span>:
+<a name="l00085"></a>00085    ~MashStepException() throw() {}
 <a name="l00086"></a>00086 
-<a name="l00087"></a>00087    std::string _err;
-<a name="l00088"></a>00088 };
-<a name="l00089"></a>00089 
-<a name="l00090"></a>00090 <span class="preprocessor">#endif //_MASHSTEP_H</span>
+<a name="l00087"></a>00087 <span class="keyword">private</span>:
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089    std::string _err;
+<a name="l00090"></a>00090 };
+<a name="l00091"></a>00091 
+<a name="l00092"></a>00092 <span class="keyword">struct </span>MashStep_ptr_cmp
+<a name="l00093"></a>00093 {
+<a name="l00094"></a>00094    <span class="keywordtype">bool</span> operator()( MashStep* lhs, MashStep* rhs)
+<a name="l00095"></a>00095    {
+<a name="l00096"></a>00096       <span class="keywordflow">return</span> *lhs &lt; *rhs;
+<a name="l00097"></a>00097    }
+<a name="l00098"></a>00098 };
+<a name="l00099"></a>00099 
+<a name="l00100"></a>00100 <span class="preprocessor">#endif //_MASHSTEP_H</span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sun Jan 25 10:19:22 2009 for Brewtarget by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 22 17:57:01 2009 for Brewtarget by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

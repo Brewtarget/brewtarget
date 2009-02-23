@@ -36,6 +36,8 @@
       <itemPath>../../BeerColorWidget.cpp</itemPath>
       <itemPath>../../BeerColorWidget.h</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
+      <itemPath>../../config.h</itemPath>
+      <itemPath>../../configure</itemPath>
       <itemPath>../../database.cpp</itemPath>
       <itemPath>../../database.h</itemPath>
       <itemPath>../../equipment.cpp</itemPath>
@@ -370,6 +372,12 @@
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../config.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../configure">
         <itemTool>3</itemTool>
       </item>
       <item path="../../database.cpp">
@@ -756,6 +764,12 @@ make clean</buildCommand>
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../config.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../configure">
         <itemTool>3</itemTool>
       </item>
       <item path="../../database.cpp">

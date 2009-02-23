@@ -36,50 +36,49 @@
 <a name="l00022"></a>00022 <span class="preprocessor">#include &lt;iostream&gt;</span>
 <a name="l00023"></a>00023 <span class="preprocessor">#include &lt;string&gt;</span>
 <a name="l00024"></a>00024 <span class="preprocessor">#include &lt;vector&gt;</span>
-<a name="l00025"></a>00025 
-<a name="l00026"></a>00026 <span class="keyword">using namespace </span>std;
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="keywordtype">bool</span> beginsWith( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;str1, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;str2 );
-<a name="l00029"></a>00029 <span class="comment">// Returns string between first and second quotes or first and second apostrophes</span>
-<a name="l00030"></a>00030 <span class="comment">// whichever is found first. Returns the original string if there are no quotes</span>
-<a name="l00031"></a>00031 <span class="comment">// or apos. Returns a blank string if there is no matching second quote or apo.</span>
-<a name="l00032"></a>00032 std::string removeQuotes( <span class="keyword">const</span> std::string &amp;str );
-<a name="l00033"></a>00033 std::string replaceXmlCodes( <span class="keyword">const</span> std::string &amp;str );
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <span class="keywordtype">string</span>&amp; trim( <span class="keywordtype">string</span> &amp;str );
-<a name="l00036"></a>00036 
-<a name="l00037"></a>00037 <span class="keyword">struct </span>ToLower
-<a name="l00038"></a>00038 {
-<a name="l00039"></a>00039    <span class="keywordtype">char</span> operator()( <span class="keywordtype">char</span> c )<span class="keyword"> const</span>
-<a name="l00040"></a>00040 <span class="keyword">   </span>{
-<a name="l00041"></a>00041       <span class="keywordflow">return</span> std::tolower(c);
-<a name="l00042"></a>00042    }
-<a name="l00043"></a>00043 };
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045 <span class="keyword">class </span>Xml;
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047 <span class="keyword">class </span>Xml
-<a name="l00048"></a>00048 {
-<a name="l00049"></a>00049    <span class="keyword">public</span>:
-<a name="l00050"></a>00050       Xml( istream &amp;in );
-<a name="l00051"></a>00051       <span class="keywordtype">string</span> nextTag();
-<a name="l00052"></a>00052       <span class="keywordtype">string</span> nextNonTag();
-<a name="l00053"></a>00053       <span class="keywordtype">void</span> resetIter();
-<a name="l00054"></a>00054       <span class="keywordtype">bool</span> isAtEnd();
-<a name="l00055"></a>00055       <span class="keywordtype">string</span> getStringVal( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;closeTag, <span class="keywordtype">bool</span> &amp;success, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;errMsg );
-<a name="l00056"></a>00056       <span class="keywordtype">double</span> getDoubleVal( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;closeTag, <span class="keywordtype">bool</span> &amp;success, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;errMsg );
-<a name="l00057"></a>00057       <span class="keywordtype">long</span> <span class="keywordtype">int</span> getLongVal( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;closeTag, <span class="keywordtype">bool</span> &amp;success, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;errMsg );
-<a name="l00058"></a>00058       
-<a name="l00059"></a>00059    <span class="keyword">private</span>:
-<a name="l00060"></a>00060       <span class="keywordtype">string</span> xmlText;
-<a name="l00061"></a>00061       string::const_iterator iter;
-<a name="l00062"></a>00062       string::const_iterator end;
-<a name="l00063"></a>00063 };
-<a name="l00064"></a>00064 
-<a name="l00065"></a>00065 <span class="preprocessor">#endif // _XML_H</span>
-<a name="l00066"></a>00066 <span class="preprocessor"></span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include "stringparsing.h"</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="keyword">using namespace </span>std;
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029 <span class="keywordtype">bool</span> beginsWith( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;str1, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;str2 );
+<a name="l00030"></a>00030 <span class="comment">// Returns string between first and second quotes or first and second apostrophes</span>
+<a name="l00031"></a>00031 <span class="comment">// whichever is found first. Returns the original string if there are no quotes</span>
+<a name="l00032"></a>00032 <span class="comment">// or apos. Returns a blank string if there is no matching second quote or apo.</span>
+<a name="l00033"></a>00033 std::string removeQuotes( <span class="keyword">const</span> std::string &amp;str );
+<a name="l00034"></a>00034 std::string replaceXmlCodes( <span class="keyword">const</span> std::string &amp;str );
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 <span class="keyword">struct </span>ToLower
+<a name="l00037"></a>00037 {
+<a name="l00038"></a>00038    <span class="keywordtype">char</span> operator()( <span class="keywordtype">char</span> c )<span class="keyword"> const</span>
+<a name="l00039"></a>00039 <span class="keyword">   </span>{
+<a name="l00040"></a>00040       <span class="keywordflow">return</span> std::tolower(c);
+<a name="l00041"></a>00041    }
+<a name="l00042"></a>00042 };
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044 <span class="keyword">class </span>Xml;
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046 <span class="keyword">class </span>Xml
+<a name="l00047"></a>00047 {
+<a name="l00048"></a>00048    <span class="keyword">public</span>:
+<a name="l00049"></a>00049       Xml( istream &amp;in );
+<a name="l00050"></a>00050       <span class="keywordtype">string</span> nextTag();
+<a name="l00051"></a>00051       <span class="keywordtype">string</span> nextNonTag();
+<a name="l00052"></a>00052       <span class="keywordtype">void</span> resetIter();
+<a name="l00053"></a>00053       <span class="keywordtype">bool</span> isAtEnd();
+<a name="l00054"></a>00054       <span class="keywordtype">string</span> getStringVal( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;closeTag, <span class="keywordtype">bool</span> &amp;success, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;errMsg );
+<a name="l00055"></a>00055       <span class="keywordtype">double</span> getDoubleVal( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;closeTag, <span class="keywordtype">bool</span> &amp;success, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;errMsg );
+<a name="l00056"></a>00056       <span class="keywordtype">long</span> <span class="keywordtype">int</span> getLongVal( <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;closeTag, <span class="keywordtype">bool</span> &amp;success, <span class="keyword">const</span> <span class="keywordtype">string</span> &amp;errMsg );
+<a name="l00057"></a>00057       
+<a name="l00058"></a>00058    <span class="keyword">private</span>:
+<a name="l00059"></a>00059       <span class="keywordtype">string</span> xmlText;
+<a name="l00060"></a>00060       string::const_iterator iter;
+<a name="l00061"></a>00061       string::const_iterator end;
+<a name="l00062"></a>00062 };
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 <span class="preprocessor">#endif // _XML_H</span>
+<a name="l00065"></a>00065 <span class="preprocessor"></span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sun Jan 25 10:19:22 2009 for Brewtarget by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 22 17:57:01 2009 for Brewtarget by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

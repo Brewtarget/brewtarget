@@ -48,23 +48,29 @@
 <a name="l00034"></a>00034 std::string intToString( <span class="keywordtype">int</span> num );
 <a name="l00035"></a>00035 std::string boolToString( <span class="keywordtype">bool</span> b );
 <a name="l00036"></a>00036 
-<a name="l00037"></a>00037 <span class="comment">//==========================ParseException======================================</span>
-<a name="l00038"></a>00038 <span class="keyword">class </span>ParseException : std::exception
-<a name="l00039"></a>00039 {
-<a name="l00040"></a>00040 <span class="keyword">public</span>:
-<a name="l00041"></a>00041    
-<a name="l00042"></a>00042    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* what() <span class="keyword">const</span> throw()
-<a name="l00043"></a>00043    {
-<a name="l00044"></a>00044       <span class="keywordflow">return</span> <span class="stringliteral">"Error in parsing."</span>;
-<a name="l00045"></a>00045    }
-<a name="l00046"></a>00046    
-<a name="l00047"></a>00047    ParseException(){};
-<a name="l00048"></a>00048 };
-<a name="l00049"></a>00049 
-<a name="l00050"></a>00050 <span class="preprocessor">#endif  </span><span class="comment">/* _STRINGPARSING_H */</span>
-<a name="l00051"></a>00051 
+<a name="l00037"></a>00037 std::string&amp; trim( std::string &amp;str );
+<a name="l00038"></a>00038 <span class="keywordtype">void</span> iterateUntilDelimiter( std::string::const_iterator &amp;iter );
+<a name="l00039"></a>00039 <span class="keywordtype">void</span> iterateUntilNotDelimiter( std::string::const_iterator &amp;iter );
+<a name="l00040"></a>00040 <span class="keywordtype">void</span> iterateUntilCharFound( std::string::const_iterator &amp;iter, <span class="keywordtype">char</span> c );
+<a name="l00041"></a>00041 <span class="keywordtype">bool</span> isWhiteSpace( <span class="keywordtype">char</span> c );
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043 <span class="comment">//==========================ParseException======================================</span>
+<a name="l00044"></a>00044 <span class="keyword">class </span>ParseException : std::exception
+<a name="l00045"></a>00045 {
+<a name="l00046"></a>00046 <span class="keyword">public</span>:
+<a name="l00047"></a>00047    
+<a name="l00048"></a>00048    <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* what() <span class="keyword">const</span> throw()
+<a name="l00049"></a>00049    {
+<a name="l00050"></a>00050       <span class="keywordflow">return</span> <span class="stringliteral">"Error in parsing."</span>;
+<a name="l00051"></a>00051    }
+<a name="l00052"></a>00052    
+<a name="l00053"></a>00053    ParseException(){};
+<a name="l00054"></a>00054 };
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056 <span class="preprocessor">#endif  </span><span class="comment">/* _STRINGPARSING_H */</span>
+<a name="l00057"></a>00057 
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sun Jan 25 10:19:22 2009 for Brewtarget by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 22 17:57:01 2009 for Brewtarget by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

@@ -41,7 +41,7 @@ macx {
     #QMAKE_POST_LINK=strip brewtarget.app/Contents/MacOS/brewtarget
 
     # Install everything into an app bundle.
-    data.path = /usr/local/share/brewtarget/
+    data.path = brewtarget.app/Contents/Resources
     data.files = *.xml
 
     doc.path = brewtarget.app/Contents/Resources/en.lproj
@@ -59,7 +59,7 @@ win32 {
 
     target.path = release
 
-    data.path = /usr/local/share/brewtarget/
+    data.path = release
     #data.files = *.xml win/brewtarget.ico README COPYING
     data.files = *.xml README COPYING
 

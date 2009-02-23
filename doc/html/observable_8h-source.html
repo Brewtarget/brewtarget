@@ -46,46 +46,54 @@
 <a name="l00032"></a>00032    <span class="keywordtype">void</span> addObserver(Observer* obs);
 <a name="l00033"></a>00033    <span class="keywordtype">bool</span> removeObserver(Observer* obs); <span class="comment">// Returns true if successful.</span>
 <a name="l00034"></a>00034    <span class="keywordtype">void</span> hasChanged();
-<a name="l00035"></a>00035    
-<a name="l00036"></a>00036 <span class="keyword">private</span>:
-<a name="l00037"></a>00037    std::vector&lt;Observer*&gt; observers;
-<a name="l00038"></a>00038    
-<a name="l00039"></a>00039    <span class="keywordtype">void</span> notifyObservers();
-<a name="l00040"></a>00040    <span class="keywordtype">void</span> setDefaults();
-<a name="l00041"></a>00041 };
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043 <span class="keyword">class </span>Observer
-<a name="l00044"></a>00044 {
-<a name="l00045"></a>00045 <span class="keyword">public</span>:
-<a name="l00046"></a>00046    Observer();
-<a name="l00047"></a>00047    Observer(Observable* obs);
-<a name="l00048"></a>00048    <span class="keywordtype">void</span> setObserved(Observable* obs);
-<a name="l00049"></a>00049    
-<a name="l00050"></a>00050    <span class="keyword">virtual</span> <span class="keywordtype">void</span> notify(Observable *notifier) = 0; <span class="comment">// This will get called by observed whenever it changes.</span>
-<a name="l00051"></a>00051    
-<a name="l00052"></a>00052 <span class="keyword">private</span>:
-<a name="l00053"></a>00053    Observable* observed;
-<a name="l00054"></a>00054 };
-<a name="l00055"></a>00055 
-<a name="l00056"></a>00056 <span class="keyword">class </span>MultipleObserver : <span class="keyword">public</span> Observer
-<a name="l00057"></a>00057 {
-<a name="l00058"></a>00058 <span class="keyword">public</span>:
-<a name="l00059"></a>00059    MultipleObserver();
-<a name="l00060"></a>00060    MultipleObserver(Observable* obs);
-<a name="l00061"></a>00061    <span class="keywordtype">void</span> addObserved(Observable* obs);
-<a name="l00062"></a>00062    <span class="keywordtype">void</span> removeObserved(Observable* obs);
-<a name="l00063"></a>00063    <span class="keywordtype">void</span> removeAllObserved();
-<a name="l00064"></a>00064    
-<a name="l00065"></a>00065    <span class="comment">// virtual void notify(Observable* notifier); // Don't forget to overload from class Observer.</span>
-<a name="l00066"></a>00066    
-<a name="l00067"></a>00067 <span class="keyword">private</span>:
-<a name="l00068"></a>00068    std::vector&lt;Observable*&gt; obsVec;
-<a name="l00069"></a>00069 };
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071 <span class="preprocessor">#endif  </span><span class="comment">/* _OBSERVABLE_H */</span>
-<a name="l00072"></a>00072 
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036    <span class="comment">// In case notification causes weird problems.</span>
+<a name="l00037"></a>00037    <span class="keywordtype">void</span> disableNotification();
+<a name="l00038"></a>00038    <span class="keywordtype">void</span> reenableNotification();
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040    <span class="comment">// In case you need it. Forces a notification of observers.</span>
+<a name="l00041"></a>00041    <span class="keywordtype">void</span> forceNotify();
+<a name="l00042"></a>00042    
+<a name="l00043"></a>00043 <span class="keyword">private</span>:
+<a name="l00044"></a>00044    std::vector&lt;Observer*&gt; observers;
+<a name="l00045"></a>00045    <span class="keywordtype">bool</span> doNotify;
+<a name="l00046"></a>00046    
+<a name="l00047"></a>00047    <span class="keywordtype">void</span> notifyObservers();
+<a name="l00048"></a>00048    <span class="keywordtype">void</span> setDefaults();
+<a name="l00049"></a>00049 };
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 <span class="keyword">class </span>Observer
+<a name="l00052"></a>00052 {
+<a name="l00053"></a>00053 <span class="keyword">public</span>:
+<a name="l00054"></a>00054    Observer();
+<a name="l00055"></a>00055    Observer(Observable* obs);
+<a name="l00056"></a>00056    <span class="keywordtype">void</span> setObserved(Observable* obs);
+<a name="l00057"></a>00057    
+<a name="l00058"></a>00058    <span class="keyword">virtual</span> <span class="keywordtype">void</span> notify(Observable *notifier) = 0; <span class="comment">// This will get called by observed whenever it changes.</span>
+<a name="l00059"></a>00059    
+<a name="l00060"></a>00060 <span class="keyword">private</span>:
+<a name="l00061"></a>00061    Observable* observed;
+<a name="l00062"></a>00062 };
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 <span class="keyword">class </span>MultipleObserver : <span class="keyword">public</span> Observer
+<a name="l00065"></a>00065 {
+<a name="l00066"></a>00066 <span class="keyword">public</span>:
+<a name="l00067"></a>00067    MultipleObserver();
+<a name="l00068"></a>00068    MultipleObserver(Observable* obs);
+<a name="l00069"></a>00069    <span class="keywordtype">void</span> addObserved(Observable* obs);
+<a name="l00070"></a>00070    <span class="keywordtype">void</span> removeObserved(Observable* obs);
+<a name="l00071"></a>00071    <span class="keywordtype">void</span> removeAllObserved();
+<a name="l00072"></a>00072    
+<a name="l00073"></a>00073    <span class="comment">// virtual void notify(Observable* notifier); // Don't forget to overload from class Observer.</span>
+<a name="l00074"></a>00074    
+<a name="l00075"></a>00075 <span class="keyword">private</span>:
+<a name="l00076"></a>00076    std::vector&lt;Observable*&gt; obsVec;
+<a name="l00077"></a>00077 };
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079 <span class="preprocessor">#endif  </span><span class="comment">/* _OBSERVABLE_H */</span>
+<a name="l00080"></a>00080 
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sun Jan 25 10:19:22 2009 for Brewtarget by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 22 17:57:01 2009 for Brewtarget by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
