@@ -24,10 +24,9 @@
 #define GLASS ":/images/glass.png"
 
 /* Things that will get configured by configure script */
-#define DATADIR "/usr/local/share/brewtarget/"
-#define DBXML "/usr/local/share/brewtarget/database.xml"
-#define RECIPESXML "/usr/local/share/brewtarget/recipes.xml"
-#define MASHSXML "/usr/local/share/brewtarget/mashs.xml"
+
+// This only gets used by linux OS version.
+#define CONFIGDATADIR "/usr/local/share/brewtarget/"
 
 #endif /*_CONFIG_H*/
 

@@ -36,6 +36,7 @@
 #include "xmlnode.h"
 #include "xmltree.h"
 #include "config.h"
+#include "brewtarget.h"
 
 // Grrr... stupid C++. Have to define these outside the class AGAIN.
 std::list<Equipment*> Database::equipments;
@@ -51,11 +52,11 @@ std::list<Yeast*> Database::yeasts;
 bool Database::initialized = false;
 Database* Database::internalDBInstance = 0;
 std::fstream Database::dbFile;
-const char* Database::dbFileName = DBXML;
+QString Database::dbFileName;
 std::fstream Database::recipeFile;
-const char* Database::recipeFileName = RECIPESXML;
+QString Database::recipeFileName;
 std::fstream Database::mashFile;
-const char* Database::mashFileName = MASHSXML;
+QString Database::mashFileName;
 
 Database::Database()
 {
@@ -77,9 +78,13 @@ bool Database::isInitialized()
 
 void Database::initialize()
 {
-   dbFile.open(dbFileName);
-   recipeFile.open(recipeFileName); // Why are these separate from the dbFile? To prevent duplicates.
-   mashFile.open(mashFileName); // Why are these separate from the dbFile? To prevent duplicates.
+   dbFileName = (Brewtarget::getDataDir() + "database.xml");
+   recipeFileName = (Brewtarget::getDataDir() + "recipes.xml");
+   mashFileName = (Brewtarget::getDataDir() + "mashs.xml");
+   
+   dbFile.open(dbFileName.toStdString().c_str());
+   recipeFile.open(recipeFileName.toStdString().c_str()); // Why are these separate from the dbFile? To prevent duplicates.
+   mashFile.open(mashFileName.toStdString().c_str()); // Why are these separate from the dbFile? To prevent duplicates.
    
    unsigned int i, size;
    std::vector<XmlNode*> nodes;
@@ -166,9 +171,9 @@ void Database::resortAll()
 
 void Database::savePersistent()
 {
-   dbFile.open( dbFileName, ios::out | ios::trunc );
-   recipeFile.open( recipeFileName, ios::out | ios::trunc );
-   mashFile.open( mashFileName, ios::out | ios::trunc );
+   dbFile.open( dbFileName.toStdString().c_str(), ios::out | ios::trunc );
+   recipeFile.open( recipeFileName.toStdString().c_str(), ios::out | ios::trunc );
+   mashFile.open( mashFileName.toStdString().c_str(), ios::out | ios::trunc );
 
    dbFile << "<?xml version=\"1.0\"?>" << std::endl;
    recipeFile << "<?xml version=\"1.0\"?>" << std::endl;

@@ -29,20 +29,30 @@
 
 #include <QPixmap>
 #include <QLabel>
+#include <QDir>
 
 #include "BeerColorWidget.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 int main(int argc, char **argv)
 {
+   QApplication app(argc, argv);
+   Brewtarget::setApp(app);
+
+   return Brewtarget::run();
+   
+   /*
    MainWindow *mainWindow;
    QApplication app(argc, argv);
+
    Database::initialize();
 
    mainWindow = new MainWindow();
 
    mainWindow->show();
    return app.exec();
+    */
 
    /*
    QApplication app(argc, argv);

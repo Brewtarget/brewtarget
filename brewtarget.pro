@@ -72,6 +72,7 @@ win32 {
 # Input
 HEADERS += AboutDialog.h \
            BeerColorWidget.h \
+           brewtarget.h \
            config.h \
            database.h \
            equipment.h \
@@ -125,6 +126,7 @@ FORMS +=   aboutDialog.ui \
            yeastDialog.ui \
            yeastEditor.ui
 SOURCES += database.cpp \
+           brewtarget.cpp \
            BeerColorWidget.cpp \
            equipment.cpp \
            fermentable.cpp \

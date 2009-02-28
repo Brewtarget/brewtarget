@@ -35,7 +35,7 @@ sub modifyInPlace;
 
 #===========================Main Routine Below==============================
 
-print "\nConfigure script for Brewtarget\n";
+print "\n---Configure script for Brewtarget.\n";
 
 getOptions(); # Get any options provided by user.
 findMake();   # Won't overwrite user options.
@@ -70,7 +70,7 @@ elsif( isMac() )
 elsif( isWindows() )
 {
    print "OS: Windows\n";
-   $datapath = "release/";
+   $datapath = "/";
 }
 else
 {
@@ -81,25 +81,29 @@ else
 # ---Done configuring defaults.---
 
 # ---Modify the config.h file.---
-$dbxml      = join '', $datapath, 'database.xml';
-$recipesxml = join '', $datapath, 'recipes.xml';
-$mashsxml   = join '', $datapath, 'mashs.xml';
-
-modifyInPlace('config.h', '#define DATADIR.*$', qq(#define DATADIR "$datapath"));
-modifyInPlace('config.h', '#define DBXML.*$', qq(#define DBXML "$dbxml"));
-modifyInPlace('config.h', '#define RECIPESXML.*$', qq(#define RECIPESXML "$recipesxml"));
-modifyInPlace('config.h', '#define MASHSXML.*$', qq(#define MASHSXML "$mashsxml"));
+modifyInPlace('config.h', '#define CONFIGDATADIR.*$', qq(#define CONFIGDATADIR "$datapath"));
 # ---Done modifying config.h.---
 
 # Make the makefile.
-print "$qmake $qprofile\n";
-`$qmake $qprofile`;
+if( isMac() )
+{
+   print "$qmake -spec macx-g++ $qprofile\n";
+   `$qmake -spec macx-g++ $qprofile`;
+}
+else
+{
+   print "$qmake $qprofile\n";
+   `$qmake $qprofile`;
+}
 
 # NOTE: NEED TO FIND A BETTER WAY TO DO THIS.
 # Seems qmake wants to install in mode 644 which is not cool for brewtarget.
-modifyInPlace( 'Makefile', '^INSTALL_FILE\s*=.*$', q(INSTALL_FILE = install -m 666 -p));
+if( isLinux() )
+{
+   modifyInPlace( 'Makefile', '^INSTALL_FILE\s*=.*$', q(INSTALL_FILE = install -m 666 -p));
+}
 
-print "\nYou are now ready to run $make.\n";
+print "\nYou are now ready to run \"$make\" then \"$make install\".\n\n";
 exit 0;
 #===============================END OF CONFIGURATION==================================
 
@@ -123,35 +127,56 @@ sub getOptions
 {
    foreach $arg (@ARGV)
    {
-      ($opt, $val) = split $arg, '=';
-      if( $opt == '--target-path' )
+      ($opt, $val) = split '=', $arg;
+      if( $opt eq '--target-path' )
       {
          $targetpath = $val;
          print "target.path = $val\n";
       }
-      elsif( $opt == '--data-path' )
+      elsif( $opt eq '--data-path' )
       {
          $datapath = $val;
          print "data.path = $val\n";
       }
-      elsif( $opt == '--doc-path' )
+      elsif( $opt eq '--doc-path' )
       {
          $docpath = $val;
          print "doc.path = $val\n";
       }
-      elsif( $opt == '--make' )
+      elsif( $opt eq '--make' )
       {
          $make = $val;
          print "make = $val\n";
       }
-      elsif( $opt == '--qmake' )
+      elsif( $opt eq '--qmake' )
       {
          $qmake = $val;
          print "qmake = $val\n";
       }
-      elsif( $opt == '--help' )
+      elsif( $opt eq '--help' )
       {
          printUsageExit(0);
+      }
+      elsif( $opt eq '--os' )
+      {
+         if( isWindows() )
+         {
+            print "OS: Windows ($^O)\n";
+         }
+         elsif( isLinux() )
+         {
+            print "OS: Linux ($^O)\n";
+         }
+         elsif( isMac() )
+         {
+            print "OS: Mac ($^O)\n";
+         }
+         else
+         {
+            print "OS: Unknown ($^O)\n";
+         }
+         
+         exit 0;
       }
       else
       {
@@ -171,6 +196,7 @@ sub printUsageExit
          "      --doc-path=T    Sets the documentation install dir to T.\n",
          "      --make=T        Uses T as the make executable.\n",
          "      --qmake=T       Uses T as the qmake executable.\n",
+         "      --os            Print the OS and exit.\n",
          "      --help          Print this message.\n";
    exit $_[0];
 }
@@ -182,12 +208,14 @@ sub isLinux
 
 sub isMac
 {
-   return $^O =~ /mac/i;
+   return $^O =~ /mac|darwin/i;
 }
 
 sub isWindows
 {
-   return $^O =~ /win/i;
+   return $^O =~ /(?<!dar)win/i;
+   # Matches .*win.* except when "dar" precedes "win",
+   # thereby making this OS a mac :)
 }
 
 sub findExec

@@ -102,11 +102,11 @@ private:
    static bool initialized;
    static Database* internalDBInstance;
    static std::fstream dbFile;
-   static const char* dbFileName;
+   static QString dbFileName;
    static std::fstream recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static const char* recipeFileName;
+   static QString recipeFileName;
    static std::fstream mashFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static const char* mashFileName;
+   static QString mashFileName;
 
    // The stuff we care about...
    static std::list<Equipment*> equipments;
