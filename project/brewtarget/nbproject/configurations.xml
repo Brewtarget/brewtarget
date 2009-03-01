@@ -35,6 +35,8 @@
       <itemPath>../../aboutDialog.ui</itemPath>
       <itemPath>../../BeerColorWidget.cpp</itemPath>
       <itemPath>../../BeerColorWidget.h</itemPath>
+      <itemPath>../../brewtarget.cpp</itemPath>
+      <itemPath>../../brewtarget.h</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
       <itemPath>../../config.h</itemPath>
       <itemPath>../../configure</itemPath>
@@ -369,6 +371,12 @@
         <itemTool>3</itemTool>
       </item>
       <item path="../../aboutDialog.ui">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../brewtarget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../brewtarget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
@@ -761,6 +769,12 @@ make clean</buildCommand>
         <itemTool>3</itemTool>
       </item>
       <item path="../../aboutDialog.ui">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../brewtarget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../brewtarget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">

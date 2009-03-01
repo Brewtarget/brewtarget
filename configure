@@ -178,6 +178,14 @@ sub getOptions
          
          exit 0;
       }
+      elsif( $opt eq '--no-ppc' )
+      {
+         modifyInPlace('brewtarget.pro', q(CONFIG [+]= ppc), q(#CONFIG += ppc));
+      }
+      elsif( $opt eq '--no-x86' )
+      {
+         modifyInPlace('brewtarget.pro', q(CONFIG [+]= x86), q(#CONFIG += x86));
+      }
       else
       {
          print STDERR "Cannot recognize option '$opt'\n";
@@ -197,6 +205,9 @@ sub printUsageExit
          "      --make=T        Uses T as the make executable.\n",
          "      --qmake=T       Uses T as the qmake executable.\n",
          "      --os            Print the OS and exit.\n",
+         "   ===Mac Only===\n",
+         "      --no-ppc        Build without ppc instructions.\n",
+         "      --no-x86        Build without x86 instructions.\n",
          "      --help          Print this message.\n";
    exit $_[0];
 }
