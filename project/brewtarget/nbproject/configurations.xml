@@ -54,7 +54,6 @@
       <itemPath>../../FermentableTableModel.h</itemPath>
       <itemPath>../../FermentableTableWidget.cpp</itemPath>
       <itemPath>../../FermentableTableWidget.h</itemPath>
-      <itemPath>../../guitest.cpp</itemPath>
       <itemPath>../../hop.cpp</itemPath>
       <itemPath>../../hop.h</itemPath>
       <itemPath>../../HopDialog.cpp</itemPath>
@@ -67,6 +66,7 @@
       <itemPath>../../HopTableWidget.h</itemPath>
       <itemPath>../../hoputilization.cpp</itemPath>
       <itemPath>../../hoputilization.h</itemPath>
+      <itemPath>../../main.cpp</itemPath>
       <itemPath>../../MainWindow.cpp</itemPath>
       <itemPath>../../MainWindow.h</itemPath>
       <itemPath>../../mainWindow.ui</itemPath>
@@ -406,9 +406,6 @@
       <item path="../../fermentable.h">
         <itemTool>3</itemTool>
       </item>
-      <item path="../../guitest.cpp">
-        <itemTool>1</itemTool>
-      </item>
       <item path="../../hop.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -420,6 +417,9 @@
       </item>
       <item path="../../hoputilization.h">
         <itemTool>3</itemTool>
+      </item>
+      <item path="../../main.cpp">
+        <itemTool>1</itemTool>
       </item>
       <item path="../../mainWindow.ui">
         <itemTool>3</itemTool>
@@ -804,9 +804,6 @@ make clean</buildCommand>
       <item path="../../fermentable.h">
         <itemTool>3</itemTool>
       </item>
-      <item path="../../guitest.cpp">
-        <itemTool>1</itemTool>
-      </item>
       <item path="../../hop.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -818,6 +815,9 @@ make clean</buildCommand>
       </item>
       <item path="../../hoputilization.h">
         <itemTool>3</itemTool>
+      </item>
+      <item path="../../main.cpp">
+        <itemTool>1</itemTool>
       </item>
       <item path="../../mainWindow.ui">
         <itemTool>3</itemTool>

@@ -31,7 +31,7 @@ public:
    Brewtarget();
 
    static QApplication* getApp();
-   static void setApp(QApplication& a);
+   static void setApp(QApplication& a); // This method should be called before any of the others.
    static QString getDataDir();
    static int run();
 

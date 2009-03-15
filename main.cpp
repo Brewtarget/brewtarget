@@ -1,5 +1,5 @@
 /*
- * guitest.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * main.cpp is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -17,22 +17,7 @@
  */
 
 #include <iostream>
-#include <vector>
-#include <string>
 #include <QApplication>
-#include <QWidget>
-#include "MainWindow.h"
-#include "recipe.h"
-#include "xmlnode.h"
-#include "xmltree.h"
-#include "database.h"
-
-#include <QPixmap>
-#include <QLabel>
-#include <QDir>
-
-#include "BeerColorWidget.h"
-#include "unit.h"
 #include "brewtarget.h"
 
 int main(int argc, char **argv)
@@ -41,26 +26,4 @@ int main(int argc, char **argv)
    Brewtarget::setApp(app);
 
    return Brewtarget::run();
-   
-   /*
-   MainWindow *mainWindow;
-   QApplication app(argc, argv);
-
-   Database::initialize();
-
-   mainWindow = new MainWindow();
-
-   mainWindow->show();
-   return app.exec();
-    */
-
-   /*
-   QApplication app(argc, argv);
-   QPixmap img("images/glass.png");
-   QLabel lbl;
-   lbl.setPixmap(img);
-
-   lbl.show();
-   return app.exec();
-    */
 }

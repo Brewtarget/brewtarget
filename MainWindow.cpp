@@ -228,6 +228,7 @@ void MainWindow::showChanges()
    recipeObs->recalculate();
 
    lineEdit_name->setText(recipeObs->getName().c_str());
+   lineEdit_name->setCursorPosition(0);
    lineEdit_batchSize->setText(doubleToString(recipeObs->getBatchSize_l()).c_str());
    lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
    lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());

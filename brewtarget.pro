@@ -135,7 +135,7 @@ SOURCES += database.cpp \
            FermentableDialog.cpp \
            FermentableTableModel.cpp \
            FermentableTableWidget.cpp \
-           guitest.cpp \
+           main.cpp \
            hop.cpp \
            hoputilization.cpp \
            HopDialog.cpp \
