@@ -108,6 +108,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Setup some of the widgets.
    recipeComboBox->startObservingDB();
+   equipmentComboBox->startObservingDB();
    fermDialog->startObservingDB();
    hopDialog->startObservingDB();
    miscDialog->startObservingDB();
@@ -121,6 +122,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
    connect( pushButton_clear, SIGNAL( clicked() ), this, SLOT( clear() ));
    connect( recipeComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
+   connect( equipmentComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
@@ -239,10 +241,7 @@ void MainWindow::showChanges()
    // Recipe's equipment is optional, so might be null.
    Equipment* equip = recipeObs->getEquipment();
    if( equip )
-      pushButton_equipment->setText(tr(equip->getName().c_str()));
-   else
-      pushButton_equipment->setText(tr("No equipment"));
-   pushButton_equipment->adjustSize();
+      equipmentComboBox->setIndexByEquipmentName(equip->getName());
 
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
@@ -277,10 +276,15 @@ void MainWindow::updateRecipeStyle()
       return;
 }
 
-void MainWindow::updateRecipeEquipment()
+void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
 {
    if( recipeObs == 0 )
       return;
+
+   // equip may be null.
+   Equipment* equip = equipmentComboBox->getSelected();
+   if( equip )
+      recipeObs->setEquipment(equip);
 }
 
 void MainWindow::updateRecipeBatchSize()

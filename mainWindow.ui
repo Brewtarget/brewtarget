@@ -178,15 +178,24 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_equipment" >
+              <widget class="EquipmentComboBox" name="equipmentComboBox" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-                 <horstretch>0</horstretch>
+                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+                 <horstretch>100</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
-                <string>PushButton</string>
+               <property name="minimumSize" >
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>100</width>
+                 <height>16777215</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -571,7 +580,6 @@
           </spacer>
          </item>
         </layout>
-        <zorder>label_13</zorder>
        </widget>
       </item>
      </layout>
@@ -885,8 +893,6 @@
      </layout>
     </item>
    </layout>
-   <zorder>tabWidget</zorder>
-   <zorder>label_13</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar" >
    <property name="geometry" >
@@ -971,6 +977,11 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>EquipmentComboBox</class>
+   <extends>QComboBox</extends>
+   <header>EquipmentComboBox.h</header>
+  </customwidget>
   <customwidget>
    <class>FermentableTableWidget</class>
    <extends>QTableView</extends>

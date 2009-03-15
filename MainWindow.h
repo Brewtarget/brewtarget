@@ -57,7 +57,7 @@ public slots:
 
    void updateRecipeName();
    void updateRecipeStyle();
-   void updateRecipeEquipment();
+   void updateRecipeEquipment(const QString&);
    void updateRecipeBatchSize();
    void updateRecipeBoilSize();
    void updateRecipeEfficiency();

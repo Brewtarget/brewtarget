@@ -77,6 +77,7 @@ HEADERS += AboutDialog.h \
            config.h \
            database.h \
            equipment.h \
+           EquipmentComboBox.h \
            fermentable.h \
            FermentableEditor.h \
            FermentableDialog.h \
@@ -130,6 +131,7 @@ SOURCES += database.cpp \
            brewtarget.cpp \
            BeerColorWidget.cpp \
            equipment.cpp \
+           EquipmentComboBox.cpp \
            fermentable.cpp \
            FermentableEditor.cpp \
            FermentableDialog.cpp \

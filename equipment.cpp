@@ -172,6 +172,7 @@ Equipment::Equipment(XmlNode *node)
 void Equipment::setName( const std::string &var )
 {
    name = std::string(var);
+   hasChanged();
 }
 
 void Equipment::setBoilSize_l( double var )
@@ -179,7 +180,10 @@ void Equipment::setBoilSize_l( double var )
    if( var < 0.0 )
       throw EquipmentException("boil size cannot be negative: " + doubleToString(var) );
    else
+   {
       boilSize_l = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setBatchSize_l( double var )
@@ -187,7 +191,10 @@ void Equipment::setBatchSize_l( double var )
    if( var < 0.0 )
       throw EquipmentException( "batch size cannot be negative: " + doubleToString(var) );
    else
+   {
       batchSize_l = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setTunVolume_l( double var )
@@ -195,7 +202,10 @@ void Equipment::setTunVolume_l( double var )
    if( var < 0.0 )
       throw EquipmentException( "tun volume cannot be negative: " + doubleToString(var) );
    else
+   {
       tunVolume_l = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setTunWeight_kg( double var )
@@ -203,7 +213,10 @@ void Equipment::setTunWeight_kg( double var )
    if( var < 0.0 )
       throw EquipmentException( "tun weight cannot be negative: " + doubleToString(var) );
    else
+   {
       tunWeight_kg = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setTunSpecificHeat_calGC( double var )
@@ -211,7 +224,10 @@ void Equipment::setTunSpecificHeat_calGC( double var )
    if( var < 0.0 )
       throw EquipmentException( "tun specific heat cannot be negative: " + doubleToString(var) );
    else
+   {
       tunSpecificHeat_calGC = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setTopUpWater_l( double var )
@@ -219,7 +235,10 @@ void Equipment::setTopUpWater_l( double var )
    if( var < 0.0 )
       throw EquipmentException( "top up water cannot be negative: " + doubleToString(var) );
    else
+   {
       topUpWater_l = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setTrubChillerLoss_l( double var )
@@ -227,7 +246,10 @@ void Equipment::setTrubChillerLoss_l( double var )
    if( var < 0.0 )
       throw EquipmentException( "trub chiller loss cannot be negative: " + doubleToString(var) );
    else
+   {
       trubChillerLoss_l = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setEvapRate_pctHr( double var )
@@ -235,7 +257,10 @@ void Equipment::setEvapRate_pctHr( double var )
    if( var < 0.0 || var > 100.0)
       throw EquipmentException( "evap rate must be a percent: " + doubleToString(var) );
    else
+   {
       evapRate_pctHr = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setBoilTime_hrs( double var )
@@ -243,12 +268,16 @@ void Equipment::setBoilTime_hrs( double var )
    if( var < 0.0 )
       throw EquipmentException( "boil time cannot be negative: " + doubleToString(var) );
    else
+   {
       boilTime_hrs = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setCalcBoilVolume( bool var )
 {
    calcBoilVolume = var;
+   hasChanged();
 }
 
 void Equipment::setLauterDeadspace_l( double var )
@@ -256,7 +285,10 @@ void Equipment::setLauterDeadspace_l( double var )
    if( var < 0.0 )
       throw EquipmentException( "lauter deadspace cannot be negative: " + doubleToString(var) );
    else
+   {
       lauterDeadspace_l = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setTopUpKettle_l( double var )
@@ -264,7 +296,10 @@ void Equipment::setTopUpKettle_l( double var )
    if( var < 0.0 )
       throw EquipmentException( "top up kettle cannot be negative: " + doubleToString(var) );
    else
+   {
       topUpKettle_l = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setHopUtilization_pct( double var )
@@ -272,12 +307,16 @@ void Equipment::setHopUtilization_pct( double var )
    if( var < 0.0 || var > 100.0 )
       throw EquipmentException( "hop utilization must be a percentage: " + doubleToString(var) );
    else
-      ;
+   {
+      hopUtilization_pct = var;
+      hasChanged();
+   }
 }
 
 void Equipment::setNotes( const std::string &var )
 {
    notes = std::string(var);
+   hasChanged();
 }
 
 //============================"GET" METHODS=====================================

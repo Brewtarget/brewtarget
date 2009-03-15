@@ -24,11 +24,12 @@
 #include <ostream>
 
 #include "xmlnode.h"
+#include "observable.h"
 
 class Equipment;
 class EquipmentException;
 
-class Equipment
+class Equipment : public Observable
 {
 public:
    
