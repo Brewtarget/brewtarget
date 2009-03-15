@@ -42,7 +42,7 @@ std::string Equipment::toXml()
    ret += "<TOP_UP_WATER>"+doubleToString(topUpWater_l)+"</TOP_UP_WATER>\n";
    ret += "<TRUB_CHILLER_LOSS>"+doubleToString(trubChillerLoss_l)+"</TRUB_CHILLER_LOSS>\n";
    ret += "<EVAP_RATE>"+doubleToString(evapRate_pctHr)+"</EVAP_RATE>\n";
-   ret += "<BOIL_TIME>"+doubleToString(boilTime_hrs)+"</BOIL_TIME>\n";
+   ret += "<BOIL_TIME>"+doubleToString(boilTime_min)+"</BOIL_TIME>\n";
    ret += "<CALC_BOIL_VOLUME>"+boolToString(calcBoilVolume)+"</CALC_BOIL_VOLUME>\n";
    ret += "<LAUTER_DEADSPACE>"+doubleToString(lauterDeadspace_l)+"</LAUTER_DEADSPACE>\n";
    ret += "<TOP_UP_KETTLE>"+doubleToString(topUpKettle_l)+"</TOP_UP_KETTLE>\n";
@@ -67,7 +67,7 @@ void Equipment::setDefaults()
    topUpWater_l = 0.0;
    trubChillerLoss_l = 0.0;
    evapRate_pctHr = 0.0;
-   boilTime_hrs = 0.0;
+   boilTime_min = 0.0;
    calcBoilVolume = false;
    lauterDeadspace_l = 0.0;
    topUpKettle_l = 0.0;
@@ -148,7 +148,7 @@ Equipment::Equipment(XmlNode *node)
       else if( tag == "EVAP_RATE" )
          setEvapRate_pctHr(parseDouble(leafText));
       else if( tag == "BOIL_TIME" )
-         setBoilTime_hrs(parseDouble(leafText));
+         setBoilTime_min(parseDouble(leafText));
       else if( tag == "CALC_BOIL_VOLUME" )
          setCalcBoilVolume(parseBool(leafText));
       else if( tag == "LAUTER_DEADSPACE" )
@@ -194,6 +194,7 @@ void Equipment::setBatchSize_l( double var )
    {
       batchSize_l = var;
       hasChanged();
+      doCalculations();
    }
 }
 
@@ -238,6 +239,7 @@ void Equipment::setTopUpWater_l( double var )
    {
       topUpWater_l = var;
       hasChanged();
+      doCalculations();
    }
 }
 
@@ -249,6 +251,7 @@ void Equipment::setTrubChillerLoss_l( double var )
    {
       trubChillerLoss_l = var;
       hasChanged();
+      doCalculations();
    }
 }
 
@@ -260,17 +263,19 @@ void Equipment::setEvapRate_pctHr( double var )
    {
       evapRate_pctHr = var;
       hasChanged();
+      doCalculations();
    }
 }
 
-void Equipment::setBoilTime_hrs( double var )
+void Equipment::setBoilTime_min( double var )
 {
    if( var < 0.0 )
       throw EquipmentException( "boil time cannot be negative: " + doubleToString(var) );
    else
    {
-      boilTime_hrs = var;
+      boilTime_min = var;
       hasChanged();
+      doCalculations();
    }
 }
 
@@ -278,6 +283,8 @@ void Equipment::setCalcBoilVolume( bool var )
 {
    calcBoilVolume = var;
    hasChanged();
+   if( var )
+      doCalculations();
 }
 
 void Equipment::setLauterDeadspace_l( double var )
@@ -366,9 +373,9 @@ double Equipment::getEvapRate_pctHr() const
    return evapRate_pctHr;
 }
 
-double Equipment::getBoilTime_hrs() const
+double Equipment::getBoilTime_min() const
 {
-   return boilTime_hrs;
+   return boilTime_min;
 }
 
 bool Equipment::getCalcBoilVolume() const
@@ -394,4 +401,14 @@ double Equipment::getHopUtilization_pct() const
 std::string Equipment::getNotes() const
 {
    return notes;
+}
+
+void Equipment::doCalculations()
+{
+   /* The equation given the BeerXML 1.0 spec was way wrong. */
+   boilSize_l =
+      (batchSize_l - topUpWater_l + trubChillerLoss_l)
+      / (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
+
+   hasChanged();
 }

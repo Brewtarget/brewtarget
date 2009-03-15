@@ -38,6 +38,7 @@ class MainWindow;
 #include "MiscEditor.h"
 #include "HopEditor.h"
 #include "YeastEditor.h"
+#include "EquipmentEditor.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -83,6 +84,7 @@ private:
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
    QFileDialog* fileSaver;
+   EquipmentEditor* equipEditor;
    FermentableDialog* fermDialog;
    FermentableEditor* fermEditor;
    HopDialog* hopDialog;

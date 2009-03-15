@@ -51,7 +51,7 @@ public:
    void setTopUpWater_l( double var );
    void setTrubChillerLoss_l( double var );
    void setEvapRate_pctHr( double var );
-   void setBoilTime_hrs( double var );
+   void setBoilTime_min( double var );
    void setCalcBoilVolume( bool var );
    void setLauterDeadspace_l( double var );
    void setTopUpKettle_l( double var );
@@ -68,7 +68,7 @@ public:
    double getTopUpWater_l() const;
    double getTrubChillerLoss_l() const;
    double getEvapRate_pctHr() const;
-   double getBoilTime_hrs() const;
+   double getBoilTime_min() const;
    bool getCalcBoilVolume() const;
    double getLauterDeadspace_l() const;
    double getTopUpKettle_l() const;
@@ -86,7 +86,7 @@ private:
    double topUpWater_l;
    double trubChillerLoss_l;
    double evapRate_pctHr;
-   double boilTime_hrs;
+   double boilTime_min;
    bool calcBoilVolume;
    double lauterDeadspace_l;
    double topUpKettle_l;
@@ -94,6 +94,7 @@ private:
    std::string notes;
 
    void setDefaults();
+   void doCalculations();
 };
 
 class EquipmentException : public std::exception

@@ -22,6 +22,10 @@
 #define ICON48 ":/images/BrewtargetIcon.png"
 #define ICON96 ":/images/BrewtargetIcon_96.png"
 #define GLASS ":/images/glass.png"
+#define SMALLBARLEY ":/images/smallBarley.png"
+#define SMALLHOP ":/images/smallHop.png"
+#define SMALLWATER ":/images/smallWater.png"
+#define SMALLYEAST ":/images/smallYeast.png"
 
 /* Things that will get configured by configure script */
 

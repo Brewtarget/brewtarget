@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeObs = 0;
 
    dialog_about = new AboutDialog(this);
+   equipEditor = new EquipmentEditor(this);
    fermDialog = new FermentableDialog(this);
    fermEditor = new FermentableEditor(this);
    hopDialog = new HopDialog(this);
@@ -113,6 +114,11 @@ MainWindow::MainWindow(QWidget* parent)
    hopDialog->startObservingDB();
    miscDialog->startObservingDB();
    yeastDialog->startObservingDB();
+
+   // Icons for menu items
+   actionFermentables->setIcon(QIcon(SMALLBARLEY));
+   actionHops->setIcon(QIcon(SMALLHOP));
+   actionYeasts->setIcon(QIcon(SMALLYEAST));
    
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );
@@ -126,6 +132,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
+   connect( actionEquipments, SIGNAL( triggered() ), equipEditor, SLOT( show() ) );
    connect( actionFermentables, SIGNAL( triggered() ), fermDialog, SLOT( show() ) );
    connect( actionHops, SIGNAL( triggered() ), hopDialog, SLOT( show() ) );
    connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
-    <height>630</height>
+    <width>430</width>
+    <height>605</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,8 +17,8 @@
     <rect>
      <x>0</x>
      <y>26</y>
-     <width>473</width>
-     <height>581</height>
+     <width>430</width>
+     <height>556</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_9" >
@@ -124,7 +124,7 @@
                </property>
                <property name="maximumSize" >
                 <size>
-                 <width>150</width>
+                 <width>100</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -232,7 +232,7 @@
                </property>
                <property name="maximumSize" >
                 <size>
-                 <width>150</width>
+                 <width>100</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -271,7 +271,7 @@
                </property>
                <property name="maximumSize" >
                 <size>
-                 <width>150</width>
+                 <width>100</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -310,7 +310,7 @@
                </property>
                <property name="maximumSize" >
                 <size>
-                 <width>150</width>
+                 <width>100</width>
                  <height>16777215</height>
                 </size>
                </property>
@@ -606,8 +606,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>451</width>
-         <height>180</height>
+         <width>408</width>
+         <height>172</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -899,7 +899,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>473</width>
+     <width>430</width>
      <height>26</height>
     </rect>
    </property>
@@ -921,6 +921,7 @@
     <property name="title" >
      <string>View</string>
     </property>
+    <addaction name="actionEquipments" />
     <addaction name="actionFermentables" />
     <addaction name="actionHops" />
     <addaction name="actionMiscs" />
@@ -934,8 +935,8 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>607</y>
-     <width>473</width>
+     <y>582</y>
+     <width>430</width>
      <height>23</height>
     </rect>
    </property>
@@ -973,6 +974,11 @@
   <action name="actionYeasts" >
    <property name="text" >
     <string>Yeasts</string>
+   </property>
+  </action>
+  <action name="actionEquipments" >
+   <property name="text" >
+    <string>Equipments</string>
    </property>
   </action>
  </widget>
