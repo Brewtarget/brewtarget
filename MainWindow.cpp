@@ -67,6 +67,14 @@ MainWindow::MainWindow(QWidget* parent)
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
 
+   if( Database::isInitialized() )
+      db = Database::getDatabase();
+   else
+   {
+      Database::initialize();
+      db = Database::getDatabase();
+   }
+
    setWindowIcon(QIcon(ICON48));
    label_Icon->setPixmap(QPixmap(ICON96));
 
@@ -81,6 +89,7 @@ MainWindow::MainWindow(QWidget* parent)
    hopEditor = new HopEditor(this);
    miscDialog = new MiscDialog(this);
    miscEditor = new MiscEditor(this);
+   styleEditor = new StyleEditor(this);
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
 
@@ -99,17 +108,10 @@ MainWindow::MainWindow(QWidget* parent)
    // Set up and place the BeerColorWidget
    verticalLayout_lcd->insertWidget( 5, &beerColorWidget);
 
-   if( Database::isInitialized() )
-      db = Database::getDatabase();
-   else
-   {
-      Database::initialize();
-      db = Database::getDatabase();
-   }
-
    // Setup some of the widgets.
    recipeComboBox->startObservingDB();
    equipmentComboBox->startObservingDB();
+   styleComboBox->startObservingDB();
    fermDialog->startObservingDB();
    hopDialog->startObservingDB();
    miscDialog->startObservingDB();
@@ -129,10 +131,12 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_clear, SIGNAL( clicked() ), this, SLOT( clear() ));
    connect( recipeComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
+   connect( styleComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
    connect( actionEquipments, SIGNAL( triggered() ), equipEditor, SLOT( show() ) );
+   connect( actionStyles, SIGNAL( triggered() ), styleEditor, SLOT( show() ) );
    connect( actionFermentables, SIGNAL( triggered() ), fermDialog, SLOT( show() ) );
    connect( actionHops, SIGNAL( triggered() ), hopDialog, SLOT( show() ) );
    connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );
@@ -242,13 +246,19 @@ void MainWindow::showChanges()
    lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
    lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());
 
-   pushButton_style->setText(tr(recipeObs->getStyle()->getName().c_str()));
-   pushButton_style->adjustSize();
-   
+   // Recipe's style is optional, so might be null.
+   Style* style = recipeObs->getStyle();
+   if( style )
+      styleComboBox->setIndexByStyleName(style->getName());
+   else
+      styleComboBox->setCurrentIndex(-1);
+
    // Recipe's equipment is optional, so might be null.
    Equipment* equip = recipeObs->getEquipment();
    if( equip )
       equipmentComboBox->setIndexByEquipmentName(equip->getName());
+   else
+      equipmentComboBox->setCurrentIndex(-1);
 
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
@@ -292,6 +302,17 @@ void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
    Equipment* equip = equipmentComboBox->getSelected();
    if( equip )
       recipeObs->setEquipment(equip);
+}
+
+void MainWindow::updateRecipeStyle(const QString& /*styleName*/)
+{
+   if( recipeObs == 0 )
+      return;
+
+   // style may be null.
+   Style* style = styleComboBox->getSelected();
+   if( style )
+      recipeObs->setStyle(style);
 }
 
 void MainWindow::updateRecipeBatchSize()

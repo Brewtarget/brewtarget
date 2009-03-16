@@ -56,6 +56,7 @@ void HopDialog::notify(Observable *notifier)
 void HopDialog::startObservingDB()
 {
    dbObs = Database::getDatabase();
+   setObserved(dbObs);
    populateTable();
 }
 

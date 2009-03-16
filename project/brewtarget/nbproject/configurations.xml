@@ -9,6 +9,9 @@
       <logicalFolder name="QtDesignerPlugins"
                      displayName="QtDesignerPlugins"
                      projectFiles="true">
+        <itemPath>../../QtDesignerPlugins/EquipmentComboBoxPlugin.cpp</itemPath>
+        <itemPath>../../QtDesignerPlugins/EquipmentComboBoxPlugin.h</itemPath>
+        <itemPath>../../QtDesignerPlugins/EquipmentComboBoxPlugin.pro</itemPath>
         <itemPath>../../QtDesignerPlugins/FermentableTableWidgetPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/FermentableTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/FermentableTableWidgetPlugin.pro</itemPath>
@@ -44,6 +47,10 @@
       <itemPath>../../database.h</itemPath>
       <itemPath>../../equipment.cpp</itemPath>
       <itemPath>../../equipment.h</itemPath>
+      <itemPath>../../EquipmentComboBox.cpp</itemPath>
+      <itemPath>../../EquipmentComboBox.h</itemPath>
+      <itemPath>../../EquipmentEditor.cpp</itemPath>
+      <itemPath>../../EquipmentEditor.h</itemPath>
       <itemPath>../../fermentable.cpp</itemPath>
       <itemPath>../../fermentable.h</itemPath>
       <itemPath>../../FermentableDialog.cpp</itemPath>
@@ -175,6 +182,18 @@
       <item path="../../BeerColorWidget.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../EquipmentComboBox.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../EquipmentComboBox.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../EquipmentEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../EquipmentEditor.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableDialog.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -263,6 +282,15 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MiscTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.pro">
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/FermentableTableWidgetPlugin.cpp">
@@ -573,6 +601,18 @@ make clean</buildCommand>
       <item path="../../BeerColorWidget.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../EquipmentComboBox.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../EquipmentComboBox.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../EquipmentEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../EquipmentEditor.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../FermentableDialog.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -661,6 +701,15 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MiscTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.pro">
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/FermentableTableWidgetPlugin.cpp">

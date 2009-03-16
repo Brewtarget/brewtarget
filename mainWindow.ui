@@ -148,15 +148,24 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_style" >
+              <widget class="StyleComboBox" name="styleComboBox" >
                <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-                 <horstretch>0</horstretch>
+                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+                 <horstretch>100</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
-                <string>PushButton</string>
+               <property name="minimumSize" >
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize" >
+                <size>
+                 <width>100</width>
+                 <height>16777215</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -678,8 +687,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>451</width>
-         <height>180</height>
+         <width>408</width>
+         <height>172</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -737,8 +746,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>451</width>
-         <height>180</height>
+         <width>408</width>
+         <height>172</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -796,8 +805,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>451</width>
-         <height>180</height>
+         <width>408</width>
+         <height>172</height>
         </rect>
        </property>
        <attribute name="title" >
@@ -925,6 +934,7 @@
     <addaction name="actionFermentables" />
     <addaction name="actionHops" />
     <addaction name="actionMiscs" />
+    <addaction name="actionStyles" />
     <addaction name="actionYeasts" />
    </widget>
    <addaction name="menuFile" />
@@ -981,6 +991,11 @@
     <string>Equipments</string>
    </property>
   </action>
+  <action name="actionStyles" >
+   <property name="text" >
+    <string>Styles</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1007,6 +1022,11 @@
    <class>RecipeComboBox</class>
    <extends>QComboBox</extends>
    <header>RecipeComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>StyleComboBox</class>
+   <extends>QComboBox</extends>
+   <header>StyleComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>YeastTableWidget</class>

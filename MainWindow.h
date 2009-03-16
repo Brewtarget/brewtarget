@@ -39,6 +39,7 @@ class MainWindow;
 #include "HopEditor.h"
 #include "YeastEditor.h"
 #include "EquipmentEditor.h"
+#include "StyleEditor.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -62,6 +63,7 @@ public slots:
    void updateRecipeBatchSize();
    void updateRecipeBoilSize();
    void updateRecipeEfficiency();
+   void updateRecipeStyle(const QString&);
 
    void addFermentableToRecipe(Fermentable* ferm);
    void removeSelectedFermentable();
@@ -91,6 +93,7 @@ private:
    HopEditor* hopEditor;
    MiscDialog* miscDialog;
    MiscEditor* miscEditor;
+   StyleEditor* styleEditor;
    YeastDialog* yeastDialog;
    YeastEditor* yeastEditor;
    Database* db;

@@ -106,6 +106,8 @@ HEADERS += AboutDialog.h \
            RecipeComboBox.h \
            stringparsing.h \
            style.h \
+           StyleComboBox.h \
+           StyleEditor.h \
            unit.h \
            water.h \
            WaterTableModel.h \
@@ -127,6 +129,7 @@ FORMS +=   aboutDialog.ui \
            hopDialog.ui \
            hopEditor.ui \
            miscDialog.ui \
+           styleEditor.ui \
            yeastDialog.ui \
            yeastEditor.ui
 SOURCES += database.cpp \
@@ -164,6 +167,8 @@ SOURCES += database.cpp \
            RecipeComboBox.cpp \
            stringparsing.cpp \
            style.cpp \
+           StyleComboBox.cpp \
+           StyleEditor.cpp \
            unit.cpp \
            water.cpp \
            WaterTableModel.cpp \

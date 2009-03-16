@@ -53,8 +53,15 @@ void EquipmentComboBox::addEquipment(Equipment* equipment)
 
 void EquipmentComboBox::removeAllEquipments()
 {
+   /*
    removeAllObserved(); // Don't want to observe anything.
    equipmentObs.clear(); // Delete internal list.
+    */
+
+   int i;
+   for( i=0; i < equipmentObs.size(); ++i )
+      removeObserved(equipmentObs[i]);
+   equipmentObs.clear(); // Clear internal list.
    clear(); // Clear the combo box's visible list.
 }
 

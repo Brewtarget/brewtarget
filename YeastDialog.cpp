@@ -56,6 +56,7 @@ void YeastDialog::notify(Observable *notifier)
 void YeastDialog::startObservingDB()
 {
    dbObs = Database::getDatabase();
+   setObserved(dbObs);
    populateTable();
 }
 
