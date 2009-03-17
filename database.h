@@ -59,7 +59,7 @@ public:
    void addMash(Mash* mash);
    void addMashStep(MashStep* mashStep);
    void addMisc(Misc* misc);
-   void addRecipe(Recipe* rec);
+   void addRecipe(Recipe* rec, bool copySubelements);
    void addStyle(Style* style);
    void addWater(Water* water);
    void addYeast(Yeast* yeast);
@@ -76,6 +76,18 @@ public:
    unsigned int getNumStyles();
    unsigned int getNumWaters();
    unsigned int getNumYeasts();
+
+   // These all return null on failure.
+   Equipment* findEquipmentByName(std::string name);
+   Fermentable* findFermentableByName(std::string name);
+   Hop* findHopByName(std::string name);
+   Mash* findMashByName(std::string name);
+   MashStep* findMashStepByName(std::string name);
+   Misc* findMiscByName(std::string name);
+   Recipe* findRecipeByName(std::string name);
+   Style* findStyleByName(std::string name);
+   Water* findWaterByName(std::string name);
+   Yeast* findYeastByName(std::string name);
 
    std::list<Equipment*>::iterator getEquipmentBegin();
    std::list<Equipment*>::iterator getEquipmentEnd();

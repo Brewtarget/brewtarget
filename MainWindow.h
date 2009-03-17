@@ -56,6 +56,7 @@ public slots:
    void save();
    void setRecipeByName(const QString& name);
    void clear();
+   void exit();
 
    void updateRecipeName();
    void updateRecipeStyle();
@@ -80,6 +81,7 @@ public slots:
 
    void newRecipe();
    void exportRecipe();
+   void importRecipes();
 
 private:
    Recipe* recipeObs;

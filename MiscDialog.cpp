@@ -18,6 +18,9 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <QInputDialog>
+#include <QString>
+#include <string>
 #include <list>
 #include "MiscDialog.h"
 #include "observable.h"
@@ -118,7 +121,14 @@ void MiscDialog::editSelected()
 
 void MiscDialog::newMisc()
 {
+   QString name = QInputDialog::getText(this, tr("Misc name"),
+                                              tr("Misc name:"));
+   if(name.isEmpty())
+      return;
+
    Misc *m = new Misc();
+   std::string stdname = name.toStdString();
+   m->setName(stdname);
 
    Database::getDatabase()->addMisc(m);
    miscEdit->setMisc(m);

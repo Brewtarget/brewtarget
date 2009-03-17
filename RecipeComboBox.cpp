@@ -100,7 +100,7 @@ void RecipeComboBox::notify(Observable *notifier)
    }
 }
 
-void RecipeComboBox::setIndexByRecipeName(std::string& name)
+void RecipeComboBox::setIndexByRecipeName(std::string name)
 {
    int ndx;
 

@@ -18,6 +18,9 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <QInputDialog>
+#include <QString>
+#include <string>
 #include <list>
 #include "YeastDialog.h"
 #include "observable.h"
@@ -118,7 +121,14 @@ void YeastDialog::editSelected()
 
 void YeastDialog::newYeast()
 {
+   QString name = QInputDialog::getText(this, tr("Yeast name"),
+                                              tr("Yeast name:"));
+   if( name.isEmpty() )
+      return;
+
    Yeast* y = new Yeast();
+   std::string stdname = name.toStdString();
+   y->setName(stdname);
 
    Database::getDatabase()->addYeast(y);
    yeastEditor->setYeast(y);

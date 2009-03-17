@@ -918,7 +918,10 @@
     </property>
     <addaction name="actionNewRecipe" />
     <addaction name="separator" />
+    <addaction name="actionImport_Recipes" />
     <addaction name="actionExportRecipe" />
+    <addaction name="separator" />
+    <addaction name="actionExit" />
    </widget>
    <widget class="QMenu" name="menuAbout" >
     <property name="title" >
@@ -994,6 +997,16 @@
   <action name="actionStyles" >
    <property name="text" >
     <string>Styles</string>
+   </property>
+  </action>
+  <action name="actionExit" >
+   <property name="text" >
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionImport_Recipes" >
+   <property name="text" >
+    <string>Import Recipes</string>
    </property>
   </action>
  </widget>

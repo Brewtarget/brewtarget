@@ -53,6 +53,7 @@ void Misc::setDefaults()
    type = "Other";
    use = "Boil";
    amount = 0.0;
+   time = 0.0;
    
    amountIsWeight=false;
    useFor = "";

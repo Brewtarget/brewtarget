@@ -18,6 +18,7 @@
 
 #include <QWidget>
 #include <QMainWindow>
+#include <QMessageBox>
 
 #include "FermentableEditor.h"
 #include "MiscEditor.h"
@@ -38,6 +39,7 @@
 #include <iostream>
 #include <fstream>
 #include <list>
+#include <vector>
 
 #include "recipe.h"
 #include "MainWindow.h"
@@ -49,6 +51,8 @@
 #include "YeastDialog.h"
 #include "BeerColorWidget.h"
 #include "config.h"
+#include "xmltree.h"
+#include "xmlnode.h"
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -132,14 +136,16 @@ MainWindow::MainWindow(QWidget* parent)
       setRecipe( *(db->getRecipeBegin()) );
 
    // Connect signals.
-   connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
+   connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( exit() ));
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
    connect( pushButton_clear, SIGNAL( clicked() ), this, SLOT( clear() ));
    connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
+   connect( actionExit, SIGNAL( triggered() ), this, SLOT( exit() ) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
+   connect( actionImport_Recipes, SIGNAL( triggered() ), this, SLOT( importRecipes() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
    connect( actionEquipments, SIGNAL( triggered() ), equipEditor, SLOT( show() ) );
    connect( actionStyles, SIGNAL( triggered() ), styleEditor, SLOT( show() ) );
@@ -170,6 +176,8 @@ void MainWindow::setRecipeByName(const QString& name)
    if(  ! Database::isInitialized() )
       return;
 
+   setRecipe( db->findRecipeByName( name.toStdString() ) );
+   /*
    std::list<Recipe*>::iterator it, end;
 
    end = db->getRecipeEnd();
@@ -179,8 +187,10 @@ void MainWindow::setRecipeByName(const QString& name)
          setRecipe(*it);
          break;
       }
+    */
 }
 
+// Can handle null recipes.
 void MainWindow::setRecipe(Recipe* recipe)
 {
    // Don't like void pointers.
@@ -192,8 +202,37 @@ void MainWindow::setRecipe(Recipe* recipe)
    Hop *hop;
    Misc *misc;
    Yeast *yeast;
+   Style* style;
+   Style* dbStyle;
+   Equipment* equip;
+   Equipment* dbEquip;
 
-   // First, remove any previous recipe shit.
+   // Force the Style and Equipment pointers of the recipe to point
+   // inside the database so that if we make changes to the database versions
+   // (like with a StyleEditor or EquipmentEditor), those changes will be
+   // reflected in the recipe.
+   // If there is not a version in the database, we copy the one in the recipe
+   // to the database.
+   style = recipe->getStyle();
+   equip = recipe->getEquipment();
+   if( style )
+   {
+      dbStyle = db->findStyleByName(style->getName());
+      if( dbStyle )
+         recipe->setStyle( dbStyle );
+      else
+         db->addStyle(style); // Recipe and db point to same style.
+   }
+   if( equip )
+   {
+      dbEquip = db->findEquipmentByName(equip->getName());
+      if( dbEquip )
+         recipe->setEquipment( dbEquip );
+      else
+         db->addEquipment(equip);
+   }
+
+   // Remove any previous recipe shit.
    fermentableTable->getModel()->removeAll();
    hopTable->getModel()->removeAll();
    miscTable->getModel()->removeAll();
@@ -259,22 +298,6 @@ void MainWindow::showChanges()
    lineEdit_batchSize->setText(doubleToString(recipeObs->getBatchSize_l()).c_str());
    lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
    lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());
-
-   /* Shouldn't need to do this
-   // Recipe's style is optional, so might be null.
-   Style* style = recipeObs->getStyle();
-   if( style )
-      styleComboBox->setIndexByStyleName(style->getName());
-   else
-      styleComboBox->setCurrentIndex(-1);
-
-   // Recipe's equipment is optional, so might be null.
-   Equipment* equip = recipeObs->getEquipment();
-   if( equip )
-      equipmentComboBox->setIndexByEquipmentName(equip->getName());
-   else
-      equipmentComboBox->setCurrentIndex(-1);
-   */
    
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
@@ -291,8 +314,15 @@ void MainWindow::save()
 
 void MainWindow::clear()
 {
-   recipeObs->clear();
-   setRecipe(recipeObs); // This will update tables and everything.
+   if( QMessageBox::question(this, tr("Sure about that?"),
+                             tr("You are about to obliterate the recipe. Is that ok?"),
+                             QMessageBox::Ok,
+                             QMessageBox::No)
+       == QMessageBox::Ok )
+   {
+      recipeObs->clear();
+      setRecipe(recipeObs); // This will update tables and everything.
+   }
 }
 
 void MainWindow::updateRecipeName()
@@ -316,8 +346,12 @@ void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
 
    // equip may be null.
    Equipment* equip = equipmentComboBox->getSelected();
-   if( equip )
-      recipeObs->setEquipment(equip);
+   if( equip == 0 )
+      return;
+
+   // Notice that we are using a reference from the database, not a copy.
+   // So, if the equip in the database is changed, this one will change also.
+   recipeObs->setEquipment(equip);
 }
 
 void MainWindow::updateRecipeStyle(const QString& /*styleName*/)
@@ -327,8 +361,12 @@ void MainWindow::updateRecipeStyle(const QString& /*styleName*/)
 
    // style may be null.
    Style* style = styleComboBox->getSelected();
-   if( style )
-      recipeObs->setStyle(style);
+   if( style == 0 )
+      return;
+
+   // Notice that we are using a reference from the database, not a copy.
+   // So, if the style in the database is changed, this one will change also.
+   recipeObs->setStyle(style);
 }
 
 void MainWindow::updateRecipeBatchSize()
@@ -575,18 +613,69 @@ void MainWindow::removeSelectedYeast()
 
 void MainWindow::newRecipe()
 {
+   QString name = QInputDialog::getText(this, tr("Recipe name"),
+                                          tr("Recipe name:"));
+   if( name.isEmpty() )
+      return;
+
    Recipe* recipe = new Recipe();
-   std::string name = "New Recipe";
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   recipe->setName(name);
+   recipe->setName(name.toStdString());
    recipe->setBatchSize_l(18.93); // 5 gallons
    recipe->setBoilSize_l(23.47);  // 6.2 gallons
    recipe->setEfficiency_pct(70.0);
 
-   db->addRecipe(recipe);
+   db->addRecipe(recipe, false);
    setRecipe(recipe);
 
-   recipeComboBox->setIndexByRecipeName(name);
+   recipeComboBox->setIndexByRecipeName(name.toStdString());
+}
+
+// Imports all the recipes from a file into the database.
+void MainWindow::importRecipes()
+{
+   const char* filename;
+   std::fstream in;
+   unsigned int numRecipes, i;
+   std::vector<XmlNode*> nodes;
+   Recipe* newRec;
+
+   if( fileOpener->exec() )
+      filename = fileOpener->selectedFiles()[0].toStdString().c_str();
+   else
+      return;
+
+   in.open(filename, ios::in);
+
+   XmlTree* tree = new XmlTree( in );
+   numRecipes = tree->getNodesWithTag( nodes, "RECIPE" );
+
+   // Tell how many recipes there were in the status bar.
+   statusBar()->showMessage( tr("Found ") + tr(intToString(numRecipes).c_str()) + tr(" recipes."), 5000 );
+
+   for( i = 0; i < numRecipes; ++i )
+   {
+      newRec = new Recipe(nodes[i]);
+      db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+   }
+
+   delete tree;
+   in.close();
+}
+
+// Ask if user wants to save the db, then exit.
+void MainWindow::exit()
+{
+   if( QMessageBox::question(this, tr("Save database?"),
+                             tr("Do you want to save the changes made?"),
+                             QMessageBox::Yes,
+                             QMessageBox::No)
+       == QMessageBox::Yes )
+   {
+      Database::savePersistent();
+   }
+   
+   close();
 }

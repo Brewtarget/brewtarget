@@ -27,6 +27,9 @@
         <itemPath>../../QtDesignerPlugins/RecipeComboBoxPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/RecipeComboBoxPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/RecipeComboBoxPlugin.pro</itemPath>
+        <itemPath>../../QtDesignerPlugins/StyleComboBoxPlugin.cpp</itemPath>
+        <itemPath>../../QtDesignerPlugins/StyleComboBoxPlugin.h</itemPath>
+        <itemPath>../../QtDesignerPlugins/StyleComboBoxPlugin.pro</itemPath>
         <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp</itemPath>
         <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.h</itemPath>
         <itemPath>../../QtDesignerPlugins/WaterTableWidgetPlugin.pro</itemPath>
@@ -109,6 +112,10 @@
       <itemPath>../../stringparsing.h</itemPath>
       <itemPath>../../style.cpp</itemPath>
       <itemPath>../../style.h</itemPath>
+      <itemPath>../../StyleComboBox.cpp</itemPath>
+      <itemPath>../../StyleComboBox.h</itemPath>
+      <itemPath>../../StyleEditor.cpp</itemPath>
+      <itemPath>../../StyleEditor.h</itemPath>
       <itemPath>../../tabletest.cpp</itemPath>
       <itemPath>../../unit.cpp</itemPath>
       <itemPath>../../unit.h</itemPath>
@@ -338,6 +345,15 @@
       <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.pro">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../QtDesignerPlugins/StyleComboBoxPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/StyleComboBoxPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/StyleComboBoxPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -360,6 +376,18 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../RecipeComboBox.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../StyleComboBox.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../StyleComboBox.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../StyleEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../StyleEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../WaterTableModel.cpp">
@@ -757,6 +785,15 @@ make clean</buildCommand>
       <item path="../../QtDesignerPlugins/RecipeComboBoxPlugin.pro">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../QtDesignerPlugins/StyleComboBoxPlugin.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/StyleComboBoxPlugin.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../QtDesignerPlugins/StyleComboBoxPlugin.pro">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../QtDesignerPlugins/WaterTableWidgetPlugin.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -779,6 +816,18 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../RecipeComboBox.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../StyleComboBox.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../StyleComboBox.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../StyleEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../StyleEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../WaterTableModel.cpp">

@@ -18,6 +18,9 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <QInputDialog>
+#include <QString>
+#include <string>
 #include <list>
 #include "HopDialog.h"
 #include "observable.h"
@@ -119,7 +122,14 @@ void HopDialog::editSelected()
 
 void HopDialog::newHop()
 {
+   QString name = QInputDialog::getText(this, tr("Hop name"),
+                                          tr("Hop name:"));
+   if( name.isEmpty() )
+      return;
+
    Hop* hop = new Hop();
+   std::string stdname = name.toStdString();
+   hop->setName(stdname);
 
    Database::getDatabase()->addHop(hop);
    hopEditor->setHop(hop);

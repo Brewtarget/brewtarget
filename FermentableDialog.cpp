@@ -18,7 +18,10 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <QString>
+#include <QInputDialog>
 #include <list>
+#include <string>
 #include "FermentableDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -117,7 +120,14 @@ void FermentableDialog::addFermentable()
 
 void FermentableDialog::newFermentable()
 {
+   QString name = QInputDialog::getText(this, tr("Fermentable name"),
+                                          tr("Fermentable name:"));
+   if( name.isEmpty() )
+      return;
+   
    Fermentable *ferm = new Fermentable();
+   std::string stdname = name.toStdString();
+   ferm->setName(stdname);
 
    Database::getDatabase()->addFermentable(ferm);
    fermEdit->setFermentable(ferm);

@@ -319,14 +319,40 @@ void Database::addMisc(Misc* misc)
    }
 }
 
-void Database::addRecipe(Recipe* rec)
+void Database::addRecipe(Recipe* rec, bool copySubelements)
 {
-   if( rec != 0 )
+   if( rec == 0 )
+      return;
+
+   recipes.push_back(rec);
+   recipes.sort(Recipe_ptr_cmp());
+
+   if( copySubelements )
    {
-      recipes.push_back(rec);
-      recipes.sort(Recipe_ptr_cmp());
-      hasChanged();
+      unsigned int i, size;
+      addEquipment(rec->getEquipment());
+      addMash(rec->getMash());
+      addStyle(rec->getStyle());
+
+      size = rec->getNumFermentables();
+      for( i = 0; i < size; ++i )
+         addFermentable( rec->getFermentable(i) );
+      size = rec->getNumHops();
+      for( i = 0; i < size; ++i )
+         addHop( rec->getHop(i) );
+      size = rec->getNumMiscs();
+      for( i = 0; i < size; ++i )
+         addMisc( rec->getMisc(i) );
+      size = rec->getNumWaters();
+      for( i = 0; i < size; ++i )
+         addWater( rec->getWater(i) );
+      size = rec->getNumYeasts();
+      for( i = 0; i < size; ++i )
+         addYeast( rec->getYeast(i) );
    }
+
+   hasChanged();
+
 }
 
 void Database::addStyle(Style* style)
@@ -509,4 +535,144 @@ std::list<Yeast*>::iterator Database::getYeastBegin()
 std::list<Yeast*>::iterator Database::getYeastEnd()
 {
    return yeasts.end();
+}
+
+Equipment* Database::findEquipmentByName(std::string name)
+{
+   std::list<Equipment*>::iterator it, end;
+   end = equipments.end();
+
+   for( it = equipments.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+   
+   return 0;
+}
+
+Fermentable* Database::findFermentableByName(std::string name)
+{
+   std::list<Fermentable*>::iterator it, end;
+   end = fermentables.end();
+
+   for( it = fermentables.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+Hop* Database::findHopByName(std::string name)
+{
+   std::list<Hop*>::iterator it, end;
+   end = hops.end();
+
+   for( it = hops.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+Mash* Database::findMashByName(std::string name)
+{
+   std::list<Mash*>::iterator it, end;
+   end = mashs.end();
+
+   for( it = mashs.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+MashStep* Database::findMashStepByName(std::string name)
+{
+   std::list<MashStep*>::iterator it, end;
+   end = mashSteps.end();
+
+   for( it = mashSteps.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+Misc* Database::findMiscByName(std::string name)
+{
+   std::list<Misc*>::iterator it, end;
+   end = miscs.end();
+
+   for( it = miscs.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+Recipe* Database::findRecipeByName(std::string name)
+{
+   std::list<Recipe*>::iterator it, end;
+   end = recipes.end();
+
+   for( it = recipes.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+Style* Database::findStyleByName(std::string name)
+{
+   std::list<Style*>::iterator it, end;
+   end = styles.end();
+
+   for( it = styles.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+Water* Database::findWaterByName(std::string name)
+{
+   std::list<Water*>::iterator it, end;
+   end = waters.end();
+
+   for( it = waters.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
+}
+
+Yeast* Database::findYeastByName(std::string name)
+{
+   std::list<Yeast*>::iterator it, end;
+   end = yeasts.end();
+
+   for( it = yeasts.begin(); it != end; it++ )
+   {
+      if( (*it)->getName() == name )
+         return *it;
+   }
+
+   return 0;
 }
