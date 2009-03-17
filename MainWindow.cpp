@@ -121,6 +121,12 @@ MainWindow::MainWindow(QWidget* parent)
    actionFermentables->setIcon(QIcon(SMALLBARLEY));
    actionHops->setIcon(QIcon(SMALLHOP));
    actionYeasts->setIcon(QIcon(SMALLYEAST));
+   actionEquipments->setIcon(QIcon(SMALLKETTLE));
+   actionMiscs->setIcon(QIcon(SMALLQUESTION));
+   actionStyles->setIcon(QIcon(SMALLSTYLE));
+   actionNewRecipe->setIcon(QIcon(SMALLPLUS));
+   actionExportRecipe->setIcon(QIcon(SMALLARROW));
+   actionAbout_BrewTarget->setIcon(QIcon(SMALLINFO));
    
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );

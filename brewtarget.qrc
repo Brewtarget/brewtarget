@@ -24,5 +24,11 @@
    <file>images/smallWater.png</file>
    <file>images/smallHop.png</file>
    <file>images/smallYeast.png</file>
+   <file>images/smallKettle.png</file>
+   <file>images/smallQuestion.png</file>
+   <file>images/smallStyle.png</file>
+   <file>images/smallPlus.png</file>
+   <file>images/smallArrow.png</file>
+   <file>images/smallInfo.png</file>
 </qresource>
 </RCC>

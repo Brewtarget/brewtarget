@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>Style Editor</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7" >
    <item>
@@ -155,7 +155,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>Category Number</string>
+            <string>Category number</string>
            </property>
           </widget>
          </item>
@@ -194,7 +194,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>Style Letter</string>
+            <string>Style letter</string>
            </property>
           </widget>
          </item>
@@ -233,7 +233,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>Style Guide</string>
+            <string>Style guide</string>
            </property>
           </widget>
          </item>
@@ -575,7 +575,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>Color Min</string>
+            <string>Min color (SRM)</string>
            </property>
           </widget>
          </item>
@@ -614,7 +614,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>Color Max</string>
+            <string>Max color (SRM)</string>
            </property>
           </widget>
          </item>
@@ -653,7 +653,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>Carb Min (Vols)</string>
+            <string>Min carb (vols)</string>
            </property>
           </widget>
          </item>
@@ -692,7 +692,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>Carb Max (Vols)</string>
+            <string>Max carb (vols)</string>
            </property>
           </widget>
          </item>
@@ -738,7 +738,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>ABV min (pct)</string>
+            <string>Min ABV (pct)</string>
            </property>
           </widget>
          </item>
@@ -777,7 +777,7 @@
             </sizepolicy>
            </property>
            <property name="text" >
-            <string>ABV max (pct)</string>
+            <string>Max ABV (pct)</string>
            </property>
           </widget>
          </item>
@@ -927,52 +927,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>label</zorder>
-  <zorder>styleComboBox</zorder>
-  <zorder>label_2</zorder>
-  <zorder>label_3</zorder>
-  <zorder>label_4</zorder>
-  <zorder>label_5</zorder>
-  <zorder>label_6</zorder>
-  <zorder>label_7</zorder>
-  <zorder>label_8</zorder>
-  <zorder>label_9</zorder>
-  <zorder>label_10</zorder>
-  <zorder>label_11</zorder>
-  <zorder>label_12</zorder>
-  <zorder>label_13</zorder>
-  <zorder>label_14</zorder>
-  <zorder>label_15</zorder>
-  <zorder>label_16</zorder>
-  <zorder>label_17</zorder>
-  <zorder>label_18</zorder>
-  <zorder>label_19</zorder>
-  <zorder>groupBox</zorder>
-  <zorder>groupBox_2</zorder>
-  <zorder>groupBox_3</zorder>
-  <zorder>groupBox_4</zorder>
-  <zorder>lineEdit_name</zorder>
-  <zorder>lineEdit_category</zorder>
-  <zorder>lineEdit_categoryNumber</zorder>
-  <zorder>lineEdit_styleLetter</zorder>
-  <zorder>lineEdit_styleGuide</zorder>
-  <zorder>comboBox_type</zorder>
-  <zorder>lineEdit_ogMin</zorder>
-  <zorder>lineEdit_ogMax</zorder>
-  <zorder>lineEdit_fgMin</zorder>
-  <zorder>lineEdit_fgMax</zorder>
-  <zorder>lineEdit_ibuMin</zorder>
-  <zorder>lineEdit_ibuMax</zorder>
-  <zorder>lineEdit_colorMin</zorder>
-  <zorder>lineEdit_colorMax</zorder>
-  <zorder>lineEdit_carbMin</zorder>
-  <zorder>lineEdit_carbMax</zorder>
-  <zorder>lineEdit_abvMin</zorder>
-  <zorder>lineEdit_abvMax</zorder>
-  <zorder>pushButton_new</zorder>
-  <zorder>pushButton_save</zorder>
-  <zorder>pushButton_cancel</zorder>
-  <zorder>horizontalSpacer_2</zorder>
   <zorder></zorder>
  </widget>
  <customwidgets>

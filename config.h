@@ -26,6 +26,12 @@
 #define SMALLHOP ":/images/smallHop.png"
 #define SMALLWATER ":/images/smallWater.png"
 #define SMALLYEAST ":/images/smallYeast.png"
+#define SMALLKETTLE ":/images/smallKettle.png"
+#define SMALLQUESTION ":/images/smallQuestion.png"
+#define SMALLSTYLE ":/images/smallStyle.png"
+#define SMALLPLUS ":/images/smallPlus.png"
+#define SMALLARROW ":/images/smallArrow.png"
+#define SMALLINFO ":/images/smallInfo.png"
 
 /* Things that will get configured by configure script */
 
