@@ -28,7 +28,7 @@ class EquipmentComboBox;
 #include "observable.h"
 #include "equipment.h"
 #include "database.h"
-
+#include "recipe.h"
 
 class EquipmentComboBox : public QComboBox, public MultipleObserver
 {
@@ -37,6 +37,7 @@ class EquipmentComboBox : public QComboBox, public MultipleObserver
 public:
    EquipmentComboBox(QWidget* parent=0);
    void startObservingDB();
+   void observeRecipe(Recipe* rec);
    void addEquipment(Equipment* equipment);
    void setIndexByEquipmentName(std::string name);
    void removeAllEquipments();
@@ -48,6 +49,7 @@ public:
 
 private:
    std::vector<Equipment*> equipmentObs;
+   Recipe* recipeObs;
    Database* dbObs;
 };
 

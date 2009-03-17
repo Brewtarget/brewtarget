@@ -40,7 +40,7 @@ StyleEditor::StyleEditor(QWidget* parent)
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
-   connect( styleComboBox, SIGNAL(currentIndexChanged ( const QString& )), this, SLOT( styleSelected(const QString&) ) );
+   connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
 }
 
 void StyleEditor::setStyle( Style* s )

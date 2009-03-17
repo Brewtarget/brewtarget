@@ -28,7 +28,7 @@ class StyleComboBox;
 #include "observable.h"
 #include "style.h"
 #include "database.h"
-
+#include "recipe.h"
 
 class StyleComboBox : public QComboBox, public MultipleObserver
 {
@@ -37,6 +37,7 @@ class StyleComboBox : public QComboBox, public MultipleObserver
 public:
    StyleComboBox(QWidget* parent=0);
    void startObservingDB();
+   void observeRecipe(Recipe* rec);
    void addStyle(Style* style);
    void setIndexByStyleName(std::string name);
    void removeAllStyles();
@@ -48,6 +49,7 @@ public:
 
 private:
    std::vector<Style*> styleObs;
+   Recipe* recipeObs;
    Database* dbObs;
 };
 

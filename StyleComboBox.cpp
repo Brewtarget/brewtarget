@@ -22,6 +22,7 @@
 StyleComboBox::StyleComboBox(QWidget* parent)
         : QComboBox(parent)
 {
+   recipeObs = 0;
 }
 
 void StyleComboBox::startObservingDB()
@@ -72,6 +73,8 @@ void StyleComboBox::notify(Observable *notifier)
    // Notifier could be the database.
    if( notifier == dbObs )
    {
+      Style* previousSelection = getSelected(); // Remember what we had.
+      
       removeAllStyles();
       std::list<Style*>::iterator it, end;
 
@@ -80,6 +83,23 @@ void StyleComboBox::notify(Observable *notifier)
       for( it = dbObs->getStyleBegin(); it != end; ++it )
          addStyle(*it);
       repopulateList();
+
+      // Need to reset the selected entry if we observe a recipe.
+      if( recipeObs && recipeObs->getStyle() )
+         setIndexByStyleName( (recipeObs->getStyle())->getName() );
+      // Or, try to select the same thing we had selected last.
+      else if( previousSelection )
+         setIndexByStyleName(previousSelection->getName());
+      else
+         setCurrentIndex(-1); // Or just give up.
+   }
+   else if( notifier == recipeObs )
+   {
+      // All we care about is the style in the recipe.
+      if( recipeObs->getStyle() )
+         setIndexByStyleName( (recipeObs->getStyle())->getName() );
+      else
+         setCurrentIndex(-1); // Or just give up.
    }
    else // Otherwise, we know that one of the styles changed.
    {
@@ -99,16 +119,18 @@ void StyleComboBox::setIndexByStyleName(std::string name)
    int ndx;
 
    ndx = findText( tr(name.c_str()), Qt::MatchExactly );
+   /*
    if( ndx == -1 )
       return;
-
+   */
+   
    setCurrentIndex(ndx);
 }
 
 void StyleComboBox::repopulateList()
 {
    unsigned int i, size;
-   clear();
+   clear(); // Remove all items in the visible list.
 
    size = styleObs.size();
    for( i = 0; i < size; ++i )
@@ -121,4 +143,23 @@ Style* StyleComboBox::getSelected()
       return styleObs[currentIndex()];
    else
       return 0;
+}
+
+void StyleComboBox::observeRecipe(Recipe* rec)
+{
+   // Make sure caller isn't stupid.
+   if( rec )
+   {
+      // Remove any previous association.
+      if( recipeObs )
+         removeObserved(recipeObs);
+      
+      recipeObs = rec;
+      addObserved(recipeObs);
+
+      if( recipeObs->getStyle() )
+         setIndexByStyleName( (recipeObs->getStyle())->getName() );
+      else
+         setCurrentIndex(-1);
+   }
 }

@@ -22,6 +22,7 @@
 EquipmentComboBox::EquipmentComboBox(QWidget* parent)
         : QComboBox(parent)
 {
+   recipeObs = 0;
 }
 
 void EquipmentComboBox::startObservingDB()
@@ -72,6 +73,8 @@ void EquipmentComboBox::notify(Observable *notifier)
    // Notifier could be the database.
    if( notifier == dbObs )
    {
+      Equipment* previousSelection = getSelected();
+      
       removeAllEquipments();
       std::list<Equipment*>::iterator it, end;
 
@@ -80,6 +83,23 @@ void EquipmentComboBox::notify(Observable *notifier)
       for( it = dbObs->getEquipmentBegin(); it != end; ++it )
          addEquipment(*it);
       repopulateList();
+
+      // Need to reset the selected entry if we observe a recipe.
+      if( recipeObs && recipeObs->getEquipment() )
+         setIndexByEquipmentName( (recipeObs->getEquipment())->getName() );
+      // Or, try to select the same thing we had selected last.
+      else if( previousSelection )
+         setIndexByEquipmentName(previousSelection->getName());
+      else
+         setCurrentIndex(-1); // Or just give up.
+   }
+   else if( notifier == recipeObs )
+   {
+      // All we care about is the equipment in the recipe.
+      if( recipeObs->getEquipment() )
+         setIndexByEquipmentName( (recipeObs->getEquipment())->getName() );
+      else
+         setCurrentIndex(-1); // Or just give up.
    }
    else // Otherwise, we know that one of the equipments changed.
    {
@@ -99,9 +119,11 @@ void EquipmentComboBox::setIndexByEquipmentName(std::string name)
    int ndx;
 
    ndx = findText( tr(name.c_str()), Qt::MatchExactly );
+   /*
    if( ndx == -1 )
       return;
-
+   */
+   
    setCurrentIndex(ndx);
 }
 
@@ -121,4 +143,20 @@ Equipment* EquipmentComboBox::getSelected()
       return equipmentObs[currentIndex()];
    else
       return 0;
+}
+
+void EquipmentComboBox::observeRecipe(Recipe* rec)
+{
+   if( rec )
+   {
+      if( recipeObs )
+         removeObserved(recipeObs);
+      recipeObs = rec;
+      addObserved(recipeObs);
+
+      if( recipeObs->getEquipment() )
+         setIndexByEquipmentName( (recipeObs->getEquipment())->getName() );
+      else
+         setCurrentIndex(-1);
+   }
 }

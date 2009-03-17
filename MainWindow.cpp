@@ -129,9 +129,9 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( close() ));
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
    connect( pushButton_clear, SIGNAL( clicked() ), this, SLOT( clear() ));
-   connect( recipeComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
-   connect( equipmentComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
-   connect( styleComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
+   connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
+   connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
+   connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
@@ -169,7 +169,10 @@ void MainWindow::setRecipeByName(const QString& name)
    end = db->getRecipeEnd();
    for( it = db->getRecipeBegin(); it != end; ++it )
       if( (*it)->getName() == name.toStdString() )
+      {
          setRecipe(*it);
+         break;
+      }
 }
 
 void MainWindow::setRecipe(Recipe* recipe)
@@ -193,6 +196,11 @@ void MainWindow::setRecipe(Recipe* recipe)
    // Make sure this MainWindow is paying attention...
    recipeObs = recipe;
    setObserved(recipeObs); // Automatically removes the previous observer.
+
+   // Tell the style CB to pay attention.
+   styleComboBox->observeRecipe(recipe);
+   // And the equipment CB too...
+   equipmentComboBox->observeRecipe(recipe);
 
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )
@@ -246,6 +254,7 @@ void MainWindow::showChanges()
    lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
    lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());
 
+   /* Shouldn't need to do this
    // Recipe's style is optional, so might be null.
    Style* style = recipeObs->getStyle();
    if( style )
@@ -259,7 +268,8 @@ void MainWindow::showChanges()
       equipmentComboBox->setIndexByEquipmentName(equip->getName());
    else
       equipmentComboBox->setCurrentIndex(-1);
-
+   */
+   
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
    lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(),1).c_str());
