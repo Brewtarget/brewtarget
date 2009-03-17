@@ -16,17 +16,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QIcon>
 #include "FermentableEditor.h"
 #include "fermentable.h"
 #include "observable.h"
 #include "stringparsing.h"
 #include "database.h"
+#include "config.h"
 
 FermentableEditor::FermentableEditor( QWidget* parent )
 {
    setupUi(this);
 
-   setWindowIcon(parent->windowIcon());
+   setWindowIcon(QIcon(SMALLBARLEY));
 
    connect( this, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( this, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));

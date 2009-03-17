@@ -18,15 +18,17 @@
 
 #include <QtGui>
 #include <string>
+#include <QIcon>
 #include "YeastEditor.h"
 #include "stringparsing.h"
 #include "database.h"
+#include "config.h"
 
 YeastEditor::YeastEditor( QWidget* parent )
 {
    setupUi(this);
 
-   setWindowIcon(parent->windowIcon());
+   setWindowIcon(QIcon(SMALLYEAST));
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));

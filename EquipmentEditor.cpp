@@ -19,21 +19,20 @@
 #include <QInputDialog>
 #include <string>
 #include <iostream>
+#include <QIcon>
 
 #include "equipment.h"
 #include "EquipmentEditor.h"
 #include "EquipmentComboBox.h"
 #include "stringparsing.h"
+#include "config.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent)
         : QDialog(parent)
 {
    setupUi(this);
 
-   if( parent )
-   {
-      setWindowIcon(parent->windowIcon());
-   }
+   setWindowIcon(QIcon(SMALLKETTLE));
 
    equipmentComboBox->startObservingDB();
 

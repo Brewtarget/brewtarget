@@ -17,6 +17,7 @@
  */
 
 #include <QInputDialog>
+#include <QIcon>
 #include <string>
 #include <iostream>
 
@@ -24,16 +25,14 @@
 #include "StyleEditor.h"
 #include "StyleComboBox.h"
 #include "stringparsing.h"
+#include "config.h"
 
 StyleEditor::StyleEditor(QWidget* parent)
         : QDialog(parent)
 {
    setupUi(this);
 
-   if( parent )
-   {
-      setWindowIcon(parent->windowIcon());
-   }
+   setWindowIcon(QIcon(SMALLSTYLE));
 
    styleComboBox->startObservingDB();
 

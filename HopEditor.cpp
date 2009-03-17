@@ -19,15 +19,17 @@
 #include <QtGui>
 #include <iostream>
 #include <string>
+#include <QIcon>
 #include "HopEditor.h"
 #include "stringparsing.h"
 #include "database.h"
+#include "config.h"
 
 HopEditor::HopEditor( QWidget* parent )
 {
    setupUi(this);
 
-   setWindowIcon(parent->windowIcon());
+   setWindowIcon(QIcon(SMALLHOP));
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));

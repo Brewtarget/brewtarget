@@ -21,15 +21,17 @@
 #include <QtGui>
 #include <iostream>
 #include <string>
+#include <QIcon>
 #include "MiscEditor.h"
 #include "stringparsing.h"
 #include "database.h"
+#include "config.h"
 
 MiscEditor::MiscEditor( QWidget* parent )
 {
    setupUi(this);
 
-   setWindowIcon(parent->windowIcon());
+   setWindowIcon(QIcon(SMALLQUESTION));
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
