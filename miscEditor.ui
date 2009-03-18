@@ -244,17 +244,20 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6" >
        <item>
-        <spacer name="horizontalSpacer" >
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
+        <widget class="QLabel" name="label_8" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>40</width>
-           <height>0</height>
-          </size>
+         <property name="toolTip" >
+          <string>Check it if the amount listed is in kg instead of L.</string>
          </property>
-        </spacer>
+         <property name="text" >
+          <string>Amount is weight?</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="checkBox_isWeight" >
@@ -265,7 +268,7 @@
           </sizepolicy>
          </property>
          <property name="text" >
-          <string>Amount is weight?</string>
+          <string/>
          </property>
         </widget>
        </item>

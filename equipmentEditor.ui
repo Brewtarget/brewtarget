@@ -12,6 +12,9 @@
   <property name="windowTitle" >
    <string>Equipment Editor</string>
   </property>
+  <property name="toolTip" >
+   <string/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_8" >
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5" >
@@ -146,6 +149,9 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="toolTip" >
+               <string>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</string>
               </property>
               <property name="text" >
                <string>Calculate pre-boil volume</string>

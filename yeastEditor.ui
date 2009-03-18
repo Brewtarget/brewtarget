@@ -200,6 +200,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip" >
+          <string>Check it if the amount given is in kg instead of L.</string>
+         </property>
          <property name="text" >
           <string>Amount is weight</string>
          </property>
