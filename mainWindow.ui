@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>430</width>
-    <height>605</height>
+    <height>615</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,9 +16,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>26</y>
+     <y>37</y>
      <width>430</width>
-     <height>556</height>
+     <height>555</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_9" >
@@ -948,11 +948,30 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>582</y>
+     <y>592</y>
      <width>430</width>
      <height>23</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QToolBar" name="toolBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>26</y>
+     <width>430</width>
+     <height>11</height>
+    </rect>
+   </property>
+   <property name="windowTitle" >
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>true</bool>
+   </attribute>
   </widget>
   <action name="actionAbout_BrewTarget" >
    <property name="text" >

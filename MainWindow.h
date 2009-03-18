@@ -100,7 +100,8 @@ private:
    YeastEditor* yeastEditor;
    Database* db;
    BeerColorWidget beerColorWidget;
-   
+
+   void setupToolbar();
    void showChanges();
 };
 

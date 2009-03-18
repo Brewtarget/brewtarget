@@ -19,6 +19,8 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QToolButton>
+#include <QSize>
 
 #include "FermentableEditor.h"
 #include "MiscEditor.h"
@@ -98,6 +100,8 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
 
+   setupToolbar();
+
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), homedir, tr("BeerXML files (*.xml)"));
    fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
@@ -171,6 +175,47 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_editMisc, SIGNAL( clicked() ), this, SLOT( editSelectedMisc() ) );
    connect( pushButton_editHop, SIGNAL( clicked() ), this, SLOT( editSelectedHop() ) );
    connect( pushButton_editYeast, SIGNAL( clicked() ), this, SLOT( editSelectedYeast() ) );
+}
+
+void MainWindow::setupToolbar()
+{
+   QToolButton *newRec, *viewEquip, *viewFerm, *viewHops,
+               *viewMiscs, *viewStyles, *viewYeast;
+
+   setIconSize(QSize(16, 16));
+
+   newRec = new QToolButton(toolBar);
+   viewEquip = new QToolButton(toolBar);
+   viewFerm = new QToolButton(toolBar);
+   viewHops = new QToolButton(toolBar);
+   viewMiscs = new QToolButton(toolBar);
+   viewStyles = new QToolButton(toolBar);
+   viewYeast = new QToolButton(toolBar);
+   
+   newRec->setIcon(QIcon(SMALLPLUS));
+   viewEquip->setIcon(QIcon(SMALLKETTLE));
+   viewFerm->setIcon(QIcon(SMALLBARLEY));
+   viewHops->setIcon(QIcon(SMALLHOP));
+   viewMiscs->setIcon(QIcon(SMALLQUESTION));
+   viewStyles->setIcon(QIcon(SMALLSTYLE));
+   viewYeast->setIcon(QIcon(SMALLYEAST));
+
+   toolBar->addWidget(newRec);
+   toolBar->addSeparator();
+   toolBar->addWidget(viewEquip);
+   toolBar->addWidget(viewFerm);
+   toolBar->addWidget(viewHops);
+   toolBar->addWidget(viewMiscs);
+   toolBar->addWidget(viewStyles);
+   toolBar->addWidget(viewYeast);
+
+   connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
+   connect( viewEquip, SIGNAL(clicked()), equipEditor, SLOT(show()) );
+   connect( viewFerm, SIGNAL(clicked()), fermDialog, SLOT(show()) );
+   connect( viewHops, SIGNAL(clicked()), hopDialog, SLOT(show()) );
+   connect( viewMiscs, SIGNAL(clicked()), miscDialog, SLOT(show()) );
+   connect( viewStyles, SIGNAL(clicked()), styleEditor, SLOT(show()) );
+   connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
 }
 
 void MainWindow::setRecipeByName(const QString& name)
