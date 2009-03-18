@@ -26,6 +26,7 @@
 #include "EquipmentComboBox.h"
 #include "stringparsing.h"
 #include "config.h"
+#include "unit.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent)
         : QDialog(parent)
@@ -62,22 +63,24 @@ void EquipmentEditor::save()
    obsEquip->disableNotification();
 
    obsEquip->setName( lineEdit_name->text().toStdString() );
-   obsEquip->setBoilSize_l( parseDouble(lineEdit_boilSize->text().toStdString()) );
+   //obsEquip->setBoilSize_l( Unit::qstringToSI((lineEdit_boilSize->text()) );
+   obsEquip->setBoilSize_l( Unit::qstringToSI(lineEdit_boilSize->text()) );
+   
    obsEquip->setCalcBoilVolume( (checkBox_calcBoilVolume->checkState() == Qt::Checked)? true : false );
-   obsEquip->setBatchSize_l( parseDouble(lineEdit_batchSize->text().toStdString()) );
+   obsEquip->setBatchSize_l( Unit::qstringToSI(lineEdit_batchSize->text()) );
 
-   obsEquip->setTunVolume_l( parseDouble(lineEdit_tunVolume->text().toStdString()) );
-   obsEquip->setTunWeight_kg( parseDouble(lineEdit_tunWeight->text().toStdString()) );
-   obsEquip->setTunSpecificHeat_calGC( parseDouble(lineEdit_tunSpecificHeat->text().toStdString()) );
+   obsEquip->setTunVolume_l( Unit::qstringToSI(lineEdit_tunVolume->text()) );
+   obsEquip->setTunWeight_kg( Unit::qstringToSI(lineEdit_tunWeight->text()) );
+   obsEquip->setTunSpecificHeat_calGC( Unit::qstringToSI(lineEdit_tunSpecificHeat->text()) );
 
-   obsEquip->setBoilTime_min( parseDouble(lineEdit_boilTime->text().toStdString()) );
-   obsEquip->setEvapRate_pctHr( parseDouble(lineEdit_evaporationRate->text().toStdString()) );
-   obsEquip->setTopUpKettle_l( parseDouble(lineEdit_topUpKettle->text().toStdString()) );
-   obsEquip->setTopUpWater_l( parseDouble(lineEdit_topUpWater->text().toStdString()) );
-   obsEquip->setHopUtilization_pct( parseDouble(lineEdit_hopUtilization->text().toStdString()) );
+   obsEquip->setBoilTime_min( Unit::qstringToSI(lineEdit_boilTime->text()) );
+   obsEquip->setEvapRate_pctHr( Unit::qstringToSI(lineEdit_evaporationRate->text()) );
+   obsEquip->setTopUpKettle_l( Unit::qstringToSI(lineEdit_topUpKettle->text()) );
+   obsEquip->setTopUpWater_l( Unit::qstringToSI(lineEdit_topUpWater->text()) );
+   obsEquip->setHopUtilization_pct( Unit::qstringToSI(lineEdit_hopUtilization->text()) );
 
-   obsEquip->setTrubChillerLoss_l( parseDouble(lineEdit_trubChillerLoss->text().toStdString()) );
-   obsEquip->setLauterDeadspace_l( parseDouble(lineEdit_lauterDeadspace->text().toStdString()) );
+   obsEquip->setTrubChillerLoss_l( Unit::qstringToSI(lineEdit_trubChillerLoss->text()) );
+   obsEquip->setLauterDeadspace_l( Unit::qstringToSI(lineEdit_lauterDeadspace->text()) );
 
    obsEquip->setNotes(textEdit_notes->toPlainText().toStdString());
 

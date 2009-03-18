@@ -412,6 +412,10 @@ std::string Equipment::getNotes() const
 
 void Equipment::doCalculations()
 {
+   // Only do the calculation if we're asked to.
+   if( ! calcBoilVolume )
+      return;
+   
    /* The equation given the BeerXML 1.0 spec was way wrong. */
    boilSize_l =
       (batchSize_l - topUpWater_l + trubChillerLoss_l)

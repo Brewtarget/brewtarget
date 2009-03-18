@@ -32,6 +32,7 @@
 #include "observable.h"
 #include "WaterTableModel.h"
 #include "water.h"
+#include "unit.h"
 
 WaterTableModel::WaterTableModel(WaterTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -215,57 +216,57 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
          else
             return false;
       case WATERAMOUNTCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_l(value.toDouble());
+            row->setAmount_l( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case WATERCALCIUMCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setCalcium_ppm(value.toDouble());
+            row->setCalcium_ppm( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case WATERBICARBONATECOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setBicarbonate_ppm(value.toDouble());
+            row->setBicarbonate_ppm( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case WATERSULFATECOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setSulfate_ppm(value.toDouble());
+            row->setSulfate_ppm( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case WATERCHLORIDECOL:
-         if( value.canConvert(QVariant::Double))
+         if( value.canConvert(QVariant::String))
          {
-            row->setChloride_ppm(value.toDouble());
+            row->setChloride_ppm( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case WATERSODIUMCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setSodium_ppm(value.toDouble());
+            row->setSodium_ppm( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case WATERMAGNESIUMCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setMagnesium_ppm(value.toDouble());
+            row->setMagnesium_ppm( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

@@ -32,6 +32,7 @@
 #include "misc.h"
 #include "observable.h"
 #include "MiscTableModel.h"
+#include "unit.h"
 
 MiscTableModel::MiscTableModel(MiscTableWidget* parent)
    : QAbstractTableModel(parent), MultipleObserver()
@@ -224,15 +225,15 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    }
    else if( col == MISCTIMECOL )
    {
-      if( value.canConvert(QVariant::Double) )
-         row->setTime(value.toDouble());
+      if( value.canConvert(QVariant::String) )
+         row->setTime( Unit::qstringToSI(value.toString()) );
       else
          return false;
    }
    else if( col == MISCAMOUNTCOL )
    {
-      if( value.canConvert(QVariant::Double) )
-         row->setAmount(value.toDouble());
+      if( value.canConvert(QVariant::String) )
+         row->setAmount( Unit::qstringToSI(value.toString()) );
       else
          return false;
    }

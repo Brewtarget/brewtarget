@@ -26,6 +26,7 @@
 #include "StyleComboBox.h"
 #include "stringparsing.h"
 #include "config.h"
+#include "unit.h"
 
 StyleEditor::StyleEditor(QWidget* parent)
         : QDialog(parent)
@@ -69,18 +70,18 @@ void StyleEditor::save()
    s->setStyleLetter( lineEdit_styleLetter->text().toStdString() );
    s->setStyleGuide( lineEdit_styleGuide->text().toStdString() );
    s->setType( comboBox_type->currentText().toStdString() );
-   s->setOgMin( parseDouble(lineEdit_ogMin->text().toStdString()) );
-   s->setOgMax( parseDouble(lineEdit_ogMax->text().toStdString()) );
-   s->setFgMin( parseDouble(lineEdit_fgMin->text().toStdString()) );
-   s->setFgMax( parseDouble(lineEdit_fgMax->text().toStdString()) );
-   s->setIbuMin( parseDouble(lineEdit_ibuMin->text().toStdString()) );
-   s->setIbuMax( parseDouble(lineEdit_ibuMax->text().toStdString()) );
-   s->setColorMin_srm( parseDouble(lineEdit_colorMin->text().toStdString()) );
-   s->setColorMax_srm( parseDouble(lineEdit_colorMax->text().toStdString()) );
-   s->setCarbMin_vol( parseDouble(lineEdit_carbMin->text().toStdString()) );
-   s->setCarbMax_vol( parseDouble(lineEdit_carbMax->text().toStdString()) );
-   s->setAbvMin_pct( parseDouble(lineEdit_abvMin->text().toStdString()) );
-   s->setAbvMax_pct( parseDouble(lineEdit_abvMax->text().toStdString()) );
+   s->setOgMin( Unit::qstringToSI(lineEdit_ogMin->text()) );
+   s->setOgMax( Unit::qstringToSI(lineEdit_ogMax->text()) );
+   s->setFgMin( Unit::qstringToSI(lineEdit_fgMin->text()) );
+   s->setFgMax( Unit::qstringToSI(lineEdit_fgMax->text()) );
+   s->setIbuMin( Unit::qstringToSI(lineEdit_ibuMin->text()) );
+   s->setIbuMax( Unit::qstringToSI(lineEdit_ibuMax->text()) );
+   s->setColorMin_srm( Unit::qstringToSI(lineEdit_colorMin->text()) );
+   s->setColorMax_srm( Unit::qstringToSI(lineEdit_colorMax->text()) );
+   s->setCarbMin_vol( Unit::qstringToSI(lineEdit_carbMin->text()) );
+   s->setCarbMax_vol( Unit::qstringToSI(lineEdit_carbMax->text()) );
+   s->setAbvMin_pct( Unit::qstringToSI(lineEdit_abvMin->text()) );
+   s->setAbvMax_pct( Unit::qstringToSI(lineEdit_abvMax->text()) );
    s->setProfile( textEdit_profile->toPlainText().toStdString() );
    s->setIngredients( textEdit_ingredients->toPlainText().toStdString() );
    s->setExamples( textEdit_examples->toPlainText().toStdString() );

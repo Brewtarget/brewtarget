@@ -33,6 +33,7 @@
 #include "yeast.h"
 #include "observable.h"
 #include "YeastTableModel.h"
+#include "unit.h"
 
 YeastTableModel::YeastTableModel(YeastTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -216,9 +217,9 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          else
             return false;
       case YEASTAMOUNTCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setAmount(value.toDouble());
+            row->setAmount( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

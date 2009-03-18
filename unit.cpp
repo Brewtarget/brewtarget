@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QStringList>
 #include <string>
 #include <iostream>
 #include "unit.h"
@@ -38,6 +39,7 @@ TablespoonUnit tablespoons;
 TeaspoonUnit teaspoons;
 SecondUnit seconds;
 MinuteUnit minutes;
+HourUnit hours;
 CelsiusUnit celsius;
 FahrenheitUnit fahrenheit;
 KelvinUnit kelvin;
@@ -54,7 +56,8 @@ double Unit::convert( double amount, const std::string& fromUnit, const std::str
    return Unit::nameToUnit[toUnit]->fromSI(SI);
 }
 
-double Unit::stringToSI( std::string& input )
+/*
+double Unit::stringToSI( std::string input )
 {
    size_t pos;
    std::string num, units;
@@ -68,7 +71,41 @@ double Unit::stringToSI( std::string& input )
    trim(num);
    trim(units);
 
-   return Unit::nameToUnit["lb"]->toSI(parseDouble(num));
+   std::cerr << "Units: " + units << std::endl;
+   std::cerr << "Num: " + num <<  std::endl;
+   std::cerr << "Converted: " << Unit::nameToUnit[units]->toSI(parseDouble(num)) << " " << Unit::nameToUnit[units]->getSIUnitName() << std::endl;
+
+   // If we are not provided units, assume "num" is already in
+   // SI units.
+   if( units.length() == 0 )
+      return parseDouble(num);
+   else
+      return Unit::nameToUnit[units]->toSI(parseDouble(num));
+}
+ */
+
+// Translates something like "5.0 gal" into the appropriate SI units.
+double Unit::qstringToSI( QString qstr )
+{
+   if( ! Unit::isMapSetup )
+      Unit::setupMap();
+
+   QStringList list1 = qstr.split(" ");
+
+   if( list1.size() < 1 ) // Didn't even provide a number.
+      return 0.0;
+   else if( list1.size() < 2  ) // Only provided a number.
+      return list1[0].toDouble(); // Assume units are already SI.
+   else // Provided a number and unit.
+   {
+      std::string units;
+      units = list1[1].toStdString();
+
+      if( nameToUnit[units] == 0 ) // Invalid unit since it's not in the map.
+         return list1[0].toDouble(); // Assume units are already SI.
+      else
+         return Unit::nameToUnit[units]->toSI(list1[0].toDouble());
+   }
 }
 
 void Unit::setupMap()
@@ -87,6 +124,7 @@ void Unit::setupMap()
    Unit::nameToUnit[teaspoons.getUnitName()] = &teaspoons;
    Unit::nameToUnit[seconds.getUnitName()] = &seconds;
    Unit::nameToUnit[minutes.getUnitName()] = &minutes;
+   Unit::nameToUnit[hours.getUnitName()] = &hours;
    Unit::nameToUnit[celsius.getUnitName()] = &celsius;
    Unit::nameToUnit[kelvin.getUnitName()] = &kelvin;
    Unit::nameToUnit[fahrenheit.getUnitName()] = &fahrenheit;
@@ -302,34 +340,51 @@ double TeaspoonUnit::fromSI( double amt ) const
 SecondUnit::SecondUnit()
 {
    unitName = "s";
-   SIUnitName = "s";
+   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
 }
 
 double SecondUnit::toSI( double amt ) const
 {
-   return amt;
+   return amt/(double)60.0;
 }
 
 double SecondUnit::fromSI( double amt ) const
 {
-   return amt;
+   return amt*(double)60.0;
 }
 
 // === Minutes ===
 MinuteUnit::MinuteUnit()
 {
    unitName = "min";
-   SIUnitName = "s";
+   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
 }
 
 double MinuteUnit::toSI( double amt ) const
 {
-   return amt * 60.0;
+   return amt;
 }
 
 double MinuteUnit::fromSI( double amt ) const
 {
-   return amt / 60.0;
+   return amt;
+}
+
+// === Hours ===
+HourUnit::HourUnit()
+{
+   unitName = "hr";
+   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
+}
+
+double HourUnit::toSI( double amt ) const
+{
+   return amt * (double)60.0;
+}
+
+double HourUnit::fromSI( double amt ) const
+{
+   return amt / (double)60.0;
 }
 
 // === Celsius ===

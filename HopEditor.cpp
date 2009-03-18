@@ -24,6 +24,7 @@
 #include "stringparsing.h"
 #include "database.h"
 #include "config.h"
+#include "unit.h"
 
 HopEditor::HopEditor( QWidget* parent )
 {
@@ -59,19 +60,19 @@ void HopEditor::save()
    h->disableNotification();
 
    h->setName(lineEdit_name->text().toStdString());
-   h->setAlpha_pct(parseDouble(lineEdit_alpha->text().toStdString()));
-   h->setAmount_kg(parseDouble(lineEdit_amount->text().toStdString()));
+   h->setAlpha_pct(Unit::qstringToSI(lineEdit_alpha->text()));
+   h->setAmount_kg(Unit::qstringToSI(lineEdit_amount->text()));
    h->setUse(comboBox_use->currentText().toStdString());
-   h->setTime_min(parseDouble(lineEdit_time->text().toStdString()));
+   h->setTime_min(Unit::qstringToSI(lineEdit_time->text()));
    h->setType(comboBox_type->currentText().toStdString());
    h->setForm(comboBox_form->currentText().toStdString());
-   h->setBeta_pct(parseDouble(lineEdit_beta->text().toStdString()));
-   h->setHsi_pct(parseDouble(lineEdit_HSI->text().toStdString()));
+   h->setBeta_pct(Unit::qstringToSI(lineEdit_beta->text()));
+   h->setHsi_pct(Unit::qstringToSI(lineEdit_HSI->text()));
    h->setOrigin(lineEdit_origin->text().toStdString());
-   h->setHumulene_pct(parseDouble(lineEdit_humulene->text().toStdString()));
-   h->setCaryophyllene_pct(parseDouble(lineEdit_caryophyllene->text().toStdString()));
-   h->setCohumulone_pct(parseDouble(lineEdit_cohumulone->text().toStdString()));
-   h->setMyrcene_pct(parseDouble(lineEdit_myrcene->text().toStdString()));
+   h->setHumulene_pct(Unit::qstringToSI(lineEdit_humulene->text()));
+   h->setCaryophyllene_pct(Unit::qstringToSI(lineEdit_caryophyllene->text()));
+   h->setCohumulone_pct(Unit::qstringToSI(lineEdit_cohumulone->text()));
+   h->setMyrcene_pct(Unit::qstringToSI(lineEdit_myrcene->text()));
 
    h->setSubstitutes(textEdit_substitutes->toPlainText().toStdString());
    h->setNotes(textEdit_notes->toPlainText().toStdString());

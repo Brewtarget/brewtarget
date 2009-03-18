@@ -34,12 +34,16 @@ class TablespoonUnit;
 class TeaspoonUnit;
 class SecondUnit;
 class MinuteUnit;
+class HourUnit;
 class CelsiusUnit;
 class FahrenheitUnit;
 class KelvinUnit;
 
+#include <QString>
 #include <string>
 #include <map>
+
+// TODO: implement ppm, percent, diastatic power, ibuGalPerLb, gravity, srm, volumes.
 
 class Unit
 {
@@ -52,7 +56,8 @@ class Unit
       virtual const std::string& getSIUnitName() const { return 0; };
 
       static double convert( double amount, const std::string& fromUnit, const std::string& toUnit );
-      static double stringToSI( std::string& input );
+      //static double stringToSI( std::string input );
+      static double qstringToSI( QString qstr );
    private:
       static std::map<std::string, Unit*> nameToUnit;
       static bool isMapSetup;
@@ -281,6 +286,22 @@ class MinuteUnit : public Unit
       const std::string& getUnitName() const { return unitName; }
       const std::string& getSIUnitName() const { return SIUnitName; }
       
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+};
+
+class HourUnit : public Unit
+{
+   public:
+      HourUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
    private:
       std::string unitName;
       std::string SIUnitName;

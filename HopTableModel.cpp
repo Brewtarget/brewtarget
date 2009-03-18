@@ -35,6 +35,7 @@
 #include "hop.h"
 #include "observable.h"
 #include "HopTableModel.h"
+#include "unit.h"
 
 HopTableModel::HopTableModel(HopTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -214,9 +215,9 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          else
             return false;
       case HOPAMOUNTCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_kg(value.toDouble());
+            row->setAmount_kg( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
@@ -230,9 +231,9 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          else
             return false;
       case HOPTIMECOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setTime_min(value.toDouble());
+            row->setTime_min( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

@@ -49,7 +49,7 @@ macx {
     doc.files = README COPYING
 
     misc.path = brewtarget.app/Contents
-    misc.files = Info.plist PkgInfo
+    misc.files = mac/Info.plist mac/PkgInfo
 
     INSTALLS += data doc misc
 }

@@ -30,6 +30,7 @@
 #include "mashstep.h"
 #include "observable.h"
 #include "MashStepTableModel.h"
+#include "unit.h"
 
 MashStepTableModel::MashStepTableModel(MashStepTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -209,25 +210,25 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          else
             return false;
       case MASHSTEPAMOUNTCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setInfuseAmount_l(value.toDouble());
+            row->setInfuseAmount_l( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case MASHSTEPTEMPCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setStepTemp_c(value.toDouble());
+            row->setStepTemp_c( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
             return false;
       case MASHSTEPTIMECOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setStepTime_min(value.toDouble());
+            row->setStepTime_min( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

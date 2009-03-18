@@ -26,6 +26,7 @@
 #include "stringparsing.h"
 #include "database.h"
 #include "config.h"
+#include "unit.h"
 
 MiscEditor::MiscEditor( QWidget* parent )
 {
@@ -64,8 +65,8 @@ void MiscEditor::save()
    m->setType(comboBox_type->currentText().toStdString());
    m->setUse(comboBox_use->currentText().toStdString());
    // TODO: fill in the rest of the "set" methods.
-   m->setTime(parseDouble(lineEdit_time->text().toStdString()));
-   m->setAmount(parseDouble(lineEdit_amount->text().toStdString()));
+   m->setTime(Unit::qstringToSI(lineEdit_time->text()));
+   m->setAmount(Unit::qstringToSI(lineEdit_amount->text()));
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
    m->setUseFor(textEdit_useFor->toPlainText().toStdString());
    m->setNotes( textEdit_notes->toPlainText().toStdString() );

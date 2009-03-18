@@ -53,6 +53,7 @@
 #include "config.h"
 #include "xmltree.h"
 #include "xmlnode.h"
+#include "unit.h"
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -375,7 +376,7 @@ void MainWindow::updateRecipeBatchSize()
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setBatchSize_l( parseDouble(lineEdit_batchSize->text().toStdString()) );
+   recipeObs->setBatchSize_l( Unit::qstringToSI(lineEdit_batchSize->text()) );
 }
 
 void MainWindow::updateRecipeBoilSize()
@@ -383,7 +384,7 @@ void MainWindow::updateRecipeBoilSize()
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setBoilSize_l( parseDouble(lineEdit_boilSize->text().toStdString()) );
+   recipeObs->setBoilSize_l( Unit::qstringToSI(lineEdit_boilSize->text()) );
 }
 
 void MainWindow::updateRecipeEfficiency()
@@ -391,7 +392,7 @@ void MainWindow::updateRecipeEfficiency()
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setEfficiency_pct( parseDouble(lineEdit_efficiency->text().toStdString()) );
+   recipeObs->setEfficiency_pct( Unit::qstringToSI(lineEdit_efficiency->text()) );
 }
 
 void MainWindow::addFermentableToRecipe(Fermentable* ferm)

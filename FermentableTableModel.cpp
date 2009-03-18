@@ -34,6 +34,7 @@
 #include "observable.h"
 #include "fermentable.h"
 #include "FermentableTableModel.h"
+#include "unit.h"
 
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
@@ -220,9 +221,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       case FERMAMOUNTCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_kg(value.toDouble());
+            row->setAmount_kg( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else
@@ -236,9 +237,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       case FERMCOLORCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setColor_srm(value.toDouble());
+            row->setColor_srm( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

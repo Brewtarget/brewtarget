@@ -23,6 +23,7 @@
 #include "stringparsing.h"
 #include "database.h"
 #include "config.h"
+#include "unit.h"
 
 FermentableEditor::FermentableEditor( QWidget* parent )
 {
@@ -57,19 +58,19 @@ void FermentableEditor::save()
 
    obsFerm->setName(lineEdit_name->text().toStdString());
    obsFerm->setType(comboBox_type->currentText().toStdString());
-   obsFerm->setAmount_kg(parseDouble(lineEdit_amount->text().toStdString()));
-   obsFerm->setYield_pct(parseDouble(lineEdit_yield->text().toStdString()));
-   obsFerm->setColor_srm(parseDouble(lineEdit_color->text().toStdString()));
+   obsFerm->setAmount_kg(Unit::qstringToSI(lineEdit_amount->text()));
+   obsFerm->setYield_pct(Unit::qstringToSI(lineEdit_yield->text()));
+   obsFerm->setColor_srm(Unit::qstringToSI(lineEdit_color->text()));
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
    obsFerm->setOrigin( lineEdit_origin->text().toStdString() );
    obsFerm->setSupplier( lineEdit_supplier->text().toStdString() );
-   obsFerm->setCoarseFineDiff_pct( parseDouble(lineEdit_coarseFineDiff->text().toStdString()) );
-   obsFerm->setMoisture_pct( parseDouble(lineEdit_moisture->text().toStdString()) );
-   obsFerm->setDiastaticPower_lintner( parseDouble(lineEdit_diastaticPower->text().toStdString()) );
-   obsFerm->setProtein_pct( parseDouble(lineEdit_protein->text().toStdString()) );
-   obsFerm->setMaxInBatch_pct( parseDouble(lineEdit_maxInBatch->text().toStdString()) );
+   obsFerm->setCoarseFineDiff_pct( Unit::qstringToSI(lineEdit_coarseFineDiff->text()) );
+   obsFerm->setMoisture_pct( Unit::qstringToSI(lineEdit_moisture->text()) );
+   obsFerm->setDiastaticPower_lintner( Unit::qstringToSI(lineEdit_diastaticPower->text()) );
+   obsFerm->setProtein_pct( Unit::qstringToSI(lineEdit_protein->text()) );
+   obsFerm->setMaxInBatch_pct( Unit::qstringToSI(lineEdit_maxInBatch->text()) );
    obsFerm->setRecommendMash( (checkBox_recommendMash->checkState() == Qt::Checked) ? true : false );
-   obsFerm->setIbuGalPerLb( parseDouble(lineEdit_ibuGalPerLb->text().toStdString()) );
+   obsFerm->setIbuGalPerLb( Unit::qstringToSI(lineEdit_ibuGalPerLb->text()) );
    obsFerm->setNotes( textEdit_notes->toPlainText().toStdString() );
 
    obsFerm->reenableNotification();
