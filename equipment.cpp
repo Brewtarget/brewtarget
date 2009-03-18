@@ -118,7 +118,9 @@ Equipment::Equipment(XmlNode *node)
          throw EquipmentException("Should have been a leaf but is not.");
       
       leafText = leaf->getLeafText();
-      
+
+      // TODO: in all elements, make sure that an exception thrown by a parse
+      // method gets handled when the element is not required.
       if( tag == "NAME" )
       {
          setName(leafText);

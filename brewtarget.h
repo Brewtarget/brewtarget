@@ -23,6 +23,7 @@ class Brewtarget;
 
 #include <QApplication>
 #include <QString>
+#include <string>
 #include "MainWindow.h"
 
 class Brewtarget
@@ -30,10 +31,13 @@ class Brewtarget
 public:
    Brewtarget();
 
+   enum LogType {WARNING, ERROR};
+
    static QApplication* getApp();
    static void setApp(QApplication& a); // This method should be called before any of the others.
    static QString getDataDir();
    static int run();
+   static void log( LogType lt, std::string message );
 
 private:
    static QApplication* app;

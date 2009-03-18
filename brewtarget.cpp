@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include "brewtarget.h"
 #include "config.h"
 #include "database.h"
@@ -63,4 +64,19 @@ int Brewtarget::run()
    mainWindow->show();
 
    return app->exec();
+}
+
+void Brewtarget::log( LogType lt, std::string message )
+{
+   std::string m;
+
+   if( lt == WARNING )
+      m = "WARNING: " + message;
+   else if( lt == ERROR )
+      m = "ERROR: " + message;
+   else
+      m = message;
+
+   // Logging is the stderr right now.
+   std::cerr << m << std::endl;
 }

@@ -30,5 +30,6 @@
    <file>images/smallPlus.png</file>
    <file>images/smallArrow.png</file>
    <file>images/smallInfo.png</file>
+   <file>images/smallOutArrow.png</file>
 </qresource>
 </RCC>

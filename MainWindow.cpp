@@ -98,13 +98,13 @@ MainWindow::MainWindow(QWidget* parent)
    yeastEditor = new YeastEditor(this);
 
    // Set up the fileOpener dialog.
-   fileOpener = new QFileDialog(this, tr("Open"), tr(homedir), tr(".xml"));
+   fileOpener = new QFileDialog(this, tr("Open"), homedir, tr("BeerXML files (*.xml)"));
    fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
    fileOpener->setFileMode(QFileDialog::ExistingFile);
    fileOpener->setViewMode(QFileDialog::List);
 
    // Set up the fileSaver dialog.
-   fileSaver = new QFileDialog(this, tr("Save"), tr(homedir), tr(".xml") );
+   fileSaver = new QFileDialog(this, tr("Save"), homedir, tr("BeerXML files (*.xml)") );
    fileSaver->setAcceptMode(QFileDialog::AcceptSave);
    fileSaver->setFileMode(QFileDialog::AnyFile);
    fileSaver->setViewMode(QFileDialog::List);
@@ -129,7 +129,8 @@ MainWindow::MainWindow(QWidget* parent)
    actionMiscs->setIcon(QIcon(SMALLQUESTION));
    actionStyles->setIcon(QIcon(SMALLSTYLE));
    actionNewRecipe->setIcon(QIcon(SMALLPLUS));
-   actionExportRecipe->setIcon(QIcon(SMALLARROW));
+   actionImport_Recipes->setIcon(QIcon(SMALLARROW));
+   actionExportRecipe->setIcon(QIcon(SMALLOUTARROW));
    actionAbout_BrewTarget->setIcon(QIcon(SMALLINFO));
    
    if( db->getNumRecipes() > 0 )

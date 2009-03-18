@@ -32,6 +32,7 @@
 #define SMALLPLUS ":/images/smallPlus.png"
 #define SMALLARROW ":/images/smallArrow.png"
 #define SMALLINFO ":/images/smallInfo.png"
+#define SMALLOUTARROW ":/images/smallOutArrow.png"
 
 /* Things that will get configured by configure script */
 
