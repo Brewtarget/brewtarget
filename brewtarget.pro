@@ -55,7 +55,7 @@ macx {
 }
 
 win32 {
-    #RC_FILE = win\icon.rc
+    RC_FILE = win\icon.rc
     CONFIG -= console
 
     target.path = release
