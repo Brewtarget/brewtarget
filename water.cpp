@@ -27,6 +27,11 @@ bool operator<(Water &w1, Water &w2)
    return w1.name < w2.name;
 }
 
+bool operator==(Water &w1, Water &w2)
+{
+   return w1.name == w2.name;
+}
+
 std::string Water::toXml()
 {
    std::string ret = "<WATER>\n";

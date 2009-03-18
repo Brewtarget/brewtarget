@@ -35,6 +35,7 @@ public:
    Yeast( XmlNode *node );
 
    friend bool operator<(Yeast &y1, Yeast &y2);
+   friend bool operator==(Yeast &y1, Yeast &y2);
 
    std::string toXml();
    
@@ -131,6 +132,14 @@ struct Yeast_ptr_cmp
    bool operator()( Yeast* lhs, Yeast* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Yeast_ptr_equals
+{
+   bool operator()( Yeast* lhs, Yeast* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

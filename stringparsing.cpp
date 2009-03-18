@@ -17,6 +17,7 @@
  */
 
 #include <string>
+#include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 #include "stringparsing.h"
@@ -29,13 +30,16 @@ int parseInt( const std::string &str )
 long parseLong( const std::string &str )
 {
    char *endptr;
-   long ret;
+   long ret = 0.0;
    const char *begptr = str.c_str();
    
    ret = strtol( begptr, &endptr, 10 );
    
-   if( endptr == begptr )
-      throw ParseException();
+   if( endptr == begptr && str.size() > 0 )
+   {
+      std::cerr << "parseLong() could not convert " + str << std::endl;
+      throw ParseException("parseLong() could not convert " + str);
+   }
    
    return ret;
 }
@@ -43,13 +47,16 @@ long parseLong( const std::string &str )
 double parseDouble( const std::string &str )
 {
    char *endptr;
-   double ret;
+   double ret = 0.0;
    const char *begptr = str.c_str();
    
    ret = strtod( begptr, &endptr );
    
-   if( endptr == begptr )
-      throw ParseException();
+   if( endptr == begptr && str.size() > 0 )
+   {
+      std::cerr << "parseDouble() could not convert " + str << std::endl;
+      throw ParseException("parseDouble() could not convert " + str);
+   }
    
    return ret;
 }
@@ -61,7 +68,10 @@ bool parseBool( const std::string &str )
    else if( str == "FALSE" )
       return false;
    else
-      throw ParseException();
+   {
+      std::cerr << "parseBool() could not convert " + str << std::endl;
+      throw ParseException("parseBool() could not convert " + str);
+   }
 }
 
 std::string boolToString( bool b )

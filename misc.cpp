@@ -28,6 +28,11 @@ bool operator<(Misc &m1, Misc &m2)
    return m1.name < m2.name;
 }
 
+bool operator==(Misc &m1, Misc &m2)
+{
+   return m1.name == m2.name;
+}
+
 std::string Misc::toXml()
 {
    std::string ret = "<MISC>\n";

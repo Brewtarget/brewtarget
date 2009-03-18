@@ -47,10 +47,18 @@ public:
    
    virtual const char* what() const throw()
    {
-      return "Error in parsing.";
+      return std::string("Error in parsing: " + _err + "\n").c_str();
    }
    
    ParseException(){};
+   ParseException( std::string error )
+   {
+      _err = error;
+   }
+
+   ~ParseException() throw() {}
+private:
+   std::string _err;
 };
 
 #endif	/* _STRINGPARSING_H */

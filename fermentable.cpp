@@ -26,6 +26,11 @@ bool operator<(Fermentable &f1, Fermentable &f2)
    return f1.name < f2.name;
 }
 
+bool operator==(Fermentable &f1, Fermentable &f2)
+{
+   return f1.name == f2.name;
+}
+
 std::string Fermentable::toXml()
 {
    std::string ret = "<FERMENTABLE>\n";

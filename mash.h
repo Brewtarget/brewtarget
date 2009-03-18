@@ -34,6 +34,7 @@ public:
    Mash( const XmlNode *node);
 
    friend bool operator<(Mash &m1, Mash &m2);
+   friend bool operator==(Mash &m1, Mash &m2);
 
    std::string toXml();
    
@@ -103,6 +104,14 @@ struct Mash_ptr_cmp
    bool operator()( Mash* lhs, Mash* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Mash_ptr_equals
+{
+   bool operator()( Mash* lhs, Mash* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

@@ -35,6 +35,7 @@ public:
    Misc( const XmlNode *node );
 
    friend bool operator<(Misc &m1, Misc &m2);
+   friend bool operator==(Misc &m1, Misc &m2);
 
    std::string toXml();
    
@@ -107,6 +108,14 @@ struct Misc_ptr_cmp
    bool operator()( Misc* lhs, Misc* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Misc_ptr_equals
+{
+   bool operator()( Misc* lhs, Misc* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

@@ -34,6 +34,7 @@ public:
    Water(XmlNode *node);
 
    friend bool operator<(Water &w1, Water &w2);
+   friend bool operator==(Water &w1, Water &w2);
 
    std::string toXml();
    
@@ -103,6 +104,14 @@ struct Water_ptr_cmp
    bool operator()( Water* lhs, Water* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Water_ptr_equals
+{
+   bool operator()( Water* lhs, Water* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

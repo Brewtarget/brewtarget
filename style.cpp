@@ -28,6 +28,11 @@ bool operator<(Style &s1, Style &s2)
    return s1.name < s2.name;
 }
 
+bool operator==(Style &s1, Style &s2)
+{
+   return s1.name == s2.name;
+}
+
 std::string Style::toXml()
 {
    std::string ret = "<STYLE>\n";

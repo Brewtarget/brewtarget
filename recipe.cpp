@@ -39,6 +39,11 @@ bool operator<(Recipe &r1, Recipe &r2 )
    return r1.name < r2.name;
 }
 
+bool operator==(Recipe &r1, Recipe &r2 )
+{
+   return r1.name == r2.name;
+}
+
 std::string Recipe::toXml()
 {
    unsigned int i, size;

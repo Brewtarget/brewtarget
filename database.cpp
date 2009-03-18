@@ -259,12 +259,15 @@ void Database::savePersistent()
 }
 
 //=========================accessor methods=====================================
+
+// TODO: restructure the database to use maps so that this process is fast.
 void Database::addEquipment(Equipment* equip)
 {
    if( equip != 0 )
    {
       equipments.push_back(equip);
       equipments.sort(Equipment_ptr_cmp());
+      equipments.unique(Equipment_ptr_equals()); // No dups.
       hasChanged();
    }
 }
@@ -275,6 +278,7 @@ void Database::addFermentable(Fermentable* ferm)
    {
       fermentables.push_back(ferm);
       fermentables.sort(Fermentable_ptr_cmp());
+      fermentables.unique(Fermentable_ptr_equals());
       hasChanged();
    }
 }
@@ -285,6 +289,7 @@ void Database::addHop(Hop* hop)
    {
       hops.push_back(hop);
       hops.sort(Hop_ptr_cmp());
+      hops.unique(Hop_ptr_equals());
       hasChanged();
    }
 }
@@ -295,6 +300,7 @@ void Database::addMash(Mash* mash)
    {
       mashs.push_back(mash);
       mashs.sort(Mash_ptr_cmp());
+      mashs.unique(Mash_ptr_equals());
       hasChanged();
    }
 }
@@ -305,6 +311,7 @@ void Database::addMashStep(MashStep* mashStep)
    {
       mashSteps.push_back(mashStep);
       mashSteps.sort(MashStep_ptr_cmp());
+      mashSteps.unique(MashStep_ptr_equals());
       hasChanged();
    }
 }
@@ -315,6 +322,7 @@ void Database::addMisc(Misc* misc)
    {
       miscs.push_back(misc);
       miscs.sort(Misc_ptr_cmp());
+      miscs.unique(Misc_ptr_equals());
       hasChanged();
    }
 }
@@ -326,6 +334,7 @@ void Database::addRecipe(Recipe* rec, bool copySubelements)
 
    recipes.push_back(rec);
    recipes.sort(Recipe_ptr_cmp());
+   recipes.unique(Recipe_ptr_equals());
 
    if( copySubelements )
    {
@@ -361,6 +370,7 @@ void Database::addStyle(Style* style)
    {
       styles.push_back(style);
       styles.sort(Style_ptr_cmp());
+      styles.unique(Style_ptr_equals());
       hasChanged();
    }
 }
@@ -371,6 +381,7 @@ void Database::addWater(Water* water)
    {
       waters.push_back(water);
       waters.sort(Water_ptr_cmp());
+      waters.unique(Water_ptr_equals());
       hasChanged();
    }
 }
@@ -381,6 +392,7 @@ void Database::addYeast(Yeast* yeast)
    {
       yeasts.push_back(yeast);
       yeasts.sort(Yeast_ptr_cmp());
+      yeasts.unique(Yeast_ptr_equals());
       hasChanged();
    }
 }

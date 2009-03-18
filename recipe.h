@@ -43,6 +43,7 @@ public:
    Recipe(const XmlNode *node);
 
    friend bool operator<(Recipe &r1, Recipe &r2 );
+   friend bool operator==(Recipe &r1, Recipe &r2 );
 
    std::string toXml();
    void clear(); // Retains only the name, but sets everything else to defaults.
@@ -219,6 +220,14 @@ struct Recipe_ptr_cmp
    bool operator()( Recipe* lhs, Recipe* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Recipe_ptr_equals
+{
+   bool operator()( Recipe* lhs, Recipe* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

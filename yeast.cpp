@@ -27,6 +27,11 @@ bool operator<(Yeast &y1, Yeast &y2)
    return y1.name < y2.name;
 }
 
+bool operator==(Yeast &y1, Yeast &y2)
+{
+   return y1.name == y2.name;
+}
+
 std::string Yeast::toXml()
 {
    std::string ret = "<YEAST>\n";

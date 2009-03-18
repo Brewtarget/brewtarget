@@ -40,6 +40,7 @@ public:
 
    // Operators
    friend bool operator<(Equipment &e1, Equipment &e2);
+   friend bool operator==(Equipment &e1, Equipment &e2);
 
    // Set
    void setName( const std::string &var );
@@ -125,6 +126,14 @@ struct Equipment_ptr_cmp
    bool operator()( Equipment* lhs, Equipment* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Equipment_ptr_equals
+{
+   bool operator()( Equipment* lhs, Equipment* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

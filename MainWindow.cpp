@@ -658,7 +658,15 @@ void MainWindow::importRecipes()
    for( i = 0; i < numRecipes; ++i )
    {
       newRec = new Recipe(nodes[i]);
-      db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+
+      if( QMessageBox::question(this, tr("Import recipe?"),
+                             tr("Import \"") + newRec->getName().c_str() + "\"?",
+                             QMessageBox::Yes,
+                             QMessageBox::No)
+           == QMessageBox::Yes )
+      {
+         db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+      }
    }
 
    delete tree;

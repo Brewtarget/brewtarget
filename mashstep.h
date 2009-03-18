@@ -34,6 +34,7 @@ public:
    MashStep(const XmlNode *node);
 
    friend bool operator<(MashStep &m1, MashStep &m2);
+   friend bool operator==(MashStep &m1, MashStep &m2);
 
    std::string toXml();
    
@@ -94,6 +95,14 @@ struct MashStep_ptr_cmp
    bool operator()( MashStep* lhs, MashStep* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct MashStep_ptr_equals
+{
+   bool operator()( MashStep* lhs, MashStep* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

@@ -31,6 +31,11 @@ bool operator<( Hop &h1, Hop &h2 )
    return h1.name < h2.name;
 }
 
+bool operator==( Hop &h1, Hop &h2 )
+{
+   return h1.name == h2.name;
+}
+
 bool Hop::isValidUse(const string &str)
 {
    static const string uses[] = {"Boil", "Dry Hop", "Mash", "First Wort", "Aroma"};
@@ -261,7 +266,10 @@ Hop::Hop( const XmlNode *node )
       else if( tag == "MYRCENE" )
          myrcene_pct = parseDouble( leaf->getLeafText() );
       else
-         throw HopException("Do not recognize \"" + tag + "\".");
+      {
+         //throw HopException("Do not recognize \"" + tag + "\".");
+         std::cerr << "Warning: unsupported HOP tag \"" + tag + "\"." << std::endl;
+      }
    } // end for().
 } // end Hop()
 

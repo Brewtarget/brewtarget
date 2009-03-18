@@ -34,6 +34,7 @@ public:
    Style(XmlNode *node);
 
    friend bool operator<(Style &s1, Style &s2);
+   friend bool operator==(Style &s1, Style &s2);
 
    std::string toXml();
    
@@ -142,6 +143,14 @@ struct Style_ptr_cmp
    bool operator()( Style* lhs, Style* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Style_ptr_equals
+{
+   bool operator()( Style* lhs, Style* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

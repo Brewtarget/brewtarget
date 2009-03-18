@@ -38,6 +38,7 @@ class Hop : public Observable
       Hop( const XmlNode *node );
 
       friend bool operator<( Hop &h1, Hop &h2 );
+      friend bool operator==( Hop &h1, Hop &h2 );
 
       std::string toXml();
       
@@ -137,6 +138,14 @@ struct Hop_ptr_cmp
    bool operator()( Hop* lhs, Hop* rhs)
    {
       return *lhs < *rhs;
+   }
+};
+
+struct Hop_ptr_equals
+{
+   bool operator()( Hop* lhs, Hop* rhs )
+   {
+      return *lhs == *rhs;
    }
 };
 

@@ -28,6 +28,11 @@ bool operator<(MashStep &m1, MashStep &m2)
    return m1.name < m2.name;
 }
 
+bool operator==(MashStep &m1, MashStep &m2)
+{
+   return m1.name == m2.name;
+}
+
 std::string MashStep::toXml()
 {
    std::string ret = "<MASH_STEP>\n";
