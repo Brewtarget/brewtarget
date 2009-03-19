@@ -1,0 +1,73 @@
+<html>
+<h1>Brewtarget 1.0b Manual</h1>
+
+<h2>Adding Ingredients to a Recipe</h2>
+<ol>
+	<li>Choose the appropriate tab in the main window (Fermentable, Hops,...).</li>
+	<li>Click the &quot;add&quot; button in the tab.</li>
+	<li>Select any column of the row of the ingredient you wish to add.</li>
+	<li>Click &quot;Add to Recipe&quot;.</li>
+</ol>
+
+<h2>Units</h2>
+	<p>
+	Brewtarget supports both metric and US customary units (sometimes incorrectly called English units or Imperial units).
+	To switch between these modes, go to tools->options, and check/uncheck the appropriate box.
+	It also supports a cool feature I call <b>auto-conversion</b>. For example, if you are in US mode, and you enter
+	&quot;0.50 gal&quot; into a text field, it will appear as &quot;2.000 qt&quot;. You may also enter units from the other
+	unit system if you like. However, if you enter an unsupported unit, Brewtarget will assume the quantity you entered
+	has the same units as the BeerXML entry for that field (which is in metric). For example, if you enter &quot;20 asdf&quot;
+	into a volume field while in US mode, you will see &quot;5.283 gal&quot; because Brewtarget assumed you meant &quot;20 L&quot;
+	and then converted to US units.
+	</p>
+	<h3>Caveats with Auto-conversion</h3>
+	<p>
+	With US units, people have a tendency to sometimes put a trailing &quot;s&quot; or a period at the end (hrs, hrs., etc.).
+	Brewtarget only supports singular no-period units. This will probably be a common error among users since the habit is
+	so ingrained. The reason for this lack of support for such spellings should be obvious...it would mean the program has
+	to guess what you mean. The units supported, and the exact unit abbreviation you should use are given below.
+	</p>
+	<h3>Supported Units</h3>
+		<h4>US Customary Units</h4>
+			<h5>Mass/Weight (BeerXML pretends they are the same)</h5>
+			<ul>
+				<li>Pounds - &quot;lb&quot;</li>
+				<li>Ounces - &quot;oz&quot;</li>
+			</ul>
+			<h5>Volume</h5>
+			<ul>
+				<li>Gallons - &quot;gal&quot;</li>
+				<li>Quarts - &quot;qt&quot;</li>
+				<li>Cups - &quot;cup&quot;</li>
+				<li>Tablespoon - &quot;tbsp&quot;</li>
+				<li>Teaspoon - &quot;tsp&quot;</li>
+			</ul>
+			<h5>Temperature</h5>
+			<ul>
+				<li>Fahrenheit - &quot;F&quot;</li>
+			</ul>
+		<h4>Metric Units</h4>
+			<h5>Mass/Weight (BeerXML pretends they are the same)</h5>
+			<ul>
+				<li>Kilograms - &quot;kg&quot;</li>
+				<li>Grams - &quot;g&quot;</li>
+				<li>Milligrams - &quot;mg&quot;</li>
+			</ul>
+			<h5>Volume</h5>
+			<ul>
+				<li>Liters - &quot;L&quot;</li>
+				<li>Milliliters - &quot;mL&quot;</li>
+			</ul>
+			<h5>Temperature</h5>
+			<ul>
+				<li>Celsius - &quot;C&quot;</li>
+				<li>Kelvin - &quot;K&quot;</li>
+			</ul>
+		<h4>Shared Units</h4>
+			<h5>Time</h5>
+			<ul>
+				<li>Hours - &quot;hr&quot;</li>
+				<li>Minutes - &quot;min&quot;</li>
+				<li>Seconds - &quot;s&quot;</li>
+			</ul>
+</html>

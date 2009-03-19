@@ -43,7 +43,7 @@ macx {
 
     # Install everything into an app bundle.
     data.path = brewtarget.app/Contents/Resources
-    data.files = *.xml
+    data.files = *.xml mac/BrewtargetIcon.icns
 
     doc.path = brewtarget.app/Contents/Resources/en.lproj
     doc.files = README COPYING
