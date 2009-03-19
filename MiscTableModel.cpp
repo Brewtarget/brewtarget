@@ -33,6 +33,7 @@
 #include "observable.h"
 #include "MiscTableModel.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 MiscTableModel::MiscTableModel(MiscTableWidget* parent)
    : QAbstractTableModel(parent), MultipleObserver()
@@ -137,11 +138,11 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    }
    else if( index.column() == MISCTIMECOL )
    {
-      return QVariant( row->getTime() );
+      return QVariant( Brewtarget::displayAmount(row->getTime(), Units::minutes) );
    }
    else if( index.column() == MISCAMOUNTCOL )
    {
-      return QVariant( row->getAmount() );
+      return QVariant( Brewtarget::displayAmount(row->getAmount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
    }
    else
    {
@@ -163,9 +164,9 @@ QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, i
          case MISCUSECOL:
             return QVariant("Use");
          case MISCTIMECOL:
-            return QVariant("Time (min)");
+            return QVariant("Time");
          case MISCAMOUNTCOL:
-            return QVariant("Amount (kg or L)");
+            return QVariant("Amount");
          default:
             return QVariant();
       }
@@ -174,13 +175,13 @@ QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, i
       return QVariant();
 }
 
-Qt::ItemFlags MiscTableModel::flags(const QModelIndex& index ) const
+Qt::ItemFlags MiscTableModel::flags(const QModelIndex& /*index*/ ) const
 {
    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
           Qt::ItemIsEnabled;
 }
 
-bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
+bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, int /*role*/ )
 {
    Misc *row;
    int col;

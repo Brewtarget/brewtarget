@@ -24,6 +24,7 @@
 #include "database.h"
 #include "config.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 FermentableEditor::FermentableEditor( QWidget* parent )
 {
@@ -104,20 +105,20 @@ void FermentableEditor::showChanges()
    tmp = comboBox_type->findText(obsFerm->getType().c_str());
    comboBox_type->setCurrentIndex(tmp);
 
-   lineEdit_amount->setText(QString::number(obsFerm->getAmount_kg()));
-   lineEdit_yield->setText(QString::number(obsFerm->getYield_pct()));
-   lineEdit_color->setText(QString::number(obsFerm->getColor_srm()));
+   lineEdit_amount->setText(Brewtarget::displayAmount(obsFerm->getAmount_kg(), Units::kilograms));
+   lineEdit_yield->setText(Brewtarget::displayAmount(obsFerm->getYield_pct(), 0));
+   lineEdit_color->setText(Brewtarget::displayAmount(obsFerm->getColor_srm(), 0));
    checkBox_addAfterBoil->setCheckState( obsFerm->getAddAfterBoil()? Qt::Checked : Qt::Unchecked );
    lineEdit_origin->setText(obsFerm->getOrigin().c_str());
    lineEdit_origin->setCursorPosition(0);
    lineEdit_supplier->setText(obsFerm->getSupplier().c_str());
    lineEdit_supplier->setCursorPosition(0);
-   lineEdit_coarseFineDiff->setText(QString::number(obsFerm->getCoarseFineDiff_pct()));
-   lineEdit_moisture->setText(QString::number(obsFerm->getMoisture_pct()));
-   lineEdit_diastaticPower->setText(QString::number(obsFerm->getDiastaticPower_lintner()));
-   lineEdit_protein->setText(QString::number(obsFerm->getProtein_pct()));
-   lineEdit_maxInBatch->setText(QString::number(obsFerm->getMaxInBatch_pct()));
+   lineEdit_coarseFineDiff->setText(Brewtarget::displayAmount(obsFerm->getCoarseFineDiff_pct(), 0));
+   lineEdit_moisture->setText(Brewtarget::displayAmount(obsFerm->getMoisture_pct(), 0));
+   lineEdit_diastaticPower->setText(Brewtarget::displayAmount(obsFerm->getDiastaticPower_lintner(), 0));
+   lineEdit_protein->setText(Brewtarget::displayAmount(obsFerm->getProtein_pct(), 0));
+   lineEdit_maxInBatch->setText(Brewtarget::displayAmount(obsFerm->getMaxInBatch_pct(), 0));
    checkBox_recommendMash->setCheckState( obsFerm->getRecommendMash()? Qt::Checked : Qt::Unchecked );
-   lineEdit_ibuGalPerLb->setText(QString::number(obsFerm->getIbuGalPerLb()));
+   lineEdit_ibuGalPerLb->setText(Brewtarget::displayAmount(obsFerm->getIbuGalPerLb(), 0));
    textEdit_notes->setPlainText( obsFerm->getNotes().c_str() );
 }

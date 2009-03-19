@@ -36,6 +36,7 @@
 #include "observable.h"
 #include "HopTableModel.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 HopTableModel::HopTableModel(HopTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -143,13 +144,13 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
       case HOPNAMECOL:
          return QVariant(row->getName().c_str());
       case HOPALPHACOL:
-         return QVariant(row->getAlpha_pct());
+         return QVariant( Brewtarget::displayAmount(row->getAlpha_pct(), 0) );
       case HOPAMOUNTCOL:
-         return QVariant(row->getAmount_kg());
+         return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
       case HOPUSECOL:
          return QVariant(row->getUse().c_str());
       case HOPTIMECOL:
-         return QVariant(row->getTime_min());
+         return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
       default :
          std::cerr << "Bad column: " << index.column() << std::endl;
          return QVariant();
@@ -167,11 +168,11 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
          case HOPALPHACOL:
             return QVariant("Alpha %");
          case HOPAMOUNTCOL:
-            return QVariant("Amount (kg)");
+            return QVariant("Amount");
          case HOPUSECOL:
             return QVariant("Use");
          case HOPTIMECOL:
-            return QVariant("Time (min)");
+            return QVariant("Time");
          default:
             std::cerr << "Bad column: " << section << std::endl;
             return QVariant();
@@ -207,9 +208,9 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          else
             return false;
       case HOPALPHACOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setAlpha_pct(value.toDouble());
+            row->setAlpha_pct( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

@@ -25,24 +25,28 @@
 std::map<std::string, Unit*> Unit::nameToUnit;
 bool Unit::isMapSetup = false;
 
-KilogramUnit kilograms;
-GramUnit grams;
-MilligramUnit milligrams;
-PoundUnit pounds;
-OunceUnit ounces;
-LiterUnit liters;
-MilliliterUnit milliliters;
-GallonUnit gallons;
-QuartUnit quarts;
-CupUnit cups;
-TablespoonUnit tablespoons;
-TeaspoonUnit teaspoons;
-SecondUnit seconds;
-MinuteUnit minutes;
-HourUnit hours;
-CelsiusUnit celsius;
-FahrenheitUnit fahrenheit;
-KelvinUnit kelvin;
+// === Mass ===
+KilogramUnit* Units::kilograms = new KilogramUnit();
+GramUnit* Units::grams = new GramUnit();
+MilligramUnit* Units::milligrams = new MilligramUnit();
+PoundUnit* Units::pounds = new PoundUnit();
+OunceUnit* Units::ounces = new OunceUnit();
+// === Volume ===
+LiterUnit* Units::liters = new LiterUnit();
+MilliliterUnit* Units::milliliters = new MilliliterUnit();
+GallonUnit* Units::gallons = new GallonUnit();
+QuartUnit* Units::quarts = new QuartUnit();
+CupUnit* Units::cups = new CupUnit();
+TablespoonUnit* Units::tablespoons = new TablespoonUnit();
+TeaspoonUnit* Units::teaspoons = new TeaspoonUnit();
+// === Time ===
+SecondUnit* Units::seconds = new SecondUnit();
+MinuteUnit* Units::minutes = new MinuteUnit();
+HourUnit* Units::hours = new HourUnit();
+// === Temperature ===
+CelsiusUnit* Units::celsius = new CelsiusUnit();
+FahrenheitUnit* Units::fahrenheit = new FahrenheitUnit();
+KelvinUnit* Units::kelvin = new KelvinUnit();
 
 double Unit::convert( double amount, const std::string& fromUnit, const std::string& toUnit )
 {
@@ -110,24 +114,24 @@ double Unit::qstringToSI( QString qstr )
 
 void Unit::setupMap()
 {
-   Unit::nameToUnit[kilograms.getUnitName()] = &kilograms;
-   Unit::nameToUnit[grams.getUnitName()] = &grams;
-   Unit::nameToUnit[milligrams.getUnitName()] = &milligrams;
-   Unit::nameToUnit[pounds.getUnitName()] = &pounds;
-   Unit::nameToUnit[ounces.getUnitName()] = &ounces;
-   Unit::nameToUnit[liters.getUnitName()] = &liters;
-   Unit::nameToUnit[milliliters.getUnitName()] = &milliliters;
-   Unit::nameToUnit[gallons.getUnitName()] = &gallons;
-   Unit::nameToUnit[quarts.getUnitName()] = &quarts;
-   Unit::nameToUnit[cups.getUnitName()] = &cups;
-   Unit::nameToUnit[tablespoons.getUnitName()] = &tablespoons;
-   Unit::nameToUnit[teaspoons.getUnitName()] = &teaspoons;
-   Unit::nameToUnit[seconds.getUnitName()] = &seconds;
-   Unit::nameToUnit[minutes.getUnitName()] = &minutes;
-   Unit::nameToUnit[hours.getUnitName()] = &hours;
-   Unit::nameToUnit[celsius.getUnitName()] = &celsius;
-   Unit::nameToUnit[kelvin.getUnitName()] = &kelvin;
-   Unit::nameToUnit[fahrenheit.getUnitName()] = &fahrenheit;
+   Unit::nameToUnit[Units::kilograms->getUnitName()] = Units::kilograms;
+   Unit::nameToUnit[Units::grams->getUnitName()] = Units::grams;
+   Unit::nameToUnit[Units::milligrams->getUnitName()] = Units::milligrams;
+   Unit::nameToUnit[Units::pounds->getUnitName()] = Units::pounds;
+   Unit::nameToUnit[Units::ounces->getUnitName()] = Units::ounces;
+   Unit::nameToUnit[Units::liters->getUnitName()] = Units::liters;
+   Unit::nameToUnit[Units::milliliters->getUnitName()] = Units::milliliters;
+   Unit::nameToUnit[Units::gallons->getUnitName()] = Units::gallons;
+   Unit::nameToUnit[Units::quarts->getUnitName()] = Units::quarts;
+   Unit::nameToUnit[Units::cups->getUnitName()] = Units::cups;
+   Unit::nameToUnit[Units::tablespoons->getUnitName()] = Units::tablespoons;
+   Unit::nameToUnit[Units::teaspoons->getUnitName()] = Units::teaspoons;
+   Unit::nameToUnit[Units::seconds->getUnitName()] = Units::seconds;
+   Unit::nameToUnit[Units::minutes->getUnitName()] = Units::minutes;
+   Unit::nameToUnit[Units::hours->getUnitName()] = Units::hours;
+   Unit::nameToUnit[Units::celsius->getUnitName()] = Units::celsius;
+   Unit::nameToUnit[Units::kelvin->getUnitName()] = Units::kelvin;
+   Unit::nameToUnit[Units::fahrenheit->getUnitName()] = Units::fahrenheit;
 
    Unit::isMapSetup = true;
 }

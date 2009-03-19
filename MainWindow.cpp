@@ -22,6 +22,8 @@
 #include <QToolButton>
 #include <QSize>
 
+#include "brewtarget.h"
+
 #include "FermentableEditor.h"
 #include "MiscEditor.h"
 #include "HopEditor.h"
@@ -342,9 +344,10 @@ void MainWindow::showChanges()
 
    lineEdit_name->setText(recipeObs->getName().c_str());
    lineEdit_name->setCursorPosition(0);
-   lineEdit_batchSize->setText(doubleToString(recipeObs->getBatchSize_l()).c_str());
-   lineEdit_boilSize->setText(doubleToString(recipeObs->getBoilSize_l()).c_str());
-   lineEdit_efficiency->setText(doubleToString(recipeObs->getEfficiency_pct()).c_str());
+   //lineEdit_batchSize->setText(doubleToString(recipeObs->getBatchSize_l()).c_str());
+   lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->getBatchSize_l(), Units::liters) );
+   lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->getBoilSize_l(), Units::liters) );
+   lineEdit_efficiency->setText( Brewtarget::displayAmount(recipeObs->getEfficiency_pct(), 0) );
    
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());

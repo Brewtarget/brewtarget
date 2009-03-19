@@ -20,6 +20,7 @@
 #define _UNIT_H
 
 class Unit;
+class Units; // A container of instances.
 class KilogramUnit;
 class GramUnit;
 class MilligramUnit;
@@ -56,8 +57,8 @@ class Unit
       virtual const std::string& getSIUnitName() const { return 0; };
 
       static double convert( double amount, const std::string& fromUnit, const std::string& toUnit );
-      //static double stringToSI( std::string input );
       static double qstringToSI( QString qstr );
+
    private:
       static std::map<std::string, Unit*> nameToUnit;
       static bool isMapSetup;
@@ -355,6 +356,35 @@ class FahrenheitUnit : public Unit
    private:
       std::string unitName;
       std::string SIUnitName;
+};
+
+class Units
+{
+public:
+   Units();
+
+   // === Mass ===
+   static KilogramUnit *kilograms;
+   static GramUnit *grams;
+   static MilligramUnit *milligrams;
+   static PoundUnit *pounds;
+   static OunceUnit *ounces;
+   // === Volume ===
+   static LiterUnit *liters;
+   static MilliliterUnit *milliliters;
+   static GallonUnit *gallons;
+   static QuartUnit *quarts;
+   static CupUnit *cups;
+   static TablespoonUnit *tablespoons;
+   static TeaspoonUnit *teaspoons;
+   // === Time ===
+   static SecondUnit *seconds;
+   static MinuteUnit *minutes;
+   static HourUnit *hours;
+   // === Temperature ===
+   static CelsiusUnit *celsius;
+   static FahrenheitUnit *fahrenheit;
+   static KelvinUnit *kelvin;
 };
 
 #endif // _UNIT_H

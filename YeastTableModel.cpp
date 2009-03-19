@@ -34,6 +34,7 @@
 #include "observable.h"
 #include "YeastTableModel.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 YeastTableModel::YeastTableModel(YeastTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -145,7 +146,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
       case YEASTFORMCOL:
          return QVariant(row->getForm().c_str());
       case YEASTAMOUNTCOL:
-         return QVariant(row->getAmount());
+         return QVariant( Brewtarget::displayAmount(row->getAmount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
       default :
          std::cerr << "Bad column: " << index.column() << std::endl;
          return QVariant();
@@ -165,7 +166,7 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
          case YEASTFORMCOL:
             return QVariant("Form");
          case YEASTAMOUNTCOL:
-            return QVariant("Amount (kg or l)");
+            return QVariant("Amount");
          default:
             std::cerr << "Bad column: " << section << std::endl;
             return QVariant();

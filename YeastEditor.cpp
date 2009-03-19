@@ -24,6 +24,7 @@
 #include "database.h"
 #include "config.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 YeastEditor::YeastEditor( QWidget* /*parent*/ )
 {
@@ -111,19 +112,19 @@ void YeastEditor::showChanges()
    comboBox_type->setCurrentIndex(tmp);
    tmp = comboBox_form->findText(y->getForm().c_str());
    comboBox_form->setCurrentIndex(tmp);
-   lineEdit_amount->setText( QString::number(y->getAmount()) );
+   lineEdit_amount->setText( Brewtarget::displayAmount(y->getAmount(), (y->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
    checkBox_amountIsWeight->setCheckState( (y->getAmountIsWeight())? Qt::Checked : Qt::Unchecked );
    lineEdit_laboratory->setText(y->getLaboratory().c_str());
    lineEdit_laboratory->setCursorPosition(0);
    lineEdit_productID->setText(y->getProductID().c_str());
    lineEdit_productID->setCursorPosition(0);
-   lineEdit_minTemperature->setText(QString::number(y->getMinTemperature_c()));
-   lineEdit_maxTemperature->setText(QString::number(y->getMaxTemperature_c()));
+   lineEdit_minTemperature->setText(Brewtarget::displayAmount(y->getMinTemperature_c(), Units::celsius));
+   lineEdit_maxTemperature->setText(Brewtarget::displayAmount(y->getMaxTemperature_c(), Units::celsius));
    tmp = comboBox_flocculation->findText(y->getFlocculation().c_str());
    comboBox_flocculation->setCurrentIndex(tmp);
-   lineEdit_attenuation->setText( QString::number(y->getAttenuation_pct()));
+   lineEdit_attenuation->setText( Brewtarget::displayAmount(y->getAttenuation_pct(), 0));
    lineEdit_timesCultured->setText(QString::number(y->getTimesCultured()));
-   lineEdit_maxReuse->setText(QString::number(y->getMaxReuse()));
+   lineEdit_maxReuse->setText(QString::number(y->getMaxReuse(), 0));
    checkBox_addToSecondary->setCheckState( (y->getAddToSecondary())? Qt::Checked : Qt::Unchecked );
 
    textEdit_bestFor->setPlainText(y->getBestFor().c_str());

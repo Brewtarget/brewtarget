@@ -27,8 +27,9 @@
 #include "database.h"
 #include "config.h"
 #include "unit.h"
+#include "brewtarget.h"
 
-MiscEditor::MiscEditor( QWidget* parent )
+MiscEditor::MiscEditor( QWidget* /*parent*/ )
 {
    setupUi(this);
 
@@ -106,8 +107,8 @@ void MiscEditor::showChanges()
    comboBox_type->setCurrentIndex(tmp);
    tmp = comboBox_use->findText(obsMisc->getUse().c_str());
    comboBox_use->setCurrentIndex(tmp);
-   lineEdit_time->setText(QString::number(obsMisc->getTime()));
-   lineEdit_amount->setText(QString::number(obsMisc->getAmount()));
+   lineEdit_time->setText(Brewtarget::displayAmount(obsMisc->getTime(), Units::minutes));
+   lineEdit_amount->setText(Brewtarget::displayAmount(obsMisc->getAmount(), (obsMisc->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
    checkBox_isWeight->setCheckState( obsMisc->getAmountIsWeight()? Qt::Checked : Qt::Unchecked );
    textEdit_useFor->setPlainText( obsMisc->getUseFor().c_str() );
    textEdit_notes->setPlainText( obsMisc->getNotes().c_str() );

@@ -27,6 +27,7 @@
 #include "stringparsing.h"
 #include "config.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 StyleEditor::StyleEditor(QWidget* parent)
         : QDialog(parent)
@@ -130,18 +131,18 @@ void StyleEditor::showChanges()
    lineEdit_styleLetter->setText(s->getStyleLetter().c_str());
    lineEdit_styleGuide->setText(s->getStyleGuide().c_str());
    comboBox_type->setCurrentIndex(comboBox_type->findText(s->getType().c_str(), Qt::MatchExactly));
-   lineEdit_ogMin->setText(doubleToString(s->getOgMin()).c_str());
-   lineEdit_ogMax->setText(doubleToString(s->getOgMax()).c_str());
-   lineEdit_fgMin->setText(doubleToString(s->getFgMin()).c_str());
-   lineEdit_fgMax->setText(doubleToString(s->getFgMax()).c_str());
-   lineEdit_ibuMin->setText(doubleToString(s->getIbuMin()).c_str());
-   lineEdit_ibuMax->setText(doubleToString(s->getIbuMax()).c_str());
-   lineEdit_colorMin->setText(doubleToString(s->getColorMin_srm()).c_str());
-   lineEdit_colorMax->setText(doubleToString(s->getColorMax_srm()).c_str());
-   lineEdit_carbMin->setText(doubleToString(s->getCarbMin_vol()).c_str());
-   lineEdit_carbMax->setText(doubleToString(s->getCarbMax_vol()).c_str());
-   lineEdit_abvMin->setText(doubleToString(s->getAbvMin_pct()).c_str());
-   lineEdit_abvMax->setText(doubleToString(s->getAbvMax_pct()).c_str());
+   lineEdit_ogMin->setText(Brewtarget::displayAmount(s->getOgMin(), 0));
+   lineEdit_ogMax->setText(Brewtarget::displayAmount(s->getOgMax(), 0));
+   lineEdit_fgMin->setText(Brewtarget::displayAmount(s->getFgMin(), 0));
+   lineEdit_fgMax->setText(Brewtarget::displayAmount(s->getFgMax(), 0));
+   lineEdit_ibuMin->setText(Brewtarget::displayAmount(s->getIbuMin(), 0));
+   lineEdit_ibuMax->setText(Brewtarget::displayAmount(s->getIbuMax(), 0));
+   lineEdit_colorMin->setText(Brewtarget::displayAmount(s->getColorMin_srm(), 0));
+   lineEdit_colorMax->setText(Brewtarget::displayAmount(s->getColorMax_srm(), 0));
+   lineEdit_carbMin->setText(Brewtarget::displayAmount(s->getCarbMin_vol(), 0));
+   lineEdit_carbMax->setText(Brewtarget::displayAmount(s->getCarbMax_vol(), 0));
+   lineEdit_abvMin->setText(Brewtarget::displayAmount(s->getAbvMin_pct(), 0));
+   lineEdit_abvMax->setText(Brewtarget::displayAmount(s->getAbvMax_pct(), 0));
    textEdit_profile->setText(s->getProfile().c_str());
    textEdit_ingredients->setText(s->getIngredients().c_str());
    textEdit_examples->setText(s->getExamples().c_str());

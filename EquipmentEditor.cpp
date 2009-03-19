@@ -27,6 +27,7 @@
 #include "stringparsing.h"
 #include "config.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent)
         : QDialog(parent)
@@ -123,22 +124,22 @@ void EquipmentEditor::showChanges()
 
    lineEdit_name->setText(e->getName().c_str());
    lineEdit_name->setCursorPosition(0);
-   lineEdit_boilSize->setText(doubleToString(e->getBoilSize_l()).c_str());
+   lineEdit_boilSize->setText( Brewtarget::displayAmount(e->getBoilSize_l(), Units::liters) );
    checkBox_calcBoilVolume->setCheckState( (e->getCalcBoilVolume())? Qt::Checked : Qt::Unchecked );
-   lineEdit_batchSize->setText(doubleToString(e->getBatchSize_l()).c_str());
+   lineEdit_batchSize->setText( Brewtarget::displayAmount(e->getBatchSize_l(), Units::liters) );
 
-   lineEdit_tunVolume->setText(doubleToString(e->getTunVolume_l()).c_str());
-   lineEdit_tunWeight->setText(doubleToString(e->getTunWeight_kg()).c_str());
-   lineEdit_tunSpecificHeat->setText(doubleToString(e->getTunSpecificHeat_calGC()).c_str());
+   lineEdit_tunVolume->setText( Brewtarget::displayAmount(e->getTunVolume_l(), Units::liters) );
+   lineEdit_tunWeight->setText(Brewtarget::displayAmount(e->getTunWeight_kg(), Units::kilograms));
+   lineEdit_tunSpecificHeat->setText(Brewtarget::displayAmount(e->getTunSpecificHeat_calGC(), 0) );
 
-   lineEdit_boilTime->setText(doubleToString(e->getBoilTime_min()).c_str());
-   lineEdit_evaporationRate->setText(doubleToString(e->getEvapRate_pctHr()).c_str());
-   lineEdit_topUpKettle->setText(doubleToString(e->getTopUpKettle_l()).c_str());
-   lineEdit_topUpWater->setText(doubleToString(e->getTopUpWater_l()).c_str());
-   lineEdit_hopUtilization->setText(doubleToString(e->getHopUtilization_pct()).c_str());
+   lineEdit_boilTime->setText(Brewtarget::displayAmount(e->getBoilTime_min(), Units::minutes) );
+   lineEdit_evaporationRate->setText(Brewtarget::displayAmount(e->getEvapRate_pctHr(), 0) );
+   lineEdit_topUpKettle->setText(Brewtarget::displayAmount(e->getTopUpKettle_l(), Units::liters) );
+   lineEdit_topUpWater->setText(Brewtarget::displayAmount(e->getTopUpWater_l(), Units::liters) );
+   lineEdit_hopUtilization->setText(Brewtarget::displayAmount(e->getHopUtilization_pct(), 0) );
 
-   lineEdit_trubChillerLoss->setText(doubleToString(e->getTrubChillerLoss_l()).c_str());
-   lineEdit_lauterDeadspace->setText(doubleToString(e->getLauterDeadspace_l()).c_str());
+   lineEdit_trubChillerLoss->setText(Brewtarget::displayAmount(e->getTrubChillerLoss_l(), Units::liters) );
+   lineEdit_lauterDeadspace->setText(Brewtarget::displayAmount(e->getLauterDeadspace_l(), Units::liters) );
 
    textEdit_notes->setText(e->getNotes().c_str());
 }

@@ -31,6 +31,7 @@
 #include "observable.h"
 #include "MashStepTableModel.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 MashStepTableModel::MashStepTableModel(MashStepTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -140,11 +141,11 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       case MASHSTEPTYPECOL:
          return QVariant(row->getType().c_str());
       case MASHSTEPAMOUNTCOL:
-         return QVariant(row->getInfuseAmount_l());
+         return QVariant( Brewtarget::displayAmount(row->getInfuseAmount_l(), Units::liters) );
       case MASHSTEPTEMPCOL:
-         return QVariant(row->getStepTemp_c());
+         return QVariant( Brewtarget::displayAmount(row->getStepTemp_c(), Units::celsius) );
       case MASHSTEPTIMECOL:
-         return QVariant(row->getStepTime_min());
+         return QVariant( Brewtarget::displayAmount(row->getStepTime_min(), Units::minutes) );
       default :
          std::cerr << "Bad column: " << index.column() << std::endl;
          return QVariant();
@@ -162,11 +163,11 @@ QVariant MashStepTableModel::headerData( int section, Qt::Orientation orientatio
          case MASHSTEPTYPECOL:
             return QVariant("Type");
          case MASHSTEPAMOUNTCOL:
-            return QVariant("Amount (l)");
+            return QVariant("Amount");
          case MASHSTEPTEMPCOL:
-            return QVariant("Temp (C)");
+            return QVariant("Temp");
          case MASHSTEPTIMECOL:
-            return QVariant("Time (min)");
+            return QVariant("Time");
          default:
             std::cerr << "Bad column: " << section << std::endl;
             return QVariant();

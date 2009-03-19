@@ -25,6 +25,7 @@ class Brewtarget;
 #include <QString>
 #include <string>
 #include "MainWindow.h"
+#include "unit.h"
 
 class Brewtarget
 {
@@ -38,10 +39,13 @@ public:
    static QString getDataDir();
    static int run();
    static void log( LogType lt, std::string message );
+   static QString displayAmount( double amount, Unit* units );
 
 private:
    static QApplication* app;
    static MainWindow* mainWindow;
+
+   static bool englishUnits;
 };
 
 #endif	/* _BREWTARGET_H */

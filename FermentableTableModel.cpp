@@ -22,6 +22,8 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
+
+#include "brewtarget.h"
 #include <Qt>
 #include <QSize>
 #include <QComboBox>
@@ -151,11 +153,11 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
       case FERMTYPECOL:
          return QVariant(row->getType().c_str());
       case FERMAMOUNTCOL:
-         return QVariant(row->getAmount_kg());
+         return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
       case FERMYIELDCOL:
-         return QVariant(row->getYield_pct());
+         return QVariant( Brewtarget::displayAmount(row->getYield_pct(), 0) );
       case FERMCOLORCOL:
-         return QVariant(row->getColor_srm());
+         return QVariant( Brewtarget::displayAmount(row->getColor_srm(), 0) );
       default :
          std::cerr << "Bad column: " << index.column() << std::endl;
          return QVariant();
@@ -173,7 +175,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
          case FERMTYPECOL:
             return QVariant("Type");
          case FERMAMOUNTCOL:
-            return QVariant("Amount (kg)");
+            return QVariant("Amount");
          case FERMYIELDCOL:
             return QVariant("Yield %");
          case FERMCOLORCOL:
@@ -229,9 +231,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       case FERMYIELDCOL:
-         if( value.canConvert(QVariant::Double) )
+         if( value.canConvert(QVariant::String) )
          {
-            row->setYield_pct(value.toDouble());
+            row->setYield_pct( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

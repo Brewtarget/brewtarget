@@ -33,6 +33,7 @@
 #include "WaterTableModel.h"
 #include "water.h"
 #include "unit.h"
+#include "brewtarget.h"
 
 WaterTableModel::WaterTableModel(WaterTableWidget* parent)
 : QAbstractTableModel(parent), MultipleObserver()
@@ -140,19 +141,19 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
       case WATERNAMECOL:
          return QVariant(row->getName().c_str());
       case WATERAMOUNTCOL:
-         return QVariant(row->getAmount_l());
+         return QVariant( Brewtarget::displayAmount(row->getAmount_l(), Units::liters) );
       case WATERCALCIUMCOL:
-         return QVariant(row->getCalcium_ppm());
+         return QVariant( Brewtarget::displayAmount(row->getCalcium_ppm(), 0) );
       case WATERBICARBONATECOL:
-         return QVariant(row->getBicarbonate_ppm());
+         return QVariant( Brewtarget::displayAmount(row->getBicarbonate_ppm(), 0) );
       case WATERSULFATECOL:
-         return QVariant(row->getSulfate_ppm());
+         return QVariant( Brewtarget::displayAmount(row->getSulfate_ppm(), 0) );
       case WATERCHLORIDECOL:
-         return QVariant(row->getChloride_ppm());
+         return QVariant( Brewtarget::displayAmount(row->getChloride_ppm(), 0) );
       case WATERSODIUMCOL:
-         return QVariant(row->getSodium_ppm());
+         return QVariant( Brewtarget::displayAmount(row->getSodium_ppm(), 0) );
       case WATERMAGNESIUMCOL:
-         return QVariant(row->getMagnesium_ppm());
+         return QVariant( Brewtarget::displayAmount(row->getMagnesium_ppm(), 0) );
       default :
          std::cerr << "Bad column: " << index.column() << std::endl;
          return QVariant();
@@ -168,7 +169,7 @@ QVariant WaterTableModel::headerData( int section, Qt::Orientation orientation, 
          case WATERNAMECOL:
             return QVariant("Name");
          case WATERAMOUNTCOL:
-            return QVariant("Amount (l)");
+            return QVariant("Amount");
          case WATERCALCIUMCOL:
             return QVariant("Calcium (ppm)");
          case WATERBICARBONATECOL:

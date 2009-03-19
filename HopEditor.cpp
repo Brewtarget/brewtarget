@@ -25,8 +25,9 @@
 #include "database.h"
 #include "config.h"
 #include "unit.h"
+#include "brewtarget.h"
 
-HopEditor::HopEditor( QWidget* parent )
+HopEditor::HopEditor( QWidget* /*parent*/ )
 {
    setupUi(this);
 
@@ -109,23 +110,23 @@ void HopEditor::showChanges()
 
    lineEdit_name->setText(h->getName().c_str());
    lineEdit_name->setCursorPosition(0);
-   lineEdit_alpha->setText(QString::number(h->getAlpha_pct()));
-   lineEdit_amount->setText(QString::number(h->getAmount_kg()));
+   lineEdit_alpha->setText(Brewtarget::displayAmount(h->getAlpha_pct(), 0));
+   lineEdit_amount->setText(Brewtarget::displayAmount(h->getAmount_kg(), Units::kilograms));
    tmp = comboBox_use->findText(h->getUse().c_str());
    comboBox_use->setCurrentIndex(tmp);
-   lineEdit_time->setText(QString::number(h->getTime_min()));
+   lineEdit_time->setText(Brewtarget::displayAmount(h->getTime_min(), Units::minutes));
    tmp = comboBox_type->findText(h->getType().c_str());
    comboBox_type->setCurrentIndex(tmp);
    tmp = comboBox_form->findText(h->getForm().c_str());
    comboBox_form->setCurrentIndex(tmp);
-   lineEdit_beta->setText(QString::number(h->getBeta_pct()));
-   lineEdit_HSI->setText(QString::number(h->getHsi_pct()));
+   lineEdit_beta->setText(Brewtarget::displayAmount(h->getBeta_pct(), 0));
+   lineEdit_HSI->setText(Brewtarget::displayAmount(h->getHsi_pct(), 0));
    lineEdit_origin->setText(h->getOrigin().c_str());
    lineEdit_origin->setCursorPosition(0);
-   lineEdit_humulene->setText(QString::number(h->getHumulene_pct()));
-   lineEdit_caryophyllene->setText(QString::number(h->getCaryophyllene_pct()));
-   lineEdit_cohumulone->setText(QString::number(h->getCohumulone_pct()));
-   lineEdit_myrcene->setText(QString::number(h->getMyrcene_pct()));
+   lineEdit_humulene->setText(Brewtarget::displayAmount(h->getHumulene_pct(), 0));
+   lineEdit_caryophyllene->setText(Brewtarget::displayAmount(h->getCaryophyllene_pct(), 0));
+   lineEdit_cohumulone->setText(Brewtarget::displayAmount(h->getCohumulone_pct(), 0));
+   lineEdit_myrcene->setText(Brewtarget::displayAmount(h->getMyrcene_pct(), 0));
    textEdit_substitutes->setPlainText(h->getSubstitutes().c_str());
    textEdit_notes->setPlainText(h->getNotes().c_str());
 }
