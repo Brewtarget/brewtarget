@@ -49,11 +49,8 @@ void HopDialog::notify(Observable *notifier)
    if( notifier != dbObs )
       return;
 
-   if( numHops != dbObs->getNumHops() )
-   {
-      hopTableWidget->getModel()->removeAll();
-      populateTable();
-   }
+   hopTableWidget->getModel()->removeAll();
+   populateTable();
 }
 
 void HopDialog::startObservingDB()
@@ -131,7 +128,7 @@ void HopDialog::newHop()
    std::string stdname = name.toStdString();
    hop->setName(stdname);
 
-   Database::getDatabase()->addHop(hop);
+   dbObs->addHop(hop);
    hopEditor->setHop(hop);
    hopEditor->show();
 }

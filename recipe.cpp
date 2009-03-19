@@ -1017,6 +1017,8 @@ void Recipe::recalculate()
    unsigned int i;
    double points = 0;
    double sugar_kg = 0;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   std::string fermtype;
    double attenuation_pct = 0.0;
    Fermentable* ferm;
    Yeast* yeast;
@@ -1025,11 +1027,18 @@ void Recipe::recalculate()
    for( i = 0; i < fermentables.size(); ++i )
    {
       ferm = fermentables[i];
-      sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+
+      // If we have some sort of non-grain, we have to ignore efficiency.
+      fermtype = ferm->getType();
+      if( fermtype.compare("Sugar") == 0 || fermtype.compare("Extract") == 0 || fermtype.compare("Dry Extract") == 0 )
+         sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+      else
+         sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
    }
 
    // Conversion factor for lb/gal to kg/l = 8.34538.
    points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
+   points += 383.89 * sugar_kg_ignoreEfficiency / getBatchSize_l();
    og = 1 + points/1000.0;
 
    // Calculage FG
@@ -1179,18 +1188,32 @@ double Recipe::getWortGrav()
    unsigned int i;
    Fermentable* ferm;
    double sugar_kg = 0.0;
+   double sugar_kg_ignoreEfficiency = 0.0;
    double points = 0.0;
+   std::string type;
 
    // Calculate OG
    for( i = 0; i < fermentables.size(); ++i )
    {
       ferm = fermentables[i];
-      if( ! ferm->getAddAfterBoil() )
+      if( ferm->getAddAfterBoil() )
+         continue;
+
+      // If we have some sort of non-grain, we have to ignore efficiency.
+      type = ferm->getType();
+      if( type.compare("Sugar") == 0 || type.compare("Extract") == 0 || type.compare("Dry Extract") == 0 )
+         sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+      else
          sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
    }
 
    // Conversion factor for lb/gal to kg/l = 8.34538.
+   /*
    points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
+   points += 383.89 * sugar_kg_ignoreEfficiency / getBatchSize_l();
+    */
+   points = (383.89 * sugar_kg / getBoilSize_l()) * getEfficiency_pct()/100.0;
+   points += 383.89 * sugar_kg_ignoreEfficiency / getBoilSize_l();
    return (1.0 + points/1000.0);
 }
 

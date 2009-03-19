@@ -1,5 +1,24 @@
 <html>
+<head>
+	<title>Brewtarget 1.0b Manual</title>
+</head>
+<body>
+
 <h1>Brewtarget 1.0b Manual</h1>
+
+<h2>Notes</h2>
+<p>
+Be aware that this is a beta version. You may experience crashing or weird behavior, so
+please press "save" often.
+</p>
+
+<h2>General Concepts</h2>
+<p>
+Brewtarget maintains an internal BeerXML database of recipes, ingredients, etc. At program startup,
+it reads these files into memory, and all the editing you do occurs in memory until such time that
+you decide to press "save" on the main window. At this point, all your changes will be committed to
+the BeerXML database on disk.
+</p>
 
 <h2>Adding Ingredients to a Recipe</h2>
 <ol>
@@ -8,6 +27,19 @@
 	<li>Select any column of the row of the ingredient you wish to add.</li>
 	<li>Click &quot;Add to Recipe&quot;.</li>
 </ol>
+
+<h2>Importing Recipes</h2>
+<p>
+You can import other BeerXML recipes (such as, from Beersmith) by using File->Import Recipes.
+However, you need to be aware that Beersmith does not strictly adhere to XML standards or even
+BeerXML, so you may have some trouble importing recipes from time to time. Brewtarget tries
+to maintain strict compatability with both.
+</p>
+
+<h2>Exporting Recipes</h2>
+<p>
+I bet you can figure this one out.
+</p>
 
 <h2>Units</h2>
 	<p>
@@ -70,4 +102,16 @@
 				<li>Minutes - &quot;min&quot;</li>
 				<li>Seconds - &quot;s&quot;</li>
 			</ul>
+
+<h2>Planned Features</h2>
+<ul>
+	<li>Cool things for style checking.</li>
+	<li>Mash calculations.</li>
+	<li>Water salts calculations.</li>
+	<li>Automatic formulation of recipes given certain constraints.</li>
+	<li>Step-by-step instructions for brew day.</li>
+	<li>Post-brew analysis.</li>
+</ul>
+
+</body>
 </html>

@@ -27,7 +27,7 @@ unix:!macx {
    doc.path = /usr/local/share/doc/brewtarget
    
    data.files = *.xml
-   doc.files = README COPYING
+   doc.files = README COPYING doc/manual/*
    INSTALLS += target data doc
 }
 
@@ -46,7 +46,7 @@ macx {
     data.files = *.xml mac/BrewtargetIcon.icns
 
     doc.path = brewtarget.app/Contents/Resources/en.lproj
-    doc.files = README COPYING
+    doc.files = README COPYING doc/manual/*
 
     misc.path = brewtarget.app/Contents
     misc.files = mac/Info.plist mac/PkgInfo
@@ -65,7 +65,7 @@ win32 {
     data.files = *.xml README COPYING
 
     doc.path = release/doc
-    doc.files = README COPYING
+    doc.files = README COPYING doc/manual/*
 
     INSTALLS += target data doc 
 }

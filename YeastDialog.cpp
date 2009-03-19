@@ -49,11 +49,9 @@ void YeastDialog::notify(Observable *notifier)
    if( notifier != dbObs )
       return;
 
-   if( numYeasts != dbObs->getNumYeasts() )
-   {
-      yeastTableWidget->getModel()->removeAll();
-      populateTable();
-   }
+   yeastTableWidget->getModel()->removeAll();
+   populateTable();
+
 }
 
 void YeastDialog::startObservingDB()
@@ -130,7 +128,7 @@ void YeastDialog::newYeast()
    std::string stdname = name.toStdString();
    y->setName(stdname);
 
-   Database::getDatabase()->addYeast(y);
+   dbObs->addYeast(y);
    yeastEditor->setYeast(y);
    yeastEditor->show();
 }

@@ -70,11 +70,8 @@ void FermentableDialog::notify(Observable *notifier)
    if( notifier != dbObs )
       return;
 
-   if( numFerms != dbObs->getNumFermentables() )
-   {
-      fermentableTableWidget->getModel()->removeAll();
-      populateTable();
-   }
+   fermentableTableWidget->getModel()->removeAll();
+   populateTable();
 }
 
 void FermentableDialog::startObservingDB()
@@ -129,7 +126,7 @@ void FermentableDialog::newFermentable()
    std::string stdname = name.toStdString();
    ferm->setName(stdname);
 
-   Database::getDatabase()->addFermentable(ferm);
+   dbObs->addFermentable(ferm);
    fermEdit->setFermentable(ferm);
    fermEdit->show();
 }

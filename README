@@ -1,13 +1,11 @@
+NOTE: you must have perl installed to run the configure script.
+
 ==Making==
-rm brewtarget
-qmake brewtarget.pro
+./configure
 make
 
 ==Installing==
-mv brewtarget *.xml /dir/of/your/choice
-
-==Running==
-./brewtarget
+make install
 
 ==Definitions==
 "unix" must be defined before compiling on unix-like systems.

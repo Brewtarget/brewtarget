@@ -190,7 +190,7 @@ Fermentable::Fermentable( const XmlNode* node )
 void Fermentable::setDefaults()
 {
    name = "";
-   type = "";
+   type = "Grain";
    amount_kg = 0.0;
    yield_pct = 0.0;
    color_srm = 0.0;

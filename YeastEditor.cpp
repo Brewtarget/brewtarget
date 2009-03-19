@@ -121,7 +121,7 @@ void YeastEditor::showChanges()
    lineEdit_minTemperature->setText(Brewtarget::displayAmount(y->getMinTemperature_c(), Units::celsius));
    lineEdit_maxTemperature->setText(Brewtarget::displayAmount(y->getMaxTemperature_c(), Units::celsius));
    tmp = comboBox_flocculation->findText(y->getFlocculation().c_str());
-   comboBox_flocculation->setCurrentIndex(tmp);
+   comboBox_flocculation->setCurrentIndex( (tmp==-1)? 0 : tmp );
    lineEdit_attenuation->setText( Brewtarget::displayAmount(y->getAttenuation_pct(), 0));
    lineEdit_timesCultured->setText(QString::number(y->getTimesCultured()));
    lineEdit_maxReuse->setText(QString::number(y->getMaxReuse(), 0));

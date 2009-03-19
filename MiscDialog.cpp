@@ -49,11 +49,8 @@ void MiscDialog::notify(Observable *notifier)
    if( notifier != dbObs )
       return;
 
-   if( numMiscs != dbObs->getNumMiscs() )
-   {
-      miscTableWidget->getModel()->removeAll();
-      populateTable();
-   }
+   miscTableWidget->getModel()->removeAll();
+   populateTable();
 }
 
 void MiscDialog::startObservingDB()
@@ -130,7 +127,7 @@ void MiscDialog::newMisc()
    std::string stdname = name.toStdString();
    m->setName(stdname);
 
-   Database::getDatabase()->addMisc(m);
+   dbObs->addMisc(m);
    miscEdit->setMisc(m);
    miscEdit->show();
 }

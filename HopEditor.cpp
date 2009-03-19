@@ -116,9 +116,9 @@ void HopEditor::showChanges()
    comboBox_use->setCurrentIndex(tmp);
    lineEdit_time->setText(Brewtarget::displayAmount(h->getTime_min(), Units::minutes));
    tmp = comboBox_type->findText(h->getType().c_str());
-   comboBox_type->setCurrentIndex(tmp);
+   comboBox_type->setCurrentIndex( (tmp == -1)? 0 : tmp );
    tmp = comboBox_form->findText(h->getForm().c_str());
-   comboBox_form->setCurrentIndex(tmp);
+   comboBox_form->setCurrentIndex((tmp == -1)? 0 : tmp);
    lineEdit_beta->setText(Brewtarget::displayAmount(h->getBeta_pct(), 0));
    lineEdit_HSI->setText(Brewtarget::displayAmount(h->getHsi_pct(), 0));
    lineEdit_origin->setText(h->getOrigin().c_str());
