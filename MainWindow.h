@@ -40,11 +40,13 @@ class MainWindow;
 #include "YeastEditor.h"
 #include "EquipmentEditor.h"
 #include "StyleEditor.h"
+#include "OptionDialog.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
    Q_OBJECT
 
+   friend class OptionDialog;
 public:
    MainWindow(QWidget* parent=0);
    void setRecipe(Recipe* recipe);
@@ -100,6 +102,7 @@ private:
    YeastEditor* yeastEditor;
    Database* db;
    BeerColorWidget beerColorWidget;
+   OptionDialog* optionDialog;
 
    void setupToolbar();
    void showChanges();

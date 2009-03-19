@@ -221,7 +221,7 @@
                 </sizepolicy>
                </property>
                <property name="text" >
-                <string>Batch Size (l)</string>
+                <string>Batch Size</string>
                </property>
               </widget>
              </item>
@@ -260,7 +260,7 @@
                 </sizepolicy>
                </property>
                <property name="text" >
-                <string>Boil Size (l)</string>
+                <string>Boil Size</string>
                </property>
               </widget>
              </item>
@@ -940,8 +940,15 @@
     <addaction name="actionStyles" />
     <addaction name="actionYeasts" />
    </widget>
+   <widget class="QMenu" name="menuTools" >
+    <property name="title" >
+     <string>Tools</string>
+    </property>
+    <addaction name="actionOptions" />
+   </widget>
    <addaction name="menuFile" />
    <addaction name="menuView" />
+   <addaction name="menuTools" />
    <addaction name="menuAbout" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
@@ -970,7 +977,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak" >
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <action name="actionAbout_BrewTarget" >
@@ -1026,6 +1033,11 @@
   <action name="actionImport_Recipes" >
    <property name="text" >
     <string>Import Recipes</string>
+   </property>
+  </action>
+  <action name="actionOptions" >
+   <property name="text" >
+    <string>Options</string>
    </property>
   </action>
  </widget>

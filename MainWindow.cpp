@@ -101,6 +101,7 @@ MainWindow::MainWindow(QWidget* parent)
    styleEditor = new StyleEditor(this);
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
+   optionDialog = new OptionDialog(this);
 
    setupToolbar();
 
@@ -161,6 +162,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionHops, SIGNAL( triggered() ), hopDialog, SLOT( show() ) );
    connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );
    connect( actionYeasts, SIGNAL( triggered() ), yeastDialog, SLOT( show() ) );
+   connect( actionOptions, SIGNAL( triggered() ), optionDialog, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );

@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>476</width>
+    <width>454</width>
     <height>418</height>
    </rect>
   </property>
@@ -61,6 +61,12 @@
           </property>
           <item>
            <widget class="QLabel" name="label" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
              <string>Name</string>
             </property>
@@ -69,8 +75,8 @@
           <item>
            <widget class="QLineEdit" name="lineEdit_name" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>100</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -78,6 +84,12 @@
              <size>
               <width>100</width>
               <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -88,6 +100,12 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2" >
           <item>
            <widget class="QLabel" name="label_2" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
              <string>Alpha (%)</string>
             </property>
@@ -96,8 +114,8 @@
           <item>
            <widget class="QLineEdit" name="lineEdit_alpha" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>100</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -105,6 +123,12 @@
              <size>
               <width>100</width>
               <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -115,16 +139,22 @@
          <layout class="QHBoxLayout" name="horizontalLayout_3" >
           <item>
            <widget class="QLabel" name="label_3" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
-             <string>Amount (kg)</string>
+             <string>Amount </string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_amount" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>100</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -132,6 +162,12 @@
              <size>
               <width>100</width>
               <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -142,6 +178,12 @@
          <layout class="QHBoxLayout" name="horizontalLayout_5" >
           <item>
            <widget class="QLabel" name="label_5" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
              <string>Use</string>
             </property>
@@ -182,16 +224,22 @@
          <layout class="QHBoxLayout" name="horizontalLayout_4" >
           <item>
            <widget class="QLabel" name="label_4" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text" >
-             <string>Time (min)</string>
+             <string>Time</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_time" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>100</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -199,6 +247,12 @@
              <size>
               <width>100</width>
               <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -212,6 +266,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_6" >
        <item>
         <widget class="QLabel" name="label_6" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Type</string>
          </property>
@@ -242,6 +302,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_8" >
        <item>
         <widget class="QLabel" name="label_8" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Form</string>
          </property>
@@ -272,6 +338,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_7" >
        <item>
         <widget class="QLabel" name="label_7" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Beta (%)</string>
          </property>
@@ -280,8 +352,8 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_beta" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-           <horstretch>0</horstretch>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>100</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -289,6 +361,12 @@
           <size>
            <width>100</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
@@ -299,6 +377,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_9" >
        <item>
         <widget class="QLabel" name="label_9" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>HSI</string>
          </property>
@@ -307,8 +391,8 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_HSI" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-           <horstretch>0</horstretch>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>100</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -316,6 +400,12 @@
           <size>
            <width>100</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
@@ -326,6 +416,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_10" >
        <item>
         <widget class="QLabel" name="label_10" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Origin</string>
          </property>
@@ -334,8 +430,8 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_origin" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-           <horstretch>0</horstretch>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>100</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -343,6 +439,12 @@
           <size>
            <width>100</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
@@ -376,6 +478,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_14" >
        <item>
         <widget class="QLabel" name="label_11" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Humulene (%)</string>
          </property>
@@ -384,8 +492,8 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_humulene" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>100</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -393,6 +501,12 @@
           <size>
            <width>100</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
@@ -403,6 +517,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_13" >
        <item>
         <widget class="QLabel" name="label_12" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Caryophyllene (%)</string>
          </property>
@@ -411,8 +531,8 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_caryophyllene" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-           <horstretch>0</horstretch>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>100</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -420,6 +540,12 @@
           <size>
            <width>100</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
@@ -430,6 +556,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_12" >
        <item>
         <widget class="QLabel" name="label_13" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Cohumulone (%)</string>
          </property>
@@ -438,8 +570,8 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_cohumulone" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-           <horstretch>0</horstretch>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>100</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -447,6 +579,12 @@
           <size>
            <width>100</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>
@@ -457,6 +595,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_11" >
        <item>
         <widget class="QLabel" name="label_14" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Myrcene (%)</string>
          </property>
@@ -465,8 +609,8 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_myrcene" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-           <horstretch>0</horstretch>
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>100</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
@@ -474,6 +618,12 @@
           <size>
            <width>100</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>16777215</height>
           </size>
          </property>
         </widget>

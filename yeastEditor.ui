@@ -149,7 +149,7 @@
           <item>
            <widget class="QLabel" name="label_4" >
             <property name="text" >
-             <string>Amount (L or kg)</string>
+             <string>Amount</string>
             </property>
            </widget>
           </item>
@@ -166,6 +166,39 @@
               <width>100</width>
               <height>16777215</height>
              </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5" >
+          <item>
+           <widget class="QLabel" name="label_5" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Check it if the amount given is in kg instead of L.</string>
+            </property>
+            <property name="text" >
+             <string>Amount is weight?</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_amountIsWeight" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string/>
             </property>
            </widget>
           </item>
@@ -189,39 +222,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5" >
-       <item>
-        <widget class="QLabel" name="label_5" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip" >
-          <string>Check it if the amount given is in kg instead of L.</string>
-         </property>
-         <property name="text" >
-          <string>Amount is weight</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_amountIsWeight" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text" >
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_7" >
@@ -282,7 +282,7 @@
        <item>
         <widget class="QLabel" name="label_8" >
          <property name="text" >
-          <string>Min Temp (C)</string>
+          <string>Min Temp</string>
          </property>
         </widget>
        </item>
@@ -309,7 +309,7 @@
        <item>
         <widget class="QLabel" name="label_9" >
          <property name="text" >
-          <string>Max Temp (C)</string>
+          <string>Max Temp</string>
          </property>
         </widget>
        </item>

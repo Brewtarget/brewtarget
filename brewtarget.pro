@@ -102,6 +102,7 @@ HEADERS += AboutDialog.h \
            MiscTableModel.h \
            MiscTableWidget.h \
            observable.h \
+           OptionDialog.h \
            recipe.h \
            RecipeComboBox.h \
            stringparsing.h \
@@ -129,6 +130,7 @@ FORMS +=   aboutDialog.ui \
            hopDialog.ui \
            hopEditor.ui \
            miscDialog.ui \
+           optionsDialog.ui \
            styleEditor.ui \
            yeastDialog.ui \
            yeastEditor.ui
@@ -163,6 +165,7 @@ SOURCES += database.cpp \
            MiscTableWidget.cpp \
            observable.cpp \
            observer.cpp \
+           OptionDialog.cpp \
            recipe.cpp \
            RecipeComboBox.cpp \
            stringparsing.cpp \

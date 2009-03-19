@@ -112,7 +112,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Pre-boil volume (L)</string>
+               <string>Pre-boil volume</string>
               </property>
              </widget>
             </item>
@@ -178,7 +178,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Batch size (L)</string>
+               <string>Batch size</string>
               </property>
              </widget>
             </item>
@@ -229,7 +229,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Volume (L)</string>
+               <string>Volume</string>
               </property>
              </widget>
             </item>
@@ -268,7 +268,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Mass (kg)</string>
+               <string>Mass</string>
               </property>
              </widget>
             </item>
@@ -358,7 +358,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Boil time (min)</string>
+               <string>Boil time</string>
               </property>
              </widget>
             </item>
@@ -436,7 +436,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Kettle top-up water (L)</string>
+               <string>Kettle top-up water</string>
               </property>
              </widget>
             </item>
@@ -475,7 +475,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Final top-up water (L)</string>
+               <string>Final top-up water</string>
               </property>
              </widget>
             </item>
@@ -569,7 +569,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Kettle to fermenter (L)</string>
+               <string>Kettle to fermenter</string>
               </property>
              </widget>
             </item>
@@ -608,7 +608,7 @@
                </sizepolicy>
               </property>
               <property name="text" >
-               <string>Lauter deadspace (L)</string>
+               <string>Lauter deadspace</string>
               </property>
              </widget>
             </item>

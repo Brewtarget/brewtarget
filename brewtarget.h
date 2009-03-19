@@ -29,6 +29,7 @@ class Brewtarget;
 
 class Brewtarget
 {
+   friend class OptionDialog;
 public:
    Brewtarget();
 
@@ -45,6 +46,7 @@ private:
    static QApplication* app;
    static MainWindow* mainWindow;
 
+   // These are options that are ONLY to be edited by the OptionDialog.
    static bool englishUnits;
 };
 
