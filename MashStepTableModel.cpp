@@ -300,7 +300,7 @@ void MashStepItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
    }
 }
 
-void MashStepItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void MashStepItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
 {
    editor->setGeometry(option.rect);
 }

@@ -160,10 +160,8 @@ Hop::Hop( const XmlNode *node )
    XmlNode* leaf;
    unsigned int i, childrenSize;
    const string formatErr("BeerXML file not formatted correctly.");
-   char *endptr;
    bool haveName=false, haveVersion=false, haveAlpha=false;
    bool haveAmount=false, haveUse=false, haveTime=false;
-   bool trash;
    
    setDefaults();
    

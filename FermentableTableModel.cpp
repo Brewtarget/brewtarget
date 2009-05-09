@@ -119,12 +119,12 @@ void FermentableTableModel::notify(Observable* notifier, QVariant info)
    }
 }
 
-int FermentableTableModel::rowCount(const QModelIndex& parent) const
+int FermentableTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
    return fermObs.size();
 }
 
-int FermentableTableModel::columnCount(const QModelIndex& parent) const
+int FermentableTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
    return FERMNUMCOLS;
 }
@@ -189,7 +189,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
       return QVariant();
 }
 
-Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
+Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& /*index*/ ) const
 {
    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
           Qt::ItemIsEnabled;
@@ -264,7 +264,7 @@ FermentableItemDelegate::FermentableItemDelegate(QObject* parent)
 {
 }
         
-QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
 {
    if( index.column() == FERMTYPECOL )
    {

@@ -121,7 +121,7 @@ Mash::Mash(const XmlNode *node)
          if( ! leaf->isLeaf() )
             throw MashException("Should have been a leaf but is not.");
          
-         if( parseInt(leaf->getLeafText()) != version )
+         if( parseInt(leaf->getLeafText()) != (int)version )
             std::cerr << "Warning: XML MASH is not version " << version << std::endl;
          
          hasVersion = true;

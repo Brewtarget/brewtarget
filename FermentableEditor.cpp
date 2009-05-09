@@ -27,6 +27,7 @@
 #include "brewtarget.h"
 
 FermentableEditor::FermentableEditor( QWidget* parent )
+        : QDialog(parent)
 {
    setupUi(this);
 

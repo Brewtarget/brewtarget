@@ -113,7 +113,7 @@ Xml::Xml( istream &in )
 {
    string tmp;
 
-   while( getline( cin, tmp ) )
+   while( getline( in, tmp ) )
       //xmlTextVec.push_back(tmp);
       xmlText += tmp;
 
@@ -180,7 +180,7 @@ string Xml::nextNonTag()
 string Xml::getStringVal( const string &closeTag, bool &success, const string &errMsg )
 {
    string ret = nextNonTag();
-   if( ret.size() >= 0 )
+   if( ret.size() > 0 )
       success = true;
    else
       success = false;

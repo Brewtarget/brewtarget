@@ -18,7 +18,6 @@
 
 #include <iostream>
 
-#include "unit.h"
 #include "brewtarget.h"
 #include "config.h"
 #include "database.h"

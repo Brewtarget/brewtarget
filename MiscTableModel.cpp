@@ -96,12 +96,12 @@ void MiscTableModel::removeAll()
    reset();
 }
 
-int MiscTableModel::rowCount(const QModelIndex& parent) const
+int MiscTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
    return miscObs.size();
 }
 
-int MiscTableModel::columnCount(const QModelIndex& parent) const
+int MiscTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
    return 5;
 }
@@ -267,7 +267,7 @@ MiscItemDelegate::MiscItemDelegate(QObject* parent)
 {
 }
         
-QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
 {
    if( index.column() == MISCTYPECOL )
    {

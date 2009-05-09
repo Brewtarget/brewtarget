@@ -165,7 +165,7 @@ Recipe::Recipe(const XmlNode *node)
    std::string leafText;
    XmlNode* leaf;
    unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasGrainTemp=false, hasMashStep=false;
+   bool hasVersion=false;
    
    setDefaults();
    
@@ -425,7 +425,10 @@ Recipe::Recipe(const XmlNode *node)
          std::cerr << "Warning: unsupported RECIPE tag: " << tag << std::endl;
    }// end for()
 
-   // TODO: Make sure we have a valid RECIPE before continuing.
+   // I am purposely being slack about checking for all required fields.
+   // Seems to me BeerXML is a little too strict with Recipes.
+   if( ! hasVersion )
+      throw RecipeException("Recipe lacks version tag.");
 } // end Recipe()
 
 //================================"SET" METHODS=================================
