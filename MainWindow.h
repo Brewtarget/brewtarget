@@ -24,6 +24,7 @@ class MainWindow;
 #include <QWidget>
 #include <QMainWindow>
 #include <QString>
+#include <QVariant>
 #include <QFileDialog>
 #include "ui_mainWindow.h"
 #include "FermentableDialog.h"
@@ -50,7 +51,7 @@ class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 public:
    MainWindow(QWidget* parent=0);
    void setRecipe(Recipe* recipe);
-   virtual void notify(Observable* notifier); // Inherited from Observer
+   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
 
    static const char* homedir;
 

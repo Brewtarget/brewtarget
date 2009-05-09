@@ -23,6 +23,7 @@ class FermentableDialog;
 
 #include <QWidget>
 #include <QDialog>
+#include <QVariant>
 #include "ui_fermentableDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -36,7 +37,7 @@ class FermentableDialog : public QDialog, public Ui::fermentableDialog, public O
 public:
    FermentableDialog(MainWindow* parent);
    void startObservingDB();
-   virtual void notify(Observable *notifier); // From Observer
+   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    void addFermentable();

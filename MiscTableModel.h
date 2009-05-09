@@ -47,7 +47,7 @@ public:
    Misc* getMisc(unsigned int i);
    bool removeMisc(Misc* misc);
    void removeAll();
-   virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver
+   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver
    
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;

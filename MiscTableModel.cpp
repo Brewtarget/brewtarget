@@ -245,7 +245,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    return true;
 }
 
-void MiscTableModel::notify(Observable* notifier) // Gets called when an observable changes.
+void MiscTableModel::notify(Observable* notifier, QVariant info) // Gets called when an observable changes.
 {
    int i;
    

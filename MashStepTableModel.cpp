@@ -94,7 +94,7 @@ void MashStepTableModel::removeAll()
    reset();
 }
 
-void MashStepTableModel::notify(Observable* notifier)
+void MashStepTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
 

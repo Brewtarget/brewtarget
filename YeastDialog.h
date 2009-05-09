@@ -23,6 +23,7 @@ class YeastDialog;
 
 #include <QWidget>
 #include <QDialog>
+#include <QVariant>
 #include "ui_yeastDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -36,7 +37,7 @@ class YeastDialog : public QDialog, public Ui::yeastDialog, public Observer
 public:
    YeastDialog(MainWindow* parent);
    void startObservingDB();
-   virtual void notify(Observable *notifier); // From Observer
+   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    void addYeast();

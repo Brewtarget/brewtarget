@@ -114,7 +114,7 @@ void StyleEditor::clearAndClose()
    setVisible(false);
 }
 
-void StyleEditor::notify(Observable* /*notifier*/)
+void StyleEditor::notify(Observable* /*notifier*/, QVariant info)
 {
    showChanges();
 }

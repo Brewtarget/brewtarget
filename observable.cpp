@@ -55,12 +55,12 @@ bool Observable::removeObserver(Observer* obs)
    return false;
 }
 
-void Observable::hasChanged()
+void Observable::hasChanged(QVariant info)
 {
-   notifyObservers();
+   notifyObservers(info);
 }
 
-void Observable::notifyObservers()
+void Observable::notifyObservers(QVariant info)
 {
    unsigned int i, size=observers.size();
 
@@ -68,12 +68,12 @@ void Observable::notifyObservers()
       return;
 
    for( i = 0; i < size; ++i )
-      observers[i]->notify(this);
+      observers[i]->notify(this, info);
 }
 
 void Observable::forceNotify()
 {
-   notifyObservers();
+   notifyObservers(QVariant());
 }
 
 void Observable::disableNotification()

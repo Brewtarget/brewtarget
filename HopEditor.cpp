@@ -94,7 +94,7 @@ void HopEditor::clearAndClose()
    setVisible(false); // Hide the window.
 }
 
-void HopEditor::notify(Observable* notifier)
+void HopEditor::notify(Observable* notifier, QVariant info)
 {
    if( notifier == obsHop )
       showChanges();

@@ -1086,7 +1086,7 @@ double Recipe::getABV_pct()
    return 0.130*((getOg()-1)-(getFg()-1))*1000.0;
 }
 
-void Recipe::notify(Observable* /*notifier*/)
+void Recipe::notify(Observable* /*notifier*/, QVariant info)
 {
    recalculate();
    hasChanged();

@@ -97,7 +97,7 @@ void YeastTableModel::removeAll()
    reset();
 }
 
-void YeastTableModel::notify(Observable* notifier)
+void YeastTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
 

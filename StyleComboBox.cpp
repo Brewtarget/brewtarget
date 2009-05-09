@@ -66,7 +66,7 @@ void StyleComboBox::removeAllStyles()
    clear(); // Clear the combo box's visible list.
 }
 
-void StyleComboBox::notify(Observable *notifier)
+void StyleComboBox::notify(Observable *notifier, QVariant info)
 {
    unsigned int i, size;
 

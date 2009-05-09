@@ -23,6 +23,7 @@ class MiscDialog;
 
 #include <QWidget>
 #include <QDialog>
+#include <QVariant>
 #include "ui_miscDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -36,7 +37,7 @@ class MiscDialog : public QDialog, public Ui::miscDialog, public Observer
 public:
    MiscDialog(MainWindow* parent);
    void startObservingDB();
-   virtual void notify(Observable *notifier); // From Observer
+   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    void addMisc();

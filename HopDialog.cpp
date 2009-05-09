@@ -44,7 +44,7 @@ HopDialog::HopDialog(MainWindow* parent)
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
 }
 
-void HopDialog::notify(Observable *notifier)
+void HopDialog::notify(Observable *notifier, QVariant info)
 {
    if( notifier != dbObs )
       return;

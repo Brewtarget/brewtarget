@@ -45,7 +45,7 @@ public:
    Hop* getHop(unsigned int i);
    bool removeHop(Hop* hop); // Returns true if "hop" is successfully found and removed.
    void removeAll();
-   virtual void notify(Observable* notifier); // Inherited from Observer via MultipleObserver.
+   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
    
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;

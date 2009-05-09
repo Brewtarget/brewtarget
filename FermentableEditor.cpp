@@ -87,7 +87,7 @@ void FermentableEditor::clearAndClose()
    setVisible(false); // Hide the window.
 }
 
-void FermentableEditor::notify(Observable* notifier)
+void FermentableEditor::notify(Observable* notifier, QVariant info)
 {
    if( notifier == obsFerm )
       showChanges();

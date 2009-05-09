@@ -111,7 +111,7 @@ void EquipmentEditor::clearAndClose()
    setVisible(false);
 }
 
-void EquipmentEditor::notify(Observable* /*notifier*/)
+void EquipmentEditor::notify(Observable* /*notifier*/, QVariant info)
 {
    showChanges();
 }

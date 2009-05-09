@@ -65,7 +65,7 @@ void FermentableDialog::editSelected()
    fermEdit->show();
 }
 
-void FermentableDialog::notify(Observable *notifier)
+void FermentableDialog::notify(Observable *notifier, QVariant info)
 {
    if( notifier != dbObs )
       return;

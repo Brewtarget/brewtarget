@@ -22,6 +22,7 @@ class Recipe;
 class RecipeException;
 
 #include <QColor>
+#include <QVariant>
 #include <string>
 #include <exception>
 #include "xmlnode.h"
@@ -47,7 +48,7 @@ public:
 
    std::string toXml();
    void clear(); // Retains only the name, but sets everything else to defaults.
-   virtual void notify(Observable *notifier); // Inherited from MultipleObserver.
+   virtual void notify(Observable *notifier, QVariant info = QVariant()); // Inherited from MultipleObserver.
    
    void setName( const std::string &var );
    void setType( const std::string &var );

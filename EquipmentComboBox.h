@@ -23,6 +23,7 @@ class EquipmentComboBox;
 
 #include <QComboBox>
 #include <QWidget>
+#include <QVariant>
 #include <vector>
 #include <string>
 #include "observable.h"
@@ -45,7 +46,7 @@ public:
 
    Equipment* getSelected();
 
-   virtual void notify(Observable *notifier); // This will get called by observed whenever it changes.
+   virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
 
 private:
    std::vector<Equipment*> equipmentObs;

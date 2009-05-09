@@ -40,7 +40,7 @@ public slots:
 private:
    Fermentable* obsFerm;
 
-   virtual void notify(Observable* notifier); // Inherited from Observer
+   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    void showChanges();
 };
 

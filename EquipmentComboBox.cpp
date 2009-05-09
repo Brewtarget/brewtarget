@@ -66,7 +66,7 @@ void EquipmentComboBox::removeAllEquipments()
    clear(); // Clear the combo box's visible list.
 }
 
-void EquipmentComboBox::notify(Observable *notifier)
+void EquipmentComboBox::notify(Observable *notifier, QVariant info)
 {
    unsigned int i, size;
 

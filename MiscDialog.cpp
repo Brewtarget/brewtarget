@@ -44,7 +44,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
 }
 
-void MiscDialog::notify(Observable *notifier)
+void MiscDialog::notify(Observable *notifier, QVariant info)
 {
    if( notifier != dbObs )
       return;

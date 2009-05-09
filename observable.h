@@ -19,6 +19,7 @@
 #ifndef _OBSERVABLE_H
 #define	_OBSERVABLE_H
 #include <vector>
+#include <QVariant>
 
 class Observable;
 class Observer;
@@ -31,7 +32,7 @@ public:
    Observable(Observer* obs);
    void addObserver(Observer* obs);
    bool removeObserver(Observer* obs); // Returns true if successful.
-   void hasChanged();
+   void hasChanged(QVariant info = QVariant());
 
    // In case notification causes weird problems.
    void disableNotification();
@@ -44,7 +45,7 @@ private:
    std::vector<Observer*> observers;
    bool doNotify;
    
-   void notifyObservers();
+   void notifyObservers(QVariant info);
    void setDefaults();
 };
 
@@ -55,7 +56,7 @@ public:
    Observer(Observable* obs);
    void setObserved(Observable* obs);
    
-   virtual void notify(Observable *notifier) = 0; // This will get called by observed whenever it changes.
+   virtual void notify(Observable *notifier, QVariant info) = 0; // This will get called by observed whenever it changes.
    
 private:
    Observable* observed;
@@ -70,7 +71,7 @@ public:
    void removeObserved(Observable* obs);
    void removeAllObserved();
    
-   // virtual void notify(Observable* notifier); // Don't forget to overload from class Observer.
+   // virtual void notify(Observable* notifier, QVariant info); // Don't forget to overload from class Observer.
    
 private:
    std::vector<Observable*> obsVec;

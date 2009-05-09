@@ -88,7 +88,7 @@ void MiscEditor::clearAndClose()
    setVisible(false); // Hide the window.
 }
 
-void MiscEditor::notify(Observable* notifier)
+void MiscEditor::notify(Observable* notifier, QVariant info)
 {
    if( notifier == obsMisc ) 
       showChanges();

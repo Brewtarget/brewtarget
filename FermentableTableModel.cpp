@@ -100,7 +100,7 @@ void FermentableTableModel::removeAll()
    reset();
 }
 
-void FermentableTableModel::notify(Observable* notifier)
+void FermentableTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
    

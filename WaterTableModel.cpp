@@ -96,7 +96,7 @@ void WaterTableModel::removeAll()
    reset();
 }
 
-void WaterTableModel::notify(Observable* notifier)
+void WaterTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
 

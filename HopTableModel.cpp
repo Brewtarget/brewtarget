@@ -99,7 +99,7 @@ void HopTableModel::removeAll()
    reset();
 }
 
-void HopTableModel::notify(Observable* notifier)
+void HopTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
    

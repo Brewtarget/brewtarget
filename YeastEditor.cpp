@@ -92,7 +92,7 @@ void YeastEditor::clearAndClose()
    setVisible(false); // Hide the window.
 }
 
-void YeastEditor::notify(Observable* notifier)
+void YeastEditor::notify(Observable* notifier, QVariant info)
 {
    if( notifier == obsYeast )
       showChanges();

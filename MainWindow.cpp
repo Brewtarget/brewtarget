@@ -326,7 +326,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    showChanges();
 }
 
-void MainWindow::notify(Observable* notifier)
+void MainWindow::notify(Observable* notifier, QVariant info)
 {
    // Make sure the notifier is our observed recipe
    if( notifier != recipeObs )

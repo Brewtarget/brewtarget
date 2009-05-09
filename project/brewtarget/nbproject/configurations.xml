@@ -104,6 +104,8 @@
       <itemPath>../../observable.cpp</itemPath>
       <itemPath>../../observable.h</itemPath>
       <itemPath>../../observer.cpp</itemPath>
+      <itemPath>../../OptionDialog.cpp</itemPath>
+      <itemPath>../../OptionDialog.h</itemPath>
       <itemPath>../../recipe.cpp</itemPath>
       <itemPath>../../recipe.h</itemPath>
       <itemPath>../../RecipeComboBox.cpp</itemPath>
@@ -289,6 +291,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MiscTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../OptionDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../OptionDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.cpp">
@@ -729,6 +737,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MiscTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../OptionDialog.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../OptionDialog.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.cpp">

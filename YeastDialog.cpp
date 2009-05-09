@@ -44,7 +44,7 @@ YeastDialog::YeastDialog(MainWindow* parent)
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
 }
 
-void YeastDialog::notify(Observable *notifier)
+void YeastDialog::notify(Observable *notifier, QVariant info)
 {
    if( notifier != dbObs )
       return;

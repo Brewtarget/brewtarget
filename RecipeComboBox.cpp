@@ -70,7 +70,7 @@ void RecipeComboBox::removeAllRecipes()
    clear(); // Clear the combo box's visible list.
 }
 
-void RecipeComboBox::notify(Observable *notifier)
+void RecipeComboBox::notify(Observable *notifier, QVariant info)
 {
    unsigned int i, size;
 
