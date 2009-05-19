@@ -26,6 +26,7 @@ class MainWindow;
 #include <QString>
 #include <QVariant>
 #include <QFileDialog>
+#include <QPalette>
 #include "ui_mainWindow.h"
 #include "FermentableDialog.h"
 #include "HopDialog.h"
@@ -104,6 +105,7 @@ private:
    Database* db;
    BeerColorWidget beerColorWidget;
    OptionDialog* optionDialog;
+   QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
 
    void setupToolbar();
    void showChanges();

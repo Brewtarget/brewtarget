@@ -87,6 +87,15 @@ MainWindow::MainWindow(QWidget* parent)
    setWindowIcon(QIcon(ICON48));
    label_Icon->setPixmap(QPixmap(ICON96));
 
+   // Different palettes for lcds.
+   lcdPalette_old = lcdNumber_og->palette();
+   lcdPalette_tooLow = QPalette(lcdPalette_old);
+   lcdPalette_tooLow.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 0, 208));
+   lcdPalette_good = QPalette(lcdPalette_old);
+   lcdPalette_good.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 128, 0));
+   lcdPalette_tooHigh = QPalette(lcdPalette_old);
+   lcdPalette_tooHigh.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(208, 0, 0));
+
    // Null out the recipe
    recipeObs = 0;
 
@@ -203,6 +212,14 @@ void MainWindow::setupToolbar()
    viewMiscs->setIcon(QIcon(SMALLQUESTION));
    viewStyles->setIcon(QIcon(SMALLSTYLE));
    viewYeast->setIcon(QIcon(SMALLYEAST));
+
+   newRec->setToolTip(QString("New recipe"));
+   viewEquip->setToolTip(QString("View equipments"));
+   viewFerm->setToolTip(QString("View fermentables"));
+   viewHops->setToolTip(QString("View hops"));
+   viewMiscs->setToolTip(QString("View miscs"));
+   viewStyles->setToolTip(QString("View styles"));
+   viewYeast->setToolTip(QString("View yeasts"));
 
    toolBar->addWidget(newRec);
    toolBar->addSeparator();
@@ -335,16 +352,100 @@ void MainWindow::showChanges()
 
    lineEdit_name->setText(recipeObs->getName().c_str());
    lineEdit_name->setCursorPosition(0);
-   //lineEdit_batchSize->setText(doubleToString(recipeObs->getBatchSize_l()).c_str());
    lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->getBatchSize_l(), Units::liters) );
    lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->getBoilSize_l(), Units::liters) );
    lineEdit_efficiency->setText( Brewtarget::displayAmount(recipeObs->getEfficiency_pct(), 0) );
    
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
-   lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(),1).c_str());
-   lcdNumber_ibu->display(doubleToStringPrec(recipeObs->getIBU(),1).c_str());
+   lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(), 1).c_str());
+   lcdNumber_ibu->display(doubleToStringPrec(recipeObs->getIBU(), 1).c_str());
    lcdNumber_srm->display(doubleToStringPrec(recipeObs->getColor_srm(),1).c_str());
+
+   // Want to do some color manipulation based on selected style.
+   Style* recipeStyle = recipeObs->getStyle();
+   if( recipeStyle != 0 )
+   {
+      double og = recipeObs->getOg();
+      double fg = recipeObs->getFg();
+      double abv = recipeObs->getABV_pct();
+      double ibu = recipeObs->getIBU();
+      double srm = recipeObs->getColor_srm();
+      
+      if( recipeStyle->getOgMin() < og && og < recipeStyle->getOgMax() )
+      {
+         lcdNumber_og->setPalette(lcdPalette_good);
+      }
+      else if( og <= recipeStyle->getOgMin() )
+      {
+         lcdNumber_og->setPalette(lcdPalette_tooLow);
+      }
+      else
+      {
+         lcdNumber_og->setPalette(lcdPalette_tooHigh);
+      }
+
+      if( recipeStyle->getFgMin() < fg && fg < recipeStyle->getFgMax() )
+      {
+         lcdNumber_fg->setPalette(lcdPalette_good);
+      }
+      else if( fg <= recipeStyle->getFgMin() )
+      {
+         lcdNumber_fg->setPalette(lcdPalette_tooLow);
+      }
+      else
+      {
+         lcdNumber_fg->setPalette(lcdPalette_tooHigh);
+      }
+
+      if( recipeStyle->getAbvMin_pct() < abv && abv < recipeStyle->getAbvMax_pct() )
+      {
+         lcdNumber_abv->setPalette(lcdPalette_good);
+      }
+      else if( abv <= recipeStyle->getAbvMin_pct() )
+      {
+         lcdNumber_abv->setPalette(lcdPalette_tooLow);
+      }
+      else
+      {
+         lcdNumber_abv->setPalette(lcdPalette_tooHigh);
+      }
+
+      if( recipeStyle->getIbuMin() < ibu && ibu < recipeStyle->getIbuMax() )
+      {
+         lcdNumber_ibu->setPalette(lcdPalette_good);
+      }
+      else if( ibu < recipeStyle->getIbuMin() )
+      {
+         lcdNumber_ibu->setPalette(lcdPalette_tooLow);
+      }
+      else
+      {
+         lcdNumber_ibu->setPalette(lcdPalette_tooHigh);
+      }
+
+      if( recipeStyle->getColorMin_srm() < srm && srm < recipeStyle->getColorMax_srm() )
+      {
+         lcdNumber_srm->setPalette(lcdPalette_good);
+      }
+      else if( srm < recipeStyle->getCarbMin_vol() )
+      {
+         lcdNumber_srm->setPalette(lcdPalette_tooLow);
+      }
+      else
+      {
+         lcdNumber_srm->setPalette(lcdPalette_tooHigh);
+      }
+   }
+   else
+   {
+      lcdNumber_og->setPalette(lcdPalette_old);
+      lcdNumber_fg->setPalette(lcdPalette_old);
+      lcdNumber_abv->setPalette(lcdPalette_old);
+      lcdNumber_ibu->setPalette(lcdPalette_old);
+      lcdNumber_srm->setPalette(lcdPalette_old);
+   }
+
    beerColorWidget.setColor( recipeObs->getSRMColor() );
 }
 
