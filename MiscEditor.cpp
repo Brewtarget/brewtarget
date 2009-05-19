@@ -75,7 +75,7 @@ void MiscEditor::save()
    m->reenableNotification();
    m->forceNotify();
 
-   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
+   Database::getDatabase()->resortMiscs(); // If the name changed, need to resort.
 }
 
 void MiscEditor::clearAndClose()

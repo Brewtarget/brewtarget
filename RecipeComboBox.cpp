@@ -71,7 +71,7 @@ void RecipeComboBox::notify(Observable *notifier, QVariant info)
 
    // Notifier could be the database. Only pay attention if the number of
    // recipes has changed.
-   if( notifier == dbObs && dbObs->getNumRecipes() != recipeObs.size() )
+   if( notifier == dbObs && (info.toInt() == DBRECIPE || info.toInt() == DBALL) )
    {
       removeAllRecipes();
       std::list<Recipe*>::iterator it, end;

@@ -67,7 +67,7 @@ void FermentableDialog::editSelected()
 
 void FermentableDialog::notify(Observable *notifier, QVariant info)
 {
-   if( notifier != dbObs )
+   if( notifier != dbObs || (info.toInt() != DBFERM && info.toInt() != DBALL) )
       return;
 
    fermentableTableWidget->getModel()->removeAll();

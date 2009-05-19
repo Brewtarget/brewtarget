@@ -46,7 +46,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
 
 void MiscDialog::notify(Observable *notifier, QVariant info)
 {
-   if( notifier != dbObs )
+   if( notifier != dbObs || (info.toInt() != DBMISC && info.toInt() != DBALL) )
       return;
 
    miscTableWidget->getModel()->removeAll();

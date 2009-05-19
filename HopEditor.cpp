@@ -81,7 +81,7 @@ void HopEditor::save()
    h->reenableNotification();
    h->forceNotify();
 
-   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
+   Database::getDatabase()->resortHops(); // If the name changed, need to resort.
 }
 
 void HopEditor::clearAndClose()

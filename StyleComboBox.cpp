@@ -66,7 +66,7 @@ void StyleComboBox::notify(Observable *notifier, QVariant info)
    unsigned int i, size;
 
    // Notifier could be the database.
-   if( notifier == dbObs )
+   if( notifier == dbObs && (info.toInt() == DBSTYLE || info.toInt() == DBALL) )
    {
       Style* previousSelection = getSelected(); // Remember what we had.
       

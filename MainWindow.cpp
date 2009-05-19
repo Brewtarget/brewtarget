@@ -228,17 +228,6 @@ void MainWindow::setRecipeByName(const QString& name)
       return;
 
    setRecipe( db->findRecipeByName( name.toStdString() ) );
-   /*
-   std::list<Recipe*>::iterator it, end;
-
-   end = db->getRecipeEnd();
-   for( it = db->getRecipeBegin(); it != end; ++it )
-      if( (*it)->getName() == name.toStdString() )
-      {
-         setRecipe(*it);
-         break;
-      }
-    */
 }
 
 // Can handle null recipes.
@@ -326,7 +315,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    showChanges();
 }
 
-void MainWindow::notify(Observable* notifier, QVariant info)
+void MainWindow::notify(Observable* notifier, QVariant /*info*/)
 {
    // Make sure the notifier is our observed recipe
    if( notifier != recipeObs )

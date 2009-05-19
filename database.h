@@ -36,6 +36,9 @@
 
 class Database;
 
+enum {DBEQUIP, DBFERM, DBHOP, DBMASH, DBMASHSTEP, DBMISC, DBRECIPE,
+      DBSTYLE, DBWATER, DBYEAST, DBALL};
+
 /*
  * This class is a singleton, meaning that there should only ever be one
  * instance of this in the whole damn program.
@@ -65,6 +68,12 @@ public:
    void addYeast(Yeast* yeast);
 
    void resortAll(); // Sorts all the lists by their compare methods.
+   void resortFermentables();
+   void resortEquipments();
+   void resortHops();
+   void resortMiscs();
+   void resortStyles();
+   void resortYeasts();
 
    unsigned int getNumEquipments();
    unsigned int getNumFermentables();

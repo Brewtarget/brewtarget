@@ -46,7 +46,7 @@ YeastDialog::YeastDialog(MainWindow* parent)
 
 void YeastDialog::notify(Observable *notifier, QVariant info)
 {
-   if( notifier != dbObs )
+   if( notifier != dbObs || (info.toInt() != DBYEAST && info.toInt() != DBALL) )
       return;
 
    yeastTableWidget->getModel()->removeAll();

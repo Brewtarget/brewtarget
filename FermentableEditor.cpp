@@ -78,7 +78,7 @@ void FermentableEditor::save()
    obsFerm->reenableNotification();
    obsFerm->forceNotify();
 
-   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
+   Database::getDatabase()->resortFermentables(); // If the name changed, need to resort.
 }
 
 void FermentableEditor::clearAndClose()

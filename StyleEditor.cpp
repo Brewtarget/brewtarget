@@ -91,7 +91,7 @@ void StyleEditor::save()
    s->reenableNotification();
    s->forceNotify();
 
-   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
+   Database::getDatabase()->resortStyles(); // If the name changed, need to resort.
 }
 
 void StyleEditor::newStyle()

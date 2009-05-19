@@ -46,7 +46,7 @@ HopDialog::HopDialog(MainWindow* parent)
 
 void HopDialog::notify(Observable *notifier, QVariant info)
 {
-   if( notifier != dbObs )
+   if( notifier != dbObs || (info.toInt() != DBHOP && info.toInt() != DBALL) )
       return;
 
    hopTableWidget->getModel()->removeAll();

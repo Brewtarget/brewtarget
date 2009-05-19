@@ -88,7 +88,7 @@ void EquipmentEditor::save()
    obsEquip->reenableNotification();
    obsEquip->forceNotify();
 
-   Database::getDatabase()->resortAll(); // If the name changed, need to resort.
+   Database::getDatabase()->resortEquipments(); // If the name changed, need to resort.
 }
 
 void EquipmentEditor::newEquipment()

@@ -166,7 +166,43 @@ void Database::resortAll()
    waters.sort(Water_ptr_cmp());
    yeasts.sort(Yeast_ptr_cmp());
 
-   hasChanged();
+   hasChanged(QVariant(DBALL));
+}
+
+void Database::resortEquipments()
+{
+   equipments.sort(Equipment_ptr_cmp());
+   hasChanged(QVariant(DBEQUIP));
+}
+
+void Database::resortFermentables()
+{
+   fermentables.sort(Fermentable_ptr_cmp());
+   hasChanged(QVariant(DBFERM));
+}
+
+void Database::resortHops()
+{
+   hops.sort(Hop_ptr_cmp());
+   hasChanged(QVariant(DBHOP));
+}
+
+void Database::resortMiscs()
+{
+   miscs.sort(Misc_ptr_cmp());
+   hasChanged(QVariant(DBMISC));
+}
+
+void Database::resortStyles()
+{
+   styles.sort(Style_ptr_cmp());
+   hasChanged(QVariant(DBSTYLE));
+}
+
+void Database::resortYeasts()
+{
+   yeasts.sort(Yeast_ptr_cmp());
+   hasChanged(QVariant(DBYEAST));
 }
 
 void Database::savePersistent()
@@ -268,7 +304,7 @@ void Database::addEquipment(Equipment* equip)
       equipments.push_back(equip);
       equipments.sort(Equipment_ptr_cmp());
       equipments.unique(Equipment_ptr_equals()); // No dups.
-      hasChanged();
+      hasChanged(QVariant(DBEQUIP));
    }
 }
 
@@ -279,7 +315,7 @@ void Database::addFermentable(Fermentable* ferm)
       fermentables.push_back(ferm);
       fermentables.sort(Fermentable_ptr_cmp());
       fermentables.unique(Fermentable_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBFERM));
    }
 }
 
@@ -290,7 +326,7 @@ void Database::addHop(Hop* hop)
       hops.push_back(hop);
       hops.sort(Hop_ptr_cmp());
       hops.unique(Hop_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBHOP));
    }
 }
 
@@ -301,7 +337,7 @@ void Database::addMash(Mash* mash)
       mashs.push_back(mash);
       mashs.sort(Mash_ptr_cmp());
       mashs.unique(Mash_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBMASH));
    }
 }
 
@@ -312,7 +348,7 @@ void Database::addMashStep(MashStep* mashStep)
       mashSteps.push_back(mashStep);
       mashSteps.sort(MashStep_ptr_cmp());
       mashSteps.unique(MashStep_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBMASHSTEP));
    }
 }
 
@@ -323,7 +359,7 @@ void Database::addMisc(Misc* misc)
       miscs.push_back(misc);
       miscs.sort(Misc_ptr_cmp());
       miscs.unique(Misc_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBMISC));
    }
 }
 
@@ -360,7 +396,7 @@ void Database::addRecipe(Recipe* rec, bool copySubelements)
          addYeast( rec->getYeast(i) );
    }
 
-   hasChanged();
+   hasChanged(DBRECIPE);
 
 }
 
@@ -371,7 +407,7 @@ void Database::addStyle(Style* style)
       styles.push_back(style);
       styles.sort(Style_ptr_cmp());
       styles.unique(Style_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBSTYLE));
    }
 }
 
@@ -382,7 +418,7 @@ void Database::addWater(Water* water)
       waters.push_back(water);
       waters.sort(Water_ptr_cmp());
       waters.unique(Water_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBWATER));
    }
 }
 
@@ -393,7 +429,7 @@ void Database::addYeast(Yeast* yeast)
       yeasts.push_back(yeast);
       yeasts.sort(Yeast_ptr_cmp());
       yeasts.unique(Yeast_ptr_equals());
-      hasChanged();
+      hasChanged(QVariant(DBYEAST));
    }
 }
 

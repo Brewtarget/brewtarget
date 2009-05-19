@@ -71,7 +71,7 @@ void EquipmentComboBox::notify(Observable *notifier, QVariant info)
    unsigned int i, size;
 
    // Notifier could be the database.
-   if( notifier == dbObs )
+   if( notifier == dbObs && (info.toInt() == DBEQUIP || info.toInt() == DBALL) )
    {
       Equipment* previousSelection = getSelected();
       
