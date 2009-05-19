@@ -1,69 +1,50 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>mainWindow</class>
- <widget class="QMainWindow" name="mainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="mainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
-    <height>615</height>
+    <width>454</width>
+    <height>619</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Brewtarget - 1.0b</string>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>37</y>
-     <width>430</width>
-     <height>555</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_9" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_9">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_14" >
+     <layout class="QHBoxLayout" name="horizontalLayout_14">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_8" >
-        <item>
-         <widget class="QLabel" name="label_12" >
-          <property name="text" >
-           <string>Recipe</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="RecipeComboBox" name="recipeComboBox" >
-          <property name="maximumSize" >
-           <size>
-            <width>124</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_2" >
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0" >
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="title">
+         <string>Recipes</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_15">
+         <item>
+          <widget class="RecipeComboBox" name="recipeComboBox">
+           <property name="maximumSize">
+            <size>
+             <width>160</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_3" >
-        <property name="orientation" >
+       <layout class="QVBoxLayout" name="verticalLayout_8"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
           <height>20</height>
@@ -72,8 +53,8 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="label_Icon" >
-        <property name="text" >
+       <widget class="QLabel" name="label_Icon">
+        <property name="text">
          <string/>
         </property>
        </widget>
@@ -81,48 +62,48 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_18" >
+     <layout class="QHBoxLayout" name="horizontalLayout_18">
       <item>
-       <widget class="QGroupBox" name="groupBox" >
-        <property name="title" >
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
          <string>Your Recipe</string>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_12" >
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2" >
-           <property name="spacing" >
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
             <number>1</number>
            </property>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout" >
+            <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QLabel" name="label" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <widget class="QLabel" name="label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Name</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_name" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <widget class="QLineEdit" name="lineEdit_name">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>100</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize" >
+               <property name="maximumSize">
                 <size>
                  <width>100</width>
                  <height>16777215</height>
@@ -133,35 +114,35 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2" >
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QLabel" name="label_2" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <widget class="QLabel" name="label_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Style</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="StyleComboBox" name="styleComboBox" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <widget class="StyleComboBox" name="styleComboBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>100</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>100</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize" >
+               <property name="maximumSize">
                 <size>
                  <width>100</width>
                  <height>16777215</height>
@@ -172,35 +153,35 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3" >
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <widget class="QLabel" name="label_3" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <widget class="QLabel" name="label_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Equipment</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="EquipmentComboBox" name="equipmentComboBox" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <widget class="EquipmentComboBox" name="equipmentComboBox">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>100</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>100</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize" >
+               <property name="maximumSize">
                 <size>
                  <width>100</width>
                  <height>16777215</height>
@@ -211,35 +192,35 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4" >
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <widget class="QLabel" name="label_4" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <widget class="QLabel" name="label_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Batch Size</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_batchSize" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <widget class="QLineEdit" name="lineEdit_batchSize">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>100</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize" >
+               <property name="maximumSize">
                 <size>
                  <width>100</width>
                  <height>16777215</height>
@@ -250,35 +231,35 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_5" >
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
-              <widget class="QLabel" name="label_5" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <widget class="QLabel" name="label_5">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Boil Size</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_boilSize" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <widget class="QLineEdit" name="lineEdit_boilSize">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>100</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize" >
+               <property name="maximumSize">
                 <size>
                  <width>100</width>
                  <height>16777215</height>
@@ -289,35 +270,35 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6" >
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QLabel" name="label_6" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+              <widget class="QLabel" name="label_6">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                  <horstretch>20</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Efficiency (%)</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_efficiency" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <widget class="QLineEdit" name="lineEdit_efficiency">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>100</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize" >
+               <property name="maximumSize">
                 <size>
                  <width>100</width>
                  <height>16777215</height>
@@ -328,11 +309,11 @@
             </layout>
            </item>
            <item>
-            <spacer name="verticalSpacer_7" >
-             <property name="orientation" >
+            <spacer name="verticalSpacer_7">
+             <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" stdset="0" >
+             <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
                <height>40</height>
@@ -343,46 +324,49 @@
           </layout>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_lcd" >
-           <property name="spacing" >
+          <layout class="QVBoxLayout" name="verticalLayout_lcd">
+           <property name="spacing">
             <number>1</number>
            </property>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7" >
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="sizeConstraint">
+              <enum>QLayout::SetNoConstraint</enum>
+             </property>
              <item>
-              <widget class="QLabel" name="label_7" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+              <widget class="QLabel" name="label_7">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>OG</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLCDNumber" name="lcdNumber_og" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+              <widget class="QLCDNumber" name="lcdNumber_og">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="segmentStyle" >
+               <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
@@ -390,41 +374,54 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8" >
+            <spacer name="verticalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
              <item>
-              <widget class="QLabel" name="label_8" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+              <widget class="QLabel" name="label_8">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>FG</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLCDNumber" name="lcdNumber_fg" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+              <widget class="QLCDNumber" name="lcdNumber_fg">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="segmentStyle" >
+               <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
@@ -432,41 +429,54 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_9" >
+            <spacer name="verticalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
              <item>
-              <widget class="QLabel" name="label_9" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+              <widget class="QLabel" name="label_9">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>ABV (%)</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLCDNumber" name="lcdNumber_abv" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+              <widget class="QLCDNumber" name="lcdNumber_abv">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="segmentStyle" >
+               <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
@@ -474,41 +484,54 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_10" >
+            <spacer name="verticalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
              <item>
-              <widget class="QLabel" name="label_10" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+              <widget class="QLabel" name="label_10">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
-                 <width>80</width>
+                 <width>90</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Bitterness (IBU)</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLCDNumber" name="lcdNumber_ibu" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+              <widget class="QLCDNumber" name="lcdNumber_ibu">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="segmentStyle" >
+               <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
@@ -516,41 +539,54 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_11" >
+            <spacer name="verticalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
              <item>
-              <widget class="QLabel" name="label_11" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+              <widget class="QLabel" name="label_11">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>Color (SRM)</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLCDNumber" name="lcdNumber_srm" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+              <widget class="QLCDNumber" name="lcdNumber_srm">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize" >
+               <property name="minimumSize">
                 <size>
                  <width>80</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="segmentStyle" >
+               <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
@@ -558,11 +594,11 @@
             </layout>
            </item>
            <item>
-            <spacer name="verticalSpacer" >
-             <property name="orientation" >
+            <spacer name="verticalSpacer">
+             <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" stdset="0" >
+             <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
                <height>40</height>
@@ -573,14 +609,31 @@
           </layout>
          </item>
          <item>
-          <spacer name="horizontalSpacer" >
-           <property name="orientation" >
+          <layout class="QVBoxLayout" name="verticalLayout_beerColor">
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeType" >
+           <property name="sizeType">
             <enum>QSizePolicy::MinimumExpanding</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>5</width>
              <height>20</height>
@@ -594,44 +647,36 @@
      </layout>
     </item>
     <item>
-     <widget class="QTabWidget" name="tabWidget" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="minimumSize" >
+      <property name="minimumSize">
        <size>
         <width>0</width>
         <height>200</height>
        </size>
       </property>
-      <property name="currentIndex" >
+      <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="fermentableTab" >
-       <property name="geometry" >
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>408</width>
-         <height>172</height>
-        </rect>
-       </property>
-       <attribute name="title" >
+      <widget class="QWidget" name="fermentableTab">
+       <attribute name="title">
         <string>Fermentables</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_19" >
+       <layout class="QHBoxLayout" name="horizontalLayout_19">
         <item>
-         <widget class="FermentableTableWidget" name="fermentableTable" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+         <widget class="FermentableTableWidget" name="fermentableTable">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize" >
+          <property name="minimumSize">
            <size>
             <width>0</width>
             <height>20</height>
@@ -640,37 +685,37 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3" >
-          <property name="spacing" >
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
            <number>1</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pushButton_addFerm" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_addFerm">
+            <property name="text">
              <string>Add</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_removeFerm" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_removeFerm">
+            <property name="text">
              <string>Remove</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_editFerm" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_editFerm">
+            <property name="text">
              <string>Edit</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer_3" >
-            <property name="orientation" >
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeHint" stdset="0" >
+            <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
               <height>40</height>
@@ -682,54 +727,46 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="hopsTab" >
-       <property name="geometry" >
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>408</width>
-         <height>172</height>
-        </rect>
-       </property>
-       <attribute name="title" >
+      <widget class="QWidget" name="hopsTab">
+       <attribute name="title">
         <string>Hops</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_20" >
+       <layout class="QHBoxLayout" name="horizontalLayout_20">
         <item>
-         <widget class="HopTableWidget" name="hopTable" />
+         <widget class="HopTableWidget" name="hopTable"/>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_4" >
-          <property name="spacing" >
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="spacing">
            <number>1</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pushButton_addHop" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_addHop">
+            <property name="text">
              <string>Add</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_removeHop" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_removeHop">
+            <property name="text">
              <string>Remove</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_editHop" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_editHop">
+            <property name="text">
              <string>Edit</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer_4" >
-            <property name="orientation" >
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeHint" stdset="0" >
+            <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
               <height>40</height>
@@ -741,54 +778,46 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="miscTab" >
-       <property name="geometry" >
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>408</width>
-         <height>172</height>
-        </rect>
-       </property>
-       <attribute name="title" >
+      <widget class="QWidget" name="miscTab">
+       <attribute name="title">
         <string>Miscellaneous</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_21" >
+       <layout class="QHBoxLayout" name="horizontalLayout_21">
         <item>
-         <widget class="MiscTableWidget" name="miscTable" />
+         <widget class="MiscTableWidget" name="miscTable"/>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5" >
-          <property name="spacing" >
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
            <number>1</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pushButton_addMisc" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_addMisc">
+            <property name="text">
              <string>Add</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_removeMisc" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_removeMisc">
+            <property name="text">
              <string>Remove</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_editMisc" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_editMisc">
+            <property name="text">
              <string>Edit</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer_5" >
-            <property name="orientation" >
+           <spacer name="verticalSpacer_5">
+            <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeHint" stdset="0" >
+            <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
               <height>40</height>
@@ -800,54 +829,46 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_3" >
-       <property name="geometry" >
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>408</width>
-         <height>172</height>
-        </rect>
-       </property>
-       <attribute name="title" >
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
         <string>Yeast</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_13" >
+       <layout class="QHBoxLayout" name="horizontalLayout_13">
         <item>
-         <widget class="YeastTableWidget" name="yeastTable" />
+         <widget class="YeastTableWidget" name="yeastTable"/>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6" >
-          <property name="spacing" >
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <property name="spacing">
            <number>1</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pushButton_addYeast" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_addYeast">
+            <property name="text">
              <string>Add</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_removeYeast" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_removeYeast">
+            <property name="text">
              <string>Remove</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_editYeast" >
-            <property name="text" >
+           <widget class="QPushButton" name="pushButton_editYeast">
+            <property name="text">
              <string>Edit</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer_6" >
-            <property name="orientation" >
+           <spacer name="verticalSpacer_6">
+            <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeHint" stdset="0" >
+            <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
               <height>40</height>
@@ -858,19 +879,17 @@
          </layout>
         </item>
        </layout>
-       <zorder></zorder>
-       <zorder>yeastTable</zorder>
       </widget>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_17" >
+     <layout class="QHBoxLayout" name="horizontalLayout_17">
       <item>
-       <spacer name="horizontalSpacer_2" >
-        <property name="orientation" >
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
           <height>20</height>
@@ -879,22 +898,22 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_save" >
-        <property name="text" >
+       <widget class="QPushButton" name="pushButton_save">
+        <property name="text">
          <string>Save</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_clear" >
-        <property name="text" >
+       <widget class="QPushButton" name="pushButton_clear">
+        <property name="text">
          <string>Clear</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_exit" >
-        <property name="text" >
+       <widget class="QPushButton" name="pushButton_exit">
+        <property name="text">
          <string>Exit</string>
         </property>
        </widget>
@@ -903,140 +922,123 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>430</width>
-     <height>26</height>
+     <width>454</width>
+     <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNewRecipe" />
-    <addaction name="separator" />
-    <addaction name="actionImport_Recipes" />
-    <addaction name="actionExportRecipe" />
-    <addaction name="separator" />
-    <addaction name="actionExit" />
+    <addaction name="actionNewRecipe"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport_Recipes"/>
+    <addaction name="actionExportRecipe"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuAbout" >
-    <property name="title" >
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
      <string>About</string>
     </property>
-    <addaction name="actionAbout_BrewTarget" />
+    <addaction name="actionAbout_BrewTarget"/>
    </widget>
-   <widget class="QMenu" name="menuView" >
-    <property name="title" >
+   <widget class="QMenu" name="menuView">
+    <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionEquipments" />
-    <addaction name="actionFermentables" />
-    <addaction name="actionHops" />
-    <addaction name="actionMiscs" />
-    <addaction name="actionStyles" />
-    <addaction name="actionYeasts" />
+    <addaction name="actionEquipments"/>
+    <addaction name="actionFermentables"/>
+    <addaction name="actionHops"/>
+    <addaction name="actionMiscs"/>
+    <addaction name="actionStyles"/>
+    <addaction name="actionYeasts"/>
    </widget>
-   <widget class="QMenu" name="menuTools" >
-    <property name="title" >
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionOptions" />
+    <addaction name="actionOptions"/>
    </widget>
-   <addaction name="menuFile" />
-   <addaction name="menuView" />
-   <addaction name="menuTools" />
-   <addaction name="menuAbout" />
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuAbout"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>592</y>
-     <width>430</width>
-     <height>23</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="toolBar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>26</y>
-     <width>430</width>
-     <height>11</height>
-    </rect>
-   </property>
-   <property name="windowTitle" >
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
     <string>toolBar</string>
    </property>
-   <attribute name="toolBarArea" >
+   <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="actionAbout_BrewTarget" >
-   <property name="text" >
+  <action name="actionAbout_BrewTarget">
+   <property name="text">
     <string>About BrewTarget</string>
    </property>
   </action>
-  <action name="actionExportRecipe" >
-   <property name="text" >
+  <action name="actionExportRecipe">
+   <property name="text">
     <string>Export Recipe</string>
    </property>
   </action>
-  <action name="actionNewRecipe" >
-   <property name="text" >
+  <action name="actionNewRecipe">
+   <property name="text">
     <string>New Recipe</string>
    </property>
   </action>
-  <action name="actionFermentables" >
-   <property name="text" >
+  <action name="actionFermentables">
+   <property name="text">
     <string>Fermentables</string>
    </property>
   </action>
-  <action name="actionHops" >
-   <property name="text" >
+  <action name="actionHops">
+   <property name="text">
     <string>Hops</string>
    </property>
   </action>
-  <action name="actionMiscs" >
-   <property name="text" >
+  <action name="actionMiscs">
+   <property name="text">
     <string>Miscs</string>
    </property>
   </action>
-  <action name="actionYeasts" >
-   <property name="text" >
+  <action name="actionYeasts">
+   <property name="text">
     <string>Yeasts</string>
    </property>
   </action>
-  <action name="actionEquipments" >
-   <property name="text" >
+  <action name="actionEquipments">
+   <property name="text">
     <string>Equipments</string>
    </property>
   </action>
-  <action name="actionStyles" >
-   <property name="text" >
+  <action name="actionStyles">
+   <property name="text">
     <string>Styles</string>
    </property>
   </action>
-  <action name="actionExit" >
-   <property name="text" >
+  <action name="actionExit">
+   <property name="text">
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionImport_Recipes" >
-   <property name="text" >
+  <action name="actionImport_Recipes">
+   <property name="text">
     <string>Import Recipes</string>
    </property>
   </action>
-  <action name="actionOptions" >
-   <property name="text" >
+  <action name="actionOptions">
+   <property name="text">
     <string>Options</string>
    </property>
   </action>

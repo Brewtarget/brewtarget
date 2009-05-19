@@ -118,7 +118,7 @@ MainWindow::MainWindow(QWidget* parent)
    fileSaver->setViewMode(QFileDialog::List);
 
    // Set up and place the BeerColorWidget
-   verticalLayout_lcd->insertWidget( 5, &beerColorWidget);
+   verticalLayout_beerColor->insertWidget( 0, &beerColorWidget);
 
    // Setup some of the widgets.
    recipeComboBox->startObservingDB();
