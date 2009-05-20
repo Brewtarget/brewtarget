@@ -85,7 +85,6 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    setWindowIcon(QIcon(ICON48));
-   label_Icon->setPixmap(QPixmap(ICON96));
 
    // Different palettes for lcds.
    lcdPalette_old = lcdNumber_og->palette();
@@ -141,6 +140,7 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog->startObservingDB();
 
    // Icons for menu items
+   actionExit->setIcon(QIcon(EXITPNG));
    actionFermentables->setIcon(QIcon(SMALLBARLEY));
    actionHops->setIcon(QIcon(SMALLHOP));
    actionYeasts->setIcon(QIcon(SMALLYEAST));
@@ -156,9 +156,6 @@ MainWindow::MainWindow(QWidget* parent)
       setRecipe( *(db->getRecipeBegin()) );
 
    // Connect signals.
-   connect( pushButton_exit, SIGNAL( clicked() ), this, SLOT( exit() ));
-   connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ));
-   connect( pushButton_clear, SIGNAL( clicked() ), this, SLOT( clear() ));
    connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
@@ -194,12 +191,15 @@ MainWindow::MainWindow(QWidget* parent)
 
 void MainWindow::setupToolbar()
 {
-   QToolButton *newRec, *viewEquip, *viewFerm, *viewHops,
+   QToolButton *newRec, *clearRec, *save,
+               *viewEquip, *viewFerm, *viewHops,
                *viewMiscs, *viewStyles, *viewYeast;
 
    setIconSize(QSize(16, 16));
 
    newRec = new QToolButton(toolBar);
+   clearRec = new QToolButton(toolBar);
+   save = new QToolButton(toolBar);
    viewEquip = new QToolButton(toolBar);
    viewFerm = new QToolButton(toolBar);
    viewHops = new QToolButton(toolBar);
@@ -208,6 +208,8 @@ void MainWindow::setupToolbar()
    viewYeast = new QToolButton(toolBar);
    
    newRec->setIcon(QIcon(SMALLPLUS));
+   clearRec->setIcon(QIcon(SHRED));
+   save->setIcon(QIcon(SAVEPNG));
    viewEquip->setIcon(QIcon(SMALLKETTLE));
    viewFerm->setIcon(QIcon(SMALLBARLEY));
    viewHops->setIcon(QIcon(SMALLHOP));
@@ -216,6 +218,8 @@ void MainWindow::setupToolbar()
    viewYeast->setIcon(QIcon(SMALLYEAST));
 
    newRec->setToolTip(QString("New recipe"));
+   clearRec->setToolTip(QString("Clear recipe"));
+   save->setToolTip(QString("Save database"));
    viewEquip->setToolTip(QString("View equipments"));
    viewFerm->setToolTip(QString("View fermentables"));
    viewHops->setToolTip(QString("View hops"));
@@ -224,6 +228,8 @@ void MainWindow::setupToolbar()
    viewYeast->setToolTip(QString("View yeasts"));
 
    toolBar->addWidget(newRec);
+   toolBar->addWidget(save);
+   toolBar->addWidget(clearRec);
    toolBar->addSeparator();
    toolBar->addWidget(viewEquip);
    toolBar->addWidget(viewFerm);
@@ -233,6 +239,8 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(viewYeast);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
+   connect( save, SIGNAL(clicked()), this, SLOT(save()) );
+   connect( clearRec, SIGNAL(clicked()), this, SLOT(clear()) );
    connect( viewEquip, SIGNAL(clicked()), equipEditor, SLOT(show()) );
    connect( viewFerm, SIGNAL(clicked()), fermDialog, SLOT(show()) );
    connect( viewHops, SIGNAL(clicked()), hopDialog, SLOT(show()) );

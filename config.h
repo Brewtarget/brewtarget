@@ -33,6 +33,9 @@
 #define SMALLARROW ":/images/smallArrow.png"
 #define SMALLINFO ":/images/smallInfo.png"
 #define SMALLOUTARROW ":/images/smallOutArrow.png"
+#define SHRED ":/images/editshred.png"
+#define EXITPNG ":/images/exit.png"
+#define SAVEPNG ":/images/filesave.png"
 
 /* Things that will get configured by configure script */
 

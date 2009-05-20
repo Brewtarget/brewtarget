@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>454</width>
-    <height>619</height>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,25 +37,29 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_8"/>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
       <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_Icon">
+       <widget class="QLabel" name="label_12">
         <property name="text">
          <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="brewtarget.qrc">:/images/title.png</pixmap>
         </property>
        </widget>
       </item>
@@ -678,22 +682,43 @@
           </property>
           <item>
            <widget class="QPushButton" name="pushButton_addFerm">
-            <property name="text">
+            <property name="toolTip">
              <string>Add</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="brewtarget.qrc">
+              <normaloff>:/images/smallPlus.png</normaloff>:/images/smallPlus.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_removeFerm">
-            <property name="text">
+            <property name="toolTip">
              <string>Remove</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="brewtarget.qrc">
+              <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_editFerm">
-            <property name="text">
+            <property name="toolTip">
              <string>Edit</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="brewtarget.qrc">
+              <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
             </property>
            </widget>
           </item>
@@ -869,44 +894,6 @@
       </widget>
      </widget>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_17">
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_save">
-        <property name="text">
-         <string>Save</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_clear">
-        <property name="text">
-         <string>Clear</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_exit">
-        <property name="text">
-         <string>Exit</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1067,6 +1054,8 @@
    <header>YeastTableWidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="brewtarget.qrc"/>
+ </resources>
  <connections/>
 </ui>

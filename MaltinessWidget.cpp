@@ -62,6 +62,8 @@ void MaltinessWidget::observeRecipe(Recipe* recipe)
    recObs = recipe;
    if( recipe != 0 )
       setObserved(recipe);
+
+   update();
 }
 
 void MaltinessWidget::paintEvent(QPaintEvent*)

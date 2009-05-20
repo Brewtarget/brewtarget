@@ -31,5 +31,11 @@
    <file>images/smallArrow.png</file>
    <file>images/smallInfo.png</file>
    <file>images/smallOutArrow.png</file>
+   <file>images/editshred.png</file>
+   <file>images/exit.png</file>
+   <file>images/filesave.png</file>
+   <file>images/smallMinus.png</file>
+   <file>images/edit.png</file>
+   <file>images/title.png</file>
 </qresource>
 </RCC>
