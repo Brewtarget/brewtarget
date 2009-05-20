@@ -53,7 +53,10 @@ void YeastEditor::save()
    Yeast *y = obsYeast;
 
    if( y == 0 )
+   {
+      setVisible(false);
       return;
+   }
 
    // Need to disable notification since every "set" method will cause a "showChanges" that
    // will revert any changes made.
@@ -80,6 +83,8 @@ void YeastEditor::save()
    y->forceNotify();
 
    Database::getDatabase()->resortYeasts(); // If the name changed, need to resort.
+
+   setVisible(false);
 }
 
 void YeastEditor::clearAndClose()

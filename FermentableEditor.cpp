@@ -52,7 +52,10 @@ void FermentableEditor::setFermentable( Fermentable* f )
 void FermentableEditor::save()
 {
    if( obsFerm == 0 )
+   {
+      setVisible(false);
       return;
+   }
 
    // Need to disable notification since every "set" method will cause a "showChanges" that
    // will revert any changes made.
@@ -79,6 +82,9 @@ void FermentableEditor::save()
    obsFerm->forceNotify();
 
    Database::getDatabase()->resortFermentables(); // If the name changed, need to resort.
+
+   setVisible(false);
+   return;
 }
 
 void FermentableEditor::clearAndClose()

@@ -37,6 +37,7 @@ StyleEditor::StyleEditor(QWidget* parent)
    setWindowIcon(QIcon(SMALLSTYLE));
 
    styleComboBox->startObservingDB();
+   obsStyle = 0;
 
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
@@ -62,6 +63,11 @@ void StyleEditor::styleSelected( const QString& /*text*/ )
 void StyleEditor::save()
 {
    Style* s = obsStyle;
+   if( s == 0 )
+   {
+      setVisible(false);
+      return;
+   }
 
    s->disableNotification();
 
@@ -92,6 +98,9 @@ void StyleEditor::save()
    s->forceNotify();
 
    Database::getDatabase()->resortStyles(); // If the name changed, need to resort.
+
+   setVisible(false);
+   return;
 }
 
 void StyleEditor::newStyle()

@@ -456,6 +456,11 @@ void MainWindow::showChanges()
       lcdNumber_ibu->setPalette(lcdPalette_old);
       lcdNumber_srm->setPalette(lcdPalette_old);
    }
+   lcdNumber_og->update();
+   lcdNumber_fg->update();
+   lcdNumber_abv->update();
+   lcdNumber_ibu->update();
+   lcdNumber_srm->update();
 
    beerColorWidget.setColor( recipeObs->getSRMColor() );
 }

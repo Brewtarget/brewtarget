@@ -37,6 +37,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent)
    setWindowIcon(QIcon(SMALLKETTLE));
 
    equipmentComboBox->startObservingDB();
+   obsEquip = 0;
 
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
@@ -61,6 +62,12 @@ void EquipmentEditor::equipmentSelected( const QString& /*text*/ )
 
 void EquipmentEditor::save()
 {
+   if( obsEquip == 0 )
+   {
+      setVisible(false);
+      return;
+   }
+
    obsEquip->disableNotification();
 
    obsEquip->setName( lineEdit_name->text().toStdString() );
@@ -89,6 +96,9 @@ void EquipmentEditor::save()
    obsEquip->forceNotify();
 
    Database::getDatabase()->resortEquipments(); // If the name changed, need to resort.
+
+   setVisible(false);
+   return;
 }
 
 void EquipmentEditor::newEquipment()

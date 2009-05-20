@@ -56,7 +56,10 @@ void MiscEditor::save()
    Misc *m = obsMisc;
    
    if( m == 0 )
+   {
+      setVisible(false);
       return;
+   }
    
    // Need to disable notification since every "set" method will cause a "showChanges" that
    // will revert any changes made.
@@ -76,6 +79,8 @@ void MiscEditor::save()
    m->forceNotify();
 
    Database::getDatabase()->resortMiscs(); // If the name changed, need to resort.
+
+   setVisible(false);
 }
 
 void MiscEditor::clearAndClose()

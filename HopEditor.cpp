@@ -54,7 +54,10 @@ void HopEditor::save()
    Hop *h = obsHop;
 
    if( h == 0 )
+   {
+      setVisible(false);
       return;
+   }
 
    // Need to disable notification since every "set" method will cause a "showChanges" that
    // will revert any changes made.
@@ -82,6 +85,8 @@ void HopEditor::save()
    h->forceNotify();
 
    Database::getDatabase()->resortHops(); // If the name changed, need to resort.
+
+   setVisible(false);
 }
 
 void HopEditor::clearAndClose()
