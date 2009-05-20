@@ -43,6 +43,7 @@ class MainWindow;
 #include "EquipmentEditor.h"
 #include "StyleEditor.h"
 #include "OptionDialog.h"
+#include "MaltinessWidget.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -106,6 +107,7 @@ private:
    BeerColorWidget beerColorWidget;
    OptionDialog* optionDialog;
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
+   MaltinessWidget maltWidget;
 
    void setupToolbar();
    void showChanges();

@@ -80,6 +80,8 @@
       <itemPath>../../MainWindow.cpp</itemPath>
       <itemPath>../../MainWindow.h</itemPath>
       <itemPath>../../mainWindow.ui</itemPath>
+      <itemPath>../../MaltinessWidget.cpp</itemPath>
+      <itemPath>../../MaltinessWidget.h</itemPath>
       <itemPath>../../mash.cpp</itemPath>
       <itemPath>../../mash.h</itemPath>
       <itemPath>../../mashstep.cpp</itemPath>
@@ -255,6 +257,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MainWindow.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MaltinessWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MaltinessWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MashStepTableModel.cpp">
@@ -701,6 +709,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MainWindow.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MaltinessWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MaltinessWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MashStepTableModel.cpp">

@@ -91,6 +91,7 @@ HEADERS += AboutDialog.h \
            HopTableModel.h \
            HopTableWidget.h \
            MainWindow.h \
+           MaltinessWidget.h \
            mash.h \
            mashstep.h \
            MashStepTableModel.h \
@@ -153,6 +154,7 @@ SOURCES += database.cpp \
            HopTableModel.cpp \
            HopTableWidget.cpp \
            MainWindow.cpp \
+           MaltinessWidget.cpp \
            mash.cpp \
            mashstep.cpp \
            MashStepTableModel.cpp \

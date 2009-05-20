@@ -128,6 +128,8 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Set up and place the BeerColorWidget
    verticalLayout_beerColor->insertWidget( 0, &beerColorWidget);
+   // And test out the maltiness widget.
+   verticalLayout_beerColor->insertWidget( -1, &maltWidget );
 
    // Setup some of the widgets.
    recipeComboBox->startObservingDB();
@@ -303,6 +305,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    styleComboBox->observeRecipe(recipe);
    // And the equipment CB too...
    equipmentComboBox->observeRecipe(recipe);
+   maltWidget.observeRecipe(recipe);
 
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )
