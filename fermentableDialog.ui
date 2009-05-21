@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>fermentableDialog</class>
- <widget class="QDialog" name="fermentableDialog" >
-  <property name="geometry" >
+ <widget class="QDialog" name="fermentableDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,21 +10,21 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Fermentable Database</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="FermentableTableWidget" name="fermentableTableWidget" />
+    <widget class="FermentableTableWidget" name="fermentableTableWidget"/>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" >
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <spacer name="horizontalSpacer" >
-       <property name="orientation" >
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -32,23 +33,44 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_addToRecipe" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButton_addToRecipe">
+       <property name="text">
         <string>Add to Recipe</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_new" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButton_new">
+       <property name="text">
         <string>New</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_edit" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButton_edit">
+       <property name="toolTip">
         <string>Edit</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="brewtarget.qrc">
+         <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_remove">
+       <property name="toolTip">
+        <string>Remove</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="brewtarget.qrc">
+         <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
        </property>
       </widget>
      </item>
@@ -63,6 +85,8 @@
    <header>FermentableTableWidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="brewtarget.qrc"/>
+ </resources>
  <connections/>
 </ui>

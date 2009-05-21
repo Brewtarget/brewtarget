@@ -39,8 +39,11 @@ public:
    void startObservingDB();
    void addRecipe(Recipe* recipe);
    void setIndexByRecipeName(std::string name);
+   void setIndex(int ndx);
    void removeAllRecipes();
    void repopulateList();
+
+   Recipe* getSelectedRecipe();
 
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
 

@@ -67,6 +67,17 @@ public:
    void addWater(Water* water);
    void addYeast(Yeast* yeast);
 
+   void removeEquipment(Equipment* equip);
+   void removeFermentable(Fermentable* ferm);
+   void removeHop(Hop* hop);
+   void removeMash(Mash* mash);
+   void removeMashStep(MashStep* mashStep);
+   void removeMisc(Misc* misc);
+   void removeRecipe(Recipe* rec);
+   void removeStyle(Style* style);
+   void removeWater(Water* water);
+   void removeYeast(Yeast* yeast);
+
    void resortAll(); // Sorts all the lists by their compare methods.
    void resortFermentables();
    void resortEquipments();

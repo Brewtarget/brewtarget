@@ -42,6 +42,28 @@ YeastDialog::YeastDialog(MainWindow* parent)
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
+   connect( pushButton_remove, SIGNAL(clicked()), this, SLOT( removeYeast() ) );
+}
+
+void YeastDialog::removeYeast()
+{
+   QModelIndexList selected = yeastTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Yeast *yeast = yeastTableWidget->getModel()->getYeast(row);
+   dbObs->removeYeast(yeast);
 }
 
 void YeastDialog::notify(Observable *notifier, QVariant info)

@@ -41,6 +41,7 @@ public:
 
 public slots:
    void addHop();
+   void removeHop();
    void editSelected();
    void newHop();
 

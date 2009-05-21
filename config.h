@@ -30,6 +30,7 @@
 #define SMALLQUESTION ":/images/smallQuestion.png"
 #define SMALLSTYLE ":/images/smallStyle.png"
 #define SMALLPLUS ":/images/smallPlus.png"
+#define SMALLMINUS ":/images/smallMinus.png"
 #define SMALLARROW ":/images/smallArrow.png"
 #define SMALLINFO ":/images/smallInfo.png"
 #define SMALLOUTARROW ":/images/smallOutArrow.png"

@@ -44,6 +44,7 @@
       <itemPath>../../brewtarget.cpp</itemPath>
       <itemPath>../../brewtarget.h</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
+      <itemPath>../../brewtarget.qrc</itemPath>
       <itemPath>../../config.h</itemPath>
       <itemPath>../../configure</itemPath>
       <itemPath>../../database.cpp</itemPath>
@@ -452,6 +453,9 @@
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../brewtarget.qrc">
         <itemTool>3</itemTool>
       </item>
       <item path="../../config.h">
@@ -904,6 +908,9 @@ make clean</buildCommand>
         <itemTool>3</itemTool>
       </item>
       <item path="../../brewtarget.pro">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../brewtarget.qrc">
         <itemTool>3</itemTool>
       </item>
       <item path="../../config.h">

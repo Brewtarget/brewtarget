@@ -41,6 +41,7 @@ public:
 
 public slots:
    void addMisc();
+   void removeMisc();
    void editSelected();
    void newMisc();
 

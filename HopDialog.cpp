@@ -42,6 +42,28 @@ HopDialog::HopDialog(MainWindow* parent)
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
+   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
+}
+
+void HopDialog::removeHop()
+{
+   QModelIndexList selected = hopTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Hop *hop = hopTableWidget->getModel()->getHop(row);
+   dbObs->removeHop(hop);
 }
 
 void HopDialog::notify(Observable *notifier, QVariant info)

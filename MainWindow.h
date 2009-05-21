@@ -85,6 +85,7 @@ public slots:
    void editSelectedYeast();
 
    void newRecipe();
+   void removeRecipe();
    void exportRecipe();
    void importRecipes();
 

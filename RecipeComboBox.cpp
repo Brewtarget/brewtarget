@@ -100,9 +100,12 @@ void RecipeComboBox::setIndexByRecipeName(std::string name)
    int ndx;
 
    ndx = findText( tr(name.c_str()), Qt::MatchExactly );
-   if( ndx == -1 )
-      return;
 
+   setCurrentIndex(ndx);
+}
+
+void RecipeComboBox::setIndex(int ndx)
+{
    setCurrentIndex(ndx);
 }
 
@@ -114,4 +117,12 @@ void RecipeComboBox::repopulateList()
    size = recipeObs.size();
    for( i = 0; i < size; ++i )
       addItem( tr(recipeObs[i]->getName().c_str()) );
+}
+
+Recipe* RecipeComboBox::getSelectedRecipe()
+{
+   if( currentIndex() >= 0 )
+      return recipeObs[currentIndex()];
+   else
+      return 0;
 }

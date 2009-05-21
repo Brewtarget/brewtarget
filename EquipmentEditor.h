@@ -37,6 +37,8 @@ public:
 public slots:
    void save();
    void newEquipment();
+   void removeEquipment();
+   void clear();
    void clearAndClose();
 
    void equipmentSelected( const QString& text );

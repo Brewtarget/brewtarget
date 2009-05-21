@@ -42,6 +42,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent)
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
+   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeEquipment() ) );
    connect( equipmentComboBox, SIGNAL(currentIndexChanged ( const QString& )), this, SLOT( equipmentSelected(const QString&) ) );
 }
 
@@ -53,6 +54,42 @@ void EquipmentEditor::setEquipment( Equipment* e )
       setObserved(obsEquip);
       showChanges();
    }
+}
+
+void EquipmentEditor::removeEquipment()
+{
+   if( obsEquip )
+      Database::getDatabase()->removeEquipment(obsEquip);
+
+   obsEquip = 0;
+   setObserved(obsEquip);
+
+   equipmentComboBox->setIndexByEquipmentName("");
+   showChanges();
+}
+
+void EquipmentEditor::clear()
+{
+   lineEdit_name->setText(QString(""));
+   lineEdit_name->setCursorPosition(0);
+   lineEdit_boilSize->setText(QString(""));
+   checkBox_calcBoilVolume->setCheckState( Qt::Unchecked );
+   lineEdit_batchSize->setText(QString(""));
+
+   lineEdit_tunVolume->setText(QString(""));
+   lineEdit_tunWeight->setText(QString(""));
+   lineEdit_tunSpecificHeat->setText(QString(""));
+
+   lineEdit_boilTime->setText(QString(""));
+   lineEdit_evaporationRate->setText(QString(""));
+   lineEdit_topUpKettle->setText(QString(""));
+   lineEdit_topUpWater->setText(QString(""));
+   lineEdit_hopUtilization->setText(QString(""));
+
+   lineEdit_trubChillerLoss->setText(QString(""));
+   lineEdit_lauterDeadspace->setText(QString(""));
+
+   textEdit_notes->setText("");
 }
 
 void EquipmentEditor::equipmentSelected( const QString& /*text*/ )
@@ -129,6 +166,11 @@ void EquipmentEditor::notify(Observable* /*notifier*/, QVariant info)
 void EquipmentEditor::showChanges()
 {
    Equipment *e = obsEquip;
+   if( e == 0 )
+   {
+      clear();
+      return;
+   }
 
    equipmentComboBox->setIndexByEquipmentName(e->getName());
 

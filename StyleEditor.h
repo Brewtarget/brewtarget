@@ -37,6 +37,8 @@ public:
 public slots:
    void save();
    void newStyle();
+   void removeStyle();
+   void clear();
    void clearAndClose();
 
    void styleSelected( const QString& text );

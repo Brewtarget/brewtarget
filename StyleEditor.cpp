@@ -42,6 +42,7 @@ StyleEditor::StyleEditor(QWidget* parent)
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
+   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT(removeStyle()) );
    connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
 }
 
@@ -53,6 +54,18 @@ void StyleEditor::setStyle( Style* s )
       setObserved(obsStyle);
       showChanges();
    }
+}
+
+void StyleEditor::removeStyle()
+{
+   if( obsStyle )
+      Database::getDatabase()->removeStyle(obsStyle);
+
+   obsStyle = 0;
+   setObserved(obsStyle);
+   
+   styleComboBox->setIndexByStyleName("");
+   showChanges();
 }
 
 void StyleEditor::styleSelected( const QString& /*text*/ )
@@ -123,14 +136,44 @@ void StyleEditor::clearAndClose()
    setVisible(false);
 }
 
-void StyleEditor::notify(Observable* /*notifier*/, QVariant info)
+void StyleEditor::notify(Observable* /*notifier*/, QVariant /*info*/)
 {
    showChanges();
+}
+
+void StyleEditor::clear()
+{
+   lineEdit_name->setText(QString(""));
+   lineEdit_category->setText(QString(""));
+   lineEdit_categoryNumber->setText(QString(""));
+   lineEdit_styleLetter->setText(QString(""));
+   lineEdit_styleGuide->setText(QString(""));
+   lineEdit_ogMin->setText(QString(""));
+   lineEdit_ogMax->setText(QString(""));
+   lineEdit_fgMin->setText(QString(""));
+   lineEdit_fgMax->setText(QString(""));
+   lineEdit_ibuMin->setText(QString(""));
+   lineEdit_ibuMax->setText(QString(""));
+   lineEdit_colorMin->setText(QString(""));
+   lineEdit_colorMax->setText(QString(""));
+   lineEdit_carbMin->setText(QString(""));
+   lineEdit_carbMax->setText(QString(""));
+   lineEdit_abvMin->setText(QString(""));
+   lineEdit_abvMax->setText(QString(""));
+   textEdit_profile->setText(QString(""));
+   textEdit_ingredients->setText(QString(""));
+   textEdit_examples->setText(QString(""));
+   textEdit_notes->setText(QString(""));
 }
 
 void StyleEditor::showChanges()
 {
    Style *s = obsStyle;
+   if( s == 0 )
+   {
+      clear();
+      return;
+   }
 
    styleComboBox->setIndexByStyleName(s->getName());
 

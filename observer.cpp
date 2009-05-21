@@ -39,7 +39,8 @@ void Observer::setObserved(Observable* obs)
       observed->removeObserver(this);
    
    observed = obs;
-   observed->addObserver(this);
+   if( observed )
+      observed->addObserver(this);
 }
 
 MultipleObserver::MultipleObserver()

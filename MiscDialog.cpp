@@ -42,6 +42,28 @@ MiscDialog::MiscDialog(MainWindow* parent)
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
+   connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
+}
+
+void MiscDialog::removeMisc()
+{
+   QModelIndexList selected = miscTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Misc* m = miscTableWidget->getModel()->getMisc(row);
+   dbObs->removeMisc(m);
 }
 
 void MiscDialog::notify(Observable *notifier, QVariant info)

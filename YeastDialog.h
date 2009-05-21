@@ -41,6 +41,7 @@ public:
 
 public slots:
    void addYeast();
+   void removeYeast();
    void editSelected();
    void newYeast();
 

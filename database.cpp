@@ -411,6 +411,66 @@ void Database::addStyle(Style* style)
    }
 }
 
+void Database::removeEquipment(Equipment* equip)
+{
+   equipments.remove(equip);
+   hasChanged(QVariant(DBEQUIP));
+}
+
+void Database::removeFermentable(Fermentable* ferm)
+{
+   fermentables.remove(ferm);
+   hasChanged(QVariant(DBFERM));
+}
+
+void Database::removeHop(Hop* hop)
+{
+   hops.remove(hop);
+   hasChanged(QVariant(DBHOP));
+}
+
+void Database::removeMash(Mash* mash)
+{
+   mashs.remove(mash);
+   hasChanged(QVariant(DBMASH));
+}
+
+void Database::removeMashStep(MashStep* mashStep)
+{
+   mashSteps.remove(mashStep);
+   hasChanged(QVariant(DBMASHSTEP));
+}
+
+void Database::removeMisc(Misc* misc)
+{
+   miscs.remove(misc);
+   hasChanged(QVariant(DBMISC));
+}
+
+void Database::removeRecipe(Recipe* rec)
+{
+   recipes.remove(rec);
+   hasChanged(QVariant(DBRECIPE));
+}
+
+void Database::removeStyle(Style* style)
+{
+   styles.remove(style); // Wow, that was easy.
+   hasChanged(QVariant(DBSTYLE));
+}
+
+void Database::removeWater(Water* water)
+{
+   waters.remove(water);
+   hasChanged(QVariant(DBWATER));
+}
+
+void Database::removeYeast(Yeast* yeast)
+{
+   yeasts.remove(yeast);
+   hasChanged(QVariant(DBYEAST));
+}
+
 void Database::addWater(Water* water)
 {
    if( water != 0 )

@@ -191,7 +191,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 void MainWindow::setupToolbar()
 {
-   QToolButton *newRec, *clearRec, *save,
+   QToolButton *newRec, *clearRec, *save, *removeRec,
                *viewEquip, *viewFerm, *viewHops,
                *viewMiscs, *viewStyles, *viewYeast;
 
@@ -199,6 +199,7 @@ void MainWindow::setupToolbar()
 
    newRec = new QToolButton(toolBar);
    clearRec = new QToolButton(toolBar);
+   removeRec = new QToolButton(toolBar);
    save = new QToolButton(toolBar);
    viewEquip = new QToolButton(toolBar);
    viewFerm = new QToolButton(toolBar);
@@ -209,6 +210,7 @@ void MainWindow::setupToolbar()
    
    newRec->setIcon(QIcon(SMALLPLUS));
    clearRec->setIcon(QIcon(SHRED));
+   removeRec->setIcon(QIcon(SMALLMINUS));
    save->setIcon(QIcon(SAVEPNG));
    viewEquip->setIcon(QIcon(SMALLKETTLE));
    viewFerm->setIcon(QIcon(SMALLBARLEY));
@@ -219,6 +221,7 @@ void MainWindow::setupToolbar()
 
    newRec->setToolTip(QString("New recipe"));
    clearRec->setToolTip(QString("Clear recipe"));
+   removeRec->setToolTip(QString("Remove recipe"));
    save->setToolTip(QString("Save database"));
    viewEquip->setToolTip(QString("View equipments"));
    viewFerm->setToolTip(QString("View fermentables"));
@@ -230,6 +233,7 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
    toolBar->addWidget(clearRec);
+   toolBar->addWidget(removeRec);
    toolBar->addSeparator();
    toolBar->addWidget(viewEquip);
    toolBar->addWidget(viewFerm);
@@ -239,6 +243,7 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(viewYeast);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
+   connect( removeRec, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
    connect( save, SIGNAL(clicked()), this, SLOT(save()) );
    connect( clearRec, SIGNAL(clicked()), this, SLOT(clear()) );
    connect( viewEquip, SIGNAL(clicked()), equipEditor, SLOT(show()) );
@@ -247,6 +252,15 @@ void MainWindow::setupToolbar()
    connect( viewMiscs, SIGNAL(clicked()), miscDialog, SLOT(show()) );
    connect( viewStyles, SIGNAL(clicked()), styleEditor, SLOT(show()) );
    connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
+}
+
+void MainWindow::removeRecipe()
+{
+   Recipe* rec = recipeComboBox->getSelectedRecipe();
+   db->removeRecipe(rec);
+
+   recipeComboBox->setIndex(0);
+   setRecipe(recipeComboBox->getSelectedRecipe());
 }
 
 void MainWindow::setRecipeByName(const QString& name)

@@ -40,7 +40,29 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addFermentable() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
+   connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeFermentable() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
+}
+
+void FermentableDialog::removeFermentable()
+{
+   QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(row);
+   dbObs->removeFermentable(ferm);
 }
 
 void FermentableDialog::editSelected()

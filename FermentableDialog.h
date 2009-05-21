@@ -41,6 +41,7 @@ public:
 
 public slots:
    void addFermentable();
+   void removeFermentable();
    void editSelected();
    void newFermentable();
 
