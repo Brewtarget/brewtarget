@@ -524,6 +524,21 @@ void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
    // Notice that we are using a reference from the database, not a copy.
    // So, if the equip in the database is changed, this one will change also.
    recipeObs->setEquipment(equip);
+
+   if( QMessageBox::question(this,
+                             tr("Equipment request"),
+                             tr("Would you like to set the batch and boil size to that requested by the equipment?"),
+                             QMessageBox::Yes,
+                             QMessageBox::No)
+        == QMessageBox::Yes
+     )
+   {
+      if( recipeObs )
+      {
+         recipeObs->setBatchSize_l( equip->getBatchSize_l() );
+         recipeObs->setBoilSize_l( equip->getBoilSize_l() );
+      }
+   }
 }
 
 void MainWindow::updateRecipeStyle(const QString& /*styleName*/)
