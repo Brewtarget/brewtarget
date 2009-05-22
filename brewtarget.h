@@ -40,7 +40,7 @@ public:
    static QString getDataDir();
    static int run();
    static void log( LogType lt, std::string message );
-   static QString displayAmount( double amount, Unit* units );
+   static QString displayAmount( double amount, Unit* units=0 );
 
 private:
    static QApplication* app;

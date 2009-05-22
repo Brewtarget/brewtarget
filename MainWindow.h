@@ -44,6 +44,7 @@ class MainWindow;
 #include "StyleEditor.h"
 #include "OptionDialog.h"
 #include "MaltinessWidget.h"
+#include "MashEditor.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -99,6 +100,7 @@ private:
    FermentableEditor* fermEditor;
    HopDialog* hopDialog;
    HopEditor* hopEditor;
+   MashEditor* mashEditor;
    MiscDialog* miscDialog;
    MiscEditor* miscEditor;
    StyleEditor* styleEditor;

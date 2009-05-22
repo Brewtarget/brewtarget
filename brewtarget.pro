@@ -84,6 +84,7 @@ HEADERS += AboutDialog.h \
            FermentableDialog.h \
            FermentableTableModel.h \
            FermentableTableWidget.h \
+           HeatCalculations.h \
            hop.h \
            hoputilization.h \
            HopDialog.h \
@@ -93,6 +94,7 @@ HEADERS += AboutDialog.h \
            MainWindow.h \
            MaltinessWidget.h \
            mash.h \
+           MashEditor.h \
            mashstep.h \
            MashStepTableModel.h \
            MashStepTableWidget.h \
@@ -130,6 +132,7 @@ FORMS +=   aboutDialog.ui \
            equipmentEditor.ui \
            hopDialog.ui \
            hopEditor.ui \
+           mashEditor.ui \
            miscDialog.ui \
            optionsDialog.ui \
            styleEditor.ui \
@@ -147,6 +150,7 @@ SOURCES += database.cpp \
            FermentableTableModel.cpp \
            FermentableTableWidget.cpp \
            main.cpp \
+           HeatCalculations.cpp \
            hop.cpp \
            hoputilization.cpp \
            HopDialog.cpp \
@@ -156,6 +160,7 @@ SOURCES += database.cpp \
            MainWindow.cpp \
            MaltinessWidget.cpp \
            mash.cpp \
+           MashEditor.cpp \
            mashstep.cpp \
            MashStepTableModel.cpp \
            MashStepTableWidget.cpp \

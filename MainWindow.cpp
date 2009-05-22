@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "MashEditor.h"
 #include <QWidget>
 #include <QMainWindow>
 #include <QMessageBox>
@@ -104,6 +105,7 @@ MainWindow::MainWindow(QWidget* parent)
    fermEditor = new FermentableEditor(this);
    hopDialog = new HopDialog(this);
    hopEditor = new HopEditor(this);
+   mashEditor = new MashEditor(this);
    miscDialog = new MiscDialog(this);
    miscEditor = new MiscEditor(this);
    styleEditor = new StyleEditor(this);
@@ -187,6 +189,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_editMisc, SIGNAL( clicked() ), this, SLOT( editSelectedMisc() ) );
    connect( pushButton_editHop, SIGNAL( clicked() ), this, SLOT( editSelectedHop() ) );
    connect( pushButton_editYeast, SIGNAL( clicked() ), this, SLOT( editSelectedYeast() ) );
+   connect( pushButton_editMash, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
 }
 
 void MainWindow::setupToolbar()
@@ -372,6 +375,8 @@ void MainWindow::showChanges()
 {
    if( recipeObs == 0 )
       return;
+
+   mashEditor->setRecipe(recipeObs);
 
    recipeObs->recalculate();
 
