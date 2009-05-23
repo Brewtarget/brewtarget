@@ -46,6 +46,7 @@ class MainWindow;
 #include "MaltinessWidget.h"
 #include "MashEditor.h"
 #include "MashStepEditor.h"
+#include "MashWizard.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -107,6 +108,7 @@ private:
    HopEditor* hopEditor;
    MashEditor* mashEditor;
    MashStepEditor* mashStepEditor;
+   MashWizard* mashWizard;
    MiscDialog* miscDialog;
    MiscEditor* miscEditor;
    StyleEditor* styleEditor;

@@ -54,6 +54,11 @@ public:
    double getRampTime_min() const;
    double getEndTemp_c() const;
 
+   // My extensions
+   void setInfuseTemp_c( double var );
+   double getInfuseTemp_c() const;
+   // ===
+
 private:
 
    std::string name;
@@ -64,6 +69,10 @@ private:
    double stepTime_min;
    double rampTime_min;
    double endTemp_c;
+
+   // My extensions
+   double infuseTemp_c;
+   // ===
 
    bool isValidType( const std::string &str ) const;
    void setDefaults();

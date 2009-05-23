@@ -17,44 +17,31 @@
  */
 
 #include "MashStepEditor.h"
-
-
 #include "MashStepTableModel.h"
-
-
 #include "mash.h"
-
-
 #include "MashEditor.h"
 #include <QWidget>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QToolButton>
 #include <QSize>
-
 #include "brewtarget.h"
-
 #include "FermentableEditor.h"
 #include "MiscEditor.h"
 #include "HopEditor.h"
 #include "YeastEditor.h"
-
 #include "YeastTableModel.h"
-
 #include "MiscTableModel.h"
 #include <QtGui>
-
 #include "style.h"
 #include <QString>
 #include <QFileDialog>
 #include <QIcon>
 #include <QPixmap>
-
 #include <iostream>
 #include <fstream>
 #include <list>
 #include <vector>
-
 #include "recipe.h"
 #include "MainWindow.h"
 #include "AboutDialog.h"
@@ -116,6 +103,7 @@ MainWindow::MainWindow(QWidget* parent)
    hopEditor = new HopEditor(this);
    mashEditor = new MashEditor(this);
    mashStepEditor = new MashStepEditor(this);
+   mashWizard = new MashWizard(this);
    miscDialog = new MiscDialog(this);
    miscEditor = new MiscEditor(this);
    styleEditor = new StyleEditor(this);
@@ -203,6 +191,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_addMashStep, SIGNAL( clicked() ), this, SLOT(addMashStep()) );
    connect( pushButton_removeMashStep, SIGNAL( clicked() ), this, SLOT(removeSelectedMashStep()) );
    connect( pushButton_editMashStep, SIGNAL( clicked() ), this, SLOT(editSelectedMashStep()) );
+   connect( pushButton_mashWizard, SIGNAL( clicked() ), mashWizard, SLOT( show() ) );
 }
 
 void MainWindow::setupToolbar()
@@ -340,6 +329,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    recipeObs = recipe;
    setObserved(recipeObs); // Automatically removes the previous observer.
 
+   mashWizard->setRecipe(recipe);
    // Tell the style CB to pay attention.
    styleComboBox->observeRecipe(recipe);
    // And the equipment CB too...

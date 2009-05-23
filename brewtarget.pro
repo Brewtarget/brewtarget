@@ -99,6 +99,7 @@ HEADERS += AboutDialog.h \
            MashStepEditor.h \
            MashStepTableModel.h \
            MashStepTableWidget.h \
+           MashWizard.h \
            matrix.h \
            misc.h \
            MiscEditor.h \
@@ -135,6 +136,7 @@ FORMS +=   aboutDialog.ui \
            hopDialog.ui \
            hopEditor.ui \
            mashEditor.ui \
+           mashWizard.ui \
            miscDialog.ui \
            optionsDialog.ui \
            styleEditor.ui \
@@ -167,6 +169,7 @@ SOURCES += database.cpp \
            MashStepEditor.cpp \
            MashStepTableModel.cpp \
            MashStepTableWidget.cpp \
+           MashWizard.cpp \
            matrix.cpp \
            misc.cpp \
            MiscEditor.cpp \

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>454</width>
-    <height>589</height>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -648,7 +648,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="fermentableTab">
        <attribute name="title">
@@ -1010,6 +1010,13 @@
            <widget class="QPushButton" name="pushButton_editMash">
             <property name="text">
              <string>Edit mash</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_mashWizard">
+            <property name="text">
+             <string>Mash wiz</string>
             </property>
            </widget>
           </item>

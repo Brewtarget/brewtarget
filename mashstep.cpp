@@ -45,6 +45,7 @@ std::string MashStep::toXml()
    ret += "<STEP_TIME>"+doubleToString(stepTime_min)+"</STEP_TIME>\n";
    ret += "<RAMP_TIME>"+doubleToString(rampTime_min)+"</RAMP_TIME>\n";
    ret += "<END_TEMP>"+doubleToString(endTemp_c)+"</END_TEMP>\n";
+   ret += "<INFUSE_TEMP>"+doubleToString(infuseTemp_c)+"</INFUSE_TEMP>\n";
    
    ret += "</MASH_STEP>\n";
    return ret;
@@ -57,6 +58,7 @@ void MashStep::setDefaults()
    name = "";
    type = "";
    infuseAmount_l = 0.0;
+   infuseTemp_c = 0.0;
    stepTemp_c = 0.0;
    stepTime_min = 0.0;
    rampTime_min = 0.0;
@@ -144,6 +146,10 @@ MashStep::MashStep( const XmlNode *node)
          setRampTime_min(parseDouble(leafText));
       else if( tag == "END_TEMP" )
          setEndTemp_c(parseDouble(leafText));
+      // My extensions
+      else if( tag == "INFUSE_TEMP" )
+         setInfuseTemp_c(parseDouble(leafText));
+      // ===
       else
          std::cerr << "Warning: MASH_STEP does not support the tag: " << tag << std::endl;
    } // end for()
@@ -157,6 +163,12 @@ MashStep::MashStep( const XmlNode *node)
 void MashStep::setName( const std::string &var )
 {
    name = std::string(var);
+   hasChanged();
+}
+
+void MashStep::setInfuseTemp_c(double var)
+{
+   infuseTemp_c = var;
    hasChanged();
 }
 
@@ -231,6 +243,11 @@ void MashStep::setEndTemp_c( double var )
 std::string MashStep::getName() const
 {
    return name;
+}
+
+double MashStep::getInfuseTemp_c() const
+{
+   return infuseTemp_c;
 }
 
 std::string MashStep::getType() const
