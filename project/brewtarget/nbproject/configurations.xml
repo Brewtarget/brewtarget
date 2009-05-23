@@ -65,6 +65,8 @@
       <itemPath>../../FermentableTableModel.h</itemPath>
       <itemPath>../../FermentableTableWidget.cpp</itemPath>
       <itemPath>../../FermentableTableWidget.h</itemPath>
+      <itemPath>../../HeatCalculations.cpp</itemPath>
+      <itemPath>../../HeatCalculations.h</itemPath>
       <itemPath>../../hop.cpp</itemPath>
       <itemPath>../../hop.h</itemPath>
       <itemPath>../../HopDialog.cpp</itemPath>
@@ -85,6 +87,8 @@
       <itemPath>../../MaltinessWidget.h</itemPath>
       <itemPath>../../mash.cpp</itemPath>
       <itemPath>../../mash.h</itemPath>
+      <itemPath>../../MashEditor.cpp</itemPath>
+      <itemPath>../../MashEditor.h</itemPath>
       <itemPath>../../mashstep.cpp</itemPath>
       <itemPath>../../mashstep.h</itemPath>
       <itemPath>../../MashStepTableModel.cpp</itemPath>
@@ -230,6 +234,12 @@
       <item path="../../FermentableTableWidget.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../HeatCalculations.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HeatCalculations.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../HopDialog.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -264,6 +274,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MaltinessWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MashStepTableModel.cpp">
@@ -685,6 +701,12 @@ make clean</buildCommand>
       <item path="../../FermentableTableWidget.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../HeatCalculations.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HeatCalculations.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../HopDialog.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -719,6 +741,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MaltinessWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashEditor.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MashStepTableModel.cpp">

@@ -28,7 +28,7 @@ class MashStepTableWidget;
 class MashStepTableWidget : public QTableView
 {
    Q_OBJECT
-
+   friend class MainWindow;
 public:
    MashStepTableWidget(QWidget* parent=0);
    MashStepTableModel* getModel();

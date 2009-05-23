@@ -23,6 +23,7 @@
 #include "stringparsing.h"
 #include "mash.h"
 #include "mashstep.h"
+#include "ui_mainWindow.h"
 
 bool operator<(Mash &m1, Mash &m2)
 {
@@ -206,26 +207,31 @@ Mash::Mash(const XmlNode *node)
 void Mash::setName( const std::string& var )
 {
    name = std::string(var);
+   hasChanged();
 }
 
 void Mash::setGrainTemp_c( double var )
 {
    grainTemp_c = var;
+   hasChanged();
 }
 
 void Mash::setNotes( const std::string& var )
 {
    notes = std::string(var);
+   hasChanged();
 }
 
 void Mash::setTunTemp_c( double var )
 {
    tunTemp_c = var;
+   hasChanged();
 }
 
 void Mash::setSpargeTemp_c( double var )
 {
    spargeTemp_c = var;
+   hasChanged();
 }
 
 void Mash::setPh( double var )
@@ -233,7 +239,10 @@ void Mash::setPh( double var )
    if( var < 0.0 || var > 14.0 )
       throw MashException("invalid PH: " + doubleToString(var) );
    else
+   {
       ph = var;
+      hasChanged();
+   }
 }
 
 void Mash::setTunWeight_kg( double var )
@@ -241,7 +250,10 @@ void Mash::setTunWeight_kg( double var )
    if( var < 0.0 )
       throw MashException("invalid weight: " + doubleToString(var) );
    else
+   {
       tunWeight_kg = var;
+      hasChanged();
+   }
 }
 
 void Mash::setTunSpecificHeat_calGC( double var )
@@ -249,12 +261,42 @@ void Mash::setTunSpecificHeat_calGC( double var )
    if( var < 0.0 )
       throw MashException("invalid specific heat: " + doubleToString(var) );
    else
+   {
       tunSpecificHeat_calGC = var;
+      hasChanged();
+   }
 }
 
 void Mash::setEquipAdjust( bool var )
 {
    equipAdjust = var;
+   hasChanged();
+}
+
+void Mash::addMashStep(MashStep* step)
+{
+   if( step == 0 )
+      return;
+   
+   mashSteps.push_back(step);
+   hasChanged();
+}
+
+void Mash::removeMashStep(MashStep* step)
+{
+   if( step == 0 )
+      return;
+
+   std::vector<MashStep*>::iterator it;
+   for( it = mashSteps.begin(); it != mashSteps.end(); it++ )
+   {
+      if(*it == step )
+      {
+         mashSteps.erase(it);
+         hasChanged();
+         return;
+      }
+   }
 }
 
 //============================="GET" METHODS====================================

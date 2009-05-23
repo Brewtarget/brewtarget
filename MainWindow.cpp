@@ -16,6 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "MashStepEditor.h"
+
+
+#include "MashStepTableModel.h"
+
+
+#include "mash.h"
+
+
 #include "MashEditor.h"
 #include <QWidget>
 #include <QMainWindow>
@@ -106,6 +115,7 @@ MainWindow::MainWindow(QWidget* parent)
    hopDialog = new HopDialog(this);
    hopEditor = new HopEditor(this);
    mashEditor = new MashEditor(this);
+   mashStepEditor = new MashStepEditor(this);
    miscDialog = new MiscDialog(this);
    miscEditor = new MiscEditor(this);
    styleEditor = new StyleEditor(this);
@@ -190,6 +200,9 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_editHop, SIGNAL( clicked() ), this, SLOT( editSelectedHop() ) );
    connect( pushButton_editYeast, SIGNAL( clicked() ), this, SLOT( editSelectedYeast() ) );
    connect( pushButton_editMash, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
+   connect( pushButton_addMashStep, SIGNAL( clicked() ), this, SLOT(addMashStep()) );
+   connect( pushButton_removeMashStep, SIGNAL( clicked() ), this, SLOT(removeSelectedMashStep()) );
+   connect( pushButton_editMashStep, SIGNAL( clicked() ), this, SLOT(editSelectedMashStep()) );
 }
 
 void MainWindow::setupToolbar()
@@ -321,6 +334,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    hopTable->getModel()->removeAll();
    miscTable->getModel()->removeAll();
    yeastTable->getModel()->removeAll();
+   mashStepTableWidget->getModel()->removeAll();
 
    // Make sure this MainWindow is paying attention...
    recipeObs = recipe;
@@ -355,6 +369,13 @@ void MainWindow::setRecipe(Recipe* recipe)
    {
       yeast = recipeObs->getYeast(i);
       yeastTable->getModel()->addYeast(yeast);
+   }
+
+   if( recipeObs->getMash() != 0 )
+   {
+      Mash* mash = recipeObs->getMash();
+      for( i = 0; i < mash->getNumMashSteps(); ++i )
+         mashStepTableWidget->getModel()->addMashStep(mash->getMashStep(i));
    }
 
    showChanges();
@@ -878,4 +899,88 @@ void MainWindow::exit()
    }
    
    close();
+}
+
+void MainWindow::addMashStep()
+{
+   Mash* mash;
+   if( recipeObs != 0 && recipeObs->getMash() != 0 )
+   {
+      mash = recipeObs->getMash();
+   }
+   else
+   {
+      QMessageBox::information(this, tr("No mash"), tr("Trying to add a mash step without a mash. Please create a mash first.") );
+      return;
+   }
+
+   MashStep* step = new MashStep();
+   mash->addMashStep(step);
+   mashStepTableWidget->getModel()->addMashStep(step);
+   mashStepEditor->setMashStep(step);
+   mashStepEditor->setVisible(true);
+}
+
+void MainWindow::removeSelectedMashStep()
+{
+   Mash* mash;
+   if( recipeObs && recipeObs->getMash() )
+   {
+      mash = recipeObs->getMash();
+   }
+   else
+   {
+      return;
+   }
+   
+   QModelIndexList selected = mashStepTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   MashStep* step = mashStepTableWidget->getModel()->getMashStep(row);
+   mashStepTableWidget->getModel()->removeMashStep(step);
+   mash->removeMashStep(step);
+}
+
+void MainWindow::editSelectedMashStep()
+{
+   Mash* mash;
+   if( recipeObs && recipeObs->getMash() )
+   {
+      mash = recipeObs->getMash();
+   }
+   else
+   {
+      return;
+   }
+
+   QModelIndexList selected = mashStepTableWidget->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if( size == 0 )
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+
+   MashStep* step = mashStepTableWidget->getModel()->getMashStep(row);
+   mashStepEditor->setMashStep(step);
+   mashStepEditor->setVisible(true);
 }

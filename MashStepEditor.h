@@ -1,5 +1,5 @@
 /*
- * HeatCalculations.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * MashStepEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,24 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _HEATCALCULATIONS_H
-#define	_HEATCALCULATIONS_H
+#ifndef _MASHSTEPEDITOR_H
+#define	_MASHSTEPEDITOR_H
 
-class HeatCalculations;
+class MashStepEditor;
 
-class HeatCalculations
+#include <QDialog>
+#include <QWidget>
+#include <QVariant>
+#include "observable.h"
+#include "mashstep.h"
+#include "ui_mashStepEditor.h"
+
+class MashStepEditor : public QDialog, public Ui::mashStepEditor, public Observer
 {
+   Q_OBJECT
 public:
+   MashStepEditor(QWidget* parent=0);
+   virtual void notify(Observable *notifier, QVariant info=QVariant());
 
-   double equivalentMCProduct(double m1, double c1, double m2, double c2);
-   // Water temp when mass 1 is initially at T1 and is to be brought to Tf by
-   // water. MCw = (mass of water)*(water sp. heat). MC1 = (mass 1)*(sp. heat 1).
-   double requiredWaterTemp( double MCw, double MC1, double Tf, double T1 );
+public slots:
+   void saveAndClose();
+   void setMashStep(MashStep* step);
+   void close();
 
-   // Water's specific heat.
-   static double Cw_JKgK;
-   static double Cw_calGC;
+private:
+   void showChanges();
+   void clear();
+   MashStep* obs;
 };
 
-#endif	/* _HEATCALCULATIONS_H */
+#endif	/* _MASHSTEPEDITOR_H */
 

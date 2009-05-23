@@ -305,3 +305,8 @@ void MashStepItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpt
    editor->setGeometry(option.rect);
 }
 
+MashStep* MashStepTableModel::getMashStep(unsigned int i)
+{
+   return stepObs[i];
+}
+

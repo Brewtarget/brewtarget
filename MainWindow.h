@@ -45,6 +45,7 @@ class MainWindow;
 #include "OptionDialog.h"
 #include "MaltinessWidget.h"
 #include "MashEditor.h"
+#include "MashStepEditor.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -85,6 +86,10 @@ public slots:
    void removeSelectedYeast();
    void editSelectedYeast();
 
+   void addMashStep();
+   void removeSelectedMashStep();
+   void editSelectedMashStep();
+
    void newRecipe();
    void removeRecipe();
    void exportRecipe();
@@ -101,6 +106,7 @@ private:
    HopDialog* hopDialog;
    HopEditor* hopEditor;
    MashEditor* mashEditor;
+   MashStepEditor* mashStepEditor;
    MiscDialog* miscDialog;
    MiscEditor* miscEditor;
    StyleEditor* styleEditor;

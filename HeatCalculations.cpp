@@ -18,7 +18,8 @@
 
 #include "HeatCalculations.h"
 
-double HeatCalculations::Cw_JKgK = 4184;
+double HeatCalculations::Cw_JKgK = 4184.0;
+double HeatCalculations::Cw_calGC = 1.0;
 
 double HeatCalculations::equivalentMCProduct(double m1, double c1, double m2, double c2)
 {

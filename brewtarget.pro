@@ -96,6 +96,7 @@ HEADERS += AboutDialog.h \
            mash.h \
            MashEditor.h \
            mashstep.h \
+           MashStepEditor.h \
            MashStepTableModel.h \
            MashStepTableWidget.h \
            matrix.h \
@@ -126,6 +127,7 @@ HEADERS += AboutDialog.h \
            YeastTableWidget.h
 FORMS +=   aboutDialog.ui \
            mainWindow.ui \
+           mashStepEditor.ui \
            miscEditor.ui \
            fermentableEditor.ui \
            fermentableDialog.ui \
@@ -162,6 +164,7 @@ SOURCES += database.cpp \
            mash.cpp \
            MashEditor.cpp \
            mashstep.cpp \
+           MashStepEditor.cpp \
            MashStepTableModel.cpp \
            MashStepTableWidget.cpp \
            matrix.cpp \

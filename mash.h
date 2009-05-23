@@ -22,11 +22,12 @@
 #include <exception>
 #include "xmlnode.h"
 #include "mashstep.h"
+#include "observable.h"
 
 class Mash;
 class MashException;
 
-class Mash
+class Mash : public Observable
 {
 public:
 
@@ -60,6 +61,8 @@ public:
    double getTunSpecificHeat_calGC() const;
    bool getEquipAdjust() const;
 
+   void addMashStep(MashStep* step);
+   void removeMashStep(MashStep* step);
 private:
 
    std::string name;
