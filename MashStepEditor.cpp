@@ -45,6 +45,7 @@ void MashStepEditor::showChanges()
    comboBox_type->setCurrentIndex(tmp);
    lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->getInfuseAmount_l(), Units::liters));
    lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->getInfuseTemp_c(), Units::celsius));
+   lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->getDecoctionAmount_l(), Units::liters));
    lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->getStepTemp_c(), Units::celsius));
    lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->getStepTime_min(), Units::minutes));
    lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->getRampTime_min(), Units::minutes));
@@ -57,6 +58,7 @@ void MashStepEditor::clear()
    comboBox_type->setCurrentIndex(0);
    lineEdit_infuseAmount->setText("");
    lineEdit_infuseTemp->setText("");
+   lineEdit_decoctionAmount->setText("");
    lineEdit_stepTemp->setText("");
    lineEdit_stepTime->setText("");
    lineEdit_rampTime->setText("");
@@ -91,6 +93,7 @@ void MashStepEditor::saveAndClose()
    obs->setType(comboBox_type->currentText().toStdString());
    obs->setInfuseAmount_l(Unit::qstringToSI(lineEdit_infuseAmount->text()));
    obs->setInfuseTemp_c(Unit::qstringToSI(lineEdit_infuseTemp->text()));
+   obs->setDecoctionAmount_l(Unit::qstringToSI(lineEdit_decoctionAmount->text()));
    obs->setStepTemp_c(Unit::qstringToSI(lineEdit_stepTemp->text()));
    obs->setStepTime_min(Unit::qstringToSI(lineEdit_stepTime->text()));
    obs->setRampTime_min(Unit::qstringToSI(lineEdit_rampTime->text()));

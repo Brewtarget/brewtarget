@@ -30,10 +30,14 @@ public:
    // water. MCw = (mass of water)*(water sp. heat). MC1 = (mass 1)*(sp. heat 1).
    double requiredWaterTemp( double MCw, double MC1, double Tf, double T1 );
 
+   /***Specific heats***/
    // Water's specific heat.
    static double Cw_JKgK;
    static double Cw_calGC;
    static double Cgrain_calGC;
+
+   /***Density***/
+   static double rhoGrain_KgL;
 };
 
 #endif	/* _HEATCALCULATIONS_H */

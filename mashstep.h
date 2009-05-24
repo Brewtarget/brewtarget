@@ -57,6 +57,8 @@ public:
    // My extensions
    void setInfuseTemp_c( double var );
    double getInfuseTemp_c() const;
+   void setDecoctionAmount_l( double var );
+   double getDecoctionAmount_l() const;
    // ===
 
 private:
@@ -72,6 +74,7 @@ private:
 
    // My extensions
    double infuseTemp_c;
+   double decoctionAmount_l;
    // ===
 
    bool isValidType( const std::string &str ) const;

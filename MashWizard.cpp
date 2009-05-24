@@ -23,6 +23,8 @@
 #include "fermentable.h"
 #include <QMessageBox>
 #include "HeatCalculations.h"
+#include "stringparsing.h"
+#include "brewtarget.h"
 
 MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 {
@@ -45,11 +47,12 @@ void MashWizard::wizardry()
 
    Mash* mash = recObs->getMash();
    MashStep* mashStep;
-   int i, size;
+   int i, j, size;
    double thickness_LKg;
    double MC, MCw;
    double tw, tf, t1;
    double grainMass = 0.0, massWater = 0.0;
+   double grainDensity = HeatCalculations::rhoGrain_KgL;
    
    size = mash->getNumMashSteps();
    thickness_LKg = Unit::qstringToSI(lineEdit_mashThickness->text());
@@ -116,17 +119,47 @@ void MashWizard::wizardry()
       if( mashStep->getType() == "Temperature")
          continue;
       // TODO: deal with decoctions.
-      if( mashStep->getType() == "Decoction" )
-         QMessageBox::warning(this, tr("Decoction"), tr("Can't handle decoctions properly yet."));
-      
-      tf = mashStep->getStepTemp_c();
-      t1 = mash->getMashStep(i-1)->getStepTemp_c();
-      tw = 100; // Assume adding boiling water to minimize final volume.
-      MC += massWater * HeatCalculations::Cw_calGC; // Add MC product of last addition.
+      else if( mashStep->getType() == "Decoction" )
+      {
+         QMessageBox::warning(this, tr("Decoction"), tr("Haven't tested decoction calculations yet.\nUse at own risk."));
+         double m_w, m_g, m_e, r;
+         double c_w, c_g, c_e;
 
-      massWater = (MC*(tf-t1))/(HeatCalculations::Cw_calGC * (tw-tf));
+         tf = mashStep->getStepTemp_c();
+         t1 = mash->getMashStep(i-1)->getStepTemp_c();
 
-      mashStep->setInfuseAmount_l(massWater);
-      mashStep->setInfuseTemp_c(tw);
+         m_w = 0; // Total mass of water.
+         for(j = 0; j < i; ++j )
+            m_w += mash->getMashStep(j)->getInfuseAmount_l();
+         m_g = grainMass;
+         m_e = (mash->getEquipAdjust()) ? mash->getTunWeight_kg() : 0;
+
+         c_w = HeatCalculations::Cw_calGC;
+         c_g = HeatCalculations::Cgrain_calGC;
+         c_e = (mash->getEquipAdjust()) ? mash->getTunSpecificHeat_calGC() : 0;
+
+         // r is the ratio of water and grain to take out for decoction.
+         r = ((m_w*c_w + m_g*c_g + m_e*c_e)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(100-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
+         if( r < 0 || r > 1 )
+         {
+            QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
+            Brewtarget::log(Brewtarget::ERROR, "Decoction: r=" + doubleToString(r));
+            return;
+         }
+
+         mashStep->setDecoctionAmount_l( r*(m_w + m_g/grainDensity) );
+      }
+      else
+      {
+         tf = mashStep->getStepTemp_c();
+         t1 = mash->getMashStep(i-1)->getStepTemp_c();
+         tw = 100; // Assume adding boiling water to minimize final volume.
+         MC += massWater * HeatCalculations::Cw_calGC; // Add MC product of last addition.
+
+         massWater = (MC*(tf-t1))/(HeatCalculations::Cw_calGC * (tw-tf));
+
+         mashStep->setInfuseAmount_l(massWater);
+         mashStep->setInfuseTemp_c(tw);
+      }
    }
 }

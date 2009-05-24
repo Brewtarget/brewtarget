@@ -95,6 +95,8 @@
       <itemPath>../../MashStepTableModel.h</itemPath>
       <itemPath>../../MashStepTableWidget.cpp</itemPath>
       <itemPath>../../MashStepTableWidget.h</itemPath>
+      <itemPath>../../MashWizard.cpp</itemPath>
+      <itemPath>../../MashWizard.h</itemPath>
       <itemPath>../../matrix.cpp</itemPath>
       <itemPath>../../matrix.h</itemPath>
       <itemPath>../../matrixtest.cpp</itemPath>
@@ -157,6 +159,8 @@
                    projectFiles="false">
       <itemPath>brewtarget-Makefile.mk</itemPath>
     </logicalFolder>
+    <itemPath>../../MashStepEditor.cpp</itemPath>
+    <itemPath>../../MashStepEditor.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../..</Elem>
@@ -282,6 +286,12 @@
       <item path="../../MashEditor.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../MashStepEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashStepEditor.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../MashStepTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -292,6 +302,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../MashStepTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashWizard.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashWizard.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscDialog.cpp">
@@ -749,6 +765,12 @@ make clean</buildCommand>
       <item path="../../MashEditor.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../MashStepEditor.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashStepEditor.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../MashStepTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -759,6 +781,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../MashStepTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../MashWizard.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../MashWizard.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MiscDialog.cpp">
