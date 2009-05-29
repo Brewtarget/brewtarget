@@ -39,6 +39,11 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    showChanges();
 }
 
+TimerWidget::~TimerWidget()
+{
+   delete timer;
+}
+
 QString TimerWidget::getTimerValue()
 {
    return QString("%1:%2:%3").arg(hours,2,10,QChar('0')).arg(minutes,2,10,QChar('0')).arg(seconds,2,10,QChar('0'));

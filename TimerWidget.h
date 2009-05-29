@@ -31,6 +31,7 @@ class TimerWidget : public QWidget, public Ui::timerWidget
    Q_OBJECT
 public:
    TimerWidget(QWidget* parent=0);
+   ~TimerWidget();
 
    QString getTimerValue();
 

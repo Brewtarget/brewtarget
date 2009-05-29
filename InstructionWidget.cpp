@@ -33,6 +33,12 @@ InstructionWidget::InstructionWidget(QWidget* parent) : QWidget(parent)
    connect( textEdit, SIGNAL(textChanged()), this, SLOT(setDirections()) );
 }
 
+InstructionWidget::~InstructionWidget()
+{
+   setObserved(0);
+   delete timer;
+}
+
 QSize InstructionWidget::sizeHint() const
 {
    return QSize(0,0);

@@ -517,11 +517,11 @@ void Recipe::generateInstructions()
       for( j = 0; j < fermentables.size(); ++j )
       {
          if( fermentables[j]->getRecommendMash() )
-            str += QString("%1 %2,")
+            str += QString("%1 %2, ")
             .arg(Brewtarget::displayAmount(fermentables[j]->getAmount_kg(), Units::kilograms))
             .arg(fermentables[j]->getName().c_str());
       }
-      str += " to the mash tun.";
+      str += "to the mash tun.";
       ins->setDirections(str);
       instructions.push_back(ins);
       /*** END Add grains ***/

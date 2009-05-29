@@ -93,14 +93,23 @@ void BrewDayWidget::notify(Observable* notifier, QVariant info)
 void BrewDayWidget::clear()
 {
    listWidget->clear();
-   stackedWidget->setCurrentIndex(-1);
+
+   while( stackedWidget->count() > 0 )
+   {
+      InstructionWidget* iw = (InstructionWidget*)stackedWidget->widget(0);
+      stackedWidget->removeWidget(iw);
+      delete iw;
+   }
+
+   stackedWidget->setCurrentIndex(0);
 }
 
 void BrewDayWidget::showChanges()
 {
+   clear();
    if( recObs == 0 )
    {
-      clear();
+      //clear();
       return;
    }
 
@@ -112,13 +121,11 @@ void BrewDayWidget::showChanges()
    {
       if(stackedWidget->widget(i) == 0)
       {
-         //std::cerr << "Making new instruction widget" << std::endl;
          iw = new InstructionWidget(stackedWidget);
          stackedWidget->addWidget(iw);
       }
       else
       {
-         //std::cerr << "Casting instruction widget. Count: "<< stackedWidget->count() << std::endl;
          iw = (InstructionWidget*)stackedWidget->widget(i);
          iw->setVisible(true);
       }
@@ -126,6 +133,7 @@ void BrewDayWidget::showChanges()
       iw->setInstruction(recObs->getInstruction(i));
    }
 
+   stackedWidget->update(); // Whatever, I give up.
    repopulateListWidget();
 }
 

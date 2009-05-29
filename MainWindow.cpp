@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
    optionDialog = new OptionDialog(this);
-   brewDayDialog = new QDialog(this);
+   brewDayDialog = new QDialog();
    brewDayWidget = new BrewDayWidget(brewDayDialog);
 
    setupToolbar();
