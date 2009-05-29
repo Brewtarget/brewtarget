@@ -35,6 +35,7 @@ class RecipeException;
 #include "yeast.h"
 #include "water.h"
 #include "observable.h"
+#include "instruction.h"
 
 class Recipe : public Observable, public MultipleObserver
 {
@@ -42,6 +43,8 @@ public:
 
    Recipe();
    Recipe(const XmlNode *node);
+
+   enum{INSTRUCTION};
 
    friend bool operator<(Recipe &r1, Recipe &r2 );
    friend bool operator==(Recipe &r1, Recipe &r2 );
@@ -69,9 +72,17 @@ public:
    bool removeYeast( Yeast* var );
    void addWater( Water* var );
    bool removeWater( Water* var );
-   
-   void setMash( Mash *var );
 
+   void addInstruction( Instruction* ins );
+   void removeInstruction( Instruction* ins );
+   void clearInstructions();
+   void insertInstruction( Instruction* ins, int pos );
+   int getNumInstructions();
+   Instruction* getInstruction(int i);
+   void generateInstructions();
+   QString nextAddToBoil(double& time);
+
+   void setMash( Mash *var );
    void setAsstBrewer( const std::string &var );
    void setEquipment( Equipment *var );
    void setNotes( const std::string &var );
@@ -166,6 +177,7 @@ private:
    std::vector<Yeast*> yeasts;
    std::vector<Water*> waters;
    Mash *mash;
+   std::vector<Instruction*> instructions;
    
    std::string asstBrewer;
    Equipment* equipment;

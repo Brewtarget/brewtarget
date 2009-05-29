@@ -108,8 +108,8 @@ Equipment::Equipment(XmlNode *node)
       tag = children[i]->getTag();
       children[i]->getChildren( tmpVec );
       
-      // All valid children of EQUIPMENT only have one child.
-      if( tmpVec.size() != 1 )
+      // All valid children of EQUIPMENT only have one or fewer children.
+      if( tmpVec.size() > 1 )
          throw EquipmentException("Tag \""+tag+"\" has more than one child.");
       
       leaf = tmpVec[0];

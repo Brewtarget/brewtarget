@@ -1,5 +1,5 @@
 /*
- * MashStepEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * TimerWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,36 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MASHSTEPEDITOR_H
-#define	_MASHSTEPEDITOR_H
+#ifndef _TIMERWIDGET_H
+#define	_TIMERWIDGET_H
 
-class MashStepEditor;
+class TimerWidget;
 
-#include <QDialog>
+#include "ui_timerWidget.h"
 #include <QWidget>
-#include <QVariant>
-#include "observable.h"
-#include "mashstep.h"
-#include "ui_mashStepEditor.h"
+#include <QTimer>
+#include <QString>
 
-class MashStepEditor : public QDialog, public Ui::mashStepEditor, public Observer
+class TimerWidget : public QWidget, public Ui::timerWidget
 {
    Q_OBJECT
 public:
-   MashStepEditor(QWidget* parent=0);
-   virtual void notify(Observable *notifier, QVariant info=QVariant());
+   TimerWidget(QWidget* parent=0);
+
+   QString getTimerValue();
 
 public slots:
-   void saveAndClose();
-   void setMashStep(MashStep* step);
-   void close();
-   void grayOutStuff(const QString& text);
+   void setTimer(QString text);
+   void setTimer();
+   void startStop();
+   void subtractOneSecond();
+   void endTimer();
+   void showChanges();
+   
+signals:
+   void timerDone();
+   void timerSet(QString text);
 
 private:
-   void showChanges();
-   void clear();
-   MashStep* obs;
+   void subtractOneMinute();
+   
+   unsigned int hours;
+   unsigned int minutes;
+   unsigned int seconds;
+   bool start;
+   QTimer* timer;
 };
 
-#endif	/* _MASHSTEPEDITOR_H */
+#endif	/* _TIMERWIDGET_H */
 

@@ -47,6 +47,7 @@ class MainWindow;
 #include "MashEditor.h"
 #include "MashStepEditor.h"
 #include "MashWizard.h"
+#include "BrewDayWidget.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -96,6 +97,8 @@ public slots:
    void exportRecipe();
    void importRecipes();
 
+   void brewDayMode();
+
 private:
    Recipe* recipeObs;
    AboutDialog* dialog_about;
@@ -119,6 +122,8 @@ private:
    OptionDialog* optionDialog;
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
    MaltinessWidget maltWidget;
+   QDialog* brewDayDialog;
+   BrewDayWidget* brewDayWidget;
 
    void setupToolbar();
    void showChanges();

@@ -1,5 +1,5 @@
 /*
- * MashStepEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * BrewDayWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,36 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MASHSTEPEDITOR_H
-#define	_MASHSTEPEDITOR_H
+#ifndef _BREWDAYWIDGET_H
+#define	_BREWDAYWIDGET_H
 
-class MashStepEditor;
+class BrewDayWidget;
 
-#include <QDialog>
+#include "ui_brewDayWidget.h"
 #include <QWidget>
-#include <QVariant>
+#include <QSize>
 #include "observable.h"
-#include "mashstep.h"
-#include "ui_mashStepEditor.h"
+#include "recipe.h"
 
-class MashStepEditor : public QDialog, public Ui::mashStepEditor, public Observer
+class BrewDayWidget : public QWidget, public Ui::brewDayWidget, public Observer
 {
    Q_OBJECT
 public:
-   MashStepEditor(QWidget* parent=0);
-   virtual void notify(Observable *notifier, QVariant info=QVariant());
+   BrewDayWidget(QWidget* parent=0);
+   void setRecipe(Recipe* rec);
+
+   virtual QSize sizeHint() const; // From QWidget
+   virtual void notify(Observable *notifier, QVariant info); // From Observer.
 
 public slots:
-   void saveAndClose();
-   void setMashStep(MashStep* step);
-   void close();
-   void grayOutStuff(const QString& text);
+   void insertInstruction();
+   void removeSelectedInstruction();
 
 private:
    void showChanges();
+   void repopulateListWidget();
    void clear();
-   MashStep* obs;
+   
+   Recipe* recObs;
 };
 
-#endif	/* _MASHSTEPEDITOR_H */
+#endif	/* _BREWDAYWIDGET_H */
 

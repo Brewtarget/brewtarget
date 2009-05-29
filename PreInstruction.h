@@ -1,5 +1,5 @@
 /*
- * MashStepEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * PreInstruction.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,36 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MASHSTEPEDITOR_H
-#define	_MASHSTEPEDITOR_H
+#ifndef _PREINSTRUCTION_H
+#define	_PREINSTRUCTION_H
 
-class MashStepEditor;
+class PreInstruction;
 
-#include <QDialog>
-#include <QWidget>
-#include <QVariant>
-#include "observable.h"
-#include "mashstep.h"
-#include "ui_mashStepEditor.h"
+#include <QString>
 
-class MashStepEditor : public QDialog, public Ui::mashStepEditor, public Observer
+class PreInstruction
 {
-   Q_OBJECT
 public:
-   MashStepEditor(QWidget* parent=0);
-   virtual void notify(Observable *notifier, QVariant info=QVariant());
+   PreInstruction();
+   PreInstruction(const QString& txt, const QString& title, double t);
 
-public slots:
-   void saveAndClose();
-   void setMashStep(MashStep* step);
-   void close();
-   void grayOutStuff(const QString& text);
+   friend bool operator<(const PreInstruction& lhs, const PreInstruction& rhs);
 
+   QString getText();
+   QString getTitle();
+   double getTime();
 private:
-   void showChanges();
-   void clear();
-   MashStep* obs;
+   QString text;
+   QString title;
+   double time;
 };
 
-#endif	/* _MASHSTEPEDITOR_H */
+#endif	/* _PREINSTRUCTION_H */
 

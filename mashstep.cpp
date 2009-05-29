@@ -57,7 +57,7 @@ std::string MashStep::toXml()
 void MashStep::setDefaults()
 {
    name = "";
-   type = "";
+   type = "Infusion";
    infuseAmount_l = 0.0;
    infuseTemp_c = 0.0;
    stepTemp_c = 0.0;

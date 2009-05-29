@@ -55,6 +55,7 @@
 #include "xmltree.h"
 #include "xmlnode.h"
 #include "unit.h"
+#include <QVBoxLayout>
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -110,8 +111,16 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
    optionDialog = new OptionDialog(this);
+   brewDayDialog = new QDialog(this);
+   brewDayWidget = new BrewDayWidget(brewDayDialog);
 
    setupToolbar();
+
+   // Set up brewDayDialog
+   brewDayDialog->setModal(false);
+   QVBoxLayout* vblayout = new QVBoxLayout();
+   vblayout->addWidget(brewDayWidget);
+   brewDayDialog->setLayout(vblayout);
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), homedir, tr("BeerXML files (*.xml)"));
@@ -198,7 +207,8 @@ void MainWindow::setupToolbar()
 {
    QToolButton *newRec, *clearRec, *save, *removeRec,
                *viewEquip, *viewFerm, *viewHops,
-               *viewMiscs, *viewStyles, *viewYeast;
+               *viewMiscs, *viewStyles, *viewYeast,
+               *brewDay;
 
    setIconSize(QSize(16, 16));
 
@@ -212,6 +222,7 @@ void MainWindow::setupToolbar()
    viewMiscs = new QToolButton(toolBar);
    viewStyles = new QToolButton(toolBar);
    viewYeast = new QToolButton(toolBar);
+   brewDay = new QToolButton(toolBar);
    
    newRec->setIcon(QIcon(SMALLPLUS));
    clearRec->setIcon(QIcon(SHRED));
@@ -223,6 +234,7 @@ void MainWindow::setupToolbar()
    viewMiscs->setIcon(QIcon(SMALLQUESTION));
    viewStyles->setIcon(QIcon(SMALLSTYLE));
    viewYeast->setIcon(QIcon(SMALLYEAST));
+   brewDay->setText(QString("Brewday mode"));
 
    newRec->setToolTip(QString("New recipe"));
    clearRec->setToolTip(QString("Clear recipe"));
@@ -246,6 +258,8 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(viewMiscs);
    toolBar->addWidget(viewStyles);
    toolBar->addWidget(viewYeast);
+   toolBar->addSeparator();
+   toolBar->addWidget(brewDay);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
    connect( removeRec, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
@@ -257,6 +271,7 @@ void MainWindow::setupToolbar()
    connect( viewMiscs, SIGNAL(clicked()), miscDialog, SLOT(show()) );
    connect( viewStyles, SIGNAL(clicked()), styleEditor, SLOT(show()) );
    connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
+   connect( brewDay, SIGNAL(clicked()), this, SLOT(brewDayMode()) );
 }
 
 void MainWindow::removeRecipe()
@@ -330,6 +345,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    setObserved(recipeObs); // Automatically removes the previous observer.
 
    mashWizard->setRecipe(recipe);
+   brewDayWidget->setRecipe(recipe);
    // Tell the style CB to pay attention.
    styleComboBox->observeRecipe(recipe);
    // And the equipment CB too...
@@ -973,4 +989,16 @@ void MainWindow::editSelectedMashStep()
    MashStep* step = mashStepTableWidget->getModel()->getMashStep(row);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
+}
+
+void MainWindow::brewDayMode()
+{
+   if( QMessageBox::question(this, tr("New instructions?"), tr("Generate new instructions?"), QMessageBox::Yes, QMessageBox::No )
+       == QMessageBox::Yes )
+   {
+      if( recipeObs != 0 )
+         recipeObs->generateInstructions();
+   }
+
+   brewDayDialog->show();
 }

@@ -41,6 +41,8 @@
       <itemPath>../../aboutDialog.ui</itemPath>
       <itemPath>../../BeerColorWidget.cpp</itemPath>
       <itemPath>../../BeerColorWidget.h</itemPath>
+      <itemPath>../../BrewDayWidget.cpp</itemPath>
+      <itemPath>../../BrewDayWidget.h</itemPath>
       <itemPath>../../brewtarget.cpp</itemPath>
       <itemPath>../../brewtarget.h</itemPath>
       <itemPath>../../brewtarget.pro</itemPath>
@@ -79,6 +81,10 @@
       <itemPath>../../HopTableWidget.h</itemPath>
       <itemPath>../../hoputilization.cpp</itemPath>
       <itemPath>../../hoputilization.h</itemPath>
+      <itemPath>../../instruction.cpp</itemPath>
+      <itemPath>../../instruction.h</itemPath>
+      <itemPath>../../InstructionWidget.cpp</itemPath>
+      <itemPath>../../InstructionWidget.h</itemPath>
       <itemPath>../../main.cpp</itemPath>
       <itemPath>../../MainWindow.cpp</itemPath>
       <itemPath>../../MainWindow.h</itemPath>
@@ -91,6 +97,8 @@
       <itemPath>../../MashEditor.h</itemPath>
       <itemPath>../../mashstep.cpp</itemPath>
       <itemPath>../../mashstep.h</itemPath>
+      <itemPath>../../MashStepEditor.cpp</itemPath>
+      <itemPath>../../MashStepEditor.h</itemPath>
       <itemPath>../../MashStepTableModel.cpp</itemPath>
       <itemPath>../../MashStepTableModel.h</itemPath>
       <itemPath>../../MashStepTableWidget.cpp</itemPath>
@@ -115,6 +123,8 @@
       <itemPath>../../observer.cpp</itemPath>
       <itemPath>../../OptionDialog.cpp</itemPath>
       <itemPath>../../OptionDialog.h</itemPath>
+      <itemPath>../../PreInstruction.cpp</itemPath>
+      <itemPath>../../PreInstruction.h</itemPath>
       <itemPath>../../recipe.cpp</itemPath>
       <itemPath>../../recipe.h</itemPath>
       <itemPath>../../RecipeComboBox.cpp</itemPath>
@@ -128,6 +138,8 @@
       <itemPath>../../StyleEditor.cpp</itemPath>
       <itemPath>../../StyleEditor.h</itemPath>
       <itemPath>../../tabletest.cpp</itemPath>
+      <itemPath>../../TimerWidget.cpp</itemPath>
+      <itemPath>../../TimerWidget.h</itemPath>
       <itemPath>../../unit.cpp</itemPath>
       <itemPath>../../unit.h</itemPath>
       <itemPath>../../water.cpp</itemPath>
@@ -159,8 +171,6 @@
                    projectFiles="false">
       <itemPath>brewtarget-Makefile.mk</itemPath>
     </logicalFolder>
-    <itemPath>../../MashStepEditor.cpp</itemPath>
-    <itemPath>../../MashStepEditor.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../..</Elem>
@@ -200,6 +210,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../BeerColorWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../BrewDayWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../BrewDayWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../EquipmentComboBox.cpp">
@@ -266,6 +282,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../InstructionWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../InstructionWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MainWindow.cpp">
@@ -338,6 +360,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../OptionDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../PreInstruction.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../PreInstruction.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.cpp">
@@ -439,6 +467,12 @@
       <item path="../../StyleEditor.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../TimerWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../TimerWidget.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../WaterTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -524,6 +558,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../hoputilization.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../instruction.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../instruction.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../main.cpp">
@@ -681,6 +721,12 @@ make clean</buildCommand>
       <item path="../../BeerColorWidget.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../BrewDayWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../BrewDayWidget.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../EquipmentComboBox.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -745,6 +791,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../InstructionWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../InstructionWidget.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../MainWindow.cpp">
@@ -817,6 +869,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../OptionDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../PreInstruction.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../PreInstruction.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../QtDesignerPlugins/EquipmentComboBoxPlugin.cpp">
@@ -918,6 +976,12 @@ make clean</buildCommand>
       <item path="../../StyleEditor.h">
         <itemTool>3</itemTool>
       </item>
+      <item path="../../TimerWidget.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../TimerWidget.h">
+        <itemTool>3</itemTool>
+      </item>
       <item path="../../WaterTableModel.cpp">
         <itemTool>1</itemTool>
       </item>
@@ -1003,6 +1067,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../hoputilization.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../instruction.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../instruction.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../main.cpp">

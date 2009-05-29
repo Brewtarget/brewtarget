@@ -22,6 +22,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <exception>
 #include "stringparsing.h"
 
 using namespace std;
@@ -59,6 +60,29 @@ class Xml
       string xmlText;
       string::const_iterator iter;
       string::const_iterator end;
+};
+
+class BeerXmlException : public std::exception
+{
+public:
+
+   virtual const char* what() const throw()
+   {
+      // Note: this temporary object might get destroyed too early.
+      // I'm not really sure.
+      return std::string("BeerXml error: " + _err + "\n").c_str();
+   }
+
+   BeerXmlException( std::string message )
+   {
+      _err = message;
+   }
+
+   ~BeerXmlException() throw() {}
+
+private:
+
+   std::string _err;
 };
 
 #endif // _XML_H

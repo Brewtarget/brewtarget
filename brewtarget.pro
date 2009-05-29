@@ -73,6 +73,7 @@ win32 {
 # Input
 HEADERS += AboutDialog.h \
            BeerColorWidget.h \
+           BrewDayWidget.h \
            brewtarget.h \
            config.h \
            database.h \
@@ -91,6 +92,8 @@ HEADERS += AboutDialog.h \
            HopEditor.h \
            HopTableModel.h \
            HopTableWidget.h \
+           instruction.h \
+           InstructionWidget.h \
            MainWindow.h \
            MaltinessWidget.h \
            mash.h \
@@ -108,12 +111,14 @@ HEADERS += AboutDialog.h \
            MiscTableWidget.h \
            observable.h \
            OptionDialog.h \
+           PreInstruction.h \
            recipe.h \
            RecipeComboBox.h \
            stringparsing.h \
            style.h \
            StyleComboBox.h \
            StyleEditor.h \
+           TimerWidget.h \
            unit.h \
            water.h \
            WaterTableModel.h \
@@ -127,6 +132,7 @@ HEADERS += AboutDialog.h \
            YeastTableModel.h \
            YeastTableWidget.h
 FORMS +=   aboutDialog.ui \
+           brewDayWidget.ui \
            mainWindow.ui \
            mashStepEditor.ui \
            miscEditor.ui \
@@ -135,15 +141,18 @@ FORMS +=   aboutDialog.ui \
            equipmentEditor.ui \
            hopDialog.ui \
            hopEditor.ui \
+           instructionWidget.ui \
            mashEditor.ui \
            mashWizard.ui \
            miscDialog.ui \
            optionsDialog.ui \
            styleEditor.ui \
+           timerWidget.ui \
            yeastDialog.ui \
            yeastEditor.ui
 SOURCES += database.cpp \
            brewtarget.cpp \
+           BrewDayWidget.cpp \
            BeerColorWidget.cpp \
            equipment.cpp \
            EquipmentComboBox.cpp \
@@ -161,6 +170,8 @@ SOURCES += database.cpp \
            HopEditor.cpp \
            HopTableModel.cpp \
            HopTableWidget.cpp \
+           instruction.cpp \
+           InstructionWidget.cpp \
            MainWindow.cpp \
            MaltinessWidget.cpp \
            mash.cpp \
@@ -179,12 +190,14 @@ SOURCES += database.cpp \
            observable.cpp \
            observer.cpp \
            OptionDialog.cpp \
+           PreInstruction.cpp \
            recipe.cpp \
            RecipeComboBox.cpp \
            stringparsing.cpp \
            style.cpp \
            StyleComboBox.cpp \
            StyleEditor.cpp \
+           TimerWidget.cpp \
            unit.cpp \
            water.cpp \
            WaterTableModel.cpp \

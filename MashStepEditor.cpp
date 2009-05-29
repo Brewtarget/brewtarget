@@ -25,10 +25,11 @@ MashStepEditor::MashStepEditor(QWidget* parent) : QDialog(parent)
    setupUi(this);
    obs = 0;
 
-   comboBox_type->setCurrentIndex(0);
+   comboBox_type->setCurrentIndex(-1);
 
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT(saveAndClose()) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT(close()) );
+   connect( comboBox_type, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(grayOutStuff(const QString &)) );
 }
 
 void MashStepEditor::showChanges()
@@ -103,4 +104,32 @@ void MashStepEditor::saveAndClose()
    obs->forceNotify();
 
    setVisible(false);
+}
+
+void MashStepEditor::grayOutStuff(const QString& text)
+{
+   if( text == "Infusion" )
+   {
+      lineEdit_infuseAmount->setEnabled(true);
+      lineEdit_infuseTemp->setEnabled(true);
+      lineEdit_decoctionAmount->setEnabled(false);
+   }
+   else if( text == "Decoction" )
+   {
+      lineEdit_infuseAmount->setEnabled(false);
+      lineEdit_infuseTemp->setEnabled(false);
+      lineEdit_decoctionAmount->setEnabled(true);
+   }
+   else if( text == "Temperature" )
+   {
+      lineEdit_infuseAmount->setEnabled(false);
+      lineEdit_infuseTemp->setEnabled(false);
+      lineEdit_decoctionAmount->setEnabled(false);
+   }
+   else
+   {
+      lineEdit_infuseAmount->setEnabled(true);
+      lineEdit_infuseTemp->setEnabled(true);
+      lineEdit_decoctionAmount->setEnabled(true);
+   }
 }
