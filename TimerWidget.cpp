@@ -28,10 +28,20 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    minutes = 0;
    seconds = 0;
    start = true;
+   oldColors = true;
    timer = new QTimer();
+   flashTimer = new QTimer();
    timer->setInterval(1000); // One second between timeouts.
+   flashTimer->setInterval(500);
+
+   paletteOld = lcdNumber->palette();
+   paletteNew = QPalette(paletteOld);
+   // Swap colors.
+   paletteNew.setColor(QPalette::Active, QPalette::WindowText, paletteOld.color(QPalette::Active, QPalette::Window));
+   paletteNew.setColor(QPalette::Active, QPalette::Window, paletteOld.color(QPalette::Active, QPalette::WindowText));
 
    connect( timer, SIGNAL(timeout()), this, SLOT(subtractOneSecond()) );
+   connect( flashTimer, SIGNAL(timeout()), this, SLOT(flash()) );
    connect( this, SIGNAL(timerDone()), this, SLOT(endTimer()) );
    connect( pushButton_set, SIGNAL(clicked()), this, SLOT(setTimer()) );
    connect( pushButton_startStop, SIGNAL(clicked()), this, SLOT(startStop()) );
@@ -49,8 +59,24 @@ QString TimerWidget::getTimerValue()
    return QString("%1:%2:%3").arg(hours,2,10,QChar('0')).arg(minutes,2,10,QChar('0')).arg(seconds,2,10,QChar('0'));
 }
 
+void TimerWidget::flash()
+{
+   oldColors = ! oldColors;
+
+   if( oldColors )
+      lcdNumber->setPalette(paletteOld);
+   else
+      lcdNumber->setPalette(paletteNew);
+
+   lcdNumber->update();
+}
+
 void TimerWidget::setTimer()
 {
+   flashTimer->stop();
+   lcdNumber->setPalette(paletteOld);
+   lcdNumber->update();
+   
    setTimer(lineEdit->text());
    emit timerSet(getTimerValue());
 }
@@ -58,6 +84,7 @@ void TimerWidget::setTimer()
 void TimerWidget::endTimer()
 {
    timer->stop();
+   flashTimer->start();
 
    pushButton_startStop->setText("Start");
    start = true;

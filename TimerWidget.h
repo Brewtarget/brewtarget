@@ -25,6 +25,7 @@ class TimerWidget;
 #include <QWidget>
 #include <QTimer>
 #include <QString>
+#include <QPalette>
 
 class TimerWidget : public QWidget, public Ui::timerWidget
 {
@@ -42,6 +43,7 @@ public slots:
    void subtractOneSecond();
    void endTimer();
    void showChanges();
+   void flash();
    
 signals:
    void timerDone();
@@ -55,6 +57,9 @@ private:
    unsigned int seconds;
    bool start;
    QTimer* timer;
+   QTimer* flashTimer;
+   QPalette paletteOld, paletteNew;
+   bool oldColors;
 };
 
 #endif	/* _TIMERWIDGET_H */
