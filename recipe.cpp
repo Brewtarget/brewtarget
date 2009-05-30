@@ -81,6 +81,10 @@ std::string Recipe::toXml()
    for( i = 0; i < size; ++i )
       ret += waters[i]->toXml();
    ret += "</WATERS>\n";
+   ret += "<INSTRUCTIONS>\n"; size = instructions.size();
+   for( i = 0; i < size; ++i )
+      ret += instructions[i]->toXml();
+   ret += "</INSTRUCTIONS>\n";
    ret += mash->toXml();
    
    ret += "<ASST_BREWER>"+asstBrewer+"</ASST_BREWER>\n";
@@ -283,6 +287,13 @@ Recipe::Recipe(const XmlNode *node)
          
          for( j = 0; j < tmpVec.size(); ++j )
             addWater(new Water(tmpVec[j]));
+      }
+      else if( tag == "INSTRUCTIONS" )
+      {
+         unsigned int j;
+
+         for( j = 0; j < tmpVec.size(); ++j )
+            instructions.push_back(new Instruction(tmpVec[j]));
       }
       else if( tag == "MASH" )
       {

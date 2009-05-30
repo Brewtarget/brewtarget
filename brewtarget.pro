@@ -17,6 +17,7 @@
 TEMPLATE = app
 TARGET = brewtarget
 CONFIG += qt release warn_on
+QT += xml
 DEPENDPATH += .
 INCLUDEPATH += .
 RESOURCES = brewtarget.qrc

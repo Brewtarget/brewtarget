@@ -17,6 +17,13 @@
  */
 
 #include <iostream>
+#include <QFile>
+#include <QIODevice>
+#include <QString>
+#include <QDomNode>
+#include <QDomElement>
+#include <QDomText>
+#include <QTextStream>
 
 #include "brewtarget.h"
 #include "config.h"
@@ -24,11 +31,13 @@
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
+QDomDocument* Brewtarget::optionsDoc;
 bool Brewtarget::englishUnits = false;
 
 void Brewtarget::setApp(QApplication& a)
 {
    app = &a;
+   readPersistentOptions();
 }
 
 QApplication* Brewtarget::getApp()
@@ -59,13 +68,16 @@ QString Brewtarget::getDataDir()
 
 int Brewtarget::run()
 {
+   int ret;
    Database::initialize();
    
    mainWindow = new MainWindow();
 
    mainWindow->show();
 
-   return app->exec();
+   ret = app->exec();
+   savePersistentOptions();
+   return ret;
 }
 
 void Brewtarget::log( LogType lt, std::string message )
@@ -175,4 +187,84 @@ QString Brewtarget::displayAmount( double amount, Unit* units )
       ret = QString("%1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName.c_str());
 
    return ret;
+}
+
+void Brewtarget::readPersistentOptions()
+{
+   QFile xmlFile(getDataDir() + "options.xml");
+   optionsDoc = new QDomDocument();
+   QDomElement root;
+   QDomNode node, child;
+   QDomText textNode;
+   QString err;
+   QString text;
+   int line;
+   int col;
+
+   if( ! xmlFile.open(QIODevice::ReadOnly) )
+   {
+      log(WARNING, "Could not open " + xmlFile.fileName().toStdString() + " for reading.");
+      return;
+   }
+
+   if( ! optionsDoc->setContent(&xmlFile, false, &err, &line, &col) )
+   {
+      log(WARNING, "Bad document formatting in " +
+                   xmlFile.fileName().toStdString() +
+                   QString(" %1:%2.").arg(line).arg(col).toStdString());
+      log(WARNING, QString("Bad document formatting in %1 %2:%3.").arg(xmlFile.fileName()).arg(line).arg(col).toStdString() );
+   }
+
+   root = optionsDoc->documentElement();
+   for( node = root.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() || ! node.hasChildNodes() )
+         continue;
+
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      if( node.nodeName() == "english_units" )
+      {
+         if( text == "true" )
+            englishUnits = true;
+         else if( text == "false" )
+            englishUnits = false;
+      }
+   }
+
+   delete optionsDoc;
+   optionsDoc = 0;
+   xmlFile.close();
+}
+
+void Brewtarget::savePersistentOptions()
+{
+   QFile xmlFile(getDataDir() + "options.xml");
+   optionsDoc = new QDomDocument();
+   QDomElement root;
+   QDomNode node, child;
+
+   if( ! xmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
+   {
+      log(WARNING, "Could not open " + xmlFile.fileName().toStdString() + " for writing.");
+      return;
+   }
+
+   root = optionsDoc->createElement("options");
+
+   node = optionsDoc->createElement("english_units");
+   child = optionsDoc->createTextNode( englishUnits ? "true" : "false" );
+   node.appendChild(child);
+   root.appendChild(node);
+
+   optionsDoc->appendChild(root);
+
+   QTextStream out(&xmlFile);
+   out << optionsDoc->toString();
+
+   xmlFile.close();
+   delete optionsDoc;
+   optionsDoc = 0;
 }

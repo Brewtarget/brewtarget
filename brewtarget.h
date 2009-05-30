@@ -24,6 +24,7 @@ class Brewtarget;
 #include <QApplication>
 #include <QString>
 #include <string>
+#include <QDomDocument>
 #include "MainWindow.h"
 #include "unit.h"
 
@@ -42,9 +43,13 @@ public:
    static void log( LogType lt, std::string message );
    static QString displayAmount( double amount, Unit* units=0 );
 
+   static void readPersistentOptions();
+   static void savePersistentOptions();
+
 private:
    static QApplication* app;
    static MainWindow* mainWindow;
+   static QDomDocument* optionsDoc;
 
    // These are options that are ONLY to be edited by the OptionDialog.
    static bool englishUnits;
