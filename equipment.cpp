@@ -22,6 +22,7 @@
 #include "xmlnode.h"
 #include "stringparsing.h"
 #include "equipment.h"
+#include "brewtarget.h"
 
 bool operator<(Equipment &e1, Equipment &e2)
 {
@@ -173,6 +174,100 @@ Equipment::Equipment(XmlNode *node)
    if( !hasName || !hasVersion || !hasBoilSize || !hasBatchSize )
       throw EquipmentException("missing required tag.");
 } // end Equipment()
+
+Equipment::Equipment(const QDomNode& equipmentNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = equipmentNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         name = value.toStdString();
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("EQUIPMENT says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "BOIL_SIZE" )
+      {
+         setBoilSize_l(getDouble(textNode));
+      }
+      else if( property == "BATCH_SIZE" )
+      {
+         setBatchSize_l(getDouble(textNode));
+      }
+      else if( property == "TUN_VOLUME" )
+      {
+         setTunVolume_l(getDouble(textNode));
+      }
+      else if( property == "TUN_WEIGHT" )
+      {
+         setTunWeight_kg(getDouble(textNode));
+      }
+      else if( property == "TUN_SPECIFIC_HEAT" )
+      {
+         setTunSpecificHeat_calGC(getDouble(textNode));
+      }
+      else if( property == "TOP_UP_WATER" )
+      {
+         setTopUpWater_l(getDouble(textNode));
+      }
+      else if( property == "TRUB_CHILLER_LOSS" )
+      {
+         setTrubChillerLoss_l(getDouble(textNode));
+      }
+      else if( property == "EVAP_RATE" )
+      {
+         setEvapRate_pctHr(getDouble(textNode));
+      }
+      else if( property == "BOIL_TIME" )
+      {
+         setBoilTime_min(getDouble(textNode));
+      }
+      else if( property == "CALC_BOIL_VOLUME" )
+      {
+         setCalcBoilVolume(getBool(textNode));
+      }
+      else if( property == "LAUTER_DEADSPACE" )
+      {
+         setLauterDeadspace_l(getDouble(textNode));
+      }
+      else if( property == "TOP_UP_KETTLE" )
+      {
+         setTopUpKettle_l(getDouble(textNode));
+      }
+      else if( property == "HOP_UTILIZATION" )
+      {
+         setHopUtilization_pct(getDouble(textNode));
+      }
+      else if( property == "NOTES" )
+      {
+         setNotes(value.toStdString());
+      }
+      else
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+   }
+}
 
 //============================"SET" METHODS=====================================
 

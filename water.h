@@ -21,17 +21,20 @@
 
 #include <string>
 #include <exception>
+#include <QDomNode>
 #include "xmlnode.h"
 #include "observable.h"
+#include "BeerXMLElement.h"
 
 class Water;
 class WaterException;
 
-class Water : public Observable
+class Water : public Observable, public BeerXMLElement
 {
 public:
    Water();
    Water(XmlNode *node);
+   Water( const QDomNode& waterNode );
 
    friend bool operator<(Water &w1, Water &w2);
    friend bool operator==(Water &w1, Water &w2);

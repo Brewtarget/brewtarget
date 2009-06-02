@@ -21,6 +21,11 @@
 #include <list>
 #include <iostream>
 #include <fstream>
+#include <QDomDocument>
+#include <QIODevice>
+#include <QDomNodeList>
+#include <QDomNode>
+#include <QTextStream>
 
 #include "equipment.h"
 #include "fermentable.h"
@@ -51,11 +56,11 @@ std::list<Water*> Database::waters;
 std::list<Yeast*> Database::yeasts;
 bool Database::initialized = false;
 Database* Database::internalDBInstance = 0;
-std::fstream Database::dbFile;
+QFile Database::dbFile;
 QString Database::dbFileName;
-std::fstream Database::recipeFile;
+QFile Database::recipeFile;
 QString Database::recipeFileName;
-std::fstream Database::mashFile;
+QFile Database::mashFile;
 QString Database::mashFileName;
 
 Database::Database()
@@ -78,10 +83,127 @@ bool Database::isInitialized()
 
 void Database::initialize()
 {
+   QDomDocument dbDoc, recDoc, mashDoc;
+   QDomNodeList list;
+   QString err;
+   int line;
+   int col;
+   unsigned int i, size;
+
    dbFileName = (Brewtarget::getDataDir() + "database.xml");
    recipeFileName = (Brewtarget::getDataDir() + "recipes.xml");
    mashFileName = (Brewtarget::getDataDir() + "mashs.xml");
+
+   dbFile.setFileName(dbFileName);
+   recipeFile.setFileName(recipeFileName);
+   mashFile.setFileName(mashFileName);
+
+   // Try to open the files.
+   if( ! dbFile.open(QIODevice::ReadOnly) )
+   {
+      Brewtarget::log(Brewtarget::ERROR, "Could not open " + dbFile.fileName().toStdString() + " for reading.");
+      return;
+   }
+   if( ! recipeFile.open(QIODevice::ReadOnly) )
+   {
+      Brewtarget::log(Brewtarget::ERROR, "Could not open " + recipeFile.fileName().toStdString() + " for reading.");
+      return;
+   }
+   if( ! mashFile.open(QIODevice::ReadOnly) )
+   {
+      Brewtarget::log(Brewtarget::ERROR, "Could not open " + recipeFile.fileName().toStdString() + " for reading.");
+      return;
+   }
+
+   // Parse the xml documents.
+   if( ! dbDoc.setContent(&dbFile, false, &err, &line, &col) )
+   {
+      Brewtarget::log(Brewtarget::WARNING, "Bad document formatting in " +
+                   dbFile.fileName().toStdString() +
+                   QString(" %1:%2.").arg(line).arg(col).toStdString());
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3.").arg(dbFile.fileName()).arg(line).arg(col).toStdString() );
+   }
+   if( ! recDoc.setContent(&recipeFile, false, &err, &line, &col) )
+   {
+      Brewtarget::log(Brewtarget::WARNING, "Bad document formatting in " +
+                   recipeFile.fileName().toStdString() +
+                   QString(" %1:%2.").arg(line).arg(col).toStdString());
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3.").arg(recipeFile.fileName()).arg(line).arg(col).toStdString() );
+   }
+   if( ! mashDoc.setContent(&mashFile, false, &err, &line, &col) )
+   {
+      Brewtarget::log(Brewtarget::WARNING, "Bad document formatting in " +
+                   mashFile.fileName().toStdString() +
+                   QString(" %1:%2.").arg(line).arg(col).toStdString());
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3.").arg(mashFile.fileName()).arg(line).arg(col).toStdString() );
+   }
+
+   /*** Items in dbDoc ***/
+   list = dbDoc.elementsByTagName("EQUIPMENT");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      equipments.push_back(new Equipment( list.at(i) ));
+   list = dbDoc.elementsByTagName("FERMENTABLE");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      fermentables.push_back( new Fermentable( list.at(i) ) );
+   list = dbDoc.elementsByTagName("HOP");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      hops.push_back(new Hop( list.at(i) ));
+   list = dbDoc.elementsByTagName("MASH_STEP");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      mashSteps.push_back(new MashStep( list.at(i) ));
+   list = dbDoc.elementsByTagName("MISC");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      miscs.push_back(new Misc( list.at(i) ));
+   list = dbDoc.elementsByTagName("STYLE");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      styles.push_back(new Style(list.at(i)));
+   list = dbDoc.elementsByTagName("WATER");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      waters.push_back(new Water(list.at(i)));
+   list = dbDoc.elementsByTagName("YEAST");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      yeasts.push_back(new Yeast(list.at(i)));
+
+   /*** Items in mashDoc ***/
+   list = mashDoc.elementsByTagName("MASH");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      mashs.push_back(new Mash(list.at(i)));
+
+   /*** Items in recDoc ***/
+   list = recDoc.elementsByTagName("RECIPE");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      recipes.push_back(new Recipe(list.at(i)));
+
+   // Sort everything by name.
+   equipments.sort(Equipment_ptr_cmp());
+   fermentables.sort(Fermentable_ptr_cmp());
+   hops.sort(Hop_ptr_cmp());
+   mashs.sort(Mash_ptr_cmp());
+   mashSteps.sort(MashStep_ptr_cmp());
+   miscs.sort(Misc_ptr_cmp());
+   recipes.sort(Recipe_ptr_cmp());
+   styles.sort(Style_ptr_cmp());
+   waters.sort(Water_ptr_cmp());
+   yeasts.sort(Yeast_ptr_cmp());
+
+   dbFile.close();
+   recipeFile.close();
+   mashFile.close();
+
+   internalDBInstance = new Database();
+   Database::initialized = true;
    
+   /*
    dbFile.open(dbFileName.toStdString().c_str());
    recipeFile.open(recipeFileName.toStdString().c_str()); // Why are these separate from the dbFile? To prevent duplicates.
    mashFile.open(mashFileName.toStdString().c_str()); // Why are these separate from the dbFile? To prevent duplicates.
@@ -148,8 +270,7 @@ void Database::initialize()
    waters.sort(Water_ptr_cmp());
    yeasts.sort(Yeast_ptr_cmp());
 
-   internalDBInstance = new Database();
-   Database::initialized = true;
+    */
 }
 
 void Database::resortAll()
@@ -207,87 +328,91 @@ void Database::resortYeasts()
 
 void Database::savePersistent()
 {
-   dbFile.open( dbFileName.toStdString().c_str(), ios::out | ios::trunc );
-   recipeFile.open( recipeFileName.toStdString().c_str(), ios::out | ios::trunc );
-   mashFile.open( mashFileName.toStdString().c_str(), ios::out | ios::trunc );
+   dbFile.open( QIODevice::Truncate | QIODevice::WriteOnly );
+   recipeFile.open( QIODevice::Truncate | QIODevice::WriteOnly );
+   mashFile.open( QIODevice::Truncate | QIODevice::WriteOnly );
 
-   dbFile << "<?xml version=\"1.0\"?>" << std::endl;
-   recipeFile << "<?xml version=\"1.0\"?>" << std::endl;
-   mashFile << "<?xml version=\"1.0\"?>" << std::endl;
+   QTextStream dbOut(&dbFile);
+   QTextStream recipeOut(&recipeFile);
+   QTextStream mashOut(&mashFile);
 
-   //=====================dbFile entries=============================
+   dbOut << QString("<?xml version=\"1.0\"?>\n");
+   recipeOut << QString("<?xml version=\"1.0\"?>\n");
+   mashOut << QString("<?xml version=\"1.0\"?>\n");
+
+   //=====================dbOut entries=============================
 
    std::list<Equipment*>::iterator eqit, eqend;
    eqend = equipments.end();
-   dbFile << "<EQUIPMENTS>" << std::endl;
+   dbOut << QString("<EQUIPMENTS>\n");
    for( eqit = equipments.begin(); eqit != eqend; ++eqit )
-      dbFile << (*eqit)->toXml();
-   dbFile << "</EQUIPMENTS>" << std::endl;
+      dbOut << QString((*eqit)->toXml().c_str());
+   dbOut << QString("</EQUIPMENTS>\n");
 
    std::list<Fermentable*>::iterator fit, fend;
    fend = fermentables.end();
-   dbFile << "<FERMENTABLES>" << std::endl;
+   dbOut << QString("<FERMENTABLES>\n");
    for( fit = fermentables.begin(); fit != fend; ++fit )
-      dbFile << (*fit)->toXml();
-   dbFile << "</FERMENTABLES>" << std::endl;
+      dbOut << QString((*fit)->toXml().c_str());
+   dbOut << QString("</FERMENTABLES>\n");
 
    std::list<Hop*>::iterator hit, hend;
    hend = hops.end();
-   dbFile << "<HOPS>" << std::endl;
+   dbOut << QString("<HOPS>\n");
    for( hit = hops.begin(); hit != hend; ++hit )
-      dbFile << (*hit)->toXml();
-   dbFile << "</HOPS>" << std::endl;
+      dbOut << QString((*hit)->toXml().c_str());
+   dbOut << QString("</HOPS>\n");
 
    std::list<MashStep*>::iterator msit, msend;
    msend = mashSteps.end();
-   dbFile << "<MASH_STEPS>" << std::endl;
+   dbOut << QString("<MASH_STEPS>\n");
    for( msit = mashSteps.begin(); msit != msend; ++msit )
-      dbFile << (*msit)->toXml();
-   dbFile << "</MASH_STEPS>" << std::endl;
+      dbOut << QString((*msit)->toXml().c_str());
+   dbOut << QString("</MASH_STEPS>\n");
 
    std::list<Misc*>::iterator miscit, miscend;
    miscend = miscs.end();
-   dbFile << "<MISCS>" << std::endl;
+   dbOut << QString("<MISCS>\n");
    for( miscit = miscs.begin(); miscit != miscend; ++miscit )
-      dbFile << (*miscit)->toXml();
-   dbFile << "</MISCS>" << std::endl;
+      dbOut << QString((*miscit)->toXml().c_str());
+   dbOut << QString("</MISCS>\n");
 
    std::list<Style*>::iterator sit, send;
    send = styles.end();
-   dbFile << "<STYLES>" << std::endl;
+   dbOut << QString("<STYLES>\n");
    for( sit = styles.begin(); sit != send; ++sit )
-      dbFile << (*sit)->toXml();
-   dbFile << "</STYLES>" << std::endl;
+      dbOut << QString((*sit)->toXml().c_str());
+   dbOut << QString("</STYLES>\n");
 
    std::list<Water*>::iterator wit, wend;
    wend = waters.end();
-   dbFile << "<WATERS>" << std::endl;
+   dbOut << QString("<WATERS>\n");
    for( wit = waters.begin(); wit != wend; ++wit )
-      dbFile << (*wit)->toXml();
-   dbFile << "</WATERS>" << std::endl;
+      dbOut << QString((*wit)->toXml().c_str());
+   dbOut << QString("</WATERS>\n");
 
    std::list<Yeast*>::iterator yit, yend;
    yend = yeasts.end();
-   dbFile << "<YEASTS>" << std::endl;
+   dbOut << QString("<YEASTS>\n");
    for( yit = yeasts.begin(); yit != yend; ++yit )
-      dbFile << (*yit)->toXml();
-   dbFile << "</YEASTS>" << std::endl;
+      dbOut << QString((*yit)->toXml().c_str());
+   dbOut << QString("</YEASTS>\n");
 
-   //============================mashFile entries===============================
+   //============================mashOut entries===============================
    std::list<Mash*>::iterator mait, maend;
    maend = mashs.end();
-   mashFile << "<MASHS>" << std::endl;
+   mashOut << QString("<MASHS>\n");
    for( mait = mashs.begin(); mait != maend; ++mait )
-      mashFile << (*mait)->toXml();
-   mashFile << "</MASHS>" << std::endl;
+      mashOut << QString((*mait)->toXml().c_str());
+   mashOut << QString("</MASHS>\n");
 
-   //==========================recipeFile entries===============================
+   //==========================recipeOut entries===============================
    std::list<Recipe*>::iterator rit, rend;
    rend = recipes.end();
-   recipeFile << "<RECIPES>" << std::endl;
+   recipeOut << QString("<RECIPES>\n");
    for( rit = recipes.begin(); rit != rend; ++rit )
-      recipeFile << (*rit)->toXml();
-   recipeFile << "</RECIPES>" << std::endl;
+      recipeOut << QString((*rit)->toXml().c_str());
+   recipeOut << QString("</RECIPES>\n");
 
    dbFile.close();
    recipeFile.close();

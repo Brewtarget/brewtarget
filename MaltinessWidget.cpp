@@ -73,7 +73,7 @@ void MaltinessWidget::paintEvent(QPaintEvent*)
 
    QPainter painter(this);
 
-   palette.setColor(QPalette::Active, QPalette::Background, bgColor());
+   palette.setColor(QPalette::Active, QPalette::Window, bgColor());
    label->setPalette(palette);
    label->setText(fgText());
 

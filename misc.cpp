@@ -16,12 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "brewtarget.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include "misc.h"
 #include "stringparsing.h"
 #include "xmlnode.h"
+#include "brewtarget.h"
 
 bool operator<(Misc &m1, Misc &m2)
 {
@@ -168,6 +170,82 @@ Misc::Misc( const XmlNode * node ) : Observable()
    if( !hasName || !hasVersion || !hasType || !hasUse || !hasAmount || !hasTime )
       throw MiscException("one of the required fields is missing.");
 } //end Misc()
+
+Misc::Misc(const QDomNode& miscNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = miscNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         name = value.toStdString();
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("MISC says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "TYPE" )
+      {
+         if( isValidType(value.toStdString()) )
+            type = value.toStdString();
+         else
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "USE" )
+      {
+         if( isValidUse(value.toStdString()) )
+            use = value.toStdString();
+         else
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid use for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "TIME" )
+      {
+         setTime(getDouble(textNode));
+      }
+      else if( property == "AMOUNT" )
+      {
+         setAmount(getDouble(textNode));
+      }
+      else if( property == "AMOUNT_IS_WEIGHT" )
+      {
+         setAmountIsWeight(getBool(textNode));
+      }
+      else if( property == "USE_FOR" )
+      {
+         setUseFor(value.toStdString());
+      }
+      else if( property == "NOTES" )
+      {
+         setNotes(value.toStdString());
+      }
+      else
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported MISC property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+      }
+   }
+
+   hasChanged();
+}
 
 //============================"GET" METHODS=====================================
 std::string Misc::getName() const

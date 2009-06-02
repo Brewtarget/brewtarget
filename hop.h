@@ -23,19 +23,22 @@
 #include <exception>
 #include "xmlnode.h"
 #include "observable.h"
+#include <QDomNode>
+#include "BeerXMLElement.h"
 
 using namespace std;
 
 class Hop;
 class HopException;
 
-class Hop : public Observable
+class Hop : public Observable, public BeerXMLElement
 {
    
    public:
       Hop();
       Hop( Hop& other );
       Hop( const XmlNode *node );
+      Hop(const QDomNode& hopNode);
 
       friend bool operator<( Hop &h1, Hop &h2 );
       friend bool operator==( Hop &h1, Hop &h2 );

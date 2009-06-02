@@ -23,6 +23,7 @@
 #include "xml.h"
 #include "xmlnode.h"
 #include "stringparsing.h"
+#include "brewtarget.h"
 
 using namespace std;
 
@@ -270,6 +271,113 @@ Hop::Hop( const XmlNode *node )
       }
    } // end for().
 } // end Hop()
+
+Hop::Hop(const QDomNode& hopNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = hopNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         name = value.toStdString();
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("MISC says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "ALPHA" )
+      {
+         setAlpha_pct(getDouble(textNode));
+      }
+      else if( property == "AMOUNT" )
+      {
+         setAmount_kg(getDouble(textNode));
+      }
+      else if( property == "USE" )
+      {
+         if( isValidUse(value.toStdString()) )
+            setUse(value.toStdString());
+         else
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid use for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "TIME" )
+      {
+         setTime_min(getDouble(textNode));
+      }
+      else if( property == "NOTES" )
+      {
+         setNotes(value.toStdString());
+      }
+      else if( property == "TYPE" )
+      {
+         if( isValidType(value.toStdString()) )
+            setType(value.toStdString());
+         else
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "FORM" )
+      {
+         if( isValidForm(value.toStdString()) )
+            setForm(value.toStdString());
+         else
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid form for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "BETA" )
+      {
+         setBeta_pct(getDouble(textNode));
+      }
+      else if( property == "HSI" )
+      {
+         setHsi_pct(getDouble(textNode));
+      }
+      else if( property == "ORIGIN" )
+      {
+         setOrigin(value.toStdString());
+      }
+      else if( property == "SUBSTITUTES" )
+      {
+         setSubstitutes(value.toStdString());
+      }
+      else if( property == "HUMULENE" )
+      {
+         setHumulene_pct(getDouble(textNode));
+      }
+      else if( property == "CARYOPHYLLENE" )
+      {
+         setCaryophyllene_pct(getDouble(textNode));
+      }
+      else if( property == "COHUMULONE" )
+      {
+         setCohumulone_pct(getDouble(textNode));
+      }
+      else if( property == "MYRCENE" )
+      {
+         setMyrcene_pct(getDouble(textNode));
+      }
+      else
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported HOP property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+   }
+}
 
 //============================="SET" METHODS====================================
 void Hop::setName( const string &str )

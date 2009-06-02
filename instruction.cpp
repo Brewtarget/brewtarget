@@ -20,6 +20,7 @@
 #include <vector>
 #include "stringparsing.h"
 #include "xml.h"
+#include "brewtarget.h"
 
 void Instruction::setDefaults()
 {
@@ -109,6 +110,55 @@ Instruction::Instruction(const XmlNode* node)
       {
          setCompleted(parseBool(leafText));
       }
+   }
+}
+
+Instruction::Instruction(const QDomNode& instructionNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = instructionNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         setName(value);
+      }
+      else if( property == "DIRECTIONS" )
+      {
+         setDirections(value);
+      }
+      else if( property == "HAS_TIMER" )
+      {
+         setHasTimer(getBool(textNode));
+      }
+      else if( property == "TIMER_VALUE" )
+      {
+         setTimerValue(value);
+      }
+      else if( property == "COMPLETED" )
+      {
+         setCompleted(getBool(textNode));
+      }
+      else
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported INSTRUCTION property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
 

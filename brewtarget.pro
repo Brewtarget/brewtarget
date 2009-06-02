@@ -74,6 +74,7 @@ win32 {
 # Input
 HEADERS += AboutDialog.h \
            BeerColorWidget.h \
+           BeerXMLElement.h \
            BrewDayWidget.h \
            brewtarget.h \
            config.h \
@@ -152,9 +153,10 @@ FORMS +=   aboutDialog.ui \
            yeastDialog.ui \
            yeastEditor.ui
 SOURCES += database.cpp \
-           brewtarget.cpp \
+           BeerXMLElement.cpp \
            BrewDayWidget.cpp \
            BeerColorWidget.cpp \
+           brewtarget.cpp \
            equipment.cpp \
            EquipmentComboBox.cpp \
            EquipmentEditor.cpp \

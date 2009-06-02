@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "brewtarget.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -245,6 +246,130 @@ Style::Style(XmlNode *node)
            !hasColorMin || !hasColorMax )
       throw StyleException("missing a required field.");
 }// end Style()
+
+Style::Style(const QDomNode& styleNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = styleNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         setName(value.toStdString());
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("WATER says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "CATEGORY" )
+      {
+         setCategory(value.toStdString());
+      }
+      else if( property == "CATEGORY_NUMBER" )
+      {
+         setCategoryNumber(value.toStdString());
+      }
+      else if( property == "STYLE_LETTER" )
+      {
+         setStyleLetter(value.toStdString());
+      }
+      else if( property == "STYLE_GUIDE" )
+      {
+         setStyleGuide(value.toStdString());
+      }
+      else if( property == "TYPE" )
+      {
+         setType(value.toStdString());
+      }
+      else if( property == "OG_MIN" )
+      {
+         setOgMin(getDouble(textNode));
+      }
+      else if( property == "OG_MAX" )
+      {
+         setOgMax(getDouble(textNode));
+      }
+      else if( property == "FG_MIN" )
+      {
+         setFgMin(getDouble(textNode));
+      }
+      else if( property == "FG_MAX" )
+      {
+         setFgMax(getDouble(textNode));
+      }
+      else if( property == "IBU_MIN" )
+      {
+         setIbuMin(getDouble(textNode));
+      }
+      else if( property == "IBU_MAX" )
+      {
+         setIbuMax(getDouble(textNode));
+      }
+      else if( property == "COLOR_MIN" )
+      {
+         setColorMin_srm(getDouble(textNode));
+      }
+      else if( property == "COLOR_MAX" )
+      {
+         setColorMax_srm(getDouble(textNode));
+      }
+      else if( property == "CARB_MIN" )
+      {
+         setCarbMin_vol(getDouble(textNode));
+      }
+      else if( property == "CARB_MAX" )
+      {
+         setCarbMax_vol(getDouble(textNode));
+      }
+      else if( property == "ABV_MIN" )
+      {
+         setAbvMin_pct(getDouble(textNode));
+      }
+      else if( property == "ABV_MAX" )
+      {
+         setAbvMax_pct(getDouble(textNode));
+      }
+      else if( property == "NOTES" )
+      {
+         setNotes(value.toStdString());
+      }
+      else if( property == "PROFILE" )
+      {
+         setProfile(value.toStdString());
+      }
+      else if( property == "INGREDIENTS" )
+      {
+         setIngredients(value.toStdString());
+      }
+      else if( property == "EXAMPLES" )
+      {
+         setExamples(value.toStdString());
+      }
+      else
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported STYLE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+      }
+   }
+}
 
 //==============================="SET" METHODS==================================
 void Style::setName( const std::string& var )

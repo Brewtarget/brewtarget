@@ -20,6 +20,7 @@
 #include <string>
 #include "fermentable.h"
 #include "stringparsing.h"
+#include "brewtarget.h"
 
 bool operator<(Fermentable &f1, Fermentable &f2)
 {
@@ -186,6 +187,107 @@ Fermentable::Fermentable( const XmlNode* node )
       throw FermentableException("missing required fields.");
    
 } // end Fermentable(...)
+
+Fermentable::Fermentable(const QDomNode& fermentableNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = fermentableNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         name = value.toStdString();
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("FERMENTABLE says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "TYPE" )
+      {
+         if( isValidType(value.toStdString()) )
+            setType(value.toStdString());
+         else
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for FERMENTABLE. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "AMOUNT" )
+      {
+         setAmount_kg(getDouble(textNode));
+      }
+      else if( property == "YIELD" )
+      {
+         setYield_pct(getDouble(textNode));
+      }
+      else if( property == "COLOR" )
+      {
+         setColor_srm(getDouble(textNode));
+      }
+      else if( property == "ADD_AFTER_BOIL" )
+      {
+         setAddAfterBoil(getBool(textNode));
+      }
+      else if( property == "ORIGIN" )
+      {
+         setOrigin(value.toStdString());
+      }
+      else if( property == "SUPPLIER" )
+      {
+         setSupplier(value.toStdString());
+      }
+      else if( property == "NOTES" )
+      {
+         setNotes(value.toStdString());
+      }
+      else if( property == "COARSE_FINE_DIFF" )
+      {
+         setCoarseFineDiff_pct(getDouble(textNode));
+      }
+      else if( property == "MOISTURE" )
+      {
+         setMoisture_pct(getDouble(textNode));
+      }
+      else if( property == "DIASTATIC_POWER" )
+      {
+         setDiastaticPower_lintner(getDouble(textNode));
+      }
+      else if( property == "PROTEIN" )
+      {
+         setProtein_pct(getDouble(textNode));
+      }
+      else if( property == "MAX_IN_BATCH" )
+      {
+         setMaxInBatch_pct(getDouble(textNode));
+      }
+      else if( property == "RECOMMEND_MASH" )
+      {
+         setRecommendMash(getBool(textNode));
+      }
+      else if( property == "IBU_GAL_PER_LB" )
+      {
+         setIbuGalPerLb(getDouble(textNode));
+      }
+      else
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported FERMENTABLE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+   }
+}
 
 void Fermentable::setDefaults()
 {

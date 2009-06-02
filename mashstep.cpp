@@ -22,6 +22,7 @@
 #include "xmlnode.h"
 #include "stringparsing.h"
 #include "mashstep.h"
+#include "brewtarget.h"
 
 bool operator<(MashStep &m1, MashStep &m2)
 {
@@ -162,6 +163,79 @@ MashStep::MashStep( const XmlNode *node)
        (type=="Infusion" && !hasInfuseAmount) )
       throw MashStepException("missing required field.");
 } // end MashStep()
+
+MashStep::MashStep(const QDomNode& mashStepNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = mashStepNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         name = value.toStdString();
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("YEAST says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "TYPE" )
+      {
+         if( isValidType(value.toStdString()) )
+            type = value.toStdString();
+         else
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for MASHSTEP. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "INFUSE_AMOUNT" )
+      {
+         setInfuseAmount_l(getDouble(textNode));
+      }
+      else if( property == "STEP_TEMP" )
+      {
+         setStepTemp_c(getDouble(textNode));
+      }
+      else if( property == "STEP_TIME" )
+      {
+         setStepTime_min(getDouble(textNode));
+      }
+      else if( property == "RAMP_TIME" )
+      {
+         setRampTime_min(getDouble(textNode));
+      }
+      else if( property == "END_TEMP" )
+      {
+         setEndTemp_c(getDouble(textNode));
+      }
+      else if( property == "INFUSE_TEMP" )
+      {
+         setInfuseTemp_c(getDouble(textNode));
+      }
+      else if( property == "DECOCTION_AMOUNT" )
+      {
+         setDecoctionAmount_l(getDouble(textNode));
+      }
+      else
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported MASHSTEP property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+   }
+}
 
 //================================"SET" METHODS=================================
 void MashStep::setName( const std::string &var )

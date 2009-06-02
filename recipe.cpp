@@ -445,6 +445,334 @@ Recipe::Recipe(const XmlNode *node)
       throw RecipeException("Recipe lacks version tag.");
 } // end Recipe()
 
+Recipe::Recipe(const QDomNode& recipeNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = recipeNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() )
+         continue;
+
+      property = node.nodeName();
+      if( child.isText() )
+      {
+         textNode = child.toText();
+         value = textNode.nodeValue();
+      }
+      else
+      {
+         textNode = QDomText();
+         value = QString();
+      }
+
+      if( property == "NAME" )
+      {
+         setName(value.toStdString());
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("RECIPE says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "TYPE" )
+      {
+         if( value.isNull() )
+         {
+            Brewtarget::log(Brewtarget::ERROR, QString("Error at line %2.").arg(textNode.lineNumber()) );
+            continue;
+         }
+
+         if( isValidType(value.toStdString()) )
+            setType(value.toStdString());
+         else
+             Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for RECIPE. Line %2").arg(value).arg(textNode.lineNumber()));
+      }
+      else if( property == "BREWER" )
+      {
+         if( value.isNull() )
+         {
+            continue;
+         }
+
+         setBrewer(value.toStdString());
+      }
+      else if( property == "STYLE" )
+      {
+         setStyle(new Style(node));
+      }
+      else if( property == "BATCH_SIZE" )
+      {
+         if( textNode.isNull() )
+         {
+            Brewtarget::log(Brewtarget::ERROR, QString("Error at line %2.").arg(node.lineNumber()) );
+            continue;
+         }
+         setBatchSize_l(getDouble(textNode));
+      }
+      else if( property == "BOIL_SIZE" )
+      {
+         if( textNode.isNull() )
+         {
+            Brewtarget::log(Brewtarget::ERROR, QString("Error at line %2.").arg(node.lineNumber()) );
+            continue;
+         }
+         setBoilSize_l(getDouble(textNode));
+      }
+      else if( property == "BOIL_TIME" )
+      {
+         if( textNode.isNull() )
+         {
+            Brewtarget::log(Brewtarget::ERROR, QString("Error at line %2.").arg(node.lineNumber()) );
+            continue;
+         }
+         setBoilTime_min(getDouble(textNode));
+      }
+      else if( property == "EFFICIENCY" )
+      {
+         if( textNode.isNull() )
+         {
+            Brewtarget::log(Brewtarget::ERROR, QString("Error at line %2.").arg(node.lineNumber()) );
+            continue;
+         }
+         setEfficiency_pct(getDouble(textNode));
+      }
+      else if( property == "HOPS" )
+      {
+         QDomNode hopNode;
+         for( hopNode = child; ! hopNode.isNull(); hopNode = hopNode.nextSibling() )
+            addHop(new Hop(hopNode));
+      }
+      else if( property == "FERMENTABLES" )
+      {
+         QDomNode fermNode;
+         for( fermNode = child; ! fermNode.isNull(); fermNode = fermNode.nextSibling() )
+            addFermentable(new Fermentable(fermNode));
+      }
+      else if( property == "MISCS" )
+      {
+         QDomNode miscNode;
+         for( miscNode = child; ! miscNode.isNull(); miscNode = miscNode.nextSibling() )
+            addMisc(new Misc(miscNode));
+      }
+      else if( property == "YEASTS" )
+      {
+         QDomNode yeastNode;
+         for( yeastNode = child; ! yeastNode.isNull(); yeastNode = yeastNode.nextSibling() )
+            addYeast(new Yeast(yeastNode));
+      }
+      else if( property == "WATERS" )
+      {
+         QDomNode waterNode;
+         for( waterNode = child; ! waterNode.isNull(); waterNode = waterNode.nextSibling() )
+            addWater(new Water(waterNode));
+      }
+      else if( property == "INSTRUCTIONS" )
+      {
+         QDomNode instructionNode;
+         for( instructionNode = child; ! instructionNode.isNull(); instructionNode = instructionNode.nextSibling() )
+            addInstruction(new Instruction(instructionNode));
+      }
+      else if( property == "MASH" )
+      {
+         setMash(new Mash(node));
+      }
+      else if( property == "ASST_BREWER" )
+      {
+         if( value.isNull() )
+         {
+            continue;
+         }
+         setAsstBrewer(value.toStdString());
+      }
+      else if( property == "EQUIPMENT" )
+      {
+         setEquipment(new Equipment(node));
+      }
+      else if( property == "NOTES" )
+      {
+         if( value.isNull() )
+         {
+            continue;
+         }
+         setNotes(value.toStdString());
+      }
+      else if( property == "TASTE_NOTES" )
+      {
+         if( value.isNull() )
+         {
+            continue;
+         }
+         setTasteNotes(value.toStdString());
+      }
+      else if( property == "TASTE_RATING" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setTasteRating(getDouble(textNode));
+      }
+      else if( property == "OG" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setOg(getDouble(textNode));
+      }
+      else if( property == "FG" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setFg(getDouble(textNode));
+      }
+      else if( property == "FERMENTATION_STAGES" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setFermentationStages(getInt(textNode));
+      }
+      else if( property == "PRIMARY_AGE" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setPrimaryAge_days(getDouble(textNode));
+      }
+      else if( property == "PRIMARY_TEMP" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setPrimaryTemp_c(getDouble(textNode));
+      }
+      else if( property == "SECONDARY_AGE" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setSecondaryAge_days(getDouble(textNode));
+      }
+      else if( property == "SECONDARY_TEMP" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setSecondaryTemp_c(getDouble(textNode));
+      }
+      else if( property == "TERTIARY_AGE" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setTertiaryAge_days(getDouble(textNode));
+      }
+      else if( property == "TERTIARY_TEMP" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setTertiaryTemp_c(getDouble(textNode));
+      }
+      else if( property == "AGE" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setAge_days(getDouble(textNode));
+      }
+      else if( property == "AGE_TEMP" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setAgeTemp_c(getDouble(textNode));
+      }
+      else if( property == "DATE" )
+      {
+         if( value.isNull() )
+         {
+            continue;
+         }
+         setDate(value.toStdString());
+      }
+      else if( property == "CARBONATION" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setCarbonation_vols(getDouble(textNode));
+      }
+      else if( property == "FORCED_CARBONATION" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setForcedCarbonation(getBool(textNode));
+      }
+      else if( property == "PRIMING_SUGAR_NAME" )
+      {
+         if( value.isNull() )
+         {
+            continue;
+         }
+         setPrimingSugarName(value.toStdString());
+      }
+      else if( property == "CARBONATION_TEMP" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setCarbonationTemp_c(getDouble(textNode));
+      }
+      else if( property == "PRIMING_SUGAR_EQUIV" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setPrimingSugarEquiv(getDouble(textNode));
+      }
+      else if( property == "KEG_PRIMING_FACTOR" )
+      {
+         if( textNode.isNull() )
+         {
+            continue;
+         }
+         setKegPrimingFactor(getDouble(textNode));
+      }
+      else
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported RECIPE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+   }
+}
+
 void Recipe::addInstruction(Instruction* ins)
 {
    if( ins == 0 )

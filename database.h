@@ -21,7 +21,8 @@
 
 #include <list>
 #include <iostream>
-#include <fstream>
+#include <QFile>
+#include <QString>
 #include "equipment.h"
 #include "fermentable.h"
 #include "hop.h"
@@ -133,11 +134,11 @@ public:
 private:
    static bool initialized;
    static Database* internalDBInstance;
-   static std::fstream dbFile;
+   static QFile dbFile;
    static QString dbFileName;
-   static std::fstream recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
+   static QFile recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
    static QString recipeFileName;
-   static std::fstream mashFile; // Why are these separate from the dbFile? To prevent duplicates.
+   static QFile mashFile; // Why are these separate from the dbFile? To prevent duplicates.
    static QString mashFileName;
 
    // The stuff we care about...

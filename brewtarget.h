@@ -41,6 +41,7 @@ public:
    static QString getDataDir();
    static int run();
    static void log( LogType lt, std::string message );
+   static void log( LogType lt, QString message );
    static QString displayAmount( double amount, Unit* units=0 );
 
    static void readPersistentOptions();

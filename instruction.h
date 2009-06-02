@@ -26,12 +26,15 @@ class Instruction;
 #include "observable.h"
 #include "xmlnode.h"
 #include <string>
+#include <QDomNode>
+#include "BeerXMLElement.h"
 
-class Instruction : public Observable
+class Instruction : public Observable, public BeerXMLElement
 {
 public:
    Instruction();
    Instruction(const XmlNode* node);
+   Instruction(const QDomNode& instructionNode);
 
    std::string toXml();
 

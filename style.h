@@ -22,16 +22,19 @@
 #include <exception>
 #include "xmlnode.h"
 #include "observable.h"
+#include <QDomNode>
+#include "BeerXMLElement.h"
 
 class Style;
 class StyleException;
 
-class Style : public Observable
+class Style : public Observable, public BeerXMLElement
 {
 public:
 
    Style();
    Style(XmlNode *node);
+   Style(const QDomNode& styleNode);
 
    friend bool operator<(Style &s1, Style &s2);
    friend bool operator==(Style &s1, Style &s2);

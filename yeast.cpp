@@ -21,6 +21,7 @@
 #include "yeast.h"
 #include "stringparsing.h"
 #include "xmlnode.h"
+#include "brewtarget.h"
 
 bool operator<(Yeast &y1, Yeast &y2)
 {
@@ -207,6 +208,117 @@ Yeast::Yeast( XmlNode *node )
    if( !hasName || !hasVersion || !hasType || !hasForm || !hasAmount )
       throw YeastException("missing required fields.");
 } // end Yeast()
+
+Yeast::Yeast(const QDomNode& yeastNode)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString property, value;
+
+   setDefaults();
+
+   for( node = yeastNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+
+      property = node.nodeName();
+      textNode = child.toText();
+      value = textNode.nodeValue();
+
+      if( property == "NAME" )
+      {
+         name = value.toStdString();
+      }
+      else if( property == "VERSION" )
+      {
+         if( version != getInt(textNode) )
+            Brewtarget::log(Brewtarget::ERROR, QString("YEAST says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+      }
+      else if( property == "TYPE" )
+      {
+         if( isValidType( value.toStdString() ) )
+            type = value.toStdString();
+         else
+            Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid type for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "FORM" )
+      {
+         if( isValidForm( value.toStdString() ) )
+            form = value.toStdString();
+         else
+            Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid form for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "AMOUNT" )
+      {
+         amount = getDouble(textNode);
+      }
+      else if( property == "AMOUNT_IS_WEIGHT" )
+      {
+         amountIsWeight = getBool(textNode);
+      }
+      else if( property == "LABORATORY" )
+      {
+         laboratory = value.toStdString();
+      }
+      else if( property == "PRODUCT_ID" )
+      {
+         productID = value.toStdString();
+      }
+      else if( property == "MIN_TEMPERATURE" )
+      {
+         minTemperature_c = getDouble(textNode);
+      }
+      else if( property == "MAX_TEMPERATURE" )
+      {
+         maxTemperature_c = getDouble(textNode);
+      }
+      else if( property == "FLOCCULATION" )
+      {
+         if( isValidFlocculation( value.toStdString() ) )
+            flocculation = value.toStdString();
+         else
+            Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid flocculation for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+      }
+      else if( property == "ATTENUATION" )
+      {
+         attenuation_pct = getDouble(textNode);
+      }
+      else if( property == "NOTES" )
+      {
+         notes = value.toStdString();
+      }
+      else if( property == "BEST_FOR" )
+      {
+         bestFor = value.toStdString();
+      }
+      else if( property == "TIMES_CULTURED" )
+      {
+         timesCultured = getInt(textNode);
+      }
+      else if( property == "MAX_REUSE" )
+      {
+         maxReuse = getInt(textNode);
+      }
+      else if( property == "ADD_TO_SECONDARY" )
+      {
+         addToSecondary = getBool(textNode);
+      }
+      else
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported YEAST property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+      }
+   }
+
+   hasChanged();
+}
 
 //============================="SET" METHODS====================================
 void Yeast::setName( const std::string& var )

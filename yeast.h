@@ -23,16 +23,19 @@
 #include <exception>
 #include "xmlnode.h"
 #include "observable.h"
+#include "BeerXMLElement.h"
+#include <QDomNode>
 
 class Yeast;
 class YeastException;
 
-class Yeast : public Observable
+class Yeast : public Observable, public BeerXMLElement
 {
 public:
    Yeast();
    Yeast(Yeast& other);
    Yeast( XmlNode *node );
+   Yeast( const QDomNode& yeastNode );
 
    friend bool operator<(Yeast &y1, Yeast &y2);
    friend bool operator==(Yeast &y1, Yeast &y2);

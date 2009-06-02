@@ -23,15 +23,18 @@
 #include <exception>
 #include "xmlnode.h"
 #include "observable.h"
+#include <QDomNode>
+#include "BeerXMLElement.h"
 
 class Fermentable;
 
-class Fermentable : public Observable
+class Fermentable : public Observable, public BeerXMLElement
 {
 public:
    Fermentable();
    Fermentable( Fermentable& other );
    Fermentable( const XmlNode* node );
+   Fermentable(const QDomNode& fermentableNode);
    
    std::string toXml();
 

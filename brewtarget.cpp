@@ -95,6 +95,11 @@ void Brewtarget::log( LogType lt, std::string message )
    std::cerr << m << std::endl;
 }
 
+void Brewtarget::log(LogType lt, QString message)
+{
+   log( lt, message.toStdString() );
+}
+
 // Displays "amount" of units "units" in the proper format.
 // If "units" is null, just return the amount.
 QString Brewtarget::displayAmount( double amount, Unit* units )

@@ -23,6 +23,8 @@ class RecipeException;
 
 #include <QColor>
 #include <QVariant>
+#include <QDomNode>
+#include "BeerXMLElement.h"
 #include <string>
 #include <exception>
 #include "xmlnode.h"
@@ -37,12 +39,13 @@ class RecipeException;
 #include "observable.h"
 #include "instruction.h"
 
-class Recipe : public Observable, public MultipleObserver
+class Recipe : public Observable, public MultipleObserver, public BeerXMLElement
 {
 public:
 
    Recipe();
    Recipe(const XmlNode *node);
+   Recipe(const QDomNode& recipeNode);
 
    enum{INSTRUCTION};
 

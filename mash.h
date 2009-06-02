@@ -23,16 +23,19 @@
 #include "xmlnode.h"
 #include "mashstep.h"
 #include "observable.h"
+#include <QDomNode>
+#include "BeerXMLElement.h"
 
 class Mash;
 class MashException;
 
-class Mash : public Observable
+class Mash : public Observable, public BeerXMLElement
 {
 public:
 
    Mash();
    Mash( const XmlNode *node);
+   Mash( const QDomNode& mashNode );
 
    friend bool operator<(Mash &m1, Mash &m2);
    friend bool operator==(Mash &m1, Mash &m2);

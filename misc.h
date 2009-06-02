@@ -21,18 +21,22 @@
 
 #include <string>
 #include <exception>
+#include <QDomNode>
+#include <QDomText>
 #include "xmlnode.h"
 #include "observable.h"
+#include "BeerXMLElement.h"
 
 class Misc;
 class MiscException;
 
-class Misc : public Observable
+class Misc : public Observable, public BeerXMLElement
 {
 public:
    Misc();
    Misc(Misc& other);
    Misc( const XmlNode *node );
+   Misc( const QDomNode& miscNode );
 
    friend bool operator<(Misc &m1, Misc &m2);
    friend bool operator==(Misc &m1, Misc &m2);

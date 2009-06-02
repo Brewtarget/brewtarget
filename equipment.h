@@ -22,19 +22,21 @@
 #include <string>
 #include <exception>
 #include <ostream>
-
+#include <QDomNode>
 #include "xmlnode.h"
 #include "observable.h"
+#include "BeerXMLElement.h"
 
 class Equipment;
 class EquipmentException;
 
-class Equipment : public Observable
+class Equipment : public Observable, public BeerXMLElement
 {
 public:
    
    Equipment();
    Equipment(XmlNode *node);
+   Equipment(const QDomNode& equipmentNode);
    
    std::string toXml();
 
