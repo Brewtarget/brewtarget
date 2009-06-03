@@ -22,6 +22,9 @@
 class BeerXMLElement;
 
 #include <QDomText>
+#include <QDomNode>
+#include <QDomDocument>
+#include <QString>
 
 class BeerXMLElement
 {
@@ -30,6 +33,12 @@ public:
    double getDouble( const QDomText& textNode );
    bool getBool( const QDomText& textNode );
    int getInt( const QDomText& textNode );
+
+   QString text(bool val);
+   QString text(double val);
+   QString text(int val);
+
+   virtual void toXml(QDomDocument& doc, QDomNode& parent) = 0;
 };
 
 #endif	/* _BEERXMLELEMENT_H */

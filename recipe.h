@@ -52,7 +52,8 @@ public:
    friend bool operator<(Recipe &r1, Recipe &r2 );
    friend bool operator==(Recipe &r1, Recipe &r2 );
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
    void clear(); // Retains only the name, but sets everything else to defaults.
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // Inherited from MultipleObserver.
    

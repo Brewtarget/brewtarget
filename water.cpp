@@ -22,6 +22,8 @@
 #include "stringparsing.h"
 #include "water.h"
 #include "brewtarget.h"
+#include <QDomElement>
+#include <QDomText>
 
 bool operator<(Water &w1, Water &w2)
 {
@@ -33,6 +35,7 @@ bool operator==(Water &w1, Water &w2)
    return w1.name == w2.name;
 }
 
+/*
 std::string Water::toXml()
 {
    std::string ret = "<WATER>\n";
@@ -51,6 +54,73 @@ std::string Water::toXml()
    
    ret += "</WATER>\n";
    return ret;
+}
+*/
+
+void Water::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement waterNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+
+   waterNode = doc.createElement("WATER");
+
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(text(version));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(text(amount_l));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CALCIUM");
+   tmpText = doc.createTextNode(text(calcium_ppm));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("BICARBONATE");
+   tmpText = doc.createTextNode(text(bicarbonate_ppm));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("SULFATE");
+   tmpText = doc.createTextNode(text(sulfate_ppm));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CHLORIDE");
+   tmpText = doc.createTextNode(text(chloride_ppm));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("SODIUM");
+   tmpText = doc.createTextNode(text(sodium_ppm));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("MAGNESIUM");
+   tmpText = doc.createTextNode(text(magnesium_ppm));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("PH");
+   tmpText = doc.createTextNode(text(ph));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   parent.appendChild(waterNode);
 }
 
 //================================CONSTRUCTORS==================================

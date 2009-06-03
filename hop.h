@@ -33,7 +33,6 @@ class HopException;
 
 class Hop : public Observable, public BeerXMLElement
 {
-   
    public:
       Hop();
       Hop( Hop& other );
@@ -43,7 +42,8 @@ class Hop : public Observable, public BeerXMLElement
       friend bool operator<( Hop &h1, Hop &h2 );
       friend bool operator==( Hop &h1, Hop &h2 );
 
-      std::string toXml();
+      virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+      //std::string toXml();
       
       const string& getName() const;
       int getVersion() const;

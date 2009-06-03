@@ -36,7 +36,8 @@ public:
    Instruction(const XmlNode* node);
    Instruction(const QDomNode& instructionNode);
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
 
    // "set" methods.
    void setName(const QString& n);

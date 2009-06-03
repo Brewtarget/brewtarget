@@ -61,3 +61,21 @@ int BeerXMLElement::getInt(const QDomText& textNode)
 
    return ret;
 }
+
+QString BeerXMLElement::text(bool val)
+{
+   if( val )
+      return QString("TRUE");
+   else
+      return QString("FALSE");
+}
+
+QString BeerXMLElement::text(double val)
+{
+   return QString("%1").arg(val, 0, 'e', 5);
+}
+
+QString BeerXMLElement::text(int val)
+{
+   return QString("%1").arg(val);
+}

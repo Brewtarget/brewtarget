@@ -38,6 +38,8 @@ void MaltinessWidget::setup()
 {
    QSize size(90,30);
 
+   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+
    label = new QLabel(this);
    // Want to specify a minimum size and have it expand if able.
    label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -78,6 +80,11 @@ void MaltinessWidget::paintEvent(QPaintEvent*)
    label->setText(fgText());
 
    label->render(&painter);
+}
+
+QSize MaltinessWidget::sizeHint() const
+{
+   return label->sizeHint();
 }
 
 QColor MaltinessWidget::bgColor()

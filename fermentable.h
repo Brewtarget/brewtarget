@@ -36,7 +36,8 @@ public:
    Fermentable( const XmlNode* node );
    Fermentable(const QDomNode& fermentableNode);
    
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
 
    // Operators
    friend bool operator<(Fermentable &f1, Fermentable &f2);

@@ -24,6 +24,8 @@
 #include "xmlnode.h"
 #include "stringparsing.h"
 #include "brewtarget.h"
+#include <QDomElement>
+#include <QDomText>
 
 using namespace std;
 
@@ -76,6 +78,7 @@ bool Hop::isValidForm(const string &str)
    return false;
 }
 
+/*
 std::string Hop::toXml()
 {
    std::string ret = "<HOP>\n";
@@ -103,6 +106,103 @@ std::string Hop::toXml()
    ret += "</HOP>\n";
    
    return ret;
+}
+*/
+
+void Hop::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement hopNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   hopNode = doc.createElement("HOP");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(text(version));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ALPHA");
+   tmpText = doc.createTextNode(text(alpha_pct));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(text(amount_kg));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("USE");
+   tmpText = doc.createTextNode(use.c_str());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TIME");
+   tmpText = doc.createTextNode(text(time_min));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(type.c_str());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FORM");
+   tmpText = doc.createTextNode(form.c_str());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BETA");
+   tmpText = doc.createTextNode(text(beta_pct));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HSI");
+   tmpText = doc.createTextNode(text(hsi_pct));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ORIGIN");
+   tmpText = doc.createTextNode(origin.c_str());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SUBSTITUTES");
+   tmpText = doc.createTextNode(substitutes.c_str());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HUMULENE");
+   tmpText = doc.createTextNode(text(humulene_pct));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("CARYOPHYLLENE");
+   tmpText = doc.createTextNode(text(caryophyllene_pct));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("COHUMULONE");
+   tmpText = doc.createTextNode(text(cohumulone_pct));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MYRCENE");
+   tmpText = doc.createTextNode(text(myrcene_pct));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   parent.appendChild(hopNode);
 }
 
 void Hop::setDefaults()

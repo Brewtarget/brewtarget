@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>454</width>
+    <width>424</width>
     <height>583</height>
    </rect>
   </property>
@@ -618,7 +618,7 @@
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeType">
-            <enum>QSizePolicy::MinimumExpanding</enum>
+            <enum>QSizePolicy::Preferred</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -1046,8 +1046,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>454</width>
-     <height>25</height>
+     <width>424</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

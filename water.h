@@ -39,7 +39,8 @@ public:
    friend bool operator<(Water &w1, Water &w2);
    friend bool operator==(Water &w1, Water &w2);
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
    
    void setName( const std::string &var );
    void setAmount_l( double var );

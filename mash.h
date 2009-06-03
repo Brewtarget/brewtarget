@@ -40,7 +40,8 @@ public:
    friend bool operator<(Mash &m1, Mash &m2);
    friend bool operator==(Mash &m1, Mash &m2);
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
    
    void setName( const std::string &var );
    void setGrainTemp_c( double var );
@@ -69,7 +70,7 @@ public:
 private:
 
    std::string name;
-   static const unsigned int version = 1;
+   static const int version = 1;
    double grainTemp_c;
    std::vector<MashStep *> mashSteps;
    std::string notes;

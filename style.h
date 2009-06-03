@@ -39,7 +39,8 @@ public:
    friend bool operator<(Style &s1, Style &s2);
    friend bool operator==(Style &s1, Style &s2);
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
    
    void setName( const std::string& var );
    void setCategory( const std::string& var );

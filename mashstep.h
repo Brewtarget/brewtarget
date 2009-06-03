@@ -39,7 +39,8 @@ public:
    friend bool operator<(MashStep &m1, MashStep &m2);
    friend bool operator==(MashStep &m1, MashStep &m2);
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
    
    void setName( const std::string &var );
    void setType( const std::string &var );

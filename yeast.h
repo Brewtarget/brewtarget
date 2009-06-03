@@ -40,7 +40,9 @@ public:
    friend bool operator<(Yeast &y1, Yeast &y2);
    friend bool operator==(Yeast &y1, Yeast &y2);
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+
+   //std::string toXml();
    
    // Set
    void setName( const std::string& var );

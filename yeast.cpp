@@ -18,6 +18,9 @@
 
 #include <string>
 #include <iostream>
+#include <QDomNode>
+#include <QDomElement>
+#include <QDomText>
 #include "yeast.h"
 #include "stringparsing.h"
 #include "xmlnode.h"
@@ -33,6 +36,7 @@ bool operator==(Yeast &y1, Yeast &y2)
    return y1.name == y2.name;
 }
 
+/*
 std::string Yeast::toXml()
 {
    std::string ret = "<YEAST>\n";
@@ -57,6 +61,103 @@ std::string Yeast::toXml()
    
    ret += "</YEAST>\n";
    return ret;
+}
+*/
+
+void Yeast::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement yeastNode;
+   QDomElement tmpElement;
+   QDomText tmpText;
+
+   yeastNode = doc.createElement("YEAST");
+   
+   tmpElement = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+   
+   tmpElement = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(QString("%1").arg(version));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(type.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("FORM");
+   tmpText = doc.createTextNode(form.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(text(amount));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("AMOUNT_IS_WEIGHT");
+   tmpText = doc.createTextNode(text(amountIsWeight));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("LABORATORY");
+   tmpText = doc.createTextNode(laboratory.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PRODUCT_ID");
+   tmpText = doc.createTextNode(productID.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("MIN_TEMPERATURE");
+   tmpText = doc.createTextNode(text(minTemperature_c));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("MAX_TEMPERATURE");
+   tmpText = doc.createTextNode(text(maxTemperature_c));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("FLOCCULATION");
+   tmpText = doc.createTextNode(flocculation.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("ATTENUATION");
+   tmpText = doc.createTextNode(text(attenuation_pct));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("BEST_FOR");
+   tmpText = doc.createTextNode(bestFor.c_str());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("TIMES_CULTURED");
+   tmpText = doc.createTextNode(text(timesCultured));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("MAX_REUSE");
+   tmpText = doc.createTextNode(text(maxReuse));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("ADD_TO_SECONDARY");
+   tmpText = doc.createTextNode(text(addToSecondary));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   parent.appendChild(yeastNode);
 }
 
 void Yeast::setDefaults()

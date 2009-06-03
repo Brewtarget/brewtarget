@@ -56,6 +56,12 @@
 #include "xmlnode.h"
 #include "unit.h"
 #include <QVBoxLayout>
+#include <QDomDocument>
+#include <QFile>
+#include <QIODevice>
+#include <QTextStream>
+#include <QDomNodeList>
+#include <QDomNode>
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -639,19 +645,32 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
 void MainWindow::exportRecipe()
 {
    const char* filename;
-   std::ofstream out;
+   QFile outFile;
+   QDomDocument doc;
 
+   if( recipeObs == 0 )
+      return;
+   
    if( fileSaver->exec() )
       filename = fileSaver->selectedFiles()[0].toStdString().c_str();
    else
       return;
 
-   out.open(filename, ios::trunc);
+   outFile.setFileName(filename);
+   
+   if( ! outFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
+   {
+      Brewtarget::log(Brewtarget::WARNING, QString("Could not open %1 for writing").arg(filename));
+      return;
+   }
+   
+   QTextStream out(&outFile);
 
-   out << "<?xml version=\"1.0\"?>" << std::endl;
-   out << recipeObs->toXml();
-
-   out.close();
+   recipeObs->toXml(doc, doc);
+   
+   out << doc.toString();
+   
+   outFile.close();
 }
 
 void MainWindow::removeSelectedFermentable()
@@ -856,16 +875,54 @@ void MainWindow::newRecipe()
 void MainWindow::importRecipes()
 {
    const char* filename;
-   std::fstream in;
    unsigned int numRecipes, i;
-   std::vector<XmlNode*> nodes;
+   //std::fstream in;
+   //std::vector<XmlNode*> nodes;
    Recipe* newRec;
+   QFile inFile;
+   QDomDocument xmlDoc;
+   QDomNodeList list;
+   QString err;
+   int line, col;
 
    if( fileOpener->exec() )
       filename = fileOpener->selectedFiles()[0].toStdString().c_str();
    else
       return;
 
+   inFile.setFileName(filename);
+   if( ! inFile.open(QIODevice::ReadOnly) )
+   {
+      Brewtarget::log(Brewtarget::WARNING, QString("Could not open %1 for reading.").arg(filename));
+      return;
+   }
+   
+   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+   
+   list = xmlDoc.elementsByTagName("RECIPE");
+   numRecipes = list.size();
+   
+   // Tell how many recipes there were in the status bar.
+   statusBar()->showMessage( QString("Found %1 recipes.").arg(numRecipes), 5000 );
+   
+   for( i = 0; i < numRecipes; ++i )
+   {
+      newRec = new Recipe(list.at(i));
+      
+      if( QMessageBox::question(this, tr("Import recipe?"),
+	   QString("Import %1?").arg(newRec->getName().c_str()),
+	   QMessageBox::Yes,
+	   QMessageBox::No)
+	 == QMessageBox::Yes )
+      {
+	 db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+      }
+   }
+   
+   inFile.close();
+   
+   /*
    in.open(filename, ios::in);
 
    XmlTree* tree = new XmlTree( in );
@@ -890,6 +947,7 @@ void MainWindow::importRecipes()
 
    delete tree;
    in.close();
+   */
 }
 
 // Ask if user wants to save the db, then exit.

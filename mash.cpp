@@ -25,6 +25,8 @@
 #include "mashstep.h"
 #include "ui_mainWindow.h"
 #include "brewtarget.h"
+#include <QDomElement>
+#include <QDomText>
 
 bool operator<(Mash &m1, Mash &m2)
 {
@@ -36,6 +38,7 @@ bool operator==(Mash &m1, Mash &m2)
    return m1.name == m2.name;
 }
 
+/*
 std::string Mash::toXml()
 {
    unsigned int i, size = mashSteps.size();
@@ -59,6 +62,76 @@ std::string Mash::toXml()
    ret += "</MASH>\n";
    
    return ret;
+}
+*/
+
+void Mash::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement mashNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   unsigned int i, size;
+   
+   mashNode = doc.createElement("MASH");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(text(version));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("GRAIN_TEMP");
+   tmpText = doc.createTextNode(text(grainTemp_c));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MASH_STEPS");
+   size = mashSteps.size();
+   for( i = 0; i < size; ++i )
+      mashSteps[i]->toXml(doc, tmpNode);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_TEMP");
+   tmpText = doc.createTextNode(text(tunTemp_c));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SPARGE_TEMP");
+   tmpText = doc.createTextNode(text(spargeTemp_c));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PH");
+   tmpText = doc.createTextNode(text(ph));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_WEIGHT");
+   tmpText = doc.createTextNode(text(tunWeight_kg));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
+   tmpText = doc.createTextNode(text(tunSpecificHeat_calGC));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("EQUIP_ADJUST");
+   tmpText = doc.createTextNode(text(equipAdjust));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   parent.appendChild(mashNode);
 }
 
 void Mash::setDefaults()

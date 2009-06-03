@@ -24,6 +24,8 @@
 #include "stringparsing.h"
 #include "xmlnode.h"
 #include "brewtarget.h"
+#include <QDomElement>
+#include <QDomText>
 
 bool operator<(Misc &m1, Misc &m2)
 {
@@ -35,6 +37,7 @@ bool operator==(Misc &m1, Misc &m2)
    return m1.name == m2.name;
 }
 
+/*
 std::string Misc::toXml()
 {
    std::string ret = "<MISC>\n";
@@ -51,6 +54,63 @@ std::string Misc::toXml()
    
    ret += "</MISC>\n";
    return ret;
+}
+*/
+
+void Misc::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement miscNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   miscNode = doc.createElement("MISC");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(text(version));
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(type.c_str());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("USE");
+   tmpText = doc.createTextNode(use.c_str());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TIME");
+   tmpText = doc.createTextNode(text(time));
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(text(amount));
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT_IS_WEIGHT");
+   tmpText = doc.createTextNode(text(amountIsWeight));
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("USE_FOR");
+   tmpText = doc.createTextNode(useFor.c_str());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   parent.appendChild(miscNode);
 }
 
 //============================CONSTRUCTORS======================================

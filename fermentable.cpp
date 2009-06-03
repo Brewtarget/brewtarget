@@ -21,6 +21,8 @@
 #include "fermentable.h"
 #include "stringparsing.h"
 #include "brewtarget.h"
+#include <QDomElement>
+#include <QDomText>
 
 bool operator<(Fermentable &f1, Fermentable &f2)
 {
@@ -32,6 +34,7 @@ bool operator==(Fermentable &f1, Fermentable &f2)
    return f1.name == f2.name;
 }
 
+/*
 std::string Fermentable::toXml()
 {
    std::string ret = "<FERMENTABLE>\n";
@@ -57,6 +60,103 @@ std::string Fermentable::toXml()
    ret += "</FERMENTABLE>\n";
    
    return ret;
+}
+*/
+
+void Fermentable::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement fermNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   fermNode = doc.createElement("FERMENTABLE");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(text(version));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(type.c_str());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(text(amount_kg));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("YIELD");
+   tmpText = doc.createTextNode(text(yield_pct));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("COLOR");
+   tmpText = doc.createTextNode(text(color_srm));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ADD_AFTER_BOIL");
+   tmpText = doc.createTextNode(text(addAfterBoil));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ORIGIN");
+   tmpText = doc.createTextNode(origin.c_str());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SUPPLIER");
+   tmpText = doc.createTextNode(supplier.c_str());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("COARSE_FINE_DIFF");
+   tmpText = doc.createTextNode(text(coarseFineDiff_pct));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MOISTURE");
+   tmpText = doc.createTextNode(text(moisture_pct));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("DIASTATIC_POWER");
+   tmpText = doc.createTextNode(text(diastaticPower_lintner));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PROTEIN");
+   tmpText = doc.createTextNode(text(protein_pct));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MAX_IN_BATCH");
+   tmpText = doc.createTextNode(text(maxInBatch_pct));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("RECOMMEND_MASH");
+   tmpText = doc.createTextNode(text(recommendMash));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("IBU_GAL_PER_LB");
+   tmpText = doc.createTextNode(text(ibuGalPerLb));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   parent.appendChild(fermNode);
 }
 
 Fermentable::Fermentable()

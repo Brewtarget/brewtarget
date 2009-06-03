@@ -41,6 +41,8 @@
       <itemPath>../../aboutDialog.ui</itemPath>
       <itemPath>../../BeerColorWidget.cpp</itemPath>
       <itemPath>../../BeerColorWidget.h</itemPath>
+      <itemPath>../../BeerXMLElement.cpp</itemPath>
+      <itemPath>../../BeerXMLElement.h</itemPath>
       <itemPath>../../BrewDayWidget.cpp</itemPath>
       <itemPath>../../BrewDayWidget.h</itemPath>
       <itemPath>../../brewtarget.cpp</itemPath>
@@ -210,6 +212,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../BeerColorWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../BeerXMLElement.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../BeerXMLElement.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../BrewDayWidget.cpp">
@@ -719,6 +727,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../BeerColorWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../BeerXMLElement.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../BeerXMLElement.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../BrewDayWidget.cpp">

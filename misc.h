@@ -41,7 +41,8 @@ public:
    friend bool operator<(Misc &m1, Misc &m2);
    friend bool operator==(Misc &m1, Misc &m2);
 
-   std::string toXml();
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //std::string toXml();
    
    // Set
    void setName( const std::string &var );

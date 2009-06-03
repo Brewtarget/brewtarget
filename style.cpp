@@ -23,6 +23,8 @@
 #include "xmlnode.h"
 #include "stringparsing.h"
 #include "style.h"
+#include <QDomElement>
+#include <QDomText>
 
 bool operator<(Style &s1, Style &s2)
 {
@@ -34,6 +36,7 @@ bool operator==(Style &s1, Style &s2)
    return s1.name == s2.name;
 }
 
+/*
 std::string Style::toXml()
 {
    std::string ret = "<STYLE>\n";
@@ -64,6 +67,133 @@ std::string Style::toXml()
    
    ret += "</STYLE>\n";
    return ret;
+}
+*/
+
+void Style::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement styleNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+
+   styleNode = doc.createElement("STYLE");
+
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(text(version));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CATEGORY");
+   tmpText = doc.createTextNode(category.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CATEGORY_NUMBER");
+   tmpText = doc.createTextNode(categoryNumber.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("STYLE_LETTER");
+   tmpText = doc.createTextNode(styleLetter.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("STYLE_GUIDE");
+   tmpText = doc.createTextNode(styleGuide.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(type.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("OG_MIN");
+   tmpText = doc.createTextNode(text(ogMin));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("OG_MAX");
+   tmpText = doc.createTextNode(text(ogMax));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("FG_MIN");
+   tmpText = doc.createTextNode(text(fgMin));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("FG_MAX");
+   tmpText = doc.createTextNode(text(fgMax));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("IBU_MIN");
+   tmpText = doc.createTextNode(text(ibuMin));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("IBU_MAX");
+   tmpText = doc.createTextNode(text(ibuMax));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("COLOR_MIN");
+   tmpText = doc.createTextNode(text(colorMin_srm));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("COLOR_MAX");
+   tmpText = doc.createTextNode(text(colorMax_srm));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("ABV_MIN");
+   tmpText = doc.createTextNode(text(abvMin_pct));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("ABV_MAX");
+   tmpText = doc.createTextNode(text(abvMax_pct));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CARB_MIN");
+   tmpText = doc.createTextNode(text(carbMin_vol));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CARB_MAX");
+   tmpText = doc.createTextNode(text(carbMax_vol));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("PROFILE");
+   tmpText = doc.createTextNode(profile.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("INGREDIENTS");
+   tmpText = doc.createTextNode(ingredients.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("EXAMPLES");
+   tmpText = doc.createTextNode(examples.c_str());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   parent.appendChild(styleNode);
 }
 
 //===========================CONSTRUCTORS=======================================

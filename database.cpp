@@ -117,26 +117,11 @@ void Database::initialize()
 
    // Parse the xml documents.
    if( ! dbDoc.setContent(&dbFile, false, &err, &line, &col) )
-   {
-      Brewtarget::log(Brewtarget::WARNING, "Bad document formatting in " +
-                   dbFile.fileName().toStdString() +
-                   QString(" %1:%2.").arg(line).arg(col).toStdString());
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3.").arg(dbFile.fileName()).arg(line).arg(col).toStdString() );
-   }
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(dbFile.fileName()).arg(line).arg(col).arg(err) );
    if( ! recDoc.setContent(&recipeFile, false, &err, &line, &col) )
-   {
-      Brewtarget::log(Brewtarget::WARNING, "Bad document formatting in " +
-                   recipeFile.fileName().toStdString() +
-                   QString(" %1:%2.").arg(line).arg(col).toStdString());
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3.").arg(recipeFile.fileName()).arg(line).arg(col).toStdString() );
-   }
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(recipeFile.fileName()).arg(line).arg(col).arg(err) );
    if( ! mashDoc.setContent(&mashFile, false, &err, &line, &col) )
-   {
-      Brewtarget::log(Brewtarget::WARNING, "Bad document formatting in " +
-                   mashFile.fileName().toStdString() +
-                   QString(" %1:%2.").arg(line).arg(col).toStdString());
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3.").arg(mashFile.fileName()).arg(line).arg(col).toStdString() );
-   }
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(mashFile.fileName()).arg(line).arg(col).arg(err) );
 
    /*** Items in dbDoc ***/
    list = dbDoc.elementsByTagName("EQUIPMENT");
@@ -328,14 +313,101 @@ void Database::resortYeasts()
 
 void Database::savePersistent()
 {
-   dbFile.open( QIODevice::Truncate | QIODevice::WriteOnly );
-   recipeFile.open( QIODevice::Truncate | QIODevice::WriteOnly );
-   mashFile.open( QIODevice::Truncate | QIODevice::WriteOnly );
+   QDomDocument dbDoc, recDoc, mashDoc;
+   QDomElement dbRoot, recRoot, mashRoot;
+   
+   if( ! dbFile.open( QIODevice::Truncate | QIODevice::WriteOnly ) )
+   {
+      Brewtarget::log(Brewtarget::ERROR, "Could not open " + dbFile.fileName().toStdString() + " for writing.");
+      return;
+   }
+   if( ! recipeFile.open( QIODevice::Truncate | QIODevice::WriteOnly ) )
+   {
+      Brewtarget::log(Brewtarget::ERROR, "Could not open " + recipeFile.fileName().toStdString() + " for writing.");
+      return;
+   }
+   if( ! mashFile.open( QIODevice::Truncate | QIODevice::WriteOnly ) )
+   {
+      Brewtarget::log(Brewtarget::ERROR, "Could not open " + mashFile.fileName().toStdString() + " for writing.");
+      return;
+   }
 
    QTextStream dbOut(&dbFile);
    QTextStream recipeOut(&recipeFile);
    QTextStream mashOut(&mashFile);
 
+   /*** dbDoc ***/
+   dbRoot = dbDoc.createElement("DATABASE");
+   
+   std::list<Equipment*>::iterator eqit, eqend;
+   eqend = equipments.end();
+   for( eqit = equipments.begin(); eqit != eqend; ++eqit )
+      (*eqit)->toXml(dbDoc, dbRoot);
+   
+   std::list<Fermentable*>::iterator fit, fend;
+   fend = fermentables.end();
+   for( fit = fermentables.begin(); fit != fend; ++fit )
+      (*fit)->toXml(dbDoc, dbRoot);
+   
+   std::list<Hop*>::iterator hit, hend;
+   hend = hops.end();
+   for( hit = hops.begin(); hit != hend; ++hit )
+      (*hit)->toXml(dbDoc, dbRoot);
+   
+   std::list<MashStep*>::iterator msit, msend;
+   msend = mashSteps.end();
+   for( msit = mashSteps.begin(); msit != msend; ++msit )
+      (*msit)->toXml(dbDoc, dbRoot);
+   
+   std::list<Misc*>::iterator miscit, miscend;
+   miscend = miscs.end();
+   for( miscit = miscs.begin(); miscit != miscend; ++miscit )
+      (*miscit)->toXml(dbDoc, dbRoot);
+   
+   std::list<Style*>::iterator sit, send;
+   send = styles.end();
+   for( sit = styles.begin(); sit != send; ++sit )
+      (*sit)->toXml(dbDoc, dbRoot);
+   
+   std::list<Water*>::iterator wit, wend;
+   wend = waters.end();
+   for( wit = waters.begin(); wit != wend; ++wit )
+      (*wit)->toXml(dbDoc, dbRoot);
+   
+   std::list<Yeast*>::iterator yit, yend;
+   yend = yeasts.end();
+   for( yit = yeasts.begin(); yit != yend; ++yit )
+      (*yit)->toXml(dbDoc, dbRoot);
+   
+   dbDoc.appendChild(dbRoot);
+   dbOut << dbDoc.toString();
+   /*** END dbDoc ***/
+   
+   /*** recDoc ***/
+   recRoot = recDoc.createElement("RECIPES");
+   
+   std::list<Recipe*>::iterator rit, rend;
+   rend = recipes.end();
+   for( rit = recipes.begin(); rit != rend; ++rit )
+      (*rit)->toXml(recDoc, recRoot);
+   
+   recDoc.appendChild(recRoot);
+   recipeOut << recDoc.toString();
+   /*** END recDoc ***/
+   
+   /*** mashDoc ***/
+   mashRoot = mashDoc.createElement("MASHS");
+   
+   std::list<Mash*>::iterator mait, maend;
+   maend = mashs.end();
+   for( mait = mashs.begin(); mait != maend; ++mait )
+      (*mait)->toXml(mashDoc, mashRoot);
+   
+   mashDoc.appendChild(mashRoot);
+   mashOut << mashDoc.toString();
+   /*** END mashDoc ***/
+   
+   /*
    dbOut << QString("<?xml version=\"1.0\"?>\n");
    recipeOut << QString("<?xml version=\"1.0\"?>\n");
    mashOut << QString("<?xml version=\"1.0\"?>\n");
@@ -414,6 +486,8 @@ void Database::savePersistent()
       recipeOut << QString((*rit)->toXml().c_str());
    recipeOut << QString("</RECIPES>\n");
 
+   */
+   
    dbFile.close();
    recipeFile.close();
    mashFile.close();

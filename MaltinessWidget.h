@@ -41,6 +41,7 @@ public:
    void observeRecipe(Recipe* recipe);
 
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
+   virtual QSize sizeHint() const;
 
 protected:
    virtual void paintEvent(QPaintEvent *);

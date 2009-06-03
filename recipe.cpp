@@ -36,6 +36,8 @@
 #include "water.h"
 #include "hoputilization.h"
 #include "PreInstruction.h"
+#include <QDomElement>
+#include <QDomText>
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {
@@ -47,6 +49,7 @@ bool operator==(Recipe &r1, Recipe &r2 )
    return r1.name == r2.name;
 }
 
+/*
 std::string Recipe::toXml()
 {
    unsigned int i, size;
@@ -114,6 +117,209 @@ std::string Recipe::toXml()
    
    ret += "</RECIPE>\n";
    return ret;
+}
+*/
+
+void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
+{
+   QDomElement recipeNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   unsigned int i, size;
+   
+   recipeNode = doc.createElement("RECIPE");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(name.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(text(version));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(type.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BREWER");
+   tmpText = doc.createTextNode(brewer.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BATCH_SIZE");
+   tmpText = doc.createTextNode(text(batchSize_l));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BOIL_SIZE");
+   tmpText = doc.createTextNode(text(boilSize_l));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BOIL_TIME");
+   tmpText = doc.createTextNode(text(boilTime_min));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("EFFICIENCY");
+   tmpText = doc.createTextNode(text(efficiency_pct));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HOPS");
+   size = hops.size();
+   for( i = 0; i < size; ++i )
+      hops[i]->toXml(doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("FERMENTABLES");
+   size = fermentables.size();
+   for( i = 0; i < size; ++i )
+      fermentables[i]->toXml(doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MISCS");
+   size = miscs.size();
+   for( i = 0; i < size; ++i )
+      miscs[i]->toXml(doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("YEASTS");
+   size = yeasts.size();
+   for( i = 0; i < size; ++i )
+      yeasts[i]->toXml(doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("WATERS");
+   size = waters.size();
+   for( i = 0; i < size; ++i )
+      waters[i]->toXml(doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("INSTRUCTIONS");
+   size = instructions.size();
+   for( i = 0; i < size; ++i )
+      instructions[i]->toXml(doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ASST_BREWER");
+   tmpText = doc.createTextNode(asstBrewer.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   if( equipment )
+      equipment->toXml(doc, recipeNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(notes.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TASTE_NOTES");
+   tmpText = doc.createTextNode(tasteNotes.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TASTE_RATING");
+   tmpText = doc.createTextNode(text(tasteRating));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("OG");
+   tmpText = doc.createTextNode(text(og));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FG");
+   tmpText = doc.createTextNode(text(fg));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FERMENTATION_STAGES");
+   tmpText = doc.createTextNode(text(fermentationStages));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMARY_AGE");
+   tmpText = doc.createTextNode(text(primaryAge_days));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMARY_TEMP");
+   tmpText = doc.createTextNode(text(primaryTemp_c));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SECONDARY_AGE");
+   tmpText = doc.createTextNode(text(secondaryAge_days));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SECONDARY_TEMP");
+   tmpText = doc.createTextNode(text(secondaryTemp_c));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TERTIARY_AGE");
+   tmpText = doc.createTextNode(text(tertiaryAge_days));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TERTIARY_TEMP");
+   tmpText = doc.createTextNode(text(tertiaryTemp_c));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AGE");
+   tmpText = doc.createTextNode(text(age_days));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AGE_TEMP");
+   tmpText = doc.createTextNode(text(ageTemp_c));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("DATE");
+   tmpText = doc.createTextNode(date.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("CARBONATION");
+   tmpText = doc.createTextNode(text(carbonation_vols));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FORCED_CARBONATION");
+   tmpText = doc.createTextNode(text(forcedCarbonation));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMING_SUGAR_NAME");
+   tmpText = doc.createTextNode(primingSugarName.c_str());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("CARBONATION_TEMP");
+   tmpText = doc.createTextNode(text(carbonationTemp_c));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMING_SUGAR_EQUIV");
+   tmpText = doc.createTextNode(text(primingSugarEquiv));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("KEG_PRIMING_FACTOR");
+   tmpText = doc.createTextNode(text(kegPrimingFactor));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   parent.appendChild(recipeNode);
 }
 
 //=================================CONSTRUCTORS=================================
