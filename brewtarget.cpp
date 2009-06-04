@@ -82,22 +82,24 @@ int Brewtarget::run()
 
 void Brewtarget::log( LogType lt, std::string message )
 {
-   std::string m;
+   log( lt, QString(message.c_str()) );
+}
 
+void Brewtarget::log(LogType lt, QString message)
+{
+   QString m;
+   
    if( lt == WARNING )
       m = "WARNING: " + message;
    else if( lt == ERROR )
       m = "ERROR: " + message;
    else
       m = message;
-
-   // Logging is the stderr right now.
-   std::cerr << m << std::endl;
-}
-
-void Brewtarget::log(LogType lt, QString message)
-{
-   log( lt, message.toStdString() );
+   
+   // First, write out to stderr.
+   std::cerr << m.toStdString() << std::endl;
+   // Then display it in the GUI's status bar.
+   mainWindow->statusBar()->showMessage(m, 3000);
 }
 
 // Displays "amount" of units "units" in the proper format.

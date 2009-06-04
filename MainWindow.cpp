@@ -127,6 +127,7 @@ MainWindow::MainWindow(QWidget* parent)
    QVBoxLayout* vblayout = new QVBoxLayout();
    vblayout->addWidget(brewDayWidget);
    brewDayDialog->setLayout(vblayout);
+   brewDayDialog->setWindowTitle("Brew day mode");
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), homedir, tr("BeerXML files (*.xml)"));
