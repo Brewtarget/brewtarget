@@ -1,56 +1,57 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>fermentableEditor</class>
- <widget class="QDialog" name="fermentableEditor" >
-  <property name="geometry" >
+ <widget class="QDialog" name="fermentableEditor">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>505</width>
-    <height>343</height>
+    <height>317</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Fermentable Editor</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_16" >
+  <layout class="QHBoxLayout" name="horizontalLayout_16">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2" >
-     <property name="spacing" >
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
       <number>0</number>
      </property>
      <item>
-      <widget class="QGroupBox" name="groupBox" >
-       <property name="title" >
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
         <string>Required Fields</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout" >
-        <property name="spacing" >
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
          <number>0</number>
         </property>
-        <property name="topMargin" >
+        <property name="topMargin">
          <number>2</number>
         </property>
-        <property name="bottomMargin" >
+        <property name="bottomMargin">
          <number>2</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5" >
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QLabel" name="label" >
-            <property name="text" >
+           <widget class="QLabel" name="label">
+            <property name="text">
              <string>Name</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_name" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+           <widget class="QLineEdit" name="lineEdit_name">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="maximumSize" >
+            <property name="maximumSize">
              <size>
               <width>100</width>
               <height>16777215</height>
@@ -61,38 +62,38 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4" >
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QLabel" name="label_2" >
-            <property name="text" >
+           <widget class="QLabel" name="label_2">
+            <property name="text">
              <string>Type</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_type" >
+           <widget class="QComboBox" name="comboBox_type">
             <item>
-             <property name="text" >
+             <property name="text">
               <string>Grain</string>
              </property>
             </item>
             <item>
-             <property name="text" >
+             <property name="text">
               <string>Sugar</string>
              </property>
             </item>
             <item>
-             <property name="text" >
+             <property name="text">
               <string>Extract</string>
              </property>
             </item>
             <item>
-             <property name="text" >
+             <property name="text">
               <string>Dry Extract</string>
              </property>
             </item>
             <item>
-             <property name="text" >
+             <property name="text">
               <string>Adjunct</string>
              </property>
             </item>
@@ -101,23 +102,23 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3" >
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QLabel" name="label_3" >
-            <property name="text" >
+           <widget class="QLabel" name="label_3">
+            <property name="text">
              <string>Amount</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_amount" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+           <widget class="QLineEdit" name="lineEdit_amount">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="maximumSize" >
+            <property name="maximumSize">
              <size>
               <width>100</width>
               <height>16777215</height>
@@ -128,23 +129,23 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2" >
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="label_4" >
-            <property name="text" >
+           <widget class="QLabel" name="label_4">
+            <property name="text">
              <string>Yield (%)</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_yield" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+           <widget class="QLineEdit" name="lineEdit_yield">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="maximumSize" >
+            <property name="maximumSize">
              <size>
               <width>100</width>
               <height>16777215</height>
@@ -155,23 +156,23 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout" >
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QLabel" name="label_5" >
-            <property name="text" >
+           <widget class="QLabel" name="label_5">
+            <property name="text">
              <string>Lovibond</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_color" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+           <widget class="QLineEdit" name="lineEdit_color">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="maximumSize" >
+            <property name="maximumSize">
              <size>
               <width>100</width>
               <height>16777215</height>
@@ -185,14 +186,14 @@
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer_3" >
-       <property name="orientation" >
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Fixed</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
          <height>10</height>
@@ -201,29 +202,29 @@
       </spacer>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6" >
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QLabel" name="label_6" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+        <widget class="QLabel" name="label_6">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Add After Boil</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_addAfterBoil" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <widget class="QCheckBox" name="checkBox_addAfterBoil">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </widget>
@@ -231,23 +232,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7" >
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
        <item>
-        <widget class="QLabel" name="label_7" >
-         <property name="text" >
+        <widget class="QLabel" name="label_7">
+         <property name="text">
           <string>Origin</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_origin" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_origin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -258,23 +259,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_8" >
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
        <item>
-        <widget class="QLabel" name="label_8" >
-         <property name="text" >
+        <widget class="QLabel" name="label_8">
+         <property name="text">
           <string>Supplier</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_supplier" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_supplier">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -285,23 +286,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_9" >
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
-        <widget class="QLabel" name="label_9" >
-         <property name="text" >
+        <widget class="QLabel" name="label_9">
+         <property name="text">
           <string>Coarse/Fine Diff (%)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_coarseFineDiff" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_coarseFineDiff">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -312,14 +313,14 @@
       </layout>
      </item>
      <item>
-      <spacer name="verticalSpacer" >
-       <property name="orientation" >
+      <spacer name="verticalSpacer">
+       <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::MinimumExpanding</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
          <height>20</height>
@@ -330,28 +331,28 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3" >
-     <property name="spacing" >
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="spacing">
       <number>0</number>
      </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10" >
+      <layout class="QHBoxLayout" name="horizontalLayout_10">
        <item>
-        <widget class="QLabel" name="label_10" >
-         <property name="text" >
+        <widget class="QLabel" name="label_10">
+         <property name="text">
           <string>Moisture (%)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_moisture" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_moisture">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -362,23 +363,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_11" >
+      <layout class="QHBoxLayout" name="horizontalLayout_11">
        <item>
-        <widget class="QLabel" name="label_11" >
-         <property name="text" >
+        <widget class="QLabel" name="label_11">
+         <property name="text">
           <string>DP (Lintner)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_diastaticPower" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_diastaticPower">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -389,23 +390,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_12" >
+      <layout class="QHBoxLayout" name="horizontalLayout_12">
        <item>
-        <widget class="QLabel" name="label_12" >
-         <property name="text" >
+        <widget class="QLabel" name="label_12">
+         <property name="text">
           <string>Protein (%)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_protein" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_protein">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -416,23 +417,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_13" >
+      <layout class="QHBoxLayout" name="horizontalLayout_13">
        <item>
-        <widget class="QLabel" name="label_13" >
-         <property name="text" >
+        <widget class="QLabel" name="label_13">
+         <property name="text">
           <string>Max In Batch (%)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_maxInBatch" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_maxInBatch">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -443,23 +444,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_14" >
+      <layout class="QHBoxLayout" name="horizontalLayout_14">
        <item>
-        <widget class="QLabel" name="label_14" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+        <widget class="QLabel" name="label_14">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Recommend Mash</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_recommendMash" >
-         <property name="text" >
+        <widget class="QCheckBox" name="checkBox_recommendMash">
+         <property name="text">
           <string/>
          </property>
         </widget>
@@ -467,23 +468,47 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_15" >
+      <layout class="QHBoxLayout" name="horizontalLayout_17">
        <item>
-        <widget class="QLabel" name="label_15" >
-         <property name="text" >
+        <widget class="QLabel" name="label_17">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Is Mashed</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_isMashed">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_15">
+       <item>
+        <widget class="QLabel" name="label_15">
+         <property name="text">
           <string>Bitterness (IBU*gal/lb)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_ibuGalPerLb" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+        <widget class="QLineEdit" name="lineEdit_ibuGalPerLb">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="maximumSize" >
+         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>16777215</height>
@@ -494,15 +519,15 @@
       </layout>
      </item>
      <item>
-      <widget class="QLabel" name="label_16" >
-       <property name="text" >
+      <widget class="QLabel" name="label_16">
+       <property name="text">
         <string>Notes:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QTextEdit" name="textEdit_notes" >
-       <property name="maximumSize" >
+      <widget class="QTextEdit" name="textEdit_notes">
+       <property name="maximumSize">
         <size>
          <width>1000</width>
          <height>100</height>
@@ -511,14 +536,14 @@
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer_2" >
-       <property name="orientation" >
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Preferred</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
          <height>20</height>
@@ -527,11 +552,11 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDialogButtonBox" name="buttonBox" >
-       <property name="orientation" >
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="standardButtons" >
+       <property name="standardButtons">
         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
@@ -548,11 +573,11 @@
    <receiver>fermentableEditor</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -564,11 +589,11 @@
    <receiver>fermentableEditor</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>

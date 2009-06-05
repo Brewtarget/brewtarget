@@ -83,6 +83,11 @@ public:
    void setRecommendMash( bool b );
    void setIbuGalPerLb( double num );
    
+   /*** My extensions ***/
+   bool getIsMashed() const;
+   void setIsMashed(bool var);
+   /*** END my extensions ***/
+   
 private:
    std::string name;
    static const int version = 1;
@@ -102,6 +107,9 @@ private:
    double maxInBatch_pct;
    bool recommendMash;
    double ibuGalPerLb;
+   /*** My extensions ***/
+   bool isMashed;
+   /*** END my extensions ***/
 
    static bool isValidType( const std::string& str );
    void setDefaults();

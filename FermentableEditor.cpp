@@ -75,6 +75,7 @@ void FermentableEditor::save()
    obsFerm->setProtein_pct( Unit::qstringToSI(lineEdit_protein->text()) );
    obsFerm->setMaxInBatch_pct( Unit::qstringToSI(lineEdit_maxInBatch->text()) );
    obsFerm->setRecommendMash( (checkBox_recommendMash->checkState() == Qt::Checked) ? true : false );
+   obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIbuGalPerLb( Unit::qstringToSI(lineEdit_ibuGalPerLb->text()) );
    obsFerm->setNotes( textEdit_notes->toPlainText().toStdString() );
 
@@ -126,6 +127,7 @@ void FermentableEditor::showChanges()
    lineEdit_protein->setText(Brewtarget::displayAmount(obsFerm->getProtein_pct(), 0));
    lineEdit_maxInBatch->setText(Brewtarget::displayAmount(obsFerm->getMaxInBatch_pct(), 0));
    checkBox_recommendMash->setCheckState( obsFerm->getRecommendMash()? Qt::Checked : Qt::Unchecked );
+   checkBox_isMashed->setCheckState( obsFerm->getIsMashed() ? Qt::Checked : Qt::Unchecked );
    lineEdit_ibuGalPerLb->setText(Brewtarget::displayAmount(obsFerm->getIbuGalPerLb(), 0));
    textEdit_notes->setPlainText( obsFerm->getNotes().c_str() );
 }

@@ -1090,7 +1090,7 @@ void Recipe::generateInstructions()
       str = "Add ";
       for( j = 0; j < fermentables.size(); ++j )
       {
-         if( fermentables[j]->getRecommendMash() )
+         if( fermentables[j]->getIsMashed() )
             str += QString("%1 %2, ")
             .arg(Brewtarget::displayAmount(fermentables[j]->getAmount_kg(), Units::kilograms))
             .arg(fermentables[j]->getName().c_str());
@@ -1267,7 +1267,7 @@ void Recipe::generateInstructions()
    for( i = 0; i < fermentables.size(); ++i )
    {
       Fermentable* ferm = fermentables[i];
-      if( ferm->getRecommendMash() || ferm->getAddAfterBoil() )
+      if( ferm->getIsMashed() || ferm->getAddAfterBoil() )
          continue;
 
       hasFerms = true;
@@ -2441,7 +2441,7 @@ double Recipe::getGrainsInMash_kg() const
    {
       ferm = fermentables[i];
       
-      if( ferm->getRecommendMash() )
+      if( ferm->getIsMashed() )
 	 grains_kg += ferm->getAmount_kg();
    }
    

@@ -22,6 +22,8 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
+#include <QCheckBox>
+#include <QItemEditorFactory>
 
 #include "brewtarget.h"
 #include <Qt>
@@ -142,22 +144,38 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
    else
       row = fermObs[index.row()];
    
-   // Make sure we only respond to the DisplayRole role.
-   if( role != Qt::DisplayRole )
-      return QVariant();
-   
    switch( index.column() )
    {
       case FERMNAMECOL:
-         return QVariant(row->getName().c_str());
+	 if( role == Qt::DisplayRole )
+	    return QVariant(row->getName().c_str());
+	 else
+	    return QVariant();
       case FERMTYPECOL:
-         return QVariant(row->getType().c_str());
+	 if( role == Qt::DisplayRole )
+	    return QVariant(row->getType().c_str());
+	 else
+	    return QVariant();
       case FERMAMOUNTCOL:
-         return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
+	 if( role == Qt::DisplayRole )
+	    return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
+	 else
+	    return QVariant();
+      case FERMISMASHEDCOL:
+	 if( role == Qt::CheckStateRole )
+	    return QVariant( row->getIsMashed() ? Qt::Checked : Qt::Unchecked);
+	 else
+	    return QVariant();
       case FERMYIELDCOL:
-         return QVariant( Brewtarget::displayAmount(row->getYield_pct(), 0) );
+	 if( role == Qt::DisplayRole )
+	    return QVariant( Brewtarget::displayAmount(row->getYield_pct(), 0) );
+	 else
+	    return QVariant();
       case FERMCOLORCOL:
-         return QVariant( Brewtarget::displayAmount(row->getColor_srm(), 0) );
+	 if( role == Qt::DisplayRole )
+	    return QVariant( Brewtarget::displayAmount(row->getColor_srm(), 0) );
+	 else
+	    return QVariant();
       default :
          std::cerr << "Bad column: " << index.column() << std::endl;
          return QVariant();
@@ -176,6 +194,8 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
             return QVariant("Type");
          case FERMAMOUNTCOL:
             return QVariant("Amount");
+	 case FERMISMASHEDCOL:
+	    return QVariant("Mashed");
          case FERMYIELDCOL:
             return QVariant("Yield %");
          case FERMCOLORCOL:
@@ -200,7 +220,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
    Fermentable* row;
    
    if( index.row() >= (int)fermObs.size() || role != Qt::EditRole )
+   {
       return false;
+   }
    else
       row = fermObs[index.row()];
    
@@ -230,6 +252,14 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          }
          else
             return false;
+      case FERMISMASHEDCOL:
+	 if( value.canConvert(QVariant::Bool) )
+	 {
+	    row->setIsMashed( value.toBool() );
+	    return true;
+	 }
+	 else
+	    return false;
       case FERMYIELDCOL:
          if( value.canConvert(QVariant::String) )
          {
@@ -262,9 +292,16 @@ Fermentable* FermentableTableModel::getFermentable(unsigned int i)
 FermentableItemDelegate::FermentableItemDelegate(QObject* parent)
         : QItemDelegate(parent)
 {
+   //connect( this, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)), this, SLOT(destroyWidget(QWidget*, QAbstractItemDelegate::EndEditHint)) );
 }
-        
-QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& index) const
+
+void FermentableItemDelegate::destroyWidget(QWidget* widget, QAbstractItemDelegate::EndEditHint hint)
+{
+   delete widget;
+}
+
+
+QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
    if( index.column() == FERMTYPECOL )
    {
@@ -277,6 +314,16 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
       box->addItem("Adjunct");
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
+   }
+   else if( index.column() == FERMISMASHEDCOL )
+   {
+      QCheckBox* box = new QCheckBox(parent);
+      box->setFocusPolicy(Qt::StrongFocus);
+      box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+      return box;
+
+      //return QItemDelegate::createEditor(parent, option, index);
+      //return itemEditorFactory()->createEditor(QVariant::Bool, parent);
    }
    else
       return new QLineEdit(parent);
@@ -291,6 +338,13 @@ void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
       
       int index = box->findText(text);
       box->setCurrentIndex(index);
+   }
+   else if( index.column() == FERMISMASHEDCOL )
+   {
+      QCheckBox* checkBox = (QCheckBox*)editor;
+      Qt::CheckState checkState = (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt();
+      
+      checkBox->setCheckState( checkState );
    }
    else
    {
@@ -310,6 +364,13 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
       
       model->setData(index, value, Qt::EditRole);
    }
+   else if( index.column() == FERMISMASHEDCOL )
+   {
+      QCheckBox* checkBox = (QCheckBox*)editor;
+      bool checked = (checkBox->checkState() == Qt::Checked);
+      
+      model->setData(index, checked, Qt::EditRole);
+   }
    else
    {
       QLineEdit* line = (QLineEdit*)editor;
@@ -317,6 +378,21 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
       model->setData(index, line->text(), Qt::EditRole);
    }
 }
+
+/*
+void FermentableItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+   if( index.column() == FERMISMASHEDCOL )
+   {
+      drawCheck(painter, option, option.rect, (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt() );
+   }
+   else
+   {
+      QString str = index.model()->data(index, Qt::DisplayRole).toString();
+      drawDisplay(painter, option, option.rect, str);
+   }
+}
+*/
 
 void FermentableItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {

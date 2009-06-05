@@ -29,12 +29,13 @@ class FermentableItemDelegate;
 #include <Qt>
 #include <QStringList>
 #include <QItemDelegate>
+#include <QAbstractItemDelegate>
 #include <vector>
 #include "fermentable.h"
 #include "FermentableTableWidget.h"
 #include "observable.h"
 
-enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
+enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMISMASHEDCOL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
 class FermentableTableModel : public QAbstractTableModel, public MultipleObserver
 {
@@ -73,7 +74,10 @@ public:
    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   //virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
    
+public slots:
+   void destroyWidget(QWidget* widget, QAbstractItemDelegate::EndEditHint hint);
 private:
 };
 

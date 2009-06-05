@@ -77,6 +77,7 @@ void MashWizard::wizardry()
       return;
    }
 
+   /*
    for( i = 0; i < recObs->getNumFermentables(); i++ )
    {
       Fermentable* ferm = recObs->getFermentable(i);
@@ -85,6 +86,9 @@ void MashWizard::wizardry()
       if( ferm->getRecommendMash() )
          grainMass += ferm->getAmount_kg();
    }
+   */
+   
+   grainMass = recObs->getGrainsInMash_kg();
 
    // Do first step
    tf = mashStep->getStepTemp_c();

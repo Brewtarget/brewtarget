@@ -151,6 +151,11 @@ void Fermentable::toXml(QDomDocument& doc, QDomNode& parent)
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
    
+   tmpNode = doc.createElement("IS_MASHED");
+   tmpText = doc.createTextNode(text(isMashed));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
    tmpNode = doc.createElement("IBU_GAL_PER_LB");
    tmpText = doc.createTextNode(text(ibuGalPerLb));
    tmpNode.appendChild(tmpText);
@@ -183,9 +188,11 @@ Fermentable::Fermentable( Fermentable& other )
    protein_pct = other.protein_pct;
    maxInBatch_pct = other.maxInBatch_pct;
    recommendMash = other.recommendMash;
+   isMashed = other.isMashed;
    ibuGalPerLb = other.ibuGalPerLb;
 }
 
+/***
 Fermentable::Fermentable( const XmlNode* node )
 {
    std::vector<XmlNode *> children;
@@ -287,6 +294,7 @@ Fermentable::Fermentable( const XmlNode* node )
       throw FermentableException("missing required fields.");
    
 } // end Fermentable(...)
+***/
 
 Fermentable::Fermentable(const QDomNode& fermentableNode)
 {
@@ -380,6 +388,10 @@ Fermentable::Fermentable(const QDomNode& fermentableNode)
       {
          setRecommendMash(getBool(textNode));
       }
+      else if( property == "IS_MASHED" )
+      {
+	 setIsMashed(getBool(textNode));
+      }
       else if( property == "IBU_GAL_PER_LB" )
       {
          setIbuGalPerLb(getDouble(textNode));
@@ -407,6 +419,7 @@ void Fermentable::setDefaults()
    protein_pct = 0.0;
    maxInBatch_pct = 0.0;
    recommendMash = false;
+   isMashed = false;
    ibuGalPerLb = 0.0;
 }
 
@@ -428,6 +441,7 @@ double Fermentable::getDiastaticPower_lintner() const { return diastaticPower_li
 double Fermentable::getProtein_pct() const { return protein_pct; }
 double Fermentable::getMaxInBatch_pct() const { return maxInBatch_pct; }
 bool Fermentable::getRecommendMash() const { return recommendMash; }
+bool Fermentable::getIsMashed() const { return isMashed; }
 double Fermentable::getIbuGalPerLb() const { return ibuGalPerLb; }
 
 // Set
@@ -528,6 +542,7 @@ void Fermentable::setMaxInBatch_pct( double num )
       throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
 }
 void Fermentable::setRecommendMash( bool b ) { recommendMash = b; hasChanged();}
+void Fermentable::setIsMashed(bool var) { isMashed = var; hasChanged(); }
 void Fermentable::setIbuGalPerLb( double num ) { ibuGalPerLb = num; hasChanged();}
 
 bool Fermentable::isValidType( const std::string& str )
