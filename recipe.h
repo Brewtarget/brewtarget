@@ -44,7 +44,7 @@ class Recipe : public Observable, public MultipleObserver, public BeerXMLElement
 public:
 
    Recipe();
-   Recipe(const XmlNode *node);
+   //Recipe(const XmlNode *node);
    Recipe(const QDomNode& recipeNode);
 
    enum{INSTRUCTION};
@@ -79,6 +79,7 @@ public:
 
    void addInstruction( Instruction* ins );
    void removeInstruction( Instruction* ins );
+   void swapInstructions( unsigned int j, unsigned int k );
    void clearInstructions();
    void insertInstruction( Instruction* ins, int pos );
    int getNumInstructions();
@@ -163,6 +164,8 @@ public:
    double getWortGrav();
    double getIBU();
    QColor getSRMColor();
+   double estimateWortFromMash_l() const; // Estimate amount of wort collected immediately after the mash.
+   double getGrainsInMash_kg() const;
 
 private:
 

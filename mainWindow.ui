@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>424</width>
+    <width>468</width>
     <height>583</height>
    </rect>
   </property>
@@ -25,11 +25,20 @@
         <layout class="QHBoxLayout" name="horizontalLayout_15">
          <item>
           <widget class="RecipeComboBox" name="recipeComboBox">
-           <property name="maximumSize">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
             <size>
              <width>160</width>
-             <height>16777215</height>
+             <height>0</height>
             </size>
+           </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
            </property>
           </widget>
          </item>
@@ -43,8 +52,8 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>0</width>
+          <height>0</height>
          </size>
         </property>
        </spacer>
@@ -131,22 +140,19 @@
              <item>
               <widget class="StyleComboBox" name="styleComboBox">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                  <horstretch>100</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
+                 <width>160</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
+               <property name="sizeAdjustPolicy">
+                <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
                </property>
               </widget>
              </item>
@@ -170,22 +176,19 @@
              <item>
               <widget class="EquipmentComboBox" name="equipmentComboBox">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                  <horstretch>100</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
+                 <width>160</width>
                  <height>0</height>
                 </size>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
+               <property name="sizeAdjustPolicy">
+                <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
                </property>
               </widget>
              </item>
@@ -597,6 +600,9 @@
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_beerColor">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetNoConstraint</enum>
+           </property>
            <item>
             <spacer name="verticalSpacer_2">
              <property name="orientation">
@@ -1046,7 +1052,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>424</width>
+     <width>468</width>
      <height>23</height>
     </rect>
    </property>

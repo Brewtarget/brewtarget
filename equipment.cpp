@@ -599,6 +599,7 @@ std::string Equipment::getNotes() const
    return notes;
 }
 
+//TODO: take a look at evapRate_pctHr.
 void Equipment::doCalculations()
 {
    // Only do the calculation if we're asked to.
@@ -611,4 +612,9 @@ void Equipment::doCalculations()
       / (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
 
    hasChanged();
+}
+
+double Equipment::wortEndOfBoil_l( double kettleWort_l ) const
+{
+   return kettleWort_l * (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
 }

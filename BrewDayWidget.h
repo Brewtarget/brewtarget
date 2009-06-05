@@ -40,6 +40,8 @@ public:
 public slots:
    void insertInstruction();
    void removeSelectedInstruction();
+   void pushInstructionUp();
+   void pushInstructionDown();
 
 private:
    void showChanges();

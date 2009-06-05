@@ -41,6 +41,8 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
    connect( listWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)) );
    connect( pushButton_insert, SIGNAL(clicked()), this, SLOT(insertInstruction()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
+   connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
+   connect( pushButton_down, SIGNAL(clicked()), this, SLOT(pushInstructionDown()) );
 }
 
 QSize BrewDayWidget::sizeHint() const
@@ -57,6 +59,32 @@ void BrewDayWidget::removeSelectedInstruction()
    if( row < 0 )
       return;
    recObs->removeInstruction(recObs->getInstruction(row));
+}
+
+void BrewDayWidget::pushInstructionUp()
+{
+   if( recObs == 0 )
+      return;
+   
+   int row = listWidget->currentRow();
+   if( row <= 0 )
+      return;
+   
+   recObs->swapInstructions(row, row-1);
+   listWidget->setCurrentRow(row-1);
+}
+
+void BrewDayWidget::pushInstructionDown()
+{
+   if( recObs == 0 )
+      return;
+   
+   int row = listWidget->currentRow();
+   if( row >= listWidget->count() )
+      return;
+   
+   recObs->swapInstructions(row, row+1);
+   listWidget->setCurrentRow(row+1);
 }
 
 void BrewDayWidget::setRecipe(Recipe* rec)

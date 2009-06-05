@@ -36,7 +36,7 @@ class MaltinessWidget : public QWidget, public Observer
    Q_OBJECT
 
 public:
-   MaltinessWidget();
+   MaltinessWidget(QWidget* parent=0);
    MaltinessWidget(Recipe* recipe);
    void observeRecipe(Recipe* recipe);
 

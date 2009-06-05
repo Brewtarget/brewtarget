@@ -33,7 +33,14 @@
       </widget>
      </item>
      <item>
-      <widget class="EquipmentComboBox" name="equipmentComboBox"/>
+      <widget class="EquipmentComboBox" name="equipmentComboBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_remove">

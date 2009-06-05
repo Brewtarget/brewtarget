@@ -433,6 +433,7 @@ void Mash::addMashStep(MashStep* step)
       return;
    
    mashSteps.push_back(step);
+   addObserved(step);
    hasChanged();
 }
 
@@ -447,6 +448,7 @@ void Mash::removeMashStep(MashStep* step)
       if(*it == step )
       {
          mashSteps.erase(it);
+	 removeObserved(*it);
          hasChanged();
          return;
       }
@@ -510,4 +512,28 @@ double Mash::getTunSpecificHeat_calGC() const
 bool Mash::getEquipAdjust() const
 {
    return equipAdjust;
+}
+
+// === other methods ===
+double Mash::totalMashWater_l() const
+{
+   unsigned int i, size;
+   double waterAdded_l = 0.0;
+   MashStep* step;
+   
+   size = mashSteps.size();
+   for( i = 0; i < size; ++i )
+   {
+      step = mashSteps[i];
+      
+      if( step->getType() == "Infusion" )
+	 waterAdded_l += step->getInfuseAmount_l();
+   }
+   
+   return waterAdded_l;
+}
+
+void Mash::notify(Observable *notifier, QVariant info)
+{
+   hasChanged(); // Just pass along the notification.
 }

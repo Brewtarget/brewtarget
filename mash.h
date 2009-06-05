@@ -29,7 +29,7 @@
 class Mash;
 class MashException;
 
-class Mash : public Observable, public BeerXMLElement
+class Mash : public Observable, public MultipleObserver, public BeerXMLElement
 {
 public:
 
@@ -41,7 +41,7 @@ public:
    friend bool operator==(Mash &m1, Mash &m2);
 
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //std::string toXml();
+   virtual void notify(Observable *notifier, QVariant info); // From MultipleObserver
    
    void setName( const std::string &var );
    void setGrainTemp_c( double var );
@@ -67,6 +67,7 @@ public:
 
    void addMashStep(MashStep* step);
    void removeMashStep(MashStep* step);
+   double totalMashWater_l() const; // Total amount of water that went INTO the mash.
 private:
 
    std::string name;

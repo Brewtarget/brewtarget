@@ -121,7 +121,7 @@ private:
    BeerColorWidget beerColorWidget;
    OptionDialog* optionDialog;
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
-   MaltinessWidget maltWidget;
+   MaltinessWidget* maltWidget;
    QDialog* brewDayDialog;
    BrewDayWidget* brewDayWidget;
 

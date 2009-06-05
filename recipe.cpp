@@ -38,6 +38,7 @@
 #include "PreInstruction.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QInputDialog>
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {
@@ -200,6 +201,9 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
       waters[i]->toXml(doc, tmpNode);
    recipeNode.appendChild(tmpNode);
    
+   if( mash != 0 )
+      mash->toXml(doc, recipeNode);
+   
    tmpNode = doc.createElement("INSTRUCTIONS");
    size = instructions.size();
    for( i = 0; i < size; ++i )
@@ -339,6 +343,7 @@ void Recipe::setDefaults()
    yeasts = std::vector<Yeast*>();
    waters = std::vector<Water*>();
    mash = new Mash();
+   addObserved(mash);
 
    asstBrewer = "";
    equipment = NULL;
@@ -370,6 +375,7 @@ Recipe::Recipe()
    setDefaults();
 }
 
+/*
 Recipe::Recipe(const XmlNode *node)
 {
    std::vector<XmlNode *> children;
@@ -650,6 +656,7 @@ Recipe::Recipe(const XmlNode *node)
    if( ! hasVersion )
       throw RecipeException("Recipe lacks version tag.");
 } // end Recipe()
+*/
 
 Recipe::Recipe(const QDomNode& recipeNode)
 {
@@ -1003,6 +1010,22 @@ void Recipe::removeInstruction(Instruction* ins)
    }
 }
 
+void Recipe::swapInstructions(unsigned int j, unsigned int k)
+{
+   if( j < 0 || k < 0 || j == k || j >= instructions.size() || k >= instructions.size() )
+      return;
+   
+   Instruction* tmp;
+   tmp = instructions[j];
+   instructions[j] = instructions[k];
+   instructions[k] = tmp;
+   
+   hasChanged(QVariant(Recipe::INSTRUCTION));
+   
+   return;
+}
+
+
 void Recipe::clearInstructions()
 {
    instructions.clear();
@@ -1048,6 +1071,9 @@ void Recipe::generateInstructions()
    QString str;
    int i, j, size;
    double timeRemaining;
+   double totalWaterAdded_l = 0.0;
+   double wortInBoil_l = 0.0;
+   double wort_l = 0.0;
    std::vector<PreInstruction> preinstructions;
 
    // Mash instructions
@@ -1109,6 +1135,8 @@ void Recipe::generateInstructions()
                   .arg(Brewtarget::displayAmount(mstep->getInfuseAmount_l(), Units::liters))
                   .arg(Brewtarget::displayAmount(mstep->getInfuseTemp_c(), Units::celsius))
                   .arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
+		  
+	    totalWaterAdded_l += mstep->getInfuseAmount_l();
          }
          else if( mstep->getType() == "Temperature" )
          {
@@ -1194,16 +1222,42 @@ void Recipe::generateInstructions()
    }
    // END first wort hopping
 
+   // Need to top up the kettle before boil?
+   if( equipment != 0 )
+   {
+      wortInBoil_l = estimateWortFromMash_l() - equipment->getLauterDeadspace_l();
+      str = QString("You should now have %1 wort.")
+      .arg(Brewtarget::displayAmount( wortInBoil_l, Units::liters));
+      wortInBoil_l += equipment->getTopUpKettle_l();
+      str += QString(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
+	    .arg(Brewtarget::displayAmount(equipment->getTopUpKettle_l(), Units::liters))
+	    .arg(Brewtarget::displayAmount(wortInBoil_l, Units::liters));
+	    
+      ins = new Instruction();
+      ins->setName("Pre-boil");
+      ins->setDirections(str);
+      instructions.push_back(ins);
+   }
+
    // Boil instructions
-   preinstructions.clear();
+   preinstructions.clear();   
    
    // Find boil time.
-   // TODO: fix this.
    if( equipment != 0 )
       timeRemaining = equipment->getBoilTime_min();
    else
-      timeRemaining = 60.0;
-
+   {
+      timeRemaining = Unit::qstringToSI(QInputDialog::getText(0,
+					     "Boil time",
+					     "You did not configure an equipment (which you really should), so tell me the boil time."));
+   }
+   
+   str = QString("Bring the wort to a boil and hold for %1.").arg(Brewtarget::displayAmount( timeRemaining, Units::minutes));
+   ins = new Instruction();
+   ins->setName("Start boil");
+   ins->setDirections(str);
+   instructions.push_back(ins);
+   
    /*** Get fermentables we haven't added yet ***/
    bool hasFerms = false;
    str = QString("Add ");
@@ -1294,6 +1348,29 @@ void Recipe::generateInstructions()
    }
    /*** END fermentables added after boil ***/
 
+   /*** post boil ***/
+   if( equipment != 0 )
+   {
+      wort_l = equipment->wortEndOfBoil_l(wortInBoil_l);
+      str = QString("You should have %1 wort post-boil.")
+            .arg(Brewtarget::displayAmount( wort_l, Units::liters));
+      str += QString("\nYou anticipate losing %1 to trub and chiller loss.")
+	     .arg(Brewtarget::displayAmount( equipment->getTrubChillerLoss_l(), Units::liters));
+      wort_l -= equipment->getTrubChillerLoss_l();
+      if( equipment->getTopUpWater_l() > 0.0 )
+	 str += QString("\nAdd %1 top up water into primary.")
+	        .arg(Brewtarget::displayAmount( equipment->getTopUpWater_l(), Units::liters));
+      wort_l += equipment->getTopUpWater_l();
+      str += QString("\nThe final volume in the primary is %1.")
+             .arg(Brewtarget::displayAmount(wort_l, Units::liters));
+	     
+      ins = new Instruction();
+      ins->setName("Post boil");
+      ins->setDirections(str);
+      instructions.push_back(ins);
+   }
+   /*** end post boil ***/
+   
    /*** Primary yeast ***/
    str = QString("Cool wort and pitch ");
    for( i = 0; i < yeasts.size(); ++i )
@@ -1579,7 +1656,6 @@ void Recipe::addWater( Water* var )
    }
 }
 
-// TODO: need to make mash an observable and do the addObserved() call here.
 void Recipe::setMash( Mash *var )
 {
    if( var == NULL )
@@ -1587,6 +1663,7 @@ void Recipe::setMash( Mash *var )
    else
    {
       mash = var;
+      addObserved(mash);
       hasChanged();
    }
 }
@@ -2049,6 +2126,27 @@ void Recipe::recalculate()
          sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
    }
 
+   // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
+   if( equipment != 0 )
+   {
+      // First, lauter deadspace.
+      double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
+      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
+	 ratio = 1.0;
+      sugar_kg *= ratio;
+      // Don't consider this one since nobody adds sugar or extract to the mash.
+      //sugar_kg_ignoreEfficiency *= ratio;
+      
+      // Next, trub/chiller loss.
+      double kettleWort_l = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) + equipment->getTopUpKettle_l();
+      double postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
+      ratio = (postBoilWort_l - equipment->getTrubChillerLoss_l()) / postBoilWort_l;
+      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
+	 ratio = 1.0;
+      sugar_kg *= ratio;
+      sugar_kg_ignoreEfficiency *= ratio;
+   }
+
    // Conversion factor for lb/gal to kg/l = 8.34538.
    points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
    points += 383.89 * sugar_kg_ignoreEfficiency / getBatchSize_l();
@@ -2220,11 +2318,17 @@ double Recipe::getWortGrav()
          sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
    }
 
+   // We might lose some sugar in the form of lauter deadspace.
+   if( equipment != 0 )
+   {
+      // First, lauter deadspace.
+      double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
+      sugar_kg *= ratio;
+      // Don't consider this one since nobody adds sugar or extract to the mash.
+      //sugar_kg_ignoreEfficiency *= ratio;
+   }
+
    // Conversion factor for lb/gal to kg/l = 8.34538.
-   /*
-   points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
-   points += 383.89 * sugar_kg_ignoreEfficiency / getBatchSize_l();
-    */
    points = (383.89 * sugar_kg / getBoilSize_l()) * getEfficiency_pct()/100.0;
    points += 383.89 * sugar_kg_ignoreEfficiency / getBoilSize_l();
    return (1.0 + points/1000.0);
@@ -2234,7 +2338,7 @@ double Recipe::getIBU()
 {
    unsigned int i;
    double ibus = 0.0;
-
+   
    // Bitterness due to hops...
    for( i = 0; i < hops.size(); ++i )
       ibus += IBU( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
@@ -2308,4 +2412,33 @@ QColor Recipe::getSRMColor()
    ret.setRgb( r, g, b );
 
    return ret;
+}
+
+double Recipe::estimateWortFromMash_l() const
+{
+   if( mash == 0 )
+      return 0.0;
+   
+   double waterAdded_l = mash->totalMashWater_l();;
+   double absorption_lKg = 0.13 * (3.78541178)/(0.45359237); // 0.13 gal/lb
+   
+   return (waterAdded_l - absorption_lKg*getGrainsInMash_kg());
+}
+
+double Recipe::getGrainsInMash_kg() const
+{
+   unsigned int i, size;
+   double grains_kg = 0.0;
+   Fermentable* ferm;
+   
+   size = fermentables.size();
+   for( i = 0; i < size; ++i )
+   {
+      ferm = fermentables[i];
+      
+      if( ferm->getRecommendMash() )
+	 grains_kg += ferm->getAmount_kg();
+   }
+   
+   return grains_kg;
 }

@@ -23,7 +23,7 @@
 #include <QFrame>
 #include "MaltinessWidget.h"
 
-MaltinessWidget::MaltinessWidget()
+MaltinessWidget::MaltinessWidget(QWidget* parent) : QWidget(parent)
 {
    setup();
 }
@@ -44,6 +44,7 @@ void MaltinessWidget::setup()
    // Want to specify a minimum size and have it expand if able.
    label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
    label->setMinimumSize(size);
+   //label->setMaximumSize(QSize(200,50));
    // Align text in center, vertically and horizontally.
    label->setAlignment(Qt::AlignCenter);
    // Add a border.
@@ -57,6 +58,7 @@ void MaltinessWidget::setup()
    //setFixedSize(size);
    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
    setMinimumSize(size);
+   //setMaximumSize(QSize(200,50));
 }
 
 void MaltinessWidget::observeRecipe(Recipe* recipe)
@@ -84,7 +86,8 @@ void MaltinessWidget::paintEvent(QPaintEvent*)
 
 QSize MaltinessWidget::sizeHint() const
 {
-   return label->sizeHint();
+   //return label->sizeHint();
+   return QSize(90,30);
 }
 
 QColor MaltinessWidget::bgColor()

@@ -78,6 +78,8 @@ public:
    double getTopUpKettle_l() const;
    double getHopUtilization_pct() const;
    std::string getNotes() const;
+   
+   double wortEndOfBoil_l( double kettleWort_l ) const; // Calculate how much wort is left immediately at knockout.
 
 private:
    std::string name;
