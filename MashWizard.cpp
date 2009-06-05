@@ -118,7 +118,6 @@ void MashWizard::wizardry()
 
       if( mashStep->getType() == "Temperature")
          continue;
-      // TODO: deal with decoctions.
       else if( mashStep->getType() == "Decoction" )
       {
          QMessageBox::warning(this, tr("Decoction"), tr("Haven't tested decoction calculations yet.\nUse at own risk."));
@@ -161,5 +160,37 @@ void MashWizard::wizardry()
          mashStep->setInfuseAmount_l(massWater);
          mashStep->setInfuseTemp_c(tw);
       }
+   }
+   
+   // Now, do a sparge step to get the total volume of the mash up to the boil size.
+   double wortInBoil_l = recObs->estimateWortFromMash_l();
+   if( recObs->getEquipment() != 0 )
+      wortInBoil_l -= recObs->getEquipment()->getLauterDeadspace_l();
+   
+   double spargeWater_l = recObs->getBoilSize_l() - wortInBoil_l;
+   if( spargeWater_l >= 0.0 )
+   {
+      mashStep = new MashStep();
+      tf = 74; // 74C is recommended in Palmer's How to Brew
+      t1 = mash->getMashStep(size-1)->getStepTemp_c();
+      MC += massWater * HeatCalculations::Cw_calGC; // Add MC product of last addition.
+      massWater = spargeWater_l;
+      
+      tw = (MC/(massWater*HeatCalculations::Cw_calGC))*(tf-t1) + tf;
+      
+      mashStep->setName("Sparge");
+      mashStep->setType("Infusion");
+      mashStep->setInfuseAmount_l(spargeWater_l);
+      mashStep->setInfuseTemp_c(tw);
+      mashStep->setEndTemp_c(tw);
+      mashStep->setStepTemp_c(tf);
+      mashStep->setStepTime_min(15);
+      
+      mash->addMashStep(mashStep);
+   }
+   else
+   {
+      QMessageBox::information(this, tr("Too much wort"),
+      tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time."));
    }
 }

@@ -346,7 +346,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    hopTable->getModel()->removeAll();
    miscTable->getModel()->removeAll();
    yeastTable->getModel()->removeAll();
-   mashStepTableWidget->getModel()->removeAll();
+   //mashStepTableWidget->getModel()->removeAll();
 
    // Make sure this MainWindow is paying attention...
    recipeObs = recipe;
@@ -387,9 +387,9 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    if( recipeObs->getMash() != 0 )
    {
-      Mash* mash = recipeObs->getMash();
-      for( i = 0; i < mash->getNumMashSteps(); ++i )
-         mashStepTableWidget->getModel()->addMashStep(mash->getMashStep(i));
+      //Mash* mash = recipeObs->getMash();
+      //for( i = 0; i < mash->getNumMashSteps(); ++i )
+      mashStepTableWidget->getModel()->setMash(recipeObs->getMash());
    }
 
    showChanges();
@@ -982,7 +982,7 @@ void MainWindow::addMashStep()
 
    MashStep* step = new MashStep();
    mash->addMashStep(step);
-   mashStepTableWidget->getModel()->addMashStep(step);
+   //mashStepTableWidget->getModel()->addMashStep(step);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
 }
@@ -1014,8 +1014,8 @@ void MainWindow::removeSelectedMashStep()
          return;
    }
 
-   MashStep* step = mashStepTableWidget->getModel()->getMashStep(row);
-   mashStepTableWidget->getModel()->removeMashStep(step);
+   MashStep* step = mash->getMashStep(row); //mashStepTableWidget->getModel()->getMashStep(row);
+   //mashStepTableWidget->getModel()->removeMashStep(step);
    mash->removeMashStep(step);
 }
 
@@ -1046,7 +1046,7 @@ void MainWindow::editSelectedMashStep()
          return;
    }
 
-   MashStep* step = mashStepTableWidget->getModel()->getMashStep(row);
+   MashStep* step = mash->getMashStep(row);//mashStepTableWidget->getModel()->getMashStep(row);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
 }

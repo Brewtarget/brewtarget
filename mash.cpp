@@ -535,5 +535,15 @@ double Mash::totalMashWater_l() const
 
 void Mash::notify(Observable *notifier, QVariant info)
 {
-   hasChanged(); // Just pass along the notification.
+   unsigned int i, size;
+   size = mashSteps.size();
+   
+   for( i = 0; i < size; ++i )
+   {
+      if( mashSteps[i] == notifier )
+      {
+	 hasChanged(QVariant(i)); // Mash notifies its observers of which mashStep changed.
+	 return;
+      }
+   }
 }

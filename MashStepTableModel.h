@@ -30,21 +30,23 @@ class MashStepItemDelegate;
 #include <QItemDelegate>
 #include <vector>
 #include "mashstep.h"
+#include "mash.h"
 #include "observable.h"
 #include "MashStepTableWidget.h"
 
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 
-class MashStepTableModel : public QAbstractTableModel, public MultipleObserver
+class MashStepTableModel : public QAbstractTableModel, public Observer
 {
    Q_OBJECT
 
 public:
    MashStepTableModel(MashStepTableWidget* parent=0);
-   void addMashStep(MashStep* step);
-   bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.
-   void removeAll();
-   MashStep* getMashStep(unsigned int i);
+   void setMash( Mash* m );
+   //void addMashStep(MashStep* step);
+   //bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.
+   //void removeAll();
+   //MashStep* getMashStep(unsigned int i);
    virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
@@ -56,7 +58,7 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
 private:
-   std::vector<MashStep*> stepObs;
+   Mash* mashObs;
    MashStepTableWidget* parentTableWidget;
 };
 

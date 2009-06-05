@@ -146,6 +146,9 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
+   if( style != 0 )
+      style->toXml(doc, recipeNode);
+   
    tmpNode = doc.createElement("BREWER");
    tmpText = doc.createTextNode(brewer.c_str());
    tmpNode.appendChild(tmpText);
@@ -2323,6 +2326,8 @@ double Recipe::getWortGrav()
    {
       // First, lauter deadspace.
       double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
+      if( ratio > 1.0 )
+	 ratio = 1.0;
       sugar_kg *= ratio;
       // Don't consider this one since nobody adds sugar or extract to the mash.
       //sugar_kg_ignoreEfficiency *= ratio;

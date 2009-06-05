@@ -34,12 +34,26 @@
 #include "brewtarget.h"
 
 MashStepTableModel::MashStepTableModel(MashStepTableWidget* parent)
-: QAbstractTableModel(parent), MultipleObserver()
+: QAbstractTableModel(parent), Observer()
 {
-   stepObs.clear();
    parentTableWidget = parent;
+   mashObs = 0;
 }
 
+void MashStepTableModel::setMash( Mash* m )
+{
+   mashObs = m;
+   setObserved(mashObs);
+   reset(); // Tell everybody that the table has changed.
+   
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+}
+
+/***************************************************
 void MashStepTableModel::addMashStep(MashStep* step)
 {
    std::vector<MashStep*>::iterator iter;
@@ -94,22 +108,43 @@ void MashStepTableModel::removeAll()
    reset();
 }
 
+MashStep* MashStepTableModel::getMashStep(unsigned int i)
+{
+   return stepObs[i];
+}
+*************************************************************/
+
 void MashStepTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
-
-   // Find the notifier in the list
-   for( i = 0; i < (int)stepObs.size(); ++i )
+   bool ok = false;
+   
+   if( notifier != mashObs )
+      return;
+   
+   i = info.toInt(&ok); // mashObs' info says which MashStep changed.
+   
+   if( ok )
    {
-      if( notifier == stepObs[i] )
-         emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                           QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS));
+      emit dataChanged( QAbstractItemModel::createIndex(i, 0),
+			QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS));
+   }
+   else
+      reset();
+   
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
    }
 }
 
 int MashStepTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
-   return stepObs.size();
+   if( mashObs != 0 )
+      return mashObs->getNumMashSteps();
+   else
+      return 0;
 }
 
 int MashStepTableModel::columnCount(const QModelIndex& /*parent*/) const
@@ -121,14 +156,17 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
 {
    MashStep* row;
 
+   if( mashObs == 0 )
+      return QVariant();
+   
    // Ensure the row is ok.
-   if( index.row() >= (int)stepObs.size() )
+   if( index.row() >= (int)(mashObs->getNumMashSteps()) )
    {
       std::cerr << "Bad model index. row = " << index.row() << std::endl;
       return QVariant();
    }
    else
-      row = stepObs[index.row()];
+      row = mashObs->getMashStep(index.row());
 
    // Make sure we only respond to the DisplayRole role.
    if( role != Qt::DisplayRole )
@@ -169,7 +207,6 @@ QVariant MashStepTableModel::headerData( int section, Qt::Orientation orientatio
          case MASHSTEPTIMECOL:
             return QVariant("Time");
          default:
-            std::cerr << "Bad column: " << section << std::endl;
             return QVariant();
       }
    }
@@ -187,10 +224,13 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
 {
    MashStep *row;
 
-   if( index.row() >= (int)stepObs.size() || role != Qt::EditRole )
+   if( mashObs == 0 )
+      return false;
+   
+   if( index.row() >= (int)(mashObs->getNumMashSteps()) || role != Qt::EditRole )
       return false;
    else
-      row = stepObs[index.row()];
+      row = mashObs->getMashStep(index.row());
 
    switch( index.column() )
    {
@@ -235,7 +275,6 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          else
             return false;
       default:
-         std::cerr << "Bad column: " << index.column() << std::endl;
          return false;
    }
 }
@@ -303,10 +342,5 @@ void MashStepItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 void MashStepItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
 {
    editor->setGeometry(option.rect);
-}
-
-MashStep* MashStepTableModel::getMashStep(unsigned int i)
-{
-   return stepObs[i];
 }
 
