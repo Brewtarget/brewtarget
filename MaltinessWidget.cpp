@@ -38,27 +38,20 @@ void MaltinessWidget::setup()
 {
    QSize size(90,30);
 
-   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-
    label = new QLabel(this);
    // Want to specify a minimum size and have it expand if able.
    label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-   label->setMinimumSize(size);
-   //label->setMaximumSize(QSize(200,50));
    // Align text in center, vertically and horizontally.
    label->setAlignment(Qt::AlignCenter);
    // Add a border.
    label->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-   //label->setFrameStyle(QFrame::Panel | QFrame::Raised);
-   //label->setLineWidth(1);
 
    palette = label->palette();
 
    // Set size policy of the MaltinessWidget
-   //setFixedSize(size);
+   //sPolicy = QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
    setMinimumSize(size);
-   //setMaximumSize(QSize(200,50));
 }
 
 void MaltinessWidget::observeRecipe(Recipe* recipe)
@@ -77,6 +70,8 @@ void MaltinessWidget::paintEvent(QPaintEvent*)
 
    QPainter painter(this);
 
+   label->resize(size());
+   
    palette.setColor(QPalette::Active, QPalette::Window, bgColor());
    label->setPalette(palette);
    label->setText(fgText());
@@ -86,9 +81,15 @@ void MaltinessWidget::paintEvent(QPaintEvent*)
 
 QSize MaltinessWidget::sizeHint() const
 {
-   //return label->sizeHint();
-   return QSize(90,30);
+   return label->sizeHint();
 }
+
+/*
+QSizePolicy MaltinessWidget::sizePolicy() const
+{
+   return sPolicy;
+}
+*/
 
 QColor MaltinessWidget::bgColor()
 {

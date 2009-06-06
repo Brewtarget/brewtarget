@@ -1154,7 +1154,7 @@ void Recipe::generateInstructions()
 
          str += QString(" Hold for %1.").arg(Brewtarget::displayAmount(mstep->getStepTime_min(), Units::minutes));
 
-         preinstructions.push_back(PreInstruction(str, mstep->getType().c_str(),timeRemaining));
+         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getType().c_str()).arg(mstep->getName().c_str()), timeRemaining));
          timeRemaining -= mstep->getStepTime_min();
       }
       /*** END do each mash step ***/

@@ -26,6 +26,7 @@ class MaltinessWidget;
 #include <QPaintEvent>
 #include <QLabel>
 #include <QPalette>
+#include <QSizePolicy>
 #include "observable.h"
 #include "recipe.h"
 
@@ -42,6 +43,7 @@ public:
 
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
    virtual QSize sizeHint() const;
+   QSizePolicy sizePolicy () const;
 
 protected:
    virtual void paintEvent(QPaintEvent *);
@@ -53,6 +55,7 @@ private:
    QString fgText();
    int region();
 
+   //QSizePolicy sPolicy;
    QPalette palette;
    QLabel* label;
    Recipe* recObs;

@@ -24,28 +24,32 @@
 #include <QPoint>
 #include <QColor>
 #include <QSize>
+#include <QSizePolicy>
 #include "BeerColorWidget.h"
 #include "config.h"
 
 // TODO: make the size adjust inside the container.
 BeerColorWidget::BeerColorWidget()
 {
-   setFixedSize(QSize(90,130));
+   //setFixedSize(QSize(90,130));
+   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+   setMinimumSize(90, 130);
+   
+   glass = QImage(GLASS);
 }
 
 void BeerColorWidget::paintEvent(QPaintEvent *)
 {
-   // === ORIG ===
    QPainter painter(this);
    QRect rect;
 
-   rect.setCoords(0,0,90,130);
+   int x1 = (size().width() - 90) / 2;
+   int y1 = 0;
+   rect.setCoords( x1, y1, x1+87, y1+130 );
    painter.setBrush(color);
    painter.drawRect(rect);
-   // === END ORIG ===
 
-   QImage glass = QImage(GLASS);
-   painter.drawImage( QPoint(0,0), glass );
+   painter.drawImage( QPoint(x1,y1), glass );
 }
 
 void BeerColorWidget::setColor( QColor newColor )

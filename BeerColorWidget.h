@@ -24,6 +24,7 @@ class BeerColorWidget;
 #include <QWidget>
 #include <QColor>
 #include <QPaintEvent>
+#include <QImage>
 
 class BeerColorWidget : public QWidget
 {
@@ -36,6 +37,7 @@ protected:
    virtual void paintEvent(QPaintEvent *);
    QColor color;
 private:
+   QImage glass;
    void showColor();
 };
 
