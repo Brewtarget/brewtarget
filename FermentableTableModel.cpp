@@ -24,6 +24,8 @@
 #include <QVariant>
 #include <QCheckBox>
 #include <QItemEditorFactory>
+#include <QStyle>
+#include <QRect>
 
 #include "brewtarget.h"
 #include <Qt>
@@ -164,6 +166,8 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
       case FERMISMASHEDCOL:
 	 if( role == Qt::CheckStateRole )
 	    return QVariant( row->getIsMashed() ? Qt::Checked : Qt::Unchecked);
+	 else if( role == Qt::DisplayRole )
+	    return row->getIsMashed() ? QString("Mashed") : QString ("Not mashed");
 	 else
 	    return QVariant();
       case FERMYIELDCOL:
@@ -209,17 +213,21 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
       return QVariant();
 }
 
-Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& /*index*/ ) const
+Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
 {
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-          Qt::ItemIsEnabled;
+   Qt::ItemFlags defaults = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+   
+   if( index.column()  == FERMISMASHEDCOL )
+      return (defaults | Qt::ItemIsUserCheckable);
+   else
+      return (defaults | Qt::ItemIsEditable);
 }
 
 bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Fermentable* row;
    
-   if( index.row() >= (int)fermObs.size() || role != Qt::EditRole )
+   if( index.row() >= (int)fermObs.size() )
    {
       return false;
    }
@@ -253,9 +261,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       case FERMISMASHEDCOL:
-	 if( value.canConvert(QVariant::Bool) )
+	 if( role == Qt::CheckStateRole && value.canConvert(QVariant::Int) )
 	 {
-	    row->setIsMashed( value.toBool() );
+	    row->setIsMashed( ((Qt::CheckState)value.toInt()) == Qt::Checked );
 	    return true;
 	 }
 	 else
@@ -290,7 +298,7 @@ Fermentable* FermentableTableModel::getFermentable(unsigned int i)
 //======================CLASS FermentableItemDelegate===========================
 
 FermentableItemDelegate::FermentableItemDelegate(QObject* parent)
-        : QItemDelegate(parent)
+        : QStyledItemDelegate(parent)
 {
    //connect( this, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)), this, SLOT(destroyWidget(QWidget*, QAbstractItemDelegate::EndEditHint)) );
 }
@@ -320,6 +328,20 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
       QCheckBox* box = new QCheckBox(parent);
       box->setFocusPolicy(Qt::StrongFocus);
       box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+      /*
+      QWidget* displayWidget = (((FermentableTableModel*)(index.model()))->parentTableWidget)->indexWidget(index);
+      if( displayWidget != 0 )
+	 box->move(displayWidget->pos());
+      ***Didn't work at all***/
+      
+      /*
+      QRect rect = QStyle::alignedRect(Qt::LeftToRight, Qt::AlignLeft, box->sizeHint(), option.rect);
+      std::cerr << "option.rect " << option.rect.x() << " " << option.rect.y() << " " << option.rect.width() << " " << option.rect.height() << std::endl;
+      std::cerr << "rect " << rect.x() << " " << rect.y() << " " << rect.width() << " " << rect.height() << std::endl;
+      box->move(rect.topRight());
+      ***Didn't really do much either***/
+      
       return box;
 
       //return QItemDelegate::createEditor(parent, option, index);
@@ -384,12 +406,12 @@ void FermentableItemDelegate::paint( QPainter* painter, const QStyleOptionViewIt
 {
    if( index.column() == FERMISMASHEDCOL )
    {
-      drawCheck(painter, option, option.rect, (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt() );
+      QItemDelegate::drawCheck(painter, option, option.rect, (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt() );
    }
    else
    {
       QString str = index.model()->data(index, Qt::DisplayRole).toString();
-      drawDisplay(painter, option, option.rect, str);
+      QItemDelegate::drawDisplay(painter, option, option.rect, str);
    }
 }
 */

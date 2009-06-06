@@ -28,7 +28,7 @@ class FermentableItemDelegate;
 #include <QVariant>
 #include <Qt>
 #include <QStringList>
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 #include <QAbstractItemDelegate>
 #include <vector>
 #include "fermentable.h"
@@ -57,12 +57,14 @@ public:
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
+   FermentableTableWidget* parentTableWidget;
+   
 private:
    std::vector<Fermentable*> fermObs;
-   FermentableTableWidget* parentTableWidget;
+   
 };
 
-class FermentableItemDelegate : public QItemDelegate
+class FermentableItemDelegate : public QStyledItemDelegate
 {
    Q_OBJECT
            
