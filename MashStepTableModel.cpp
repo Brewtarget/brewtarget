@@ -262,6 +262,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          if( value.canConvert(QVariant::String) )
          {
             row->setStepTemp_c( Unit::qstringToSI(value.toString()) );
+	    row->setEndTemp_c( Unit::qstringToSI(value.toString()) );
             return true;
          }
          else

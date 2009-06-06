@@ -1,15 +1,131 @@
 <html>
 <head>
-	<title>Brewtarget 1.0b Manual</title>
+	<title>Brewtarget 1.1 Manual</title>
 </head>
 <body>
 
-<h1>Brewtarget 1.0b Manual</h1>
+<h1>Brewtarget 1.1 Manual</h1>
 
-<h2>Notes</h2>
+<h2>A Walkthrough</h2>
 <p>
-Be aware that this is a beta version. You may experience crashing or weird behavior, so
-please press "save" often.
+I figure it's probably easier to demonstrate the features of the program rather than try to explain
+every single concept. So, here we will create a nice American Amber Ale, trying to touch on as many
+features as possible.
+</p>
+
+<h3>Making a New Recipe</h3>
+<p>
+Click on either File->"New Recipe", or click the green plus in the toolbar at the top of the main
+window. Now, title your recipe in the box that pops up, and click "OK".
+</p>
+
+<h3>Making a New Equipment Record</h3>
+<p>
+Having an equipment record for your recipe is very important in Brewtarget. It contains a lot of
+information about your <i>particular</i> setup, and helps Brewtarget better estimate your results.
+Click on View->Equipments to bring up the Equipment Editor. At the bottom, press the green plus
+and enter the name you wish to give it. Check "calculate pre-boil volume", and enter as many of
+these fields as you can.
+
+<ul>
+   <li><b>Batch size</b> - How much wort you want to end up in the primary.</li>
+   <li><b>Volume</b> - How much your mash tun can hold.</li>
+   <li><b>Mass</b> - Mass of your mash tun.</li>
+   <li><b>Specific heat</b> - Specific heat of the material of your mash tun in cal/(g*C). Typical values are:</li>
+   
+   <ul>
+      <li>Aluminum - 0.215</li>
+      <li>Copper - 0.0924</li>
+      <li>Iron/Steel - 0.108</li>
+      <li>Plastic - 0.359</li>
+   </ul>
+   
+   <li><b>Boil time</b> - How long you usually boil.</li>
+   <li><b>Evaporation Rate</b> - Every hour, your boil will lose (evap. rate)*(pre-boil vol.). Typically, around 15 percent.</li>
+   <li><b>Kettle top-up water</b> - Amount of water you usually add directly to the kettle before boiling.</li>
+   <li><b>Final top-up water</b> - Amount of water to add to the wort immediately before going into the primary.</li>
+   <li><b>Hop utilization</b> - Don't use this. Brewtarget automatically calculates hop utilization.</li>
+   <li><b>Kettle to fermenter</b> - How much wort you usually leave behind in the kettle when you transfer the wort to primary.</li>
+   <li><b>Lauter deadspace</b> - How much wort you usually lose in the lauter tun.</li>
+</ul>
+
+Then, press the diskette button at the bottom to save.
+</p>
+
+<h3>Adjusting Recipe Parameters</h3>
+<p>
+Now that you're back at the main window, open the Style drop-down list and choose "American Amber Ale".
+From the Equipment drop-down list, choose "Ideal" (which assumes 5 gallon batches, 15% evaporation rate, and no losses)
+which is already provided by Brewtarget, just for the sake of demonstration. For now, leave
+the efficiency at 70% for the same reason.
+</p>
+
+<h3>Adding Ingredients</h3>
+<p>
+First, go to the Fermentables tab on the main window, and click the green plus sign on the right.
+This brings up the database of fermentables that Brewtarget has. Scroll down to "Pale Malt (2 row) US",
+single-click the name (or anywhere in the row) and press "Add to Recipe". Repeat for
+"Caramel/Crystal Malt - 40L", and close the fermentable database window.
+</p>
+<p>
+Back at the main window, you will see those two malts in your recipe. Click on the Crystal 40's "Mashed"
+checkbox to tell it that we want to have this in the mash.
+</p>
+<p>
+Here's a cool feature about Brewtarget: you can enter amounts of stuff in pretty much any units you want.
+Let's see what I mean. Double-click the 2-row's "amount" cell and enter "3.175 kg". You will see that
+it immediately gets converted into "7.000 lb". For the crystal 40, tell it "32 oz" and watch it get
+converted into "2.000 lb". You can change english/metric preferences in Tools->Options.
+</p>
+<p>
+Now you should notice something different about the OG, FG, etc., displayed in the main window.
+The OG now reads 1.045, and it is green which indicates "to style" as dictated by the amber ale
+style we chose. However, the FG is red, which means it's too high, and the ABV is blue which means
+it is too low. The glass of beer to the right of that represents the approximate color of your beer,
+and the thing right below that which reads "Cloying" is a maltiness indicator (based on OG vs. IBUs).
+</p>
+<p>
+Now, go add 1 oz Cascade at 1 hr, 1 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
+be at 29, and in the green. Add Wyeast American Ale yeast to the recipe. Now everything should be in
+the green except for the ABV which is at 4.4%, but that's ok (you can correct this if you want by
+adding a little more fermentable stuff).
+</p>
+
+<h3>Making a Mash</h3>
+<p>
+Let's do a 2-step mash with a protein rest at 121 F and a conversion rest at 152 F. Go to the mash
+tab and click the green plus. Name it "Protein" and click "OK". Double click its "Temp" cell and
+change to "121 F", and change the "Time" to "20 min". Do the same for a "Conversion" step at "152 F"
+and for "1 hr".
+</p>
+<p>
+Click on "Edit Mash", give it a name, and set the initial grain temp to 70 F. Now, click on the
+"Mash wiz" button, and tell it you want the mash thickness to be 2.7 (in L/kg. 2-4 is normal).
+The mash wizard just did 3 things for you: calculated infusion volumes, infusion temps., and
+gave you a sparge step that will make you hit your pre-boil volume. Pretty cool? You can
+see any of the infusion temperatures by selecting the name of the mash step in the table and
+pressing the edit button to the right (looks like a pencil and paper).
+</p>
+
+<h3>Brewday Mode</h3>
+<p>
+Now that your recipe is all planned, wouldn't it be good to have some instructions on your
+brewday? Click the "Brewday mode" button in the toolbar at the top, and answer "yes". It
+has made all instructions for you and listed them on the left in order. There is a timer
+available for each step if you click "show timer", as well as a couple of timers at the
+bottom for any purpose you want. They are in HH:MM:SS format, and the text box above each
+one is what you use to set it. Just enter "1:00:00" and press "set" to set the timer for
+1 hour, for example.
+</p>
+<p>
+You can remove, shift up/down, insert, change steps as you see fit to help you be organized
+on your brew day.
+</p>
+
+<h3>Saving your work</h3>
+<p>
+Before you close Brewtarget, be sure to press the diskette at the top in the toolbar,
+<b>or you will lose any changes you have made in this session!</b>
 </p>
 
 <h2>General Concepts</h2>
@@ -105,11 +221,8 @@ I bet you can figure this one out.
 
 <h2>Planned Features</h2>
 <ul>
-	<li>Cool things for style checking.</li>
-	<li>Mash calculations.</li>
 	<li>Water salts calculations.</li>
 	<li>Automatic formulation of recipes given certain constraints.</li>
-	<li>Step-by-step instructions for brew day.</li>
 	<li>Post-brew analysis.</li>
 </ul>
 
