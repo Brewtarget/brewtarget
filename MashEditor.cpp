@@ -57,9 +57,12 @@ void MashEditor::saveAndClose()
       rec->setMash(mash);
    }
    else
+   {
       mash = rec->getMash();
+   }
    
-   mash->setEquipAdjust( (checkBox_unheatedTun->checkState() == Qt::Checked) ? true : false );
+   mash->disableNotification(); // If we don't do this, the notification will propagate to a showChanges() and we'll lose any info we want saved.
+   mash->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
    mash->setName( lineEdit_name->text().toStdString() );
    mash->setGrainTemp_c(Unit::qstringToSI(lineEdit_grainTemp->text()));
@@ -70,6 +73,9 @@ void MashEditor::saveAndClose()
    mash->setTunSpecificHeat_calGC(Unit::qstringToSI(lineEdit_tunSpHeat->text()) );
 
    mash->setNotes( textEdit_notes->toPlainText().toStdString() );
+   
+   mash->reenableNotification();
+   mash->forceNotify();
 }
 
 void MashEditor::fromEquipment()
@@ -100,8 +106,6 @@ void MashEditor::showChanges()
    }
 
    Mash* mash = rec->getMash();
-
-   checkBox_unheatedTun->setCheckState( mash->getEquipAdjust() ? Qt::Checked : Qt::Unchecked );
    
    lineEdit_name->setText(mash->getName().c_str());
    lineEdit_grainTemp->setText(Brewtarget::displayAmount(mash->getGrainTemp_c(), Units::celsius));
@@ -116,8 +120,6 @@ void MashEditor::showChanges()
 
 void MashEditor::clear()
 {
-   checkBox_unheatedTun->setCheckState( Qt::Unchecked );
-
    lineEdit_name->setText("");
    lineEdit_grainTemp->setText("");
    lineEdit_spargeTemp->setText("");

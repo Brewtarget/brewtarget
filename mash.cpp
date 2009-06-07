@@ -137,15 +137,15 @@ void Mash::toXml(QDomDocument& doc, QDomNode& parent)
 void Mash::setDefaults()
 {
    name = "";
-   grainTemp_c = 0.0;
+   grainTemp_c = 21.0;
    mashSteps = std::vector<MashStep *>();
    notes = "";
-   tunTemp_c = 0.0;
-   spargeTemp_c = 0.0;
+   tunTemp_c = 21.0;
+   spargeTemp_c = 74.0;
    ph = 7.0;
    tunWeight_kg = 0.0;
    tunSpecificHeat_calGC = 0.0;
-   equipAdjust = false;
+   equipAdjust = true;
 }
 
 Mash::Mash()

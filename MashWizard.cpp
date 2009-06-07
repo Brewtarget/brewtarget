@@ -96,10 +96,11 @@ void MashWizard::wizardry()
    massWater = thickness_LKg * grainMass;
    MCw = HeatCalculations::Cw_calGC * massWater;
    MC = HeatCalculations::Cgrain_calGC * grainMass;
-   if( mash->getEquipAdjust() )
+   // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
+   //if( mash->getEquipAdjust() )
       tw = MC/MCw * (tf-t1) + (mash->getTunSpecificHeat_calGC()*mash->getTunWeight_kg())/MCw * (tf-mash->getTunTemp_c()) + tf;
-   else
-      tw = MC/MCw * (tf-t1) + tf;
+   //else
+   //   tw = MC/MCw * (tf-t1) + tf;
 
    // Can't have water above boiling.
    if( tw > 100 )
@@ -113,8 +114,9 @@ void MashWizard::wizardry()
    // End of first step.
 
    // Do rest of steps.
-   // Perhaps add mass*specific heat constant of equipment to MC.
-   if( mash->getEquipAdjust() )
+   // Add mass*specific heat constant of equipment to MC.
+   // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
+   //if( mash->getEquipAdjust() )
       MC += mash->getTunSpecificHeat_calGC()*mash->getTunWeight_kg();
    for( i = 1; i < size; ++i )
    {

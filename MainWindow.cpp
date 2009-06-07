@@ -392,6 +392,8 @@ void MainWindow::setRecipe(Recipe* recipe)
       mashStepTableWidget->getModel()->setMash(recipeObs->getMash());
    }
 
+   mashEditor->setRecipe(recipeObs);
+
    showChanges();
 }
 
@@ -410,8 +412,6 @@ void MainWindow::showChanges()
 {
    if( recipeObs == 0 )
       return;
-
-   mashEditor->setRecipe(recipeObs);
 
    recipeObs->recalculate();
 
