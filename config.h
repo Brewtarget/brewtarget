@@ -42,6 +42,7 @@
 
 // This only gets used by linux OS version.
 #define CONFIGDATADIR "/usr/local/share/brewtarget/"
+#define CONFIGDOCDIR "/usr/local/share/doc/brewtarget/"
 
 #endif /*_CONFIG_H*/
 

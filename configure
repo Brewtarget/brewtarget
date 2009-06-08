@@ -60,17 +60,30 @@ if( $docpath ) # User might have passed an option.
 if( isLinux() )
 {
    print "OS: Linux...yay!\n";
-   $datapath = "/usr/local/share/brewtarget/";
+   if( ! $datapath )
+   {
+      $datapath = "/usr/local/share/brewtarget/";
+   }
+   if( ! $docpath )
+   {
+      $docpath = "/usr/local/share/doc/brewtarget/";
+   }
 }
 elsif( isMac() )
 {
    print "OS: Mac\n";
-   $datapath = "Contents/Resources/"; # Is this right?
+   if( ! $datapath )
+   {
+      $datapath = "Contents/Resources/"; # Is this right?
+   }
 }
 elsif( isWindows() )
 {
    print "OS: Windows\n";
-   $datapath = "/";
+   if( ! $datapath )
+   {
+      $datapath = "/";
+   }
 }
 else
 {
@@ -82,6 +95,7 @@ else
 
 # ---Modify the config.h file.---
 modifyInPlace('config.h', '#define CONFIGDATADIR.*$', qq(#define CONFIGDATADIR "$datapath"));
+modifyInPlace('config.h', '#define CONFIGDOCDIR.*$', qq(#define CONFIGDOCDIR "$docpath"));
 # ---Done modifying config.h.---
 
 # Make the makefile.

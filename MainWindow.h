@@ -27,6 +27,7 @@ class MainWindow;
 #include <QVariant>
 #include <QFileDialog>
 #include <QPalette>
+#include <QCloseEvent>
 #include "ui_mainWindow.h"
 #include "FermentableDialog.h"
 #include "HopDialog.h"
@@ -48,6 +49,7 @@ class MainWindow;
 #include "MashStepEditor.h"
 #include "MashWizard.h"
 #include "BrewDayWidget.h"
+#include "HtmlViewer.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -65,7 +67,6 @@ public slots:
    void save();
    void setRecipeByName(const QString& name);
    void clear();
-   void exit();
 
    void updateRecipeName();
    void updateRecipeStyle();
@@ -99,6 +100,9 @@ public slots:
 
    void brewDayMode();
 
+protected:
+   virtual void closeEvent(QCloseEvent* event);
+
 private:
    Recipe* recipeObs;
    AboutDialog* dialog_about;
@@ -124,6 +128,7 @@ private:
    MaltinessWidget* maltWidget;
    QDialog* brewDayDialog;
    BrewDayWidget* brewDayWidget;
+   HtmlViewer* htmlViewer;
 
    void setupToolbar();
    void showChanges();

@@ -38,6 +38,9 @@ public:
 
    /***Density***/
    static double rhoGrain_KgL;
+   
+   /***Absorption***/
+   static double absorption_LKg;
 };
 
 #endif	/* _HEATCALCULATIONS_H */

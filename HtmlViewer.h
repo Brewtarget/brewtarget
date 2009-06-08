@@ -1,5 +1,5 @@
 /*
- * HeatCalculations.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * HtmlViewer.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,15 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "HeatCalculations.h"
+#ifndef _HTMLVIEWER_H
+#define	_HTMLVIEWER_H
 
-double HeatCalculations::Cw_JKgK = 4184.0;
-double HeatCalculations::Cw_calGC = 1.0;
-double HeatCalculations::Cgrain_calGC = 0.4;
-double HeatCalculations::rhoGrain_KgL = 0.432;
-double HeatCalculations::absorption_LKg = 0.13 * (3.78541178)/(0.45359237); // 0.13 gal/lb
+class HtmlEditor;
 
-double HeatCalculations::equivalentMCProduct(double m1, double c1, double m2, double c2)
+#include "ui_htmlViewer.h"
+#include <QDialog>
+#include <QWidget>
+
+class HtmlViewer : public QDialog, public Ui::htmlViewer
 {
-   return m1*c1*(1.+(m2*c2)/(m1*c1));
-}
+public:
+   HtmlViewer(QWidget* parent=0);
+
+   void setHtml(const QString& fileName);
+};
+
+#endif	/* _HTMLVIEWER_H */
+

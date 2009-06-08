@@ -119,6 +119,7 @@ MainWindow::MainWindow(QWidget* parent)
    optionDialog = new OptionDialog(this);
    brewDayDialog = new QDialog();
    brewDayWidget = new BrewDayWidget(brewDayDialog);
+   htmlViewer = new HtmlViewer(this);
 
    setupToolbar();
 
@@ -146,6 +147,9 @@ MainWindow::MainWindow(QWidget* parent)
    // And test out the maltiness widget.
    maltWidget = new MaltinessWidget(groupBox);
    verticalLayout_beerColor->insertWidget( -1, maltWidget );
+
+   // Set up HtmlViewer to view documentation.
+   htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
 
    // Setup some of the widgets.
    recipeComboBox->startObservingDB();
@@ -176,7 +180,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
-   connect( actionExit, SIGNAL( triggered() ), this, SLOT( exit() ) );
+   connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
    connect( actionImport_Recipes, SIGNAL( triggered() ), this, SLOT( importRecipes() ) );
@@ -188,6 +192,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );
    connect( actionYeasts, SIGNAL( triggered() ), yeastDialog, SLOT( show() ) );
    connect( actionOptions, SIGNAL( triggered() ), optionDialog, SLOT( show() ) );
+   connect( actionManual, SIGNAL( triggered() ), htmlViewer, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -493,7 +498,7 @@ void MainWindow::showChanges()
       {
          lcdNumber_srm->setPalette(lcdPalette_good);
       }
-      else if( srm < recipeStyle->getCarbMin_vol() )
+      else if( srm < recipeStyle->getColorMin_srm() )
       {
          lcdNumber_srm->setPalette(lcdPalette_tooLow);
       }
@@ -952,21 +957,6 @@ void MainWindow::importRecipes()
    */
 }
 
-// Ask if user wants to save the db, then exit.
-void MainWindow::exit()
-{
-   if( QMessageBox::question(this, tr("Save database?"),
-                             tr("Do you want to save the changes made?"),
-                             QMessageBox::Yes,
-                             QMessageBox::No)
-       == QMessageBox::Yes )
-   {
-      Database::savePersistent();
-   }
-   
-   close();
-}
-
 void MainWindow::addMashStep()
 {
    Mash* mash;
@@ -1061,4 +1051,18 @@ void MainWindow::brewDayMode()
    }
 
    brewDayDialog->show();
+}
+
+void MainWindow::closeEvent(QCloseEvent* /*event*/)
+{
+   if( QMessageBox::question(this, tr("Save database?"),
+                             tr("Do you want to save the changes made? If not, you will lose anything you changed in this session."),
+                             QMessageBox::Yes,
+                             QMessageBox::No)
+       == QMessageBox::Yes )
+   {
+      Database::savePersistent();
+   }
+
+   setVisible(false);
 }

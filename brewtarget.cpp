@@ -66,6 +66,27 @@ QString Brewtarget::getDataDir()
 #endif
 }
 
+QString Brewtarget::getDocDir()
+{
+   QString dir = app->applicationDirPath();
+#if defined(Q_WS_X11) // Linux OS.
+
+   return QString(CONFIGDOCDIR);
+
+#elif defined(Q_WS_MAC) // MAC OS.
+
+   // We should be inside an app bundle.
+   dir += "/../Resources/en.lproj/";
+   return dir;
+
+#else // Windows OS.
+
+   dir += "/doc/";
+   return dir;
+
+#endif
+}
+
 int Brewtarget::run()
 {
    int ret;
@@ -99,7 +120,10 @@ void Brewtarget::log(LogType lt, QString message)
    // First, write out to stderr.
    std::cerr << m.toStdString() << std::endl;
    // Then display it in the GUI's status bar.
-   mainWindow->statusBar()->showMessage(m, 3000);
+   // Hmm... I can't access the mainWindow from outside the
+   // GUI event loop?
+   //if( mainWindow->statusBar() != 0 )
+   //   mainWindow->statusBar()->showMessage(m, 3000);
 }
 
 // Displays "amount" of units "units" in the proper format.

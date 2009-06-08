@@ -68,7 +68,9 @@ void TimerWidget::flash()
    else
       lcdNumber->setPalette(paletteNew);
 
-   lcdNumber->update();
+   // Update doesn't repaint when the window is out of focus...
+   //lcdNumber->update();
+   lcdNumber->repaint();
 }
 
 void TimerWidget::setTimer()

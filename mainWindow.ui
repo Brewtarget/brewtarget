@@ -1072,6 +1072,7 @@
      <string>About</string>
     </property>
     <addaction name="actionAbout_BrewTarget"/>
+    <addaction name="actionManual"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -1165,6 +1166,11 @@
   <action name="actionOptions">
    <property name="text">
     <string>Options</string>
+   </property>
+  </action>
+  <action name="actionManual">
+   <property name="text">
+    <string>Manual</string>
    </property>
   </action>
  </widget>

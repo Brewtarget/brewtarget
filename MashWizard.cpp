@@ -178,13 +178,16 @@ void MashWizard::wizardry()
    {
       mashStep = new MashStep();
       tf = 74; // 74C is recommended in Palmer's How to Brew
-      t1 = mash->getMashStep(size-1)->getStepTemp_c();
-      MC += massWater * HeatCalculations::Cw_calGC; // Add MC product of last addition.
+      t1 = mash->getMashStep(size-1)->getStepTemp_c() - 10.0; // You will lose about 10C from last step.
+      //MC += massWater * HeatCalculations::Cw_calGC; // Add MC product of last addition.
+      MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC
+           + HeatCalculations::absorption_LKg * recObs->getGrainsInMash_kg() * HeatCalculations::Cw_calGC
+	   + mash->getTunWeight_kg() * mash->getTunSpecificHeat_calGC();
       massWater = spargeWater_l;
       
       tw = (MC/(massWater*HeatCalculations::Cw_calGC))*(tf-t1) + tf;
       
-      mashStep->setName("Sparge");
+      mashStep->setName("Batch Sparge");
       mashStep->setType("Infusion");
       mashStep->setInfuseAmount_l(spargeWater_l);
       mashStep->setInfuseTemp_c(tw);

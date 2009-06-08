@@ -17,7 +17,7 @@
 TEMPLATE = app
 TARGET = brewtarget
 CONFIG += qt release warn_on
-QT += xml
+QT += xml webkit
 DEPENDPATH += .
 INCLUDEPATH += .
 RESOURCES = brewtarget.qrc
@@ -94,6 +94,7 @@ HEADERS += AboutDialog.h \
            HopEditor.h \
            HopTableModel.h \
            HopTableWidget.h \
+           HtmlViewer.h \
            instruction.h \
            InstructionWidget.h \
            MainWindow.h \
@@ -143,6 +144,7 @@ FORMS +=   aboutDialog.ui \
            equipmentEditor.ui \
            hopDialog.ui \
            hopEditor.ui \
+           htmlViewer.ui \
            instructionWidget.ui \
            mashEditor.ui \
            mashWizard.ui \
@@ -173,6 +175,7 @@ SOURCES += database.cpp \
            HopEditor.cpp \
            HopTableModel.cpp \
            HopTableWidget.cpp \
+           HtmlViewer.cpp \
            instruction.cpp \
            InstructionWidget.cpp \
            MainWindow.cpp \

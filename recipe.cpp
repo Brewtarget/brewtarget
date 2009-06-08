@@ -2346,8 +2346,17 @@ double Recipe::getIBU()
    
    // Bitterness due to hops...
    for( i = 0; i < hops.size(); ++i )
-      ibus += IBU( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
+   {
+      if( hops[i]->getUse() == "Boil")
+         ibus += IBU( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
                    batchSize_l, getWortGrav(), hops[i]->getTime_min() );
+      else if( hops[i]->getUse() == "First Wort" )
+         ibus += 1.10 * IBU( hops[i]->getAlpha_pct()/100.0,
+                             hops[i]->getAmount_kg()*1000.0,
+                             batchSize_l,
+                             getWortGrav(),
+                             20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
+   }
 
    // Bitterness due to hopped extracts...
    for( i = 0; i < fermentables.size(); ++i )
