@@ -83,6 +83,8 @@
       <itemPath>../../HopTableWidget.h</itemPath>
       <itemPath>../../hoputilization.cpp</itemPath>
       <itemPath>../../hoputilization.h</itemPath>
+      <itemPath>../../HtmlViewer.cpp</itemPath>
+      <itemPath>../../HtmlViewer.h</itemPath>
       <itemPath>../../instruction.cpp</itemPath>
       <itemPath>../../instruction.h</itemPath>
       <itemPath>../../InstructionWidget.cpp</itemPath>
@@ -290,6 +292,12 @@
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../HtmlViewer.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HtmlViewer.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../InstructionWidget.cpp">
@@ -805,6 +813,12 @@ make clean</buildCommand>
         <itemTool>1</itemTool>
       </item>
       <item path="../../HopTableWidget.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../HtmlViewer.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../HtmlViewer.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../InstructionWidget.cpp">
