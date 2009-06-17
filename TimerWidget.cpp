@@ -97,7 +97,7 @@ void TimerWidget::setTimer(QString text)
    QStringList strList = text.split(":", QString::SkipEmptyParts);
    bool conversionOk = true;
 
-   if( strList.length() == 1 )
+   if( strList.size() == 1 )
    {
       seconds = strList[0].toUInt(&conversionOk);
       if( ! conversionOk )
@@ -106,7 +106,7 @@ void TimerWidget::setTimer(QString text)
       hours = 0;
       minutes = 0;
    }
-   else if( strList.length() == 2 )
+   else if( strList.size() == 2 )
    {
       minutes = strList[0].toUInt(&conversionOk);
       if( ! conversionOk )
@@ -117,7 +117,7 @@ void TimerWidget::setTimer(QString text)
 
       hours = 0;
    }
-   else if( strList.length() == 3 )
+   else if( strList.size() == 3 )
    {
       hours = strList[0].toUInt(&conversionOk);
       if( ! conversionOk )

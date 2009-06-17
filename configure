@@ -62,11 +62,13 @@ if( isLinux() )
    print "OS: Linux...yay!\n";
    if( ! $datapath )
    {
-      $datapath = "/usr/local/share/brewtarget/";
+      # Debian defaults
+      $datapath = "/usr/share/brewtarget/";
    }
    if( ! $docpath )
    {
-      $docpath = "/usr/local/share/doc/brewtarget/";
+      # Debian defaults
+      $docpath = "/usr/share/doc/brewtarget/";
    }
 }
 elsif( isMac() )

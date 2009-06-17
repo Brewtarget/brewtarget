@@ -45,6 +45,8 @@ public:
    static void log( LogType lt, QString message );
    static QString displayAmount( double amount, Unit* units=0 );
 
+   static bool useEnglishUnits();
+   
    static void readPersistentOptions();
    static void savePersistentOptions();
 

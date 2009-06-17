@@ -45,6 +45,11 @@ QApplication* Brewtarget::getApp()
    return app;
 }
 
+bool Brewtarget::useEnglishUnits()
+{
+   return englishUnits;
+}
+
 QString Brewtarget::getDataDir()
 {
    QString dir = app->applicationDirPath();

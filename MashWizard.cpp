@@ -40,6 +40,16 @@ void MashWizard::setRecipe(Recipe* rec)
    recObs = rec;
 }
 
+void MashWizard::show()
+{
+   if( Brewtarget::useEnglishUnits() )
+      label->setText(tr("Mash thickness (qt/lb)"));
+   else
+      label->setText(tr("Mash thickness (L/kg)"));
+   
+   setVisible(true);
+}
+
 void MashWizard::wizardry()
 {
    if( recObs == 0 || recObs->getMash() == 0 )
@@ -49,13 +59,18 @@ void MashWizard::wizardry()
    MashStep* mashStep;
    int i, j, size;
    double thickness_LKg;
+   double thickNum;
    double MC, MCw;
    double tw, tf, t1;
    double grainMass = 0.0, massWater = 0.0;
    double grainDensity = HeatCalculations::rhoGrain_KgL;
    
    size = mash->getNumMashSteps();
-   thickness_LKg = Unit::qstringToSI(lineEdit_mashThickness->text());
+   thickNum = Unit::qstringToSI(lineEdit_mashThickness->text());
+   if( Brewtarget::useEnglishUnits() )
+      thickness_LKg = thickNum * 2.086;
+   else
+      thickness_LKg = thickNum;
 
    if( thickness_LKg <= 0.0 )
    {

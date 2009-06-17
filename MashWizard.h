@@ -34,6 +34,7 @@ public:
 
 public slots:
    void wizardry(); // Do what the wizard is supposed to do.
+   void show();
 
 private:
    Recipe* recObs;
