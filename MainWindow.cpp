@@ -426,6 +426,22 @@ void MainWindow::showChanges()
    lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->getBoilSize_l(), Units::liters) );
    lineEdit_efficiency->setText( Brewtarget::displayAmount(recipeObs->getEfficiency_pct(), 0) );
    
+   label_calcBatchSize->setText( Brewtarget::displayAmount(recipeObs->estimateFinalVolume_l(), Units::liters) );
+   label_calcBoilSize->setText( Brewtarget::displayAmount(recipeObs->estimateBoilVolume_l(), Units::liters) );
+   // Color manipulation
+   if( 0.95*recipeObs->getBatchSize_l() <= recipeObs->estimateFinalVolume_l() && recipeObs->estimateFinalVolume_l() <= 1.05*recipeObs->getBatchSize_l() )
+      label_calcBatchSize->setPalette(lcdPalette_good);
+   else if( recipeObs->estimateFinalVolume_l() < 0.95*recipeObs->getBatchSize_l() )
+      label_calcBatchSize->setPalette(lcdPalette_tooLow);
+   else
+      label_calcBatchSize->setPalette(lcdPalette_tooHigh);
+   if( 0.95*recipeObs->getBoilSize_l() <= recipeObs->estimateBoilVolume_l() && recipeObs->estimateBoilVolume_l() <= 1.05*recipeObs->getBoilSize_l() )
+      label_calcBoilSize->setPalette(lcdPalette_good);
+   else if( recipeObs->estimateBoilVolume_l() < 0.95* recipeObs->getBoilSize_l() )
+      label_calcBoilSize->setPalette(lcdPalette_tooLow);
+   else
+      label_calcBoilSize->setPalette(lcdPalette_tooHigh);
+   
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
    lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(), 1).c_str());

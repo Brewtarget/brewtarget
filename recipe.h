@@ -165,6 +165,8 @@ public:
    double getIBU();
    QColor getSRMColor();
    double estimateWortFromMash_l() const; // Estimate amount of wort collected immediately after the mash.
+   double estimateBoilVolume_l() const; // Estimate boil volume based on user inputs.
+   double estimateFinalVolume_l() const; // Estimate final volume based on user inputs.
    double getGrainsInMash_kg() const;
 
 private:

@@ -378,289 +378,6 @@ Recipe::Recipe()
    setDefaults();
 }
 
-/*
-Recipe::Recipe(const XmlNode *node)
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasVersion=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "RECIPE" )
-      throw RecipeException("initializer not passed a RECIPE node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      if( tmpVec.size() == 0 )
-         leaf = &XmlNode();
-      else
-         leaf = tmpVec[0]; // May not really be a leaf.
-      
-      if( leaf->isLeaf() )
-         leafText = leaf->getLeafText();
-
-      if( tag == "NAME" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setName(leafText);
-      }
-      else if( tag == "VERSION" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         if( parseInt(leafText) != version )
-            std::cerr << "Warning: XML RECIPE version is not " << version << std::endl;
-         hasVersion=true;
-      }
-      else if( tag == "TYPE" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setType(leafText);
-      }
-      else if( tag == "BREWER" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setBrewer(leafText);
-      }
-      else if( tag == "STYLE" )
-      {
-         setStyle(new Style(children[i]));
-      }
-      else if( tag == "BATCH_SIZE" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setBatchSize_l(parseDouble(leafText));
-      }
-      else if( tag == "BOIL_SIZE" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setBoilSize_l(parseDouble(leafText));
-      }
-      else if( tag == "BOIL_TIME" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setBoilTime_min(parseDouble(leafText));
-      }
-      else if( tag == "EFFICIENCY" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setEfficiency_pct(parseDouble(leafText));
-      }
-      else if( tag == "HOPS" )
-      {
-         Hop *h;
-         unsigned int j;
-         
-         for( j = 0; j < tmpVec.size(); ++j )
-         {
-            h = new Hop(tmpVec[j]);
-            addHop(h);
-         }
-      }
-      else if( tag == "FERMENTABLES" )
-      {
-         unsigned int j;
-         
-         for( j = 0; j < tmpVec.size(); ++j )
-            addFermentable(new Fermentable(tmpVec[j]));
-      }
-      else if( tag == "MISCS" )
-      {
-         unsigned int j;
-         
-         for( j = 0; j < tmpVec.size(); ++j )
-            addMisc(new Misc(tmpVec[j]));
-      }
-      else if( tag == "YEASTS" )
-      {
-         unsigned int j;
-         
-         for( j = 0; j < tmpVec.size(); ++j )
-            addYeast(new Yeast(tmpVec[j]));
-      }
-      else if( tag == "WATERS" )
-      {
-         unsigned int j;
-         
-         for( j = 0; j < tmpVec.size(); ++j )
-            addWater(new Water(tmpVec[j]));
-      }
-      else if( tag == "INSTRUCTIONS" )
-      {
-         unsigned int j;
-
-         for( j = 0; j < tmpVec.size(); ++j )
-            instructions.push_back(new Instruction(tmpVec[j]));
-      }
-      else if( tag == "MASH" )
-      {
-         setMash(new Mash(children[i]));
-      }
-      else if( tag == "ASST_BREWER" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setAsstBrewer(leafText);
-      }
-      else if( tag == "EQUIPMENT" )
-      {
-         setEquipment(new Equipment(children[i]));
-      }
-      else if( tag == "NOTES" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setNotes(leafText);
-      }
-      else if( tag == "TASTE_NOTES" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setTasteNotes(leafText);
-      }
-      else if( tag == "TASTE_RATING" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setTasteRating(parseDouble(leafText));
-      }
-      else if( tag == "OG" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setOg(parseDouble(leafText));
-      }
-      else if( tag == "FG" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setFg(parseDouble(leafText));
-      }
-      else if( tag == "FERMENTATION_STAGES" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setFermentationStages(parseInt(leafText));
-      }
-      else if( tag == "PRIMARY_AGE" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setPrimaryAge_days(parseDouble(leafText));
-      }
-      else if( tag == "PRIMARY_TEMP" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setPrimaryTemp_c(parseDouble(leafText));
-      }
-      else if( tag == "SECONDARY_AGE" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setSecondaryAge_days(parseDouble(leafText));
-      }
-      else if( tag == "SECONDARY_TEMP" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setSecondaryTemp_c(parseDouble(leafText));
-      }
-      else if( tag == "TERTIARY_AGE")
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setTertiaryAge_days(parseDouble(leafText));
-      }
-      else if( tag == "TERTIARY_TEMP" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setTertiaryTemp_c(parseDouble(leafText));
-      }
-      else if( tag == "AGE" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setAge_days(parseDouble(leafText));
-      }
-      else if( tag == "AGE_TEMP" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setAgeTemp_c(parseDouble(leafText));
-      }
-      else if( tag == "DATE" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setDate(leafText);
-      }
-      else if( tag == "CARBONATION" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setCarbonation_vols(parseDouble(leafText));
-      }
-      else if( tag == "FORCED_CARBONATION" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setForcedCarbonation(parseBool(leafText));
-      }
-      else if( tag == "PRIMING_SUGAR_NAME" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setPrimingSugarName(leafText);
-      }
-      else if( tag == "CARBONATION_TEMP" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setCarbonationTemp_c(parseDouble(leafText));
-      }
-      else if( tag == "PRIMING_SUGAR_EQUIV" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setPrimingSugarEquiv(parseDouble(leafText));
-      }
-      else if( tag == "KEG_PRIMING_FACTOR" )
-      {
-         if( !leaf->isLeaf())
-            throw RecipeException("expected a leaf");
-         setKegPrimingFactor(parseDouble(leafText));
-      }
-      else
-         std::cerr << "Warning: unsupported RECIPE tag: " << tag << std::endl;
-   }// end for()
-
-   // I am purposely being slack about checking for all required fields.
-   // Seems to me BeerXML is a little too strict with Recipes.
-   if( ! hasVersion )
-      throw RecipeException("Recipe lacks version tag.");
-} // end Recipe()
-*/
-
 Recipe::Recipe(const QDomNode& recipeNode)
 {
    QDomNode node, child;
@@ -2136,6 +1853,8 @@ void Recipe::recalculate()
       double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
 	 ratio = 1.0;
+      else if( ratio < 0.0 ) // Only happens if the user is stupid with lauter deadspace.
+	 ratio = 0.0;
       sugar_kg *= ratio;
       // Don't consider this one since nobody adds sugar or extract to the mash.
       //sugar_kg_ignoreEfficiency *= ratio;
@@ -2146,6 +1865,8 @@ void Recipe::recalculate()
       ratio = (postBoilWort_l - equipment->getTrubChillerLoss_l()) / postBoilWort_l;
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
 	 ratio = 1.0;
+      else if( ratio < 0.0 )
+	 ratio = 0.0;
       sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
    }
@@ -2455,4 +2176,37 @@ double Recipe::getGrainsInMash_kg() const
    }
    
    return grains_kg;
+}
+
+double Recipe::estimateBoilVolume_l() const
+{
+   double mashVol_l;
+   double ret = 0.0;
+   
+   mashVol_l = estimateWortFromMash_l();
+   
+   if( mashVol_l <= 0.0 ) // Give up.
+      return boilSize_l;
+   
+   if( equipment != 0 )
+      ret = mashVol_l - equipment->getLauterDeadspace_l() + equipment->getTopUpKettle_l();
+   else
+      ret = mashVol_l;
+   
+   return ret;
+}
+
+double Recipe::estimateFinalVolume_l() const
+{
+   double boilVol_l;
+   double ret;
+   
+   boilVol_l = estimateBoilVolume_l();
+   
+   if( equipment != 0 )
+      ret = equipment->wortEndOfBoil_l(boilVol_l) - equipment->getTrubChillerLoss_l() + equipment->getTopUpWater_l();
+   else
+      ret = boilVol_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
+      
+   return ret;
 }

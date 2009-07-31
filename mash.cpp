@@ -153,6 +153,7 @@ Mash::Mash()
    setDefaults();
 }
 
+/*
 Mash::Mash(const XmlNode *node)
 {
    std::vector<XmlNode *> children;
@@ -277,6 +278,7 @@ Mash::Mash(const XmlNode *node)
    if( !hasName || !hasVersion || !hasGrainTemp || !hasMashStep )
       throw MashException("missing required field.");
 }// end Mash()
+*/
 
 Mash::Mash(const QDomNode& mashNode)
 {

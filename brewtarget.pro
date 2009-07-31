@@ -23,9 +23,9 @@ INCLUDEPATH += .
 RESOURCES = brewtarget.qrc
 
 unix:!macx {
-   target.path = /usr/local/bin
-   data.path = /usr/local/share/brewtarget/
-   doc.path = /usr/local/share/doc/brewtarget
+   target.path = /usr/bin
+   data.path = /usr/share/brewtarget/
+   doc.path = /usr/share/doc/brewtarget
    
    data.files = *.xml
    doc.files = README COPYING doc/manual/*
