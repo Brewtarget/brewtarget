@@ -62,6 +62,7 @@
 #include <QTextStream>
 #include <QDomNodeList>
 #include <QDomNode>
+#include "ScaleRecipeTool.h"
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -120,6 +121,7 @@ MainWindow::MainWindow(QWidget* parent)
    brewDayDialog = new QDialog();
    brewDayWidget = new BrewDayWidget(brewDayDialog);
    htmlViewer = new HtmlViewer(this);
+   recipeScaler = new ScaleRecipeTool(this);
 
    setupToolbar();
 
@@ -193,6 +195,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionYeasts, SIGNAL( triggered() ), yeastDialog, SLOT( show() ) );
    connect( actionOptions, SIGNAL( triggered() ), optionDialog, SLOT( show() ) );
    connect( actionManual, SIGNAL( triggered() ), htmlViewer, SLOT( show() ) );
+   connect( actionScale_Recipe, SIGNAL( triggered() ), recipeScaler, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -398,6 +401,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    }
 
    mashEditor->setRecipe(recipeObs);
+   recipeScaler->setRecipe(recipeObs);
 
    showChanges();
 }

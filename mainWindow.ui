@@ -1224,6 +1224,8 @@
     <property name="title">
      <string>Tools</string>
     </property>
+    <addaction name="actionScale_Recipe"/>
+    <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
    <addaction name="menuFile"/>
@@ -1306,6 +1308,11 @@
   <action name="actionManual">
    <property name="text">
     <string>Manual</string>
+   </property>
+  </action>
+  <action name="actionScale_Recipe">
+   <property name="text">
+    <string>Scale Recipe</string>
    </property>
   </action>
  </widget>

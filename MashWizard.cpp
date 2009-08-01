@@ -191,7 +191,21 @@ void MashWizard::wizardry()
    double spargeWater_l = recObs->getBoilSize_l() - wortInBoil_l;
    if( spargeWater_l >= 0.0 )
    {
-      mashStep = new MashStep();
+      // If the recipe already has a mash step named "Batch Sparge",
+      // find it and use it instead of making a new one.
+      bool foundSparge = false;
+      for( int j = 0; j < mash->getNumMashSteps(); ++j )
+      {
+	 if( mash->getMashStep(j)->getName() == "Batch Sparge" )
+	 {
+	    mashStep = mash->getMashStep(j);
+	    foundSparge = true;
+	    break;
+	 }
+      }
+      if( ! foundSparge )
+	 mashStep = new MashStep(); // Or just make a new one.
+      
       tf = 74; // 74C is recommended in John Palmer's How to Brew
       t1 = mash->getMashStep(size-1)->getStepTemp_c() - 10.0; // You will lose about 10C from last step.
       MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC
@@ -209,11 +223,12 @@ void MashWizard::wizardry()
       mashStep->setStepTemp_c(tf);
       mashStep->setStepTime_min(15);
       
-      mash->addMashStep(mashStep);
+      if( ! foundSparge )
+	 mash->addMashStep(mashStep);
    }
    else
    {
       QMessageBox::information(this, tr("Too much wort"),
-      tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time."));
+      tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness."));
    }
 }

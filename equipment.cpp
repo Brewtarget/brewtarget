@@ -36,33 +36,6 @@ bool operator==(Equipment &e1, Equipment &e2)
    return e1.name == e2.name;
 }
 
-/*
-std::string Equipment::toXml()
-{
-   std::string ret = "<EQUIPMENT>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<BOIL_SIZE>"+doubleToString(boilSize_l)+"</BOIL_SIZE>\n";
-   ret += "<BATCH_SIZE>"+doubleToString(batchSize_l)+"</BATCH_SIZE>\n";
-   ret += "<TUN_VOLUME>"+doubleToString(tunVolume_l)+"</TUN_VOLUME>\n";
-   ret += "<TUN_WEIGHT>"+doubleToString(tunWeight_kg)+"</TUN_WEIGHT>\n";
-   ret += "<TUN_SPECIFIC_HEAT>"+doubleToString(tunSpecificHeat_calGC)+"</TUN_SPECIFIC_HEAT>\n";
-   ret += "<TOP_UP_WATER>"+doubleToString(topUpWater_l)+"</TOP_UP_WATER>\n";
-   ret += "<TRUB_CHILLER_LOSS>"+doubleToString(trubChillerLoss_l)+"</TRUB_CHILLER_LOSS>\n";
-   ret += "<EVAP_RATE>"+doubleToString(evapRate_pctHr)+"</EVAP_RATE>\n";
-   ret += "<BOIL_TIME>"+doubleToString(boilTime_min)+"</BOIL_TIME>\n";
-   ret += "<CALC_BOIL_VOLUME>"+boolToString(calcBoilVolume)+"</CALC_BOIL_VOLUME>\n";
-   ret += "<LAUTER_DEADSPACE>"+doubleToString(lauterDeadspace_l)+"</LAUTER_DEADSPACE>\n";
-   ret += "<TOP_UP_KETTLE>"+doubleToString(topUpKettle_l)+"</TOP_UP_KETTLE>\n";
-   ret += "<HOP_UTILIZATION>"+doubleToString(hopUtilization_pct)+"</HOP_UTILIZATION>\n";
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   
-   ret += "</EQUIPMENT>\n";
-   
-   return ret;
-}
-*/
 void Equipment::toXml(QDomDocument& doc, QDomNode& parent)
 {
    QDomElement equipNode;

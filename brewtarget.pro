@@ -117,6 +117,7 @@ HEADERS += AboutDialog.h \
            PreInstruction.h \
            recipe.h \
            RecipeComboBox.h \
+	   ScaleRecipeTool.h \
            stringparsing.h \
            style.h \
            StyleComboBox.h \
@@ -150,6 +151,7 @@ FORMS +=   aboutDialog.ui \
            mashWizard.ui \
            miscDialog.ui \
            optionsDialog.ui \
+	   scaleRecipeTool.ui \
            styleEditor.ui \
            timerWidget.ui \
            yeastDialog.ui \
@@ -199,6 +201,7 @@ SOURCES += database.cpp \
            PreInstruction.cpp \
            recipe.cpp \
            RecipeComboBox.cpp \
+	   ScaleRecipeTool.cpp \
            stringparsing.cpp \
            style.cpp \
            StyleComboBox.cpp \

@@ -50,6 +50,7 @@ class MainWindow;
 #include "MashWizard.h"
 #include "BrewDayWidget.h"
 #include "HtmlViewer.h"
+#include "ScaleRecipeTool.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -129,6 +130,7 @@ private:
    QDialog* brewDayDialog;
    BrewDayWidget* brewDayWidget;
    HtmlViewer* htmlViewer;
+   ScaleRecipeTool* recipeScaler;
 
    void setupToolbar();
    void showChanges();
