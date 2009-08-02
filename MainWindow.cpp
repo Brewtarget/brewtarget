@@ -360,14 +360,14 @@ void MainWindow::setRecipe(Recipe* recipe)
    recipeObs = recipe;
    setObserved(recipeObs); // Automatically removes the previous observer.
 
+   // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayWidget->setRecipe(recipe);
-   // Tell the style CB to pay attention.
    styleComboBox->observeRecipe(recipe);
-   // And the equipment CB too...
    equipmentComboBox->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
-
+   beerColorWidget.setRecipe(recipe);
+   
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )
    {
@@ -540,8 +540,6 @@ void MainWindow::showChanges()
    lcdNumber_abv->update();
    lcdNumber_ibu->update();
    lcdNumber_srm->update();
-
-   beerColorWidget.setColor( recipeObs->getSRMColor() );
 }
 
 void MainWindow::save()

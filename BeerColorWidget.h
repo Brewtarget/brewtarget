@@ -25,20 +25,27 @@ class BeerColorWidget;
 #include <QColor>
 #include <QPaintEvent>
 #include <QImage>
+#include "observable.h"
+#include "recipe.h"
 
-class BeerColorWidget : public QWidget
+class BeerColorWidget : public QWidget, public Observer
 {
    Q_OBJECT
 
 public:
    BeerColorWidget();
    void setColor( QColor newColor );
+   void setRecipe( Recipe* rec );
 protected:
    virtual void paintEvent(QPaintEvent *);
    QColor color;
 private:
    QImage glass;
    void showColor();
+   
+   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
+   
+   Recipe* recObs;
 };
 
 #endif	/* _BEERCOLORWIDGET_H */

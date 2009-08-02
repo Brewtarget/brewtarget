@@ -36,6 +36,22 @@ BeerColorWidget::BeerColorWidget()
    setMinimumSize(90, 130);
    
    glass = QImage(GLASS);
+   recObs = 0;
+}
+
+void BeerColorWidget::setRecipe( Recipe* rec )
+{
+   
+   setObserved(rec);
+   recObs = rec;
+}
+
+void BeerColorWidget::notify(Observable* notifier, QVariant info)
+{
+   if( notifier != recObs )
+      return;
+   
+   setColor( recObs->getSRMColor() );
 }
 
 void BeerColorWidget::paintEvent(QPaintEvent *)
