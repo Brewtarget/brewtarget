@@ -51,6 +51,7 @@ class MainWindow;
 #include "BrewDayWidget.h"
 #include "HtmlViewer.h"
 #include "ScaleRecipeTool.h"
+#include "RecipeFormatter.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -131,6 +132,7 @@ private:
    BrewDayWidget* brewDayWidget;
    HtmlViewer* htmlViewer;
    ScaleRecipeTool* recipeScaler;
+   RecipeFormatter* recipeFormatter;
 
    void setupToolbar();
    void showChanges();

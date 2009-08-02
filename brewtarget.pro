@@ -117,6 +117,7 @@ HEADERS += AboutDialog.h \
            PreInstruction.h \
            recipe.h \
            RecipeComboBox.h \
+	   RecipeFormatter.h \
 	   ScaleRecipeTool.h \
            stringparsing.h \
            style.h \
@@ -201,6 +202,7 @@ SOURCES += database.cpp \
            PreInstruction.cpp \
            recipe.cpp \
            RecipeComboBox.cpp \
+	   RecipeFormatter.cpp \
 	   ScaleRecipeTool.cpp \
            stringparsing.cpp \
            style.cpp \

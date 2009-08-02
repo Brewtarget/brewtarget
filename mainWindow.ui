@@ -1225,6 +1225,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionScale_Recipe"/>
+    <addaction name="action_recipeToTextClipboard"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
@@ -1313,6 +1314,11 @@
   <action name="actionScale_Recipe">
    <property name="text">
     <string>Scale Recipe</string>
+   </property>
+  </action>
+  <action name="action_recipeToTextClipboard">
+   <property name="text">
+    <string>Recipe to Clipboard as Text</string>
    </property>
   </action>
  </widget>
