@@ -50,77 +50,6 @@ bool operator==(Recipe &r1, Recipe &r2 )
    return r1.name == r2.name;
 }
 
-/*
-std::string Recipe::toXml()
-{
-   unsigned int i, size;
-   std::string ret = "<RECIPE>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<TYPE>"+type+"</TYPE>\n";
-   ret += "<BREWER>"+brewer+"</BREWER>\n";
-   ret += style->toXml();
-   ret += "<BATCH_SIZE>"+doubleToString(batchSize_l)+"</BATCH_SIZE>\n";
-   ret += "<BOIL_SIZE>"+doubleToString(boilSize_l)+"</BOIL_SIZE>\n";
-   ret += "<BOIL_TIME>"+doubleToString(boilTime_min)+"</BOIL_TIME>\n";
-   ret += "<EFFICIENCY>"+doubleToString(efficiency_pct)+"</EFFICIENCY>\n";
-   ret += "<HOPS>\n"; size = hops.size();
-   for(i = 0; i < size; ++i )
-      ret += hops[i]->toXml();
-   ret += "</HOPS>\n";
-   ret += "<FERMENTABLES>\n"; size = fermentables.size();
-   for(i = 0; i < size; ++i )
-      ret += fermentables[i]->toXml();
-   ret += "</FERMENTABLES>\n";
-   ret += "<MISCS>\n"; size = miscs.size();
-   for( i = 0; i < size; ++i )
-      ret += miscs[i]->toXml();
-   ret += "</MISCS>\n";
-   ret += "<YEASTS>\n"; size = yeasts.size();
-   for( i = 0; i < size; ++i )
-      ret += yeasts[i]->toXml();
-   ret += "</YEASTS>\n";
-   ret += "<WATERS>\n"; size = waters.size();
-   for( i = 0; i < size; ++i )
-      ret += waters[i]->toXml();
-   ret += "</WATERS>\n";
-   ret += "<INSTRUCTIONS>\n"; size = instructions.size();
-   for( i = 0; i < size; ++i )
-      ret += instructions[i]->toXml();
-   ret += "</INSTRUCTIONS>\n";
-   ret += mash->toXml();
-   
-   ret += "<ASST_BREWER>"+asstBrewer+"</ASST_BREWER>\n";
-   if( equipment )
-      ret += equipment->toXml();
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   ret += "<TASTE_NOTES>"+tasteNotes+"</TASTE_NOTES>\n";
-   ret += "<TASTE_RATING>"+doubleToString(tasteRating)+"</TASTE_RATING>\n";
-   ret += "<OG>"+doubleToString(og)+"</OG>\n";
-   ret += "<FG>"+doubleToString(fg)+"</FG>\n";
-   ret += "<FERMENTATION_STAGES>"+intToString(fermentationStages)+"</FERMENTATION_STAGES>\n";
-   ret += "<PRIMARY_AGE>"+doubleToString(primaryAge_days)+"</PRIMARY_AGE>\n";
-   ret += "<PRIMARY_TEMP>"+doubleToString(primaryTemp_c)+"</PRIMARY_TEMP>\n";
-   ret += "<SECONDARY_AGE>"+doubleToString(secondaryAge_days)+"</SECONDARY_AGE>\n";
-   ret += "<SECONDARY_TEMP>"+doubleToString(secondaryTemp_c)+"</SECONDARY_TEMP>\n";
-   ret += "<TERTIARY_AGE>"+doubleToString(tertiaryAge_days)+"</TERTIARY_AGE>\n";
-   ret += "<TERTIARY_TEMP>"+doubleToString(tertiaryTemp_c)+"</TERTIARY_TEMP>\n";
-   ret += "<AGE>"+doubleToString(age_days)+"</AGE>\n";
-   ret += "<AGE_TEMP>"+doubleToString(ageTemp_c)+"</AGE_TEMP>\n";
-   ret += "<DATE>"+date+"</DATE>\n";
-   ret += "<CARBONATION>"+doubleToString(carbonation_vols)+"</CARBONATION>\n";
-   ret += "<FORCED_CARBONATION>"+boolToString(forcedCarbonation)+"</FORCED_CARBONATION>\n";
-   ret += "<PRIMING_SUGAR_NAME>"+primingSugarName+"</PRIMING_SUGAR_NAME>\n";
-   ret += "<CARBONATION_TEMP>"+doubleToString(carbonationTemp_c)+"</CARBONATION_TEMP>\n";
-   ret += "<PRIMING_SUGAR_EQUIV>"+doubleToString(primingSugarEquiv)+"</PRIMING_SUGAR_EQUIV>\n";
-   ret += "<KEG_PRIMING_FACTOR>"+doubleToString(kegPrimingFactor)+"</KEG_PRIMING_FACTOR>\n";
-   
-   ret += "</RECIPE>\n";
-   return ret;
-}
-*/
-
 void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
 {
    QDomElement recipeNode;
@@ -371,6 +300,8 @@ void Recipe::setDefaults()
    carbonationTemp_c = 0.0;
    primingSugarEquiv = 0.0;
    kegPrimingFactor = 0.0;
+   
+   hops.clear();
 }
 
 Recipe::Recipe()
@@ -2067,17 +1998,7 @@ double Recipe::getIBU()
    
    // Bitterness due to hops...
    for( i = 0; i < hops.size(); ++i )
-   {
-      if( hops[i]->getUse() == "Boil")
-         ibus += IBU( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
-                   batchSize_l, getWortGrav(), hops[i]->getTime_min() );
-      else if( hops[i]->getUse() == "First Wort" )
-         ibus += 1.10 * IBU( hops[i]->getAlpha_pct()/100.0,
-                             hops[i]->getAmount_kg()*1000.0,
-                             batchSize_l,
-                             getWortGrav(),
-                             20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
-   }
+      ibus += getIBUFromHop(i);
 
    // Bitterness due to hopped extracts...
    for( i = 0; i < fermentables.size(); ++i )
@@ -2087,6 +2008,26 @@ double Recipe::getIBU()
               fermentables[i]->getIbuGalPerLb() *
               (fermentables[i]->getAmount_kg() / batchSize_l) / 8.34538;
    }
+
+   return ibus;
+}
+
+double Recipe::getIBUFromHop( unsigned int i )
+{
+   double ibus = 0.0;
+   
+   if( i >= hops.size() )
+      return 0.0;
+   
+   if( hops[i]->getUse() == "Boil")
+      ibus = IBU( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
+                   batchSize_l, getWortGrav(), hops[i]->getTime_min() );
+   else if( hops[i]->getUse() == "First Wort" )
+      ibus = 1.10 * IBU( hops[i]->getAlpha_pct()/100.0,
+                          hops[i]->getAmount_kg()*1000.0,
+                          batchSize_l,
+                          getWortGrav(),
+                          20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
 
    return ibus;
 }

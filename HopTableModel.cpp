@@ -43,6 +43,8 @@ HopTableModel::HopTableModel(HopTableWidget* parent)
 {
    hopObs.clear();
    parentTableWidget = parent;
+   showIBUs = false;
+   recObs = 0;
 }
 
 void HopTableModel::addHop(Hop* hop)
@@ -62,6 +64,23 @@ void HopTableModel::addHop(Hop* hop)
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
+   }
+}
+
+void HopTableModel::setShowIBUs( bool var )
+{
+   showIBUs = var;
+}
+
+void HopTableModel::setRecipe( Recipe* rec )
+{
+   if( recObs )
+      removeObserved(recObs);
+   
+   if( rec )
+   {
+      addObserved(rec);
+      recObs = rec;
    }
 }
 
@@ -102,6 +121,9 @@ void HopTableModel::removeAll()
 void HopTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
+   
+   if( notifier == recObs )
+      emit headerDataChanged( Qt::Vertical, 0, hopObs.size() );
    
    // Find the notifier in the list
    for( i = 0; i < (int)hopObs.size(); ++i )
@@ -177,6 +199,11 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
             std::cerr << "Bad column: " << section << std::endl;
             return QVariant();
       }
+   }
+   else if( showIBUs && recObs && orientation == Qt::Vertical && role == Qt::DisplayRole )
+   {
+      double ibus = recObs->getIBUFromHop( section );
+      return QVariant( QString("%1 IBU").arg( ibus, 0, 'f', 1 ) );
    }
    else
       return QVariant();

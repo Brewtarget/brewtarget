@@ -63,6 +63,7 @@
 #include <QDomNodeList>
 #include <QDomNode>
 #include "ScaleRecipeTool.h"
+#include "HopTableModel.h"
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -103,6 +104,11 @@ MainWindow::MainWindow(QWidget* parent)
    // Null out the recipe
    recipeObs = 0;
 
+   // Make the fermentable table show grain percentages in row headers.
+   fermentableTable->getModel()->setDisplayPercentages(true);
+   // Hop table show IBUs in row headers.
+   hopTable->getModel()->setShowIBUs(true);
+   
    dialog_about = new AboutDialog(this);
    equipEditor = new EquipmentEditor(this);
    fermDialog = new FermentableDialog(this);
@@ -367,6 +373,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    equipmentComboBox->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
    beerColorWidget.setRecipe(recipe);
+   hopTable->getModel()->setRecipe(recipe); // This is for calculating the IBUs to show in the row headers.
    
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )

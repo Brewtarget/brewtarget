@@ -50,6 +50,7 @@ FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
    parentTableWidget = parent;
    
    totalFermMass_kg = 0;
+   displayPercentages = false;
 }
 
 void FermentableTableModel::addFermentable(Fermentable* ferm)
@@ -108,6 +109,12 @@ void FermentableTableModel::removeAll()
    totalFermMass_kg = 0;
    reset();
 }
+
+void FermentableTableModel::setDisplayPercentages(bool var)
+{
+   displayPercentages = var;
+}
+
 
 void FermentableTableModel::notify(Observable* notifier, QVariant info)
 {
@@ -214,7 +221,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
             return QVariant();
       }
    }
-   else if( orientation == Qt::Vertical && role == Qt::DisplayRole )
+   else if( displayPercentages && orientation == Qt::Vertical && role == Qt::DisplayRole )
    {
       return QVariant( QString("%1\%").arg( (double)100.0 *fermObs[section]->getAmount_kg()/totalFermMass_kg, 0, 'f', 0 ) );
    }

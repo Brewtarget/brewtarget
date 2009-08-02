@@ -41,9 +41,10 @@ BeerColorWidget::BeerColorWidget()
 
 void BeerColorWidget::setRecipe( Recipe* rec )
 {
-   
    setObserved(rec);
    recObs = rec;
+   if( recObs )
+      setColor( recObs->getSRMColor() );
 }
 
 void BeerColorWidget::notify(Observable* notifier, QVariant info)

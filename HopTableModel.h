@@ -32,6 +32,7 @@ class HopItemDelegate;
 #include "hop.h"
 #include "observable.h"
 #include "HopTableWidget.h"
+#include "recipe.h"
 
 enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
@@ -41,6 +42,8 @@ class HopTableModel : public QAbstractTableModel, public MultipleObserver
            
 public:
    HopTableModel(HopTableWidget* parent=0);
+   void setRecipe( Recipe* rec ); // You need to set a recipe if you want to show IBUs.
+   void setShowIBUs( bool var ); // If you want to show IBUs.
    void addHop(Hop* hop);
    Hop* getHop(unsigned int i);
    bool removeHop(Hop* hop); // Returns true if "hop" is successfully found and removed.
@@ -57,7 +60,9 @@ public:
    
 private:
    std::vector<Hop*> hopObs;
+   Recipe* recObs;
    HopTableWidget* parentTableWidget;
+   bool showIBUs; // True if you want to show the IBU contributions in the table rows.
 };
 
 class HopItemDelegate : public QItemDelegate
