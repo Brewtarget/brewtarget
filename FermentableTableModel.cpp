@@ -48,6 +48,8 @@ FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
 {
    fermObs.clear();
    parentTableWidget = parent;
+   
+   totalFermMass_kg = 0;
 }
 
 void FermentableTableModel::addFermentable(Fermentable* ferm)
@@ -61,6 +63,7 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    
    fermObs.push_back(ferm);
    addObserved(ferm);
+   totalFermMass_kg += ferm->getAmount_kg();
    reset(); // Tell everybody that the table has changed.
    
    if(parentTableWidget)
@@ -79,6 +82,7 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
       {
          fermObs.erase(iter);
          removeObserved(ferm);
+	 totalFermMass_kg -= ferm->getAmount_kg();
          reset(); // Tell everybody the table has changed.
          
          if(parentTableWidget)
@@ -101,6 +105,7 @@ void FermentableTableModel::removeAll()
       removeObserved(fermObs[i]);
 
    fermObs.clear();
+   totalFermMass_kg = 0;
    reset();
 }
 
@@ -208,6 +213,10 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
             std::cerr << "Bad column: " << section << std::endl;
             return QVariant();
       }
+   }
+   else if( orientation == Qt::Vertical && role == Qt::DisplayRole )
+   {
+      return QVariant( QString("%1\%").arg( (double)100.0 *fermObs[section]->getAmount_kg()/totalFermMass_kg, 0, 'f', 0 ) );
    }
    else
       return QVariant();

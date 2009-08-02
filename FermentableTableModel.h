@@ -61,7 +61,7 @@ public:
    
 private:
    std::vector<Fermentable*> fermObs;
-   
+   double totalFermMass_kg;
 };
 
 class FermentableItemDelegate : public QStyledItemDelegate
