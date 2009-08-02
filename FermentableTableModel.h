@@ -61,6 +61,8 @@ public:
    FermentableTableWidget* parentTableWidget;
    
 private:
+   void updateTotalGrains();
+   
    std::vector<Fermentable*> fermObs;
    bool displayPercentages; // True if you want to display percent of each grain in the row header.
    double totalFermMass_kg;

@@ -110,6 +110,17 @@ void FermentableTableModel::removeAll()
    reset();
 }
 
+void FermentableTableModel::updateTotalGrains()
+{
+   unsigned int i, size;
+   
+   totalFermMass_kg = 0;
+   
+   size = fermObs.size();
+   for( i = 0; i < size; ++i )
+      totalFermMass_kg += fermObs[i]->getAmount_kg();
+}
+
 void FermentableTableModel::setDisplayPercentages(bool var)
 {
    displayPercentages = var;
@@ -129,6 +140,7 @@ void FermentableTableModel::notify(Observable* notifier, QVariant info)
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                            QAbstractItemModel::createIndex(i, FERMNUMCOLS));
           */
+	 updateTotalGrains();
          reset();
          break;
       }
