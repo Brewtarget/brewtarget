@@ -62,7 +62,12 @@ public:
    double getMaxInBatch_pct() const;
    bool getRecommendMash() const;
    double getIbuGalPerLb() const;
-   
+
+   // Derived getters...
+
+   // Get the maximum kg of equivalent sucrose that will come out of this ferm.
+   double getEquivSucrose_kg() const;
+
    // Set
    void setName( const std::string& str );
    void setVersion( int num );

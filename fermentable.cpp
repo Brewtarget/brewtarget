@@ -192,110 +192,6 @@ Fermentable::Fermentable( Fermentable& other )
    ibuGalPerLb = other.ibuGalPerLb;
 }
 
-/***
-Fermentable::Fermentable( const XmlNode* node )
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasType=false, hasAmount=false, hasYield=false, hasColor=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "FERMENTABLE" )
-      throw FermentableException("FERMENTABLE initializer not passed a FERMENTABLE node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      // All valid children of FERMENTABLE only have zero or one child.
-      if( tmpVec.size() > 1 )
-      {
-         children[i]->printParentTags();
-         throw FermentableException("Tag \""+tag+"\" has more than one child.");
-      }
-
-      if( tmpVec.size() == 1 )
-         leaf = tmpVec[0];
-      else
-         leaf = &XmlNode();
-      
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw FermentableException("Should have been a leaf but is not.");
-      
-      if( tag == "NAME" )
-      {
-         setName(leaf->getLeafText());
-         hasName=true;
-      }
-      else if( tag == "VERSION" )
-      {
-         if( parseInt(leaf->getLeafText()) != version )
-            std::cerr << "Warning: FERMENTABLE is not version " << version << std::endl;
-         hasVersion=true;
-      }
-      else if( tag == "TYPE" )
-      {
-         setType(leaf->getLeafText());
-         hasType=true;
-      }
-      else if( tag == "AMOUNT" )
-      {
-         setAmount_kg(parseDouble(leaf->getLeafText()));
-         hasAmount=true;
-      }
-      else if( tag == "YIELD" )
-      {
-         setYield_pct(parseDouble(leaf->getLeafText()));
-         hasYield=true;
-      }
-      else if( tag == "COLOR" )
-      {
-         setColor_srm(parseDouble(leaf->getLeafText()));
-         hasColor=true;
-      }
-      else if( tag == "ADD_AFTER_BOIL" )
-         setAddAfterBoil(parseBool(leaf->getLeafText()));
-      else if( tag == "ORIGIN" )
-         setOrigin(leaf->getLeafText());
-      else if( tag == "SUPPLIER" )
-         setSupplier(leaf->getLeafText());
-      else if( tag == "NOTES" )
-         setNotes(leaf->getLeafText());
-      else if( tag == "COARSE_FINE_DIFF" )
-         setCoarseFineDiff_pct(parseDouble(leaf->getLeafText()));
-      else if( tag == "MOISTURE" )
-         setMoisture_pct(parseDouble(leaf->getLeafText()));
-      else if( tag == "DIASTATIC_POWER" )
-         setDiastaticPower_lintner(parseDouble(leaf->getLeafText()));
-      else if( tag == "PROTEIN" )
-         setProtein_pct(parseDouble(leaf->getLeafText()));
-      else if( tag == "MAX_IN_BATCH" )
-         setMaxInBatch_pct(parseDouble(leaf->getLeafText()));
-      else if( tag == "RECOMMEND_MASH" )
-         setRecommendMash( parseBool(leaf->getLeafText()) );
-      else if( tag == "IBU_GAL_PER_LB" )
-         setIbuGalPerLb(parseDouble(leaf->getLeafText()));
-      else
-      {
-         std::cerr << "Warning: \"" << tag << "\" is not a recognized FERMENTABLE tag." << std::endl;
-      } // end if..else
-   } // end for(...)
-   
-   if( !hasName || !hasVersion || !hasType || !hasAmount || !hasYield || !hasColor )
-      throw FermentableException("missing required fields.");
-   
-} // end Fermentable(...)
-***/
-
 Fermentable::Fermentable(const QDomNode& fermentableNode)
 {
    QDomNode node, child;
@@ -443,6 +339,11 @@ double Fermentable::getMaxInBatch_pct() const { return maxInBatch_pct; }
 bool Fermentable::getRecommendMash() const { return recommendMash; }
 bool Fermentable::getIsMashed() const { return isMashed; }
 double Fermentable::getIbuGalPerLb() const { return ibuGalPerLb; }
+
+double Fermentable::getEquivSucrose_kg() const
+{
+   return amount_kg * yield_pct / (double)100;
+}
 
 // Set
 void Fermentable::setName( const std::string& str ) { name = std::string(str); }

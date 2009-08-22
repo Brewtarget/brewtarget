@@ -39,6 +39,8 @@
       </logicalFolder>
       <itemPath>../../AboutDialog.h</itemPath>
       <itemPath>../../aboutDialog.ui</itemPath>
+      <itemPath>../../Algorithms.cpp</itemPath>
+      <itemPath>../../Algorithms.h</itemPath>
       <itemPath>../../BeerColorWidget.cpp</itemPath>
       <itemPath>../../BeerColorWidget.h</itemPath>
       <itemPath>../../BeerXMLElement.cpp</itemPath>
@@ -208,6 +210,12 @@
         </requiredProjects>
       </makefileType>
       <item path="../../AboutDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../Algorithms.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../Algorithms.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../BeerColorWidget.cpp">
@@ -729,6 +737,12 @@ make clean</buildCommand>
         </requiredProjects>
       </makefileType>
       <item path="../../AboutDialog.h">
+        <itemTool>3</itemTool>
+      </item>
+      <item path="../../Algorithms.cpp">
+        <itemTool>1</itemTool>
+      </item>
+      <item path="../../Algorithms.h">
         <itemTool>3</itemTool>
       </item>
       <item path="../../BeerColorWidget.cpp">

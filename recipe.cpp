@@ -39,6 +39,7 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QInputDialog>
+#include "Algorithms.h"
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {
@@ -1772,9 +1773,11 @@ void Recipe::recalculate()
       // If we have some sort of non-grain, we have to ignore efficiency.
       fermtype = ferm->getType();
       if( fermtype.compare("Sugar") == 0 || fermtype.compare("Extract") == 0 || fermtype.compare("Dry Extract") == 0 )
-         sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+         //sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+         sugar_kg_ignoreEfficiency += ferm->getEquivSucrose_kg();
       else
-         sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+         //sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+         sugar_kg += ferm->getEquivSucrose_kg();
    }
 
    // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
@@ -1783,9 +1786,9 @@ void Recipe::recalculate()
       // First, lauter deadspace.
       double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-	 ratio = 1.0;
+	      ratio = 1.0;
       else if( ratio < 0.0 ) // Only happens if the user is stupid with lauter deadspace.
-	 ratio = 0.0;
+	      ratio = 0.0;
       sugar_kg *= ratio;
       // Don't consider this one since nobody adds sugar or extract to the mash.
       //sugar_kg_ignoreEfficiency *= ratio;
@@ -1795,9 +1798,9 @@ void Recipe::recalculate()
       double postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
       ratio = (postBoilWort_l - equipment->getTrubChillerLoss_l()) / postBoilWort_l;
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-	 ratio = 1.0;
+	      ratio = 1.0;
       else if( ratio < 0.0 )
-	 ratio = 0.0;
+	      ratio = 0.0;
       sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
    }

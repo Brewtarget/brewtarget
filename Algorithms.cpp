@@ -20,6 +20,34 @@
 #include <math.h>
 #include "Algorithms.h"
 
+double* PlatoFromSG_20C20C = 0;
+unsigned int PlatoFromSG_20C20C_order;
+double* waterDensityPoly_C = 0;
+unsigned int waterDensityPoly_C_order = 0;
+
+void initVars()
+{
+   if( PlatoFromSG_20C20C == 0 )
+   {
+      PlatoFromSG_20C20C = new double[4];
+      PlatoFromSG_20C20C_order = 3;
+      PlatoFromSG_20C20C[0] = -616.868;
+      PlatoFromSG_20C20C[1] = 1111.14;
+      PlatoFromSG_20C20C[2] = -630.272;
+      PlatoFromSG_20C20C[3] = 135.997;
+   }
+
+   if( waterDensityPoly_C == 0 )
+   {
+      waterDensityPoly_C = new double[4];
+      waterDensityPoly_C_order = 3;
+      waterDensityPoly_C[0] = 0.999924134;
+      waterDensityPoly_C[1] = 3.113930471e-5;
+      waterDensityPoly_C[2] = 6.268385468e-6;
+      waterDensityPoly_C[3] = 1.80544064e-8;
+   }
+}
+
 inline double intPow( double base, unsigned int pow )
 {
    double ret = 1;
@@ -66,15 +94,17 @@ double rootFind( double* poly, unsigned int order, double x0, double x1 )
 
 double SG_20C20C_toPlato( double sg )
 {
+   initVars();
    return polyEval(PlatoFromSG_20C20C, PlatoFromSG_20C20C_order, sg );
 }
 
 double PlatoToSG_20C20C( double plato )
 {
+   initVars();
    double poly[PlatoFromSG_20C20C_order+1];
 
    // Copy the polynomial, cuz we need to alter it.
-   for( int i = 0; i < PlatoFromSG_20C20C_order; ++i )
+   for( int i = 0; i <= PlatoFromSG_20C20C_order; ++i )
    {
       poly[i] = PlatoFromSG_20C20C[i];
    }
@@ -83,4 +113,10 @@ double PlatoToSG_20C20C( double plato )
    poly[0] -= plato;
 
    return rootFind( poly, PlatoFromSG_20C20C_order, 1.000, 1.050 );
+}
+
+double getWaterDensity_kgL( double celsius )
+{
+   initVars();
+   return polyEval(waterDensityPoly_C, waterDensityPoly_C_order, celsius);
 }

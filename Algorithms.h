@@ -24,8 +24,13 @@
 // This is the cubic fit to get Plato from specific gravity, measured at 20C
 // relative to density of water at 20C.
 // P = -616.868 + 1111.14(SG) - 630.272(SG)^2 + 135.997(SG)^3
-double PlatoFromSG_20C20C[] = { -616.868, 1111.14, -630.272, 135.997 };
-unsigned int PlatoFromSG_20C20C_order = 3;
+extern double* PlatoFromSG_20C20C;
+extern unsigned int PlatoFromSG_20C20C_order;
+
+// Water density polynomial, given in kg/L as a function of degrees C.
+// 1.80544064e-8*x^3 - 6.268385468e-6*x^2 + 3.113930471e-5*x + 0.999924134
+extern double* waterDensityPoly_C;
+extern unsigned int waterDensityPoly_C_order;
 
 double intPow( double base, unsigned int pow );
 
@@ -36,8 +41,11 @@ double rootFind( double* poly, unsigned int order, double x0, double x1 );
 
 //===================Beer-related stuff=====================
 
+void initVars();
+
 double SG_20C20C_toPlato( double sg );
 double PlatoToSG_20C20C( double plato );
+double getWaterDensity_kgL( double celsius );
 
 #endif	/* _ALGORITHMS_H */
 
