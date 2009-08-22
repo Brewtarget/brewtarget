@@ -73,6 +73,7 @@ win32 {
 
 # Input
 HEADERS += AboutDialog.h \
+           Algorithms.h \
            BeerColorWidget.h \
            BeerXMLElement.h \
            BrewDayWidget.h \
@@ -157,7 +158,8 @@ FORMS +=   aboutDialog.ui \
            timerWidget.ui \
            yeastDialog.ui \
            yeastEditor.ui
-SOURCES += database.cpp \
+SOURCES += Algorithms.cpp \
+           database.cpp \
            BeerXMLElement.cpp \
            BrewDayWidget.cpp \
            BeerColorWidget.cpp \
@@ -202,8 +204,8 @@ SOURCES += database.cpp \
            PreInstruction.cpp \
            recipe.cpp \
            RecipeComboBox.cpp \
-	   RecipeFormatter.cpp \
-	   ScaleRecipeTool.cpp \
+	        RecipeFormatter.cpp \
+	        ScaleRecipeTool.cpp \
            stringparsing.cpp \
            style.cpp \
            StyleComboBox.cpp \
