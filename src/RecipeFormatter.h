@@ -22,6 +22,7 @@
 class RecipeFormatter;
 
 #include <QString>
+#include <QStringList>
 #include <QObject>
 #include "recipe.h"
 
@@ -34,6 +35,9 @@ public:
    QString getTextFormat();
    QString getHTMLFormat();
    QString getBBCodeFormat();
+   unsigned int getMaxLength( QStringList* list );
+   QString padToLength( QString str, unsigned int length );
+   void padAllToMaxLength( QStringList* list );
    
 public slots:
    void toTextClipboard();
