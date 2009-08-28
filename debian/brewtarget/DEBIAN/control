@@ -1,0 +1,14 @@
+Package: brewtarget
+Version: 1.1-1
+Architecture: i386
+Maintainer: Philip G. Lee <rocketman768@gmail.com>
+Installed-Size: 1792
+Depends: libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libqt4-webkit (>= 4.5.0~+rc1), libqt4-xml (>= 4.5.0~+rc1), libqtcore4 (>= 4.5.0~+rc1), libqtgui4 (>= 4.5.0~+rc1), libstdc++6 (>= 4.2.1)
+Section: x11
+Priority: optional
+Homepage: http://brewtarget.sourceforge.net
+Description: GUI beer brewing software
+ Brewtarget helps you brew beer. It is a beer calculator for brewing beer.
+ Available for Linux, Mac, and Windows. Compatible with BeerSmith.
+ Generates instructions for you from the recipe! Hit all your targets with
+ brewtarget.

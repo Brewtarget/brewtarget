@@ -1,0 +1,2 @@
+?package(brewtarget):needs="X11" section="Applications/Utilities"\
+  title="Brewtarget" command="/usr/bin/brewtarget"
