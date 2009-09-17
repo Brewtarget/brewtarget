@@ -23,7 +23,6 @@
 #include <exception>
 #include <ostream>
 #include <QDomNode>
-#include "xmlnode.h"
 #include "observable.h"
 #include "BeerXMLElement.h"
 
@@ -35,7 +34,6 @@ class Equipment : public Observable, public BeerXMLElement
 public:
    
    Equipment();
-   Equipment(XmlNode *node);
    Equipment(const QDomNode& equipmentNode);
    
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
@@ -55,6 +53,7 @@ public:
    void setTopUpWater_l( double var );
    void setTrubChillerLoss_l( double var );
    void setEvapRate_pctHr( double var );
+   void setEvapRate_lHr( double var ); // Use this one.
    void setBoilTime_min( double var );
    void setCalcBoilVolume( bool var );
    void setLauterDeadspace_l( double var );
@@ -72,13 +71,14 @@ public:
    double getTopUpWater_l() const;
    double getTrubChillerLoss_l() const;
    double getEvapRate_pctHr() const;
+   double getEvapRate_lHr() const; // Use this one.
    double getBoilTime_min() const;
    bool getCalcBoilVolume() const;
    double getLauterDeadspace_l() const;
    double getTopUpKettle_l() const;
    double getHopUtilization_pct() const;
    std::string getNotes() const;
-   
+
    double wortEndOfBoil_l( double kettleWort_l ) const; // Calculate how much wort is left immediately at knockout.
 
 private:
@@ -92,6 +92,7 @@ private:
    double topUpWater_l;
    double trubChillerLoss_l;
    double evapRate_pctHr;
+   double evapRate_lHr;
    double boilTime_min;
    bool calcBoilVolume;
    double lauterDeadspace_l;

@@ -92,17 +92,15 @@ void MashWizard::wizardry()
       return;
    }
 
-   /*
-   for( i = 0; i < recObs->getNumFermentables(); i++ )
+   // Find any batch sparges and remove them for now.
+   for( i = 0; i < size; ++i )
    {
-      Fermentable* ferm = recObs->getFermentable(i);
-      // NOTE: we are assuming it's in the mash because it's recommended.
-      // We are also assuming it's a grain.
-      if( ferm->getRecommendMash() )
-         grainMass += ferm->getAmount_kg();
+      MashStep* step = mash->getMashStep(i);
+      if( step->getName() == "Batch Sparge" )
+         mash->removeMashStep(step);
    }
-   */
-   
+   size = mash->getNumMashSteps();
+
    grainMass = recObs->getGrainsInMash_kg();
 
    // Do first step
@@ -186,8 +184,12 @@ void MashWizard::wizardry()
    // Now, do a sparge step to get the total volume of the mash up to the boil size.
    double wortInBoil_l = recObs->estimateWortFromMash_l();
    if( recObs->getEquipment() != 0 )
+   {
+      //std::cerr << "Lauter deadspace: " << recObs->getEquipment()->getLauterDeadspace_l() << std::endl;
       wortInBoil_l -= recObs->getEquipment()->getLauterDeadspace_l();
+   }
    
+   //std::cerr << "Boil size: " << recObs->getBoilSize_l() << std::endl;
    double spargeWater_l = recObs->getBoilSize_l() - wortInBoil_l;
    if( spargeWater_l >= 0.0 )
    {

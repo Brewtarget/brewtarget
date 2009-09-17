@@ -199,26 +199,4 @@ void StyleEditor::showChanges()
    textEdit_ingredients->setText(s->getIngredients().c_str());
    textEdit_examples->setText(s->getExamples().c_str());
    textEdit_notes->setText(s->getNotes().c_str());
-   /*
-   lineEdit_name->setText(e->getName().c_str());
-   lineEdit_name->setCursorPosition(0);
-   lineEdit_boilSize->setText(doubleToString(e->getBoilSize_l()).c_str());
-   checkBox_calcBoilVolume->setCheckState( (e->getCalcBoilVolume())? Qt::Checked : Qt::Unchecked );
-   lineEdit_batchSize->setText(doubleToString(e->getBatchSize_l()).c_str());
-
-   lineEdit_tunVolume->setText(doubleToString(e->getTunVolume_l()).c_str());
-   lineEdit_tunWeight->setText(doubleToString(e->getTunWeight_kg()).c_str());
-   lineEdit_tunSpecificHeat->setText(doubleToString(e->getTunSpecificHeat_calGC()).c_str());
-
-   lineEdit_boilTime->setText(doubleToString(e->getBoilTime_min()).c_str());
-   lineEdit_evaporationRate->setText(doubleToString(e->getEvapRate_pctHr()).c_str());
-   lineEdit_topUpKettle->setText(doubleToString(e->getTopUpKettle_l()).c_str());
-   lineEdit_topUpWater->setText(doubleToString(e->getTopUpWater_l()).c_str());
-   lineEdit_hopUtilization->setText(doubleToString(e->getHopUtilization_pct()).c_str());
-
-   lineEdit_trubChillerLoss->setText(doubleToString(e->getTrubChillerLoss_l()).c_str());
-   lineEdit_lauterDeadspace->setText(doubleToString(e->getLauterDeadspace_l()).c_str());
-
-   textEdit_notes->setText(e->getNotes().c_str());
-    */
 }

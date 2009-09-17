@@ -119,7 +119,7 @@ void EquipmentEditor::save()
    obsEquip->setTunSpecificHeat_calGC( Unit::qstringToSI(lineEdit_tunSpecificHeat->text()) );
 
    obsEquip->setBoilTime_min( Unit::qstringToSI(lineEdit_boilTime->text()) );
-   obsEquip->setEvapRate_pctHr( Unit::qstringToSI(lineEdit_evaporationRate->text()) );
+   obsEquip->setEvapRate_lHr( Unit::qstringToSI(lineEdit_evaporationRate->text()) );
    obsEquip->setTopUpKettle_l( Unit::qstringToSI(lineEdit_topUpKettle->text()) );
    obsEquip->setTopUpWater_l( Unit::qstringToSI(lineEdit_topUpWater->text()) );
    obsEquip->setHopUtilization_pct( Unit::qstringToSI(lineEdit_hopUtilization->text()) );
@@ -185,7 +185,7 @@ void EquipmentEditor::showChanges()
    lineEdit_tunSpecificHeat->setText(Brewtarget::displayAmount(e->getTunSpecificHeat_calGC(), 0) );
 
    lineEdit_boilTime->setText(Brewtarget::displayAmount(e->getBoilTime_min(), Units::minutes) );
-   lineEdit_evaporationRate->setText(Brewtarget::displayAmount(e->getEvapRate_pctHr(), 0) );
+   lineEdit_evaporationRate->setText(Brewtarget::displayAmount(e->getEvapRate_lHr(), Units::liters) );
    lineEdit_topUpKettle->setText(Brewtarget::displayAmount(e->getTopUpKettle_l(), Units::liters) );
    lineEdit_topUpWater->setText(Brewtarget::displayAmount(e->getTopUpWater_l(), Units::liters) );
    lineEdit_hopUtilization->setText(Brewtarget::displayAmount(e->getHopUtilization_pct(), 0) );

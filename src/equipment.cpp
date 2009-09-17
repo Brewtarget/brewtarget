@@ -94,6 +94,11 @@ void Equipment::toXml(QDomDocument& doc, QDomNode& parent)
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
    
+   tmpNode = doc.createElement("REAL_EVAP_RATE");
+   tmpText = doc.createTextNode(text(evapRate_lHr));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+
    tmpNode = doc.createElement("BOIL_TIME");
    tmpText = doc.createTextNode(text(boilTime_min));
    tmpNode.appendChild(tmpText);
@@ -140,6 +145,7 @@ void Equipment::setDefaults()
    topUpWater_l = 0.0;
    trubChillerLoss_l = 0.0;
    evapRate_pctHr = 0.0;
+   evapRate_lHr = 0.0;
    boilTime_min = 0.0;
    calcBoilVolume = false;
    lauterDeadspace_l = 0.0;
@@ -153,100 +159,12 @@ Equipment::Equipment()
    setDefaults();
 }
 
-Equipment::Equipment(XmlNode *node)
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasBoilSize=false, hasBatchSize=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "EQUIPMENT" )
-      throw EquipmentException("initializer not passed an EQUIPMENT node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      // All valid children of EQUIPMENT only have one or fewer children.
-      if( tmpVec.size() > 1 )
-         throw EquipmentException("Tag \""+tag+"\" has more than one child.");
-      
-      leaf = tmpVec[0];
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw EquipmentException("Should have been a leaf but is not.");
-      
-      leafText = leaf->getLeafText();
-
-      // TODO: in all elements, make sure that an exception thrown by a parse
-      // method gets handled when the element is not required.
-      if( tag == "NAME" )
-      {
-         setName(leafText);
-         hasName = true;
-      }
-      else if( tag == "VERSION" )
-      {
-         if( parseInt(leafText) != version )
-            std::cerr << "Warning: XML EQUIPMENT version is not " << version << std::endl;
-         hasVersion = true;
-      }
-      else if( tag == "BOIL_SIZE" )
-      {
-         setBoilSize_l(parseDouble(leafText));
-         hasBoilSize=true;
-      }
-      else if( tag == "BATCH_SIZE" )
-      {
-         setBatchSize_l(parseDouble(leafText));
-         hasBatchSize=true;
-      }
-      else if( tag == "TUN_VOLUME" )
-         setTunVolume_l(parseDouble(leafText));
-      else if( tag == "TUN_WEIGHT" )
-         setTunWeight_kg(parseDouble(leafText));
-      else if( tag == "TUN_SPECIFIC_HEAT" )
-         setTunSpecificHeat_calGC(parseDouble(leafText));
-      else if( tag == "TOP_UP_WATER" )
-         setTopUpWater_l(parseDouble(leafText));
-      else if( tag == "TRUB_CHILLER_LOSS" )
-         setTrubChillerLoss_l(parseDouble(leafText));
-      else if( tag == "EVAP_RATE" )
-         setEvapRate_pctHr(parseDouble(leafText));
-      else if( tag == "BOIL_TIME" )
-         setBoilTime_min(parseDouble(leafText));
-      else if( tag == "CALC_BOIL_VOLUME" )
-         setCalcBoilVolume(parseBool(leafText));
-      else if( tag == "LAUTER_DEADSPACE" )
-         setLauterDeadspace_l(parseDouble(leafText));
-      else if( tag == "TOP_UP_KETTLE" )
-         setTopUpKettle_l(parseDouble(leafText));
-      else if( tag == "HOP_UTILIZATION" )
-         setHopUtilization_pct(parseDouble(leafText));
-      else if( tag == "NOTES" )
-         setNotes(leafText);
-      else
-         std::cerr << "Warning: Unsupported EQUIPMENT tag: " << tag << std::endl;
-   } // end for
-   
-   if( !hasName || !hasVersion || !hasBoilSize || !hasBatchSize )
-      throw EquipmentException("missing required tag.");
-} // end Equipment()
-
 Equipment::Equipment(const QDomNode& equipmentNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
+   bool hasRealEvapRate = false;
 
    setDefaults();
 
@@ -303,9 +221,14 @@ Equipment::Equipment(const QDomNode& equipmentNode)
       {
          setTrubChillerLoss_l(getDouble(textNode));
       }
-      else if( property == "EVAP_RATE" )
+      else if( property == "EVAP_RATE" && ! hasRealEvapRate )
       {
          setEvapRate_pctHr(getDouble(textNode));
+      }
+      else if( property == "REAL_EVAP_RATE" )
+      {
+         setEvapRate_lHr(getDouble(textNode));
+         hasRealEvapRate = true;
       }
       else if( property == "BOIL_TIME" )
       {
@@ -334,6 +257,10 @@ Equipment::Equipment(const QDomNode& equipmentNode)
       else
          Brewtarget::log(Brewtarget::WARNING, QString("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
+
+   // Estimate the actual evaporation rate if we didn't get one.
+   if( ! hasRealEvapRate )
+      setEvapRate_lHr( evapRate_pctHr/(double)100 * boilSize_l );
 }
 
 //============================"SET" METHODS=====================================
@@ -431,6 +358,18 @@ void Equipment::setEvapRate_pctHr( double var )
    else
    {
       evapRate_pctHr = var;
+      hasChanged();
+      doCalculations();
+   }
+}
+
+void Equipment::setEvapRate_lHr( double var )
+{
+   if( var < 0.0 )
+      throw EquipmentException( "evap rate must be non negative: " + doubleToString(var) );
+   else
+   {
+      evapRate_lHr = var;
       hasChanged();
       doCalculations();
    }
@@ -542,6 +481,11 @@ double Equipment::getEvapRate_pctHr() const
    return evapRate_pctHr;
 }
 
+double Equipment::getEvapRate_lHr() const
+{
+   return evapRate_lHr;
+}
+
 double Equipment::getBoilTime_min() const
 {
    return boilTime_min;
@@ -580,14 +524,20 @@ void Equipment::doCalculations()
       return;
    
    /* The equation given the BeerXML 1.0 spec was way wrong. */
+   /*
    boilSize_l =
       (batchSize_l - topUpWater_l + trubChillerLoss_l)
       / (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
+   */
+
+   boilSize_l = batchSize_l - topUpWater_l + trubChillerLoss_l + (boilTime_min/(double)60)*evapRate_lHr;
 
    hasChanged();
 }
 
 double Equipment::wortEndOfBoil_l( double kettleWort_l ) const
 {
-   return kettleWort_l * (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
+   //return kettleWort_l * (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
+
+   return kettleWort_l - (boilTime_min/(double)60)*evapRate_lHr;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>544</width>
-    <height>584</height>
+    <width>515</width>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
        </property>
       </widget>
@@ -419,7 +419,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Evaporation rate (pct/hr)</string>
+               <string>Evaporation rate (per hr)</string>
               </property>
              </widget>
             </item>
@@ -714,7 +714,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/smallPlus.png</normaloff>:/images/smallPlus.png</iconset>
        </property>
       </widget>
@@ -728,7 +728,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/filesave.png</normaloff>:/images/filesave.png</iconset>
        </property>
       </widget>
@@ -742,7 +742,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/exit.png</normaloff>:/images/exit.png</iconset>
        </property>
       </widget>
@@ -759,7 +759,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="brewtarget.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

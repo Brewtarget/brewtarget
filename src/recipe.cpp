@@ -2098,9 +2098,11 @@ double Recipe::estimateWortFromMash_l() const
    if( mash == 0 )
       return 0.0;
    
-   double waterAdded_l = mash->totalMashWater_l();;
+   double waterAdded_l = mash->totalMashWater_l();
    double absorption_lKg = 0.13 * (3.78541178)/(0.45359237); // 0.13 gal/lb
    
+   //std::cerr << "estimateWortFromMash_l(): " << waterAdded_l - absorption_lKg*getGrainsInMash_kg() << std::endl;
+
    return (waterAdded_l - absorption_lKg*getGrainsInMash_kg());
 }
 
