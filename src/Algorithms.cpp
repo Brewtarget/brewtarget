@@ -24,6 +24,8 @@ double* PlatoFromSG_20C20C = 0;
 unsigned int PlatoFromSG_20C20C_order;
 double* waterDensityPoly_C = 0;
 unsigned int waterDensityPoly_C_order = 0;
+double* hydroCorrection15CPoly = 0;
+unsigned int hydroCorrection15CPoly_order = 0;
 
 void initVars()
 {
@@ -39,12 +41,24 @@ void initVars()
 
    if( waterDensityPoly_C == 0 )
    {
-      waterDensityPoly_C = new double[4];
-      waterDensityPoly_C_order = 3;
-      waterDensityPoly_C[0] = 0.999924134;
-      waterDensityPoly_C[1] = 3.113930471e-5;
-      waterDensityPoly_C[2] = 6.268385468e-6;
-      waterDensityPoly_C[3] = 1.80544064e-8;
+      waterDensityPoly_C = new double[6];
+      waterDensityPoly_C_order = 5;
+      waterDensityPoly_C[0] = 0.9999776532;
+      waterDensityPoly_C[1] = 6.557692037e-5;
+      waterDensityPoly_C[2] = -1.007534371e-5;
+      waterDensityPoly_C[3] = 1.372076106e-7;
+      waterDensityPoly_C[4] = -1.414581892e-9;
+      waterDensityPoly_C[5] = 5.6890971e-12;
+   }
+
+   if( hydroCorrection15CPoly == 0 )
+   {
+      hydroCorrection15CPoly = new double[4];
+      hydroCorrection15CPoly_order = 3;
+      hydroCorrection15CPoly[0] = -0.911045;
+      hydroCorrection15CPoly[1] = -16.2853e-3;
+      hydroCorrection15CPoly[2] = 5.84346e-3;
+      hydroCorrection15CPoly[3] = -15.3243e-6;
    }
 }
 
@@ -90,6 +104,13 @@ double rootFind( double* poly, unsigned int order, double x0, double x1 )
    }
 
    return newGuess;
+}
+
+// Returns the additive correction (in SG 15C units).
+double hydrometer15CCorrection( double celsius )
+{
+   initVars();
+   return polyEval( hydroCorrection15CPoly,hydroCorrection15CPoly_order, celsius ) * (double)1e-3;
 }
 
 double SG_20C20C_toPlato( double sg )

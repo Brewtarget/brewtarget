@@ -32,6 +32,9 @@ extern unsigned int PlatoFromSG_20C20C_order;
 extern double* waterDensityPoly_C;
 extern unsigned int waterDensityPoly_C_order;
 
+extern double* hydroCorrection15CPoly;
+extern unsigned int hydroCorrection15CPoly_order;
+
 double intPow( double base, unsigned int pow );
 
 double polyEval( double* poly, unsigned int order, double x );
@@ -46,6 +49,7 @@ void initVars();
 double SG_20C20C_toPlato( double sg );
 double PlatoToSG_20C20C( double plato );
 double getWaterDensity_kgL( double celsius );
+double hydrometer15CCorrection( double celsius );
 
 #endif	/* _ALGORITHMS_H */
 

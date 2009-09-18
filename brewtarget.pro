@@ -34,15 +34,15 @@ UI_DIR = src
 # Where moc output goes.
 MOC_DIR = src
 
-unix:!macx {
-   target.path = /usr/bin
-   data.path = /usr/share/brewtarget/
-   doc.path = /usr/share/doc/brewtarget
-   
-   data.files = *.xml
-   doc.files = README COPYING doc/manual/*
-   INSTALLS += target data doc
-}
+unix : !macx {
+        target.path = /usr/bin
+        data.path = /usr/share/brewtarget/
+        doc.path = /usr/share/doc/brewtarget
+
+        data.files = *.xml
+        doc.files = README COPYING doc/manual/*
+        INSTALLS += target data doc
+    }
 
 macx {
     CONFIG += x86
@@ -126,6 +126,7 @@ HEADERS += src/AboutDialog.h \
            src/MiscTableModel.h \
            src/MiscTableWidget.h \
            src/observable.h \
+           src/OgAdjuster.h \
            src/OptionDialog.h \
            src/PreInstruction.h \
            src/recipe.h \
@@ -164,6 +165,7 @@ FORMS +=   ui/aboutDialog.ui \
            ui/mashEditor.ui \
            ui/mashWizard.ui \
            ui/miscDialog.ui \
+           ui/ogAdjuster.ui \
            ui/optionsDialog.ui \
 	        ui/scaleRecipeTool.ui \
            ui/styleEditor.ui \
@@ -212,6 +214,7 @@ SOURCES += src/Algorithms.cpp \
            src/MiscTableWidget.cpp \
            src/observable.cpp \
            src/observer.cpp \
+           src/OgAdjuster.cpp \
            src/OptionDialog.cpp \
            src/PreInstruction.cpp \
            src/recipe.cpp \

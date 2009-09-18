@@ -129,6 +129,7 @@ MainWindow::MainWindow(QWidget* parent)
    htmlViewer = new HtmlViewer(this);
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter();
+   ogAdjuster = new OgAdjuster();
 
    setupToolbar();
 
@@ -204,6 +205,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionManual, SIGNAL( triggered() ), htmlViewer, SLOT( show() ) );
    connect( actionScale_Recipe, SIGNAL( triggered() ), recipeScaler, SLOT( show() ) );
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
+   connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -377,6 +379,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    beerColorWidget.setRecipe(recipe);
    hopTable->getModel()->setRecipe(recipe); // This is for calculating the IBUs to show in the row headers.
    recipeFormatter->setRecipe(recipe);
+   ogAdjuster->setRecipe(recipe);
    
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )

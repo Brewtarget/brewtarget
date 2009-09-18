@@ -52,6 +52,7 @@ class MainWindow;
 #include "HtmlViewer.h"
 #include "ScaleRecipeTool.h"
 #include "RecipeFormatter.h"
+#include "OgAdjuster.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -133,6 +134,7 @@ private:
    HtmlViewer* htmlViewer;
    ScaleRecipeTool* recipeScaler;
    RecipeFormatter* recipeFormatter;
+   OgAdjuster* ogAdjuster;
 
    void setupToolbar();
    void showChanges();
