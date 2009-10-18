@@ -48,6 +48,7 @@ void OgAdjuster::calculate()
    double temp_c = 0.0;
    double plato = 0.0;
    double wort_l = 0.0;
+   double hydroTemp_c = 0.0;
 
    double sugar_kg = 0.0;
    double water_kg = 0.0;
@@ -69,9 +70,10 @@ void OgAdjuster::calculate()
    temp_c = Unit::qstringToSI( lineEdit_temp->text() );
    plato = Unit::qstringToSI( lineEdit_plato->text() );
    wort_l = Unit::qstringToSI( lineEdit_volume->text() );
+   hydroTemp_c = Unit::qstringToSI( lineEdit_calTemp->text() );
 
    // Make sure we got enough info.
-   gotSG = sg != 0 && temp_c != 0;
+   gotSG = sg != 0 && temp_c != 0 && hydroTemp_c != 0;
 
    if( wort_l == 0 )
       return;
@@ -87,7 +89,7 @@ void OgAdjuster::calculate()
    // Calculate missing input parameters.
    if( gotSG )
    {
-      sg_15C = sg + hydrometer15CCorrection( temp_c );
+      sg_15C = sg * getWaterDensity_kgL(hydroTemp_c)/getWaterDensity_kgL(15) + hydrometer15CCorrection( temp_c );
       sg_20C = sg_15C * getWaterDensity_kgL(15)/getWaterDensity_kgL(20);
 
       plato = SG_20C20C_toPlato( sg_20C );
@@ -110,13 +112,16 @@ void OgAdjuster::calculate()
    std::cerr << "finalWater_kg = " << finalWater_kg << std::endl;
    std::cerr << "boilTime = " << equip->getBoilTime_min() << std::endl;
    std::cerr << "evapRate_lHr = " << evapRate_lHr << std::endl;
-   std::cerr << "waterDensity = " << getWaterDensity_kgL(20);
+   std::cerr << "waterDensity = " << getWaterDensity_kgL(20) << std::endl;
    finalPlato = (double)100 * sugar_kg / (sugar_kg + finalWater_kg);
    std::cerr << "finalPlato = " << finalPlato << std::endl;
    finalUncorrectedSg_20C = PlatoToSG_20C20C( finalPlato );
 
    // Calculate volume to add to boil
-   finalPlato = SG_20C20C_toPlato( recObs->getOg() );
+   finalPlato = SG_20C20C_toPlato( recObs->getOg() ); // This is bad. This assumes the post-boil gravity = og. Need account for post-boil water additions.
+   // postBoilWater_kg = batchSize - topUpWater;
+   // postBoilSugar_kg = SG_20C20C_toPlato( recObs->getOG() ) / 100.0 * batchSize * recObs->getOG() * getWaterDensity_kgL(20);
+   // finalPlato = 100 * postBoilSugar_kg / ( postBoilSugar_kg + postBoilWater_kg );
    waterToAdd_kg = (double)100 * sugar_kg / finalPlato - sugar_kg - finalWater_kg;
    waterToAdd_l = waterToAdd_kg / getWaterDensity_kgL(20);
 

@@ -40,7 +40,7 @@ void MaltinessWidget::setup()
 
    label = new QLabel(this);
    // Want to specify a minimum size and have it expand if able.
-   label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+   label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
    // Align text in center, vertically and horizontally.
    label->setAlignment(Qt::AlignCenter);
    // Add a border.
@@ -50,7 +50,7 @@ void MaltinessWidget::setup()
 
    // Set size policy of the MaltinessWidget
    //sPolicy = QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+   setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
    setMinimumSize(size);
 }
 
