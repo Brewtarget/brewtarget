@@ -23,6 +23,7 @@
 #include <QDomNode>
 #include <QDomElement>
 #include <QDomText>
+#include <QDomNodeList>
 #include <QTextStream>
 
 #include "brewtarget.h"
@@ -33,6 +34,8 @@ QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
 QDomDocument* Brewtarget::optionsDoc;
 bool Brewtarget::englishUnits = false;
+Brewtarget::ColorType Brewtarget::colorFormula = Brewtarget::MOREY;
+Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
 
 void Brewtarget::setApp(QApplication& a)
 {
@@ -232,6 +235,7 @@ void Brewtarget::readPersistentOptions()
    QDomElement root;
    QDomNode node, child;
    QDomText textNode;
+   QDomNodeList list;
    QString err;
    QString text;
    int line;
@@ -252,6 +256,7 @@ void Brewtarget::readPersistentOptions()
    }
 
    root = optionsDoc->documentElement();
+   /*
    for( node = root.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() || ! node.hasChildNodes() )
@@ -269,6 +274,75 @@ void Brewtarget::readPersistentOptions()
             englishUnits = false;
       }
    }
+   */
+
+   // Get english units.
+   list = optionsDoc->elementsByTagName(QString("english_units"));
+   if( list.length() <= 0 )
+   {
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the english_units tag in the option file."));
+      englishUnits = true;
+   }
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      if( text == "true" )
+         englishUnits = true;
+      else
+         englishUnits = false;
+   }
+
+   // Get IBU formula.
+   list = optionsDoc->elementsByTagName(QString("ibu_formula"));
+   if( list.length() <= 0 )
+   {
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the ibu_formula tag in the option file."));
+   }
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      if( text == "tinseth" )
+         ibuFormula = TINSETH;
+      else if( text == "rager" )
+         ibuFormula = RAGER;
+      else
+      {
+         Brewtarget::log(Brewtarget::ERROR, QString("Bad ibu_formula type: %1").arg(text));
+      }
+   }
+
+   // Get color formula.
+   list = optionsDoc->elementsByTagName(QString("color_formula"));
+   if( list.length() <= 0 )
+   {
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the color_formula tag in the option file."));
+   }
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      if( text == "morey" )
+         colorFormula = MOREY;
+      else if( text == "daniel" )
+         colorFormula = DANIEL;
+      else if( text == "mosher" )
+         colorFormula = MOSHER;
+      else
+      {
+         Brewtarget::log(Brewtarget::ERROR, QString("Bad color_formula type: %1").arg(text));
+      }
+   }
 
    delete optionsDoc;
    optionsDoc = 0;
@@ -281,6 +355,7 @@ void Brewtarget::savePersistentOptions()
    optionsDoc = new QDomDocument();
    QDomElement root;
    QDomNode node, child;
+   QString text;
 
    if( ! xmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
    {
@@ -290,13 +365,55 @@ void Brewtarget::savePersistentOptions()
 
    root = optionsDoc->createElement("options");
 
+   // English units.
    node = optionsDoc->createElement("english_units");
    child = optionsDoc->createTextNode( englishUnits ? "true" : "false" );
    node.appendChild(child);
    root.appendChild(node);
 
+   // IBU formula.
+   node = optionsDoc->createElement("ibu_formula");
+   switch( ibuFormula )
+   {
+      case TINSETH:
+         text = "tinseth";
+         break;
+      case RAGER:
+         text = "rager";
+         break;
+      default:
+         text = "";
+         break;
+   }
+   child = optionsDoc->createTextNode(text);
+   node.appendChild(child);
+   root.appendChild(node);
+
+   // Color formula.
+   node = optionsDoc->createElement("color_formula");
+   switch( ibuFormula )
+   {
+      case MOREY:
+         text = "morey";
+         break;
+      case DANIEL:
+         text = "daniel";
+         break;
+      case MOSHER:
+         text = "mosher";
+         break;
+      default:
+         text = "";
+         break;
+   }
+   child = optionsDoc->createTextNode(text);
+   node.appendChild(child);
+   root.appendChild(node);
+
+   // Add root to document.
    optionsDoc->appendChild(root);
 
+   // Write file.
    QTextStream out(&xmlFile);
    out << optionsDoc->toString();
 

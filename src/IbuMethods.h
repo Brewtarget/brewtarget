@@ -1,5 +1,5 @@
 /*
- * OptionDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * IbuMethods.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,32 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _OPTIONDIALOG_H
-#define	_OPTIONDIALOG_H
+#ifndef _IBUMETHODS_H
+#define _IBUMETHODS_H
 
-class OptionDialog;
-
-#include <QDialog>
-#include <QWidget>
-#include <QAbstractButton>
-#include "ui_optionsDialog.h"
-
-class OptionDialog : public QDialog, public Ui::optionsDialog
+class IbuMethods
 {
-   Q_OBJECT
 public:
-   OptionDialog(QWidget *parent=0);
+   IbuMethods();
+   ~IbuMethods();
 
-public slots:
-   void changeColorFormula(QAbstractButton* button);
-   void changeIbuFormula(QAbstractButton* button);
-   void show();
-   void saveAndClose();
-   void cancel();
-   
+   // AArating in [0,1], wort_grav in specific gravity at around 60F I guess.
+   static double getIbus(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
 private:
-   void showChanges();
+   static double tinseth(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
+   static double rager(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
 };
 
-#endif	/* _OPTIONDIALOG_H */
-
+#endif

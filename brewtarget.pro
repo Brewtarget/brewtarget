@@ -91,6 +91,7 @@ HEADERS += src/AboutDialog.h \
            src/BrewDayWidget.h \
            src/brewtarget.h \
            src/config.h \
+           src/ColorMethods.h \
            src/database.h \
            src/equipment.h \
            src/EquipmentComboBox.h \
@@ -102,13 +103,13 @@ HEADERS += src/AboutDialog.h \
            src/FermentableTableWidget.h \
            src/HeatCalculations.h \
            src/hop.h \
-           src/hoputilization.h \
            src/HopDialog.h \
            src/HopEditor.h \
            src/HopTableModel.h \
            src/HopTableWidget.h \
            src/HtmlViewer.h \
            src/instruction.h \
+           src/IbuMethods.h \
            src/InstructionWidget.h \
            src/MainWindow.h \
            src/MaltinessWidget.h \
@@ -178,6 +179,7 @@ SOURCES += src/Algorithms.cpp \
            src/BrewDayWidget.cpp \
            src/BeerColorWidget.cpp \
            src/brewtarget.cpp \
+           src/ColorMethods.cpp \
            src/equipment.cpp \
            src/EquipmentComboBox.cpp \
            src/EquipmentEditor.cpp \
@@ -189,13 +191,13 @@ SOURCES += src/Algorithms.cpp \
            src/main.cpp \
            src/HeatCalculations.cpp \
            src/hop.cpp \
-           src/hoputilization.cpp \
            src/HopDialog.cpp \
            src/HopEditor.cpp \
            src/HopTableModel.cpp \
            src/HopTableWidget.cpp \
            src/HtmlViewer.cpp \
            src/instruction.cpp \
+           src/IbuMethods.cpp \
            src/InstructionWidget.cpp \
            src/MainWindow.cpp \
            src/MaltinessWidget.cpp \

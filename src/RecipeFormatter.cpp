@@ -41,6 +41,8 @@ void RecipeFormatter::setRecipe(Recipe* recipe)
 QString RecipeFormatter::getTextFormat()
 {
    QString ret = "";
+   QString colorString;
+   QString bitternessString;
    if( rec == 0 )
       return ret;
    
@@ -64,8 +66,33 @@ QString RecipeFormatter::getTextFormat()
    ret += "OG: " + QString("%1").arg( rec->getOg(), 0, 'f', 3 ) + "\n";
    ret += "FG: " + QString("%1").arg( rec->getFg(), 0, 'f', 3 ) + "\n";
    ret += "ABV: " + QString("%1\%").arg( rec->getABV_pct(), 0, 'f', 1 ) + "\n";
-   ret += "Bitterness: " + QString("%1 IBUs").arg( rec->getIBU(), 0, 'f', 1 ) + "\n";
-   ret += "Color: " + QString("%1 SRM").arg( rec->getColor_srm(), 0, 'f', 0 ) + "\n";
+   ret += "Bitterness: ";
+   bitternessString = QString("%1 IBUs (%2)").arg( rec->getIBU(), 0, 'f', 1 );
+   switch( Brewtarget::ibuFormula )
+   {
+      case Brewtarget::TINSETH:
+         bitternessString = bitternessString.arg("Tinseth");
+         break;
+      case Brewtarget::RAGER:
+         bitternessString = bitternessString.arg("Rager");
+         break;
+   }
+   ret += bitternessString + "\n";
+   ret += "Color: ";
+   colorString = QString("%1 SRM (%2)").arg( rec->getColor_srm(), 0, 'f', 0 );
+   switch( Brewtarget::colorFormula )
+   {
+      case Brewtarget::MOREY:
+         colorString = colorString.arg("Morey");
+         break;
+      case Brewtarget::DANIEL:
+         colorString = colorString.arg("Daniels");
+         break;
+      case Brewtarget::MOSHER:
+         colorString = colorString.arg("Mosher");
+         break;
+   }
+   ret += colorString + "\n";
    
    if( rec->getNumFermentables() > 0 )
    {

@@ -1,5 +1,5 @@
 /*
- * OptionDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
+ * ColorMethods.h is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -16,32 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _OPTIONDIALOG_H
-#define	_OPTIONDIALOG_H
+#ifndef _COLORMETHODS_H
+#define _COLORMETHODS_H
 
-class OptionDialog;
+class ColorMethods;
 
-#include <QDialog>
-#include <QWidget>
-#include <QAbstractButton>
-#include "ui_optionsDialog.h"
-
-class OptionDialog : public QDialog, public Ui::optionsDialog
+class ColorMethods
 {
-   Q_OBJECT
 public:
-   OptionDialog(QWidget *parent=0);
+   ColorMethods();
+   ~ColorMethods();
 
-public slots:
-   void changeColorFormula(QAbstractButton* button);
-   void changeIbuFormula(QAbstractButton* button);
-   void show();
-   void saveAndClose();
-   void cancel();
-   
+   static double mcuToSrm(double mcu);
 private:
-   void showChanges();
+   static double morey(double mcu);
+   static double daniel(double mcu);
+   static double mosher(double mcu);
 };
 
-#endif	/* _OPTIONDIALOG_H */
-
+#endif

@@ -31,10 +31,15 @@ class Brewtarget;
 class Brewtarget
 {
    friend class OptionDialog;
+   friend class IbuMethods;
+   friend class ColorMethods;
+   friend class RecipeFormatter;
 public:
    Brewtarget();
 
    enum LogType {WARNING, ERROR};
+   enum ColorType {MOSHER, DANIEL, MOREY};
+   enum IbuType {TINSETH, RAGER};
 
    static QApplication* getApp();
    static void setApp(QApplication& a); // This method should be called before any of the others.
@@ -57,6 +62,8 @@ private:
 
    // These are options that are ONLY to be edited by the OptionDialog.
    static bool englishUnits;
+   static ColorType colorFormula;
+   static IbuType ibuFormula;
 };
 
 #endif	/* _BREWTARGET_H */

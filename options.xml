@@ -1,3 +1,5 @@
 <options>
  <english_units>true</english_units>
+ <ibu_formula>tinseth</ibu_formula>
+ <color_formula>morey</color_formula>
 </options>

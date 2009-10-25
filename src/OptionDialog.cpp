@@ -19,17 +19,68 @@
 #include "OptionDialog.h"
 #include "brewtarget.h"
 
+#include <QButtonGroup>
+
 OptionDialog::OptionDialog(QWidget* parent)
 {
    setupUi(this);
-   
+
    if( parent != 0 )
    {
       setWindowIcon(parent->windowIcon());
    }
 
+   QButtonGroup *colorGroup, *ibuGroup;
+   colorGroup = new QButtonGroup(this);
+   ibuGroup = new QButtonGroup(this);
+
+   // Want you to only be able to select exactly one in each group.
+   colorGroup->setExclusive(true);
+   ibuGroup->setExclusive(true);
+
+   // Set up the buttons in the colorGroup
+   colorGroup->addButton(checkBox_mosher);
+   colorGroup->addButton(checkBox_daniel);
+   colorGroup->addButton(checkBox_morey);
+
+   // Same for ibuGroup.
+   ibuGroup->addButton(checkBox_tinseth);
+   ibuGroup->addButton(checkBox_rager);
+
+   connect( colorGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeColorFormula(QAbstractButton*) ) );
+   connect( ibuGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeIbuFormula(QAbstractButton*) ) );
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
+}
+
+void OptionDialog::changeColorFormula(QAbstractButton* button)
+{
+   Brewtarget::ColorType formula;
+   if( button == checkBox_mosher )
+      formula = Brewtarget::MOSHER;
+   else if( button == checkBox_daniel )
+      formula = Brewtarget::DANIEL;
+   else if( button == checkBox_morey )
+      formula = Brewtarget::MOREY;
+   else
+      formula = Brewtarget::MOREY; // Should never get here, but you never know.
+
+   Brewtarget::colorFormula = formula;
+   Brewtarget::mainWindow->forceRecipeUpdate(); // Tell the recipe to update so we can see the changes.
+}
+
+void OptionDialog::changeIbuFormula(QAbstractButton* button)
+{
+   Brewtarget::IbuType formula;
+   if( button == checkBox_tinseth )
+      formula = Brewtarget::TINSETH;
+   else if( button == checkBox_rager )
+      formula = Brewtarget::RAGER;
+   else
+      formula = Brewtarget::TINSETH; // Should never get here, but you never know.
+
+   Brewtarget::ibuFormula = formula;
+   Brewtarget::mainWindow->forceRecipeUpdate(); // Tell the recipe to update so we can see the changes.
 }
 
 void OptionDialog::show()
@@ -56,4 +107,29 @@ void OptionDialog::cancel()
 void OptionDialog::showChanges()
 {
    checkBox_USUnits->setCheckState( Brewtarget::englishUnits ? Qt::Checked : Qt::Unchecked );
+
+   // Check the right color formula box.
+   switch( Brewtarget::colorFormula )
+   {
+      case Brewtarget::MOREY:
+         checkBox_morey->setCheckState(Qt::Checked);
+         break;
+      case Brewtarget::DANIEL:
+         checkBox_daniel->setCheckState(Qt::Checked);
+         break;
+      case Brewtarget::MOSHER:
+         checkBox_mosher->setCheckState(Qt::Checked);
+         break;
+   }
+
+   // Check the right ibu formula box.
+   switch( Brewtarget::ibuFormula )
+   {
+      case Brewtarget::TINSETH:
+         checkBox_tinseth->setCheckState(Qt::Checked);
+         break;
+      case Brewtarget::RAGER:
+         checkBox_rager->setCheckState(Qt::Checked);
+         break;
+   }
 }

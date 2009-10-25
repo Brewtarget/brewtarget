@@ -34,12 +34,13 @@
 #include "equipment.h"
 #include "yeast.h"
 #include "water.h"
-#include "hoputilization.h"
 #include "PreInstruction.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QInputDialog>
 #include "Algorithms.h"
+#include "IbuMethods.h"
+#include "ColorMethods.h"
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {
@@ -1846,8 +1847,8 @@ double Recipe::getColor_srm()
       // Conversion factor for lb/gal to kg/l = 8.34538.
       mcu += ferm->getColor_srm()*8.34538 * ferm->getAmount_kg()/getBatchSize_l();
    }
-   // Morey color calculation.
-   return 1.4922 * pow( mcu, 0.6859 );
+
+   return ColorMethods::mcuToSrm(mcu);
 }
 
 double Recipe::getABV_pct()
@@ -2023,10 +2024,10 @@ double Recipe::getIBUFromHop( unsigned int i )
       return 0.0;
    
    if( hops[i]->getUse() == "Boil")
-      ibus = IBU( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
+      ibus = IbuMethods::getIbus( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
                    batchSize_l, getWortGrav(), hops[i]->getTime_min() );
    else if( hops[i]->getUse() == "First Wort" )
-      ibus = 1.10 * IBU( hops[i]->getAlpha_pct()/100.0,
+      ibus = 1.10 * IbuMethods::getIbus( hops[i]->getAlpha_pct()/100.0,
                           hops[i]->getAmount_kg()*1000.0,
                           batchSize_l,
                           getWortGrav(),

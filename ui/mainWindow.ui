@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>704</height>
+    <width>513</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -548,12 +548,6 @@
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>false</bool>
           </attribute>
-          <attribute name="horizontalHeaderStretchLastSection">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="horizontalHeaderCascadingSectionResizes">
-           <bool>false</bool>
-          </attribute>
          </widget>
         </item>
         <item>
@@ -931,8 +925,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
-     <height>22</height>
+     <width>513</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

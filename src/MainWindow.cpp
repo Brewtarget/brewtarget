@@ -1097,3 +1097,11 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
 
    setVisible(false);
 }
+
+void MainWindow::forceRecipeUpdate()
+{
+   if( recipeObs == 0 )
+      return;
+
+   recipeObs->hasChanged();
+}
