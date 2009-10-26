@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 TEMPLATE = app
-TARGET = brewtarget
 CONFIG += qt release warn_on
 QT += xml webkit
 DEPENDPATH += .
@@ -35,6 +34,7 @@ UI_DIR = src
 MOC_DIR = src
 
 unix : !macx {
+        TARGET = brewtarget
         target.path = /usr/bin
         data.path = /usr/share/brewtarget/
         doc.path = /usr/share/doc/brewtarget
@@ -45,6 +45,7 @@ unix : !macx {
     }
 
 macx {
+    TARGET = Brewtarget
     CONFIG += x86
     CONFIG += ppc
     #QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.4
@@ -68,6 +69,7 @@ macx {
 }
 
 win32 {
+    TARGET = brewtarget
     RC_FILE = win\icon.rc
     CONFIG -= console
 

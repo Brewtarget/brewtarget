@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>CFBundleDocumentTypes</key>
@@ -18,7 +18,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>brewtarget</string>
+	<string>Brewtarget</string>
 	<key>CFBundleIconFile</key>
 	<string>BrewtargetIcon.icns</string>
 	<key>CFBundlePackageType</key>
@@ -26,3 +26,4 @@
 	<key>CFBundleVersion</key>
 	<string>1.0b</string>
 </dict>
+</plist>
