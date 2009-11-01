@@ -26,6 +26,8 @@ class TimerWidget;
 #include <QTimer>
 #include <QString>
 #include <QPalette>
+#include <mediaobject.h>
+#include <audiooutput.h>
 
 class TimerWidget : public QWidget, public Ui::timerWidget
 {
@@ -44,6 +46,7 @@ public slots:
    void endTimer();
    void showChanges();
    void flash();
+   void getSound();
    
 signals:
    void timerDone();
@@ -59,6 +62,8 @@ private:
    QTimer* timer;
    QTimer* flashTimer;
    QPalette paletteOld, paletteNew;
+   Phonon::MediaObject *mediaObject;
+   Phonon::AudioOutput *audioOutput;
    bool oldColors;
 };
 

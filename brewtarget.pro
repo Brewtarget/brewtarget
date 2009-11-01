@@ -16,7 +16,7 @@
 
 TEMPLATE = app
 CONFIG += qt release warn_on
-QT += xml webkit
+QT += xml webkit phonon
 DEPENDPATH += .
 INCLUDEPATH += .
 RESOURCES = brewtarget.qrc

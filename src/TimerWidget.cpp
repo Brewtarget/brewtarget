@@ -19,6 +19,8 @@
 #include "TimerWidget.h"
 #include <QStringList>
 #include <QChar>
+#include <QFileDialog>
+#include <iostream>
 
 TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 {
@@ -34,6 +36,11 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    timer->setInterval(1000); // One second between timeouts.
    flashTimer->setInterval(500);
 
+   mediaObject = new Phonon::MediaObject(this);
+   mediaObject->setTransitionTime(0);
+   audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
+   Phonon::createPath(mediaObject, audioOutput);
+
    paletteOld = lcdNumber->palette();
    paletteNew = QPalette(paletteOld);
    // Swap colors.
@@ -45,6 +52,7 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    connect( this, SIGNAL(timerDone()), this, SLOT(endTimer()) );
    connect( pushButton_set, SIGNAL(clicked()), this, SLOT(setTimer()) );
    connect( pushButton_startStop, SIGNAL(clicked()), this, SLOT(startStop()) );
+   connect( pushButton_sound, SIGNAL(clicked()), this, SLOT(getSound()) );
 
    showChanges();
 }
@@ -52,6 +60,12 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 TimerWidget::~TimerWidget()
 {
    delete timer;
+}
+
+void TimerWidget::getSound()
+{
+   QString soundFile = QFileDialog::getOpenFileName(this, tr("Open Sound"), "", tr("Audio Files (*.wav *.ogg *.mp3)"));
+   mediaObject->setCurrentSource(soundFile);
 }
 
 QString TimerWidget::getTimerValue()
@@ -87,6 +101,8 @@ void TimerWidget::endTimer()
 {
    timer->stop();
    flashTimer->start();
+
+   mediaObject->play();
 
    pushButton_startStop->setText("Start");
    start = true;

@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>103</width>
-    <height>105</height>
+    <width>200</width>
+    <height>113</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
-    <width>200</width>
+    <width>300</width>
     <height>16777215</height>
    </size>
   </property>
@@ -69,7 +69,7 @@
          <widget class="QPushButton" name="pushButton_startStop">
           <property name="minimumSize">
            <size>
-            <width>10</width>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
@@ -82,12 +82,25 @@
          <widget class="QPushButton" name="pushButton_set">
           <property name="minimumSize">
            <size>
-            <width>10</width>
+            <width>0</width>
             <height>0</height>
            </size>
           </property>
           <property name="text">
            <string>Set</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_sound">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Sound</string>
           </property>
          </widget>
         </item>
