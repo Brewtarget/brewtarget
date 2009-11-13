@@ -25,7 +25,7 @@
 TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 {
    setupUi(this);
-   
+
    hours = 0;
    minutes = 0;
    seconds = 0;
@@ -64,8 +64,12 @@ TimerWidget::~TimerWidget()
 
 void TimerWidget::getSound()
 {
-   QString soundFile = QFileDialog::getOpenFileName(this, tr("Open Sound"), "", tr("Audio Files (*.wav *.ogg *.mp3)"));
-   mediaObject->setCurrentSource(soundFile);
+   QString soundFile = QFileDialog::getOpenFileName(this, tr("Open Sound"), "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)"));
+   if (! soundFile.isNull()) {
+     mediaObject->setCurrentSource(soundFile);
+     pushButton_sound->setCheckable(true); // indicate a sound is loaded
+     pushButton_sound->setChecked(true);
+   }
 }
 
 QString TimerWidget::getTimerValue()
@@ -89,10 +93,11 @@ void TimerWidget::flash()
 
 void TimerWidget::setTimer()
 {
+   mediaObject->stop();
    flashTimer->stop();
    lcdNumber->setPalette(paletteOld);
    lcdNumber->update();
-   
+
    setTimer(lineEdit->text());
    emit timerSet(getTimerValue());
 }
