@@ -50,7 +50,9 @@ public:
    static void log( LogType lt, QString message );
    static QString displayAmount( double amount, Unit* units=0 );
 
-   static bool useEnglishUnits();
+   static UnitSystem getWeightUnitSystem();
+   static UnitSystem getVolumeUnitSystem();
+   static TempScale getTemperatureScale();
    
    static void readPersistentOptions();
    static void savePersistentOptions();
@@ -61,7 +63,9 @@ private:
    static QDomDocument* optionsDoc;
 
    // These are options that are ONLY to be edited by the OptionDialog.
-   static bool englishUnits;
+   static UnitSystem weightUnitSystem;
+   static UnitSystem volumeUnitSystem;
+   static TempScale tempScale;
    static ColorType colorFormula;
    static IbuType ibuFormula;
 };

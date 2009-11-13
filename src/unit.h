@@ -28,9 +28,12 @@ class PoundUnit;
 class OunceUnit;
 class LiterUnit;
 class MilliliterUnit;
-class GallonUnit;
-class QuartUnit;
-class CupUnit;
+class USGallonUnit;
+class USQuartUnit;
+class USCupUnit;
+class ImperialGallonUnit;
+class ImperialQuartUnit;
+class ImperialCupUnit;
 class TablespoonUnit;
 class TeaspoonUnit;
 class SecondUnit;
@@ -44,6 +47,39 @@ class KelvinUnit;
 #include <string>
 #include <map>
 
+enum UnitSystem
+{
+    SI,
+    USCustomary,
+    Imperial
+};
+
+enum TempScale
+{
+    Celsius,
+    Fahrenheit
+};
+
+inline QString unitSystemToString(UnitSystem us)
+{
+   switch (us)
+   {
+      case SI: return "SI";
+      case USCustomary: return "USCustomary";
+      case Imperial: return "Imperial";
+      default: return 0;
+   }
+}
+
+inline QString tempScaleToString(TempScale ts)
+{
+   switch (ts)
+   {
+      case Celsius: return "Celsius";
+      case Fahrenheit: return "Fahrenheit";
+      default: return 0;
+   }
+}
 // TODO: implement ppm, percent, diastatic power, ibuGalPerLb, gravity, srm, volumes.
 
 class Unit
@@ -179,10 +215,10 @@ class MilliliterUnit : public Unit
       std::string SIUnitName;
 };
 
-class GallonUnit : public Unit
+class USGallonUnit : public Unit
 {
    public:
-      GallonUnit();
+      USGallonUnit();
 
       // Inherited methods.
       double toSI( double amt ) const;
@@ -195,10 +231,10 @@ class GallonUnit : public Unit
       std::string SIUnitName;
 };
 
-class QuartUnit : public Unit
+class USQuartUnit : public Unit
 {
    public:
-      QuartUnit();
+      USQuartUnit();
 
       // Inherited methods.
       double toSI( double amt ) const;
@@ -211,10 +247,10 @@ class QuartUnit : public Unit
       std::string SIUnitName;
 };
 
-class CupUnit : public Unit
+class USCupUnit : public Unit
 {
    public:
-      CupUnit();
+      USCupUnit();
 
       // Inherited methods.
       double toSI( double amt ) const;
@@ -226,6 +262,55 @@ class CupUnit : public Unit
       std::string unitName;
       std::string SIUnitName;
 };
+
+class ImperialGallonUnit : public Unit
+{
+   public:
+      ImperialGallonUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+};
+
+class ImperialQuartUnit : public Unit
+{
+   public:
+      ImperialQuartUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+};
+
+class ImperialCupUnit : public Unit
+{
+   public:
+      ImperialCupUnit();
+
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const std::string& getUnitName() const { return unitName; }
+      const std::string& getSIUnitName() const { return SIUnitName; }
+
+   private:
+      std::string unitName;
+      std::string SIUnitName;
+};
+
 
 class TablespoonUnit : public Unit
 {
@@ -372,9 +457,12 @@ public:
    // === Volume ===
    static LiterUnit *liters;
    static MilliliterUnit *milliliters;
-   static GallonUnit *gallons;
-   static QuartUnit *quarts;
-   static CupUnit *cups;
+   static USGallonUnit *us_gallons;
+   static USQuartUnit *us_quarts;
+   static USCupUnit *us_cups;
+   static ImperialGallonUnit *imperial_gallons;
+   static ImperialQuartUnit *imperial_quarts;
+   static ImperialCupUnit *imperial_cups;
    static TablespoonUnit *tablespoons;
    static TeaspoonUnit *teaspoons;
    // === Time ===

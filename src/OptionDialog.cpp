@@ -31,12 +31,19 @@ OptionDialog::OptionDialog(QWidget* parent)
    }
 
    QButtonGroup *colorGroup, *ibuGroup;
+   QButtonGroup *weightGroup, *volumeGroup, *tempGroup;
    colorGroup = new QButtonGroup(this);
    ibuGroup = new QButtonGroup(this);
+   weightGroup = new QButtonGroup(this);
+   volumeGroup = new QButtonGroup(this);
+   tempGroup = new QButtonGroup(this);
 
    // Want you to only be able to select exactly one in each group.
    colorGroup->setExclusive(true);
    ibuGroup->setExclusive(true);
+   weightGroup->setExclusive(true);
+   volumeGroup->setExclusive(true);
+   tempGroup->setExclusive(true);
 
    // Set up the buttons in the colorGroup
    colorGroup->addButton(checkBox_mosher);
@@ -47,8 +54,27 @@ OptionDialog::OptionDialog(QWidget* parent)
    ibuGroup->addButton(checkBox_tinseth);
    ibuGroup->addButton(checkBox_rager);
 
+   // Weight
+   weightGroup->addButton(weight_si);
+   weightGroup->addButton(weight_us);
+   weightGroup->addButton(weight_imperial);
+
+   // Volume
+   volumeGroup->addButton(volume_si);
+   volumeGroup->addButton(volume_us);
+   volumeGroup->addButton(volume_imperial);
+
+   // Temperature
+
+   tempGroup->addButton(celsius);
+   tempGroup->addButton(fahrenheit);
+
    connect( colorGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeColorFormula(QAbstractButton*) ) );
    connect( ibuGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeIbuFormula(QAbstractButton*) ) );
+   connect( weightGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeWeightUnitSystem(QAbstractButton*) ) );
+   connect( volumeGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeVolumeUnitSystem(QAbstractButton*) ) );
+   connect( tempGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeTemperatureScale(QAbstractButton*) ) );
+
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
 }
@@ -83,6 +109,34 @@ void OptionDialog::changeIbuFormula(QAbstractButton* button)
    Brewtarget::mainWindow->forceRecipeUpdate(); // Tell the recipe to update so we can see the changes.
 }
 
+void OptionDialog::changeWeightUnitSystem(QAbstractButton* button)
+{
+   if( button == weight_imperial)
+      weightUnitSystem = Imperial;
+   else if( button == weight_us)
+      weightUnitSystem = USCustomary;
+   else
+      weightUnitSystem = SI;
+}
+
+void OptionDialog::changeVolumeUnitSystem(QAbstractButton* button)
+{
+   if( button == volume_imperial)
+      volumeUnitSystem = Imperial;
+   else if( button == volume_us)
+      volumeUnitSystem = USCustomary;
+   else
+      volumeUnitSystem = SI;
+}
+
+void OptionDialog::changeTemperatureScale(QAbstractButton* button)
+{
+   if( button == fahrenheit)
+	   temperatureScale = Fahrenheit;
+   else
+	   temperatureScale = Celsius;
+}
+
 void OptionDialog::show()
 {
    showChanges();
@@ -91,10 +145,13 @@ void OptionDialog::show()
 
 void OptionDialog::saveAndClose()
 {
-   Brewtarget::englishUnits = (checkBox_USUnits->checkState() == Qt::Checked);
+   Brewtarget::weightUnitSystem = weightUnitSystem;
+   Brewtarget::volumeUnitSystem = volumeUnitSystem;
+   Brewtarget::tempScale = temperatureScale;
 
-   if( Brewtarget::mainWindow != 0 )
+   if( Brewtarget::mainWindow != 0 ) {
       Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
+   }
 
    setVisible(false);
 }
@@ -106,8 +163,6 @@ void OptionDialog::cancel()
 
 void OptionDialog::showChanges()
 {
-   checkBox_USUnits->setCheckState( Brewtarget::englishUnits ? Qt::Checked : Qt::Unchecked );
-
    // Check the right color formula box.
    switch( Brewtarget::colorFormula )
    {
@@ -132,4 +187,43 @@ void OptionDialog::showChanges()
          checkBox_rager->setCheckState(Qt::Checked);
          break;
    }
+
+   // Check the right weight unit system box.
+   switch( Brewtarget::weightUnitSystem)
+   {
+      case Imperial:
+         weight_imperial->setChecked(TRUE);
+         break;
+      case USCustomary:
+         weight_us->setChecked(TRUE);
+         break;
+      case SI:
+      default:
+         weight_si->setChecked(TRUE);
+   }
+
+   // Check the right volume unit system box.
+   switch( Brewtarget::volumeUnitSystem)
+   {
+      case Imperial:
+         volume_imperial->setChecked(TRUE);
+         break;
+      case USCustomary:
+         volume_us->setChecked(TRUE);
+         break;
+      case SI:
+      default:
+         volume_si->setChecked(TRUE);
+   }
+
+   switch( Brewtarget::tempScale)
+   {
+      case Fahrenheit:
+         fahrenheit->setChecked(TRUE);
+         break;
+      case Celsius:
+      default:
+         celsius->setChecked(TRUE);
+         break;
+  } 
 }

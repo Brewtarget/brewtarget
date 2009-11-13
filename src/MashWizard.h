@@ -24,6 +24,7 @@ class MashWizard;
 #include "ui_mashWizard.h"
 #include <QDialog>
 #include "recipe.h"
+#include "unit.h"
 
 class MashWizard : public QDialog, public Ui::mashWizard
 {
@@ -38,6 +39,8 @@ public slots:
 
 private:
    Recipe* recObs;
+   Unit *weightUnit;
+   Unit *volumeUnit;
 };
 
 #endif	/* _MASHWIZARD_H */

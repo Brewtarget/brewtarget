@@ -34,9 +34,12 @@ OunceUnit* Units::ounces = new OunceUnit();
 // === Volume ===
 LiterUnit* Units::liters = new LiterUnit();
 MilliliterUnit* Units::milliliters = new MilliliterUnit();
-GallonUnit* Units::gallons = new GallonUnit();
-QuartUnit* Units::quarts = new QuartUnit();
-CupUnit* Units::cups = new CupUnit();
+USGallonUnit* Units::us_gallons = new USGallonUnit();
+USQuartUnit* Units::us_quarts = new USQuartUnit();
+USCupUnit* Units::us_cups = new USCupUnit();
+ImperialGallonUnit* Units::imperial_gallons = new ImperialGallonUnit();
+ImperialQuartUnit* Units::imperial_quarts = new ImperialQuartUnit();
+ImperialCupUnit* Units::imperial_cups = new ImperialCupUnit();
 TablespoonUnit* Units::tablespoons = new TablespoonUnit();
 TeaspoonUnit* Units::teaspoons = new TeaspoonUnit();
 // === Time ===
@@ -121,9 +124,9 @@ void Unit::setupMap()
    Unit::nameToUnit[Units::ounces->getUnitName()] = Units::ounces;
    Unit::nameToUnit[Units::liters->getUnitName()] = Units::liters;
    Unit::nameToUnit[Units::milliliters->getUnitName()] = Units::milliliters;
-   Unit::nameToUnit[Units::gallons->getUnitName()] = Units::gallons;
-   Unit::nameToUnit[Units::quarts->getUnitName()] = Units::quarts;
-   Unit::nameToUnit[Units::cups->getUnitName()] = Units::cups;
+   Unit::nameToUnit[Units::us_gallons->getUnitName()] = Units::us_gallons;
+   Unit::nameToUnit[Units::us_quarts->getUnitName()] = Units::us_quarts;
+   Unit::nameToUnit[Units::us_cups->getUnitName()] = Units::us_cups;
    Unit::nameToUnit[Units::tablespoons->getUnitName()] = Units::tablespoons;
    Unit::nameToUnit[Units::teaspoons->getUnitName()] = Units::teaspoons;
    Unit::nameToUnit[Units::seconds->getUnitName()] = Units::seconds;
@@ -255,56 +258,108 @@ double MilliliterUnit::fromSI( double amt ) const
    return amt * (double)1000.0;
 }
 
-// === Gallons ===
-GallonUnit::GallonUnit()
+// === USGallons ===
+USGallonUnit::USGallonUnit()
 {
    unitName = "gal";
    SIUnitName = "L";
 }
 
-double GallonUnit::toSI( double amt ) const
+double USGallonUnit::toSI( double amt ) const
 {
    return amt * 3.78541178;
 }
 
-double GallonUnit::fromSI( double amt ) const
+double USGallonUnit::fromSI( double amt ) const
 {
    return amt / 3.78541178;
 }
 
-// === Quarts ===
-QuartUnit::QuartUnit()
+// === USQuarts ===
+USQuartUnit::USQuartUnit()
 {
    unitName = "qt";
    SIUnitName = "L";
 }
 
-double QuartUnit::toSI( double amt ) const
+double USQuartUnit::toSI( double amt ) const
 {
    return amt * 0.946352946;
 }
 
-double QuartUnit::fromSI( double amt ) const
+double USQuartUnit::fromSI( double amt ) const
 {
    return amt / 0.946352946;
 }
 
-// === Cups ===
-CupUnit::CupUnit()
+// === USCups ===
+USCupUnit::USCupUnit()
 {
    unitName = "cup";
    SIUnitName = "L";
 }
 
-double CupUnit::toSI( double amt ) const
+double USCupUnit::toSI( double amt ) const
 {
    return amt * 0.236588236;
 }
 
-double CupUnit::fromSI( double amt ) const
+double USCupUnit::fromSI( double amt ) const
 {
    return amt / 0.236588236;
 }
+
+// === ImperialGallons ===
+ImperialGallonUnit::ImperialGallonUnit()
+{
+   unitName = "gal";
+   SIUnitName = "L";
+}
+
+double ImperialGallonUnit::toSI( double amt ) const
+{
+   return amt * 4.54609;
+}
+
+double ImperialGallonUnit::fromSI( double amt ) const
+{
+   return amt / 4.54609;
+}
+
+// === ImperialQuarts ===
+ImperialQuartUnit::ImperialQuartUnit()
+{
+   unitName = "qt";
+   SIUnitName = "L";
+}
+
+double ImperialQuartUnit::toSI( double amt ) const
+{
+   return amt * 1.1365225;
+}
+
+double ImperialQuartUnit::fromSI( double amt ) const
+{
+   return amt / 1.1365225;
+}
+
+// === ImperialCups ===
+ImperialCupUnit::ImperialCupUnit()
+{
+   unitName = "cup";
+   SIUnitName = "L";
+}
+
+double ImperialCupUnit::toSI( double amt ) const
+{
+   return amt * 0.284130625;
+}
+
+double ImperialCupUnit::fromSI( double amt ) const
+{
+   return amt / 0.284130625;
+}
+
 
 // === Tablepoons ===
 TablespoonUnit::TablespoonUnit()

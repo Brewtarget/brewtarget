@@ -42,10 +42,33 @@ void MashWizard::setRecipe(Recipe* rec)
 
 void MashWizard::show()
 {
-   if( Brewtarget::useEnglishUnits() )
-      label->setText(tr("Mash thickness (qt/lb)"));
-   else
-      label->setText(tr("Mash thickness (L/kg)"));
+   switch (Brewtarget::getWeightUnitSystem())
+   {
+      case USCustomary:
+      case Imperial:
+         weightUnit = Units::pounds;
+         break;
+      case SI:
+      default:
+         weightUnit = Units::kilograms;
+         break;
+   }
+   switch (Brewtarget::getVolumeUnitSystem())
+   {
+      case USCustomary:
+	      volumeUnit = Units::us_quarts;
+         break;
+      case Imperial:
+         volumeUnit = Units::imperial_quarts;	
+         break;
+      case SI:
+      default:
+         weightUnit = Units::liters;
+         break;
+   }
+
+
+   label->setText(tr("Mash thickness (%1/%2)").arg(weightUnit->getUnitName().c_str(),volumeUnit->getUnitName().c_str()));
    
    setVisible(true);
 }
@@ -67,10 +90,7 @@ void MashWizard::wizardry()
    
    size = mash->getNumMashSteps();
    thickNum = Unit::qstringToSI(lineEdit_mashThickness->text());
-   if( Brewtarget::useEnglishUnits() )
-      thickness_LKg = thickNum * 2.086;
-   else
-      thickness_LKg = thickNum;
+   thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
 
    if( thickness_LKg <= 0.0 )
    {
@@ -234,3 +254,4 @@ void MashWizard::wizardry()
       tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness."));
    }
 }
+
