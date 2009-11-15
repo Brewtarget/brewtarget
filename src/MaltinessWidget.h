@@ -38,7 +38,7 @@ class MaltinessWidget : public QWidget, public Observer
 
 public:
    MaltinessWidget(QWidget* parent=0);
-   MaltinessWidget(Recipe* recipe);
+
    void observeRecipe(Recipe* recipe);
 
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.

@@ -23,15 +23,10 @@
 #include <QFrame>
 #include "MaltinessWidget.h"
 
-MaltinessWidget::MaltinessWidget(QWidget* parent) : QWidget(parent)
-{
-   setup();
-}
 
-MaltinessWidget::MaltinessWidget(Recipe* recipe)
+MaltinessWidget::MaltinessWidget(QWidget* parent) : QWidget(parent), recObs(0)
 {
    setup();
-   observeRecipe(recipe);
 }
 
 void MaltinessWidget::setup()
