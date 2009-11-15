@@ -107,6 +107,49 @@ QString Brewtarget::getDocDir()
 #endif
 }
 
+QString Brewtarget::getConfigDir()
+{
+#if defined(Q_WS_X11) // Linux OS.
+
+   QDir dir;
+   char* xdg_config_home = getenv("XDG_CONFIG_HOME");
+   if (xdg_config_home)
+   {
+      dir = xdg_config_home;
+   }
+   else
+   {
+      dir = QDir::home();
+      if (!dir.exists(".config"))
+      {
+         dir.mkdir(".config");
+      }
+      dir.cd(".config");
+   }
+   if (!dir.exists("Brewtarget"))
+   {
+      dir.mkdir("Brewtarget");
+   }
+   dir.cd("Brewtarget");
+
+   return dir.absolutePath() + "/";
+
+#elif defined(Q_WS_MAC) // MAC OS.
+
+   QString dir= app->applicationDirPath();
+   // We should be inside an app bundle.
+   dir += "/../Resources/";
+   return dir;
+
+#else // Windows OS.
+
+   QString dir= app->applicationDirPath();
+   dir += "/";
+   return dir;
+
+#endif
+}
+
 int Brewtarget::run()
 {
    int ret;
@@ -275,7 +318,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units )
 
 void Brewtarget::readPersistentOptions()
 {
-   QFile xmlFile(getDataDir() + "options.xml");
+   QFile xmlFile(getConfigDir() + "options.xml");
    optionsDoc = new QDomDocument();
    QDomElement root;
    QDomNode node, child;
@@ -448,7 +491,7 @@ void Brewtarget::readPersistentOptions()
 
 void Brewtarget::savePersistentOptions()
 {
-   QFile xmlFile(getDataDir() + "options.xml");
+   QFile xmlFile(getConfigDir() + "options.xml");
    optionsDoc = new QDomDocument();
    QDomElement root;
    QDomNode node, child;

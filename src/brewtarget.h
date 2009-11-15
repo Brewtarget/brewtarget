@@ -45,6 +45,7 @@ public:
    static void setApp(QApplication& a); // This method should be called before any of the others.
    static QString getDataDir();
    static QString getDocDir();
+   static QString getConfigDir();
    static int run();
    static void log( LogType lt, std::string message );
    static void log( LogType lt, QString message );
