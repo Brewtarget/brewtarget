@@ -90,13 +90,20 @@ void Database::initialize()
    int col;
    unsigned int i, size;
 
-   dbFileName = (Brewtarget::getDataDir() + "database.xml");
-   recipeFileName = (Brewtarget::getDataDir() + "recipes.xml");
-   mashFileName = (Brewtarget::getDataDir() + "mashs.xml");
+   dbFileName = (Brewtarget::getConfigDir() + "database.xml");
+   recipeFileName = (Brewtarget::getConfigDir() + "recipes.xml");
+   mashFileName = (Brewtarget::getConfigDir() + "mashs.xml");
 
    dbFile.setFileName(dbFileName);
    recipeFile.setFileName(recipeFileName);
    mashFile.setFileName(mashFileName);
+
+   if (!dbFile.exists())
+      QFile::copy(Brewtarget::getDataDir() + "database.xml", dbFileName);
+   if (!recipeFile.exists())
+      QFile::copy(Brewtarget::getDataDir() + "recipes.xml", recipeFileName);
+   if (!mashFile.exists())
+      QFile::copy(Brewtarget::getDataDir() + "mashs.xml", mashFileName);
 
    // Try to open the files.
    if( ! dbFile.open(QIODevice::ReadOnly) )
