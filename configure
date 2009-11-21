@@ -292,10 +292,21 @@ sub findQmake
       return;
    }
 
-   $qmake = findExec('qmake');
+   $qmake = findExec('qmake-qt4');
    if( ! $qmake )
    {
       print STDERR "ERROR: you do not have a qmake";
+      exit 1;
+   }
+
+   # Now, try to see what version we have.
+   $_ = `$qmake -v`;
+
+   /Qt\sversion\s*(\d[.]\d).*/;
+   $version = $1;
+   if( $version < 4.5 )
+   {
+      print STDERR "ERROR: your Qt version is $version but needs to be at least 4.5";
       exit 1;
    }
 }
