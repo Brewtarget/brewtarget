@@ -465,7 +465,7 @@ void MainWindow::showChanges()
    lcdNumber_ibu->display(doubleToStringPrec(recipeObs->getIBU(), 1).c_str());
    lcdNumber_srm->display(doubleToStringPrec(recipeObs->getColor_srm(),1).c_str());
 
-   // Want to do some color manipulation based on selected style.
+   // Want to do some manipulation based on selected style.
    Style* recipeStyle = recipeObs->getStyle();
    if( recipeStyle != 0 )
    {
@@ -474,6 +474,17 @@ void MainWindow::showChanges()
       double abv = recipeObs->getABV_pct();
       double ibu = recipeObs->getIBU();
       double srm = recipeObs->getColor_srm();
+
+      lcdNumber_ogLow->display(doubleToStringPrec(recipeStyle->getOgMin(), 3).c_str());
+      lcdNumber_ogHigh->display(doubleToStringPrec(recipeStyle->getOgMax(), 3).c_str());
+      lcdNumber_fgLow->display(doubleToStringPrec(recipeStyle->getFgMin(), 3).c_str());
+      lcdNumber_fgHigh->display(doubleToStringPrec(recipeStyle->getFgMax(), 3).c_str());
+      lcdNumber_abvLow->display(doubleToStringPrec(recipeStyle->getAbvMin_pct(), 1).c_str());
+      lcdNumber_abvHigh->display(doubleToStringPrec(recipeStyle->getAbvMax_pct(), 1).c_str());
+      lcdNumber_ibuLow->display(doubleToStringPrec(recipeStyle->getIbuMin(), 1).c_str());
+      lcdNumber_ibuHigh->display(doubleToStringPrec(recipeStyle->getIbuMax(), 1).c_str());
+      lcdNumber_srmLow->display(doubleToStringPrec(recipeStyle->getColorMin_srm(), 1).c_str());
+      lcdNumber_srmHigh->display(doubleToStringPrec(recipeStyle->getColorMax_srm(), 1).c_str());
       
       if( recipeStyle->getOgMin() < og && og < recipeStyle->getOgMax() )
       {
