@@ -297,17 +297,17 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
 	 else
 	    return false;
       case FERMYIELDCOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Double) )
          {
-            row->setYield_pct( Unit::qstringToSI(value.toString()) );
+            row->setYield_pct( value.toDouble() );
             return true;
          }
          else
             return false;
       case FERMCOLORCOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Double) )
          {
-            row->setColor_srm( Unit::qstringToSI(value.toString()) );
+            row->setColor_srm( value.toDouble() );
             return true;
          }
          else

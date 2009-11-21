@@ -223,6 +223,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units )
          }
 
          case SI:
+         default:
          {
             if( SIAmount < Units::grams->toSI(1.0) )
                ret = QString("%1 %2").arg(Units::milligrams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milligrams->getUnitName().c_str());
@@ -271,6 +272,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units )
          }
 
          case SI:
+         default:
          {
             if( SIAmount < Units::liters->toSI(1.0) )
                ret = QString("%1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName().c_str());
@@ -292,6 +294,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units )
             return ret;
          }
          case Celsius:
+         default:
          {
             ret = QString("%1 %2").arg(Units::celsius->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::celsius->getUnitName().c_str());
             return ret;

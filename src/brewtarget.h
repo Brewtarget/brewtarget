@@ -34,6 +34,7 @@ class Brewtarget
    friend class IbuMethods;
    friend class ColorMethods;
    friend class RecipeFormatter;
+   friend class Unit;
 public:
    Brewtarget();
 

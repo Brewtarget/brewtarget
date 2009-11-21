@@ -235,9 +235,9 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          else
             return false;
       case HOPALPHACOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Double) )
          {
-            row->setAlpha_pct( Unit::qstringToSI(value.toString()) );
+            row->setAlpha_pct( value.toDouble() );
             return true;
          }
          else

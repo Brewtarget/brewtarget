@@ -89,7 +89,7 @@ void MashWizard::wizardry()
    double grainDensity = HeatCalculations::rhoGrain_KgL;
    
    size = mash->getNumMashSteps();
-   thickNum = Unit::qstringToSI(lineEdit_mashThickness->text());
+   thickNum = lineEdit_mashThickness->text().toDouble();
    thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
 
    if( thickness_LKg <= 0.0 )

@@ -21,6 +21,7 @@
 #include <iostream>
 #include "unit.h"
 #include "stringparsing.h"
+#include "brewtarget.h"
 
 std::map<std::string, Unit*> Unit::nameToUnit;
 bool Unit::isMapSetup = false;
@@ -102,7 +103,19 @@ double Unit::qstringToSI( QString qstr )
    if( list1.size() < 1 ) // Didn't even provide a number.
       return 0.0;
    else if( list1.size() < 2  ) // Only provided a number.
-      return list1[0].toDouble(); // Assume units are already SI.
+   {
+      // If we don't have units, just assume we're dealing with mass.
+      switch(Brewtarget::weightUnitSystem)
+      {
+         case USCustomary:
+         case Imperial:
+            return Units::pounds->toSI(list1[0].toDouble());
+
+         case SI:
+         default:
+            return list1[0].toDouble();
+      }
+   }
    else // Provided a number and unit.
    {
       std::string units;

@@ -67,10 +67,10 @@ void MashEditor::saveAndClose()
    mash->setName( lineEdit_name->text().toStdString() );
    mash->setGrainTemp_c(Unit::qstringToSI(lineEdit_grainTemp->text()));
    mash->setSpargeTemp_c(Unit::qstringToSI(lineEdit_spargeTemp->text()));
-   mash->setPh(Unit::qstringToSI(lineEdit_spargePh->text()));
+   mash->setPh(lineEdit_spargePh->text().toDouble());
    mash->setTunTemp_c(Unit::qstringToSI(lineEdit_tunTemp->text()));
    mash->setTunWeight_kg(Unit::qstringToSI(lineEdit_tunMass->text()));
-   mash->setTunSpecificHeat_calGC(Unit::qstringToSI(lineEdit_tunSpHeat->text()) );
+   mash->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->text().toDouble() );
 
    mash->setNotes( textEdit_notes->toPlainText().toStdString() );
    

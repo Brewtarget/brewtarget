@@ -66,9 +66,9 @@ void OgAdjuster::calculate()
    bool gotSG = false;
 
    // Get inputs.
-   sg = Unit::qstringToSI( lineEdit_sg->text() );
+   sg = lineEdit_sg->text().toDouble();
    temp_c = Unit::qstringToSI( lineEdit_temp->text() );
-   plato = Unit::qstringToSI( lineEdit_plato->text() );
+   plato = lineEdit_plato->text().toDouble();
    wort_l = Unit::qstringToSI( lineEdit_volume->text() );
    hydroTemp_c = Unit::qstringToSI( lineEdit_calTemp->text() );
 

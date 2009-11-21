@@ -64,19 +64,19 @@ void HopEditor::save()
    h->disableNotification();
 
    h->setName(lineEdit_name->text().toStdString());
-   h->setAlpha_pct(Unit::qstringToSI(lineEdit_alpha->text()));
+   h->setAlpha_pct(lineEdit_alpha->text().toDouble());
    h->setAmount_kg(Unit::qstringToSI(lineEdit_amount->text()));
    h->setUse(comboBox_use->currentText().toStdString());
    h->setTime_min(Unit::qstringToSI(lineEdit_time->text()));
    h->setType(comboBox_type->currentText().toStdString());
    h->setForm(comboBox_form->currentText().toStdString());
-   h->setBeta_pct(Unit::qstringToSI(lineEdit_beta->text()));
-   h->setHsi_pct(Unit::qstringToSI(lineEdit_HSI->text()));
+   h->setBeta_pct(lineEdit_beta->text().toDouble());
+   h->setHsi_pct(lineEdit_HSI->text().toDouble());
    h->setOrigin(lineEdit_origin->text().toStdString());
-   h->setHumulene_pct(Unit::qstringToSI(lineEdit_humulene->text()));
-   h->setCaryophyllene_pct(Unit::qstringToSI(lineEdit_caryophyllene->text()));
-   h->setCohumulone_pct(Unit::qstringToSI(lineEdit_cohumulone->text()));
-   h->setMyrcene_pct(Unit::qstringToSI(lineEdit_myrcene->text()));
+   h->setHumulene_pct(lineEdit_humulene->text().toDouble());
+   h->setCaryophyllene_pct(lineEdit_caryophyllene->text().toDouble());
+   h->setCohumulone_pct(lineEdit_cohumulone->text().toDouble());
+   h->setMyrcene_pct(lineEdit_myrcene->text().toDouble());
 
    h->setSubstitutes(textEdit_substitutes->toPlainText().toStdString());
    h->setNotes(textEdit_notes->toPlainText().toStdString());

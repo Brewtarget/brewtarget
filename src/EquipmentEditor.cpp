@@ -122,7 +122,7 @@ void EquipmentEditor::save()
    obsEquip->setEvapRate_lHr( Unit::qstringToSI(lineEdit_evaporationRate->text()) );
    obsEquip->setTopUpKettle_l( Unit::qstringToSI(lineEdit_topUpKettle->text()) );
    obsEquip->setTopUpWater_l( Unit::qstringToSI(lineEdit_topUpWater->text()) );
-   obsEquip->setHopUtilization_pct( Unit::qstringToSI(lineEdit_hopUtilization->text()) );
+   obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble() );
 
    obsEquip->setTrubChillerLoss_l( Unit::qstringToSI(lineEdit_trubChillerLoss->text()) );
    obsEquip->setLauterDeadspace_l( Unit::qstringToSI(lineEdit_lauterDeadspace->text()) );

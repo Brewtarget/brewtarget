@@ -666,7 +666,7 @@ void MainWindow::updateRecipeEfficiency()
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setEfficiency_pct( Unit::qstringToSI(lineEdit_efficiency->text()) );
+   recipeObs->setEfficiency_pct( lineEdit_efficiency->text().toDouble() );
 }
 
 void MainWindow::addFermentableToRecipe(Fermentable* ferm)

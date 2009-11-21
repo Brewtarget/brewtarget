@@ -227,7 +227,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERCALCIUMCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setCalcium_ppm( Unit::qstringToSI(value.toString()) );
+            row->setCalcium_ppm( value.toString().toDouble() );
             return true;
          }
          else
@@ -235,7 +235,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERBICARBONATECOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setBicarbonate_ppm( Unit::qstringToSI(value.toString()) );
+            row->setBicarbonate_ppm( value.toString().toDouble() );
             return true;
          }
          else
@@ -243,7 +243,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERSULFATECOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setSulfate_ppm( Unit::qstringToSI(value.toString()) );
+            row->setSulfate_ppm( value.toString().toDouble() );
             return true;
          }
          else
@@ -251,7 +251,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERCHLORIDECOL:
          if( value.canConvert(QVariant::String))
          {
-            row->setChloride_ppm( Unit::qstringToSI(value.toString()) );
+            row->setChloride_ppm( value.toString().toDouble() );
             return true;
          }
          else
@@ -259,7 +259,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERSODIUMCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setSodium_ppm( Unit::qstringToSI(value.toString()) );
+            row->setSodium_ppm( value.toString().toDouble() );
             return true;
          }
          else
@@ -267,7 +267,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERMAGNESIUMCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setMagnesium_ppm( Unit::qstringToSI(value.toString()) );
+            row->setMagnesium_ppm( value.toString().toDouble() );
             return true;
          }
          else

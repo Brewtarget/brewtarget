@@ -64,19 +64,19 @@ void FermentableEditor::save()
    obsFerm->setName(lineEdit_name->text().toStdString());
    obsFerm->setType(comboBox_type->currentText().toStdString());
    obsFerm->setAmount_kg(Unit::qstringToSI(lineEdit_amount->text()));
-   obsFerm->setYield_pct(Unit::qstringToSI(lineEdit_yield->text()));
-   obsFerm->setColor_srm(Unit::qstringToSI(lineEdit_color->text()));
+   obsFerm->setYield_pct(lineEdit_yield->text().toDouble());
+   obsFerm->setColor_srm(lineEdit_color->text().toDouble());
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
    obsFerm->setOrigin( lineEdit_origin->text().toStdString() );
    obsFerm->setSupplier( lineEdit_supplier->text().toStdString() );
-   obsFerm->setCoarseFineDiff_pct( Unit::qstringToSI(lineEdit_coarseFineDiff->text()) );
-   obsFerm->setMoisture_pct( Unit::qstringToSI(lineEdit_moisture->text()) );
-   obsFerm->setDiastaticPower_lintner( Unit::qstringToSI(lineEdit_diastaticPower->text()) );
-   obsFerm->setProtein_pct( Unit::qstringToSI(lineEdit_protein->text()) );
-   obsFerm->setMaxInBatch_pct( Unit::qstringToSI(lineEdit_maxInBatch->text()) );
+   obsFerm->setCoarseFineDiff_pct( lineEdit_coarseFineDiff->text().toDouble() );
+   obsFerm->setMoisture_pct( lineEdit_moisture->text().toDouble() );
+   obsFerm->setDiastaticPower_lintner( lineEdit_diastaticPower->text().toDouble() );
+   obsFerm->setProtein_pct( lineEdit_protein->text().toDouble() );
+   obsFerm->setMaxInBatch_pct( lineEdit_maxInBatch->text().toDouble() );
    obsFerm->setRecommendMash( (checkBox_recommendMash->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
-   obsFerm->setIbuGalPerLb( Unit::qstringToSI(lineEdit_ibuGalPerLb->text()) );
+   obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->text().toDouble() );
    obsFerm->setNotes( textEdit_notes->toPlainText().toStdString() );
 
    obsFerm->reenableNotification();

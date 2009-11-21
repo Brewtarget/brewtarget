@@ -73,7 +73,7 @@ void YeastEditor::save()
    y->setMinTemperature_c( Unit::qstringToSI(lineEdit_minTemperature->text()) );
    y->setMaxTemperature_c( Unit::qstringToSI(lineEdit_maxTemperature->text()) );
    y->setFlocculation( comboBox_flocculation->currentText().toStdString() );
-   y->setAttenuation_pct(Unit::qstringToSI(lineEdit_attenuation->text()));
+   y->setAttenuation_pct(lineEdit_attenuation->text().toDouble());
    y->setTimesCultured(parseInt(lineEdit_timesCultured->text().toStdString()));
    y->setMaxReuse(parseInt(lineEdit_maxReuse->text().toStdString()));
    y->setAddToSecondary( (checkBox_addToSecondary->checkState() == Qt::Checked)? true : false );
