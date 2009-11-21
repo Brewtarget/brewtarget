@@ -1593,6 +1593,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionScale_Recipe"/>
+    <addaction name="actionConvert_Units"/>
     <addaction name="actionOG_Correction_Help"/>
     <addaction name="action_recipeToTextClipboard"/>
     <addaction name="separator"/>
@@ -1693,6 +1694,11 @@
   <action name="actionOG_Correction_Help">
    <property name="text">
     <string>OG Correction Help</string>
+   </property>
+  </action>
+  <action name="actionConvert_Units">
+   <property name="text">
+    <string>Convert Units</string>
    </property>
   </action>
  </widget>

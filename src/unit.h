@@ -93,6 +93,7 @@ class Unit
       virtual const std::string& getSIUnitName() const { return 0; };
 
       static double convert( double amount, const std::string& fromUnit, const std::string& toUnit );
+      static QString convert( QString qstr, QString toUnit );
       static double qstringToSI( QString qstr );
 
    private:

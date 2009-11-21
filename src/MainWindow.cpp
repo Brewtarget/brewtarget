@@ -130,6 +130,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter();
    ogAdjuster = new OgAdjuster();
+   converterTool = new ConverterTool();
 
    setupToolbar();
 
@@ -205,6 +206,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionManual, SIGNAL( triggered() ), htmlViewer, SLOT( show() ) );
    connect( actionScale_Recipe, SIGNAL( triggered() ), recipeScaler, SLOT( show() ) );
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
+   connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
    connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );

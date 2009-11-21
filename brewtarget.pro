@@ -93,6 +93,7 @@ HEADERS += src/AboutDialog.h \
            src/BrewDayWidget.h \
            src/brewtarget.h \
            src/config.h \
+           src/ConverterTool.h \
            src/ColorMethods.h \
            src/database.h \
            src/equipment.h \
@@ -155,6 +156,7 @@ HEADERS += src/AboutDialog.h \
            src/YeastTableWidget.h
 FORMS +=   ui/aboutDialog.ui \
            ui/brewDayWidget.ui \
+           ui/converterTool.ui \
            ui/mainWindow.ui \
            ui/mashStepEditor.ui \
            ui/miscEditor.ui \
@@ -182,6 +184,7 @@ SOURCES += src/Algorithms.cpp \
            src/BeerColorWidget.cpp \
            src/brewtarget.cpp \
            src/ColorMethods.cpp \
+           src/ConverterTool.cpp \
            src/equipment.cpp \
            src/EquipmentComboBox.cpp \
            src/EquipmentEditor.cpp \

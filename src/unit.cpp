@@ -115,6 +115,19 @@ double Unit::qstringToSI( QString qstr )
    }
 }
 
+QString Unit::convert(QString qstr, QString toUnit)
+{
+   if( ! Unit::isMapSetup )
+      Unit::setupMap();
+
+   double si = qstringToSI( qstr );
+   
+   if( nameToUnit[toUnit.toStdString()] == 0 )
+      return QString("%1 ?").arg(si, 0, 'f', 3);
+   else
+      return QString("%1 %2").arg(nameToUnit[toUnit.toStdString()]->fromSI(si), 0, 'f', 3).arg(toUnit);
+}
+
 void Unit::setupMap()
 {
    Unit::nameToUnit[Units::kilograms->getUnitName()] = Units::kilograms;

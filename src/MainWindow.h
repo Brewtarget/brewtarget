@@ -53,6 +53,7 @@ class MainWindow;
 #include "ScaleRecipeTool.h"
 #include "RecipeFormatter.h"
 #include "OgAdjuster.h"
+#include "ConverterTool.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -135,6 +136,7 @@ private:
    ScaleRecipeTool* recipeScaler;
    RecipeFormatter* recipeFormatter;
    OgAdjuster* ogAdjuster;
+   ConverterTool* converterTool;
 
    void setupToolbar();
    void showChanges();
