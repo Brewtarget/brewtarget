@@ -287,16 +287,14 @@ sub findMake
 
 sub findQmake
 {
-   if( $qmake )
+   if( ! $qmake ) # Don't kill any user-supplied qmake.
    {
-      return;
-   }
-
-   $qmake = findExec('qmake-qt4');
-   if( ! $qmake )
-   {
-      print STDERR "ERROR: you do not have a qmake";
-      exit 1;
+      $qmake = findExec('qmake');
+      if( ! $qmake )
+      {
+         print STDERR "ERROR: you do not have a qmake";
+         exit 1;
+      }
    }
 
    # Now, try to see what version we have.
