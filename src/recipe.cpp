@@ -665,7 +665,7 @@ void Recipe::removeInstruction(Instruction* ins)
 
 void Recipe::swapInstructions(unsigned int j, unsigned int k)
 {
-   if( j < 0 || k < 0 || j == k || j >= instructions.size() || k >= instructions.size() )
+   if( j == k || j >= instructions.size() || k >= instructions.size() )
       return;
    
    Instruction* tmp;
@@ -1787,9 +1787,12 @@ void Recipe::recalculate()
       // First, lauter deadspace.
       double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-	      ratio = 1.0;
+         ratio = 1.0;
       else if( ratio < 0.0 ) // Only happens if the user is stupid with lauter deadspace.
-	      ratio = 0.0;
+         ratio = 0.0;
+      else if( isnan(ratio) )
+         ratio = 1.0; // Need this in case we have no mash, and therefore end up with NaN.
+         
       sugar_kg *= ratio;
       // Don't consider this one since nobody adds sugar or extract to the mash.
       //sugar_kg_ignoreEfficiency *= ratio;
@@ -1799,9 +1802,11 @@ void Recipe::recalculate()
       double postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
       ratio = (postBoilWort_l - equipment->getTrubChillerLoss_l()) / postBoilWort_l;
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-	      ratio = 1.0;
+         ratio = 1.0;
       else if( ratio < 0.0 )
-	      ratio = 0.0;
+         ratio = 0.0;
+      else if( isnan(ratio) )
+         ratio = 1.0;
       sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
    }
@@ -1983,7 +1988,9 @@ double Recipe::getWortGrav()
       // First, lauter deadspace.
       double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
       if( ratio > 1.0 )
-	 ratio = 1.0;
+         ratio = 1.0;
+      else if( isnan(ratio) )
+         ratio = 1.0; // Need this in case we have no mash, and therefore end up with NaN.
       sugar_kg *= ratio;
       // Don't consider this one since nobody adds sugar or extract to the mash.
       //sugar_kg_ignoreEfficiency *= ratio;

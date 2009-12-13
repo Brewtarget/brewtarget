@@ -45,7 +45,7 @@
            <item>
             <widget class="QRadioButton" name="weight_imperial">
              <property name="text">
-              <string>Use British imperical units</string>
+              <string>Use British imperial units</string>
              </property>
             </widget>
            </item>
@@ -75,7 +75,7 @@
            <item>
             <widget class="QRadioButton" name="volume_imperial">
              <property name="text">
-              <string>Use British imperical units</string>
+              <string>Use British imperial units</string>
              </property>
             </widget>
            </item>
