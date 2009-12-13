@@ -1766,6 +1766,9 @@ void Recipe::recalculate()
    Fermentable* ferm;
    Yeast* yeast;
 
+   //Take this out.
+   estimateBoilVolume_l();
+   
    // Calculate OG
    for( i = 0; i < fermentables.size(); ++i )
    {
@@ -1958,7 +1961,7 @@ bool Recipe::removeYeast(Yeast* var)
    return false;
 }
 
-double Recipe::getWortGrav()
+double Recipe::getBoilGrav()
 {
    unsigned int i;
    Fermentable* ferm;
@@ -1997,8 +2000,8 @@ double Recipe::getWortGrav()
    }
 
    // Conversion factor for lb/gal to kg/l = 8.34538.
-   points = (383.89 * sugar_kg / getBoilSize_l()) * getEfficiency_pct()/100.0;
-   points += 383.89 * sugar_kg_ignoreEfficiency / getBoilSize_l();
+   points = (383.89 * sugar_kg / estimateBoilVolume_l()) * getEfficiency_pct()/100.0;
+   points += 383.89 * sugar_kg_ignoreEfficiency / estimateBoilVolume_l();
    return (1.0 + points/1000.0);
 }
 
@@ -2030,15 +2033,16 @@ double Recipe::getIBUFromHop( unsigned int i )
    if( i >= hops.size() )
       return 0.0;
    
+   double AArating = hops[i]->getAlpha_pct()/100.0;
+   double grams = hops[i]->getAmount_kg()*1000.0;
+   double water_l = estimateFinalVolume_l();
+   double boilGrav = getBoilGrav();
+   double minutes = hops[i]->getTime_min();
+   
    if( hops[i]->getUse() == "Boil")
-      ibus = IbuMethods::getIbus( hops[i]->getAlpha_pct()/100.0, hops[i]->getAmount_kg()*1000.0,
-                   batchSize_l, getWortGrav(), hops[i]->getTime_min() );
+      ibus = IbuMethods::getIbus( AArating, grams, water_l, boilGrav, minutes );
    else if( hops[i]->getUse() == "First Wort" )
-      ibus = 1.10 * IbuMethods::getIbus( hops[i]->getAlpha_pct()/100.0,
-                          hops[i]->getAmount_kg()*1000.0,
-                          batchSize_l,
-                          getWortGrav(),
-                          20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
+      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, water_l, boilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
 
    return ibus;
 }
@@ -2139,13 +2143,16 @@ double Recipe::estimateBoilVolume_l() const
    
    mashVol_l = estimateWortFromMash_l();
    
-   if( mashVol_l <= 0.0 ) // Give up.
-      return boilSize_l;
+   //if( mashVol_l <= 0.0 ) // Give up.
+   //   return boilSize_l;
    
    if( equipment != 0 )
       ret = mashVol_l - equipment->getLauterDeadspace_l() + equipment->getTopUpKettle_l();
    else
       ret = mashVol_l;
+   
+   if( ret <= 0.0 )
+      ret = boilSize_l; // Give up.
    
    return ret;
 }

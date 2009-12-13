@@ -161,7 +161,7 @@ public:
    void recalculate(); // Calculates some parameters.
    double getABV_pct();
    double getColor_srm();
-   double getWortGrav();
+   double getBoilGrav();
    double getIBU();
    double getIBUFromHop( unsigned int i );
    QColor getSRMColor();
