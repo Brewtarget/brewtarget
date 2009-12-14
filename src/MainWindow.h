@@ -101,6 +101,8 @@ public slots:
    void removeRecipe();
    void exportRecipe();
    void importRecipes();
+   void backup(); // Backup the database.
+   void restoreFromBackup(); // Restore the database.
 
    void brewDayMode();
 

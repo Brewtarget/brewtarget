@@ -194,75 +194,6 @@ void Database::initialize()
 
    internalDBInstance = new Database();
    Database::initialized = true;
-   
-   /*
-   dbFile.open(dbFileName.toStdString().c_str());
-   recipeFile.open(recipeFileName.toStdString().c_str()); // Why are these separate from the dbFile? To prevent duplicates.
-   mashFile.open(mashFileName.toStdString().c_str()); // Why are these separate from the dbFile? To prevent duplicates.
-   
-   unsigned int i, size;
-   std::vector<XmlNode*> nodes;
-   XmlTree* tree = new XmlTree(dbFile);
-
-   size = tree->getNodesWithTag(nodes, "EQUIPMENT");
-   for( i = 0; i < size; ++i )
-      equipments.push_back(new Equipment(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "FERMENTABLE");
-   for( i = 0; i < size; ++i )
-      fermentables.push_back(new Fermentable(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "HOP");
-   for( i = 0; i < size; ++i )
-      hops.push_back(new Hop(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "MASH_STEP");
-   for( i = 0; i < size; ++i )
-      mashSteps.push_back(new MashStep(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "MISC");
-   for( i = 0; i < size; ++i )
-      miscs.push_back(new Misc(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "STYLE");
-   for( i = 0; i < size; ++i )
-      styles.push_back(new Style(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "WATER");
-   for( i = 0; i < size; ++i )
-      waters.push_back(new Water(nodes[i]));
-   size = tree->getNodesWithTag(nodes, "YEAST");
-   for( i = 0; i < size; ++i )
-      yeasts.push_back(new Yeast(nodes[i]));
-
-   delete tree;
-
-   tree = new XmlTree(mashFile);
-
-   size = tree->getNodesWithTag(nodes, "MASH");
-   for( i = 0; i < size; ++i )
-      mashs.push_back(new Mash(nodes[i]));
-
-   delete tree;
-
-   tree = new XmlTree(recipeFile);
-
-   size = tree->getNodesWithTag(nodes, "RECIPE");
-   for( i = 0; i < size; ++i )
-      recipes.push_back(new Recipe(nodes[i]));
-
-   delete tree;
-   dbFile.close();
-   recipeFile.close();
-   mashFile.close();
-
-   // Sort everything by name.
-   equipments.sort(Equipment_ptr_cmp());
-   fermentables.sort(Fermentable_ptr_cmp());
-   hops.sort(Hop_ptr_cmp());
-   mashs.sort(Mash_ptr_cmp());
-   mashSteps.sort(MashStep_ptr_cmp());
-   miscs.sort(Misc_ptr_cmp());
-   recipes.sort(Recipe_ptr_cmp());
-   styles.sort(Style_ptr_cmp());
-   waters.sort(Water_ptr_cmp());
-   yeasts.sort(Yeast_ptr_cmp());
-
-    */
 }
 
 void Database::resortAll()
@@ -316,6 +247,61 @@ void Database::resortYeasts()
 {
    yeasts.sort(Yeast_ptr_cmp());
    hasChanged(QVariant(DBYEAST));
+}
+
+bool Database::backupToDir(QString dir)
+{
+   if( ! isInitialized() )
+      initialize();
+   
+   savePersistent();
+   bool success = true;
+   QString prefix = dir + "/";
+   QString dbFileName = prefix + "database.xml";
+   QString recipeFileName = prefix + "recipes.xml";
+   QString mashFileName = prefix + "mashs.xml";
+   
+   // Remove the files if they already exist so that
+   // the copy() operation will succeed.
+   QFile::remove(dbFileName);
+   QFile::remove(recipeFileName);
+   QFile::remove(mashFileName);
+   
+   success &= dbFile.copy( prefix + "database.xml" );
+   success &= recipeFile.copy( prefix + "recipes.xml" );
+   success &= mashFile.copy( prefix + "mashs.xml" );
+}
+
+bool Database::restoreFromDir(QString dirStr)
+{
+   if( ! isInitialized() )
+      initialize();
+   
+   bool success = true;
+   QString prefix = dirStr + "/";
+   QString dbFileName = prefix + "database.xml";
+   QString recipeFileName = prefix + "recipes.xml";
+   QString mashFileName = prefix + "mashs.xml";
+   
+   QFile newDbFile(dbFileName);
+   QFile newRecipeFile(dbFileName);
+   QFile newMashFile(mashFileName);
+   
+   // Fail if we can't find even one of the required files.
+   if( !newDbFile.exists() || !newRecipeFile.exists() || !newMashFile.exists() )
+      return false;
+   
+   success &= dbFile.remove();
+   success &= recipeFile.remove();
+   success &= mashFile.remove();
+   
+   success &= newDbFile.copy(dbFile.fileName());
+   success &= newRecipeFile.copy(recipeFile.fileName());
+   success &= newMashFile.copy(mashFile.fileName());
+   
+   initialize();
+   
+   return success;
 }
 
 void Database::savePersistent()
@@ -413,87 +399,6 @@ void Database::savePersistent()
    mashDoc.appendChild(mashRoot);
    mashOut << mashDoc.toString();
    /*** END mashDoc ***/
-   
-   /*
-   dbOut << QString("<?xml version=\"1.0\"?>\n");
-   recipeOut << QString("<?xml version=\"1.0\"?>\n");
-   mashOut << QString("<?xml version=\"1.0\"?>\n");
-
-   //=====================dbOut entries=============================
-
-   std::list<Equipment*>::iterator eqit, eqend;
-   eqend = equipments.end();
-   dbOut << QString("<EQUIPMENTS>\n");
-   for( eqit = equipments.begin(); eqit != eqend; ++eqit )
-      dbOut << QString((*eqit)->toXml().c_str());
-   dbOut << QString("</EQUIPMENTS>\n");
-
-   std::list<Fermentable*>::iterator fit, fend;
-   fend = fermentables.end();
-   dbOut << QString("<FERMENTABLES>\n");
-   for( fit = fermentables.begin(); fit != fend; ++fit )
-      dbOut << QString((*fit)->toXml().c_str());
-   dbOut << QString("</FERMENTABLES>\n");
-
-   std::list<Hop*>::iterator hit, hend;
-   hend = hops.end();
-   dbOut << QString("<HOPS>\n");
-   for( hit = hops.begin(); hit != hend; ++hit )
-      dbOut << QString((*hit)->toXml().c_str());
-   dbOut << QString("</HOPS>\n");
-
-   std::list<MashStep*>::iterator msit, msend;
-   msend = mashSteps.end();
-   dbOut << QString("<MASH_STEPS>\n");
-   for( msit = mashSteps.begin(); msit != msend; ++msit )
-      dbOut << QString((*msit)->toXml().c_str());
-   dbOut << QString("</MASH_STEPS>\n");
-
-   std::list<Misc*>::iterator miscit, miscend;
-   miscend = miscs.end();
-   dbOut << QString("<MISCS>\n");
-   for( miscit = miscs.begin(); miscit != miscend; ++miscit )
-      dbOut << QString((*miscit)->toXml().c_str());
-   dbOut << QString("</MISCS>\n");
-
-   std::list<Style*>::iterator sit, send;
-   send = styles.end();
-   dbOut << QString("<STYLES>\n");
-   for( sit = styles.begin(); sit != send; ++sit )
-      dbOut << QString((*sit)->toXml().c_str());
-   dbOut << QString("</STYLES>\n");
-
-   std::list<Water*>::iterator wit, wend;
-   wend = waters.end();
-   dbOut << QString("<WATERS>\n");
-   for( wit = waters.begin(); wit != wend; ++wit )
-      dbOut << QString((*wit)->toXml().c_str());
-   dbOut << QString("</WATERS>\n");
-
-   std::list<Yeast*>::iterator yit, yend;
-   yend = yeasts.end();
-   dbOut << QString("<YEASTS>\n");
-   for( yit = yeasts.begin(); yit != yend; ++yit )
-      dbOut << QString((*yit)->toXml().c_str());
-   dbOut << QString("</YEASTS>\n");
-
-   //============================mashOut entries===============================
-   std::list<Mash*>::iterator mait, maend;
-   maend = mashs.end();
-   mashOut << QString("<MASHS>\n");
-   for( mait = mashs.begin(); mait != maend; ++mait )
-      mashOut << QString((*mait)->toXml().c_str());
-   mashOut << QString("</MASHS>\n");
-
-   //==========================recipeOut entries===============================
-   std::list<Recipe*>::iterator rit, rend;
-   rend = recipes.end();
-   recipeOut << QString("<RECIPES>\n");
-   for( rit = recipes.begin(); rit != rend; ++rit )
-      recipeOut << QString((*rit)->toXml().c_str());
-   recipeOut << QString("</RECIPES>\n");
-
-   */
    
    dbFile.close();
    recipeFile.close();

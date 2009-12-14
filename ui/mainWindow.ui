@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>591</height>
+    <width>623</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1555,8 +1555,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>601</width>
-     <height>23</height>
+     <width>623</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1567,6 +1567,8 @@
     <addaction name="separator"/>
     <addaction name="actionImport_Recipes"/>
     <addaction name="actionExportRecipe"/>
+    <addaction name="actionBackup_Database"/>
+    <addaction name="actionRestore_Database"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1701,13 +1703,18 @@
     <string>Convert Units</string>
    </property>
   </action>
+  <action name="actionBackup_Database">
+   <property name="text">
+    <string>Backup Database</string>
+   </property>
+  </action>
+  <action name="actionRestore_Database">
+   <property name="text">
+    <string>Restore Database</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>EquipmentComboBox</class>
-   <extends>QComboBox</extends>
-   <header>EquipmentComboBox.h</header>
-  </customwidget>
   <customwidget>
    <class>FermentableTableWidget</class>
    <extends>QTableView</extends>
@@ -1719,14 +1726,19 @@
    <header>HopTableWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>MashStepTableWidget</class>
-   <extends>QTableView</extends>
-   <header>MashStepTableWidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>MiscTableWidget</class>
    <extends>QTableView</extends>
    <header>MiscTableWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EquipmentComboBox</class>
+   <extends>QComboBox</extends>
+   <header>EquipmentComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MashStepTableWidget</class>
+   <extends>QTableView</extends>
+   <header>MashStepTableWidget.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeComboBox</class>

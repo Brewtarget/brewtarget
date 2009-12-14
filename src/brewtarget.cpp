@@ -126,11 +126,11 @@ QString Brewtarget::getConfigDir()
       }
       dir.cd(".config");
    }
-   if (!dir.exists("Brewtarget"))
+   if (!dir.exists("brewtarget"))
    {
-      dir.mkdir("Brewtarget");
+      dir.mkdir("brewtarget");
    }
-   dir.cd("Brewtarget");
+   dir.cd("brewtarget");
 
    return dir.absolutePath() + "/";
 

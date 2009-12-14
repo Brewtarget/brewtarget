@@ -57,6 +57,9 @@ public:
    static bool isInitialized();
    static void savePersistent(); // Save to the persistent medium.
 
+   static bool backupToDir(QString dir);
+   static bool restoreFromDir(QString dirStr);
+   
    void addEquipment(Equipment* equip);
    void addFermentable(Fermentable* ferm);
    void addHop(Hop* hop);

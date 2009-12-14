@@ -208,6 +208,8 @@ MainWindow::MainWindow(QWidget* parent)
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
    connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
    connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
+   connect( actionBackup_Database, SIGNAL( triggered() ), this, SLOT( backup() ) );
+   connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -922,6 +924,31 @@ void MainWindow::newRecipe()
    recipeComboBox->setIndexByRecipeName(name.toStdString());
 }
 
+void MainWindow::backup()
+{
+   QString dir = QFileDialog::getExistingDirectory(this, tr("Backup Database"));
+   
+   bool success = Database::backupToDir(dir);
+   
+   if( ! success )
+      QMessageBox::warning( this, tr("Oops!"), tr("Could not copy the files for some reason."));
+}
+
+void MainWindow::restoreFromBackup()
+{
+   if( QMessageBox::question( this, tr("A Warning"),
+         tr("This will obliterate your current set of recipes and ingredients. Do you want to continue?") )
+       == QMessageBox::No
+      )
+   {
+      return;
+   }
+   
+   QString dir = QFileDialog::getExistingDirectory(this, tr("Restore Database"));
+   
+   Database::restoreFromDir(dir);
+}
+
 // Imports all the recipes from a file into the database.
 void MainWindow::importRecipes()
 {
@@ -972,33 +999,6 @@ void MainWindow::importRecipes()
    }
    
    inFile.close();
-   
-   /*
-   in.open(filename, ios::in);
-
-   XmlTree* tree = new XmlTree( in );
-   numRecipes = tree->getNodesWithTag( nodes, "RECIPE" );
-
-   // Tell how many recipes there were in the status bar.
-   statusBar()->showMessage( tr("Found ") + tr(intToString(numRecipes).c_str()) + tr(" recipes."), 5000 );
-
-   for( i = 0; i < numRecipes; ++i )
-   {
-      newRec = new Recipe(nodes[i]);
-
-      if( QMessageBox::question(this, tr("Import recipe?"),
-                             tr("Import \"") + newRec->getName().c_str() + "\"?",
-                             QMessageBox::Yes,
-                             QMessageBox::No)
-           == QMessageBox::Yes )
-      {
-         db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
-      }
-   }
-
-   delete tree;
-   in.close();
-   */
 }
 
 void MainWindow::addMashStep()
@@ -1016,7 +1016,6 @@ void MainWindow::addMashStep()
 
    MashStep* step = new MashStep();
    mash->addMashStep(step);
-   //mashStepTableWidget->getModel()->addMashStep(step);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
 }
@@ -1107,6 +1106,8 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    {
       Database::savePersistent();
    }
+
+   Brewtarget::savePersistentOptions();
 
    setVisible(false);
 }

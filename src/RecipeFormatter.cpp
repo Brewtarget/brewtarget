@@ -107,7 +107,7 @@ QString RecipeFormatter::getTextFormat()
       amounts.append("Amount");
       masheds.append("Mashed");
       yields.append("Yield");
-      colors.append("Colors");
+      colors.append("Color");
       
       size = rec->getNumFermentables();
       for( i = 0; i < size; ++i )
