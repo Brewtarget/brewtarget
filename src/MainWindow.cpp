@@ -946,7 +946,10 @@ void MainWindow::restoreFromBackup()
    
    QString dir = QFileDialog::getExistingDirectory(this, tr("Restore Database"));
    
-   Database::restoreFromDir(dir);
+   bool success = Database::restoreFromDir(dir);
+   
+   if( ! success )
+      QMessageBox::warning( this, tr("Oops!"), tr("For some reason, the operation failed.") );
 }
 
 // Imports all the recipes from a file into the database.

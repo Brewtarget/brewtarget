@@ -243,12 +243,15 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
 
 Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
 {
-   Qt::ItemFlags defaults = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+   Qt::ItemFlags defaults = Qt::ItemIsEnabled;
+   int col = index.column();
    
-   if( index.column()  == FERMISMASHEDCOL )
+   if( col == FERMISMASHEDCOL )
       return (defaults | Qt::ItemIsUserCheckable);
+   else if( col == FERMNAMECOL )
+      return defaults;
    else
-      return (defaults | Qt::ItemIsEditable);
+      return (defaults | Qt::ItemIsSelectable | Qt::ItemIsEditable);
 }
 
 bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& value, int role )

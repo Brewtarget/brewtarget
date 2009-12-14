@@ -192,8 +192,11 @@ void Database::initialize()
    recipeFile.close();
    mashFile.close();
 
-   internalDBInstance = new Database();
+   if( internalDBInstance == 0 )
+      internalDBInstance = new Database();
    Database::initialized = true;
+   
+   internalDBInstance->hasChanged(QVariant(DBALL));
 }
 
 void Database::resortAll()
@@ -270,6 +273,8 @@ bool Database::backupToDir(QString dir)
    success &= dbFile.copy( prefix + "database.xml" );
    success &= recipeFile.copy( prefix + "recipes.xml" );
    success &= mashFile.copy( prefix + "mashs.xml" );
+   
+   return success;
 }
 
 bool Database::restoreFromDir(QString dirStr)
@@ -284,7 +289,7 @@ bool Database::restoreFromDir(QString dirStr)
    QString mashFileName = prefix + "mashs.xml";
    
    QFile newDbFile(dbFileName);
-   QFile newRecipeFile(dbFileName);
+   QFile newRecipeFile(recipeFileName);
    QFile newMashFile(mashFileName);
    
    // Fail if we can't find even one of the required files.
