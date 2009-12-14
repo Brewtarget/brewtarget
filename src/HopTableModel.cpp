@@ -209,10 +209,15 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
       return QVariant();
 }
 
-Qt::ItemFlags HopTableModel::flags(const QModelIndex& /*index*/ ) const
+Qt::ItemFlags HopTableModel::flags(const QModelIndex& index ) const
 {
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-          Qt::ItemIsEnabled;
+   int col = index.column();
+   
+   if( col == HOPNAMECOL )
+      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+   else
+      return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+         Qt::ItemIsEnabled;
 }
 
 bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, int role )

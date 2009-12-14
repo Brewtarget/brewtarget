@@ -140,7 +140,7 @@ void FermentableTableModel::notify(Observable* notifier, QVariant info)
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                            QAbstractItemModel::createIndex(i, FERMNUMCOLS));
           */
-	 updateTotalGrains();
+         updateTotalGrains();
          reset();
          break;
       }
@@ -173,37 +173,44 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
    switch( index.column() )
    {
       case FERMNAMECOL:
-	 if( role == Qt::DisplayRole )
-	    return QVariant(row->getName().c_str());
-	 else
-	    return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant(row->getName().c_str());
+         else
+            return QVariant();
       case FERMTYPECOL:
-	 if( role == Qt::DisplayRole )
-	    return QVariant(row->getType().c_str());
-	 else
-	    return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant(row->getType().c_str());
+         else
+            return QVariant();
       case FERMAMOUNTCOL:
-	 if( role == Qt::DisplayRole )
-	    return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
-	 else
-	    return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
+         else
+            return QVariant();
       case FERMISMASHEDCOL:
-	 if( role == Qt::CheckStateRole )
-	    return QVariant( row->getIsMashed() ? Qt::Checked : Qt::Unchecked);
-	 else if( role == Qt::DisplayRole )
-	    return row->getIsMashed() ? QString("Mashed") : QString ("Not mashed");
-	 else
-	    return QVariant();
+         if( role == Qt::CheckStateRole )
+            return QVariant( row->getIsMashed() ? Qt::Checked : Qt::Unchecked);
+         else if( role == Qt::DisplayRole )
+            return row->getIsMashed() ? QString("Mashed") : QString ("Not mashed");
+         else
+            return QVariant();
+      case FERMAFTERBOIL:
+         if( role == Qt::CheckStateRole )
+            return QVariant( row->getAddAfterBoil() ? Qt::Checked : Qt::Unchecked );
+         else if( role == Qt::DisplayRole )
+            return row->getAddAfterBoil()? QString("Late") : QString("Normal");
+         else
+            return QVariant();
       case FERMYIELDCOL:
-	 if( role == Qt::DisplayRole )
-	    return QVariant( Brewtarget::displayAmount(row->getYield_pct(), 0) );
-	 else
-	    return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant( Brewtarget::displayAmount(row->getYield_pct(), 0) );
+         else
+            return QVariant();
       case FERMCOLORCOL:
-	 if( role == Qt::DisplayRole )
-	    return QVariant( Brewtarget::displayAmount(row->getColor_srm(), 0) );
-	 else
-	    return QVariant();
+         if( role == Qt::DisplayRole )
+            return QVariant( Brewtarget::displayAmount(row->getColor_srm(), 0) );
+         else
+            return QVariant();
       default :
          std::cerr << "Bad column: " << index.column() << std::endl;
          return QVariant();
@@ -222,8 +229,10 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
             return QVariant("Type");
          case FERMAMOUNTCOL:
             return QVariant("Amount");
-	 case FERMISMASHEDCOL:
-	    return QVariant("Mashed");
+         case FERMISMASHEDCOL:
+            return QVariant("Mashed");
+         case FERMAFTERBOIL:
+            return QVariant("Late Addition");
          case FERMYIELDCOL:
             return QVariant("Yield %");
          case FERMCOLORCOL:
@@ -248,8 +257,10 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
    
    if( col == FERMISMASHEDCOL )
       return (defaults | Qt::ItemIsUserCheckable);
-   else if( col == FERMNAMECOL )
-      return defaults;
+   else if( col == FERMAFTERBOIL )
+      return (defaults | Qt::ItemIsUserCheckable);
+   else if(  col == FERMNAMECOL )
+      return (defaults | Qt::ItemIsSelectable);
    else
       return (defaults | Qt::ItemIsSelectable | Qt::ItemIsEditable);
 }
@@ -292,13 +303,21 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       case FERMISMASHEDCOL:
-	 if( role == Qt::CheckStateRole && value.canConvert(QVariant::Int) )
-	 {
-	    row->setIsMashed( ((Qt::CheckState)value.toInt()) == Qt::Checked );
-	    return true;
-	 }
-	 else
-	    return false;
+         if( role == Qt::CheckStateRole && value.canConvert(QVariant::Int) )
+         {
+            row->setIsMashed( ((Qt::CheckState)value.toInt()) == Qt::Checked );
+            return true;
+         }
+         else
+            return false;
+      case FERMAFTERBOIL:
+         if( role == Qt::CheckStateRole && value.canConvert(QVariant::Int) )
+         {
+            row->setAddAfterBoil( ((Qt::CheckState)value.toInt()) == Qt::Checked );
+            return true;
+         }
+         else
+            return false;
       case FERMYIELDCOL:
          if( value.canConvert(QVariant::Double) )
          {
@@ -363,7 +382,7 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
       /*
       QWidget* displayWidget = (((FermentableTableModel*)(index.model()))->parentTableWidget)->indexWidget(index);
       if( displayWidget != 0 )
-	 box->move(displayWidget->pos());
+      box->move(displayWidget->pos());
       ***Didn't work at all***/
       
       /*
@@ -384,7 +403,9 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
 
 void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-   if( index.column() == FERMTYPECOL )
+   int col = index.column();
+   
+   if( col == FERMTYPECOL )
    {
       QComboBox* box = (QComboBox*)editor;
       QString text = index.model()->data(index, Qt::DisplayRole).toString();
@@ -392,7 +413,7 @@ void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
       int index = box->findText(text);
       box->setCurrentIndex(index);
    }
-   else if( index.column() == FERMISMASHEDCOL )
+   else if( col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {
       QCheckBox* checkBox = (QCheckBox*)editor;
       Qt::CheckState checkState = (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt();
@@ -410,14 +431,16 @@ void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
 
 void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-   if( index.column() == FERMTYPECOL )
+   int col = index.column();
+   
+   if( col == FERMTYPECOL )
    {
       QComboBox* box = (QComboBox*)editor;
       QString value = box->currentText();
       
       model->setData(index, value, Qt::EditRole);
    }
-   else if( index.column() == FERMISMASHEDCOL )
+   else if( col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {
       QCheckBox* checkBox = (QCheckBox*)editor;
       bool checked = (checkBox->checkState() == Qt::Checked);

@@ -35,7 +35,7 @@ class FermentableItemDelegate;
 #include "FermentableTableWidget.h"
 #include "observable.h"
 
-enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMISMASHEDCOL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
+enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMISMASHEDCOL, FERMAFTERBOIL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
 class FermentableTableModel : public QAbstractTableModel, public MultipleObserver
 {

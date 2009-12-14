@@ -175,10 +175,17 @@ QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, i
       return QVariant();
 }
 
-Qt::ItemFlags MiscTableModel::flags(const QModelIndex& /*index*/ ) const
+Qt::ItemFlags MiscTableModel::flags(const QModelIndex& index ) const
 {
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-          Qt::ItemIsEnabled;
+   int col = index.column();
+   switch( col )
+   {
+      case MISCNAMECOL:
+         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      default:
+         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+            Qt::ItemIsEnabled;
+   }
 }
 
 bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, int /*role*/ )

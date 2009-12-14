@@ -191,10 +191,17 @@ QVariant WaterTableModel::headerData( int section, Qt::Orientation orientation, 
       return QVariant();
 }
 
-Qt::ItemFlags WaterTableModel::flags(const QModelIndex& /*index*/ ) const
+Qt::ItemFlags WaterTableModel::flags(const QModelIndex& index ) const
 {
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-          Qt::ItemIsEnabled;
+   int col = index.column();
+   switch(col)
+   {
+      case WATERNAMECOL:
+         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      default:
+         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+            Qt::ItemIsEnabled;
+   }
 }
 
 bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, int role )

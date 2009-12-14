@@ -214,10 +214,17 @@ QVariant MashStepTableModel::headerData( int section, Qt::Orientation orientatio
       return QVariant();
 }
 
-Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& /*index*/ ) const
+Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const
 {
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-          Qt::ItemIsEnabled;
+   int col = index.column();
+   switch(col)
+   {
+      case MASHSTEPNAMECOL:
+         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      default:
+         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+            Qt::ItemIsEnabled;
+   }
 }
 
 bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& value, int role )

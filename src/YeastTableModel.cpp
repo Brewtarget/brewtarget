@@ -176,10 +176,17 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
       return QVariant();
 }
 
-Qt::ItemFlags YeastTableModel::flags(const QModelIndex& /*index*/ ) const
+Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
 {
-   return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-          Qt::ItemIsEnabled;
+   int col = index.column();
+   switch(col)
+   {
+      case YEASTNAMECOL:
+         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      default:
+         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+            Qt::ItemIsEnabled;
+   }
 }
 
 bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
