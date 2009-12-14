@@ -1564,6 +1564,7 @@
      <string>File</string>
     </property>
     <addaction name="actionNewRecipe"/>
+    <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
     <addaction name="actionImport_Recipes"/>
     <addaction name="actionExportRecipe"/>
@@ -1711,6 +1712,11 @@
   <action name="actionRestore_Database">
    <property name="text">
     <string>Restore Database</string>
+   </property>
+  </action>
+  <action name="actionCopy_Recipe">
+   <property name="text">
+    <string>Copy Recipe</string>
    </property>
   </action>
  </widget>

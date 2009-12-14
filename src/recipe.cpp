@@ -313,12 +313,28 @@ Recipe::Recipe()
 
 Recipe::Recipe(const QDomNode& recipeNode)
 {
+   fromNode(recipeNode);
+}
+
+Recipe::Recipe( Recipe* other )
+{
+   QDomDocument doc;
+   QDomElement root = doc.createElement("root");
+   QDomNodeList list;
+   
+   other->toXml(doc, root);
+   
+   fromNode(root.firstChild());
+}
+
+void Recipe::fromNode(const QDomNode& recipeNode)
+{
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = recipeNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -326,11 +342,11 @@ Recipe::Recipe(const QDomNode& recipeNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() )
          continue;
-
+      
       property = node.nodeName();
       if( child.isText() )
       {
@@ -342,7 +358,7 @@ Recipe::Recipe(const QDomNode& recipeNode)
          textNode = QDomText();
          value = QString();
       }
-
+      
       if( property == "NAME" )
       {
          setName(value.toStdString());
@@ -359,11 +375,11 @@ Recipe::Recipe(const QDomNode& recipeNode)
             Brewtarget::log(Brewtarget::ERROR, QString("Error at line %2.").arg(textNode.lineNumber()) );
             continue;
          }
-
+         
          if( isValidType(value.toStdString()) )
             setType(value.toStdString());
          else
-             Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for RECIPE. Line %2").arg(value).arg(textNode.lineNumber()));
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for RECIPE. Line %2").arg(value).arg(textNode.lineNumber()));
       }
       else if( property == "BREWER" )
       {
@@ -371,7 +387,7 @@ Recipe::Recipe(const QDomNode& recipeNode)
          {
             continue;
          }
-
+         
          setBrewer(value.toStdString());
       }
       else if( property == "STYLE" )

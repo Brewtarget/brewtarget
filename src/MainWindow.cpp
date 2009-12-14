@@ -64,6 +64,8 @@
 #include <QDomNode>
 #include "ScaleRecipeTool.h"
 #include "HopTableModel.h"
+#include <QInputDialog>
+#include <QLineEdit>
 
 const char* MainWindow::homedir =
 #if defined(unix)
@@ -210,6 +212,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionOG_Correction_Help, SIGNAL( triggered() ), ogAdjuster, SLOT( show() ) );
    connect( actionBackup_Database, SIGNAL( triggered() ), this, SLOT( backup() ) );
    connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
+   connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -1121,4 +1124,17 @@ void MainWindow::forceRecipeUpdate()
       return;
 
    recipeObs->hasChanged();
+}
+
+void MainWindow::copyRecipe()
+{
+   QString name = QInputDialog::getText( this, tr("Copy Recipe"), tr("Enter a unique name for the copy.") );
+   
+   if( name.isEmpty() )
+      return;
+   
+   Recipe* newRec = new Recipe(recipeObs); // Create a deep copy.
+   newRec->setName(name.toStdString());
+   
+   (Database::getDatabase())->addRecipe( newRec, false );
 }

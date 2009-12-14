@@ -24,6 +24,7 @@ class RecipeException;
 #include <QColor>
 #include <QVariant>
 #include <QDomNode>
+#include <QDomDocument>
 #include "BeerXMLElement.h"
 #include <string>
 #include <exception>
@@ -46,6 +47,8 @@ public:
    Recipe();
    //Recipe(const XmlNode *node);
    Recipe(const QDomNode& recipeNode);
+   Recipe(Recipe* other); // Deep copy constructor.
+   void fromNode(const QDomNode& recipeNode);
 
    enum{INSTRUCTION};
 
