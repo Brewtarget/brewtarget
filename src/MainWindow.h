@@ -54,6 +54,7 @@ class MainWindow;
 #include "RecipeFormatter.h"
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
+#include "TimerListDialog.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -141,6 +142,7 @@ private:
    RecipeFormatter* recipeFormatter;
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
+   TimerListDialog* timerListDialog;
 
    void setupToolbar();
    void showChanges();

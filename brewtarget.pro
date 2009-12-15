@@ -141,6 +141,7 @@ HEADERS += src/AboutDialog.h \
            src/style.h \
            src/StyleComboBox.h \
            src/StyleEditor.h \
+           src/TimerListDialog.h \
            src/TimerWidget.h \
            src/unit.h \
            src/water.h \
@@ -174,6 +175,7 @@ FORMS +=   ui/aboutDialog.ui \
            ui/optionsDialog.ui \
 	        ui/scaleRecipeTool.ui \
            ui/styleEditor.ui \
+           ui/timerListDialog.ui \
            ui/timerWidget.ui \
            ui/yeastDialog.ui \
            ui/yeastEditor.ui
@@ -232,6 +234,7 @@ SOURCES += src/Algorithms.cpp \
            src/style.cpp \
            src/StyleComboBox.cpp \
            src/StyleEditor.cpp \
+           src/TimerListDialog.cpp \
            src/TimerWidget.cpp \
            src/unit.cpp \
            src/water.cpp \

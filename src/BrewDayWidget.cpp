@@ -28,10 +28,6 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
 
    recObs = 0;
 
-   // Stick some timers at the top.
-   horizontalLayout_timers->insertWidget(0, new TimerWidget());
-   horizontalLayout_timers->insertWidget(1, new TimerWidget());
-
    // HAVE to do this since apparently the stackedWidget NEEDS at least 1
    // widget at all times.
    stackedWidget->insertWidget(0, new InstructionWidget(stackedWidget) );

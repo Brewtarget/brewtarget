@@ -133,6 +133,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeFormatter = new RecipeFormatter();
    ogAdjuster = new OgAdjuster();
    converterTool = new ConverterTool();
+   timerListDialog = new TimerListDialog(this);
 
    setupToolbar();
 
@@ -241,7 +242,7 @@ void MainWindow::setupToolbar()
    QToolButton *newRec, *clearRec, *save, *removeRec,
                *viewEquip, *viewFerm, *viewHops,
                *viewMiscs, *viewStyles, *viewYeast,
-               *brewDay;
+               *brewDay, *timers;
 
    setIconSize(QSize(16, 16));
 
@@ -256,6 +257,7 @@ void MainWindow::setupToolbar()
    viewStyles = new QToolButton(toolBar);
    viewYeast = new QToolButton(toolBar);
    brewDay = new QToolButton(toolBar);
+   timers = new QToolButton(toolBar);
    
    newRec->setIcon(QIcon(SMALLPLUS));
    clearRec->setIcon(QIcon(SHRED));
@@ -268,6 +270,7 @@ void MainWindow::setupToolbar()
    viewStyles->setIcon(QIcon(SMALLSTYLE));
    viewYeast->setIcon(QIcon(SMALLYEAST));
    brewDay->setText(QString("Brewday mode"));
+   timers->setText(QString("Timers"));
 
    newRec->setToolTip(QString("New recipe"));
    clearRec->setToolTip(QString("Clear recipe"));
@@ -293,6 +296,7 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(viewYeast);
    toolBar->addSeparator();
    toolBar->addWidget(brewDay);
+   toolBar->addWidget(timers);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
    connect( removeRec, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
@@ -305,6 +309,7 @@ void MainWindow::setupToolbar()
    connect( viewStyles, SIGNAL(clicked()), styleEditor, SLOT(show()) );
    connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
    connect( brewDay, SIGNAL(clicked()), this, SLOT(brewDayMode()) );
+   connect( timers, SIGNAL(clicked()), timerListDialog, SLOT(show()) );
 }
 
 void MainWindow::removeRecipe()
