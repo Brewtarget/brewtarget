@@ -136,12 +136,11 @@ void FermentableTableModel::notify(Observable* notifier, QVariant info)
    {
       if( notifier == fermObs[i] )
       {
-         /*
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                            QAbstractItemModel::createIndex(i, FERMNUMCOLS));
-          */
+
          updateTotalGrains();
-         reset();
+         //reset();
          break;
       }
    }
@@ -160,17 +159,18 @@ int FermentableTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
 {
    Fermentable* row;
+   int col = index.column();
    
    // Ensure the row is ok.
    if( index.row() >= (int)fermObs.size() )
    {
-      std::cerr << "Bad model index. row = " << index.row() << std::endl;
+      Brewtarget::log(Brewtarget::ERROR, QString("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
       row = fermObs[index.row()];
    
-   switch( index.column() )
+   switch( col )
    {
       case FERMNAMECOL:
          if( role == Qt::DisplayRole )
@@ -212,7 +212,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          else
             return QVariant();
       default :
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::ERROR, QString("Bad column: %1").arg(col));
          return QVariant();
    }
 }

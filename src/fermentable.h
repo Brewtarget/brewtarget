@@ -43,6 +43,10 @@ public:
    friend bool operator<(Fermentable &f1, Fermentable &f2);
    friend bool operator==(Fermentable &f1, Fermentable &f2);
 
+   // Info for hasChanged()
+   enum{ NAME, TYPE, AMOUNT, YIELD, COLOR, AFTERBOIL, ORIGIN, SUPPLIER, NOTES, COARSEFINEDIFF, MOISTURE,
+         DIASTATICPOWER, PROTEIN, MAXINBATCH, ISMASHED };
+   
    // Get
    const std::string& getName() const;
    int getVersion() const;

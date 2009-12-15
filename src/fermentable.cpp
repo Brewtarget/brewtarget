@@ -23,6 +23,7 @@
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QVariant>
 
 bool operator<(Fermentable &f1, Fermentable &f2)
 {
@@ -346,13 +347,17 @@ double Fermentable::getEquivSucrose_kg() const
 }
 
 // Set
-void Fermentable::setName( const std::string& str ) { name = std::string(str); }
+void Fermentable::setName( const std::string& str )
+{
+   name = std::string(str);
+   hasChanged(QVariant(NAME));
+}
 void Fermentable::setType( const std::string& str )
 {
    if( isValidType( str ) )
    {
       type = std::string(str);
-      hasChanged();
+      hasChanged(QVariant(TYPE));
    }
    else
       throw FermentableException( "invalid type." );
@@ -364,7 +369,7 @@ void Fermentable::setAmount_kg( double num )
    else
    {
       amount_kg = num;
-      hasChanged();
+      hasChanged(QVariant(AMOUNT));
    }
 }
 void Fermentable::setYield_pct( double num )
@@ -372,7 +377,7 @@ void Fermentable::setYield_pct( double num )
    if( num >= 0.0 && num <= 100.0 )
    {
       yield_pct = num;
-      hasChanged();
+      hasChanged(QVariant(YIELD));
    }
    else
       throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
@@ -384,20 +389,24 @@ void Fermentable::setColor_srm( double num )
    else
    {
       color_srm = num;
-      hasChanged();
+      hasChanged(QVariant(COLOR));
    }
 }
 
-void Fermentable::setAddAfterBoil( bool b ) { addAfterBoil = b; hasChanged();}
-void Fermentable::setOrigin( const std::string& str ) { origin = std::string(str); hasChanged();}
-void Fermentable::setSupplier( const std::string& str) { supplier = std::string(str); hasChanged();}
-void Fermentable::setNotes( const std::string& str ) { notes = std::string(str); hasChanged();}
+void Fermentable::setAddAfterBoil( bool b )
+{
+   addAfterBoil = b;
+   hasChanged(QVariant(AFTERBOIL));
+}
+void Fermentable::setOrigin( const std::string& str ) { origin = std::string(str); hasChanged(QVariant(ORIGIN));}
+void Fermentable::setSupplier( const std::string& str) { supplier = std::string(str); hasChanged(QVariant(SUPPLIER));}
+void Fermentable::setNotes( const std::string& str ) { notes = std::string(str); hasChanged(QVariant(NOTES));}
 void Fermentable::setCoarseFineDiff_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
       coarseFineDiff_pct = num;
-      hasChanged();
+      hasChanged(QVariant(COARSEFINEDIFF));
    }
    else
       throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
@@ -407,7 +416,7 @@ void Fermentable::setMoisture_pct( double num )
    if( num >= 0.0 && num <= 100.0 )
    {
       moisture_pct = num;
-      hasChanged();
+      hasChanged(QVariant(MOISTURE));
    }
    else
       throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
@@ -419,7 +428,7 @@ void Fermentable::setDiastaticPower_lintner( double num )
    else
    {
       diastaticPower_lintner = num;
-      hasChanged();
+      hasChanged(QVariant(DIASTATICPOWER));
    }
 }
 void Fermentable::setProtein_pct( double num )
@@ -427,7 +436,7 @@ void Fermentable::setProtein_pct( double num )
    if( num >= 0.0 && num <= 100.0 )
    {
       protein_pct = num;
-      hasChanged();
+      hasChanged(QVariant(PROTEIN));
    }
    else
       throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
@@ -437,13 +446,13 @@ void Fermentable::setMaxInBatch_pct( double num )
    if( num >= 0.0 && num <= 100.0 )
    {
       maxInBatch_pct = num;
-      hasChanged();
+      hasChanged(QVariant(MAXINBATCH));
    }
    else
       throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
 }
 void Fermentable::setRecommendMash( bool b ) { recommendMash = b; hasChanged();}
-void Fermentable::setIsMashed(bool var) { isMashed = var; hasChanged(); }
+void Fermentable::setIsMashed(bool var) { isMashed = var; hasChanged(QVariant(ISMASHED)); }
 void Fermentable::setIbuGalPerLb( double num ) { ibuGalPerLb = num; hasChanged();}
 
 bool Fermentable::isValidType( const std::string& str )
