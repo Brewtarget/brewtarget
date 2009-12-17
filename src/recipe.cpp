@@ -2049,13 +2049,22 @@ double Recipe::getIBUFromHop( unsigned int i )
    double AArating = hops[i]->getAlpha_pct()/100.0;
    double grams = hops[i]->getAmount_kg()*1000.0;
    double water_l = estimateFinalVolume_l();
+   double boilVol_l = estimateBoilVolume_l();
    double boilGrav = getBoilGrav();
+   double boilGrav_final = boilGrav; 
    double minutes = hops[i]->getTime_min();
+   double avgBoilGrav;
+   
+   if( equipment )
+      boilGrav_final = boilVol_l / equipment->wortEndOfBoil_l( boilVol_l ) * (boilGrav-1) + 1;
+   
+   avgBoilGrav = (boilGrav + boilGrav_final) / 2;
+   //avgBoilGrav = boilGrav;
    
    if( hops[i]->getUse() == "Boil")
-      ibus = IbuMethods::getIbus( AArating, grams, water_l, boilGrav, minutes );
+      ibus = IbuMethods::getIbus( AArating, grams, water_l, avgBoilGrav, minutes );
    else if( hops[i]->getUse() == "First Wort" )
-      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, water_l, boilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
+      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, water_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
 
    return ibus;
 }
