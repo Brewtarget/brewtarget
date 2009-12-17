@@ -134,6 +134,7 @@ HEADERS += src/AboutDialog.h \
            src/OgAdjuster.h \
            src/OptionDialog.h \
            src/PreInstruction.h \
+           src/PrimingDialog.h \
            src/recipe.h \
            src/RecipeComboBox.h \
 	        src/RecipeFormatter.h \
@@ -174,7 +175,8 @@ FORMS +=   ui/aboutDialog.ui \
            ui/miscDialog.ui \
            ui/ogAdjuster.ui \
            ui/optionsDialog.ui \
-	        ui/scaleRecipeTool.ui \
+           ui/primingDialog.ui \
+	   ui/scaleRecipeTool.ui \
            ui/styleEditor.ui \
            ui/timerListDialog.ui \
            ui/timerWidget.ui \
@@ -228,6 +230,7 @@ SOURCES += src/Algorithms.cpp \
            src/OgAdjuster.cpp \
            src/OptionDialog.cpp \
            src/PreInstruction.cpp \
+           src/PrimingDialog.cpp \
            src/recipe.cpp \
            src/RecipeComboBox.cpp \
 	        src/RecipeFormatter.cpp \

@@ -1,0 +1,95 @@
+/*
+* PrimingDialog.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+* (rocketman768@gmail.com), 2009.
+*
+* Brewtarget is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Brewtarget is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include <cmath>
+#include "PrimingDialog.h"
+#include "unit.h"
+#include "brewtarget.h"
+
+PrimingDialog::PrimingDialog(QWidget* parent) : QDialog(parent)
+{
+   setupUi(this);
+   
+   sugarGroup = new QButtonGroup(this);
+   sugarGroup->setExclusive(true); // Can select only one.
+   
+   sugarGroup->addButton(checkBox_glucMono);
+   sugarGroup->addButton(checkBox_gluc);
+   sugarGroup->addButton(checkBox_sucrose);
+   sugarGroup->addButton(checkBox_dme);
+   
+   connect( pushButton_calculate, SIGNAL( clicked() ), this, SLOT( calculate() ) );
+}
+
+PrimingDialog::~PrimingDialog()
+{
+}
+
+void PrimingDialog::calculate()
+{
+   QAbstractButton* button;
+   
+   double beer_l;
+   double temp_c;
+   double desiredVols;
+   
+   double addedVols;
+   double residualVols;
+   
+   double co2_l;
+   double co2_mol;
+   
+   double sugar_mol;
+   double sugar_g;
+   
+   beer_l = Unit::qstringToSI( lineEdit_beerVol->text() );
+   temp_c = Unit::qstringToSI( lineEdit_temp->text() );
+   desiredVols = lineEdit_vols->text().toDouble();
+   
+   residualVols = 1.57 * pow( 0.97, temp_c ); // Amount of CO2 still in suspension.
+   addedVols = desiredVols - residualVols;
+   co2_l = addedVols * beer_l; // Liters of CO2 we need to generate (at 273 K and 1 atm).
+   co2_mol = co2_l / 22.4; // Mols of CO2 we need.
+   
+   button = sugarGroup->checkedButton();
+   
+   if( button == checkBox_glucMono )
+   {
+      sugar_mol = co2_mol / 2;
+      sugar_g = sugar_mol * 180; // Glucose is 180g/mol.
+   }
+   else if( button == checkBox_gluc )
+   {
+      sugar_mol = co2_mol / 2;
+      sugar_g = sugar_mol * 198; // Glucose monohydrate is 198 g/mol.
+   }
+   else if( button == checkBox_sucrose )
+   {
+      sugar_mol = co2_mol / 4;
+      sugar_g = sugar_mol * 342; // Sucrose is 342 g/mol.
+   }
+   else if( button == checkBox_dme )
+   {
+      sugar_mol = co2_mol / 2;
+      sugar_g = sugar_mol * 180 / 0.60; // DME is equivalently about 60% glucose.
+   }
+   else
+      sugar_g = 0;
+   
+   lineEdit_output->setText( Brewtarget::displayAmount( sugar_g, Units::grams ) );
+}

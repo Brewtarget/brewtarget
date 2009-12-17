@@ -56,6 +56,7 @@ class MainWindow;
 #include "ConverterTool.h"
 #include "TimerListDialog.h"
 #include "MashComboBox.h"
+#include "PrimingDialog.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -147,6 +148,7 @@ private:
    ConverterTool* converterTool;
    TimerListDialog* timerListDialog;
    MashComboBox* mashComboBox;
+   PrimingDialog* primingDialog;
 
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());

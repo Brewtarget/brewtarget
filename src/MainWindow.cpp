@@ -135,6 +135,7 @@ MainWindow::MainWindow(QWidget* parent)
    converterTool = new ConverterTool();
    timerListDialog = new TimerListDialog(this);
    mashComboBox = new MashComboBox(this);
+   primingDialog = new PrimingDialog(this);
 
    setupToolbar();
 
@@ -219,6 +220,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBackup_Database, SIGNAL( triggered() ), this, SLOT( backup() ) );
    connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
+   connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
