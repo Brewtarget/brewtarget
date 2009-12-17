@@ -1828,8 +1828,8 @@ void Recipe::recalculate()
    }
 
    // Conversion factor for lb/gal to kg/l = 8.34538.
-   points = (383.89 * sugar_kg / getBatchSize_l()) * getEfficiency_pct()/100.0;
-   points += 383.89 * sugar_kg_ignoreEfficiency / getBatchSize_l();
+   points = (383.89 * sugar_kg / estimateFinalVolume_l()) * getEfficiency_pct()/100.0;
+   points += 383.89 * sugar_kg_ignoreEfficiency / estimateFinalVolume_l();
    og = 1 + points/1000.0;
 
    // Calculage FG
@@ -1866,7 +1866,7 @@ double Recipe::getColor_srm()
    {
       ferm = fermentables[i];
       // Conversion factor for lb/gal to kg/l = 8.34538.
-      mcu += ferm->getColor_srm()*8.34538 * ferm->getAmount_kg()/getBatchSize_l();
+      mcu += ferm->getColor_srm()*8.34538 * ferm->getAmount_kg()/estimateFinalVolume_l();
    }
 
    return ColorMethods::mcuToSrm(mcu);
