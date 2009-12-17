@@ -37,5 +37,6 @@
    <file>images/smallMinus.png</file>
    <file>images/edit.png</file>
    <file>images/title.png</file>
+   <file>images/clock.png</file>
 </qresource>
 </RCC>

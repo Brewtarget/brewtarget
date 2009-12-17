@@ -37,6 +37,7 @@
 #define SHRED ":/images/editshred.png"
 #define EXITPNG ":/images/exit.png"
 #define SAVEPNG ":/images/filesave.png"
+#define CLOCKPNG ":/images/clock.png"
 
 /* Things that will get configured by configure script */
 

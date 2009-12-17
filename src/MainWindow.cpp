@@ -277,19 +277,20 @@ void MainWindow::setupToolbar()
    viewMiscs->setIcon(QIcon(SMALLQUESTION));
    viewStyles->setIcon(QIcon(SMALLSTYLE));
    viewYeast->setIcon(QIcon(SMALLYEAST));
-   brewDay->setText(QString("Brewday mode"));
-   timers->setText(QString("Timers"));
+   brewDay->setText(tr("Brewday mode"));
+   timers->setIcon(QIcon(CLOCKPNG));
 
-   newRec->setToolTip(QString("New recipe"));
-   clearRec->setToolTip(QString("Clear recipe"));
-   removeRec->setToolTip(QString("Remove recipe"));
-   save->setToolTip(QString("Save database"));
-   viewEquip->setToolTip(QString("View equipments"));
-   viewFerm->setToolTip(QString("View fermentables"));
-   viewHops->setToolTip(QString("View hops"));
-   viewMiscs->setToolTip(QString("View miscs"));
-   viewStyles->setToolTip(QString("View styles"));
-   viewYeast->setToolTip(QString("View yeasts"));
+   newRec->setToolTip(tr("New recipe"));
+   clearRec->setToolTip(tr("Clear recipe"));
+   removeRec->setToolTip(tr("Remove recipe"));
+   save->setToolTip(tr("Save database"));
+   viewEquip->setToolTip(tr("View equipments"));
+   viewFerm->setToolTip(tr("View fermentables"));
+   viewHops->setToolTip(tr("View hops"));
+   viewMiscs->setToolTip(tr("View miscs"));
+   viewStyles->setToolTip(tr("View styles"));
+   viewYeast->setToolTip(tr("View yeasts"));
+   timers->setToolTip(tr("Timers"));
 
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
@@ -303,8 +304,8 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(viewStyles);
    toolBar->addWidget(viewYeast);
    toolBar->addSeparator();
-   toolBar->addWidget(brewDay);
    toolBar->addWidget(timers);
+   toolBar->addWidget(brewDay);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
    connect( removeRec, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
