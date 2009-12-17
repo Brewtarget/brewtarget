@@ -78,37 +78,6 @@ bool Hop::isValidForm(const string &str)
    return false;
 }
 
-/*
-std::string Hop::toXml()
-{
-   std::string ret = "<HOP>\n";
-   
-   ret += "<NAME>" + name + "</NAME>\n";
-   ret += "<VERSION>" + intToString(version) + "</VERSION>\n";
-   ret += "<ALPHA>" + doubleToString(alpha_pct) + "</ALPHA>\n";
-   ret += "<AMOUNT>" + doubleToString(amount_kg) + "</AMOUNT>\n";
-   ret += "<USE>" + use + "</USE>\n";
-   ret += "<TIME>" + doubleToString(time_min) + "</TIME>\n";
-   
-   ret += "<NOTES>" + notes + "</NOTES>\n";
-   if( type != "" )
-      ret += "<TYPE>" + type + "</TYPE>\n";
-   ret += "<FORM>" + form + "</FORM>\n";
-   ret += "<BETA>" + doubleToString(beta_pct) + "</BETA>\n";
-   ret += "<HSI>" + doubleToString(hsi_pct) + "</HSI>\n";
-   ret += "<ORIGIN>" + origin + "</ORIGIN>\n";
-   ret += "<SUBSTITUTES>" + substitutes + "</SUBSTITUTES>\n";
-   ret += "<HUMULENE>" + doubleToString(humulene_pct) + "</HUMULENE>\n";
-   ret += "<CARYOPHYLLENE>" + doubleToString(caryophyllene_pct) + "</CARYOPHYLLENE>\n";
-   ret += "<COHUMULONE>" + doubleToString(cohumulone_pct) + "</COHUMULONE>\n";
-   ret += "<MYRCENE>" + doubleToString(myrcene_pct) + "</MYRCENE>\n";
-   
-   ret += "</HOP>\n";
-   
-   return ret;
-}
-*/
-
 void Hop::toXml(QDomDocument& doc, QDomNode& parent)
 {
    QDomElement hopNode;
@@ -253,133 +222,19 @@ Hop::Hop( Hop& other )
    myrcene_pct = other.myrcene_pct;
 }
 
-Hop::Hop( const XmlNode *node )
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   const string formatErr("BeerXML file not formatted correctly.");
-   bool haveName=false, haveVersion=false, haveAlpha=false;
-   bool haveAmount=false, haveUse=false, haveTime=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "HOP" )
-      throw HopException( "HOP initilizer not passed a HOP node." );
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   // Go through all the children of this HOP entry.
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      // All valid children of HOP only have zero or one child.
-      if( tmpVec.size() > 1 )
-      {
-         cerr << formatErr << endl;
-         return;
-      }
-
-      // Have to deal with the fact that this node might not have
-      // and children at all.
-      if( tmpVec.size() == 1 )
-         leaf = tmpVec[0];
-      else
-         leaf = &XmlNode();
-      
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-      {
-         cerr << formatErr << endl;
-         return;
-      }
-      
-      // This if..else block parses the tag of this child.
-      if( tag == "NAME" )
-      {
-         name = leaf->getLeafText();
-         haveName = true;
-      }
-      else if( tag == "VERSION" )
-      {
-         if( parseInt(leaf->getLeafText()) != version )
-            cerr << "Warning: hop is version " << parseInt(leaf->getLeafText())
-                    << " instead of " << version << endl;
-         else
-            haveVersion = true;
-      }
-      else if( tag == "ALPHA" )
-      {
-         alpha_pct = parseDouble( leaf->getLeafText() );
-         haveAlpha = true;
-      }
-      else if( tag == "AMOUNT" )
-      {
-         amount_kg = parseDouble( leaf->getLeafText() );
-         haveAmount = true;
-      }
-      else if( tag == "USE" )
-      {
-         use = leaf->getLeafText();
-         haveUse = true;
-         if( ! isValidUse(use) )
-            throw HopException("\""+use+"\" is not a valid USE.");
-      }
-      else if( tag == "TIME" )
-      {
-         time_min = parseDouble(leaf->getLeafText());
-         haveTime = true;
-      }
-      else if( tag == "NOTES" )
-         notes = leaf->getLeafText();
-      else if( tag == "TYPE" )
-      {
-         type = leaf->getLeafText();
-         if( ! isValidType(type) )
-            throw HopException("\""+type+"\" is not a valid TYPE.");
-      }
-      else if( tag == "FORM" )
-      {
-         form = leaf->getLeafText();
-         if( ! isValidForm(form) )
-            throw HopException("\""+form+"\" is not a valid FORM.");
-      }
-      else if( tag == "BETA" )
-         beta_pct = parseDouble(leaf->getLeafText());
-      else if( tag == "HSI" )
-         hsi_pct = parseDouble( leaf->getLeafText() );
-      else if( tag == "ORIGIN" )
-         origin = leaf->getLeafText();
-      else if( tag == "SUBSTITUTES" )
-         substitutes = leaf->getLeafText();
-      else if( tag == "HUMULENE" )
-         humulene_pct = parseDouble( leaf->getLeafText() );
-      else if( tag == "CARYOPHYLLENE" )
-         caryophyllene_pct = parseDouble( leaf->getLeafText() );
-      else if( tag == "COHUMULONE" )
-         cohumulone_pct = parseDouble( leaf->getLeafText() );
-      else if( tag == "MYRCENE" )
-         myrcene_pct = parseDouble( leaf->getLeafText() );
-      else
-      {
-         //throw HopException("Do not recognize \"" + tag + "\".");
-         std::cerr << "Warning: unsupported HOP tag \"" + tag + "\"." << std::endl;
-      }
-   } // end for().
-} // end Hop()
-
 Hop::Hop(const QDomNode& hopNode)
+{
+   fromNode(hopNode);
+}
+
+void Hop::fromNode(const QDomNode& hopNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = hopNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -387,15 +242,15 @@ Hop::Hop(const QDomNode& hopNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();

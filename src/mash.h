@@ -20,7 +20,6 @@
 #define _MASH_H
 #include <string>
 #include <exception>
-#include "xmlnode.h"
 #include "mashstep.h"
 #include "observable.h"
 #include <QDomNode>
@@ -34,12 +33,12 @@ class Mash : public Observable, public MultipleObserver, public BeerXMLElement
 public:
 
    Mash();
-   Mash( const XmlNode *node);
    Mash( const QDomNode& mashNode );
 
    friend bool operator<(Mash &m1, Mash &m2);
    friend bool operator==(Mash &m1, Mash &m2);
 
+   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    virtual void notify(Observable *notifier, QVariant info); // From MultipleObserver
    

@@ -19,7 +19,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "xmlnode.h"
 #include "stringparsing.h"
 #include "mash.h"
 #include "mashstep.h"
@@ -37,33 +36,6 @@ bool operator==(Mash &m1, Mash &m2)
 {
    return m1.name == m2.name;
 }
-
-/*
-std::string Mash::toXml()
-{
-   unsigned int i, size = mashSteps.size();
-   std::string ret = "<MASH>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<GRAIN_TEMP>"+doubleToString(grainTemp_c)+"</GRAIN_TEMP>\n";
-   ret += "<MASH_STEPS>\n";
-   for( i = 0; i < size; ++i )
-      ret += mashSteps[i]->toXml();
-   ret += "</MASH_STEPS>\n";
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   ret += "<TUN_TEMP>"+doubleToString(tunTemp_c)+"</TUN_TEMP>\n";
-   ret += "<SPARGE_TEMP>"+doubleToString(spargeTemp_c)+"</SPARGE_TEMP>\n";
-   ret += "<PH>"+doubleToString(ph)+"</PH>\n";
-   ret += "<TUN_WEIGHT>"+doubleToString(tunWeight_kg)+"</TUN_WEIGHT>\n";
-   ret += "<TUN_SPECIFIC_HEAT>"+doubleToString(tunSpecificHeat_calGC)+"</TUN_SPECIFIC_HEAT>\n";
-   ret += "<EQUIP_ADJUST>"+boolToString(equipAdjust)+"</EQUIP_ADJUST>\n";
-   
-   ret += "</MASH>\n";
-   
-   return ret;
-}
-*/
 
 void Mash::toXml(QDomDocument& doc, QDomNode& parent)
 {
@@ -155,12 +127,17 @@ Mash::Mash()
 
 Mash::Mash(const QDomNode& mashNode)
 {
+   fromNode(mashNode);
+}
+
+void Mash::fromNode(const QDomNode& mashNode)
+{
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = mashNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -168,16 +145,16 @@ Mash::Mash(const QDomNode& mashNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() )
          continue;
-
+      
       property = node.nodeName();
       if( child.isText() )
          textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();
@@ -194,7 +171,7 @@ Mash::Mash(const QDomNode& mashNode)
       else if( property == "MASH_STEPS" )
       {
          QDomNode step;
-
+         
          for( step = child; ! step.isNull(); step = step.nextSibling() )
             addMashStep(new MashStep(step));
       }

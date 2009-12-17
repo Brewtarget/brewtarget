@@ -20,7 +20,6 @@
 #define _STYLE_H
 #include <string>
 #include <exception>
-#include "xmlnode.h"
 #include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
@@ -33,14 +32,13 @@ class Style : public Observable, public BeerXMLElement
 public:
 
    Style();
-   Style(XmlNode *node);
    Style(const QDomNode& styleNode);
 
    friend bool operator<(Style &s1, Style &s2);
    friend bool operator==(Style &s1, Style &s2);
 
+   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //std::string toXml();
    
    void setName( const std::string& var );
    void setCategory( const std::string& var );

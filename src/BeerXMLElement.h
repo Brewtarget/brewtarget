@@ -38,6 +38,9 @@ public:
    QString text(double val);
    QString text(int val);
 
+   void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
+   
+   virtual void fromNode(const QDomNode& node) = 0; // Should initialize this element from the node.
    virtual void toXml(QDomDocument& doc, QDomNode& parent) = 0;
 };
 

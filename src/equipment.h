@@ -36,8 +36,8 @@ public:
    Equipment();
    Equipment(const QDomNode& equipmentNode);
    
+   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //std::string toXml();
 
    // Operators
    friend bool operator<(Equipment &e1, Equipment &e2);

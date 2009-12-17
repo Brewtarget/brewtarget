@@ -33,23 +33,6 @@ void Instruction::setDefaults()
    completed = false;
 }
 
-/*
-std::string Instruction::toXml()
-{
-   std::string ret = "<INSTRUCTION>\n";
-
-   ret += "<NAME>"+name.toStdString()+"</NAME>\n";
-   ret += "<DIRECTIONS>"+directions.toStdString()+"</DIRECTIONS>\n";
-   ret += "<HAS_TIMER>"+boolToString(hasTimer)+"</HAS_TIMER>\n";
-   ret += "<TIMER_VALUE>"+timerValue.toStdString()+"</TIMER_VALUE>\n";
-   ret += "<COMPLETED>"+boolToString(completed)+"</COMPLETED>\n";
-
-   ret += "</INSTRUCTION>\n";
-
-   return ret;
-}
-*/
-
 void Instruction::toXml(QDomDocument& doc, QDomNode& parent)
 {
    QDomElement insNode;
@@ -91,76 +74,19 @@ Instruction::Instruction() : Observable()
    setDefaults();
 }
 
-Instruction::Instruction(const XmlNode* node)
+Instruction::Instruction(const QDomNode& instructionNode)
 {
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-
-   setDefaults();
-
-   if( node->getTag() != "INSTRUCTION" )
-      throw BeerXmlException("initializer not passed an INSTRUCTION node.");
-
-   node->getChildren( children );
-   childrenSize = children.size();
-
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-
-      // All valid children of INSTRUCTION only have zero or one child.
-      if( tmpVec.size() > 1 )
-         throw BeerXmlException("Tag \""+tag+"\" has more than one child.");
-
-      // Have to deal with the fact that this node might not have
-      // and children at all.
-      if( tmpVec.size() == 1 )
-         leaf = tmpVec[0];
-      else
-         leaf = &XmlNode();
-
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw BeerXmlException("Should have been a leaf but is not.");
-
-      leafText = leaf->getLeafText();
-
-      if( tag == "NAME" )
-      {
-         setName(QString(leafText.c_str()));
-      }
-      else if( tag == "DIRECTIONS" )
-      {
-         setDirections(QString(leafText.c_str()));
-      }
-      else if( tag == "HAS_TIMER" )
-      {
-         setHasTimer(parseBool(leafText));
-      }
-      else if( tag == "TIMER_VALUE" )
-      {
-         setTimerValue(QString(leafText.c_str()));
-      }
-      else if( tag == "COMPLETED" )
-      {
-         setCompleted(parseBool(leafText));
-      }
-   }
+   fromNode(instructionNode);
 }
 
-Instruction::Instruction(const QDomNode& instructionNode)
+void Instruction::fromNode(const QDomNode& instructionNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = instructionNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -168,15 +94,15 @@ Instruction::Instruction(const QDomNode& instructionNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          setName(value);

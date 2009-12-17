@@ -23,7 +23,6 @@
 #include <QDomText>
 #include "yeast.h"
 #include "stringparsing.h"
-#include "xmlnode.h"
 #include "brewtarget.h"
 
 bool operator<(Yeast &y1, Yeast &y2)
@@ -35,34 +34,6 @@ bool operator==(Yeast &y1, Yeast &y2)
 {
    return y1.name == y2.name;
 }
-
-/*
-std::string Yeast::toXml()
-{
-   std::string ret = "<YEAST>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<TYPE>"+type+"</TYPE>\n";
-   ret += "<FORM>"+form+"</FORM>\n";
-   ret += "<AMOUNT>"+doubleToString(amount)+"</AMOUNT>\n";
-   ret += "<AMOUNT_IS_WEIGHT>"+boolToString(amountIsWeight)+"</AMOUNT_IS_WEIGHT>\n";
-   ret += "<LABORATORY>"+laboratory+"</LABORATORY>\n";
-   ret += "<PRODUCT_ID>"+productID+"</PRODUCT_ID>\n";
-   ret += "<MIN_TEMPERATURE>"+doubleToString(minTemperature_c)+"</MIN_TEMPERATURE>\n";
-   ret += "<MAX_TEMPERATURE>"+doubleToString(maxTemperature_c)+"</MAX_TEMPERATURE>\n";
-   ret += "<FLOCCULATION>"+flocculation+"</FLOCCULATION>\n";
-   ret += "<ATTENUATION>"+doubleToString(attenuation_pct)+"</ATTENUATION>\n";
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   ret += "<BEST_FOR>"+bestFor+"</BEST_FOR>";
-   ret += "<TIMES_CULTURED>"+intToString(timesCultured)+"</TIMES_CULTURED>\n";
-   ret += "<MAX_REUSE>"+intToString(maxReuse)+"</MAX_REUSE>\n";
-   ret += "<ADD_TO_SECONDARY>"+boolToString(addToSecondary)+"</ADD_TO_SECONDARY>\n";
-   
-   ret += "</YEAST>\n";
-   return ret;
-}
-*/
 
 void Yeast::toXml(QDomDocument& doc, QDomNode& parent)
 {
@@ -210,114 +181,19 @@ Yeast::Yeast(Yeast& other)
    addToSecondary = other.addToSecondary;
 }
 
-Yeast::Yeast( XmlNode *node )
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasType=false, hasForm=false, hasAmount=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "YEAST" )
-      throw YeastException("initializer not passed a YEAST node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      // All valid children of YEAST only have zero or one child.
-      if( tmpVec.size() > 1 )
-         throw YeastException("Tag \""+tag+"\" has more than one child.");
-
-      // Have to deal with the fact that this node might not have
-      // and children at all.
-      if( tmpVec.size() == 1 )
-         leaf = tmpVec[0];
-      else
-         leaf = &XmlNode();
-      
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw YeastException("Should have been a leaf but is not.");
-      
-      leafText = leaf->getLeafText();
-      
-      if( tag == "NAME" )
-      {
-         setName(leafText);
-         hasName = true;
-      }
-      else if( tag == "VERSION" )
-      {
-         hasVersion = true;
-         if( parseInt(leafText) != version )
-            std::cerr << "Warning: XML YEAST version is not " << version << std::endl;
-      }
-      else if( tag == "TYPE" )
-      {
-         setType(leafText);
-         hasType = true;
-      }
-      else if( tag == "FORM" )
-      {
-         setForm(leafText);
-         hasForm = true;
-      }
-      else if( tag == "AMOUNT" )
-      {
-         setAmount(parseDouble(leafText));
-         hasAmount = true;
-      }
-      else if( tag == "AMOUNT_IS_WEIGHT" )
-         setAmountIsWeight(parseBool(leafText));
-      else if( tag == "LABORATORY" )
-         setLaboratory(leafText);
-      else if( tag == "PRODUCT_ID" )
-         setProductID(leafText);
-      else if( tag == "MIN_TEMPERATURE" )
-         setMinTemperature_c(parseDouble(leafText));
-      else if( tag == "MAX_TEMPERATURE" )
-         setMaxTemperature_c(parseDouble(leafText));
-      else if( tag == "FLOCCULATION" )
-         setFlocculation(leafText);
-      else if( tag == "ATTENUATION" )
-         setAttenuation_pct(parseDouble(leafText));
-      else if( tag == "NOTES" )
-         setNotes(leafText);
-      else if( tag == "BEST_FOR" )
-         setBestFor(leafText);
-      else if( tag == "TIMES_CULTURED" )
-         setTimesCultured(parseInt(leafText));
-      else if( tag == "MAX_REUSE" )
-         setMaxReuse(parseInt(leafText));
-      else if( tag == "ADD_TO_SECONDARY" )
-         setAddToSecondary(parseBool(leafText));
-      else
-      {
-         std::cerr << "Warning: " << tag << " is not a recognized YEAST tag." << std::endl;
-      } // end if..else
-   } // end for(...)
-   
-   if( !hasName || !hasVersion || !hasType || !hasForm || !hasAmount )
-      throw YeastException("missing required fields.");
-} // end Yeast()
-
 Yeast::Yeast(const QDomNode& yeastNode)
+{
+   fromNode(yeastNode);
+}
+
+void Yeast::fromNode(const QDomNode& yeastNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = yeastNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -325,15 +201,15 @@ Yeast::Yeast(const QDomNode& yeastNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();
@@ -354,8 +230,8 @@ Yeast::Yeast(const QDomNode& yeastNode)
       {
          if( isValidForm( value.toStdString() ) )
             form = value.toStdString();
-         else
-            Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid form for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+            else
+               Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid form for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "AMOUNT" )
       {
@@ -417,7 +293,7 @@ Yeast::Yeast(const QDomNode& yeastNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Unsupported YEAST property: %1. Line %2").arg(property).arg(node.lineNumber()) );
       }
    }
-
+   
    hasChanged();
 }
 

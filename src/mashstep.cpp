@@ -36,27 +36,6 @@ bool operator==(MashStep &m1, MashStep &m2)
    return m1.name == m2.name;
 }
 
-/*
-std::string MashStep::toXml()
-{
-   std::string ret = "<MASH_STEP>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<TYPE>"+type+"</TYPE>\n";
-   ret += "<INFUSE_AMOUNT>"+doubleToString(infuseAmount_l)+"</INFUSE_AMOUNT>\n";
-   ret += "<STEP_TEMP>"+doubleToString(stepTemp_c)+"</STEP_TEMP>\n";
-   ret += "<STEP_TIME>"+doubleToString(stepTime_min)+"</STEP_TIME>\n";
-   ret += "<RAMP_TIME>"+doubleToString(rampTime_min)+"</RAMP_TIME>\n";
-   ret += "<END_TEMP>"+doubleToString(endTemp_c)+"</END_TEMP>\n";
-   ret += "<INFUSE_TEMP>"+doubleToString(infuseTemp_c)+"</INFUSE_TEMP>\n";
-   ret += "<DECOCTION_AMOUNT>"+doubleToString(decoctionAmount_l)+"</DECOCTION_AMOUNT>\n";
-   
-   ret += "</MASH_STEP>\n";
-   return ret;
-}
-*/
-
 void MashStep::toXml(QDomDocument& doc, QDomNode& parent)
 {
    QDomElement mashStepNode;
@@ -138,105 +117,19 @@ MashStep::MashStep()
    setDefaults();
 }
 
-MashStep::MashStep( const XmlNode *node)
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasType=false, hasInfuseAmount=false,
-        hasStepTemp=false, hasStepTime=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "MASH_STEP" )
-      throw MashStepException("initializer not passed a MASH_STEP node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      // All valid children of YEAST only have zero or one child.
-      if( tmpVec.size() > 1 )
-         throw MashStepException("Tag \""+tag+"\" has more than one child.");
-      
-      // Have to deal with the fact that this node might not have
-      // and children at all.
-      if( tmpVec.size() == 1 )
-         leaf = tmpVec[0];
-      else
-         leaf = &XmlNode();
-
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw MashStepException("Should have been a leaf but is not.");
-      
-      leafText = leaf->getLeafText();
-      
-      if( tag == "NAME" )
-      {
-         setName(leafText);
-         hasName = true;
-      }
-      else if( tag == "VERSION" )
-      {
-         if( parseInt(leafText) != version )
-            std::cerr << "Warning: XML MASH_STEP is not version " << version << std::endl;
-         hasVersion=true;
-      }
-      else if( tag == "TYPE" )
-      {
-         setType(leafText);
-         hasType=true;
-      }
-      else if( tag == "INFUSE_AMOUNT" )
-      {
-         setInfuseAmount_l(parseDouble(leafText));
-         hasInfuseAmount=true;
-      }
-      else if( tag == "STEP_TEMP" )
-      {
-         setStepTemp_c(parseDouble(leafText));
-         hasStepTemp=true;
-      }
-      else if( tag == "STEP_TIME" )
-      {
-         setStepTime_min(parseDouble(leafText));
-         hasStepTime=true;
-      }
-      else if( tag == "RAMP_TIME" )
-         setRampTime_min(parseDouble(leafText));
-      else if( tag == "END_TEMP" )
-         setEndTemp_c(parseDouble(leafText));
-      // My extensions
-      else if( tag == "INFUSE_TEMP" )
-         setInfuseTemp_c(parseDouble(leafText));
-      else if( tag == "DECOCTION_AMOUNT" )
-         setDecoctionAmount_l(parseDouble(leafText));
-      // ===
-      else
-         std::cerr << "Warning: MASH_STEP does not support the tag: " << tag << std::endl;
-   } // end for()
-   
-   if( !hasName || !hasVersion || !hasType || !hasStepTemp || !hasStepTime ||
-       (type=="Infusion" && !hasInfuseAmount) )
-      throw MashStepException("missing required field.");
-} // end MashStep()
-
 MashStep::MashStep(const QDomNode& mashStepNode)
+{
+   fromNode(mashStepNode);
+}
+
+void MashStep::fromNode(const QDomNode& mashStepNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = mashStepNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -244,15 +137,15 @@ MashStep::MashStep(const QDomNode& mashStepNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();

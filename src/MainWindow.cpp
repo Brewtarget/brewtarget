@@ -93,7 +93,7 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    setWindowIcon(QIcon(ICON48));
-
+   
    // Different palettes for lcds.
    lcdPalette_old = lcdNumber_og->palette();
    lcdPalette_tooLow = QPalette(lcdPalette_old);
@@ -134,6 +134,7 @@ MainWindow::MainWindow(QWidget* parent)
    ogAdjuster = new OgAdjuster();
    converterTool = new ConverterTool();
    timerListDialog = new TimerListDialog(this);
+   mashComboBox = new MashComboBox(this);
 
    setupToolbar();
 
@@ -162,6 +163,8 @@ MainWindow::MainWindow(QWidget* parent)
    maltWidget = new MaltinessWidget(groupBox);
    verticalLayout_beerColor->insertWidget( -1, maltWidget );
 
+   horizontalLayout_mash->insertWidget( 1, mashComboBox );
+   
    // Set up HtmlViewer to view documentation.
    htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
 
@@ -169,6 +172,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeComboBox->startObservingDB();
    equipmentComboBox->startObservingDB();
    styleComboBox->startObservingDB();
+   mashComboBox->startObservingDB();
    fermDialog->startObservingDB();
    hopDialog->startObservingDB();
    miscDialog->startObservingDB();
@@ -193,6 +197,7 @@ MainWindow::MainWindow(QWidget* parent)
    // Connect signals.
    connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
+   connect( mashComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setMashByName(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
    connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
@@ -235,6 +240,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_removeMashStep, SIGNAL( clicked() ), this, SLOT(removeSelectedMashStep()) );
    connect( pushButton_editMashStep, SIGNAL( clicked() ), this, SLOT(editSelectedMashStep()) );
    connect( pushButton_mashWizard, SIGNAL( clicked() ), mashWizard, SLOT( show() ) );
+   connect( pushButton_saveMash, SIGNAL( clicked() ), this, SLOT( saveMash() ) );
 }
 
 void MainWindow::setupToolbar()
@@ -431,18 +437,18 @@ void MainWindow::setRecipe(Recipe* recipe)
    showChanges();
 }
 
-void MainWindow::notify(Observable* notifier, QVariant /*info*/)
+void MainWindow::notify(Observable* notifier, QVariant info)
 {
    // Make sure the notifier is our observed recipe
    if( notifier != recipeObs )
       return;
 
-   showChanges();
+   showChanges(info);
 }
 
 // This method should update all the widgets in the window (except the tables)
 // to reflect the currently observed recipe.
-void MainWindow::showChanges()
+void MainWindow::showChanges(const QVariant& info)
 {
    if( recipeObs == 0 )
       return;
@@ -571,11 +577,16 @@ void MainWindow::showChanges()
       lcdNumber_ibu->setPalette(lcdPalette_old);
       lcdNumber_srm->setPalette(lcdPalette_old);
    }
+   
    lcdNumber_og->update();
    lcdNumber_fg->update();
    lcdNumber_abv->update();
    lcdNumber_ibu->update();
    lcdNumber_srm->update();
+   
+   // See if we need to change the mash in the table.
+   if( info.toInt() == Recipe::MASH && recipeObs->getMash() != 0 )
+      mashStepTableWidget->getModel()->setMash(recipeObs->getMash());
 }
 
 void MainWindow::save()
@@ -1142,4 +1153,42 @@ void MainWindow::copyRecipe()
    newRec->setName(name.toStdString());
    
    (Database::getDatabase())->addRecipe( newRec, false );
+}
+
+void MainWindow::setMashByName(const QString& name)
+{
+   if( recipeObs == 0 )
+      return;
+   
+   Mash* mash = (Database::getDatabase())->findMashByName(name.toStdString());
+   
+   // Do nothing if the mash retrieved is null or if it has the same name as the one in the recipe.
+   if( mash == 0 || (recipeObs->getMash() != 0 && recipeObs->getMash()->getName() == mash->getName()) )
+      return;
+   
+   Mash* newMash = new Mash();
+   
+   newMash->deepCopy(mash); // Make a copy so we don't modify the database version.
+   
+   recipeObs->setMash(newMash);
+}
+
+void MainWindow::saveMash()
+{
+   if( recipeObs == 0 || recipeObs->getMash() == 0 )
+      return;
+   
+   Mash* mash = recipeObs->getMash();
+   Mash* newMash = new Mash(); // Make a copy to go in the database.
+   
+   // Ensure the mash has a name.
+   if( mash->getName() == "" )
+   {
+      QMessageBox::information( this, tr("Oops!"), tr("Please give you mash a name before saving.") );
+      return;
+   }
+   
+   newMash->deepCopy(mash);
+   
+   (Database::getDatabase())->addMash(mash);
 }

@@ -24,7 +24,6 @@ class Instruction;
 
 #include <QString>
 #include "observable.h"
-#include "xmlnode.h"
 #include <string>
 #include <QDomNode>
 #include "BeerXMLElement.h"
@@ -33,9 +32,9 @@ class Instruction : public Observable, public BeerXMLElement
 {
 public:
    Instruction();
-   Instruction(const XmlNode* node);
    Instruction(const QDomNode& instructionNode);
 
+   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    //std::string toXml();
 

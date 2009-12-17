@@ -117,6 +117,7 @@ HEADERS += src/AboutDialog.h \
            src/MainWindow.h \
            src/MaltinessWidget.h \
            src/mash.h \
+           src/MashComboBox.h \
            src/MashEditor.h \
            src/mashstep.h \
            src/MashStepEditor.h \
@@ -209,6 +210,7 @@ SOURCES += src/Algorithms.cpp \
            src/MainWindow.cpp \
            src/MaltinessWidget.cpp \
            src/mash.cpp \
+           src/MashComboBox.cpp \
            src/MashEditor.cpp \
            src/mashstep.cpp \
            src/MashStepEditor.cpp \

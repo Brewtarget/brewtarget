@@ -161,13 +161,18 @@ Equipment::Equipment()
 
 Equipment::Equipment(const QDomNode& equipmentNode)
 {
+   fromNode(equipmentNode);
+}
+
+void Equipment::fromNode(const QDomNode& equipmentNode)
+{
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
    bool hasRealEvapRate = false;
-
+   
    setDefaults();
-
+   
    for( node = equipmentNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -175,15 +180,15 @@ Equipment::Equipment(const QDomNode& equipmentNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();
@@ -257,7 +262,7 @@ Equipment::Equipment(const QDomNode& equipmentNode)
       else
          Brewtarget::log(Brewtarget::WARNING, QString("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
-
+   
    // Estimate the actual evaporation rate if we didn't get one.
    if( ! hasRealEvapRate )
       setEvapRate_lHr( evapRate_pctHr/(double)100 * boilSize_l );

@@ -21,6 +21,17 @@
 #include <QDomNode>
 #include "brewtarget.h"
 
+void BeerXMLElement::deepCopy( BeerXMLElement* other )
+{
+   QDomDocument doc;
+   QDomElement root = doc.createElement("root");
+   QDomNodeList list;
+   
+   other->toXml(doc, root);
+   
+   fromNode(root.firstChild());
+}
+
 double BeerXMLElement::getDouble(const QDomText& textNode)
 {
    bool ok;

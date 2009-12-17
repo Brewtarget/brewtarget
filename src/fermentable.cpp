@@ -35,35 +35,6 @@ bool operator==(Fermentable &f1, Fermentable &f2)
    return f1.name == f2.name;
 }
 
-/*
-std::string Fermentable::toXml()
-{
-   std::string ret = "<FERMENTABLE>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<TYPE>"+type+"</TYPE>\n";
-   ret += "<AMOUNT>"+doubleToString(amount_kg)+"</AMOUNT>\n";
-   ret += "<YIELD>"+doubleToString(yield_pct)+"</YIELD>\n";
-   ret += "<COLOR>"+doubleToString(color_srm)+"</COLOR>\n";
-   ret += "<ADD_AFTER_BOIL>"+boolToString(addAfterBoil)+"</ADD_AFTER_BOIL>\n";
-   ret += "<ORIGIN>"+origin+"</ORIGIN>\n";
-   ret += "<SUPPLIER>"+supplier+"</SUPPLIER>\n";
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   ret += "<COARSE_FINE_DIFF>"+doubleToString(coarseFineDiff_pct)+"</COARSE_FINE_DIFF>\n";
-   ret += "<MOISTURE>"+doubleToString(moisture_pct)+"</MOISTURE>\n";
-   ret += "<DIASTATIC_POWER>"+doubleToString(diastaticPower_lintner)+"</DIASTATIC_POWER>\n";
-   ret += "<PROTEIN>"+doubleToString(protein_pct)+"</PROTEIN>\n";
-   ret += "<MAX_IN_BATCH>"+doubleToString(maxInBatch_pct)+"</MAX_IN_BATCH>\n";
-   ret += "<RECOMMEND_MASH>"+boolToString(recommendMash)+"</RECOMMEND_MASH>\n";
-   ret += "<IBU_GAL_PER_LB>"+doubleToString(ibuGalPerLb)+"</IBU_GAL_PER_LB>\n";
-   
-   ret += "</FERMENTABLE>\n";
-   
-   return ret;
-}
-*/
-
 void Fermentable::toXml(QDomDocument& doc, QDomNode& parent)
 {
    QDomElement fermNode;
@@ -195,12 +166,17 @@ Fermentable::Fermentable( Fermentable& other )
 
 Fermentable::Fermentable(const QDomNode& fermentableNode)
 {
+   fromNode(fermentableNode);
+}
+
+void Fermentable::fromNode(const QDomNode& fermentableNode)
+{
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = fermentableNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -208,15 +184,15 @@ Fermentable::Fermentable(const QDomNode& fermentableNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();
@@ -287,7 +263,7 @@ Fermentable::Fermentable(const QDomNode& fermentableNode)
       }
       else if( property == "IS_MASHED" )
       {
-	 setIsMashed(getBool(textNode));
+         setIsMashed(getBool(textNode));
       }
       else if( property == "IBU_GAL_PER_LB" )
       {

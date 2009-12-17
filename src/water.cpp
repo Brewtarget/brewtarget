@@ -35,28 +35,6 @@ bool operator==(Water &w1, Water &w2)
    return w1.name == w2.name;
 }
 
-/*
-std::string Water::toXml()
-{
-   std::string ret = "<WATER>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<AMOUNT>"+doubleToString(amount_l)+"</AMOUNT>\n";
-   ret += "<CALCIUM>"+doubleToString(calcium_ppm)+"</CALCIUM>\n";
-   ret += "<BICARBONATE>"+doubleToString(bicarbonate_ppm)+"</BICARBONATE>\n";
-   ret += "<SULFATE>"+doubleToString(sulfate_ppm)+"</SULFATE>\n";
-   ret += "<CHLORIDE>"+doubleToString(chloride_ppm)+"</CHLORIDE>\n";
-   ret += "<SODIUM>"+doubleToString(sodium_ppm)+"</SODIUM>\n";
-   ret += "<MAGNESIUM>"+doubleToString(magnesium_ppm)+"</MAGNESIUM>\n";
-   ret += "<PH>"+doubleToString(ph)+"</PH>\n";
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   
-   ret += "</WATER>\n";
-   return ret;
-}
-*/
-
 void Water::toXml(QDomDocument& doc, QDomNode& parent)
 {
    QDomElement waterNode;
@@ -142,114 +120,19 @@ Water::Water()
    setDefaults();
 }
 
-Water::Water( XmlNode *node )
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasAmount=false, hasCa=false, hasBic=false,
-           hasSulf=false, hasChl=false, hasSodium=false, hasMag=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "WATER" )
-      throw WaterException("initializer not passed a WATER node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      // All valid children of WATER only have one child.
-      if( tmpVec.size() != 1 )
-         throw WaterException("Tag \""+tag+"\" has more than one child.");
-      
-      leaf = tmpVec[0];
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw WaterException("Should have been a leaf but is not.");
-      
-      leafText = leaf->getLeafText();
-      
-      if( tag == "NAME" )
-      {
-         setName(leafText);
-         hasName = true;
-      }
-      else if( tag == "VERSION" )
-      {
-         if( parseInt(leafText) != version )
-            std::cerr << "Warning: WATER version is not " << version << std::endl;
-         
-         hasVersion = true;
-      }
-      else if( tag == "AMOUNT" )
-      {
-         setAmount_l(parseDouble(leafText));
-         hasAmount = true;
-      }
-      else if( tag == "CALCIUM" )
-      {
-         setCalcium_ppm(parseDouble(leafText));
-         hasCa = true;
-      }
-      else if( tag == "BICARBONATE" )
-      {
-         setBicarbonate_ppm(parseDouble(leafText));
-         hasBic = true;
-      }
-      else if( tag == "SULFATE" )
-      {
-         setSulfate_ppm(parseDouble(leafText));
-         hasSulf = true;
-      }
-      else if( tag == "CHLORIDE" )
-      {
-         setChloride_ppm(parseDouble(leafText));
-         hasChl = true;
-      }
-      else if( tag == "SODIUM" )
-      {
-         setSodium_ppm(parseDouble(leafText));
-         hasSodium = true;
-      }
-      else if( tag == "MAGNESIUM" )
-      {
-         setMagnesium_ppm(parseDouble(leafText));
-         hasMag = true;
-      }
-      else if( tag == "PH" )
-      {
-         setPh(parseDouble(leafText));
-      }
-      else if( tag == "NOTES" )
-      {
-         setNotes(leafText);
-      }
-      else
-         std::cerr << "Warning: \"" << tag << "\" is not a supported WATER tag." << std::endl;
-      
-   } // end for(...)
-   
-   if( !hasName || !hasVersion || !hasAmount || !hasCa || !hasBic ||
-           !hasSulf || !hasChl || !hasSodium || !hasMag )
-      throw WaterException("missing required fields.");
-} // end Water()
-
 Water::Water(const QDomNode& waterNode)
+{
+   fromNode(waterNode);
+}
+
+void Water::fromNode(const QDomNode& waterNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = waterNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -257,15 +140,15 @@ Water::Water(const QDomNode& waterNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();

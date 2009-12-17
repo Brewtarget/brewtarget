@@ -20,7 +20,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "xmlnode.h"
 #include "stringparsing.h"
 #include "style.h"
 #include <QDomElement>
@@ -35,40 +34,6 @@ bool operator==(Style &s1, Style &s2)
 {
    return s1.name == s2.name;
 }
-
-/*
-std::string Style::toXml()
-{
-   std::string ret = "<STYLE>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<CATEGORY>"+category+"</CATEGORY>\n";
-   ret += "<CATEGORY_NUMBER>"+categoryNumber+"</CATEGORY_NUMBER>\n";
-   ret += "<STYLE_LETTER>"+styleLetter+"</STYLE_LETTER>\n";
-   ret += "<STYLE_GUIDE>"+styleGuide+"</STYLE_GUIDE>\n";
-   ret += "<TYPE>"+type+"</TYPE>\n";
-   ret += "<OG_MIN>"+doubleToString(ogMin)+"</OG_MIN>\n";
-   ret += "<OG_MAX>"+doubleToString(ogMax)+"</OG_MAX>\n";
-   ret += "<FG_MIN>"+doubleToString(fgMin)+"</FG_MIN>\n";
-   ret += "<FG_MAX>"+doubleToString(fgMax)+"</FG_MAX>\n";
-   ret += "<IBU_MIN>"+doubleToString(ibuMin)+"</IBU_MIN>\n";
-   ret += "<IBU_MAX>"+doubleToString(ibuMax)+"</IBU_MAX>\n";
-   ret += "<COLOR_MIN>"+doubleToString(colorMin_srm)+"</COLOR_MIN>\n";
-   ret += "<COLOR_MAX>"+doubleToString(colorMax_srm)+"</COLOR_MAX>\n";
-   ret += "<CARB_MIN>"+doubleToString(carbMin_vol)+"</CARB_MIN>\n";
-   ret += "<CARB_MAX>"+doubleToString(carbMax_vol)+"</CARB_MAX>\n";
-   ret += "<ABV_MIN>"+doubleToString(abvMin_pct)+"</ABV_MIN>\n";
-   ret += "<ABV_MAX>"+doubleToString(abvMax_pct)+"</ABV_MAX>\n";
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   ret += "<PROFILE>"+profile+"</PROFILE>\n";
-   ret += "<INGREDIENTS>"+ingredients+"</INGREDIENTS>\n";
-   ret += "<EXAMPLES>"+examples+"</EXAMPLES>\n";
-   
-   ret += "</STYLE>\n";
-   return ret;
-}
-*/
 
 void Style::toXml(QDomDocument& doc, QDomNode& parent)
 {
@@ -231,160 +196,19 @@ Style::Style()
    setDefaults();
 }
 
-Style::Style(XmlNode *node)
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasCat=false, hasCatNum=false, hasStyleLetter=false,
-           hasStyleGuide=false, hasType=false, hasOgMin=false, hasOgMax=false,
-           hasFgMin=false, hasFgMax=false, hasIbuMin=false, hasIbuMax=false,
-           hasColorMin=false, hasColorMax=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "STYLE" )
-      throw StyleException("initializer not passed a STYLE node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      // All valid children of YEAST only have zero or one child.
-      if( tmpVec.size() > 1 )
-         throw StyleException("Tag \""+tag+"\" has more than one child.");
-
-      // Have to deal with the fact that this node might not have
-      // and children at all.
-      if( tmpVec.size() == 1 )
-         leaf = tmpVec[0];
-      else
-         leaf = &XmlNode();
-      
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw StyleException("Should have been a leaf but is not.");
-      
-      leafText = leaf->getLeafText();
-      
-      if( tag == "NAME" )
-      {
-         setName(leafText);
-         hasName=true;
-      }
-      else if( tag == "VERSION" )
-      {
-         if( parseInt(leafText) != version )
-            std::cerr << "Warning: XML STYLE is not version " << version << std::endl;
-         hasVersion=true;
-      }
-      else if( tag == "CATEGORY" )
-      {
-         setCategory(leafText);
-         hasCat=true;
-      }
-      else if( tag == "CATEGORY_NUMBER" )
-      {
-         setCategoryNumber(leafText);
-         hasCatNum=true;
-      }
-      else if( tag == "STYLE_LETTER" )
-      {
-         setStyleLetter(leafText);
-         hasStyleLetter=true;
-      }
-      else if( tag == "STYLE_GUIDE" )
-      {
-         setStyleGuide(leafText);
-         hasStyleGuide=true;
-      }
-      else if( tag == "TYPE" )
-      {
-         setType(leafText);
-         hasType=true;
-      }
-      else if( tag == "OG_MIN" )
-      {
-         setOgMin(parseDouble(leafText));
-         hasOgMin=true;
-      }
-      else if( tag == "OG_MAX" )
-      {
-         setOgMax(parseDouble(leafText));
-         hasOgMax=true;
-      }
-      else if( tag == "FG_MIN" )
-      {
-         setFgMin(parseDouble(leafText));
-         hasFgMin=true;
-      }
-      else if( tag == "FG_MAX" )
-      {
-         setFgMax(parseDouble(leafText));
-         hasFgMax=true;
-      }
-      else if( tag == "IBU_MIN" )
-      {
-         setIbuMin(parseDouble(leafText));
-         hasIbuMin=true;
-      }
-      else if( tag == "IBU_MAX" )
-      {
-         setIbuMax(parseDouble(leafText));
-         hasIbuMax=true;
-      }
-      else if( tag == "COLOR_MIN" )
-      {
-         setColorMin_srm(parseDouble(leafText));
-         hasColorMin=true;
-      }
-      else if( tag == "COLOR_MAX" )
-      {
-         setColorMax_srm(parseDouble(leafText));
-         hasColorMax=true;
-      }
-      else if( tag == "CARB_MIN" )
-         setCarbMin_vol(parseDouble(leafText));
-      else if( tag == "CARB_MAX" )
-         setCarbMax_vol(parseDouble(leafText));
-      else if( tag == "ABV_MIN" )
-         setAbvMin_pct(parseDouble(leafText));
-      else if( tag == "ABV_MAX" )
-         setAbvMax_pct(parseDouble(leafText));
-      else if( tag == "NOTES" )
-         setNotes(leafText);
-      else if( tag == "PROFILE" )
-         setProfile(leafText);
-      else if( tag == "INGREDIENTS" )
-         setIngredients(leafText);
-      else if( tag == "EXAMPLES" )
-         setExamples(leafText);
-      else
-         std::cerr << "Warning: Style tag " << tag << " is not supported." << std::endl;
-   } // end for()
-   
-   if( !hasName || !hasVersion || !hasCat || !hasCatNum || !hasStyleLetter ||
-           !hasStyleGuide || !hasType || !hasOgMin || !hasOgMax ||
-           !hasFgMin || !hasFgMax || !hasIbuMin || !hasIbuMax ||
-           !hasColorMin || !hasColorMax )
-      throw StyleException("missing a required field.");
-}// end Style()
-
 Style::Style(const QDomNode& styleNode)
+{
+   fromNode(styleNode);
+}
+
+void Style::fromNode(const QDomNode& styleNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = styleNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -392,15 +216,15 @@ Style::Style(const QDomNode& styleNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          setName(value.toStdString());

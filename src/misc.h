@@ -23,7 +23,6 @@
 #include <exception>
 #include <QDomNode>
 #include <QDomText>
-#include "xmlnode.h"
 #include "observable.h"
 #include "BeerXMLElement.h"
 
@@ -35,12 +34,12 @@ class Misc : public Observable, public BeerXMLElement
 public:
    Misc();
    Misc(Misc& other);
-   Misc( const XmlNode *node );
    Misc( const QDomNode& miscNode );
 
    friend bool operator<(Misc &m1, Misc &m2);
    friend bool operator==(Misc &m1, Misc &m2);
 
+   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    //std::string toXml();
    

@@ -20,7 +20,7 @@
    <string>Brewtarget - 1.1</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_9">
+   <layout class="QVBoxLayout" name="verticalLayout_8">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_14">
       <item>
@@ -1151,7 +1151,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="fermentableTab">
        <attribute name="title">
@@ -1464,83 +1464,127 @@
        <attribute name="title">
         <string>Mash</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_17">
+       <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
-         <widget class="MashStepTableWidget" name="mashStepTableWidget"/>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="MashStepTableWidget" name="mashStepTableWidget"/>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="spacing">
+             <number>1</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="pushButton_addMashStep">
+              <property name="toolTip">
+               <string>Add mash step</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../brewtarget.qrc">
+                <normaloff>:/images/smallPlus.png</normaloff>:/images/smallPlus.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_removeMashStep">
+              <property name="toolTip">
+               <string>Remove mash step</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../brewtarget.qrc">
+                <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_editMashStep">
+              <property name="toolTip">
+               <string>Edit mash step</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../brewtarget.qrc">
+                <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_editMash">
+              <property name="text">
+               <string>Edit mash</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_mashWizard">
+              <property name="text">
+               <string>Mash wiz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="spacing">
-           <number>1</number>
+         <layout class="QHBoxLayout" name="horizontalLayout_mash">
+          <property name="topMargin">
+           <number>0</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pushButton_addMashStep">
-            <property name="toolTip">
-             <string>Add mash step</string>
+           <widget class="QLabel" name="label_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
             <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../brewtarget.qrc">
-              <normaloff>:/images/smallPlus.png</normaloff>:/images/smallPlus.png</iconset>
+             <string>Mashs</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_removeMashStep">
-            <property name="toolTip">
-             <string>Remove mash step</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../brewtarget.qrc">
-              <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_editMashStep">
-            <property name="toolTip">
-             <string>Edit mash step</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../brewtarget.qrc">
-              <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_editMash">
-            <property name="text">
-             <string>Edit mash</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_mashWizard">
-            <property name="text">
-             <string>Mash wiz</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer">
+           <spacer name="horizontalSpacer_4">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>20</width>
-              <height>40</height>
+              <width>40</width>
+              <height>20</height>
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_saveMash">
+            <property name="text">
+             <string>Save Mash</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

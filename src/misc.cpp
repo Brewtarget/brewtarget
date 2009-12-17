@@ -22,7 +22,6 @@
 #include <vector>
 #include "misc.h"
 #include "stringparsing.h"
-#include "xmlnode.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
@@ -36,26 +35,6 @@ bool operator==(Misc &m1, Misc &m2)
 {
    return m1.name == m2.name;
 }
-
-/*
-std::string Misc::toXml()
-{
-   std::string ret = "<MISC>\n";
-   
-   ret += "<NAME>"+name+"</NAME>\n";
-   ret += "<VERSION>"+intToString(version)+"</VERSION>\n";
-   ret += "<TYPE>"+type+"</TYPE>\n";
-   ret += "<USE>"+use+"</USE>\n";
-   ret += "<TIME>"+doubleToString(time)+"</TIME>\n";
-   ret += "<AMOUNT>"+doubleToString(amount)+"</AMOUNT>\n";
-   ret += "<AMOUNT_IS_WEIGHT>"+boolToString(amountIsWeight)+"</AMOUNT_IS_WEIGHT>\n";
-   ret += "<USE_FOR>"+useFor+"</USE_FOR>\n";
-   ret += "<NOTES>"+notes+"</NOTES>\n";
-   
-   ret += "</MISC>\n";
-   return ret;
-}
-*/
 
 void Misc::toXml(QDomDocument& doc, QDomNode& parent)
 {
@@ -146,99 +125,19 @@ Misc::Misc(Misc& other)
    notes = other.notes;
 }
 
-Misc::Misc( const XmlNode * node ) : Observable()
-{
-   std::vector<XmlNode *> children;
-   std::vector<XmlNode *> tmpVec;
-   std::string tag;
-   std::string leafText;
-   XmlNode* leaf;
-   unsigned int i, childrenSize;
-   bool hasName=false, hasVersion=false, hasType=false, hasUse=false, hasAmount=false, hasTime=false;
-   
-   setDefaults();
-   
-   if( node->getTag() != "MISC" )
-      throw MiscException("initializer not passed a MISC node.");
-   
-   node->getChildren( children );
-   childrenSize = children.size();
-   
-   for( i = 0; i < childrenSize; ++i )
-   {
-      tag = children[i]->getTag();
-      children[i]->getChildren( tmpVec );
-      
-      // All valid children of MISC only have zero or one child.
-      if( tmpVec.size() > 1 )
-         throw MiscException("Tag \""+tag+"\" has more than one child.");
-      
-      // Have to deal with the fact that this node might not have
-      // and children at all.
-      if( tmpVec.size() == 1 )
-         leaf = tmpVec[0];
-      else
-         leaf = &XmlNode();
-
-      // It must be a leaf if it is a valid BeerXML entry.
-      if( ! leaf->isLeaf() )
-         throw MiscException("Should have been a leaf but is not.");
-      
-      leafText = leaf->getLeafText();
-      
-      if( tag == "NAME" )
-      {
-         setName(leafText);
-         hasName = true;
-      }
-      else if( tag == "VERSION" )
-      {
-         hasVersion = true;
-         if( parseInt(leafText) != version )
-            std::cerr << "Warning: XML MISC version is not " << version << std::endl;
-      }
-      else if( tag == "TYPE" )
-      {
-         setType(leafText);
-         hasType = true;
-      }
-      else if( tag == "USE" )
-      {
-         setUse(leafText);
-         hasUse = true;
-      }
-      else if( tag == "TIME" )
-      {
-         setTime(parseDouble(leafText));
-         hasTime = true;
-      }
-      else if( tag == "AMOUNT" )
-      {
-         setAmount(parseDouble(leafText));
-         hasAmount = true;
-      }
-      else if( tag == "AMOUNT_IS_WEIGHT" )
-         setAmountIsWeight(parseBool(leafText));
-      else if( tag == "USE_FOR" )
-         setUseFor(leafText);
-      else if( tag == "NOTES" )
-         setNotes(leafText);
-      else
-         std::cerr << "Warning: MISC tag \"" << tag << "\" is not recognized." << std::endl;
-   } // end for(...)
-   
-   if( !hasName || !hasVersion || !hasType || !hasUse || !hasAmount || !hasTime )
-      throw MiscException("one of the required fields is missing.");
-} //end Misc()
-
 Misc::Misc(const QDomNode& miscNode)
+{
+   fromNode(miscNode);
+}
+
+void Misc::fromNode(const QDomNode& miscNode)
 {
    QDomNode node, child;
    QDomText textNode;
    QString property, value;
-
+   
    setDefaults();
-
+   
    for( node = miscNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -246,15 +145,15 @@ Misc::Misc(const QDomNode& miscNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
-
+      
       child = node.firstChild();
       if( child.isNull() || ! child.isText() )
          continue;
-
+      
       property = node.nodeName();
       textNode = child.toText();
       value = textNode.nodeValue();
-
+      
       if( property == "NAME" )
       {
          name = value.toStdString();
@@ -303,7 +202,7 @@ Misc::Misc(const QDomNode& miscNode)
          Brewtarget::log(Brewtarget::WARNING, QString("Unsupported MISC property: %1. Line %2").arg(property).arg(node.lineNumber()) );
       }
    }
-
+   
    hasChanged();
 }
 

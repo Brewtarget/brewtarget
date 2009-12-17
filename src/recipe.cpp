@@ -23,7 +23,6 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include "xmlnode.h"
 #include "stringparsing.h"
 #include "recipe.h"
 #include "style.h"
@@ -1328,13 +1327,11 @@ void Recipe::addWater( Water* var )
 void Recipe::setMash( Mash *var )
 {
    if( var == NULL )
-      throw RecipeException("null object");
-   else
-   {
-      mash = var;
-      addObserved(mash);
-      hasChanged();
-   }
+      return;
+
+   mash = var;
+   addObserved(mash);
+   hasChanged(QVariant(MASH));
 }
 
 

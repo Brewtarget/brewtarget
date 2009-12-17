@@ -22,7 +22,6 @@
 #include <string>
 #include <exception>
 #include <QDomNode>
-#include "xmlnode.h"
 #include "observable.h"
 #include "BeerXMLElement.h"
 
@@ -33,14 +32,13 @@ class Water : public Observable, public BeerXMLElement
 {
 public:
    Water();
-   Water(XmlNode *node);
    Water( const QDomNode& waterNode );
 
    friend bool operator<(Water &w1, Water &w2);
    friend bool operator==(Water &w1, Water &w2);
 
+   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //std::string toXml();
    
    void setName( const std::string &var );
    void setAmount_l( double var );

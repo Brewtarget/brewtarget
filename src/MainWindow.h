@@ -55,6 +55,7 @@ class MainWindow;
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
 #include "TimerListDialog.h"
+#include "MashComboBox.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -97,6 +98,8 @@ public slots:
    void addMashStep();
    void removeSelectedMashStep();
    void editSelectedMashStep();
+   void setMashByName(const QString& name);
+   void saveMash();
 
    void newRecipe();
    void removeRecipe();
@@ -143,9 +146,10 @@ private:
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
    TimerListDialog* timerListDialog;
+   MashComboBox* mashComboBox;
 
    void setupToolbar();
-   void showChanges();
+   void showChanges(const QVariant& info = QVariant());
 };
 
 #endif	/* _MAINWINDOW_H */
