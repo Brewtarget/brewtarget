@@ -68,7 +68,7 @@ void MashWizard::show()
    }
 
 
-   label->setText(tr("Mash thickness (%1/%2)").arg(weightUnit->getUnitName().c_str(),volumeUnit->getUnitName().c_str()));
+   label->setText(tr("Mash thickness (%1/%2)").arg(volumeUnit->getUnitName().c_str(),weightUnit->getUnitName().c_str()));
    
    setVisible(true);
 }
