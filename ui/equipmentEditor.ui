@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
-    <height>536</height>
+    <width>541</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_remove">
        <property name="toolTip">
-        <string>Remove</string>
+        <string>Remove equipment</string>
        </property>
        <property name="text">
         <string/>
@@ -119,6 +119,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Name</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -158,6 +161,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Pre-boil volume</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -182,6 +188,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="checkBox_calcBoilVolume">
+              <property name="toolTip">
+               <string>Automatically fill in pre-boil volume</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -223,6 +232,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Batch size</string>
               </property>
              </widget>
             </item>
@@ -275,6 +287,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Volume of mash tun</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -314,6 +329,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Mass or weight of mash tun</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -352,6 +370,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Specific heat of mash tun</string>
               </property>
              </widget>
             </item>
@@ -404,6 +425,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Boil time</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -442,6 +466,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>How much water boils off per hour</string>
               </property>
              </widget>
             </item>
@@ -482,6 +509,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>How much water is added to kettle immediately pre-boil</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -521,6 +551,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Water added to fermenter</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -559,6 +592,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Don't use this field. It is ignored.</string>
               </property>
              </widget>
             </item>
@@ -615,6 +651,9 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>Wort lost between kettle and fermenter</string>
+              </property>
              </widget>
             </item>
            </layout>
@@ -653,6 +692,9 @@
                 <width>100</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="toolTip">
+               <string>Volume of wort lost to lauter deadspace</string>
               </property>
              </widget>
             </item>
@@ -708,7 +750,7 @@
      <item>
       <widget class="QPushButton" name="pushButton_new">
        <property name="toolTip">
-        <string>New</string>
+        <string>New equipment</string>
        </property>
        <property name="text">
         <string/>

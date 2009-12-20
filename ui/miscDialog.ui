@@ -40,6 +40,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Add selected ingredient to recipe</string>
+       </property>
        <property name="text">
         <string>Add to Recipe</string>
        </property>
@@ -47,6 +50,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_new">
+       <property name="toolTip">
+        <string>Create a new ingredient</string>
+       </property>
        <property name="text">
         <string>New</string>
        </property>
@@ -55,13 +61,13 @@
      <item>
       <widget class="QPushButton" name="pushButton_edit">
        <property name="toolTip">
-        <string>Edit</string>
+        <string>Edit selected ingredient</string>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
        </property>
       </widget>
@@ -69,13 +75,13 @@
      <item>
       <widget class="QPushButton" name="pushButton_remove">
        <property name="toolTip">
-        <string>Remove</string>
+        <string>Remove selected ingredient</string>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
        </property>
       </widget>
@@ -92,7 +98,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="brewtarget.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

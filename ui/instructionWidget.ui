@@ -58,6 +58,9 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QCheckBox" name="checkBox_showTimer">
+       <property name="toolTip">
+        <string>Show a timer</string>
+       </property>
        <property name="text">
         <string>Show timer</string>
        </property>
@@ -65,6 +68,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="checkBox_completed">
+       <property name="toolTip">
+        <string>Mark this step completed</string>
+       </property>
        <property name="text">
         <string>Step completed</string>
        </property>

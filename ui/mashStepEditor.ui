@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>429</width>
+    <width>433</width>
     <height>182</height>
    </rect>
   </property>
@@ -54,6 +54,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Name</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -75,6 +78,9 @@
        </item>
        <item>
         <widget class="QComboBox" name="comboBox_type">
+         <property name="toolTip">
+          <string>Type</string>
+         </property>
          <item>
           <property name="text">
            <string>Infusion</string>
@@ -129,6 +135,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Target temp. of this step</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -168,6 +177,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Amount of water to infuse</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -200,6 +212,9 @@
            <width>100</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Temperature of infusion water</string>
          </property>
         </widget>
        </item>
@@ -247,6 +262,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Amount of mash to decoct</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -285,6 +303,9 @@
            <width>100</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Time to conduct the step</string>
          </property>
         </widget>
        </item>
@@ -325,6 +346,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Lag time</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -363,6 +387,9 @@
            <width>100</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Final temp. of this step</string>
          </property>
         </widget>
        </item>

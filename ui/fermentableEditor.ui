@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>505</width>
-    <height>317</height>
+    <height>326</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,6 +57,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Name</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -72,6 +75,9 @@
           </item>
           <item>
            <widget class="QComboBox" name="comboBox_type">
+            <property name="toolTip">
+             <string>Type</string>
+            </property>
             <item>
              <property name="text">
               <string>Grain</string>
@@ -124,6 +130,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Amount</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -151,6 +160,9 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Yield as compared to glucose</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -177,6 +189,9 @@
               <width>100</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Lovibond rating</string>
             </property>
            </widget>
           </item>
@@ -224,6 +239,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>This ingredient is added post boil.</string>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -254,6 +272,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Origin</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -281,6 +302,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Supplier</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -307,6 +331,9 @@
            <width>100</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Yield difference between coarse and fine grind</string>
          </property>
         </widget>
        </item>
@@ -358,6 +385,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Moisture percentage by mass</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -384,6 +414,9 @@
            <width>100</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Diastatic power in Lintner</string>
          </property>
         </widget>
        </item>
@@ -412,6 +445,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Protein percentage by mass</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -439,6 +475,9 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Maximum recommended percentage of total grist</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -460,6 +499,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="checkBox_recommendMash">
+         <property name="toolTip">
+          <string>Recommend this be mashed</string>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -484,6 +526,9 @@
        </item>
        <item>
         <widget class="QCheckBox" name="checkBox_isMashed">
+         <property name="toolTip">
+          <string>Checked if it is present in mash</string>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -513,6 +558,9 @@
            <width>100</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Bitterness of pre-hopped extracts</string>
          </property>
         </widget>
        </item>

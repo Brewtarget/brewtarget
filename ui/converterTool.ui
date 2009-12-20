@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>267</width>
-    <height>93</height>
+    <width>279</width>
+    <height>96</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,6 +44,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Amount and units to convert</string>
+       </property>
       </widget>
      </item>
      <item row="1" column="0">
@@ -67,6 +70,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Unit you want to convert to</string>
+       </property>
       </widget>
      </item>
      <item row="2" column="0">
@@ -89,6 +95,9 @@
          <width>128</width>
          <height>16777215</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Output conversion</string>
        </property>
        <property name="readOnly">
         <bool>true</bool>

@@ -43,6 +43,9 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Amount of beer to prime</string>
+          </property>
          </widget>
         </item>
         <item row="1" column="0">
@@ -66,6 +69,9 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Temp of the beer</string>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -88,6 +94,9 @@
             <width>80</width>
             <height>16777215</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</string>
           </property>
          </widget>
         </item>
@@ -166,12 +175,18 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>How much priming ingredient to use</string>
+          </property>
          </widget>
         </item>
        </layout>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_calculate">
+        <property name="toolTip">
+         <string>Calculate</string>
+        </property>
         <property name="text">
          <string>Calculate</string>
         </property>

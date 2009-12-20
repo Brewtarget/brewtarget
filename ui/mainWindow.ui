@@ -43,6 +43,9 @@
              <height>0</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Recipe list</string>
+           </property>
            <property name="sizeAdjustPolicy">
             <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
            </property>
@@ -139,6 +142,9 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Name of recipe</string>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -161,6 +167,9 @@
                  <width>160</width>
                  <height>0</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Style of this recipe</string>
                </property>
                <property name="sizeAdjustPolicy">
                 <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
@@ -187,6 +196,9 @@
                  <width>160</width>
                  <height>0</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Equipment to brew this with</string>
                </property>
                <property name="sizeAdjustPolicy">
                 <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
@@ -219,6 +231,9 @@
                  <width>100</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Target batch size</string>
                </property>
               </widget>
              </item>
@@ -263,6 +278,9 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Target boil size</string>
+               </property>
               </widget>
              </item>
              <item row="6" column="0">
@@ -305,6 +323,9 @@
                  <width>100</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>The extraction efficiency you expect</string>
                </property>
               </widget>
              </item>
@@ -1188,7 +1209,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_addFerm">
             <property name="toolTip">
-             <string>Add</string>
+             <string>Add a fermentable</string>
             </property>
             <property name="text">
              <string/>
@@ -1202,7 +1223,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_removeFerm">
             <property name="toolTip">
-             <string>Remove</string>
+             <string>Remove selected fermentable</string>
             </property>
             <property name="text">
              <string/>
@@ -1216,7 +1237,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_editFerm">
             <property name="toolTip">
-             <string>Edit</string>
+             <string>Edit selected fermentable</string>
             </property>
             <property name="text">
              <string/>
@@ -1274,7 +1295,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_removeHop">
             <property name="toolTip">
-             <string>Remove hop</string>
+             <string>Remove selected hop</string>
             </property>
             <property name="text">
              <string/>
@@ -1288,7 +1309,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_editHop">
             <property name="toolTip">
-             <string>Edit hop</string>
+             <string>Edit selected hop</string>
             </property>
             <property name="text">
              <string/>
@@ -1346,7 +1367,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_removeMisc">
             <property name="toolTip">
-             <string>Remove misc</string>
+             <string>Remove selected misc</string>
             </property>
             <property name="text">
              <string/>
@@ -1360,7 +1381,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_editMisc">
             <property name="toolTip">
-             <string>Edit misc</string>
+             <string>Edit selected misc</string>
             </property>
             <property name="text">
              <string/>
@@ -1418,7 +1439,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_removeYeast">
             <property name="toolTip">
-             <string>Remove yeast</string>
+             <string>Remove selected yeast</string>
             </property>
             <property name="text">
              <string/>
@@ -1432,7 +1453,7 @@
           <item>
            <widget class="QPushButton" name="pushButton_editYeast">
             <property name="toolTip">
-             <string>Edit yeast</string>
+             <string>Edit selected yeast</string>
             </property>
             <property name="text">
              <string/>
@@ -1492,7 +1513,7 @@
             <item>
              <widget class="QPushButton" name="pushButton_removeMashStep">
               <property name="toolTip">
-               <string>Remove mash step</string>
+               <string>Remove selected mash step</string>
               </property>
               <property name="text">
                <string/>
@@ -1506,7 +1527,7 @@
             <item>
              <widget class="QPushButton" name="pushButton_editMashStep">
               <property name="toolTip">
-               <string>Edit mash step</string>
+               <string>Edit selected mash step</string>
               </property>
               <property name="text">
                <string/>
@@ -1519,6 +1540,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_editMash">
+              <property name="toolTip">
+               <string>Edit mash properties</string>
+              </property>
               <property name="text">
                <string>Edit mash</string>
               </property>
@@ -1526,6 +1550,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="pushButton_mashWizard">
+              <property name="toolTip">
+               <string>Invoke the mash wizard</string>
+              </property>
               <property name="text">
                <string>Mash wiz</string>
               </property>
@@ -1581,6 +1608,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_saveMash">
+            <property name="toolTip">
+             <string>Save this mash profile</string>
+            </property>
             <property name="text">
              <string>Save Mash</string>
             </property>

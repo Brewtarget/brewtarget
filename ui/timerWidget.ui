@@ -106,6 +106,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Start/Stop timer</string>
+          </property>
           <property name="text">
            <string>Start</string>
           </property>
@@ -119,6 +122,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Set the timer to the specified value</string>
+          </property>
           <property name="text">
            <string>Set</string>
           </property>
@@ -131,6 +137,9 @@
             <width>0</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="toolTip">
+           <string>Set a sound as the alarm</string>
           </property>
           <property name="text">
            <string>Sound</string>

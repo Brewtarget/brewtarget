@@ -48,6 +48,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <item>
            <widget class="QPushButton" name="pushButton_remove">
+            <property name="toolTip">
+             <string>Remove currently selected step</string>
+            </property>
             <property name="text">
              <string>Remove</string>
             </property>
@@ -55,6 +58,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_up">
+            <property name="toolTip">
+             <string>Move currently selected step up</string>
+            </property>
             <property name="text">
              <string>Up</string>
             </property>
@@ -62,6 +68,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_down">
+            <property name="toolTip">
+             <string>Move currently selected step down</string>
+            </property>
             <property name="text">
              <string>Down</string>
             </property>
@@ -121,6 +130,9 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <property name="toolTip">
+                  <string>Name of new step</string>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -154,6 +166,9 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <property name="toolTip">
+                  <string>The number where the new step should be placed</string>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -177,6 +192,9 @@
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
               <widget class="QPushButton" name="pushButton_insert">
+               <property name="toolTip">
+                <string>Insert the new step</string>
+               </property>
                <property name="text">
                 <string>Insert</string>
                </property>

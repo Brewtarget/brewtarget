@@ -37,12 +37,15 @@
          <height>0</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Style</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_remove">
        <property name="toolTip">
-        <string>Delete</string>
+        <string>Delete selected style</string>
        </property>
        <property name="text">
         <string/>
@@ -110,6 +113,9 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Name</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -148,6 +154,9 @@
              <width>100</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Category</string>
            </property>
           </widget>
          </item>
@@ -188,6 +197,9 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Category number</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -226,6 +238,9 @@
              <width>100</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Style letter</string>
            </property>
           </widget>
          </item>
@@ -266,6 +281,9 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Style guide</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -304,6 +322,9 @@
              <width>100</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Type of beverage</string>
            </property>
            <item>
             <property name="text">

@@ -49,6 +49,9 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Mash thickness (do not enter any units)</string>
+       </property>
       </widget>
      </item>
     </layout>
