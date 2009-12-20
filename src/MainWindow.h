@@ -68,7 +68,6 @@ public:
    void setRecipe(Recipe* recipe);
    virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
-   static const char* homedir;
 
 public slots:
    void save();

@@ -67,17 +67,6 @@
 #include <QInputDialog>
 #include <QLineEdit>
 
-const char* MainWindow::homedir =
-#if defined(unix)
-"/home";
-#elif defined(windows)
-"c:\\";
-#elif defined(mac)
-"/home";
-#else
-"";
-#endif
-
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
 {
@@ -147,25 +136,26 @@ MainWindow::MainWindow(QWidget* parent)
    brewDayDialog->setWindowTitle("Brew day mode");
 
    // Set up the fileOpener dialog.
-   fileOpener = new QFileDialog(this, tr("Open"), homedir, tr("BeerXML files (*.xml)"));
+   fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
    fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
    fileOpener->setFileMode(QFileDialog::ExistingFile);
    fileOpener->setViewMode(QFileDialog::List);
 
    // Set up the fileSaver dialog.
-   fileSaver = new QFileDialog(this, tr("Save"), homedir, tr("BeerXML files (*.xml)") );
+   fileSaver = new QFileDialog(this, tr("Save"), QDir::homePath(), tr("BeerXML files (*.xml)") );
    fileSaver->setAcceptMode(QFileDialog::AcceptSave);
    fileSaver->setFileMode(QFileDialog::AnyFile);
    fileSaver->setViewMode(QFileDialog::List);
+   fileSaver->setDefaultSuffix(QString("xml"));
 
    // Set up and place the BeerColorWidget
    verticalLayout_beerColor->insertWidget( 0, &beerColorWidget);
+
    // And test out the maltiness widget.
    maltWidget = new MaltinessWidget(groupBox);
    verticalLayout_beerColor->insertWidget( -1, maltWidget );
-
    horizontalLayout_mash->insertWidget( 1, mashComboBox );
-   
+
    // Set up HtmlViewer to view documentation.
    htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
 
