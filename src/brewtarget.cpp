@@ -109,7 +109,7 @@ QString Brewtarget::getDocDir()
 
 QString Brewtarget::getConfigDir()
 {
-#if defined(Q_WS_X11) // Linux OS.
+#if defined(Q_WS_X11) or defined(Q_WS_MAC) // Linux OS or Mac OS.
 
    QDir dir;
    char* xdg_config_home = getenv("XDG_CONFIG_HOME");
@@ -133,13 +133,6 @@ QString Brewtarget::getConfigDir()
    dir.cd("brewtarget");
 
    return dir.absolutePath() + "/";
-
-#elif defined(Q_WS_MAC) // MAC OS.
-
-   QString dir= app->applicationDirPath();
-   // We should be inside an app bundle.
-   dir += "/../Resources/";
-   return dir;
 
 #else // Windows OS.
 
