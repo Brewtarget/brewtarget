@@ -717,7 +717,7 @@ void MainWindow::exportRecipe()
       return;
    
    if( fileSaver->exec() )
-      filename = fileSaver->selectedFiles()[0].toStdString().c_str();
+     filename = fileSaver->selectedFiles()[0].toAscii();
    else
       return;
 
@@ -979,7 +979,7 @@ void MainWindow::importRecipes()
    int line, col;
 
    if( fileOpener->exec() )
-      filename = fileOpener->selectedFiles()[0].toStdString().c_str();
+     filename = fileOpener->selectedFiles()[0].toAscii();
    else
       return;
 
