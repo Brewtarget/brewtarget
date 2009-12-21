@@ -26,6 +26,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include <QClipboard>
+#include "instruction.h"
 
 RecipeFormatter::RecipeFormatter()
 {
@@ -283,6 +284,23 @@ QString RecipeFormatter::getTextFormat()
       
       for( i = 0; i < size+1; ++i )
          ret += names.at(i) + types.at(i) + amounts.at(i) + targets.at(i) + times.at(i) + "\n";
+   }
+   
+   if( rec->getNotes() != "" )
+   {
+      ret += "\nNotes\n" + getTextSeparator() + "\n" + QString(rec->getNotes().c_str());
+   }
+   
+   if( (rec->instructions).size() > 0 )
+   {
+      ret += "\nInstructions\n" + getTextSeparator();
+      size = (rec->instructions).size();
+      Instruction* ins;
+      for( i = 0; i < size; ++i )
+      {
+         ins = rec->instructions[i];
+         ret += QString("%1) %2\n\n").arg(i).arg(ins->getDirections());
+      }
    }
    
    return ret;
