@@ -1993,6 +1993,63 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
  </FERMENTABLE>
  <HOP>
+  <NAME>Amarillo</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>9.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>A recent aroma variety, this citrusy American hop is also used for its smooth bittering properties due to its low cohumulone levels.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>6.50000e+00</BETA>
+  <HSI>0.00000e+00</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Cascade, Centennial</SUBSTITUTES>
+  <HUMULENE>1.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>3.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.25000e+01</COHUMULONE>
+  <MYRCENE>6.90000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Apollo</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.70000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Clean bittering and stores great. When used for aroma, lends strong grapefruit and hoppy notes.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>7.00000e+00</BETA>
+  <HSI>8.50000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Nugget, Columbus/Tomahawk/Zeus</SUBSTITUTES>
+  <HUMULENE>2.75000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.70000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.60000e+01</COHUMULONE>
+  <MYRCENE>4.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Bravo</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.55000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Bittering hop with fruity and floral aroma.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>3.50000e+00</BETA>
+  <HSI>7.00000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Columbus/Tomahawk/Zeus</SUBSTITUTES>
+  <HUMULENE>1.9000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.10000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.15000e+01</COHUMULONE>
+  <MYRCENE>3.75000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Bullion</NAME>
   <VERSION>1</VERSION>
   <ALPHA>6.50000e+00</ALPHA>
@@ -2014,40 +2071,59 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
  <HOP>
   <NAME>Cascade</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>4.50000e+00</ALPHA>
+  <ALPHA>6.00000e+00</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>Pleasant, flowery and spicy, citrus-like.</NOTES>
-  <TYPE>Aroma</TYPE>
+  <NOTES>Pleasant, floral, spicy, and citrus-like.</NOTES>
+  <TYPE>Both</TYPE>
   <FORM></FORM>
-  <BETA>4.50000e+00</BETA>
+  <BETA>6.00000e+00</BETA>
   <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
-  <SUBSTITUTES>Centennial</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Amarillo, Centennial</SUBSTITUTES>
+  <HUMULENE>1.05000e+01</HUMULENE>
+  <CARYOPHYLLENE>4.50000e+00</CARYOPHYLLENE>
+  <COHUMULONE>3.65000e+01</COHUMULONE>
+  <MYRCENE>4.75000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Centennial</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>9.50000e+00</ALPHA>
+  <ALPHA>1.05000e+01</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
   <NOTES>Medium with floral and citrus tones.</NOTES>
   <TYPE>Bittering</TYPE>
   <FORM></FORM>
-  <BETA>3.50000e+00</BETA>
+  <BETA>4.00000e+00</BETA>
   <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
+  <ORIGIN>US</ORIGIN>
   <SUBSTITUTES>Cascade</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <HUMULENE>1.10000e+01</HUMULENE>
+  <CARYOPHYLLENE>5.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.90000e+01</COHUMULONE>
+  <MYRCENE>5.80000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Citra</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.20000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Released in 2007 as a dual-purpose variety, this hop does well as a bittering hop due to low cohumulone content, and high alpha acids. When used for aroma, it lends tropical fruit and citrus characteristics.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>4.00000e+00</BETA>
+  <HSI>0.00000e+00</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Probably none, but a citrusy hop can make an approximation.</SUBSTITUTES>
+  <HUMULENE>1.20000e+01</HUMULENE>
+  <CARYOPHYLLENE>7.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.30000e+01</COHUMULONE>
+  <MYRCENE>6.25000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Challenger</NAME>
@@ -2069,61 +2145,80 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>0.00000e+00</MYRCENE>
  </HOP>
  <HOP>
-  <NAME>Chinook</NAME>
+  <NAME>Chelan</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>1.20000e+01</ALPHA>
+  <ALPHA>1.30000e+01</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>Mild to medium-heavy, spicy, distinct piney aroma.</NOTES>
+  <NOTES>Bittering hop with a lot of beta acid.</NOTES>
   <TYPE>Bittering</TYPE>
   <FORM></FORM>
-  <BETA>3.00000e+00</BETA>
-  <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
-  <SUBSTITUTES>Galena, Cluster, Nugget</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <BETA>9.15000e+00</BETA>
+  <HSI>8.00000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Galena</SUBSTITUTES>
+  <HUMULENE>1.35000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.05000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.40000e+01</COHUMULONE>
+  <MYRCENE>5.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Chinook</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.30000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Medium strength, spicy, piney aroma. Used in IPAs, stouts, porters, pale ales, and lagers for bittering.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>3.50000e+00</BETA>
+  <HSI>6.80000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Columbus, Nugget</SUBSTITUTES>
+  <HUMULENE>2.05000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.00000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.20000e+01</COHUMULONE>
+  <MYRCENE>3.75000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Cluster</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>5.50000e+00</ALPHA>
+  <ALPHA>7.75000e+00</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>floral</NOTES>
+  <NOTES>Dual-purpose with floral aroma.</NOTES>
   <TYPE>Both</TYPE>
   <FORM></FORM>
-  <BETA>4.50000e+00</BETA>
-  <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
-  <SUBSTITUTES>Galena, Chinook.</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <BETA>5.00000e+00</BETA>
+  <HSI>8.40000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Galena, Chinook</SUBSTITUTES>
+  <HUMULENE>1.65000e+01</HUMULENE>
+  <CARYOPHYLLENE>6.50000e+00</CARYOPHYLLENE>
+  <COHUMULONE>4.00000e+01</COHUMULONE>
+  <MYRCENE>5.00000e+01</MYRCENE>
  </HOP>
  <HOP>
-  <NAME>Columbus</NAME>
+  <NAME>Columbus/Tomahawk/Zeus</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>1.40000e+01</ALPHA>
+  <ALPHA>1.55000e+01</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>pleasant</NOTES>
-  <TYPE>Both</TYPE>
+  <NOTES>Super high alpha varieties.</NOTES>
+  <TYPE>Bittering</TYPE>
   <FORM></FORM>
   <BETA>4.50000e+00</BETA>
-  <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
-  <SUBSTITUTES></SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <HSI>5.20000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Galena, Chinook</SUBSTITUTES>
+  <HUMULENE>3.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.00000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.00000e+01</COHUMULONE>
+  <MYRCENE>4.50000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Crystal</NAME>
@@ -2189,17 +2284,55 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>Medium but pleasant hoppiness.</NOTES>
-  <TYPE>Bittering</TYPE>
+  <NOTES>Balanced bittering and nice aroma. Used with English and American ales.</NOTES>
+  <TYPE>Both</TYPE>
   <FORM></FORM>
-  <BETA>7.00000e+00</BETA>
+  <BETA>8.00000e+00</BETA>
+  <HSI>7.90000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Nugget, Cluster, Chinook</SUBSTITUTES>
+  <HUMULENE>1.15000e+01</HUMULENE>
+  <CARYOPHYLLENE>5.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>3.80000e+01</COHUMULONE>
+  <MYRCENE>5.75000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Glacier</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>5.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Dual-purpose, well balanced with pleasant aroma, this is used in stouts, porters, bitters, ESBs, and English-style pale ales.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>8.20000e+00</BETA>
   <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
-  <SUBSTITUTES>Nugget, Cluster, Chinook.</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Willamette</SUBSTITUTES>
+  <HUMULENE>3.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>9.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.90000e+01</COHUMULONE>
+  <MYRCENE>4.75000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Golding</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>5.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>This is an American version of traditional English aroma varieties.</NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM></FORM>
+  <BETA>2.50000e+00</BETA>
+  <HSI>6.60000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Kent Golding, Styrian Golding</SUBSTITUTES>
+  <HUMULENE>4.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.45000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.55000e+01</COHUMULONE>
+  <MYRCENE>3.00000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Hallertau</NAME>
@@ -2259,23 +2392,42 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>0.00000e+00</MYRCENE>
  </HOP>
  <HOP>
+  <NAME>Millennium</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.55000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Clean bittering and stores well. When used for aroma, lends strong grapefruit and hoppy notes.</NOTES>
+  <TYPE>Bittering</TYPE>
+  <FORM></FORM>
+  <BETA>4.80000e+00</BETA>
+  <HSI>7.60000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Nugget, Columbus/Tomahawk/Zeus</SUBSTITUTES>
+  <HUMULENE>2.50000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.05000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.00000e+01</COHUMULONE>
+  <MYRCENE>3.50000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Mount Hood</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>5.00000e+00</ALPHA>
+  <ALPHA>5.50000e+00</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
   <NOTES>Mild, pleasant, clean, light, and delicate.</NOTES>
   <TYPE>Aroma</TYPE>
   <FORM></FORM>
-  <BETA>5.00000e+00</BETA>
-  <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
-  <SUBSTITUTES>German Hallertau, Liberty, Crystal.</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <BETA>6.50000e+00</BETA>
+  <HSI>5.50000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>German Hallertau, Hersbrucker, Liberty, Crystal.</SUBSTITUTES>
+  <HUMULENE>3.40000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.45000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.20000e+01</COHUMULONE>
+  <MYRCENE>3.50000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Northern Brewer</NAME>
@@ -2299,21 +2451,40 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
  <HOP>
   <NAME>Nugget</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>1.20000e+01</ALPHA>
+  <ALPHA>1.30000e+01</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>Quite heavy and herbal, spicy.</NOTES>
+  <NOTES>Mild aroma, low cohumulone for smooth bitterness.</NOTES>
   <TYPE>Both</TYPE>
   <FORM></FORM>
-  <BETA>4.00000e+00</BETA>
+  <BETA>5.00000e+00</BETA>
+  <HSI>7.60000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Chinook, Galena, Cluster, Magnum</SUBSTITUTES>
+  <HUMULENE>1.75000e+01</HUMULENE>
+  <CARYOPHYLLENE>8.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.40000e+01</COHUMULONE>
+  <MYRCENE>5.15000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Palisade</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>7.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Bred as an aroma hop with perfume-like qualities. Also used for smooth bittering potential in moderate quantities.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>7.00000e+00</BETA>
   <HSI>0.00000e+00</HSI>
-  <ORIGIN></ORIGIN>
-  <SUBSTITUTES>Chinook, Galena, Cluster</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Willamette</SUBSTITUTES>
+  <HUMULENE>2.05000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.70000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.65000e+01</COHUMULONE>
+  <MYRCENE>9.50000e+00</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Perle</NAME>
@@ -2392,6 +2563,44 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>0.00000e+00</MYRCENE>
  </HOP>
  <HOP>
+  <NAME>Simcoe</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.30000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Dual-purpose hop. Has a piney aroma suited to American ales.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>4.50000e+00</BETA>
+  <HSI>0.00000e+00</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Summit, Magnum</SUBSTITUTES>
+  <HUMULENE>1.25000e+01</HUMULENE>
+  <CARYOPHYLLENE>6.50000e+00</CARYOPHYLLENE>
+  <COHUMULONE>1.75000e+01</COHUMULONE>
+  <MYRCENE>6.25000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Sterling</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>4.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>An aroma variety with smooth bitterness, and noble hop aroma. The aroma is herbal and spicy with some floral and citrus notes. Used primarily in Pilsners and Lagers as a Saaz substitute.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>5.50000e+00</BETA>
+  <HSI>6.75000e+01</HSI>
+  <ORIGIN></ORIGIN>
+  <SUBSTITUTES>Saaz</SUBSTITUTES>
+  <HUMULENE>7.00000e+00</HUMULENE>
+  <CARYOPHYLLENE>2.10000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.20000e+01</COHUMULONE>
+  <MYRCENE>4.60000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Styrian Goldings</NAME>
   <VERSION>1</VERSION>
   <ALPHA>4.50000e+00</ALPHA>
@@ -2409,6 +2618,44 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
   <COHUMULONE>0.00000e+00</COHUMULONE>
   <MYRCENE>0.00000e+00</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Summit</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.70000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Bittering variety with earthy aroma and slight citrus notes.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>5.00000e+00</BETA>
+  <HSI>8.50000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Columbus/Tomahawk/Zeus, Warrior, Millenium</SUBSTITUTES>
+  <HUMULENE>2.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.25000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.95000e+01</COHUMULONE>
+  <MYRCENE>4.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Super Galena</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.45000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Very similar to Galena in aroma and bitterness.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>9.00000e+00</BETA>
+  <HSI>7.90000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Galena</SUBSTITUTES>
+  <HUMULENE>2.15000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.00000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.750000e+01</COHUMULONE>
+  <MYRCENE>5.25000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Target</NAME>
@@ -2449,29 +2696,67 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>0.00000e+00</MYRCENE>
  </HOP>
  <HOP>
-  <NAME>Willamette</NAME>
+  <NAME>Tillicum</NAME>
   <VERSION>1</VERSION>
-  <ALPHA>4.00000e+00</ALPHA>
+  <ALPHA>1.30000e+01</ALPHA>
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>mild and pleasant, slightly spicy, aromatic.</NOTES>
+  <NOTES>Pleasant, slightly spicy</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>1.00000e+01</BETA>
+  <HSI>8.00000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Galena, Chelan</SUBSTITUTES>
+  <HUMULENE>1.45000e+01</HUMULENE>
+  <CARYOPHYLLENE>7.40000e+00</CARYOPHYLLENE>
+  <COHUMULONE>3.50000e+01</COHUMULONE>
+  <MYRCENE>5.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Warrior</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.55000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Mild aroma, clean an neutral bittering.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>4.80000e+00</BETA>
+  <HSI>7.60000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Columbus, Magnum, Nugget</SUBSTITUTES>
+  <HUMULENE>1.70000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.00000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.40000e+01</COHUMULONE>
+  <MYRCENE>4.50000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Willamette</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>5.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Mild and pleasant, slightly spicy, aromatic.</NOTES>
   <TYPE>Aroma</TYPE>
   <FORM></FORM>
-  <BETA>3.00000e+00</BETA>
-  <HSI>0.00000e+00</HSI>
+  <BETA>4.00000e+00</BETA>
+  <HSI>6.25000e+01</HSI>
   <ORIGIN></ORIGIN>
-  <SUBSTITUTES>Fuggles, Styrian Goldings, Kent Goldings.</SUBSTITUTES>
-  <HUMULENE>0.00000e+00</HUMULENE>
-  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
-  <COHUMULONE>0.00000e+00</COHUMULONE>
-  <MYRCENE>0.00000e+00</MYRCENE>
+  <SUBSTITUTES>Fuggles, Styrian Goldings, Tettnang.</SUBSTITUTES>
+  <HUMULENE>2.35000e+01</HUMULENE>
+  <CARYOPHYLLENE>7.35000e+00</CARYOPHYLLENE>
+  <COHUMULONE>3.25000e+01</COHUMULONE>
+  <MYRCENE>3.50000e+01</MYRCENE>
  </HOP>
  <MASH_STEP>
   <NAME>Conversion step</NAME>
   <VERSION>1</VERSION>
   <TYPE>Infusion</TYPE>
-  <INFUSE_AMOUNT>5.00000e+00</INFUSE_AMOUNT>
+  <INFUSE_AMOUNT>0.00000e+00</INFUSE_AMOUNT>
   <STEP_TEMP>6.80000e+01</STEP_TEMP>
   <STEP_TIME>7.00000e+01</STEP_TIME>
   <RAMP_TIME>0.00000e+00</RAMP_TIME>
