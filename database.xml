@@ -1993,6 +1993,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
  </FERMENTABLE>
  <HOP>
+  <NAME>Ahtanum</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>9.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Distinctive aroma like Cascade.</NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM></FORM>
+  <BETA>5.75000e+00</BETA>
+  <HSI>5.25000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Amarillo, Cascade</SUBSTITUTES>
+  <HUMULENE>1.80000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.05000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.25000e+01</COHUMULONE>
+  <MYRCENE>5.25000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Amarillo</NAME>
   <VERSION>1</VERSION>
   <ALPHA>9.50000e+00</ALPHA>
@@ -2029,6 +2048,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>1.70000e+01</CARYOPHYLLENE>
   <COHUMULONE>2.60000e+01</COHUMULONE>
   <MYRCENE>4.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Bramling</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>6.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Distinctive and pleasant aroma. Fruity, black currant, and lemon notes.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>2.80000e+00</BETA>
+  <HSI>0.00000e+00</HSI>
+  <ORIGIN>England</ORIGIN>
+  <SUBSTITUTES></SUBSTITUTES>
+  <HUMULENE>3.10000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.60000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.40000e+01</COHUMULONE>
+  <MYRCENE>3.60000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Bravo</NAME>
@@ -2303,7 +2341,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <AMOUNT>0.00000e+00</AMOUNT>
   <USE>Boil</USE>
   <TIME>6.00000e+01</TIME>
-  <NOTES>This is an American version of traditional English aroma varieties.</NOTES>
+  <NOTES>A.K.A Yakima Golding. This is an American version of traditional English aroma varieties.</NOTES>
   <TYPE>Aroma</TYPE>
   <FORM></FORM>
   <BETA>2.50000e+00</BETA>
@@ -2314,6 +2352,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>1.45000e+01</CARYOPHYLLENE>
   <COHUMULONE>2.55000e+01</COHUMULONE>
   <MYRCENE>3.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Green Bullet</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.10000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Has a raisiny character.</NOTES>
+  <TYPE>Bittering</TYPE>
+  <FORM></FORM>
+  <BETA>7.00000e+00</BETA>
+  <HSI>0.00000e+00</HSI>
+  <ORIGIN>New Zealand</ORIGIN>
+  <SUBSTITUTES>Pride of Ringwood</SUBSTITUTES>
+  <HUMULENE>2.40000e+01</HUMULENE>
+  <CARYOPHYLLENE>7.50000e+00</CARYOPHYLLENE>
+  <COHUMULONE>4.20000e+01</COHUMULONE>
+  <MYRCENE>5.00000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Hallertau</NAME>
@@ -2333,6 +2390,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>1.45000e+01</CARYOPHYLLENE>
   <COHUMULONE>2.45000e+01</COHUMULONE>
   <MYRCENE>1.65000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Hersbrucker</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>3.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Mild to moderate aroma.</NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM></FORM>
+  <BETA>5.25000e+00</BETA>
+  <HSI>6.00000e+01</HSI>
+  <ORIGIN>Germany</ORIGIN>
+  <SUBSTITUTES>Mount Hood, French Strisslespalt</SUBSTITUTES>
+  <HUMULENE>3.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.25000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.15000e+01</COHUMULONE>
+  <MYRCENE>1.25000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Kent Goldings</NAME>
@@ -2371,6 +2447,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>1.05000e+01</CARYOPHYLLENE>
   <COHUMULONE>2.60000e+01</COHUMULONE>
   <MYRCENE>3.30000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Magnum</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.35000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Clean German flavor and aroma profile.</NOTES>
+  <TYPE>Bittering</TYPE>
+  <FORM></FORM>
+  <BETA>6.00000e+00</BETA>
+  <HSI>7.25000e+01</HSI>
+  <ORIGIN>Germany</ORIGIN>
+  <SUBSTITUTES>Galena</SUBSTITUTES>
+  <HUMULENE>3.75000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.05000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.50000e+01</COHUMULONE>
+  <MYRCENE>3.75000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Millennium</NAME>
@@ -2487,6 +2582,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>5.00000e+01</MYRCENE>
  </HOP>
  <HOP>
+  <NAME>Phoenix</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.10000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Bittering or aroma hop for English ales.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>4.40000e+00</BETA>
+  <HSI>0</HSI>
+  <ORIGIN>England</ORIGIN>
+  <SUBSTITUTES>Challenger</SUBSTITUTES>
+  <HUMULENE>2.95000e+01</HUMULENE>
+  <CARYOPHYLLENE>9.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>3.00000e+01</COHUMULONE>
+  <MYRCENE>2.80000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Pride of Ringwood</NAME>
   <VERSION>1</VERSION>
   <ALPHA>8.50000e+00</ALPHA>
@@ -2504,6 +2618,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>7.50000e+00</CARYOPHYLLENE>
   <COHUMULONE>3.75000e+01</COHUMULONE>
   <MYRCENE>3.75000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Progress</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>5.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Similar to Fuggles, has a mild spicy or woody character, but slightly sweeter and with softer bitterness.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>2.30000e+00</BETA>
+  <HSI>7.00000e+01</HSI>
+  <ORIGIN>England</ORIGIN>
+  <SUBSTITUTES>Kent Goldings, Fuggles</SUBSTITUTES>
+  <HUMULENE>4.35000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.35000e+01</CARYOPHYLLENE>
+  <COHUMULONE>3.05000e+01</COHUMULONE>
+  <MYRCENE>3.25000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Saaz (Czech Republic)</NAME>
@@ -2563,6 +2696,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>6.25000e+01</MYRCENE>
  </HOP>
  <HOP>
+  <NAME>Spalt</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>5.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Classic noble hop. Mild, spicy aroma. Spalt Select is a hardier variety often labeled as Spalt.</NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM></FORM>
+  <BETA>4.00000e+00</BETA>
+  <HSI>5.25000e+01</HSI>
+  <ORIGIN>Germany</ORIGIN>
+  <SUBSTITUTES>Spalt Select, Tettnanger, Saaz, Hallertau</SUBSTITUTES>
+  <HUMULENE>2.50000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.05000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.55000e+01</COHUMULONE>
+  <MYRCENE>2.75000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Sterling</NAME>
   <VERSION>1</VERSION>
   <ALPHA>4.50000e+00</ALPHA>
@@ -2580,6 +2732,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>2.10000e+01</CARYOPHYLLENE>
   <COHUMULONE>2.20000e+01</COHUMULONE>
   <MYRCENE>4.60000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Strisselspalt</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>4.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES></NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM></FORM>
+  <BETA>4.25000e+00</BETA>
+  <HSI>6.50000e+01</HSI>
+  <ORIGIN>France</ORIGIN>
+  <SUBSTITUTES>Hersbrucker, Mount Hood, Crystal</SUBSTITUTES>
+  <HUMULENE>2.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>9.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.25000e+01</COHUMULONE>
+  <MYRCENE>2.50000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Styrian Goldings</NAME>
@@ -2694,6 +2865,44 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>7.40000e+00</CARYOPHYLLENE>
   <COHUMULONE>3.50000e+01</COHUMULONE>
   <MYRCENE>5.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Tradition</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>5.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>A.K.A Hallertauer Tradition. Similar flavor to Hallertauer, with improved disease resistance.</NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM></FORM>
+  <BETA>4.50000e+00</BETA>
+  <HSI>5.50000e+01</HSI>
+  <ORIGIN>Germany</ORIGIN>
+  <SUBSTITUTES>Hallertau</SUBSTITUTES>
+  <HUMULENE>4.50000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.25000e+01</CARYOPHYLLENE>
+  <COHUMULONE>2.75000e+01</COHUMULONE>
+  <MYRCENE>2.45000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Vanguard</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>5.50000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Derived from Hallertau. Flavor is like an herbal Hallertau or slightly buttery Tettnang.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM></FORM>
+  <BETA>6.00000e+00</BETA>
+  <HSI>7.75000e+01</HSI>
+  <ORIGIN>US</ORIGIN>
+  <SUBSTITUTES>Hallertau, Tettnang</SUBSTITUTES>
+  <HUMULENE>4.65000e+01</HUMULENE>
+  <CARYOPHYLLENE>1.25000e+01</CARYOPHYLLENE>
+  <COHUMULONE>1.75000e+01</COHUMULONE>
+  <MYRCENE>2.25000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Warrior</NAME>
