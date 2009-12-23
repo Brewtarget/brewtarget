@@ -25,6 +25,7 @@
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 
 bool operator<(Misc &m1, Misc &m2)
 {
@@ -142,7 +143,7 @@ void Misc::fromNode(const QDomNode& miscNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -161,21 +162,21 @@ void Misc::fromNode(const QDomNode& miscNode)
       else if( property == "VERSION" )
       {
          if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QString("MISC says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("MISC says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
       }
       else if( property == "TYPE" )
       {
          if( isValidType(value.toStdString()) )
             type = value.toStdString();
          else
-            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "USE" )
       {
          if( isValidUse(value.toStdString()) )
             use = value.toStdString();
          else
-            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid use for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid use for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "TIME" )
       {
@@ -199,7 +200,7 @@ void Misc::fromNode(const QDomNode& miscNode)
       }
       else
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported MISC property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported MISC property: %1. Line %2").arg(property).arg(node.lineNumber()) );
       }
    }
    

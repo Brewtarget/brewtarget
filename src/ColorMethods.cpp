@@ -20,6 +20,7 @@
 #include "brewtarget.h"
 #include <cmath>
 #include <QString>
+#include <QObject>
 
 ColorMethods::ColorMethods()
 {
@@ -40,7 +41,7 @@ double ColorMethods::mcuToSrm(double mcu)
       case Brewtarget::MOSHER:
          return mosher(mcu);
       default:
-         Brewtarget::log( Brewtarget::ERROR, QString("Invalid color formula type: %1").arg(Brewtarget::colorFormula) );
+         Brewtarget::log( Brewtarget::ERROR, QObject::tr("Invalid color formula type: %1").arg(Brewtarget::colorFormula) );
          return morey(mcu);
    }
 }

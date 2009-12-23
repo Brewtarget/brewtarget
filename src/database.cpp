@@ -26,6 +26,7 @@
 #include <QDomNodeList>
 #include <QDomNode>
 #include <QTextStream>
+#include <QObject>
 
 #include "equipment.h"
 #include "fermentable.h"
@@ -108,27 +109,27 @@ void Database::initialize()
    // Try to open the files.
    if( ! dbFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::log(Brewtarget::ERROR, "Could not open " + dbFile.fileName().toStdString() + " for reading.");
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for reading.").arg(dbFile.fileName()));
       return;
    }
    if( ! recipeFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::log(Brewtarget::ERROR, "Could not open " + recipeFile.fileName().toStdString() + " for reading.");
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for reading.").arg(recipeFile.fileName()));
       return;
    }
    if( ! mashFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::log(Brewtarget::ERROR, "Could not open " + recipeFile.fileName().toStdString() + " for reading.");
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for reading.").arg(recipeFile.fileName()));
       return;
    }
 
    // Parse the xml documents.
    if( ! dbDoc.setContent(&dbFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(dbFile.fileName()).arg(line).arg(col).arg(err) );
+      Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad document formatting in %1 %2:%3. %4").arg(dbFile.fileName()).arg(line).arg(col).arg(err) );
    if( ! recDoc.setContent(&recipeFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(recipeFile.fileName()).arg(line).arg(col).arg(err) );
+      Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad document formatting in %1 %2:%3. %4").arg(recipeFile.fileName()).arg(line).arg(col).arg(err) );
    if( ! mashDoc.setContent(&mashFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(mashFile.fileName()).arg(line).arg(col).arg(err) );
+      Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad document formatting in %1 %2:%3. %4").arg(mashFile.fileName()).arg(line).arg(col).arg(err) );
 
    /*** Items in dbDoc ***/
    list = dbDoc.elementsByTagName("EQUIPMENT");
@@ -316,17 +317,17 @@ void Database::savePersistent()
    
    if( ! dbFile.open( QIODevice::Truncate | QIODevice::WriteOnly ) )
    {
-      Brewtarget::log(Brewtarget::ERROR, "Could not open " + dbFile.fileName().toStdString() + " for writing.");
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for writing.").arg(dbFile.fileName()));
       return;
    }
    if( ! recipeFile.open( QIODevice::Truncate | QIODevice::WriteOnly ) )
    {
-      Brewtarget::log(Brewtarget::ERROR, "Could not open " + recipeFile.fileName().toStdString() + " for writing.");
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for writing.").arg(recipeFile.fileName()));
       return;
    }
    if( ! mashFile.open( QIODevice::Truncate | QIODevice::WriteOnly ) )
    {
-      Brewtarget::log(Brewtarget::ERROR, "Could not open " + mashFile.fileName().toStdString() + " for writing.");
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for writing.").arg(mashFile.fileName()));
       return;
    }
 

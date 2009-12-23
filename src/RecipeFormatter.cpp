@@ -26,6 +26,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include <QClipboard>
+#include <QObject>
 #include "instruction.h"
 
 RecipeFormatter::RecipeFormatter()
@@ -60,15 +61,14 @@ QString RecipeFormatter::getTextFormat()
    
    ret += getTextSeparator();
    
-   ret += "Batch Size: " + Brewtarget::displayAmount(rec->getBatchSize_l(), Units::liters) + "\n";
-   ret += "Boil Size: " + Brewtarget::displayAmount(rec->getBoilSize_l(), Units::liters) + "\n";
-   ret += "Boil Time: " + Brewtarget::displayAmount(rec->getBoilTime_min(), Units::minutes) + "\n";
-   ret += "Efficiency: " + QString("%1\%").arg(rec->getEfficiency_pct(), 0, 'f', 0) + "\n";
-   ret += "OG: " + QString("%1").arg( rec->getOg(), 0, 'f', 3 ) + "\n";
-   ret += "FG: " + QString("%1").arg( rec->getFg(), 0, 'f', 3 ) + "\n";
-   ret += "ABV: " + QString("%1\%").arg( rec->getABV_pct(), 0, 'f', 1 ) + "\n";
-   ret += "Bitterness: ";
-   bitternessString = QString("%1 IBUs (%2)").arg( rec->getIBU(), 0, 'f', 1 );
+   ret += QObject::tr("Batch Size: %1\n").arg(Brewtarget::displayAmount(rec->getBatchSize_l(), Units::liters));
+   ret += QObject::tr("Boil Size: %1\n").arg(Brewtarget::displayAmount(rec->getBoilSize_l(), Units::liters));
+   ret += QObject::tr("Boil Time: %1\n").arg(Brewtarget::displayAmount(rec->getBoilTime_min(), Units::minutes));
+   ret += QObject::tr("Efficiency: %1\%\n").arg(rec->getEfficiency_pct(), 0, 'f', 0);
+   ret += QObject::tr("OG: %1\n").arg( rec->getOg(), 0, 'f', 3 );
+   ret += QObject::tr("FG: %1\n").arg( rec->getFg(), 0, 'f', 3 );
+   ret += QObject::tr("ABV: %1\n").arg( rec->getABV_pct(), 0, 'f', 1 );
+   bitternessString = QObject::tr("Bitterness: %1 IBUs (%2)\n").arg( rec->getIBU(), 0, 'f', 1 );
    switch( Brewtarget::ibuFormula )
    {
       case Brewtarget::TINSETH:
@@ -78,9 +78,8 @@ QString RecipeFormatter::getTextFormat()
          bitternessString = bitternessString.arg("Rager");
          break;
    }
-   ret += bitternessString + "\n";
-   ret += "Color: ";
-   colorString = QString("%1 SRM (%2)").arg( rec->getColor_srm(), 0, 'f', 0 );
+   ret += bitternessString;
+   colorString = QObject::tr("Color: %1 SRM (%2)\n").arg( rec->getColor_srm(), 0, 'f', 0 );
    switch( Brewtarget::colorFormula )
    {
       case Brewtarget::MOREY:
@@ -93,22 +92,22 @@ QString RecipeFormatter::getTextFormat()
          colorString = colorString.arg("Mosher");
          break;
    }
-   ret += colorString + "\n";
+   ret += colorString;
    
    if( rec->getNumFermentables() > 0 )
    {
       QStringList names, types, amounts, masheds, yields, colors;
       ret += "\n";
-      ret += "Fermentables\n";
+      ret += QObject::tr("Fermentables\n");
       ret += getTextSeparator();
       
       //ret += "Name\t\tType\t\tAmount\t\tMashed\t\tYield\t\tColor\n";
-      names.append("Name");
-      types.append("Type");
-      amounts.append("Amount");
-      masheds.append("Mashed");
-      yields.append("Yield");
-      colors.append("Color");
+      names.append(QObject::tr("Name"));
+      types.append(QObject::tr("Type"));
+      amounts.append(QObject::tr("Amount"));
+      masheds.append(QObject::tr("Mashed"));
+      yields.append(QObject::tr("Yield"));
+      colors.append(QObject::tr("Color"));
       
       size = rec->getNumFermentables();
       for( i = 0; i < size; ++i )
@@ -117,7 +116,7 @@ QString RecipeFormatter::getTextFormat()
          names.append( ferm->getName().c_str() );
          types.append( ferm->getType().c_str() );
          amounts.append( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms) );
-         masheds.append( ferm->getIsMashed() ? "Yes" : "No" );
+         masheds.append( ferm->getIsMashed() ? QObject::tr("Yes") : QObject::tr("No") );
          yields.append( QString("%1\%").arg(ferm->getYield_pct(), 0, 'f', 0) );
          colors.append( QString("%1 L").arg(ferm->getColor_srm(), 0, 'f', 0) );
       }
@@ -137,17 +136,17 @@ QString RecipeFormatter::getTextFormat()
    {
       QStringList names, alphas, amounts, uses, times, ibus;
       ret += "\n";
-      ret += "Hops\n";
+      ret += QObject::tr("Hops\n");
       ret += getTextSeparator();
       
       //ret += "Name\t\tAlpha\t\tAmount\t\tUse\t\tTime\t\tIBU\n";
       
-      names.append( "Name" );
-      alphas.append( "Alpha" );
-      amounts.append( "Amount" );
-      uses.append( "Use" );
-      times.append( "Time" );
-      ibus.append( "IBU" );
+      names.append( QObject::tr("Name") );
+      alphas.append( QObject::tr("Alpha") );
+      amounts.append( QObject::tr("Amount") );
+      uses.append( QObject::tr("Use") );
+      times.append( QObject::tr("Time") );
+      ibus.append( QObject::tr("IBU") );
       
       size = rec->getNumHops();
       for( i = 0; i < size; ++i )
@@ -160,12 +159,6 @@ QString RecipeFormatter::getTextFormat()
          uses.append( hop->getUse().c_str() );
          times.append( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) );
          ibus.append( QString("%1").arg( rec->getIBUFromHop(i), 0, 'f', 1 ) );
-         //ret += (hop->getName() + "\t\t").c_str();
-         //ret += QString("%1").arg(hop->getAlpha_pct(), 0, 'f', 1) + "\t\t";
-         //ret += Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms) + "\t\t";
-         //ret += (hop->getUse() + "\t\t").c_str();
-         //ret += Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) + "\t\t";
-         //ret += QString("%1").arg( rec->getIBUFromHop(i), 0, 'f', 1 ) + "\n";
       }
       
       padAllToMaxLength(&names);
@@ -183,14 +176,14 @@ QString RecipeFormatter::getTextFormat()
    {
       QStringList names, types, uses, amounts, times;
       ret += "\n";
-      ret += "Misc\n";
+      ret += QObject::tr("Misc\n");
       ret += getTextSeparator();
       
-      names.append("Name");
-      types.append("Type");
-      uses.append("Use");
-      amounts.append("Amount");
-      times.append("Time");
+      names.append(QObject::tr("Name"));
+      types.append(QObject::tr("Type"));
+      uses.append(QObject::tr("Use"));
+      amounts.append(QObject::tr("Amount"));
+      times.append(QObject::tr("Time"));
       
       size = rec->getNumMiscs();
       for( i = 0; i < size; ++i )
@@ -217,14 +210,14 @@ QString RecipeFormatter::getTextFormat()
    {
       QStringList names, types, forms, amounts, stages;
       ret += "\n";
-      ret += "Yeast\n";
+      ret += QObject::tr("Yeast\n");
       ret += getTextSeparator();
       
-      names.append("Name");
-      types.append("Type");
-      forms.append("Form");
-      amounts.append("Amount");
-      stages.append("Stage");
+      names.append(QObject::tr("Name"));
+      types.append(QObject::tr("Type"));
+      forms.append(QObject::tr("Form"));
+      amounts.append(QObject::tr("Amount"));
+      stages.append(QObject::tr("Stage"));
       
       size = rec->getNumYeasts();
       for( i = 0; i < size; ++i )
@@ -234,7 +227,7 @@ QString RecipeFormatter::getTextFormat()
          types.append( y->getType().c_str() );
          forms.append( y->getForm().c_str() );
          amounts.append( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
-         stages.append( y->getAddToSecondary() ? "Secondary" : "Primary" );
+         stages.append( y->getAddToSecondary() ? QObject::tr("Secondary") : QObject::tr("Primary") );
       }
       
       padAllToMaxLength(&names);
@@ -251,14 +244,14 @@ QString RecipeFormatter::getTextFormat()
    {
       QStringList names, types, amounts, targets, times;
       ret += "\n";
-      ret += "Mash\n";
+      ret += QObject::tr("Mash\n");
       ret += getTextSeparator();
       
-      names.append("Name");
-      types.append("Type");
-      amounts.append("Amount");
-      targets.append("Target");
-      times.append("Time");
+      names.append(QObject::tr("Name"));
+      types.append(QObject::tr("Type"));
+      amounts.append(QObject::tr("Amount"));
+      targets.append(QObject::tr("Target"));
+      times.append(QObject::tr("Time"));
       
       size = mash->getNumMashSteps();
       for( i = 0; i < size; ++i )
@@ -288,12 +281,14 @@ QString RecipeFormatter::getTextFormat()
    
    if( rec->getNotes() != "" )
    {
-      ret += "\nNotes\n" + getTextSeparator() + "\n" + QString(rec->getNotes().c_str());
+      ret += "\n";
+      ret += QObject::tr("Notes\n") + getTextSeparator() + "\n" + QString(rec->getNotes().c_str());
    }
    
    if( (rec->instructions).size() > 0 )
    {
-      ret += "\nInstructions\n" + getTextSeparator();
+      ret += "\n";
+      ret += QObject::tr("Instructions\n") + getTextSeparator();
       size = (rec->instructions).size();
       Instruction* ins;
       for( i = 0; i < size; ++i )

@@ -174,13 +174,13 @@ void TimerWidget::startStop()
    if( start )
    {
       timer->start();
-      pushButton_startStop->setText("Stop");
+      pushButton_startStop->setText(tr("Stop"));
       start = false;
    }
    else
    {
       timer->stop();
-      pushButton_startStop->setText("Start");
+      pushButton_startStop->setText(tr("Start"));
       start = true;
    }
 }

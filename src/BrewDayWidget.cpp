@@ -173,7 +173,7 @@ void BrewDayWidget::repopulateListWidget()
 
    for( i = 0; i < size; ++i )
    {
-      QString text = QString("Step %1: %2").arg(i).arg(recObs->getInstruction(i)->getName());
+      QString text = tr("Step %1: %2").arg(i).arg(recObs->getInstruction(i)->getName());
       listWidget->addItem(new QListWidgetItem(text));
    }
 

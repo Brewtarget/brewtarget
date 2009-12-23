@@ -64,34 +64,6 @@ double Unit::convert( double amount, const std::string& fromUnit, const std::str
    return Unit::nameToUnit[toUnit]->fromSI(SI);
 }
 
-/*
-double Unit::stringToSI( std::string input )
-{
-   size_t pos;
-   std::string num, units;
-
-   if( ! Unit::isMapSetup )
-      Unit::setupMap();
-   
-   pos = input.find_first_of(' ');
-   num = input.substr( 0, pos );
-   units = input.substr(pos);
-   trim(num);
-   trim(units);
-
-   std::cerr << "Units: " + units << std::endl;
-   std::cerr << "Num: " + num <<  std::endl;
-   std::cerr << "Converted: " << Unit::nameToUnit[units]->toSI(parseDouble(num)) << " " << Unit::nameToUnit[units]->getSIUnitName() << std::endl;
-
-   // If we are not provided units, assume "num" is already in
-   // SI units.
-   if( units.length() == 0 )
-      return parseDouble(num);
-   else
-      return Unit::nameToUnit[units]->toSI(parseDouble(num));
-}
- */
-
 // Translates something like "5.0 gal" into the appropriate SI units.
 double Unit::qstringToSI( QString qstr )
 {

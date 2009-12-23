@@ -162,7 +162,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)(mashObs->getNumMashSteps()) )
    {
-      std::cerr << "Bad model index. row = " << index.row() << std::endl;
+      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -185,7 +185,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       case MASHSTEPTIMECOL:
          return QVariant( Brewtarget::displayAmount(row->getStepTime_min(), Units::minutes) );
       default :
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -197,15 +197,15 @@ QVariant MashStepTableModel::headerData( int section, Qt::Orientation orientatio
       switch( section )
       {
          case MASHSTEPNAMECOL:
-            return QVariant("Name");
+            return QVariant(tr("Name"));
          case MASHSTEPTYPECOL:
-            return QVariant("Type");
+            return QVariant(tr("Type"));
          case MASHSTEPAMOUNTCOL:
-            return QVariant("Amount");
+            return QVariant(tr("Amount"));
          case MASHSTEPTEMPCOL:
-            return QVariant("Temp");
+            return QVariant(tr("Temp"));
          case MASHSTEPTIMECOL:
-            return QVariant("Time");
+            return QVariant(tr("Time"));
          default:
             return QVariant();
       }

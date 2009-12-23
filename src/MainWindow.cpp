@@ -52,8 +52,6 @@
 #include "YeastDialog.h"
 #include "BeerColorWidget.h"
 #include "config.h"
-#include "xmltree.h"
-#include "xmlnode.h"
 #include "unit.h"
 #include <QVBoxLayout>
 #include <QDomDocument>
@@ -133,7 +131,7 @@ MainWindow::MainWindow(QWidget* parent)
    QVBoxLayout* vblayout = new QVBoxLayout();
    vblayout->addWidget(brewDayWidget);
    brewDayDialog->setLayout(vblayout);
-   brewDayDialog->setWindowTitle("Brew day mode");
+   brewDayDialog->setWindowTitle(tr("Brew day mode"));
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
@@ -725,7 +723,7 @@ void MainWindow::exportRecipe()
    
    if( ! outFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
    {
-      Brewtarget::log(Brewtarget::WARNING, QString("Could not open %1 for writing").arg(filename));
+      Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for writing.").arg(filename));
       return;
    }
    
@@ -986,25 +984,25 @@ void MainWindow::importRecipes()
    inFile.setFileName(filename);
    if( ! inFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::log(Brewtarget::WARNING, QString("Could not open %1 for reading.").arg(filename));
+      Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for reading.").arg(filename));
       return;
    }
    
    if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+      Brewtarget::log(Brewtarget::WARNING, tr("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
    
    list = xmlDoc.elementsByTagName("RECIPE");
    numRecipes = list.size();
    
    // Tell how many recipes there were in the status bar.
-   statusBar()->showMessage( QString("Found %1 recipes.").arg(numRecipes), 5000 );
+   statusBar()->showMessage( tr("Found %1 recipes.").arg(numRecipes), 5000 );
    
    for( i = 0; i < numRecipes; ++i )
    {
       newRec = new Recipe(list.at(i));
       
       if( QMessageBox::question(this, tr("Import recipe?"),
-	   QString("Import %1?").arg(newRec->getName().c_str()),
+	   tr("Import %1?").arg(newRec->getName().c_str()),
 	   QMessageBox::Yes,
 	   QMessageBox::No)
 	 == QMessageBox::Yes )

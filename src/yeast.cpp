@@ -21,6 +21,7 @@
 #include <QDomNode>
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 #include "yeast.h"
 #include "stringparsing.h"
 #include "brewtarget.h"
@@ -198,7 +199,7 @@ void Yeast::fromNode(const QDomNode& yeastNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -217,21 +218,21 @@ void Yeast::fromNode(const QDomNode& yeastNode)
       else if( property == "VERSION" )
       {
          if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QString("YEAST says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("YEAST says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
       }
       else if( property == "TYPE" )
       {
          if( isValidType( value.toStdString() ) )
             type = value.toStdString();
          else
-            Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid type for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log( Brewtarget::ERROR, QObject::tr("%1 is not a valid type for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "FORM" )
       {
          if( isValidForm( value.toStdString() ) )
             form = value.toStdString();
             else
-               Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid form for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+               Brewtarget::log( Brewtarget::ERROR, QObject::tr("%1 is not a valid form for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "AMOUNT" )
       {
@@ -262,7 +263,7 @@ void Yeast::fromNode(const QDomNode& yeastNode)
          if( isValidFlocculation( value.toStdString() ) )
             flocculation = value.toStdString();
          else
-            Brewtarget::log( Brewtarget::ERROR, QString("%1 is not a valid flocculation for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log( Brewtarget::ERROR, QObject::tr("%1 is not a valid flocculation for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "ATTENUATION" )
       {
@@ -290,7 +291,7 @@ void Yeast::fromNode(const QDomNode& yeastNode)
       }
       else
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported YEAST property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported YEAST property: %1. Line %2").arg(property).arg(node.lineNumber()) );
       }
    }
    

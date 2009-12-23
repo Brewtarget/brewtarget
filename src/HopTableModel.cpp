@@ -151,7 +151,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)hopObs.size() )
    {
-      std::cerr << "Bad model index. row = " << index.row() << std::endl;
+      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -174,7 +174,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
       case HOPTIMECOL:
          return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
       default :
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -186,17 +186,17 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
       switch( section )
       {
          case HOPNAMECOL:
-            return QVariant("Name");
+            return QVariant(tr("Name"));
          case HOPALPHACOL:
-            return QVariant("Alpha %");
+            return QVariant(tr("Alpha %"));
          case HOPAMOUNTCOL:
-            return QVariant("Amount");
+            return QVariant(tr("Amount"));
          case HOPUSECOL:
-            return QVariant("Use");
+            return QVariant(tr("Use"));
          case HOPTIMECOL:
-            return QVariant("Time");
+            return QVariant(tr("Time"));
          default:
-            std::cerr << "Bad column: " << section << std::endl;
+            Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -272,7 +272,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          else
             return false;
       default:
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return false;
    }
 }

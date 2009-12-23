@@ -127,7 +127,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)yeastObs.size() )
    {
-      std::cerr << "Bad model index. row = " << index.row() << std::endl;
+      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -148,7 +148,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
       case YEASTAMOUNTCOL:
          return QVariant( Brewtarget::displayAmount(row->getAmount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
       default :
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -160,15 +160,15 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
       switch( section )
       {
          case YEASTNAMECOL:
-            return QVariant("Name");
+            return QVariant(tr("Name"));
          case YEASTTYPECOL:
-            return QVariant("Type");
+            return QVariant(tr("Type"));
          case YEASTFORMCOL:
-            return QVariant("Form");
+            return QVariant(tr("Form"));
          case YEASTAMOUNTCOL:
-            return QVariant("Amount");
+            return QVariant(tr("Amount"));
          default:
-            std::cerr << "Bad column: " << section << std::endl;
+            Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -233,7 +233,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          else
             return false;
       default:
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return false;
    }
 }

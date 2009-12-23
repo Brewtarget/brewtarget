@@ -25,6 +25,7 @@
 #include <QDomText>
 #include <QDomNodeList>
 #include <QTextStream>
+#include <QObject>
 
 #include "brewtarget.h"
 #include "config.h"
@@ -167,9 +168,9 @@ void Brewtarget::log(LogType lt, QString message)
    QString m;
    
    if( lt == WARNING )
-      m = "WARNING: " + message;
+      m = QObject::tr("WARNING: %1").arg(message);
    else if( lt == ERROR )
-      m = "ERROR: " + message;
+      m = QObject::tr("ERROR: %1").arg(message);
    else
       m = message;
    
@@ -327,17 +328,12 @@ void Brewtarget::readPersistentOptions()
 
    if( ! xmlFile.open(QIODevice::ReadOnly) )
    {
-      log(WARNING, "Could not open " + xmlFile.fileName().toStdString() + " for reading.");
+      log(WARNING, QObject::tr("Could not open %1 for reading.").arg(xmlFile.fileName()));
       return;
    }
 
    if( ! optionsDoc->setContent(&xmlFile, false, &err, &line, &col) )
-   {
-      log(WARNING, "Bad document formatting in " +
-                   xmlFile.fileName().toStdString() +
-                   QString(" %1:%2.").arg(line).arg(col).toStdString());
-      log(WARNING, QString("Bad document formatting in %1 %2:%3.").arg(xmlFile.fileName()).arg(line).arg(col).toStdString() );
-   }
+      log(WARNING, QObject::tr("Bad document formatting in %1 %2:%3").arg(xmlFile.fileName()).arg(line).arg(col));
 
    root = optionsDoc->documentElement();
 
@@ -376,7 +372,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("weight_unit_system"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the weight_unit_system tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the weight_unit_system tag in the option file."));
    }
    else
    {
@@ -396,7 +392,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("volume_unit_system"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the volume_unit_system tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the volume_unit_system tag in the option file."));
    }
    else
    {
@@ -416,7 +412,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("temperature_scale"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the temperature_scale tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the temperature_scale tag in the option file."));
    }
    else
    {
@@ -436,7 +432,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("ibu_formula"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the ibu_formula tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the ibu_formula tag in the option file."));
    }
    else
    {
@@ -451,7 +447,7 @@ void Brewtarget::readPersistentOptions()
          ibuFormula = RAGER;
       else
       {
-         Brewtarget::log(Brewtarget::ERROR, QString("Bad ibu_formula type: %1").arg(text));
+         Brewtarget::log(Brewtarget::ERROR, QObject::tr("Bad ibu_formula type: %1").arg(text));
       }
    }
 
@@ -459,7 +455,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("color_formula"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the color_formula tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the color_formula tag in the option file."));
    }
    else
    {
@@ -476,7 +472,7 @@ void Brewtarget::readPersistentOptions()
          colorFormula = MOSHER;
       else
       {
-         Brewtarget::log(Brewtarget::ERROR, QString("Bad color_formula type: %1").arg(text));
+         Brewtarget::log(Brewtarget::ERROR, QObject::tr("Bad color_formula type: %1").arg(text));
       }
    }
 
@@ -495,7 +491,7 @@ void Brewtarget::savePersistentOptions()
 
    if( ! xmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
    {
-      log(WARNING, "Could not open " + xmlFile.fileName().toStdString() + " for writing.");
+      log(WARNING, QObject::tr("Could not open %1 for writing").arg(xmlFile.fileName()));
       return;
    }
 

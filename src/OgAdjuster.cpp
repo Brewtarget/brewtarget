@@ -102,19 +102,19 @@ void OgAdjuster::calculate()
 
    // Calculate intermediate parameters.
    sugar_kg = sg_20C * getWaterDensity_kgL(20) * wort_l * plato/(double)100;
-   std::cerr << "sugar_kg = " << sugar_kg << std::endl;
+   //std::cerr << "sugar_kg = " << sugar_kg << std::endl;
    water_kg = sg_20C * getWaterDensity_kgL(20) * wort_l * ((double)1 - plato/(double)100);
-   std::cerr << "water_kg = " << water_kg << std::endl;
+   //std::cerr << "water_kg = " << water_kg << std::endl;
 
    // Calculate OG w/o correction.
    finalVolume_l = equip->wortEndOfBoil_l(wort_l);
    finalWater_kg = water_kg - equip->getBoilTime_min()/(double)60 * evapRate_lHr * getWaterDensity_kgL(20);
-   std::cerr << "finalWater_kg = " << finalWater_kg << std::endl;
-   std::cerr << "boilTime = " << equip->getBoilTime_min() << std::endl;
-   std::cerr << "evapRate_lHr = " << evapRate_lHr << std::endl;
-   std::cerr << "waterDensity = " << getWaterDensity_kgL(20) << std::endl;
+   //std::cerr << "finalWater_kg = " << finalWater_kg << std::endl;
+   //std::cerr << "boilTime = " << equip->getBoilTime_min() << std::endl;
+   //std::cerr << "evapRate_lHr = " << evapRate_lHr << std::endl;
+   //std::cerr << "waterDensity = " << getWaterDensity_kgL(20) << std::endl;
    finalPlato = (double)100 * sugar_kg / (sugar_kg + finalWater_kg);
-   std::cerr << "finalPlato = " << finalPlato << std::endl;
+   //std::cerr << "finalPlato = " << finalPlato << std::endl;
    finalUncorrectedSg_20C = PlatoToSG_20C20C( finalPlato );
 
    // Calculate volume to add to boil

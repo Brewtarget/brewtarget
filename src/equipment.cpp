@@ -25,6 +25,7 @@
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 
 bool operator<(Equipment &e1, Equipment &e2)
 {
@@ -177,7 +178,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -196,7 +197,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
       else if( property == "VERSION" )
       {
          if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QString("EQUIPMENT says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("EQUIPMENT says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
       }
       else if( property == "BOIL_SIZE" )
       {
@@ -260,7 +261,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
          setNotes(value.toStdString());
       }
       else
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
    
    // Estimate the actual evaporation rate if we didn't get one.

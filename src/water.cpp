@@ -24,6 +24,7 @@
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 
 bool operator<(Water &w1, Water &w2)
 {
@@ -137,7 +138,7 @@ void Water::fromNode(const QDomNode& waterNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -156,7 +157,7 @@ void Water::fromNode(const QDomNode& waterNode)
       else if( property == "VERSION" )
       {
          if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QString("WATER says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("WATER says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
       }
       else if( property == "AMOUNT" )
       {
@@ -195,7 +196,7 @@ void Water::fromNode(const QDomNode& waterNode)
          setNotes(value.toStdString());
       }
       else
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported WATER property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported WATER property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
 

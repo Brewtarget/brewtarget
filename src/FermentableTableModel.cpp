@@ -164,7 +164,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)fermObs.size() )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Bad model index. row = %1").arg(index.row()));
+      Brewtarget::log(Brewtarget::ERROR, tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -191,14 +191,14 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          if( role == Qt::CheckStateRole )
             return QVariant( row->getIsMashed() ? Qt::Checked : Qt::Unchecked);
          else if( role == Qt::DisplayRole )
-            return row->getIsMashed() ? QString("Mashed") : QString ("Not mashed");
+            return row->getIsMashed() ? tr("Mashed") : tr("Not mashed");
          else
             return QVariant();
       case FERMAFTERBOIL:
          if( role == Qt::CheckStateRole )
             return QVariant( row->getAddAfterBoil() ? Qt::Checked : Qt::Unchecked );
          else if( role == Qt::DisplayRole )
-            return row->getAddAfterBoil()? QString("Late") : QString("Normal");
+            return row->getAddAfterBoil()? tr("Late") : tr("Normal");
          else
             return QVariant();
       case FERMYIELDCOL:
@@ -212,7 +212,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          else
             return QVariant();
       default :
-         Brewtarget::log(Brewtarget::ERROR, QString("Bad column: %1").arg(col));
+         Brewtarget::log(Brewtarget::ERROR, tr("Bad column: %1").arg(col));
          return QVariant();
    }
 }
@@ -224,21 +224,21 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
       switch( section )
       {
          case FERMNAMECOL:
-            return QVariant("Name");
+            return QVariant(tr("Name"));
          case FERMTYPECOL:
-            return QVariant("Type");
+            return QVariant(tr("Type"));
          case FERMAMOUNTCOL:
-            return QVariant("Amount");
+            return QVariant(tr("Amount"));
          case FERMISMASHEDCOL:
-            return QVariant("Mashed");
+            return QVariant(tr("Mashed"));
          case FERMAFTERBOIL:
-            return QVariant("Late Addition");
+            return QVariant(tr("Late Addition"));
          case FERMYIELDCOL:
-            return QVariant("Yield %");
+            return QVariant(tr("Yield %"));
          case FERMCOLORCOL:
-            return QVariant("Color (SRM)");
+            return QVariant(tr("Color (SRM)"));
          default:
-            std::cerr << "Bad column: " << section << std::endl;
+            Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -335,7 +335,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       default:
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return false;
    }
 }

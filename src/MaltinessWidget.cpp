@@ -114,19 +114,19 @@ QString MaltinessWidget::fgText()
    switch(region())
    {
       case CLOYING:
-         return QString("<b>Cloying</b>");
+         return tr("<b>Cloying</b>");
       case EXTRAMALTY:
-         return QString("<b>Extra malty</b>");
+         return tr("<b>Extra malty</b>");
       case SLIGHTLYMALTY:
-         return QString("<b>Slightly malty</b>");
+         return tr("<b>Slightly malty</b>");
       case BALANCED:
-         return QString("<b>Balanced</b>");
+         return tr("<b>Balanced</b>");
       case SLIGHTLYHOPPY:
-         return QString("<b>Slightly hoppy</b>");
+         return tr("<b>Slightly hoppy</b>");
       case EXTRAHOPPY:
-         return QString("<b>Extra hoppy</b>");
+         return tr("<b>Extra hoppy</b>");
       case HARSH:
-         return QString("<b>Way hoppy</b>");
+         return tr("<b>Way hoppy</b>");
       default:
          return QString("");
    }

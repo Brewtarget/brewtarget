@@ -23,6 +23,7 @@
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 
 void Instruction::setDefaults()
 {
@@ -91,7 +92,7 @@ void Instruction::fromNode(const QDomNode& instructionNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -124,7 +125,7 @@ void Instruction::fromNode(const QDomNode& instructionNode)
          setCompleted(getBool(textNode));
       }
       else
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported INSTRUCTION property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported INSTRUCTION property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
 

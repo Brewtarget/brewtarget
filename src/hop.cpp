@@ -26,6 +26,7 @@
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 
 using namespace std;
 
@@ -239,7 +240,7 @@ void Hop::fromNode(const QDomNode& hopNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -258,7 +259,7 @@ void Hop::fromNode(const QDomNode& hopNode)
       else if( property == "VERSION" )
       {
          if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QString("MISC says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("HOP says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
       }
       else if( property == "ALPHA" )
       {
@@ -273,7 +274,7 @@ void Hop::fromNode(const QDomNode& hopNode)
          if( isValidUse(value.toStdString()) )
             setUse(value.toStdString());
          else
-            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid use for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid use for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "TIME" )
       {
@@ -288,14 +289,14 @@ void Hop::fromNode(const QDomNode& hopNode)
          if( isValidType(value.toStdString()) )
             setType(value.toStdString());
          else
-            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "FORM" )
       {
          if( isValidForm(value.toStdString()) )
             setForm(value.toStdString());
          else
-            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid form for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid form for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "BETA" )
       {
@@ -330,7 +331,7 @@ void Hop::fromNode(const QDomNode& hopNode)
          setMyrcene_pct(getDouble(textNode));
       }
       else
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported HOP property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported HOP property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
 

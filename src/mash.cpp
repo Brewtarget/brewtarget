@@ -26,6 +26,7 @@
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 
 bool operator<(Mash &m1, Mash &m2)
 {
@@ -142,7 +143,7 @@ void Mash::fromNode(const QDomNode& mashNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -162,7 +163,7 @@ void Mash::fromNode(const QDomNode& mashNode)
       else if( property == "VERSION" )
       {
          if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QString("YEAST says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("YEAST says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
       }
       else if( property == "GRAIN_TEMP" )
       {
@@ -205,7 +206,7 @@ void Mash::fromNode(const QDomNode& mashNode)
       }
       else
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported MASH property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported MASH property: %1. Line %2").arg(property).arg(node.lineNumber()) );
       }
    }
 }

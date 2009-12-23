@@ -24,6 +24,7 @@
 #include "style.h"
 #include <QDomElement>
 #include <QDomText>
+#include <QObject>
 
 bool operator<(Style &s1, Style &s2)
 {
@@ -213,7 +214,7 @@ void Style::fromNode(const QDomNode& styleNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -320,7 +321,7 @@ void Style::fromNode(const QDomNode& styleNode)
       }
       else
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported STYLE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported STYLE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
       }
    }
 }

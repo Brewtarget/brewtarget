@@ -126,7 +126,7 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)waterObs.size() )
    {
-      std::cerr << "Bad model index. row = " << index.row() << std::endl;
+      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -155,7 +155,7 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
       case WATERMAGNESIUMCOL:
          return QVariant( Brewtarget::displayAmount(row->getMagnesium_ppm(), 0) );
       default :
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -167,23 +167,23 @@ QVariant WaterTableModel::headerData( int section, Qt::Orientation orientation, 
       switch( section )
       {
          case WATERNAMECOL:
-            return QVariant("Name");
+            return QVariant(tr("Name"));
          case WATERAMOUNTCOL:
-            return QVariant("Amount");
+            return QVariant(tr("Amount"));
          case WATERCALCIUMCOL:
-            return QVariant("Calcium (ppm)");
+            return QVariant(tr("Calcium (ppm)"));
          case WATERBICARBONATECOL:
-            return QVariant("Bicarbonate (ppm)");
+            return QVariant(tr("Bicarbonate (ppm)"));
          case WATERSULFATECOL:
-            return QVariant("Sulfate (ppm)");
+            return QVariant(tr("Sulfate (ppm)"));
          case WATERCHLORIDECOL:
-            return QVariant("Chloride (ppm)");
+            return QVariant(tr("Chloride (ppm)"));
          case WATERSODIUMCOL:
-            return QVariant("Sodium (ppm)");
+            return QVariant(tr("Sodium (ppm)"));
          case WATERMAGNESIUMCOL:
-            return QVariant("Magnesium (ppm)");
+            return QVariant(tr("Magnesium (ppm)"));
          default:
-            std::cerr << "Bad column: " << section << std::endl;
+            Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -280,7 +280,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
          else
             return false;
       default:
-         std::cerr << "Bad column: " << index.column() << std::endl;
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return false;
    }
 }

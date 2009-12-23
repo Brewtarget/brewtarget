@@ -24,6 +24,7 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QVariant>
+#include <QObject>
 
 bool operator<(Fermentable &f1, Fermentable &f2)
 {
@@ -181,7 +182,7 @@ void Fermentable::fromNode(const QDomNode& fermentableNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -200,14 +201,14 @@ void Fermentable::fromNode(const QDomNode& fermentableNode)
       else if( property == "VERSION" )
       {
          if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QString("FERMENTABLE says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("FERMENTABLE says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
       }
       else if( property == "TYPE" )
       {
          if( isValidType(value.toStdString()) )
             setType(value.toStdString());
          else
-            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for FERMENTABLE. Line %2").arg(value).arg(textNode.lineNumber()) );
+            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for FERMENTABLE. Line %2").arg(value).arg(textNode.lineNumber()) );
       }
       else if( property == "AMOUNT" )
       {
@@ -270,7 +271,7 @@ void Fermentable::fromNode(const QDomNode& fermentableNode)
          setIbuGalPerLb(getDouble(textNode));
       }
       else
-         Brewtarget::log(Brewtarget::WARNING, QString("Unsupported FERMENTABLE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported FERMENTABLE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
 
