@@ -469,6 +469,7 @@ void MainWindow::showChanges(const QVariant& info)
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
    
    lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
+   lcdNumber_boilSG->display(QString("%1").arg(recipeObs->getBoilGrav(),0,'f',3));
    lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
    lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(), 1).c_str());
    lcdNumber_ibu->display(doubleToStringPrec(recipeObs->getIBU(), 1).c_str());

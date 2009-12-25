@@ -67,7 +67,7 @@ QString RecipeFormatter::getTextFormat()
    ret += QObject::tr("Efficiency: %1\%\n").arg(rec->getEfficiency_pct(), 0, 'f', 0);
    ret += QObject::tr("OG: %1\n").arg( rec->getOg(), 0, 'f', 3 );
    ret += QObject::tr("FG: %1\n").arg( rec->getFg(), 0, 'f', 3 );
-   ret += QObject::tr("ABV: %1\n").arg( rec->getABV_pct(), 0, 'f', 1 );
+   ret += QObject::tr("ABV: %1\%\n").arg( rec->getABV_pct(), 0, 'f', 1 );
    bitternessString = QObject::tr("Bitterness: %1 IBUs (%2)\n").arg( rec->getIBU(), 0, 'f', 1 );
    switch( Brewtarget::ibuFormula )
    {
@@ -96,7 +96,7 @@ QString RecipeFormatter::getTextFormat()
    
    if( rec->getNumFermentables() > 0 )
    {
-      QStringList names, types, amounts, masheds, yields, colors;
+      QStringList names, types, amounts, masheds, lates, yields, colors;
       ret += "\n";
       ret += QObject::tr("Fermentables\n");
       ret += getTextSeparator();
@@ -106,6 +106,7 @@ QString RecipeFormatter::getTextFormat()
       types.append(QObject::tr("Type"));
       amounts.append(QObject::tr("Amount"));
       masheds.append(QObject::tr("Mashed"));
+      lates.append(QObject::tr("Late"));
       yields.append(QObject::tr("Yield"));
       colors.append(QObject::tr("Color"));
       
@@ -117,6 +118,7 @@ QString RecipeFormatter::getTextFormat()
          types.append( ferm->getType().c_str() );
          amounts.append( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms) );
          masheds.append( ferm->getIsMashed() ? QObject::tr("Yes") : QObject::tr("No") );
+         lates.append( ferm->getAddAfterBoil() ? QObject::tr("Yes") : QObject::tr("No") );
          yields.append( QString("%1\%").arg(ferm->getYield_pct(), 0, 'f', 0) );
          colors.append( QString("%1 L").arg(ferm->getColor_srm(), 0, 'f', 0) );
       }
@@ -125,11 +127,12 @@ QString RecipeFormatter::getTextFormat()
       padAllToMaxLength(&types);
       padAllToMaxLength(&amounts);
       padAllToMaxLength(&masheds);
+      padAllToMaxLength(&lates);
       padAllToMaxLength(&yields);
       padAllToMaxLength(&colors);
       
       for( i = 0; i < size+1; ++i )
-         ret += names.at(i) + types.at(i) + amounts.at(i) + masheds.at(i) + yields.at(i) + colors.at(i) + "\n";
+         ret += names.at(i) + types.at(i) + amounts.at(i) + masheds.at(i) + lates.at(i) + yields.at(i) + colors.at(i) + "\n";
    }
    
    if( rec->getNumHops() > 0 )

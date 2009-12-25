@@ -114,7 +114,7 @@ void Mash::setDefaults()
    mashSteps = std::vector<MashStep *>();
    notes = "";
    tunTemp_c = 21.0;
-   spargeTemp_c = 74.0;
+   spargeTemp_c = 74.0; // 74C is recommended in John Palmer's How to Brew.
    ph = 7.0;
    tunWeight_kg = 0.0;
    tunSpecificHeat_calGC = 0.0;

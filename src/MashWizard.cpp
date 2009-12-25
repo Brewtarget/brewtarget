@@ -228,7 +228,7 @@ void MashWizard::wizardry()
       if( ! foundSparge )
 	 mashStep = new MashStep(); // Or just make a new one.
       
-      tf = 74; // 74C is recommended in John Palmer's How to Brew
+      tf = mash->getSpargeTemp_c();
       t1 = mash->getMashStep(size-1)->getStepTemp_c() - 10.0; // You will lose about 10C from last step.
       MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC
            + HeatCalculations::absorption_LKg * recObs->getGrainsInMash_kg() * HeatCalculations::Cw_calGC
