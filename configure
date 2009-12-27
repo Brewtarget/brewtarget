@@ -64,7 +64,9 @@ elsif( isMac() )
    print "OS: Mac\n";
    if( ! $datapath )
    {
-      $datapath = "Contents/Resources/"; # Is this right?
+      $datapath = "brewtarget.app/Contents/Resources"; # Is this right?
+      $docpath = "brewtarget.app/Contents/Resources/en.lproj";
+      $targetpath = "NotUsed";
    }
 }
 elsif( isWindows() )
