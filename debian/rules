@@ -21,7 +21,7 @@ CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
 makefile: configure
-	./configure --qmake=/usr/bin/qmake-qt4
+	./configure --qmake=/usr/bin/qmake-qt4 --prefix=/usr
 
 config.status: configure
 	dh_testdir

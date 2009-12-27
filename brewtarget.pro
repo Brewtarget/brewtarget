@@ -36,7 +36,7 @@ MOC_DIR = src
 unix : !macx {
         TARGET = brewtarget
         target.path = /usr/bin
-        data.path = /usr/share/brewtarget/
+        data.path = /usr/share/brewtarget
         doc.path = /usr/share/doc/brewtarget
 
         data.files = *.xml

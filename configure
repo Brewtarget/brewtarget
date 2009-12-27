@@ -16,6 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+$package_name="brewtarget";
+$prefix="";
+$exec_prefix="";
+$datarootdir="";
+$datadir="";
+$bindir="";
+$docdir="";
+
 $targetpath="";
 $datapath="";
 $docpath="";
@@ -37,38 +45,18 @@ sub modifyInPlace;
 
 print "\n---Configure script for Brewtarget.\n";
 
-getOptions(); # Get any options provided by user.
-findMake();   # Won't overwrite user options.
-findQmake();  # Won't overwrite user options.
-
-# --- Modify brewtarget.pro if needed. ---
-if( $datapath ) # User might have passed an option.
-{
-   modifyInPlace( 'brewtarget.pro', 'data.path =.*$', qq(data.path = $datapath) );
-}
-if( $targetpath ) # User might have passed an option.
-{
-   modifyInPlace( 'brewtarget.pro', 'target.path =.*$', qq(target.path = $targetpath) );
-}
-if( $docpath ) # User might have passed an option.
-{
-   modifyInPlace( 'brewtarget.pro', 'doc.path =.*$', qq(doc.path = $docpath) );
-}
-# --- Done modifying brewtarget.pro. ---
-
-# ---Configure defaults.---
 if( isLinux() )
 {
    print "OS: Linux...yay!\n";
    if( ! $datapath )
    {
       # Debian defaults
-      $datapath = "/usr/share/brewtarget/";
+      #$datapath = "/usr/share/brewtarget/";
    }
    if( ! $docpath )
    {
       # Debian defaults
-      $docpath = "/usr/share/doc/brewtarget/";
+      #$docpath = "/usr/share/doc/brewtarget/";
    }
 }
 elsif( isMac() )
@@ -93,6 +81,61 @@ else
    print STDERR "Post on brewtarget.sourceforge.net if you need support for your OS.\n";
    exit 1;
 }
+
+getOptions(); # Get any options provided by user.
+findMake();   # Won't overwrite user options.
+findQmake();  # Won't overwrite user options.
+
+# --- Set up the standard configure script variables ---
+if( ! $prefix )
+{
+   $prefix = "/usr/local";
+}
+if( ! $exec_prefix )
+{
+   $exec_prefix = $prefix;
+}
+if( ! $datarootdir )
+{
+   $datarootdir = "$prefix/share";
+}
+if( ! $datadir )
+{
+   $datadir = $datarootdir;
+}
+if( ! $bindir )
+{
+   $bindir = "$exec_prefix/bin";
+}
+if( ! $docdir )
+{
+   $docdir = "$datarootdir/doc/$package_name";
+}
+# --- Done with standard configure script variables ---
+
+# --- Construct paths to install stuff to ---
+if( ! $datapath )
+{
+   $datapath = "$datadir/$package_name";
+}
+if( ! $targetpath )
+{
+   $targetpath = $bindir;
+}
+if( ! $docpath )
+{
+   $docpath = $docdir;
+}
+# --- Done constructing paths ---
+
+# --- Modify brewtarget.pro. ---
+modifyInPlace( 'brewtarget.pro', 'data.path =.*$', qq(data.path = $datapath) );
+modifyInPlace( 'brewtarget.pro', 'target.path =.*$', qq(target.path = $targetpath) );
+modifyInPlace( 'brewtarget.pro', 'doc.path =.*$', qq(doc.path = $docpath) );
+# --- Done modifying brewtarget.pro. ---
+
+# ---Configure defaults.---
+
 # ---Done configuring defaults.---
 
 # ---Modify the config.h file.---
@@ -116,7 +159,7 @@ else
 # Seems qmake wants to install in mode 644 which is not cool for brewtarget.
 if( isLinux() )
 {
-   modifyInPlace( 'Makefile', '^INSTALL_FILE\s*=.*$', q(INSTALL_FILE = install -m 666 -p));
+   #modifyInPlace( 'Makefile', '^INSTALL_FILE\s*=.*$', q(INSTALL_FILE = install -m 666 -p));
 }
 
 print "\nYou are now ready to run \"$make\" then \"$make install\".\n\n";
@@ -194,6 +237,14 @@ sub getOptions
          
          exit 0;
       }
+      elsif( $opt eq '--prefix' )
+      {
+         $prefix = $val;
+      }
+      elsif( $opt eq '--exec-prefix' )
+      {
+         $exec_prefix = $val;
+      }
       elsif( $opt eq '--no-ppc' )
       {
          modifyInPlace('brewtarget.pro', q(CONFIG [+]= ppc), q(#CONFIG += ppc));
@@ -221,6 +272,9 @@ sub printUsageExit
          "      --make=T        Uses T as the make executable.\n",
          "      --qmake=T       Uses T as the qmake executable.\n",
          "      --os            Print the OS and exit.\n",
+         "   ===Normal configure Options===\n",
+         "      --prefix=T      Set prefix to T. Don't use with above path options.\n",
+         "      --exec-prefix=T Set exec-prefix to T. Don't use with above path options.\n",
          "   ===Mac Only===\n",
          "      --no-ppc        Build without ppc instructions.\n",
          "      --no-x86        Build without x86 instructions.\n",
