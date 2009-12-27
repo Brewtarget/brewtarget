@@ -1,5 +1,6 @@
-brewtarget (1.1-1) unstable; urgency=low
+brewtarget (1.2-1) unstable; urgency=low
 
+  * New upstream release 1.2.
   * Initial debian release (Closes: #538751)
 
- -- Philip G. Lee <rocketman768@gmail.com>  Tue, 16 Jun 2009 21:52:17 -0500
+ -- Philip G. Lee <rocketman768@gmail.com>  Sun, 27 Dec 2009 14:03:00 -0500

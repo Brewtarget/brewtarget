@@ -26,7 +26,7 @@ makefile: configure
 config.status: configure
 	dh_testdir
 	# Add here commands to configure the package.
-	./configure
+	./configure --qmake=/usr/bin/qmake-qt4 --prefix=/usr
 #ifneq "$(wildcard /usr/share/misc/config.sub)" ""
 #	cp -f /usr/share/misc/config.sub config.sub
 #endif
@@ -69,6 +69,12 @@ install: build
 	$(MAKE) INSTALL_ROOT=$(CURDIR)/debian/brewtarget/ install
 	# Make sure not to include the GPL...it's already in the common-licenses folder.
 	rm -f $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/COPYING*
+	# Install the debian/changelog
+	cp $(CURDIR)/debian/changelog $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/changelog.Debian
+	gzip -9 $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/changelog.Debian
+	# Install brewtarget changelog
+	cp $(CURDIR)/changelog $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/
+	gzip -9 $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/changelog
 
 # Build architecture-independent files here.
 binary-indep: install

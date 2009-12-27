@@ -2,15 +2,15 @@ Source: brewtarget
 Section: x11 
 Priority: optional
 Maintainer: Philip G. Lee <rocketman768@gmail.com>
-Build-Depends: debhelper (>= 7), perl, autotools-dev, libqt4-dev, qt4-qmake
-Standards-Version: 3.8.2
+Build-Depends: debhelper (>= 7), perl, autotools-dev, libqt4-dev, qt4-qmake, libphonon-dev
+Standards-Version: 3.8.3
 Homepage: http://brewtarget.sourceforge.net
 
 Package: brewtarget
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: GUI beer brewing software
- Brewtarget helps you brew beer. It is a beer calculator for brewing beer.
- Available for Linux, Mac, and Windows. Compatible with BeerSmith.
- Generates instructions for you from the recipe! Hit all your targets with
- brewtarget.
+ Brewtarget is a calculator for brewing beer. It is a Qt-based program which allows you
+ to create recipes from a database of ingredients. It calculates all the important
+ parameters, helps you with mash temperatures, and just makes the process of recipe
+ formulation much easier.
