@@ -260,6 +260,9 @@
           <property name="text">
            <string>From Equipment</string>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>

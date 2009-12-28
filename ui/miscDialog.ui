@@ -46,6 +46,12 @@
        <property name="text">
         <string>Add to Recipe</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -55,6 +61,9 @@
        </property>
        <property name="text">
         <string>New</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -70,6 +79,9 @@
         <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -83,6 +95,9 @@
        <property name="icon">
         <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
