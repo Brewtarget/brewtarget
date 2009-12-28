@@ -16,7 +16,7 @@
 
 TEMPLATE = app
 CONFIG += qt release warn_on
-QT += xml webkit phonon
+QT += xml webkit
 DEPENDPATH += .
 INCLUDEPATH += .
 RESOURCES = brewtarget.qrc
@@ -34,6 +34,7 @@ UI_DIR = src
 MOC_DIR = src
 
 unix : !macx {
+        QT += phonon
         TARGET = brewtarget
         target.path = /usr/bin
         data.path = /usr/share/brewtarget
@@ -45,6 +46,7 @@ unix : !macx {
     }
 
 macx {
+    QT += phonon
     TARGET = Brewtarget
     CONFIG += x86
     CONFIG += ppc

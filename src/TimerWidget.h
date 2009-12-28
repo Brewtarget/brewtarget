@@ -26,8 +26,11 @@ class TimerWidget;
 #include <QTimer>
 #include <QString>
 #include <QPalette>
-#include <mediaobject.h>
-#include <audiooutput.h>
+
+#if !defined(Q_WS_WIN) // I think Windows can't handle Phonon.
+ #include <mediaobject.h>
+ #include <audiooutput.h>
+#endif
 
 class TimerWidget : public QWidget, public Ui::timerWidget
 {
@@ -62,8 +65,10 @@ private:
    QTimer* timer;
    QTimer* flashTimer;
    QPalette paletteOld, paletteNew;
-   Phonon::MediaObject *mediaObject;
-   Phonon::AudioOutput *audioOutput;
+   #if !defined(Q_WS_WIN)
+    Phonon::MediaObject *mediaObject;
+    Phonon::AudioOutput *audioOutput;
+   #endif
    bool oldColors;
 };
 

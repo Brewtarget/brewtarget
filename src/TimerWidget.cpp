@@ -36,10 +36,12 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    timer->setInterval(1000); // One second between timeouts.
    flashTimer->setInterval(500);
 
-   mediaObject = new Phonon::MediaObject(this);
-   mediaObject->setTransitionTime(0);
-   audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
-   Phonon::createPath(mediaObject, audioOutput);
+   #if !defined(Q_WS_WIN)
+    mediaObject = new Phonon::MediaObject(this);
+    mediaObject->setTransitionTime(0);
+    audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
+    Phonon::createPath(mediaObject, audioOutput);
+   #endif
 
    paletteOld = lcdNumber->palette();
    paletteNew = QPalette(paletteOld);
@@ -64,12 +66,14 @@ TimerWidget::~TimerWidget()
 
 void TimerWidget::getSound()
 {
-   QString soundFile = QFileDialog::getOpenFileName(this, tr("Open Sound"), "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)"));
-   if (! soundFile.isNull()) {
-     mediaObject->setCurrentSource(soundFile);
-     pushButton_sound->setCheckable(true); // indicate a sound is loaded
-     pushButton_sound->setChecked(true);
-   }
+   #if !defined(Q_WS_WIN)
+    QString soundFile = QFileDialog::getOpenFileName(this, tr("Open Sound"), "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)"));
+    if (! soundFile.isNull()) {
+      mediaObject->setCurrentSource(soundFile);
+      pushButton_sound->setCheckable(true); // indicate a sound is loaded
+      pushButton_sound->setChecked(true);
+    }
+   #endif
 }
 
 QString TimerWidget::getTimerValue()
@@ -93,7 +97,9 @@ void TimerWidget::flash()
 
 void TimerWidget::setTimer()
 {
-   mediaObject->stop();
+   #if !defined(Q_WS_WIN)
+    mediaObject->stop();
+   #endif
    flashTimer->stop();
    lcdNumber->setPalette(paletteOld);
    lcdNumber->update();
@@ -107,7 +113,9 @@ void TimerWidget::endTimer()
    timer->stop();
    flashTimer->start();
 
-   mediaObject->play();
+   #if !defined(Q_WS_WIN)
+    mediaObject->play();
+   #endif
 
    pushButton_startStop->setText("Start");
    start = true;
