@@ -99,13 +99,6 @@ void Database::initialize()
    recipeFile.setFileName(recipeFileName);
    mashFile.setFileName(mashFileName);
 
-   if (!dbFile.exists())
-      QFile::copy(Brewtarget::getDataDir() + "database.xml", dbFileName);
-   if (!recipeFile.exists())
-      QFile::copy(Brewtarget::getDataDir() + "recipes.xml", recipeFileName);
-   if (!mashFile.exists())
-      QFile::copy(Brewtarget::getDataDir() + "mashs.xml", mashFileName);
-
    // Try to open the files.
    if( ! dbFile.open(QIODevice::ReadOnly) )
    {

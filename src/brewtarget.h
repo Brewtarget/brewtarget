@@ -64,6 +64,8 @@ private:
    static MainWindow* mainWindow;
    static QDomDocument* optionsDoc;
 
+   static bool ensureFilesExist(); // Ensure the db and option files exist.
+   
    // These are options that are ONLY to be edited by the OptionDialog.
    static UnitSystem weightUnitSystem;
    static UnitSystem volumeUnitSystem;

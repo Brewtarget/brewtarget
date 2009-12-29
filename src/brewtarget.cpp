@@ -43,7 +43,36 @@ Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
 void Brewtarget::setApp(QApplication& a)
 {
    app = &a;
-   readPersistentOptions();
+   ensureFilesExist(); // Make sure all the files we need exist before starting.
+   readPersistentOptions(); // Read all the options for bt.
+}
+
+bool Brewtarget::ensureFilesExist()
+{
+   QString dbFileName, recipeFileName, mashFileName, optionsFileName;
+   QFile dbFile, recipeFile, mashFile, optionsFile;
+   bool success = true;
+   
+   dbFileName = getConfigDir() + "database.xml";
+   recipeFileName = getConfigDir() + "recipes.xml";
+   mashFileName = getConfigDir() + "mashs.xml";
+   optionsFileName = getConfigDir() + "options.xml";
+   
+   dbFile.setFileName(dbFileName);
+   recipeFile.setFileName(recipeFileName);
+   mashFile.setFileName(mashFileName);
+   optionsFile.setFileName(optionsFileName);
+   
+   if( !dbFile.exists() )
+      success &= QFile::copy(Brewtarget::getDataDir() + "database.xml", dbFileName);
+   if( !recipeFile.exists() )
+      success &= QFile::copy(Brewtarget::getDataDir() + "recipes.xml", recipeFileName);
+   if( !mashFile.exists() )
+      success &= QFile::copy(Brewtarget::getDataDir() + "mashs.xml", mashFileName);
+   if( !optionsFile.exists() )
+      success &= QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
+   
+   return success;
 }
 
 QApplication* Brewtarget::getApp()
@@ -114,6 +143,8 @@ QString Brewtarget::getConfigDir()
 
    QDir dir;
    char* xdg_config_home = getenv("XDG_CONFIG_HOME");
+   bool success = true;
+   
    if (xdg_config_home)
    {
       dir = xdg_config_home;
@@ -123,15 +154,15 @@ QString Brewtarget::getConfigDir()
       dir = QDir::home();
       if (!dir.exists(".config"))
       {
-         dir.mkdir(".config");
+         success &= dir.mkdir(".config");
       }
-      dir.cd(".config");
+      success &= dir.cd(".config");
    }
    if (!dir.exists("brewtarget"))
    {
-      dir.mkdir("brewtarget");
+      success &= dir.mkdir("brewtarget");
    }
-   dir.cd("brewtarget");
+   success &= dir.cd("brewtarget");
 
    return dir.absolutePath() + "/";
 
