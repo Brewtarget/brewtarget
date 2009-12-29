@@ -39,6 +39,7 @@ sub isWindows;
 sub findExec;
 sub findMake;
 sub findQmake;
+sub findPhonon;
 sub modifyInPlace;
 
 #===========================Main Routine Below==============================
@@ -365,3 +366,11 @@ sub findQmake
    }
 }
 
+sub findPhonon
+{
+   `ls /usr/include/phonon`;
+   if( $? != 0 )
+   {
+      print STDERR "ERROR: you do not appear to have the Phonon development library installed";      
+   }
+}

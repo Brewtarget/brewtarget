@@ -10,7 +10,7 @@ Package: brewtarget
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: GUI beer brewing software
- Brewtarget is a calculator for brewing beer. It is a Qt-based program which allows you
- to create recipes from a database of ingredients. It calculates all the important
- parameters, helps you with mash temperatures, and just makes the process of recipe
- formulation much easier.
+ Brewtarget is a calculator for brewing beer. It is a Qt-based program which
+ allows you to create recipes from a database of ingredients. It calculates all
+ the important parameters, helps you with mash temperatures, and just makes the
+ process of recipe formulation much easier.
