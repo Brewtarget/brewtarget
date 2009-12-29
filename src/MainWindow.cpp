@@ -1176,11 +1176,11 @@ void MainWindow::saveMash()
    // Ensure the mash has a name.
    if( mash->getName() == "" )
    {
-      QMessageBox::information( this, tr("Oops!"), tr("Please give you mash a name before saving.") );
+      QMessageBox::information( this, tr("Oops!"), tr("Please give your mash a name before saving.") );
       return;
    }
    
    newMash->deepCopy(mash);
    
-   (Database::getDatabase())->addMash(mash);
+   (Database::getDatabase())->addMash(newMash);
 }

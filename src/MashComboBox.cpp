@@ -55,8 +55,10 @@ void MashComboBox::addMash(Mash* m)
 
 void MashComboBox::removeAllMashs()
 {
-   unsigned int i;
-   removeAllObserved();
+   unsigned int i, size;
+   size = mashObs.size();
+   for( i = 0; i < size; ++i )
+      removeObserved(mashObs[i]);
    mashObs.clear(); // Clear internal list.
    clear(); // Clear the combo box's visible list.
 }
