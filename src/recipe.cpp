@@ -1773,6 +1773,7 @@ void Recipe::recalculate()
 {
    unsigned int i;
    double points = 0;
+   double ratio = 0;
    double sugar_kg = 0;
    double sugar_kg_ignoreEfficiency = 0.0;
    std::string fermtype;
@@ -1801,18 +1802,20 @@ void Recipe::recalculate()
    // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
    if( equipment != 0 )
    {
+      /* Ignore lauter deadspace since it should be included in efficiency ***
       // First, lauter deadspace.
-      double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
+      ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
          ratio = 1.0;
       else if( ratio < 0.0 ) // Only happens if the user is stupid with lauter deadspace.
          ratio = 0.0;
       else if( isnan(ratio) )
          ratio = 1.0; // Need this in case we have no mash, and therefore end up with NaN.
-         
+      
       sugar_kg *= ratio;
       // Don't consider this one since nobody adds sugar or extract to the mash.
       //sugar_kg_ignoreEfficiency *= ratio;
+      */
       
       // Next, trub/chiller loss.
       double kettleWort_l = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) + equipment->getTopUpKettle_l();
@@ -1824,7 +1827,8 @@ void Recipe::recalculate()
          ratio = 0.0;
       else if( isnan(ratio) )
          ratio = 1.0;
-      sugar_kg *= ratio;
+      // Ignore this again since it should be included in efficiency.
+      //sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
    }
 
