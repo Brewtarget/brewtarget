@@ -2071,6 +2071,12 @@ double Recipe::getIBUFromHop( unsigned int i )
    else if( hops[i]->getUse() == "First Wort" )
       ibus = 1.10 * IbuMethods::getIbus( AArating, grams, water_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
 
+   // Adjust for hop form.
+   if( hops[i]->getForm() == "Leaf" )
+      ibus *= 0.90;
+   else if( hops[i]->getForm() == "Plug" )
+      ibus *= 0.92;
+   
    return ibus;
 }
 
