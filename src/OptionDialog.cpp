@@ -30,8 +30,6 @@ OptionDialog::OptionDialog(QWidget* parent)
       setWindowIcon(parent->windowIcon());
    }
 
-   QButtonGroup *colorGroup, *ibuGroup;
-   QButtonGroup *weightGroup, *volumeGroup, *tempGroup;
    colorGroup = new QButtonGroup(this);
    ibuGroup = new QButtonGroup(this);
    weightGroup = new QButtonGroup(this);
@@ -69,72 +67,14 @@ OptionDialog::OptionDialog(QWidget* parent)
    tempGroup->addButton(celsius);
    tempGroup->addButton(fahrenheit);
 
-   connect( colorGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeColorFormula(QAbstractButton*) ) );
-   connect( ibuGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeIbuFormula(QAbstractButton*) ) );
-   connect( weightGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeWeightUnitSystem(QAbstractButton*) ) );
-   connect( volumeGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeVolumeUnitSystem(QAbstractButton*) ) );
-   connect( tempGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeTemperatureScale(QAbstractButton*) ) );
+   //connect( colorGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeColorFormula(QAbstractButton*) ) );
+   //connect( ibuGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeIbuFormula(QAbstractButton*) ) );
+   //connect( weightGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeWeightUnitSystem(QAbstractButton*) ) );
+   //connect( volumeGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeVolumeUnitSystem(QAbstractButton*) ) );
+   //connect( tempGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeTemperatureScale(QAbstractButton*) ) );
 
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
-}
-
-void OptionDialog::changeColorFormula(QAbstractButton* button)
-{
-   Brewtarget::ColorType formula;
-   if( button == checkBox_mosher )
-      formula = Brewtarget::MOSHER;
-   else if( button == checkBox_daniel )
-      formula = Brewtarget::DANIEL;
-   else if( button == checkBox_morey )
-      formula = Brewtarget::MOREY;
-   else
-      formula = Brewtarget::MOREY; // Should never get here, but you never know.
-
-   Brewtarget::colorFormula = formula;
-   Brewtarget::mainWindow->forceRecipeUpdate(); // Tell the recipe to update so we can see the changes.
-}
-
-void OptionDialog::changeIbuFormula(QAbstractButton* button)
-{
-   Brewtarget::IbuType formula;
-   if( button == checkBox_tinseth )
-      formula = Brewtarget::TINSETH;
-   else if( button == checkBox_rager )
-      formula = Brewtarget::RAGER;
-   else
-      formula = Brewtarget::TINSETH; // Should never get here, but you never know.
-
-   Brewtarget::ibuFormula = formula;
-   Brewtarget::mainWindow->forceRecipeUpdate(); // Tell the recipe to update so we can see the changes.
-}
-
-void OptionDialog::changeWeightUnitSystem(QAbstractButton* button)
-{
-   if( button == weight_imperial)
-      weightUnitSystem = Imperial;
-   else if( button == weight_us)
-      weightUnitSystem = USCustomary;
-   else
-      weightUnitSystem = SI;
-}
-
-void OptionDialog::changeVolumeUnitSystem(QAbstractButton* button)
-{
-   if( button == volume_imperial)
-      volumeUnitSystem = Imperial;
-   else if( button == volume_us)
-      volumeUnitSystem = USCustomary;
-   else
-      volumeUnitSystem = SI;
-}
-
-void OptionDialog::changeTemperatureScale(QAbstractButton* button)
-{
-   if( button == fahrenheit)
-	   temperatureScale = Fahrenheit;
-   else
-	   temperatureScale = Celsius;
 }
 
 void OptionDialog::show()
@@ -145,10 +85,61 @@ void OptionDialog::show()
 
 void OptionDialog::saveAndClose()
 {
+   /*
    Brewtarget::weightUnitSystem = weightUnitSystem;
    Brewtarget::volumeUnitSystem = volumeUnitSystem;
    Brewtarget::tempScale = temperatureScale;
-
+   */
+   QAbstractButton* button;
+   UnitSystem weightUnitSystem;
+   UnitSystem volumeUnitSystem;
+   TempScale temperatureScale;
+   Brewtarget::ColorType cformula;
+   Brewtarget::IbuType iformula;
+   
+   button = colorGroup->checkedButton();
+   if( button == checkBox_mosher )
+      cformula = Brewtarget::MOSHER;
+   else if( button == checkBox_daniel )
+      cformula = Brewtarget::DANIEL;
+   else if( button == checkBox_morey )
+      cformula = Brewtarget::MOREY;
+   else
+      cformula = Brewtarget::MOREY; // Should never get here, but you never know.
+   
+   button = ibuGroup->checkedButton();
+   if( button == checkBox_tinseth )
+      iformula = Brewtarget::TINSETH;
+   else if( button == checkBox_rager )
+      iformula = Brewtarget::RAGER;
+   else
+      iformula = Brewtarget::TINSETH; // Should never get here, but you never know.
+   
+   button = weightGroup->checkedButton();
+   if( button == weight_imperial )
+      weightUnitSystem = Imperial;
+   else if( button == weight_us)
+      weightUnitSystem = USCustomary;
+   else
+      weightUnitSystem = SI;
+   
+   button = volumeGroup->checkedButton();
+   if( button == volume_imperial )
+      volumeUnitSystem = Imperial;
+   else if( button == volume_us )
+      volumeUnitSystem = USCustomary;
+   else
+      volumeUnitSystem = SI;
+   
+   button = tempGroup->checkedButton();
+   if( button == fahrenheit )
+      temperatureScale = Fahrenheit;
+   else
+      temperatureScale = Celsius;
+   
+   Brewtarget::ibuFormula = iformula;
+   Brewtarget::colorFormula = cformula;
+   
    if( Brewtarget::mainWindow != 0 ) {
       Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
    }
@@ -189,7 +180,7 @@ void OptionDialog::showChanges()
    }
 
    // Check the right weight unit system box.
-   switch( Brewtarget::weightUnitSystem)
+   switch( Brewtarget::weightUnitSystem )
    {
       case Imperial:
          weight_imperial->setChecked(TRUE);
@@ -203,7 +194,7 @@ void OptionDialog::showChanges()
    }
 
    // Check the right volume unit system box.
-   switch( Brewtarget::volumeUnitSystem)
+   switch( Brewtarget::volumeUnitSystem )
    {
       case Imperial:
          volume_imperial->setChecked(TRUE);
@@ -216,7 +207,7 @@ void OptionDialog::showChanges()
          volume_si->setChecked(TRUE);
    }
 
-   switch( Brewtarget::tempScale)
+   switch( Brewtarget::tempScale )
    {
       case Fahrenheit:
          fahrenheit->setChecked(TRUE);

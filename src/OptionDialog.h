@@ -19,14 +19,13 @@
 #ifndef _OPTIONDIALOG_H
 #define	_OPTIONDIALOG_H
 
-#include "unit.h"
-
 class OptionDialog;
 
 #include <QDialog>
 #include <QWidget>
 #include <QAbstractButton>
 #include "ui_optionsDialog.h"
+#include "unit.h"
 
 class OptionDialog : public QDialog, public Ui::optionsDialog
 {
@@ -35,21 +34,14 @@ public:
    OptionDialog(QWidget *parent=0);
 
 public slots:
-   void changeColorFormula(QAbstractButton* button);
-   void changeIbuFormula(QAbstractButton* button);
-   void changeWeightUnitSystem(QAbstractButton* button);
-   void changeVolumeUnitSystem(QAbstractButton* button);
-   void changeTemperatureScale(QAbstractButton* button);
    void show();
    void saveAndClose();
    void cancel();
    
 private:
    void showChanges();
-   UnitSystem weightUnitSystem;
-   UnitSystem volumeUnitSystem;
-   TempScale temperatureScale;
-   
+   QButtonGroup *colorGroup, *ibuGroup;
+   QButtonGroup *weightGroup, *volumeGroup, *tempGroup;
 };
 
 #endif	/* _OPTIONDIALOG_H */
