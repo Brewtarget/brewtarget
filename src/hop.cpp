@@ -180,8 +180,8 @@ void Hop::setDefaults()
    name = "";
    use = "Boil";
    notes = "";
-   type = "";
-   form = "";
+   type = "Both";
+   form = "Pellet";
    origin = "";
    substitutes = "";
    

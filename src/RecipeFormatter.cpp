@@ -137,7 +137,7 @@ QString RecipeFormatter::getTextFormat()
    
    if( rec->getNumHops() > 0 )
    {
-      QStringList names, alphas, amounts, uses, times, ibus;
+      QStringList names, alphas, amounts, uses, times, forms, ibus;
       ret += "\n";
       ret += QObject::tr("Hops\n");
       ret += getTextSeparator();
@@ -149,6 +149,7 @@ QString RecipeFormatter::getTextFormat()
       amounts.append( QObject::tr("Amount") );
       uses.append( QObject::tr("Use") );
       times.append( QObject::tr("Time") );
+      forms.append( QObject::tr("Form") );
       ibus.append( QObject::tr("IBU") );
       
       size = rec->getNumHops();
@@ -161,6 +162,7 @@ QString RecipeFormatter::getTextFormat()
          amounts.append( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms) );
          uses.append( hop->getUse().c_str() );
          times.append( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) );
+         forms.append( hop->getForm().c_str() );
          ibus.append( QString("%1").arg( rec->getIBUFromHop(i), 0, 'f', 1 ) );
       }
       
@@ -169,10 +171,11 @@ QString RecipeFormatter::getTextFormat()
       padAllToMaxLength(&amounts);
       padAllToMaxLength(&uses);
       padAllToMaxLength(&times);
+      padAllToMaxLength(&forms);
       padAllToMaxLength(&ibus);
       
       for( i = 0; i < size+1; ++i )
-         ret += names.at(i) + alphas.at(i) + amounts.at(i) + uses.at(i) + times.at(i) + ibus.at(i) + "\n";
+         ret += names.at(i) + alphas.at(i) + amounts.at(i) + uses.at(i) + times.at(i) + forms.at(i) + ibus.at(i) + "\n";
    }
    
    if( rec->getNumMiscs() > 0 )
