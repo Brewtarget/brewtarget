@@ -52,6 +52,9 @@ unix : !macx {
         data.files = *.xml
         doc.files = README COPYING doc/manual/*
         INSTALLS += target data doc
+
+        desktop.path = $$DATADIR/applications/
+        desktop.files += brewtarget.desktop
     }
 
 macx {
