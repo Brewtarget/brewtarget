@@ -273,6 +273,7 @@ SOURCES += src/Algorithms.cpp \
            src/YeastTableWidget.cpp
 
 DISTFILES = \
+	changelog \
 	configure \
 	COPYING \
 	database.xml \
