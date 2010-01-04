@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+VERSION = 1.2
 TEMPLATE = app
 CONFIG += qt release warn_on
 QT += xml webkit
@@ -36,9 +37,17 @@ MOC_DIR = src
 unix : !macx {
         QT += phonon
         TARGET = brewtarget
-        target.path = /usr/bin
-        data.path = /usr/share/brewtarget
-        doc.path = /usr/share/doc/brewtarget
+        isEmpty(PREFIX) {
+                PREFIX = /usr/local
+        }
+
+        BINDIR = $$PREFIX/bin
+        DATADIR =$$PREFIX/share
+        target.path = $$PREFIX/bin
+        data.path = $$DATADIR/brewtarget/
+        doc.path = $$DATADIR/doc/brewtarget
+        CONFIG += link_pkgconfig
+        PKGCONFIG += phonon
 
         data.files = *.xml
         doc.files = README COPYING doc/manual/*
@@ -259,3 +268,36 @@ SOURCES += src/Algorithms.cpp \
            src/YeastEditor.cpp \
            src/YeastTableModel.cpp \
            src/YeastTableWidget.cpp
+
+DISTFILES = \
+	configure \
+	COPYING \
+	database.xml \
+	doxygen.conf \
+	images/BrewtargetIcon_96.png \
+	images/BrewtargetIcon.png \
+	images/clock.png \
+	images/edit.png \
+	images/editshred.png \
+	images/exit.png \
+	images/filesave.png \
+	images/glass.png \
+	images/glass.xcf \
+	images/smallArrow.png \
+	images/smallBarley.png \
+	images/smallHop.png \
+	images/smallInfo.png \
+	images/smallKettle.png \
+	images/smallMinus.png \
+	images/smallOutArrow.png \
+	images/smallPlus.png \
+	images/smallQuestion.png \
+	images/smallStyle.png \
+	images/smallWater.png \
+	images/smallYeast.png \
+	images/titlebar.xcf \
+	images/title.png \
+	mashs.xml \
+	options.xml \
+	README \
+	recipes.xml
