@@ -1,8 +1,8 @@
 Source: brewtarget
-Section: x11 
+Section: x11
 Priority: optional
 Maintainer: Philip G. Lee <rocketman768@gmail.com>
-Build-Depends: debhelper (>= 7), perl, autotools-dev, libqt4-dev, qt4-qmake, libphonon-dev
+Build-Depends: debhelper (>= 7), perl, autotools-dev, libqt4-dev, qt4-qmake, libqt4-phonon-dev
 Standards-Version: 3.8.3
 Homepage: http://brewtarget.sourceforge.net
 
