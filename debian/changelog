@@ -1,3 +1,9 @@
+brewtarget (1.2-0ubuntu1) karmic; urgency=low
+
+  * Upload for Ubuntu Karmic build
+
+ -- Rob Taylor <rob.taylor@codethink.co.uk>  Sun, 27 Dec 2009 23:20:14 +0000
+
 brewtarget (1.2-0) unstable; urgency=low
 
   [ Philip G. Lee ]
