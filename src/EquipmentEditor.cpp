@@ -116,7 +116,7 @@ void EquipmentEditor::save()
 
    obsEquip->setTunVolume_l( Unit::qstringToSI(lineEdit_tunVolume->text()) );
    obsEquip->setTunWeight_kg( Unit::qstringToSI(lineEdit_tunWeight->text()) );
-   obsEquip->setTunSpecificHeat_calGC( Unit::qstringToSI(lineEdit_tunSpecificHeat->text()) );
+   obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
 
    obsEquip->setBoilTime_min( Unit::qstringToSI(lineEdit_boilTime->text()) );
    obsEquip->setEvapRate_lHr( Unit::qstringToSI(lineEdit_evaporationRate->text()) );
