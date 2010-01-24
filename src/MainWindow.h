@@ -57,6 +57,7 @@ class MainWindow;
 #include "TimerListDialog.h"
 #include "MashComboBox.h"
 #include "PrimingDialog.h"
+#include "RecipeExtrasDialog.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -148,6 +149,7 @@ private:
    TimerListDialog* timerListDialog;
    MashComboBox* mashComboBox;
    PrimingDialog* primingDialog;
+   RecipeExtrasDialog* recipeExtrasDialog;
 
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());

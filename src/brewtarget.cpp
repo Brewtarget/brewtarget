@@ -182,7 +182,7 @@ int Brewtarget::run()
    
    mainWindow = new MainWindow();
 
-   mainWindow->show();
+   mainWindow->setVisible(true);
 
    ret = app->exec();
    savePersistentOptions();

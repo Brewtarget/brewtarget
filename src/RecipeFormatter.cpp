@@ -288,7 +288,7 @@ QString RecipeFormatter::getTextFormat()
    if( rec->getNotes() != "" )
    {
       ret += "\n";
-      ret += QObject::tr("Notes\n") + getTextSeparator() + "\n" + QString(rec->getNotes().c_str());
+      ret += QObject::tr("Notes\n") + getTextSeparator() + "\n" + rec->getNotes();
    }
    
    if( (rec->instructions).size() > 0 )

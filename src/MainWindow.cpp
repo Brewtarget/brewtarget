@@ -123,6 +123,7 @@ MainWindow::MainWindow(QWidget* parent)
    timerListDialog = new TimerListDialog(this);
    mashComboBox = new MashComboBox(this);
    primingDialog = new PrimingDialog(this);
+   recipeExtrasDialog = new RecipeExtrasDialog(this);
 
    setupToolbar();
 
@@ -238,7 +239,7 @@ void MainWindow::setupToolbar()
    QToolButton *newRec, *clearRec, *save, *removeRec,
                *viewEquip, *viewFerm, *viewHops,
                *viewMiscs, *viewStyles, *viewYeast,
-               *brewDay, *timers;
+               *brewDay, *timers, *extras;
 
    setIconSize(QSize(16, 16));
 
@@ -254,6 +255,7 @@ void MainWindow::setupToolbar()
    viewYeast = new QToolButton(toolBar);
    brewDay = new QToolButton(toolBar);
    timers = new QToolButton(toolBar);
+   extras = new QToolButton(toolBar);
    
    newRec->setIcon(QIcon(SMALLPLUS));
    clearRec->setIcon(QIcon(SHRED));
@@ -267,6 +269,7 @@ void MainWindow::setupToolbar()
    viewYeast->setIcon(QIcon(SMALLYEAST));
    brewDay->setText(tr("Brewday mode"));
    timers->setIcon(QIcon(CLOCKPNG));
+   extras->setText(tr("Extras"));
 
    newRec->setToolTip(tr("New recipe"));
    clearRec->setToolTip(tr("Clear recipe"));
@@ -282,6 +285,7 @@ void MainWindow::setupToolbar()
 
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
+   toolBar->addWidget(extras);
    toolBar->addWidget(clearRec);
    toolBar->addWidget(removeRec);
    toolBar->addSeparator();
@@ -307,6 +311,7 @@ void MainWindow::setupToolbar()
    connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
    connect( brewDay, SIGNAL(clicked()), this, SLOT(brewDayMode()) );
    connect( timers, SIGNAL(clicked()), timerListDialog, SLOT(show()) );
+   connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
 }
 
 void MainWindow::removeRecipe()
@@ -389,6 +394,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    hopTable->getModel()->setRecipe(recipe); // This is for calculating the IBUs to show in the row headers.
    recipeFormatter->setRecipe(recipe);
    ogAdjuster->setRecipe(recipe);
+   recipeExtrasDialog->setRecipe(recipe);
    
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )

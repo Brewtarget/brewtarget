@@ -25,6 +25,7 @@ class RecipeException;
 #include <QVariant>
 #include <QDomNode>
 #include <QDomDocument>
+#include <QString>
 #include "BeerXMLElement.h"
 #include <string>
 #include <exception>
@@ -61,7 +62,7 @@ public:
    
    void setName( const std::string &var );
    void setType( const std::string &var );
-   void setBrewer( const std::string &var );
+   void setBrewer( const QString &var );
    void setStyle( Style *var );
    void setBatchSize_l( double var );
    void setBoilSize_l( double var );
@@ -90,10 +91,10 @@ public:
    QString nextAddToBoil(double& time);
 
    void setMash( Mash *var );
-   void setAsstBrewer( const std::string &var );
+   void setAsstBrewer( const QString &var );
    void setEquipment( Equipment *var );
-   void setNotes( const std::string &var );
-   void setTasteNotes( const std::string &var );
+   void setNotes( const QString &var );
+   void setTasteNotes( const QString &var );
    void setTasteRating( double var );
    void setOg( double var );
    void setFg( double var );
@@ -106,7 +107,7 @@ public:
    void setTertiaryTemp_c( double var );
    void setAge_days( double var );
    void setAgeTemp_c( double var );
-   void setDate( const std::string &var );
+   void setDate( const QString &var );
    void setCarbonation_vols( double var );
    void setForcedCarbonation( bool var );
    void setPrimingSugarName( const std::string &var );
@@ -116,7 +117,7 @@ public:
 
    std::string getName() const;
    std::string getType() const;
-   std::string getBrewer() const;
+   QString getBrewer() const;
    Style *getStyle() const;
    double getBatchSize_l() const;
    double getBoilSize_l() const;
@@ -136,10 +137,10 @@ public:
    
    Mash* getMash() const;
 
-   std::string getAsstBrewer() const;
+   QString getAsstBrewer() const;
    Equipment* getEquipment() const;
-   std::string getNotes() const;
-   std::string getTasteNotes() const;
+   QString getNotes() const;
+   QString getTasteNotes() const;
    double getTasteRating() const;
    double getOg() const;
    double getFg() const;
@@ -152,7 +153,7 @@ public:
    double getTertiaryTemp_c() const;
    double getAge_days() const;
    double getAgeTemp_c() const;
-   std::string getDate() const;
+   QString getDate() const;
    double getCarbonation_vols() const;
    bool getForcedCarbonation() const;
    std::string getPrimingSugarName() const;
@@ -177,7 +178,7 @@ private:
    std::string name;
    static const int version = 1;
    std::string type;
-   std::string brewer;
+   QString brewer;
    Style* style;
    double batchSize_l;
    double boilSize_l;
@@ -191,10 +192,10 @@ private:
    Mash *mash;
    std::vector<Instruction*> instructions;
    
-   std::string asstBrewer;
+   QString asstBrewer;
    Equipment* equipment;
-   std::string notes;
-   std::string tasteNotes;
+   QString notes;
+   QString tasteNotes;
    double tasteRating;
    double og;
    double fg;
@@ -207,7 +208,7 @@ private:
    double tertiaryTemp_c;
    double age_days;
    double ageTemp_c;
-   std::string date;
+   QString date;
    double carbonation_vols;
    bool forcedCarbonation;
    std::string primingSugarName;

@@ -41,6 +41,7 @@
 #include "Algorithms.h"
 #include "IbuMethods.h"
 #include "ColorMethods.h"
+#include <QDate>
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {
@@ -81,7 +82,7 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
       style->toXml(doc, recipeNode);
    
    tmpNode = doc.createElement("BREWER");
-   tmpText = doc.createTextNode(brewer.c_str());
+   tmpText = doc.createTextNode(brewer);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -145,7 +146,7 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    recipeNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("ASST_BREWER");
-   tmpText = doc.createTextNode(asstBrewer.c_str());
+   tmpText = doc.createTextNode(asstBrewer);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -153,12 +154,12 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
       equipment->toXml(doc, recipeNode);
    
    tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TASTE_NOTES");
-   tmpText = doc.createTextNode(tasteNotes.c_str());
+   tmpText = doc.createTextNode(tasteNotes);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -223,7 +224,7 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    recipeNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("DATE");
-   tmpText = doc.createTextNode(date.c_str());
+   tmpText = doc.createTextNode(date);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -295,7 +296,7 @@ void Recipe::setDefaults()
    tertiaryTemp_c = 0.0;
    age_days = 0.0;
    ageTemp_c = 0.0;
-   date = "";
+   date = QDate::currentDate().toString("dd/mm/yyyy");
    carbonation_vols = 0.0;
    forcedCarbonation = false;
    primingSugarName = "";
@@ -388,7 +389,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
             continue;
          }
          
-         setBrewer(value.toStdString());
+         setBrewer(value);
       }
       else if( property == "STYLE" )
       {
@@ -476,7 +477,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
          {
             continue;
          }
-         setAsstBrewer(value.toStdString());
+         setAsstBrewer(value);
       }
       else if( property == "EQUIPMENT" )
       {
@@ -488,7 +489,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
          {
             continue;
          }
-         setNotes(value.toStdString());
+         setNotes(value);
       }
       else if( property == "TASTE_NOTES" )
       {
@@ -496,7 +497,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
          {
             continue;
          }
-         setTasteNotes(value.toStdString());
+         setTasteNotes(value);
       }
       else if( property == "TASTE_RATING" )
       {
@@ -600,7 +601,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
          {
             continue;
          }
-         setDate(value.toStdString());
+         setDate(value);
       }
       else if( property == "CARBONATION" )
       {
@@ -1205,9 +1206,9 @@ void Recipe::setType( const std::string &var )
    }
 }
 
-void Recipe::setBrewer( const std::string &var )
+void Recipe::setBrewer( const QString &var )
 {
-   brewer = std::string(var);
+   brewer = QString(var);
    hasChanged();
 }
 
@@ -1336,9 +1337,9 @@ void Recipe::setMash( Mash *var )
 }
 
 
-void Recipe::setAsstBrewer( const std::string &var )
+void Recipe::setAsstBrewer( const QString &var )
 {
-   asstBrewer = std::string(var);
+   asstBrewer = QString(var);
    hasChanged();
 }
 
@@ -1353,15 +1354,15 @@ void Recipe::setEquipment( Equipment *var )
    }
 }
 
-void Recipe::setNotes( const std::string &var )
+void Recipe::setNotes( const QString &var )
 {
-   notes = std::string(var);
+   notes = QString(var);
    hasChanged();
 }
 
-void Recipe::setTasteNotes( const std::string &var )
+void Recipe::setTasteNotes( const QString &var )
 {
-   tasteNotes = std::string(var);
+   tasteNotes = QString(var);
    hasChanged();
 }
 
@@ -1477,9 +1478,9 @@ void Recipe::setAgeTemp_c( double var )
    hasChanged();
 }
 
-void Recipe::setDate( const std::string &var )
+void Recipe::setDate( const QString &var )
 {
-   date = std::string(var);
+   date = QString(var);
    hasChanged();
 }
 
@@ -1545,7 +1546,7 @@ std::string Recipe::getType() const
    return type;
 }
 
-std::string Recipe::getBrewer() const
+QString Recipe::getBrewer() const
 {
    return brewer;
 }
@@ -1641,7 +1642,7 @@ Mash* Recipe::getMash() const
    return mash;
 }
 
-std::string Recipe::getAsstBrewer() const
+QString Recipe::getAsstBrewer() const
 {
    return asstBrewer;
 }
@@ -1651,12 +1652,12 @@ Equipment* Recipe::getEquipment() const
    return equipment;
 }
 
-std::string Recipe::getNotes() const
+QString Recipe::getNotes() const
 {
    return notes;
 }
 
-std::string Recipe::getTasteNotes() const
+QString Recipe::getTasteNotes() const
 {
    return tasteNotes;
 }
@@ -1721,7 +1722,7 @@ double Recipe::getAgeTemp_c() const
    return ageTemp_c;
 }
 
-std::string Recipe::getDate() const
+QString Recipe::getDate() const
 {
    return date;
 }
