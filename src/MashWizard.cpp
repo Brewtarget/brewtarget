@@ -63,7 +63,7 @@ void MashWizard::show()
          break;
       case SI:
       default:
-         weightUnit = Units::liters;
+         volumeUnit = Units::liters;
          break;
    }
 

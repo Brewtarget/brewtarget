@@ -139,6 +139,9 @@ void OptionDialog::saveAndClose()
    
    Brewtarget::ibuFormula = iformula;
    Brewtarget::colorFormula = cformula;
+   Brewtarget::weightUnitSystem = weightUnitSystem;
+   Brewtarget::volumeUnitSystem = volumeUnitSystem;
+   Brewtarget::tempScale = temperatureScale;
    
    if( Brewtarget::mainWindow != 0 ) {
       Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
