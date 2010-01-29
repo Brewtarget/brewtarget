@@ -205,11 +205,10 @@ void MashWizard::wizardry()
    double wortInBoil_l = recObs->estimateWortFromMash_l();
    if( recObs->getEquipment() != 0 )
    {
-      //std::cerr << "Lauter deadspace: " << recObs->getEquipment()->getLauterDeadspace_l() << std::endl;
+      wortInBoil_l += recObs->getEquipment()->getTopUpKettle_l();
       wortInBoil_l -= recObs->getEquipment()->getLauterDeadspace_l();
    }
-   
-   //std::cerr << "Boil size: " << recObs->getBoilSize_l() << std::endl;
+
    double spargeWater_l = recObs->getBoilSize_l() - wortInBoil_l;
    if( spargeWater_l >= 0.0 )
    {
@@ -237,6 +236,10 @@ void MashWizard::wizardry()
       
       tw = (MC/(massWater*HeatCalculations::Cw_calGC))*(tf-t1) + tf;
       
+      if(tw > 100.0)
+         QMessageBox::information(this, tr("Sparge temp."),
+                                   tr("In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water."));
+
       mashStep->setName("Batch Sparge");
       mashStep->setType("Infusion");
       mashStep->setInfuseAmount_l(spargeWater_l);
