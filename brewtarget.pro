@@ -273,7 +273,7 @@ SOURCES += src/Algorithms.cpp \
     src/YeastTableModel.cpp \
     src/YeastTableWidget.cpp \
     src/RecipeExtrasDialog.cpp
-DISTFILES = changelog \
+DISTFILES = debian/changelog \
     configure \
     COPYING \
     database.xml \
