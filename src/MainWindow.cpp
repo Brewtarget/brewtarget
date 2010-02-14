@@ -60,6 +60,7 @@
 #include <QTextStream>
 #include <QDomNodeList>
 #include <QDomNode>
+#include <QDomElement>
 #include "ScaleRecipeTool.h"
 #include "HopTableModel.h"
 #include <QInputDialog>
@@ -736,7 +737,9 @@ void MainWindow::exportRecipe()
    
    QTextStream out(&outFile);
 
-   recipeObs->toXml(doc, doc);
+   QDomElement recipes = doc.createElement("RECIPES"); // The root element.
+   doc.appendChild(recipes);
+   recipeObs->toXml(doc, recipes);
    
    out << doc.toString();
    
