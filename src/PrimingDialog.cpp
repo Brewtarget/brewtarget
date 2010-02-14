@@ -71,12 +71,12 @@ void PrimingDialog::calculate()
    if( button == checkBox_glucMono )
    {
       sugar_mol = co2_mol / 2;
-      sugar_g = sugar_mol * 180; // Glucose is 180g/mol.
+      sugar_g = sugar_mol * 198; // Glucose monohydrate is 198 g/mol.
    }
    else if( button == checkBox_gluc )
    {
       sugar_mol = co2_mol / 2;
-      sugar_g = sugar_mol * 198; // Glucose monohydrate is 198 g/mol.
+      sugar_g = sugar_mol * 180; // Glucose is 180g/mol.
    }
    else if( button == checkBox_sucrose )
    {
