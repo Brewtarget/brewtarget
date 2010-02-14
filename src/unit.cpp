@@ -23,7 +23,7 @@
 #include "stringparsing.h"
 #include "brewtarget.h"
 
-std::map<std::string, Unit*> Unit::nameToUnit;
+QMultiMap<QString, Unit*> Unit::nameToUnit;
 bool Unit::isMapSetup = false;
 
 // === Mass ===
@@ -41,8 +41,10 @@ USCupUnit* Units::us_cups = new USCupUnit();
 ImperialGallonUnit* Units::imperial_gallons = new ImperialGallonUnit();
 ImperialQuartUnit* Units::imperial_quarts = new ImperialQuartUnit();
 ImperialCupUnit* Units::imperial_cups = new ImperialCupUnit();
-TablespoonUnit* Units::tablespoons = new TablespoonUnit();
-TeaspoonUnit* Units::teaspoons = new TeaspoonUnit();
+USTablespoonUnit* Units::us_tablespoons = new USTablespoonUnit();
+USTeaspoonUnit* Units::us_teaspoons = new USTeaspoonUnit();
+ImperialTablespoonUnit* Units::imperial_tablespoons = new ImperialTablespoonUnit();
+ImperialTeaspoonUnit* Units::imperial_teaspoons = new ImperialTeaspoonUnit();
 // === Time ===
 SecondUnit* Units::seconds = new SecondUnit();
 MinuteUnit* Units::minutes = new MinuteUnit();
@@ -52,7 +54,8 @@ CelsiusUnit* Units::celsius = new CelsiusUnit();
 FahrenheitUnit* Units::fahrenheit = new FahrenheitUnit();
 KelvinUnit* Units::kelvin = new KelvinUnit();
 
-double Unit::convert( double amount, const std::string& fromUnit, const std::string& toUnit )
+// Return the equivalent of 'amount' 'fromUnit's in 'toUnit's.
+double Unit::convert( double amount, QString& fromUnit, QString& toUnit )
 {
    double SI;
 
@@ -60,8 +63,81 @@ double Unit::convert( double amount, const std::string& fromUnit, const std::str
       Unit::setupMap();
 
    // TODO: warn somebody if the units aren't in the map.
-   SI = Unit::nameToUnit[fromUnit]->toSI(amount);
-   return Unit::nameToUnit[toUnit]->fromSI(SI);
+   Unit* f;
+   Unit* t;
+
+   f = getUnit(fromUnit);
+   t = getUnit(toUnit, false);
+
+   // Freak out if we can't find the units.
+   if( f == 0 || t == 0 )
+      return 0.0;
+
+   SI = f->toSI(amount);
+   return t->fromSI(SI);
+}
+
+// Gets the unit with the appropriate name. Select the one consistent
+// with the current system (like Brewtarget::getWeightUnitSystem())
+// if possible. Otherwise, get a unit of type USCustomary or Any.
+Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
+{
+   Unit* u;
+   QMultiMap<QString, Unit*>::iterator i = nameToUnit.find(name);
+
+   int count = nameToUnit.count(name);
+
+   // First, try to find a unit consistent with the measurement system.
+   for( ; i != nameToUnit.end() && i.key() == name; ++i )
+   {
+      u = i.value();
+      if( u == 0 )
+         continue;
+
+      int type = u->getUnitType();
+      int system = u->getUnitOrTempSystem();
+
+      if( type == Temp && system == Brewtarget::getTemperatureScale() )
+         return u;
+      else if( type == Mass )
+      {
+         if( system == Any || system == Brewtarget::getWeightUnitSystem() )
+            return u;
+
+         if( (Brewtarget::getWeightUnitSystem() == USCustomary || Brewtarget::getWeightUnitSystem() == Imperial)
+            && system == ImperialAndUS)
+            return u;
+      }
+      else if( type == Volume )
+      {
+         if( system == Any || system == Brewtarget::getVolumeUnitSystem() )
+            return u;
+
+         if( (Brewtarget::getVolumeUnitSystem() == USCustomary || Brewtarget::getWeightUnitSystem() == Imperial)
+            && system == ImperialAndUS )
+            return u;
+      }
+      else if( type == Time )
+         return u;
+   }
+
+   i = nameToUnit.find(name);
+
+   // Now, just try to find a unit with the USCustomary or Any system.
+   for( ; i != nameToUnit.end() && i.key() == name; ++i )
+   {
+      u = i.value();
+      if( u == 0 )
+         continue;
+
+      int type = u->getUnitType();
+      int system = u->getUnitOrTempSystem();
+
+      if( system == Any || system == USCustomary || system == ImperialAndUS )
+         return u;
+   }
+
+   return 0;
 }
 
 // Translates something like "5.0 gal" into the appropriate SI units.
@@ -90,49 +166,62 @@ double Unit::qstringToSI( QString qstr )
    }
    else // Provided a number and unit.
    {
-      std::string units;
-      units = list1[1].toStdString();
+      Unit* u = getUnit(list1[1]);
 
-      if( nameToUnit[units] == 0 ) // Invalid unit since it's not in the map.
+      if( u == 0 ) // Invalid unit since it's not in the map.
          return list1[0].toDouble(); // Assume units are already SI.
       else
-         return Unit::nameToUnit[units]->toSI(list1[0].toDouble());
+      {
+         return u->toSI(list1[0].toDouble());
+      }
    }
 }
 
+// Return a
 QString Unit::convert(QString qstr, QString toUnit)
 {
    if( ! Unit::isMapSetup )
       Unit::setupMap();
 
    double si = qstringToSI( qstr );
+   Unit* u = getUnit(toUnit, false);
    
-   if( nameToUnit[toUnit.toStdString()] == 0 )
+   if( u == 0 )
       return QString("%1 ?").arg(si, 0, 'f', 3);
    else
-      return QString("%1 %2").arg(nameToUnit[toUnit.toStdString()]->fromSI(si), 0, 'f', 3).arg(toUnit);
+      return QString("%1 %2").arg(u->fromSI(si), 0, 'f', 3).arg(toUnit);
 }
 
 void Unit::setupMap()
 {
-   Unit::nameToUnit[Units::kilograms->getUnitName()] = Units::kilograms;
-   Unit::nameToUnit[Units::grams->getUnitName()] = Units::grams;
-   Unit::nameToUnit[Units::milligrams->getUnitName()] = Units::milligrams;
-   Unit::nameToUnit[Units::pounds->getUnitName()] = Units::pounds;
-   Unit::nameToUnit[Units::ounces->getUnitName()] = Units::ounces;
-   Unit::nameToUnit[Units::liters->getUnitName()] = Units::liters;
-   Unit::nameToUnit[Units::milliliters->getUnitName()] = Units::milliliters;
-   Unit::nameToUnit[Units::us_gallons->getUnitName()] = Units::us_gallons;
-   Unit::nameToUnit[Units::us_quarts->getUnitName()] = Units::us_quarts;
-   Unit::nameToUnit[Units::us_cups->getUnitName()] = Units::us_cups;
-   Unit::nameToUnit[Units::tablespoons->getUnitName()] = Units::tablespoons;
-   Unit::nameToUnit[Units::teaspoons->getUnitName()] = Units::teaspoons;
-   Unit::nameToUnit[Units::seconds->getUnitName()] = Units::seconds;
-   Unit::nameToUnit[Units::minutes->getUnitName()] = Units::minutes;
-   Unit::nameToUnit[Units::hours->getUnitName()] = Units::hours;
-   Unit::nameToUnit[Units::celsius->getUnitName()] = Units::celsius;
-   Unit::nameToUnit[Units::kelvin->getUnitName()] = Units::kelvin;
-   Unit::nameToUnit[Units::fahrenheit->getUnitName()] = Units::fahrenheit;
+   Unit::nameToUnit.insert(Units::kilograms->getUnitName(), Units::kilograms);
+   Unit::nameToUnit.insert(Units::grams->getUnitName(), Units::grams);
+   Unit::nameToUnit.insert(Units::milligrams->getUnitName(), Units::milligrams);
+
+   Unit::nameToUnit.insert(Units::pounds->getUnitName(), Units::pounds);
+   Unit::nameToUnit.insert(Units::ounces->getUnitName(), Units::ounces);
+
+   Unit::nameToUnit.insert(Units::liters->getUnitName(), Units::liters);
+   Unit::nameToUnit.insert(Units::milliliters->getUnitName(), Units::milliliters);
+
+   Unit::nameToUnit.insert(Units::us_gallons->getUnitName(), Units::us_gallons);
+   Unit::nameToUnit.insert(Units::us_quarts->getUnitName(), Units::us_quarts);
+   Unit::nameToUnit.insert(Units::us_cups->getUnitName(), Units::us_cups);
+   Unit::nameToUnit.insert(Units::us_tablespoons->getUnitName(), Units::us_tablespoons);
+   Unit::nameToUnit.insert(Units::us_teaspoons->getUnitName(), Units::us_teaspoons);
+
+   Unit::nameToUnit.insert(Units::imperial_gallons->getUnitName(), Units::imperial_gallons);
+   Unit::nameToUnit.insert(Units::imperial_quarts->getUnitName(), Units::imperial_quarts);
+   Unit::nameToUnit.insert(Units::imperial_cups->getUnitName(), Units::imperial_cups);
+   Unit::nameToUnit.insert(Units::imperial_tablespoons->getUnitName(), Units::imperial_tablespoons);
+   Unit::nameToUnit.insert(Units::imperial_teaspoons->getUnitName(), Units::imperial_teaspoons);
+
+   Unit::nameToUnit.insert(Units::seconds->getUnitName(), Units::seconds);
+   Unit::nameToUnit.insert(Units::minutes->getUnitName(), Units::minutes);
+   Unit::nameToUnit.insert(Units::hours->getUnitName(), Units::hours);
+   Unit::nameToUnit.insert(Units::celsius->getUnitName(), Units::celsius);
+   Unit::nameToUnit.insert(Units::kelvin->getUnitName(), Units::kelvin);
+   Unit::nameToUnit.insert(Units::fahrenheit->getUnitName(), Units::fahrenheit);
 
    Unit::isMapSetup = true;
 }
@@ -359,38 +448,72 @@ double ImperialCupUnit::fromSI( double amt ) const
 }
 
 
-// === Tablepoons ===
-TablespoonUnit::TablespoonUnit()
+// === US Tablepoons ===
+USTablespoonUnit::USTablespoonUnit()
 {
    unitName = "tbsp";
    SIUnitName = "L";
 }
 
-double TablespoonUnit::toSI( double amt ) const
+double USTablespoonUnit::toSI( double amt ) const
 {
    return amt * 0.0147867648;
 }
 
-double TablespoonUnit::fromSI( double amt ) const
+double USTablespoonUnit::fromSI( double amt ) const
 {
    return amt / 0.0147867648;
 }
 
-// === Teaspoons ===
-TeaspoonUnit::TeaspoonUnit()
+// === US Teaspoons ===
+USTeaspoonUnit::USTeaspoonUnit()
 {
    unitName = "tsp";
    SIUnitName = "L";
 }
 
-double TeaspoonUnit::toSI( double amt ) const
+double USTeaspoonUnit::toSI( double amt ) const
 {
    return amt * 0.00492892159;
 }
 
-double TeaspoonUnit::fromSI( double amt ) const
+double USTeaspoonUnit::fromSI( double amt ) const
 {
    return amt / 0.00492892159;
+}
+
+// === Imperial Tablepoons ===
+ImperialTablespoonUnit::ImperialTablespoonUnit()
+{
+   unitName = "tbsp";
+   SIUnitName = "L";
+}
+
+double ImperialTablespoonUnit::toSI( double amt ) const
+{
+   return amt * 0.0177581714;
+}
+
+double ImperialTablespoonUnit::fromSI( double amt ) const
+{
+   return amt / 0.0177581714;
+}
+
+// === Imperial Teaspoons ===
+ImperialTeaspoonUnit::ImperialTeaspoonUnit()
+{
+   unitName = "tsp";
+   SIUnitName = "L";
+}
+
+double ImperialTeaspoonUnit::toSI( double amt ) const
+{
+   return amt * 0.00591939047;
+}
+
+double ImperialTeaspoonUnit::fromSI( double amt ) const
+{
+   return amt / 0.00591939047;
 }
 
 // === Seconds ===
