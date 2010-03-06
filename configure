@@ -142,8 +142,8 @@ modifyInPlace( 'brewtarget.pro', 'doc.path =.*$', qq(doc.path = $docpath) );
 # ---Done configuring defaults.---
 
 # ---Modify the config.h file.---
-modifyInPlace('src/config.h', '#define CONFIGDATADIR.*$', qq(#define CONFIGDATADIR "$datapath"));
-modifyInPlace('src/config.h', '#define CONFIGDOCDIR.*$', qq(#define CONFIGDOCDIR "$docpath"));
+modifyInPlace('src/config.h', '#define CONFIGDATADIR.*$', qq(#define CONFIGDATADIR "$datapath/"));
+modifyInPlace('src/config.h', '#define CONFIGDOCDIR.*$', qq(#define CONFIGDOCDIR "$docpath/"));
 # ---Done modifying config.h.---
 
 # Make the makefile.

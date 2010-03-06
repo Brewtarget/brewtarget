@@ -42,8 +42,8 @@
 /* Things that will get configured by configure script */
 
 // This only gets used by linux OS version.
-#define CONFIGDATADIR "/usr/share/brewtarget/"
-#define CONFIGDOCDIR "/usr/share/doc/brewtarget/"
+#define CONFIGDATADIR "/usr/local/share/brewtarget/"
+#define CONFIGDOCDIR "/usr/local/share/doc/brewtarget/"
 
 #endif /*_CONFIG_H*/
 

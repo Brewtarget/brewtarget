@@ -100,20 +100,23 @@ QString Brewtarget::getDataDir()
    QString dir = app->applicationDirPath();
 #if defined(Q_WS_X11) // Linux OS.
 
-   return QString(CONFIGDATADIR);
+   dir = QString::QString(CONFIGDATADIR);
    
 #elif defined(Q_WS_MAC) // MAC OS.
 
    // We should be inside an app bundle.
    dir += "/../Resources/";
-   return dir;
 
 #else // Windows OS.
 
    dir += "/";
-   return dir;
 
 #endif
+
+   if( ! dir.endsWith('/') )
+      dir += "/";
+
+   return dir;
 }
 
 QString Brewtarget::getDocDir()
@@ -121,20 +124,23 @@ QString Brewtarget::getDocDir()
    QString dir = app->applicationDirPath();
 #if defined(Q_WS_X11) // Linux OS.
 
-   return QString(CONFIGDOCDIR);
+   dir = QString::QString(CONFIGDOCDIR);
 
 #elif defined(Q_WS_MAC) // MAC OS.
 
    // We should be inside an app bundle.
    dir += "/../Resources/en.lproj/";
-   return dir;
 
 #else // Windows OS.
 
    dir += "/doc/";
-   return dir;
 
 #endif
+
+   if( ! dir.endsWith('/') )
+      dir += "/";
+
+   return dir;
 }
 
 QString Brewtarget::getConfigDir()
