@@ -73,8 +73,8 @@ install: build
 	cp $(CURDIR)/debian/changelog $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/changelog.Debian
 	gzip -9 $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/changelog.Debian
 	# Install brewtarget changelog
-	cp $(CURDIR)/changelog $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/
-	gzip -9 $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/changelog
+	#cp $(CURDIR)/changelog $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/
+	#gzip -9 $(CURDIR)/debian/brewtarget/usr/share/doc/brewtarget/changelog
 
 # Build architecture-independent files here.
 binary-indep: install
