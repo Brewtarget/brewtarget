@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 {
    QApplication app(argc, argv);
    app.setApplicationName("brewtarget");
-   app.setApplicationVersion("1.2");
+   app.setApplicationVersion("1.2.1");
    app.setOrganizationName("Philip G. Lee");
    Brewtarget::setApp(app);
 

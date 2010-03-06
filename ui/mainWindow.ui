@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Brewtarget - 1.2</string>
+   <string>Brewtarget - 1.2.1</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1647,7 +1647,7 @@
      <x>0</x>
      <y>0</y>
      <width>623</width>
-     <height>24</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1819,6 +1819,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>EquipmentComboBox</class>
+   <extends>QComboBox</extends>
+   <header>EquipmentComboBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>FermentableTableWidget</class>
    <extends>QTableView</extends>
    <header>FermentableTableWidget.h</header>
@@ -1829,19 +1834,14 @@
    <header>HopTableWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>MiscTableWidget</class>
-   <extends>QTableView</extends>
-   <header>MiscTableWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>EquipmentComboBox</class>
-   <extends>QComboBox</extends>
-   <header>EquipmentComboBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>MashStepTableWidget</class>
    <extends>QTableView</extends>
    <header>MashStepTableWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MiscTableWidget</class>
+   <extends>QTableView</extends>
+   <header>MiscTableWidget.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeComboBox</class>
@@ -1860,7 +1860,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../brewtarget.qrc"/>
   <include location="../brewtarget.qrc"/>
  </resources>
  <connections/>
