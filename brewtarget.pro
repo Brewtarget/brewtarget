@@ -102,7 +102,9 @@ win32 {
 # Input
 TRANSLATIONS += bt_en.ts \
     bt_fr.ts \
-    bt_es.ts
+    bt_es.ts \
+    bt_pl.ts \
+    bt_de.ts
 HEADERS += src/AboutDialog.h \
     src/Algorithms.h \
     src/BeerColorWidget.h \

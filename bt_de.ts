@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr" sourcelanguage="en_US">
+<TS version="2.0" language="de" sourcelanguage="en">
 <context>
     <name>BrewDayWidget</name>
     <message>
@@ -653,8 +653,6 @@ Use at own risk.</source>
         <location filename="src/RecipeFormatter.cpp" line="70"/>
         <source>ABV: %1%
 </source>
-        <oldsource>ABV: %1
-</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -758,6 +756,12 @@ Use at own risk.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="src/RecipeFormatter.cpp" line="152"/>
+        <location filename="src/RecipeFormatter.cpp" line="224"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="src/RecipeFormatter.cpp" line="153"/>
         <source>IBU</source>
         <translation type="unfinished"></translation>
@@ -772,12 +776,6 @@ Use at own risk.</source>
         <location filename="src/RecipeFormatter.cpp" line="219"/>
         <source>Yeast
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/RecipeFormatter.cpp" line="152"/>
-        <location filename="src/RecipeFormatter.cpp" line="224"/>
-        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
