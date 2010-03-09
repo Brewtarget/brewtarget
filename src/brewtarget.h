@@ -25,6 +25,7 @@ class Brewtarget;
 #include <QString>
 #include <string>
 #include <QDomDocument>
+#include <QTranslator>
 #include "MainWindow.h"
 #include "unit.h"
 
@@ -63,8 +64,11 @@ private:
    static QApplication* app;
    static MainWindow* mainWindow;
    static QDomDocument* optionsDoc;
+   static QTranslator* defaultTrans;
+   static QTranslator* btTrans;
 
    static bool ensureFilesExist(); // Ensure the db and option files exist.
+   static void loadTranslations(); // Load translation files.
    
    // These are options that are ONLY to be edited by the OptionDialog.
    static UnitSystem weightUnitSystem;

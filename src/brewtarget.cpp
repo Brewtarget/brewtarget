@@ -26,6 +26,8 @@
 #include <QDomNodeList>
 #include <QTextStream>
 #include <QObject>
+#include <QLocale>
+#include <QLibraryInfo>
 
 #include "brewtarget.h"
 #include "config.h"
@@ -34,6 +36,8 @@
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
 QDomDocument* Brewtarget::optionsDoc;
+QTranslator* Brewtarget::defaultTrans = 0;
+QTranslator* Brewtarget::btTrans = 0;
 UnitSystem Brewtarget::weightUnitSystem = SI;
 UnitSystem Brewtarget::volumeUnitSystem = SI;
 TempScale Brewtarget::tempScale = Celsius;
@@ -45,6 +49,7 @@ void Brewtarget::setApp(QApplication& a)
    app = &a;
    ensureFilesExist(); // Make sure all the files we need exist before starting.
    readPersistentOptions(); // Read all the options for bt.
+   loadTranslations(); // Do internationalization.
 }
 
 bool Brewtarget::ensureFilesExist()
@@ -73,6 +78,27 @@ bool Brewtarget::ensureFilesExist()
       success &= QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
    
    return success;
+}
+
+void Brewtarget::loadTranslations()
+{
+   if( app == 0 )
+      return;
+
+   if( defaultTrans == 0 )
+      defaultTrans = new QTranslator();
+   if( btTrans == 0 )
+      btTrans = new QTranslator();
+
+   // Load translators.
+   defaultTrans->load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+   //defaultTrans->load("qt_es", QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+   btTrans->load("bt_" + QLocale::system().name());
+   //btTrans->load("bt_es");
+
+   // Install translators.
+   app->installTranslator(defaultTrans);
+   app->installTranslator(btTrans);
 }
 
 QApplication* Brewtarget::getApp()
