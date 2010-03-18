@@ -51,5 +51,14 @@ double PlatoToSG_20C20C( double plato );
 double getWaterDensity_kgL( double celsius );
 double hydrometer15CCorrection( double celsius );
 
+// Gets ABV by using current gravity reading and brix reading.
+double getABVBySGPlato( double sg, double plato );
+// Gets ABW from current gravity and plato.
+double getABWBySGPlato( double sg, double plato );
+// Gives you the SG from the starting plato and current plato.
+double sgByStartingPlato( double startingPlato, double currentPlato );
+// Returns the refractive index from plato.
+double refractiveIndex( double plato );
+
 #endif	/* _ALGORITHMS_H */
 
