@@ -165,11 +165,11 @@ double sgByStartingPlato( double startingPlato, double currentPlato )
    // Implements the method found at:
    // http://primetab.com/formulas.html
 
-   sp2 = startingPlato*startingPlato;
-   sp3 = sp2*startingPlato;
+   double sp2 = startingPlato*startingPlato;
+   double sp3 = sp2*startingPlato;
 
-   cp2 = currentPlato*currentPlato;
-   cp3 = cp2*currentPlato;
+   double cp2 = currentPlato*currentPlato;
+   double cp3 = cp2*currentPlato;
 
    return 1.001843 - 0.002318474*startingPlato - 0.000007775*sp2 - 0.000000034*sp3
           + 0.00574*currentPlato + 0.00003344*cp2 + 0.000000086*cp3;
@@ -181,4 +181,10 @@ double refractiveIndex( double plato )
    // Implements the method found at:
    // http://primetab.com/formulas.html
    return 1.33302 + 0.001427193*plato + 0.000005791157*plato*plato;
+}
+
+double realExtract( double sg, double plato )
+{
+   double ri = refractiveIndex(plato);
+   return 194.5935 + 129.8*sg + ri*(410.8815*ri - 790.8732);
 }

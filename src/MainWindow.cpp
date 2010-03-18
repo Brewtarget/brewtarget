@@ -125,6 +125,7 @@ MainWindow::MainWindow(QWidget* parent)
    mashComboBox = new MashComboBox(this);
    primingDialog = new PrimingDialog(this);
    recipeExtrasDialog = new RecipeExtrasDialog(this);
+   refractoDialog = new RefractoDialog(this);
 
    setupToolbar();
 
@@ -211,6 +212,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
+   connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );

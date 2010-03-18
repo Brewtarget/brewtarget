@@ -157,6 +157,7 @@ HEADERS += src/AboutDialog.h \
     src/recipe.h \
     src/RecipeComboBox.h \
     src/RecipeFormatter.h \
+    src/RefractoDialog.h \
     src/ScaleRecipeTool.h \
     src/stringparsing.h \
     src/style.h \
@@ -197,6 +198,7 @@ FORMS += ui/aboutDialog.ui \
     ui/optionsDialog.ui \
     ui/primingDialog.ui \
     ui/recipeExtrasDialog.ui \
+    ui/refractoDialog.ui \
     ui/scaleRecipeTool.ui \
     ui/styleEditor.ui \
     ui/timerListDialog.ui \
@@ -255,6 +257,7 @@ SOURCES += src/Algorithms.cpp \
     src/recipe.cpp \
     src/RecipeComboBox.cpp \
     src/RecipeFormatter.cpp \
+    src/RefractoDialog.cpp \
     src/ScaleRecipeTool.cpp \
     src/stringparsing.cpp \
     src/style.cpp \

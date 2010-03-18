@@ -1686,11 +1686,12 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionScale_Recipe"/>
     <addaction name="actionConvert_Units"/>
     <addaction name="actionOG_Correction_Help"/>
     <addaction name="actionPriming_Calculator"/>
     <addaction name="action_recipeToTextClipboard"/>
+    <addaction name="actionRefractometer_Tools"/>
+    <addaction name="actionScale_Recipe"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
@@ -1814,6 +1815,11 @@
   <action name="actionPriming_Calculator">
    <property name="text">
     <string>Priming Calculator</string>
+   </property>
+  </action>
+  <action name="actionRefractometer_Tools">
+   <property name="text">
+    <string>Refractometer Tools</string>
    </property>
   </action>
  </widget>

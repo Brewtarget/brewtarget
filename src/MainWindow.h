@@ -58,6 +58,7 @@ class MainWindow;
 #include "MashComboBox.h"
 #include "PrimingDialog.h"
 #include "RecipeExtrasDialog.h"
+#include "RefractoDialog.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -150,6 +151,7 @@ private:
    MashComboBox* mashComboBox;
    PrimingDialog* primingDialog;
    RecipeExtrasDialog* recipeExtrasDialog;
+   RefractoDialog* refractoDialog;
 
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());

@@ -59,6 +59,8 @@ double getABWBySGPlato( double sg, double plato );
 double sgByStartingPlato( double startingPlato, double currentPlato );
 // Returns the refractive index from plato.
 double refractiveIndex( double plato );
+// Corrects the apparent extract 'plato' to the real extract using current gravity 'sg'.
+double realExtract( double sg, double plato );
 
 #endif	/* _ALGORITHMS_H */
 
