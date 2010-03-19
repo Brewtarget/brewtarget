@@ -54,7 +54,7 @@ void ScaleRecipeTool::scale()
    unsigned int i, size;
    
    double currentBatchSize_l = recObs->getBatchSize_l();
-   double newBatchSize_l = Unit::qstringToSI(lineEdit_newBatchSize->text());
+   double newBatchSize_l = Brewtarget::volQStringToSI(lineEdit_newBatchSize->text());
    
    double ratio = newBatchSize_l / currentBatchSize_l;
    

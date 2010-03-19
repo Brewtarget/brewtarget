@@ -67,10 +67,10 @@ void OgAdjuster::calculate()
 
    // Get inputs.
    sg = lineEdit_sg->text().toDouble();
-   temp_c = Unit::qstringToSI( lineEdit_temp->text() );
+   temp_c = Brewtarget::tempQStringToSI( lineEdit_temp->text() );
    plato = lineEdit_plato->text().toDouble();
-   wort_l = Unit::qstringToSI( lineEdit_volume->text() );
-   hydroTemp_c = Unit::qstringToSI( lineEdit_calTemp->text() );
+   wort_l = Brewtarget::volQStringToSI( lineEdit_volume->text() );
+   hydroTemp_c = Brewtarget::tempQStringToSI( lineEdit_calTemp->text() );
 
    // Make sure we got enough info.
    gotSG = sg != 0 && temp_c != 0 && hydroTemp_c != 0;

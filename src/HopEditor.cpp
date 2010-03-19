@@ -65,9 +65,9 @@ void HopEditor::save()
 
    h->setName(lineEdit_name->text().toStdString());
    h->setAlpha_pct(lineEdit_alpha->text().toDouble());
-   h->setAmount_kg(Unit::qstringToSI(lineEdit_amount->text()));
+   h->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
    h->setUse(comboBox_use->currentText().toStdString());
-   h->setTime_min(Unit::qstringToSI(lineEdit_time->text()));
+   h->setTime_min(Brewtarget::timeQStringToSI(lineEdit_time->text()));
    h->setType(comboBox_type->currentText().toStdString());
    h->setForm(comboBox_form->currentText().toStdString());
    h->setBeta_pct(lineEdit_beta->text().toDouble());

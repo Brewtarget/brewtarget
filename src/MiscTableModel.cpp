@@ -234,14 +234,14 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    else if( col == MISCTIMECOL )
    {
       if( value.canConvert(QVariant::String) )
-         row->setTime( Unit::qstringToSI(value.toString()) );
+         row->setTime( Brewtarget::timeQStringToSI(value.toString()) );
       else
          return false;
    }
    else if( col == MISCAMOUNTCOL )
    {
       if( value.canConvert(QVariant::String) )
-         row->setAmount( Unit::qstringToSI(value.toString()) );
+         row->setAmount( row->getAmountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
       else
          return false;
    }

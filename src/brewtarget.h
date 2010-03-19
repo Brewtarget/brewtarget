@@ -28,6 +28,7 @@ class Brewtarget;
 #include <QTranslator>
 #include "MainWindow.h"
 #include "unit.h"
+#include "UnitSystem.h"
 
 class Brewtarget
 {
@@ -51,10 +52,15 @@ public:
    static int run();
    static void log( LogType lt, std::string message );
    static void log( LogType lt, QString message );
-   static QString displayAmount( double amount, Unit* units=0 );
 
-   static UnitSystem getWeightUnitSystem();
-   static UnitSystem getVolumeUnitSystem();
+   static QString displayAmount( double amount, Unit* units=0 );
+   static double weightQStringToSI( QString qstr );
+   static double volQStringToSI( QString qstr );
+   static double tempQStringToSI( QString qstr );
+   static double timeQStringToSI( QString qstr );
+
+   static iUnitSystem getWeightUnitSystem();
+   static iUnitSystem getVolumeUnitSystem();
    static TempScale getTemperatureScale();
    
    static void readPersistentOptions();
@@ -71,8 +77,14 @@ private:
    static void loadTranslations(); // Load translation files.
    
    // These are options that are ONLY to be edited by the OptionDialog.
-   static UnitSystem weightUnitSystem;
-   static UnitSystem volumeUnitSystem;
+   static iUnitSystem weightUnitSystem;
+   static iUnitSystem volumeUnitSystem;
+   //
+   static UnitSystem* weightSystem;
+   static UnitSystem* volumeSystem;
+   static UnitSystem* tempSystem;
+   static UnitSystem* timeSystem;
+   //
    static TempScale tempScale;
    static ColorType colorFormula;
    static IbuType ibuFormula;

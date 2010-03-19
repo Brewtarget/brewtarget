@@ -250,7 +250,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_kg( Unit::qstringToSI(value.toString()) );
+            row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
             return true;
          }
          else
@@ -266,7 +266,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPTIMECOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setTime_min( Unit::qstringToSI(value.toString()) );
+            row->setTime_min( Brewtarget::timeQStringToSI(value.toString()) );
             return true;
          }
          else

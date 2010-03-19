@@ -65,13 +65,13 @@ void YeastEditor::save()
    y->setName(lineEdit_name->text().toStdString());
    y->setType(comboBox_type->currentText().toStdString());
    y->setForm(comboBox_form->currentText().toStdString());
-   y->setAmount(Unit::qstringToSI(lineEdit_amount->text()));
-
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
+   y->setAmount( y->getAmountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()) );
+
    y->setLaboratory( lineEdit_laboratory->text().toStdString() );
    y->setProductID( lineEdit_productID->text().toStdString() );
-   y->setMinTemperature_c( Unit::qstringToSI(lineEdit_minTemperature->text()) );
-   y->setMaxTemperature_c( Unit::qstringToSI(lineEdit_maxTemperature->text()) );
+   y->setMinTemperature_c( Brewtarget::tempQStringToSI(lineEdit_minTemperature->text()) );
+   y->setMaxTemperature_c( Brewtarget::tempQStringToSI(lineEdit_maxTemperature->text()) );
    y->setFlocculation( comboBox_flocculation->currentText().toStdString() );
    y->setAttenuation_pct(lineEdit_attenuation->text().toDouble());
    y->setTimesCultured(parseInt(lineEdit_timesCultured->text().toStdString()));

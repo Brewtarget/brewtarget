@@ -297,7 +297,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_kg( Unit::qstringToSI(value.toString()) );
+            row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
             return true;
          }
          else

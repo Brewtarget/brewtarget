@@ -56,7 +56,7 @@ enum UnitType
    Temp
 };
 
-enum UnitSystem
+enum iUnitSystem
 {
     SI,
     USCustomary,
@@ -72,7 +72,7 @@ enum TempScale
     Kelvin
 };
 
-inline QString unitSystemToString(UnitSystem us)
+inline QString unitSystemToString(iUnitSystem us)
 {
    switch (us)
    {

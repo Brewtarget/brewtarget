@@ -917,7 +917,7 @@ void Recipe::generateInstructions()
       timeRemaining = equipment->getBoilTime_min();
    else
    {
-      timeRemaining = Unit::qstringToSI(QInputDialog::getText(0,
+      timeRemaining = Brewtarget::timeQStringToSI(QInputDialog::getText(0,
                                         QObject::tr("Boil time"),
                                         QObject::tr("You did not configure an equipment (which you really should), so tell me the boil time.")));
    }

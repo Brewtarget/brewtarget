@@ -227,7 +227,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount( Unit::qstringToSI(value.toString()) );
+            row->setAmount( row->getAmountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
             return true;
          }
          else

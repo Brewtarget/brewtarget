@@ -92,13 +92,13 @@ void MashStepEditor::saveAndClose()
 
    obs->setName(lineEdit_name->text().toStdString());
    obs->setType(comboBox_type->currentText().toStdString());
-   obs->setInfuseAmount_l(Unit::qstringToSI(lineEdit_infuseAmount->text()));
-   obs->setInfuseTemp_c(Unit::qstringToSI(lineEdit_infuseTemp->text()));
-   obs->setDecoctionAmount_l(Unit::qstringToSI(lineEdit_decoctionAmount->text()));
-   obs->setStepTemp_c(Unit::qstringToSI(lineEdit_stepTemp->text()));
-   obs->setStepTime_min(Unit::qstringToSI(lineEdit_stepTime->text()));
-   obs->setRampTime_min(Unit::qstringToSI(lineEdit_rampTime->text()));
-   obs->setEndTemp_c(Unit::qstringToSI(lineEdit_endTemp->text()));
+   obs->setInfuseAmount_l(Brewtarget::volQStringToSI(lineEdit_infuseAmount->text()));
+   obs->setInfuseTemp_c(Brewtarget::tempQStringToSI(lineEdit_infuseTemp->text()));
+   obs->setDecoctionAmount_l(Brewtarget::volQStringToSI(lineEdit_decoctionAmount->text()));
+   obs->setStepTemp_c(Brewtarget::tempQStringToSI(lineEdit_stepTemp->text()));
+   obs->setStepTime_min(Brewtarget::timeQStringToSI(lineEdit_stepTime->text()));
+   obs->setRampTime_min(Brewtarget::timeQStringToSI(lineEdit_rampTime->text()));
+   obs->setEndTemp_c(Brewtarget::tempQStringToSI(lineEdit_endTemp->text()));
 
    obs->reenableNotification();
    obs->forceNotify();

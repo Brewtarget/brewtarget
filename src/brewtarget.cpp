@@ -32,14 +32,21 @@
 #include "brewtarget.h"
 #include "config.h"
 #include "database.h"
+#include "UnitSystem.h"
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = 0;
 QTranslator* Brewtarget::btTrans = 0;
-UnitSystem Brewtarget::weightUnitSystem = SI;
-UnitSystem Brewtarget::volumeUnitSystem = SI;
+iUnitSystem Brewtarget::weightUnitSystem = SI;
+iUnitSystem Brewtarget::volumeUnitSystem = SI;
+
+UnitSystem* Brewtarget::weightSystem = 0;
+UnitSystem* Brewtarget::volumeSystem = 0;
+UnitSystem* Brewtarget::tempSystem = 0;
+UnitSystem* Brewtarget::timeSystem = 0;
+
 TempScale Brewtarget::tempScale = Celsius;
 Brewtarget::ColorType Brewtarget::colorFormula = Brewtarget::MOREY;
 Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
@@ -106,12 +113,12 @@ QApplication* Brewtarget::getApp()
    return app;
 }
 
-UnitSystem Brewtarget::getWeightUnitSystem()
+iUnitSystem Brewtarget::getWeightUnitSystem()
 {
    return weightUnitSystem;
 }
 
-UnitSystem Brewtarget::getVolumeUnitSystem()
+iUnitSystem Brewtarget::getVolumeUnitSystem()
 {
    return volumeUnitSystem;
 }
@@ -265,115 +272,19 @@ QString Brewtarget::displayAmount( double amount, Unit* units )
    // convert to the current unit system (s).
 
    if(SIUnitName.compare("kg") == 0) // Dealing with mass.
-   {
-      switch ( weightUnitSystem )
-      {
-         case USCustomary:
-         case Imperial:
-         {
-            if( SIAmount < Units::pounds->toSI(1.0) ) // If less than 1 pound, display ounces.
-               ret = QString("%1 %2").arg(Units::ounces->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::ounces->getUnitName());
-            else
-               ret = QString("%1 %2").arg(Units::pounds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::pounds->getUnitName());
-            
-            return ret;
-         }
-
-         case SI:
-         default:
-         {
-            if( SIAmount < Units::grams->toSI(1.0) )
-               ret = QString("%1 %2").arg(Units::milligrams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milligrams->getUnitName());
-            else if( SIAmount < Units::kilograms->toSI(1.0) )
-               ret = QString("%1 %2").arg(Units::grams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::grams->getUnitName());
-            else
-               ret = QString("%1 %2").arg(Units::kilograms->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::kilograms->getUnitName());
-            return ret;
-         }
-      }
-   }
+      ret = weightSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
-   {
-      switch ( volumeUnitSystem )
-      {
-         case USCustomary:
-         {
-            if( SIAmount < Units::us_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
-                     ret = QString("%1 %2").arg(Units::us_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_teaspoons->getUnitName());
-            else if( SIAmount < Units::us_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
-               ret = QString("%1 %2").arg(Units::us_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_tablespoons->getUnitName());
-            else if( SIAmount < Units::us_quarts->toSI(1.0) ) // If less than 1 qt, show us_cups
-               ret = QString("%1 %2").arg(Units::us_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_cups->getUnitName());
-            else if( SIAmount < Units::us_gallons->toSI(1.0) ) // If less than 1 gallon, show us_quarts
-               ret = QString("%1 %2").arg(Units::us_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_quarts->getUnitName());
-            else
-               ret = QString("%1 %2").arg(Units::us_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_gallons->getUnitName());
-
-            return ret;
-         }
-
-         case Imperial:
-         {
-            if( SIAmount < Units::imperial_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
-                     ret = QString("%1 %2").arg(Units::imperial_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_teaspoons->getUnitName());
-            else if( SIAmount < Units::imperial_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
-               ret = QString("%1 %2").arg(Units::imperial_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_tablespoons->getUnitName());
-            else if( SIAmount < Units::imperial_quarts->toSI(1.0) ) // If less than 1 qt, show imperial_cups
-               ret = QString("%1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
-            else if( SIAmount < Units::imperial_gallons->toSI(1.0) ) // If less than 1 gallon, show imperial_quarts
-               ret = QString("%1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
-            else
-               ret = QString("%1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());
-
-             return ret;
-         }
-
-         case SI:
-         default:
-         {
-            if( SIAmount < Units::liters->toSI(1.0) )
-               ret = QString("%1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
-            else
-               ret = QString("%1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
-       
-            return ret;
-         }
-      }
-   }
+      ret = volumeSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
-   {
-      switch (tempScale)
-      {
-         case Fahrenheit:
-         {
-            ret = QString("%1 %2").arg(Units::fahrenheit->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::fahrenheit->getUnitName());
-
-            return ret;
-         }
-         case Celsius:
-         default:
-         {
-            ret = QString("%1 %2").arg(Units::celsius->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::celsius->getUnitName());
-            return ret;
-         }
-      }
-   }
+      ret = tempSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("min") == 0 ) // Time
-   {
-      if( SIAmount < Units::minutes->toSI(1.0) )
-         ret = QString("%1 %2").arg(Units::seconds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::seconds->getUnitName());
-      else if( SIAmount < Units::hours->toSI(1.0) )
-         ret = QString("%1 %2").arg(Units::minutes->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::minutes->getUnitName());
-      else
-         ret = QString("%1 %2").arg(Units::hours->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::hours->getUnitName());
-      return ret;
-   }
+      ret = timeSystem->displayAmount( amount, units );
    else // If we don't deal with it above, just use the SI amount.
    {
       ret = QString("%1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
-
-      return ret;
    }
+
+   return ret;
 }
 
 void Brewtarget::readPersistentOptions()
@@ -409,6 +320,10 @@ void Brewtarget::readPersistentOptions()
       weightUnitSystem = USCustomary;
       volumeUnitSystem = USCustomary;
       tempScale = Fahrenheit;
+
+      weightSystem = UnitSystems::usWeightUnitSystem;
+      volumeSystem = UnitSystems::usVolumeUnitSystem;
+      tempSystem = UnitSystems::fahrenheitTempUnitSystem;
    }
    else
    {
@@ -422,12 +337,20 @@ void Brewtarget::readPersistentOptions()
          weightUnitSystem = USCustomary;
          volumeUnitSystem = USCustomary;
          tempScale = Fahrenheit;
+
+         weightSystem = UnitSystems::usWeightUnitSystem;
+         volumeSystem = UnitSystems::usVolumeUnitSystem;
+         tempSystem = UnitSystems::fahrenheitTempUnitSystem;
       }
       else
       {
          weightUnitSystem = SI;
          volumeUnitSystem = SI;
          tempScale = Celsius;
+
+         weightSystem = UnitSystems::siWeightUnitSystem;
+         volumeSystem = UnitSystems::siVolumeUnitSystem;
+         tempSystem = UnitSystems::celsiusTempUnitSystem;
       }
  
    }
@@ -445,11 +368,20 @@ void Brewtarget::readPersistentOptions()
       text = textNode.nodeValue();
 
       if( text == "Imperial" )
+      {
          weightUnitSystem = Imperial;
+         weightSystem = UnitSystems::usWeightUnitSystem;
+      }
       else if (text == "USCustomary")
+      {
          weightUnitSystem = USCustomary;
+         weightSystem = UnitSystems::usWeightUnitSystem;
+      }
       else
+      {
          weightUnitSystem = SI;
+         weightSystem = UnitSystems::siWeightUnitSystem;
+      }
    }
 
    list = optionsDoc->elementsByTagName(QString("volume_unit_system"));
@@ -465,11 +397,20 @@ void Brewtarget::readPersistentOptions()
       text = textNode.nodeValue();
 
       if( text == "Imperial" )
+      {
          volumeUnitSystem = Imperial;
+         volumeSystem = UnitSystems::imperialVolumeUnitSystem;
+      }
       else if (text == "USCustomary")
+      {
          volumeUnitSystem = USCustomary;
+         volumeSystem = UnitSystems::usVolumeUnitSystem;
+      }
       else
+      {
          volumeUnitSystem = SI;
+         volumeSystem = UnitSystems::siVolumeUnitSystem;
+      }
    }
 
    list = optionsDoc->elementsByTagName(QString("temperature_scale"));
@@ -485,11 +426,19 @@ void Brewtarget::readPersistentOptions()
       text = textNode.nodeValue();
 
       if( text == "Fahrenheit" )
+      {
          tempScale = Fahrenheit;
-      else 
+         tempSystem = UnitSystems::fahrenheitTempUnitSystem;
+      }
+      else
+      {
          tempScale = Celsius;
+         tempSystem = UnitSystems::celsiusTempUnitSystem;
+      }
    }
 
+   // Set the one and only time system.
+   timeSystem = UnitSystems::timeUnitSystem;
 
    // Get IBU formula.
    list = optionsDoc->elementsByTagName(QString("ibu_formula"));
@@ -626,4 +575,24 @@ void Brewtarget::savePersistentOptions()
    xmlFile.close();
    delete optionsDoc;
    optionsDoc = 0;
+}
+
+double Brewtarget::weightQStringToSI(QString qstr)
+{
+   return weightSystem->qstringToSI(qstr);
+}
+
+double Brewtarget::volQStringToSI(QString qstr)
+{
+   return volumeSystem->qstringToSI(qstr);
+}
+
+double Brewtarget::tempQStringToSI(QString qstr)
+{
+   return tempSystem->qstringToSI(qstr);
+}
+
+double Brewtarget::timeQStringToSI(QString qstr)
+{
+   return timeSystem->qstringToSI(qstr);
 }

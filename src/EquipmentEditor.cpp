@@ -108,24 +108,23 @@ void EquipmentEditor::save()
    obsEquip->disableNotification();
 
    obsEquip->setName( lineEdit_name->text().toStdString() );
-   //obsEquip->setBoilSize_l( Unit::qstringToSI((lineEdit_boilSize->text()) );
-   obsEquip->setBoilSize_l( Unit::qstringToSI(lineEdit_boilSize->text()) );
+   obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
    
    obsEquip->setCalcBoilVolume( (checkBox_calcBoilVolume->checkState() == Qt::Checked)? true : false );
-   obsEquip->setBatchSize_l( Unit::qstringToSI(lineEdit_batchSize->text()) );
+   obsEquip->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
 
-   obsEquip->setTunVolume_l( Unit::qstringToSI(lineEdit_tunVolume->text()) );
-   obsEquip->setTunWeight_kg( Unit::qstringToSI(lineEdit_tunWeight->text()) );
+   obsEquip->setTunVolume_l( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) );
+   obsEquip->setTunWeight_kg( Brewtarget::weightQStringToSI(lineEdit_tunWeight->text()) );
    obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
 
-   obsEquip->setBoilTime_min( Unit::qstringToSI(lineEdit_boilTime->text()) );
-   obsEquip->setEvapRate_lHr( Unit::qstringToSI(lineEdit_evaporationRate->text()) );
-   obsEquip->setTopUpKettle_l( Unit::qstringToSI(lineEdit_topUpKettle->text()) );
-   obsEquip->setTopUpWater_l( Unit::qstringToSI(lineEdit_topUpWater->text()) );
+   obsEquip->setBoilTime_min( Brewtarget::timeQStringToSI(lineEdit_boilTime->text()) );
+   obsEquip->setEvapRate_lHr( Brewtarget::volQStringToSI(lineEdit_evaporationRate->text()) );
+   obsEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
+   obsEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
    obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble() );
 
-   obsEquip->setTrubChillerLoss_l( Unit::qstringToSI(lineEdit_trubChillerLoss->text()) );
-   obsEquip->setLauterDeadspace_l( Unit::qstringToSI(lineEdit_lauterDeadspace->text()) );
+   obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
+   obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
 
    obsEquip->setNotes(textEdit_notes->toPlainText().toStdString());
 

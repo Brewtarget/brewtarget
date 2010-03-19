@@ -260,7 +260,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setInfuseAmount_l( Unit::qstringToSI(value.toString()) );
+            row->setInfuseAmount_l( Brewtarget::volQStringToSI(value.toString()) );
             return true;
          }
          else
@@ -268,8 +268,8 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTEMPCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setStepTemp_c( Unit::qstringToSI(value.toString()) );
-	    row->setEndTemp_c( Unit::qstringToSI(value.toString()) );
+            row->setStepTemp_c( Brewtarget::tempQStringToSI(value.toString()) );
+            row->setEndTemp_c( Brewtarget::tempQStringToSI(value.toString()) );
             return true;
          }
          else
@@ -277,7 +277,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTIMECOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setStepTime_min( Unit::qstringToSI(value.toString()) );
+            row->setStepTime_min( Brewtarget::timeQStringToSI(value.toString()) );
             return true;
          }
          else

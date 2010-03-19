@@ -1,5 +1,5 @@
 /*
- * fermentableEditor.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * FermentableEditor.cpp is part of Brewtarget, and is Copyright Philip G. Lee
  * (rocketman768@gmail.com), 2009.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
@@ -63,7 +63,7 @@ void FermentableEditor::save()
 
    obsFerm->setName(lineEdit_name->text().toStdString());
    obsFerm->setType(comboBox_type->currentText().toStdString());
-   obsFerm->setAmount_kg(Unit::qstringToSI(lineEdit_amount->text()));
+   obsFerm->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
    obsFerm->setYield_pct(lineEdit_yield->text().toDouble());
    obsFerm->setColor_srm(lineEdit_color->text().toDouble());
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );

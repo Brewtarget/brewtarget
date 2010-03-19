@@ -69,9 +69,9 @@ void MiscEditor::save()
    m->setType(comboBox_type->currentText().toStdString());
    m->setUse(comboBox_use->currentText().toStdString());
    // TODO: fill in the rest of the "set" methods.
-   m->setTime(Unit::qstringToSI(lineEdit_time->text()));
-   m->setAmount(Unit::qstringToSI(lineEdit_amount->text()));
+   m->setTime(Brewtarget::timeQStringToSI(lineEdit_time->text()));
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
+   m->setAmount( m->getAmountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()));
    m->setUseFor(textEdit_useFor->toPlainText().toStdString());
    m->setNotes( textEdit_notes->toPlainText().toStdString() );
 

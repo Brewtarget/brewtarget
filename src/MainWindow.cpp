@@ -672,7 +672,7 @@ void MainWindow::updateRecipeBatchSize()
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setBatchSize_l( Unit::qstringToSI(lineEdit_batchSize->text()) );
+   recipeObs->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
 }
 
 void MainWindow::updateRecipeBoilSize()
@@ -680,7 +680,7 @@ void MainWindow::updateRecipeBoilSize()
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setBoilSize_l( Unit::qstringToSI(lineEdit_boilSize->text()) );
+   recipeObs->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
 }
 
 void MainWindow::updateRecipeEfficiency()

@@ -98,7 +98,7 @@ void RecipeExtrasDialog::updatePrimaryTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setPrimaryTemp_c( Unit::qstringToSI(lineEdit_primaryTemp->text()) );
+   recObs->setPrimaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_primaryTemp->text()) );
 }
 
 void RecipeExtrasDialog::updateSecondaryAge()
@@ -114,7 +114,7 @@ void RecipeExtrasDialog::updateSecondaryTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setSecondaryTemp_c( Unit::qstringToSI(lineEdit_secTemp->text()) );
+   recObs->setSecondaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_secTemp->text()) );
 }
 
 void RecipeExtrasDialog::updateTertiaryAge()
@@ -130,7 +130,7 @@ void RecipeExtrasDialog::updateTertiaryTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setTertiaryTemp_c( Unit::qstringToSI( lineEdit_tertTemp->text() ) );
+   recObs->setTertiaryTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
 }
 
 void RecipeExtrasDialog::updateAge()
@@ -146,7 +146,7 @@ void RecipeExtrasDialog::updateAgeTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setAgeTemp_c( Unit::qstringToSI( lineEdit_tertTemp->text() ) );
+   recObs->setAgeTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
 }
 
 void RecipeExtrasDialog::updateDate()

@@ -18,6 +18,7 @@
 
 #include "OptionDialog.h"
 #include "brewtarget.h"
+#include "UnitSystem.h"
 
 #include <QButtonGroup>
 
@@ -91,8 +92,8 @@ void OptionDialog::saveAndClose()
    Brewtarget::tempScale = temperatureScale;
    */
    QAbstractButton* button;
-   UnitSystem weightUnitSystem;
-   UnitSystem volumeUnitSystem;
+   iUnitSystem weightUnitSystem;
+   iUnitSystem volumeUnitSystem;
    TempScale temperatureScale;
    Brewtarget::ColorType cformula;
    Brewtarget::IbuType iformula;
@@ -117,25 +118,49 @@ void OptionDialog::saveAndClose()
    
    button = weightGroup->checkedButton();
    if( button == weight_imperial )
+   {
       weightUnitSystem = Imperial;
+      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem;
+   }
    else if( button == weight_us)
+   {
       weightUnitSystem = USCustomary;
+      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem;
+   }
    else
+   {
       weightUnitSystem = SI;
+      Brewtarget::weightSystem = UnitSystems::siWeightUnitSystem;
+   }
    
    button = volumeGroup->checkedButton();
    if( button == volume_imperial )
+   {
       volumeUnitSystem = Imperial;
+      Brewtarget::volumeSystem = UnitSystems::imperialVolumeUnitSystem;
+   }
    else if( button == volume_us )
+   {
       volumeUnitSystem = USCustomary;
+      Brewtarget::volumeSystem = UnitSystems::usVolumeUnitSystem;
+   }
    else
+   {
       volumeUnitSystem = SI;
+      Brewtarget::volumeSystem = UnitSystems::siVolumeUnitSystem;
+   }
    
    button = tempGroup->checkedButton();
    if( button == fahrenheit )
+   {
       temperatureScale = Fahrenheit;
+      Brewtarget::tempSystem = UnitSystems::fahrenheitTempUnitSystem;
+   }
    else
+   {
       temperatureScale = Celsius;
+      Brewtarget::tempSystem = UnitSystems::celsiusTempUnitSystem;
+   }
    
    Brewtarget::ibuFormula = iformula;
    Brewtarget::colorFormula = cformula;
