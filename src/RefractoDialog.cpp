@@ -1,6 +1,6 @@
 /*
  * RefractoDialog.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2010.
+ * (rocketman768@gmail.com) and Eric Tamme,  2009-2010.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,27 +56,27 @@ void RefractoDialog::calculate()
    if( ! haveCP )
       return;
 
-   ri = refractiveIndex(currentPlato);
+   ri = Algorithms::Instance().refractiveIndex(currentPlato);
    lineEdit_ri->setText(Brewtarget::displayAmount(ri));
 
    if( ! haveOG && haveOP )
    {
-         inputOG = PlatoToSG_20C20C( originalPlato );
+         inputOG = Algorithms::Instance().PlatoToSG_20C20C( originalPlato );
          lineEdit_inputOG->setText(Brewtarget::displayAmount(inputOG));
    }
    else if( ! haveOP && haveOG )
    {
-      originalPlato = SG_20C20C_toPlato( inputOG );
+      originalPlato = Algorithms::Instance().SG_20C20C_toPlato( inputOG );
       lineEdit_op->setText(Brewtarget::displayAmount(originalPlato));
    }
    else if( ! haveOP && ! haveOG )
       return; // Can't do much if we don't have OG or OP.
 
-   og = PlatoToSG_20C20C( originalPlato );
-   sg = sgByStartingPlato( originalPlato, currentPlato );
-   re = realExtract( sg, currentPlato );
-   abv = getABVBySGPlato( sg, currentPlato );
-   abw = getABWBySGPlato( sg, currentPlato );
+   og = Algorithms::Instance().PlatoToSG_20C20C( originalPlato );
+   sg = Algorithms::Instance().sgByStartingPlato( originalPlato, currentPlato );
+   re = Algorithms::Instance().realExtract( sg, currentPlato );
+   abv = Algorithms::Instance().getABVBySGPlato( sg, currentPlato );
+   abw = Algorithms::Instance().getABWBySGPlato( sg, currentPlato );
 
    // Warn the user if the inputOG and calculated og don't match.
    if( abs(og - inputOG) > 0.002 )

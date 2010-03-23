@@ -19,6 +19,8 @@ QT += xml \
     webkit
 DEPENDPATH += .
 INCLUDEPATH += .
+# Needed for building on Gentoo
+# INCLUDEPATH += /usr/include/phonon
 RESOURCES = brewtarget.qrc
 
 # Where binary goes.
@@ -328,3 +330,4 @@ DISTFILES = debian/changelog \
     options.xml \
     README \
     recipes.xml
+

@@ -1,6 +1,6 @@
 /*
  * OgAdjuster.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009.
+ * (rocketman768@gmail.com) and Eric Tamme,  2009-2010.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,41 +89,41 @@ void OgAdjuster::calculate()
    // Calculate missing input parameters.
    if( gotSG )
    {
-      sg_15C = sg * getWaterDensity_kgL(hydroTemp_c)/getWaterDensity_kgL(15) + hydrometer15CCorrection( temp_c );
-      sg_20C = sg_15C * getWaterDensity_kgL(15)/getWaterDensity_kgL(20);
+      sg_15C = sg * Algorithms::Instance().getWaterDensity_kgL(hydroTemp_c)/Algorithms::Instance().getWaterDensity_kgL(15) + Algorithms::Instance().hydrometer15CCorrection( temp_c );
+      sg_20C = sg_15C * Algorithms::Instance().getWaterDensity_kgL(15)/Algorithms::Instance().getWaterDensity_kgL(20);
 
-      plato = SG_20C20C_toPlato( sg_20C );
+      plato = Algorithms::Instance().SG_20C20C_toPlato( sg_20C );
       lineEdit_plato->setText( Brewtarget::displayAmount(plato) );
    }
    else
    {
-      sg_20C = PlatoToSG_20C20C( plato );
+      sg_20C = Algorithms::Instance().PlatoToSG_20C20C( plato );
    }
 
    // Calculate intermediate parameters.
-   sugar_kg = sg_20C * getWaterDensity_kgL(20) * wort_l * plato/(double)100;
+   sugar_kg = sg_20C * Algorithms::Instance().getWaterDensity_kgL(20) * wort_l * plato/(double)100;
    //std::cerr << "sugar_kg = " << sugar_kg << std::endl;
-   water_kg = sg_20C * getWaterDensity_kgL(20) * wort_l * ((double)1 - plato/(double)100);
+   water_kg = sg_20C * Algorithms::Instance().getWaterDensity_kgL(20) * wort_l * ((double)1 - plato/(double)100);
    //std::cerr << "water_kg = " << water_kg << std::endl;
 
    // Calculate OG w/o correction.
    finalVolume_l = equip->wortEndOfBoil_l(wort_l);
-   finalWater_kg = water_kg - equip->getBoilTime_min()/(double)60 * evapRate_lHr * getWaterDensity_kgL(20);
+   finalWater_kg = water_kg - equip->getBoilTime_min()/(double)60 * evapRate_lHr * Algorithms::Instance().getWaterDensity_kgL(20);
    //std::cerr << "finalWater_kg = " << finalWater_kg << std::endl;
    //std::cerr << "boilTime = " << equip->getBoilTime_min() << std::endl;
    //std::cerr << "evapRate_lHr = " << evapRate_lHr << std::endl;
-   //std::cerr << "waterDensity = " << getWaterDensity_kgL(20) << std::endl;
+   //std::cerr << "waterDensity = " << Algorithms::Instance().getWaterDensity_kgL(20) << std::endl;
    finalPlato = (double)100 * sugar_kg / (sugar_kg + finalWater_kg);
    //std::cerr << "finalPlato = " << finalPlato << std::endl;
-   finalUncorrectedSg_20C = PlatoToSG_20C20C( finalPlato );
+   finalUncorrectedSg_20C = Algorithms::Instance().PlatoToSG_20C20C( finalPlato );
 
    // Calculate volume to add to boil
-   finalPlato = SG_20C20C_toPlato( recObs->getOg() ); // This is bad. This assumes the post-boil gravity = og. Need account for post-boil water additions.
+   finalPlato = Algorithms::Instance().SG_20C20C_toPlato( recObs->getOg() ); // This is bad. This assumes the post-boil gravity = og. Need account for post-boil water additions.
    // postBoilWater_kg = batchSize - topUpWater;
-   // postBoilSugar_kg = SG_20C20C_toPlato( recObs->getOG() ) / 100.0 * batchSize * recObs->getOG() * getWaterDensity_kgL(20);
+   // postBoilSugar_kg = Algorithms::Instance().SG_20C20C_toPlato( recObs->getOG() ) / 100.0 * batchSize * recObs->getOG() * Algorithms::Instance().getWaterDensity_kgL(20);
    // finalPlato = 100 * postBoilSugar_kg / ( postBoilSugar_kg + postBoilWater_kg );
    waterToAdd_kg = (double)100 * sugar_kg / finalPlato - sugar_kg - finalWater_kg;
-   waterToAdd_l = waterToAdd_kg / getWaterDensity_kgL(20);
+   waterToAdd_l = waterToAdd_kg / Algorithms::Instance().getWaterDensity_kgL(20);
 
    // Calculate final batch size.
    finalVolume_l += waterToAdd_l;

@@ -50,14 +50,14 @@ public slots:
    void showChanges();
    void flash();
    void getSound();
-   
+
 signals:
    void timerDone();
    void timerSet(QString text);
 
 private:
    void subtractOneMinute();
-   
+
    unsigned int hours;
    unsigned int minutes;
    unsigned int seconds;

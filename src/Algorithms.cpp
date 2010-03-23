@@ -1,6 +1,6 @@
 /*
  * Algorithms.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009.
+ * (rocketman768@gmail.com) and Eric Tamme,  2009-2010.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,54 +15,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <cmath>
 #include <math.h>
 #include "Algorithms.h"
 
-double* PlatoFromSG_20C20C = 0;
-unsigned int PlatoFromSG_20C20C_order;
-double* waterDensityPoly_C = 0;
-unsigned int waterDensityPoly_C_order = 0;
-double* hydroCorrection15CPoly = 0;
-unsigned int hydroCorrection15CPoly_order = 0;
-
-void initVars()
+// Called when Instance() is called, should only initialize once.
+Algorithms::Algorithms()
 {
-   if( PlatoFromSG_20C20C == 0 )
-   {
-      PlatoFromSG_20C20C = new double[4];
-      PlatoFromSG_20C20C_order = 3;
-      PlatoFromSG_20C20C[0] = -616.868;
-      PlatoFromSG_20C20C[1] = 1111.14;
-      PlatoFromSG_20C20C[2] = -630.272;
-      PlatoFromSG_20C20C[3] = 135.997;
-   }
+	PlatoFromSG_20C20C_order = 3;
+	PlatoFromSG_20C20C[0] = -616.868;
+	PlatoFromSG_20C20C[1] = 1111.14;
+	PlatoFromSG_20C20C[2] = -630.272;
+	PlatoFromSG_20C20C[3] = 135.997;
 
-   if( waterDensityPoly_C == 0 )
-   {
-      waterDensityPoly_C = new double[6];
-      waterDensityPoly_C_order = 5;
-      waterDensityPoly_C[0] = 0.9999776532;
-      waterDensityPoly_C[1] = 6.557692037e-5;
-      waterDensityPoly_C[2] = -1.007534371e-5;
-      waterDensityPoly_C[3] = 1.372076106e-7;
-      waterDensityPoly_C[4] = -1.414581892e-9;
-      waterDensityPoly_C[5] = 5.6890971e-12;
-   }
+	waterDensityPoly_C_order = 5;
+	waterDensityPoly_C[0] = 0.9999776532;
+	waterDensityPoly_C[1] = 6.557692037e-5;
+	waterDensityPoly_C[2] = -1.007534371e-5;
+	waterDensityPoly_C[3] = 1.372076106e-7;
+	waterDensityPoly_C[4] = -1.414581892e-9;
+	waterDensityPoly_C[5] = 5.6890971e-12;
 
-   if( hydroCorrection15CPoly == 0 )
-   {
-      hydroCorrection15CPoly = new double[4];
-      hydroCorrection15CPoly_order = 3;
-      hydroCorrection15CPoly[0] = -0.911045;
-      hydroCorrection15CPoly[1] = -16.2853e-3;
-      hydroCorrection15CPoly[2] = 5.84346e-3;
-      hydroCorrection15CPoly[3] = -15.3243e-6;
-   }
+	hydroCorrection15CPoly_order = 3;
+	hydroCorrection15CPoly[0] = -0.911045;
+	hydroCorrection15CPoly[1] = -16.2853e-3;
+	hydroCorrection15CPoly[2] = 5.84346e-3;
+	hydroCorrection15CPoly[3] = -15.3243e-6;
 }
 
-inline double intPow( double base, unsigned int pow )
+
+inline double Algorithms::intPow( double base, unsigned int pow )
 {
    double ret = 1;
    for(; pow > 0; pow--)
@@ -72,7 +54,7 @@ inline double intPow( double base, unsigned int pow )
 }
 
 // NOTE: order is the ORDER of the polynomial, NOT THE SIZE of the poly array.
-double polyEval( double* poly, unsigned int order, double x )
+double Algorithms::polyEval( double* poly, unsigned int order, double x )
 {
    double ret = 0.0;
 
@@ -86,7 +68,7 @@ double polyEval( double* poly, unsigned int order, double x )
 }
 
 // Root finding of a polynomial via the secant method. Returns HUGE_VAL on failure.
-double rootFind( double* poly, unsigned int order, double x0, double x1 )
+double Algorithms::rootFind( double* poly, unsigned int order, double x0, double x1 )
 {
    double guesses[] = { x0, x1 };
    double newGuess;
@@ -107,21 +89,18 @@ double rootFind( double* poly, unsigned int order, double x0, double x1 )
 }
 
 // Returns the additive correction (in SG 15C units).
-double hydrometer15CCorrection( double celsius )
+double Algorithms::hydrometer15CCorrection( double celsius )
 {
-   initVars();
    return polyEval( hydroCorrection15CPoly,hydroCorrection15CPoly_order, celsius ) * (double)1e-3;
 }
 
-double SG_20C20C_toPlato( double sg )
+double Algorithms::SG_20C20C_toPlato( double sg )
 {
-   initVars();
    return polyEval(PlatoFromSG_20C20C, PlatoFromSG_20C20C_order, sg );
 }
 
-double PlatoToSG_20C20C( double plato )
+double Algorithms::PlatoToSG_20C20C( double plato )
 {
-   initVars();
    double poly[PlatoFromSG_20C20C_order+1];
 
    // Copy the polynomial, cuz we need to alter it.
@@ -136,13 +115,12 @@ double PlatoToSG_20C20C( double plato )
    return rootFind( poly, PlatoFromSG_20C20C_order, 1.000, 1.050 );
 }
 
-double getWaterDensity_kgL( double celsius )
+double Algorithms::getWaterDensity_kgL( double celsius )
 {
-   initVars();
    return polyEval(waterDensityPoly_C, waterDensityPoly_C_order, celsius);
 }
 
-double getABVBySGPlato( double sg, double plato )
+double Algorithms::getABVBySGPlato( double sg, double plato )
 {
    // Implements the method found at:
    // http://www.byo.com/stories/projects-and-equipment/article/indices/29-equipment/1343-refractometers
@@ -151,7 +129,7 @@ double getABVBySGPlato( double sg, double plato )
    return (277.8851 - 277.4*sg + 0.9956*plato + 0.00523*plato*plato + 0.000013*plato*plato*plato) * (sg/0.79);
 }
 
-double getABWBySGPlato( double sg, double plato )
+double Algorithms::getABWBySGPlato( double sg, double plato )
 {
    // Implements the method found at:
    // http://primetab.com/formulas.html
@@ -160,7 +138,7 @@ double getABWBySGPlato( double sg, double plato )
    return 1017.5596 - 277.4*sg + ri*(937.8135*ri - 1805.1228);
 }
 
-double sgByStartingPlato( double startingPlato, double currentPlato )
+double Algorithms::sgByStartingPlato( double startingPlato, double currentPlato )
 {
    // Implements the method found at:
    // http://primetab.com/formulas.html
@@ -176,14 +154,14 @@ double sgByStartingPlato( double startingPlato, double currentPlato )
 
 }
 
-double refractiveIndex( double plato )
+double Algorithms::refractiveIndex( double plato )
 {
    // Implements the method found at:
    // http://primetab.com/formulas.html
    return 1.33302 + 0.001427193*plato + 0.000005791157*plato*plato;
 }
 
-double realExtract( double sg, double plato )
+double Algorithms::realExtract( double sg, double plato )
 {
    double ri = refractiveIndex(plato);
    return 194.5935 + 129.8*sg + ri*(410.8815*ri - 790.8732);
