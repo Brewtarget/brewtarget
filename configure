@@ -27,7 +27,7 @@ $docdir="";
 $targetpath="";
 $datapath="";
 $docpath="";
-$qprofile="brewtarget.pro";
+$qprofile="brewtarget_tmp.pro";
 $make="";
 $qmake="";
 
@@ -131,15 +131,17 @@ if( ! $docpath )
 }
 # --- Done constructing paths ---
 
+# Copy brewtarget.pro to a temporary place.
+copy('brewtarget.pro', $qprofile);
+
 # --- Modify brewtarget.pro. ---
-modifyInPlace( 'brewtarget.pro', 'data.path =.*$', qq(data.path = $datapath) );
-modifyInPlace( 'brewtarget.pro', 'target.path =.*$', qq(target.path = $targetpath) );
-modifyInPlace( 'brewtarget.pro', 'doc.path =.*$', qq(doc.path = $docpath) );
+modifyInPlace( $qprofile, 'data.path =.*$', qq(data.path = $datapath) );
+modifyInPlace( $qprofile, 'target.path =.*$', qq(target.path = $targetpath) );
+modifyInPlace( $qprofile, 'doc.path =.*$', qq(doc.path = $docpath) );
 # --- Done modifying brewtarget.pro. ---
 
-# ---Configure defaults.---
-
-# ---Done configuring defaults.---
+# Copy src/config.in to src/config.h
+copy('src/config.in', 'src/config.h');
 
 # ---Modify the config.h file.---
 modifyInPlace('src/config.h', '#define CONFIGDATADIR.*$', qq(#define CONFIGDATADIR "$datapath/"));
