@@ -12,10 +12,11 @@ Upstream Author:
 
 Copyright:
 
-    Brewtarget is Copyright 2009 Philip G. Lee 
+    Copyright 2009-2010 Philip G. Lee 
 
 License:
 
+    --GPLv3--
     This package is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
@@ -36,7 +37,7 @@ Public License can be found in `/usr/share/common-licenses/GPL-3'.
 
 The Debian packaging is:
 
-    Copyright C) 2009, Philip G. Lee <rocketman768@gmail.com>
+    Copyright (C) 2009-2010, Philip G. Lee <rocketman768@gmail.com>
 
 and is licensed under the GPL, see above.
 
@@ -46,4 +47,4 @@ The following are under the LGPL as part of Crystal SVG:
  - exit.png
  - filesave.png
 
-The rest of the images in this package are under an unrestricted license.
+The rest of the images in this package are under the WTFPL.
