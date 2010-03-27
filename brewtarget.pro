@@ -13,15 +13,15 @@
 VERSION = 1.2.1
 TEMPLATE = app
 CONFIG += qt \
-    release \
-    warn_on
+          release \
+          warn_off
 QT += xml \
     webkit
+RESOURCES = brewtarget.qrc
 DEPENDPATH += .
 INCLUDEPATH += .
 # Needed for building on Gentoo
 # INCLUDEPATH += /usr/include/phonon
-RESOURCES = brewtarget.qrc
 
 # Where binary goes.
 DESTDIR = 
@@ -34,26 +34,54 @@ UI_DIR = src
 
 # Where moc output goes.
 MOC_DIR = src
+
+# Other files to clean up
+QMAKE_CLEAN += brewtarget_tmp.pro \
+               src/config.h
+
 unix:!macx { 
     QT += phonon
+    CONFIG += link_pkgconfig
+    PKGCONFIG += phonon
     TARGET = brewtarget
+
+    # Set up directories
     isEmpty(PREFIX):PREFIX = /usr/local
     BINDIR = $$PREFIX/bin
     DATADIR = $$PREFIX/share
+
+    # Install paths.
     target.path = $$PREFIX/bin
     data.path = $$DATADIR/brewtarget/
     doc.path = $$DATADIR/doc/brewtarget
-    CONFIG += link_pkgconfig
-    PKGCONFIG += phonon
+
     data.files = *.xml
+    
     doc.files = README \
         COPYING \
         doc/manual/*
+
     INSTALLS += target \
         data \
         doc
-    desktop.path = $$DATADIR/applications/
+
+    # Desktop files.
+    desktop.path = /usr/share/applications/
     desktop.files += brewtarget.desktop
+    INSTALLS += desktop
+
+    # See if we have KDE going on.
+    exists( /usr/share/applications/kde4 )
+    {
+       desktop_kde.path = /usr/share/applications/kde4
+       desktop_kde.files += brewtarget.desktop
+       INSTALLS += desktop_kde
+    }
+
+    # Install icon.
+    icon.path = /usr/share/icons/brewtarget/
+    icon.files = images/BrewtargetIcon.png
+    INSTALLS += icon
 }
 macx { 
     QT += phonon

@@ -1,11 +1,11 @@
 [Desktop Entry]
-Categories=Qt;Education;Utility;Engineering
+Categories=Qt;KDE;Education;Utility;Engineering
 Encoding=UTF-8
 Exec=brewtarget
-Name=BrewTarget
-GenericName=Beer Calculator
+Name=Brewtarget
+GenericName=Beer calculator
 X-KDE-StartupNotify=true
-Icon=brewtarget
+Icon=/usr/share/icons/brewtarget/BrewtargetIcon.png
 Terminal=false
 Type=Application
 
