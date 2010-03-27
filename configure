@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+use File::Copy;
 
 # configure is part of Brewtarget, and is Copyright Philip G. Lee
 # (rocketman768@gmail.com), 2009.
