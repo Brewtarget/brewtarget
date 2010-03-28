@@ -42,6 +42,13 @@ public:
     */
    virtual double qstringToSI( QString qstr ) = 0;
 
+   /*!
+    * Returns the unit associated with thickness. If this unit system is
+    * US weight, it would return lb. If it were US volume, it would return
+    * quarts.
+    */
+   virtual Unit* thicknessUnit() = 0;
+
 protected:
    static const int fieldWidth = 0;
    static const char format = 'f';

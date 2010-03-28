@@ -301,11 +301,25 @@ void Mash::removeMashStep(MashStep* step)
       if(*it == step )
       {
          mashSteps.erase(it);
-	 removeObserved(*it);
+         removeObserved(*it);
          hasChanged();
          return;
       }
    }
+}
+
+void Mash::removeAllMashSteps()
+{
+   MashStep* step;
+
+   while( mashSteps.size() > 0 )
+   {
+      step = mashSteps.back();
+      mashSteps.pop_back(); // Remove last element.
+      delete step; // Delete storage.
+   }
+
+   hasChanged();
 }
 
 //============================="GET" METHODS====================================
@@ -327,7 +341,8 @@ unsigned int Mash::getNumMashSteps() const
 MashStep* Mash::getMashStep( unsigned int i )
 {
    if( i >= mashSteps.size() )
-      throw MashException("getMashStep(): index too large: " + intToString(i));
+      //throw MashException("getMashStep(): index too large: " + intToString(i));
+      return 0;
    else
       return mashSteps[i];
 }

@@ -126,6 +126,7 @@ MainWindow::MainWindow(QWidget* parent)
    primingDialog = new PrimingDialog(this);
    recipeExtrasDialog = new RecipeExtrasDialog(this);
    refractoDialog = new RefractoDialog(this);
+   mashDesigner = new MashDesigner(this);
 
    setupToolbar();
 
@@ -235,6 +236,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_editMashStep, SIGNAL( clicked() ), this, SLOT(editSelectedMashStep()) );
    connect( pushButton_mashWizard, SIGNAL( clicked() ), mashWizard, SLOT( show() ) );
    connect( pushButton_saveMash, SIGNAL( clicked() ), this, SLOT( saveMash() ) );
+   connect( pushButton_mashDes, SIGNAL( clicked() ), mashDesigner, SLOT( show() ) );
 }
 
 void MainWindow::setupToolbar()
@@ -398,6 +400,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    recipeFormatter->setRecipe(recipe);
    ogAdjuster->setRecipe(recipe);
    recipeExtrasDialog->setRecipe(recipe);
+   mashDesigner->setRecipe(recipe);
    
    // Make sure the fermentableTable is paying attention...
    for( i = 0; i < recipeObs->getNumFermentables(); ++i )

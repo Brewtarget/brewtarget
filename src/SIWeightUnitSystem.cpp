@@ -123,3 +123,8 @@ Unit* SIWeightUnitSystem::getUnit(const QString& name)
    else
       return nameToUnit[name];
 }
+
+Unit* SIWeightUnitSystem::thicknessUnit()
+{
+   return Units::kilograms;
+}

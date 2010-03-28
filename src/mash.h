@@ -66,6 +66,7 @@ public:
 
    void addMashStep(MashStep* step);
    void removeMashStep(MashStep* step);
+   void removeAllMashSteps();
    double totalMashWater_l() const; // Total amount of water that went INTO the mash.
 private:
 

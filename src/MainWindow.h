@@ -59,6 +59,7 @@ class MainWindow;
 #include "PrimingDialog.h"
 #include "RecipeExtrasDialog.h"
 #include "RefractoDialog.h"
+#include "MashDesigner.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -152,6 +153,7 @@ private:
    PrimingDialog* primingDialog;
    RecipeExtrasDialog* recipeExtrasDialog;
    RefractoDialog* refractoDialog;
+   MashDesigner* mashDesigner;
 
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());

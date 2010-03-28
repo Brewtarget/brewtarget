@@ -30,6 +30,7 @@ public:
    ImperialVolumeUnitSystem();
    QString displayAmount( double amount, Unit* units = 0 ); /* Inherited from UnitSystem */
    double qstringToSI( QString qstr ); /* Inherited from UnitSystem */
+   Unit* thicknessUnit(); /* Inherited from UnitSystem */
 
 private:
    static void ensureMapIsSetup();

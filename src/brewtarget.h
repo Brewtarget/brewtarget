@@ -54,6 +54,8 @@ public:
    static void log( LogType lt, QString message );
 
    static QString displayAmount( double amount, Unit* units=0 );
+   // Displays thickness in appropriate units from standard thickness in L/kg.
+   static QString displayThickness( double thick_lkg );
    static double weightQStringToSI( QString qstr );
    static double volQStringToSI( QString qstr );
    static double tempQStringToSI( QString qstr );

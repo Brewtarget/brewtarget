@@ -121,3 +121,8 @@ Unit* USWeightUnitSystem::getUnit(const QString& name)
    else
       return nameToUnit[name];
 }
+
+Unit* USWeightUnitSystem::thicknessUnit()
+{
+   return Units::pounds;
+}

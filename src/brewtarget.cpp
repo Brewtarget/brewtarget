@@ -287,6 +287,20 @@ QString Brewtarget::displayAmount( double amount, Unit* units )
    return ret;
 }
 
+QString Brewtarget::displayThickness(double thick_lkg)
+{
+   int fieldWidth = 0;
+   char format = 'f';
+   int precision = 2;
+
+   Unit* volUnit = volumeSystem->thicknessUnit();
+   Unit* weightUnit = weightSystem->thicknessUnit();
+
+   double num = volUnit->fromSI(thick_lkg);
+   double den = weightUnit->fromSI(1.0);
+
+   return QString("%1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
+}
 void Brewtarget::readPersistentOptions()
 {
    QFile xmlFile(getConfigDir() + "options.xml");

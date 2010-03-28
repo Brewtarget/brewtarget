@@ -1189,7 +1189,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="fermentableTab">
        <attribute name="title">
@@ -1572,6 +1572,13 @@
               </property>
               <property name="text">
                <string>Mash wiz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_mashDes">
+              <property name="text">
+               <string>Mash Des</string>
               </property>
              </widget>
             </item>

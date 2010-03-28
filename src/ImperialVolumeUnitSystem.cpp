@@ -125,3 +125,8 @@ Unit* ImperialVolumeUnitSystem::getUnit(const QString& name)
    else
       return nameToUnit[name];
 }
+
+Unit* ImperialVolumeUnitSystem::thicknessUnit()
+{
+   return Units::imperial_quarts;
+}

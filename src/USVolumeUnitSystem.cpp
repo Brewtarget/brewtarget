@@ -125,3 +125,8 @@ Unit* USVolumeUnitSystem::getUnit(const QString& name)
    else
       return nameToUnit[name];
 }
+
+Unit* USVolumeUnitSystem::thicknessUnit()
+{
+   return Units::us_quarts;
+}

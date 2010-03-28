@@ -13,16 +13,16 @@
 VERSION = 1.2.1
 TEMPLATE = app
 CONFIG += qt \
-          release \
-          warn_off
+    release \
+    warn_off
 QT += xml \
     webkit
 RESOURCES = brewtarget.qrc
 DEPENDPATH += .
 INCLUDEPATH += .
+
 # Needed for building on Gentoo
 # INCLUDEPATH += /usr/include/phonon
-
 # Where binary goes.
 DESTDIR = 
 
@@ -37,47 +37,43 @@ MOC_DIR = src
 
 # Other files to clean up
 QMAKE_CLEAN += brewtarget_tmp.pro \
-               src/config.h
-
+    src/config.h
 unix:!macx { 
     QT += phonon
     CONFIG += link_pkgconfig
     PKGCONFIG += phonon
     TARGET = brewtarget
-
+    
     # Set up directories
     isEmpty(PREFIX):PREFIX = /usr/local
     BINDIR = $$PREFIX/bin
     DATADIR = $$PREFIX/share
-
+    
     # Install paths.
     target.path = $$PREFIX/bin
     data.path = $$DATADIR/brewtarget/
     doc.path = $$DATADIR/doc/brewtarget
-
     data.files = *.xml
-    
     doc.files = README \
         COPYING \
         doc/manual/*
-
     INSTALLS += target \
         data \
         doc
-
+    
     # Desktop files.
     desktop.path = /usr/share/applications/
     desktop.files += brewtarget.desktop
     INSTALLS += desktop
-
+    
     # See if we have KDE going on.
     exists( /usr/share/applications/kde4 )
-    {
-       desktop_kde.path = /usr/share/applications/kde4
-       desktop_kde.files += brewtarget.desktop
-       INSTALLS += desktop_kde
+     { 
+        desktop_kde.path = /usr/share/applications/kde4
+        desktop_kde.files += brewtarget.desktop
+        INSTALLS += desktop_kde
     }
-
+    
     # Install icon.
     icon.path = /usr/share/icons/brewtarget/
     icon.files = images/BrewtargetIcon.png
@@ -216,7 +212,8 @@ HEADERS += src/AboutDialog.h \
     src/YeastEditor.h \
     src/YeastTableModel.h \
     src/YeastTableWidget.h \
-    src/RecipeExtrasDialog.h
+    src/RecipeExtrasDialog.h \
+    src/MashDesigner.h
 FORMS += ui/aboutDialog.ui \
     ui/brewDayWidget.ui \
     ui/converterTool.ui \
@@ -243,7 +240,8 @@ FORMS += ui/aboutDialog.ui \
     ui/timerListDialog.ui \
     ui/timerWidget.ui \
     ui/yeastDialog.ui \
-    ui/yeastEditor.ui
+    ui/yeastEditor.ui \
+    ui/mashDesigner.ui
 SOURCES += src/Algorithms.cpp \
     src/database.cpp \
     src/BeerXMLElement.cpp \
@@ -325,7 +323,8 @@ SOURCES += src/Algorithms.cpp \
     src/YeastEditor.cpp \
     src/YeastTableModel.cpp \
     src/YeastTableWidget.cpp \
-    src/RecipeExtrasDialog.cpp
+    src/RecipeExtrasDialog.cpp \
+    src/MashDesigner.cpp
 DISTFILES = debian/changelog \
     configure \
     COPYING \
@@ -358,4 +357,3 @@ DISTFILES = debian/changelog \
     options.xml \
     README \
     recipes.xml
-

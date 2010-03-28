@@ -119,3 +119,8 @@ Unit* SIVolumeUnitSystem::getUnit(const QString& name)
    else
       return nameToUnit[name];
 }
+
+Unit* SIVolumeUnitSystem::thicknessUnit()
+{
+   return Units::liters;
+}
