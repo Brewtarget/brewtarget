@@ -124,6 +124,17 @@ void Database::initialize()
    if( ! mashDoc.setContent(&mashFile, false, &err, &line, &col) )
       Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad document formatting in %1 %2:%3. %4").arg(mashFile.fileName()).arg(line).arg(col).arg(err) );
 
+   equipments.clear();
+   fermentables.clear();
+   hops.clear();
+   mashSteps.clear();
+   miscs.clear();
+   styles.clear();
+   waters.clear();
+   yeasts.clear();
+   mashs.clear();
+   recipes.clear();
+
    /*** Items in dbDoc ***/
    list = dbDoc.elementsByTagName("EQUIPMENT");
    size = list.size();
