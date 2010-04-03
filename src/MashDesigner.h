@@ -52,6 +52,7 @@ private slots:
    void saveTargetTemp();
    void proceed(); // Go to next step.
    void saveAndClose();
+   void typeChanged(QString type);
 
 private:
    bool nextStep(int step);
@@ -65,6 +66,7 @@ private:
    double grainVolume_l();
    double tempFromVolume_c( double vol_l );
    double volFromTemp_l( double temp_c );
+   double getDecoctionAmount_l();
 
    double getSelectedAmount_l();
    double getSelectedTemp_c();

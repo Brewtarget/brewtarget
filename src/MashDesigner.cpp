@@ -54,6 +54,8 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    connect( lineEdit_temp, SIGNAL(editingFinished()), this, SLOT(saveTargetTemp()) );
    // Move to next step.
    connect( pushButton_next, SIGNAL(clicked()), this, SLOT(proceed()) );
+   // Do correct calcs when the mash step type is selected.
+   connect( comboBox_type, SIGNAL(activated(QString)), this, SLOT(typeChanged(QString)) );
 
    connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
    connect( pushButton_finish, SIGNAL(clicked()), this, SLOT(saveAndClose()) );
@@ -73,8 +75,7 @@ void MashDesigner::setRecipe(Recipe* rec)
 
 void MashDesigner::show()
 {
-   nextStep(0);
-   setVisible(true);
+   setVisible(nextStep(0));
 }
 
 void MashDesigner::saveAndClose()
@@ -118,6 +119,8 @@ bool MashDesigner::nextStep(int step)
    lineEdit_name->clear();
    lineEdit_temp->clear();
    lineEdit_time->clear();
+
+   return true;
 }
 
 void MashDesigner::saveStep()
@@ -134,8 +137,10 @@ void MashDesigner::saveStep()
       mashStep->setInfuseAmount_l( getSelectedAmount_l() );
       mashStep->setInfuseTemp_c( getSelectedTemp_c() );
    }
+   /*
    else if( type.compare("Decoction") == 0 )
-      mashStep->setDecoctionAmount_l( getSelectedAmount_l() );
+      mashStep->setDecoctionAmount_l(  );
+    */
 }
 
 double MashDesigner::maxTemp_c()
@@ -161,6 +166,8 @@ double MashDesigner::minAmt_l()
    return volFromTemp_l( maxTemp_c() );
 }
 
+// Returns the required volume of water to infuse if the strike water is
+// at temp_c degrees Celsius.
 double MashDesigner::volFromTemp_l( double temp_c )
 {
    if( mashStep == 0 || mash == 0 )
@@ -180,6 +187,8 @@ double MashDesigner::volFromTemp_l( double temp_c )
    return mw;
 }
 
+// Returns the required temp of strike water required if
+// the volume of strike water is vol_l liters.
 double MashDesigner::tempFromVolume_c( double vol_l )
 {
    if( mashStep == 0 || mash == 0 )
@@ -208,6 +217,7 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    return tw;
 }
 
+// However much more we can add at this step.
 double MashDesigner::maxAmt_l()
 {
    // However much more we can fit in the tun.
@@ -217,6 +227,7 @@ double MashDesigner::maxAmt_l()
       return (equip == 0)? 0 : equip->getTunVolume_l() - grainVolume_l();
 }
 
+// How many liters of grain are in the tun.
 double MashDesigner::grainVolume_l()
 {
    return grain_kg / HeatCalculations::rhoGrain_KgL;
@@ -250,6 +261,8 @@ bool MashDesigner::initializeMash()
    curStep = 0;
    MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC;
    addedWater_l = 0;
+   mashStep = 0;
+   prevStep = 0;
    grain_kg = recObs->getGrainsInMash_kg();
 
    label_tunVol->setText(Brewtarget::displayAmount(equip->getTunVolume_l(), Units::liters));
@@ -266,6 +279,11 @@ bool MashDesigner::initializeMash()
 
 void MashDesigner::updateFullness()
 {
+   if( mashStep == 0 )
+      return;
+
+   QString type(mashStep->getType().c_str());
+
    if( equip == 0 )
    {
       progressBar_fullness->setValue(0);
@@ -274,14 +292,14 @@ void MashDesigner::updateFullness()
 
    double vol_l;
    if( ! isBatchSparge() )
-      vol_l = mashVolume_l() + getSelectedAmount_l();
+      vol_l = mashVolume_l() + ( (type.compare("Infusion") == 0) ? getSelectedAmount_l() : 0);
    else
       vol_l = grainVolume_l() + getSelectedAmount_l();
    double ratio = vol_l / equip->getTunVolume_l();
 
    progressBar_fullness->setValue(ratio*progressBar_fullness->maximum());
    label_mashVol->setText(Brewtarget::displayAmount(vol_l, Units::liters));
-   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + getSelectedAmount_l())/grain_kg ));
+   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + ((mashStep->getType().compare("Infusion") == 0) ? getSelectedAmount_l() : 0) )/grain_kg ));
 }
 
 void MashDesigner::updateCollectedWort()
@@ -338,44 +356,83 @@ double MashDesigner::getSelectedTemp_c()
 
 void MashDesigner::updateTempSlider()
 {
-   double temp = tempFromVolume_c( getSelectedAmount_l() );
+   if( mashStep == 0 )
+      return;
 
-   double ratio = (temp-minTemp_c()) / (maxTemp_c() - minTemp_c());
-   horizontalSlider_temp->setValue(ratio*horizontalSlider_temp->maximum());
+   if( mashStep->getType().compare("Infusion") == 0 )
+   {
+      double temp = tempFromVolume_c( getSelectedAmount_l() );
 
-   if( mashStep != 0 )
-      mashStep->setInfuseTemp_c( temp );
-}
+      double ratio = (temp-minTemp_c()) / (maxTemp_c() - minTemp_c());
+      horizontalSlider_temp->setValue(ratio*horizontalSlider_temp->maximum());
 
-void MashDesigner::updateAmt()
-{
-   double vol = horizontalSlider_amount->value() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
-
-   label_amt->setText(Brewtarget::displayAmount( vol, Units::liters));
-
-   if( mashStep != 0 )
-      mashStep->setInfuseAmount_l( vol );
-}
-
-void MashDesigner::updateTemp()
-{
-   double temp = horizontalSlider_temp->value() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
-
-   label_temp->setText(Brewtarget::displayAmount( temp, Units::celsius));
-
-   if( mashStep != 0 )
-      mashStep->setInfuseTemp_c( temp );
+      if( mashStep != 0 )
+         mashStep->setInfuseTemp_c( temp );
+   }
+   else if( mashStep->getType().compare("Decoction") == 0 )
+   {
+      horizontalSlider_temp->setValue(horizontalSlider_temp->maximum());
+   }
+   else
+      horizontalSlider_temp->setValue(0.5*horizontalSlider_temp->maximum());
 }
 
 void MashDesigner::updateAmtSlider()
 {
-   double vol = volFromTemp_l( getSelectedTemp_c() );
-   double ratio = (vol - minAmt_l()) / (maxAmt_l() - minAmt_l());
+   if( mashStep == 0 )
+      return;
 
-   horizontalSlider_amount->setValue(ratio*horizontalSlider_amount->maximum());
+   if( mashStep->getType().compare("Infusion") == 0 )
+   {
+      double vol = volFromTemp_l( getSelectedTemp_c() );
+      double ratio = (vol - minAmt_l()) / (maxAmt_l() - minAmt_l());
 
-   if( mashStep != 0 )
-      mashStep->setInfuseAmount_l(vol);
+      horizontalSlider_amount->setValue(ratio*horizontalSlider_amount->maximum());
+      if( mashStep != 0 )
+         mashStep->setInfuseAmount_l(vol);
+   }
+   else
+      horizontalSlider_amount->setValue(0.5*horizontalSlider_amount->maximum());
+}
+
+void MashDesigner::updateAmt()
+{
+   if( mashStep == 0 )
+      return;
+
+   if( mashStep->getType().compare("Infusion") == 0 )
+   {
+      double vol = horizontalSlider_amount->value() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
+
+      label_amt->setText(Brewtarget::displayAmount( vol, Units::liters));
+
+      if( mashStep != 0 )
+         mashStep->setInfuseAmount_l( vol );
+   }
+   else if( mashStep->getType().compare("Decoction") == 0 )
+      label_amt->setText(Brewtarget::displayAmount(mashStep->getDecoctionAmount_l(), Units::liters));
+   else
+      label_amt->setText(Brewtarget::displayAmount(0, Units::liters));
+}
+
+void MashDesigner::updateTemp()
+{
+   if( mashStep == 0 )
+      return;
+
+   if( mashStep->getType().compare("Infusion") == 0 )
+   {
+      double temp = horizontalSlider_temp->value() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
+
+      label_temp->setText(Brewtarget::displayAmount( temp, Units::celsius));
+
+      if( mashStep != 0 )
+         mashStep->setInfuseTemp_c( temp );
+   }
+   else if( mashStep->getType().compare("Decoction") == 0 )
+      label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
+   else
+      label_temp->setText(Brewtarget::displayAmount( mashStep->getStepTemp_c(), Units::celsius));
 }
 
 void MashDesigner::saveTargetTemp()
@@ -385,6 +442,17 @@ void MashDesigner::saveTargetTemp()
    if( mashStep != 0 )
       mashStep->setStepTemp_c(temp);
 
+   if( comboBox_type->currentText().compare("Decoction") == 0 )
+   {
+      if( mashStep != 0 )
+         mashStep->setDecoctionAmount_l( getDecoctionAmount_l() );
+
+      updateAmtSlider();
+      updateAmt();
+      updateTempSlider();
+      updateTemp();
+   }
+
    updateMinAmt();
    updateMaxAmt();
    updateMinTemp();
@@ -392,7 +460,70 @@ void MashDesigner::saveTargetTemp()
    updateFullness();
 }
 
+double MashDesigner::getDecoctionAmount_l()
+{
+   double m_w, m_g, r;
+   double c_w, c_g;
+   double tf, t1;
+
+   tf = mashStep->getStepTemp_c();
+   if( prevStep == 0 )
+   {
+      QMessageBox::critical(this, tr("Decoction error"), tr("The first mash step cannot be a decoction."));
+      Brewtarget::log(Brewtarget::ERROR, QString("MashDesigner: First step not a decoction."));
+      return 0;
+   }
+   t1 = prevStep->getStepTemp_c();
+
+   m_w = addedWater_l; // NOTE: this is bad. Assumes 1L = 1 kg.
+   m_g = grain_kg;
+
+   c_w = HeatCalculations::Cw_calGC;
+   c_g = HeatCalculations::Cgrain_calGC;
+
+   // r is the ratio of water and grain to take out for decoction.
+   r = ((MC)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(maxTemp_c()-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
+   if( r < 0 || r > 1 )
+   {
+      //QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
+      //Brewtarget::log(Brewtarget::ERROR, QString("MashDesigner Decoction: r=%1").arg(r));
+      return 0;
+   }
+
+   return r*mashVolume_l();
+}
+
 bool MashDesigner::isBatchSparge()
 {
    return (checkBox_batchSparge->checkState() == Qt::Checked);
+}
+
+void MashDesigner::typeChanged(QString type)
+{
+   if( mashStep != 0 )
+      mashStep->setType(type.toStdString());
+
+   if( type.compare("Infusion") == 0 )
+   {
+      horizontalSlider_amount->setEnabled(true);
+      horizontalSlider_temp->setEnabled(true);
+   }
+   else if( type.compare("Decoction") == 0 )
+   {
+      horizontalSlider_amount->setEnabled(false);
+      horizontalSlider_temp->setEnabled(false);
+
+      if( mashStep != 0 )
+         mashStep->setDecoctionAmount_l( getDecoctionAmount_l() );
+
+      updateAmtSlider();
+      updateAmt();
+      updateTempSlider();
+      updateTemp();
+   }
+   else if( type.compare("Temperature") == 0 )
+   {
+      horizontalSlider_amount->setEnabled(false);
+      horizontalSlider_temp->setEnabled(false);
+   }
 }
