@@ -19,7 +19,6 @@
 #define _RECIPE_H
 
 class Recipe;
-class RecipeException;
 
 #include <QColor>
 #include <QVariant>
@@ -218,27 +217,6 @@ private:
    
    void setDefaults();
    bool isValidType( const std::string &str );
-};
-
-class RecipeException : public std::exception
-{
-public:
-
-   virtual const char* what() const throw()
-   {
-      return std::string("BeerXML RECIPE error: " + _err + "\n").c_str();
-   }
-
-   RecipeException( std::string message )
-   {
-      _err = message;
-   }
-
-   ~RecipeException() throw() {}
-
-private:
-
-   std::string _err;
 };
 
 struct Recipe_ptr_cmp

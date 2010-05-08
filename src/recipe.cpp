@@ -1198,12 +1198,16 @@ void Recipe::setName( const std::string &var )
 void Recipe::setType( const std::string &var )
 {
    if( ! isValidType(var) )
-      throw RecipeException("not a valid type: " + var );
+   {
+      Brewtarget::logW( QString("Recipe: invalid type: %1").arg(var.c_str()) );
+      type = "All Grain";
+   }
    else
    {
       type = std::string(var);
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setBrewer( const QString &var )
@@ -1215,7 +1219,9 @@ void Recipe::setBrewer( const QString &var )
 void Recipe::setStyle( Style *var )
 {
    if( var == NULL )
-      throw RecipeException("null pointer for setStyle");
+   {
+      Brewtarget::logW( QString("Recipe: null style") );
+   }
    else
    {
       style = var;
@@ -1226,51 +1232,69 @@ void Recipe::setStyle( Style *var )
 void Recipe::setBatchSize_l( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: batch size < 0: %1").arg(var) );
+      batchSize_l = 0;
+   }
    else
    {
       batchSize_l = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setBoilSize_l( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: boil size < 0: %1").arg(var) );
+      boilSize_l = 0;
+   }
    else
    {
       boilSize_l = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setBoilTime_min( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: boil time < 0: %1").arg(var) );
+      boilTime_min = 0;
+   }
    else
    {
       boilTime_min = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setEfficiency_pct( double var )
 {
    if( var < 0.0  || var > 100.0 )
-      throw RecipeException("invalid percent");
+   {
+      Brewtarget::logW( QString("Recipe: 0 < efficiency < 100: %1").arg(var) );
+      efficiency_pct = 70;
+   }
    else
    {
       efficiency_pct = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::addHop( Hop *var )
 {
-   if( var == NULL )
-      throw RecipeException("null object");
+   if( var == 0 )
+   {
+      Brewtarget::logW( QString("Recipe: null hop") );
+   }
    else
    {
       hops.push_back(var);
@@ -1282,7 +1306,7 @@ void Recipe::addHop( Hop *var )
 void Recipe::addFermentable( Fermentable* var )
 {
    if( var == NULL )
-      throw RecipeException("null object");
+      Brewtarget::logW( QString("Recipe: null fermentable") );
    else
    {
       fermentables.push_back(var);
@@ -1293,7 +1317,7 @@ void Recipe::addFermentable( Fermentable* var )
 void Recipe::addMisc( Misc* var )
 {
    if( var == NULL )
-      throw RecipeException("null object");
+      Brewtarget::logW( QString("Recipe: null misc") );
    else
    {
       miscs.push_back(var);
@@ -1305,7 +1329,7 @@ void Recipe::addMisc( Misc* var )
 void Recipe::addYeast( Yeast* var )
 {
    if( var == NULL )
-      throw RecipeException("null object");
+      Brewtarget::logW( QString("Recipe: null yeast") );
    else
    {
       yeasts.push_back(var);
@@ -1317,7 +1341,7 @@ void Recipe::addYeast( Yeast* var )
 void Recipe::addWater( Water* var )
 {
    if( var == NULL )
-      throw RecipeException("null object");
+      Brewtarget::logW( QString("Recipe: null water") );
    else
    {
       waters.push_back(var);
@@ -1346,7 +1370,7 @@ void Recipe::setAsstBrewer( const QString &var )
 void Recipe::setEquipment( Equipment *var )
 {
    if( var == NULL )
-      throw RecipeException("null object");
+      Brewtarget::logW( QString("Recipe: null equipment") );
    else
    {
       equipment = var;
@@ -1369,56 +1393,76 @@ void Recipe::setTasteNotes( const QString &var )
 void Recipe::setTasteRating( double var )
 {
    if( var < 0.0 || var > 50.0 )
-      throw RecipeException("bad taste rating: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Recipe: 0 < taste rating < 50: %1").arg(var) );
+      tasteRating = 0;
+   }
    else
    {
       tasteRating = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setOg( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: og < 0: %1").arg(var) );
+      og = 1.0;
+   }
    else
    {
       og = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setFg( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: fg < 0: %1").arg(var) );
+      fg = 1.0;
+   }
    else
    {
       fg = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setFermentationStages( int var )
 {
    if( var < 0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: stages < 0: %1").arg(var) );
+      fermentationStages = 0;
+   }
    else
    {
       fermentationStages = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setPrimaryAge_days( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: primary age < 0: %1").arg(var) );
+      primaryAge_days = 0;
+   }
    else
    {
       primaryAge_days = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setPrimaryTemp_c( double var )
@@ -1430,12 +1474,16 @@ void Recipe::setPrimaryTemp_c( double var )
 void Recipe::setSecondaryAge_days( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: secondary age < 0: %1").arg(var) );
+      secondaryAge_days = 0;
+   }
    else
    {
       secondaryAge_days = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setSecondaryTemp_c( double var )
@@ -1447,12 +1495,16 @@ void Recipe::setSecondaryTemp_c( double var )
 void Recipe::setTertiaryAge_days( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: tertiary age < 0: %1").arg(var) );
+      tertiaryAge_days = 0;
+   }
    else
    {
       tertiaryAge_days = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setTertiaryTemp_c( double var )
@@ -1464,12 +1516,16 @@ void Recipe::setTertiaryTemp_c( double var )
 void Recipe::setAge_days( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: age < 0: %1").arg(var) );
+      age_days = 0;
+   }
    else
    {
       age_days = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setAgeTemp_c( double var )
@@ -1487,12 +1543,16 @@ void Recipe::setDate( const QString &var )
 void Recipe::setCarbonation_vols( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: carb < 0: %1").arg(var) );
+      carbonation_vols = 0;
+   }
    else
    {
       carbonation_vols = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setForcedCarbonation( bool var )
@@ -1516,23 +1576,31 @@ void Recipe::setCarbonationTemp_c( double var )
 void Recipe::setPrimingSugarEquiv( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: primingsugarequiv < 0: %1").arg(var) );
+      primingSugarEquiv = 1;
+   }
    else
    {
       primingSugarEquiv = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Recipe::setKegPrimingFactor( double var )
 {
    if( var < 0.0 )
-      throw RecipeException("negative quantity");
+   {
+      Brewtarget::logW( QString("Recipe: keg priming factor < 0: %1").arg(var) );
+      kegPrimingFactor = 1;
+   }
    else
    {
       kegPrimingFactor = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 //=============================="GET" METHODS===================================
@@ -1584,7 +1652,10 @@ unsigned int Recipe::getNumHops() const
 Hop* Recipe::getHop(unsigned int i)
 {
    if( i >= hops.size() )
-      throw RecipeException("bad index: " + intToString(i) );
+   {
+      Brewtarget::logE( QString("Recipe: bad index into hops: %1").arg(i) );
+      return 0;
+   }
    else
       return hops[i];
 }
@@ -1597,8 +1668,12 @@ unsigned int Recipe::getNumFermentables() const
 Fermentable* Recipe::getFermentable(unsigned int i)
 {
    if( i >= fermentables.size() )
-      throw RecipeException("bad index: " + intToString(i) );
-   return fermentables[i];
+   {
+      Brewtarget::logE( QString("Recipe: bad index into fermentables: %1").arg(i) );
+      return 0;
+   }
+   else
+      return fermentables[i];
 }
 
 unsigned int Recipe::getNumMiscs() const
@@ -1609,8 +1684,12 @@ unsigned int Recipe::getNumMiscs() const
 Misc* Recipe::getMisc(unsigned int i)
 {
    if( i >= miscs.size() )
-      throw RecipeException("bad index: " + intToString(i) );
-   return miscs[i];
+   {
+      Brewtarget::logW( QString("Recipe: bad index into miscs: %1").arg(i) );
+      return 0;
+   }
+   else
+      return miscs[i];
 }
 
 unsigned int Recipe::getNumYeasts() const
@@ -1621,8 +1700,12 @@ unsigned int Recipe::getNumYeasts() const
 Yeast* Recipe::getYeast(unsigned int i)
 {
    if( i >= yeasts.size() )
-      throw RecipeException("bad index: " + intToString(i) );
-   return yeasts[i];
+   {
+      Brewtarget::logW( QString("Recipe: bad index into yeasts: %1").arg(i) );
+      return 0;
+   }
+   else
+      return yeasts[i];
 }
 
 unsigned int Recipe::getNumWaters() const
@@ -1633,8 +1716,12 @@ unsigned int Recipe::getNumWaters() const
 Water* Recipe::getWater(unsigned int i)
 {
    if( i >= waters.size() )
-      throw RecipeException("bad index: " + intToString(i) );
-   return waters[i];
+   {
+      Brewtarget::logW( QString("Recipe: bad index into water: %1").arg(i) );
+      return 0;
+   }
+   else
+      return waters[i];
 }
 
 Mash* Recipe::getMash() const
