@@ -345,23 +345,31 @@ void Hop::setName( const string &str )
 void Hop::setAlpha_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
-      throw HopException("Bad percentage: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: 0 < alpha < 100: %1").arg(num) );
+      alpha_pct = 0;
+   }
    else
    {
       alpha_pct = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Hop::setAmount_kg( double num )
 {
    if( num < 0.0 )
-      throw HopException("Bad amount: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: amount < 0: %1").arg(num) );
+      amount_kg = 0;
+   }
    else
    {
       amount_kg = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 // Returns true on success, false on failure.
@@ -380,12 +388,16 @@ bool Hop::setUse( const string &str )
 void Hop::setTime_min( double num )
 {
    if( num < 0.0 )
-      throw HopException("Bad time: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: time < 0: %1").arg(num) );
+      time_min = 0;
+   }
    else
    {
       time_min = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
       
 void Hop::setNotes( const string &str )
@@ -421,23 +433,31 @@ bool Hop::setForm( const string &str )
 void Hop::setBeta_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
-      throw HopException("Bad percentage: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: 0 < beta < 100: %1").arg(num) );
+      beta_pct = 0;
+   }
    else
    {
       beta_pct = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Hop::setHsi_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
-      throw HopException("Bad percentage: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: 0 < hsi < 100: %1").arg(num) );
+      hsi_pct = 100;
+   }
    else
    {
       hsi_pct = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Hop::setOrigin( const string &str )
@@ -455,45 +475,61 @@ void Hop::setSubstitutes( const string &str )
 void Hop::setHumulene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
-      throw HopException("Bad percentage: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: 0 < humulene < 100: %1").arg(num) );
+      humulene_pct = 0;
+   }
    else
    {
       humulene_pct = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Hop::setCaryophyllene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
-      throw HopException("Bad percentage: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: 0 < cary < 100: %1").arg(num) );
+      caryophyllene_pct = 0;
+   }
    else
    {
       caryophyllene_pct = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Hop::setCohumulone_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
-      throw HopException("Bad percentage: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: 0 < cohumulone < 100: %1").arg(num) );
+      cohumulone_pct = 0;
+   }
    else
    {
       cohumulone_pct = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Hop::setMyrcene_pct( double num )
 {
    if( num < 0.0 || num > 100.0 )
-      throw HopException("Bad percentage: " + doubleToString(num));
+   {
+      Brewtarget::logW( QString("Hop: 0 < myrcene < 100: %1").arg(num) );
+      myrcene_pct = 0;
+   }
    else
    {
       myrcene_pct = num;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 //============================="GET" METHODS====================================

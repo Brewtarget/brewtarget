@@ -112,29 +112,6 @@ class Hop : public Observable, public BeerXMLElement
       static bool isValidForm(const string &str);
 };
 
-class HopException : public std::exception
-{
-public:
-   
-   virtual const char* what() const throw()
-   {
-      // Note: this temporary object might get destroyed too early.
-      // I'm not really sure.
-      return std::string("BeerXml HOP error: " + _err + "\n").c_str();
-   }
-   
-   HopException( std::string message )
-   {
-      _err = message;
-   }
-   
-   ~HopException() throw() {}
-   
-private:
-   
-   std::string _err;
-};
-
 struct Hop_ptr_cmp
 {
    bool operator()( Hop* lhs, Hop* rhs)
