@@ -253,6 +253,16 @@ void Brewtarget::log(LogType lt, QString message)
    //   mainWindow->statusBar()->showMessage(m, 3000);
 }
 
+void Brewtarget::logE( QString message )
+{
+   log( ERROR, message );
+}
+
+void Brewtarget::logW( QString message )
+{
+   log( WARNING, message );
+}
+
 // Displays "amount" of units "units" in the proper format.
 // If "units" is null, just return the amount.
 QString Brewtarget::displayAmount( double amount, Unit* units )

@@ -211,7 +211,11 @@ void MashStep::setInfuseTemp_c(double var)
 void MashStep::setType( const std::string &var )
 {
    if( ! isValidType(var) )
-      throw MashStepException("invalid type: " + var );
+   {
+      Brewtarget::logW( QString("MashStep: invalid type: %1").arg(var.c_str()) );
+      type = "Infusion";
+      hasChanged();
+   }
    else
    {
       type = std::string(var);
@@ -222,7 +226,11 @@ void MashStep::setType( const std::string &var )
 void MashStep::setInfuseAmount_l( double var )
 {
    if( var < 0.0 )
-      throw MashStepException("number cannot be negative: "+ doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Mashstep: number cannot be negative: %1").arg(var) );
+      infuseAmount_l = 0;
+      hasChanged();
+   }
    else
    {
       infuseAmount_l = var;
@@ -233,7 +241,11 @@ void MashStep::setInfuseAmount_l( double var )
 void MashStep::setStepTemp_c( double var )
 {
    if( var < -273.15 )
-      throw MashStepException("Temperature below absolute zero: " + doubleToString(var));
+   {
+      Brewtarget::logW( QString("Mashstep: temp below absolute zero: %1").arg(var) );
+      stepTemp_c = 0;
+      hasChanged();
+   }
    else
    {
       stepTemp_c = var;
@@ -244,7 +256,11 @@ void MashStep::setStepTemp_c( double var )
 void MashStep::setStepTime_min( double var )
 {
    if( var < 0.0 )
-      throw MashStepException("number cannot be negative: "+ doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Mashstep: step time cannot be negative: %1").arg(var) );
+      stepTime_min = 0;
+      hasChanged();
+   }
    else
    {
       stepTime_min = var;
@@ -255,7 +271,11 @@ void MashStep::setStepTime_min( double var )
 void MashStep::setRampTime_min( double var )
 {
    if( var < 0.0 )
-      throw MashStepException("number cannot be negative: "+ doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Mashstep: ramp time cannot be negative: %1").arg(var) );
+      rampTime_min = 0;
+      hasChanged();
+   }
    else
    {
       rampTime_min = var;
@@ -266,7 +286,11 @@ void MashStep::setRampTime_min( double var )
 void MashStep::setEndTemp_c( double var )
 {
    if( var < -273.15 )
-      throw MashStepException("Temperature below absolute zero: " + doubleToString(var));
+   {
+      Brewtarget::logW( QString("Mashstep: temp below absolute zero: %1").arg(var) );
+      endTemp_c = 0;
+      hasChanged();
+   }
    else
    {
       endTemp_c = var;

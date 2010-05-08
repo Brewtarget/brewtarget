@@ -52,6 +52,8 @@ public:
    static int run();
    static void log( LogType lt, std::string message );
    static void log( LogType lt, QString message );
+   static void logE( QString message ); // Error message.
+   static void logW( QString message ); // Warning message.
 
    static QString displayAmount( double amount, Unit* units=0 );
    // Displays thickness in appropriate units from standard thickness in L/kg.
