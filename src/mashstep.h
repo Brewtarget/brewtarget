@@ -25,7 +25,6 @@
 #include "BeerXMLElement.h"
 
 class MashStep;
-class MashStepException;
 
 class MashStep : public Observable, public BeerXMLElement
 {

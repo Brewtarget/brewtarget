@@ -258,45 +258,61 @@ void Misc::setName( const std::string &var )
 void Misc::setType( const std::string &var )
 {
    if( ! isValidType(var) )
-      throw MiscException("\""+var+"\" is not a valid type.");
+   {
+      Brewtarget::logW( QString("Misc: invalid type: %1").arg(var.c_str()) );
+      type = "Spice";
+   }
    else
    {
       type = std::string(var);
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Misc::setUse( const std::string &var )
 {
    if( ! isValidUse(var) )
-      throw MiscException("\""+var+"\" is not a valid use.");
+   {
+      Brewtarget::logW( QString("Misc: invalid use: %1").arg(var.c_str()) );
+      use = "Boil";
+   }
    else
    {
       use = std::string(var);
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Misc::setAmount( double var )
 {
    if( var < 0.0 )
-      throw MiscException("amount cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
+      amount = 0;
+   }
    else
    {
       amount = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Misc::setTime( double var )
 {
    if( var < 0.0 )
-      throw MiscException("time cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
+      time = 0;
+   }
    else
    {
       time = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Misc::setAmountIsWeight( bool var )

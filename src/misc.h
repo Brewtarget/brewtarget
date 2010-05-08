@@ -27,7 +27,6 @@
 #include "BeerXMLElement.h"
 
 class Misc;
-class MiscException;
 
 class Misc : public Observable, public BeerXMLElement
 {
@@ -82,29 +81,6 @@ private:
    void setDefaults();
    bool isValidType( const std::string &var );
    bool isValidUse( const std::string &var );
-};
-
-class MiscException : public std::exception
-{
-public:
-   
-   virtual const char* what() const throw()
-   {
-      // Note: this temporary object might get destroyed too early.
-      // I'm not really sure.
-      return std::string("BeerXml MISC error: " + _err + "\n").c_str();
-   }
-   
-   MiscException( std::string message )
-   {
-      _err = message;
-   }
-   
-   ~MiscException() throw() {}
-   
-private:
-   
-   std::string _err;
 };
 
 struct Misc_ptr_cmp
