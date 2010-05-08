@@ -63,7 +63,9 @@ QString RecipeFormatter::getTextFormat()
    
    ret += QObject::tr("Batch Size: %1\n").arg(Brewtarget::displayAmount(rec->getBatchSize_l(), Units::liters));
    ret += QObject::tr("Boil Size: %1\n").arg(Brewtarget::displayAmount(rec->getBoilSize_l(), Units::liters));
-   ret += QObject::tr("Boil Time: %1\n").arg(Brewtarget::displayAmount(rec->getBoilTime_min(), Units::minutes));
+   ret += QObject::tr("Boil Time: %1\n").arg( (rec->getEquipment() == 0)?
+                                              Brewtarget::displayAmount(0, Units::minutes)
+                                            : Brewtarget::displayAmount( (rec->getEquipment())->getBoilTime_min(), Units::minutes));
    ret += QObject::tr("Efficiency: %1\%\n").arg(rec->getEfficiency_pct(), 0, 'f', 0);
    ret += QObject::tr("OG: %1\n").arg( rec->getOg(), 0, 'f', 3 );
    ret += QObject::tr("FG: %1\n").arg( rec->getFg(), 0, 'f', 3 );
@@ -133,6 +135,8 @@ QString RecipeFormatter::getTextFormat()
       
       for( i = 0; i < size+1; ++i )
          ret += names.at(i) + types.at(i) + amounts.at(i) + masheds.at(i) + lates.at(i) + yields.at(i) + colors.at(i) + "\n";
+
+      ret += QObject::tr("Total grain: %1\n").arg(Brewtarget::displayAmount(rec->getGrains_kg(), Units::kilograms));
    }
    
    if( rec->getNumHops() > 0 )

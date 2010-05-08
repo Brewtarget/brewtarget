@@ -171,6 +171,7 @@ public:
    double estimateBoilVolume_l() const; // Estimate boil volume based on user inputs.
    double estimateFinalVolume_l() const; // Estimate final volume based on user inputs.
    double getGrainsInMash_kg() const;
+   double getGrains_kg() const;
 
 private:
 

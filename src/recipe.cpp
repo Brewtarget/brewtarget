@@ -2251,9 +2251,25 @@ double Recipe::getGrainsInMash_kg() const
       ferm = fermentables[i];
       
       if( ferm->getIsMashed() )
-	 grains_kg += ferm->getAmount_kg();
+         grains_kg += ferm->getAmount_kg();
    }
    
+   return grains_kg;
+}
+
+double Recipe::getGrains_kg() const
+{
+   unsigned int i, size;
+   double grains_kg = 0.0;
+   Fermentable* ferm;
+
+   size = fermentables.size();
+   for( i = 0; i < size; ++i )
+   {
+      ferm = fermentables[i];
+      grains_kg += ferm->getAmount_kg();
+   }
+
    return grains_kg;
 }
 
