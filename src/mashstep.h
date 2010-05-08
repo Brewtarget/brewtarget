@@ -84,27 +84,6 @@ private:
    void setDefaults();
 };
 
-class MashStepException : public std::exception
-{
-public:
-
-   virtual const char* what() const throw()
-   {
-      return std::string("BeerXML MASH_STEP error: " + _err + "\n").c_str();
-   }
-
-   MashStepException( std::string message )
-   {
-      _err = message;
-   }
-
-   ~MashStepException() throw() {}
-
-private:
-
-   std::string _err;
-};
-
 struct MashStep_ptr_cmp
 {
    bool operator()( MashStep* lhs, MashStep* rhs)

@@ -280,7 +280,11 @@ void Equipment::setName( const std::string &var )
 void Equipment::setBoilSize_l( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException("boil size cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: boil size negative: %1").arg(var) );
+      boilSize_l = 0;
+      hasChanged();
+   }
    else
    {
       boilSize_l = var;
@@ -291,7 +295,12 @@ void Equipment::setBoilSize_l( double var )
 void Equipment::setBatchSize_l( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "batch size cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: batch size negative: %1").arg(var) );
+      batchSize_l = 0;
+      hasChanged();
+      doCalculations();
+   }
    else
    {
       batchSize_l = var;
@@ -303,7 +312,11 @@ void Equipment::setBatchSize_l( double var )
 void Equipment::setTunVolume_l( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "tun volume cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: tun volume negative: %1").arg(var) );
+      tunVolume_l = 0;
+      hasChanged();
+   }
    else
    {
       tunVolume_l = var;
@@ -314,7 +327,11 @@ void Equipment::setTunVolume_l( double var )
 void Equipment::setTunWeight_kg( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "tun weight cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: tun weight negative: %1").arg(var) );
+      tunWeight_kg = 0;
+      hasChanged();
+   }
    else
    {
       tunWeight_kg = var;
@@ -325,7 +342,11 @@ void Equipment::setTunWeight_kg( double var )
 void Equipment::setTunSpecificHeat_calGC( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "tun specific heat cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: tun sp heat negative: %1").arg(var) );
+      tunSpecificHeat_calGC = 0;
+      hasChanged();
+   }
    else
    {
       tunSpecificHeat_calGC = var;
@@ -336,7 +357,12 @@ void Equipment::setTunSpecificHeat_calGC( double var )
 void Equipment::setTopUpWater_l( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "top up water cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: top up water negative: %1").arg(var) );
+      topUpWater_l = 0;
+      hasChanged();
+      doCalculations();
+   }
    else
    {
       topUpWater_l = var;
@@ -348,7 +374,12 @@ void Equipment::setTopUpWater_l( double var )
 void Equipment::setTrubChillerLoss_l( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "trub chiller loss cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: trub chiller loss negative: %1").arg(var) );
+      trubChillerLoss_l = 0;
+      hasChanged();
+      doCalculations();
+   }
    else
    {
       trubChillerLoss_l = var;
@@ -360,7 +391,12 @@ void Equipment::setTrubChillerLoss_l( double var )
 void Equipment::setEvapRate_pctHr( double var )
 {
    if( var < 0.0 || var > 100.0)
-      throw EquipmentException( "evap rate must be a percent: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: 0 < evap rate < 100: %1").arg(var) );
+      evapRate_pctHr = 0;
+      hasChanged();
+      doCalculations();
+   }
    else
    {
       evapRate_pctHr = var;
@@ -372,7 +408,12 @@ void Equipment::setEvapRate_pctHr( double var )
 void Equipment::setEvapRate_lHr( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "evap rate must be non negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: evap rate negative: %1").arg(var) );
+      evapRate_lHr = 0;
+      hasChanged();
+      doCalculations();
+   }
    else
    {
       evapRate_lHr = var;
@@ -384,7 +425,12 @@ void Equipment::setEvapRate_lHr( double var )
 void Equipment::setBoilTime_min( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "boil time cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: boil time negative: %1").arg(var) );
+      boilTime_min = 0;
+      hasChanged();
+      doCalculations();
+   }
    else
    {
       boilTime_min = var;
@@ -404,7 +450,11 @@ void Equipment::setCalcBoilVolume( bool var )
 void Equipment::setLauterDeadspace_l( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "lauter deadspace cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: deadspace negative: %1").arg(var) );
+      lauterDeadspace_l = 0;
+      hasChanged();
+   }
    else
    {
       lauterDeadspace_l = var;
@@ -415,7 +465,11 @@ void Equipment::setLauterDeadspace_l( double var )
 void Equipment::setTopUpKettle_l( double var )
 {
    if( var < 0.0 )
-      throw EquipmentException( "top up kettle cannot be negative: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: top up kettle negative: %1").arg(var) );
+      topUpKettle_l = 0;
+      hasChanged();
+   }
    else
    {
       topUpKettle_l = var;
@@ -426,7 +480,11 @@ void Equipment::setTopUpKettle_l( double var )
 void Equipment::setHopUtilization_pct( double var )
 {
    if( var < 0.0 || var > 100.0 )
-      throw EquipmentException( "hop utilization must be a percentage: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Equipment: 0 < hop utilization < 100: %1").arg(var) );
+      hopUtilization_pct = 20;
+      hasChanged();
+   }
    else
    {
       hopUtilization_pct = var;

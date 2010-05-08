@@ -104,29 +104,6 @@ private:
    void doCalculations();
 };
 
-class EquipmentException : public std::exception
-{
-public:
-   
-   virtual const char* what() const throw()
-   {
-      // Note: this temporary object might get destroyed too early.
-      // I'm not really sure.
-      return std::string("BeerXml EQUIPMENT error: " + _err + "\n").c_str();
-   }
-   
-   EquipmentException( std::string message )
-   {
-      _err = message;
-   }
-   
-   ~EquipmentException() throw() {}
-   
-private:
-   
-   std::string _err;
-};
-
 struct Equipment_ptr_cmp
 {
    bool operator()( Equipment* lhs, Equipment* rhs)
