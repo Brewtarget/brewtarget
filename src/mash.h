@@ -26,7 +26,6 @@
 #include "BeerXMLElement.h"
 
 class Mash;
-class MashException;
 
 class Mash : public Observable, public MultipleObserver, public BeerXMLElement
 {
@@ -84,27 +83,6 @@ private:
    
    void setDefaults();
 
-};
-
-class MashException : public std::exception
-{
-public:
-
-   virtual const char* what() const throw()
-   {
-      return std::string("BeerXML ... error: " + _err + "\n").c_str();
-   }
-
-   MashException( std::string message )
-   {
-      _err = message;
-   }
-
-   ~MashException() throw() {}
-
-private:
-
-   std::string _err;
 };
 
 struct Mash_ptr_cmp

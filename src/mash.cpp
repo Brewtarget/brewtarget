@@ -244,29 +244,40 @@ void Mash::setSpargeTemp_c( double var )
 void Mash::setPh( double var )
 {
    if( var < 0.0 || var > 14.0 )
-      throw MashException("invalid PH: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Mash: 0 < pH < 14: %1").arg(var) );
+      ph = 7;
+   }
    else
    {
       ph = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Mash::setTunWeight_kg( double var )
 {
    if( var < 0.0 )
-      throw MashException("invalid weight: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Mash: tun weight < 0: %1").arg(var) );
+      tunWeight_kg = 0;
+   }
    else
    {
       tunWeight_kg = var;
-      hasChanged();
    }
+
+   hasChanged();
 }
 
 void Mash::setTunSpecificHeat_calGC( double var )
 {
    if( var < 0.0 )
-      throw MashException("invalid specific heat: " + doubleToString(var) );
+   {
+      Brewtarget::logW( QString("Mash: sp heat < 0: %1").arg(var) );
+      tunSpecificHeat_calGC = 0;
+   }
    else
    {
       tunSpecificHeat_calGC = var;
@@ -341,7 +352,6 @@ unsigned int Mash::getNumMashSteps() const
 MashStep* Mash::getMashStep( unsigned int i )
 {
    if( i >= mashSteps.size() )
-      //throw MashException("getMashStep(): index too large: " + intToString(i));
       return 0;
    else
       return mashSteps[i];
