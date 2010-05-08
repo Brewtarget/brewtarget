@@ -124,29 +124,6 @@ private:
    void setDefaults();
 };
 
-class FermentableException : public std::exception
-{
-public:
-   
-   virtual const char* what() const throw()
-   {
-      // Note: this temporary object might get destroyed too early.
-      // I'm not really sure.
-      return std::string("BeerXml FERMENTABLE error: " + _err + "\n").c_str();
-   }
-   
-   FermentableException( std::string message )
-   {
-      _err = message;
-   }
-   
-   ~FermentableException() throw() {}
-   
-private:
-   
-   std::string _err;
-};
-
 struct Fermentable_ptr_cmp
 {
    bool operator()( Fermentable* lhs, Fermentable* rhs)

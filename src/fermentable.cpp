@@ -334,40 +334,56 @@ void Fermentable::setType( const std::string& str )
    if( isValidType( str ) )
    {
       type = std::string(str);
-      hasChanged(QVariant(TYPE));
    }
    else
-      throw FermentableException( "invalid type." );
+   {
+      Brewtarget::logW( QString("Fermentable: invalid type %1").arg(str.c_str()) );
+      type = "Grain";
+   }
+
+   hasChanged(QVariant(TYPE));
 }
 void Fermentable::setAmount_kg( double num )
 {
    if( num < 0.0 )
-      throw FermentableException( "amount cannot be negative" );
+   {
+      Brewtarget::logW( QString("Fermentable: negative amount: %1").arg(num) );
+      amount_kg = 0;
+   }
    else
    {
       amount_kg = num;
-      hasChanged(QVariant(AMOUNT));
    }
+
+   hasChanged(QVariant(AMOUNT));
 }
 void Fermentable::setYield_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
       yield_pct = num;
-      hasChanged(QVariant(YIELD));
    }
    else
-      throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
+   {
+      Brewtarget::logW( QString("Fermentable: 0 < yield < 100: %1").arg(num) );
+      yield_pct = 0;
+   }
+
+   hasChanged(QVariant(YIELD));
 }
 void Fermentable::setColor_srm( double num )
 {
    if( num < 0.0 )
-      throw FermentableException( "color cannot be negative" );
+   {
+      Brewtarget::logW( QString("Fermentable: negative color: %1").arg(num) );
+      color_srm = 0;
+   }
    else
    {
       color_srm = num;
-      hasChanged(QVariant(COLOR));
    }
+
+   hasChanged(QVariant(COLOR));
 }
 
 void Fermentable::setAddAfterBoil( bool b )
@@ -383,50 +399,70 @@ void Fermentable::setCoarseFineDiff_pct( double num )
    if( num >= 0.0 && num <= 100.0 )
    {
       coarseFineDiff_pct = num;
-      hasChanged(QVariant(COARSEFINEDIFF));
    }
    else
-      throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
+   {
+      Brewtarget::logW( QString("Fermentable: 0 < coarsefinediff < 100: %1").arg(num) );
+      coarseFineDiff_pct = 0;
+   }
+
+   hasChanged(QVariant(COARSEFINEDIFF));
 }
 void Fermentable::setMoisture_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
       moisture_pct = num;
-      hasChanged(QVariant(MOISTURE));
    }
    else
-      throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
+   {
+      Brewtarget::logW( QString("Fermentable: 0 < moisture < 100: %1").arg(num) );
+      moisture_pct = 0;
+   }
+
+   hasChanged(QVariant(MOISTURE));
 }
 void Fermentable::setDiastaticPower_lintner( double num )
 {
    if( num < 0.0 )
-      throw FermentableException( "DP cannot be negative");
+   {
+      Brewtarget::logW( QString("Fermentable: negative DP: %1").arg(num) );
+      diastaticPower_lintner = 0;
+   }
    else
    {
       diastaticPower_lintner = num;
-      hasChanged(QVariant(DIASTATICPOWER));
    }
+
+   hasChanged(QVariant(DIASTATICPOWER));
 }
 void Fermentable::setProtein_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
       protein_pct = num;
-      hasChanged(QVariant(PROTEIN));
    }
    else
-      throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
+   {
+      Brewtarget::logW( QString("Fermentable: 0 < protein < 100: %1").arg(num) );
+      protein_pct = 0;
+   }
+
+   hasChanged(QVariant(PROTEIN));
 }
 void Fermentable::setMaxInBatch_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
    {
       maxInBatch_pct = num;
-      hasChanged(QVariant(MAXINBATCH));
    }
    else
-      throw FermentableException( "wrong range for a percent: " + doubleToString(num) );
+   {
+      Brewtarget::logW( QString("Fermentable: 0 < maxinbatch < 100: %1").arg(num) );
+      maxInBatch_pct = 100;
+   }
+
+   hasChanged(QVariant(MAXINBATCH));
 }
 void Fermentable::setRecommendMash( bool b ) { recommendMash = b; hasChanged();}
 void Fermentable::setIsMashed(bool var) { isMashed = var; hasChanged(QVariant(ISMASHED)); }
