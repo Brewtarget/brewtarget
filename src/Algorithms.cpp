@@ -41,6 +41,8 @@ Algorithms::Algorithms()
 	hydroCorrection15CPoly[1] = -16.2853e-3;
 	hydroCorrection15CPoly[2] = 5.84346e-3;
 	hydroCorrection15CPoly[3] = -15.3243e-6;
+
+   sucroseDensity_kgL = 1.587;
 }
 
 
@@ -113,6 +115,13 @@ double Algorithms::PlatoToSG_20C20C( double plato )
    poly[0] -= plato;
 
    return rootFind( poly, PlatoFromSG_20C20C_order, 1.000, 1.050 );
+}
+
+double Algorithms::getPlato( double sugar_kg, double wort_l )
+{
+   double water_kg = wort_l - sugar_kg/sucroseDensity_kgL; // Assumes sucrose vol and water vol add to wort vol.
+
+   return sugar_kg/(sugar_kg+water_kg) * 100.0;
 }
 
 double Algorithms::getWaterDensity_kgL( double celsius )

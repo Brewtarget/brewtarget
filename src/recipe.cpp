@@ -1868,9 +1868,6 @@ void Recipe::recalculate()
    double attenuation_pct = 0.0;
    Fermentable* ferm;
    Yeast* yeast;
-
-   //Take this out.
-   estimateBoilVolume_l();
    
    // Calculate OG
    for( i = 0; i < fermentables.size(); ++i )
@@ -1921,9 +1918,18 @@ void Recipe::recalculate()
    }
 
    // Conversion factor for lb/gal to kg/l = 8.34538.
+   /*
    points = (383.89 * sugar_kg / estimateFinalVolume_l()) * getEfficiency_pct()/100.0;
    points += 383.89 * sugar_kg_ignoreEfficiency / estimateFinalVolume_l();
    og = 1 + points/1000.0;
+   */
+
+   // Combine the two sugars.
+   sugar_kg = sugar_kg * getEfficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
+   double plato = Algorithms::Instance().getPlato( sugar_kg, estimateFinalVolume_l());
+
+   og = Algorithms::Instance().PlatoToSG_20C20C( plato );
+   points = (og-1)*1000.0;
 
    // Calculage FG
    for( i = 0; i < yeasts.size(); ++i )
@@ -2092,23 +2098,22 @@ double Recipe::getBoilGrav()
    }
 
    // We might lose some sugar in the form of lauter deadspace.
+   /*** Forget lauter deadspace...this loss is included in efficiency ***/
+
+   // Since the efficiency refers to how much sugar we get into the fermenter,
+   // we need to adjust for that here.
+   sugar_kg = (getEfficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
    if( equipment != 0 )
-   {
-      // First, lauter deadspace.
-      double ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
-      if( ratio > 1.0 )
-         ratio = 1.0;
-      else if( isnan(ratio) )
-         ratio = 1.0; // Need this in case we have no mash, and therefore end up with NaN.
-      sugar_kg *= ratio;
-      // Don't consider this one since nobody adds sugar or extract to the mash.
-      //sugar_kg_ignoreEfficiency *= ratio;
-   }
+      sugar_kg = sugar_kg / (1 - equipment->getTrubChillerLoss_l()/estimatePostBoilVolume_l());
+
+   return Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
 
    // Conversion factor for lb/gal to kg/l = 8.34538.
+   /*
    points = (383.89 * sugar_kg / estimateBoilVolume_l()) * getEfficiency_pct()/100.0;
    points += 383.89 * sugar_kg_ignoreEfficiency / estimateBoilVolume_l();
    return (1.0 + points/1000.0);
+   */
 }
 
 double Recipe::getIBU()
@@ -2305,6 +2310,20 @@ double Recipe::estimateFinalVolume_l() const
       ret = equipment->wortEndOfBoil_l(boilVol_l) - equipment->getTrubChillerLoss_l() + equipment->getTopUpWater_l();
    else
       ret = boilVol_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
-      
+
+   return ret;
+}
+
+// Estimates post boil volume. If there is no equipment,
+// defaults to batchSize_l.
+double Recipe::estimatePostBoilVolume_l() const
+{
+   double ret;
+
+   if( equipment != 0 )
+      ret = equipment->wortEndOfBoil_l( estimateBoilVolume_l() );
+   else
+      ret = batchSize_l; // Give up.
+
    return ret;
 }
