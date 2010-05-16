@@ -69,8 +69,8 @@ double Unit::convert( double amount, QString& fromUnit, QString& toUnit )
    f = getUnit(fromUnit);
    t = getUnit(toUnit, false);
 
-   // Freak out if we can't find the units.
-   if( f == 0 || t == 0 )
+   // Freak out if we can't find the units or if they're not the same type.
+   if( f == 0 || t == 0  || f->getUnitType() != t->getUnitType() )
       return 0.0;
 
    SI = f->toSI(amount);
@@ -113,7 +113,7 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
          if( system == Any || system == Brewtarget::getVolumeUnitSystem() )
             return u;
 
-         if( (Brewtarget::getVolumeUnitSystem() == USCustomary || Brewtarget::getWeightUnitSystem() == Imperial)
+         if( (Brewtarget::getVolumeUnitSystem() == USCustomary || Brewtarget::getVolumeUnitSystem() == Imperial)
             && system == ImperialAndUS )
             return u;
       }
@@ -133,7 +133,7 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
       int type = u->getUnitType();
       int system = u->getUnitOrTempSystem();
 
-      if( system == Any || system == USCustomary || system == ImperialAndUS )
+      if( system == Any || system == USCustomary || system == ImperialAndUS || matchCurrentSystem == false )
          return u;
    }
 
@@ -141,7 +141,7 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
 }
 
 // Translates something like "5.0 gal" into the appropriate SI units.
-double Unit::qstringToSI( QString qstr )
+double Unit::qstringToSI( QString qstr, Unit** unit )
 {
    if( ! Unit::isMapSetup )
       Unit::setupMap();
@@ -172,6 +172,8 @@ double Unit::qstringToSI( QString qstr )
          return list1[0].toDouble(); // Assume units are already SI.
       else
       {
+         if( unit != 0 )
+            *unit = u;
          return u->toSI(list1[0].toDouble());
       }
    }
@@ -183,10 +185,11 @@ QString Unit::convert(QString qstr, QString toUnit)
    if( ! Unit::isMapSetup )
       Unit::setupMap();
 
-   double si = qstringToSI( qstr );
+   Unit* f;
+   double si = qstringToSI( qstr, &f );
    Unit* u = getUnit(toUnit, false);
    
-   if( u == 0 )
+   if( u == 0 || f == 0 || u->getUnitType() != f->getUnitType() )
       return QString("%1 ?").arg(si, 0, 'f', 3);
    else
       return QString("%1 %2").arg(u->fromSI(si), 0, 'f', 3).arg(toUnit);

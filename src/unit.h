@@ -98,18 +98,18 @@ class Unit
 {
    public:
       // Seems these can't be PURE virtuals b/c of some issue with std::map.
-      virtual double toSI( double amt ) const { return amt; };
-      virtual double fromSI( double amt ) const { return amt; };
+      virtual double toSI( double amt ) const { return amt; }
+      virtual double fromSI( double amt ) const { return amt; }
       // The unit name will be the singular of the commonly used abbreviation.
-      virtual const QString& getUnitName() const { return 0; };
-      virtual const QString& getSIUnitName() const { return 0; };
+      virtual const QString& getUnitName() const { return 0; }
+      virtual const QString& getSIUnitName() const { return 0; }
 
-      virtual const int getUnitType() const { return 0; };
-      virtual const int getUnitOrTempSystem() const { return 0; };
+      virtual const int getUnitType() const { return 0; }
+      virtual const int getUnitOrTempSystem() const { return 0; }
 
       static double convert( double amount, QString& fromUnit, QString& toUnit );
       static QString convert( QString qstr, QString toUnit );
-      static double qstringToSI( QString qstr );
+      static double qstringToSI( QString qstr, Unit** unit = 0 ); // Returns SI. Places unit in 'unit*'.
 
    private:
       static Unit* getUnit(QString& name, bool matchCurrentSystem = true);
@@ -184,8 +184,8 @@ class PoundUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Mass; };
-      const int getUnitOrTempSystem() const { return ImperialAndUS; };
+      const int getUnitType() const { return Mass; }
+      const int getUnitOrTempSystem() const { return ImperialAndUS; }
       
    private:
       QString unitName;
@@ -202,8 +202,8 @@ class OunceUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Mass; };
-      const int getUnitOrTempSystem() const { return ImperialAndUS; };
+      const int getUnitType() const { return Mass; }
+      const int getUnitOrTempSystem() const { return ImperialAndUS; }
 
    private:
       QString unitName;
@@ -221,8 +221,8 @@ class LiterUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return SI; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return SI; }
 
    private:
       QString unitName;
@@ -239,8 +239,8 @@ class MilliliterUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return SI; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return SI; }
 
    private:
       QString unitName;
@@ -257,8 +257,8 @@ class USGallonUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return USCustomary; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return USCustomary; }
 
    private:
       QString unitName;
@@ -275,8 +275,8 @@ class USQuartUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return USCustomary; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return USCustomary; }
 
    private:
       QString unitName;
@@ -293,8 +293,8 @@ class USCupUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return USCustomary; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return USCustomary; }
 
    private:
       QString unitName;
@@ -311,8 +311,8 @@ class ImperialGallonUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return Imperial; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return Imperial; }
 
    private:
       QString unitName;
@@ -329,8 +329,8 @@ class ImperialQuartUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return Imperial; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return Imperial; }
 
    private:
       QString unitName;
@@ -347,8 +347,8 @@ class ImperialCupUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return Imperial; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return Imperial; }
 
    private:
       QString unitName;
@@ -365,8 +365,8 @@ class ImperialTablespoonUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return Imperial; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return Imperial; }
 
    private:
       QString unitName;
@@ -383,8 +383,8 @@ class ImperialTeaspoonUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return Imperial; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return Imperial; }
 
    private:
       QString unitName;
@@ -401,8 +401,8 @@ class USTablespoonUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return USCustomary; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return USCustomary; }
 
    private:
       QString unitName;
@@ -419,8 +419,8 @@ class USTeaspoonUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Volume; };
-      const int getUnitOrTempSystem() const { return USCustomary; };
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return USCustomary; }
 
    private:
       QString unitName;
@@ -438,8 +438,8 @@ class SecondUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Time; };
-      const int getUnitOrTempSystem() const { return Any; };
+      const int getUnitType() const { return Time; }
+      const int getUnitOrTempSystem() const { return Any; }
 
    private:
       QString unitName;
@@ -456,8 +456,8 @@ class MinuteUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Time; };
-      const int getUnitOrTempSystem() const { return Any; };
+      const int getUnitType() const { return Time; }
+      const int getUnitOrTempSystem() const { return Any; }
       
    private:
       QString unitName;
@@ -474,8 +474,8 @@ class HourUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Time; };
-      const int getUnitOrTempSystem() const { return Any; };
+      const int getUnitType() const { return Time; }
+      const int getUnitOrTempSystem() const { return Any; }
 
    private:
       QString unitName;
@@ -494,8 +494,8 @@ class CelsiusUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Temp; };
-      const int getUnitOrTempSystem() const { return Celsius; };
+      const int getUnitType() const { return Temp; }
+      const int getUnitOrTempSystem() const { return Celsius; }
 
    private:
       QString unitName;
@@ -512,8 +512,8 @@ class KelvinUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Temp; };
-      const int getUnitOrTempSystem() const { return Kelvin; };
+      const int getUnitType() const { return Temp; }
+      const int getUnitOrTempSystem() const { return Kelvin; }
 
    private:
       QString unitName;
@@ -530,8 +530,8 @@ class FahrenheitUnit : public Unit
       double fromSI( double amt ) const;
       const QString& getUnitName() const { return unitName; }
       const QString& getSIUnitName() const { return SIUnitName; }
-      const int getUnitType() const { return Temp; };
-      const int getUnitOrTempSystem() const { return Fahrenheit; };
+      const int getUnitType() const { return Temp; }
+      const int getUnitOrTempSystem() const { return Fahrenheit; }
 
    private:
       QString unitName;
