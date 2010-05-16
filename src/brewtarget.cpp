@@ -33,6 +33,7 @@
 #include "config.h"
 #include "database.h"
 #include "UnitSystem.h"
+#include "Algorithms.h"
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
@@ -50,6 +51,8 @@ UnitSystem* Brewtarget::timeSystem = 0;
 TempScale Brewtarget::tempScale = Celsius;
 Brewtarget::ColorType Brewtarget::colorFormula = Brewtarget::MOREY;
 Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
+
+bool Brewtarget::usePlato = false;
 
 void Brewtarget::setApp(QApplication& a)
 {
@@ -512,6 +515,27 @@ void Brewtarget::readPersistentOptions()
       }
    }
 
+   // Get plato usage.
+   list = optionsDoc->elementsByTagName(QString("use_plato"));
+   if( list.length() <= 0 )
+      Brewtarget::logW( QObject::tr("Could not find the use_plato tag in the option file.") );
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      if( text == "true" )
+         usePlato = true;
+      else if( text == "false" )
+         usePlato = false;
+      else
+      {
+         Brewtarget::logW(QObject::tr("Bad use_plato type: %1").arg(text));
+      }
+   }
+
    delete optionsDoc;
    optionsDoc = 0;
    xmlFile.close();
@@ -589,6 +613,16 @@ void Brewtarget::savePersistentOptions()
    node.appendChild(child);
    root.appendChild(node);
 
+   // Gravity.
+   node = optionsDoc->createElement("use_plato");
+   if( usePlato )
+      text = "true";
+   else
+      text = "false";
+   child = optionsDoc->createTextNode(text);
+   node.appendChild(child);
+   root.appendChild(node);
+
    // Add root to document.
    optionsDoc->appendChild(root);
 
@@ -619,4 +653,21 @@ double Brewtarget::tempQStringToSI(QString qstr)
 double Brewtarget::timeQStringToSI(QString qstr)
 {
    return timeSystem->qstringToSI(qstr);
+}
+
+QString Brewtarget::displayOG( double og )
+{
+   if( usePlato == false )
+      return QString("%1").arg(og, 0, 'f', 3);
+
+   return QString("%1").arg(Algorithms::Instance().SG_20C20C_toPlato(og), 0, 'f', 1);
+}
+
+QString Brewtarget::displayFG( double fg, double og )
+{
+   if( usePlato == false )
+      return QString("%1").arg(fg, 0, 'f', 3);
+
+   double plato = Algorithms::Instance().ogFgToPlato( og, fg );
+   return QString("%1").arg( plato, 0, 'f', 1 );
 }

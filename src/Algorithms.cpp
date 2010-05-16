@@ -163,6 +163,18 @@ double Algorithms::sgByStartingPlato( double startingPlato, double currentPlato 
 
 }
 
+double Algorithms::ogFgToPlato( double og, double fg )
+{
+   double sp = SG_20C20C_toPlato( og );
+
+   double poly[4] = {1.001843 - 0.002318474*sp - 0.000007775*sp*sp - 0.000000034*sp*sp*sp - fg,
+                     0.00574,
+                     0.00003344,
+                     0.000000086};
+
+   return rootFind(poly, 3, 3, 5);
+}
+
 double Algorithms::refractiveIndex( double plato )
 {
    // Implements the method found at:

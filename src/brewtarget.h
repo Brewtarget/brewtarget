@@ -58,6 +58,9 @@ public:
    static QString displayAmount( double amount, Unit* units=0 );
    // Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg );
+   // Display gravity appropriately.
+   static QString displayOG( double og );
+   static QString displayFG( double fg, double og ); // Need OG if we're using plato.
    static double weightQStringToSI( QString qstr );
    static double volQStringToSI( QString qstr );
    static double tempQStringToSI( QString qstr );
@@ -81,6 +84,8 @@ private:
    static void loadTranslations(); // Load translation files.
    
    // These are options that are ONLY to be edited by the OptionDialog.
+   static bool usePlato; // Whether or not to display plato instead of SG.
+   //
    static iUnitSystem weightUnitSystem;
    static iUnitSystem volumeUnitSystem;
    //

@@ -41,7 +41,7 @@ public slots:
 private:
    void showChanges();
    QButtonGroup *colorGroup, *ibuGroup;
-   QButtonGroup *weightGroup, *volumeGroup, *tempGroup;
+   QButtonGroup *weightGroup, *volumeGroup, *tempGroup, *gravGroup;
 };
 
 #endif	/* _OPTIONDIALOG_H */

@@ -480,12 +480,15 @@ void MainWindow::showChanges(const QVariant& info)
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
    
-   lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
-   lcdNumber_boilSG->display(QString("%1").arg(recipeObs->getBoilGrav(),0,'f',3));
-   lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
-   lcdNumber_abv->display(doubleToStringPrec(recipeObs->getABV_pct(), 1).c_str());
-   lcdNumber_ibu->display(doubleToStringPrec(recipeObs->getIBU(), 1).c_str());
-   lcdNumber_srm->display(doubleToStringPrec(recipeObs->getColor_srm(),1).c_str());
+   //lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->getOg()));
+   //lcdNumber_boilSG->display(QString("%1").arg(recipeObs->getBoilGrav(),0,'f',3));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->getBoilGrav()));
+   //lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
+   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->getFg(), recipeObs->getOg()));
+   lcdNumber_abv->display(QString("%1").arg(recipeObs->getABV_pct(), 0, 'f', 1));
+   lcdNumber_ibu->display(QString("%1").arg(recipeObs->getIBU(), 0, 'f', 1));
+   lcdNumber_srm->display(QString("%1").arg(recipeObs->getColor_srm(), 0, 'f', 1));
 
    // Want to do some manipulation based on selected style.
    Style* recipeStyle = recipeObs->getStyle();
@@ -497,16 +500,16 @@ void MainWindow::showChanges(const QVariant& info)
       double ibu = recipeObs->getIBU();
       double srm = recipeObs->getColor_srm();
 
-      lcdNumber_ogLow->display(doubleToStringPrec(recipeStyle->getOgMin(), 3).c_str());
-      lcdNumber_ogHigh->display(doubleToStringPrec(recipeStyle->getOgMax(), 3).c_str());
-      lcdNumber_fgLow->display(doubleToStringPrec(recipeStyle->getFgMin(), 3).c_str());
-      lcdNumber_fgHigh->display(doubleToStringPrec(recipeStyle->getFgMax(), 3).c_str());
-      lcdNumber_abvLow->display(doubleToStringPrec(recipeStyle->getAbvMin_pct(), 1).c_str());
-      lcdNumber_abvHigh->display(doubleToStringPrec(recipeStyle->getAbvMax_pct(), 1).c_str());
-      lcdNumber_ibuLow->display(doubleToStringPrec(recipeStyle->getIbuMin(), 1).c_str());
-      lcdNumber_ibuHigh->display(doubleToStringPrec(recipeStyle->getIbuMax(), 1).c_str());
-      lcdNumber_srmLow->display(doubleToStringPrec(recipeStyle->getColorMin_srm(), 1).c_str());
-      lcdNumber_srmHigh->display(doubleToStringPrec(recipeStyle->getColorMax_srm(), 1).c_str());
+      lcdNumber_ogLow->display(Brewtarget::displayOG(recipeStyle->getOgMin()));
+      lcdNumber_ogHigh->display(Brewtarget::displayOG(recipeStyle->getOgMax()));
+      lcdNumber_fgLow->display(Brewtarget::displayFG(recipeStyle->getFgMin(), recipeObs->getOg()));
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(recipeStyle->getFgMax(), recipeObs->getOg()));
+      lcdNumber_abvLow->display(QString("%1").arg(recipeStyle->getAbvMin_pct(), 0, 'f', 1));
+      lcdNumber_abvHigh->display(QString("%1").arg(recipeStyle->getAbvMax_pct(), 1));
+      lcdNumber_ibuLow->display(QString("%1").arg(recipeStyle->getIbuMin(), 0, 'f', 1));
+      lcdNumber_ibuHigh->display(QString("%1").arg(recipeStyle->getIbuMax(), 0, 'f', 1));
+      lcdNumber_srmLow->display(QString("%1").arg(recipeStyle->getColorMin_srm(), 0, 'f', 1));
+      lcdNumber_srmHigh->display(QString("%1").arg(recipeStyle->getColorMax_srm(), 0, 'f', 1));
       
       if( recipeStyle->getOgMin() < og && og < recipeStyle->getOgMax() )
       {

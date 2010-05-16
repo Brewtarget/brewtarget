@@ -40,9 +40,11 @@ public:
 	double getWaterDensity_kgL( double celsius );
 	double hydrometer15CCorrection( double celsius );
 
-   // Estimates plato from kg of dissolve sucrose (sugar_kg) and
+   // Estimates plato from kg of dissolved sucrose (sugar_kg) and
    // the total wort volume wort_l.
    double getPlato( double sugar_kg, double wort_l );
+   // Converts FG to plato, given the OG.
+   double ogFgToPlato( double og, double fg );
 	// Gets ABV by using current gravity reading and brix reading.
 	double getABVBySGPlato( double sg, double plato );
 	// Gets ABW from current gravity and plato.

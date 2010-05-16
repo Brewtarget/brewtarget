@@ -36,6 +36,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    weightGroup = new QButtonGroup(this);
    volumeGroup = new QButtonGroup(this);
    tempGroup = new QButtonGroup(this);
+   gravGroup = new QButtonGroup(this);
 
    // Want you to only be able to select exactly one in each group.
    colorGroup->setExclusive(true);
@@ -43,6 +44,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    weightGroup->setExclusive(true);
    volumeGroup->setExclusive(true);
    tempGroup->setExclusive(true);
+   gravGroup->setExclusive(true);
 
    // Set up the buttons in the colorGroup
    colorGroup->addButton(checkBox_mosher);
@@ -64,9 +66,12 @@ OptionDialog::OptionDialog(QWidget* parent)
    volumeGroup->addButton(volume_imperial);
 
    // Temperature
-
    tempGroup->addButton(celsius);
    tempGroup->addButton(fahrenheit);
+
+   // Gravity
+   gravGroup->addButton(radioButton_sg);
+   gravGroup->addButton(radioButton_plato);
 
    //connect( colorGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeColorFormula(QAbstractButton*) ) );
    //connect( ibuGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeIbuFormula(QAbstractButton*) ) );
@@ -116,6 +121,13 @@ void OptionDialog::saveAndClose()
    else
       iformula = Brewtarget::TINSETH; // Should never get here, but you never know.
    
+   // Get gravity setting.
+   button = gravGroup->checkedButton();
+   if( button == radioButton_sg )
+      Brewtarget::usePlato = false;
+   else
+      Brewtarget::usePlato = true;
+
    button = weightGroup->checkedButton();
    if( button == weight_imperial )
    {
@@ -168,9 +180,8 @@ void OptionDialog::saveAndClose()
    Brewtarget::volumeUnitSystem = volumeUnitSystem;
    Brewtarget::tempScale = temperatureScale;
    
-   if( Brewtarget::mainWindow != 0 ) {
+   if( Brewtarget::mainWindow != 0 )
       Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
-   }
 
    setVisible(false);
 }
@@ -235,6 +246,13 @@ void OptionDialog::showChanges()
          volume_si->setChecked(TRUE);
    }
 
+   // Check gravity.
+   if( Brewtarget::usePlato )
+      radioButton_plato->setChecked(TRUE);
+   else
+      radioButton_sg->setChecked(TRUE);
+
+   // Temp.
    switch( Brewtarget::tempScale )
    {
       case Fahrenheit:
