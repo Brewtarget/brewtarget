@@ -237,6 +237,8 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashWizard, SIGNAL( clicked() ), mashWizard, SLOT( show() ) );
    connect( pushButton_saveMash, SIGNAL( clicked() ), this, SLOT( saveMash() ) );
    connect( pushButton_mashDes, SIGNAL( clicked() ), mashDesigner, SLOT( show() ) );
+   connect( pushButton_mashUp, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepUp() ) );
+   connect( pushButton_mashDown, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepDown() ) );
 }
 
 void MainWindow::setupToolbar()

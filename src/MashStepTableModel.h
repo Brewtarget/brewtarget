@@ -49,6 +49,9 @@ public:
    //MashStep* getMashStep(unsigned int i);
    virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
 
+   void moveStepUp(unsigned int i);
+   void moveStepDown(unsigned int i);
+
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;

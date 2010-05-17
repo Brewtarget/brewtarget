@@ -33,6 +33,10 @@ public:
    MashStepTableWidget(QWidget* parent=0);
    MashStepTableModel* getModel();
 
+public slots:
+   void moveSelectedStepUp();
+   void moveSelectedStepDown();
+
 private:
    MashStepTableModel* model;
 };

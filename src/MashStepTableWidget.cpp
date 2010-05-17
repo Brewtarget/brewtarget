@@ -34,3 +34,22 @@ MashStepTableModel* MashStepTableWidget::getModel()
    return model;
 }
 
+void MashStepTableWidget::moveSelectedStepUp()
+{
+   QModelIndexList list = selectedIndexes();
+
+   if( list.size() > 1 || list.size() < 0 )
+      return;
+
+   model->moveStepUp(list[0].row());
+}
+
+void MashStepTableWidget::moveSelectedStepDown()
+{
+   QModelIndexList list = selectedIndexes();
+
+   if( list.size() > 1 || list.size() < 0 )
+      return;
+
+   model->moveStepDown(list[0].row());
+}

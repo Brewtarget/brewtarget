@@ -287,6 +287,22 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
    }
 }
 
+void MashStepTableModel::moveStepUp(unsigned int i)
+{
+   if( mashObs == 0 || i-1 < 0 || i >= mashObs->getNumMashSteps() )
+      return;
+
+   mashObs->swapSteps(i, i-1);
+}
+
+void MashStepTableModel::moveStepDown(unsigned int i)
+{
+   if( mashObs == 0 || i < 0 || i+1 >= mashObs->getNumMashSteps() )
+      return;
+
+   mashObs->swapSteps(i, i+1);
+}
+
 //==========================CLASS MashStepItemDelegate===============================
 
 MashStepItemDelegate::MashStepItemDelegate(QObject* parent)

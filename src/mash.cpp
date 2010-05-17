@@ -405,7 +405,7 @@ double Mash::totalMashWater_l() const
       step = mashSteps[i];
       
       if( step->getType() == "Infusion" )
-	 waterAdded_l += step->getInfuseAmount_l();
+      waterAdded_l += step->getInfuseAmount_l();
    }
    
    return waterAdded_l;
@@ -420,8 +420,20 @@ void Mash::notify(Observable *notifier, QVariant info)
    {
       if( mashSteps[i] == notifier )
       {
-	 hasChanged(QVariant(i)); // Mash notifies its observers of which mashStep changed.
-	 return;
+         hasChanged(QVariant(i)); // Mash notifies its observers of which mashStep changed.
+         return;
       }
    }
+}
+
+void Mash::swapSteps( unsigned int i, unsigned int j )
+{
+   if( i < 0 || j < 0 || i >= mashSteps.size() || j >= mashSteps.size() )
+      return; // Bad indices.
+
+   MashStep* tmp = mashSteps[i];
+   mashSteps[i] = mashSteps[j];
+   mashSteps[j] = tmp;
+
+   hasChanged();
 }

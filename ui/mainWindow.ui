@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>623</width>
-    <height>604</height>
+    <width>601</width>
+    <height>592</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1631,6 +1631,20 @@
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButton_mashUp">
+            <property name="text">
+             <string>Up</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_mashDown">
+            <property name="text">
+             <string>Down</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="pushButton_saveMash">
             <property name="toolTip">
              <string>Save this mash profile</string>
@@ -1653,7 +1667,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>623</width>
+     <width>601</width>
      <height>23</height>
     </rect>
    </property>
