@@ -17,26 +17,25 @@
 -->
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-   <file>images/glass.png</file>
-   <file>images/BrewtargetIcon.png</file>
-   <file>images/BrewtargetIcon_96.png</file>
-   <file>images/smallBarley.png</file>
-   <file>images/smallWater.png</file>
-   <file>images/smallHop.png</file>
-   <file>images/smallYeast.png</file>
-   <file>images/smallKettle.png</file>
-   <file>images/smallQuestion.png</file>
-   <file>images/smallStyle.png</file>
-   <file>images/smallPlus.png</file>
-   <file>images/smallArrow.png</file>
-   <file>images/smallInfo.png</file>
-   <file>images/smallOutArrow.png</file>
-   <file>images/editshred.png</file>
-   <file>images/exit.png</file>
-   <file>images/filesave.png</file>
-   <file>images/smallMinus.png</file>
-   <file>images/edit.png</file>
-   <file>images/title.png</file>
-   <file>images/clock.png</file>
+   <file>images/glass.svg</file>
+   <file>images/brewtarget_icon.svg</file>
+   <file>images/smallBarley.svg</file>
+   <file>images/smallWater.svg</file>
+   <file>images/smallHop.svg</file>
+   <file>images/smallYeast.svg</file>
+   <file>images/smallKettle.svg</file>
+   <file>images/smallQuestion.svg</file>
+   <file>images/smallStyle.svg</file>
+   <file>images/smallPlus.svg</file>
+   <file>images/smallArrow.svg</file>
+   <file>images/smallInfo.svg</file>
+   <file>images/smallOutArrow.svg</file>
+   <file>images/editshred.svg</file>
+   <file>images/exit.svg</file>
+   <file>images/filesave.svg</file>
+   <file>images/smallMinus.svg</file>
+   <file>images/edit.svg</file>
+   <file>images/title.svg</file>
+   <file>images/clock.svg</file>
 </qresource>
 </RCC>

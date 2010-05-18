@@ -14,7 +14,8 @@ VERSION = 1.2.1
 TEMPLATE = app
 CONFIG += qt \
     release \
-    warn_off
+    warn_off \
+    svg
 QT += xml \
     webkit
 RESOURCES = brewtarget.qrc
