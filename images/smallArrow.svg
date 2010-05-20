@@ -15,7 +15,7 @@
    inkscape:version="0.47 r22583"
    width="46"
    height="32"
-   sodipodi:docname="smallArrow.png">
+   sodipodi:docname="smallArrow.svg">
   <metadata
      id="metadata16347">
     <rdf:RDF>
@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -105,6 +105,24 @@
        y1="16.087553"
        x2="44.41253"
        y2="16.087553" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient16899"
+       id="linearGradient2833"
+       gradientUnits="userSpaceOnUse"
+       x1="1.8010933"
+       y1="16.087553"
+       x2="44.41253"
+       y2="16.087553" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient16885"
+       id="linearGradient2836"
+       gradientUnits="userSpaceOnUse"
+       x1="29.099241"
+       y1="3.6198492"
+       x2="10.450799"
+       y2="35.691338" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -150,20 +168,20 @@
        id="guide16361" />
   </sodipodi:namedview>
   <g
-     id="g16907">
+     id="g2839">
     <path
        id="path16363"
-       d="m 23.010933,1.0790594 0,7.3347346 -21.5727497,0 0,15.005046 21.5727497,0 0,7.670311 L 45.111016,16.132044 23.010933,1.0790594 z"
-       style="fill:none;stroke:#00185f;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1" />
+       d="m 23.010933,1.0790594 l 0,7.3347346 l -21.5727497,0 l 0,15.005046 l 21.5727497,0 l 0,7.670311 L 45.111016,16.132044 L 23.010933,1.0790594 z"
+       style="fill:none;stroke:#00185f;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1" />
     <path
        sodipodi:nodetypes="cccccccc"
-       style="fill:url(#linearGradient16891);stroke:#0041ff;stroke-width:0.92810075999999997px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1"
-       d="m 23.437376,2.1613578 0,6.8073732 -21.1722323,-0.047939 0.1438183,13.9261944 21.028414,0.04794 0,7.118822 L 43.94848,16.132044 23.437376,2.1613578 z"
+       style="fill:url(#linearGradient2836);fill-opacity:1;stroke:#0041ff;stroke-width:0.92810076px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+       d="m 23.437376,2.1613578 l 0,6.8073732 L 2.2651437,8.920792 L 2.408962,22.846986 l 21.028414,0.04794 l 0,7.118822 L 43.94848,16.132044 L 23.437376,2.1613578 z"
        id="path16875" />
     <path
        id="path16897"
-       d="m 23.437376,2.1613578 0,6.8073732 L 2.2651437,8.920792 C 15.658365,13.048752 26.494991,25.971404 43.94848,16.132044 L 23.437376,2.1613578 z"
-       style="fill:url(#linearGradient16905);stroke:none;stroke-width:0.92810075999999997px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1"
+       d="m 23.437376,2.1613578 l 0,6.8073732 L 2.2651437,8.920792 C 15.658365,13.048752 26.494991,25.971404 43.94848,16.132044 L 23.437376,2.1613578 z"
+       style="fill:url(#linearGradient2833);fill-opacity:1;stroke:none"
        sodipodi:nodetypes="ccccc" />
   </g>
 </svg>

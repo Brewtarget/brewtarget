@@ -15,7 +15,7 @@
    inkscape:version="0.47 r22583"
    width="31.522102"
    height="31.522102"
-   sodipodi:docname="smallQuestion.png">
+   sodipodi:docname="smallQuestion.svg">
   <metadata
      id="metadata23225">
     <rdf:RDF>
@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -135,6 +135,16 @@
        y1="4.8532734"
        x2="12.936014"
        y2="12.909485" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient20121"
+       id="linearGradient2833"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.95915629,0,0,0.95915629,0.73968776,0.349523)"
+       x1="3.7519131"
+       y1="4.8532734"
+       x2="12.936014"
+       y2="12.909485" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -157,11 +167,10 @@
      inkscape:window-maximized="0"
      inkscape:current-layer="svg23219" />
   <g
-     id="g23289"
-     transform="translate(1.345797,-10.781321)">
+     id="g2840">
     <path
-       transform="matrix(0.95915629,0,0,0.95915629,-0.60610924,11.130844)"
-       d="M 31.593221,16.067797 C 31.593221,24.86691 24.46013,32 15.661017,32 6.8619045,32 -0.27118587,24.86691 -0.27118587,16.067797 c 0,-8.7991132 7.13309037,-15.93220359 15.93220287,-15.93220359 8.799113,0 15.932204,7.13309039 15.932204,15.93220359 z"
+       transform="matrix(0.95915629,0,0,0.95915629,0.73968776,0.349523)"
+       d="m 31.593221,16.067797 a 15.932203,15.932203 0 1 1 -31.86440687,0 a 15.932203,15.932203 0 1 1 31.86440687,0 z"
        sodipodi:ry="15.932203"
        sodipodi:rx="15.932203"
        sodipodi:cy="16.067797"
@@ -172,27 +181,27 @@
     <text
        xml:space="preserve"
        style="font-size:25.15572166px;font-style:normal;font-weight:normal;fill:#182145;fill-opacity:1;stroke:none;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch"
-       x="7.3911409"
-       y="34.475735"
+       x="8.7369375"
+       y="23.694414"
        id="text20079"><tspan
          sodipodi:role="line"
          id="tspan20081"
-         x="7.3911409"
-         y="34.475735">?</tspan></text>
+         x="8.7369375"
+         y="23.694414">?</tspan></text>
     <text
        id="text20075"
-       y="34.020542"
-       x="6.9359493"
+       y="23.239222"
+       x="8.2817459"
        style="font-size:25.15572166px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Courier 10 Pitch;-inkscape-font-specification:Courier 10 Pitch"
        xml:space="preserve"><tspan
-         y="34.020542"
-         x="6.9359493"
+         y="23.239222"
+         x="8.2817459"
          id="tspan20077"
          sodipodi:role="line">?</tspan></text>
     <path
        sodipodi:nodetypes="ccc"
        id="path20065"
-       d="M 22.137425,14.356079 C 10.206619,5.8128387 -7.441127,19.986712 2.450978,35.490263 1.472887,29.071481 5.5371218,14.490535 22.137425,14.356079 z"
-       style="fill:url(#linearGradient23299);fill-opacity:1;stroke:none" />
+       d="M 23.483222,3.574758 C 11.552416,-4.9684823 -6.09533,9.205391 3.796775,24.708942 C 2.818684,18.29016 6.8829188,3.709214 23.483222,3.574758 z"
+       style="fill:url(#linearGradient2833);fill-opacity:1;stroke:none" />
   </g>
 </svg>

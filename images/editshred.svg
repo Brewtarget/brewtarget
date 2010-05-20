@@ -15,7 +15,7 @@
    inkscape:version="0.47 r22583"
    width="23.237288"
    height="32.026173"
-   sodipodi:docname="editshred.png">
+   sodipodi:docname="editshred.svg">
   <metadata
      id="metadata8878">
     <rdf:RDF>
@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -268,6 +268,66 @@
        y1="28.380573"
        x2="5.9924302"
        y2="26.367115" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient9575"
+       id="linearGradient2850"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(13.88698,-0.04237287)"
+       x1="5.9924302"
+       y1="28.380573"
+       x2="5.9924302"
+       y2="26.367115" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient9575"
+       id="linearGradient2853"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(7.910528,-0.04237288)"
+       x1="5.9924302"
+       y1="28.380573"
+       x2="5.9924302"
+       y2="26.367115" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient9575"
+       id="linearGradient2856"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(1.9340776,-0.04237289)"
+       x1="5.9924302"
+       y1="28.380573"
+       x2="5.9924302"
+       y2="26.367115" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient9575"
+       id="linearGradient2859"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-3.9944336,-0.06634262)"
+       x1="5.9924302"
+       y1="28.380573"
+       x2="5.9924302"
+       y2="26.367115" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient9635"
+       id="linearGradient2862"
+       gradientUnits="userSpaceOnUse"
+       x1="22.779661"
+       y1="5.2542377"
+       x2="21.805084"
+       y2="6.4067802"
+       gradientTransform="translate(-4.042373,-0.0423729)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8698"
+       id="linearGradient2865"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0.09322,0.025424)"
+       x1="23.144068"
+       y1="6.3539515"
+       x2="11.525424"
+       y2="10.572621" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -292,36 +352,35 @@
      inkscape:window-maximized="0"
      inkscape:current-layer="svg8872" />
   <g
-     id="g9643"
-     transform="translate(-4.042373,-0.0423729)">
+     id="g2867">
     <path
        sodipodi:nodetypes="cccccc"
        id="path8088"
-       d="m 4.542373,0.6779659 0.135593,28.8813561 21.966102,0 0.135593,-21.2881351 -7.050847,-7.728814 -15.186441,0.135593 z"
-       style="fill:url(#linearGradient9652);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="m 0.5,0.635593 l 0.135593,28.881356 l 21.966102,0 L 22.737288,8.228814 L 15.686441,0.5 L 0.5,0.635593 z"
+       style="fill:url(#linearGradient2865);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        id="path8090"
-       d="m 20,0.9491529 0.20339,7.050847 6.440678,0.20339 L 20,0.9491529 z"
-       style="fill:url(#linearGradient9654);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1" />
+       d="m 15.957627,0.90678 l 0.20339,7.050847 l 6.440678,0.20339 L 15.957627,0.90678 z"
+       style="fill:url(#linearGradient2862);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1" />
     <path
        id="path9573"
-       d="m 4.6021865,14.238436 0,17.306139 2.8763665,0 0,-13.710681"
-       style="fill:url(#linearGradient9656);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="m 0.5598135,14.196063 l 0,17.306139 l 2.8763665,0 l 0,-13.710681"
+       style="fill:url(#linearGradient2859);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
-       style="fill:url(#linearGradient9658);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 10.530697,14.262406 0,17.306139 2.876367,0 0,-13.710681"
+       style="fill:url(#linearGradient2856);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 6.488324,14.220033 l 0,17.306139 l 2.876367,0 l 0,-13.710681"
        id="path9583" />
     <path
        id="path9587"
-       d="m 16.507148,14.262406 0,17.306139 2.876367,0 0,-13.710681"
-       style="fill:url(#linearGradient9660);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="m 12.464775,14.220033 l 0,17.306139 l 2.876367,0 l 0,-13.710681"
+       style="fill:url(#linearGradient2853);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
-       style="fill:url(#linearGradient9662);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 22.4836,14.262406 0,17.306139 2.876367,0 0,-13.710681"
+       style="fill:url(#linearGradient2850);fill-opacity:1;stroke:#b4bed3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 18.441227,14.220033 l 0,17.306139 l 2.876367,0 l 0,-13.710681"
        id="path9591" />
     <path
        id="path9604"
-       d="m 19.559293,1.4146355 -14.3338937,0.095879 0.095879,29.2430595 1.3902438,0"
+       d="M 15.51692,1.3722626 L 1.1830263,1.4681416 l 0.095879,29.2430594 l 1.3902438,0"
        style="fill:none;stroke:#e8f3fa;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

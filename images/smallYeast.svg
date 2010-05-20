@@ -15,7 +15,7 @@
    inkscape:version="0.47 r22583"
    width="44.75185"
    height="29.15863"
-   sodipodi:docname="smallYeast.png">
+   sodipodi:docname="smallYeast.svg">
   <metadata
      id="metadata18626">
     <rdf:RDF>
@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -116,6 +116,64 @@
        y1="6.9152541"
        x2="16.366873"
        y2="12.881356" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient21871"
+       id="radialGradient2836"
+       gradientUnits="userSpaceOnUse"
+       cx="122.85714"
+       cy="290.93362"
+       fx="122.85714"
+       fy="290.93362"
+       r="33.214287" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient19203"
+       id="linearGradient2838"
+       gradientUnits="userSpaceOnUse"
+       x1="6.7796607"
+       y1="6.9152541"
+       x2="16.366873"
+       y2="12.881356" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient19203"
+       id="linearGradient2841"
+       gradientUnits="userSpaceOnUse"
+       x1="6.7796607"
+       y1="6.9152541"
+       x2="16.366873"
+       y2="12.881356"
+       gradientTransform="matrix(0.91921024,0,0,0.91921024,-5.0351354,0.935015)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient21871"
+       id="radialGradient2844"
+       gradientUnits="userSpaceOnUse"
+       cx="122.85714"
+       cy="290.93362"
+       fx="122.85714"
+       fy="290.93362"
+       r="33.214287" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient19203"
+       id="linearGradient2846"
+       gradientUnits="userSpaceOnUse"
+       x1="6.7796607"
+       y1="6.9152541"
+       x2="16.366873"
+       y2="12.881356" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient19203"
+       id="linearGradient2849"
+       gradientUnits="userSpaceOnUse"
+       x1="6.7796607"
+       y1="6.9152541"
+       x2="16.366873"
+       y2="12.881356"
+       gradientTransform="matrix(1.0858391,0,0,1.0858391,9.6453465,-1.9387732)" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -138,45 +196,36 @@
      inkscape:window-maximized="0"
      inkscape:current-layer="svg18620" />
   <g
-     id="g19235"
-     transform="translate(-5.4776755,-1.3787272)">
-    <g
-       transform="matrix(0.91921024,0,0,0.91921024,0.44254009,2.3137422)"
-       id="g19217">
-      <path
-         d="m 156.07143,290.93362 c 0,18.34375 -14.87055,33.21429 -33.21429,33.21429 -18.34374,0 -33.214287,-14.87054 -33.214287,-33.21429 0,-18.34374 14.870547,-33.21428 33.214287,-33.21428 18.34374,0 33.21429,14.87054 33.21429,33.21428 z"
-         sodipodi:ry="33.214287"
-         sodipodi:rx="33.214287"
-         sodipodi:cy="290.93362"
-         sodipodi:cx="122.85714"
-         id="path21879"
-         style="fill:url(#radialGradient19231);fill-opacity:1;stroke:#715f48;stroke-width:8.02910328;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-         sodipodi:type="arc"
-         transform="matrix(-0.3604047,-0.01332519,0.01332519,-0.3604047,59.305993,121.70322)" />
-      <path
-         style="fill:url(#linearGradient19233);fill-opacity:1;stroke:none"
-         d="M 17.898305,4.4745763 C 18.797608,14.373358 17.220339,17.581921 10.576271,21.288136 6.7462206,18.010837 6.6973048,6.8347956 17.898305,4.4745763 z"
-         id="path18691"
-         sodipodi:nodetypes="ccc" />
-    </g>
-    <g
-       transform="matrix(1.0858391,0,0,1.0858391,15.123022,-0.56004602)"
-       id="g19221">
-      <path
-         transform="matrix(-0.3604047,-0.01332519,0.01332519,-0.3604047,59.305993,121.70322)"
-         sodipodi:type="arc"
-         style="fill:url(#radialGradient19227);fill-opacity:1;stroke:#715f48;stroke-width:8.02910328;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-         id="path19223"
-         sodipodi:cx="122.85714"
-         sodipodi:cy="290.93362"
-         sodipodi:rx="33.214287"
-         sodipodi:ry="33.214287"
-         d="m 156.07143,290.93362 c 0,18.34375 -14.87055,33.21429 -33.21429,33.21429 -18.34374,0 -33.214287,-14.87054 -33.214287,-33.21429 0,-18.34374 14.870547,-33.21428 33.214287,-33.21428 18.34374,0 33.21429,14.87054 33.21429,33.21428 z" />
-      <path
-         sodipodi:nodetypes="ccc"
-         id="path19225"
-         d="M 17.898305,4.4745763 C 18.797608,14.373358 17.220339,17.581921 10.576271,21.288136 6.7462206,18.010837 6.6973048,6.8347956 17.898305,4.4745763 z"
-         style="fill:url(#linearGradient19229);fill-opacity:1;stroke:none" />
-    </g>
+     id="g2852">
+    <path
+       transform="matrix(-0.33128769,-0.01224865,0.01224865,-0.33128769,49.479541,112.80586)"
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient2836);fill-opacity:1;stroke:#715f48;stroke-width:8.02910328;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path21879"
+       sodipodi:cx="122.85714"
+       sodipodi:cy="290.93362"
+       sodipodi:rx="33.214287"
+       sodipodi:ry="33.214287"
+       d="m 156.07143,290.93362 a 33.214287,33.214287 0 1 1 -66.428577,0 a 33.214287,33.214287 0 1 1 66.428577,0 z" />
+    <path
+       sodipodi:nodetypes="ccc"
+       id="path18691"
+       d="M 11.41717,5.0480914 C 12.243818,14.147153 10.793977,17.096497 4.6866812,20.503288 C 1.1660597,17.490761 1.1210958,7.2176291 11.41717,5.0480914 z"
+       style="fill:url(#linearGradient2841);fill-opacity:1;stroke:none" />
+    <path
+       d="m 156.07143,290.93362 a 33.214287,33.214287 0 1 1 -66.428577,0 a 33.214287,33.214287 0 1 1 66.428577,0 z"
+       sodipodi:ry="33.214287"
+       sodipodi:rx="33.214287"
+       sodipodi:cy="290.93362"
+       sodipodi:cx="122.85714"
+       id="path19223"
+       style="fill:url(#radialGradient2844);fill-opacity:1;stroke:#715f48;stroke-width:8.02910328;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:type="arc"
+       transform="matrix(-0.39134152,-0.01446901,0.01446901,-0.39134152,74.042113,130.21134)" />
+    <path
+       style="fill:url(#linearGradient2849);fill-opacity:1;stroke:none"
+       d="M 29.080026,2.9198967 C 30.056524,13.668381 28.343864,17.152364 21.129475,21.176717 C 16.970657,17.618098 16.917542,5.4827151 29.080026,2.9198967 z"
+       id="path19225"
+       sodipodi:nodetypes="ccc" />
   </g>
 </svg>
