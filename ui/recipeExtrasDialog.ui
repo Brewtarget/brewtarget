@@ -381,7 +381,11 @@
      <item>
       <widget class="QPushButton" name="pushButton_save">
        <property name="text">
-        <string>Save</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
       </widget>
      </item>
@@ -396,6 +400,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../brewtarget.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -491,6 +491,7 @@ void MainWindow::showChanges(const QVariant& info)
    lcdNumber_abv->display(QString("%1").arg(recipeObs->getABV_pct(), 0, 'f', 1));
    lcdNumber_ibu->display(QString("%1").arg(recipeObs->getIBU(), 0, 'f', 1));
    lcdNumber_srm->display(QString("%1").arg(recipeObs->getColor_srm(), 0, 'f', 1));
+   lcdNumber_ibugu->display(QString("%1").arg(recipeObs->getIBU()/((recipeObs->getOg()-1)*1000), 0, 'f', 2));
 
    // Want to do some manipulation based on selected style.
    Style* recipeStyle = recipeObs->getStyle();

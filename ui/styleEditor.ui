@@ -52,7 +52,7 @@
        </property>
        <property name="icon">
         <iconset resource="../brewtarget.qrc">
-         <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
+         <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -945,7 +945,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset>
          <normaloff>:/images/smallPlus.png</normaloff>:/images/smallPlus.png</iconset>
        </property>
        <property name="autoDefault">
@@ -962,7 +962,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset>
          <normaloff>:/images/filesave.png</normaloff>:/images/filesave.png</iconset>
        </property>
        <property name="autoDefault">
@@ -982,7 +982,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset>
          <normaloff>:/images/exit.png</normaloff>:/images/exit.png</iconset>
        </property>
        <property name="autoDefault">

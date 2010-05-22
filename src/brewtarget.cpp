@@ -657,10 +657,14 @@ double Brewtarget::timeQStringToSI(QString qstr)
 
 QString Brewtarget::displayOG( double og )
 {
+   QString ret = "%1";
    if( usePlato == false )
-      return QString("%1").arg(og, 0, 'f', 3);
+      return ret.arg(og, 0, 'f', 3);
 
-   return QString("%1").arg(Algorithms::Instance().SG_20C20C_toPlato(og), 0, 'f', 1);
+   if( og >= 1.000 ) // Make sure OG is sane.
+      return ret.arg(Algorithms::Instance().SG_20C20C_toPlato(og), 0, 'f', 1);
+   else
+      return ret.arg(0);
 }
 
 QString Brewtarget::displayFG( double fg, double og )
@@ -668,6 +672,10 @@ QString Brewtarget::displayFG( double fg, double og )
    if( usePlato == false )
       return QString("%1").arg(fg, 0, 'f', 3);
 
-   double plato = Algorithms::Instance().ogFgToPlato( og, fg );
+   double plato;
+   if( og < fg || og < 1.000 || fg < 0.001 )
+      plato = 0; // Strange input, so just say 0.
+   else
+      plato = Algorithms::Instance().ogFgToPlato( og, fg );
    return QString("%1").arg( plato, 0, 'f', 1 );
 }
