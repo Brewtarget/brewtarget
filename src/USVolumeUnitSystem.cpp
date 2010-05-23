@@ -18,6 +18,7 @@
 
 #include "USVolumeUnitSystem.h"
 #include <QStringList>
+#include <cmath>
 
 bool USVolumeUnitSystem::isMapSetup = false;
 QMap<QString, Unit*> USVolumeUnitSystem::nameToUnit;
@@ -30,6 +31,7 @@ QString USVolumeUnitSystem::displayAmount( double amount, Unit* units )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
+   double absSIAmount = std::abs(SIAmount);
    QString ret;
 
    // Special cases. Make sure the unit isn't null and that we're
@@ -37,13 +39,13 @@ QString USVolumeUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("L") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( SIAmount < Units::us_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
+   if( absSIAmount < Units::us_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
       ret = QString("%1 %2").arg(Units::us_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_teaspoons->getUnitName());
-   else if( SIAmount < Units::us_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
+   else if( absSIAmount < Units::us_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
       ret = QString("%1 %2").arg(Units::us_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_tablespoons->getUnitName());
-   else if( SIAmount < Units::us_quarts->toSI(1.0) ) // If less than 1 qt, show us_cups
+   else if( absSIAmount < Units::us_quarts->toSI(1.0) ) // If less than 1 qt, show us_cups
       ret = QString("%1 %2").arg(Units::us_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_cups->getUnitName());
-   else if( SIAmount < Units::us_gallons->toSI(1.0) ) // If less than 1 gallon, show us_quarts
+   else if( absSIAmount < Units::us_gallons->toSI(1.0) ) // If less than 1 gallon, show us_quarts
       ret = QString("%1 %2").arg(Units::us_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_quarts->getUnitName());
    else
       ret = QString("%1 %2").arg(Units::us_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_gallons->getUnitName());

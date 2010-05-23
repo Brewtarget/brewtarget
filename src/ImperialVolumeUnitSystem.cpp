@@ -18,6 +18,7 @@
 
 #include "ImperialVolumeUnitSystem.h"
 #include <QStringList>
+#include <cmath>
 
 bool ImperialVolumeUnitSystem::isMapSetup = false;
 QMap<QString, Unit*> ImperialVolumeUnitSystem::nameToUnit;
@@ -30,6 +31,7 @@ QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
+   double absSIAmount = std::abs(SIAmount);
    QString ret;
 
    // Special cases. Make sure the unit isn't null and that we're
@@ -37,13 +39,13 @@ QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("L") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( SIAmount < Units::imperial_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
+   if( absSIAmount < Units::imperial_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
       ret = QString("%1 %2").arg(Units::imperial_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_teaspoons->getUnitName());
-   else if( SIAmount < Units::imperial_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
+   else if( absSIAmount < Units::imperial_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
       ret = QString("%1 %2").arg(Units::imperial_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_tablespoons->getUnitName());
-   else if( SIAmount < Units::imperial_quarts->toSI(1.0) ) // If less than 1 qt, show imperial_cups
+   else if( absSIAmount < Units::imperial_quarts->toSI(1.0) ) // If less than 1 qt, show imperial_cups
       ret = QString("%1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
-   else if( SIAmount < Units::imperial_gallons->toSI(1.0) ) // If less than 1 gallon, show imperial_quarts
+   else if( absSIAmount < Units::imperial_gallons->toSI(1.0) ) // If less than 1 gallon, show imperial_quarts
       ret = QString("%1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
    else
       ret = QString("%1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());

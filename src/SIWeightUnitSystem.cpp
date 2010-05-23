@@ -18,6 +18,7 @@
 
 #include "SIWeightUnitSystem.h"
 #include <QStringList>
+#include <cmath>
 
 bool SIWeightUnitSystem::isMapSetup = false;
 QMap<QString, Unit*> SIWeightUnitSystem::nameToUnit;
@@ -30,6 +31,7 @@ QString SIWeightUnitSystem::displayAmount( double amount, Unit* units )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
+   double absSIAmount = std::abs(SIAmount);
    QString ret;
 
    // Special cases. Make sure the unit isn't null and that we're
@@ -37,9 +39,9 @@ QString SIWeightUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("kg") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( SIAmount < Units::grams->toSI(1.0) ) // If less than a gram, show mg.
+   if( absSIAmount < Units::grams->toSI(1.0) ) // If less than a gram, show mg.
       ret = QString("%1 %2").arg(Units::milligrams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milligrams->getUnitName());
-   else if( SIAmount < Units::kilograms->toSI(1.0) ) // If less than a kg, show g.
+   else if( absSIAmount < Units::kilograms->toSI(1.0) ) // If less than a kg, show g.
       ret = QString("%1 %2").arg(Units::grams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::grams->getUnitName());
    else // Otherwise, show kg.
       ret = QString("%1 %2").arg(Units::kilograms->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::kilograms->getUnitName());

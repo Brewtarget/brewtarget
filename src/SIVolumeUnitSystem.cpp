@@ -18,6 +18,7 @@
 
 #include "SIVolumeUnitSystem.h"
 #include <QStringList>
+#include <cmath>
 
 bool SIVolumeUnitSystem::isMapSetup = false;
 QMap<QString, Unit*> SIVolumeUnitSystem::nameToUnit;
@@ -37,7 +38,7 @@ QString SIVolumeUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("L") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( SIAmount < Units::liters->toSI(1.0) ) // If less than 1 L, display mL.
+   if( std::abs(SIAmount) < Units::liters->toSI(1.0) ) // If less than 1 L, display mL.
       ret = QString("%1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
    else // Otherwise, display liters.
       ret = QString("%1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
