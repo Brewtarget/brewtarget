@@ -51,8 +51,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/images/smallMinus.png</normaloff>:/images/smallMinus.png</iconset>
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
