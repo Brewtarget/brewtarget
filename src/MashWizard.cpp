@@ -87,6 +87,11 @@ void MashWizard::wizardry()
    double tw, tf, t1;
    double grainMass = 0.0, massWater = 0.0;
    double grainDensity = HeatCalculations::rhoGrain_KgL;
+   double absorption_LKg;
+   if( recObs->getEquipment() != 0 )
+      absorption_LKg = recObs->getEquipment()->getGrainAbsorption_LKg();
+   else
+      absorption_LKg = HeatCalculations::absorption_LKg;
 
    thickNum = lineEdit_mashThickness->text().toDouble();
    thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
@@ -226,11 +231,11 @@ void MashWizard::wizardry()
       }
       if( ! foundSparge )
          mashStep = new MashStep(); // Or just make a new one.
-      
+
       tf = mash->getSpargeTemp_c();
       t1 = mash->getMashStep(mash->getNumMashSteps()-1)->getStepTemp_c() - 10.0; // You will lose about 10C from last step.
       MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC
-           + HeatCalculations::absorption_LKg * recObs->getGrainsInMash_kg() * HeatCalculations::Cw_calGC
+           + absorption_LKg * recObs->getGrainsInMash_kg() * HeatCalculations::Cw_calGC
 	   + mash->getTunWeight_kg() * mash->getTunSpecificHeat_calGC();
       massWater = spargeWater_l;
       

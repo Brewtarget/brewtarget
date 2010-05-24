@@ -26,6 +26,7 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include "HeatCalculations.h"
 
 bool operator<(Equipment &e1, Equipment &e2)
 {
@@ -129,6 +130,12 @@ void Equipment::toXml(QDomDocument& doc, QDomNode& parent)
    tmpText = doc.createTextNode(notes.c_str());
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
+
+   // My extensions below
+   tmpNode = doc.createElement("ABSORPTION");
+   tmpText = doc.createTextNode(text(absorption_LKg));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
    
    parent.appendChild(equipNode);
 }
@@ -153,6 +160,7 @@ void Equipment::setDefaults()
    topUpKettle_l = 0.0;
    hopUtilization_pct = 0.0;
    notes = "";
+   absorption_LKg = HeatCalculations::absorption_LKg;
 }
 
 Equipment::Equipment()
@@ -259,6 +267,10 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
       else if( property == "NOTES" )
       {
          setNotes(value.toStdString());
+      }
+      else if( property == "ABSORPTION" ) // My extension.
+      {
+         setGrainAbsorption_LKg( getDouble(textNode) );
       }
       else
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
@@ -498,6 +510,21 @@ void Equipment::setNotes( const std::string &var )
    hasChanged();
 }
 
+void Equipment::setGrainAbsorption_LKg(double var)
+{
+   if( var < 0.0 )
+   {
+      Brewtarget::logW( QString("Equipment: absorption < 0: %1").arg(var) );
+      absorption_LKg = HeatCalculations::absorption_LKg;
+   }
+   else
+   {
+      absorption_LKg = var;
+   }
+
+   hasChanged();
+}
+
 //============================"GET" METHODS=====================================
 
 std::string Equipment::getName() const
@@ -578,6 +605,11 @@ double Equipment::getHopUtilization_pct() const
 std::string Equipment::getNotes() const
 {
    return notes;
+}
+
+double Equipment::getGrainAbsorption_LKg()
+{
+   return absorption_LKg;
 }
 
 //TODO: take a look at evapRate_pctHr.

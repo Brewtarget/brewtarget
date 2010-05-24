@@ -60,6 +60,7 @@ public:
    void setTopUpKettle_l( double var );
    void setHopUtilization_pct( double var );
    void setNotes( const std::string &var );
+   void setGrainAbsorption_LKg(double var);
 
    // Get
    std::string getName() const;
@@ -78,6 +79,7 @@ public:
    double getTopUpKettle_l() const;
    double getHopUtilization_pct() const;
    std::string getNotes() const;
+   double getGrainAbsorption_LKg();
 
    double wortEndOfBoil_l( double kettleWort_l ) const; // Calculate how much wort is left immediately at knockout.
 
@@ -99,6 +101,8 @@ private:
    double topUpKettle_l;
    double hopUtilization_pct;
    std::string notes;
+   // My extensions below.
+   double absorption_LKg;
 
    void setDefaults();
    void doCalculations();

@@ -42,6 +42,7 @@
 #include "IbuMethods.h"
 #include "ColorMethods.h"
 #include <QDate>
+#include "HeatCalculations.h"
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {
@@ -2237,7 +2238,11 @@ double Recipe::estimateWortFromMash_l() const
       return 0.0;
    
    double waterAdded_l = mash->totalMashWater_l();
-   double absorption_lKg = 0.13 * (3.78541178)/(0.45359237); // 0.13 gal/lb
+   double absorption_lKg;
+   if( equipment != 0 )
+      absorption_lKg = equipment->getGrainAbsorption_LKg();
+   else
+      absorption_lKg = HeatCalculations::absorption_LKg;
    
    //std::cerr << "estimateWortFromMash_l(): " << waterAdded_l - absorption_lKg*getGrainsInMash_kg() << std::endl;
 

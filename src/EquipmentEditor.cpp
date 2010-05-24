@@ -28,6 +28,7 @@
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "HeatCalculations.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent)
         : QDialog(parent)
@@ -43,6 +44,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent)
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeEquipment() ) );
+   connect( pushButton_absorption, SIGNAL( clicked() ), this, SLOT( resetAbsorption() ) );
    connect( equipmentComboBox, SIGNAL(currentIndexChanged ( const QString& )), this, SLOT( equipmentSelected(const QString&) ) );
 }
 
@@ -90,6 +92,8 @@ void EquipmentEditor::clear()
    lineEdit_lauterDeadspace->setText(QString(""));
 
    textEdit_notes->setText("");
+
+   lineEdit_grainAbsorption->setText("");
 }
 
 void EquipmentEditor::equipmentSelected( const QString& /*text*/ )
@@ -127,6 +131,7 @@ void EquipmentEditor::save()
    obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
 
    obsEquip->setNotes(textEdit_notes->toPlainText().toStdString());
+   obsEquip->setGrainAbsorption_LKg( lineEdit_grainAbsorption->text().toDouble() );
 
    obsEquip->reenableNotification();
    obsEquip->forceNotify();
@@ -155,6 +160,14 @@ void EquipmentEditor::newEquipment()
 void EquipmentEditor::clearAndClose()
 {
    setVisible(false);
+}
+
+void EquipmentEditor::resetAbsorption()
+{
+   if( obsEquip == 0 )
+      return;
+
+   obsEquip->setGrainAbsorption_LKg( HeatCalculations::absorption_LKg );
 }
 
 void EquipmentEditor::notify(Observable* /*notifier*/, QVariant info)
@@ -193,4 +206,6 @@ void EquipmentEditor::showChanges()
    lineEdit_lauterDeadspace->setText(Brewtarget::displayAmount(e->getLauterDeadspace_l(), Units::liters) );
 
    textEdit_notes->setText(e->getNotes().c_str());
+
+   lineEdit_grainAbsorption->setText(QString("%1").arg(e->getGrainAbsorption_LKg(), 0, 'f', 3));
 }

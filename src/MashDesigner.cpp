@@ -194,6 +194,12 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    if( mashStep == 0 || mash == 0 )
       return 0.0;
 
+   double absorption_LKg;
+   if( equip != 0 )
+      absorption_LKg = equip->getGrainAbsorption_LKg();
+   else
+      absorption_LKg = HeatCalculations::absorption_LKg;
+
    double tf = mashStep->getStepTemp_c();
    // NOTE: This needs to be changed. Assumes 1L = 1 kg.
    double mw = vol_l;
@@ -209,7 +215,7 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    double ct = mash->getTunWeight_kg();
 
    double batchMC = grain_kg * HeatCalculations::Cgrain_calGC
-                    + HeatCalculations::absorption_LKg * grain_kg * HeatCalculations::Cw_calGC
+                    + absorption_LKg * grain_kg * HeatCalculations::Cw_calGC
                     + mash->getTunWeight_kg() * mash->getTunSpecificHeat_calGC();
 
    double tw = 1/(mw*cw) * ( (isBatchSparge()? batchMC : MC) * (tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->getTunTemp_c()) : 0) ) + tf;

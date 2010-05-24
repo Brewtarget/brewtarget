@@ -40,6 +40,7 @@ public slots:
    void removeEquipment();
    void clear();
    void clearAndClose();
+   void resetAbsorption();
 
    void equipmentSelected( const QString& text );
 
