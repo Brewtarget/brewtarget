@@ -127,6 +127,7 @@ void MashDesigner::saveStep()
 {
    QString type = comboBox_type->currentText();
 
+   mashStep->disableNotification();
    mashStep->setName( lineEdit_name->text().toStdString() );
    mashStep->setType( type.toStdString() );
    mashStep->setStepTemp_c( Brewtarget::tempQStringToSI(lineEdit_temp->text()) );
@@ -141,6 +142,9 @@ void MashDesigner::saveStep()
    else if( type.compare("Decoction") == 0 )
       mashStep->setDecoctionAmount_l(  );
     */
+
+   mashStep->reenableNotification();
+   mashStep->forceNotify();
 }
 
 double MashDesigner::maxTemp_c()

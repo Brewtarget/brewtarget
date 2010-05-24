@@ -161,7 +161,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Belgium</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Used at rates of up to 10%, Aromatic malt will lend a distinct, almost exaggerated malt aroma and flavor to the finished Ales and Lagers. Aromatic malt also has a rich color and is high in diastatic power for aid in starch conversion. D/C Aromatic malt. As the name suggests, adds aromatics to a beer.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -201,7 +201,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Adds proteins to promote hean retention and mouth feel. Commonly used Dry Stouts.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -261,7 +261,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Belgium</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Biscuit is a unique malt thats lightly roasted, lending the subtle properties of black and chocolate malts. Used at the rate of 3 to 15 %, it is designed to improve the bread and biscuits, or toasted flavor and aroma characteristics to Lagers and Ales.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -281,7 +281,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>The darkest of all malts, use sparingly to add deep color and roast-charcoal flavor. Use no more than 1 to 3%. Best used in trace amounts only, for color. Almost any contribution that Black Patent gives to beer can be obtained from using another malt with less harsh flavor impacts.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -292,7 +292,7 @@
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
  </FERMENTABLE>
  <FERMENTABLE>
-  <NAME>Black Barley (Stout)</NAME>
+  <NAME>Black Barley (Roast Barley)</NAME>
   <VERSION>1</VERSION>
   <TYPE>Grain</TYPE>
   <AMOUNT>0.00000e+00</AMOUNT>
@@ -301,7 +301,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Use 10 to 12% to impart a distinct, roasted flavor to Stouts. Other dark beers also benefit from smaller quantities (2 - 6%).</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -312,7 +312,7 @@
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
  </FERMENTABLE>
  <FERMENTABLE>
-  <NAME>Brown Malt</NAME>
+  <NAME>Brown Malt (British Chocolate)</NAME>
   <VERSION>1</VERSION>
   <TYPE>Grain</TYPE>
   <AMOUNT>0.00000e+00</AMOUNT>
@@ -321,7 +321,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>United Kingdom</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Ideal for British Porters and Brown or Mild Ales and even Stouts. It's a little darker than domestic Chocolate malt yet it has a slightly smoother character in the roast flavor and aroma profiles.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -381,7 +381,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Germany</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Dark German malt developed to add malt flavor of Alt, Marzen and Oktoberfest beers. Helps create authentic maltiness without having to do a decoction mash. Rarely available for homebrewers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -481,7 +481,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Dextrins lend body, mouth feel and palate fullness to beers, as well as foam stability. Carapils must be mashed with pale malt, due to its lack of enzymes. Use 5 to 20% for these properties without adding color.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -601,7 +601,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>This Light Crystal malt will lend body and mouth feel with a minimum of color, much like Carapils, but with a light caramel sweetness.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -621,7 +621,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Dark Crystal will lend a complex sharp caramel flavor and aroma to beers. Used in smaller quantities this malt will add color and slight sweetness to beers, while heavier concentrations are well suited to strong beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -641,7 +641,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>This Crystal malt will provide a golden color and a sweet, mild caramel flavor.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -681,7 +681,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>This Pale Crystal malt will lend a balance of medium caramel color, flavor, and body.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -701,7 +701,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>This Medium Crystal malt will lend a well rounded caramel flavor, color and sweetness. This Crystal malt is a good choice if you're not sure which variety to use.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -721,7 +721,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>This Crystal malt will lend a well a pronounced caramel flavor, color and sweetness.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -741,7 +741,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Belgium</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Use Caramunich for a deeper color, caramelized sugars and contribute a rich malt aroma.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -781,7 +781,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Belgium</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Impart a rich, caramel-sweet aroma and promotes a fuller flavor. Excellent all purpose caramel malt that can be used in high percentages (up to 15%) without leaving the beer too caramel/sweet.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -821,7 +821,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>United Kingdom</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Ideal for British Porters and Brown or Mild Ales and even Stouts. It's a little darker than US Chocolate malt yet it has a slightly smoother character in the roast flavor and aroma profiles.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -841,7 +841,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Being the least roasted of the black malts, Chocolate malt will add a dark color and pleasant roast flavor. Small quantities lend a nutty flavor and deep, ruby red color while higher amounts lend a black color and smooth, roasted flavor. Use 3 to 12%.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -901,7 +901,7 @@
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>The most common adjunct in American Lagers and Cream ales. Lightens both color and body.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1082,7 +1082,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>United Kingdom</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Sucrose (table sugar) that has been inverted with heat and acid to form a mixture of fructose and glucose.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1222,12 +1222,12 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Germany</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Although kilned, Munich still retains sufficient enzymes for 100% of the grain bill, or it can be used at a percentage of the total malt content for its full, malty flavor and aroma.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
   <PROTEIN>0.00000e+00</PROTEIN>
-  <MAX_IN_BATCH>8.00000e+01</MAX_IN_BATCH>
+  <MAX_IN_BATCH>1.00000e+02</MAX_IN_BATCH>
   <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
   <IS_MASHED>TRUE</IS_MASHED>
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
@@ -1242,12 +1242,12 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Although kilned, Munich still retains sufficient enzymes for 100% of the grain bill, or it can be used at a percentage of the total malt content for its full, malty flavor and aroma.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
   <PROTEIN>0.00000e+00</PROTEIN>
-  <MAX_IN_BATCH>8.00000e+01</MAX_IN_BATCH>
+  <MAX_IN_BATCH>1.00000e+02</MAX_IN_BATCH>
   <RECOMMEND_MASH>TRUE</RECOMMEND_MASH>
   <IS_MASHED>TRUE</IS_MASHED>
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
@@ -1262,7 +1262,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>A little darker than German Munich malt and adds a deeper color and fuller malt profile. Great for Dark and amber lagers, blend Munich with German Pils or Domestic 2 Row at the rate of 10 to 60% of the total grain bill.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1282,7 +1282,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Oats will improve mouth feel and add a creamy head. Commonly used in Oatmeal Stout.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1302,7 +1302,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Use to make wheat and weizen beers at 40-60% for wheat and 35-65% for Bavarian weizens. Small amounts at about 3-6 % aid in head retention to any beer without altering final flavor. Use with a highly modified malt to insure diastatic enzymes. Protein rest highly recommended due to very high protein content.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1362,7 +1362,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>United Kingdom</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Fully modified British malt, easily converted by a single temperature mash. Preferred by many brewers for authentic English ales. This malt has undergone higher kilning than Domestic 2 Row and is lower in diastatic power so keep adjuncts at a lower percentage.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1382,7 +1382,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>A variety of malt that forms two seed rows along the stem on the grain head. Well modified with a high diastatic power allows mashing with up to 35% grain adjuncts. Because it is fairly neutral 2-Row makes an excellent base malt and is known as the "workhorse" of many recipes. Greater starch per weight ratio than 6-Row. Protein rest recommended to avoid chill-haze. Also know as Klages.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1402,7 +1402,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>This malt variety forms six distinct seed rows on the grain head. Very high diastatic power allows mashing with up to 60% grain adjuncts, great if added diastatic strength is needed in a recipe. 6-Row also has greater husks per weight ratio than 2-Row. Protein rest recommended to avoid chill-haze.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1422,7 +1422,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>United Kingdom</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Smoked over peat moss for a soft sweet, earty smoked character. Imparts a soft peaty smoke flavor for strong Scottish ales.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1442,7 +1442,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Belgium</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>This is an excellent base malt for many styles, including full flavored Lagers, Belgian Ales and Belgian Wheat beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1513,7 +1513,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
  </FERMENTABLE>
  <FERMENTABLE>
-  <NAME>Rauch Malt (GER)</NAME>
+  <NAME>Rauch Malt (Germany)</NAME>
   <VERSION>1</VERSION>
   <TYPE>Grain</TYPE>
   <AMOUNT>0.00000e+00</AMOUNT>
@@ -1522,7 +1522,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Germany</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>German malt is smoked over a beechwood fire for a drier, sharper, obvious more wood-smoked flavor. Imparts a distinct smoked character for German Rauch beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>5.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1582,7 +1582,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Another popular adjunct in American Lagers. Lightens both color and body.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1602,7 +1602,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Use 10 to 12% to impart a distinct, roasted flavor to Stouts. Other dark beers also benefit from smaller quantities (2 - 6%).</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1622,7 +1622,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Imparts a distinct sharp flavor.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1642,7 +1642,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Imparts a distinct sharp flavor.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1678,11 +1678,11 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <TYPE>Grain</TYPE>
   <AMOUNT>0.00000e+00</AMOUNT>
   <YIELD>6.52000e+01</YIELD>
-  <COLOR>1.80000e+02</COLOR>
+  <COLOR>1.60000e+02</COLOR>
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Belgium</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Special B refers to a type of dark, flavorful crystal malt traditionally malted in Belgium. In small amounts, it gives a unique flavor to the finished beer that is often compared to raisins or dried fruit. This malt is always dark, but the color and flavor vary more than most other malt styles; most of the commonly available varieties are in the 110-160 L range, but it may be even darker. Don't depend on this software to calculate the color of your beer correctly, since it may be expecting a much darker malt than you are actually using; some older sources assume Special B will be over 200 or even up to 300 L. While some sources still claim that Special B must be mashed, it is a crystal malt and can be steeped with an extract batch without adding significant protein to the beer.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1701,8 +1701,8 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <COLOR>5.00000e+01</COLOR>
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
-  <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <SUPPLIER>Briess</SUPPLIER>
+  <NOTES>Special Roast Malt is a specially processed malt from the American maltster, Briess. It is kilned using 6 row barley and it appears to be Victory Malt turned up a notch. Flavor: Toasty, Strong Biscuit, Sour Dough, Tangy. Any non-straw colored beer where roasty, toasty flavors are acceptable is a good candidate for this malt. Porters and Nut Brown Ales could take a good helping of this malt, and smaller amounts (less than 8 ounces) would work in Viennas, Märzens, and Alt beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1742,7 +1742,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>United Kingdom</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Adds reddish hue without sweetness associated with caramelized malts.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1782,7 +1782,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Imparts a toasty/nutty/biscuit/bread flavor, and adds head retention. Use in nut browns and other darker beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1802,7 +1802,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Germany</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Vienna Malt is a kiln-dried barley malt darker than pale ale malt, but not as dark as Munich Malt. It imparts a golden to orange color and a distinctive toast or biscuit malt aroma to the beer. Vienna malt traditionally makes up up to 100% of the grist of Vienna Lager and the bulk of the related Märzen style. Other beer styles sometimes use Vienna malt to add malty complexity and light toasty notes to lighter base malts, or to lighten the grist of a beer brewed with mostly Munich malt. Examples include Baltic Porter, Dunkelweizen, and most styles of Bock.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1862,7 +1862,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Belgium</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Use in wheat beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1882,7 +1882,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Germany</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Use in wheat beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1902,7 +1902,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>Germany</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Use in wheat beers.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1922,7 +1922,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Flaked wheat is not malted, therefore requires extra effort to extract it's potential sugar content, which will be lower than malted wheat. Flaked wheat is traditional in Belgian witbier and lambics, it contains more starch and higher levels of protein than malted wheat. It adds more mouthfeel than malted wheat and has a different taste, which is noticeable when used in larger quantities. If the grain bill consists of more than 25% flaked wheat you should consider a cereal mash, or precooking the wheat in order to gelatinize it so you can extract more sugars out of it. The addion of 6-row can aid conversion since the barley contains a higher percentage of enzymes than 2-row.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
@@ -1962,7 +1962,7 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <ADD_AFTER_BOIL>FALSE</ADD_AFTER_BOIL>
   <ORIGIN>US</ORIGIN>
   <SUPPLIER></SUPPLIER>
-  <NOTES></NOTES>
+  <NOTES>Torrified wheat is unmalted wheat that has been heated very quickly to get the kernel to puff up, kind of like popcorn. Torrified wheat adds a different flavor to the beer and the grain is gelatinized so you don't have to cook it.</NOTES>
   <COARSE_FINE_DIFF>0.00000e+00</COARSE_FINE_DIFF>
   <MOISTURE>0.00000e+00</MOISTURE>
   <DIASTATIC_POWER>0.00000e+00</DIASTATIC_POWER>
