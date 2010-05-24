@@ -49,6 +49,7 @@ ImperialTeaspoonUnit* Units::imperial_teaspoons = new ImperialTeaspoonUnit();
 SecondUnit* Units::seconds = new SecondUnit();
 MinuteUnit* Units::minutes = new MinuteUnit();
 HourUnit* Units::hours = new HourUnit();
+DayUnit* Units::days = new DayUnit();
 // === Temperature ===
 CelsiusUnit* Units::celsius = new CelsiusUnit();
 FahrenheitUnit* Units::fahrenheit = new FahrenheitUnit();
@@ -222,6 +223,7 @@ void Unit::setupMap()
    Unit::nameToUnit.insert(Units::seconds->getUnitName(), Units::seconds);
    Unit::nameToUnit.insert(Units::minutes->getUnitName(), Units::minutes);
    Unit::nameToUnit.insert(Units::hours->getUnitName(), Units::hours);
+   Unit::nameToUnit.insert(Units::days->getUnitName(), Units::days);
    Unit::nameToUnit.insert(Units::celsius->getUnitName(), Units::celsius);
    Unit::nameToUnit.insert(Units::kelvin->getUnitName(), Units::kelvin);
    Unit::nameToUnit.insert(Units::fahrenheit->getUnitName(), Units::fahrenheit);
@@ -568,6 +570,23 @@ double HourUnit::toSI( double amt ) const
 double HourUnit::fromSI( double amt ) const
 {
    return amt / (double)60.0;
+}
+
+// === Days ===
+DayUnit::DayUnit()
+{
+   unitName = "day";
+   SIUnitName = "min"; // Pretend the SI unit is minutes for the sake of BeerXML.
+}
+
+double DayUnit::toSI( double amt ) const
+{
+   return amt * (double)1440.0;
+}
+
+double DayUnit::fromSI( double amt ) const
+{
+   return amt / (double)1440.0;
 }
 
 // === Celsius ===

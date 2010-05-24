@@ -18,6 +18,7 @@
 
 #include "TimeUnitSystem.h"
 #include <QStringList>
+#include <cmath>
 
 bool TimeUnitSystem::isMapSetup = false;
 QMap<QString, Unit*> TimeUnitSystem::nameToUnit;
@@ -30,6 +31,7 @@ QString TimeUnitSystem::displayAmount( double amount, Unit* units )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
+   double absSIAmount = std::abs(SIAmount);
    QString ret;
 
    // Special cases. Make sure the unit isn't null and that we're
@@ -37,12 +39,14 @@ QString TimeUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("min") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( SIAmount < Units::minutes->toSI(1.0) ) // Less than a minute, show seconds.
+   if( absSIAmount < Units::minutes->toSI(1.0) ) // Less than a minute, show seconds.
       ret = QString("%1 %2").arg(Units::seconds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::seconds->getUnitName());
-   else if( SIAmount < Units::hours->toSI(1.0) ) // Less than an hour, show minutes.
+   else if( absSIAmount < Units::hours->toSI(1.0) ) // Less than an hour, show minutes.
       ret = QString("%1 %2").arg(Units::minutes->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::minutes->getUnitName());
-   else // Show hours.
+   else if( absSIAmount < Units::days->toSI(1.0) )// Show hours.
       ret = QString("%1 %2").arg(Units::hours->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::hours->getUnitName());
+   else
+      ret = QString("%1 %2").arg(Units::days->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::days->getUnitName());
 
    return ret;
 }
@@ -109,6 +113,7 @@ void TimeUnitSystem::ensureMapIsSetup()
    nameToUnit.insert(Units::seconds->getUnitName(), Units::seconds);
    nameToUnit.insert(Units::minutes->getUnitName(), Units::minutes);
    nameToUnit.insert(Units::hours->getUnitName(), Units::hours);
+   nameToUnit.insert(Units::days->getUnitName(), Units::days);
 
    //nameToUnit.insert(Units::celsius->getUnitName(), Units::celsius);
    //nameToUnit.insert(Units::kelvin->getUnitName(), Units::kelvin);

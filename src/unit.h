@@ -482,6 +482,24 @@ class HourUnit : public Unit
       QString SIUnitName;
 };
 
+class DayUnit: public Unit
+{
+public:
+   DayUnit();
+
+   // Inherited methods.
+   double toSI( double amt ) const;
+   double fromSI( double amt ) const;
+   const QString& getUnitName() const { return unitName; }
+   const QString& getSIUnitName() const { return SIUnitName; }
+   const int getUnitType() const { return Time; }
+   const int getUnitOrTempSystem() const { return Any; }
+
+private:
+   QString unitName;
+   QString SIUnitName;
+};
+
 // ================ Temperature ================
 
 class CelsiusUnit : public Unit
@@ -566,6 +584,7 @@ public:
    static SecondUnit *seconds;
    static MinuteUnit *minutes;
    static HourUnit *hours;
+   static DayUnit *days;
    // === Temperature ===
    static CelsiusUnit *celsius;
    static FahrenheitUnit *fahrenheit;
