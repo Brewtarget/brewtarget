@@ -64,10 +64,18 @@ void MaltinessWidget::paintEvent(QPaintEvent*)
       return;
 
    QPainter painter(this);
-
+   QColor bg = bgColor();
    label->resize(size());
+
+   QString colorstring = QString("%1%2%3").arg(bg.red(),2,16,QChar('0')).arg(bg.green(),2,16,QChar('0')).arg(bg.blue(),2,16,QChar('0'));
    
-   palette.setColor(QPalette::Active, QPalette::Window, bgColor());
+   /*palette.setColor(QPalette::Active, QPalette::Window, bg);
+   palette.setColor(QPalette::Inactive, QPalette::Window, bg);
+   */
+   label->setStyleSheet(QString("QLabel { background: #%1 }").arg(colorstring).toAscii());
+   //palette.setColor(QPalette::Active, QPalette::Base, bg);
+   //palette.setColor(QPalette::Active, QPalette::AlternateBase, bg);
+   //palette.setColor(QPalette::Active, QPalette::Button, bg);
    label->setPalette(palette);
    label->setText(fgText());
 
