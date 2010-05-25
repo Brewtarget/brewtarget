@@ -65,6 +65,7 @@
 #include "HopTableModel.h"
 #include <QInputDialog>
 #include <QLineEdit>
+#include "BtDigitWidget.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -82,7 +83,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    setWindowIcon(QIcon(ICON48));
    
-   // Different palettes for lcds.
+   // Different palettes for some text.
    lcdPalette_old = lcdNumber_og->palette();
    lcdPalette_tooLow = QPalette(lcdPalette_old);
    lcdPalette_tooLow.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 0, 208));
@@ -90,6 +91,20 @@ MainWindow::MainWindow(QWidget* parent)
    lcdPalette_good.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 128, 0));
    lcdPalette_tooHigh = QPalette(lcdPalette_old);
    lcdPalette_tooHigh.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(208, 0, 0));
+
+   // Set constant colors for some lcds.
+   lcdNumber_ogLow->setConstantColor(BtDigitWidget::LOW);
+   lcdNumber_ogHigh->setConstantColor(BtDigitWidget::HIGH);
+   lcdNumber_fgLow->setConstantColor(BtDigitWidget::LOW);
+   lcdNumber_fgHigh->setConstantColor(BtDigitWidget::HIGH);
+   lcdNumber_abvLow->setConstantColor(BtDigitWidget::LOW);
+   lcdNumber_abvHigh->setConstantColor(BtDigitWidget::HIGH);
+   lcdNumber_ibuLow->setConstantColor(BtDigitWidget::LOW);
+   lcdNumber_ibuHigh->setConstantColor(BtDigitWidget::HIGH);
+   lcdNumber_srmLow->setConstantColor(BtDigitWidget::LOW);
+   lcdNumber_srmHigh->setConstantColor(BtDigitWidget::HIGH);
+   lcdNumber_boilSG->setConstantColor(BtDigitWidget::BLACK);
+   lcdNumber_ibugu->setConstantColor(BtDigitWidget::BLACK);
 
    // Null out the recipe
    recipeObs = 0;
@@ -481,17 +496,23 @@ void MainWindow::showChanges(const QVariant& info)
       label_calcBoilSize->setPalette(lcdPalette_tooLow);
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
-   
-   //lcdNumber_og->display(doubleToStringPrec(recipeObs->getOg(), 3).c_str());
+
+   /*
    lcdNumber_og->display(Brewtarget::displayOG(recipeObs->getOg()));
-   //lcdNumber_boilSG->display(QString("%1").arg(recipeObs->getBoilGrav(),0,'f',3));
    lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->getBoilGrav()));
-   //lcdNumber_fg->display(doubleToStringPrec(recipeObs->getFg(), 3).c_str());
    lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->getFg(), recipeObs->getOg()));
    lcdNumber_abv->display(QString("%1").arg(recipeObs->getABV_pct(), 0, 'f', 1));
    lcdNumber_ibu->display(QString("%1").arg(recipeObs->getIBU(), 0, 'f', 1));
    lcdNumber_srm->display(QString("%1").arg(recipeObs->getColor_srm(), 0, 'f', 1));
    lcdNumber_ibugu->display(QString("%1").arg(recipeObs->getIBU()/((recipeObs->getOg()-1)*1000), 0, 'f', 2));
+   */
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->getOg()));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->getBoilGrav()));
+   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->getFg(), recipeObs->getOg()));
+   lcdNumber_abv->display(recipeObs->getABV_pct(), 1);
+   lcdNumber_ibu->display(recipeObs->getIBU(), 1);
+   lcdNumber_srm->display(recipeObs->getColor_srm(), 1);
+   lcdNumber_ibugu->display(recipeObs->getIBU()/((recipeObs->getOg()-1)*1000), 2);
 
    // Want to do some manipulation based on selected style.
    Style* recipeStyle = recipeObs->getStyle();
@@ -503,6 +524,7 @@ void MainWindow::showChanges(const QVariant& info)
       double ibu = recipeObs->getIBU();
       double srm = recipeObs->getColor_srm();
 
+      /*
       lcdNumber_ogLow->display(Brewtarget::displayOG(recipeStyle->getOgMin()));
       lcdNumber_ogHigh->display(Brewtarget::displayOG(recipeStyle->getOgMax()));
       lcdNumber_fgLow->display(Brewtarget::displayFG(recipeStyle->getFgMin(), recipeObs->getOg()));
@@ -513,7 +535,33 @@ void MainWindow::showChanges(const QVariant& info)
       lcdNumber_ibuHigh->display(QString("%1").arg(recipeStyle->getIbuMax(), 0, 'f', 1));
       lcdNumber_srmLow->display(QString("%1").arg(recipeStyle->getColorMin_srm(), 0, 'f', 1));
       lcdNumber_srmHigh->display(QString("%1").arg(recipeStyle->getColorMax_srm(), 0, 'f', 1));
-      
+      */
+      lcdNumber_ogLow->display(Brewtarget::displayOG(recipeStyle->getOgMin()));
+      lcdNumber_ogHigh->display(Brewtarget::displayOG(recipeStyle->getOgMax()));
+      lcdNumber_og->setLowLim(recipeStyle->getOgMin());
+      lcdNumber_og->setHighLim(recipeStyle->getOgMax());
+
+      lcdNumber_fgLow->display(Brewtarget::displayFG(recipeStyle->getFgMin(), recipeObs->getOg()));
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(recipeStyle->getFgMax(), recipeObs->getOg()));
+      lcdNumber_fg->setLowLim(recipeStyle->getFgMin());
+      lcdNumber_fg->setHighLim(recipeStyle->getFgMax());
+
+      lcdNumber_abvLow->display(recipeStyle->getAbvMin_pct(), 1);
+      lcdNumber_abvHigh->display(recipeStyle->getAbvMax_pct(), 1);
+      lcdNumber_abv->setLowLim(recipeStyle->getAbvMin_pct());
+      lcdNumber_abv->setHighLim(recipeStyle->getAbvMax_pct());
+
+      lcdNumber_ibuLow->display(recipeStyle->getIbuMin(), 1);
+      lcdNumber_ibuHigh->display(recipeStyle->getIbuMax(), 1);
+      lcdNumber_ibu->setLowLim(recipeStyle->getIbuMin());
+      lcdNumber_ibu->setHighLim(recipeStyle->getIbuMax());
+
+      lcdNumber_srmLow->display(recipeStyle->getColorMin_srm(), 1);
+      lcdNumber_srmHigh->display(recipeStyle->getColorMax_srm(), 1);
+      lcdNumber_srm->setLowLim(recipeStyle->getColorMin_srm());
+      lcdNumber_srm->setHighLim(recipeStyle->getColorMax_srm());
+
+      /*
       if( recipeStyle->getOgMin() < og && og < recipeStyle->getOgMax() )
       {
          lcdNumber_og->setPalette(lcdPalette_good);
@@ -578,22 +626,27 @@ void MainWindow::showChanges(const QVariant& info)
       {
          lcdNumber_srm->setPalette(lcdPalette_tooHigh);
       }
+      */
    }
    else
    {
+      /*
       lcdNumber_og->setPalette(lcdPalette_old);
       lcdNumber_fg->setPalette(lcdPalette_old);
       lcdNumber_abv->setPalette(lcdPalette_old);
       lcdNumber_ibu->setPalette(lcdPalette_old);
       lcdNumber_srm->setPalette(lcdPalette_old);
+      */
    }
    
+   /*
    lcdNumber_og->update();
    lcdNumber_fg->update();
    lcdNumber_abv->update();
    lcdNumber_ibu->update();
    lcdNumber_srm->update();
-   
+   */
+
    // See if we need to change the mash in the table.
    if( info.toInt() == Recipe::MASH && recipeObs->getMash() != 0 )
       mashStepTableWidget->getModel()->setMash(recipeObs->getMash());

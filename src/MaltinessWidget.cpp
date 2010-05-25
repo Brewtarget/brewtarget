@@ -31,11 +31,11 @@ MaltinessWidget::MaltinessWidget(QWidget* parent) : QWidget(parent), recObs(0)
 
 void MaltinessWidget::setup()
 {
-   QSize size(90,30);
+   QSize size(110,50);
 
    label = new QLabel(this);
    // Want to specify a minimum size and have it expand if able.
-   label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+   label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
    // Align text in center, vertically and horizontally.
    label->setAlignment(Qt::AlignCenter);
    // Add a border.
@@ -47,6 +47,7 @@ void MaltinessWidget::setup()
    //sPolicy = QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
    setMinimumSize(size);
+   setMaximumSize(size);
 }
 
 void MaltinessWidget::observeRecipe(Recipe* recipe)

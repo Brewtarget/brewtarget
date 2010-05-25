@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>591</height>
+    <width>608</width>
+    <height>622</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -356,60 +356,10 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QLCDNumber" name="lcdNumber_og">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="0">
               <widget class="QLabel" name="fGLabel">
                <property name="text">
                 <string>FG</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLCDNumber" name="lcdNumber_fg">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
              </item>
@@ -420,54 +370,10 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="2">
-              <widget class="QLCDNumber" name="lcdNumber_abv">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
              <item row="4" column="0">
               <widget class="QLabel" name="bitternessIBULabel">
                <property name="text">
                 <string>Bitterness (IBU)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QLCDNumber" name="lcdNumber_ibu">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
              </item>
@@ -478,647 +384,10 @@
                </property>
               </widget>
              </item>
-             <item row="5" column="2">
-              <widget class="QLCDNumber" name="lcdNumber_srm">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>80</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLCDNumber" name="lcdNumber_ogLow">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::Box</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLCDNumber" name="lcdNumber_ogHigh">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLCDNumber" name="lcdNumber_fgLow">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::Box</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3">
-              <widget class="QLCDNumber" name="lcdNumber_fgHigh">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLCDNumber" name="lcdNumber_abvLow">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::Box</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="3">
-              <widget class="QLCDNumber" name="lcdNumber_abvHigh">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QLCDNumber" name="lcdNumber_ibuLow">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::Box</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="3">
-              <widget class="QLCDNumber" name="lcdNumber_ibuHigh">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QLCDNumber" name="lcdNumber_srmLow">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>208</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::Box</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="3">
-              <widget class="QLCDNumber" name="lcdNumber_srmHigh">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="palette">
-                <palette>
-                 <active>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </active>
-                 <inactive>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>208</red>
-                     <green>0</green>
-                     <blue>0</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </inactive>
-                 <disabled>
-                  <colorrole role="WindowText">
-                   <brush brushstyle="SolidPattern">
-                    <color alpha="255">
-                     <red>126</red>
-                     <green>125</green>
-                     <blue>124</blue>
-                    </color>
-                   </brush>
-                  </colorrole>
-                 </disabled>
-                </palette>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Boil SG</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLCDNumber" name="lcdNumber_boilSG">
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
-               </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
              </item>
@@ -1129,25 +398,392 @@
                </property>
               </widget>
              </item>
-             <item row="6" column="2">
-              <widget class="QLCDNumber" name="lcdNumber_ibugu">
+             <item row="0" column="2">
+              <widget class="BtDigitWidget" name="lcdNumber_og">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>80</width>
-                 <height>0</height>
+                 <width>70</width>
+                 <height>30</height>
                 </size>
                </property>
-               <property name="frameShadow">
-                <enum>QFrame::Sunken</enum>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
                </property>
-               <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="BtDigitWidget" name="lcdNumber_ogLow">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="BtDigitWidget" name="lcdNumber_ogHigh">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="BtDigitWidget" name="lcdNumber_boilSG">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>20</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="BtDigitWidget" name="lcdNumber_fg">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>20</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="BtDigitWidget" name="lcdNumber_fgLow">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="BtDigitWidget" name="lcdNumber_fgHigh">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="BtDigitWidget" name="lcdNumber_abvLow">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="BtDigitWidget" name="lcdNumber_abv">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>20</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="BtDigitWidget" name="lcdNumber_abvHigh">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="BtDigitWidget" name="lcdNumber_ibuLow">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="BtDigitWidget" name="lcdNumber_ibu">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>20</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="3">
+              <widget class="BtDigitWidget" name="lcdNumber_ibuHigh">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="BtDigitWidget" name="lcdNumber_srmLow">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="2">
+              <widget class="BtDigitWidget" name="lcdNumber_srm">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>20</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="3">
+              <widget class="BtDigitWidget" name="lcdNumber_srmHigh">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="2">
+              <widget class="BtDigitWidget" name="lcdNumber_ibugu">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>20</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>70</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>DejaVu Sans Mono</family>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
               </widget>
              </item>
@@ -1249,6 +885,12 @@
            <bool>false</bool>
           </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="horizontalHeaderCascadingSectionResizes">
            <bool>false</bool>
           </attribute>
          </widget>
@@ -1702,8 +1344,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>601</width>
-     <height>23</height>
+     <width>608</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1880,6 +1522,11 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>BtDigitWidget</class>
+   <extends>QLabel</extends>
+   <header>BtDigitWidget.h</header>
+  </customwidget>
   <customwidget>
    <class>EquipmentComboBox</class>
    <extends>QComboBox</extends>

@@ -214,7 +214,8 @@ HEADERS += src/AboutDialog.h \
     src/YeastTableModel.h \
     src/YeastTableWidget.h \
     src/RecipeExtrasDialog.h \
-    src/MashDesigner.h
+    src/MashDesigner.h \
+    src/BtDigitWidget.h
 FORMS += ui/aboutDialog.ui \
     ui/brewDayWidget.ui \
     ui/converterTool.ui \
@@ -325,7 +326,8 @@ SOURCES += src/Algorithms.cpp \
     src/YeastTableModel.cpp \
     src/YeastTableWidget.cpp \
     src/RecipeExtrasDialog.cpp \
-    src/MashDesigner.cpp
+    src/MashDesigner.cpp \
+    src/BtDigitWidget.cpp
 DISTFILES = debian/changelog \
     configure \
     COPYING \
