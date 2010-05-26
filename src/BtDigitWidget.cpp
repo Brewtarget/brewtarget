@@ -31,12 +31,13 @@ BtDigitWidget::BtDigitWidget(QWidget *parent) : QLabel(parent)
    //styleSheet = QString("QLabel { font: normal bold 12 px \"Arial\"; color: #%1 }");
    styleSheet = QString("QLabel { font-weight: bold; color: #%1 }");
    setStyleSheet(styleSheet.arg(0,6,16,QChar('0')));
-   setFrameStyle(QFrame::StyledPanel);
-   setFrameShadow(QFrame::Raised);
+   setFrameStyle(QFrame::Box);
+   setFrameShadow(QFrame::Sunken);
    lowLim = 0;
    highLim = 1;
    lastNum = 1.5;
    lastPrec = 3;
+   constantColor = false;
 }
 
 BtDigitWidget::~BtDigitWidget()
@@ -58,29 +59,30 @@ void BtDigitWidget::display(double num, int prec)
    lastNum = num;
    lastPrec = prec;
 
-   if( num < lowLim || (constantColor && color == LOW))
+   if( (!constantColor && (num < lowLim)) || (constantColor && color == LOW))
    {
       style = styleSheet.arg(rgblow,6,16,QChar('0'));
-      std::cerr << num << " " << lowLim << "\n";
+      setToolTip(constantColor? "" : tr("Too low for style."));
    }
-   else if( num <= highLim || (constantColor && color == GOOD))
+   else if( (!constantColor && (num <= highLim)) || (constantColor && color == GOOD))
    {
       style = styleSheet.arg(rgbgood,6,16,QChar('0'));
-      std::cerr << num << " " << highLim << "\n";
+      setToolTip(constantColor? "" : tr("In range for style."));
    }
    else
    {
-      style = styleSheet.arg(rgbhigh,6,16,QChar('0'));
-      std::cerr << num << " high " << highLim << "\n";
+      if( constantColor && color == BLACK )
+         style = styleSheet.arg(0,6,16,QChar('0'));
+      else
+      {
+         style = styleSheet.arg(rgbhigh,6,16,QChar('0'));
+         setToolTip(tr("Too high for style."));
+      }
    }
 
-   if( constantColor && color == BLACK )
-      style = styleSheet.arg(0,6,16,QChar('0'));
-
    setStyleSheet(style);
-   std::cerr << style.toStdString() << "\n";
    setText(str);
-   update(); // Calls for a repaint.
+   //update(); // Calls for a repaint.
 }
 
 void BtDigitWidget::setLowLim(double num)
@@ -101,9 +103,11 @@ void BtDigitWidget::setConstantColor(ColorType c)
 {
    constantColor = (c == LOW || c == GOOD || c == HIGH || c == BLACK );
    color = c;
+   update(); // repaint.
 }
 
 void BtDigitWidget::unsetConstantColor()
 {
    constantColor = false;
+   update(); // repaint
 }
