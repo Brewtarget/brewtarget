@@ -120,6 +120,8 @@ bool MashDesigner::nextStep(int step)
    lineEdit_temp->clear();
    lineEdit_time->clear();
 
+   horizontalSlider_amount->setValue(0); // Least amount of water.
+
    return true;
 }
 
@@ -168,6 +170,16 @@ double MashDesigner::minAmt_l()
 {
    // Minimum amount occurs with maximum temperature.
    return volFromTemp_l( maxTemp_c() );
+}
+
+// However much more we can add at this step.
+double MashDesigner::maxAmt_l()
+{
+   // However much more we can fit in the tun.
+   if( ! isBatchSparge() )
+      return (equip==0)? 0 : equip->getTunVolume_l() - mashVolume_l();
+   else
+      return (equip == 0)? 0 : equip->getTunVolume_l() - grainVolume_l();
 }
 
 // Returns the required volume of water to infuse if the strike water is
@@ -225,16 +237,6 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    double tw = 1/(mw*cw) * ( (isBatchSparge()? batchMC : MC) * (tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->getTunTemp_c()) : 0) ) + tf;
 
    return tw;
-}
-
-// However much more we can add at this step.
-double MashDesigner::maxAmt_l()
-{
-   // However much more we can fit in the tun.
-   if( ! isBatchSparge() )
-      return (equip==0)? 0 : equip->getTunVolume_l() - mashVolume_l();
-   else
-      return (equip == 0)? 0 : equip->getTunVolume_l() - grainVolume_l();
 }
 
 // How many liters of grain are in the tun.
@@ -468,6 +470,7 @@ void MashDesigner::saveTargetTemp()
    updateMinTemp();
    updateMaxTemp();
    updateFullness();
+   updateCollectedWort();
 }
 
 double MashDesigner::getDecoctionAmount_l()

@@ -20,6 +20,7 @@
 #include <string>
 #include <iostream>
 #include <QIcon>
+#include <QMessageBox>
 
 #include "equipment.h"
 #include "EquipmentEditor.h"
@@ -137,6 +138,12 @@ void EquipmentEditor::save()
    obsEquip->forceNotify();
 
    Database::getDatabase()->resortEquipments(); // If the name changed, need to resort.
+
+   // Do some checks...
+   if( obsEquip->getTunVolume_l() <= 0.001 )
+      QMessageBox::warning(this, tr("Tun Volume Warning"), tr("The tun volume you entered is 0. This may cause problems."));
+   if( obsEquip->getBatchSize_l() <= 0.001 )
+      QMessageBox::warning(this, tr("Batch Size Warning"), tr("The batch size you entered is 0. This may cause problems."));
 
    setVisible(false);
    return;
