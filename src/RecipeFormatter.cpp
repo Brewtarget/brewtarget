@@ -67,8 +67,8 @@ QString RecipeFormatter::getTextFormat()
                                               Brewtarget::displayAmount(0, Units::minutes)
                                             : Brewtarget::displayAmount( (rec->getEquipment())->getBoilTime_min(), Units::minutes));
    ret += QObject::tr("Efficiency: %1\%\n").arg(rec->getEfficiency_pct(), 0, 'f', 0);
-   ret += QObject::tr("OG: %1\n").arg( rec->getOg(), 0, 'f', 3 );
-   ret += QObject::tr("FG: %1\n").arg( rec->getFg(), 0, 'f', 3 );
+   ret += QObject::tr("OG: %1\n").arg( Brewtarget::displayOG(rec->getOg(), true) );
+   ret += QObject::tr("FG: %1\n").arg( Brewtarget::displayFG(rec->getFg(), rec->getOg(), true) );
    ret += QObject::tr("ABV: %1\%\n").arg( rec->getABV_pct(), 0, 'f', 1 );
    bitternessString = QObject::tr("Bitterness: %1 IBUs (%2)\n").arg( rec->getIBU(), 0, 'f', 1 );
    switch( Brewtarget::ibuFormula )

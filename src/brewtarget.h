@@ -59,8 +59,8 @@ public:
    // Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg );
    // Display gravity appropriately.
-   static QString displayOG( double og );
-   static QString displayFG( double fg, double og ); // Need OG if we're using plato.
+   static QString displayOG( double og, bool showUnits=false );
+   static QString displayFG( double fg, double og, bool showUnits=false ); // Need OG if we're using plato.
    static double weightQStringToSI( QString qstr );
    static double volQStringToSI( QString qstr );
    static double tempQStringToSI( QString qstr );
