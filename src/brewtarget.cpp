@@ -594,7 +594,7 @@ void Brewtarget::savePersistentOptions()
 
    // Color formula.
    node = optionsDoc->createElement("color_formula");
-   switch( ibuFormula )
+   switch( colorFormula )
    {
       case MOREY:
          text = "morey";
