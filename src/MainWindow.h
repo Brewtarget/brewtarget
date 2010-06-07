@@ -60,6 +60,7 @@ class MainWindow;
 #include "RecipeExtrasDialog.h"
 #include "RefractoDialog.h"
 #include "MashDesigner.h"
+#include "PitchDialog.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -154,6 +155,7 @@ private:
    RecipeExtrasDialog* recipeExtrasDialog;
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
+   PitchDialog* pitchDialog;
 
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());

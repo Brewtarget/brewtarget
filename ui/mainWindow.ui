@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
+    <width>615</width>
     <height>622</height>
    </rect>
   </property>
@@ -1344,7 +1344,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>608</width>
+     <width>615</width>
      <height>21</height>
     </rect>
    </property>
@@ -1392,6 +1392,7 @@
     <addaction name="actionScale_Recipe"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
+    <addaction name="actionPitch_Rate_Calculator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -1518,6 +1519,11 @@
   <action name="actionRefractometer_Tools">
    <property name="text">
     <string>Refractometer Tools</string>
+   </property>
+  </action>
+  <action name="actionPitch_Rate_Calculator">
+   <property name="text">
+    <string>Pitch Rate Calculator</string>
    </property>
   </action>
  </widget>

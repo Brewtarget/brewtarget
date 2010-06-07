@@ -215,7 +215,8 @@ HEADERS += src/AboutDialog.h \
     src/YeastTableWidget.h \
     src/RecipeExtrasDialog.h \
     src/MashDesigner.h \
-    src/BtDigitWidget.h
+    src/BtDigitWidget.h \
+    src/PitchDialog.h
 FORMS += ui/aboutDialog.ui \
     ui/brewDayWidget.ui \
     ui/converterTool.ui \
@@ -243,7 +244,8 @@ FORMS += ui/aboutDialog.ui \
     ui/timerWidget.ui \
     ui/yeastDialog.ui \
     ui/yeastEditor.ui \
-    ui/mashDesigner.ui
+    ui/mashDesigner.ui \
+    ui/pitchDialog.ui
 SOURCES += src/Algorithms.cpp \
     src/database.cpp \
     src/BeerXMLElement.cpp \
@@ -327,7 +329,8 @@ SOURCES += src/Algorithms.cpp \
     src/YeastTableWidget.cpp \
     src/RecipeExtrasDialog.cpp \
     src/MashDesigner.cpp \
-    src/BtDigitWidget.cpp
+    src/BtDigitWidget.cpp \
+    src/PitchDialog.cpp
 DISTFILES = debian/changelog \
     configure \
     COPYING \

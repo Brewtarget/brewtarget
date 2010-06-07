@@ -142,6 +142,7 @@ MainWindow::MainWindow(QWidget* parent)
    recipeExtrasDialog = new RecipeExtrasDialog(this);
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
+   pitchDialog = new PitchDialog(this);
 
    setupToolbar();
 
@@ -229,6 +230,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
+   connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), pitchDialog, SLOT(show()));
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
