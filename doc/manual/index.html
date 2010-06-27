@@ -1,10 +1,10 @@
 <html>
 <head>
-	<title>Brewtarget 1.2 Manual</title>
+	<title>Brewtarget 1.2.2 Manual</title>
 </head>
 <body>
 
-<h1>Brewtarget 1.2 Manual</h1>
+<h1>Brewtarget 1.2.2 Manual</h1>
 
 <h2>A Walkthrough</h2>
 <p>
@@ -16,17 +16,22 @@ features as possible.
 <h3>Setting Options</h3>
 <p>
 Brewtarget's options are in Tools-&gt;Options. Here you should set your preferences for the unit
-system you wish to use, and which formulae you want to use in creating your recipes.
+system you wish to use, and which formulae you want to use in creating your recipes. For the purposes
+of this walkthrough, set the units to US traditional, temperature to Fahrenheit, gravity to specific gravity,
+color to Morey, and IBU to Tinseth. Note: if you choose Plato for gravity, then all the displayed FG
+numbers are already corrected to the estimated OG so that the displayed FG reflects what you will see if
+you use your refractometer.
 </p>
 
 <h3>Making a New Recipe</h3>
 <p>
-Click on either File-&gt;&quot;New Recipe&quot;, or click the green plus in the toolbar at the top of the main
+Click on either File-&gt;&quot;New Recipe&quot;, or click the blue plus in the toolbar at the top of the main
 window. Now, title your recipe in the box that pops up, and click &quot;OK&quot;.
 </p>
 
 <h3>Making a New Equipment Record</h3>
 <p>
+Never <b>ever</b> try to formulate a recipe without setting up an equipment record.
 Having an equipment record for your recipe is very important in Brewtarget. It contains a lot of
 information about your <i>particular</i> setup, and helps Brewtarget better estimate your results.
 Click on View-&gt;Equipments to bring up the Equipment Editor. At the bottom, press the green plus
@@ -34,8 +39,23 @@ and enter the name you wish to give it. Check &quot;calculate pre-boil volume&qu
 these fields as you can.
 
 <ul>
+   <li><b>Name</b> - Any name you choose to title your equipment setup.</li>
+   <li><b>Pre-boil volume</b> - Amount of wort in the kettle immediately prior to boil.</li>
+   <li><b>Calculate pre-boil volume</b> - Based on the boil time, losses, and water additions, automatically
+          calculate the pre-boil volume instead of entering it by hand.
    <li><b>Batch size</b> - How much wort you want to end up in the primary.</li>
-   <li><b>Volume</b> - How much your mash tun can hold.</li>
+
+   <li><b>Boil time</b> - How long you usually boil.</li>
+   <li><b>Evaporation rate</b> - Every hour, your boil will lose this much water. Typically, around 3L or 0.75 US gallons.</li>
+   <li><b>Kettle top-up water</b> - Amount of water you usually add directly to the kettle before boiling.
+                                    For <b>extract recipes</b>, this should be equal to the boil volume.</li>
+   <li><b>Final top-up water</b> - Amount of water to add to the wort immediately before going into the primary.</li>
+   <li><b>Hop utilization</b> - Don't use this. Brewtarget automatically calculates hop utilization.</li>
+   <li><b>Grain absorption</b> - How many liters of water are permanently lost to each kilogram of grain during
+          mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of
+          your grind, humidity, brand, and other factors.
+
+   <li><b>Volume</b> - The maximum volume your mash tun can hold.</li>
    <li><b>Mass</b> - Mass of your mash tun.</li>
    <li><b>Specific heat</b> - Specific heat of the material of your mash tun in cal/(g*C). Typical values are:</li>
    
@@ -46,12 +66,6 @@ these fields as you can.
       <li>Plastic - 0.359</li>
    </ul>
    
-   <li><b>Boil time</b> - How long you usually boil.</li>
-   <li><b>Evaporation Rate</b> - Every hour, your boil will lose this much water. Typically, around 3L or 0.75 US gallons.</li>
-   <li><b>Kettle top-up water</b> - Amount of water you usually add directly to the kettle before boiling.
-                                    For extract recipes, this should be equal to the boil volume.</li>
-   <li><b>Final top-up water</b> - Amount of water to add to the wort immediately before going into the primary.</li>
-   <li><b>Hop utilization</b> - Don't use this. Brewtarget automatically calculates hop utilization.</li>
    <li><b>Kettle to fermenter</b> - How much wort you usually leave behind in the kettle when you transfer the wort to primary.</li>
    <li><b>Lauter deadspace</b> - How much wort you usually lose in the lauter tun.</li>
 </ul>
@@ -62,21 +76,32 @@ Then, press the diskette button at the bottom to save.
 <h3>Adjusting Recipe Parameters</h3>
 <p>
 Now that you're back at the main window, open the Style drop-down list and choose &quot;American Amber Ale&quot;.
-From the Equipment drop-down list, choose &quot;Ideal&quot; (which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses)
+From the Equipment drop-down list, choose &quot;5 gal batch - Ideal&quot; (which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses)
 which is already provided by Brewtarget, just for the sake of demonstration. For now, leave
-the efficiency at 70% for the same reason.
+the efficiency at 70% for the same reason. After selecting the equipment, you will be asked if you want to set the batch
+and boil size of the recipe to that of the equipment. Click &quot;Yes&quot;.
+</p>
+
+<p>
+Brewtarget comes pre-loaded with all of the BJCP styles. This means you can check your recipe against the guidelines
+for the particular style you are trying to make. To do this, select &quot; American Amber Ale&quot; from the Style
+drop down list. You will notice that the left-most and right-most numbers for OG, FG, ABV, Bitterness, and Color
+fields have changed. These reflect the lower and upper bounds of these parameters for the style. The middle number
+for each row is the current estimate for your recipe. If the number is blue, it means it is too low; red means too high,
+and green means you're in the Goldilocks zone. If you choose, you can create your own styles in the View-&gt;Styles
+dialog. You can also view descriptions of the particular style and recommended ingredients there.
 </p>
 
 <h3>Adding Ingredients</h3>
 <p>
-First, go to the Fermentables tab on the main window, and click the green plus sign on the right.
+First, go to the Fermentables tab on the main window, and click the blue plus sign on the right.
 This brings up the database of fermentables that Brewtarget has. Scroll down to &quot;Pale Malt (2 row) US&quot;,
 single-click the name (or anywhere in the row) and press &quot;Add to Recipe&quot;. Repeat for
 &quot;Caramel/Crystal Malt - 40L&quot;, and close the fermentable database window.
 </p>
 <p>
 Back at the main window, you will see those two malts in your recipe. Click on the Crystal 40's &quot;Mashed&quot;
-checkbox to tell it that we want to have this in the mash.
+checkbox to tell it that we want to have this in the mash (this malt can also be simply steeped).
 </p>
 <p>
 Here's a cool feature about Brewtarget: you can enter amounts of stuff in pretty much any units you want.
@@ -84,63 +109,108 @@ Let's see what I mean. Double-click the 2-row's &quot;amount&quot; cell and ente
 it immediately gets converted into &quot;7.000 lb&quot; if you're using US units. For the crystal 40, tell it &quot;32 oz&quot; and watch it get
 converted into &quot;2.000 lb&quot;. You can change US/English/SI preferences in Tools-&gt;Options. Please see the
 section called &quot;Supported Units&quot; in this document to see the correct abbreviation for each unit.
+<b>Important</b>: do not forget that you MUST enter the unit suffix (lb, kg, L, mL, etc.) for almost all amount
+boxes in brewtarget. If you do not, brewtarget will simply try to guess what you mean, which can give unexpected
+results.
 </p>
 <p>
 Now you should notice something different about the OG, FG, etc., displayed in the main window.
-First, the two smaller LCDs on each side of these displays are the lower and upper limits of the style
-we have selected.
 The OG now reads 1.045, and it is green which indicates &quot;to style&quot; as dictated by the amber ale
-style we chose. However, the FG is red, which means it's too high, and the ABV is blue which means
-it is too low. The glass of beer to the right of that represents the approximate color of your beer,
-and the thing right below that which reads &quot;Cloying&quot; is a maltiness indicator (based on OG vs. IBUs).
+style we chose. However, the FG is red, which means it's too high, the ABV is blue which means
+it is too low, and the color is green: just right. The glass of beer to the right of that represents the approximate color of your beer,
+and the thing right below that which reads &quot;Cloying&quot; is the maltiness indicator (based on IBU/GU ratio which now shows 0).
 </p>
 <p>
-Now, go to the Hops tab and add 1 oz Cascade at 1 hr, 1.5 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
-be at 32, and in the green. Add Wyeast American Ale yeast to the recipe. Now everything should be in
-the green except for the ABV which is at 4.4%, but that's ok (you can correct this if you want by
+Now, go to the Hops tab and add 1 oz Cascade at 1 hr, 1 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
+be about 37.6, and in the green. Add Wyeast American Ale yeast to the recipe. Now everything should be in
+the green except for the ABV which is about 4.4%, but that's ok (you can correct this if you want by
 adding a little more fermentable stuff).
 </p>
 
 <h3>Making a Mash</h3>
 <p>
 Let's do a 2-step mash with a protein rest at 121 F and a conversion rest at 152 F. Go to the mash
-tab and click the green plus. Name it &quot;Protein&quot; and click &quot;OK&quot;. Double click its &quot;Temp&quot; cell and
-change to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;. Do the same for a &quot;Conversion&quot; step at &quot;152 F&quot;
-and for &quot;1 hr&quot;.
+tab and click the blue plus. Name it &quot;Protein&quot; and click &quot;OK&quot;. Double click its &quot;Temp&quot; cell and
+change to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;. This means we want
+to hit a target temperature of 121 F for 20 minutes. Do the same for a &quot;Conversion&quot; step at &quot;152 F&quot;
+for &quot;1 hr&quot;.
 </p>
 <p>
-I should mention something here. Until now, Brewtarget has been lying to you. Underneath the
-target batch size, it says your calculated batch size is 5.000 gal. A similar thing occurs with
+I should mention something here. Until now, Brewtarget has been <b>lying</b> to you. Underneath the
+target batch size on the main window, it says your calculated batch size is 5.000 gal. A similar thing occurs with
 the calculated boil size. These are estimates based on your mash and equipment what the actual
-volumes will be. Now, since there are no water additions in the &quot;Ideal&quot; equipment and since we're
+volumes will be. Now, since there are no water additions in the &quot;5 gal batch - Ideal&quot; equipment and since we're
 not actually adding any water for the mash yet, the displayed volumes should both be 0. However,
-Brewtarget uses these numbers in the calculation of the OG, IBUs, et cetera. So, it's convenient
-when you haven't set up the mash and everything just to be able to start adding the ingredients
-and get an approximate answer.
+Brewtarget uses these calculated batch/boil sizes in the calculation of the OG, IBUs, et cetera. So, brewtarget is
+lying because it's convenient
+when you haven't set up the mash just to be able to start adding the ingredients
+and get an approximate answer. After setting the mash addition volumes, you will get a real answer.
 </p>
 <p>
 Click on &quot;Edit Mash&quot; and give it a name. Notice that you can enter the initial grain temp, sparge
 temp and initial tun temp here. Entering these as accurately as possible will give you the best chance
-to nail your temperatures. To set tun mass and specific heat, you would click &quot;From Equipment&quot;. Now, click on the
-&quot;Mash wiz&quot; button, and give it a mash thickness (for example 1.25 qt/lb if you're in US units).
-The mash wizard just did 3 things for you: calculated infusion volumes, infusion temps., and
+to nail your temperatures. To set tun mass and specific heat, you would click &quot;From Equipment&quot;.
+You can save this mash profile by pressing &quot;Save Mash&quot; at the bottom of the mash tab. It
+will be saved under the name you gave it in the &quot;Edit mash&quot; dialog. You can
+recall a mash profile by selecting it in the appropriate drop down box.
+From here, there are two ways to create the mash.
+</p>
+
+<h3>Method 1: Mash wiz</h2>
+<p>
+The mash wiz is for quickly and easily getting the correct mash temperatures and volumes for a single
+batch sparge mash.
+Click on the
+&quot;Mash wiz&quot; button, and give it a mash thickness of 1.25 qt/lb.
+The mash wizard just did 3 things for you: calculated infusion volumes, infusion temps, and
 gave you a sparge step that will make you hit your pre-boil volume. Now Brewtarget is not lying anymore
 about the calculated boil volume and batch size. Pretty cool? You can
 see any of the infusion temperatures by selecting the name of the mash step in the table and
-pressing the edit button to the right (looks like a pencil and paper).
-
-You can save this mash profile by pressing &quot;Save Mash&quot; at the bottom of the mash tab. You can
-recall a mash profile by selecting in the appropriate drop down box. Since your equipment and recipe
+pressing the edit button to the right (looks like a pencil and paper), or by moving to brewday mode which
+we will see later. Since your equipment and recipe
 might change, you should always do the mash wizard after recalling a saved mash profile.
+</p>
+
+<h3>Method 2: Mash designer</h2>
+<p>
+The mash designer is for more advanced users. It can be used to create pretty much any mash schedule
+you desire with however many sparges, and at whatever infusion temp or volume you desire. To enter it,
+just click the &quot;Mash Des&quot; button. It is not necessary to add all of the steps beforehand
+as we did with the mash wiz. A dialog will ask you for
+the temperature of the tun before the first infusion, so enter 70 F and continue.
+</p>
+<p>
+We are now looking at the parameters for the first infusion. Enter &quot;Protein&quot; for the name,
+leave the type at &quot;Infusion&quot;, enter &quot;121 F&quot; for &quot;Target temp.&quot;, and
+&quot;20 min&quot; for the time. Now, you can either move the infusion/decoction amount slider OR
+the infusion temp slider. Moving one will cause the other to move so that the combination of
+amount and infusion temp causes you to hit 121 F. The upper and lower limits of these sliders
+are based on the maximum available space left in the tun (as given by the current equipment), and
+the boiling temperature of water. Start the amount slider at the far left. You will see that the
+tun fullness meter on the right shows an infusion ratio of 0.11 qt/lb which is far too low. How
+do I know it's too low? The total collected wort meter shows -2.768 qt, meaning that the grain
+will absorb all of the 3.020 cups and could absorb another 2.768 qt more. So, slowly move the amount
+slider until the infusion ratio reaches 1.25 qt/lb.
+</p>
+<p>
+You should see that the tun is about half full, and we have reached 1.304 gal of the 5.75 gal that we
+plan to collect pre-boil. Click &quot;Next&quot;. Title this step &quot;Conversion&quot; and set the
+target temp to 152 F and the time to 1 hr. Slowly move the temp slider all the way to 212 F. Click
+&quot;Next&quot;. Entitle this step &quot;Batch Sparge&quot;. Click the &quot;Batch Sparge&quot;
+checkbox, set the target temp to 170 F, and the time to 15 min. You will notice that the tun fullness
+has gone down, simulating that you have drained the tun of liquid; this is the purpose of the checkbox.
+Move the amount slider slowly to the right until the total collected wort reaches about 5.75 gal.
+<b>NOTE</b>: if you exceed the target 5.75 gal, the progress bar will still show 100 percent, so be
+careful and pay attention to the text which shows the actual collected wort. Click &quot;Finish&quot;
+to return to the main window.
 </p>
 
 <h3>Brewday Mode</h3>
 <p>
 Now that your recipe is all planned, wouldn't it be good to have some instructions on your
 brewday? Click the &quot;Brewday mode&quot; button in the toolbar at the top, and answer &quot;yes&quot;. It
-has made all instructions for you and listed them on the left in order. There is a timer
-available for each step if you click &quot;show timer&quot;. There are also 3 timers for general purpose
-use if you click the clock button in the toolbar.
+has made all instructions for you and listed them on the left in order. There are 3 timers to help you with
+time-critical steps if you click the clock button in the toolbar of the main window.
 They are in HH:MM:SS format, and the text box above each
 one is what you use to set it. Just enter &quot;1:00:00&quot; and press &quot;set&quot; to set the timer for
 1 hour, for example.
@@ -193,11 +263,18 @@ just as simple. However, be aware that when you restore a database, anything in 
 be wiped out.
 </p>
 
+<h2>Posting or Printing Your Recipe - Recipe to Clipboard</h2>
+<p>
+This tool is used to make a text version of the recipe so that you may print it out, post it online,
+or whatever else you can do with a text version. To print, Tools-&gt;&quot;Recipe to Clipboard as Text&quot;,
+open up a text editor, click paste in the text editor, and then print.
+</p>
+
 <h2>OG Correction Tool</h2>
 <p>
 A common problem is that you under or over estimate your efficiency and get a different OG than you
 planned for. To correct this in the boil, choose Tools-&gt;&quot;OG Correction Help&quot;. Please note
-that this tool makes some assumptions, the biggest being that you are not going to add any water post boil.
+that this tool makes the assumption that you are not going to add any water post boil.
 Just enter the SG, temp of sample, and calibration temp of the hydrometer OR the degrees Plato of the wort
 as you read it pre-boil. Then enter the pre-boil volume. Now, click &quot;Calculate&quot; and 3 fields
 will populate on the output half of the window. The first shows you the post-boil OG if you do nothing.
@@ -205,11 +282,28 @@ The next shows you how much water to add (or boil off if negative) in order to a
 The last shows how much wort you will end up with.
 </p>
 
-<h2>Recipe to Clipboard</h2>
+<h2>Pitch Rate Calculator</h2>
 <p>
-This tool is used to make a text version of the recipe so that you may print it out, post it online,
-or whatever else you can do with a text version. To print, click this button, open up a text editor,
-click paste in the text editor, and then print.
+This tool is located in Tools-&gt;&quot;Pitch Rate Calculator&quot; and helps you to make a starter
+that has the correct amount of yeast for your beer. Put in the wort volume, OG and starter OG (in specific gravity)
+and select the pitch rate. The pitch rate should be 0.75-1.00 for most ales and 1.50-2.00 for lagers.
+The output is the number of yeast cells required (in billions), the number of wyeast activator packs or
+white labs vials needed without a starter, the amount of dry yeast required (without starter), and the
+size of the starter needed to reach the cell count at the given starter OG (usually never over 1.030).
+</p>
+
+<h2>Priming Calculator</h2>
+<p>
+Tools->&gt;&quot;Priming Calculator&quot;. Put in the required input values, select a priming agent, and
+press calculate.
+</p>
+
+<h2>Refractometer Tools</h2>
+<p>
+Tools->&gt;&quot;Refractometer Tools&quot;. Here, you can find OG and current SG by using refractometer
+readings. You must always enter the current plato and either the original plato OR the OG. If you just
+want to find out what 11.2 plato corresponds to, enter 11.2 in both the original plato and current plato
+fields.
 </p>
 
 <h2>Units</h2>
@@ -221,12 +315,12 @@ click paste in the text editor, and then print.
 	unit system if you like. However, if you enter an unsupported unit, Brewtarget will assume the quantity you entered
 	has the same units as the BeerXML entry for that field (which is usuall SI). For example, if you enter &quot;20 asdf&quot;
 	into a volume field while in US mode, you will see &quot;5.283 gal&quot; because Brewtarget assumed you meant &quot;20 L&quot;
-	and then converted to US units.
+	and then converted to US units. In other words, always use a valid unit suffix.
 	</p>
 	<h3>Caveats with Auto-conversion</h3>
 	<p>
 	With US and Imperial units, people have a tendency to sometimes put a trailing &quot;s&quot; or a period at the end (hrs, hrs., etc.).
-	Brewtarget only supports singular no-period units. This will probably be a common error among users since the habit is
+	Brewtarget only supports singular no-period units. This is a common error among users since the habit is
 	so ingrained. The reason for this lack of support for such spellings should be obvious...it would mean the program has
 	to guess what you mean. The units supported, and the exact unit abbreviation you should use are given below.
 	</p>
@@ -272,6 +366,7 @@ click paste in the text editor, and then print.
 		<h4>Shared Units</h4>
 			<h5>Time</h5>
 			<ul>
+                                <li>Days - &quot;day&quot;</li>
 				<li>Hours - &quot;hr&quot;</li>
 				<li>Minutes - &quot;min&quot;</li>
 				<li>Seconds - &quot;s&quot;</li>

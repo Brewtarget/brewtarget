@@ -4,8 +4,13 @@ NOTE: you must have perl installed to run the configure script.
 ./configure
 make
 
+NOTE: "./configure --help" displays all configuration options.
+
 ==Installing==
 make install
+
+NOTE: You will probably need root privileges to do this under
+unix environments.
 
 ==Definitions==
 "unix" must be defined before compiling on unix-like systems.

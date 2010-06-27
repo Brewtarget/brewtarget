@@ -59,21 +59,24 @@ void RefractoDialog::calculate()
    ri = Algorithms::Instance().refractiveIndex(currentPlato);
    lineEdit_ri->setText(Brewtarget::displayAmount(ri));
 
-   if( ! haveOG && haveOP )
+   if( (!haveOG) && haveOP )
    {
          inputOG = Algorithms::Instance().PlatoToSG_20C20C( originalPlato );
          lineEdit_inputOG->setText(Brewtarget::displayAmount(inputOG));
    }
-   else if( ! haveOP && haveOG )
+   else if( (!haveOP) && haveOG )
    {
       originalPlato = Algorithms::Instance().SG_20C20C_toPlato( inputOG );
       lineEdit_op->setText(Brewtarget::displayAmount(originalPlato));
    }
-   else if( ! haveOP && ! haveOG )
+   else if( (!haveOP) && (!haveOG) )
       return; // Can't do much if we don't have OG or OP.
 
    og = Algorithms::Instance().PlatoToSG_20C20C( originalPlato );
-   sg = Algorithms::Instance().sgByStartingPlato( originalPlato, currentPlato );
+   if( originalPlato != currentPlato )
+     sg = Algorithms::Instance().sgByStartingPlato( originalPlato, currentPlato );
+   else
+     sg = og;
    re = Algorithms::Instance().realExtract( sg, currentPlato );
    abv = Algorithms::Instance().getABVBySGPlato( sg, currentPlato );
    abw = Algorithms::Instance().getABWBySGPlato( sg, currentPlato );

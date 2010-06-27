@@ -3,6 +3,6 @@
  <volume_unit_system>USCustomary</volume_unit_system>
  <temperature_scale>Fahrenheit</temperature_scale>
  <ibu_formula>tinseth</ibu_formula>
- <color_formula>mosher</color_formula>
+ <color_formula>morey</color_formula>
  <use_plato>false</use_plato>
 </options>

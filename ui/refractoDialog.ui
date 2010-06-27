@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
+    <width>363</width>
     <height>223</height>
    </rect>
   </property>
@@ -35,7 +35,7 @@
            <widget class="QLineEdit" name="lineEdit_op">
             <property name="minimumSize">
              <size>
-              <width>50</width>
+              <width>60</width>
               <height>0</height>
              </size>
             </property>
@@ -58,7 +58,7 @@
            <widget class="QLineEdit" name="lineEdit_inputOG">
             <property name="minimumSize">
              <size>
-              <width>50</width>
+              <width>60</width>
               <height>0</height>
              </size>
             </property>
@@ -92,7 +92,7 @@
            <widget class="QLineEdit" name="lineEdit_cp">
             <property name="minimumSize">
              <size>
-              <width>50</width>
+              <width>60</width>
               <height>0</height>
              </size>
             </property>
@@ -157,7 +157,7 @@
        <widget class="QLineEdit" name="lineEdit_ri">
         <property name="minimumSize">
          <size>
-          <width>50</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
@@ -180,7 +180,7 @@
        <widget class="QLineEdit" name="lineEdit_sg">
         <property name="minimumSize">
          <size>
-          <width>50</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
@@ -203,7 +203,7 @@
        <widget class="QLineEdit" name="lineEdit_abv">
         <property name="minimumSize">
          <size>
-          <width>50</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
@@ -226,7 +226,7 @@
        <widget class="QLineEdit" name="lineEdit_abw">
         <property name="minimumSize">
          <size>
-          <width>50</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
@@ -256,7 +256,7 @@
        <widget class="QLineEdit" name="lineEdit_re">
         <property name="minimumSize">
          <size>
-          <width>50</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
@@ -279,7 +279,7 @@
        <widget class="QLineEdit" name="lineEdit_og">
         <property name="minimumSize">
          <size>
-          <width>50</width>
+          <width>60</width>
           <height>0</height>
          </size>
         </property>
