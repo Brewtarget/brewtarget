@@ -860,7 +860,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="fermentableTab">
        <attribute name="title">
@@ -1243,19 +1243,19 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="pushButton_mashDes">
+              <property name="text">
+               <string>Mash Des</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="pushButton_mashWizard">
               <property name="toolTip">
                <string>Invoke the mash wizard</string>
               </property>
               <property name="text">
                <string>Mash wiz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_mashDes">
-              <property name="text">
-               <string>Mash Des</string>
               </property>
              </widget>
             </item>
@@ -1309,15 +1309,23 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_mashUp">
-            <property name="text">
-             <string>Up</string>
+            <property name="toolTip">
+             <string>Mash step up</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../brewtarget.qrc">
+              <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_mashDown">
-            <property name="text">
-             <string>Down</string>
+            <property name="toolTip">
+             <string>Mash step down</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../brewtarget.qrc">
+              <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
             </property>
            </widget>
           </item>

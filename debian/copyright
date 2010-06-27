@@ -10,13 +10,22 @@ Upstream Author:
 
     Philip G. Lee <rocketman768@gmail.com>
 
-Copyright:
+The Debian packaging is:
 
-    Copyright 2009-2010 Philip G. Lee 
+    Copyright (C) 2009-2010, Philip G. Lee <rocketman768@gmail.com>
 
-License:
+and is licensed under the GPL-3.
 
-    --GPLv3--
+Files: *
+Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+License: GPL-3
+
+Files: images/*
+Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+           2009-2010, Eric Tamme
+License: WTFPL-2
+
+License: GPL-3
     This package is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
@@ -32,7 +41,10 @@ License:
     Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA, or visit
     http://www.gnu.org/copyleft/gpl.html
 
-   --WTFPLv2--
+On Debian systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL-3'.
+
+License: WTFPL-2
    Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
 
    Everyone is permitted to copy and distribute verbatim or modified
@@ -44,19 +56,3 @@ License:
 
    0. You just DO WHAT THE FUCK YOU WANT TO.
 
-On Debian systems, the complete text of the GNU General
-Public License can be found in `/usr/share/common-licenses/GPL-3'.
-
-The Debian packaging is:
-
-    Copyright (C) 2009-2010, Philip G. Lee <rocketman768@gmail.com>
-
-and is licensed under the GPLv3, see above.
-
-The following are under the LGPL as part of Crystal SVG:
- - edit.png
- - editshred.png
- - exit.png
- - filesave.png
-
-The rest of the images in this package are under the WTFPLv2.

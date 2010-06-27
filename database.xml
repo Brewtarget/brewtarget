@@ -1,11 +1,11 @@
 <DATABASE>
  <EQUIPMENT>
-  <NAME>7.5 Gal Kettle w/ 10 Gal Igloo</NAME>
+  <NAME>7.5 gal Kettle with 10 gal Igloo cooler</NAME>
   <VERSION>1</VERSION>
   <BOIL_SIZE>2.47611e+01</BOIL_SIZE>
   <BATCH_SIZE>2.08198e+01</BATCH_SIZE>
   <TUN_VOLUME>3.78541e+01</TUN_VOLUME>
-  <TUN_WEIGHT>3.78541e+01</TUN_WEIGHT>
+  <TUN_WEIGHT>4.98952e+00</TUN_WEIGHT>
   <TUN_SPECIFIC_HEAT>3.59000e-01</TUN_SPECIFIC_HEAT>
   <TOP_UP_WATER>0.00000e+00</TOP_UP_WATER>
   <TRUB_CHILLER_LOSS>2.27125e-01</TRUB_CHILLER_LOSS>
@@ -18,12 +18,12 @@
   <NOTES></NOTES>
  </EQUIPMENT>
  <EQUIPMENT>
-  <NAME>8 Gal pot with 5 gal Igloo Cooler</NAME>
+  <NAME>8 gal pot with 5 gal Igloo cooler</NAME>
   <VERSION>1</VERSION>
   <BOIL_SIZE>2.18462e+01</BOIL_SIZE>
   <BATCH_SIZE>1.89300e+01</BATCH_SIZE>
   <TUN_VOLUME>1.89300e+01</TUN_VOLUME>
-  <TUN_WEIGHT>2.00000e+00</TUN_WEIGHT>
+  <TUN_WEIGHT>2.49476e+00</TUN_WEIGHT>
   <TUN_SPECIFIC_HEAT>3.00000e-01</TUN_SPECIFIC_HEAT>
   <TOP_UP_WATER>0.00000e+00</TOP_UP_WATER>
   <TRUB_CHILLER_LOSS>9.50000e-01</TRUB_CHILLER_LOSS>
@@ -36,7 +36,7 @@
   <NOTES>Popular all grain setup.  5 Gallon Gott or Igloo cooler as mash tun with false bottom, and 7-9 gallon brewpot capable of boiling at least 6 gallons of wort.  Primarily used for single infusion mashes.</NOTES>
  </EQUIPMENT>
  <EQUIPMENT>
-  <NAME>Ideal</NAME>
+  <NAME>5 gal batch - Ideal</NAME>
   <VERSION>1</VERSION>
   <BOIL_SIZE>2.22672e+01</BOIL_SIZE>
   <BATCH_SIZE>1.89271e+01</BATCH_SIZE>
@@ -51,10 +51,10 @@
   <LAUTER_DEADSPACE>0.00000e+00</LAUTER_DEADSPACE>
   <TOP_UP_KETTLE>0.00000e+00</TOP_UP_KETTLE>
   <HOP_UTILIZATION>0.00000e+00</HOP_UTILIZATION>
-  <NOTES></NOTES>
+  <NOTES>This is a setup with no losses and no mass. Use this equipment only as a first iteration when designing recipes. It will give slightly wrong results if used in practice.</NOTES>
  </EQUIPMENT>
  <EQUIPMENT>
-  <NAME>Philip 2 gal AG</NAME>
+  <NAME>2 gal batch - brew-in-a-bag 6 gal aluminum kettle/tun</NAME>
   <VERSION>1</VERSION>
   <BOIL_SIZE>1.13562e+01</BOIL_SIZE>
   <BATCH_SIZE>7.57082e+00</BATCH_SIZE>

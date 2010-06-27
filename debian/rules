@@ -57,7 +57,7 @@ clean: makefile
 	rm -f config.sub config.guess
 	rm -f brewtarget
 	rm -f brewtarget_tmp.pro
-	rm -f src/config.h
+	#rm -f src/config.h
 
 	dh_clean 
 
