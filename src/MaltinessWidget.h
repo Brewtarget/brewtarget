@@ -21,18 +21,15 @@
 
 class MaltinessWidget;
 
-#include <QWidget>
 #include <QColor>
 #include <QPaintEvent>
 #include <QLabel>
-#include <QPalette>
-#include <QSizePolicy>
 #include "observable.h"
 #include "recipe.h"
 
 enum{ CLOYING, EXTRAMALTY, SLIGHTLYMALTY, BALANCED, SLIGHTLYHOPPY, EXTRAHOPPY, HARSH };
 
-class MaltinessWidget : public QWidget, public Observer
+class MaltinessWidget : public QLabel, public Observer
 {
    Q_OBJECT
 
@@ -42,22 +39,16 @@ public:
    void observeRecipe(Recipe* recipe);
 
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
-   virtual QSize sizeHint() const;
-   QSizePolicy sizePolicy () const;
-
-protected:
-   virtual void paintEvent(QPaintEvent *);
 
 private:
 
    void setup();
+   void updateInfo();
+
    QColor bgColor();
    QString fgText();
    int region();
 
-   //QSizePolicy sPolicy;
-   QPalette palette;
-   QLabel* label;
    Recipe* recObs;
 };
 

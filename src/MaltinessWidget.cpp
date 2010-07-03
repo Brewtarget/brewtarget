@@ -22,9 +22,9 @@
 #include <Qt>
 #include <QFrame>
 #include "MaltinessWidget.h"
+#include "brewtarget.h"
 
-
-MaltinessWidget::MaltinessWidget(QWidget* parent) : QWidget(parent), recObs(0)
+MaltinessWidget::MaltinessWidget(QWidget* parent) : QLabel(parent), recObs(0)
 {
    setup();
 }
@@ -33,15 +33,14 @@ void MaltinessWidget::setup()
 {
    QSize size(110,50);
 
-   label = new QLabel(this);
    // Want to specify a minimum size and have it expand if able.
-   label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+   //setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
    // Align text in center, vertically and horizontally.
-   label->setAlignment(Qt::AlignCenter);
+   setAlignment(Qt::AlignCenter);
    // Add a border.
-   label->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+   setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
-   palette = label->palette();
+   //palette = palette();
 
    // Set size policy of the MaltinessWidget
    //sPolicy = QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -56,44 +55,9 @@ void MaltinessWidget::observeRecipe(Recipe* recipe)
    if( recipe != 0 )
       setObserved(recipe);
 
+   updateInfo();
    update();
 }
-
-void MaltinessWidget::paintEvent(QPaintEvent*)
-{
-   if( recObs == 0 )
-      return;
-
-   QPainter painter(this);
-   QColor bg = bgColor();
-   label->resize(size());
-
-   QString colorstring = QString("%1%2%3").arg(bg.red(),2,16,QChar('0')).arg(bg.green(),2,16,QChar('0')).arg(bg.blue(),2,16,QChar('0'));
-   
-   /*palette.setColor(QPalette::Active, QPalette::Window, bg);
-   palette.setColor(QPalette::Inactive, QPalette::Window, bg);
-   */
-   label->setStyleSheet(QString("QLabel { background: #%1 }").arg(colorstring).toAscii());
-   //palette.setColor(QPalette::Active, QPalette::Base, bg);
-   //palette.setColor(QPalette::Active, QPalette::AlternateBase, bg);
-   //palette.setColor(QPalette::Active, QPalette::Button, bg);
-   label->setPalette(palette);
-   label->setText(fgText());
-
-   label->render(&painter);
-}
-
-QSize MaltinessWidget::sizeHint() const
-{
-   return label->sizeHint();
-}
-
-/*
-QSizePolicy MaltinessWidget::sizePolicy() const
-{
-   return sPolicy;
-}
-*/
 
 QColor MaltinessWidget::bgColor()
 {
@@ -173,5 +137,18 @@ void MaltinessWidget::notify(Observable *notifier, QVariant /*info*/)
    if( notifier != recObs )
       return;
 
+   updateInfo();
+
    update();
+}
+
+// Changes the text/color based on recipe statistics.
+void MaltinessWidget::updateInfo()
+{
+   QColor bg = bgColor();
+
+   QString colorstring = QString("%1%2%3").arg(bg.red(),2,16,QChar('0')).arg(bg.green(),2,16,QChar('0')).arg(bg.blue(),2,16,QChar('0'));
+
+   setStyleSheet(QString("QLabel { background: #%1 }").arg(colorstring).toAscii());
+   setText(fgText());
 }
