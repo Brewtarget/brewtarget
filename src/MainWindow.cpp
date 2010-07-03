@@ -81,7 +81,7 @@ MainWindow::MainWindow(QWidget* parent)
       db = Database::getDatabase();
    }
 
-   setWindowIcon(QIcon(ICON48));
+   //setWindowIcon(QIcon(ICON48));
    
    // Different palettes for some text.
    lcdPalette_old = lcdNumber_og->palette();
@@ -188,17 +188,17 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog->startObservingDB();
 
    // Icons for menu items
-   actionExit->setIcon(QIcon(EXITPNG));
-   actionFermentables->setIcon(QIcon(SMALLBARLEY));
-   actionHops->setIcon(QIcon(SMALLHOP));
-   actionYeasts->setIcon(QIcon(SMALLYEAST));
-   actionEquipments->setIcon(QIcon(SMALLKETTLE));
-   actionMiscs->setIcon(QIcon(SMALLQUESTION));
-   actionStyles->setIcon(QIcon(SMALLSTYLE));
-   actionNewRecipe->setIcon(QIcon(SMALLPLUS));
-   actionImport_Recipes->setIcon(QIcon(SMALLARROW));
-   actionExportRecipe->setIcon(QIcon(SMALLOUTARROW));
-   actionAbout_BrewTarget->setIcon(QIcon(SMALLINFO));
+   //actionExit->setIcon(QIcon(EXITPNG));
+   //actionFermentables->setIcon(QIcon(SMALLBARLEY));
+   //actionHops->setIcon(QIcon(SMALLHOP));
+   //actionYeasts->setIcon(QIcon(SMALLYEAST));
+   //actionEquipments->setIcon(QIcon(SMALLKETTLE));
+   //actionMiscs->setIcon(QIcon(SMALLQUESTION));
+   //actionStyles->setIcon(QIcon(SMALLSTYLE));
+   //actionNewRecipe->setIcon(QIcon(SMALLPLUS));
+   //actionImport_Recipes->setIcon(QIcon(SMALLARROW));
+   //actionExportRecipe->setIcon(QIcon(SMALLOUTARROW));
+   //actionAbout_BrewTarget->setIcon(QIcon(SMALLINFO));
    
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );

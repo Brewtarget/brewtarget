@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Brewtarget - 1.2.2</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../brewtarget.qrc">
+    <normaloff>:/images/brewtarget_icon.svg</normaloff>:/images/brewtarget_icon.svg</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_8">
     <item>
@@ -66,6 +70,16 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../brewtarget.qrc">:/images/title.svg</pixmap>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_12">
@@ -1356,20 +1370,6 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionNewRecipe"/>
-    <addaction name="actionCopy_Recipe"/>
-    <addaction name="separator"/>
-    <addaction name="actionImport_Recipes"/>
-    <addaction name="actionExportRecipe"/>
-    <addaction name="actionBackup_Database"/>
-    <addaction name="actionRestore_Database"/>
-    <addaction name="separator"/>
-    <addaction name="actionExit"/>
-   </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
      <string>About</string>
@@ -1402,6 +1402,20 @@
     <addaction name="actionOptions"/>
     <addaction name="actionPitch_Rate_Calculator"/>
    </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNewRecipe"/>
+    <addaction name="actionCopy_Recipe"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport_Recipes"/>
+    <addaction name="actionExportRecipe"/>
+    <addaction name="actionBackup_Database"/>
+    <addaction name="actionRestore_Database"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
    <addaction name="menuTools"/>
@@ -1420,56 +1434,100 @@
    </attribute>
   </widget>
   <action name="actionAbout_BrewTarget">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallInfo.svg</normaloff>:/images/smallInfo.svg</iconset>
+   </property>
    <property name="text">
     <string>About BrewTarget</string>
    </property>
   </action>
   <action name="actionExportRecipe">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallOutArrow.svg</normaloff>:/images/smallOutArrow.svg</iconset>
+   </property>
    <property name="text">
     <string>Export Recipe</string>
    </property>
   </action>
   <action name="actionNewRecipe">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+   </property>
    <property name="text">
     <string>New Recipe</string>
    </property>
   </action>
   <action name="actionFermentables">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallBarley.svg</normaloff>:/images/smallBarley.svg</iconset>
+   </property>
    <property name="text">
     <string>Fermentables</string>
    </property>
   </action>
   <action name="actionHops">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallHop.svg</normaloff>:/images/smallHop.svg</iconset>
+   </property>
    <property name="text">
     <string>Hops</string>
    </property>
   </action>
   <action name="actionMiscs">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallQuestion.svg</normaloff>:/images/smallQuestion.svg</iconset>
+   </property>
    <property name="text">
     <string>Miscs</string>
    </property>
   </action>
   <action name="actionYeasts">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallYeast.svg</normaloff>:/images/smallYeast.svg</iconset>
+   </property>
    <property name="text">
     <string>Yeasts</string>
    </property>
   </action>
   <action name="actionEquipments">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallKettle.svg</normaloff>:/images/smallKettle.svg</iconset>
+   </property>
    <property name="text">
     <string>Equipments</string>
    </property>
   </action>
   <action name="actionStyles">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallStyle.svg</normaloff>:/images/smallStyle.svg</iconset>
+   </property>
    <property name="text">
     <string>Styles</string>
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
   <action name="actionImport_Recipes">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallArrow.svg</normaloff>:/images/smallArrow.svg</iconset>
+   </property>
    <property name="text">
     <string>Import Recipes</string>
    </property>
