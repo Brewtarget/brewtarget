@@ -29,6 +29,7 @@ class Brewtarget;
 #include "MainWindow.h"
 #include "unit.h"
 #include "UnitSystem.h"
+#include <QTextStream>
 
 class Brewtarget
 {
@@ -48,7 +49,7 @@ public:
    static void setApp(QApplication& a); // This method should be called before any of the others.
    static QString getDataDir();
    static QString getDocDir();
-   static QString getConfigDir();
+   static QString getConfigDir(bool* success = 0);
    static int run();
    static void log( LogType lt, std::string message );
    static void log( LogType lt, QString message );
@@ -79,6 +80,8 @@ private:
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;
    static QTranslator* btTrans;
+   static QFile* logFile;
+   static QTextStream* logStream;
 
    static bool ensureFilesExist(); // Ensure the db and option files exist.
    static void loadTranslations(); // Load translation files.

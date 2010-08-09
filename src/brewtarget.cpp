@@ -40,6 +40,8 @@ MainWindow* Brewtarget::mainWindow;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = 0;
 QTranslator* Brewtarget::btTrans = 0;
+QTextStream* Brewtarget::logStream = 0;
+QFile* Brewtarget::logFile = 0;
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
 
@@ -64,10 +66,13 @@ void Brewtarget::setApp(QApplication& a)
 
 bool Brewtarget::ensureFilesExist()
 {
-   QString dbFileName, recipeFileName, mashFileName, optionsFileName;
+   QString dbFileName, recipeFileName, mashFileName, optionsFileName, logFileName;
    QFile dbFile, recipeFile, mashFile, optionsFile;
    bool success = true;
    
+   logFile = new QFile();
+
+   // Database files.
    dbFileName = getConfigDir() + "database.xml";
    recipeFileName = getConfigDir() + "recipes.xml";
    mashFileName = getConfigDir() + "mashs.xml";
@@ -87,6 +92,23 @@ bool Brewtarget::ensureFilesExist()
    if( !optionsFile.exists() )
       success &= QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
    
+   // Log file
+   logFile->setFileName(getConfigDir() + "brewtarget_log.txt");
+   if( logFile->open(QFile::WriteOnly | QFile::Truncate) )
+      logStream = new QTextStream(logFile);
+   else
+   {
+      // Put the log in a temporary directory.
+      logFile->setFileName(QDir::tempPath() + "/brewtarget_log.txt");
+      if( logFile->open(QFile::WriteOnly | QFile::Truncate ) )
+      {
+         logW(QString("Log is in a temporary directory: %1").arg(logFile->fileName()) );
+         logStream = new QTextStream(logFile);
+      }
+      else
+         logW(QString("Could not create a log file."));
+   }
+
    return success;
 }
 
@@ -179,39 +201,82 @@ QString Brewtarget::getDocDir()
    return dir;
 }
 
-QString Brewtarget::getConfigDir()
+QString Brewtarget::getConfigDir(bool *success)
 {
 #if defined(Q_WS_X11) or defined(Q_WS_MAC) // Linux OS or Mac OS.
 
    QDir dir;
+   QFileInfo fileInfo;
    char* xdg_config_home = getenv("XDG_CONFIG_HOME");
-   bool success = true;
+   bool tmp;
    
+   // First, try XDG_CONFIG_HOME.
+   // If that variable doesn't exist, create ~/.config
    if (xdg_config_home)
    {
       dir = xdg_config_home;
    }
    else
    {
+      // Creating config directory.
       dir = QDir::home();
-      if (!dir.exists(".config"))
+      if( !dir.exists(".config") )
       {
-         success &= dir.mkdir(".config");
+         logW( QString("Config dir \"%1\" did not exist...").arg(dir.absolutePath() + "/.config") );
+         tmp = dir.mkdir(".config");
+         logW( QString( tmp ? "...created it." : "...could not create it.") );
+         if( !tmp )
+         {
+            // Failure.
+            if( success != 0 )
+               *success = false;
+            return "";
+         }
       }
-      success &= dir.cd(".config");
-   }
-   if (!dir.exists("brewtarget"))
-   {
-      success &= dir.mkdir("brewtarget");
-   }
-   success &= dir.cd("brewtarget");
 
+      // CD to config directory.
+      if( ! dir.cd(".config") )
+      {
+         logE( QString("Could not CD to \"%1\".").arg(dir.absolutePath() + "/.config") );
+         if( success != 0 )
+            *success = false;
+         return "";
+      }
+   }
+
+   // See if brewtarget dir exists.
+   if( !dir.exists("brewtarget") )
+   {
+      logW( QString("\"%1\" does not exist...creating.").arg(dir.absolutePath() + "/brewtarget") );
+
+      // Try to make brewtarget dir.
+      if( ! dir.mkdir("brewtarget") )
+      {
+         logE( QString("Could not create \"%1\"").arg(dir.absolutePath() + "/brewtarget") );
+         if( success != 0 )
+            *success = false;
+         return "";
+      }
+   }
+
+   if( ! dir.cd("brewtarget") )
+   {
+      logE(QString("Could not CD into \"%1\"").arg(dir.absolutePath() + "/brewtarget"));
+      if( success != 0 )
+         *success = false;
+      return "";
+   }
+
+   if( success != 0 )
+      *success = true;
    return dir.absolutePath() + "/";
 
 #else // Windows OS.
 
    QString dir= app->applicationDirPath();
    dir += "/";
+   if( success != 0 )
+      *success = true;
    return dir;
 
 #endif
@@ -228,6 +293,9 @@ int Brewtarget::run()
 
    ret = app->exec();
    savePersistentOptions();
+   // Close log file.
+   if( logFile != 0 && logFile->isOpen() )
+      logFile->close();
    return ret;
 }
 
@@ -241,9 +309,9 @@ void Brewtarget::log(LogType lt, QString message)
    QString m;
    
    if( lt == WARNING )
-      m = QObject::tr("WARNING: %1").arg(message);
+      m = QString("WARNING: %1").arg(message);
    else if( lt == ERROR )
-      m = QObject::tr("ERROR: %1").arg(message);
+      m = QString("ERROR: %1").arg(message);
    else
       m = message;
    
@@ -254,6 +322,10 @@ void Brewtarget::log(LogType lt, QString message)
    // GUI event loop?
    //if( mainWindow->statusBar() != 0 )
    //   mainWindow->statusBar()->showMessage(m, 3000);
+
+   // Now, write it to the log file if there is one.
+   if( logStream != 0 )
+      *logStream << m << "\n";
 }
 
 void Brewtarget::logE( QString message )
@@ -327,14 +399,17 @@ void Brewtarget::readPersistentOptions()
    int line;
    int col;
 
+   // Try to open xmlFile.
    if( ! xmlFile.open(QIODevice::ReadOnly) )
    {
-      log(WARNING, QObject::tr("Could not open %1 for reading.").arg(xmlFile.fileName()));
+      // Now we know we can't open it.
+      log(WARNING, QString("Could not open %1 for reading.").arg(xmlFile.fileName()));
+      // Try changing the permissions
       return;
    }
 
    if( ! optionsDoc->setContent(&xmlFile, false, &err, &line, &col) )
-      log(WARNING, QObject::tr("Bad document formatting in %1 %2:%3").arg(xmlFile.fileName()).arg(line).arg(col));
+      log(WARNING, QString("Bad document formatting in %1 %2:%3").arg(xmlFile.fileName()).arg(line).arg(col));
 
    root = optionsDoc->documentElement();
 
