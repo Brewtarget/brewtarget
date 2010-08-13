@@ -38,7 +38,10 @@ void MashStepTableWidget::moveSelectedStepUp()
 {
    QModelIndexList list = selectedIndexes();
 
+	/* jazzbeerman 8/11/10 changed
    if( list.size() > 1 || list.size() < 0 )
+	   */
+	if( list.size() != 1 )
       return;
 
    model->moveStepUp(list[0].row());
@@ -48,7 +51,10 @@ void MashStepTableWidget::moveSelectedStepDown()
 {
    QModelIndexList list = selectedIndexes();
 
+	/*jazzbeerman 8/11/10 changed
    if( list.size() > 1 || list.size() < 0 )
+	 */
+	if (list.size() != 1 )
       return;
 
    model->moveStepDown(list[0].row());
