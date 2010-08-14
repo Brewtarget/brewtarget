@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>615</width>
-    <height>622</height>
+    <width>758</width>
+    <height>706</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -874,7 +874,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="fermentableTab">
        <attribute name="title">
@@ -1366,8 +1366,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>615</width>
-     <height>21</height>
+     <width>758</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
