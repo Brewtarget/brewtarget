@@ -129,7 +129,7 @@ void YeastEditor::showChanges()
    comboBox_flocculation->setCurrentIndex( (tmp==-1)? 0 : tmp );
    lineEdit_attenuation->setText( Brewtarget::displayAmount(y->getAttenuation_pct(), 0));
    lineEdit_timesCultured->setText(QString::number(y->getTimesCultured()));
-   lineEdit_maxReuse->setText(QString::number(y->getMaxReuse(), 0));
+   lineEdit_maxReuse->setText(QString::number(y->getMaxReuse()));
    checkBox_addToSecondary->setCheckState( (y->getAddToSecondary())? Qt::Checked : Qt::Unchecked );
 
    textEdit_bestFor->setPlainText(y->getBestFor().c_str());
