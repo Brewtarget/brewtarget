@@ -108,10 +108,13 @@ void BrewDayWidget::insertInstruction()
 
 void BrewDayWidget::notify(Observable* notifier, QVariant info)
 {
+   /*
    if( notifier != recObs || info.toInt() != Recipe::INSTRUCTION )
       return;
+   */
 
-   showChanges();
+   if( notifier == recObs && info.toInt() == Recipe::INSTRUCTION )
+      showChanges();
 }
 
 void BrewDayWidget::clear()

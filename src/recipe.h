@@ -47,17 +47,37 @@ public:
    Recipe(const QDomNode& recipeNode);
    Recipe(Recipe* other); // Deep copy constructor.
 
-   enum{INSTRUCTION, MASH};
+   // DONOTUSE is first because it will equal zero, and by default, QVariant.toInt() returns 0. So,
+   // put this as a place holder and don't ever use it.
+   enum{DONOTUSE, INSTRUCTION, MASH};
 
+   /*!
+    * Compares recipes based on name.
+    */
    friend bool operator<(Recipe &r1, Recipe &r2 );
+   /*!
+    * Compares recipes based on name.
+    */
    friend bool operator==(Recipe &r1, Recipe &r2 );
    friend class RecipeFormatter;
 
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   /*!
+    * From BeerXMLElement.
+    */
+   virtual void fromNode(const QDomNode& node);
+   /*!
+    * From BeerXMLElement.
+    */
+   virtual void toXml(QDomDocument& doc, QDomNode& parent);
    
-   void clear(); // Retains only the name, but sets everything else to defaults.
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // Inherited from MultipleObserver.
+   /*!
+    * Retains only the name, but sets everything else to defaults.
+    */
+   void clear();
+   /*!
+    * Inherited from MultipleObserver.
+    */
+   virtual void notify(Observable *notifier, QVariant info = QVariant());
    
    void setName( const std::string &var );
    void setType( const std::string &var );
