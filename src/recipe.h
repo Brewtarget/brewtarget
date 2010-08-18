@@ -47,8 +47,12 @@ public:
    Recipe(const QDomNode& recipeNode);
    Recipe(Recipe* other); // Deep copy constructor.
 
-   // DONOTUSE is first because it will equal zero, and by default, QVariant.toInt() returns 0. So,
-   // put this as a place holder and don't ever use it.
+   /*!
+    * This enum is for passing information via Observer::notify().
+    * DONOTUSE is first because it will equal zero, and by default, QVariant.toInt() returns 0. So,
+    * put this as a place holder and don't ever use it.
+    * \todo Make sure other Observables have this dummy element.
+    */
    enum{DONOTUSE, INSTRUCTION, MASH};
 
    /*!
@@ -79,59 +83,162 @@ public:
     */
    virtual void notify(Observable *notifier, QVariant info = QVariant());
    
+   /*!
+    * Set recipe name.
+    */
    void setName( const std::string &var );
+   /*!
+    * Set recipe type.
+    */
    void setType( const std::string &var );
+   /*!
+    * Set brewer.
+    */
    void setBrewer( const QString &var );
+   /*!
+    * Set style.
+    */
    void setStyle( Style *var );
+   /*!
+    * Set the batch size in liters.
+    */
    void setBatchSize_l( double var );
+   /*!
+    * Set the boil size in liters.
+    */
    void setBoilSize_l( double var );
+   /*!
+    * Set the boil time in minutes.
+    */
    void setBoilTime_min( double var );
+   /*!
+    * Set the overall efficiency in percent (out of 100).
+    */
    void setEfficiency_pct( double var );
    
+   /*!
+    * Add a hop.
+    */
    void addHop( Hop *var );
+   /*!
+    * Remove a hop.
+    */
    bool removeHop( Hop *var );
+   /*!
+    * Add a fermentable.
+    */
    void addFermentable( Fermentable* var );
+   /*!
+    * Remove a fermentable.
+    */
    bool removeFermentable( Fermentable* var );
+   /*!
+    * Add a misc.
+    */
    void addMisc( Misc* var );
+   /*!
+    * Remove a misc.
+    */
    bool removeMisc( Misc* var );
+   /*!
+    * Add a yeast.
+    */
    void addYeast( Yeast* var );
+   /*!
+    * Remove a yeast.
+    */
    bool removeYeast( Yeast* var );
+   /*!
+    * Add a water.
+    */
    void addWater( Water* var );
+   /*!
+    * Remove a water.
+    */
    bool removeWater( Water* var );
 
+   /*!
+    * Add an instruction.
+    */
    void addInstruction( Instruction* ins );
+   /*!
+    * Remove an instruction.
+    */
    void removeInstruction( Instruction* ins );
+   /*!
+    * Swap instructions j and k.
+    * \param j some integer less than getNumInstructions()
+    * \param k some integer less than getNumInstructions()
+    */
    void swapInstructions( unsigned int j, unsigned int k );
+   //! Remove all instructions.
    void clearInstructions();
+   //! Insert instruction ins into slot pos.
    void insertInstruction( Instruction* ins, int pos );
+   //! Get the total number of instructions.
    int getNumInstructions();
+   //! Get instruction i.
    Instruction* getInstruction(int i);
+   //! Automagically generate a list of instructions.
    void generateInstructions();
+   /*!
+    * Finds the next ingredient to add that has a time
+    * less than time. Changes time to be the time of the found
+    * ingredient, or if none are found, -1. Returns a string
+    * in the form "Add %1 to %2 at %3".
+    */
    QString nextAddToBoil(double& time);
 
+   //! Set mash.
    void setMash( Mash *var );
+   //! Set assistant brewer.
    void setAsstBrewer( const QString &var );
+   //! Set equipment.
    void setEquipment( Equipment *var );
+   //! Set notes.
    void setNotes( const QString &var );
+   //! Set taste notes.
    void setTasteNotes( const QString &var );
+   //! Set taste rating.
    void setTasteRating( double var );
+   //! Set OG.
    void setOg( double var );
+   //! Set FG.
    void setFg( double var );
+   //! Set the number of fermentation stages.
    void setFermentationStages( int var );
+   //! Set the primary age in days.
    void setPrimaryAge_days( double var );
+   //! Set the primary temp in celsius.
    void setPrimaryTemp_c( double var );
+   //! Set the secondary age in days.
    void setSecondaryAge_days( double var );
+   //! Set the secondary temp in celsius.
    void setSecondaryTemp_c( double var );
+   //! Set the tertiary time in days.
    void setTertiaryAge_days( double var );
+   //! Set the tertiary temp in celsius.
    void setTertiaryTemp_c( double var );
+   //! Set the age time in days.
    void setAge_days( double var );
+   //! Set the age temp in celsius.
    void setAgeTemp_c( double var );
+   //! Set the date in a reasonable date format.
    void setDate( const QString &var );
+   //! Set the carbonation in volumes of CO2 (1L CO2 per liter of beer at standard temp and pressure).
    void setCarbonation_vols( double var );
+   //! Set the forced carbonation flag.
    void setForcedCarbonation( bool var );
+   //! Set the priming sugar name. Change this to QString.
+   /*!
+    * \todo Change to QString.
+    */
    void setPrimingSugarName( const std::string &var );
+   //! Set carbonation temp in C.
    void setCarbonationTemp_c( double var );
+   //! Set the multiplication factor to convert mass of glucose to mass of this priming sugar.
    void setPrimingSugarEquiv( double var );
+   //! Set multiplication factor to convert mass of glucose reqd. to bottle prime to that required to keg prime.
    void setKegPrimingFactor( double var );
 
    std::string getName() const;
