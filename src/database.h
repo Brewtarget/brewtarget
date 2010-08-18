@@ -37,10 +37,12 @@
 
 class Database;
 
-enum {DBEQUIP, DBFERM, DBHOP, DBMASH, DBMASHSTEP, DBMISC, DBRECIPE,
+//! Used in the hasChanged() function. Never use \b DONOTUSE ok?
+enum {DONOTUSE, DBEQUIP, DBFERM, DBHOP, DBMASH, DBMASHSTEP, DBMISC, DBRECIPE,
       DBSTYLE, DBWATER, DBYEAST, DBALL};
 
-/*
+/*!
+ * \class Database
  * This class is a singleton, meaning that there should only ever be one
  * instance of this in the whole damn program.
  *
@@ -51,11 +53,14 @@ enum {DBEQUIP, DBFERM, DBHOP, DBMASH, DBMASHSTEP, DBMISC, DBRECIPE,
 class Database : public Observable
 {
 public:
-   Database(); // Don't EVER use this method to get the database!!!
-   static Database* getDatabase(); // This should be the ONLY way you get an instance!!!
+   //! Don't EVER use this method to get the database!!!
+   Database();
+   //! This should be the ONLY way you get an instance!!!
+   static Database* getDatabase();
    static void initialize();
    static bool isInitialized();
-   static void savePersistent(); // Save to the persistent medium.
+   //! Save to the persistent medium.
+   static void savePersistent();
 
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
@@ -82,7 +87,8 @@ public:
    void removeWater(Water* water);
    void removeYeast(Yeast* yeast);
 
-   void resortAll(); // Sorts all the lists by their compare methods.
+   //! Sorts all the lists by their compare methods.
+   void resortAll();
    void resortFermentables();
    void resortEquipments();
    void resortHops();

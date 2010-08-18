@@ -1283,4 +1283,6 @@ void MainWindow::saveMash()
    
    newMash->deepCopy(mash);
    
-   (Database::getDatabase())->addMash(newMash);}
+   (Database::getDatabase())->addMash(newMash);
+}
+

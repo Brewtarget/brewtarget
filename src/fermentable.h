@@ -43,8 +43,8 @@ public:
    friend bool operator<(Fermentable &f1, Fermentable &f2);
    friend bool operator==(Fermentable &f1, Fermentable &f2);
 
-   // Info for hasChanged()
-   enum{ NAME, TYPE, AMOUNT, YIELD, COLOR, AFTERBOIL, ORIGIN, SUPPLIER, NOTES, COARSEFINEDIFF, MOISTURE,
+   //! Info for hasChanged(). Never use the \b DONOTUSE ok?
+   enum{ DONOTUSE, NAME, TYPE, AMOUNT, YIELD, COLOR, AFTERBOIL, ORIGIN, SUPPLIER, NOTES, COARSEFINEDIFF, MOISTURE,
          DIASTATICPOWER, PROTEIN, MAXINBATCH, ISMASHED };
    
    // Get
