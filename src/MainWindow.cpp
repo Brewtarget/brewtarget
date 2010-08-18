@@ -1187,6 +1187,10 @@ void MainWindow::removeMash()
 	m->removeAllMashSteps();
 	db->removeMash(m);
 	
+	recipeObs->setMash( 0 );
+	MashStepTableModel *model = mashStepTableWidget->getModel();
+	model->setMash ( 0 );
+	
 	//remove from combobox handled automatically by qt
 	if( db->getNumMashs() < 1 )
 		mashComboBox->setIndex( -1 );
@@ -1279,5 +1283,4 @@ void MainWindow::saveMash()
    
    newMash->deepCopy(mash);
    
-   (Database::getDatabase())->addMash(newMash);
-}
+   (Database::getDatabase())->addMash(newMash);}
