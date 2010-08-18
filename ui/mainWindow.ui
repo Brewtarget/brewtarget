@@ -29,6 +29,12 @@
      <layout class="QHBoxLayout" name="horizontalLayout_14">
       <item>
        <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="title">
          <string>Recipes</string>
         </property>
@@ -1320,6 +1326,17 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_mashRemove">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../brewtarget.qrc">
+              <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_mashUp">

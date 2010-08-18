@@ -104,6 +104,7 @@ public slots:
    void editSelectedMashStep();
    void setMashByName(const QString& name);
    void saveMash();
+	void removeMash();
 
    void newRecipe();
    void removeRecipe();

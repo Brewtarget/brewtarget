@@ -206,7 +206,7 @@ MainWindow::MainWindow(QWidget* parent)
    // Connect signals.
    connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
-   connect( mashComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setMashByName(const QString&)) );
+   connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashByName(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
    connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
@@ -256,6 +256,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashDes, SIGNAL( clicked() ), mashDesigner, SLOT( show() ) );
    connect( pushButton_mashUp, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepUp() ) );
    connect( pushButton_mashDown, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepDown() ) );
+	connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
 }
 
 void MainWindow::setupToolbar()
@@ -1173,6 +1174,27 @@ void MainWindow::editSelectedMashStep()
    mashStepEditor->setVisible(true);
 }
 
+void MainWindow::removeMash()
+{
+
+	if( mashComboBox->currentIndex() == -1)
+		return;
+	//due to way this is designed, we can't have a NULL mash, so
+	//we need to remove all the mash steps and then remove the mash
+	//from the database.
+	//remove from db
+	Mash *m = mashComboBox->getSelectedMash();
+	m->removeAllMashSteps();
+	db->removeMash(m);
+	
+	//remove from combobox handled automatically by qt
+	if( db->getNumMashs() < 1 )
+		mashComboBox->setIndex( -1 );
+	else
+		mashComboBox->setIndex( 0 );
+	recipeObs->forceNotify();
+}
+
 void MainWindow::brewDayMode()
 {
    if( QMessageBox::question(this, tr("New instructions?"), tr("Generate new instructions?"), QMessageBox::Yes, QMessageBox::No )
@@ -1231,8 +1253,8 @@ void MainWindow::setMashByName(const QString& name)
    
    // Do nothing if the mash retrieved is null or if it has the same name as the one in the recipe.
    if( mash == 0 || (recipeObs->getMash() != 0 && recipeObs->getMash()->getName() == mash->getName()) )
-      return;
-   
+		return;
+
    Mash* newMash = new Mash();
    
    newMash->deepCopy(mash); // Make a copy so we don't modify the database version.
