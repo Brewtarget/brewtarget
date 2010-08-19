@@ -179,10 +179,33 @@ SET( brewtarget_MOC_HEADERS
     YeastTableWidget.h
 )
 
-# This function is still experimental.
-# Processes ALL sources to see whether they need
-# moc'ing or not and creates mocs when needed.
-#QT4_AUTOMOC(${brewtarget_SRCS})
+# List of documentation files to be installed.
+SET( brewtarget_DOCS
+     ../README
+     ../COPYING.GPLv3
+     ../COPYING.WTFPL
+     ../doc/manual/index.html
+)
+
+# List of data files to be installed.
+SET( brewtarget_DATA
+     ../database.xml
+     ../mashs.xml
+     ../options.xml
+     ../recipes.xml
+)
+
+# Desktop files to install.
+SET( brewtarget_DESKTOP
+     ../brewtarget.desktop
+)
+
+# Icon files to install.
+SET( brewtarget_ICONS
+     ../icons/BrewtargetIcon.png
+)
+
+#==================================Qt Junk=====================================
 
 # Create the moc sources from the headers.
 QT4_WRAP_CPP(brewtarget_MOC_SRCS ${brewtarget_MOC_HEADERS})
@@ -190,12 +213,62 @@ QT4_WRAP_CPP(brewtarget_MOC_SRCS ${brewtarget_MOC_HEADERS})
 # Create the ui_*.h files from the *.ui files.
 QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 
+# Generate the resource .cpp from the .qrc file.
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
 
+#===========================Create the binary==================================
+
 # The executable.
-# I'm not exactly sure why we have to add brewtarget_UIS_H, but apparently
-# the ui_*.h won't get generated otherwise.
 ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
 
 # Link brewtarget against Qt libraries defined by QT_USE_FILE.
 TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} ${QT_LIBRARIES})
+
+#========================Construct the directories=============================
+
+# Directories...Debian standards.
+SET( EXEC_PREFIX ${CMAKE_INSTALL_PREFIX} )
+SET( DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" )
+SET( DATADIR ${DATAROOTDIR} )
+SET( BINDIR "${EXEC_PREFIX}/bin" )
+SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
+
+# Actual install directories.
+SET( DATAPATH "${DATADIR}/${CMAKE_PROJECT_NAME}" )
+SET( TARGETPATH ${BINDIR} )
+SET( DOCPATH ${DOCDIR} )
+
+#==============================Setup the config.h==============================
+
+# NOTE: need to replace "#define CONFIGDATADIR blah" etc. in config.in
+# with "#define CONFIGDATADIR ${CONFIGDATADIR}" so that they will be replaced
+# by the below corresponding values when CONFIGURE_FILE()
+# is called.
+SET( CONFIGDATADIR "${DATAPATH}/" )
+SET( CONFIGDOCDIR "${DOCPATH}/" )
+
+# Tell cmake where the configure file is and where
+# to put the output. All variables in config.in written as "${VAR}$
+# will be replaced by VAR as determined by cmake in config.h.
+CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
+
+#==============================Setup install targets===========================
+
+# Install the executable.
+INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+         RUNTIME DESTINATION ${TARGETPATH} )
+
+# Install the data.
+INSTALL( FILES ${brewtarget_DATA}
+         DESTINATION ${DATAPATH} )
+
+# Install the documentation.
+INSTALL( FILES ${brewtarget_DOCS}
+         DESTINATION ${DOCPATH} )
+
+# Install the icons.
+INSTALL( FILES ${brewtarget_ICONS}
+         DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+
+INSTALL( FILES ${brewtarget_DESKTOP}
+         DESTINATION "${DATAROOTDIR}/applications" )

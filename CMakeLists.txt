@@ -12,9 +12,5 @@ SET(SRCDIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 # Find Qt4 (>= 4.6.0) for this project.
 FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebkit QtXml Phonon REQUIRED)
 
-# Tell cmake where the configure file is and where
-# to put the output.
-CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
-
 # Tell cmake to process other CMakeList.txt's
 ADD_SUBDIRECTORY(${SRCDIR})
