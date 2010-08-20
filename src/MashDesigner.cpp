@@ -267,7 +267,25 @@ bool MashDesigner::initializeMash()
 
    mash->setTunSpecificHeat_calGC( equip->getTunSpecificHeat_calGC() );
    mash->setTunWeight_kg( equip->getTunWeight_kg() );
-   mash->setTunTemp_c( Brewtarget::tempQStringToSI( QInputDialog::getText(this, tr("Tun Temp"), tr("Enter the temperature of the tun before your first infusion.")) ) );
+	
+	bool ok;
+	QString dialogText = QInputDialog::getText(
+													 this,
+													 tr("Tun Temp"),
+													 tr("Enter the temperature of the tun before your first infusion."),
+													 QLineEdit::Normal, //default,
+													 QString::null,
+													 &ok
+													//don't need the widget pointer - default is parent
+															 );
+	
+	//if user hits cancel, cancel out of the dialog and quit the mashDesigner
+	//edited jazzbeerman (dcavanagh) 8/20/10
+	if(!ok)
+		return false;
+	
+	//otherwise continue - get the text and keep going
+   mash->setTunTemp_c( Brewtarget::tempQStringToSI( dialogText ) );
 
    mash->removeAllMashSteps();
    curStep = 0;
