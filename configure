@@ -11,6 +11,19 @@ function printUsageAndExit {
    exit 0;
 }
 
+# Ensures cmake exists.
+function findCMake {
+
+   if [ -z $(which cmake) ]
+   then
+      echo "ERROR: cmake not installed";
+      exit 1;
+   fi
+
+}
+
+findCMake;
+
 # Get options.
 while getopts "p:h" option
 do
@@ -28,6 +41,8 @@ then
    PREFIX=/usr;
 fi
 
+echo "Prefix: $PREFIX";
+
 # If we have a prefix...
 if [ -z $PREFIX ]
 then
@@ -38,4 +53,3 @@ else
    cmake .
 fi
 
-echo "Prefix: $PREFIX";
