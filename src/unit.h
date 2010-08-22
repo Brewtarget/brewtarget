@@ -98,14 +98,14 @@ class Unit
 {
    public:
       // Seems these can't be PURE virtuals b/c of some issue with std::map.
-      virtual double toSI( double amt ) const { return amt; }
-      virtual double fromSI( double amt ) const { return amt; }
+      virtual double toSI( double amt ) const =0;// { return amt; }
+      virtual double fromSI( double amt ) const =0;// { return amt; }
       // The unit name will be the singular of the commonly used abbreviation.
-      virtual const QString& getUnitName() const { return 0; }
-      virtual const QString& getSIUnitName() const { return 0; }
+      virtual const QString& getUnitName() const = 0; //{ return 0; }
+      virtual const QString& getSIUnitName() const = 0;// { return 0; }
 
-      virtual const int getUnitType() const { return 0; }
-      virtual const int getUnitOrTempSystem() const { return 0; }
+      virtual const int getUnitType() const = 0;//{ return 0; }
+      virtual const int getUnitOrTempSystem() const = 0;// { return 0; }
 
       static double convert( double amount, QString& fromUnit, QString& toUnit );
       static QString convert( QString qstr, QString toUnit );
