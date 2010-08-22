@@ -42,8 +42,9 @@
 /* Things that will get configured by configure script */
 
 // This only gets used by linux OS version.
-#define CONFIGDATADIR "/usr/local/share/brewtarget/"
-#define CONFIGDOCDIR "/usr/local/share/doc/brewtarget/"
+// Variables are set by cmake.
+#define CONFIGDATADIR "${CONFIGDATADIR}"
+#define CONFIGDOCDIR "${CONFIGDOCDIR}"
 
 #endif /*_CONFIG_H*/
 

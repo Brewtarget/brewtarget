@@ -1,6 +1,10 @@
 PROJECT(brewtarget)
 cmake_minimum_required(VERSION 2.6)
 
+# Creates a Makefile.
+# NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
+# will install to /foo/tmp/blah.
+
 # Version
 set( brewtarget_VERSION_MAJOR 1 )
 set( brewtarget_VERSION_MINOR 2 )

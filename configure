@@ -1,379 +1,41 @@
-#!/usr/bin/perl
-use File::Copy;
+#!/bin/bash
 
-# configure is part of Brewtarget, and is Copyright Philip G. Lee
-# (rocketman768@gmail.com), 2009.
-#
-# Brewtarget is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+PREFIX=""
+EXECPREFIX=""
 
-# Brewtarget is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-$package_name="brewtarget";
-$prefix="";
-$exec_prefix="";
-$datarootdir="";
-$datadir="";
-$bindir="";
-$docdir="";
-
-$targetpath="";
-$datapath="";
-$docpath="";
-$qprofile="brewtarget_tmp.pro";
-$make="";
-$qmake="";
-
-sub getOptions;
-sub printUsageExit;
-sub isLinux;
-sub isMac;
-sub isWindows;
-sub findExec;
-sub findMake;
-sub findQmake;
-sub findPhonon;
-sub modifyInPlace;
-
-#===========================Main Routine Below==============================
-
-print "\n---Configure script for Brewtarget.\n";
-
-if( isLinux() )
-{
-   print "OS: Linux...yay!\n";
-   if( ! $datapath )
-   {
-      # Debian defaults
-      #$datapath = "/usr/share/brewtarget/";
-   }
-   if( ! $docpath )
-   {
-      # Debian defaults
-      #$docpath = "/usr/share/doc/brewtarget/";
-   }
+function printUsageAndExit {
+   echo -e "Usage\n" \
+           "   Options:\n" \
+           "      -p T      Set prefix to T.\n" \
+           "      --help          Print this message.\n";
+   exit 0;
 }
-elsif( isMac() )
-{
-   print "OS: Mac\n";
-   if( ! $datapath )
-   {
-      $datapath = "brewtarget.app/Contents/Resources"; # Is this right?
-      $docpath = "brewtarget.app/Contents/Resources/en.lproj";
-      $targetpath = "NotUsed";
-   }
-}
-elsif( isWindows() )
-{
-   print "OS: Windows\n";
-   if( ! $datapath )
-   {
-      $datapath = "/";
-   }
-}
+
+# Get options.
+while getopts "p:h" option
+do
+   case $option in
+      p) PREFIX="$OPTARG";;
+      h) printUsageAndExit ;;
+   esac
+done
+
+# Cmake defaults CMAKE_INSTALL_PREFIX=/usr/local.
+# This is not good for debian, so try to detect debian/ubuntu.
+grep -i ubuntu /etc/issue > /dev/null 2> /dev/null || grep -i debian /etc/issue > /dev/null 2> /dev/null
+if [ $? == 0 ]
+then
+   PREFIX=/usr;
+fi
+
+# If we have a prefix...
+if [ -z $PREFIX ]
+then
+   #...define the prefix.
+   cmake -DCMAKE_INSTALL_PREFIX="$PREFIX" .
 else
-{
-   print STDERR "Unrecognized OS: $^O\n";
-   print STDERR "Post on brewtarget.sourceforge.net if you need support for your OS.\n";
-   exit 1;
-}
+   #...just run cmake.
+   cmake .
+fi
 
-getOptions(); # Get any options provided by user.
-findMake();   # Won't overwrite user options.
-findQmake();  # Won't overwrite user options.
-
-# --- Set up the standard configure script variables ---
-if( ! $prefix )
-{
-   $prefix = "/usr/local";
-}
-if( ! $exec_prefix )
-{
-   $exec_prefix = $prefix;
-}
-if( ! $datarootdir )
-{
-   $datarootdir = "$prefix/share";
-}
-if( ! $datadir )
-{
-   $datadir = $datarootdir;
-}
-if( ! $bindir )
-{
-   $bindir = "$exec_prefix/bin";
-}
-if( ! $docdir )
-{
-   $docdir = "$datarootdir/doc/$package_name";
-}
-# --- Done with standard configure script variables ---
-
-# --- Construct paths to install stuff to ---
-if( ! $datapath )
-{
-   $datapath = "$datadir/$package_name";
-}
-if( ! $targetpath )
-{
-   $targetpath = $bindir;
-}
-if( ! $docpath )
-{
-   $docpath = $docdir;
-}
-# --- Done constructing paths ---
-
-# Copy brewtarget.pro to a temporary place.
-copy('brewtarget.pro', $qprofile);
-
-# --- Modify brewtarget.pro. ---
-modifyInPlace( $qprofile, 'data.path =.*$', qq(data.path = $datapath) );
-modifyInPlace( $qprofile, 'target.path =.*$', qq(target.path = $targetpath) );
-modifyInPlace( $qprofile, 'doc.path =.*$', qq(doc.path = $docpath) );
-# --- Done modifying brewtarget.pro. ---
-
-# Copy src/config.in to src/config.h
-copy('src/config.in', 'src/config.h');
-
-# ---Modify the config.h file.---
-modifyInPlace('src/config.h', '#define CONFIGDATADIR.*$', qq(#define CONFIGDATADIR "$datapath/"));
-modifyInPlace('src/config.h', '#define CONFIGDOCDIR.*$', qq(#define CONFIGDOCDIR "$docpath/"));
-# ---Done modifying config.h.---
-
-# Make the makefile.
-if( isMac() )
-{
-   print "$qmake -spec macx-g++ $qprofile\n";
-   `$qmake -spec macx-g++ $qprofile`;
-}
-else
-{
-   print "$qmake $qprofile\n";
-   `$qmake $qprofile`;
-}
-
-# NOTE: NEED TO FIND A BETTER WAY TO DO THIS.
-# Seems qmake wants to install in mode 644 which is not cool for brewtarget.
-if( isLinux() )
-{
-   #modifyInPlace( 'Makefile', '^INSTALL_FILE\s*=.*$', q(INSTALL_FILE = install -m 666 -p));
-}
-
-print "\nYou are now ready to run \"$make\" then \"$make install\".\n\n";
-exit 0;
-#===============================END OF CONFIGURATION==================================
-
-#=========Subroutines Below==========
-sub modifyInPlace
-{
-   ($file, $oldstr, $newstr) = @_;
-   
-   $^I = '.orig'; # Sets the backup suffix for in-place editing.
-   @oldargv = @ARGV;
-   @ARGV = ($file);
-   while( <> )
-   {
-      s/$oldstr/$newstr/g;
-      print;
-   }
-   @ARGV = @oldargv;
-}
-
-sub getOptions
-{
-   foreach $arg (@ARGV)
-   {
-      ($opt, $val) = split '=', $arg;
-      if( $opt eq '--target-path' )
-      {
-         $targetpath = $val;
-         print "target.path = $val\n";
-      }
-      elsif( $opt eq '--data-path' )
-      {
-         $datapath = $val;
-         print "data.path = $val\n";
-      }
-      elsif( $opt eq '--doc-path' )
-      {
-         $docpath = $val;
-         print "doc.path = $val\n";
-      }
-      elsif( $opt eq '--make' )
-      {
-         $make = $val;
-         print "make = $val\n";
-      }
-      elsif( $opt eq '--qmake' )
-      {
-         $qmake = $val;
-         print "qmake = $val\n";
-      }
-      elsif( $opt eq '--help' )
-      {
-         printUsageExit(0);
-      }
-      elsif( $opt eq '--os' )
-      {
-         if( isWindows() )
-         {
-            print "OS: Windows ($^O)\n";
-         }
-         elsif( isLinux() )
-         {
-            print "OS: Linux ($^O)\n";
-         }
-         elsif( isMac() )
-         {
-            print "OS: Mac ($^O)\n";
-         }
-         else
-         {
-            print "OS: Unknown ($^O)\n";
-         }
-         
-         exit 0;
-      }
-      elsif( $opt eq '--prefix' )
-      {
-         $prefix = $val;
-      }
-      elsif( $opt eq '--exec-prefix' )
-      {
-         $exec_prefix = $val;
-      }
-      elsif( $opt eq '--no-ppc' )
-      {
-         modifyInPlace('brewtarget.pro', q(CONFIG [+]= ppc), q(#CONFIG += ppc));
-      }
-      elsif( $opt eq '--no-x86' )
-      {
-         modifyInPlace('brewtarget.pro', q(CONFIG [+]= x86), q(#CONFIG += x86));
-      }
-      else
-      {
-         print STDERR "Cannot recognize option '$opt'\n";
-         printUsageExit(1);
-      }
-   }
-}
-
-# printUsageExit(a) exits with code a.
-sub printUsageExit
-{
-   print "Usage\n",
-         "   Options:\n",
-         "      --target-path=T Sets the binary install dir to T.\n",
-         "      --data-path=T   Sets the data install dir to T.\n",
-         "      --doc-path=T    Sets the documentation install dir to T.\n",
-         "      --make=T        Uses T as the make executable.\n",
-         "      --qmake=T       Uses T as the qmake executable.\n",
-         "      --os            Print the OS and exit.\n",
-         "   ===Normal configure Options===\n",
-         "      --prefix=T      Set prefix to T. Don't use with above path options.\n",
-         "      --exec-prefix=T Set exec-prefix to T. Don't use with above path options.\n",
-         "   ===Mac Only===\n",
-         "      --no-ppc        Build without ppc instructions.\n",
-         "      --no-x86        Build without x86 instructions.\n",
-         "      --help          Print this message.\n";
-   exit $_[0];
-}
-
-sub isLinux
-{
-   return $^O =~ /linux/i;
-}
-
-sub isMac
-{
-   return $^O =~ /mac|darwin/i;
-}
-
-sub isWindows
-{
-   return $^O =~ /(?<!dar)win/i;
-   # Matches .*win.* except when "dar" precedes "win",
-   # thereby making this OS a mac :)
-}
-
-sub findExec
-{
-   $exec = $_[0];
-   
-   if( isWindows() )
-   {
-      print "findExec is not yet implemented for Windows\n";
-      exit 1;
-   }
-   else
-   {
-      $_ = `which $exec`;
-      chomp($_);
-      return $_;
-   }
-}
-
-sub findMake
-{
-   if( $make )
-   {
-      return;
-   }
-
-   foreach $m ('gmake', 'make')
-   {
-      $make = findExec($m);
-      if( $make )
-      {
-         break;
-      }
-   }
-   
-   if( ! $make )
-   {
-      print STDERR "ERROR: you do not have a make" ;
-      exit 1;
-   }
-}
-
-sub findQmake
-{
-   if( ! $qmake ) # Don't kill any user-supplied qmake.
-   {
-      $qmake = findExec('qmake');
-      if( ! $qmake )
-      {
-         print STDERR "ERROR: you do not have a qmake";
-         exit 1;
-      }
-   }
-
-   # Now, try to see what version we have.
-   $_ = `$qmake -v`;
-
-   /Qt\sversion\s*(\d[.]\d).*/;
-   $version = $1;
-   if( $version < 4.5 )
-   {
-      print STDERR "ERROR: your Qt version is $version but needs to be at least 4.5";
-      exit 1;
-   }
-}
-
-sub findPhonon
-{
-   `ls /usr/include/phonon`;
-   if( $? != 0 )
-   {
-      print STDERR "ERROR: you do not appear to have the Phonon development library installed";      
-   }
-}
+echo "Prefix: $PREFIX";

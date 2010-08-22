@@ -129,6 +129,7 @@ SET( brewtarget_UIS
 )
 
 # The list of files that need to be moc'd.
+# In other words, classes that have Q_OBJECT declarations and stuff.
 SET( brewtarget_MOC_HEADERS
     BeerColorWidget.h
     BrewDayWidget.h
@@ -202,7 +203,7 @@ SET( brewtarget_DESKTOP
 
 # Icon files to install.
 SET( brewtarget_ICONS
-     ../icons/BrewtargetIcon.png
+     ../images/BrewtargetIcon.png
 )
 
 #==================================Qt Junk=====================================
@@ -219,14 +220,59 @@ QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
 #===========================Create the binary==================================
 
 # The executable.
-ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
+IF( APPLE )
+   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} MACOSX_BUNDLE
+                   ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H}
+                   # Do I need to include this since I want them to go in the bundle?
+                   ${brewtarget_DOCS} ${brewtarget_DATA}
+   )
+
+   # Want the docs in the en.lproj folder.
+   SET_SOURCE_FILES_PROPERTIES(
+      ${brewtarget_DOCS}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION Resources/en.lproj
+   )
+
+   # Want the data in the resources folder.
+   SET_SOURCE_FILES_PROPERTIES(
+      ${brewtarget_DATA}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION Resources
+   )
+
+   SET( MACOSX_BUNDLE_INFO_STRING "Info string" )
+   SET( MACOSX_BUNDLE_ICON_FILE "../mac/BrewtargetIcon.icns" )
+   SET( MACOSX_BUNDLE_GUI_IDENTIFIER "Bundle gui identifier" )
+   SET( MACOSX_BUNDLE_LONG_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
+   SET( MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget" )
+   SET( MACOSX_BUNDLE_SHORT_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}" )
+   SET( MACOSX_BUNDLE_BUNDLE_VERSION "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
+   SET( MACOSX_BUNDLE_COPYRIGHT "Brewtarget is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    Brewtarget is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with brewtarget;if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA, or visit
+    http://www.gnu.org/copyleft/gpl.html"
+   )
+ELSE()
+   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
+ENDIF()
 
 # Link brewtarget against Qt libraries defined by QT_USE_FILE.
 TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} ${QT_LIBRARIES})
 
 #========================Construct the directories=============================
 
-# Directories...Debian standards.
+# Debian standard directories.
 SET( EXEC_PREFIX ${CMAKE_INSTALL_PREFIX} )
 SET( DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" )
 SET( DATADIR ${DATAROOTDIR} )
@@ -234,9 +280,17 @@ SET( BINDIR "${EXEC_PREFIX}/bin" )
 SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
 
 # Actual install directories.
-SET( DATAPATH "${DATADIR}/${CMAKE_PROJECT_NAME}" )
-SET( TARGETPATH ${BINDIR} )
-SET( DOCPATH ${DOCDIR} )
+IF( UNIX )
+  SET( DATAPATH "${DATADIR}/${CMAKE_PROJECT_NAME}" )
+  SET( TARGETPATH ${BINDIR} )
+  SET( DOCPATH ${DOCDIR} )
+ELSEIF( WIN32 )
+  SET( DATAPATH "${CMAKE_INSTALL_PREFIX}/release" )
+  SET( TARGETPATH "${CMAKE_INSTALL_PREFIX}/release" )
+  SET( DOCPATH "${CMAKE_INSTALL_PREFIX}/release/doc" )
+ELSEIF( APPLE )
+  # No directories to configure here I think.
+ENDIF()
 
 #==============================Setup the config.h==============================
 
@@ -254,21 +308,35 @@ CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
 
 #==============================Setup install targets===========================
 
-# Install the executable.
-INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-         RUNTIME DESTINATION ${TARGETPATH} )
+IF(APPLE)
 
-# Install the data.
-INSTALL( FILES ${brewtarget_DATA}
-         DESTINATION ${DATAPATH} )
+   # I don't think we need to do any install targets here.
 
-# Install the documentation.
-INSTALL( FILES ${brewtarget_DOCS}
-         DESTINATION ${DOCPATH} )
+ELSE()
 
-# Install the icons.
-INSTALL( FILES ${brewtarget_ICONS}
-         DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+   # Install the executable.
+   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+            RUNTIME DESTINATION ${TARGETPATH} )
 
-INSTALL( FILES ${brewtarget_DESKTOP}
-         DESTINATION "${DATAROOTDIR}/applications" )
+   # Install the data.
+   INSTALL( FILES ${brewtarget_DATA}
+            DESTINATION ${DATAPATH} )
+
+   # Install the documentation.
+   INSTALL( FILES ${brewtarget_DOCS}
+            DESTINATION ${DOCPATH} )
+
+ENDIF()
+
+# Some extra targets for unix.
+IF( UNIX )
+
+   # Install the icons.
+   INSTALL( FILES ${brewtarget_ICONS}
+            DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+
+   # Install the .desktop file.
+   INSTALL( FILES ${brewtarget_DESKTOP}
+            DESTINATION "${DATAROOTDIR}/applications" )
+
+ENDIF()
