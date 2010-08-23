@@ -280,7 +280,7 @@ SET( BINDIR "${EXEC_PREFIX}/bin" )
 SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
 
 # Actual install directories.
-IF( UNIX )
+IF( UNIX AND NOT APPLE )
   SET( DATAPATH "${DATADIR}/${CMAKE_PROJECT_NAME}" )
   SET( TARGETPATH ${BINDIR} )
   SET( DOCPATH ${DOCDIR} )
@@ -329,7 +329,7 @@ ELSE()
 ENDIF()
 
 # Some extra targets for unix.
-IF( UNIX )
+IF( UNIX AND NOT APPLE )
 
    # Install the icons.
    INSTALL( FILES ${brewtarget_ICONS}
