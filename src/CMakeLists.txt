@@ -191,10 +191,10 @@ SET( brewtarget_DOCS
 
 # List of data files to be installed.
 SET( brewtarget_DATA
-     ../database.xml
-     ../mashs.xml
-     ../options.xml
-     ../recipes.xml
+     ../data/database.xml
+     ../data/mashs.xml
+     ../data/options.xml
+     ../data/recipes.xml
 )
 
 # Desktop files to install.
@@ -222,6 +222,8 @@ QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
 
 # NOTE: For now, this only calls CPack when we are unix. Need to add support
 # for apple bundles and microsoft NSIS installer.
+#
+# To make the packages, "make package". For source packages, "make package_source"
 IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   MESSAGE(STATUS "CMakeRoot: ${CMAKE_ROOT}/Modules/CPack.cmake")
 
@@ -249,26 +251,26 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
       "config\\\\.h"
   )
 
-  SET(CPACK_PACKAGE_VENDOR  "Philip G. Lee")
-  SET(CPACK_PACKAGE_CONTACT "Philip G. Lee <rocketman768@gmail.com>")
-#	SET(CPACK_RESOURCE_FILE_LICENSE		${CMAKE_CURRENT_SOURCE_DIR}//COPYING)
-  SET(CPACK_PACKAGE_VERSION_MAJOR       ${brewtarget_VERSION_MAJOR})
-  SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})	# to create a debian confirm file-version-string
-  SET(CPACK_PACKAGE_FILE_NAME           "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CMAKE_SYSTEM_PROCESSOR}")
-  SET(CPACK_SOURCE_PACKAGE_FILE_NAME    "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_source")
-
-  SET( CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
-  #SET(CPACK_STRIP_FILES TRUE)
-  SET(CPACK_COMPONENTS_ALL Libraries ApplicationData)
-
-  #-----------------DEB----------------
-  SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
+  SET( CPACK_PACKAGE_VERSION ${brewtarget_VERSION_STRING} )
+  SET( CPACK_PACKAGE_VENDOR  "Philip G. Lee" )
+  SET( CPACK_PACKAGE_CONTACT "Philip G. Lee <rocketman768@gmail.com>" )
   SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY "GUI beer brewing software" )
   SET( CPACK_PACKAGE_DESCRIPTION "Brewtarget is a calculator for brewing beer. It is a Qt-based program which
        allows you to create recipes from a database of ingredients. It calculates all
        the important parameters, helps you with mash temperatures, and just makes the
        process of recipe formulation much easier." )
 
+#	SET(CPACK_RESOURCE_FILE_LICENSE		${CMAKE_CURRENT_SOURCE_DIR}//COPYING)
+  SET(CPACK_PACKAGE_VERSION_MAJOR       ${brewtarget_VERSION_MAJOR})
+  SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})	# to create a debian confirm file-version-string
+  SET(CPACK_PACKAGE_FILE_NAME           "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CMAKE_SYSTEM_PROCESSOR}")
+  SET(CPACK_SOURCE_PACKAGE_FILE_NAME    "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_source")
+  SET( CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
+  #SET(CPACK_STRIP_FILES TRUE)
+  SET(CPACK_COMPONENTS_ALL Libraries ApplicationData)
+
+  #-----------------DEB----------------
+  SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
   # NOTE: Use the getdependencies script to get the dependencies!
   SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), libx11-6, phonon (>= 4:4.5.2)
 " )
@@ -283,6 +285,11 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
       OUTPUT_STRIP_TRAILING_WHITESPACE)
     SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE})
   ENDIF(DPKG_CMD)
+
+  #-----------------RPM-----------------
+  SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
+  SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
+  SET(CPACK_RPM_PACKAGE_REQUIRES "qt(>= 4.6.0), phonon(>= 4.2.0)") # NOTE: I'm just guessing here. Somebody needs to check.
 
   INCLUDE(CPack)
 ENDIF()

@@ -1,19 +1,16 @@
-NOTE: you must have perl installed to run the configure script.
+You need CMake (2.8 or greater) installed to compile this package.
 
-==Making==
-./configure
-make
+COMPILING
+  $./configure
+  $make
 
-NOTE: "./configure --help" displays all configuration options.
+INSTALLING
+  $sudo make install
+  This may not be required in some environments.
 
-==Installing==
-make install
+MAKING PACKAGES
+  $make package
 
-NOTE: You will probably need root privileges to do this under
-unix environments.
-
-==Definitions==
-"unix" must be defined before compiling on unix-like systems.
-"windows" ...
-"mac" ...
+MAKING SOURCE PACKAGES
+  $make package_source
 
