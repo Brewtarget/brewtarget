@@ -185,6 +185,7 @@ SET( brewtarget_DOCS
      ../README
      ../COPYING.GPLv3
      ../COPYING.WTFPL
+     ../COPYRIGHT
      ../doc/manual/index.html
 )
 
@@ -216,6 +217,75 @@ QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 
 # Generate the resource .cpp from the .qrc file.
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
+
+#===============================Packaging======================================
+
+# NOTE: For now, this only calls CPack when we are unix. Need to add support
+# for apple bundles and microsoft NSIS installer.
+IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
+  MESSAGE(STATUS "CMakeRoot: ${CMAKE_ROOT}/Modules/CPack.cmake")
+
+  SET(CPACK_SET_DESTDIR "on")
+  SET(CPACK_PACKAGING_INSTALL_PREFIX "/tmp")
+  SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
+  SET(CPACK_SOURCE_GENERATOR "TBZ2;")
+  SET(CPACK_SOURCE_IGNORE_FILES 
+      "/.svn/"
+      "~$"
+      "/CMakeFiles/"
+      "/_CPack_Packages/"
+      "brewtarget.*deb"
+      "brewtarget.*rpm"
+      "brewtarget.*tar.*"
+      "CPack.*"
+      "Makefile"
+      "cmake_install.*"
+      "\\\\.o"
+      "/brewtarget.dir/"
+      "moc_.*"
+      "qrc_brewtarget.*"
+      "ui_.*h"
+      "install_manifest.*"
+      "config\\\\.h"
+  )
+
+  SET(CPACK_PACKAGE_VENDOR  "Philip G. Lee")
+  SET(CPACK_PACKAGE_CONTACT "Philip G. Lee <rocketman768@gmail.com>")
+#	SET(CPACK_RESOURCE_FILE_LICENSE		${CMAKE_CURRENT_SOURCE_DIR}//COPYING)
+  SET(CPACK_PACKAGE_VERSION_MAJOR       ${brewtarget_VERSION_MAJOR})
+  SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})	# to create a debian confirm file-version-string
+  SET(CPACK_PACKAGE_FILE_NAME           "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CMAKE_SYSTEM_PROCESSOR}")
+  SET(CPACK_SOURCE_PACKAGE_FILE_NAME    "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_source")
+
+  SET( CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
+  #SET(CPACK_STRIP_FILES TRUE)
+  SET(CPACK_COMPONENTS_ALL Libraries ApplicationData)
+
+  #-----------------DEB----------------
+  SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
+  SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY "GUI beer brewing software" )
+  SET( CPACK_PACKAGE_DESCRIPTION "Brewtarget is a calculator for brewing beer. It is a Qt-based program which
+       allows you to create recipes from a database of ingredients. It calculates all
+       the important parameters, helps you with mash temperatures, and just makes the
+       process of recipe formulation much easier." )
+
+  # NOTE: Use the getdependencies script to get the dependencies!
+  SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), libx11-6, phonon (>= 4:4.5.2)
+" )
+  SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
+  SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
+  SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
+
+  FIND_PROGRAM(DPKG_CMD dpkg)
+  IF(DPKG_CMD)
+    EXECUTE_PROCESS(COMMAND "${DPKG_CMD}" --print-architecture
+      OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+    SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE})
+  ENDIF(DPKG_CMD)
+
+  INCLUDE(CPack)
+ENDIF()
 
 #===========================Create the binary==================================
 

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+EXECUTABLE=${1}
+
+which dpkg-shlibdeps > /dev/null 2> /dev/null;
+if [ ! $? ]
+then
+  echo "You don't have dpkg-shlibdeps";
+  exit 1;
+fi
+
+if [ -ne ${EXECUTABLE} ]
+then
+  echo "${EXECUTABLE} does not exist";
+  exit 1;
+fi
+
+dpkg-shlibdeps ${EXECUTABLE} -dDepends -Tsubstvars > /dev/null 2> /dev/null;
+cat substvars | sed 's/shlibs[:]Depends=//';
+rm substvars;
+

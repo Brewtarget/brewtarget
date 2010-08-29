@@ -1,5 +1,5 @@
 Source: brewtarget
-Section: x11
+Section: misc
 Priority: optional
 Maintainer: Philip G. Lee <rocketman768@gmail.com>
 Build-Depends: debhelper (>= 7), perl, autotools-dev, libqt4-dev, qt4-qmake, libphonon-dev

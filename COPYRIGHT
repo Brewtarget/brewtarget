@@ -1,0 +1,43 @@
+Files: *
+Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+License: GPL-3
+
+Files: images/*
+Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+           2009-2010, Eric Tamme
+License: WTFPL-2
+
+License: GPL-3
+    This package is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    This package is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this package;if not, write to the Free Software Foundation,
+    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA, or visit
+    http://www.gnu.org/copyleft/gpl.html
+
+A copy of the GPL-3 license can be found in the brewtarget source package
+in the file COPYING.GPLv3. On Debian systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL-3'.
+
+License: WTFPL-2
+   Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+
+   Everyone is permitted to copy and distribute verbatim or modified
+   copies of this license document, and changing it is allowed as long
+   as the name is changed.
+
+   DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+   0. You just DO WHAT THE FUCK YOU WANT TO.
+
+A copy of the WTFPL-2 license can be found in the brewtarget source package
+in the file COPYING.WTFPL.
