@@ -6,205 +6,214 @@ SET(brewtarget_EXECUTABLE "../brewtarget")
 
 # Variable that contains all the .cpp files in this project.
 SET( brewtarget_SRCS
-    Algorithms.cpp
-    database.cpp
-    BeerXMLElement.cpp
-    BrewDayWidget.cpp
-    BeerColorWidget.cpp
-    brewtarget.cpp
-    CelsiusTempUnitSystem.cpp
-    ColorMethods.cpp
-    ConverterTool.cpp
-    equipment.cpp
-    EquipmentComboBox.cpp
-    EquipmentEditor.cpp
-    FahrenheitTempUnitSystem.cpp
-    fermentable.cpp
-    FermentableEditor.cpp
-    FermentableDialog.cpp
-    FermentableTableModel.cpp
-    FermentableTableWidget.cpp
-    main.cpp
-    HeatCalculations.cpp
-    hop.cpp
-    HopDialog.cpp
-    HopEditor.cpp
-    HopTableModel.cpp
-    HopTableWidget.cpp
-    HtmlViewer.cpp
-    instruction.cpp
-    IbuMethods.cpp
-    ImperialVolumeUnitSystem.cpp
-    InstructionWidget.cpp
-    MainWindow.cpp
-    MaltinessWidget.cpp
-    mash.cpp
-    MashComboBox.cpp
-    MashEditor.cpp
-    mashstep.cpp
-    MashStepEditor.cpp
-    MashStepTableModel.cpp
-    MashStepTableWidget.cpp
-    MashWizard.cpp
-    matrix.cpp
-    misc.cpp
-    MiscEditor.cpp
-    MiscDialog.cpp
-    MiscTableModel.cpp
-    MiscTableWidget.cpp
-    observable.cpp
-    observer.cpp
-    OgAdjuster.cpp
-    OptionDialog.cpp
-    PreInstruction.cpp
-    PrimingDialog.cpp
-    recipe.cpp
-    RecipeComboBox.cpp
-    RecipeFormatter.cpp
-    RefractoDialog.cpp
-    ScaleRecipeTool.cpp
-    SIVolumeUnitSystem.cpp
-    SIWeightUnitSystem.cpp
-    stringparsing.cpp
-    style.cpp
-    StyleComboBox.cpp
-    StyleEditor.cpp
-    TimerListDialog.cpp
-    TimerWidget.cpp
-    TimeUnitSystem.cpp
-    unit.cpp
-    UnitSystem.cpp
-    USVolumeUnitSystem.cpp
-    USWeightUnitSystem.cpp
-    water.cpp
-    WaterTableModel.cpp
-    WaterTableWidget.cpp
-    xml.cpp
-    xmlnode.cpp
-    xmltree.cpp
-    yeast.cpp
-    YeastDialog.cpp
-    YeastEditor.cpp
-    YeastTableModel.cpp
-    YeastTableWidget.cpp
-    RecipeExtrasDialog.cpp
-    MashDesigner.cpp
-    BtDigitWidget.cpp
-    PitchDialog.cpp
+    ${SRCDIR}/Algorithms.cpp
+    ${SRCDIR}/database.cpp
+    ${SRCDIR}/BeerXMLElement.cpp
+    ${SRCDIR}/BrewDayWidget.cpp
+    ${SRCDIR}/BeerColorWidget.cpp
+    ${SRCDIR}/brewtarget.cpp
+    ${SRCDIR}/CelsiusTempUnitSystem.cpp
+    ${SRCDIR}/ColorMethods.cpp
+    ${SRCDIR}/ConverterTool.cpp
+    ${SRCDIR}/equipment.cpp
+    ${SRCDIR}/EquipmentComboBox.cpp
+    ${SRCDIR}/EquipmentEditor.cpp
+    ${SRCDIR}/FahrenheitTempUnitSystem.cpp
+    ${SRCDIR}/fermentable.cpp
+    ${SRCDIR}/FermentableEditor.cpp
+    ${SRCDIR}/FermentableDialog.cpp
+    ${SRCDIR}/FermentableTableModel.cpp
+    ${SRCDIR}/FermentableTableWidget.cpp
+    ${SRCDIR}/main.cpp
+    ${SRCDIR}/HeatCalculations.cpp
+    ${SRCDIR}/hop.cpp
+    ${SRCDIR}/HopDialog.cpp
+    ${SRCDIR}/HopEditor.cpp
+    ${SRCDIR}/HopTableModel.cpp
+    ${SRCDIR}/HopTableWidget.cpp
+    ${SRCDIR}/HtmlViewer.cpp
+    ${SRCDIR}/instruction.cpp
+    ${SRCDIR}/IbuMethods.cpp
+    ${SRCDIR}/ImperialVolumeUnitSystem.cpp
+    ${SRCDIR}/InstructionWidget.cpp
+    ${SRCDIR}/MainWindow.cpp
+    ${SRCDIR}/MaltinessWidget.cpp
+    ${SRCDIR}/mash.cpp
+    ${SRCDIR}/MashComboBox.cpp
+    ${SRCDIR}/MashEditor.cpp
+    ${SRCDIR}/mashstep.cpp
+    ${SRCDIR}/MashStepEditor.cpp
+    ${SRCDIR}/MashStepTableModel.cpp
+    ${SRCDIR}/MashStepTableWidget.cpp
+    ${SRCDIR}/MashWizard.cpp
+    ${SRCDIR}/matrix.cpp
+    ${SRCDIR}/misc.cpp
+    ${SRCDIR}/MiscEditor.cpp
+    ${SRCDIR}/MiscDialog.cpp
+    ${SRCDIR}/MiscTableModel.cpp
+    ${SRCDIR}/MiscTableWidget.cpp
+    ${SRCDIR}/observable.cpp
+    ${SRCDIR}/observer.cpp
+    ${SRCDIR}/OgAdjuster.cpp
+    ${SRCDIR}/OptionDialog.cpp
+    ${SRCDIR}/PreInstruction.cpp
+    ${SRCDIR}/PrimingDialog.cpp
+    ${SRCDIR}/recipe.cpp
+    ${SRCDIR}/RecipeComboBox.cpp
+    ${SRCDIR}/RecipeFormatter.cpp
+    ${SRCDIR}/RefractoDialog.cpp
+    ${SRCDIR}/ScaleRecipeTool.cpp
+    ${SRCDIR}/SIVolumeUnitSystem.cpp
+    ${SRCDIR}/SIWeightUnitSystem.cpp
+    ${SRCDIR}/stringparsing.cpp
+    ${SRCDIR}/style.cpp
+    ${SRCDIR}/StyleComboBox.cpp
+    ${SRCDIR}/StyleEditor.cpp
+    ${SRCDIR}/TimerListDialog.cpp
+    ${SRCDIR}/TimerWidget.cpp
+    ${SRCDIR}/TimeUnitSystem.cpp
+    ${SRCDIR}/unit.cpp
+    ${SRCDIR}/UnitSystem.cpp
+    ${SRCDIR}/USVolumeUnitSystem.cpp
+    ${SRCDIR}/USWeightUnitSystem.cpp
+    ${SRCDIR}/water.cpp
+    ${SRCDIR}/WaterTableModel.cpp
+    ${SRCDIR}/WaterTableWidget.cpp
+    ${SRCDIR}/xml.cpp
+    ${SRCDIR}/xmlnode.cpp
+    ${SRCDIR}/xmltree.cpp
+    ${SRCDIR}/yeast.cpp
+    ${SRCDIR}/YeastDialog.cpp
+    ${SRCDIR}/YeastEditor.cpp
+    ${SRCDIR}/YeastTableModel.cpp
+    ${SRCDIR}/YeastTableWidget.cpp
+    ${SRCDIR}/RecipeExtrasDialog.cpp
+    ${SRCDIR}/MashDesigner.cpp
+    ${SRCDIR}/BtDigitWidget.cpp
+    ${SRCDIR}/PitchDialog.cpp
 )
 
 # List of all the *.ui.
 # TODO: can I somehow have a separate CMakeLists.txt
 # in the ui/ directory instead of here?
 SET( brewtarget_UIS
-    ../ui/aboutDialog.ui
-    ../ui/brewDayWidget.ui
-    ../ui/converterTool.ui
-    ../ui/mainWindow.ui
-    ../ui/mashStepEditor.ui
-    ../ui/miscEditor.ui
-    ../ui/fermentableEditor.ui
-    ../ui/fermentableDialog.ui
-    ../ui/equipmentEditor.ui
-    ../ui/hopDialog.ui
-    ../ui/hopEditor.ui
-    ../ui/htmlViewer.ui
-    ../ui/instructionWidget.ui
-    ../ui/mashEditor.ui
-    ../ui/mashWizard.ui
-    ../ui/miscDialog.ui
-    ../ui/ogAdjuster.ui
-    ../ui/optionsDialog.ui
-    ../ui/primingDialog.ui
-    ../ui/recipeExtrasDialog.ui
-    ../ui/refractoDialog.ui
-    ../ui/scaleRecipeTool.ui
-    ../ui/styleEditor.ui
-    ../ui/timerListDialog.ui
-    ../ui/timerWidget.ui
-    ../ui/yeastDialog.ui
-    ../ui/yeastEditor.ui
-    ../ui/mashDesigner.ui
-    ../ui/pitchDialog.ui
+    ${UIDIR}/aboutDialog.ui
+    ${UIDIR}/brewDayWidget.ui
+    ${UIDIR}/converterTool.ui
+    ${UIDIR}/mainWindow.ui
+    ${UIDIR}/mashStepEditor.ui
+    ${UIDIR}/miscEditor.ui
+    ${UIDIR}/fermentableEditor.ui
+    ${UIDIR}/fermentableDialog.ui
+    ${UIDIR}/equipmentEditor.ui
+    ${UIDIR}/hopDialog.ui
+    ${UIDIR}/hopEditor.ui
+    ${UIDIR}/htmlViewer.ui
+    ${UIDIR}/instructionWidget.ui
+    ${UIDIR}/mashEditor.ui
+    ${UIDIR}/mashWizard.ui
+    ${UIDIR}/miscDialog.ui
+    ${UIDIR}/ogAdjuster.ui
+    ${UIDIR}/optionsDialog.ui
+    ${UIDIR}/primingDialog.ui
+    ${UIDIR}/recipeExtrasDialog.ui
+    ${UIDIR}/refractoDialog.ui
+    ${UIDIR}/scaleRecipeTool.ui
+    ${UIDIR}/styleEditor.ui
+    ${UIDIR}/timerListDialog.ui
+    ${UIDIR}/timerWidget.ui
+    ${UIDIR}/yeastDialog.ui
+    ${UIDIR}/yeastEditor.ui
+    ${UIDIR}/mashDesigner.ui
+    ${UIDIR}/pitchDialog.ui
 )
 
 # The list of files that need to be moc'd.
 # In other words, classes that have Q_OBJECT declarations and stuff.
 SET( brewtarget_MOC_HEADERS
-    BeerColorWidget.h
-    BrewDayWidget.h
-    BtDigitWidget.h
-    ConverterTool.h
-    EquipmentComboBox.h
-    EquipmentEditor.h
-    FermentableEditor.h
-    FermentableDialog.h
-    FermentableTableModel.h
-    FermentableTableWidget.h
-    HopDialog.h
-    HopEditor.h
-    HopTableModel.h
-    HopTableWidget.h
-    InstructionWidget.h
-    MainWindow.h
-    MaltinessWidget.h
-    MashComboBox.h
-    MashDesigner.h
-    MashEditor.h
-    MashStepEditor.h
-    MashStepTableModel.h
-    MashStepTableWidget.h
-    MashWizard.h
-    MiscDialog.h
-    MiscEditor.h
-    MiscTableModel.h
-    MiscTableWidget.h
-    OgAdjuster.h
-    OptionDialog.h
-    PitchDialog.h
-    PrimingDialog.h
-    RecipeComboBox.h
-    RecipeExtrasDialog.h
-    RecipeFormatter.h
-    RefractoDialog.h
-    ScaleRecipeTool.h
-    StyleComboBox.h
-    StyleEditor.h
-    TimerListDialog.h
-    TimerWidget.h
-    WaterTableModel.h
-    WaterTableWidget.h
-    YeastDialog.h
-    YeastEditor.h
-    YeastTableModel.h
-    YeastTableWidget.h
+    ${SRCDIR}/BeerColorWidget.h
+    ${SRCDIR}/BrewDayWidget.h
+    ${SRCDIR}/BtDigitWidget.h
+    ${SRCDIR}/ConverterTool.h
+    ${SRCDIR}/EquipmentComboBox.h
+    ${SRCDIR}/EquipmentEditor.h
+    ${SRCDIR}/FermentableEditor.h
+    ${SRCDIR}/FermentableDialog.h
+    ${SRCDIR}/FermentableTableModel.h
+    ${SRCDIR}/FermentableTableWidget.h
+    ${SRCDIR}/HopDialog.h
+    ${SRCDIR}/HopEditor.h
+    ${SRCDIR}/HopTableModel.h
+    ${SRCDIR}/HopTableWidget.h
+    ${SRCDIR}/InstructionWidget.h
+    ${SRCDIR}/MainWindow.h
+    ${SRCDIR}/MaltinessWidget.h
+    ${SRCDIR}/MashComboBox.h
+    ${SRCDIR}/MashDesigner.h
+    ${SRCDIR}/MashEditor.h
+    ${SRCDIR}/MashStepEditor.h
+    ${SRCDIR}/MashStepTableModel.h
+    ${SRCDIR}/MashStepTableWidget.h
+    ${SRCDIR}/MashWizard.h
+    ${SRCDIR}/MiscDialog.h
+    ${SRCDIR}/MiscEditor.h
+    ${SRCDIR}/MiscTableModel.h
+    ${SRCDIR}/MiscTableWidget.h
+    ${SRCDIR}/OgAdjuster.h
+    ${SRCDIR}/OptionDialog.h
+    ${SRCDIR}/PitchDialog.h
+    ${SRCDIR}/PrimingDialog.h
+    ${SRCDIR}/RecipeComboBox.h
+    ${SRCDIR}/RecipeExtrasDialog.h
+    ${SRCDIR}/RecipeFormatter.h
+    ${SRCDIR}/RefractoDialog.h
+    ${SRCDIR}/ScaleRecipeTool.h
+    ${SRCDIR}/StyleComboBox.h
+    ${SRCDIR}/StyleEditor.h
+    ${SRCDIR}/TimerListDialog.h
+    ${SRCDIR}/TimerWidget.h
+    ${SRCDIR}/WaterTableModel.h
+    ${SRCDIR}/WaterTableWidget.h
+    ${SRCDIR}/YeastDialog.h
+    ${SRCDIR}/YeastEditor.h
+    ${SRCDIR}/YeastTableModel.h
+    ${SRCDIR}/YeastTableWidget.h
 )
 
 # List of documentation files to be installed.
 SET( brewtarget_DOCS
-     ../README
-     ../COPYING.GPLv3
-     ../COPYING.WTFPL
-     ../COPYRIGHT
-     ../doc/manual/index.html
+     ${ROOTDIR}/README
+     ${ROOTDIR}/COPYING.GPLv3
+     ${ROOTDIR}/COPYING.WTFPL
+     ${ROOTDIR}/COPYRIGHT
+     ${ROOTDIR}/doc/manual/index.html
 )
 
 # List of data files to be installed.
 SET( brewtarget_DATA
-     ../data/database.xml
-     ../data/mashs.xml
-     ../data/options.xml
-     ../data/recipes.xml
+     ${DATADIR}/data/database.xml
+     ${DATADIR}/data/mashs.xml
+     ${DATADIR}/data/options.xml
+     ${DATADIR}/data/recipes.xml
 )
 
 # Desktop files to install.
 SET( brewtarget_DESKTOP
-     ../brewtarget.desktop
+     ${ROOTDIR}/brewtarget.desktop
 )
 
 # Icon files to install.
 SET( brewtarget_ICONS
-     ../images/BrewtargetIcon.png
+     ${ROOTDIR}/images/BrewtargetIcon.png
+)
+
+SET( TRANSLATIONS_FILES
+     ${TRANSLATIONSDIR}/bt_de.ts # German
+     ${TRANSLATIONSDIR}/bt_en.ts # English
+     ${TRANSLATIONSDIR}/bt_es.ts # Spanish
+     ${TRANSLATIONSDIR}/bt_fr.ts # French
+     ${TRANSLATIONSDIR}/bt_pl.ts # Polish
+     ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese
 )
 
 #==================================Qt Junk=====================================
@@ -217,6 +226,23 @@ QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 
 # Generate the resource .cpp from the .qrc file.
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
+
+# Translations
+SET( FILES_TO_TRANSLATE ${brewtarget_SRCS} ${brewtarget_UIS} PARENT_SCOPE)
+
+OPTION(UPDATE_TRANSLATIONS "Update source translation *.ts files (WARNING: make clean will delete the source .ts files! Danger!)")
+IF(UPDATE_TRANSLATIONS)
+  # Updates the .ts files with translatable strings, AND creates the binary .qm files
+  QT4_CREATE_TRANSLATION(QM_FILES ${FILES_TO_TRANSLATE} ${TRANSLATIONS_FILES})
+ELSE()
+  # Creates the .qm files without modifying the .ts files.
+  QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
+ENDIF() 
+
+ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
+
+#INSTALL(FILES ${QM_FILES}
+#        DESTINATION ${somewhere}/translations)
 
 #===============================Packaging======================================
 

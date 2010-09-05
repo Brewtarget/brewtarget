@@ -186,22 +186,12 @@ MainWindow::MainWindow(QWidget* parent)
    hopDialog->startObservingDB();
    miscDialog->startObservingDB();
    yeastDialog->startObservingDB();
-
-   // Icons for menu items
-   //actionExit->setIcon(QIcon(EXITPNG));
-   //actionFermentables->setIcon(QIcon(SMALLBARLEY));
-   //actionHops->setIcon(QIcon(SMALLHOP));
-   //actionYeasts->setIcon(QIcon(SMALLYEAST));
-   //actionEquipments->setIcon(QIcon(SMALLKETTLE));
-   //actionMiscs->setIcon(QIcon(SMALLQUESTION));
-   //actionStyles->setIcon(QIcon(SMALLSTYLE));
-   //actionNewRecipe->setIcon(QIcon(SMALLPLUS));
-   //actionImport_Recipes->setIcon(QIcon(SMALLARROW));
-   //actionExportRecipe->setIcon(QIcon(SMALLOUTARROW));
-   //actionAbout_BrewTarget->setIcon(QIcon(SMALLINFO));
    
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );
+
+   // Resize to the smallest possible size.
+   this->resize(0,0);
 
    // Connect signals.
    connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );

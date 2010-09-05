@@ -38,6 +38,7 @@
    <file>images/smallMinus.svg</file>
    <file>images/edit.svg</file>
    <file>images/title.svg</file>
+   <file>images/title.png</file>
    <file>images/clock.svg</file>
 </qresource>
 </RCC>

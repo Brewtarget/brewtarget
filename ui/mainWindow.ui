@@ -20,7 +20,7 @@
    <string>Brewtarget - 1.2.2</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../brewtarget.qrc">
+   <iconset>
     <normaloff>:/images/brewtarget_icon.svg</normaloff>:/images/brewtarget_icon.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -76,16 +76,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="pixmap">
-         <pixmap resource="../brewtarget.qrc">:/images/title.svg</pixmap>
-        </property>
-       </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_12">
@@ -567,6 +557,97 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="palette">
+                <palette>
+                 <active>
+                  <colorrole role="WindowText">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>128</green>
+                     <blue>0</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                  <colorrole role="Text">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>128</green>
+                     <blue>0</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                  <colorrole role="ButtonText">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>128</green>
+                     <blue>0</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                 </active>
+                 <inactive>
+                  <colorrole role="WindowText">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>128</green>
+                     <blue>0</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                  <colorrole role="Text">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>128</green>
+                     <blue>0</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                  <colorrole role="ButtonText">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>128</green>
+                     <blue>0</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                 </inactive>
+                 <disabled>
+                  <colorrole role="WindowText">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>0</green>
+                     <blue>208</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                  <colorrole role="Text">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>0</green>
+                     <blue>208</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                  <colorrole role="ButtonText">
+                   <brush brushstyle="SolidPattern">
+                    <color alpha="255">
+                     <red>0</red>
+                     <green>0</green>
+                     <blue>208</blue>
+                    </color>
+                   </brush>
+                  </colorrole>
+                 </disabled>
+                </palette>
+               </property>
                <property name="font">
                 <font>
                  <family>DejaVu Sans Mono</family>
@@ -929,7 +1010,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -943,7 +1024,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -957,7 +1038,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1001,7 +1082,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -1015,7 +1096,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1029,7 +1110,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1073,7 +1154,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -1087,7 +1168,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1101,7 +1182,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1145,7 +1226,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -1159,7 +1240,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1173,7 +1254,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1219,7 +1300,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
               </property>
              </widget>
@@ -1233,7 +1314,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
               </property>
              </widget>
@@ -1247,7 +1328,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
               </property>
              </widget>
@@ -1333,7 +1414,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1344,7 +1425,7 @@
              <string>Mash step up</string>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
             </property>
            </widget>
@@ -1355,7 +1436,7 @@
              <string>Mash step down</string>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
             </property>
            </widget>
@@ -1384,7 +1465,7 @@
      <x>0</x>
      <y>0</y>
      <width>758</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1452,7 +1533,7 @@
   </widget>
   <action name="actionAbout_BrewTarget">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallInfo.svg</normaloff>:/images/smallInfo.svg</iconset>
    </property>
    <property name="text">
@@ -1461,7 +1542,7 @@
   </action>
   <action name="actionExportRecipe">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallOutArrow.svg</normaloff>:/images/smallOutArrow.svg</iconset>
    </property>
    <property name="text">
@@ -1470,7 +1551,7 @@
   </action>
   <action name="actionNewRecipe">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
    </property>
    <property name="text">
@@ -1479,7 +1560,7 @@
   </action>
   <action name="actionFermentables">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallBarley.svg</normaloff>:/images/smallBarley.svg</iconset>
    </property>
    <property name="text">
@@ -1488,7 +1569,7 @@
   </action>
   <action name="actionHops">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallHop.svg</normaloff>:/images/smallHop.svg</iconset>
    </property>
    <property name="text">
@@ -1497,7 +1578,7 @@
   </action>
   <action name="actionMiscs">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallQuestion.svg</normaloff>:/images/smallQuestion.svg</iconset>
    </property>
    <property name="text">
@@ -1506,7 +1587,7 @@
   </action>
   <action name="actionYeasts">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallYeast.svg</normaloff>:/images/smallYeast.svg</iconset>
    </property>
    <property name="text">
@@ -1515,7 +1596,7 @@
   </action>
   <action name="actionEquipments">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallKettle.svg</normaloff>:/images/smallKettle.svg</iconset>
    </property>
    <property name="text">
@@ -1524,7 +1605,7 @@
   </action>
   <action name="actionStyles">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallStyle.svg</normaloff>:/images/smallStyle.svg</iconset>
    </property>
    <property name="text">
@@ -1533,7 +1614,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
    </property>
    <property name="text">
@@ -1542,7 +1623,7 @@
   </action>
   <action name="actionImport_Recipes">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallArrow.svg</normaloff>:/images/smallArrow.svg</iconset>
    </property>
    <property name="text">
@@ -1657,8 +1738,6 @@
    <header>YeastTableWidget.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../brewtarget.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
