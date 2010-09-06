@@ -216,6 +216,11 @@ SET( TRANSLATIONS_FILES
      ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese
 )
 
+SET( FILES_TO_TRANSLATE
+     ${brewtarget_SRCS}
+     ${brewtarget_UIS}
+)
+
 #==================================Qt Junk=====================================
 
 # Create the moc sources from the headers.
@@ -228,12 +233,15 @@ QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
 
 # Translations
-SET( FILES_TO_TRANSLATE ${brewtarget_SRCS} ${brewtarget_UIS} PARENT_SCOPE)
-
-OPTION(UPDATE_TRANSLATIONS "Update source translation *.ts files (WARNING: make clean will delete the source .ts files! Danger!)")
+OPTION(UPDATE_TRANSLATIONS
+       "Update source translation *.ts files (WARNING: make clean will delete the source .ts files! Danger!)"
+       OFF)
 IF(UPDATE_TRANSLATIONS)
   # Updates the .ts files with translatable strings, AND creates the binary .qm files
-  QT4_CREATE_TRANSLATION(QM_FILES ${FILES_TO_TRANSLATE} ${TRANSLATIONS_FILES})
+  QT4_CREATE_TRANSLATION(QM_FILES
+                         ${FILES_TO_TRANSLATE}
+                         ${TRANSLATIONS_FILES}
+  )
 ELSE()
   # Creates the .qm files without modifying the .ts files.
   QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
