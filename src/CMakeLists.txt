@@ -191,10 +191,10 @@ SET( brewtarget_DOCS
 
 # List of data files to be installed.
 SET( brewtarget_DATA
-     ${DATADIR}/data/database.xml
-     ${DATADIR}/data/mashs.xml
-     ${DATADIR}/data/options.xml
-     ${DATADIR}/data/recipes.xml
+     ${DATADIR}/database.xml
+     ${DATADIR}/mashs.xml
+     ${DATADIR}/options.xml
+     ${DATADIR}/recipes.xml
 )
 
 # Desktop files to install.
