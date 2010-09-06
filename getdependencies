@@ -2,6 +2,13 @@
 
 EXECUTABLE=${1}
 
+# Check input arguments.
+if [ -z ${EXECUTABLE} ]
+then
+  echo -e "Usage: ./getdependencies <executable>";
+  exit 1;
+fi
+
 which dpkg-shlibdeps > /dev/null 2> /dev/null;
 if [ ! $? ]
 then

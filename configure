@@ -1,13 +1,15 @@
 #!/bin/bash
 
 PREFIX=""
-EXECPREFIX=""
+CMAKEOPTIONS=""
 
 function printUsageAndExit {
    echo -e "Usage\n" \
            "   Options:\n" \
-           "      -p T      Set prefix to T.\n" \
-           "      --help          Print this message.\n";
+           "      -p T   Set prefix to T.\n" \
+           "      -t     Update translation files (*.ts).\n" \
+           "      -v     Verbose compilation.\n" \
+           "      -h     Print this help message.\n";
    exit 0;
 }
 
@@ -25,10 +27,12 @@ function findCMake {
 findCMake;
 
 # Get options.
-while getopts "p:h" option
+while getopts "p:t:h:v" option
 do
    case $option in
       p) PREFIX="$OPTARG";;
+      t) CMAKEOPTIONS="$CMAKEOPTIONS -DUPDATE_TRANSLATIONS=ON";;
+      v) CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_VERBOSE_MAKEFILE=TRUE";;
       h) printUsageAndExit ;;
    esac
 done
@@ -47,9 +51,11 @@ echo "Prefix: $PREFIX";
 if [ -z $PREFIX ]
 then
    #...define the prefix.
-   cmake -DCMAKE_INSTALL_PREFIX="$PREFIX" .
-else
-   #...just run cmake.
-   cmake .
+   CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_INSTALL_PREFIX=\"$PREFIX\"";
 fi
+
+# NOTE: This is an in-source build, which will create lots of extraneous
+# files in the source directory. Really, we should probably "cd ../some_empty_directory" and
+# then call cmake on the source tree.
+cmake $CMAKEOPTIONS .
 
