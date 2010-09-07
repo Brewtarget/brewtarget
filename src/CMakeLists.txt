@@ -1,9 +1,6 @@
 # Put all the required Qt dirs in the includes.
 INCLUDE(${QT_USE_FILE})
 
-# Where the binary goes.
-SET(brewtarget_EXECUTABLE "../brewtarget")
-
 # Variable that contains all the .cpp files in this project.
 SET( brewtarget_SRCS
     ${SRCDIR}/Algorithms.cpp
@@ -221,6 +218,8 @@ SET( FILES_TO_TRANSLATE
      ${brewtarget_UIS}
 )
 
+SET( RCFILE ${WINDIR}/icon.rc )
+
 #==================================Qt Junk=====================================
 
 # Create the moc sources from the headers.
@@ -270,13 +269,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
       "~$"
       "/CMakeFiles/"
       "/_CPack_Packages/"
-      "brewtarget.*deb"
-      "brewtarget.*rpm"
-      "brewtarget.*tar.*"
+      "^brewtarget.*deb$"
+      "^brewtarget.*rpm$"
+      "^brewtarget.*tar.*$"
       "CPack.*"
       "Makefile"
       "cmake_install.*"
-      "\\\\.o"
+      "\\\\.o$"
       "/brewtarget.dir/"
       "moc_.*"
       "qrc_brewtarget.*"
@@ -326,6 +325,19 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   SET(CPACK_RPM_PACKAGE_REQUIRES "qt(>= 4.6.0), phonon(>= 4.2.0)") # NOTE: I'm just guessing here. Somebody needs to check.
 
   INCLUDE(CPack)
+ENDIF()
+
+#============================Icon for Windows==================================
+
+IF( WIN32 AND MINGW )
+  ADD_CUSTOM_COMMAND(OUTPUT ${RCFILE}
+                     COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
+                     -i${RCFILE}
+                     -o${WINDIR}/icon.o
+  )
+  SET(brewtarget_SRCS ${brewtarget_SRCS} ${WINDIR}/icon.o)
+ELSEIF(WIN32)
+  SET(brewtarget_SRCS ${brewtarget_SRCS} ${RCFILE})
 ENDIF()
 
 #===========================Create the binary==================================

@@ -12,12 +12,16 @@ SET( brewtarget_VERSION_PATCH 3 )
 
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
+# Where the binary goes.
+SET(brewtarget_EXECUTABLE "brewtarget")
+
 # Directories.
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(SRCDIR "${ROOTDIR}/src")
 SET(UIDIR "${ROOTDIR}/ui")
 SET(DATADIR "${ROOTDIR}/data")
 SET(TRANSLATIONSDIR "${ROOTDIR}/translations")
+SET(WINDIR "${ROOTDIR}/win")
 
 INCLUDE_DIRECTORIES(${SRCDIR})
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
@@ -29,6 +33,7 @@ FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebkit QtXml Phonon REQUI
 SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
              PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
              ".*~$" # Kate backup files.
+             "CMakeLists.txt.user" # From QtCreator I think.
              "CPackConfig.cmake"
              "CPackSourceConfig.cmake"
             )
