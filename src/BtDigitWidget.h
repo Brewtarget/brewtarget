@@ -27,7 +27,7 @@ class BtDigitWidget;
 
 class BtDigitWidget : public QLabel
 {
-   Q_OBJECT;
+   Q_OBJECT
 public:
    enum ColorType{ LOW, GOOD, HIGH, BLACK };
 

@@ -726,9 +726,9 @@ int Recipe::getNumInstructions()
    return instructions.size();
 }
 
-Instruction* Recipe::getInstruction(int i)
+Instruction* Recipe::getInstruction(unsigned int i)
 {
-   if( 0 <= i && i < instructions.size() )
+   if( i < instructions.size() )
       return instructions[i];
    else
       return 0;
@@ -740,7 +740,7 @@ void Recipe::generateInstructions()
    MashStep* mstep;
    instructions.clear();
    QString str;
-   int i, j, size;
+   unsigned int i, j, size;
    double timeRemaining;
    double totalWaterAdded_l = 0.0;
    double wortInBoil_l = 0.0;
@@ -2080,7 +2080,6 @@ double Recipe::getBoilGrav()
    Fermentable* ferm;
    double sugar_kg = 0.0;
    double sugar_kg_ignoreEfficiency = 0.0;
-   double points = 0.0;
    std::string type;
 
    // Calculate OG

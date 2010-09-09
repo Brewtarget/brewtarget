@@ -86,7 +86,7 @@ std::string doubleToString( double num )
 {
    static char s[32];
    
-   sprintf( s, "%.3lf", num );
+   sprintf( s, "%.3f", num );
    
    return std::string(s);
 }

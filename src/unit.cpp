@@ -86,8 +86,6 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
    Unit* u;
    QMultiMap<QString, Unit*>::iterator i = nameToUnit.find(name);
 
-   int count = nameToUnit.count(name);
-
    // First, try to find a unit consistent with the measurement system.
    for( ; i != nameToUnit.end() && i.key() == name; ++i )
    {
@@ -131,7 +129,6 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
       if( u == 0 )
          continue;
 
-      int type = u->getUnitType();
       int system = u->getUnitOrTempSystem();
 
       if( system == Any || system == USCustomary || system == ImperialAndUS || matchCurrentSystem == false )

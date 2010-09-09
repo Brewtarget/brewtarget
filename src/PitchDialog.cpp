@@ -47,7 +47,6 @@ void PitchDialog::calculate()
    double rate_MpermLP = (2-0.75) * ((double)slider_pitchRate->value()) / 100.0 + 0.75;
    double og = lineEdit_OG->text().toDouble(&ok);
    double vol_l = Brewtarget::volQStringToSI(lineEdit_vol->text());
-   double starterOg = lineEdit_starterOG->text().toDouble(&tmp);
    ok &= tmp;
    double plato = Algorithms::Instance().SG_20C20C_toPlato(og);
 

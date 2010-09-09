@@ -103,10 +103,12 @@ double Algorithms::SG_20C20C_toPlato( double sg )
 
 double Algorithms::PlatoToSG_20C20C( double plato )
 {
-   double poly[PlatoFromSG_20C20C_order+1];
+   double* poly = new double[PlatoFromSG_20C20C_order+1];
+   double ret;
+   unsigned int i;
 
    // Copy the polynomial, cuz we need to alter it.
-   for( int i = 0; i <= PlatoFromSG_20C20C_order; ++i )
+   for( i = 0; i <= PlatoFromSG_20C20C_order; ++i )
    {
       poly[i] = PlatoFromSG_20C20C[i];
    }
@@ -114,7 +116,9 @@ double Algorithms::PlatoToSG_20C20C( double plato )
    // After this, finding the root of the polynomial will be finding the SG.
    poly[0] -= plato;
 
-   return rootFind( poly, PlatoFromSG_20C20C_order, 1.000, 1.050 );
+   ret = rootFind( poly, PlatoFromSG_20C20C_order, 1.000, 1.050 );
+   delete[] poly;
+   return ret;
 }
 
 double Algorithms::getPlato( double sugar_kg, double wort_l )

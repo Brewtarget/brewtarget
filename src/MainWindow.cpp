@@ -511,24 +511,6 @@ void MainWindow::showChanges(const QVariant& info)
    Style* recipeStyle = recipeObs->getStyle();
    if( recipeStyle != 0 )
    {
-      double og = recipeObs->getOg();
-      double fg = recipeObs->getFg();
-      double abv = recipeObs->getABV_pct();
-      double ibu = recipeObs->getIBU();
-      double srm = recipeObs->getColor_srm();
-
-      /*
-      lcdNumber_ogLow->display(Brewtarget::displayOG(recipeStyle->getOgMin()));
-      lcdNumber_ogHigh->display(Brewtarget::displayOG(recipeStyle->getOgMax()));
-      lcdNumber_fgLow->display(Brewtarget::displayFG(recipeStyle->getFgMin(), recipeObs->getOg()));
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(recipeStyle->getFgMax(), recipeObs->getOg()));
-      lcdNumber_abvLow->display(QString("%1").arg(recipeStyle->getAbvMin_pct(), 0, 'f', 1));
-      lcdNumber_abvHigh->display(QString("%1").arg(recipeStyle->getAbvMax_pct(), 1));
-      lcdNumber_ibuLow->display(QString("%1").arg(recipeStyle->getIbuMin(), 0, 'f', 1));
-      lcdNumber_ibuHigh->display(QString("%1").arg(recipeStyle->getIbuMax(), 0, 'f', 1));
-      lcdNumber_srmLow->display(QString("%1").arg(recipeStyle->getColorMin_srm(), 0, 'f', 1));
-      lcdNumber_srmHigh->display(QString("%1").arg(recipeStyle->getColorMax_srm(), 0, 'f', 1));
-      */
       lcdNumber_ogLow->display(Brewtarget::displayOG(recipeStyle->getOgMin()));
       lcdNumber_ogHigh->display(Brewtarget::displayOG(recipeStyle->getOgMax()));
       lcdNumber_og->setLowLim(recipeStyle->getOgMin());
@@ -553,92 +535,7 @@ void MainWindow::showChanges(const QVariant& info)
       lcdNumber_srmHigh->display(recipeStyle->getColorMax_srm(), 1);
       lcdNumber_srm->setLowLim(recipeStyle->getColorMin_srm());
       lcdNumber_srm->setHighLim(recipeStyle->getColorMax_srm());
-
-      /*
-      if( recipeStyle->getOgMin() < og && og < recipeStyle->getOgMax() )
-      {
-         lcdNumber_og->setPalette(lcdPalette_good);
-      }
-      else if( og <= recipeStyle->getOgMin() )
-      {
-         lcdNumber_og->setPalette(lcdPalette_tooLow);
-      }
-      else
-      {
-         lcdNumber_og->setPalette(lcdPalette_tooHigh);
-      }
-
-      if( recipeStyle->getFgMin() < fg && fg < recipeStyle->getFgMax() )
-      {
-         lcdNumber_fg->setPalette(lcdPalette_good);
-      }
-      else if( fg <= recipeStyle->getFgMin() )
-      {
-         lcdNumber_fg->setPalette(lcdPalette_tooLow);
-      }
-      else
-      {
-         lcdNumber_fg->setPalette(lcdPalette_tooHigh);
-      }
-
-      if( recipeStyle->getAbvMin_pct() < abv && abv < recipeStyle->getAbvMax_pct() )
-      {
-         lcdNumber_abv->setPalette(lcdPalette_good);
-      }
-      else if( abv <= recipeStyle->getAbvMin_pct() )
-      {
-         lcdNumber_abv->setPalette(lcdPalette_tooLow);
-      }
-      else
-      {
-         lcdNumber_abv->setPalette(lcdPalette_tooHigh);
-      }
-
-      if( recipeStyle->getIbuMin() < ibu && ibu < recipeStyle->getIbuMax() )
-      {
-         lcdNumber_ibu->setPalette(lcdPalette_good);
-      }
-      else if( ibu < recipeStyle->getIbuMin() )
-      {
-         lcdNumber_ibu->setPalette(lcdPalette_tooLow);
-      }
-      else
-      {
-         lcdNumber_ibu->setPalette(lcdPalette_tooHigh);
-      }
-
-      if( recipeStyle->getColorMin_srm() < srm && srm < recipeStyle->getColorMax_srm() )
-      {
-         lcdNumber_srm->setPalette(lcdPalette_good);
-      }
-      else if( srm < recipeStyle->getColorMin_srm() )
-      {
-         lcdNumber_srm->setPalette(lcdPalette_tooLow);
-      }
-      else
-      {
-         lcdNumber_srm->setPalette(lcdPalette_tooHigh);
-      }
-      */
    }
-   else
-   {
-      /*
-      lcdNumber_og->setPalette(lcdPalette_old);
-      lcdNumber_fg->setPalette(lcdPalette_old);
-      lcdNumber_abv->setPalette(lcdPalette_old);
-      lcdNumber_ibu->setPalette(lcdPalette_old);
-      lcdNumber_srm->setPalette(lcdPalette_old);
-      */
-   }
-   
-   /*
-   lcdNumber_og->update();
-   lcdNumber_fg->update();
-   lcdNumber_abv->update();
-   lcdNumber_ibu->update();
-   lcdNumber_srm->update();
-   */
 
    // See if we need to change the mash in the table.
    if( info.toInt() == Recipe::MASH && recipeObs->getMash() != 0 )

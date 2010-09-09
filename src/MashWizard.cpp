@@ -80,7 +80,7 @@ void MashWizard::wizardry()
 
    Mash* mash = recObs->getMash();
    MashStep* mashStep;
-   int i, j;
+   unsigned int i, j;
    double thickness_LKg;
    double thickNum;
    double MC, MCw;
@@ -220,7 +220,7 @@ void MashWizard::wizardry()
       // If the recipe already has a mash step named "Final Batch Sparge",
       // find it and use it instead of making a new one.
       bool foundSparge = false;
-      for( int j = 0; j < mash->getNumMashSteps(); ++j )
+      for( j = 0; j < mash->getNumMashSteps(); ++j )
       {
          if( mash->getMashStep(j)->getName() == "Final Batch Sparge" )
          {

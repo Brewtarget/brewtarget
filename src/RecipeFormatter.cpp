@@ -66,10 +66,10 @@ QString RecipeFormatter::getTextFormat()
    ret += QObject::tr("Boil Time: %1\n").arg( (rec->getEquipment() == 0)?
                                               Brewtarget::displayAmount(0, Units::minutes)
                                             : Brewtarget::displayAmount( (rec->getEquipment())->getBoilTime_min(), Units::minutes));
-   ret += QObject::tr("Efficiency: %1\%\n").arg(rec->getEfficiency_pct(), 0, 'f', 0);
+   ret += QObject::tr("Efficiency: %1%%\n").arg(rec->getEfficiency_pct(), 0, 'f', 0);
    ret += QObject::tr("OG: %1\n").arg( Brewtarget::displayOG(rec->getOg(), true) );
    ret += QObject::tr("FG: %1\n").arg( Brewtarget::displayFG(rec->getFg(), rec->getOg(), true) );
-   ret += QObject::tr("ABV: %1\%\n").arg( rec->getABV_pct(), 0, 'f', 1 );
+   ret += QObject::tr("ABV: %1%%\n").arg( rec->getABV_pct(), 0, 'f', 1 );
    bitternessString = QObject::tr("Bitterness: %1 IBUs (%2)\n").arg( rec->getIBU(), 0, 'f', 1 );
    switch( Brewtarget::ibuFormula )
    {
@@ -121,7 +121,7 @@ QString RecipeFormatter::getTextFormat()
          amounts.append( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms) );
          masheds.append( ferm->getIsMashed() ? QObject::tr("Yes") : QObject::tr("No") );
          lates.append( ferm->getAddAfterBoil() ? QObject::tr("Yes") : QObject::tr("No") );
-         yields.append( QString("%1\%").arg(ferm->getYield_pct(), 0, 'f', 0) );
+         yields.append( QString("%1%%").arg(ferm->getYield_pct(), 0, 'f', 0) );
          colors.append( QString("%1 L").arg(ferm->getColor_srm(), 0, 'f', 0) );
       }
       
@@ -162,7 +162,7 @@ QString RecipeFormatter::getTextFormat()
          Hop* hop = rec->getHop(i);
          
          names.append( hop->getName().c_str() );
-         alphas.append( QString("%1\%").arg(hop->getAlpha_pct(), 0, 'f', 1) );
+         alphas.append( QString("%1%%").arg(hop->getAlpha_pct(), 0, 'f', 1) );
          amounts.append( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms) );
          uses.append( hop->getUse().c_str() );
          times.append( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) );
@@ -342,8 +342,8 @@ void RecipeFormatter::toTextClipboard()
 
 unsigned int RecipeFormatter::getMaxLength( QStringList* list )
 {
-   unsigned int i;
-   unsigned int maxlen = 0;
+   int i;
+   int maxlen = 0;
 
    for( i = 0; i < list->count(); ++i )
    {

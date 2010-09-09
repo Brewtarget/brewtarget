@@ -178,7 +178,7 @@ public:
    //! Get the total number of instructions.
    int getNumInstructions();
    //! Get instruction i.
-   Instruction* getInstruction(int i);
+   Instruction* getInstruction(unsigned int i);
    //! Automagically generate a list of instructions.
    void generateInstructions();
    /*!
