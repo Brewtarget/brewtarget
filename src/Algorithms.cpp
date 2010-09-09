@@ -45,6 +45,18 @@ Algorithms::Algorithms()
    sucroseDensity_kgL = 1.587;
 }
 
+bool Algorithms::isnan(double d)
+{
+   // If using IEEE floating points, all comparisons with a NaN
+   // are false, so the following should be true only if we have
+   // a NaN.
+   return (d != d);
+}
+
+double Algorithms::round(double d)
+{
+   return floor(d+0.5);
+}
 
 inline double Algorithms::intPow( double base, unsigned int pow )
 {

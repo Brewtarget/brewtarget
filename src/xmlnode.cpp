@@ -20,6 +20,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <iterator>
 #include "stringparsing.h"
 #include "xmlnode.h"
 #include "xml.h"

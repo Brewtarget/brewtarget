@@ -1911,7 +1911,7 @@ void Recipe::recalculate()
          ratio = 1.0;
       else if( ratio < 0.0 )
          ratio = 0.0;
-      else if( isnan(ratio) )
+      else if( Algorithms::Instance().isnan(ratio) )
          ratio = 1.0;
       // Ignore this again since it should be included in efficiency.
       //sugar_kg *= ratio;
@@ -2221,8 +2221,8 @@ QColor Recipe::getSRMColor()
    double red = 232.9 * pow( (double)0.93, SRM );
    double green = (double)-106.25 * log(SRM) + 280.9;
 
-   int r = (red < 0)? 0 : ((red > 255)? 255 : (int)round(red));
-   int g = (green < 0)? 0 : ((green > 255)? 255 : (int)round(green));
+   int r = (red < 0)? 0 : ((red > 255)? 255 : (int)Algorithms::Instance().round(red));
+   int g = (green < 0)? 0 : ((green > 255)? 255 : (int)Algorithms::Instance().round(green));
    int b = 0;
 
    QColor ret;

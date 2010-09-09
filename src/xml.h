@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <cctype>
 #include "stringparsing.h"
 
 using namespace std;

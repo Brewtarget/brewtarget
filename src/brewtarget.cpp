@@ -203,7 +203,7 @@ QString Brewtarget::getDocDir()
 
 QString Brewtarget::getConfigDir(bool *success)
 {
-#if defined(Q_WS_X11) or defined(Q_WS_MAC) // Linux OS or Mac OS.
+#if defined(Q_WS_X11) || defined(Q_WS_MAC) // Linux OS or Mac OS.
 
    QDir dir;
    QFileInfo fileInfo;

@@ -28,6 +28,10 @@ public:
 	  return algorithmsSingleton;
 	}
 
+   // Need the following to be cross-platform compatible.
+   bool isnan(double d);
+   double round(double d);
+
 	// Polynomial evaluation
 	double intPow( double base, unsigned int pow );
 	double polyEval( double* poly, unsigned int order, double x );
