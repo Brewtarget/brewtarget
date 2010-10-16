@@ -24,12 +24,14 @@
 #include <QDomNode>
 #include "observable.h"
 #include "BeerXMLElement.h"
+#include <QString>
 
 class Water;
 class WaterException;
 
 class Water : public Observable, public BeerXMLElement
 {
+   //Q_OBJECT
 public:
    Water();
    Water( const QDomNode& waterNode );
@@ -40,18 +42,7 @@ public:
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
-   void setName( const std::string &var );
-   void setAmount_l( double var );
-   void setCalcium_ppm( double var );
-   void setSulfate_ppm( double var );
-   void setBicarbonate_ppm( double var );
-   void setChloride_ppm( double var );
-   void setSodium_ppm( double var );
-   void setMagnesium_ppm( double var );
-   void setPh( double var );
-   void setNotes( const std::string &var );
-   
-   std::string getName() const;
+   QString getName() const;
    double getAmount_l() const;
    double getCalcium_ppm() const;
    double getBicarbonate_ppm() const;
@@ -60,10 +51,22 @@ public:
    double getSodium_ppm() const;
    double getMagnesium_ppm() const;
    double getPh() const;
-   std::string getNotes() const;
+   QString getNotes() const;
+
+//public slots:
+   void setName( const QString &var );
+   void setAmount_l( double var );
+   void setCalcium_ppm( double var );
+   void setSulfate_ppm( double var );
+   void setBicarbonate_ppm( double var );
+   void setChloride_ppm( double var );
+   void setSodium_ppm( double var );
+   void setMagnesium_ppm( double var );
+   void setPh( double var );
+   void setNotes( const QString &var );
    
 private:
-   std::string name;
+   QString name;
    static const int version = 1;
    double amount_l;
    double calcium_ppm;
@@ -73,32 +76,9 @@ private:
    double sodium_ppm;
    double magnesium_ppm;
    double ph;
-   std::string notes;
+   QString notes;
 
    void setDefaults();
-};
-
-class WaterException : public std::exception
-{
-public:
-   
-   virtual const char* what() const throw()
-   {
-      // Note: this temporary object might get destroyed too early.
-      // I'm not really sure.
-      return std::string("BeerXml WATER error: " + _err + "\n").c_str();
-   }
-   
-   WaterException( std::string message )
-   {
-      _err = message;
-   }
-   
-   ~WaterException() throw() {}
-   
-private:
-   
-   std::string _err;
 };
 
 struct Water_ptr_cmp

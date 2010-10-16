@@ -15,7 +15,10 @@ SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION
 SET(brewtarget_EXECUTABLE "brewtarget")
 
 # Compile flags
-#SET( CMAKE_CXX_FLAGS "-Wall -ansi -pedantic" )
+SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
+SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -gstabs+" )
+
+SET( CMAKE_BUILD_TYPE "Debug" )
 
 # Directories.
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")

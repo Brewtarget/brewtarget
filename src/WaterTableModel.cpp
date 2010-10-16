@@ -139,7 +139,7 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
    switch( index.column() )
    {
       case WATERNAMECOL:
-         return QVariant(row->getName().c_str());
+         return QVariant(row->getName());
       case WATERAMOUNTCOL:
          return QVariant( Brewtarget::displayAmount(row->getAmount_l(), Units::liters) );
       case WATERCALCIUMCOL:
@@ -218,7 +218,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case WATERNAMECOL:
          if( value.canConvert(QVariant::String))
          {
-            row->setName(value.toString().toStdString());
+            row->setName(value.toString());
             return true;
          }
          else

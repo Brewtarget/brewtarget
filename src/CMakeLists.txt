@@ -76,6 +76,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/water.cpp
     ${SRCDIR}/WaterTableModel.cpp
     ${SRCDIR}/WaterTableWidget.cpp
+    ${SRCDIR}/WaterEditor.cpp
     ${SRCDIR}/xml.cpp
     ${SRCDIR}/xmlnode.cpp
     ${SRCDIR}/xmltree.cpp
@@ -119,6 +120,7 @@ SET( brewtarget_UIS
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerListDialog.ui
     ${UIDIR}/timerWidget.ui
+    ${UIDIR}/waterEditor.ui
     ${UIDIR}/yeastDialog.ui
     ${UIDIR}/yeastEditor.ui
     ${UIDIR}/mashDesigner.ui
@@ -171,6 +173,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/TimerWidget.h
     ${SRCDIR}/WaterTableModel.h
     ${SRCDIR}/WaterTableWidget.h
+    ${SRCDIR}/WaterEditor.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastTableModel.h

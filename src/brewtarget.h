@@ -56,7 +56,11 @@ public:
    static void logE( QString message ); // Error message.
    static void logW( QString message ); // Warning message.
 
-   static QString displayAmount( double amount, Unit* units=0 );
+   /*!
+    * Produces the appropriate string for 'amount' which has units 'units'.
+    * Variable 'precision' controls how many decimal places.
+    */
+   static QString displayAmount( double amount, Unit* units=0, int precision=3 );
    // Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg );
    // Display gravity appropriately.

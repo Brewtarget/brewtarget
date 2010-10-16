@@ -340,11 +340,10 @@ void Brewtarget::logW( QString message )
 
 // Displays "amount" of units "units" in the proper format.
 // If "units" is null, just return the amount.
-QString Brewtarget::displayAmount( double amount, Unit* units )
+QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
 {
    int fieldWidth = 0;
    char format = 'f';
-   int precision = 3;
 
    // Special case.
    if( units == 0 )

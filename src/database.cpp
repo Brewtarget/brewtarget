@@ -27,6 +27,7 @@
 #include <QDomNode>
 #include <QTextStream>
 #include <QObject>
+#include <QString>
 
 #include "equipment.h"
 #include "fermentable.h"
@@ -885,7 +886,7 @@ Water* Database::findWaterByName(std::string name)
 
    for( it = waters.begin(); it != end; it++ )
    {
-      if( (*it)->getName() == name )
+      if( (*it)->getName() == QString(name.c_str()) )
          return *it;
    }
 
