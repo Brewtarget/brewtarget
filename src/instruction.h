@@ -25,6 +25,7 @@ class Instruction;
 #include <QString>
 #include "observable.h"
 #include <string>
+#include <QVector>
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
@@ -44,6 +45,9 @@ public:
    void setHasTimer(bool has);
    void setTimerValue(const QString& timerVal);
    void setCompleted(bool comp);
+   void setInterval(double interval);
+   void setReagent(const QString& reagent);
+
 
    // "get" methods.
    QString getName();
@@ -51,6 +55,9 @@ public:
    bool getHasTimer();
    QString getTimerValue();
    bool getCompleted();
+   QString getReagent(int i);
+   QVector<QString> getReagents();
+   double getInterval();
 
 private:
    void setDefaults();
@@ -60,6 +67,8 @@ private:
    bool hasTimer;
    QString timerValue; // hh:mm:ss
    bool completed;
+   double interval;     // when the action takes place
+   QVector<QString> reagents; // what the action works on
 };
 
 #endif	/* _INSTRUCTION_H */

@@ -40,5 +40,6 @@
    <file>images/title.svg</file>
    <file>images/title.png</file>
    <file>images/clock.svg</file>
+   <file>css/brewday.css</file>
 </qresource>
 </RCC>

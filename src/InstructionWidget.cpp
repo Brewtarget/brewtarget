@@ -18,6 +18,7 @@
 
 #include "instruction.h"
 #include "InstructionWidget.h"
+#include <iostream>
 
 InstructionWidget::InstructionWidget(QWidget* parent) : QWidget(parent)
 {

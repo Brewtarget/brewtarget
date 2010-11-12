@@ -32,6 +32,7 @@ void Instruction::setDefaults()
    hasTimer = false;
    timerValue = QString("00:00:00"); // hh:mm:ss
    completed = false;
+   interval  = 0.0;
 }
 
 void Instruction::toXml(QDomDocument& doc, QDomNode& parent)
@@ -160,6 +161,15 @@ void Instruction::setCompleted(bool comp)
    hasChanged();
 }
 
+void Instruction::setReagent(const QString& reagent)
+{
+   reagents.push_back(reagent);
+}
+
+void Instruction::setInterval(double time) 
+{
+   interval = time;
+}
 
 QString Instruction::getName()
 {
@@ -184,4 +194,28 @@ QString Instruction::getTimerValue()
 bool Instruction::getCompleted()
 {
    return completed;
+}
+
+QString Instruction::getReagent(int i)
+{
+   if ( i < reagents.size() )
+      return reagents[i];
+   else
+      return QString("");
+}
+
+QVector<QString> Instruction::getReagents()
+{
+   QVector<QString> tmp;
+   if ( reagents.size() > 0 )
+      tmp = reagents;
+   else 
+      tmp.push_back(directions);
+
+   return tmp;
+}
+
+double Instruction::getInterval() 
+{
+   return interval;
 }

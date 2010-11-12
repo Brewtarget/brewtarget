@@ -17,13 +17,14 @@
  */
 
 #ifndef _BREWDAYWIDGET_H
-#define	_BREWDAYWIDGET_H
+#define _BREWDAYWIDGET_H
 
 class BrewDayWidget;
 
 #include "ui_brewDayWidget.h"
 #include <QWidget>
 #include <QSize>
+#include <QWebView>
 #include "observable.h"
 #include "recipe.h"
 
@@ -42,14 +43,20 @@ public slots:
    void removeSelectedInstruction();
    void pushInstructionUp();
    void pushInstructionDown();
+   void pushInstructionPrint();
+   bool loadComplete(bool ok);
 
 private:
    void showChanges();
    void repopulateListWidget();
    void clear();
+   QString buildTitleTable();
+   QString getCSS();
    
    Recipe* recObs;
+   QPrinter* printer;
+   QWebView* doc;
 };
 
-#endif	/* _BREWDAYWIDGET_H */
+#endif  /* _BREWDAYWIDGET_H */
 

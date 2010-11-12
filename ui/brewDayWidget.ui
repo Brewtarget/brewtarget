@@ -76,6 +76,16 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_print">
+            <property name="toolTip">
+             <string>Print brewday instructions</string>
+            </property>
+            <property name="text">
+             <string>Print</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
