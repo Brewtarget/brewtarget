@@ -44,18 +44,27 @@ public slots:
    void pushInstructionUp();
    void pushInstructionDown();
    void pushInstructionPrint();
-   bool loadComplete(bool ok);
+   void pushInstructionPreview();
 
 private:
    void showChanges();
    void repopulateListWidget();
    void clear();
+   void populateComboBox(QComboBox *comboBox_template);
    QString buildTitleTable();
+   QString buildInstructionTable();
+   QString buildFooterTable();
    QString getCSS();
    
    Recipe* recObs;
    QPrinter* printer;
    QWebView* doc;
+
+   QString cssName;
+
+private slots:
+   bool loadComplete(bool ok);
+   void comboSetCSS(const QString name);
 };
 
 #endif  /* _BREWDAYWIDGET_H */

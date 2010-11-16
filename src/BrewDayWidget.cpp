@@ -24,13 +24,13 @@
 #include <QPrintDialog>
 #include <QDate>
 #include <QVector>
+#include <QDir>
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
 
 BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
 {
    setupUi(this);
-
    recObs = 0;
 
    // HAVE to do this since apparently the stackedWidget NEEDS at least 1
@@ -45,13 +45,16 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
    connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
    connect( pushButton_down, SIGNAL(clicked()), this, SLOT(pushInstructionDown()) );
    connect( pushButton_print, SIGNAL(clicked()), this, SLOT(pushInstructionPrint()) );
+   connect( pushButton_preview, SIGNAL(clicked()), this, SLOT(pushInstructionPreview()) );
+   connect( comboBox_template, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboSetCSS(QString)) );
 
-   /* Instantiate the Webview and then connect its signal */
+   // Set up the printer stuff
    doc = new QWebView();
-   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
-
    printer = new QPrinter;
    printer->setPageSize(QPrinter::Letter);
+
+   // populate the drop down list
+   populateComboBox(comboBox_template);
 }
 
 QSize BrewDayWidget::sizeHint() const
@@ -96,9 +99,17 @@ void BrewDayWidget::pushInstructionDown()
    listWidget->setCurrentRow(row+1);
 }
 
+void BrewDayWidget::comboSetCSS(const QString name) 
+{
+   cssName = QString(":/css/%1").arg(name);
+}
+
 QString BrewDayWidget::getCSS() 
 {
-   QFile cssInput(":/css/brewday.css");
+   if ( cssName == NULL )
+       cssName = tr(":/css/brewday.css");
+
+   QFile cssInput(cssName);
    QString css;
 
    if (cssInput.open(QFile::ReadOnly)) {
@@ -136,19 +147,20 @@ QString BrewDayWidget::buildTitleTable()
            .arg(QDate::currentDate().toString());
 
    body += tr("<tr><td class=\"left\">Boil Volume</td><td class=\"value\">%1</td><td class=\"right\">Preboil Gravity</td><td class=\"value\">%2</td></tr>")
-           .arg(Brewtarget::displayAmount(recObs->getBatchSize_l(), Units::liters))
+           .arg(Brewtarget::displayAmount(recObs->getBoilSize_l(),Units::liters,2))
            .arg(Brewtarget::displayOG(recObs->getBoilGrav()));
 
-   body += tr("<tr><td class=\"left\">Final Volume</td><td class=\"value\">%1</td><td class=\"right\">Final Gravity</td><td class=\"value\">%2</td></tr>")
-           .arg(Brewtarget::displayAmount(recObs->getBoilSize_l(),Units::liters))
+   body += tr("<tr><td class=\"left\">Final Volume</td><td class=\"value\">%1</td><td class=\"right\">Starting Gravity</td><td class=\"value\">%2</td></tr>")
+           .arg(Brewtarget::displayAmount(recObs->getBatchSize_l(), Units::liters,2))
            .arg(Brewtarget::displayOG(recObs->getOg()));
 
    body += tr("<tr><td class=\"left\">Boil Time</td><td class=\"value\">%1</td><td class=\"right\">IBU</td><td class=\"value\">%2</td></tr>")
            .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
            .arg(recObs->getIBU(),0,'f',1);
 
-   body += tr("<tr><td class=\"left\">Predicted Efficiency</td><td class=\"value\">%1</td></tr>")
-           .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0));
+   body += tr("<tr><td class=\"left\">Predicted Efficiency</td><td class=\"value\">%1</td><td class=\"right\">Estimated calories(per 12 oz )</td><td class=\"value\">%2</tr>")
+           .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0))
+           .arg(Brewtarget::displayAmount(recObs->estimateCalories(),0,0));
 
    body += "</table>";
 
@@ -156,34 +168,16 @@ QString BrewDayWidget::buildTitleTable()
 
 }
 
-bool BrewDayWidget::loadComplete(bool ok) 
+QString BrewDayWidget::buildInstructionTable()
 {
-   doc->print(printer);
-   return ok;
-}
-
-void BrewDayWidget::pushInstructionPrint()
-{
-   QString pDoc;
+   QString middle;
    int i, j, size;
 
+   middle += "<h2>Instructions</h2>";
+   middle += "<table id=\"steps\">";
+   middle += tr("<tr><th class=\"check\">Completed</th><th class=\"time\">Time</th><th class=\"step\">Step</th></tr>");
 
-   QPrintDialog *dialog = new QPrintDialog(printer, this);
-   dialog->setWindowTitle(tr("Print Document"));
-   if (dialog->exec() != QDialog::Accepted)
-      return;
-
-   if( recObs == 0 )
-      return;
-
-   // Start building the document to be printed.  I think.
    size = recObs->getNumInstructions();
-   pDoc = buildTitleTable();
-
-   // Start the instructions header
-   pDoc += "<h2>Instructions</h2>";
-   pDoc += "<table id=\"steps\">";
-   pDoc += tr("<tr><th class=\"check\">Completed</th><th class=\"time\">Time</th><th class=\"step\">Step</th></tr>");
    for( i = 0; i < size; ++i )
    {
       QString stepTime, tmp;
@@ -211,15 +205,82 @@ void BrewDayWidget::pushInstructionPrint()
 
       QString altTag = i % 2 ? "alt" : "norm";
 
-      pDoc += tr("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
+      middle += tr("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
                .arg(altTag)
                .arg(stepTime)
                .arg(recObs->getInstruction(i)->getName())
                .arg(tmp);
    }
-   pDoc += "</table></body></html>";
+   middle += "</table>";
+
+   return middle;
+}
+
+QString BrewDayWidget::buildFooterTable()
+{
+   QString bottom;
+
+   bottom = "<table id=\"notes\">";
+   bottom += tr("<tr><td class=\"left\">Actual PreBoil Volume:</td><td class=\"value\"></td><td class=\"right\">Actual PreBoil Gravity:</td><td class=\"value\"></td></tr>");
+
+   bottom += tr("<tr><td class=\"left\">PostBoil Volume:</td><td class=\"value\"></td><td class=\"right\">PostBoil Gravity:</td><td class=\"value\"></td></tr>");
+
+   bottom += tr("<tr><td class=\"left\">Volume into fermenter:</td><td class=\"value\"></tr>");
+   bottom += "</table>";
+
+   return bottom;
+}
+
+bool BrewDayWidget::loadComplete(bool ok) 
+{
+   doc->print(printer);
+   disconnect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+   return ok;
+}
+
+void BrewDayWidget::pushInstructionPrint()
+{
+   QString pDoc;
+   QPrintDialog *dialog = new QPrintDialog(printer, this);
+
+   /* Instantiate the Webview and then connect its signal */
+   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+
+   dialog->setWindowTitle(tr("Print Document"));
+   if (dialog->exec() != QDialog::Accepted)
+      return;
+
+   if( recObs == 0 )
+      return;
+
+   // Start building the document to be printed.  I think.
+   pDoc = buildTitleTable();
+   pDoc += buildInstructionTable();
+   pDoc += buildFooterTable();
+
+   pDoc += tr("<h2>Notes</h2>");
+   pDoc += "</body></html>";
 
    doc->setHtml(pDoc);
+}
+
+void BrewDayWidget::pushInstructionPreview()
+{
+   QString pDoc;
+
+   if( recObs == 0 )
+      return;
+
+   // Start building the document to be printed.  I think.
+   pDoc = buildTitleTable();
+   pDoc += buildInstructionTable();
+   pDoc += buildFooterTable();
+
+   pDoc += tr("<h2>Notes</h2>");
+   pDoc += "</body></html>";
+
+   doc->setHtml(pDoc);
+   doc->show();
 }
 
 void BrewDayWidget::setRecipe(Recipe* rec)
@@ -323,4 +384,24 @@ void BrewDayWidget::repopulateListWidget()
       listWidget->setCurrentRow(0);
    else
       listWidget->setCurrentRow(-1);
+}
+
+
+void BrewDayWidget::populateComboBox(QComboBox *comboBox_template)
+{
+   QDir css(":/css");
+   QFileInfoList cssList;
+   QFileInfo fileInfo;
+   int i;
+
+   css.setFilter(QDir::Files);
+   cssList = css.entryInfoList();
+
+   for ( i = 0; i < cssList.size(); i++) 
+   {  
+      fileInfo = cssList.at(i);
+      comboBox_template->addItem(tr("%1").arg(fileInfo.fileName()));
+   }
+
+   comboBox_template->setEditable(false);
 }

@@ -298,6 +298,7 @@ public:
    double estimateBoilVolume_l() const; // Estimate boil volume based on user inputs.
    double estimatePostBoilVolume_l() const; // How much wort immediately post boil.
    double estimateFinalVolume_l() const; // Estimate final volume based on user inputs.
+   double estimateCalories() const;    // Estimate final calories of the beer
    double getGrainsInMash_kg() const;
    double getGrains_kg() const;
 
@@ -343,6 +344,7 @@ private:
    double carbonationTemp_c;
    double primingSugarEquiv;
    double kegPrimingFactor;
+   double estimatedCalories;
    
    void setDefaults();
    bool isValidType( const std::string &str );

@@ -88,3 +88,38 @@ img
 {
 	width:10%;
 }
+#notes
+{
+	border-collapse:collapse;
+	width:100%;
+}
+#notes td, #notes th
+{
+	border: 0px solid white;
+	padding: 30px 10px 20px 10px;
+	empty-cells:show;
+}
+#notes tr.alt
+{
+	color:black;
+	background-color:#e8e8e8;
+}
+#notes td.left
+{
+	width:20%;
+	font-weight:bold;
+	text-align:left;
+}
+#notes td.value
+{
+	width:30%;
+	font-weight:normal;
+	text-align:left;
+}
+#notes td.right
+{
+	width:20%;
+	font-weight:bold;
+	text-align:right;
+}
+

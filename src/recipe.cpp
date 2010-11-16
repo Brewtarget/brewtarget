@@ -2350,3 +2350,25 @@ double Recipe::estimatePostBoilVolume_l() const
 
    return ret;
 }
+
+// the formula in here are taken from http://hbd.org/ensmingr/
+double Recipe::estimateCalories() const
+{
+    double ret, startPlato, finishPlato, RE, abw, og, fg;
+
+    og = getOg();
+    fg = getFg();
+
+    // Need to translate OG and FG into plato
+    startPlato  = -463.37 + ( 668.72 * og ) - (205.35 * og * og);
+    finishPlato = -463.37 + ( 668.72 * fg ) - (205.35 * fg * fg);
+
+    // RE (real extract)
+    RE = (0.1808 * startPlato) + (0.8192 * finishPlato);
+
+    // Alcohol by weight?
+    abw = (startPlato-RE)/(2.0665 - (0.010665 * startPlato));
+
+    ret = ((6.9*abw) + 4.0 * (RE-0.1)) * fg * 3.55;
+    return ret;
+}
