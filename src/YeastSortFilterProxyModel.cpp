@@ -1,6 +1,6 @@
 /*
- * YeastTableWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009.
+ * YeastSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
+ * Firestone (mikfire@gmail.com), 2010.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _YEASTTABLEWIDGET_H
-#define	_YEASTTABLEWIDGET_H
-
-class YeastTableWidget;
-
-#include <QTableView>
-#include <QWidget>
+#include "unit.h"
 #include "YeastSortFilterProxyModel.h"
 #include "YeastTableModel.h"
-
-class YeastTableWidget : public QTableView
+#include <iostream>
+YeastSortFilterProxyModel::YeastSortFilterProxyModel(QObject *parent) 
+: QSortFilterProxyModel(parent)
 {
-   Q_OBJECT
-   friend class YeastDialog;
-   friend class MainWindow;
-public:
-   YeastTableWidget(QWidget* parent=0);
-   YeastTableModel* getModel();
+}
 
-private:
-   YeastTableModel* model;
-};
+bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left, 
+                                         const QModelIndex &right) const
+{
+    QVariant leftYeast = sourceModel()->data(left);
+    QVariant rightYeast = sourceModel()->data(right);
 
-#endif	/* _YEASTTABLEWIDGET_H */
+    if ( left.column() == YEASTAMOUNTCOL )
+    {
+        return Unit::qstringToSI(leftYeast.toString()) > Unit::qstringToSI(rightYeast.toString());
+    }
+
+    return leftYeast.toString() > rightYeast.toString();
+}
+
 

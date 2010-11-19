@@ -15,7 +15,11 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="YeastTableWidget" name="yeastTableWidget"/>
+    <widget class="YeastTableWidget" name="yeastTableWidget">
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

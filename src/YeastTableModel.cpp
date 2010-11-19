@@ -143,6 +143,10 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
          return QVariant(row->getName().c_str());
       case YEASTTYPECOL:
          return QVariant(row->getType().c_str());
+      case YEASTLABCOL:
+         return QVariant(row->getLaboratory().c_str());
+      case YEASTPRODIDCOL:
+         return QVariant(row->getProductID().c_str());
       case YEASTFORMCOL:
          return QVariant(row->getForm().c_str());
       case YEASTAMOUNTCOL:
@@ -167,6 +171,10 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
             return QVariant(tr("Form"));
          case YEASTAMOUNTCOL:
             return QVariant(tr("Amount"));
+         case YEASTLABCOL:
+             return QVariant(tr("Laboratory"));
+         case YEASTPRODIDCOL:
+             return QVariant(tr("ProductId"));
          default:
             Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();
@@ -204,6 +212,22 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( value.canConvert(QVariant::String))
          {
             row->setName(value.toString().toStdString());
+            return true;
+         }
+         else
+            return false;
+      case YEASTLABCOL:
+         if( value.canConvert(QVariant::String) )
+         {
+            row->setType(value.toString().toStdString());
+            return true;
+         }
+         else
+            return false;
+      case YEASTPRODIDCOL:
+         if( value.canConvert(QVariant::String) )
+         {
+            row->setType(value.toString().toStdString());
             return true;
          }
          else

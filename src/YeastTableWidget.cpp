@@ -24,9 +24,17 @@
 YeastTableWidget::YeastTableWidget(QWidget* parent)
         : QTableView(parent)
 {
+   YeastSortFilterProxyModel *yfpm;
+
+   yfpm = new YeastSortFilterProxyModel(parent);
    model = new YeastTableModel(this);
-   setModel(model);
+
+   yfpm->setSourceModel(model);
+   yfpm->setDynamicSortFilter(true);
+
+   setModel(yfpm);
    setItemDelegate(new YeastItemDelegate(this));
+
 }
 
 YeastTableModel* YeastTableWidget::getModel()

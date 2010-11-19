@@ -1,6 +1,6 @@
 /*
- * HopTableWidget.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009.
+ * YeastSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
+ * Firestone (mikfire@gmail.com), 2010.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QTableView>
-#include <QWidget>
-#include "HopTableModel.h"
-#include "HopTableWidget.h"
+#ifndef _FermentableSORTFILTERPROXYMODEL_H
+#define _FermentableSORTFILTERPROXYMODEL_H
 
-HopTableWidget::HopTableWidget(QWidget* parent)
-        : QTableView(parent)
+class FermentableSortFilterProxyModel;
+
+#include <QSortFilterProxyModel>
+
+class FermentableSortFilterProxyModel : public QSortFilterProxyModel
 {
-   HopSortFilterProxyModel *hfpm;
+   Q_OBJECT
 
-   hfpm = new HopSortFilterProxyModel(parent);
-   model = new HopTableModel(this);
+public:
+   FermentableSortFilterProxyModel(QObject *parent = 0);
 
-   hfpm->setSourceModel(model);
-   hfpm->setDynamicSortFilter(true);
+protected:
+   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
-   setModel(hfpm);
-   setItemDelegate(new HopItemDelegate(this));
+};
 
-}
-
-HopTableModel* HopTableWidget::getModel()
-{
-   return model;
-}
+#endif

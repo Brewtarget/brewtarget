@@ -18,12 +18,21 @@
 
 #include "FermentableTableModel.h"
 #include "FermentableTableWidget.h"
+#include "FermentableSortFilterProxyModel.h"
 
 FermentableTableWidget::FermentableTableWidget(QWidget* parent)
         : QTableView(parent)
 {
+   FermentableSortFilterProxyModel *ffpm;
+
+   ffpm = new FermentableSortFilterProxyModel(parent);
    model = new FermentableTableModel(this);
-   setModel(model);
+
+   ffpm->setSourceModel(model);
+   ffpm->setDynamicSortFilter(true);
+
+   setModel(ffpm);
+
    //setItemDelegate(new FermentableItemDelegate(this));
 }
 

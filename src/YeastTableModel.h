@@ -33,7 +33,7 @@ class YeastItemDelegate;
 #include "observable.h"
 #include "YeastTableWidget.h"
 
-enum{ YEASTNAMECOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTNUMCOLS /*This one MUST be last*/};
+enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTNUMCOLS /*This one MUST be last*/};
 
 class YeastTableModel : public QAbstractTableModel, public MultipleObserver
 {

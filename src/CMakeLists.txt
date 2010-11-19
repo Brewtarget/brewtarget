@@ -19,6 +19,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/fermentable.cpp
     ${SRCDIR}/FermentableEditor.cpp
     ${SRCDIR}/FermentableDialog.cpp
+    ${SRCDIR}/FermentableSortFilterProxyModel.cpp
     ${SRCDIR}/FermentableTableModel.cpp
     ${SRCDIR}/FermentableTableWidget.cpp
     ${SRCDIR}/main.cpp
@@ -26,6 +27,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/hop.cpp
     ${SRCDIR}/HopDialog.cpp
     ${SRCDIR}/HopEditor.cpp
+    ${SRCDIR}/HopSortFilterProxyModel.cpp
     ${SRCDIR}/HopTableModel.cpp
     ${SRCDIR}/HopTableWidget.cpp
     ${SRCDIR}/HtmlViewer.cpp
@@ -85,6 +87,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/YeastEditor.cpp
     ${SRCDIR}/YeastTableModel.cpp
     ${SRCDIR}/YeastTableWidget.cpp
+    ${SRCDIR}/YeastSortFilterProxyModel.cpp
     ${SRCDIR}/RecipeExtrasDialog.cpp
     ${SRCDIR}/MashDesigner.cpp
     ${SRCDIR}/BtDigitWidget.cpp
@@ -138,10 +141,12 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/FermentableEditor.h
     ${SRCDIR}/FermentableDialog.h
+    ${SRCDIR}/FermentableSortFilterProxyModel.h
     ${SRCDIR}/FermentableTableModel.h
     ${SRCDIR}/FermentableTableWidget.h
     ${SRCDIR}/HopDialog.h
     ${SRCDIR}/HopEditor.h
+    ${SRCDIR}/HopSortFilterProxyModel.h
     ${SRCDIR}/HopTableModel.h
     ${SRCDIR}/HopTableWidget.h
     ${SRCDIR}/InstructionWidget.h
@@ -176,6 +181,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/WaterEditor.h
     ${SRCDIR}/YeastDialog.h
     ${SRCDIR}/YeastEditor.h
+    ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
     ${SRCDIR}/YeastTableWidget.h
 )
