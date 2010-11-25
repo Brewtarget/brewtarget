@@ -48,6 +48,7 @@ HopDialog::HopDialog(MainWindow* parent)
 void HopDialog::removeHop()
 {
    QModelIndexList selected = hopTableWidget->selectedIndexes();
+   QModelIndex translated;
    int row, size, i;
 
    size = selected.size();
@@ -62,7 +63,8 @@ void HopDialog::removeHop()
          return;
    }
 
-   Hop *hop = hopTableWidget->getModel()->getHop(row);
+   translated = hopTableWidget->getProxy()->mapFromSource(selected[0]);
+   Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
    dbObs->removeHop(hop);
 }
 
@@ -99,6 +101,7 @@ void HopDialog::populateTable()
 void HopDialog::addHop()
 {
    QModelIndexList selected = hopTableWidget->selectedIndexes();
+   QModelIndex translated;
    int row, size, i;
 
    size = selected.size();
@@ -113,13 +116,15 @@ void HopDialog::addHop()
          return;
    }
 
-   Hop *hop = hopTableWidget->getModel()->getHop(row);
+   translated = hopTableWidget->getProxy()->mapToSource(selected[0]);
+   Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
    mainWindow->addHopToRecipe(new Hop(*hop) ); // Need to add a copy so we don't change the database.
 }
 
 void HopDialog::editSelected()
 {
    QModelIndexList selected = hopTableWidget->selectedIndexes();
+   QModelIndex translated;
    int row, size, i;
 
    size = selected.size();
@@ -134,7 +139,8 @@ void HopDialog::editSelected()
          return;
    }
 
-   Hop *hop = hopTableWidget->getModel()->getHop(row);
+   translated = hopTableWidget->getProxy()->mapToSource(selected[0]);
+   Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
    hopEditor->setHop(hop);
    hopEditor->show();
 }

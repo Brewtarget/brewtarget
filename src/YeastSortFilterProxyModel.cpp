@@ -39,4 +39,3 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
     return leftYeast.toString() > rightYeast.toString();
 }
 
-

@@ -352,3 +352,4 @@ void YeastItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOption
 {
    editor->setGeometry(option.rect);
 }
+

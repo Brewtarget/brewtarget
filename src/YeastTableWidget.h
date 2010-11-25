@@ -34,9 +34,11 @@ class YeastTableWidget : public QTableView
 public:
    YeastTableWidget(QWidget* parent=0);
    YeastTableModel* getModel();
+   YeastSortFilterProxyModel* getProxy();
 
 private:
    YeastTableModel* model;
+   YeastSortFilterProxyModel *yfpm;
 };
 
 #endif	/* _YEASTTABLEWIDGET_H */

@@ -47,6 +47,7 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
 void FermentableDialog::removeFermentable()
 {
    QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+   QModelIndex translated;
    int row, size, i;
 
    size = selected.size();
@@ -61,13 +62,15 @@ void FermentableDialog::removeFermentable()
          return;
    }
 
-   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(row);
+   translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
+   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
    dbObs->removeFermentable(ferm);
 }
 
 void FermentableDialog::editSelected()
 {
    QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+   QModelIndex translated;
    int row, size, i;
 
    size = selected.size();
@@ -82,7 +85,8 @@ void FermentableDialog::editSelected()
          return;
    }
 
-   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(row);
+   translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
+   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
    fermEdit->setFermentable(ferm);
    fermEdit->show();
 }
@@ -119,6 +123,7 @@ void FermentableDialog::populateTable()
 void FermentableDialog::addFermentable()
 {
    QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+   QModelIndex translated;
    int row, size, i;
 
    size = selected.size();
@@ -133,7 +138,8 @@ void FermentableDialog::addFermentable()
          return;
    }
 
-   Fermentable *ferm = fermentableTableWidget->getModel()->getFermentable(row);
+   translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
+   Fermentable *ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
    mainWindow->addFermentableToRecipe(new Fermentable(*ferm) ); // Need to add a copy so we don't change the database.
 }
 

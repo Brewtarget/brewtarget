@@ -34,9 +34,11 @@ class HopTableWidget : public QTableView
 public:
    HopTableWidget(QWidget* parent=0);
    HopTableModel* getModel();
+   HopSortFilterProxyModel* getProxy();
    
 private:
    HopTableModel* model;
+   HopSortFilterProxyModel* hfpm;
 };
 
 #endif	/* _HOPTABLEWIDGET_H */

@@ -23,6 +23,7 @@ class FermentableTableWidget;
 
 #include <QTableView>
 #include <QWidget>
+#include "FermentableSortFilterProxyModel.h"
 #include "FermentableTableModel.h"
 
 class FermentableTableWidget : public QTableView
@@ -30,12 +31,15 @@ class FermentableTableWidget : public QTableView
    Q_OBJECT
    friend class FermentableDialog;
    friend class MainWindow;
+
 public:
    FermentableTableWidget(QWidget* parent=0);
    FermentableTableModel* getModel();
+   FermentableSortFilterProxyModel* getProxy();
    
 private:
    FermentableTableModel* model;
+   FermentableSortFilterProxyModel* ffpm;
 };
 
 #endif	/* _FERMENTABLETABLEWIDGET_H */

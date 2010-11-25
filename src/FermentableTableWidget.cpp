@@ -23,7 +23,6 @@
 FermentableTableWidget::FermentableTableWidget(QWidget* parent)
         : QTableView(parent)
 {
-   FermentableSortFilterProxyModel *ffpm;
 
    ffpm = new FermentableSortFilterProxyModel(parent);
    model = new FermentableTableModel(this);
@@ -40,3 +39,9 @@ FermentableTableModel* FermentableTableWidget::getModel()
 {
    return model;
 }
+
+FermentableSortFilterProxyModel* FermentableTableWidget::getProxy()
+{
+    return ffpm;
+}
+
