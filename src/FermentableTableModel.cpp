@@ -244,7 +244,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
    }
    else if( displayPercentages && orientation == Qt::Vertical && role == Qt::DisplayRole )
    {
-      return QVariant( QString("%1%%").arg( (double)100.0 *fermObs[section]->getAmount_kg()/totalFermMass_kg, 0, 'f', 0 ) );
+      return QVariant( QString("%1%").arg( (double)100.0 *fermObs[section]->getAmount_kg()/totalFermMass_kg, 0, 'f', 0 ) );
    }
    else
       return QVariant();
