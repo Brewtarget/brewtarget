@@ -19,6 +19,7 @@
 <qresource>
    <file>images/glass.svg</file>
    <file>images/brewtarget_icon.svg</file>
+   <file>images/donate.svg</file>
    <file>images/smallBarley.svg</file>
    <file>images/smallWater.svg</file>
    <file>images/smallHop.svg</file>

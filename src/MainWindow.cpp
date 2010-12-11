@@ -66,6 +66,8 @@
 #include <QInputDialog>
 #include <QLineEdit>
 #include "BtDigitWidget.h"
+#include <QUrl>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -246,7 +248,8 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashDes, SIGNAL( clicked() ), mashDesigner, SLOT( show() ) );
    connect( pushButton_mashUp, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepUp() ) );
    connect( pushButton_mashDown, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepDown() ) );
-	connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
+   connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
+   connect( pushButton_donate, SIGNAL( clicked() ), this, SLOT( openDonateLink() ) );
 }
 
 void MainWindow::setupToolbar()
@@ -1173,5 +1176,10 @@ void MainWindow::saveMash()
    newMash->deepCopy(mash);
    
    (Database::getDatabase())->addMash(newMash);
+}
+
+void MainWindow::openDonateLink()
+{
+   QDesktopServices::openUrl(QUrl("http://sourceforge.net/project/project_donations.php?group_id=249733"));
 }
 

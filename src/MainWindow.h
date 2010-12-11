@@ -117,6 +117,8 @@ public slots:
 
    void brewDayMode();
 
+   void openDonateLink();
+
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
