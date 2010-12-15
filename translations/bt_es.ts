@@ -1979,7 +1979,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/fermentableDialog.ui" line="54"/>
         <source>Create new ingredient</source>
-        <translation>Crear una ingrediente nueva</translation>
+        <translation>Crear un ingrediente nuevo</translation>
     </message>
     <message>
         <location filename="../ui/fermentableDialog.ui" line="57"/>
@@ -2827,7 +2827,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="1645"/>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1650"/>
@@ -2970,7 +2970,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mashEditor.ui" line="14"/>
         <source>Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor de Maceración</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="33"/>
@@ -2982,65 +2982,65 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mashEditor.ui" line="69"/>
         <location filename="../ui/mashEditor.ui" line="88"/>
         <source>Initial grain temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. inicial del grano</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="105"/>
         <source>Sparge temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. del lavado</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="124"/>
         <source>Sparge temp target</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. deseado del lavado</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="141"/>
         <location filename="../ui/mashEditor.ui" line="160"/>
         <source>Sparge pH</source>
-        <translation type="unfinished"></translation>
+        <translation>pH del lavado</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="181"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="213"/>
         <source>Tun</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuba</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="230"/>
         <location filename="../ui/mashEditor.ui" line="249"/>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. inicial</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="258"/>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation type="unfinished"></translation>
+        <translation>Conseguir los parametros del equipaje de la receta.</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="261"/>
         <source>From Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Del Equipaje</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="279"/>
         <location filename="../ui/mashEditor.ui" line="298"/>
         <source>Tun mass</source>
-        <translation type="unfinished"></translation>
+        <translation>Masa</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="315"/>
         <source>Tun sp. heat</source>
-        <translation type="unfinished"></translation>
+        <translation>Calor específico</translation>
     </message>
     <message>
         <location filename="../ui/mashEditor.ui" line="334"/>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
+        <translation>Calor específico de la cuba (cal/(g*K))</translation>
     </message>
 </context>
 <context>
@@ -3048,7 +3048,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mashStepEditor.ui" line="14"/>
         <source>Mash Step Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor de pasos de la maceracíon</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="33"/>
@@ -3065,57 +3065,57 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mashStepEditor.ui" line="86"/>
         <source>Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusión</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="91"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="96"/>
         <source>Decoction</source>
-        <translation type="unfinished"></translation>
+        <translation>Cocción</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="114"/>
         <source>Target temp.</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. deseado</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="139"/>
         <source>Target temp. of this step</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp deseado del paso</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="156"/>
         <source>Infuse Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de agua</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="181"/>
         <source>Amount of water to infuse</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad del agua para infusar</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="198"/>
         <source>Infuse temp.</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp de la infusión</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="217"/>
         <source>Temperature of infusion water</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura del agua de la infusión</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="241"/>
         <source>Decoction Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de la cocción</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="266"/>
         <source>Amount of mash to decoct</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de la maceración para cocer</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="283"/>
@@ -3125,27 +3125,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mashStepEditor.ui" line="308"/>
         <source>Time to conduct the step</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiempo para hacer el paso</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="325"/>
         <source>Temp. lag time</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapso de la temp.</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="350"/>
         <source>Lag time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiempo del lapso</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="367"/>
         <source>End temp.</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. final</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="392"/>
         <source>Final temp. of this step</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. final del paso</translation>
     </message>
 </context>
 <context>
@@ -3153,17 +3153,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mashWizard.ui" line="14"/>
         <source>Mash Wizard</source>
-        <translation type="unfinished"></translation>
+        <translation>Asistente de la maceración</translation>
     </message>
     <message>
         <location filename="../ui/mashWizard.ui" line="28"/>
         <source>Mash thickness (L/kg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosor (L/kg)</translation>
     </message>
     <message>
         <location filename="../ui/mashWizard.ui" line="53"/>
         <source>Mash thickness (do not enter any units)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosor de la maceración (no ingresar ningún unidad)</translation>
     </message>
 </context>
 <context>
@@ -3171,37 +3171,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/miscDialog.ui" line="14"/>
         <source>Misc Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de datos de miscs</translation>
     </message>
     <message>
         <location filename="../ui/miscDialog.ui" line="44"/>
         <source>Add selected ingredient to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar ingrediente seleccionado a la receta</translation>
     </message>
     <message>
         <location filename="../ui/miscDialog.ui" line="47"/>
         <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar a Receta</translation>
     </message>
     <message>
         <location filename="../ui/miscDialog.ui" line="60"/>
         <source>Create a new ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear un ingrediente nuevo</translation>
     </message>
     <message>
         <location filename="../ui/miscDialog.ui" line="63"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo</translation>
     </message>
     <message>
         <location filename="../ui/miscDialog.ui" line="73"/>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar ingrediente seleccionado</translation>
     </message>
     <message>
         <location filename="../ui/miscDialog.ui" line="90"/>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover ingrediente seleccionado</translation>
     </message>
 </context>
 <context>
@@ -3209,7 +3209,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/miscEditor.ui" line="14"/>
         <source>Misc Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor de miscs</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="42"/>
@@ -3226,32 +3226,32 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/miscEditor.ui" line="104"/>
         <source>Spice</source>
-        <translation type="unfinished"></translation>
+        <translation>Especia</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="109"/>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation>Aclarador</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="114"/>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation>Agente para Agua</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="119"/>
         <source>Herb</source>
-        <translation type="unfinished"></translation>
+        <translation>Hierba</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="124"/>
         <source>Flavor</source>
-        <translation type="unfinished"></translation>
+        <translation>Sabor</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="129"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Otro</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="147"/>
@@ -3262,27 +3262,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/miscEditor.ui" line="161"/>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Hervor</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="166"/>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation>Maceración</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="171"/>
         <source>Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>Primario</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="176"/>
         <source>Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>Secundario</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="181"/>
         <source>Bottling</source>
-        <translation type="unfinished"></translation>
+        <translation>Embotellar</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="199"/>
@@ -3299,27 +3299,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/miscEditor.ui" line="289"/>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcar si la cantidad se mide por masa en vez de volumen</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="292"/>
         <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Cantidad es masa?</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="305"/>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Marcar si la cantidad se mide por masa en vez de volumen</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="327"/>
         <source>Use for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Se utiliza para:</translation>
     </message>
     <message>
         <location filename="../ui/miscEditor.ui" line="350"/>
         <source>Notes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Notas</translation>
     </message>
 </context>
 <context>
@@ -3327,108 +3327,108 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/ogAdjuster.ui" line="14"/>
         <source>Adjust Volume to Hit OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajustar el Volumen para alcanzar la DI</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="20"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Introducir</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="38"/>
         <source>SG</source>
-        <translation type="unfinished"></translation>
+        <translation>Densidad</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="63"/>
         <source>Measured gravity pre-boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Densidad medida antes del hervor</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="80"/>
         <source>Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="105"/>
         <source>Temperature of SG reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp de la medida de la densidad</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="116"/>
         <source>Calibration Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp del calibrado</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="135"/>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp al cual está calibrado el hidrometro</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="161"/>
         <source>-or-</source>
-        <translation type="unfinished"></translation>
+        <translation>-o-</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="206"/>
         <source>Plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="231"/>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato (porciento por masa de sacarosa equivalente)</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="272"/>
         <source>Pre-Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen pre-hervor</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="297"/>
         <source>Measured pre-boil volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen medido antes del hervor</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="311"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultados</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="325"/>
         <source>OG w/o Correction</source>
-        <translation type="unfinished"></translation>
+        <translation>DI sin corrección</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="350"/>
         <source>OG if you boil as planned</source>
-        <translation type="unfinished"></translation>
+        <translation>DI si se hierve como planeado</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="370"/>
         <source>Add to Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar al hervor</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="395"/>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de agua que necesitas agregar al hervor para alcanzar la DI planeada (o hervir si está negativa)</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="415"/>
         <source>Final Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño de lote final</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="440"/>
         <source>Estimated batch size after correction</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño estimado después de la corrección</translation>
     </message>
     <message>
         <location filename="../ui/ogAdjuster.ui" line="483"/>
         <location filename="../ui/ogAdjuster.ui" line="486"/>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Calcular</translation>
     </message>
 </context>
 <context>
@@ -3436,110 +3436,110 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/optionsDialog.ui" line="14"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opciones</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="22"/>
         <source>Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Unidades</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="28"/>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Masa</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="34"/>
         <location filename="../ui/optionsDialog.ui" line="64"/>
         <source>Use SI units</source>
-        <translation type="unfinished"></translation>
+        <translation>Unidades SI</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="41"/>
         <location filename="../ui/optionsDialog.ui" line="71"/>
         <source>Use US traditional units</source>
-        <translation type="unfinished"></translation>
+        <translation>Unidades EEUU</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="48"/>
         <location filename="../ui/optionsDialog.ui" line="78"/>
         <source>Use British imperial units</source>
-        <translation type="unfinished"></translation>
+        <translation>Unidades Británicas</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="58"/>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="88"/>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="94"/>
         <source>Celsius</source>
-        <translation type="unfinished"></translation>
+        <translation>Centígrado</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="101"/>
         <source>Fahrenheit</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahrenheit</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="111"/>
         <source>Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densidad</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="117"/>
         <source>20C/20C Specific Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>20C/20C Densidad</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="124"/>
         <source>Plato/Brix/Balling</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato/Brix/Balling</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="152"/>
         <source>Formulae</source>
-        <translation type="unfinished"></translation>
+        <translation>Fórmulas</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="158"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Color</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="164"/>
         <source>Mosher&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Aproximación Mosher</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="171"/>
         <source>Daniels&apos; approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Aproximación Daniels</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="178"/>
         <source>Morey&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Aproximación Morey</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="188"/>
         <source>IBU</source>
-        <translation type="unfinished"></translation>
+        <translation>Amargor</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="194"/>
         <source>Tinseth&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Aproximación Tinseth</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="201"/>
         <source>Rager&apos;s approximation</source>
-        <translation type="unfinished"></translation>
+        <translation>Aproximación Rager</translation>
     </message>
 </context>
 <context>
@@ -3547,67 +3547,67 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/pitchDialog.ui" line="14"/>
         <source>Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculadora para Levadura</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="20"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entradas</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="31"/>
         <source>Wort Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen del Caldo</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="48"/>
         <source>OG</source>
-        <translation type="unfinished"></translation>
+        <translation>DI</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="65"/>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Para ales, 0.75-1. Para lagers, 1.5-2.</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="68"/>
         <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tasa de Levadura</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="93"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="102"/>
         <source>Starter OG</source>
-        <translation type="unfinished"></translation>
+        <translation>DI del iniciador</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="124"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultos</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="132"/>
         <source># Vials/Smack Packs</source>
-        <translation type="unfinished"></translation>
+        <translation># Ampolletas/Paquetes</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="139"/>
         <source>Dry Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Levadura Seca</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="146"/>
         <source>Starter Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen del Iniciador</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="183"/>
         <source>Billions of Yeast Cells Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Mil Millones de Células Requisitas</translation>
     </message>
 </context>
 <context>
@@ -3615,83 +3615,83 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/primingDialog.ui" line="14"/>
         <source>Priming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculadora para Botellar</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="20"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entradas</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="28"/>
         <source>Collected Beer Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen Coleccionado</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="47"/>
         <source>Amount of beer to prime</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de cerveza</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="54"/>
         <source>Beer Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="73"/>
         <source>Temp of the beer</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp de la cerveza</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="80"/>
         <source>Desired Volumes</source>
-        <translation type="unfinished"></translation>
+        <translation>Volúmenes Deseados</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="99"/>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de CO2 que se quiere (1 L CO2 @ STP por L de cerveza)</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="108"/>
         <source>Glucose Monohydrate (corn sugar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Glucosa Monohidrato</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="115"/>
         <source>Anhydrous Glucose</source>
-        <translation type="unfinished"></translation>
+        <translation>Glucosa Deshidratado</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="122"/>
         <source>Sucrose (table sugar)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sacarosa</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="129"/>
         <source>Dry Malt Extract</source>
-        <translation type="unfinished"></translation>
+        <translation>Extracto Seco</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="152"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultados</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="160"/>
         <source>Prime with</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizar</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="179"/>
         <source>How much priming ingredient to use</source>
-        <translation type="unfinished"></translation>
+        <translation>Cantidad de azúcar requisita</translation>
     </message>
     <message>
         <location filename="../ui/primingDialog.ui" line="188"/>
         <location filename="../ui/primingDialog.ui" line="191"/>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Calcular</translation>
     </message>
 </context>
 <context>
@@ -3699,87 +3699,87 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="14"/>
         <source>Recipe Extras</source>
-        <translation type="unfinished"></translation>
+        <translation>Extras</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="27"/>
         <source>Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Fabricante</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="50"/>
         <source>Asst. Brewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Asst. del Fabricante</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="57"/>
         <source>Taste Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>Calificacción del Sabor</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="96"/>
         <source>Primary Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>Días en el Primario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="119"/>
         <source>Primary Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. del Primario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="142"/>
         <source>Secondary Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dias en el Secundario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="165"/>
         <source>Secondary Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. del Secundario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="188"/>
         <source>Tertiary Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dias en el Terciario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="211"/>
         <source>Tertiary Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. del Terciario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="234"/>
         <source>Bottle/Keg Age (days)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dias en la Botella o Barrica</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="257"/>
         <source>Bottle/Keg Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. de la Botella o Barrica</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="280"/>
         <source>Date First Brewed</source>
-        <translation type="unfinished"></translation>
+        <translation>Fecha de Primera Fabricación</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="293"/>
         <source>dd MMM yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation>dd MMM yyyy</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="300"/>
         <source>Carbonation Volumes</source>
-        <translation type="unfinished"></translation>
+        <translation>Volúmenes de CO2</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="327"/>
         <source>Taste Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notas del Sabor</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="346"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <source>Save</source>
@@ -3788,7 +3788,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="395"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -3796,67 +3796,67 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/refractoDialog.ui" line="14"/>
         <source>Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramienta para Refractometros</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="22"/>
         <source>Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Entradas</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="30"/>
         <source>Original Plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato Inicial</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="53"/>
         <source>OG (20 C)</source>
-        <translation type="unfinished"></translation>
+        <translation>DI (20C)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="87"/>
         <source>Current Plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato Actual</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="142"/>
         <source>Calculate</source>
-        <translation type="unfinished"></translation>
+        <translation>Calcular</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="153"/>
         <source>Outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultados</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="175"/>
         <source>SG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>Densidad (20C)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="198"/>
         <source>ABV</source>
-        <translation type="unfinished"></translation>
+        <translation>APV</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="221"/>
         <source>ABW</source>
-        <translation type="unfinished"></translation>
+        <translation>APM</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="244"/>
         <source>Refractive Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Índice Refractor</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="251"/>
         <source>Real Extract (Plato)</source>
-        <translation type="unfinished"></translation>
+        <translation>Extracto Real (Plato)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="274"/>
         <source>OG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>DI (20C)</translation>
     </message>
 </context>
 <context>
@@ -3869,12 +3869,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/scaleRecipeTool.ui" line="22"/>
         <source>New Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño de Lote Nuevo</translation>
     </message>
     <message>
         <location filename="../ui/scaleRecipeTool.ui" line="35"/>
         <source>New batch size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño de Lote Nuevo</translation>
     </message>
 </context>
 <context>
@@ -3882,18 +3882,18 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/styleEditor.ui" line="14"/>
         <source>Style Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor de Estilos</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="22"/>
         <location filename="../ui/styleEditor.ui" line="41"/>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="48"/>
         <source>Delete selected style</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover estilo seleccionado</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="95"/>
@@ -3905,25 +3905,25 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/styleEditor.ui" line="137"/>
         <location filename="../ui/styleEditor.ui" line="162"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Categoría</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="179"/>
         <location filename="../ui/styleEditor.ui" line="204"/>
         <source>Category number</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de Categoría</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="221"/>
         <location filename="../ui/styleEditor.ui" line="246"/>
         <source>Style letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Letra de Estilo</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="263"/>
         <location filename="../ui/styleEditor.ui" line="288"/>
         <source>Style guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Guía de Estilos</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="305"/>
@@ -3933,122 +3933,122 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/styleEditor.ui" line="330"/>
         <source>Type of beverage</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo de bebida</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="334"/>
         <source>Lager</source>
-        <translation type="unfinished"></translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="339"/>
         <source>Ale</source>
-        <translation type="unfinished"></translation>
+        <translation>Ale</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="344"/>
         <source>Mead</source>
-        <translation type="unfinished"></translation>
+        <translation>Mead</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="349"/>
         <source>Wheat</source>
-        <translation type="unfinished"></translation>
+        <translation>Trigo</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="354"/>
         <source>Mixed</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezclado</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="359"/>
         <source>Cider</source>
-        <translation type="unfinished"></translation>
+        <translation>Cider</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="377"/>
         <source>Min OG</source>
-        <translation type="unfinished"></translation>
+        <translation>DI Min</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="416"/>
         <source>Max OG</source>
-        <translation type="unfinished"></translation>
+        <translation>DI Max</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="455"/>
         <source>Min FG</source>
-        <translation type="unfinished"></translation>
+        <translation>DF Min</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="494"/>
         <source>Max FG</source>
-        <translation type="unfinished"></translation>
+        <translation>DF Max</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="533"/>
         <source>Min IBUs</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU Min</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="572"/>
         <source>Max IBUs</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU Max</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="611"/>
         <source>Min color (SRM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Color Min (SRM)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="650"/>
         <source>Max color (SRM)</source>
-        <translation type="unfinished"></translation>
+        <translation>Color Max (SRM)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="689"/>
         <source>Min carb (vols)</source>
-        <translation type="unfinished"></translation>
+        <translation>CO2 Min (vol.)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="728"/>
         <source>Max carb (vols)</source>
-        <translation type="unfinished"></translation>
+        <translation>CO2 Max (vol.)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="774"/>
         <source>Min ABV (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>APV Min (pct)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="813"/>
         <source>Max ABV (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>APV Max (pct)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="850"/>
         <source>Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Perfil</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="875"/>
         <source>Ingredients</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingredientes</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="893"/>
         <source>Examples</source>
-        <translation type="unfinished"></translation>
+        <translation>Ejemplos</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="911"/>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="942"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="959"/>
@@ -4058,7 +4058,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/styleEditor.ui" line="979"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -4066,7 +4066,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/timerListDialog.ui" line="14"/>
         <source>Timers</source>
-        <translation type="unfinished">Temporizadores</translation>
+        <translation>Minuteros</translation>
     </message>
 </context>
 <context>
@@ -4074,37 +4074,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/timerWidget.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../ui/timerWidget.ui" line="110"/>
         <source>Start/Stop timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Empezar/Parar minutero</translation>
     </message>
     <message>
         <location filename="../ui/timerWidget.ui" line="113"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Empezar</translation>
     </message>
     <message>
         <location filename="../ui/timerWidget.ui" line="126"/>
         <source>Set the timer to the specified value</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicializar el minutero al valor indicado</translation>
     </message>
     <message>
         <location filename="../ui/timerWidget.ui" line="129"/>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicializar</translation>
     </message>
     <message>
         <location filename="../ui/timerWidget.ui" line="148"/>
         <source>Set a sound as the alarm</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar un soñido como una alerta</translation>
     </message>
     <message>
         <location filename="../ui/timerWidget.ui" line="151"/>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Soñido</translation>
     </message>
 </context>
 <context>
@@ -4112,37 +4112,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/yeastDialog.ui" line="14"/>
         <source>Yeast Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de datos para levaduras</translation>
     </message>
     <message>
         <location filename="../ui/yeastDialog.ui" line="38"/>
         <source>Add selected yeast to recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar levadura seleccionada a la receta</translation>
     </message>
     <message>
         <location filename="../ui/yeastDialog.ui" line="41"/>
         <source>Add to Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar a Receta</translation>
     </message>
     <message>
         <location filename="../ui/yeastDialog.ui" line="54"/>
         <source>Create new yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear una levadura nueva</translation>
     </message>
     <message>
         <location filename="../ui/yeastDialog.ui" line="57"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nueva</translation>
     </message>
     <message>
         <location filename="../ui/yeastDialog.ui" line="67"/>
         <source>Edit selected yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Editar levadura seleccionada</translation>
     </message>
     <message>
         <location filename="../ui/yeastDialog.ui" line="84"/>
         <source>Remove selected yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Remover levadura seleccionada</translation>
     </message>
 </context>
 <context>
@@ -4150,12 +4150,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/yeastEditor.ui" line="14"/>
         <source>Yeast Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor de Levaduras</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="25"/>
         <source>Required Fields</source>
-        <translation type="unfinished"></translation>
+        <translation>Información Requisita</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="39"/>
@@ -4172,53 +4172,53 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/yeastEditor.ui" line="86"/>
         <source>Ale</source>
-        <translation type="unfinished"></translation>
+        <translation>Ale</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="91"/>
         <source>Lager</source>
-        <translation type="unfinished"></translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="96"/>
         <source>Wheat</source>
-        <translation type="unfinished"></translation>
+        <translation>Trigo</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="101"/>
         <source>Wine</source>
-        <translation type="unfinished"></translation>
+        <translation>Vino</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="106"/>
         <source>Champagne</source>
-        <translation type="unfinished"></translation>
+        <translation>Champán</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="124"/>
         <location filename="../ui/yeastEditor.ui" line="131"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="135"/>
         <source>Liquid</source>
-        <translation type="unfinished"></translation>
+        <translation>Liquida</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="140"/>
         <source>Dry</source>
-        <translation type="unfinished"></translation>
+        <translation>Seca</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="145"/>
         <source>Slant</source>
-        <translation type="unfinished"></translation>
+        <translation>Slant</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="150"/>
         <source>Culture</source>
-        <translation type="unfinished"></translation>
+        <translation>Cultura</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="162"/>
@@ -4229,125 +4229,125 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/yeastEditor.ui" line="198"/>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si la cantidad es masa</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="201"/>
         <source>Amount is weight?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Cantidad es masa?</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="214"/>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Si la cantidad es masa</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="247"/>
         <location filename="../ui/yeastEditor.ui" line="266"/>
         <source>Lab</source>
-        <translation type="unfinished"></translation>
+        <translation>Lab</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="277"/>
         <location filename="../ui/yeastEditor.ui" line="296"/>
         <source>Product ID</source>
-        <translation type="unfinished"></translation>
+        <translation>No. ID</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="307"/>
         <source>Min Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp Min</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="326"/>
         <source>Min temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp min</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="337"/>
         <source>Max Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp Max</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="356"/>
         <source>Max temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. max</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="393"/>
         <location filename="../ui/yeastEditor.ui" line="400"/>
         <source>Flocculation</source>
-        <translation type="unfinished"></translation>
+        <translation>Precipitado</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="404"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Bajo</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="409"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Medio</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="414"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="419"/>
         <source>Very High</source>
-        <translation type="unfinished"></translation>
+        <translation>Muy Alto</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="431"/>
         <source>Attenuation (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Atenuación (%)</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="450"/>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation type="unfinished"></translation>
+        <translation>Atenucación aparente como un porcentaje de puntos de DI</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="461"/>
         <source>Times Recultured</source>
-        <translation type="unfinished"></translation>
+        <translation>Veces Reculturada</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="480"/>
         <source>Times this yeast has been recultured</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero de veces que la levadura ha sido reculturado</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="491"/>
         <source>Max Recultures</source>
-        <translation type="unfinished"></translation>
+        <translation>Reculteraciónes Max</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="510"/>
         <source>Max recultures</source>
-        <translation type="unfinished"></translation>
+        <translation>Reculteraciónes Max</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="527"/>
         <source>Add to Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar al Secundario</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="540"/>
         <source>Checked means add this yeast to secondary instead of primary</source>
-        <translation type="unfinished"></translation>
+        <translation>Que si se necesita agregarla al secundario</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="552"/>
         <source>Best For:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mejor para:</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="575"/>
         <source>Notes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Notas:</translation>
     </message>
 </context>
 </TS>
