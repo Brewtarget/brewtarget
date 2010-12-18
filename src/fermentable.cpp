@@ -26,6 +26,8 @@
 #include <QVariant>
 #include <QObject>
 
+QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
+
 bool operator<(Fermentable &f1, Fermentable &f2)
 {
    return f1.name < f2.name;
@@ -55,7 +57,7 @@ void Fermentable::toXml(QDomDocument& doc, QDomNode& parent)
    fermNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type.c_str());
+   tmpText = doc.createTextNode(types.at(type));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
    
@@ -205,10 +207,11 @@ void Fermentable::fromNode(const QDomNode& fermentableNode)
       }
       else if( property == "TYPE" )
       {
-         if( isValidType(value.toStdString()) )
-            setType(value.toStdString());
-         else
+         int ndx = types.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for FERMENTABLE. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            type = static_cast<Fermentable::Type>( ndx );
       }
       else if( property == "AMOUNT" )
       {
@@ -278,7 +281,7 @@ void Fermentable::fromNode(const QDomNode& fermentableNode)
 void Fermentable::setDefaults()
 {
    name = "";
-   type = "Grain";
+   type = TYPEGRAIN;
    amount_kg = 0.0;
    yield_pct = 0.0;
    color_srm = 0.0;
@@ -300,7 +303,8 @@ void Fermentable::setDefaults()
 // Get
 const std::string& Fermentable::getName() const { return name; }
 int Fermentable::getVersion() const { return version; }
-const std::string& Fermentable::getType() const { return type; }
+const Fermentable::Type Fermentable::getType() const { return type; }
+const QString& Fermentable::getTypeString() const { return types.at(type); }
 double Fermentable::getAmount_kg() const { return amount_kg; }
 double Fermentable::getYield_pct() const { return yield_pct; }
 double Fermentable::getColor_srm() const { return color_srm; }
@@ -329,8 +333,9 @@ void Fermentable::setName( const std::string& str )
    name = std::string(str);
    hasChanged(QVariant(NAME));
 }
-void Fermentable::setType( const std::string& str )
+void Fermentable::setType( Type t )
 {
+   /*
    if( isValidType( str ) )
    {
       type = std::string(str);
@@ -340,9 +345,28 @@ void Fermentable::setType( const std::string& str )
       Brewtarget::logW( QString("Fermentable: invalid type %1").arg(str.c_str()) );
       type = "Grain";
    }
+   */
+
+   type = t;
 
    hasChanged(QVariant(TYPE));
 }
+
+/*
+void Fermentable::setType( Type type )
+{
+   if( type == GRAIN )
+      setType("Grain");
+   else if( type == SUGAR )
+      setType("Sugar");
+   else if( type == EXTRACT )
+      setType("Extract");
+   else if( type == DRY_EXTRACT )
+      setType("Dry Extract");
+   else if( type == ADJUNCT )
+      setType("Adjunct");
+}
+*/
 void Fermentable::setAmount_kg( double num )
 {
    if( num < 0.0 )

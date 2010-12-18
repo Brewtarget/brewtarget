@@ -26,6 +26,8 @@
 #include <QDomElement>
 #include <QDomText>
 
+QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction";
+
 bool operator<(MashStep &m1, MashStep &m2)
 {
    return m1.name < m2.name;
@@ -55,7 +57,7 @@ void MashStep::toXml(QDomDocument& doc, QDomNode& parent)
    mashStepNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type.c_str());
+   tmpText = doc.createTextNode(getTypeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
    
@@ -102,7 +104,7 @@ void MashStep::toXml(QDomDocument& doc, QDomNode& parent)
 void MashStep::setDefaults()
 {
    name = "";
-   type = "Infusion";
+   type = TYPEINFUSION;
    infuseAmount_l = 0.0;
    infuseTemp_c = 0.0;
    stepTemp_c = 0.0;
@@ -157,10 +159,11 @@ void MashStep::fromNode(const QDomNode& mashStepNode)
       }
       else if( property == "TYPE" )
       {
-         if( isValidType(value.toStdString()) )
-            type = value.toStdString();
-         else
+         int ndx = types.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for MASHSTEP. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            setType(static_cast<MashStep::Type>(ndx));
       }
       else if( property == "INFUSE_AMOUNT" )
       {
@@ -208,19 +211,10 @@ void MashStep::setInfuseTemp_c(double var)
    hasChanged();
 }
 
-void MashStep::setType( const std::string &var )
+void MashStep::setType( Type t )
 {
-   if( ! isValidType(var) )
-   {
-      Brewtarget::logW( QString("MashStep: invalid type: %1").arg(var.c_str()) );
-      type = "Infusion";
-      hasChanged();
-   }
-   else
-   {
-      type = std::string(var);
-      hasChanged();
-   }
+   type = t;
+   hasChanged();
 }
 
 void MashStep::setInfuseAmount_l( double var )
@@ -315,9 +309,14 @@ double MashStep::getInfuseTemp_c() const
    return infuseTemp_c;
 }
 
-std::string MashStep::getType() const
+MashStep::Type MashStep::getType() const
 {
    return type;
+}
+
+const QString& MashStep::getTypeString() const
+{
+   return types.at(type);
 }
 
 double MashStep::getInfuseAmount_l() const

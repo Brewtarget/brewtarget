@@ -23,12 +23,16 @@
 #include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
+#include <QStringList>
+#include <QString>
 
 class MashStep;
 
 class MashStep : public Observable, public BeerXMLElement
 {
 public:
+
+   enum Type {TYPEINFUSION, TYPETEMPERATURE, TYPEDECOCTION};
 
    MashStep();
    MashStep( const QDomNode& mashStepNode );
@@ -41,7 +45,7 @@ public:
    //std::string toXml();
    
    void setName( const std::string &var );
-   void setType( const std::string &var );
+   void setType( Type t );
    void setInfuseAmount_l( double var );
    void setStepTemp_c( double var );
    void setStepTime_min( double var );
@@ -49,7 +53,8 @@ public:
    void setEndTemp_c( double var );
 
    std::string getName() const;
-   std::string getType() const;
+   Type getType() const;
+   const QString& getTypeString() const;
    double getInfuseAmount_l() const;
    double getStepTemp_c() const;
    double getStepTime_min() const;
@@ -67,7 +72,7 @@ private:
 
    std::string name;
    static const int version = 1;
-   std::string type;
+   Type type;
    double infuseAmount_l;
    double stepTemp_c;
    double stepTime_min;
@@ -81,6 +86,8 @@ private:
 
    bool isValidType( const std::string &str ) const;
    void setDefaults();
+
+   static QStringList types;
 };
 
 struct MashStep_ptr_cmp

@@ -271,7 +271,6 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
 
   SET(CPACK_SET_DESTDIR "on")
   SET(CPACK_PACKAGING_INSTALL_PREFIX "/tmp")
-  SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
   SET(CPACK_SOURCE_GENERATOR "TBZ2;")
   SET(CPACK_SOURCE_IGNORE_FILES 
       "/.svn/"
@@ -307,9 +306,12 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})	# to create a debian confirm file-version-string
   SET(CPACK_PACKAGE_FILE_NAME           "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CMAKE_SYSTEM_PROCESSOR}")
   SET(CPACK_SOURCE_PACKAGE_FILE_NAME    "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_source")
-  SET( CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
+  SET(CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
   #SET(CPACK_STRIP_FILES TRUE)
   SET(CPACK_COMPONENTS_ALL Libraries ApplicationData)
+
+ IF(UNIX)#===========================UNIX======================================
+  SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
 
   #-----------------DEB----------------
   SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
@@ -333,7 +335,18 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
   SET(CPACK_RPM_PACKAGE_REQUIRES "qt(>= 4.6.0), phonon(>= 4.2.0)") # NOTE: I'm just guessing here. Somebody needs to check.
 
-  INCLUDE(CPack)
+ ELSEIF(APPLE)#============================APPLE=================================
+  #---------------App Bundle---------------
+  SET( CPACK_GENERATOR "Bundle" )
+
+  SET( CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}" )
+  SET( CPACK_BUNDLE_ICON            "../mac/BrewtargetIcon.icns" )
+  SET( CPACK_BUNDLE_PLIST           "../mac/Info.plist" )
+  SET( CPACK_BUNDLE_STARTUP_COMMAND "${brewtarget_EXECUTABLE}")
+
+ ENDIF()#========================================================================
+
+ INCLUDE(CPack)
 ENDIF()
 
 #============================Icon for Windows==================================
@@ -352,52 +365,54 @@ ENDIF()
 #===========================Create the binary==================================
 
 # The executable.
-IF( APPLE )
-   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} MACOSX_BUNDLE
-                   ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H}
-                   # Do I need to include this since I want them to go in the bundle?
-                   ${brewtarget_DOCS} ${brewtarget_DATA}
-   )
+#IF( APPLE )
+#   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} MACOSX_BUNDLE
+#                   ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H}
+#                   # Do I need to include this since I want them to go in the bundle?
+#                   ${brewtarget_DOCS} ${brewtarget_DATA}
+#   )
+#
+#   # Want the docs in the en.lproj folder.
+#   SET_SOURCE_FILES_PROPERTIES(
+#      ${brewtarget_DOCS}
+#      PROPERTIES
+#      MACOSX_PACKAGE_LOCATION Resources/en.lproj
+#   )
+#
+#   # Want the data in the resources folder.
+#   SET_SOURCE_FILES_PROPERTIES(
+#      ${brewtarget_DATA}
+#      PROPERTIES
+#      MACOSX_PACKAGE_LOCATION Resources
+#   )
+#
+#   SET( MACOSX_BUNDLE_INFO_STRING "Info string" )
+#   SET( MACOSX_BUNDLE_ICON_FILE "../mac/BrewtargetIcon.icns" )
+#   SET( MACOSX_BUNDLE_GUI_IDENTIFIER "Bundle gui identifier" )
+#   SET( MACOSX_BUNDLE_LONG_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
+#   SET( MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget" )
+#   SET( MACOSX_BUNDLE_SHORT_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}" )
+#   SET( MACOSX_BUNDLE_BUNDLE_VERSION "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
+#   SET( MACOSX_BUNDLE_COPYRIGHT "Brewtarget is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    Brewtarget is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with brewtarget;if not, write to the Free Software Foundation,
+#    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA, or visit
+#    http://www.gnu.org/copyleft/gpl.html"
+#   )
+#ELSE()
+#   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
+#ENDIF()
 
-   # Want the docs in the en.lproj folder.
-   SET_SOURCE_FILES_PROPERTIES(
-      ${brewtarget_DOCS}
-      PROPERTIES
-      MACOSX_PACKAGE_LOCATION Resources/en.lproj
-   )
-
-   # Want the data in the resources folder.
-   SET_SOURCE_FILES_PROPERTIES(
-      ${brewtarget_DATA}
-      PROPERTIES
-      MACOSX_PACKAGE_LOCATION Resources
-   )
-
-   SET( MACOSX_BUNDLE_INFO_STRING "Info string" )
-   SET( MACOSX_BUNDLE_ICON_FILE "../mac/BrewtargetIcon.icns" )
-   SET( MACOSX_BUNDLE_GUI_IDENTIFIER "Bundle gui identifier" )
-   SET( MACOSX_BUNDLE_LONG_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
-   SET( MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget" )
-   SET( MACOSX_BUNDLE_SHORT_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}" )
-   SET( MACOSX_BUNDLE_BUNDLE_VERSION "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
-   SET( MACOSX_BUNDLE_COPYRIGHT "Brewtarget is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
-
-    Brewtarget is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with brewtarget;if not, write to the Free Software Foundation,
-    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA, or visit
-    http://www.gnu.org/copyleft/gpl.html"
-   )
-ELSE()
-   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
-ENDIF()
+ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
 
 # Link brewtarget against Qt libraries defined by QT_USE_FILE.
 TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} ${QT_LIBRARIES})
@@ -421,7 +436,9 @@ ELSEIF( WIN32 )
   SET( TARGETPATH "${CMAKE_INSTALL_PREFIX}/release" )
   SET( DOCPATH "${CMAKE_INSTALL_PREFIX}/release/doc" )
 ELSEIF( APPLE )
-  # No directories to configure here I think.
+  SET( DATAPATH "Resources" )
+  SET( DOCPATH  "Resources/en.lproj" )
+  
 ENDIF()
 
 #==============================Setup the config.h==============================
@@ -440,25 +457,38 @@ CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
 
 #==============================Setup install targets===========================
 
-IF(APPLE)
+#IF(APPLE)
+#
+#   # I don't think we need to do any install targets here.
+#
+#ELSE()
+#
+#   # Install the executable.
+#   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+#            RUNTIME DESTINATION ${TARGETPATH} )
+#
+#   # Install the data.
+#   INSTALL( FILES ${brewtarget_DATA}
+#            DESTINATION ${DATAPATH} )
+#
+#   # Install the documentation.
+#   INSTALL( FILES ${brewtarget_DOCS}
+#            DESTINATION ${DOCPATH} )
+#
+#ENDIF()
 
-   # I don't think we need to do any install targets here.
-
-ELSE()
-
-   # Install the executable.
-   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-            RUNTIME DESTINATION ${TARGETPATH} )
-
-   # Install the data.
-   INSTALL( FILES ${brewtarget_DATA}
-            DESTINATION ${DATAPATH} )
-
-   # Install the documentation.
-   INSTALL( FILES ${brewtarget_DOCS}
-            DESTINATION ${DOCPATH} )
-
+IF( UNIX AND NOT APPLE )
+  INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+           RUNTIME DESTINATION ${TARGETPATH} )
 ENDIF()
+
+ # Install the data.
+ INSTALL( FILES ${brewtarget_DATA}
+          DESTINATION ${DATAPATH} )
+
+ # Install the documentation.
+ INSTALL( FILES ${brewtarget_DOCS}
+          DESTINATION ${DOCPATH} )
 
 # Some extra targets for unix.
 IF( UNIX AND NOT APPLE )

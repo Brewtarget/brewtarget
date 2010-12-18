@@ -24,6 +24,8 @@
 #include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
+#include <QString>
+#include <QStringList>
 
 using namespace std;
 
@@ -33,6 +35,11 @@ class HopException;
 class Hop : public Observable, public BeerXMLElement
 {
    public:
+
+   enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
+   enum Form { FORMPELLET, FORMPLUG, FORMLEAF, NUMFORMS };
+   enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
+
       Hop();
       Hop( Hop& other );
       Hop(const QDomNode& hopNode);
@@ -48,12 +55,15 @@ class Hop : public Observable, public BeerXMLElement
       int getVersion() const;
       double getAlpha_pct() const;
       double getAmount_kg() const;
-      const string& getUse() const;
+      Use getUse() const;
+      const QString& getUseString() const;
       double getTime_min() const;
       
       const string& getNotes() const;
-      const string& getType() const;
-      const string& getForm() const;
+      Type getType() const;
+      const QString& getTypeString() const;
+      Form getForm() const;
+      const QString& getFormString() const;
       double getBeta_pct() const;
       double getHsi_pct() const;
       const string& getOrigin() const;
@@ -67,12 +77,12 @@ class Hop : public Observable, public BeerXMLElement
       void setName( const string &str );
       void setAlpha_pct( double num );
       void setAmount_kg( double num );
-      bool setUse( const string &str );
+      bool setUse( Use u );
       void setTime_min( double num );
       
       void setNotes( const string &str );
-      bool setType( const string &str );
-      bool setForm( const string &str );
+      bool setType( Type t );
+      bool setForm( Form f );
       void setBeta_pct( double num );
       void setHsi_pct( double num );
       void setOrigin( const string &str );
@@ -88,13 +98,13 @@ class Hop : public Observable, public BeerXMLElement
       const static int version = 1;
       double alpha_pct;
       double amount_kg;
-      string use;
+      Use use;
       double time_min;
       
       // Optional members.
       string notes;
-      string type;
-      string form;
+      Type type;
+      Form form;
       double beta_pct;
       double hsi_pct;
       string origin;
@@ -110,6 +120,10 @@ class Hop : public Observable, public BeerXMLElement
       static bool isValidUse(const string &str);
       static bool isValidType(const string &str);
       static bool isValidForm(const string &str);
+
+      static QStringList uses;
+      static QStringList types;
+      static QStringList forms;
 };
 
 struct Hop_ptr_cmp

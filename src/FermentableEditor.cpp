@@ -62,7 +62,10 @@ void FermentableEditor::save()
    obsFerm->disableNotification();
 
    obsFerm->setName(lineEdit_name->text().toStdString());
-   obsFerm->setType(comboBox_type->currentText().toStdString());
+   //obsFerm->setType(comboBox_type->currentText().toStdString());
+   // NOTE: the following assumes that Fermentable::Type is enumerated in the same
+   // order as the combobox.
+   obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
    obsFerm->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
    obsFerm->setYield_pct(lineEdit_yield->text().toDouble());
    obsFerm->setColor_srm(lineEdit_color->text().toDouble());
@@ -103,15 +106,13 @@ void FermentableEditor::notify(Observable* notifier, QVariant info)
 
 void FermentableEditor::showChanges()
 {
-   int tmp;
-
    if( obsFerm == 0 )
       return;
 
    lineEdit_name->setText(obsFerm->getName().c_str());
    lineEdit_name->setCursorPosition(0);
-   tmp = comboBox_type->findText(obsFerm->getType().c_str());
-   comboBox_type->setCurrentIndex(tmp);
+   // NOTE: assumes the comboBox entries are in same order as Fermentable::Type
+   comboBox_type->setCurrentIndex(obsFerm->getType());
 
    lineEdit_amount->setText(Brewtarget::displayAmount(obsFerm->getAmount_kg(), Units::kilograms));
    lineEdit_yield->setText(Brewtarget::displayAmount(obsFerm->getYield_pct(), 0));

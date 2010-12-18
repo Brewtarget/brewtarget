@@ -34,6 +34,7 @@
 #include "database.h"
 #include "UnitSystem.h"
 #include "Algorithms.h"
+#include "fermentable.h"
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;

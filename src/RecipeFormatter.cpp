@@ -117,7 +117,7 @@ QString RecipeFormatter::getTextFormat()
       {
          Fermentable* ferm =  rec->getFermentable(i);
          names.append( ferm->getName().c_str() );
-         types.append( ferm->getType().c_str() );
+         types.append( ferm->getTypeString() );
          amounts.append( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms) );
          masheds.append( ferm->getIsMashed() ? QObject::tr("Yes") : QObject::tr("No") );
          lates.append( ferm->getAddAfterBoil() ? QObject::tr("Yes") : QObject::tr("No") );
@@ -164,9 +164,9 @@ QString RecipeFormatter::getTextFormat()
          names.append( hop->getName().c_str() );
          alphas.append( QString("%1%%").arg(hop->getAlpha_pct(), 0, 'f', 1) );
          amounts.append( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms) );
-         uses.append( hop->getUse().c_str() );
+         uses.append( hop->getUseString() );
          times.append( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) );
-         forms.append( hop->getForm().c_str() );
+         forms.append( hop->getFormString() );
          ibus.append( QString("%1").arg( rec->getIBUFromHop(i), 0, 'f', 1 ) );
       }
       
@@ -268,10 +268,10 @@ QString RecipeFormatter::getTextFormat()
       {
          MashStep* s = mash->getMashStep(i);
          names.append(s->getName().c_str());
-         types.append(s->getType().c_str());
-         if( s->getType() == "Infusion" )
+         types.append(s->getTypeString());
+         if( s->getType() == MashStep::TYPEINFUSION )
             amounts.append( Brewtarget::displayAmount( s->getInfuseAmount_l(), Units::liters ) );
-         else if( s->getType() == "Decoction" )
+         else if( s->getType() == MashStep::TYPEDECOCTION )
             amounts.append( Brewtarget::displayAmount( s->getDecoctionAmount_l(), Units::liters ) );
          else
             amounts.append( "---" );

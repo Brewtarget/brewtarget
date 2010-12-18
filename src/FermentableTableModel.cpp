@@ -179,7 +179,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
             return QVariant();
       case FERMTYPECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getType().c_str());
+            return QVariant(row->getTypeString());
          else
             return QVariant();
       case FERMAMOUNTCOL:
@@ -287,9 +287,9 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       case FERMTYPECOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Int) )
          {
-            row->setType(value.toString().toStdString());
+            row->setType( static_cast<Fermentable::Type>(value.toInt()));
             return true;
          }
          else
@@ -298,6 +298,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( value.canConvert(QVariant::String) )
          {
             row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
+            headerDataChanged( Qt::Vertical, 0, rowCount() ); // Need to re-show header (grain percent).
             return true;
          }
          else
@@ -436,7 +437,7 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
    if( col == FERMTYPECOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      QString value = box->currentText();
+      int value = box->currentIndex();
       
       model->setData(index, value, Qt::EditRole);
    }

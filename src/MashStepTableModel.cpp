@@ -177,9 +177,9 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       case MASHSTEPNAMECOL:
          return QVariant(row->getName().c_str());
       case MASHSTEPTYPECOL:
-         return QVariant(row->getType().c_str());
+         return QVariant(row->getTypeString());
       case MASHSTEPAMOUNTCOL:
-         return (row->getType() == "Decoction")
+         return (row->getType() == MashStep::TYPEDECOCTION)
                 ? QVariant( Brewtarget::displayAmount(row->getDecoctionAmount_l(), Units::liters ) )
                 : QVariant( Brewtarget::displayAmount(row->getInfuseAmount_l(), Units::liters) );
       case MASHSTEPTEMPCOL:
@@ -252,9 +252,9 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          else
             return false;
       case MASHSTEPTYPECOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Int) )
          {
-            row->setType(value.toString().toStdString());
+            row->setType(static_cast<MashStep::Type>(value.toInt()));
             return true;
          }
          else
@@ -262,7 +262,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            if( row->getType() == "Decoction" )
+            if( row->getType() == MashStep::TYPEDECOCTION )
                row->setDecoctionAmount_l( Brewtarget::volQStringToSI(value.toString()) );
             else
                row->setInfuseAmount_l( Brewtarget::volQStringToSI(value.toString()) );

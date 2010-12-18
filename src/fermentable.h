@@ -25,12 +25,19 @@
 #include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
+#include <QStringList>
+#include <QString>
 
 class Fermentable;
 
 class Fermentable : public Observable, public BeerXMLElement
 {
+   friend class Brewtarget;
 public:
+
+   //! These should exactly correspond to \b types.
+   enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
+
    Fermentable();
    Fermentable( Fermentable& other );
    Fermentable( const XmlNode* node );
@@ -50,7 +57,8 @@ public:
    // Get
    const std::string& getName() const;
    int getVersion() const;
-   const std::string& getType() const;
+   const Type getType() const;
+   const QString& getTypeString() const;
    double getAmount_kg() const;
    double getYield_pct() const;
    double getColor_srm() const;
@@ -75,7 +83,7 @@ public:
    // Set
    void setName( const std::string& str );
    void setVersion( int num );
-   void setType( const std::string& str );
+   void setType( Type t );
    void setAmount_kg( double num );
    void setYield_pct( double num );
    void setColor_srm( double num );
@@ -100,7 +108,7 @@ public:
 private:
    std::string name;
    static const int version = 1;
-   std::string type;
+   Type type;
    double amount_kg;
    double yield_pct;
    double color_srm;
@@ -122,6 +130,8 @@ private:
 
    static bool isValidType( const std::string& str );
    void setDefaults();
+
+   static QStringList types;
 };
 
 struct Fermentable_ptr_cmp

@@ -61,9 +61,9 @@ public:
     * Variable 'precision' controls how many decimal places.
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3 );
-   // Displays thickness in appropriate units from standard thickness in L/kg.
+   //! Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg );
-   // Display gravity appropriately.
+   //! Display gravity appropriately.
    static QString displayOG( double og, bool showUnits=false );
    static QString displayFG( double fg, double og, bool showUnits=false ); // Need OG if we're using plato.
    static double weightQStringToSI( QString qstr );
@@ -87,8 +87,10 @@ private:
    static QFile* logFile;
    static QTextStream* logStream;
 
-   static bool ensureFilesExist(); // Ensure the db and option files exist.
-   static void loadTranslations(); // Load translation files.
+   //! Ensure the db and option files exist.
+   static bool ensureFilesExist();
+   //! Load translation files.
+   static void loadTranslations();
    
    // These are options that are ONLY to be edited by the OptionDialog.
    static bool usePlato; // Whether or not to display plato instead of SG.

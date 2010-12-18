@@ -66,10 +66,10 @@ void HopEditor::save()
    h->setName(lineEdit_name->text().toStdString());
    h->setAlpha_pct(lineEdit_alpha->text().toDouble());
    h->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
-   h->setUse(comboBox_use->currentText().toStdString());
+   h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
    h->setTime_min(Brewtarget::timeQStringToSI(lineEdit_time->text()));
-   h->setType(comboBox_type->currentText().toStdString());
-   h->setForm(comboBox_form->currentText().toStdString());
+   h->setType(static_cast<Hop::Type>(comboBox_type->currentIndex()));
+   h->setForm(static_cast<Hop::Form>(comboBox_form->currentIndex()));
    h->setBeta_pct(lineEdit_beta->text().toDouble());
    h->setHsi_pct(lineEdit_HSI->text().toDouble());
    h->setOrigin(lineEdit_origin->text().toStdString());
@@ -111,19 +111,14 @@ void HopEditor::showChanges()
    if( h == 0 )
       return;
 
-   int tmp;
-
    lineEdit_name->setText(h->getName().c_str());
    lineEdit_name->setCursorPosition(0);
    lineEdit_alpha->setText(Brewtarget::displayAmount(h->getAlpha_pct(), 0));
    lineEdit_amount->setText(Brewtarget::displayAmount(h->getAmount_kg(), Units::kilograms));
-   tmp = comboBox_use->findText(h->getUse().c_str());
-   comboBox_use->setCurrentIndex(tmp);
+   comboBox_use->setCurrentIndex(obsHop->getUse());
    lineEdit_time->setText(Brewtarget::displayAmount(h->getTime_min(), Units::minutes));
-   tmp = comboBox_type->findText(h->getType().c_str());
-   comboBox_type->setCurrentIndex( (tmp == -1)? 0 : tmp );
-   tmp = comboBox_form->findText(h->getForm().c_str());
-   comboBox_form->setCurrentIndex((tmp == -1)? 0 : tmp);
+   comboBox_type->setCurrentIndex(obsHop->getType());
+   comboBox_form->setCurrentIndex(obsHop->getForm());
    lineEdit_beta->setText(Brewtarget::displayAmount(h->getBeta_pct(), 0));
    lineEdit_HSI->setText(Brewtarget::displayAmount(h->getHsi_pct(), 0));
    lineEdit_origin->setText(h->getOrigin().c_str());

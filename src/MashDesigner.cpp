@@ -55,7 +55,7 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
    // Move to next step.
    connect( pushButton_next, SIGNAL(clicked()), this, SLOT(proceed()) );
    // Do correct calcs when the mash step type is selected.
-   connect( comboBox_type, SIGNAL(activated(QString)), this, SLOT(typeChanged(QString)) );
+   connect( comboBox_type, SIGNAL(activated(int)), this, SLOT(typeChanged(int)) );
 
    connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
    connect( pushButton_finish, SIGNAL(clicked()), this, SLOT(saveAndClose()) );
@@ -127,23 +127,19 @@ bool MashDesigner::nextStep(int step)
 
 void MashDesigner::saveStep()
 {
-   QString type = comboBox_type->currentText();
+   MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
 
    mashStep->disableNotification();
    mashStep->setName( lineEdit_name->text().toStdString() );
-   mashStep->setType( type.toStdString() );
+   mashStep->setType( type );
    mashStep->setStepTemp_c( Brewtarget::tempQStringToSI(lineEdit_temp->text()) );
    mashStep->setStepTime_min( Brewtarget::timeQStringToSI(lineEdit_time->text()) );
 
-   if( type.compare("Infusion") == 0 )
+   if( type == MashStep::TYPEINFUSION )
    {
       mashStep->setInfuseAmount_l( getSelectedAmount_l() );
       mashStep->setInfuseTemp_c( getSelectedTemp_c() );
    }
-   /*
-   else if( type.compare("Decoction") == 0 )
-      mashStep->setDecoctionAmount_l(  );
-    */
 
    mashStep->reenableNotification();
    mashStep->forceNotify();
@@ -312,7 +308,7 @@ void MashDesigner::updateFullness()
    if( mashStep == 0 )
       return;
 
-   QString type(mashStep->getType().c_str());
+   MashStep::Type type = mashStep->getType();
 
    if( equip == 0 )
    {
@@ -322,14 +318,14 @@ void MashDesigner::updateFullness()
 
    double vol_l;
    if( ! isBatchSparge() )
-      vol_l = mashVolume_l() + ( (type.compare("Infusion") == 0) ? getSelectedAmount_l() : 0);
+      vol_l = mashVolume_l() + ( (type==MashStep::TYPEINFUSION) ? getSelectedAmount_l() : 0);
    else
       vol_l = grainVolume_l() + getSelectedAmount_l();
    double ratio = vol_l / equip->getTunVolume_l();
 
    progressBar_fullness->setValue(ratio*progressBar_fullness->maximum());
    label_mashVol->setText(Brewtarget::displayAmount(vol_l, Units::liters));
-   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + ((mashStep->getType().compare("Infusion") == 0) ? getSelectedAmount_l() : 0) )/grain_kg ));
+   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + ((type==MashStep::TYPEINFUSION) ? getSelectedAmount_l() : 0) )/grain_kg ));
 }
 
 void MashDesigner::updateCollectedWort()
@@ -389,7 +385,7 @@ void MashDesigner::updateTempSlider()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType().compare("Infusion") == 0 )
+   if( mashStep->getType() == MashStep::TYPEINFUSION )
    {
       double temp = tempFromVolume_c( getSelectedAmount_l() );
 
@@ -399,7 +395,7 @@ void MashDesigner::updateTempSlider()
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( mashStep->getType().compare("Decoction") == 0 )
+   else if( mashStep->getType() == MashStep::TYPEDECOCTION )
    {
       horizontalSlider_temp->setValue(horizontalSlider_temp->maximum());
    }
@@ -412,7 +408,7 @@ void MashDesigner::updateAmtSlider()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType().compare("Infusion") == 0 )
+   if( mashStep->getType() == MashStep::TYPEINFUSION )
    {
       double vol = volFromTemp_l( getSelectedTemp_c() );
       double ratio = (vol - minAmt_l()) / (maxAmt_l() - minAmt_l());
@@ -430,7 +426,7 @@ void MashDesigner::updateAmt()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType().compare("Infusion") == 0 )
+   if( mashStep->getType() == MashStep::TYPEINFUSION )
    {
       double vol = horizontalSlider_amount->value() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
 
@@ -439,7 +435,7 @@ void MashDesigner::updateAmt()
       if( mashStep != 0 )
          mashStep->setInfuseAmount_l( vol );
    }
-   else if( mashStep->getType().compare("Decoction") == 0 )
+   else if( mashStep->getType() == MashStep::TYPEDECOCTION )
       label_amt->setText(Brewtarget::displayAmount(mashStep->getDecoctionAmount_l(), Units::liters));
    else
       label_amt->setText(Brewtarget::displayAmount(0, Units::liters));
@@ -450,7 +446,7 @@ void MashDesigner::updateTemp()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType().compare("Infusion") == 0 )
+   if( mashStep->getType() == MashStep::TYPEINFUSION )
    {
       double temp = horizontalSlider_temp->value() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
 
@@ -459,7 +455,7 @@ void MashDesigner::updateTemp()
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( mashStep->getType().compare("Decoction") == 0 )
+   else if( mashStep->getType() == MashStep::TYPEDECOCTION )
       label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
    else
       label_temp->setText(Brewtarget::displayAmount( mashStep->getStepTemp_c(), Units::celsius));
@@ -529,17 +525,19 @@ bool MashDesigner::isBatchSparge()
    return (checkBox_batchSparge->checkState() == Qt::Checked);
 }
 
-void MashDesigner::typeChanged(QString type)
+void MashDesigner::typeChanged(int t)
 {
-   if( mashStep != 0 )
-      mashStep->setType(type.toStdString());
+   MashStep::Type type = static_cast<MashStep::Type>(t);
 
-   if( type.compare("Infusion") == 0 )
+   if( mashStep != 0 )
+      mashStep->setType(type);
+
+   if( type == MashStep::TYPEINFUSION )
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
    }
-   else if( type.compare("Decoction") == 0 )
+   else if( type == MashStep::TYPEDECOCTION )
    {
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);
@@ -552,7 +550,7 @@ void MashDesigner::typeChanged(QString type)
       updateTempSlider();
       updateTemp();
    }
-   else if( type.compare("Temperature") == 0 )
+   else if( type == MashStep::TYPETEMPERATURE )
    {
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);

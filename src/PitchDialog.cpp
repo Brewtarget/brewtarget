@@ -41,7 +41,7 @@ PitchDialog::~PitchDialog()
 
 void PitchDialog::calculate()
 {
-   bool ok, tmp;
+   bool ok;
 
    // Allow selection of 0.75 to 2 million cells per mL per degree P.
    double rate_MpermLP = (2-0.75) * ((double)slider_pitchRate->value()) / 100.0 + 0.75;

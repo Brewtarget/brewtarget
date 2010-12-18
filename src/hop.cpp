@@ -28,7 +28,9 @@
 #include <QDomText>
 #include <QObject>
 
-using namespace std;
+QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
+QStringList Hop::forms = QStringList() << "Pellet" << "Plug" << "Leaf";
+QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First Wort" << "Aroma";
 
 bool operator<( Hop &h1, Hop &h2 )
 {
@@ -108,7 +110,7 @@ void Hop::toXml(QDomDocument& doc, QDomNode& parent)
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(use.c_str());
+   tmpText = doc.createTextNode(getUseString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
@@ -123,12 +125,12 @@ void Hop::toXml(QDomDocument& doc, QDomNode& parent)
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type.c_str());
+   tmpText = doc.createTextNode(getTypeString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("FORM");
-   tmpText = doc.createTextNode(form.c_str());
+   tmpText = doc.createTextNode(getFormString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
@@ -178,10 +180,10 @@ void Hop::toXml(QDomDocument& doc, QDomNode& parent)
 void Hop::setDefaults()
 {
    name = "";
-   use = "Boil";
+   use = USEBOIL;
    notes = "";
-   type = "Both";
-   form = "Pellet";
+   type = TYPEBOTH;
+   form = FORMPELLET;
    origin = "";
    substitutes = "";
    
@@ -271,10 +273,11 @@ void Hop::fromNode(const QDomNode& hopNode)
       }
       else if( property == "USE" )
       {
-         if( isValidUse(value.toStdString()) )
-            setUse(value.toStdString());
-         else
+         int ndx = uses.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid use for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            setUse( static_cast<Hop::Use>(ndx));
       }
       else if( property == "TIME" )
       {
@@ -286,17 +289,19 @@ void Hop::fromNode(const QDomNode& hopNode)
       }
       else if( property == "TYPE" )
       {
-         if( isValidType(value.toStdString()) )
-            setType(value.toStdString());
-         else
+         int ndx = types.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            setType(static_cast<Hop::Type>(ndx));
       }
       else if( property == "FORM" )
       {
-         if( isValidForm(value.toStdString()) )
-            setForm(value.toStdString());
-         else
+         int ndx = forms.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid form for HOP. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            setForm( static_cast<Hop::Form>(ndx));
       }
       else if( property == "BETA" )
       {
@@ -372,17 +377,11 @@ void Hop::setAmount_kg( double num )
    hasChanged();
 }
 
-// Returns true on success, false on failure.
-bool Hop::setUse( const string &str )
+bool Hop::setUse(Use u)
 {
-   if( isValidUse(str) )
-   {
-      use = string(str);
-      hasChanged();
-      return true;
-   }
-   else
-      return false;
+   use = u;
+   hasChanged();
+   return true;
 }
 
 void Hop::setTime_min( double num )
@@ -406,28 +405,18 @@ void Hop::setNotes( const string &str )
    hasChanged();
 }
 
-bool Hop::setType( const string &str )
+bool Hop::setType(Type t)
 {
-   if( isValidType(str) )
-   {
-      type = string(str);
-      hasChanged();
-      return true;
-   }
-   else
-      return false;
+   type = t;
+   hasChanged();
+   return true;
 }
 
-bool Hop::setForm( const string &str )
+bool Hop::setForm( Form f )
 {
-   if( isValidForm(str) )
-   {
-      form = string(str);
-      hasChanged();
-      return true;
-   }
-   else
-      return false;
+   form = f;
+   hasChanged();
+   return true;
 }
 
 void Hop::setBeta_pct( double num )
@@ -554,9 +543,14 @@ double Hop::getAmount_kg() const
    return amount_kg;
 }
 
-const string& Hop::getUse() const
+Hop::Use Hop::getUse() const
 {
    return use;
+}
+
+const QString& Hop::getUseString() const
+{
+   return uses.at(use);
 }
 
 double Hop::getTime_min() const
@@ -569,14 +563,24 @@ const string& Hop::getNotes() const
    return notes;
 }
 
-const string& Hop::getType() const
+Hop::Type Hop::getType() const
 {
    return type;
 }
 
-const string& Hop::getForm() const
+const QString& Hop::getTypeString() const
+{
+   return types.at(type);
+}
+
+Hop::Form Hop::getForm() const
 {
    return form;
+}
+
+const QString& Hop::getFormString() const
+{
+   return forms.at(form);
 }
 
 double Hop::getBeta_pct() const

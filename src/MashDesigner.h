@@ -52,7 +52,7 @@ private slots:
    void saveTargetTemp();
    void proceed(); // Go to next step.
    void saveAndClose();
-   void typeChanged(QString type);
+   void typeChanged(int t);
 
 private:
    bool nextStep(int step);

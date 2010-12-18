@@ -34,7 +34,6 @@ MashStepEditor::MashStepEditor(QWidget* parent) : QDialog(parent)
 
 void MashStepEditor::showChanges()
 {
-   int tmp;
    if( obs == 0 )
    {
       clear();
@@ -42,8 +41,7 @@ void MashStepEditor::showChanges()
    }
 
    lineEdit_name->setText(obs->getName().c_str());
-   tmp = comboBox_type->findText(obs->getType().c_str());
-   comboBox_type->setCurrentIndex(tmp);
+   comboBox_type->setCurrentIndex(obs->getType());
    lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->getInfuseAmount_l(), Units::liters));
    lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->getInfuseTemp_c(), Units::celsius));
    lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->getDecoctionAmount_l(), Units::liters));
@@ -91,7 +89,7 @@ void MashStepEditor::saveAndClose()
    obs->disableNotification();
 
    obs->setName(lineEdit_name->text().toStdString());
-   obs->setType(comboBox_type->currentText().toStdString());
+   obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(Brewtarget::volQStringToSI(lineEdit_infuseAmount->text()));
    obs->setInfuseTemp_c(Brewtarget::tempQStringToSI(lineEdit_infuseTemp->text()));
    obs->setDecoctionAmount_l(Brewtarget::volQStringToSI(lineEdit_decoctionAmount->text()));

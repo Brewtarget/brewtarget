@@ -170,7 +170,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
       case HOPAMOUNTCOL:
          return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
       case HOPUSECOL:
-         return QVariant(row->getUse().c_str());
+         return QVariant(row->getUseString());
       case HOPTIMECOL:
          return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
       default :
@@ -243,6 +243,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          if( value.canConvert(QVariant::Double) )
          {
             row->setAlpha_pct( value.toDouble() );
+            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
             return true;
          }
          else
@@ -251,14 +252,16 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          if( value.canConvert(QVariant::String) )
          {
             row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
+            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
             return true;
          }
          else
             return false;
       case HOPUSECOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Int) )
          {
-            row->setUse(value.toString().toStdString());
+            row->setUse(static_cast<Hop::Use>(value.toInt()));
+            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
             return true;
          }
          else
@@ -267,12 +270,13 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          if( value.canConvert(QVariant::String) )
          {
             row->setTime_min( Brewtarget::timeQStringToSI(value.toString()) );
+            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
             return true;
          }
          else
             return false;
       default:
-         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
+         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(index.column()));
          return false;
    }
 }
@@ -332,7 +336,7 @@ void HopItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, c
    if( index.column() == HOPUSECOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      QString value = box->currentText();
+      int value = box->currentIndex();
       
       model->setData(index, value, Qt::EditRole);
    }
