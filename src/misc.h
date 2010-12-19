@@ -23,6 +23,7 @@
 #include <exception>
 #include <QDomNode>
 #include <QDomText>
+#include <QString>
 #include "observable.h"
 #include "BeerXMLElement.h"
 
@@ -31,6 +32,10 @@ class Misc;
 class Misc : public Observable, public BeerXMLElement
 {
 public:
+  
+   enum Type{ TYPESPICE, TYPEFINING, TYPEWATER_AGENT, TYPEHERB, TYPEFLAVOR, TYPEOTHER };
+   enum Use{ USEBOIL, USEMASH, USEPRIMARY, USESECONDARY, USEBOTTLING };
+   
    Misc();
    Misc(Misc& other);
    Misc( const QDomNode& miscNode );
@@ -44,8 +49,8 @@ public:
    
    // Set
    void setName( const std::string &var );
-   void setType( const std::string &var );
-   void setUse( const std::string &var );
+   void setType( Type t );
+   void setUse( Use u );
    void setAmount( double var );
    void setTime( double var );
    void setAmountIsWeight( bool var );
@@ -54,8 +59,10 @@ public:
    
    // Get
    std::string getName() const;
-   std::string getType() const;
-   std::string getUse() const;
+   Type getType() const;
+   const QString& getTypeString() const;
+   Use getUse() const;
+   const QString& getUseString() const;
    double getAmount() const;
    double getTime() const;
    bool getAmountIsWeight() const;
@@ -67,8 +74,8 @@ private:
    // Required fields.
    std::string name;
    static const int version = 1;
-   std::string type;
-   std::string use;
+   Type type;
+   Use use;
    double time;
    double amount;
    
@@ -81,6 +88,9 @@ private:
    void setDefaults();
    bool isValidType( const std::string &var );
    bool isValidUse( const std::string &var );
+   
+   static QStringList types;
+   static QStringList uses;
 };
 
 struct Misc_ptr_cmp

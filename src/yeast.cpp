@@ -26,6 +26,10 @@
 #include "stringparsing.h"
 #include "brewtarget.h"
 
+QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
+QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
+QStringList Yeast::flocculations = QStringList() << "Low" << "Medium" << "High" << "Very High";
+
 bool operator<(Yeast &y1, Yeast &y2)
 {
    return y1.name < y2.name;
@@ -55,12 +59,12 @@ void Yeast::toXml(QDomDocument& doc, QDomNode& parent)
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type.c_str());
+   tmpText = doc.createTextNode(types.at(type));
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("FORM");
-   tmpText = doc.createTextNode(form.c_str());
+   tmpText = doc.createTextNode(forms.at(form));
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 
@@ -95,7 +99,7 @@ void Yeast::toXml(QDomDocument& doc, QDomNode& parent)
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("FLOCCULATION");
-   tmpText = doc.createTextNode(flocculation.c_str());
+   tmpText = doc.createTextNode(flocculations.at(flocculation));
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 
@@ -136,8 +140,8 @@ void Yeast::setDefaults()
 {
    // Required fields.
    name = "";
-   type = "Ale";
-   form = "Liquid";
+   type = TYPEALE;
+   form = FORMLIQUID;
    amount = 0.0;
    
    // Optional fields.
@@ -146,7 +150,7 @@ void Yeast::setDefaults()
    productID = "";
    minTemperature_c = 0.0;
    maxTemperature_c = 0.0;
-   flocculation = "";
+   flocculation = FLOCMEDIUM;
    attenuation_pct = 0.0;
    notes = "";
    bestFor = "";
@@ -222,17 +226,19 @@ void Yeast::fromNode(const QDomNode& yeastNode)
       }
       else if( property == "TYPE" )
       {
-         if( isValidType( value.toStdString() ) )
-            type = value.toStdString();
-         else
+         int ndx = types.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log( Brewtarget::ERROR, QObject::tr("%1 is not a valid type for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            type = static_cast<Yeast::Type>(ndx);
       }
       else if( property == "FORM" )
       {
-         if( isValidForm( value.toStdString() ) )
-            form = value.toStdString();
-            else
-               Brewtarget::log( Brewtarget::ERROR, QObject::tr("%1 is not a valid form for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+         int ndx = forms.indexOf(value);
+         if( ndx < 0 )
+            Brewtarget::log( Brewtarget::ERROR, QObject::tr("%1 is not a valid form for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            form = static_cast<Yeast::Form>(ndx);
       }
       else if( property == "AMOUNT" )
       {
@@ -260,10 +266,11 @@ void Yeast::fromNode(const QDomNode& yeastNode)
       }
       else if( property == "FLOCCULATION" )
       {
-         if( isValidFlocculation( value.toStdString() ) )
-            flocculation = value.toStdString();
-         else
+         int ndx = flocculations.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log( Brewtarget::ERROR, QObject::tr("%1 is not a valid flocculation for yeast. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            flocculation = static_cast<Yeast::Flocculation>(ndx);
       }
       else if( property == "ATTENUATION" )
       {
@@ -305,26 +312,16 @@ void Yeast::setName( const std::string& var )
    hasChanged();
 }
 
-void Yeast::setType( const std::string& var )
+void Yeast::setType( Yeast::Type t )
 {
-   if( !isValidType(var) )
-      throw YeastException("invalid type \"" + var + "\".");
-   else
-   {
-      type = std::string(var);
-      hasChanged();
-   }
+   type = t;
+   hasChanged();
 }
 
-void Yeast::setForm( const std::string& var )
+void Yeast::setForm( Yeast::Form f )
 {
-   if( ! isValidForm(var) )
-      throw YeastException("invalid form \"" + var + "\".");
-   else
-   {
-      form = std::string(var);
-      hasChanged();
-   }
+   form = f;
+   hasChanged();
 }
 
 void Yeast::setAmount( double var )
@@ -378,15 +375,10 @@ void Yeast::setMaxTemperature_c( double var )
    }
 }
 
-void Yeast::setFlocculation( const std::string& var )
+void Yeast::setFlocculation( Yeast::Flocculation f )
 {
-   if( ! isValidFlocculation(var) )
-      throw YeastException("invalid flocculation \"" + var + "\".");
-   else
-   {
-      flocculation = std::string(var);
-      hasChanged();
-   }
+   flocculation = f;
+   hasChanged();
 }
 
 void Yeast::setAttenuation_pct( double var )
@@ -441,15 +433,18 @@ void Yeast::setAddToSecondary( bool var )
    
 //============================="GET" METHODS====================================
 std::string Yeast::getName() const { return name; }
-std::string Yeast::getType() const { return type; }
-std::string Yeast::getForm() const { return form; }
+Yeast::Type Yeast::getType() const { return type; }
+const QString& Yeast::getTypeString() const { return types.at(type); }
+Yeast::Form Yeast::getForm() const { return form; }
+const QString& Yeast::getFormString() const { return forms.at(form); }
 double Yeast::getAmount() const { return amount; }
 bool Yeast::getAmountIsWeight() const { return amountIsWeight; }
 std::string Yeast::getLaboratory() const { return laboratory; }
 std::string Yeast::getProductID() const { return productID; }
 double Yeast::getMinTemperature_c() const { return minTemperature_c; }
 double Yeast::getMaxTemperature_c() const { return maxTemperature_c; }
-std::string Yeast::getFlocculation() const { return flocculation; }
+Yeast::Flocculation Yeast::getFlocculation() const { return flocculation; }
+const QString& Yeast::getFlocculationString() const { return flocculations.at(flocculation); }
 double Yeast::getAttenuation_pct() const { return attenuation_pct; }
 std::string Yeast::getNotes() const { return notes; }
 std::string Yeast::getBestFor() const { return bestFor; }

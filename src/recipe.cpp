@@ -852,7 +852,7 @@ void Recipe::generateInstructions()
       for( j = 0; j < miscs.size(); ++j )
       {
          Misc* misc = miscs[j];
-         if( misc->getUse() == "Mash" )
+         if( misc->getUse() == Misc::USEMASH )
          {
             str = QObject::tr("Put %1 %2 into mash for %3.")
                   .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
@@ -984,7 +984,7 @@ void Recipe::generateInstructions()
    for( i = 0; i < miscs.size(); ++i )
    {
       Misc* misc = miscs[i];
-      if( misc->getUse() == "Boil" )
+      if( misc->getUse() == Misc::USEBOIL )
       {
          str = QObject::tr("Put %1 %2 into boil for %3.")
                .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
@@ -1067,7 +1067,7 @@ void Recipe::generateInstructions()
    {
       Yeast* yeast = yeasts[i];
       if( ! yeast->getAddToSecondary() )
-         str += QObject::tr("%1 %2 yeast, ").arg(yeast->getName().c_str()).arg(yeast->getType().c_str());
+         str += QObject::tr("%1 %2 yeast, ").arg(yeast->getName().c_str()).arg(yeast->getTypeString());
    }
    str += QObject::tr("to the primary.");
    ins = new Instruction();
@@ -1082,7 +1082,7 @@ void Recipe::generateInstructions()
    for( i = 0; i < miscs.size(); ++i )
    {
       Misc* misc = miscs[i];
-      if( misc->getUse() == "Primary" )
+      if( misc->getUse() == Misc::USEPRIMARY )
       {
          str += QString("%1 %2, ")
                 .arg(Brewtarget::displayAmount(misc->getAmount(), (misc->getAmountIsWeight()) ? ((Unit*)Units::kilograms) : ((Unit*)Units::liters) ))
@@ -1117,7 +1117,7 @@ void Recipe::generateInstructions()
    for( i = 0; i < miscs.size(); ++i )
    {
       Misc* misc = miscs[i];
-      if( misc->getUse() == "Secondary" )
+      if( misc->getUse() == Misc::USESECONDARY )
       {
          str = QObject::tr("Add %1 %2 to secondary for %3.")
                .arg(Brewtarget::displayAmount(misc->getAmount(), (misc->getAmountIsWeight()) ? ((Unit*)Units::kilograms) : ((Unit*)Units::liters) ))
@@ -1187,7 +1187,7 @@ QString Recipe::nextAddToBoil(double& time)
    for( i = 0; i < size; ++i )
    {
       m = miscs[i];
-      if( m->getUse() != "Boil" )
+      if( m->getUse() != Misc::USEBOIL )
          continue;
       if( m->getTime() < time && m->getTime() > max )
       {

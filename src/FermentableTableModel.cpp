@@ -180,6 +180,8 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
       case FERMTYPECOL:
          if( role == Qt::DisplayRole )
             return QVariant(row->getTypeString());
+         else if( role == Qt::UserRole )
+            return QVariant(row->getType());
          else
             return QVariant();
       case FERMAMOUNTCOL:
@@ -366,12 +368,13 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem("Grain");
-      box->addItem("Sugar");
-      box->addItem("Extract");
-      box->addItem("Dry Extract");
-      box->addItem("Adjunct");
+      box->addItem(tr("Grain"));
+      box->addItem(tr("Sugar"));
+      box->addItem(tr("Extract"));
+      box->addItem(tr("Dry Extract"));
+      box->addItem(tr("Adjunct"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+      box->setFocusPolicy(Qt::StrongFocus);
       return box;
    }
    else if( index.column() == FERMISMASHEDCOL )
@@ -409,10 +412,9 @@ void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
    if( col == FERMTYPECOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      QString text = index.model()->data(index, Qt::DisplayRole).toString();
-      
-      int index = box->findText(text);
-      box->setCurrentIndex(index);
+      int ndx = index.model()->data(index, Qt::UserRole).toInt();
+
+      box->setCurrentIndex(ndx);
    }
    else if( col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {

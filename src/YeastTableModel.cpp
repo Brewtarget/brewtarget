@@ -133,24 +133,42 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    else
       row = yeastObs[index.row()];
 
-   // Make sure we only respond to the DisplayRole role.
-   if( role != Qt::DisplayRole )
-      return QVariant();
-
    switch( index.column() )
    {
       case YEASTNAMECOL:
+      if( role == Qt::DisplayRole )
          return QVariant(row->getName().c_str());
+      else
+         return QVariant();
       case YEASTTYPECOL:
-         return QVariant(row->getType().c_str());
+      if( role == Qt::DisplayRole )
+         return QVariant(row->getTypeString());
+      else if( role == Qt::UserRole )
+         return QVariant(row->getType());
+      else
+         return QVariant();
       case YEASTLABCOL:
+      if( role == Qt::DisplayRole )
          return QVariant(row->getLaboratory().c_str());
+      else
+         return QVariant();
       case YEASTPRODIDCOL:
+      if( role == Qt::DisplayRole )
          return QVariant(row->getProductID().c_str());
+      else
+         return QVariant();
       case YEASTFORMCOL:
-         return QVariant(row->getForm().c_str());
+      if( role == Qt::DisplayRole )
+         return QVariant(row->getFormString());
+      else if( role == Qt::UserRole )
+         return QVariant(row->getForm());
+      else
+         return QVariant();
       case YEASTAMOUNTCOL:
+      if( role == Qt::DisplayRole )
          return QVariant( Brewtarget::displayAmount(row->getAmount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+      else
+         return QVariant();
       default :
          Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -219,7 +237,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTLABCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setType(value.toString().toStdString());
+            row->setLaboratory(value.toString().toStdString());
             return true;
          }
          else
@@ -227,23 +245,23 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTPRODIDCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setType(value.toString().toStdString());
+            row->setProductID(value.toString().toStdString());
             return true;
          }
          else
             return false;
       case YEASTTYPECOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Int) )
          {
-            row->setType(value.toString().toStdString());
+            row->setType(static_cast<Yeast::Type>(value.toInt()));
             return true;
          }
          else
             return false;
       case YEASTFORMCOL:
-         if( value.canConvert(QVariant::String) )
+         if( value.canConvert(QVariant::Int) )
          {
-            row->setForm(value.toString().toStdString());
+            row->setForm(static_cast<Yeast::Form>(value.toInt()));
             return true;
          }
          else
@@ -282,12 +300,11 @@ QWidget* YeastItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
    {
       QComboBox *box = new QComboBox(parent);
 
-      /*May be “Ale”, “Lager”, “Wheat”, “Wine” or “Champagne”*/
-      box->addItem("Ale");
-      box->addItem("Lager");
-      box->addItem("Wheat");
-      box->addItem("Wine");
-      box->addItem("Champagne");
+      box->addItem(tr("Ale"));
+      box->addItem(tr("Lager"));
+      box->addItem(tr("Wheat"));
+      box->addItem(tr("Wine"));
+      box->addItem(tr("Champagne"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;
@@ -296,11 +313,10 @@ QWidget* YeastItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
    {
       QComboBox *box = new QComboBox(parent);
 
-      /*May be “Liquid”, “Dry”, “Slant” or “Culture”*/
-      box->addItem("Liquid");
-      box->addItem("Dry");
-      box->addItem("Slant");
-      box->addItem("Culture");
+      box->addItem(tr("Liquid"));
+      box->addItem(tr("Dry"));
+      box->addItem(tr("Slant"));
+      box->addItem(tr("Culture"));
 
       return box;
    }
@@ -315,10 +331,9 @@ void YeastItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
    if( col == YEASTTYPECOL || col == YEASTFORMCOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      QString text = index.model()->data(index, Qt::DisplayRole).toString();
+      int ndx = index.model()->data(index, Qt::UserRole).toInt();
 
-      int index = box->findText(text);
-      box->setCurrentIndex(index);
+      box->setCurrentIndex(ndx);
    }
    else
    {
@@ -336,7 +351,7 @@ void YeastItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
    if( col == YEASTTYPECOL || col == YEASTFORMCOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      QString value = box->currentText();
+      int value = box->currentIndex();
 
       model->setData(index, value, Qt::EditRole);
    }
@@ -352,4 +367,3 @@ void YeastItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOption
 {
    editor->setGeometry(option.rect);
 }
-

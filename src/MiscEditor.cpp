@@ -66,8 +66,8 @@ void MiscEditor::save()
    m->disableNotification();
 
    m->setName(lineEdit_name->text().toStdString());
-   m->setType(comboBox_type->currentText().toStdString());
-   m->setUse(comboBox_use->currentText().toStdString());
+   m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
+   m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
    // TODO: fill in the rest of the "set" methods.
    m->setTime(Brewtarget::timeQStringToSI(lineEdit_time->text()));
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
@@ -101,17 +101,13 @@ void MiscEditor::notify(Observable* notifier, QVariant info)
 
 void MiscEditor::showChanges()
 {
-   int tmp;
-   
    if( obsMisc == 0 )
       return;
    
    lineEdit_name->setText(obsMisc->getName().c_str());
    lineEdit_name->setCursorPosition(0);
-   tmp = comboBox_type->findText(obsMisc->getType().c_str());
-   comboBox_type->setCurrentIndex(tmp);
-   tmp = comboBox_use->findText(obsMisc->getUse().c_str());
-   comboBox_use->setCurrentIndex(tmp);
+   comboBox_type->setCurrentIndex(obsMisc->getType());
+   comboBox_use->setCurrentIndex(obsMisc->getUse());
    lineEdit_time->setText(Brewtarget::displayAmount(obsMisc->getTime(), Units::minutes));
    lineEdit_amount->setText(Brewtarget::displayAmount(obsMisc->getAmount(), (obsMisc->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
    checkBox_isWeight->setCheckState( obsMisc->getAmountIsWeight()? Qt::Checked : Qt::Unchecked );

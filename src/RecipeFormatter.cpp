@@ -200,8 +200,8 @@ QString RecipeFormatter::getTextFormat()
       {
          Misc* misc = rec->getMisc(i);
          names.append(misc->getName().c_str());
-         types.append(misc->getType().c_str());
-         uses.append(misc->getUse().c_str());
+         types.append(misc->getTypeString());
+         uses.append(misc->getUseString());
          amounts.append(Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters));
          times.append( Brewtarget::displayAmount(misc->getTime(), Units::minutes) );
       }
@@ -234,8 +234,8 @@ QString RecipeFormatter::getTextFormat()
       {
          Yeast* y = rec->getYeast(i);
          names.append( y->getName().c_str() );
-         types.append( y->getType().c_str() );
-         forms.append( y->getForm().c_str() );
+         types.append( y->getTypeString() );
+         forms.append( y->getFormString() );
          amounts.append( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
          stages.append( y->getAddToSecondary() ? QObject::tr("Secondary") : QObject::tr("Primary") );
       }

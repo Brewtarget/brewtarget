@@ -27,6 +27,9 @@
 #include <QDomText>
 #include <QObject>
 
+QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
+QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
+
 bool operator<(Misc &m1, Misc &m2)
 {
    return m1.name < m2.name;
@@ -56,12 +59,12 @@ void Misc::toXml(QDomDocument& doc, QDomNode& parent)
    miscNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type.c_str());
+   tmpText = doc.createTextNode(getTypeString());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(use.c_str());
+   tmpText = doc.createTextNode(getUseString());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
    
@@ -97,8 +100,8 @@ void Misc::toXml(QDomDocument& doc, QDomNode& parent)
 void Misc::setDefaults()
 {
    name = "";
-   type = "Other";
-   use = "Boil";
+   type = TYPEOTHER;
+   use = USEBOIL;
    amount = 0.0;
    time = 0.0;
    
@@ -166,17 +169,19 @@ void Misc::fromNode(const QDomNode& miscNode)
       }
       else if( property == "TYPE" )
       {
-         if( isValidType(value.toStdString()) )
-            type = value.toStdString();
-         else
+         int ndx = types.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            type = static_cast<Misc::Type>(ndx);
       }
       else if( property == "USE" )
       {
-         if( isValidUse(value.toStdString()) )
-            use = value.toStdString();
-         else
+         int ndx = uses.indexOf(value);
+         if( ndx < 0 )
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid use for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            use = static_cast<Misc::Use>(ndx);
       }
       else if( property == "TIME" )
       {
@@ -213,14 +218,24 @@ std::string Misc::getName() const
    return name;
 }
 
-std::string Misc::getType() const
+Misc::Type Misc::getType() const
 {
    return type;
 }
 
-std::string Misc::getUse() const
+const QString& Misc::getTypeString() const
+{
+   return types.at(type);
+}
+
+Misc::Use Misc::getUse() const
 {
    return use;
+}
+
+const QString& Misc::getUseString() const
+{
+   return uses.at(use);
 }
 
 double Misc::getAmount() const
@@ -255,33 +270,16 @@ void Misc::setName( const std::string &var )
    hasChanged();
 }
 
-void Misc::setType( const std::string &var )
+void Misc::setType( Type t )
 {
-   if( ! isValidType(var) )
-   {
-      Brewtarget::logW( QString("Misc: invalid type: %1").arg(var.c_str()) );
-      type = "Spice";
-   }
-   else
-   {
-      type = std::string(var);
-   }
-
+   type = t;
+   
    hasChanged();
 }
 
-void Misc::setUse( const std::string &var )
+void Misc::setUse( Use u )
 {
-   if( ! isValidUse(var) )
-   {
-      Brewtarget::logW( QString("Misc: invalid use: %1").arg(var.c_str()) );
-      use = "Boil";
-   }
-   else
-   {
-      use = std::string(var);
-   }
-
+   use = u;
    hasChanged();
 }
 

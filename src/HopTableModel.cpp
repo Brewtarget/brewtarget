@@ -156,23 +156,36 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    }
    else
       row = hopObs[index.row()];
-   
-   // Make sure we only respond to the DisplayRole role.
-   if( role != Qt::DisplayRole )
-      return QVariant();
-   
+
    switch( index.column() )
    {
       case HOPNAMECOL:
-         return QVariant(row->getName().c_str());
+         if( role == Qt::DisplayRole )
+            return QVariant(row->getName().c_str());
+         else
+            return QVariant();
       case HOPALPHACOL:
-         return QVariant( Brewtarget::displayAmount(row->getAlpha_pct(), 0) );
+         if( role == Qt::DisplayRole )
+            return QVariant( Brewtarget::displayAmount(row->getAlpha_pct(), 0) );
+         else
+            return QVariant();
       case HOPAMOUNTCOL:
-         return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
+         if( role == Qt::DisplayRole )
+            return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
+         else
+            return QVariant();
       case HOPUSECOL:
-         return QVariant(row->getUseString());
+         if( role == Qt::DisplayRole )
+            return QVariant(row->getUseString());
+         else if( role == Qt::UserRole )
+            return QVariant(row->getUse());
+         else
+            return QVariant();
       case HOPTIMECOL:
-         return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
+         if( role == Qt::DisplayRole )
+            return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
+         else
+            return QVariant();
       default :
          Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -299,11 +312,11 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem("Boil");
-      box->addItem("Dry Hop");
-      box->addItem("Mash");
-      box->addItem("First Wort");
-      box->addItem("Aroma");
+      box->addItem(tr("Boil"));
+      box->addItem(tr("Dry Hop"));
+      box->addItem(tr("Mash"));
+      box->addItem(tr("First Wort"));
+      box->addItem(tr("Aroma"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;
@@ -317,10 +330,9 @@ void HopItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) c
    if( index.column() == HOPUSECOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      QString text = index.model()->data(index, Qt::DisplayRole).toString();
-      
-      int index = box->findText(text);
-      box->setCurrentIndex(index);
+      int ndx = index.model()->data(index, Qt::UserRole).toInt();
+
+      box->setCurrentIndex(ndx);
    }
    else
    {

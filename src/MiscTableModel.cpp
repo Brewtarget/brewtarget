@@ -103,7 +103,7 @@ int MiscTableModel::rowCount(const QModelIndex& /*parent*/) const
 
 int MiscTableModel::columnCount(const QModelIndex& /*parent*/) const
 {
-   return 5;
+   return MISCNUMCOLS;
 }
 
 QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
@@ -119,34 +119,49 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    else
       row = miscObs[index.row()];
    
-   // Make sure we only respond to the DisplayRole role.
-   if( role != Qt::DisplayRole )
-      return QVariant();
-   
    // Deal with the column and return the right data.
    if( index.column() == MISCNAMECOL )
    {
-      return QVariant(row->getName().c_str());
+      if( role == Qt::DisplayRole )
+         return QVariant(row->getName().c_str());
+      else
+         return QVariant();
    }
    else if( index.column() == MISCTYPECOL )
    {
-      return QVariant(row->getType().c_str());
+      if( role == Qt::DisplayRole )
+         return QVariant(row->getTypeString());
+      else if( role == Qt::UserRole )
+         return QVariant(row->getType());
+      else
+         return QVariant();
    }
    else if( index.column() == MISCUSECOL )
    {
-      return QVariant(row->getUse().c_str());
+      if( role == Qt::DisplayRole )
+         return QVariant(row->getUseString());
+      else if( role == Qt::UserRole )
+         return QVariant(row->getUse());
+      else
+         return QVariant();
    }
    else if( index.column() == MISCTIMECOL )
    {
-      return QVariant( Brewtarget::displayAmount(row->getTime(), Units::minutes) );
+      if( role == Qt::DisplayRole )
+         return QVariant( Brewtarget::displayAmount(row->getTime(), Units::minutes) );
+      else
+         return QVariant();
    }
    else if( index.column() == MISCAMOUNTCOL )
    {
-      return QVariant( Brewtarget::displayAmount(row->getAmount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+      if( role == Qt::DisplayRole )
+         return QVariant( Brewtarget::displayAmount(row->getAmount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+      else
+         return QVariant();
    }
    else
    {
-      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. column = %1").arg(index.column()));
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad model index. column = %1").arg(index.column()));
       return QVariant();
    }
 }
@@ -213,20 +228,18 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    }
    else if( col == MISCTYPECOL )
    {
-      if( value.canConvert(QVariant::String) )
+      if( value.canConvert(QVariant::Int) )
       {
-         tmpStr = value.toString();
-         row->setType(tmpStr.toStdString());
+         row->setType( static_cast<Misc::Type>(value.toInt()) );
       }
       else
          return false;
    }
    else if( col == MISCUSECOL )
    {
-      if( value.canConvert(QVariant::String) )
+      if( value.canConvert(QVariant::Int) )
       {
-         tmpStr = value.toString();
-         row->setUse(tmpStr.toStdString());
+         row->setUse( static_cast<Misc::Use>(value.toInt()) );
       }
       else
          return false;
@@ -279,12 +292,12 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    if( index.column() == MISCTYPECOL )
    {
       QComboBox *box = new QComboBox(parent);
-      box->addItem("Spice");
-      box->addItem("Fining");
-      box->addItem("Water Agent");
-      box->addItem("Herb");
-      box->addItem("Flavor");
-      box->addItem("Other");
+      box->addItem(tr("Spice"));
+      box->addItem(tr("Fining"));
+      box->addItem(tr("Water Agent"));
+      box->addItem(tr("Herb"));
+      box->addItem(tr("Flavor"));
+      box->addItem(tr("Other"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
@@ -292,11 +305,11 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem("Boil");
-      box->addItem("Mash");
-      box->addItem("Primary");
-      box->addItem("Secondary");
-      box->addItem("Bottling");
+      box->addItem(tr("Boil"));
+      box->addItem(tr("Mash"));
+      box->addItem(tr("Primary"));
+      box->addItem(tr("Secondary"));
+      box->addItem(tr("Bottling"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
@@ -307,14 +320,11 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
    int column = index.column();
-   
-   if( column == MISCTYPECOL ||  column == MISCUSECOL )
+
+   if( column == MISCTYPECOL || column == MISCUSECOL )
    {
-      QComboBox* box = (QComboBox*)editor;
-      QString text = index.model()->data(index, Qt::DisplayRole).toString();
-      
-      int index = box->findText(text);
-      box->setCurrentIndex(index);
+      QComboBox* box = reinterpret_cast<QComboBox*>(editor);
+      box->setCurrentIndex(index.model()->data(index, Qt::UserRole).toInt());
    }
    else
    {
@@ -331,9 +341,9 @@ void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
    if( column == MISCTYPECOL || column == MISCUSECOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      QString value = box->currentText();
+      int ndx = box->currentIndex();
       
-      model->setData(index, value, Qt::EditRole);
+      model->setData(index, ndx, Qt::EditRole);
    }
    else
    {

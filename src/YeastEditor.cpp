@@ -63,8 +63,8 @@ void YeastEditor::save()
    y->disableNotification();
 
    y->setName(lineEdit_name->text().toStdString());
-   y->setType(comboBox_type->currentText().toStdString());
-   y->setForm(comboBox_form->currentText().toStdString());
+   y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
+   y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
    y->setAmount( y->getAmountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()) );
 
@@ -72,7 +72,7 @@ void YeastEditor::save()
    y->setProductID( lineEdit_productID->text().toStdString() );
    y->setMinTemperature_c( Brewtarget::tempQStringToSI(lineEdit_minTemperature->text()) );
    y->setMaxTemperature_c( Brewtarget::tempQStringToSI(lineEdit_maxTemperature->text()) );
-   y->setFlocculation( comboBox_flocculation->currentText().toStdString() );
+   y->setFlocculation( static_cast<Yeast::Flocculation>(comboBox_flocculation->currentIndex()) );
    y->setAttenuation_pct(lineEdit_attenuation->text().toDouble());
    y->setTimesCultured(parseInt(lineEdit_timesCultured->text().toStdString()));
    y->setMaxReuse(parseInt(lineEdit_maxReuse->text().toStdString()));
@@ -109,14 +109,10 @@ void YeastEditor::showChanges()
    if( y == 0 )
       return;
 
-   int tmp;
-
    lineEdit_name->setText(y->getName().c_str());
    lineEdit_name->setCursorPosition(0);
-   tmp = comboBox_type->findText(y->getType().c_str());
-   comboBox_type->setCurrentIndex(tmp);
-   tmp = comboBox_form->findText(y->getForm().c_str());
-   comboBox_form->setCurrentIndex(tmp);
+   comboBox_type->setCurrentIndex(y->getType());
+   comboBox_form->setCurrentIndex(y->getForm());
    lineEdit_amount->setText( Brewtarget::displayAmount(y->getAmount(), (y->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
    checkBox_amountIsWeight->setCheckState( (y->getAmountIsWeight())? Qt::Checked : Qt::Unchecked );
    lineEdit_laboratory->setText(y->getLaboratory().c_str());
@@ -125,8 +121,7 @@ void YeastEditor::showChanges()
    lineEdit_productID->setCursorPosition(0);
    lineEdit_minTemperature->setText(Brewtarget::displayAmount(y->getMinTemperature_c(), Units::celsius));
    lineEdit_maxTemperature->setText(Brewtarget::displayAmount(y->getMaxTemperature_c(), Units::celsius));
-   tmp = comboBox_flocculation->findText(y->getFlocculation().c_str());
-   comboBox_flocculation->setCurrentIndex( (tmp==-1)? 0 : tmp );
+   comboBox_flocculation->setCurrentIndex( y->getFlocculation() );
    lineEdit_attenuation->setText( Brewtarget::displayAmount(y->getAttenuation_pct(), 0));
    lineEdit_timesCultured->setText(QString::number(y->getTimesCultured()));
    lineEdit_maxReuse->setText(QString::number(y->getMaxReuse()));

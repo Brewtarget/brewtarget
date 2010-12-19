@@ -32,7 +32,7 @@ FermentableTableWidget::FermentableTableWidget(QWidget* parent)
 
    setModel(ffpm);
 
-   //setItemDelegate(new FermentableItemDelegate(this));
+   setItemDelegate(new FermentableItemDelegate(this));
 }
 
 FermentableTableModel* FermentableTableWidget::getModel()

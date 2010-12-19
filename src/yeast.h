@@ -24,6 +24,8 @@
 #include "observable.h"
 #include "BeerXMLElement.h"
 #include <QDomNode>
+#include <QString>
+#include <QStringList>
 
 class Yeast;
 class YeastException;
@@ -31,6 +33,10 @@ class YeastException;
 class Yeast : public Observable, public BeerXMLElement
 {
 public:
+   enum Type {TYPEALE, TYPELAGER, TYPEWHEAT, TYPEWINE, TYPECHAMPAGNE};
+   enum Form {FORMLIQUID, FORMDRY, FORMSLANT, FORMCULTURE};
+   enum Flocculation {FLOCLOW, FLOCMEDIUM, FLOCHIGH, FLOCVERY_HIGH};
+
    Yeast();
    Yeast(Yeast& other);
    Yeast( const QDomNode& yeastNode );
@@ -43,15 +49,15 @@ public:
    
    // Set
    void setName( const std::string& var );
-   void setType( const std::string& var );
-   void setForm( const std::string& var );
+   void setType( Type t );
+   void setForm( Form f );
    void setAmount( double var );
    void setAmountIsWeight( bool var );
    void setLaboratory( const std::string& var );
    void setProductID( const std::string& var );
    void setMinTemperature_c( double var );
    void setMaxTemperature_c( double var );
-   void setFlocculation( const std::string& var );
+   void setFlocculation( Flocculation f );
    void setAttenuation_pct( double var );
    void setNotes( const std::string& var );
    void setBestFor( const std::string& var );
@@ -61,15 +67,18 @@ public:
    
    // Get
    std::string getName() const;
-   std::string getType() const;
-   std::string getForm() const;
+   Type getType() const;
+   const QString& getTypeString() const;
+   Form getForm() const;
+   const QString& getFormString() const;
    double getAmount() const;
    bool getAmountIsWeight() const;
    std::string getLaboratory() const;
    std::string getProductID() const;
    double getMinTemperature_c() const;
    double getMaxTemperature_c() const;
-   std::string getFlocculation() const;
+   Flocculation getFlocculation() const;
+   const QString& getFlocculationString() const;
    double getAttenuation_pct() const;
    std::string getNotes() const;
    std::string getBestFor() const;
@@ -81,8 +90,8 @@ private:
    // Required fields.
    std::string name;
    static const int version = 1;
-   std::string type;
-   std::string form;
+   Type type;
+   Form form;
    double amount;
    
    // Optional fields.
@@ -91,7 +100,7 @@ private:
    std::string productID;
    double minTemperature_c;
    double maxTemperature_c;
-   std::string flocculation;
+   Flocculation flocculation;
    double attenuation_pct;
    std::string notes;
    std::string bestFor;
@@ -99,6 +108,10 @@ private:
    int maxReuse;
    bool addToSecondary;
    
+   static QStringList types;
+   static QStringList forms;
+   static QStringList flocculations;
+
    // Methods
    bool isValidType(const std::string& str) const;
    bool isValidForm(const std::string& str) const;
