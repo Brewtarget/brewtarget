@@ -43,6 +43,7 @@ public:
 
    enum LogType {WARNING, ERROR};
    enum ColorType {MOSHER, DANIEL, MOREY};
+   enum ColorUnitType {SRM, EBC};
    enum IbuType {TINSETH, RAGER};
 
    static QApplication* getApp();
@@ -66,6 +67,7 @@ public:
    //! Display gravity appropriately.
    static QString displayOG( double og, bool showUnits=false );
    static QString displayFG( double fg, double og, bool showUnits=false ); // Need OG if we're using plato.
+   static QString displayColor( double srm, bool showUnits );
    static double weightQStringToSI( QString qstr );
    static double volQStringToSI( QString qstr );
    static double tempQStringToSI( QString qstr );
@@ -105,6 +107,7 @@ private:
    //
    static TempScale tempScale;
    static ColorType colorFormula;
+   static ColorUnitType colorUnit;
    static IbuType ibuFormula;
 };
 

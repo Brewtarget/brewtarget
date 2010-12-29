@@ -507,7 +507,7 @@ void MainWindow::showChanges(const QVariant& info)
    lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->getFg(), recipeObs->getOg()));
    lcdNumber_abv->display(recipeObs->getABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->getIBU(), 1);
-   lcdNumber_srm->display(recipeObs->getColor_srm(), 1);
+   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs->getColor_srm(),false));
    lcdNumber_ibugu->display(recipeObs->getIBU()/((recipeObs->getOg()-1)*1000), 2);
 
    // Want to do some manipulation based on selected style.
@@ -516,13 +516,13 @@ void MainWindow::showChanges(const QVariant& info)
    {
       lcdNumber_ogLow->display(Brewtarget::displayOG(recipeStyle->getOgMin()));
       lcdNumber_ogHigh->display(Brewtarget::displayOG(recipeStyle->getOgMax()));
-      lcdNumber_og->setLowLim(recipeStyle->getOgMin());
-      lcdNumber_og->setHighLim(recipeStyle->getOgMax());
+      lcdNumber_og->setLowLim(Brewtarget::displayOG(recipeStyle->getOgMin()).toDouble());
+      lcdNumber_og->setHighLim(Brewtarget::displayOG(recipeStyle->getOgMax()).toDouble());
 
       lcdNumber_fgLow->display(Brewtarget::displayFG(recipeStyle->getFgMin(), recipeObs->getOg()));
       lcdNumber_fgHigh->display(Brewtarget::displayFG(recipeStyle->getFgMax(), recipeObs->getOg()));
-      lcdNumber_fg->setLowLim(recipeStyle->getFgMin());
-      lcdNumber_fg->setHighLim(recipeStyle->getFgMax());
+      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recipeStyle->getFgMin(), recipeObs->getOg()).toDouble());
+      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recipeStyle->getFgMax(), recipeObs->getOg()).toDouble());
 
       lcdNumber_abvLow->display(recipeStyle->getAbvMin_pct(), 1);
       lcdNumber_abvHigh->display(recipeStyle->getAbvMax_pct(), 1);
@@ -534,10 +534,10 @@ void MainWindow::showChanges(const QVariant& info)
       lcdNumber_ibu->setLowLim(recipeStyle->getIbuMin());
       lcdNumber_ibu->setHighLim(recipeStyle->getIbuMax());
 
-      lcdNumber_srmLow->display(recipeStyle->getColorMin_srm(), 1);
-      lcdNumber_srmHigh->display(recipeStyle->getColorMax_srm(), 1);
-      lcdNumber_srm->setLowLim(recipeStyle->getColorMin_srm());
-      lcdNumber_srm->setHighLim(recipeStyle->getColorMax_srm());
+      lcdNumber_srmLow->display(Brewtarget::displayColor(recipeStyle->getColorMin_srm(), false));
+      lcdNumber_srmHigh->display(Brewtarget::displayColor(recipeStyle->getColorMax_srm(), false));
+      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recipeStyle->getColorMin_srm(), false).toDouble());
+      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recipeStyle->getColorMax_srm(), false).toDouble());
    }
 
    // See if we need to change the mash in the table.

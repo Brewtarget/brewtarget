@@ -37,6 +37,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    volumeGroup = new QButtonGroup(this);
    tempGroup = new QButtonGroup(this);
    gravGroup = new QButtonGroup(this);
+   colorUnitGroup = new QButtonGroup(this);
 
    // Want you to only be able to select exactly one in each group.
    colorGroup->setExclusive(true);
@@ -45,6 +46,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    volumeGroup->setExclusive(true);
    tempGroup->setExclusive(true);
    gravGroup->setExclusive(true);
+   colorUnitGroup->setExclusive(true);
 
    // Set up the buttons in the colorGroup
    colorGroup->addButton(checkBox_mosher);
@@ -72,6 +74,10 @@ OptionDialog::OptionDialog(QWidget* parent)
    // Gravity
    gravGroup->addButton(radioButton_sg);
    gravGroup->addButton(radioButton_plato);
+
+   // Color Unit
+   colorUnitGroup->addButton(radioButton_srm);
+   colorUnitGroup->addButton(radioButton_ebc);
 
    //connect( colorGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeColorFormula(QAbstractButton*) ) );
    //connect( ibuGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeIbuFormula(QAbstractButton*) ) );
@@ -102,6 +108,7 @@ void OptionDialog::saveAndClose()
    TempScale temperatureScale;
    Brewtarget::ColorType cformula;
    Brewtarget::IbuType iformula;
+   Brewtarget::ColorUnitType colorUnit;
    
    button = colorGroup->checkedButton();
    if( button == checkBox_mosher )
@@ -174,11 +181,20 @@ void OptionDialog::saveAndClose()
       Brewtarget::tempSystem = UnitSystems::celsiusTempUnitSystem;
    }
    
+   button = colorUnitGroup->checkedButton();
+   if( button == radioButton_ebc )
+   {
+      colorUnit = Brewtarget::EBC;
+   }
+   else
+      colorUnit = Brewtarget::SRM;
+
    Brewtarget::ibuFormula = iformula;
    Brewtarget::colorFormula = cformula;
    Brewtarget::weightUnitSystem = weightUnitSystem;
    Brewtarget::volumeUnitSystem = volumeUnitSystem;
    Brewtarget::tempScale = temperatureScale;
+   Brewtarget::colorUnit = colorUnit;
    
    if( Brewtarget::mainWindow != 0 )
       Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
@@ -262,5 +278,15 @@ void OptionDialog::showChanges()
       default:
          celsius->setChecked(TRUE);
          break;
-  } 
+  }
+
+  // Color Formula
+   switch( Brewtarget::colorUnit )
+   {
+   case Brewtarget::EBC:
+      radioButton_ebc->setChecked(true);
+   case Brewtarget::SRM:
+   default:
+      radioButton_srm->setChecked(true);
+   }
 }

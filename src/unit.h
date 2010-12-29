@@ -53,7 +53,8 @@ enum UnitType
    Mass,
    Volume,
    Time,
-   Temp
+   Temp,
+   Color
 };
 
 enum iUnitSystem
@@ -97,7 +98,6 @@ inline QString tempScaleToString(TempScale ts)
 class Unit
 {
    public:
-      // Seems these can't be PURE virtuals b/c of some issue with std::map.
       virtual double toSI( double amt ) const =0;// { return amt; }
       virtual double fromSI( double amt ) const =0;// { return amt; }
       // The unit name will be the singular of the commonly used abbreviation.
@@ -556,6 +556,46 @@ class FahrenheitUnit : public Unit
       QString SIUnitName;
 };
 
+// I will consider the standard unit of color
+// to be SRM.
+class SRMUnit : public Unit
+{
+public:
+   SRMUnit();
+
+   // Inherited methods.
+   double toSI( double amt ) const;
+   double fromSI( double amt ) const;
+   const QString& getUnitName() const { return unitName; }
+   const QString& getSIUnitName() const { return SIUnitName; }
+   const int getUnitType() const { return Color; }
+   const int getUnitOrTempSystem() const { return Any; }
+
+private:
+   QString unitName;
+   QString SIUnitName;
+};
+
+// I will consider the standard unit of color
+// to be SRM.
+class EBCUnit : public Unit
+{
+public:
+   EBCUnit();
+
+   // Inherited methods.
+   double toSI( double amt ) const;
+   double fromSI( double amt ) const;
+   const QString& getUnitName() const { return unitName; }
+   const QString& getSIUnitName() const { return SIUnitName; }
+   const int getUnitType() const { return Color; }
+   const int getUnitOrTempSystem() const { return Any; }
+
+private:
+   QString unitName;
+   QString SIUnitName;
+};
+
 class Units
 {
 public:
@@ -589,6 +629,9 @@ public:
    static CelsiusUnit *celsius;
    static FahrenheitUnit *fahrenheit;
    static KelvinUnit *kelvin;
+   // === Color ===
+   static SRMUnit *srm;
+   static EBCUnit *ebc;
 };
 
 #endif // _UNIT_H

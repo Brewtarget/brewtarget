@@ -54,6 +54,7 @@ UnitSystem* Brewtarget::timeSystem = 0;
 TempScale Brewtarget::tempScale = Celsius;
 Brewtarget::ColorType Brewtarget::colorFormula = Brewtarget::MOREY;
 Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
+Brewtarget::ColorUnitType Brewtarget::colorUnit = Brewtarget::SRM;
 
 bool Brewtarget::usePlato = false;
 
@@ -386,6 +387,7 @@ QString Brewtarget::displayThickness(double thick_lkg)
 
    return QString("%1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
 }
+
 void Brewtarget::readPersistentOptions()
 {
    QFile xmlFile(getConfigDir() + "options.xml");
@@ -460,7 +462,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("weight_unit_system"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the weight_unit_system tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the weight_unit_system tag in the option file."));
    }
    else
    {
@@ -489,7 +491,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("volume_unit_system"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the volume_unit_system tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the volume_unit_system tag in the option file."));
    }
    else
    {
@@ -518,7 +520,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("temperature_scale"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the temperature_scale tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the temperature_scale tag in the option file."));
    }
    else
    {
@@ -546,7 +548,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("ibu_formula"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the ibu_formula tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the ibu_formula tag in the option file."));
    }
    else
    {
@@ -561,7 +563,7 @@ void Brewtarget::readPersistentOptions()
          ibuFormula = RAGER;
       else
       {
-         Brewtarget::log(Brewtarget::ERROR, QObject::tr("Bad ibu_formula type: %1").arg(text));
+         Brewtarget::log(Brewtarget::ERROR, QString("Bad ibu_formula type: %1").arg(text));
       }
    }
 
@@ -569,7 +571,7 @@ void Brewtarget::readPersistentOptions()
    list = optionsDoc->elementsByTagName(QString("color_formula"));
    if( list.length() <= 0 )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not find the color_formula tag in the option file."));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the color_formula tag in the option file."));
    }
    else
    {
@@ -586,14 +588,14 @@ void Brewtarget::readPersistentOptions()
          colorFormula = MOSHER;
       else
       {
-         Brewtarget::log(Brewtarget::ERROR, QObject::tr("Bad color_formula type: %1").arg(text));
+         Brewtarget::log(Brewtarget::ERROR, QString("Bad color_formula type: %1").arg(text));
       }
    }
 
    // Get plato usage.
    list = optionsDoc->elementsByTagName(QString("use_plato"));
    if( list.length() <= 0 )
-      Brewtarget::logW( QObject::tr("Could not find the use_plato tag in the option file.") );
+      Brewtarget::logW( "Could not find the use_plato tag in the option file." );
    else
    {
       node = list.at(0);
@@ -607,8 +609,26 @@ void Brewtarget::readPersistentOptions()
          usePlato = false;
       else
       {
-         Brewtarget::logW(QObject::tr("Bad use_plato type: %1").arg(text));
+         Brewtarget::logW(QString("Bad use_plato type: %1").arg(text));
       }
+   }
+
+   list = optionsDoc->elementsByTagName("color_unit");
+   if( list.length() <= 0 )
+      Brewtarget::logW( "Could not find the color_unit tag in the option file." );
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      if( text == "srm" )
+         colorUnit = SRM;
+      else if( text == "ebc" )
+         colorUnit = EBC;
+      else
+         Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));;
    }
 
    delete optionsDoc;
@@ -698,6 +718,16 @@ void Brewtarget::savePersistentOptions()
    node.appendChild(child);
    root.appendChild(node);
 
+   // Color unit.
+   node = optionsDoc->createElement("color_unit");
+   if( colorUnit == SRM )
+      text = "srm";
+   else
+      text = "ebc";
+   child = optionsDoc->createTextNode(text);
+   node.appendChild(child);
+   root.appendChild(node);
+
    // Add root to document.
    optionsDoc->appendChild(root);
 
@@ -768,6 +798,21 @@ QString Brewtarget::displayFG( double fg, double og, bool showUnits )
 
    if( showUnits )
       ret = usePlato ? ret.arg("P") : ret;
+
+   return ret;
+}
+
+QString Brewtarget::displayColor( double srm, bool showUnits )
+{
+   QString ret;
+
+   if( colorUnit == SRM )
+      ret = showUnits ? QString("%1 %2").arg(srm,0,'f',1).arg(Units::srm->getUnitName()) : QString("%1").arg(srm,0,'f',1);
+   else
+   {
+      double ebc = Units::ebc->fromSI(srm);
+      ret = showUnits ? QString("%1 %2").arg(ebc,0,'f',1).arg(Units::ebc->getUnitName()) : QString("%1").arg(ebc,0,'f',1);
+   }
 
    return ret;
 }

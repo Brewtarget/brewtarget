@@ -54,6 +54,9 @@ DayUnit* Units::days = new DayUnit();
 CelsiusUnit* Units::celsius = new CelsiusUnit();
 FahrenheitUnit* Units::fahrenheit = new FahrenheitUnit();
 KelvinUnit* Units::kelvin = new KelvinUnit();
+// === Color ===
+SRMUnit* Units::srm = new SRMUnit();
+EBCUnit* Units::ebc = new EBCUnit();
 
 // Return the equivalent of 'amount' 'fromUnit's in 'toUnit's.
 double Unit::convert( double amount, QString& fromUnit, QString& toUnit )
@@ -224,6 +227,9 @@ void Unit::setupMap()
    Unit::nameToUnit.insert(Units::celsius->getUnitName(), Units::celsius);
    Unit::nameToUnit.insert(Units::kelvin->getUnitName(), Units::kelvin);
    Unit::nameToUnit.insert(Units::fahrenheit->getUnitName(), Units::fahrenheit);
+
+   Unit::nameToUnit.insert(Units::srm->getUnitName(), Units::srm);
+   Unit::nameToUnit.insert(Units::ebc->getUnitName(), Units::ebc);
 
    Unit::isMapSetup = true;
 }
@@ -635,4 +641,38 @@ double KelvinUnit::toSI( double amt ) const
 double KelvinUnit::fromSI( double amt ) const
 {
    return amt + 273.15;
+}
+
+// === SRM ===
+SRMUnit::SRMUnit()
+{
+   unitName = "srm";
+   SIUnitName = "srm";
+}
+
+double SRMUnit::toSI( double amt ) const
+{
+   return amt;
+}
+
+double SRMUnit::fromSI( double amt ) const
+{
+   return amt;
+}
+
+// === EBC ===
+EBCUnit::EBCUnit()
+{
+   unitName = "ebc";
+   SIUnitName = "srm";
+}
+
+double EBCUnit::toSI( double amt ) const
+{
+   return amt * 12.7/25.0;
+}
+
+double EBCUnit::fromSI( double amt ) const
+{
+   return amt * 25.0/12.7;
 }
