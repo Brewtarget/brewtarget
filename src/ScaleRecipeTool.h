@@ -25,6 +25,8 @@ class ScaleRecipeTool;
 #include <QDialog>
 #include <QWidget>
 #include "recipe.h"
+#include <QAbstractButton>
+#include <QButtonGroup>
 
 class ScaleRecipeTool : public QDialog, public Ui::scaleRecipeTool
 {
@@ -39,9 +41,13 @@ public slots:
    
 private slots:
    void scale();
+   void scaleByVolume();
+   void scaleByEfficiency();
+   void scaleGroupButtonPressed(QAbstractButton* button);
 
 private:
    Recipe* recObs;
+   QButtonGroup scaleGroup;
 };
 
 #endif /*SCALE_RECIPE_TOOL_H*/

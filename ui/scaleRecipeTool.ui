@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>190</width>
-    <height>68</height>
+    <width>238</width>
+    <height>114</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QCheckBox" name="checkBox_batchSize">
        <property name="text">
-        <string>New Batch Size</string>
+        <string>New batch size</string>
        </property>
       </widget>
      </item>
@@ -35,6 +35,16 @@
         <string>New batch size</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_efficiency">
+       <property name="text">
+        <string>New efficiency (pct)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_newEfficiency"/>
      </item>
      <item>
       <spacer name="verticalSpacer_2">
