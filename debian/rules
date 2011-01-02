@@ -2,7 +2,8 @@
 install-dir = "$(shell pwd)/debian/brewtarget/usr"
 
 override_dh_auto_configure:
-	mkdir build/cmake
+	if ! test -d build; then mkdir build; fi
+	if ! test -d build/cmake; then mkdir build/cmake; fi
 	cd build/cmake; \
 	cmake ../../ -DCMAKE_INSTALL_PREFIX=$(install-dir)
 

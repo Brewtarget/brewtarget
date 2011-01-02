@@ -1,0 +1,1 @@
+The only purpose of this file is to keep cpack from not including this otherwise empty directory in the source packages.

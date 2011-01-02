@@ -189,8 +189,8 @@ SET( brewtarget_MOC_HEADERS
 # List of documentation files to be installed.
 SET( brewtarget_DOCS
      ${ROOTDIR}/README
-     ${ROOTDIR}/COPYING.GPLv3
-     ${ROOTDIR}/COPYING.WTFPL
+#     ${ROOTDIR}/COPYING.GPLv3
+#     ${ROOTDIR}/COPYING.WTFPL
      ${ROOTDIR}/COPYRIGHT
      ${ROOTDIR}/doc/manual/index.html
 )
