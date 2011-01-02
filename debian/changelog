@@ -1,28 +1,8 @@
-brewtarget (1.2.2-1) unstable; urgency=low
+brewtarget (1.2.3-1) unstable; urgency=low
 
   * 1.2.2 release.
-
- -- Philip G. Lee <rocketman768@gmail.com>  Sun, 27 Jun 2010 08:34:00 -0600
- 
-brewtarget (1.2.1-1) unstable; urgency=low
-
-  * 1.2.1 release.
-
- -- Philip G. Lee <rocketman768@gmail.com>  Sat, 27 Mar 2010 13:11:17 -0500
-
-brewtarget (1.2-0ubuntu1) karmic; urgency=low
-
-  * Upload for Ubuntu Karmic build
-
- -- Rob Taylor <rob.taylor@codethink.co.uk>  Sun, 27 Dec 2009 23:20:14 +0000
-
-brewtarget (1.2-0) unstable; urgency=low
-
-  [ Philip G. Lee ]
-  * New upstream release 1.2.
+  * New upstream release 1.2.3
   * Initial debian release (Closes: #538751)
 
-  [ Rob Taylor ]
-  * Correct version number
-
- -- Rob Taylor <rob.taylor@codethink.co.uk>  Sun, 27 Dec 2009 22:42:20 +0000
+ -- Philip G. Lee <rocketman768@gmail.com>  Sat, 01 Jan 2011 20:13:00 -0600
+ 

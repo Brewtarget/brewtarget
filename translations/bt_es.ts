@@ -433,12 +433,12 @@
     <message>
         <location filename="../src/MaltinessWidget.cpp" line="92"/>
         <source>&lt;b&gt;Extra malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Dulce&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Extra maltosa&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/MaltinessWidget.cpp" line="94"/>
         <source>&lt;b&gt;Slightly malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Un poco dulce&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Un poco maltosa&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/MaltinessWidget.cpp" line="96"/>
@@ -3864,7 +3864,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/scaleRecipeTool.ui" line="14"/>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Balancear la Receta</translation>
     </message>
     <message>
         <location filename="../ui/scaleRecipeTool.ui" line="22"/>
@@ -4229,7 +4229,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/yeastEditor.ui" line="198"/>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Si la cantidad es masa</translation>
+        <translation>Si la cantidad es masa.</translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="201"/>
