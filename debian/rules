@@ -1,4 +1,5 @@
 #!/usr/bin/make -f
+export DH_VERBOSE=1
 install-dir = "$(shell pwd)/debian/brewtarget/usr"
 
 override_dh_auto_configure:
