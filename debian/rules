@@ -1,4 +1,24 @@
 #!/usr/bin/make -f
+install-dir = "$(shell pwd)/debian/brewtarget/usr"
+
+override_dh_auto_configure:
+	mkdir build/cmake
+	cd build/cmake; \
+	cmake ../../ -DCMAKE_INSTALL_PREFIX=$(install-dir)
+
+override_dh_auto_build:
+	cd build/cmake; \
+	make
+
+override_dh_auto_install:
+	cd build/cmake; \
+	make install
+
+override_dh_clean:
+	dh_clean
+	if test -d build/cmake; then rm -r build/cmake; fi
+	if test -e src/config.h; then rm src/config.h; fi
+
 %:
 	dh $@
 

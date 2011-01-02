@@ -1,2 +1,2 @@
-?package(brewtarget):needs="X11" section="Applications/Utilities"\
+?package(brewtarget):needs="X11" section="Applications/Science/Chemistry"\
   title="Brewtarget" command="/usr/bin/brewtarget"
