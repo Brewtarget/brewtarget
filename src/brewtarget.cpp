@@ -160,7 +160,7 @@ QString Brewtarget::getDataDir()
    QString dir = app->applicationDirPath();
 #if defined(Q_WS_X11) // Linux OS.
 
-   dir = QString::QString(CONFIGDATADIR);
+   dir = QString(CONFIGDATADIR);
    
 #elif defined(Q_WS_MAC) // MAC OS.
 
@@ -184,7 +184,7 @@ QString Brewtarget::getDocDir()
    QString dir = app->applicationDirPath();
 #if defined(Q_WS_X11) // Linux OS.
 
-   dir = QString::QString(CONFIGDOCDIR);
+   dir = QString(CONFIGDOCDIR);
 
 #elif defined(Q_WS_MAC) // MAC OS.
 
