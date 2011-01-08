@@ -186,6 +186,11 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
             return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
          else
             return QVariant();
+      case HOPTYPECOL:
+    	 if ( role == Qt::DisplayRole )
+    		 return QVariant( row->getFormString());
+    	 else
+    		 return QVariant();
       default :
          Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -208,6 +213,8 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
             return QVariant(tr("Use"));
          case HOPTIMECOL:
             return QVariant(tr("Time"));
+         case HOPTYPECOL:
+        	return QVariant(tr("Type"));
          default:
             Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();

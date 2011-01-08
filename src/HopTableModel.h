@@ -34,7 +34,7 @@ class HopItemDelegate;
 #include "HopTableWidget.h"
 #include "recipe.h"
 
-enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
+enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPTYPECOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
 class HopTableModel : public QAbstractTableModel, public MultipleObserver
 {
