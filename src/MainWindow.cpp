@@ -158,7 +158,7 @@ MainWindow::MainWindow(QWidget* parent)
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
    fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
-   fileOpener->setFileMode(QFileDialog::ExistingFile);
+   fileOpener->setFileMode(QFileDialog::ExistingFiles);
    fileOpener->setViewMode(QFileDialog::List);
 
    // Set up the fileSaver dialog.
@@ -940,7 +940,7 @@ void MainWindow::restoreFromBackup()
 // Imports all the recipes from a file into the database.
 void MainWindow::importRecipes()
 {
-   const char* filename;
+//   const char* filename;
    unsigned int numRecipes, i;
    //std::fstream in;
    //std::vector<XmlNode*> nodes;
@@ -951,42 +951,47 @@ void MainWindow::importRecipes()
    QString err;
    int line, col;
 
-   if( fileOpener->exec() )
-     filename = fileOpener->selectedFiles()[0].toAscii();
-   else
-      return;
+   if ( ! fileOpener->exec() )
+	   return;
+   
+//   if( fileOpener->exec() )
+//     filename = fileOpener->selectedFiles()[0].toAscii();
+//   else
+//      return;
+   foreach ( QString filename, fileOpener->selectedFiles())
+   {
+	   inFile.setFileName(filename);
+	   if( ! inFile.open(QIODevice::ReadOnly) )
+	   {
+		  Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for reading.").arg(filename));
+		  return;
+	   }
 
-   inFile.setFileName(filename);
-   if( ! inFile.open(QIODevice::ReadOnly) )
-   {
-      Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for reading.").arg(filename));
-      return;
+	   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
+		  Brewtarget::log(Brewtarget::WARNING, tr("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+
+	   list = xmlDoc.elementsByTagName("RECIPE");
+	   numRecipes = list.size();
+
+	   // Tell how many recipes there were in the status bar.
+	   statusBar()->showMessage( tr("Found %1 recipes.").arg(numRecipes), 5000 );
+
+	   for( i = 0; i < numRecipes; ++i )
+	   {
+		  newRec = new Recipe(list.at(i));
+
+		  if( QMessageBox::question(this, tr("Import recipe?"),
+		   tr("Import %1?").arg(newRec->getName().c_str()),
+		   QMessageBox::Yes,
+		   QMessageBox::No)
+		 == QMessageBox::Yes )
+		  {
+		 db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+		  }
+	   }
+
+	   inFile.close();
    }
-   
-   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, tr("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
-   
-   list = xmlDoc.elementsByTagName("RECIPE");
-   numRecipes = list.size();
-   
-   // Tell how many recipes there were in the status bar.
-   statusBar()->showMessage( tr("Found %1 recipes.").arg(numRecipes), 5000 );
-   
-   for( i = 0; i < numRecipes; ++i )
-   {
-      newRec = new Recipe(list.at(i));
-      
-      if( QMessageBox::question(this, tr("Import recipe?"),
-	   tr("Import %1?").arg(newRec->getName().c_str()),
-	   QMessageBox::Yes,
-	   QMessageBox::No)
-	 == QMessageBox::Yes )
-      {
-	 db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
-      }
-   }
-   
-   inFile.close();
 }
 
 void MainWindow::addMashStep()
