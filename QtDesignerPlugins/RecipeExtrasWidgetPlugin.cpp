@@ -92,4 +92,3 @@ QString RecipeExtrasWidgetPlugin::includeFile() const
    return "RecipeExtrasWidget.h";
 }
 
-Q_EXPORT_PLUGIN2( recipeextraswidgetplugin, RecipeExtrasWidgetPlugin )

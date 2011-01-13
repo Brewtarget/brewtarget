@@ -20,7 +20,7 @@ set( SRC_FILES
    #${SRCDIR}/Algorithms.cpp
    #${SRCDIR}/BeerColorWidget.cpp
    #${SRCDIR}/BeerXMLElement.cpp
-   #${SRCDIR}/BrewDayScrollWidget.cpp
+   ${SRCDIR}/BrewDayScrollWidget.cpp
    #${SRCDIR}/BrewDayWidget.cpp
    ${SRCDIR}/brewtarget.cpp
    #${SRCDIR}/BtDigitWidget.cpp
@@ -77,7 +77,7 @@ set( SRC_FILES
    #${SRCDIR}/RecipeComboBox.cpp
    #${SRCDIR}/recipe.cpp
    #${SRCDIR}/RecipeExtrasDialog.cpp
-   #${SRCDIR}/RecipeExtrasWidget.cpp
+   ${SRCDIR}/RecipeExtrasWidget.cpp
    #${SRCDIR}/RecipeFormatter.cpp
    #${SRCDIR}/RefractoDialog.cpp
    #${SRCDIR}/ScaleRecipeTool.cpp
@@ -108,7 +108,7 @@ set( SRC_FILES
 set( MOC_FILES
     #${SRCDIR}/BeerColorWidget.h
     #${SRCDIR}/BrewDayWidget.h
-    #${SRCDIR}/BrewDayScrollWidget.h
+    ${SRCDIR}/BrewDayScrollWidget.h
     #${SRCDIR}/BtDigitWidget.h
     #${SRCDIR}/ConverterTool.h
     #${SRCDIR}/EquipmentComboBox.h
@@ -143,7 +143,7 @@ set( MOC_FILES
     #${SRCDIR}/PrimingDialog.h
     #${SRCDIR}/RecipeComboBox.h
     #${SRCDIR}/RecipeExtrasDialog.h
-    #${SRCDIR}/RecipeExtrasWidget.h
+    ${SRCDIR}/RecipeExtrasWidget.h
     #${SRCDIR}/RecipeFormatter.h
     #${SRCDIR}/RefractoDialog.h
     #${SRCDIR}/ScaleRecipeTool.h
@@ -197,69 +197,35 @@ set( UI_FILES
     ${UIDIR}/recipeExtrasWidget.ui
 )
 
-#===========================Set various UIs====================================
-SET( RECIPEEXTRASWIDGETPLUGIN_UIS
-   ${UIDIR}/recipeExtrasWidget.ui
+SET( PLUGIN_MOCS
+   BrewtargetPlugins.h
+   BrewDayScrollWidgetPlugin.h
+   RecipeExtrasWidgetPlugin.h
 )
 
-SET( BREWDAYSCROLLWIDGETPLUGIN_UIS
-   ${UIDIR}/brewDayScrollWidget.ui
+SET( PLUGIN_SRCS
+   BrewtargetPlugins.cpp
+   BrewDayScrollWidgetPlugin.cpp
+   RecipeExtrasWidgetPlugin.cpp
 )
 
-QT4_WRAP_CPP( GEN_MOC_FILES	${MOC_FILES})
+QT4_WRAP_CPP( GEN_MOC_FILES ${MOC_FILES} ${PLUGIN_MOCS} )
 QT4_WRAP_UI( GEN_UI_FILES ${UI_FILES})
 #QT4_ADD_RESOURCES( GEN_RCC_FILES "../brewtarget.qrc")
 #QT4_WRAP_CPP( GEN_MOC_UI_FILES ${GEN_UI_FILES})
 
-#===============================Recipe Extras Widget===========================
-QT4_WRAP_CPP( GEN_MOC_RECIPEEXTRASWIDGETPLUGIN "${SRCDIR}/RecipeExtrasWidget.h" RecipeExtrasWidgetPlugin.h )
-#QT4_WRAP_UI( RECIPEEXTRASWIDGETPLUGIN_UIS_H ${RECIPEEXTRASWIDGETPLUGIN_UIS} ) 
+#========================All Plugins Together==================================
 
-add_library( recipeextraswidgetplugin SHARED 
-        RecipeExtrasWidgetPlugin.cpp
-        ${SRCDIR}/RecipeExtrasWidget.cpp
+add_library( brewtargetplugins SHARED 
         ${SRC_FILES}
-        ${GEN_MOC_RECIPEEXTRASWIDGETPLUGIN}
-        #${RECIPEEXTRASWIDGETPLUGIN_UIS_H}
+        ${PLUGIN_SRCS}
         ${GEN_UI_FILES}
         ${GEN_MOC_FILES}
 )
 
-#target_link_libraries( recipeextraswidgetplugin  
-#	${QT_QTCORE_LIBRARY}
-#	${QT_QTDESIGNER_LIBRARY}
-#	${QT_QTDESIGNERCOMPONENTS_LIBRARY}
-#)
-
-TARGET_LINK_LIBRARIES( recipeextraswidgetplugin
+TARGET_LINK_LIBRARIES( brewtargetplugins
    ${QT_LIBRARIES}
 )
 
-install( TARGETS recipeextraswidgetplugin DESTINATION ${QT_PLUGINS_DIR}/designer )
-
-#===========================Brewday Scroll Widget==============================
-QT4_WRAP_CPP( GEN_MOC_BREWDAYSCROLLWIDGETPLUGIN "${SRCDIR}/BrewDayScrollWidget.h" BrewDayScrollWidgetPlugin.h )
-#QT4_WRAP_UI( BREWDAYSCROLLWIDGETPLUGIN_UIS_H ${BREWDAYSCROLLWIDGETPLUGIN_UIS} )
-
-add_library( brewdayscrollwidgetplugin SHARED 
-        BrewDayScrollWidgetPlugin.cpp
-        ${SRCDIR}/BrewDayScrollWidget.cpp
-        ${SRC_FILES}
-        ${GEN_MOC_BREWDAYSCROLLWIDGETPLUGIN}
-        #${BREWDAYSCROLLWIDGETPLUGIN_UIS_H}
-        ${GEN_UI_FILES}
-        ${GEN_MOC_FILES}
-)
-
-#target_link_libraries( brewdayscrollwidgetplugin  
-#	${QT_QTCORE_LIBRARY}
-#	${QT_QTDESIGNER_LIBRARY}
-#	${QT_QTDESIGNERCOMPONENTS_LIBRARY}
-#)
-
-TARGET_LINK_LIBRARIES( brewdayscrollwidgetplugin
-   ${QT_LIBRARIES}
-)
-
-install( TARGETS brewdayscrollwidgetplugin DESTINATION ${QT_PLUGINS_DIR}/designer )
+INSTALL( TARGETS brewtargetplugins DESTINATION ${QT_PLUGINS_DIR}/designer )
 

@@ -92,4 +92,3 @@ QString BrewDayScrollWidgetPlugin::includeFile() const
    return "BrewDayScrollWidget.h";
 }
 
-Q_EXPORT_PLUGIN2( brewdayscrollwidgetplugin, BrewDayScrollWidgetPlugin )
