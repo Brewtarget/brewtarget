@@ -7,6 +7,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/database.cpp
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BrewDayWidget.cpp
+    ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
@@ -92,6 +93,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MashDesigner.cpp
     ${SRCDIR}/BtDigitWidget.cpp
     ${SRCDIR}/PitchDialog.cpp
+    ${SRCDIR}/RecipeExtrasWidget.cpp
 )
 
 # List of all the *.ui.
@@ -100,6 +102,7 @@ SET( brewtarget_SRCS
 SET( brewtarget_UIS
     ${UIDIR}/aboutDialog.ui
     ${UIDIR}/brewDayWidget.ui
+    ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/converterTool.ui
     ${UIDIR}/mainWindow.ui
     ${UIDIR}/mashStepEditor.ui
@@ -128,6 +131,8 @@ SET( brewtarget_UIS
     ${UIDIR}/yeastEditor.ui
     ${UIDIR}/mashDesigner.ui
     ${UIDIR}/pitchDialog.ui
+    ${UIDIR}/brewDayScrollWidget.ui
+    ${UIDIR}/recipeExtrasWidget.ui
 )
 
 # The list of files that need to be moc'd.
@@ -135,6 +140,7 @@ SET( brewtarget_UIS
 SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BrewDayWidget.h
+    ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/EquipmentComboBox.h
@@ -169,6 +175,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/RecipeComboBox.h
     ${SRCDIR}/RecipeExtrasDialog.h
+    ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h

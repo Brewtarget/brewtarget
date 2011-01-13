@@ -48,7 +48,7 @@ class MainWindow;
 #include "MashEditor.h"
 #include "MashStepEditor.h"
 #include "MashWizard.h"
-#include "BrewDayWidget.h"
+#include "BrewDayScrollWidget.h"
 #include "HtmlViewer.h"
 #include "ScaleRecipeTool.h"
 #include "RecipeFormatter.h"
@@ -57,7 +57,7 @@ class MainWindow;
 #include "TimerListDialog.h"
 #include "MashComboBox.h"
 #include "PrimingDialog.h"
-#include "RecipeExtrasDialog.h"
+#include "RecipeExtrasWidget.h"
 #include "RefractoDialog.h"
 #include "MashDesigner.h"
 #include "PitchDialog.h"
@@ -115,7 +115,7 @@ public slots:
    void backup(); // Backup the database.
    void restoreFromBackup(); // Restore the database.
 
-   void brewDayMode();
+   //void brewDayMode();
 
    void openDonateLink();
 
@@ -146,7 +146,7 @@ private:
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
    MaltinessWidget* maltWidget;
    QDialog* brewDayDialog;
-   BrewDayWidget* brewDayWidget;
+   BrewDayScrollWidget* brewDayScrollWidget;
    HtmlViewer* htmlViewer;
    ScaleRecipeTool* recipeScaler;
    RecipeFormatter* recipeFormatter;
@@ -155,7 +155,7 @@ private:
    TimerListDialog* timerListDialog;
    MashComboBox* mashComboBox;
    PrimingDialog* primingDialog;
-   RecipeExtrasDialog* recipeExtrasDialog;
+   RecipeExtrasWidget* recipeExtrasWidget;
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;

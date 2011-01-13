@@ -1,6 +1,6 @@
 /*
  * MainWindow.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009.
+ * (rocketman768@gmail.com), 2009-2011.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,8 +131,10 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
    optionDialog = new OptionDialog(this);
-   brewDayDialog = new QDialog();
-   brewDayWidget = new BrewDayWidget(brewDayDialog);
+   //brewDayDialog = new QDialog();
+   //brewDayWidget = new BrewDayWidget(brewDayDialog);
+   brewDayScrollWidget = new BrewDayScrollWidget(tab_brewday);
+   tab_brewday->layout()->addWidget(brewDayScrollWidget);
    htmlViewer = new HtmlViewer(this);
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter();
@@ -141,7 +143,9 @@ MainWindow::MainWindow(QWidget* parent)
    timerListDialog = new TimerListDialog(this);
    mashComboBox = new MashComboBox(this);
    primingDialog = new PrimingDialog(this);
-   recipeExtrasDialog = new RecipeExtrasDialog(this);
+   //recipeExtrasDialog = new RecipeExtrasDialog(this);
+   recipeExtrasWidget = new RecipeExtrasWidget(tab_extras);
+   tab_extras->layout()->addWidget(recipeExtrasWidget);
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
@@ -149,11 +153,13 @@ MainWindow::MainWindow(QWidget* parent)
    setupToolbar();
 
    // Set up brewDayDialog
+   /*
    brewDayDialog->setModal(false);
    QVBoxLayout* vblayout = new QVBoxLayout();
    vblayout->addWidget(brewDayWidget);
    brewDayDialog->setLayout(vblayout);
    brewDayDialog->setWindowTitle(tr("Brew day mode"));
+   */
 
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
@@ -257,7 +263,7 @@ void MainWindow::setupToolbar()
    QToolButton *newRec, *clearRec, *save, *removeRec,
                *viewEquip, *viewFerm, *viewHops,
                *viewMiscs, *viewStyles, *viewYeast,
-               *brewDay, *timers, *extras;
+               *timers;
 
    setIconSize(QSize(16, 16));
 
@@ -271,9 +277,9 @@ void MainWindow::setupToolbar()
    viewMiscs = new QToolButton(toolBar);
    viewStyles = new QToolButton(toolBar);
    viewYeast = new QToolButton(toolBar);
-   brewDay = new QToolButton(toolBar);
+   //brewDay = new QToolButton(toolBar);
    timers = new QToolButton(toolBar);
-   extras = new QToolButton(toolBar);
+   //extras = new QToolButton(toolBar);
    
    newRec->setIcon(QIcon(SMALLPLUS));
    clearRec->setIcon(QIcon(SHRED));
@@ -285,9 +291,9 @@ void MainWindow::setupToolbar()
    viewMiscs->setIcon(QIcon(SMALLQUESTION));
    viewStyles->setIcon(QIcon(SMALLSTYLE));
    viewYeast->setIcon(QIcon(SMALLYEAST));
-   brewDay->setText(tr("Brewday mode"));
+   //brewDay->setText(tr("Brewday mode"));
    timers->setIcon(QIcon(CLOCKPNG));
-   extras->setText(tr("Extras"));
+   //extras->setText(tr("Extras"));
 
    newRec->setToolTip(tr("New recipe"));
    clearRec->setToolTip(tr("Clear recipe"));
@@ -303,7 +309,7 @@ void MainWindow::setupToolbar()
 
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
-   toolBar->addWidget(extras);
+   //toolBar->addWidget(extras);
    toolBar->addWidget(clearRec);
    toolBar->addWidget(removeRec);
    toolBar->addSeparator();
@@ -315,7 +321,7 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(viewYeast);
    toolBar->addSeparator();
    toolBar->addWidget(timers);
-   toolBar->addWidget(brewDay);
+   //toolBar->addWidget(brewDay);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
    connect( removeRec, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
@@ -327,9 +333,9 @@ void MainWindow::setupToolbar()
    connect( viewMiscs, SIGNAL(clicked()), miscDialog, SLOT(show()) );
    connect( viewStyles, SIGNAL(clicked()), styleEditor, SLOT(show()) );
    connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
-   connect( brewDay, SIGNAL(clicked()), this, SLOT(brewDayMode()) );
+   //connect( brewDay, SIGNAL(clicked()), this, SLOT(brewDayMode()) );
    connect( timers, SIGNAL(clicked()), timerListDialog, SLOT(show()) );
-   connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
+   //connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
 }
 
 void MainWindow::removeRecipe()
@@ -404,7 +410,7 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
-   brewDayWidget->setRecipe(recipe);
+   brewDayScrollWidget->setRecipe(recipe);
    styleComboBox->observeRecipe(recipe);
    equipmentComboBox->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
@@ -412,7 +418,8 @@ void MainWindow::setRecipe(Recipe* recipe)
    hopTable->getModel()->setRecipe(recipe); // This is for calculating the IBUs to show in the row headers.
    recipeFormatter->setRecipe(recipe);
    ogAdjuster->setRecipe(recipe);
-   recipeExtrasDialog->setRecipe(recipe);
+   //recipeExtrasDialog->setRecipe(recipe);
+   recipeExtrasWidget->setRecipe(recipe);
    mashDesigner->setRecipe(recipe);
    
    // Make sure the fermentableTable is paying attention...
@@ -1104,6 +1111,7 @@ void MainWindow::removeMash()
 	recipeObs->forceNotify();
 }
 
+/*
 void MainWindow::brewDayMode()
 {
    if( QMessageBox::question(this, tr("New instructions?"), tr("Generate new instructions?"), QMessageBox::Yes, QMessageBox::No )
@@ -1115,6 +1123,7 @@ void MainWindow::brewDayMode()
 
    brewDayDialog->show();
 }
+*/
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
