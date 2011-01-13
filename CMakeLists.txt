@@ -11,6 +11,9 @@ SET( brewtarget_VERSION_MINOR 2 )
 SET( brewtarget_VERSION_PATCH 3 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
+OPTION( BUILD_DESIGNER_PLUGINS "If on, you will only build and install the designer plugins."
+        OFF )
+
 # Where the binary goes.
 SET(brewtarget_EXECUTABLE "brewtarget")
 
@@ -30,9 +33,14 @@ SET(WINDIR "${ROOTDIR}/win")
 
 INCLUDE_DIRECTORIES(${SRCDIR})
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
+INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
 
 # Find Qt4 (>= 4.6.0) for this project.
-FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebkit QtXml Phonon REQUIRED)
+IF( ${BUILD_DESIGNER_PLUGINS} )
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebKit QtXml Phonon QtDesigner REQUIRED)
+ELSE()
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebkit QtXml Phonon REQUIRED)
+ENDIF()
 
 # Some extra files for the "make clean" target.
 SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -62,5 +70,50 @@ IF( EXISTS "/etc/debian_version" )
   ENDIF()
 ENDIF()
 
-# Tell cmake to process other CMakeList.txt's
-ADD_SUBDIRECTORY(${SRCDIR})
+#========================Construct the directories=============================
+
+# Debian standard directories.
+SET( EXEC_PREFIX ${CMAKE_INSTALL_PREFIX} )
+SET( DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" )
+SET( DATADIR ${DATAROOTDIR} )
+SET( BINDIR "${EXEC_PREFIX}/bin" )
+SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
+
+# Actual install directories.
+IF( UNIX AND NOT APPLE )
+  SET( DATAPATH "${DATADIR}/${CMAKE_PROJECT_NAME}" )
+  SET( TARGETPATH ${BINDIR} )
+  SET( DOCPATH ${DOCDIR} )
+ELSEIF( WIN32 )
+  SET( DATAPATH "${CMAKE_INSTALL_PREFIX}/release" )
+  SET( TARGETPATH "${CMAKE_INSTALL_PREFIX}/release" )
+  SET( DOCPATH "${CMAKE_INSTALL_PREFIX}/release/doc" )
+ELSEIF( APPLE )
+  SET( DATAPATH "Resources" )
+  SET( DOCPATH  "Resources/en.lproj" )
+
+ENDIF()
+
+#==============================Setup the config.h==============================
+
+# NOTE: need to replace "#define CONFIGDATADIR blah" etc. in config.in
+# with "#define CONFIGDATADIR ${CONFIGDATADIR}" so that they will be replaced
+# by the below corresponding values when CONFIGURE_FILE()
+# is called.
+SET( CONFIGDATADIR "${DATAPATH}/" )
+SET( CONFIGDOCDIR "${DOCPATH}/" )
+
+# Tell cmake where the configure file is and where
+# to put the output. All variables in config.in written as "${VAR}$
+# will be replaced by VAR as determined by cmake in config.h.
+CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
+
+
+# =====================Process other CMakeList.txt's===========================
+IF( ${BUILD_DESIGNER_PLUGINS} )
+   MESSAGE( STATUS "Making plugins..." )
+   ADD_SUBDIRECTORY(QtDesignerPlugins)
+ELSE()
+   MESSAGE( STATUS "Building Brewtarget..." )
+   ADD_SUBDIRECTORY(${SRCDIR})
+ENDIF()

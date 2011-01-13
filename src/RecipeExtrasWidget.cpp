@@ -151,7 +151,7 @@ void RecipeExtrasWidget::updateDate()
    if( recObs == 0 )
       return;
 
-   recObs->setDate( dateEdit_date->date().toString("dd/mm/yyyy") );
+   recObs->setDate( dateEdit_date->date().toString("dd/MM/yyyy") );
 }
 
 void RecipeExtrasWidget::updateCarbonation()

@@ -424,44 +424,6 @@ ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRC
 # Link brewtarget against Qt libraries defined by QT_USE_FILE.
 TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} ${QT_LIBRARIES})
 
-#========================Construct the directories=============================
-
-# Debian standard directories.
-SET( EXEC_PREFIX ${CMAKE_INSTALL_PREFIX} )
-SET( DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" )
-SET( DATADIR ${DATAROOTDIR} )
-SET( BINDIR "${EXEC_PREFIX}/bin" )
-SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
-
-# Actual install directories.
-IF( UNIX AND NOT APPLE )
-  SET( DATAPATH "${DATADIR}/${CMAKE_PROJECT_NAME}" )
-  SET( TARGETPATH ${BINDIR} )
-  SET( DOCPATH ${DOCDIR} )
-ELSEIF( WIN32 )
-  SET( DATAPATH "${CMAKE_INSTALL_PREFIX}/release" )
-  SET( TARGETPATH "${CMAKE_INSTALL_PREFIX}/release" )
-  SET( DOCPATH "${CMAKE_INSTALL_PREFIX}/release/doc" )
-ELSEIF( APPLE )
-  SET( DATAPATH "Resources" )
-  SET( DOCPATH  "Resources/en.lproj" )
-  
-ENDIF()
-
-#==============================Setup the config.h==============================
-
-# NOTE: need to replace "#define CONFIGDATADIR blah" etc. in config.in
-# with "#define CONFIGDATADIR ${CONFIGDATADIR}" so that they will be replaced
-# by the below corresponding values when CONFIGURE_FILE()
-# is called.
-SET( CONFIGDATADIR "${DATAPATH}/" )
-SET( CONFIGDOCDIR "${DOCPATH}/" )
-
-# Tell cmake where the configure file is and where
-# to put the output. All variables in config.in written as "${VAR}$
-# will be replaced by VAR as determined by cmake in config.h.
-CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
-
 #==============================Setup install targets===========================
 
 #IF(APPLE)
