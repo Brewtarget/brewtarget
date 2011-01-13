@@ -131,10 +131,6 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
    optionDialog = new OptionDialog(this);
-   //brewDayDialog = new QDialog();
-   //brewDayWidget = new BrewDayWidget(brewDayDialog);
-   brewDayScrollWidget = new BrewDayScrollWidget(tab_brewday);
-   tab_brewday->layout()->addWidget(brewDayScrollWidget);
    htmlViewer = new HtmlViewer(this);
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter();
@@ -143,9 +139,6 @@ MainWindow::MainWindow(QWidget* parent)
    timerListDialog = new TimerListDialog(this);
    mashComboBox = new MashComboBox(this);
    primingDialog = new PrimingDialog(this);
-   //recipeExtrasDialog = new RecipeExtrasDialog(this);
-   recipeExtrasWidget = new RecipeExtrasWidget(tab_extras);
-   tab_extras->layout()->addWidget(recipeExtrasWidget);
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
@@ -277,9 +270,7 @@ void MainWindow::setupToolbar()
    viewMiscs = new QToolButton(toolBar);
    viewStyles = new QToolButton(toolBar);
    viewYeast = new QToolButton(toolBar);
-   //brewDay = new QToolButton(toolBar);
    timers = new QToolButton(toolBar);
-   //extras = new QToolButton(toolBar);
    
    newRec->setIcon(QIcon(SMALLPLUS));
    clearRec->setIcon(QIcon(SHRED));
@@ -291,9 +282,7 @@ void MainWindow::setupToolbar()
    viewMiscs->setIcon(QIcon(SMALLQUESTION));
    viewStyles->setIcon(QIcon(SMALLSTYLE));
    viewYeast->setIcon(QIcon(SMALLYEAST));
-   //brewDay->setText(tr("Brewday mode"));
    timers->setIcon(QIcon(CLOCKPNG));
-   //extras->setText(tr("Extras"));
 
    newRec->setToolTip(tr("New recipe"));
    clearRec->setToolTip(tr("Clear recipe"));
@@ -309,7 +298,6 @@ void MainWindow::setupToolbar()
 
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
-   //toolBar->addWidget(extras);
    toolBar->addWidget(clearRec);
    toolBar->addWidget(removeRec);
    toolBar->addSeparator();
@@ -321,7 +309,6 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(viewYeast);
    toolBar->addSeparator();
    toolBar->addWidget(timers);
-   //toolBar->addWidget(brewDay);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
    connect( removeRec, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
@@ -333,7 +320,6 @@ void MainWindow::setupToolbar()
    connect( viewMiscs, SIGNAL(clicked()), miscDialog, SLOT(show()) );
    connect( viewStyles, SIGNAL(clicked()), styleEditor, SLOT(show()) );
    connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
-   //connect( brewDay, SIGNAL(clicked()), this, SLOT(brewDayMode()) );
    connect( timers, SIGNAL(clicked()), timerListDialog, SLOT(show()) );
    //connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
 }
@@ -418,7 +404,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    hopTable->getModel()->setRecipe(recipe); // This is for calculating the IBUs to show in the row headers.
    recipeFormatter->setRecipe(recipe);
    ogAdjuster->setRecipe(recipe);
-   //recipeExtrasDialog->setRecipe(recipe);
    recipeExtrasWidget->setRecipe(recipe);
    mashDesigner->setRecipe(recipe);
    

@@ -5,25 +5,32 @@ cmake_minimum_required(VERSION 2.8)
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
 # will install to /foo/tmp/blah.
 
-# Version
+# Where the binary goes.
+SET(brewtarget_EXECUTABLE "brewtarget")
+
+#=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 1 )
 SET( brewtarget_VERSION_MINOR 2 )
 SET( brewtarget_VERSION_PATCH 3 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
-OPTION( BUILD_DESIGNER_PLUGINS "If on, you will only build and install the designer plugins."
+#===================================Options====================================
+OPTION( BUILD_DESIGNER_PLUGINS
+        "If on, you will only build and install the designer plugins."
         OFF )
-
-# Where the binary goes.
-SET(brewtarget_EXECUTABLE "brewtarget")
-
-# Compile flags
+OPTION( DO_RELEASE_BUILD
+        "If on, will do a release build. Otherwise, debug build."
+        OFF )
+#==============================Compile flags===================================
 SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
 SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -gstabs+" )
+IF( ${DO_RELEASE_BUILD} )
+   SET( CMAKE_BUILD_TYPE "Release" )
+ELSE()
+   SET( CMAKE_BUILD_TYPE "Debug" )
+ENDIF()
 
-SET( CMAKE_BUILD_TYPE "Debug" )
-
-# Directories.
+#============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(SRCDIR "${ROOTDIR}/src")
 SET(UIDIR "${ROOTDIR}/ui")
@@ -35,7 +42,7 @@ INCLUDE_DIRECTORIES(${SRCDIR})
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
 
-# Find Qt4 (>= 4.6.0) for this project.
+# ======================Find Qt4 (>= 4.6.0) for this project===================
 IF( ${BUILD_DESIGNER_PLUGINS} )
    FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebKit QtXml Phonon QtDesigner REQUIRED)
 ELSE()
@@ -51,7 +58,7 @@ SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
              "CPackSourceConfig.cmake"
             )
 
-# Add a target for doxygen documentation.
+#============================Doxygen Custom Target=============================
 FIND_PROGRAM( DOXYGEN_CMD doxygen )
 IF( DOXYGEN_CMD )
   ADD_CUSTOM_TARGET( source_doc
@@ -60,7 +67,7 @@ IF( DOXYGEN_CMD )
                    )
 ENDIF()
 
-# See if this is debian.
+#=========================Detect Debian======================================== 
 IF( EXISTS "/etc/debian_version" )
   MESSAGE( STATUS "Debian detected..." )
 
@@ -75,13 +82,13 @@ ENDIF()
 # Debian standard directories.
 SET( EXEC_PREFIX ${CMAKE_INSTALL_PREFIX} )
 SET( DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" )
-SET( DATADIR ${DATAROOTDIR} )
+#SET( DATADIR ${DATAROOTDIR} )
 SET( BINDIR "${EXEC_PREFIX}/bin" )
 SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
 
 # Actual install directories.
 IF( UNIX AND NOT APPLE )
-  SET( DATAPATH "${DATADIR}/${CMAKE_PROJECT_NAME}" )
+  SET( DATAPATH "${DATAROOTDIR}/${CMAKE_PROJECT_NAME}" )
   SET( TARGETPATH ${BINDIR} )
   SET( DOCPATH ${DOCDIR} )
 ELSEIF( WIN32 )
@@ -91,15 +98,16 @@ ELSEIF( WIN32 )
 ELSEIF( APPLE )
   SET( DATAPATH "Resources" )
   SET( DOCPATH  "Resources/en.lproj" )
-
 ENDIF()
+
+# DATAPATH=/usr/share/brewtarget
+#MESSAGE( STATUS "DATAPATH=${DATAPATH}" )
 
 #==============================Setup the config.h==============================
 
-# NOTE: need to replace "#define CONFIGDATADIR blah" etc. in config.in
-# with "#define CONFIGDATADIR ${CONFIGDATADIR}" so that they will be replaced
-# by the below corresponding values when CONFIGURE_FILE()
-# is called.
+# "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
+# by the below corresponding value in ${CONFIGDATADIR} below when
+# CONFIGURE_FILE() is called.
 SET( CONFIGDATADIR "${DATAPATH}/" )
 SET( CONFIGDOCDIR "${DOCPATH}/" )
 
@@ -111,9 +119,10 @@ CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
 
 # =====================Process other CMakeList.txt's===========================
 IF( ${BUILD_DESIGNER_PLUGINS} )
-   MESSAGE( STATUS "Making plugins..." )
+   MESSAGE( STATUS "Building Qt Designer plugins." )
    ADD_SUBDIRECTORY(QtDesignerPlugins)
 ELSE()
-   MESSAGE( STATUS "Building Brewtarget..." )
+   MESSAGE( STATUS "Building Brewtarget." )
    ADD_SUBDIRECTORY(${SRCDIR})
 ENDIF()
+

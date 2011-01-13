@@ -18,3 +18,7 @@ MAKE TARGETS
   * make translations
       If the cmake option UPDATE_TRANSLATIONS is set, updates the *.ts files
       and creates .qm files. Otherwise, just creates .qm files from *.ts files.
+
+CMAKE OPTIONS
+  * -DBUILD_DESIGNER_PLUGINS - OFF by default. If set to ON, builds the Qt Designer
+     plugins instead of brewtarget.

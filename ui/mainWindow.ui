@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>690</width>
-    <height>668</height>
+    <height>671</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -962,13 +962,21 @@
        <attribute name="title">
         <string>Extras</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_10"/>
+       <layout class="QVBoxLayout" name="verticalLayout_10">
+        <item>
+         <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_brewday">
        <attribute name="title">
         <string>Brewday</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_17"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_17">
+        <item>
+         <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -1528,7 +1536,7 @@
      <x>0</x>
      <y>0</y>
      <width>690</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1755,6 +1763,16 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>BrewDayScrollWidget</class>
+   <extends>QWidget</extends>
+   <header>BrewDayScrollWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RecipeExtrasWidget</class>
+   <extends>QWidget</extends>
+   <header>RecipeExtrasWidget.h</header>
+  </customwidget>
   <customwidget>
    <class>BtDigitWidget</class>
    <extends>QLabel</extends>

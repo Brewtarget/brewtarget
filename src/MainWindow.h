@@ -146,7 +146,6 @@ private:
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
    MaltinessWidget* maltWidget;
    QDialog* brewDayDialog;
-   BrewDayScrollWidget* brewDayScrollWidget;
    HtmlViewer* htmlViewer;
    ScaleRecipeTool* recipeScaler;
    RecipeFormatter* recipeFormatter;
@@ -155,7 +154,6 @@ private:
    TimerListDialog* timerListDialog;
    MashComboBox* mashComboBox;
    PrimingDialog* primingDialog;
-   RecipeExtrasWidget* recipeExtrasWidget;
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
