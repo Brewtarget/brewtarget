@@ -29,13 +29,27 @@
 #include <QObject>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QVBoxLayout>
 #include "instruction.h"
 
 RecipeFormatter::RecipeFormatter()
 {
    textSeparator = 0;
    rec = 0;
-   doc = new QWebView();
+
+   // Put the doc widget inside a dialog.
+   docDialog = new QDialog(Brewtarget::mainWindow);
+   if( docDialog->layout() == 0 )
+      docDialog->setLayout(new QVBoxLayout());
+   doc = new QWebView(docDialog);
+   docDialog->layout()->addWidget(doc);
+   
+}
+
+RecipeFormatter::~RecipeFormatter()
+{
+   delete doc;
+   delete docDialog; 
 }
 
 void RecipeFormatter::setRecipe(Recipe* recipe)
@@ -695,5 +709,5 @@ void RecipeFormatter::printPreview()
    pDoc += "</body></html>";
 
    doc->setHtml(pDoc);
-   doc->show();
+   docDialog->show();
 }

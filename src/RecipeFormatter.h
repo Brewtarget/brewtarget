@@ -27,6 +27,7 @@ class RecipeFormatter;
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QWebView>
+#include <QDialog>
 #include "recipe.h"
 
 class RecipeFormatter : public QObject
@@ -34,6 +35,7 @@ class RecipeFormatter : public QObject
    Q_OBJECT
 public:
    RecipeFormatter();
+   ~RecipeFormatter();
    void setRecipe(Recipe* recipe);
    QString getTextFormat();
    QString getHTMLFormat();
@@ -65,6 +67,7 @@ private:
 
    QPrinter* printer;
    QWebView* doc;
+   QDialog* docDialog;
    QString cssName;
 
 private slots:
