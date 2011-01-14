@@ -28,6 +28,8 @@ class MainWindow;
 #include <QFileDialog>
 #include <QPalette>
 #include <QCloseEvent>
+#include <QPrinter>
+#include <QPrintDialog>
 #include "ui_mainWindow.h"
 #include "FermentableDialog.h"
 #include "HopDialog.h"
@@ -112,6 +114,9 @@ public slots:
    void importRecipes();
    void copyRecipe();
    
+   void printRecipe();
+   void printPreview();
+
    void backup(); // Backup the database.
    void restoreFromBackup(); // Restore the database.
 
@@ -157,6 +162,8 @@ private:
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
+
+   QPrinter *printer;
 
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());

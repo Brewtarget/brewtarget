@@ -24,6 +24,9 @@ class RecipeFormatter;
 #include <QString>
 #include <QStringList>
 #include <QObject>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QWebView>
 #include "recipe.h"
 
 class RecipeFormatter : public QObject
@@ -39,13 +42,33 @@ public:
    QString padToLength( QString str, unsigned int length );
    void padAllToMaxLength( QStringList* list );
    
+   void print(QPrinter *mainPrinter, QPrintDialog* dialog);
+   void printPreview();
+
 public slots:
    void toTextClipboard();
    
 private:
    QString getTextSeparator();
+
+   QString buildTitleTable();
+   QString buildFermentableTable();
+   QString buildHopsTable();
+   QString buildYeastTable();
+   QString buildMiscTable();
+   QString buildNotes();
+   QString buildInstructionTable();
+   QString getCSS();
+
    QString* textSeparator;
    Recipe* rec;
+
+   QPrinter* printer;
+   QWebView* doc;
+   QString cssName;
+
+private slots:
+   bool loadComplete(bool ok);
 };
 
 #endif /*RECIPE_FORMATTER_H*/

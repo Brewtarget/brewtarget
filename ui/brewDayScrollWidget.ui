@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>410</width>
-        <height>385</height>
+        <width>402</width>
+        <height>377</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -230,47 +230,6 @@
             </layout>
            </item>
           </layout>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_print">
-           <property name="title">
-            <string>Print</string>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_6">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_11">
-                <item>
-                 <widget class="QPushButton" name="pushButton_preview">
-                  <property name="text">
-                   <string>Preview</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_print">
-                  <property name="text">
-                   <string>Print</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>Template</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="comboBox_template"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
          </item>
         </layout>
        </item>

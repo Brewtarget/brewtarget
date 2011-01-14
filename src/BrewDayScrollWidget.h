@@ -25,6 +25,8 @@ class BrewDayScrollWidget;
 #include <QWidget>
 #include <QSize>
 #include <QWebView>
+#include <QPrinter>
+#include <QPrintDialog>
 #include "observable.h"
 #include "recipe.h"
 
@@ -38,20 +40,21 @@ public:
    virtual QSize sizeHint() const; // From QWidget
    virtual void notify(Observable *notifier, QVariant info); // From Observer.
 
+   void print(QPrinter* mainPrinter, QPrintDialog *dialog);
+   void printPreview();
+
 public slots:
    void generateInstructions();
    void insertInstruction();
    void removeSelectedInstruction();
    void pushInstructionUp();
    void pushInstructionDown();
-   void pushInstructionPrint();
-   void pushInstructionPreview();
+
 
 private:
    void showChanges();
    void repopulateListWidget();
    void clear();
-   void populateComboBox(QComboBox *comboBox_template);
    QString buildTitleTable();
    QString buildInstructionTable();
    QString buildFooterTable();
@@ -65,7 +68,6 @@ private:
 
 private slots:
    bool loadComplete(bool ok);
-   void comboSetCSS(const QString name);
 };
 
 #endif  /* _BREWDAYSCROLLWIDGET_H */

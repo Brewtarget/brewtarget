@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>690</width>
-    <height>671</height>
+    <height>714</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,7 @@
    <string>Brewtarget - 1.2.3</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../brewtarget.qrc">
+   <iconset>
     <normaloff>:/images/brewtarget_icon.svg</normaloff>:/images/brewtarget_icon.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -83,7 +83,7 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="../brewtarget.qrc">:/images/title.png</pixmap>
+         <pixmap>:/images/title.png</pixmap>
         </property>
        </widget>
       </item>
@@ -92,7 +92,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_recipe">
        <attribute name="title">
@@ -964,7 +964,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+         <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
         </item>
        </layout>
       </widget>
@@ -974,7 +974,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_17">
         <item>
-         <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+         <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
         </item>
        </layout>
       </widget>
@@ -1022,12 +1022,6 @@
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>false</bool>
           </attribute>
-          <attribute name="horizontalHeaderStretchLastSection">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="horizontalHeaderCascadingSectionResizes">
-           <bool>false</bool>
-          </attribute>
          </widget>
         </item>
         <item>
@@ -1044,7 +1038,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -1058,7 +1052,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1072,7 +1066,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1116,7 +1110,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -1130,7 +1124,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1144,7 +1138,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1188,7 +1182,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -1202,7 +1196,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1216,7 +1210,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1260,7 +1254,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
             </property>
            </widget>
@@ -1274,7 +1268,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1288,7 +1282,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
             </property>
            </widget>
@@ -1334,7 +1328,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
               </property>
              </widget>
@@ -1348,7 +1342,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
               </property>
              </widget>
@@ -1362,7 +1356,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../brewtarget.qrc">
+               <iconset>
                 <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
               </property>
              </widget>
@@ -1448,7 +1442,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
             </property>
            </widget>
@@ -1459,7 +1453,7 @@
              <string>Mash step up</string>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
             </property>
            </widget>
@@ -1470,7 +1464,7 @@
              <string>Mash step down</string>
             </property>
             <property name="icon">
-             <iconset resource="../brewtarget.qrc">
+             <iconset>
               <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
             </property>
            </widget>
@@ -1515,7 +1509,7 @@
          <string>Donate</string>
         </property>
         <property name="icon">
-         <iconset resource="../brewtarget.qrc">
+         <iconset>
           <normaloff>:/images/donate.svg</normaloff>:/images/donate.svg</iconset>
         </property>
         <property name="iconSize">
@@ -1536,7 +1530,7 @@
      <x>0</x>
      <y>0</y>
      <width>690</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1561,6 +1555,13 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuPrint">
+     <property name="title">
+      <string>Print</string>
+     </property>
+     <addaction name="actionPrint_Preview"/>
+     <addaction name="actionPrint_2"/>
+    </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
@@ -1568,6 +1569,8 @@
     <addaction name="actionExportRecipe"/>
     <addaction name="actionBackup_Database"/>
     <addaction name="actionRestore_Database"/>
+    <addaction name="separator"/>
+    <addaction name="menuPrint"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1604,7 +1607,7 @@
   </widget>
   <action name="actionAbout_BrewTarget">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallInfo.svg</normaloff>:/images/smallInfo.svg</iconset>
    </property>
    <property name="text">
@@ -1613,7 +1616,7 @@
   </action>
   <action name="actionExportRecipe">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallOutArrow.svg</normaloff>:/images/smallOutArrow.svg</iconset>
    </property>
    <property name="text">
@@ -1622,7 +1625,7 @@
   </action>
   <action name="actionNewRecipe">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
    </property>
    <property name="text">
@@ -1631,7 +1634,7 @@
   </action>
   <action name="actionFermentables">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallBarley.svg</normaloff>:/images/smallBarley.svg</iconset>
    </property>
    <property name="text">
@@ -1640,7 +1643,7 @@
   </action>
   <action name="actionHops">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallHop.svg</normaloff>:/images/smallHop.svg</iconset>
    </property>
    <property name="text">
@@ -1649,7 +1652,7 @@
   </action>
   <action name="actionMiscs">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallQuestion.svg</normaloff>:/images/smallQuestion.svg</iconset>
    </property>
    <property name="text">
@@ -1658,7 +1661,7 @@
   </action>
   <action name="actionYeasts">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallYeast.svg</normaloff>:/images/smallYeast.svg</iconset>
    </property>
    <property name="text">
@@ -1667,7 +1670,7 @@
   </action>
   <action name="actionEquipments">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallKettle.svg</normaloff>:/images/smallKettle.svg</iconset>
    </property>
    <property name="text">
@@ -1676,7 +1679,7 @@
   </action>
   <action name="actionStyles">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallStyle.svg</normaloff>:/images/smallStyle.svg</iconset>
    </property>
    <property name="text">
@@ -1685,7 +1688,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
    </property>
    <property name="text">
@@ -1694,7 +1697,7 @@
   </action>
   <action name="actionImport_Recipes">
    <property name="icon">
-    <iconset resource="../brewtarget.qrc">
+    <iconset>
      <normaloff>:/images/smallArrow.svg</normaloff>:/images/smallArrow.svg</iconset>
    </property>
    <property name="text">
@@ -1759,6 +1762,16 @@
   <action name="actionPitch_Rate_Calculator">
    <property name="text">
     <string>Pitch Rate Calculator</string>
+   </property>
+  </action>
+  <action name="actionPrint_Preview">
+   <property name="text">
+    <string>Print Preview</string>
+   </property>
+  </action>
+  <action name="actionPrint_2">
+   <property name="text">
+    <string>Print</string>
    </property>
   </action>
  </widget>

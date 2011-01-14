@@ -44,9 +44,7 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
    connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
    connect( pushButton_down, SIGNAL(clicked()), this, SLOT(pushInstructionDown()) );
-   connect( pushButton_print, SIGNAL(clicked()), this, SLOT(pushInstructionPrint()) );
-   connect( pushButton_preview, SIGNAL(clicked()), this, SLOT(pushInstructionPreview()) );
-   connect( comboBox_template, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboSetCSS(QString)) );
+
 
    // Set up the printer stuff
    doc = new QWebView();
@@ -54,7 +52,7 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
    printer->setPageSize(QPrinter::Letter);
 
    // populate the drop down list
-   populateComboBox(comboBox_template);
+
 }
 
 QSize BrewDayWidget::sizeHint() const
@@ -97,11 +95,6 @@ void BrewDayWidget::pushInstructionDown()
    
    recObs->swapInstructions(row, row+1);
    listWidget->setCurrentRow(row+1);
-}
-
-void BrewDayWidget::comboSetCSS(const QString name) 
-{
-   cssName = QString(":/css/%1").arg(name);
 }
 
 QString BrewDayWidget::getCSS() 
@@ -384,24 +377,4 @@ void BrewDayWidget::repopulateListWidget()
       listWidget->setCurrentRow(0);
    else
       listWidget->setCurrentRow(-1);
-}
-
-
-void BrewDayWidget::populateComboBox(QComboBox *comboBox_template)
-{
-   QDir css(":/css");
-   QFileInfoList cssList;
-   QFileInfo fileInfo;
-   int i;
-
-   css.setFilter(QDir::Files);
-   cssList = css.entryInfoList();
-
-   for ( i = 0; i < cssList.size(); i++) 
-   {  
-      fileInfo = cssList.at(i);
-      comboBox_template->addItem(tr("%1").arg(fileInfo.fileName()));
-   }
-
-   comboBox_template->setEditable(false);
 }

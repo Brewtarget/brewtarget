@@ -145,6 +145,10 @@ MainWindow::MainWindow(QWidget* parent)
 
    setupToolbar();
 
+   // Set up the printer
+   printer = new QPrinter;
+   printer->setPageSize(QPrinter::Letter);
+
    // Set up brewDayDialog
    /*
    brewDayDialog->setModal(false);
@@ -222,6 +226,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), pitchDialog, SLOT(show()));
+
+   connect( actionPrint_Preview, SIGNAL(triggered()), this, SLOT( printPreview()));
+   connect( actionPrint_2, SIGNAL(triggered()), this, SLOT( printRecipe()));
+
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -1190,3 +1198,31 @@ void MainWindow::openDonateLink()
    QDesktopServices::openUrl(QUrl("http://sourceforge.net/project/project_donations.php?group_id=249733"));
 }
 
+void MainWindow::printPreview()
+{
+	switch(tabWidget_2->currentIndex())
+	{
+		case 0:
+			recipeFormatter->printPreview();
+			break;
+		case 2:
+			brewDayScrollWidget->printPreview();
+			break;
+	}
+}
+
+void MainWindow::printRecipe()
+{
+	QPrintDialog *printerDialog = new QPrintDialog(printer, this);
+	switch(tabWidget_2->currentIndex())
+	{
+		case 0:
+			qDebug() << "Calling recipeFormatter";
+			recipeFormatter->print(printer, printerDialog);
+			break;
+		case 2:
+			qDebug() << "Calling brewDayWidget";
+			brewDayScrollWidget->print(printer, printerDialog);
+			break;
+	}
+}

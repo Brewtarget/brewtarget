@@ -50,7 +50,6 @@ private:
    void showChanges();
    void repopulateListWidget();
    void clear();
-   void populateComboBox(QComboBox *comboBox_template);
    QString buildTitleTable();
    QString buildInstructionTable();
    QString buildFooterTable();
@@ -64,7 +63,6 @@ private:
 
 private slots:
    bool loadComplete(bool ok);
-   void comboSetCSS(const QString name);
 };
 
 #endif  /* _BREWDAYWIDGET_H */

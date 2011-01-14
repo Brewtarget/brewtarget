@@ -1,0 +1,173 @@
+ul { list-style-type:circle; }
+caption 
+{ 
+    caption-side:bottom; 
+    text-align: right;
+}
+h1 
+{ 
+	font-size:36px;
+	font-weight:bold;
+	text-align:left;
+}
+h2
+{
+	font-size:18px;
+	font-weight:bold;
+	text-align:left;
+	border-bottom-style:solid;
+}
+h3
+{
+	font-size:14px;
+    text-align:left;
+    font-weight:normal;
+    border-bottom-width:1px;
+	border-bottom-style:solid;
+}
+img
+{
+	position:absolute;
+	right:0px;
+	top:0px;
+	z-index:-1;
+}
+#title
+{
+	border-collapse:collapse;
+	width:100%;
+	empty-cells:hide;
+}
+#title td, #title th
+{
+	border: 0px solid white;
+	padding: 3px 7px 2px 7px;
+	empty-cells:show;
+}
+#title td.left
+{
+	width:10%;
+	font-weight:bold;
+	text-align:left;
+}
+#title td.value
+{
+	width:30%;
+	font-weight:normal;
+	text-align:left;
+}
+#title td.right
+{
+	width:20%;
+	font-weight:bold;
+	text-align:right;
+}
+#fermentables
+{
+	border-collapse:collapse;
+	width:100%;
+	empty-cells:hide;
+}
+#fermentables td
+{
+	border: 0px solid white;
+	padding: 3px 7px 2px 7px;
+	empty-cells:show;
+}
+#fermentables th
+{
+	border: 0px solid white;
+    padding: 3px 7px 2px 7px;
+    font-weight:bold;
+    text-align:left;
+    empty-cells:show;
+}
+#fermentables caption 
+{ 
+    caption-side:bottom; 
+    text-align: center;
+    font-weight:bold;
+    padding: 0.5em 0;
+}
+#hops
+{
+	border-collapse:collapse;
+	width:100%;
+	empty-cells:hide;
+}
+#hops td
+{
+	border: 0px solid white;
+	padding: 3px 7px 2px 7px;
+	empty-cells:show;
+}
+#hops th
+{
+	border: 0px solid white;
+    padding: 3px 7px 2px 7px;
+    font-weight:bold;
+    text-align:left;
+    empty-cells:show;
+}
+#hops caption 
+{ 
+    caption-side:bottom; 
+    text-align: center;
+    font-weight:bold;
+}
+#misc
+{
+	border-collapse:collapse;
+	width:100%;
+	empty-cells:hide;
+}
+#misc td
+{
+	border: 0px solid white;
+	padding: 3px 7px 2px 7px;
+	empty-cells:show;
+}
+#misc th
+{
+	border: 0px solid white;
+    padding: 3px 7px 2px 7px;
+    font-weight:bold;
+    text-align:left;
+    empty-cells:show;
+}
+#misc caption 
+{ 
+    caption-side:bottom; 
+    text-align: center;
+    font-weight:bold;
+}
+#yeast
+{
+	border-collapse:collapse;
+	width:100%;
+	empty-cells:hide;
+}
+#yeast td
+{
+	border: 0px solid white;
+	padding: 3px 7px 2px 7px;
+	empty-cells:show;
+}
+#yeast th
+{
+	border: 0px solid white;
+    padding: 3px 7px 2px 7px;
+    font-weight:bold;
+    text-align:left;
+    empty-cells:show;
+}
+#yeast caption 
+{ 
+    caption-side:bottom; 
+    text-align: center;
+    font-weight:bold;
+}
+#instruction
+{
+    list-style-type:decimal;
+}

@@ -27,12 +27,15 @@
 #include "brewtarget.h"
 #include <QClipboard>
 #include <QObject>
+#include <QPrinter>
+#include <QPrintDialog>
 #include "instruction.h"
 
 RecipeFormatter::RecipeFormatter()
 {
    textSeparator = 0;
    rec = 0;
+   doc = new QWebView();
 }
 
 void RecipeFormatter::setRecipe(Recipe* recipe)
@@ -367,4 +370,329 @@ void RecipeFormatter::padAllToMaxLength( QStringList* list )
    size = list->count();
    for( i = 0; i < size; ++i )
       list->replace( i, padToLength( list->at(i), maxlen+1 ) ); // Add one so that text doesn't run together.
+}
+
+QString RecipeFormatter::getCSS()
+{
+   if ( cssName == NULL )
+       cssName = tr(":/css/recipe.css");
+
+   QFile cssInput(cssName);
+   QString css;
+
+   if (cssInput.open(QFile::ReadOnly)) {
+      QTextStream inStream(&cssInput);
+      while ( ! inStream.atEnd() )
+      {
+         css += inStream.readLine();
+      }
+   }
+   return css;
+}
+
+QString RecipeFormatter::buildTitleTable()
+{
+   QString header;
+   QString body;
+   QString color;
+   QString bitterness;
+
+   if ( rec == 0 )
+	   return "";
+
+   // Do the style sheet first
+   header = "<html><head><style type=\"text/css\">";
+   header += getCSS();
+   header += "</style></head>";
+
+   body   = "<body>";
+   body += tr("<h1>%1</h1>").arg(rec->getName().c_str());
+
+   // Build the top table
+   // Build the first row: Batch Size and Boil Size
+   body += "<table id=\"title\">";
+   body += tr("<tr><td class=\"left\">Batch Size</td><td class=\"value\">%1</td>")
+           .arg(Brewtarget::displayAmount(rec->getBatchSize_l(), Units::liters));
+   body += tr("<td class=\"right\">Boil Size</td><td class=\"value\">%1</td></tr>")
+           .arg(Brewtarget::displayAmount(rec->getBoilSize_l(), Units::liters));
+   // Second row: Boil Time and Efficiency
+   body += tr("<tr><td class=\"left\">Boil Time</td><td class=\"value\">%1</td>")
+           .arg( (rec->getEquipment() == 0)?
+                   Brewtarget::displayAmount(0, Units::minutes)
+                 : Brewtarget::displayAmount( (rec->getEquipment())->getBoilTime_min(), Units::minutes));
+   body += tr("<td class=\"right\">Efficiency</td><td class=\"value\">%1%</td></tr>")
+           .arg(rec->getEfficiency_pct(), 0, 'f', 0);
+
+   // Third row: OG and FG
+   body += tr("<tr><td class=\"left\">OG</td><td class=\"value\">%1</td>")
+           .arg(Brewtarget::displayOG(rec->getOg(), true ));
+   body += tr("<td class=\"right\">Starting Gravity</td><td class=\"value\">%1</td></tr>")
+           .arg(Brewtarget::displayFG(rec->getFg(), rec->getOg(), true));
+
+   // Fourth row: ABV and Bitterness.  We need to set the bitterness string up first
+   bitterness = tr("%1 IBUs (%2)").arg( rec->getIBU(), 0, 'f', 1);
+   switch ( Brewtarget::ibuFormula )
+   {
+	   case Brewtarget::TINSETH:
+		   bitterness.arg("Tinseth");
+		   break;
+	   case Brewtarget::RAGER:
+		   bitterness.arg("Rager");
+		   break;
+   }
+   body += tr("<tr><td class=\"left\">ABV</td><td class=\"value\">%1%</td>")
+           .arg(rec->getABV_pct(), 0, 'f', 1);
+   body += tr("<td class=\"right\">Bitterness</td><td class=\"value\">%1</td></tr>")
+           .arg(bitterness);
+   // Fifth row: Color and calories.  Set up the color string first
+   color = tr("%1 SRM (%2)").arg(rec->getColor_srm(), 0, 'f', 0);
+   switch( Brewtarget::colorFormula )
+   {
+	   case Brewtarget::MOREY:
+		   color = color.arg("Morey");
+		   break;
+	   case Brewtarget::DANIEL:
+		   color = color.arg("Daniels");
+		   break;
+	   case Brewtarget::MOSHER:
+		   color = color.arg("Mosher");
+		   break;
+   }
+   body += tr("<tr><td class=\"left\">Color</td><td class=\"value\">%1%</td>")
+           .arg(color);
+   body += tr("<td class=\"right\">Calories (per 12 ounces)</td><td class=\"value\">%1</td></tr>")
+           .arg(rec->estimateCalories());
+
+   body += "</table>";
+
+   return header + body;
+
+}
+
+QString RecipeFormatter::buildFermentableTable()
+{
+	QString ftable;
+	if ( rec == 0 || rec->getNumFermentables() < 1 )
+		return "";
+
+	ftable = tr("<h3>Fermentables</h3>");
+	ftable += tr("<table id=\"fermentables\"");
+	ftable += tr("<caption>Total grain: %1</caption>")
+			.arg(Brewtarget::displayAmount(rec->getGrains_kg(), Units::kilograms));
+	// Set up the header row.
+	ftable += tr("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th><th>%7</th></tr>")
+			.arg("Name")
+			.arg("Type")
+			.arg("Amount")
+			.arg("Mashed")
+			.arg("Late")
+			.arg("Yield")
+			.arg("Color");
+	// Now add a row for each fermentable
+	for(unsigned int i=0; i < rec->getNumFermentables(); ++i)
+	{
+		Fermentable* ferm = rec->getFermentable(i);
+		ftable += "<tr>";
+		ftable += tr("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7 L</td>")
+				.arg( ferm->getName().c_str())
+				.arg( ferm->getTypeString())
+				.arg( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
+				.arg( ferm->getIsMashed() ? "Yes" : "No" )
+				.arg( ferm->getAddAfterBoil() ? "Yes" : "No")
+				.arg( ferm->getYield_pct(), 0, 'f', 0)
+				.arg( ferm->getColor_srm(), 0, 'f', 0);
+		ftable += "</tr>";
+	}
+	ftable += "</table>";
+	return ftable;
+}
+
+QString RecipeFormatter::buildHopsTable()
+{
+	QString hTable;
+
+	if ( rec == 0 || rec->getNumHops() < 1 )
+		return "";
+
+	hTable = tr("<h3>Hops</h3>");
+	hTable += tr("<table id=\"hops\"");
+	// Set up the header row.
+	hTable += tr("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th><th>%7</th></tr>")
+			.arg("Name")
+			.arg("Alpha")
+			.arg("Amount")
+			.arg("Use")
+			.arg("Time")
+			.arg("Form")
+			.arg("IBU");
+	for( unsigned int i = 0; i < rec->getNumHops(); ++i)
+	{
+		Hop *hop = rec->getHop(i);
+		hTable += tr("<td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7%</td>")
+				.arg( hop->getName().c_str())
+				.arg( hop->getAlpha_pct(), 0, 'f', 0)
+				.arg( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
+				.arg( hop->getUseString())
+				.arg( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) )
+				.arg( hop->getFormString())
+				.arg( rec->getIBUFromHop(i), 0, 'f', 1);
+		hTable += "</tr>";
+	}
+	hTable += "</table>";
+	return hTable;
+}
+
+QString RecipeFormatter::buildMiscTable()
+{
+	QString mtable;
+
+	if ( rec == 0 || rec->getNumMiscs() < 1 )
+		return "";
+
+	mtable = tr("<h3>Misc</h3>");
+	mtable += tr("<table id=\"misc\"");
+	// Set up the header row.
+	mtable += tr("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
+			.arg("Name")
+			.arg("Type")
+			.arg("Use")
+			.arg("Amount")
+			.arg("Time");
+	for( unsigned int i = 0; i < rec->getNumMiscs(); ++i)
+	{
+		Misc *misc = rec->getMisc(i);
+		mtable += tr("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
+				.arg( misc->getName().c_str())
+				.arg( misc->getTypeString())
+				.arg( misc->getUseString())
+				.arg( Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters))
+				.arg( Brewtarget::displayAmount(misc->getTime(), Units::minutes) );
+		mtable += "</tr>";
+	}
+	mtable += "</table>";
+	return mtable;
+
+}
+
+QString RecipeFormatter::buildYeastTable()
+{
+	QString ytable;
+
+	if ( rec == 0 || rec->getNumYeasts() < 1 )
+		return "";
+
+	ytable = tr("<h3>Yeast</h3>");
+	ytable += tr("<table id=\"yeast\"");
+	// Set up the header row.
+	ytable += tr("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
+			.arg("Name")
+			.arg("Type")
+			.arg("Form")
+			.arg("Amount")
+			.arg("Stage");
+	for( unsigned int i = 0; i < rec->getNumYeasts(); ++i)
+	{
+		Yeast *y = rec->getYeast(i);
+		ytable += tr("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
+				.arg( y->getName().c_str())
+				.arg( y->getTypeString())
+				.arg( y->getFormString())
+				.arg( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) )
+				.arg( y->getAddToSecondary() ? "Secondary" : "Primary");
+		ytable += "</tr>";
+	}
+	ytable += "</table>";
+	return ytable;
+}
+
+QString RecipeFormatter::buildNotes()
+{
+	QString notes;
+
+	if ( rec == 0 || rec->getNotes() == "" )
+		return "";
+
+	notes = "<h3>Notes</h3>";
+	notes += tr("<pre>%1</pre>").arg( rec->getNotes());
+
+	return notes;
+}
+
+QString RecipeFormatter::buildInstructionTable()
+{
+   QString itable;
+
+   if ( rec == 0 || rec->getNumInstructions() < 1 )
+	   return "";
+
+   itable = "<h3>Instructions</h3>";
+   itable += "<ol id=\"instruction\">";
+
+   for(int i = 0; i < rec->getNumInstructions(); ++i )
+   {
+	   Instruction* ins = rec->getInstruction(i);
+	   itable += tr("<li>%1</li>").arg( ins->getDirections());
+   }
+
+   itable += "</table>";
+
+   return itable;
+}
+
+bool RecipeFormatter::loadComplete(bool ok)
+{
+   doc->print(printer);
+   disconnect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+   return ok;
+}
+
+void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog)
+{
+   QString pDoc;
+//   QPrintDialog *dialog = new QPrintDialog(printer, parent);
+
+   printer = mainPrinter;
+   /* Instantiate the Webview and then connect its signal */
+   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+
+   dialog->setWindowTitle(tr("Print Document"));
+   if (dialog->exec() != QDialog::Accepted)
+      return;
+
+   if( rec == 0 )
+      return;
+
+   // Start building the document to be printed.  I think.
+   pDoc = buildTitleTable();
+   pDoc += buildFermentableTable();
+   pDoc += buildHopsTable();
+   pDoc += buildMiscTable();
+   pDoc += buildYeastTable();
+   pDoc += buildNotes();
+   pDoc += buildInstructionTable();
+
+   pDoc += "</body></html>";
+
+   doc->setHtml(pDoc);
+}
+
+void RecipeFormatter::printPreview()
+{
+   QString pDoc;
+
+   if( rec == 0 )
+      return;
+
+   // Start building the document to be printed.  I think.
+   pDoc = buildTitleTable();
+   pDoc += buildFermentableTable();
+   pDoc += buildHopsTable();
+   pDoc += buildMiscTable();
+   pDoc += buildYeastTable();
+   pDoc += buildNotes();
+   pDoc += buildInstructionTable();
+   pDoc += "</body></html>";
+
+   doc->setHtml(pDoc);
+   doc->show();
 }

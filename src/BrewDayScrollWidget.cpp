@@ -44,18 +44,9 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent), Obs
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
    connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
    connect( pushButton_down, SIGNAL(clicked()), this, SLOT(pushInstructionDown()) );
-   connect( pushButton_print, SIGNAL(clicked()), this, SLOT(pushInstructionPrint()) );
-   connect( pushButton_preview, SIGNAL(clicked()), this, SLOT(pushInstructionPreview()) );
-   connect( comboBox_template, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboSetCSS(QString)) );
    connect( pushButton_generateInstructions, SIGNAL(clicked()), this, SLOT(generateInstructions()) );
 
-   // Set up the printer stuff
    doc = new QWebView();
-   printer = new QPrinter;
-   printer->setPageSize(QPrinter::Letter);
-
-   // populate the drop down list
-   populateComboBox(comboBox_template);
 }
 
 void BrewDayScrollWidget::generateInstructions()
@@ -106,11 +97,6 @@ void BrewDayScrollWidget::pushInstructionDown()
    
    recObs->swapInstructions(row, row+1);
    listWidget->setCurrentRow(row+1);
-}
-
-void BrewDayScrollWidget::comboSetCSS(const QString name) 
-{
-   cssName = QString(":/css/%1").arg(name);
 }
 
 QString BrewDayScrollWidget::getCSS() 
@@ -247,10 +233,12 @@ bool BrewDayScrollWidget::loadComplete(bool ok)
    return ok;
 }
 
-void BrewDayScrollWidget::pushInstructionPrint()
+void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog)
 {
    QString pDoc;
-   QPrintDialog *dialog = new QPrintDialog(printer, this);
+//   QPrintDialog *dialog = new QPrintDialog(printer, this);
+
+   printer = mainPrinter;
 
    /* Instantiate the Webview and then connect its signal */
    connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
@@ -268,12 +256,15 @@ void BrewDayScrollWidget::pushInstructionPrint()
    pDoc += buildFooterTable();
 
    pDoc += tr("<h2>Notes</h2>");
+   if ( recObs->getNotes() != "" )
+	   pDoc += tr("<pre>%1</pre>").arg(recObs->getNotes());
+
    pDoc += "</body></html>";
 
    doc->setHtml(pDoc);
 }
 
-void BrewDayScrollWidget::pushInstructionPreview()
+void BrewDayScrollWidget::printPreview()
 {
    QString pDoc;
 
@@ -393,24 +384,4 @@ void BrewDayScrollWidget::repopulateListWidget()
       listWidget->setCurrentRow(0);
    else
       listWidget->setCurrentRow(-1);
-}
-
-
-void BrewDayScrollWidget::populateComboBox(QComboBox *comboBox_template)
-{
-   QDir css(":/css");
-   QFileInfoList cssList;
-   QFileInfo fileInfo;
-   int i;
-
-   css.setFilter(QDir::Files);
-   cssList = css.entryInfoList();
-
-   for ( i = 0; i < cssList.size(); i++) 
-   {  
-      fileInfo = cssList.at(i);
-      comboBox_template->addItem(tr("%1").arg(fileInfo.fileName()));
-   }
-
-   comboBox_template->setEditable(false);
 }
