@@ -1200,29 +1200,21 @@ void MainWindow::openDonateLink()
 
 void MainWindow::printPreview()
 {
-	switch(tabWidget_2->currentIndex())
-	{
-		case 0:
-			recipeFormatter->printPreview();
-			break;
-		case 2:
-			brewDayScrollWidget->printPreview();
-			break;
-	}
+   QTabWidget* currentTab = reinterpret_cast<QTabWidget*>(tabWidget_recipeView->currentWidget());
+   if( currentTab == tab_recipe )
+      recipeFormatter->printPreview();
+   else if( currentTab == tab_brewday )
+      brewDayScrollWidget->printPreview();
 }
 
 void MainWindow::printRecipe()
 {
-	QPrintDialog *printerDialog = new QPrintDialog(printer, this);
-	switch(tabWidget_2->currentIndex())
-	{
-		case 0:
-			qDebug() << "Calling recipeFormatter";
-			recipeFormatter->print(printer, printerDialog);
-			break;
-		case 2:
-			qDebug() << "Calling brewDayWidget";
-			brewDayScrollWidget->print(printer, printerDialog);
-			break;
-	}
+   QPrintDialog printerDialog(printer, this);
+
+   QTabWidget* currentTab = reinterpret_cast<QTabWidget*>(tabWidget_recipeView->currentWidget());
+   if( currentTab == tab_recipe )
+      recipeFormatter->print( printer, &printerDialog );
+   else if( currentTab == tab_brewday )
+      brewDayScrollWidget->print( printer, &printerDialog );
 }
+

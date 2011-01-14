@@ -426,7 +426,7 @@ QString RecipeFormatter::buildTitleTable()
    // Third row: OG and FG
    body += tr("<tr><td class=\"left\">OG</td><td class=\"value\">%1</td>")
            .arg(Brewtarget::displayOG(rec->getOg(), true ));
-   body += tr("<td class=\"right\">Starting Gravity</td><td class=\"value\">%1</td></tr>")
+   body += tr("<td class=\"right\">FG</td><td class=\"value\">%1</td></tr>")
            .arg(Brewtarget::displayFG(rec->getFg(), rec->getOg(), true));
 
    // Fourth row: ABV and Bitterness.  We need to set the bitterness string up first
@@ -458,10 +458,11 @@ QString RecipeFormatter::buildTitleTable()
 		   color = color.arg("Mosher");
 		   break;
    }
-   body += tr("<tr><td class=\"left\">Color</td><td class=\"value\">%1%</td>")
+   //body += tr("<tr><td class=\"left\">Color</td><td class=\"value\">%1%</td>")
+   body += tr("<tr><td class=\"left\">Color</td><td class=\"value\">%1</td>")
            .arg(color);
    body += tr("<td class=\"right\">Calories (per 12 ounces)</td><td class=\"value\">%1</td></tr>")
-           .arg(rec->estimateCalories());
+           .arg(rec->estimateCalories(), 0, 'f', 0);
 
    body += "</table>";
 
