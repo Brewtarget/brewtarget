@@ -448,11 +448,13 @@ QString RecipeFormatter::buildTitleTable()
    switch ( Brewtarget::ibuFormula )
    {
 	   case Brewtarget::TINSETH:
-		   bitterness.arg("Tinseth");
+		   bitterness = bitterness.arg("Tinseth");
 		   break;
 	   case Brewtarget::RAGER:
-		   bitterness.arg("Rager");
+		   bitterness = bitterness.arg("Rager");
 		   break;
+       default:
+           bitterness = bitterness.arg("Unknown");
    }
    body += tr("<tr><td class=\"left\">ABV</td><td class=\"value\">%1%</td>")
            .arg(rec->getABV_pct(), 0, 'f', 1);
