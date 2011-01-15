@@ -6,15 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>690</width>
-    <height>714</height>
+    <width>715</width>
+    <height>668</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Brewtarget - 1.2.3</string>
@@ -933,6 +939,36 @@
                <property name="sizeConstraint">
                 <enum>QLayout::SetNoConstraint</enum>
                </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QFrame" name="frame">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_9">
+                  <item>
+                   <widget class="BeerColorWidget" name="beerColorWidget"/>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
               </layout>
              </item>
              <item>
@@ -1535,8 +1571,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>690</width>
-     <height>21</height>
+     <width>715</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1782,6 +1818,11 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>BeerColorWidget</class>
+   <extends>QWidget</extends>
+   <header>BeerColorWidget.h</header>
+  </customwidget>
   <customwidget>
    <class>BrewDayScrollWidget</class>
    <extends>QWidget</extends>

@@ -146,7 +146,6 @@ private:
    YeastDialog* yeastDialog;
    YeastEditor* yeastEditor;
    Database* db;
-   BeerColorWidget beerColorWidget;
    OptionDialog* optionDialog;
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
    MaltinessWidget* maltWidget;

@@ -172,7 +172,7 @@ MainWindow::MainWindow(QWidget* parent)
    fileSaver->setDefaultSuffix(QString("xml"));
 
    // Set up and place the BeerColorWidget
-   verticalLayout_beerColor->insertWidget( 0, &beerColorWidget);
+   //verticalLayout_beerColor->insertWidget( 0, &beerColorWidget);
 
    // And test out the maltiness widget.
    maltWidget = new MaltinessWidget(groupBox);
@@ -408,7 +408,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    styleComboBox->observeRecipe(recipe);
    equipmentComboBox->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
-   beerColorWidget.setRecipe(recipe);
+   beerColorWidget->setRecipe(recipe);
    hopTable->getModel()->setRecipe(recipe); // This is for calculating the IBUs to show in the row headers.
    recipeFormatter->setRecipe(recipe);
    ogAdjuster->setRecipe(recipe);

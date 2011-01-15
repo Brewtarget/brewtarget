@@ -425,7 +425,7 @@ QString RecipeFormatter::buildTitleTable()
    body += QString("<table id=\"header\">");
    body += QString("<caption>%1 - %2</caption>")
 		   .arg( rec->getName().c_str())
-		   .arg( style ? style->getName().c_str() : tr("unknown style"));
+		   .arg( rec->getStyle() ? rec->getStyle()->getName().c_str() : tr("unknown style"));
 
    body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Brewer"))
