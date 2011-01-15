@@ -21,7 +21,7 @@
 
 #define ICON48 ":/images/brewtarget_icon.svg"
 //#define ICON96 ":/images/BrewtargetIcon_96.png"
-#define GLASS ":/images/glass.svg"
+#define GLASS ":/images/glass2.png"
 #define SMALLBARLEY ":/images/smallBarley.svg"
 #define SMALLHOP ":/images/smallHop.svg"
 #define SMALLWATER ":/images/smallWater.svg"

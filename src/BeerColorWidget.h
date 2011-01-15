@@ -33,7 +33,7 @@ class BeerColorWidget : public QWidget, public Observer
    Q_OBJECT
 
 public:
-   BeerColorWidget();
+   BeerColorWidget(QWidget* parent=0);
    void setColor( QColor newColor );
    void setRecipe( Recipe* rec );
 protected:

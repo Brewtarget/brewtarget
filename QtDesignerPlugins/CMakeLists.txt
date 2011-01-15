@@ -18,7 +18,7 @@ set( QT_USE_QTDESIGNER TRUE )
 
 set( SRC_FILES 
    #${SRCDIR}/Algorithms.cpp
-   #${SRCDIR}/BeerColorWidget.cpp
+   ${SRCDIR}/BeerColorWidget.cpp
    #${SRCDIR}/BeerXMLElement.cpp
    ${SRCDIR}/BrewDayScrollWidget.cpp
    #${SRCDIR}/BrewDayWidget.cpp
@@ -106,7 +106,7 @@ set( SRC_FILES
 )
 
 set( MOC_FILES
-    #${SRCDIR}/BeerColorWidget.h
+    ${SRCDIR}/BeerColorWidget.h
     #${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
     #${SRCDIR}/BtDigitWidget.h
@@ -199,12 +199,14 @@ set( UI_FILES
 
 SET( PLUGIN_MOCS
    BrewtargetPlugins.h
+   BeerColorWidgetPlugin.h
    BrewDayScrollWidgetPlugin.h
    RecipeExtrasWidgetPlugin.h
 )
 
 SET( PLUGIN_SRCS
    BrewtargetPlugins.cpp
+   BeerColorWidgetPlugin.cpp
    BrewDayScrollWidgetPlugin.cpp
    RecipeExtrasWidgetPlugin.cpp
 )

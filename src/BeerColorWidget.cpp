@@ -29,7 +29,7 @@
 #include "config.h"
 
 // TODO: make the size adjust inside the container.
-BeerColorWidget::BeerColorWidget()
+BeerColorWidget::BeerColorWidget(QWidget* parent) : QWidget(parent)
 {
    //setFixedSize(QSize(90,130));
    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
