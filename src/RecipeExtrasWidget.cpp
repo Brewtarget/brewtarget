@@ -27,7 +27,6 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) : QWidget(parent)
 
    recObs = 0;
 
-   /*
    connect( lineEdit_age, SIGNAL(editingFinished()), this, SLOT(updateAge()));
    connect( lineEdit_ageTemp, SIGNAL(editingFinished()), this, SLOT(updateAgeTemp()));
    connect( lineEdit_asstBrewer, SIGNAL(editingFinished()), this, SLOT(updateBrewerAsst()) );
@@ -41,11 +40,11 @@ RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) : QWidget(parent)
    connect( lineEdit_tertTemp, SIGNAL(editingFinished()), this, SLOT(updateTertiaryTemp()) );
    connect( spinBox_tasteRating, SIGNAL(editingFinished()), this, SLOT(updateTasteRating()) );
    connect( dateEdit_date, SIGNAL(editingFinished()), this, SLOT(updateDate()) );
-   */
-   //connect( plainTextEdit_notes, SIGNAL(textChanged()), this, SLOT(updateNotes()) );
-   //connect( plainTextEdit_tasteNotes, SIGNAL(textChanged()), this, SLOT(updateTasteNotes()) );
-   /** The above 2 signal/slot pairs cause infinite recursion and segfault since updating
-     the notes calls textChanged() to be called. **/
+
+   connect( plainTextEdit_notes, SIGNAL(textChanged()), this, SLOT(updateNotes()) );
+   connect( plainTextEdit_tasteNotes, SIGNAL(textChanged()), this, SLOT(updateTasteNotes()) );
+   /** The above 2 signal/slot pairs used to cause infinite loops and segfault since updating
+     the notes caused textChanged() to be emitted. **/
 }
 
 void RecipeExtrasWidget::setRecipe(Recipe* rec)
@@ -167,7 +166,9 @@ void RecipeExtrasWidget::updateTasteNotes()
    if( recObs == 0 )
       return;
 
+   recObs->disableNotification();
    recObs->setTasteNotes( plainTextEdit_tasteNotes->toPlainText() );
+   recObs->reenableNotification();
 }
 
 void RecipeExtrasWidget::updateNotes()
@@ -175,7 +176,13 @@ void RecipeExtrasWidget::updateNotes()
    if( recObs == 0 )
       return;
 
+   // Need to disable notification. Otherwise, when recObs->setNotes()
+   // is called, recObs calls notify, then showChanges, which causes
+   // the notes to be set, emitting textChanged() and sending us into
+   // an infinite loop.
+   recObs->disableNotification();
    recObs->setNotes( plainTextEdit_notes->toPlainText() );
+   recObs->reenableNotification();
 }
 
 void RecipeExtrasWidget::notify(Observable* notifier, QVariant /*info*/)

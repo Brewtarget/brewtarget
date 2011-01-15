@@ -1201,7 +1201,7 @@ void MainWindow::openDonateLink()
 void MainWindow::printPreview()
 {
    QTabWidget* currentTab = reinterpret_cast<QTabWidget*>(tabWidget_recipeView->currentWidget());
-   if( currentTab == tab_recipe )
+   if( currentTab == tab_recipe || currentTab == tab_extras )
       recipeFormatter->printPreview();
    else if( currentTab == tab_brewday )
       brewDayScrollWidget->printPreview();
@@ -1212,7 +1212,7 @@ void MainWindow::printRecipe()
    QPrintDialog printerDialog(printer, this);
 
    QTabWidget* currentTab = reinterpret_cast<QTabWidget*>(tabWidget_recipeView->currentWidget());
-   if( currentTab == tab_recipe )
+   if( currentTab == tab_recipe || currentTab == tab_extras )
       recipeFormatter->print( printer, &printerDialog );
    else if( currentTab == tab_brewday )
       brewDayScrollWidget->print( printer, &printerDialog );
