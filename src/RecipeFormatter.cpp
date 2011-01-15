@@ -410,9 +410,12 @@ QString RecipeFormatter::buildTitleTable()
    QString body;
    QString color;
    QString bitterness;
+   Style* style = 0;
 
    if ( rec == 0 )
 	   return "";
+
+   style = rec->getStyle();
 
    // Do the style sheet first
    header = "<html><head><style type=\"text/css\">";
@@ -420,12 +423,14 @@ QString RecipeFormatter::buildTitleTable()
    header += "</style></head>";
 
    body   = "<body>";
-   body += QString("<h1>%1</h1>").arg(rec->getName().c_str());
+   //body += QString("<h1>%1</h1>").arg(rec->getName().c_str());
    body += QString("<div id=\"headerdiv\">");
    body += QString("<table id=\"header\">");
-   body += QString("<caption>%1 - %2</caption>")
+   body += QString("<caption>%1 - %2 (%3%4)</caption>")
 		   .arg( rec->getName().c_str())
-		   .arg( rec->getStyle() ? rec->getStyle()->getName().c_str() : tr("unknown style"));
+		   .arg( style ? style->getName().c_str() : tr("unknown style"))
+                   .arg( style ? style->getCategoryNumber().c_str() : tr("N/A") )
+                   .arg( style ? style->getStyleLetter().c_str() : "" );
 
    body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Brewer"))
