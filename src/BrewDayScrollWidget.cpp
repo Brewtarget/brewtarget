@@ -128,35 +128,56 @@ QString BrewDayScrollWidget::buildTitleTable()
    header += "</style></head>";
 
    body   = "<body>";
-   body += tr("<h1>%1</h1>").arg(recObs->getName().c_str());
-   body += tr("<img src=\"%1\" />").arg("qrc:/images/title.svg");
+   body += QString("<h1>%1</h1>").arg(recObs->getName().c_str());
+   body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
 
    // Build the top table
    // Build the first row: Style and Date
    body += "<table id=\"title\">";
-   body += tr("<tr><td class=\"left\">Style</td>");
+   body += QString("<tr><td class=\"left\">%1</td>")
+		   .arg(tr("Style"));
    body += tr("<td class=\"value\">%1</td>")
            .arg(recObs->getStyle()->getName().c_str());
-   body += tr("<td class=\"right\">Date</td>");
+   body += QString("<td class=\"right\">%1</td>")
+		   .arg(tr("Date"));
    body += tr("<td class=\"value\">%1</td></tr>")
            .arg(QDate::currentDate().toString());
 
-   body += tr("<tr><td class=\"left\">Boil Volume</td><td class=\"value\">%1</td><td class=\"right\">Preboil Gravity</td><td class=\"value\">%2</td></tr>")
+   // second row:  boil time and efficiency.  I think there is something wrong w/ the call to getBoilTime_min(), because it returns
+      // 0 a lot.  I need to get this figured out.
+      body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
+    		  .arg(tr("Boil Time"))
+              .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
+              .arg(tr("Efficiency"))
+              .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0));
+
+   // third row: pre-Boil Volume and Preboil Gravity
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
+		   .arg(tr("Boil Volume"))
            .arg(Brewtarget::displayAmount(recObs->getBoilSize_l(),Units::liters,2))
+           .arg(tr("Preboil Gravity"))
            .arg(Brewtarget::displayOG(recObs->getBoilGrav()));
 
-   body += tr("<tr><td class=\"left\">Final Volume</td><td class=\"value\">%1</td><td class=\"right\">Starting Gravity</td><td class=\"value\">%2</td></tr>")
+   // fourth row: Final volume and starting gravity
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
+		   .arg(tr("Final Volume"))
            .arg(Brewtarget::displayAmount(recObs->getBatchSize_l(), Units::liters,2))
-           .arg(Brewtarget::displayOG(recObs->getOg()));
+           .arg(tr("Starting Gravity"))
+           .arg(Brewtarget::displayOG(recObs->getOg(), true));
 
-   body += tr("<tr><td class=\"left\">Boil Time</td><td class=\"value\">%1</td><td class=\"right\">IBU</td><td class=\"value\">%2</td></tr>")
-           .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
-           .arg(recObs->getIBU(),0,'f',1);
+   // fifth row: IBU and Final gravity
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
+		   .arg(tr("IBU"))
+           .arg( recObs->getIBU(),0,'f',1)
+           .arg(tr("Final Gravity"))
+           .arg(Brewtarget::displayFG(recObs->getFg(), recObs->getOg(), true));
 
-   body += tr("<tr><td class=\"left\">Predicted Efficiency</td><td class=\"value\">%1</td><td class=\"right\">Estimated calories(per 12 oz )</td><td class=\"value\">%2</tr>")
-           .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0))
-           .arg(Brewtarget::displayAmount(recObs->estimateCalories(),0,0));
-
+   // sixth row: ABV and estimate calories
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
+		   .arg(tr("ABV"))
+		   .arg( recObs->getABV_pct(), 0, 'f', 1)
+		   .arg(tr("Estimated calories(per 12 oz)"))
+		   .arg( recObs->estimateCalories(), 0, 'f', 0);
    body += "</table>";
 
    return header + body;
@@ -168,23 +189,27 @@ QString BrewDayScrollWidget::buildInstructionTable()
    QString middle;
    int i, j, size;
 
-   middle += "<h2>Instructions</h2>";
-   middle += "<table id=\"steps\">";
-   middle += tr("<tr><th class=\"check\">Completed</th><th class=\"time\">Time</th><th class=\"step\">Step</th></tr>");
+   middle += QString("<h2>%1</h2>").arg(tr("Instructions"));
+   middle += QString("<table id=\"steps\">");
+   middle += QString("<tr><th class=\"check\">%1</th><th class=\"time\">%2</th><th class=\"step\">%3</th></tr>")
+		   .arg(tr("Completed"))
+		   .arg(tr("Time"))
+		   .arg(tr("Step"));
 
    size = recObs->getNumInstructions();
    for( i = 0; i < size; ++i )
    {
       QString stepTime, tmp;
       QVector<QString> reagents;
+      Instruction* ins = recObs->getInstruction(i);
 
-      if (recObs->getInstruction(i)->getInterval())
-         stepTime = Brewtarget::displayAmount(recObs->getInstruction(i)->getInterval(), Units::minutes, 0);
+      if (ins->getInterval())
+         stepTime = Brewtarget::displayAmount(ins->getInterval(), Units::minutes, 0);
       else
          stepTime = "--";
 
       tmp = "";
-      reagents = recObs->getInstruction(i)->getReagents();
+      reagents = ins->getReagents();
       if ( reagents.size() > 1 ) {
          tmp = tr("<ul>");
          for ( j = 0; j < reagents.size(); j++ ) 
@@ -203,7 +228,7 @@ QString BrewDayScrollWidget::buildInstructionTable()
       middle += tr("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
                .arg(altTag)
                .arg(stepTime)
-               .arg(recObs->getInstruction(i)->getName())
+               .arg(ins->getName())
                .arg(tmp);
    }
    middle += "</table>";
@@ -215,12 +240,17 @@ QString BrewDayScrollWidget::buildFooterTable()
 {
    QString bottom;
 
-   bottom = "<table id=\"notes\">";
-   bottom += tr("<tr><td class=\"left\">Actual PreBoil Volume:</td><td class=\"value\"></td><td class=\"right\">Actual PreBoil Gravity:</td><td class=\"value\"></td></tr>");
+   bottom = QString("<table id=\"notes\">");
+   bottom += QString("<tr><td class=\"left\">%1:</td><td class=\"value\"></td><td class=\"right\">%2:</td><td class=\"value\"></td></tr>")
+		   .arg(tr("Actual PreBoil Volume"))
+		   .arg(tr("Actual PreBoil Gravity"));
 
-   bottom += tr("<tr><td class=\"left\">PostBoil Volume:</td><td class=\"value\"></td><td class=\"right\">PostBoil Gravity:</td><td class=\"value\"></td></tr>");
+   bottom += QString("<tr><td class=\"left\">%1:</td><td class=\"value\"></td><td class=\"right\">%2:</td><td class=\"value\"></td></tr>")
+		   .arg(tr("PostBoil Volume"))
+		   .arg(tr("PostBoil Gravity"));
 
-   bottom += tr("<tr><td class=\"left\">Volume into fermenter:</td><td class=\"value\"></tr>");
+   bottom += QString("<tr><td class=\"left\">%1:</td><td class=\"value\"></tr>")
+		   .arg(tr("Volume into fermenter"));
    bottom += "</table>";
 
    return bottom;

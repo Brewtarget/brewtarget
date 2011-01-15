@@ -421,8 +421,19 @@ QString RecipeFormatter::buildTitleTable()
 
    body   = "<body>";
    body += QString("<h1>%1</h1>").arg(rec->getName().c_str());
-   //body += QString("%1").arg(rec->getBrewer());
-   //body += QString("<br />%1").arg(rec->getDate());
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"header\">");
+   body += QString("<caption>%1 - %2</caption>")
+		   .arg( rec->getName().c_str())
+		   .arg( style ? style->getName().c_str() : tr("unknown style"));
+
+   body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(tr("Brewer"))
+		   .arg(rec->getBrewer());
+   body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(tr("Date"))
+		   .arg(rec->getDate());
+   body += "</table>";
 
    // Build the top table
    // Build the first row: Batch Size and Boil Size
@@ -452,7 +463,8 @@ QString RecipeFormatter::buildTitleTable()
            .arg(Brewtarget::displayFG(rec->getFg(), rec->getOg(), true));
 
    // Fourth row: ABV and Bitterness.  We need to set the bitterness string up first
-   bitterness = tr("%1 IBUs (%2)").arg( rec->getIBU(), 0, 'f', 1);
+   bitterness = QString("%1 IBU (%2)")
+		   .arg( rec->getIBU(), 0, 'f', 1);
    switch ( Brewtarget::ibuFormula )
    {
 	   case Brewtarget::TINSETH:
@@ -462,7 +474,7 @@ QString RecipeFormatter::buildTitleTable()
 		   bitterness = bitterness.arg("Rager");
 		   break;
        default:
-           bitterness = bitterness.arg("Unknown");
+           bitterness = bitterness.arg(tr("Unknown"));
    }
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td>")
            .arg(tr("ABV"))

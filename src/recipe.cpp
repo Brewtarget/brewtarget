@@ -1993,7 +1993,16 @@ double Recipe::getColor_srm()
 
 double Recipe::getABV_pct()
 {
-   return 0.130*((getOg()-1)-(getFg()-1))*1000.0;
+    double abw, og, fg;
+
+    og = getOg();
+    fg = getFg();
+
+    // Alcohol by weight.  This is a different formula than used
+    // when calculating the calories.
+    abw = 76.08 * (og-fg)/(1.775-og);
+
+    return abw * (fg/0.794);
 }
 
 void Recipe::notify(Observable* /*notifier*/, QVariant info)
