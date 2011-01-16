@@ -37,7 +37,7 @@ class Hop : public Observable, public BeerXMLElement
    public:
 
    enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
-   enum Form { FORMPELLET, FORMPLUG, FORMLEAF, NUMFORMS };
+   enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
    enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
 
       Hop();

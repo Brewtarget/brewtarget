@@ -29,7 +29,7 @@
 #include <QObject>
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
-QStringList Hop::forms = QStringList() << "Pellet" << "Plug" << "Leaf";
+QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
 QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First Wort" << "Aroma";
 
 bool operator<( Hop &h1, Hop &h2 )

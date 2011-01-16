@@ -28,7 +28,6 @@
 #include <QLineEdit>
 
 #include "hop.h"
-#include <vector>
 #include <QString>
 #include <vector>
 #include <iostream>
@@ -186,13 +185,15 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
             return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
          else
             return QVariant();
-      case HOPTYPECOL:
+      case HOPFORMCOL:
     	 if ( role == Qt::DisplayRole )
     		 return QVariant( row->getFormString());
+    	 else if ( role == Qt::UserRole )
+    		 return QVariant( row->getForm());
     	 else
     		 return QVariant();
       default :
-         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
+         Brewtarget::log(Brewtarget::WARNING, tr("HopTableModel::data Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -213,10 +214,10 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
             return QVariant(tr("Use"));
          case HOPTIMECOL:
             return QVariant(tr("Time"));
-         case HOPTYPECOL:
-        	return QVariant(tr("Type"));
+         case HOPFORMCOL:
+        	return QVariant(tr("Form"));
          default:
-            Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
+            Brewtarget::log(Brewtarget::WARNING, tr("HopTableModel::headerdata Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -286,6 +287,13 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          }
          else
             return false;
+      case HOPFORMCOL:
+    	  if( value.canConvert(QVariant::Int))
+    	  {
+    		  row->setForm(static_cast<Hop::Form>(value.toInt()));
+    		  headerDataChanged( Qt::Vertical, index.row(), index.row() );
+    		  return true;
+    	  }
       case HOPTIMECOL:
          if( value.canConvert(QVariant::String) )
          {
@@ -296,7 +304,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          else
             return false;
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(index.column()));
+         Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::setdata Bad column: %1").arg(index.column()));
          return false;
    }
 }
@@ -315,56 +323,80 @@ HopItemDelegate::HopItemDelegate(QObject* parent)
         
 QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& /*option*/, const QModelIndex &index) const
 {
-   if( index.column() == HOPUSECOL )
-   {
-      QComboBox *box = new QComboBox(parent);
+	if ( index.column() == HOPUSECOL )
+	{
+		QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("Boil"));
-      box->addItem(tr("Dry Hop"));
-      box->addItem(tr("Mash"));
-      box->addItem(tr("First Wort"));
-      box->addItem(tr("Aroma"));
-      box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+		box->addItem(tr("Boil"));
+		box->addItem(tr("Dry Hop"));
+		box->addItem(tr("Mash"));
+		box->addItem(tr("First Wort"));
+		box->addItem(tr("Aroma"));
+		box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
-      return box;
-   }
-   else
-      return new QLineEdit(parent);
+		return box;
+	}
+	else if ( index.column() == HOPFORMCOL )
+	{
+		QComboBox *box = new QComboBox(parent);
+
+		box->addItem(tr("Leaf"));
+		box->addItem(tr("Pellet"));
+		box->addItem(tr("Plug"));
+
+
+		box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+		return box;
+	}
+	else
+	{
+		return new QLineEdit(parent);
+	}
 }
 
 void HopItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-   if( index.column() == HOPUSECOL )
-   {
-      QComboBox* box = (QComboBox*)editor;
-      int ndx = index.model()->data(index, Qt::UserRole).toInt();
+	if (index.column() == HOPUSECOL )
+	{
+		QComboBox* box = (QComboBox*)editor;
+		int ndx = index.model()->data(index, Qt::UserRole).toInt();
 
-      box->setCurrentIndex(ndx);
-   }
-   else
-   {
-      QLineEdit* line = (QLineEdit*)editor;
-      
-      line->setText(index.model()->data(index, Qt::DisplayRole).toString());
-   }
-   
+		box->setCurrentIndex(ndx);
+	}
+	else if ( index.column() == HOPFORMCOL )
+	{
+		QComboBox* box = (QComboBox*)editor;
+		int ndx = index.model()->data(index,Qt::UserRole).toInt();
+
+		box->setCurrentIndex(ndx);
+	}
+	else
+	{
+	    QLineEdit* line = (QLineEdit*)editor;
+	    line->setText(index.model()->data(index, Qt::DisplayRole).toString());
+	}
 }
 
 void HopItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-   if( index.column() == HOPUSECOL )
-   {
-      QComboBox* box = (QComboBox*)editor;
-      int value = box->currentIndex();
-      
-      model->setData(index, value, Qt::EditRole);
-   }
-   else
-   {
-      QLineEdit* line = (QLineEdit*)editor;
-      
-      model->setData(index, line->text(), Qt::EditRole);
-   }
+	if ( index.column() == HOPUSECOL )
+	{
+		QComboBox* box = (QComboBox*)editor;
+	    int value = box->currentIndex();
+	    model->setData(index, value, Qt::EditRole);
+	}
+	else if (index.column() == HOPFORMCOL )
+	{
+	    QComboBox* box = (QComboBox*)editor;
+	    int value = box->currentIndex();
+	    model->setData(index, value, Qt::EditRole);
+	}
+	else
+	{
+	 	QLineEdit* line = (QLineEdit*)editor;
+		model->setData(index, line->text(), Qt::EditRole);
+    }
 }
 
 void HopItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const
