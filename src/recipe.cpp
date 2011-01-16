@@ -43,6 +43,7 @@
 #include "ColorMethods.h"
 #include <QDate>
 #include "HeatCalculations.h"
+#include <ctime>
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {

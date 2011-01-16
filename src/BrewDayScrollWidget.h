@@ -68,6 +68,7 @@ private:
 
 private slots:
    bool loadComplete(bool ok);
+   void showInstruction(int insNdx);
 };
 
 #endif  /* _BREWDAYSCROLLWIDGET_H */

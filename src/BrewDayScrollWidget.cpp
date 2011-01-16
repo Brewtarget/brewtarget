@@ -35,11 +35,12 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent), Obs
 
    // HAVE to do this since apparently the stackedWidget NEEDS at least 1
    // widget at all times.
-   stackedWidget->insertWidget(0, new InstructionWidget(stackedWidget) );
-   stackedWidget->widget(0)->setVisible(false);
-   stackedWidget->removeWidget(stackedWidget->widget(1));
+   //stackedWidget->insertWidget(0, new InstructionWidget(stackedWidget) );
+   //stackedWidget->widget(0)->setVisible(false);
+   //stackedWidget->removeWidget(stackedWidget->widget(1));
 
-   connect( listWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)) );
+   //connect( listWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)) );
+   connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
    connect( pushButton_insert, SIGNAL(clicked()), this, SLOT(insertInstruction()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
    connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
@@ -47,6 +48,18 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent), Obs
    connect( pushButton_generateInstructions, SIGNAL(clicked()), this, SLOT(generateInstructions()) );
 
    doc = new QWebView();
+}
+
+void BrewDayScrollWidget::showInstruction(int insNdx)
+{
+   if( recObs == 0 )
+      return;
+
+   int size = recObs->getNumInstructions();
+   if( insNdx < 0 || insNdx >= size )
+      return;
+
+   plainTextEdit->setPlainText(recObs->getInstruction(insNdx)->getDirections());
 }
 
 void BrewDayScrollWidget::generateInstructions()
@@ -351,6 +364,7 @@ void BrewDayScrollWidget::clear()
 {
    listWidget->clear();
 
+   /*
    while( stackedWidget->count() > 0 )
    {
       InstructionWidget* iw = (InstructionWidget*)stackedWidget->widget(0);
@@ -359,6 +373,7 @@ void BrewDayScrollWidget::clear()
    }
 
    stackedWidget->setCurrentIndex(0);
+   */
 }
 
 void BrewDayScrollWidget::showChanges()
@@ -370,6 +385,7 @@ void BrewDayScrollWidget::showChanges()
       return;
    }
 
+   /*
    int i, size;
    InstructionWidget* iw;
    size = recObs->getNumInstructions();
@@ -391,6 +407,8 @@ void BrewDayScrollWidget::showChanges()
    }
 
    stackedWidget->update(); // Whatever, I give up.
+   */
+
    repopulateListWidget();
 }
 

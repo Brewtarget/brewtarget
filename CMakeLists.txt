@@ -21,9 +21,17 @@ OPTION( BUILD_DESIGNER_PLUGINS
 OPTION( DO_RELEASE_BUILD
         "If on, will do a release build. Otherwise, debug build."
         OFF )
+OPTION( ENABLE_PROFILING
+        "If on, builds with necessary profiling options."
+        OFF )
 #==============================Compile flags===================================
 SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
 SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -gstabs+" )
+
+IF( ${ENABLE_PROFILING} )
+   SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pg" )
+ENDIF()
+
 IF( ${DO_RELEASE_BUILD} )
    SET( CMAKE_BUILD_TYPE "Release" )
 ELSE()
