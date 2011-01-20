@@ -22,6 +22,8 @@
 #include <QFileDialog>
 #include <iostream>
 
+#define Q_WS_WIN 42
+
 TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 {
    setupUi(this);
@@ -37,10 +39,12 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    flashTimer->setInterval(500);
 
    #if !defined(Q_WS_WIN)
+   
     mediaObject = new Phonon::MediaObject(this);
     mediaObject->setTransitionTime(0);
     audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
     Phonon::createPath(mediaObject, audioOutput);
+   
    #endif
 
    paletteOld = lcdNumber->palette();
@@ -226,3 +230,5 @@ void TimerWidget::showChanges()
 {
    lcdNumber->display(getTimerValue());
 }
+
+#undef Q_WS_WIN
