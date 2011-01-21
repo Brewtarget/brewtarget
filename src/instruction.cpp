@@ -67,7 +67,12 @@ void Instruction::toXml(QDomDocument& doc, QDomNode& parent)
    tmpText = doc.createTextNode(text(completed));
    tmpNode.appendChild(tmpText);
    insNode.appendChild(tmpNode);
-   
+
+   tmpNode = doc.createElement("INTERVAL");
+   tmpText = doc.createTextNode(text(interval));
+   tmpNode.appendChild(tmpText);
+   insNode.appendChild(tmpNode);
+
    parent.appendChild(insNode);
 }
 
@@ -124,6 +129,10 @@ void Instruction::fromNode(const QDomNode& instructionNode)
       else if( property == "COMPLETED" )
       {
          setCompleted(getBool(textNode));
+      }
+      else if ( property == "INTERVAL" )
+      {
+          setInterval(getDouble(textNode));
       }
       else
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported INSTRUCTION property: %1. Line %2").arg(property).arg(node.lineNumber()) );
