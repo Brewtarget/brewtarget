@@ -659,7 +659,7 @@ QString RecipeFormatter::buildNotes()
 		return "";
 
 	notes = QString("<h3>%1</h3>").arg(tr("Notes"));
-	notes += QString("<pre>%1</pre>").arg( rec->getNotes());
+	notes += QString("%1").arg( rec->getNotes());
 
 	return notes;
 }

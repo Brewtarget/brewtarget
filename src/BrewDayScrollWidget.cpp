@@ -281,16 +281,16 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog)
    QString pDoc;
 //   QPrintDialog *dialog = new QPrintDialog(printer, this);
 
+   if( recObs == 0 )
+      return;
+
    printer = mainPrinter;
 
-   /* Instantiate the Webview and then connect its signal */
+   /* Connect the webview's signal */
    connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
 
    dialog->setWindowTitle(tr("Print Document"));
    if (dialog->exec() != QDialog::Accepted)
-      return;
-
-   if( recObs == 0 )
       return;
 
    // Start building the document to be printed.  I think.
@@ -300,7 +300,7 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog)
 
    pDoc += tr("<h2>Notes</h2>");
    if ( recObs->getNotes() != "" )
-	   pDoc += tr("<pre>%1</pre>").arg(recObs->getNotes());
+	   pDoc += QString("%1").arg(recObs->getNotes());
 
    pDoc += "</body></html>";
 
