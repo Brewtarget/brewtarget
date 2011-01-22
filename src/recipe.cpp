@@ -298,7 +298,7 @@ void Recipe::setDefaults()
    tertiaryTemp_c = 0.0;
    age_days = 0.0;
    ageTemp_c = 0.0;
-   date = QDate::currentDate().toString("dd/mm/yyyy");
+   date = QDate::currentDate().toString("MM/dd/yyyy");
    carbonation_vols = 0.0;
    forcedCarbonation = false;
    primingSugarName = "";

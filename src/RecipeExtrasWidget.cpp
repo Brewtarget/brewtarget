@@ -150,7 +150,7 @@ void RecipeExtrasWidget::updateDate()
    if( recObs == 0 )
       return;
 
-   recObs->setDate( dateEdit_date->date().toString("dd/MM/yyyy") );
+   recObs->setDate( dateEdit_date->date().toString("MM/dd/yyyy") );
 }
 
 void RecipeExtrasWidget::updateCarbonation()
@@ -234,7 +234,7 @@ void RecipeExtrasWidget::showChanges()
    lineEdit_tertTemp->setText( Brewtarget::displayAmount(recObs->getTertiaryTemp_c(), Units::celsius) );
    spinBox_tasteRating->setValue( (int)(recObs->getTasteRating()) );
 
-   dateEdit_date->setDate( QDate::fromString(recObs->getDate(), "dd/MM/yyyy") );
+   dateEdit_date->setDate( QDate::fromString(recObs->getDate(), "MM/dd/yyyy") );
 
    plainTextEdit_notes->setPlainText( recObs->getNotes() );
    plainTextEdit_tasteNotes->setPlainText( recObs->getTasteNotes() );
