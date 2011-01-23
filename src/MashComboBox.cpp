@@ -66,15 +66,13 @@ void MashComboBox::removeAllMashs()
 void MashComboBox::notify(Observable *notifier, QVariant info)
 {
    unsigned int i, size;
-   QString saveText = this->currentText();
+   QString saveText = currentText();
    
    
    // Notifier could be the database. Only pay attention if the number of
    // mashs has changed.
    if( notifier == dbObs && (info.toInt() == DBMASH || info.toInt() == DBALL) )
    {
-   
-    
       removeAllMashs();
       std::list<Mash*>::iterator it, end;
       
@@ -83,9 +81,10 @@ void MashComboBox::notify(Observable *notifier, QVariant info)
       for( it = dbObs->getMashBegin(); it != end; ++it )
          addMash(*it);
       repopulateList();
+
       int saveIndex = findText(saveText);
-      if(saveIndex != -1)
-      setCurrentIndex(saveIndex);
+      if(saveIndex >= 0)
+         setCurrentIndex(saveIndex);
    }
    else // Otherwise, we know that one of the mashs changed.
    {
@@ -100,8 +99,6 @@ void MashComboBox::notify(Observable *notifier, QVariant info)
          addMash(*it);
       repopulateList();
    }
-  
-   
 }
 
 void MashComboBox::setIndexByMashName(std::string name)

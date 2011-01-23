@@ -193,7 +193,12 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          if( role == Qt::CheckStateRole )
             return QVariant( row->getIsMashed() ? Qt::Checked : Qt::Unchecked);
          else if( role == Qt::DisplayRole )
-            return row->getIsMashed() ? tr("Mashed") : tr("Not mashed");
+         {
+            if( row->getType() == Fermentable::TYPEGRAIN )
+               return row->getIsMashed() ? tr("Mashed") : tr("Steeped");
+            else
+               return row->getIsMashed() ? tr("Mashed") : tr("Not mashed");
+         }
          else
             return QVariant();
       case FERMAFTERBOIL:

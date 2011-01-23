@@ -2288,7 +2288,7 @@ double Recipe::getGrainsInMash_kg() const
    {
       ferm = fermentables[i];
       
-      if( ferm->getIsMashed() )
+      if( ferm->getType() == Fermentable::TYPEGRAIN && ferm->getIsMashed() )
          grains_kg += ferm->getAmount_kg();
    }
    
