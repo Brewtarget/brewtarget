@@ -280,11 +280,12 @@ void OptionDialog::showChanges()
          break;
   }
 
-  // Color Formula
+   // Color Formula
    switch( Brewtarget::colorUnit )
    {
    case Brewtarget::EBC:
       radioButton_ebc->setChecked(true);
+      break;
    case Brewtarget::SRM:
    default:
       radioButton_srm->setChecked(true);
