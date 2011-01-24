@@ -18,7 +18,7 @@
 
 #include "database.h"
 
-#include <list>
+#include <QList>
 #include <iostream>
 #include <fstream>
 #include <QDomDocument>
@@ -29,6 +29,7 @@
 #include <QObject>
 #include <QString>
 
+#include "Algorithms.h"
 #include "equipment.h"
 #include "fermentable.h"
 #include "hop.h"
@@ -44,16 +45,16 @@
 #include "brewtarget.h"
 
 // Grrr... stupid C++. Have to define these outside the class AGAIN.
-std::list<Equipment*> Database::equipments;
-std::list<Fermentable*> Database::fermentables;
-std::list<Hop*> Database::hops;
-std::list<Mash*> Database::mashs;
-std::list<MashStep*> Database::mashSteps;
-std::list<Misc*> Database::miscs;
-std::list<Recipe*> Database::recipes;
-std::list<Style*> Database::styles;
-std::list<Water*> Database::waters;
-std::list<Yeast*> Database::yeasts;
+QList<Equipment*> Database::equipments;
+QList<Fermentable*> Database::fermentables;
+QList<Hop*> Database::hops;
+QList<Mash*> Database::mashs;
+QList<MashStep*> Database::mashSteps;
+QList<Misc*> Database::miscs;
+QList<Recipe*> Database::recipes;
+QList<Style*> Database::styles;
+QList<Water*> Database::waters;
+QList<Yeast*> Database::yeasts;
 bool Database::initialized = false;
 Database* Database::internalDBInstance = 0;
 QFile Database::dbFile;
@@ -181,16 +182,26 @@ void Database::initialize()
       recipes.push_back(new Recipe(list.at(i)));
 
    // Sort everything by name.
-   equipments.sort(Equipment_ptr_cmp());
-   fermentables.sort(Fermentable_ptr_cmp());
-   hops.sort(Hop_ptr_cmp());
-   mashs.sort(Mash_ptr_cmp());
-   mashSteps.sort(MashStep_ptr_cmp());
-   miscs.sort(Misc_ptr_cmp());
-   recipes.sort(Recipe_ptr_cmp());
-   styles.sort(Style_ptr_cmp());
-   waters.sort(Water_ptr_cmp());
-   yeasts.sort(Yeast_ptr_cmp());
+   qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
+   //equipments.sort(Equipment_ptr_cmp());
+   qSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
+   //fermentables.sort(Fermentable_ptr_cmp());
+   qSort( hops.begin(), hops.end(), HopPtrLt );
+   //hops.sort(Hop_ptr_cmp());
+   qSort( mashs.begin(), mashs.end(), MashPtrLt );
+   //mashs.sort(Mash_ptr_cmp());
+   qSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
+   //mashSteps.sort(MashStep_ptr_cmp());
+   qSort( miscs.begin(), miscs.end(), MiscPtrLt );
+   //miscs.sort(Misc_ptr_cmp());
+   qSort( recipes.begin(), recipes.end(), RecipePtrLt );
+   //recipes.sort(Recipe_ptr_cmp());
+   qSort( styles.begin(), styles.end(), StylePtrLt );
+   //styles.sort(Style_ptr_cmp());
+   qSort( waters.begin(), waters.end(), WaterPtrLt );
+   //waters.sort(Water_ptr_cmp());
+   qSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
+   //yeasts.sort(Yeast_ptr_cmp());
 
    dbFile.close();
    recipeFile.close();
@@ -206,53 +217,63 @@ void Database::initialize()
 void Database::resortAll()
 {
    // Sort everything by name.
-   equipments.sort(Equipment_ptr_cmp());
-   fermentables.sort(Fermentable_ptr_cmp());
-   hops.sort(Hop_ptr_cmp());
-   mashs.sort(Mash_ptr_cmp());
-   mashSteps.sort(MashStep_ptr_cmp());
-   miscs.sort(Misc_ptr_cmp());
-   recipes.sort(Recipe_ptr_cmp());
-   styles.sort(Style_ptr_cmp());
-   waters.sort(Water_ptr_cmp());
-   yeasts.sort(Yeast_ptr_cmp());
+   qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
+   //equipments.sort(Equipment_ptr_cmp());
+   qSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
+   //fermentables.sort(Fermentable_ptr_cmp());
+   qSort( hops.begin(), hops.end(), HopPtrLt );
+   //hops.sort(Hop_ptr_cmp());
+   qSort( mashs.begin(), mashs.end(), MashPtrLt );
+   //mashs.sort(Mash_ptr_cmp());
+   qSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
+   //mashSteps.sort(MashStep_ptr_cmp());
+   qSort( miscs.begin(), miscs.end(), MiscPtrLt );
+   //miscs.sort(Misc_ptr_cmp());
+   qSort( recipes.begin(), recipes.end(), RecipePtrLt );
+   //recipes.sort(Recipe_ptr_cmp());
+   qSort( styles.begin(), styles.end(), StylePtrLt );
+   //styles.sort(Style_ptr_cmp());
+   qSort( waters.begin(), waters.end(), WaterPtrLt );
+   //waters.sort(Water_ptr_cmp());
+   qSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
+   //yeasts.sort(Yeast_ptr_cmp());
 
    hasChanged(QVariant(DBALL));
 }
 
 void Database::resortEquipments()
 {
-   equipments.sort(Equipment_ptr_cmp());
+   qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
    hasChanged(QVariant(DBEQUIP));
 }
 
 void Database::resortFermentables()
 {
-   fermentables.sort(Fermentable_ptr_cmp());
+   qSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
    hasChanged(QVariant(DBFERM));
 }
 
 void Database::resortHops()
 {
-   hops.sort(Hop_ptr_cmp());
+   qSort( hops.begin(), hops.end(), HopPtrLt );
    hasChanged(QVariant(DBHOP));
 }
 
 void Database::resortMiscs()
 {
-   miscs.sort(Misc_ptr_cmp());
+   qSort( miscs.begin(), miscs.end(), MiscPtrLt );
    hasChanged(QVariant(DBMISC));
 }
 
 void Database::resortStyles()
 {
-   styles.sort(Style_ptr_cmp());
+   qSort( styles.begin(), styles.end(), StylePtrLt );
    hasChanged(QVariant(DBSTYLE));
 }
 
 void Database::resortYeasts()
 {
-   yeasts.sort(Yeast_ptr_cmp());
+   qSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
    hasChanged(QVariant(DBYEAST));
 }
 
@@ -341,42 +362,42 @@ void Database::savePersistent()
    /*** dbDoc ***/
    dbRoot = dbDoc.createElement("DATABASE");
    
-   std::list<Equipment*>::iterator eqit, eqend;
+   QList<Equipment*>::iterator eqit, eqend;
    eqend = equipments.end();
    for( eqit = equipments.begin(); eqit != eqend; ++eqit )
       (*eqit)->toXml(dbDoc, dbRoot);
    
-   std::list<Fermentable*>::iterator fit, fend;
+   QList<Fermentable*>::iterator fit, fend;
    fend = fermentables.end();
    for( fit = fermentables.begin(); fit != fend; ++fit )
       (*fit)->toXml(dbDoc, dbRoot);
    
-   std::list<Hop*>::iterator hit, hend;
+   QList<Hop*>::iterator hit, hend;
    hend = hops.end();
    for( hit = hops.begin(); hit != hend; ++hit )
       (*hit)->toXml(dbDoc, dbRoot);
    
-   std::list<MashStep*>::iterator msit, msend;
+   QList<MashStep*>::iterator msit, msend;
    msend = mashSteps.end();
    for( msit = mashSteps.begin(); msit != msend; ++msit )
       (*msit)->toXml(dbDoc, dbRoot);
    
-   std::list<Misc*>::iterator miscit, miscend;
+   QList<Misc*>::iterator miscit, miscend;
    miscend = miscs.end();
    for( miscit = miscs.begin(); miscit != miscend; ++miscit )
       (*miscit)->toXml(dbDoc, dbRoot);
    
-   std::list<Style*>::iterator sit, send;
+   QList<Style*>::iterator sit, send;
    send = styles.end();
    for( sit = styles.begin(); sit != send; ++sit )
       (*sit)->toXml(dbDoc, dbRoot);
    
-   std::list<Water*>::iterator wit, wend;
+   QList<Water*>::iterator wit, wend;
    wend = waters.end();
    for( wit = waters.begin(); wit != wend; ++wit )
       (*wit)->toXml(dbDoc, dbRoot);
    
-   std::list<Yeast*>::iterator yit, yend;
+   QList<Yeast*>::iterator yit, yend;
    yend = yeasts.end();
    for( yit = yeasts.begin(); yit != yend; ++yit )
       (*yit)->toXml(dbDoc, dbRoot);
@@ -388,7 +409,7 @@ void Database::savePersistent()
    /*** recDoc ***/
    recRoot = recDoc.createElement("RECIPES");
    
-   std::list<Recipe*>::iterator rit, rend;
+   QList<Recipe*>::iterator rit, rend;
    rend = recipes.end();
    for( rit = recipes.begin(); rit != rend; ++rit )
       (*rit)->toXml(recDoc, recRoot);
@@ -400,7 +421,7 @@ void Database::savePersistent()
    /*** mashDoc ***/
    mashRoot = mashDoc.createElement("MASHS");
    
-   std::list<Mash*>::iterator mait, maend;
+   QList<Mash*>::iterator mait, maend;
    maend = mashs.end();
    for( mait = mashs.begin(); mait != maend; ++mait )
       (*mait)->toXml(mashDoc, mashRoot);
@@ -422,8 +443,9 @@ void Database::addEquipment(Equipment* equip)
    if( equip != 0 )
    {
       equipments.push_back(equip);
-      equipments.sort(Equipment_ptr_cmp());
-      equipments.unique(Equipment_ptr_equals()); // No dups.
+      qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
+      Algorithms::Instance().unDup(equipments, EquipmentPtrEq);
+      //equipments.unique(Equipment_ptr_equals()); // No dups.
       hasChanged(QVariant(DBEQUIP));
    }
 }
@@ -433,8 +455,9 @@ void Database::addFermentable(Fermentable* ferm)
    if( ferm != 0 )
    {
       fermentables.push_back(ferm);
-      fermentables.sort(Fermentable_ptr_cmp());
-      fermentables.unique(Fermentable_ptr_equals());
+      qSort(fermentables.begin(), fermentables.end(), FermentablePtrLt );
+      Algorithms::Instance().unDup(fermentables, FermentablePtrEq);
+      //fermentables.unique(Fermentable_ptr_equals());
       hasChanged(QVariant(DBFERM));
    }
 }
@@ -444,8 +467,9 @@ void Database::addHop(Hop* hop)
    if( hop != 0 )
    {
       hops.push_back(hop);
-      hops.sort(Hop_ptr_cmp());
-      hops.unique(Hop_ptr_equals());
+      qSort(hops.begin(), hops.end(), HopPtrLt );
+      Algorithms::Instance().unDup(hops, HopPtrEq);
+      //hops.unique(Hop_ptr_equals());
       hasChanged(QVariant(DBHOP));
    }
 }
@@ -455,8 +479,9 @@ void Database::addMash(Mash* mash)
    if( mash != 0 )
    {
       mashs.push_back(mash);
-      mashs.sort(Mash_ptr_cmp());
-      mashs.unique(Mash_ptr_equals());
+      qSort(mashs.begin(), mashs.end(), MashPtrLt );
+      Algorithms::Instance().unDup(mashs, MashPtrEq);
+      //mashs.unique(Mash_ptr_equals());
       hasChanged(QVariant(DBMASH));
    }
 }
@@ -466,8 +491,9 @@ void Database::addMashStep(MashStep* mashStep)
    if( mashStep != 0 )
    {
       mashSteps.push_back(mashStep);
-      mashSteps.sort(MashStep_ptr_cmp());
-      mashSteps.unique(MashStep_ptr_equals());
+      qSort(mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
+      Algorithms::Instance().unDup(mashSteps, MashStepPtrEq);
+      //mashSteps.unique(MashStep_ptr_equals());
       hasChanged(QVariant(DBMASHSTEP));
    }
 }
@@ -477,8 +503,9 @@ void Database::addMisc(Misc* misc)
    if( misc != 0 )
    {
       miscs.push_back(misc);
-      miscs.sort(Misc_ptr_cmp());
-      miscs.unique(Misc_ptr_equals());
+      qSort(miscs.begin(), miscs.end(), MiscPtrLt );
+      Algorithms::Instance().unDup(miscs, MiscPtrEq);
+      //miscs.unique(Misc_ptr_equals());
       hasChanged(QVariant(DBMISC));
    }
 }
@@ -489,8 +516,9 @@ void Database::addRecipe(Recipe* rec, bool copySubelements)
       return;
 
    recipes.push_back(rec);
-   recipes.sort(Recipe_ptr_cmp());
-   recipes.unique(Recipe_ptr_equals());
+   qSort(recipes.begin(), recipes.end(), RecipePtrLt );
+   Algorithms::Instance().unDup(recipes, RecipePtrEq);
+   //recipes.unique(Recipe_ptr_equals());
 
    if( copySubelements )
    {
@@ -525,69 +553,70 @@ void Database::addStyle(Style* style)
    if( style != 0 )
    {
       styles.push_back(style);
-      styles.sort(Style_ptr_cmp());
-      styles.unique(Style_ptr_equals());
+      qSort(styles.begin(), styles.end(), StylePtrLt );
+      Algorithms::Instance().unDup(styles, StylePtrEq);
+      //styles.unique(Style_ptr_equals());
       hasChanged(QVariant(DBSTYLE));
    }
 }
 
 void Database::removeEquipment(Equipment* equip)
 {
-   equipments.remove(equip);
+   equipments.removeOne(equip);
    hasChanged(QVariant(DBEQUIP));
 }
 
 void Database::removeFermentable(Fermentable* ferm)
 {
-   fermentables.remove(ferm);
+   fermentables.removeOne(ferm);
    hasChanged(QVariant(DBFERM));
 }
 
 void Database::removeHop(Hop* hop)
 {
-   hops.remove(hop);
+   hops.removeOne(hop);
    hasChanged(QVariant(DBHOP));
 }
 
 void Database::removeMash(Mash* mash)
 {
-   mashs.remove(mash);
+   mashs.removeOne(mash);
    hasChanged(QVariant(DBMASH));
 }
 
 void Database::removeMashStep(MashStep* mashStep)
 {
-   mashSteps.remove(mashStep);
+   mashSteps.removeOne(mashStep);
    hasChanged(QVariant(DBMASHSTEP));
 }
 
 void Database::removeMisc(Misc* misc)
 {
-   miscs.remove(misc);
+   miscs.removeOne(misc);
    hasChanged(QVariant(DBMISC));
 }
 
 void Database::removeRecipe(Recipe* rec)
 {
-   recipes.remove(rec);
+   recipes.removeOne(rec);
    hasChanged(QVariant(DBRECIPE));
 }
 
 void Database::removeStyle(Style* style)
 {
-   styles.remove(style); // Wow, that was easy.
+   styles.removeOne(style); // Wow, that was easy.
    hasChanged(QVariant(DBSTYLE));
 }
 
 void Database::removeWater(Water* water)
 {
-   waters.remove(water);
+   waters.removeOne(water);
    hasChanged(QVariant(DBWATER));
 }
 
 void Database::removeYeast(Yeast* yeast)
 {
-   yeasts.remove(yeast);
+   yeasts.removeOne(yeast);
    hasChanged(QVariant(DBYEAST));
 }
 
@@ -596,8 +625,9 @@ void Database::addWater(Water* water)
    if( water != 0 )
    {
       waters.push_back(water);
-      waters.sort(Water_ptr_cmp());
-      waters.unique(Water_ptr_equals());
+      qSort(waters.begin(), waters.end(), WaterPtrLt );
+      Algorithms::Instance().unDup(waters, WaterPtrEq);
+      //waters.unique(Water_ptr_equals());
       hasChanged(QVariant(DBWATER));
    }
 }
@@ -607,8 +637,9 @@ void Database::addYeast(Yeast* yeast)
    if( yeast != 0 )
    {
       yeasts.push_back(yeast);
-      yeasts.sort(Yeast_ptr_cmp());
-      yeasts.unique(Yeast_ptr_equals());
+      qSort(yeasts.begin(), yeasts.end(), YeastPtrLt );
+      Algorithms::Instance().unDup(yeasts, YeastPtrEq);
+      //yeasts.unique(Yeast_ptr_equals());
       hasChanged(QVariant(DBYEAST));
    }
 }
@@ -665,109 +696,109 @@ unsigned int Database::getNumYeasts()
 }
 
 
-std::list<Equipment*>::iterator Database::getEquipmentBegin()
+QList<Equipment*>::iterator Database::getEquipmentBegin()
 {
    return equipments.begin();
 }
 
-std::list<Equipment*>::iterator Database::getEquipmentEnd()
+QList<Equipment*>::iterator Database::getEquipmentEnd()
 {
    return equipments.end();
 }
 
-std::list<Fermentable*>::iterator Database::getFermentableBegin()
+QList<Fermentable*>::iterator Database::getFermentableBegin()
 {
    return fermentables.begin();
 }
 
-std::list<Fermentable*>::iterator Database::getFermentableEnd()
+QList<Fermentable*>::iterator Database::getFermentableEnd()
 {
    return fermentables.end();
 }
 
-std::list<Hop*>::iterator Database::getHopBegin()
+QList<Hop*>::iterator Database::getHopBegin()
 {
    return hops.begin();
 }
 
-std::list<Hop*>::iterator Database::getHopEnd()
+QList<Hop*>::iterator Database::getHopEnd()
 {
    return hops.end();
 }
 
-std::list<Mash*>::iterator Database::getMashBegin()
+QList<Mash*>::iterator Database::getMashBegin()
 {
    return mashs.begin();
 }
 
-std::list<Mash*>::iterator Database::getMashEnd()
+QList<Mash*>::iterator Database::getMashEnd()
 {
    return mashs.end();
 }
 
-std::list<MashStep*>::iterator Database::getMashStepBegin()
+QList<MashStep*>::iterator Database::getMashStepBegin()
 {
    return mashSteps.begin();
 }
 
-std::list<MashStep*>::iterator Database::getMashStepEnd()
+QList<MashStep*>::iterator Database::getMashStepEnd()
 {
    return mashSteps.end();
 }
 
-std::list<Misc*>::iterator Database::getMiscBegin()
+QList<Misc*>::iterator Database::getMiscBegin()
 {
    return miscs.begin();
 }
 
-std::list<Misc*>::iterator Database::getMiscEnd()
+QList<Misc*>::iterator Database::getMiscEnd()
 {
    return miscs.end();
 }
 
-std::list<Recipe*>::iterator Database::getRecipeBegin()
+QList<Recipe*>::iterator Database::getRecipeBegin()
 {
    return recipes.begin();
 }
 
-std::list<Recipe*>::iterator Database::getRecipeEnd()
+QList<Recipe*>::iterator Database::getRecipeEnd()
 {
    return recipes.end();
 }
 
-std::list<Style*>::iterator Database::getStyleBegin()
+QList<Style*>::iterator Database::getStyleBegin()
 {
    return styles.begin();
 }
 
-std::list<Style*>::iterator Database::getStyleEnd()
+QList<Style*>::iterator Database::getStyleEnd()
 {
    return styles.end();
 }
 
-std::list<Water*>::iterator Database::getWaterBegin()
+QList<Water*>::iterator Database::getWaterBegin()
 {
    return waters.begin();
 }
 
-std::list<Water*>::iterator Database::getWaterEnd()
+QList<Water*>::iterator Database::getWaterEnd()
 {
    return waters.end();
 }
 
-std::list<Yeast*>::iterator Database::getYeastBegin()
+QList<Yeast*>::iterator Database::getYeastBegin()
 {
    return yeasts.begin();
 }
 
-std::list<Yeast*>::iterator Database::getYeastEnd()
+QList<Yeast*>::iterator Database::getYeastEnd()
 {
    return yeasts.end();
 }
 
 Equipment* Database::findEquipmentByName(QString name)
 {
-   std::list<Equipment*>::iterator it, end;
+   QList<Equipment*>::iterator it, end;
    end = equipments.end();
 
    for( it = equipments.begin(); it != end; it++ )
@@ -781,7 +812,7 @@ Equipment* Database::findEquipmentByName(QString name)
 
 Fermentable* Database::findFermentableByName(QString name)
 {
-   std::list<Fermentable*>::iterator it, end;
+   QList<Fermentable*>::iterator it, end;
    end = fermentables.end();
 
    for( it = fermentables.begin(); it != end; it++ )
@@ -795,7 +826,7 @@ Fermentable* Database::findFermentableByName(QString name)
 
 Hop* Database::findHopByName(QString name)
 {
-   std::list<Hop*>::iterator it, end;
+   QList<Hop*>::iterator it, end;
    end = hops.end();
 
    for( it = hops.begin(); it != end; it++ )
@@ -809,7 +840,7 @@ Hop* Database::findHopByName(QString name)
 
 Mash* Database::findMashByName(QString name)
 {
-   std::list<Mash*>::iterator it, end;
+   QList<Mash*>::iterator it, end;
    end = mashs.end();
 
    for( it = mashs.begin(); it != end; it++ )
@@ -823,7 +854,7 @@ Mash* Database::findMashByName(QString name)
 
 MashStep* Database::findMashStepByName(QString name)
 {
-   std::list<MashStep*>::iterator it, end;
+   QList<MashStep*>::iterator it, end;
    end = mashSteps.end();
 
    for( it = mashSteps.begin(); it != end; it++ )
@@ -837,7 +868,7 @@ MashStep* Database::findMashStepByName(QString name)
 
 Misc* Database::findMiscByName(QString name)
 {
-   std::list<Misc*>::iterator it, end;
+   QList<Misc*>::iterator it, end;
    end = miscs.end();
 
    for( it = miscs.begin(); it != end; it++ )
@@ -851,7 +882,7 @@ Misc* Database::findMiscByName(QString name)
 
 Recipe* Database::findRecipeByName(QString name)
 {
-   std::list<Recipe*>::iterator it, end;
+   QList<Recipe*>::iterator it, end;
    end = recipes.end();
 
    for( it = recipes.begin(); it != end; it++ )
@@ -865,7 +896,7 @@ Recipe* Database::findRecipeByName(QString name)
 
 Style* Database::findStyleByName(QString name)
 {
-   std::list<Style*>::iterator it, end;
+   QList<Style*>::iterator it, end;
    end = styles.end();
 
    for( it = styles.begin(); it != end; it++ )
@@ -879,7 +910,7 @@ Style* Database::findStyleByName(QString name)
 
 Water* Database::findWaterByName(QString name)
 {
-   std::list<Water*>::iterator it, end;
+   QList<Water*>::iterator it, end;
    end = waters.end();
 
    for( it = waters.begin(); it != end; it++ )
@@ -893,7 +924,7 @@ Water* Database::findWaterByName(QString name)
 
 Yeast* Database::findYeastByName(QString name)
 {
-   std::list<Yeast*>::iterator it, end;
+   QList<Yeast*>::iterator it, end;
    end = yeasts.end();
 
    for( it = yeasts.begin(); it != end; it++ )

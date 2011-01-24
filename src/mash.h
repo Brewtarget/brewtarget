@@ -88,6 +88,16 @@ private:
 
 };
 
+inline bool MashPtrLt( Mash* lhs, Mash* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool MashPtrEq( Mash* lhs, Mash* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Mash_ptr_cmp
 {
    bool operator()( Mash* lhs, Mash* rhs)

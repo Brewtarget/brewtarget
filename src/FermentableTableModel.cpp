@@ -33,9 +33,9 @@
 #include <QComboBox>
 #include <QLineEdit>
 
-#include <vector>
+#include <QVector>
 #include <QString>
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include "observable.h"
 #include "fermentable.h"

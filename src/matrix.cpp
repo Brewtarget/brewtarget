@@ -17,7 +17,7 @@
  */
 
 #include <iostream>
-#include <vector>
+#include <QVector>
 #include <cmath>
 #include "matrix.h"
 

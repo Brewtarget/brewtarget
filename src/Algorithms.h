@@ -21,7 +21,10 @@
 
 #define ROOT_PRECISION 0.0000001
 
-class Algorithms {
+#include <QList>
+
+class Algorithms
+{
 public:
 	static Algorithms& Instance() {
 	  static Algorithms algorithmsSingleton;
@@ -31,6 +34,26 @@ public:
    // Need the following to be cross-platform compatible.
    bool isnan(double d);
    double round(double d);
+
+   /**
+    * A duplicate-removing function for SORTED lists.
+    * equals(T,T) is a function that should return true iff the
+    * two arguments are considered equal in the same sense that
+    * the list is sorted in.
+    * Why isn't this already a member of QList?
+    */
+   template<class T> void unDup( QList<T>& list, bool (*equals)(T,T) )
+   { // Must be implemented in this header file apparently :(
+      int i = 0;
+
+      while( i < list.size() - 1 )
+      {
+         if( equals(list.at(i), list.at(i+1)) )
+            list.removeAt(i+1); // Removes the next item.
+         else
+            i++; // If the adjacent items are unequal, we can advance.
+      }
+   }
 
 	// Polynomial evaluation
 	double intPow( double base, unsigned int pow );

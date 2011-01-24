@@ -28,7 +28,7 @@ class MashStepItemDelegate;
 #include <QVariant>
 #include <Qt>
 #include <QItemDelegate>
-#include <vector>
+#include <QVector>
 #include "mashstep.h"
 #include "mash.h"
 #include "observable.h"

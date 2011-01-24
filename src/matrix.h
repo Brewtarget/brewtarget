@@ -20,7 +20,7 @@
 #define _MATRIX_H
 
 #include <iostream>
-#include <vector>
+#include <QVector>
 #include <cmath>
 #include <exception>
 

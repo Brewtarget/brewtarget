@@ -28,7 +28,7 @@
 #include <QLineEdit>
 #include <QString>
 
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include "yeast.h"
 #include "observable.h"

@@ -108,6 +108,16 @@ private:
    void doCalculations();
 };
 
+inline bool EquipmentPtrLt( Equipment* lhs, Equipment* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool EquipmentPtrEq( Equipment* lhs, Equipment* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Equipment_ptr_cmp
 {
    bool operator()( Equipment* lhs, Equipment* rhs)

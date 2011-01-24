@@ -40,8 +40,8 @@
 #include <QPixmap>
 #include <iostream>
 #include <fstream>
-#include <list>
-#include <vector>
+#include <QList>
+#include <QVector>
 #include "recipe.h"
 #include "MainWindow.h"
 #include "AboutDialog.h"

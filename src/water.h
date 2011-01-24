@@ -81,6 +81,16 @@ private:
    void setDefaults();
 };
 
+inline bool WaterPtrLt( Water* lhs, Water* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool WaterPtrEq( Water* lhs, Water* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Water_ptr_cmp
 {
    bool operator()( Water* lhs, Water* rhs)

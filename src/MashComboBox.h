@@ -24,7 +24,7 @@ class MashComboBox;
 #include <QComboBox>
 #include <QWidget>
 #include <string>
-#include <vector>
+#include <QVector>
 #include "mash.h"
 #include "database.h"
 #include "observable.h"

@@ -18,7 +18,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <QVector>
 #include "equipment.h"
 #include "brewtarget.h"
 #include <QDomElement>

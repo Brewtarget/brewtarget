@@ -132,6 +132,16 @@ private:
    static QStringList types;
 };
 
+inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool FermentablePtrEq( Fermentable* lhs, Fermentable* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Fermentable_ptr_cmp
 {
    bool operator()( Fermentable* lhs, Fermentable* rhs)

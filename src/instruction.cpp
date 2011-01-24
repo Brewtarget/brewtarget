@@ -17,7 +17,7 @@
  */
 
 #include "instruction.h"
-#include <vector>
+#include <QVector>
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>

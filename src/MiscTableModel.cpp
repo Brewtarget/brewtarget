@@ -27,7 +27,7 @@
 #include <QStyleOptionViewItem>
 #include <QComboBox>
 #include <QLineEdit>
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include "misc.h"
 #include "observable.h"

@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QComboBox>
 #include <QLineEdit>
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include "mashstep.h"
 #include "observable.h"

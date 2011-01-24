@@ -118,6 +118,16 @@ private:
    bool isValidType( const QString &str );
 };
 
+inline bool StylePtrLt( Style* lhs, Style* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool StylePtrEq( Style* lhs, Style* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Style_ptr_cmp
 {
    bool operator()( Style* lhs, Style* rhs)

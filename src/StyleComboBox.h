@@ -24,7 +24,7 @@ class StyleComboBox;
 #include <QComboBox>
 #include <QWidget>
 #include <QVariant>
-#include <vector>
+#include <QVector>
 #include <string>
 #include "observable.h"
 #include "style.h"

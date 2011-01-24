@@ -19,7 +19,7 @@
 #include "brewtarget.h"
 #include <iostream>
 #include <string>
-#include <vector>
+#include <QVector>
 #include "style.h"
 #include <QDomElement>
 #include <QDomText>

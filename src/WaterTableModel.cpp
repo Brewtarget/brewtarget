@@ -27,7 +27,7 @@
 #include <QLineEdit>
 #include <QString>
 
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include "observable.h"
 #include "WaterTableModel.h"

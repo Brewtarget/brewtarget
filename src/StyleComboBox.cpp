@@ -17,7 +17,7 @@
  */
 
 #include "StyleComboBox.h"
-#include <list>
+#include <QList>
 
 StyleComboBox::StyleComboBox(QWidget* parent)
         : QComboBox(parent)
@@ -33,7 +33,7 @@ void StyleComboBox::startObservingDB()
    dbObs = Database::getDatabase();
    addObserved(dbObs);
 
-   std::list<Style*>::iterator it, end;
+   QList<Style*>::iterator it, end;
 
    end = dbObs->getStyleEnd();
 
@@ -71,7 +71,7 @@ void StyleComboBox::notify(Observable *notifier, QVariant info)
       Style* previousSelection = getSelected(); // Remember what we had.
       
       removeAllStyles();
-      std::list<Style*>::iterator it, end;
+      QList<Style*>::iterator it, end;
 
       end = dbObs->getStyleEnd();
 

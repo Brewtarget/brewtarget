@@ -17,7 +17,7 @@
  */
 
 #include "EquipmentComboBox.h"
-#include <list>
+#include <QList>
 
 EquipmentComboBox::EquipmentComboBox(QWidget* parent)
         : QComboBox(parent)
@@ -32,7 +32,7 @@ void EquipmentComboBox::startObservingDB()
       dbObs = Database::getDatabase();
       addObserved(dbObs);
 
-      std::list<Equipment*>::iterator it, end;
+      QList<Equipment*>::iterator it, end;
 
       end = dbObs->getEquipmentEnd();
 
@@ -76,7 +76,7 @@ void EquipmentComboBox::notify(Observable *notifier, QVariant info)
       Equipment* previousSelection = getSelected();
       
       removeAllEquipments();
-      std::list<Equipment*>::iterator it, end;
+      QList<Equipment*>::iterator it, end;
 
       end = dbObs->getEquipmentEnd();
 

@@ -19,7 +19,7 @@
 #include <QComboBox>
 #include <QWidget>
 #include <Qt>
-#include <list>
+#include <QList>
 #include <string>
 
 #include "database.h"
@@ -38,7 +38,7 @@ void RecipeComboBox::startObservingDB()
       dbObs = Database::getDatabase();
       addObserved(dbObs);
 
-      std::list<Recipe*>::iterator it, end;
+      QList<Recipe*>::iterator it, end;
 
       end = dbObs->getRecipeEnd();
 
@@ -74,7 +74,7 @@ void RecipeComboBox::notify(Observable *notifier, QVariant info)
    if( notifier == dbObs && (info.toInt() == DBRECIPE || info.toInt() == DBALL) )
    {
       removeAllRecipes();
-      std::list<Recipe*>::iterator it, end;
+      QList<Recipe*>::iterator it, end;
 
       end = dbObs->getRecipeEnd();
 

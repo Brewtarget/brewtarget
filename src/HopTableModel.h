@@ -28,7 +28,7 @@ class HopItemDelegate;
 #include <QVariant>
 #include <Qt>
 #include <QItemDelegate>
-#include <vector>
+#include <QVector>
 #include "hop.h"
 #include "observable.h"
 #include "HopTableWidget.h"

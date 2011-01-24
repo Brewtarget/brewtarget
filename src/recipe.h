@@ -350,6 +350,16 @@ private:
    bool isValidType( const QString &str );
 };
 
+inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool RecipePtrEq( Recipe* lhs, Recipe* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Recipe_ptr_cmp
 {
    bool operator()( Recipe* lhs, Recipe* rhs)

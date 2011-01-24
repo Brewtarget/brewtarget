@@ -24,7 +24,7 @@ class EquipmentComboBox;
 #include <QComboBox>
 #include <QWidget>
 #include <QVariant>
-#include <vector>
+#include <QVector>
 #include <string>
 #include "observable.h"
 #include "equipment.h"

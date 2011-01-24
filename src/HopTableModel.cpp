@@ -29,7 +29,7 @@
 
 #include "hop.h"
 #include <QString>
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include "hop.h"
 #include "observable.h"

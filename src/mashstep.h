@@ -90,6 +90,16 @@ private:
    static QStringList types;
 };
 
+inline bool MashStepPtrLt( MashStep* lhs, MashStep* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool MashStepPtrEq( MashStep* lhs, MashStep* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct MashStep_ptr_cmp
 {
    bool operator()( MashStep* lhs, MashStep* rhs)

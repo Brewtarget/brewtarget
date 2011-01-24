@@ -30,7 +30,7 @@ class MiscItemDelegate;
 #include <Qt>
 #include <QItemDelegate>
 #include <QStyleOptionViewItem>
-#include <vector>
+#include <QVector>
 #include "misc.h"
 #include "observable.h"
 #include "MiscTableWidget.h"

@@ -18,7 +18,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <QVector>
 #include "mash.h"
 #include "mashstep.h"
 #include "ui_mainWindow.h"

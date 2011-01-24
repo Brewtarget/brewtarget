@@ -21,7 +21,7 @@
 #include <QInputDialog>
 #include <QString>
 #include <string>
-#include <list>
+#include <QList>
 #include "MiscDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -84,7 +84,7 @@ void MiscDialog::startObservingDB()
 
 void MiscDialog::populateTable()
 {
-   std::list<Misc*>::iterator it, end;
+   QList<Misc*>::iterator it, end;
 
    if( ! Database::isInitialized() )
       return;

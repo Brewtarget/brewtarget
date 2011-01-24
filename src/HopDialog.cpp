@@ -21,7 +21,7 @@
 #include <QInputDialog>
 #include <QString>
 #include <string>
-#include <list>
+#include <QList>
 #include "HopDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -48,7 +48,7 @@ HopDialog::HopDialog(MainWindow* parent)
 void HopDialog::removeHop()
 {
    QModelIndexList selected = hopTableWidget->selectedIndexes();
-   QModelIndex translated;
+   QModelIndex modelIndex;
    int row, size, i;
 
    size = selected.size();
@@ -63,8 +63,8 @@ void HopDialog::removeHop()
          return;
    }
 
-   translated = hopTableWidget->getProxy()->mapFromSource(selected[0]);
-   Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
+   modelIndex = hopTableWidget->getProxy()->mapToSource(selected[0]);
+   Hop *hop = hopTableWidget->getModel()->getHop(modelIndex.row());
    dbObs->removeHop(hop);
 }
 
@@ -86,7 +86,7 @@ void HopDialog::startObservingDB()
 
 void HopDialog::populateTable()
 {
-   std::list<Hop*>::iterator it, end;
+   QList<Hop*>::iterator it, end;
 
 
    if( ! Database::isInitialized() )

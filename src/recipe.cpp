@@ -19,7 +19,7 @@
 #include "instruction.h"
 #include "brewtarget.h"
 #include <string>
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include <cmath>
 #include <algorithm>

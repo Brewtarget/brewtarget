@@ -17,7 +17,7 @@
  */
 
 #include <QApplication>
-#include <vector>
+#include <QVector>
 #include <iostream>
 #include "MiscTableWidget.h"
 #include "MiscTableModel.h"

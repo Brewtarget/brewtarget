@@ -28,7 +28,7 @@ class YeastItemDelegate;
 #include <QVariant>
 #include <Qt>
 #include <QItemDelegate>
-#include <vector>
+#include <QVector>
 #include "yeast.h"
 #include "observable.h"
 #include "YeastTableWidget.h"

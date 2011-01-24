@@ -21,7 +21,7 @@
 #include <QInputDialog>
 #include <QString>
 #include <string>
-#include <list>
+#include <QList>
 #include "YeastDialog.h"
 #include "observable.h"
 #include "database.h"
@@ -90,7 +90,7 @@ void YeastDialog::startObservingDB()
 
 void YeastDialog::populateTable()
 {
-   std::list<Yeast*>::iterator it, end;
+   QList<Yeast*>::iterator it, end;
 
    if( ! Database::isInitialized() )
       return;

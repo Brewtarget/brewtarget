@@ -123,6 +123,16 @@ class Hop : public Observable, public BeerXMLElement
       static QStringList forms;
 };
 
+inline bool HopPtrLt( Hop* lhs, Hop* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool HopPtrEq( Hop* lhs, Hop* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Hop_ptr_cmp
 {
    bool operator()( Hop* lhs, Hop* rhs)

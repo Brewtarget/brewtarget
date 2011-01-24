@@ -118,6 +118,16 @@ private:
    void setDefaults();
 };
 
+inline bool YeastPtrLt( Yeast* lhs, Yeast* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool YeastPtrEq( Yeast* lhs, Yeast* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Yeast_ptr_cmp
 {
    bool operator()( Yeast* lhs, Yeast* rhs)

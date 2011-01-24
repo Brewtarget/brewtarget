@@ -20,7 +20,7 @@
 #include <QDialog>
 #include <QString>
 #include <QInputDialog>
-#include <list>
+#include <QList>
 #include <string>
 #include "FermentableDialog.h"
 #include "observable.h"
@@ -109,7 +109,7 @@ void FermentableDialog::startObservingDB()
 
 void FermentableDialog::populateTable()
 {
-   std::list<Fermentable*>::iterator it, end;
+   QList<Fermentable*>::iterator it, end;
 
    if( ! Database::isInitialized() )
       return;

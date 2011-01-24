@@ -28,7 +28,7 @@ class WaterItemDelegate;
 #include <QVariant>
 #include <Qt>
 #include <QItemDelegate>
-#include <vector>
+#include <QVector>
 #include "water.h"
 #include "observable.h"
 #include "WaterTableWidget.h"

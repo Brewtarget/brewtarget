@@ -30,7 +30,7 @@ class FermentableItemDelegate;
 #include <QStringList>
 #include <QStyledItemDelegate>
 #include <QAbstractItemDelegate>
-#include <vector>
+#include <QVector>
 #include "fermentable.h"
 #include "FermentableTableWidget.h"
 #include "observable.h"

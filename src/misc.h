@@ -93,6 +93,16 @@ private:
    static QStringList uses;
 };
 
+inline bool MiscPtrLt( Misc* lhs, Misc* rhs)
+{
+   return *lhs < *rhs;
+}
+
+inline bool MiscPtrEq( Misc* lhs, Misc* rhs)
+{
+   return *lhs == *rhs;
+}
+
 struct Misc_ptr_cmp
 {
    bool operator()( Misc* lhs, Misc* rhs)

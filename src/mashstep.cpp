@@ -18,7 +18,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <QVector>
 #include "mashstep.h"
 #include "brewtarget.h"
 #include <QDomElement>

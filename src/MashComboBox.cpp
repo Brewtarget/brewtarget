@@ -35,7 +35,7 @@ void MashComboBox::startObservingDB()
       dbObs = Database::getDatabase();
       addObserved(dbObs);
       
-      std::list<Mash*>::iterator it, end;
+      QList<Mash*>::iterator it, end;
       
       end = dbObs->getMashEnd();
       
@@ -74,7 +74,7 @@ void MashComboBox::notify(Observable *notifier, QVariant info)
    if( notifier == dbObs && (info.toInt() == DBMASH || info.toInt() == DBALL) )
    {
       removeAllMashs();
-      std::list<Mash*>::iterator it, end;
+      QList<Mash*>::iterator it, end;
       
       end = dbObs->getMashEnd();
       
@@ -91,7 +91,7 @@ void MashComboBox::notify(Observable *notifier, QVariant info)
       size = mashObs.size();
      
       removeAllMashs();
-      std::list<Mash*>::iterator it, end;
+      QList<Mash*>::iterator it, end;
       
       end = dbObs->getMashEnd();
       

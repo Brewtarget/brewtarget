@@ -19,7 +19,7 @@
 #ifndef _DATABASE_H
 #define	_DATABASE_H
 
-#include <list>
+#include <QList>
 #include <iostream>
 #include <QFile>
 #include <QString>
@@ -119,26 +119,26 @@ public:
    Water* findWaterByName(QString name);
    Yeast* findYeastByName(QString name);
 
-   std::list<Equipment*>::iterator getEquipmentBegin();
-   std::list<Equipment*>::iterator getEquipmentEnd();
-   std::list<Fermentable*>::iterator getFermentableBegin();
-   std::list<Fermentable*>::iterator getFermentableEnd();
-   std::list<Hop*>::iterator getHopBegin();
-   std::list<Hop*>::iterator getHopEnd();
-   std::list<Mash*>::iterator getMashBegin();
-   std::list<Mash*>::iterator getMashEnd();
-   std::list<MashStep*>::iterator getMashStepBegin();
-   std::list<MashStep*>::iterator getMashStepEnd();
-   std::list<Misc*>::iterator getMiscBegin();
-   std::list<Misc*>::iterator getMiscEnd();
-   std::list<Recipe*>::iterator getRecipeBegin();
-   std::list<Recipe*>::iterator getRecipeEnd();
-   std::list<Style*>::iterator getStyleBegin();
-   std::list<Style*>::iterator getStyleEnd();
-   std::list<Water*>::iterator getWaterBegin();
-   std::list<Water*>::iterator getWaterEnd();
-   std::list<Yeast*>::iterator getYeastBegin();
-   std::list<Yeast*>::iterator getYeastEnd();
+   QList<Equipment*>::iterator getEquipmentBegin();
+   QList<Equipment*>::iterator getEquipmentEnd();
+   QList<Fermentable*>::iterator getFermentableBegin();
+   QList<Fermentable*>::iterator getFermentableEnd();
+   QList<Hop*>::iterator getHopBegin();
+   QList<Hop*>::iterator getHopEnd();
+   QList<Mash*>::iterator getMashBegin();
+   QList<Mash*>::iterator getMashEnd();
+   QList<MashStep*>::iterator getMashStepBegin();
+   QList<MashStep*>::iterator getMashStepEnd();
+   QList<Misc*>::iterator getMiscBegin();
+   QList<Misc*>::iterator getMiscEnd();
+   QList<Recipe*>::iterator getRecipeBegin();
+   QList<Recipe*>::iterator getRecipeEnd();
+   QList<Style*>::iterator getStyleBegin();
+   QList<Style*>::iterator getStyleEnd();
+   QList<Water*>::iterator getWaterBegin();
+   QList<Water*>::iterator getWaterEnd();
+   QList<Yeast*>::iterator getYeastBegin();
+   QList<Yeast*>::iterator getYeastEnd();
 
 private:
    static bool initialized;
@@ -151,16 +151,16 @@ private:
    static QString mashFileName;
 
    // The stuff we care about...
-   static std::list<Equipment*> equipments;
-   static std::list<Fermentable*> fermentables;
-   static std::list<Hop*> hops;
-   static std::list<Mash*> mashs;
-   static std::list<MashStep*> mashSteps;
-   static std::list<Misc*> miscs;
-   static std::list<Recipe*> recipes;
-   static std::list<Style*> styles;
-   static std::list<Water*> waters;
-   static std::list<Yeast*> yeasts;
+   static QList<Equipment*> equipments;
+   static QList<Fermentable*> fermentables;
+   static QList<Hop*> hops;
+   static QList<Mash*> mashs;
+   static QList<MashStep*> mashSteps;
+   static QList<Misc*> miscs;
+   static QList<Recipe*> recipes;
+   static QList<Style*> styles;
+   static QList<Water*> waters;
+   static QList<Yeast*> yeasts;
 };
 
 #endif	/* _DATABASE_H */

@@ -18,7 +18,7 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
+#include <QVector>
 #include "water.h"
 #include "brewtarget.h"
 #include <QDomElement>
