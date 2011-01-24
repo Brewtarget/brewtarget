@@ -139,46 +139,46 @@ void OptionDialog::saveAndClose()
    if( button == weight_imperial )
    {
       weightUnitSystem = Imperial;
-      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem;
+      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem();
    }
    else if( button == weight_us)
    {
       weightUnitSystem = USCustomary;
-      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem;
+      Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem();
    }
    else
    {
       weightUnitSystem = SI;
-      Brewtarget::weightSystem = UnitSystems::siWeightUnitSystem;
+      Brewtarget::weightSystem = UnitSystems::siWeightUnitSystem();
    }
    
    button = volumeGroup->checkedButton();
    if( button == volume_imperial )
    {
       volumeUnitSystem = Imperial;
-      Brewtarget::volumeSystem = UnitSystems::imperialVolumeUnitSystem;
+      Brewtarget::volumeSystem = UnitSystems::imperialVolumeUnitSystem();
    }
    else if( button == volume_us )
    {
       volumeUnitSystem = USCustomary;
-      Brewtarget::volumeSystem = UnitSystems::usVolumeUnitSystem;
+      Brewtarget::volumeSystem = UnitSystems::usVolumeUnitSystem();
    }
    else
    {
       volumeUnitSystem = SI;
-      Brewtarget::volumeSystem = UnitSystems::siVolumeUnitSystem;
+      Brewtarget::volumeSystem = UnitSystems::siVolumeUnitSystem();
    }
    
    button = tempGroup->checkedButton();
    if( button == fahrenheit )
    {
       temperatureScale = Fahrenheit;
-      Brewtarget::tempSystem = UnitSystems::fahrenheitTempUnitSystem;
+      Brewtarget::tempSystem = UnitSystems::fahrenheitTempUnitSystem();
    }
    else
    {
       temperatureScale = Celsius;
-      Brewtarget::tempSystem = UnitSystems::celsiusTempUnitSystem;
+      Brewtarget::tempSystem = UnitSystems::celsiusTempUnitSystem();
    }
    
    button = colorUnitGroup->checkedButton();

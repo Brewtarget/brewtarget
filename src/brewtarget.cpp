@@ -46,10 +46,10 @@ QFile* Brewtarget::logFile = 0;
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
 
-UnitSystem* Brewtarget::weightSystem = 0;
-UnitSystem* Brewtarget::volumeSystem = 0;
-UnitSystem* Brewtarget::tempSystem = 0;
-UnitSystem* Brewtarget::timeSystem = 0;
+UnitSystem* Brewtarget::weightSystem = UnitSystems::usWeightUnitSystem();
+UnitSystem* Brewtarget::volumeSystem = UnitSystems::usVolumeUnitSystem();
+UnitSystem* Brewtarget::tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+UnitSystem* Brewtarget::timeSystem = UnitSystems::timeUnitSystem();
 
 TempScale Brewtarget::tempScale = Celsius;
 Brewtarget::ColorType Brewtarget::colorFormula = Brewtarget::MOREY;
@@ -425,9 +425,9 @@ void Brewtarget::readPersistentOptions()
       volumeUnitSystem = USCustomary;
       tempScale = Fahrenheit;
 
-      weightSystem = UnitSystems::usWeightUnitSystem;
-      volumeSystem = UnitSystems::usVolumeUnitSystem;
-      tempSystem = UnitSystems::fahrenheitTempUnitSystem;
+      weightSystem = UnitSystems::usWeightUnitSystem();
+      volumeSystem = UnitSystems::usVolumeUnitSystem();
+      tempSystem = UnitSystems::fahrenheitTempUnitSystem();
    }
    else
    {
@@ -442,9 +442,9 @@ void Brewtarget::readPersistentOptions()
          volumeUnitSystem = USCustomary;
          tempScale = Fahrenheit;
 
-         weightSystem = UnitSystems::usWeightUnitSystem;
-         volumeSystem = UnitSystems::usVolumeUnitSystem;
-         tempSystem = UnitSystems::fahrenheitTempUnitSystem;
+         weightSystem = UnitSystems::usWeightUnitSystem();
+	 volumeSystem = UnitSystems::usVolumeUnitSystem();
+	 tempSystem = UnitSystems::fahrenheitTempUnitSystem();
       }
       else
       {
@@ -452,9 +452,9 @@ void Brewtarget::readPersistentOptions()
          volumeUnitSystem = SI;
          tempScale = Celsius;
 
-         weightSystem = UnitSystems::siWeightUnitSystem;
-         volumeSystem = UnitSystems::siVolumeUnitSystem;
-         tempSystem = UnitSystems::celsiusTempUnitSystem;
+	 weightSystem = UnitSystems::siWeightUnitSystem();
+	 volumeSystem = UnitSystems::siVolumeUnitSystem();
+	 tempSystem = UnitSystems::celsiusTempUnitSystem();
       }
  
    }
@@ -474,17 +474,17 @@ void Brewtarget::readPersistentOptions()
       if( text == "Imperial" )
       {
          weightUnitSystem = Imperial;
-         weightSystem = UnitSystems::usWeightUnitSystem;
+	 weightSystem = UnitSystems::usWeightUnitSystem();
       }
       else if (text == "USCustomary")
       {
          weightUnitSystem = USCustomary;
-         weightSystem = UnitSystems::usWeightUnitSystem;
+	 weightSystem = UnitSystems::usWeightUnitSystem();
       }
       else
       {
          weightUnitSystem = SI;
-         weightSystem = UnitSystems::siWeightUnitSystem;
+	 weightSystem = UnitSystems::siWeightUnitSystem();
       }
    }
 
@@ -503,17 +503,17 @@ void Brewtarget::readPersistentOptions()
       if( text == "Imperial" )
       {
          volumeUnitSystem = Imperial;
-         volumeSystem = UnitSystems::imperialVolumeUnitSystem;
+	 volumeSystem = UnitSystems::imperialVolumeUnitSystem();
       }
       else if (text == "USCustomary")
       {
          volumeUnitSystem = USCustomary;
-         volumeSystem = UnitSystems::usVolumeUnitSystem;
+	 volumeSystem = UnitSystems::usVolumeUnitSystem();
       }
       else
       {
          volumeUnitSystem = SI;
-         volumeSystem = UnitSystems::siVolumeUnitSystem;
+	 volumeSystem = UnitSystems::siVolumeUnitSystem();
       }
    }
 
@@ -532,17 +532,17 @@ void Brewtarget::readPersistentOptions()
       if( text == "Fahrenheit" )
       {
          tempScale = Fahrenheit;
-         tempSystem = UnitSystems::fahrenheitTempUnitSystem;
+	 tempSystem = UnitSystems::fahrenheitTempUnitSystem();
       }
       else
       {
          tempScale = Celsius;
-         tempSystem = UnitSystems::celsiusTempUnitSystem;
+	 tempSystem = UnitSystems::celsiusTempUnitSystem();
       }
    }
 
    // Set the one and only time system.
-   timeSystem = UnitSystems::timeUnitSystem;
+   timeSystem = UnitSystems::timeUnitSystem();
 
    // Get IBU formula.
    list = optionsDoc->elementsByTagName(QString("ibu_formula"));

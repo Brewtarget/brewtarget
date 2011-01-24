@@ -67,17 +67,17 @@ protected:
 class UnitSystems
 {
 public:
-   static USWeightUnitSystem* usWeightUnitSystem;
-   static SIWeightUnitSystem* siWeightUnitSystem;
+   static USWeightUnitSystem* usWeightUnitSystem();
+   static SIWeightUnitSystem* siWeightUnitSystem();
 
-   static ImperialVolumeUnitSystem* imperialVolumeUnitSystem;
-   static USVolumeUnitSystem* usVolumeUnitSystem;
-   static SIVolumeUnitSystem* siVolumeUnitSystem;
+   static ImperialVolumeUnitSystem* imperialVolumeUnitSystem();
+   static USVolumeUnitSystem* usVolumeUnitSystem();
+   static SIVolumeUnitSystem* siVolumeUnitSystem();
 
-   static CelsiusTempUnitSystem* celsiusTempUnitSystem;
-   static FahrenheitTempUnitSystem* fahrenheitTempUnitSystem;
+   static CelsiusTempUnitSystem* celsiusTempUnitSystem();
+   static FahrenheitTempUnitSystem* fahrenheitTempUnitSystem();
 
-   static TimeUnitSystem* timeUnitSystem;
+   static TimeUnitSystem* timeUnitSystem();
 };
 
 #endif /*_UNITSYSTEM_H*/

@@ -18,14 +18,50 @@
 
 #include "UnitSystem.h"
 
-USWeightUnitSystem* UnitSystems::usWeightUnitSystem = new USWeightUnitSystem();
-SIWeightUnitSystem* UnitSystems::siWeightUnitSystem = new SIWeightUnitSystem();
+USWeightUnitSystem* UnitSystems::usWeightUnitSystem()
+{
+   static USWeightUnitSystem* us = new USWeightUnitSystem();
+   return us;
+}
 
-ImperialVolumeUnitSystem* UnitSystems::imperialVolumeUnitSystem = new ImperialVolumeUnitSystem();
-USVolumeUnitSystem* UnitSystems::usVolumeUnitSystem = new USVolumeUnitSystem();
-SIVolumeUnitSystem* UnitSystems::siVolumeUnitSystem = new SIVolumeUnitSystem();
+SIWeightUnitSystem* UnitSystems::siWeightUnitSystem()
+{
+   static SIWeightUnitSystem* si = new SIWeightUnitSystem();
+   return si;
+}
 
-CelsiusTempUnitSystem* UnitSystems::celsiusTempUnitSystem = new CelsiusTempUnitSystem();
-FahrenheitTempUnitSystem* UnitSystems::fahrenheitTempUnitSystem = new FahrenheitTempUnitSystem();
+ImperialVolumeUnitSystem* UnitSystems::imperialVolumeUnitSystem()
+{
+   static ImperialVolumeUnitSystem* imp = new ImperialVolumeUnitSystem();
+   return imp;
+}
 
-TimeUnitSystem* UnitSystems::timeUnitSystem = new TimeUnitSystem();
+USVolumeUnitSystem* UnitSystems::usVolumeUnitSystem()
+{
+   static USVolumeUnitSystem* us = new USVolumeUnitSystem();
+   return us;
+}
+
+SIVolumeUnitSystem* UnitSystems::siVolumeUnitSystem()
+{
+   static SIVolumeUnitSystem* si = new SIVolumeUnitSystem();
+   return si;
+}
+
+CelsiusTempUnitSystem* UnitSystems::celsiusTempUnitSystem()
+{
+   static CelsiusTempUnitSystem* c = new CelsiusTempUnitSystem();
+   return c;
+}
+
+FahrenheitTempUnitSystem* UnitSystems::fahrenheitTempUnitSystem()
+{
+   static FahrenheitTempUnitSystem* f = new FahrenheitTempUnitSystem();
+   return f;
+}
+
+TimeUnitSystem* UnitSystems::timeUnitSystem()
+{
+   static TimeUnitSystem* t = new TimeUnitSystem();
+   return t;
+}
