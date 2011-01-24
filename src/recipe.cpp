@@ -812,7 +812,7 @@ void Recipe::generateInstructions()
                   .arg(Brewtarget::displayAmount(mstep->getInfuseTemp_c(), Units::celsius))
                   .arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
 		  
-			totalWaterAdded_l += mstep->getInfuseAmount_l();
+            totalWaterAdded_l += mstep->getInfuseAmount_l();
          }
          else if( mstep->getType() == MashStep::TYPETEMPERATURE )
          {
@@ -829,7 +829,7 @@ void Recipe::generateInstructions()
 
 //         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getType().c_str()).arg(mstep->getName().c_str()), timeRemaining));
          preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getTypeString()).arg(mstep->getName().c_str()),
-                     mstep->getStepTime_min()));
+                     timeRemaining));
          timeRemaining -= mstep->getStepTime_min();
       }
       /*** END do each mash step ***/
@@ -866,14 +866,14 @@ void Recipe::generateInstructions()
 
       // Add instructions in descending mash time order.
       std::sort(preinstructions.begin(), preinstructions.end());
-	  for( i=0; i < preinstructions.size(); i++ )
+      for( i=0; i < preinstructions.size(); i++ )
       {
-		 j = preinstructions.size()- i - 1;
+         j = preinstructions.size()- i - 1;
          PreInstruction pi = preinstructions[j];
          ins = new Instruction();
          ins->setName(pi.getTitle());
          ins->setDirections(pi.getText());
-		 ins->setInterval(pi.getTime());
+         ins->setInterval(pi.getTime());
          instructions.push_back(ins);
       }
    } // END mash instructions.
