@@ -83,12 +83,12 @@ void StyleEditor::save()
 
    s->disableNotification();
 
-   s->setName( lineEdit_name->text().toStdString() );
-   s->setCategory( lineEdit_category->text().toStdString() );
-   s->setCategoryNumber( lineEdit_categoryNumber->text().toStdString() );
-   s->setStyleLetter( lineEdit_styleLetter->text().toStdString() );
-   s->setStyleGuide( lineEdit_styleGuide->text().toStdString() );
-   s->setType( comboBox_type->currentText().toStdString() );
+   s->setName( lineEdit_name->text() );
+   s->setCategory( lineEdit_category->text() );
+   s->setCategoryNumber( lineEdit_categoryNumber->text() );
+   s->setStyleLetter( lineEdit_styleLetter->text() );
+   s->setStyleGuide( lineEdit_styleGuide->text() );
+   s->setType( comboBox_type->currentText() );
    s->setOgMin( lineEdit_ogMin->text().toDouble() );
    s->setOgMax( lineEdit_ogMax->text().toDouble() );
    s->setFgMin( lineEdit_fgMin->text().toDouble() );
@@ -101,10 +101,10 @@ void StyleEditor::save()
    s->setCarbMax_vol( lineEdit_carbMax->text().toDouble() );
    s->setAbvMin_pct( lineEdit_abvMin->text().toDouble() );
    s->setAbvMax_pct( lineEdit_abvMax->text().toDouble() );
-   s->setProfile( textEdit_profile->toPlainText().toStdString() );
-   s->setIngredients( textEdit_ingredients->toPlainText().toStdString() );
-   s->setExamples( textEdit_examples->toPlainText().toStdString() );
-   s->setNotes( textEdit_notes->toPlainText().toStdString() );
+   s->setProfile( textEdit_profile->toPlainText() );
+   s->setIngredients( textEdit_ingredients->toPlainText() );
+   s->setExamples( textEdit_examples->toPlainText() );
+   s->setNotes( textEdit_notes->toPlainText() );
    
    s->reenableNotification();
    s->forceNotify();
@@ -123,7 +123,7 @@ void StyleEditor::newStyle()
       return;
 
    Style *s = new Style();
-   s->setName( name.toStdString() );
+   s->setName( name );
 
    Database::getDatabase()->addStyle(s);
 
@@ -176,12 +176,12 @@ void StyleEditor::showChanges()
 
    styleComboBox->setIndexByStyleName(s->getName());
 
-   lineEdit_name->setText(s->getName().c_str());
-   lineEdit_category->setText(s->getCategory().c_str());
-   lineEdit_categoryNumber->setText(s->getCategoryNumber().c_str());
-   lineEdit_styleLetter->setText(s->getStyleLetter().c_str());
-   lineEdit_styleGuide->setText(s->getStyleGuide().c_str());
-   comboBox_type->setCurrentIndex(comboBox_type->findText(s->getType().c_str(), Qt::MatchExactly));
+   lineEdit_name->setText(s->getName());
+   lineEdit_category->setText(s->getCategory());
+   lineEdit_categoryNumber->setText(s->getCategoryNumber());
+   lineEdit_styleLetter->setText(s->getStyleLetter());
+   lineEdit_styleGuide->setText(s->getStyleGuide());
+   comboBox_type->setCurrentIndex(comboBox_type->findText(s->getType(), Qt::MatchExactly));
    lineEdit_ogMin->setText(Brewtarget::displayAmount(s->getOgMin(), 0));
    lineEdit_ogMax->setText(Brewtarget::displayAmount(s->getOgMax(), 0));
    lineEdit_fgMin->setText(Brewtarget::displayAmount(s->getFgMin(), 0));
@@ -194,8 +194,8 @@ void StyleEditor::showChanges()
    lineEdit_carbMax->setText(Brewtarget::displayAmount(s->getCarbMax_vol(), 0));
    lineEdit_abvMin->setText(Brewtarget::displayAmount(s->getAbvMin_pct(), 0));
    lineEdit_abvMax->setText(Brewtarget::displayAmount(s->getAbvMax_pct(), 0));
-   textEdit_profile->setText(s->getProfile().c_str());
-   textEdit_ingredients->setText(s->getIngredients().c_str());
-   textEdit_examples->setText(s->getExamples().c_str());
-   textEdit_notes->setText(s->getNotes().c_str());
+   textEdit_profile->setText(s->getProfile());
+   textEdit_ingredients->setText(s->getIngredients());
+   textEdit_examples->setText(s->getExamples());
+   textEdit_notes->setText(s->getNotes());
 }

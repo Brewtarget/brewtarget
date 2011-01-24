@@ -111,7 +111,7 @@ void EquipmentEditor::save()
 
    obsEquip->disableNotification();
 
-   obsEquip->setName( lineEdit_name->text().toStdString() );
+   obsEquip->setName( lineEdit_name->text() );
    obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
    
    obsEquip->setCalcBoilVolume( (checkBox_calcBoilVolume->checkState() == Qt::Checked)? true : false );
@@ -130,7 +130,7 @@ void EquipmentEditor::save()
    obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
    obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
 
-   obsEquip->setNotes(textEdit_notes->toPlainText().toStdString());
+   obsEquip->setNotes(textEdit_notes->toPlainText());
    obsEquip->setGrainAbsorption_LKg( lineEdit_grainAbsorption->text().toDouble() );
 
    obsEquip->reenableNotification();
@@ -156,7 +156,7 @@ void EquipmentEditor::newEquipment()
       return;
 
    Equipment *e = new Equipment();
-   e->setName( name.toStdString() );
+   e->setName( name );
 
    Database::getDatabase()->addEquipment(e);
 
@@ -192,7 +192,7 @@ void EquipmentEditor::showChanges()
 
    equipmentComboBox->setIndexByEquipmentName(e->getName());
 
-   lineEdit_name->setText(e->getName().c_str());
+   lineEdit_name->setText(e->getName());
    lineEdit_name->setCursorPosition(0);
    lineEdit_boilSize->setText( Brewtarget::displayAmount(e->getBoilSize_l(), Units::liters) );
    checkBox_calcBoilVolume->setCheckState( (e->getCalcBoilVolume())? Qt::Checked : Qt::Unchecked );
@@ -211,7 +211,7 @@ void EquipmentEditor::showChanges()
    lineEdit_trubChillerLoss->setText(Brewtarget::displayAmount(e->getTrubChillerLoss_l(), Units::liters) );
    lineEdit_lauterDeadspace->setText(Brewtarget::displayAmount(e->getLauterDeadspace_l(), Units::liters) );
 
-   textEdit_notes->setText(e->getNotes().c_str());
+   textEdit_notes->setText(e->getNotes());
 
    lineEdit_grainAbsorption->setText(QString("%1").arg(e->getGrainAbsorption_LKg(), 0, 'f', 3));
 }

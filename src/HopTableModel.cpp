@@ -160,7 +160,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    {
       case HOPNAMECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getName().c_str());
+            return QVariant(row->getName());
          else
             return QVariant();
       case HOPALPHACOL:
@@ -255,7 +255,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPNAMECOL:
          if( value.canConvert(QVariant::String))
          {
-            row->setName(value.toString().toStdString());
+            row->setName(value.toString());
             return true;
          }
          else

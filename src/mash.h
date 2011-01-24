@@ -41,9 +41,9 @@ public:
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    virtual void notify(Observable *notifier, QVariant info); // From MultipleObserver
    
-   void setName( const std::string &var );
+   void setName( const QString &var );
    void setGrainTemp_c( double var );
-   void setNotes( const std::string &var );
+   void setNotes( const QString &var );
    void setTunTemp_c( double var );
    void setSpargeTemp_c( double var );
    void setPh( double var );
@@ -51,11 +51,11 @@ public:
    void setTunSpecificHeat_calGC( double var );
    void setEquipAdjust( bool var );
 
-   std::string getName() const;
+   QString getName() const;
    double getGrainTemp_c() const;
    unsigned int getNumMashSteps() const;
    MashStep* getMashStep( unsigned int i );
-   std::string getNotes() const;
+   QString getNotes() const;
    double getTunTemp_c() const;
    double getSpargeTemp_c() const;
    double getPh() const;
@@ -72,11 +72,11 @@ public:
 
 private:
 
-   std::string name;
+   QString name;
    static const int version = 1;
    double grainTemp_c;
    std::vector<MashStep *> mashSteps;
-   std::string notes;
+   QString notes;
    double tunTemp_c;
    double spargeTemp_c;
    double ph;

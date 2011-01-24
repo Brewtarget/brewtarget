@@ -38,7 +38,7 @@ class MashComboBox : public QComboBox, public MultipleObserver
       ~MashComboBox();
       void startObservingDB();
       void addMash(Mash* m);
-      void setIndexByMashName(std::string name);
+      void setIndexByMashName(QString name);
       void setIndex(int ndx);
       void removeAllMashs();
       void repopulateList();

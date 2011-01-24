@@ -40,7 +40,7 @@ public:
    void startObservingDB();
    void observeRecipe(Recipe* rec);
    void addStyle(Style* style);
-   void setIndexByStyleName(std::string name);
+   void setIndexByStyleName(QString name);
    void removeAllStyles();
    void repopulateList();
 

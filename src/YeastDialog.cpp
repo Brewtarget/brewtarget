@@ -157,7 +157,7 @@ void YeastDialog::newYeast()
       return;
 
    Yeast* y = new Yeast();
-   std::string stdname = name.toStdString();
+   QString stdname = name;
    y->setName(stdname);
 
    dbObs->addYeast(y);

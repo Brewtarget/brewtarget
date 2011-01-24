@@ -40,7 +40,7 @@ public:
    void startObservingDB();
    void observeRecipe(Recipe* rec);
    void addEquipment(Equipment* equipment);
-   void setIndexByEquipmentName(std::string name);
+   void setIndexByEquipmentName(QString name);
    void removeAllEquipments();
    void repopulateList();
 

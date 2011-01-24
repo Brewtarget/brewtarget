@@ -53,7 +53,7 @@ void RecipeComboBox::addRecipe(Recipe* recipe)
    recipeObs.push_back(recipe);
    addObserved(recipe);
 
-   addItem( recipe->getName().c_str() );
+   addItem( recipe->getName() );
 }
 
 void RecipeComboBox::removeAllRecipes()
@@ -90,16 +90,16 @@ void RecipeComboBox::notify(Observable *notifier, QVariant info)
          {
             // Notice we assume 'i' is an index into both 'recipeObs' and also
             // to the text list in this combo box...
-            setItemText(i, recipeObs[i]->getName().c_str() );
+            setItemText(i, recipeObs[i]->getName() );
          }
    }
 }
 
-void RecipeComboBox::setIndexByRecipeName(std::string name)
+void RecipeComboBox::setIndexByRecipeName(QString name)
 {
    int ndx;
 
-   ndx = findText( name.c_str(), Qt::MatchExactly );
+   ndx = findText( name, Qt::MatchExactly );
 
    setCurrentIndex(ndx);
 }
@@ -116,7 +116,7 @@ void RecipeComboBox::repopulateList()
 
    size = recipeObs.size();
    for( i = 0; i < size; ++i )
-      addItem( recipeObs[i]->getName().c_str() );
+      addItem( recipeObs[i]->getName() );
 }
 
 Recipe* RecipeComboBox::getSelectedRecipe()

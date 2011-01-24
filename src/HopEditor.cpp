@@ -62,7 +62,7 @@ void HopEditor::save()
    // will revert any changes made.
    h->disableNotification();
 
-   h->setName(lineEdit_name->text().toStdString());
+   h->setName(lineEdit_name->text());
    h->setAlpha_pct(lineEdit_alpha->text().toDouble());
    h->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
    h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
@@ -71,14 +71,14 @@ void HopEditor::save()
    h->setForm(static_cast<Hop::Form>(comboBox_form->currentIndex()));
    h->setBeta_pct(lineEdit_beta->text().toDouble());
    h->setHsi_pct(lineEdit_HSI->text().toDouble());
-   h->setOrigin(lineEdit_origin->text().toStdString());
+   h->setOrigin(lineEdit_origin->text());
    h->setHumulene_pct(lineEdit_humulene->text().toDouble());
    h->setCaryophyllene_pct(lineEdit_caryophyllene->text().toDouble());
    h->setCohumulone_pct(lineEdit_cohumulone->text().toDouble());
    h->setMyrcene_pct(lineEdit_myrcene->text().toDouble());
 
-   h->setSubstitutes(textEdit_substitutes->toPlainText().toStdString());
-   h->setNotes(textEdit_notes->toPlainText().toStdString());
+   h->setSubstitutes(textEdit_substitutes->toPlainText());
+   h->setNotes(textEdit_notes->toPlainText());
 
    h->reenableNotification();
    h->forceNotify();
@@ -110,7 +110,7 @@ void HopEditor::showChanges()
    if( h == 0 )
       return;
 
-   lineEdit_name->setText(h->getName().c_str());
+   lineEdit_name->setText(h->getName());
    lineEdit_name->setCursorPosition(0);
    lineEdit_alpha->setText(Brewtarget::displayAmount(h->getAlpha_pct(), 0));
    lineEdit_amount->setText(Brewtarget::displayAmount(h->getAmount_kg(), Units::kilograms));
@@ -120,12 +120,12 @@ void HopEditor::showChanges()
    comboBox_form->setCurrentIndex(obsHop->getForm());
    lineEdit_beta->setText(Brewtarget::displayAmount(h->getBeta_pct(), 0));
    lineEdit_HSI->setText(Brewtarget::displayAmount(h->getHsi_pct(), 0));
-   lineEdit_origin->setText(h->getOrigin().c_str());
+   lineEdit_origin->setText(h->getOrigin());
    lineEdit_origin->setCursorPosition(0);
    lineEdit_humulene->setText(Brewtarget::displayAmount(h->getHumulene_pct(), 0));
    lineEdit_caryophyllene->setText(Brewtarget::displayAmount(h->getCaryophyllene_pct(), 0));
    lineEdit_cohumulone->setText(Brewtarget::displayAmount(h->getCohumulone_pct(), 0));
    lineEdit_myrcene->setText(Brewtarget::displayAmount(h->getMyrcene_pct(), 0));
-   textEdit_substitutes->setPlainText(h->getSubstitutes().c_str());
-   textEdit_notes->setPlainText(h->getNotes().c_str());
+   textEdit_substitutes->setPlainText(h->getSubstitutes());
+   textEdit_notes->setPlainText(h->getNotes());
 }

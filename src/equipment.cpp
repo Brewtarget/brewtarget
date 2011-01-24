@@ -45,7 +45,7 @@ void Equipment::toXml(QDomDocument& doc, QDomNode& parent)
    equipNode = doc.createElement("EQUIPMENT");
    
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
    
@@ -125,7 +125,7 @@ void Equipment::toXml(QDomDocument& doc, QDomNode& parent)
    equipNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
 
@@ -198,7 +198,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
       
       if( property == "NAME" )
       {
-         name = value.toStdString();
+         name = value;
       }
       else if( property == "VERSION" )
       {
@@ -264,7 +264,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
       }
       else if( property == "NOTES" )
       {
-         setNotes(value.toStdString());
+         setNotes(value);
       }
       else if( property == "ABSORPTION" ) // My extension.
       {
@@ -281,9 +281,9 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
 
 //============================"SET" METHODS=====================================
 
-void Equipment::setName( const std::string &var )
+void Equipment::setName( const QString &var )
 {
-   name = std::string(var);
+   name = QString(var);
    hasChanged();
 }
 
@@ -502,9 +502,9 @@ void Equipment::setHopUtilization_pct( double var )
    }
 }
 
-void Equipment::setNotes( const std::string &var )
+void Equipment::setNotes( const QString &var )
 {
-   notes = std::string(var);
+   notes = QString(var);
    hasChanged();
 }
 
@@ -525,7 +525,7 @@ void Equipment::setGrainAbsorption_LKg(double var)
 
 //============================"GET" METHODS=====================================
 
-std::string Equipment::getName() const
+QString Equipment::getName() const
 {
    return name;
 }
@@ -600,7 +600,7 @@ double Equipment::getHopUtilization_pct() const
    return hopUtilization_pct;
 }
 
-std::string Equipment::getNotes() const
+QString Equipment::getNotes() const
 {
    return notes;
 }

@@ -44,7 +44,7 @@ public:
    friend bool operator==(Equipment &e1, Equipment &e2);
 
    // Set
-   void setName( const std::string &var );
+   void setName( const QString &var );
    void setBoilSize_l( double var );
    void setBatchSize_l( double var );
    void setTunVolume_l( double var );
@@ -59,11 +59,11 @@ public:
    void setLauterDeadspace_l( double var );
    void setTopUpKettle_l( double var );
    void setHopUtilization_pct( double var );
-   void setNotes( const std::string &var );
+   void setNotes( const QString &var );
    void setGrainAbsorption_LKg(double var);
 
    // Get
-   std::string getName() const;
+   QString getName() const;
    double getBoilSize_l() const;
    double getBatchSize_l() const;
    double getTunVolume_l() const;
@@ -78,13 +78,13 @@ public:
    double getLauterDeadspace_l() const;
    double getTopUpKettle_l() const;
    double getHopUtilization_pct() const;
-   std::string getNotes() const;
+   QString getNotes() const;
    double getGrainAbsorption_LKg();
 
    double wortEndOfBoil_l( double kettleWort_l ) const; // Calculate how much wort is left immediately at knockout.
 
 private:
-   std::string name;
+   QString name;
    static const int version = 1;
    double boilSize_l;
    double batchSize_l;
@@ -100,7 +100,7 @@ private:
    double lauterDeadspace_l;
    double topUpKettle_l;
    double hopUtilization_pct;
-   std::string notes;
+   QString notes;
    // My extensions below.
    double absorption_LKg;
 

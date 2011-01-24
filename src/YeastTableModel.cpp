@@ -137,7 +137,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    {
       case YEASTNAMECOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getName().c_str());
+         return QVariant(row->getName());
       else
          return QVariant();
       case YEASTTYPECOL:
@@ -149,12 +149,12 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
          return QVariant();
       case YEASTLABCOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getLaboratory().c_str());
+         return QVariant(row->getLaboratory());
       else
          return QVariant();
       case YEASTPRODIDCOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getProductID().c_str());
+         return QVariant(row->getProductID());
       else
          return QVariant();
       case YEASTFORMCOL:
@@ -229,7 +229,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTNAMECOL:
          if( value.canConvert(QVariant::String))
          {
-            row->setName(value.toString().toStdString());
+            row->setName(value.toString());
             return true;
          }
          else
@@ -237,7 +237,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTLABCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setLaboratory(value.toString().toStdString());
+            row->setLaboratory(value.toString());
             return true;
          }
          else
@@ -245,7 +245,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTPRODIDCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setProductID(value.toString().toStdString());
+            row->setProductID(value.toString());
             return true;
          }
          else

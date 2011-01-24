@@ -37,7 +37,7 @@ public:
 
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //std::string toXml();
+   //QString toXml();
 
    // "set" methods.
    void setName(const QString& n);

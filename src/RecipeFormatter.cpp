@@ -71,9 +71,9 @@ QString RecipeFormatter::getTextFormat()
    Mash* mash = rec->getMash();
    
    // Vital statistics.
-   ret += rec->getName().c_str();
+   ret += rec->getName();
    if( style != 0 && style->getName() != "" )
-      ret += (" - " + style->getName()).c_str();
+      ret += (" - " + style->getName());
    ret += "\n";
    
    ret += getTextSeparator();
@@ -133,7 +133,7 @@ QString RecipeFormatter::getTextFormat()
       for( i = 0; i < size; ++i )
       {
          Fermentable* ferm =  rec->getFermentable(i);
-         names.append( ferm->getName().c_str() );
+         names.append( ferm->getName() );
          types.append( ferm->getTypeString() );
          amounts.append( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms) );
          masheds.append( ferm->getIsMashed() ? QObject::tr("Yes") : QObject::tr("No") );
@@ -178,7 +178,7 @@ QString RecipeFormatter::getTextFormat()
       {
          Hop* hop = rec->getHop(i);
          
-         names.append( hop->getName().c_str() );
+         names.append( hop->getName() );
          alphas.append( QString("%1%%").arg(hop->getAlpha_pct(), 0, 'f', 1) );
          amounts.append( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms) );
          uses.append( hop->getUseString() );
@@ -216,7 +216,7 @@ QString RecipeFormatter::getTextFormat()
       for( i = 0; i < size; ++i )
       {
          Misc* misc = rec->getMisc(i);
-         names.append(misc->getName().c_str());
+         names.append(misc->getName());
          types.append(misc->getTypeString());
          uses.append(misc->getUseString());
          amounts.append(Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters));
@@ -250,7 +250,7 @@ QString RecipeFormatter::getTextFormat()
       for( i = 0; i < size; ++i )
       {
          Yeast* y = rec->getYeast(i);
-         names.append( y->getName().c_str() );
+         names.append( y->getName() );
          types.append( y->getTypeString() );
          forms.append( y->getFormString() );
          amounts.append( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
@@ -284,7 +284,7 @@ QString RecipeFormatter::getTextFormat()
       for( i = 0; i < size; ++i )
       {
          MashStep* s = mash->getMashStep(i);
-         names.append(s->getName().c_str());
+         names.append(s->getName());
          types.append(s->getTypeString());
          if( s->getType() == MashStep::TYPEINFUSION )
             amounts.append( Brewtarget::displayAmount( s->getInfuseAmount_l(), Units::liters ) );
@@ -423,14 +423,14 @@ QString RecipeFormatter::buildTitleTable()
    header += "</style></head>";
 
    body   = "<body>";
-   //body += QString("<h1>%1</h1>").arg(rec->getName().c_str());
+   //body += QString("<h1>%1</h1>").arg(rec->getName()());
    body += QString("<div id=\"headerdiv\">");
    body += QString("<table id=\"header\">");
    body += QString("<caption>%1 - %2 (%3%4)</caption>")
-		   .arg( rec->getName().c_str())
-		   .arg( style ? style->getName().c_str() : tr("unknown style"))
-                   .arg( style ? style->getCategoryNumber().c_str() : tr("N/A") )
-                   .arg( style ? style->getStyleLetter().c_str() : "" );
+         .arg( rec->getName())
+         .arg( style ? style->getName() : tr("unknown style"))
+                   .arg( style ? style->getCategoryNumber() : tr("N/A") )
+                   .arg( style ? style->getStyleLetter() : "" );
 
    body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Brewer"))
@@ -540,7 +540,7 @@ QString RecipeFormatter::buildFermentableTable()
 		Fermentable* ferm = rec->getFermentable(i);
 		ftable += "<tr>";
 		ftable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7 L</td>")
-				.arg( ferm->getName().c_str())
+            .arg( ferm->getName())
 				.arg( ferm->getTypeString())
 				.arg( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
 				.arg( ferm->getIsMashed() ? tr("Yes") : tr("No") )
@@ -575,7 +575,7 @@ QString RecipeFormatter::buildHopsTable()
 	{
 		Hop *hop = rec->getHop(i);
 		hTable += QString("<td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7%</td>")
-				.arg( hop->getName().c_str())
+            .arg( hop->getName())
 				.arg( hop->getAlpha_pct(), 0, 'f', 0)
 				.arg( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
 				.arg( hop->getUseString())
@@ -608,7 +608,7 @@ QString RecipeFormatter::buildMiscTable()
 	{
 		Misc *misc = rec->getMisc(i);
 		mtable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
-				.arg( misc->getName().c_str())
+            .arg( misc->getName())
 				.arg( misc->getTypeString())
 				.arg( misc->getUseString())
 				.arg( Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters))
@@ -640,7 +640,7 @@ QString RecipeFormatter::buildYeastTable()
 	{
 		Yeast *y = rec->getYeast(i);
 		ytable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
-				.arg( y->getName().c_str())
+            .arg( y->getName())
 				.arg( y->getTypeString())
 				.arg( y->getFormString())
 				.arg( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) )

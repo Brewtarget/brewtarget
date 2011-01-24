@@ -46,7 +46,7 @@ void Fermentable::toXml(QDomDocument& doc, QDomNode& parent)
    fermNode = doc.createElement("FERMENTABLE");
    
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
    
@@ -81,17 +81,17 @@ void Fermentable::toXml(QDomDocument& doc, QDomNode& parent)
    fermNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("ORIGIN");
-   tmpText = doc.createTextNode(origin.c_str());
+   tmpText = doc.createTextNode(origin);
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("SUPPLIER");
-   tmpText = doc.createTextNode(supplier.c_str());
+   tmpText = doc.createTextNode(supplier);
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
    
@@ -197,7 +197,7 @@ void Fermentable::fromNode(const QDomNode& fermentableNode)
       
       if( property == "NAME" )
       {
-         name = value.toStdString();
+         name = value;
       }
       else if( property == "VERSION" )
       {
@@ -230,15 +230,15 @@ void Fermentable::fromNode(const QDomNode& fermentableNode)
       }
       else if( property == "ORIGIN" )
       {
-         setOrigin(value.toStdString());
+         setOrigin(value);
       }
       else if( property == "SUPPLIER" )
       {
-         setSupplier(value.toStdString());
+         setSupplier(value);
       }
       else if( property == "NOTES" )
       {
-         setNotes(value.toStdString());
+         setNotes(value);
       }
       else if( property == "COARSE_FINE_DIFF" )
       {
@@ -300,7 +300,7 @@ void Fermentable::setDefaults()
 }
 
 // Get
-const std::string& Fermentable::getName() const { return name; }
+const QString& Fermentable::getName() const { return name; }
 int Fermentable::getVersion() const { return version; }
 const Fermentable::Type Fermentable::getType() const { return type; }
 const QString& Fermentable::getTypeString() const { return types.at(type); }
@@ -309,9 +309,9 @@ double Fermentable::getYield_pct() const { return yield_pct; }
 double Fermentable::getColor_srm() const { return color_srm; }
 
 bool Fermentable::getAddAfterBoil() const { return addAfterBoil; }
-const std::string& Fermentable::getOrigin() const { return origin; }
-const std::string& Fermentable::getSupplier() const { return supplier; }
-const std::string& Fermentable::getNotes() const { return notes; }
+const QString& Fermentable::getOrigin() const { return origin; }
+const QString& Fermentable::getSupplier() const { return supplier; }
+const QString& Fermentable::getNotes() const { return notes; }
 double Fermentable::getCoarseFineDiff_pct() const { return coarseFineDiff_pct; }
 double Fermentable::getMoisture_pct() const { return moisture_pct; }
 double Fermentable::getDiastaticPower_lintner() const { return diastaticPower_lintner; }
@@ -331,9 +331,9 @@ double Fermentable::getEquivSucrose_kg() const
 }
 
 // Set
-void Fermentable::setName( const std::string& str )
+void Fermentable::setName( const QString& str )
 {
-   name = std::string(str);
+   name = QString(str);
    hasChanged(QVariant(NAME));
 }
 void Fermentable::setType( Type t )
@@ -341,11 +341,11 @@ void Fermentable::setType( Type t )
    /*
    if( isValidType( str ) )
    {
-      type = std::string(str);
+      type = QString(str);
    }
    else
    {
-      Brewtarget::logW( QString("Fermentable: invalid type %1").arg(str.c_str()) );
+      Brewtarget::logW( QString("Fermentable: invalid type %1").arg(str()) );
       type = "Grain";
    }
    */
@@ -418,9 +418,9 @@ void Fermentable::setAddAfterBoil( bool b )
    addAfterBoil = b;
    hasChanged(QVariant(AFTERBOIL));
 }
-void Fermentable::setOrigin( const std::string& str ) { origin = std::string(str); hasChanged(QVariant(ORIGIN));}
-void Fermentable::setSupplier( const std::string& str) { supplier = std::string(str); hasChanged(QVariant(SUPPLIER));}
-void Fermentable::setNotes( const std::string& str ) { notes = std::string(str); hasChanged(QVariant(NOTES));}
+void Fermentable::setOrigin( const QString& str ) { origin = QString(str); hasChanged(QVariant(ORIGIN));}
+void Fermentable::setSupplier( const QString& str) { supplier = QString(str); hasChanged(QVariant(SUPPLIER));}
+void Fermentable::setNotes( const QString& str ) { notes = QString(str); hasChanged(QVariant(NOTES));}
 void Fermentable::setCoarseFineDiff_pct( double num )
 {
    if( num >= 0.0 && num <= 100.0 )
@@ -495,9 +495,9 @@ void Fermentable::setRecommendMash( bool b ) { recommendMash = b; hasChanged();}
 void Fermentable::setIsMashed(bool var) { isMashed = var; hasChanged(QVariant(ISMASHED)); }
 void Fermentable::setIbuGalPerLb( double num ) { ibuGalPerLb = num; hasChanged();}
 
-bool Fermentable::isValidType( const std::string& str )
+bool Fermentable::isValidType( const QString& str )
 {
-   static const std::string validTypes[] = {"Grain", "Sugar", "Extract", "Dry Extract", "Adjunct"};
+   static const QString validTypes[] = {"Grain", "Sugar", "Extract", "Dry Extract", "Adjunct"};
    unsigned int i, size = 5;
    
    for( i = 0; i < size; ++i )

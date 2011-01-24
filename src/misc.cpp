@@ -48,7 +48,7 @@ void Misc::toXml(QDomDocument& doc, QDomNode& parent)
    miscNode = doc.createElement("MISC");
    
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
    
@@ -83,12 +83,12 @@ void Misc::toXml(QDomDocument& doc, QDomNode& parent)
    miscNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("USE_FOR");
-   tmpText = doc.createTextNode(useFor.c_str());
+   tmpText = doc.createTextNode(useFor);
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
    
@@ -159,7 +159,7 @@ void Misc::fromNode(const QDomNode& miscNode)
       
       if( property == "NAME" )
       {
-         name = value.toStdString();
+         name = value;
       }
       else if( property == "VERSION" )
       {
@@ -196,11 +196,11 @@ void Misc::fromNode(const QDomNode& miscNode)
       }
       else if( property == "USE_FOR" )
       {
-         setUseFor(value.toStdString());
+         setUseFor(value);
       }
       else if( property == "NOTES" )
       {
-         setNotes(value.toStdString());
+         setNotes(value);
       }
       else
       {
@@ -212,7 +212,7 @@ void Misc::fromNode(const QDomNode& miscNode)
 }
 
 //============================"GET" METHODS=====================================
-std::string Misc::getName() const
+QString Misc::getName() const
 {
    return name;
 }
@@ -252,20 +252,20 @@ bool Misc::getAmountIsWeight() const
    return amountIsWeight;
 }
 
-std::string Misc::getUseFor() const
+QString Misc::getUseFor() const
 {
    return useFor;
 }
 
-std::string Misc::getNotes() const
+QString Misc::getNotes() const
 {
    return notes;
 }
 
 //============================"SET" METHODS=====================================
-void Misc::setName( const std::string &var )
+void Misc::setName( const QString &var )
 {
-   name = std::string(var);
+   name = QString(var);
    hasChanged();
 }
 
@@ -318,23 +318,23 @@ void Misc::setAmountIsWeight( bool var )
    hasChanged();
 }
 
-void Misc::setUseFor( const std::string &var )
+void Misc::setUseFor( const QString &var )
 {
-   useFor = std::string(var);
+   useFor = QString(var);
    hasChanged();
 }
 
-void Misc::setNotes( const std::string &var )
+void Misc::setNotes( const QString &var )
 {
-   notes = std::string(var);
+   notes = QString(var);
    hasChanged();
 }
 
 //========================OTHER METHODS=========================================
 
-bool Misc::isValidUse( const std::string &var )
+bool Misc::isValidUse( const QString &var )
 {
-   static const std::string uses[] = {"Boil", "Mash", "Primary", "Secondary", "Bottling"};
+   static const QString uses[] = {"Boil", "Mash", "Primary", "Secondary", "Bottling"};
    static const unsigned int size = 5;
    unsigned int i;
    
@@ -345,9 +345,9 @@ bool Misc::isValidUse( const std::string &var )
    return false;
 }
 
-bool Misc::isValidType( const std::string &var )
+bool Misc::isValidType( const QString &var )
 {
-   static const std::string types[] = {"Spice", "Fining", "Water Agent", "Herb", "Flavor", "Other"};
+   static const QString types[] = {"Spice", "Fining", "Water Agent", "Herb", "Flavor", "Other"};
    static const unsigned int size = 6;
    unsigned int i;
    

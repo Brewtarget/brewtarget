@@ -42,9 +42,9 @@ public:
 
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //std::string toXml();
+   //QString toXml();
    
-   void setName( const std::string &var );
+   void setName( const QString &var );
    void setType( Type t );
    void setInfuseAmount_l( double var );
    void setStepTemp_c( double var );
@@ -52,7 +52,7 @@ public:
    void setRampTime_min( double var );
    void setEndTemp_c( double var );
 
-   std::string getName() const;
+   QString getName() const;
    Type getType() const;
    const QString& getTypeString() const;
    double getInfuseAmount_l() const;
@@ -70,7 +70,7 @@ public:
 
 private:
 
-   std::string name;
+   QString name;
    static const int version = 1;
    Type type;
    double infuseAmount_l;
@@ -84,7 +84,7 @@ private:
    double decoctionAmount_l;
    // ===
 
-   bool isValidType( const std::string &str ) const;
+   bool isValidType( const QString &str ) const;
    void setDefaults();
 
    static QStringList types;

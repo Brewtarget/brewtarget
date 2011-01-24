@@ -175,7 +175,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
    switch( index.column() )
    {
       case MASHSTEPNAMECOL:
-         return QVariant(row->getName().c_str());
+         return QVariant(row->getName());
       case MASHSTEPTYPECOL:
          return QVariant(row->getTypeString());
       case MASHSTEPAMOUNTCOL:
@@ -246,7 +246,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPNAMECOL:
          if( value.canConvert(QVariant::String))
          {
-            row->setName(value.toString().toStdString());
+            row->setName(value.toString());
             return true;
          }
          else

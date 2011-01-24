@@ -45,7 +45,7 @@ void MashStep::toXml(QDomDocument& doc, QDomNode& parent)
    mashStepNode = doc.createElement("MASH_STEP");
    
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
    
@@ -148,7 +148,7 @@ void MashStep::fromNode(const QDomNode& mashStepNode)
       
       if( property == "NAME" )
       {
-         name = value.toStdString();
+         name = value;
       }
       else if( property == "VERSION" )
       {
@@ -197,9 +197,9 @@ void MashStep::fromNode(const QDomNode& mashStepNode)
 }
 
 //================================"SET" METHODS=================================
-void MashStep::setName( const std::string &var )
+void MashStep::setName( const QString &var )
 {
-   name = std::string(var);
+   name = QString(var);
    hasChanged();
 }
 
@@ -297,7 +297,7 @@ void MashStep::setDecoctionAmount_l(double var)
 }
 
 //============================="GET" METHODS====================================
-std::string MashStep::getName() const
+QString MashStep::getName() const
 {
    return name;
 }
@@ -347,9 +347,9 @@ double MashStep::getDecoctionAmount_l() const
    return decoctionAmount_l;
 }
 
-bool MashStep::isValidType( const std::string &str ) const
+bool MashStep::isValidType( const QString &str ) const
 {
-   static const std::string types[] = {"Infusion", "Temperature", "Decoction"};
+   static const QString types[] = {"Infusion", "Temperature", "Decoction"};
    static const unsigned int size = 3;
    unsigned int i;
    

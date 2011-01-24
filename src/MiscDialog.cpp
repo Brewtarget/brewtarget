@@ -146,7 +146,7 @@ void MiscDialog::newMisc()
       return;
 
    Misc *m = new Misc();
-   std::string stdname = name.toStdString();
+   QString stdname = name;
    m->setName(stdname);
 
    dbObs->addMisc(m);

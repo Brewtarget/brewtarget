@@ -53,7 +53,7 @@ public:
          DIASTATICPOWER, PROTEIN, MAXINBATCH, ISMASHED };
    
    // Get
-   const std::string& getName() const;
+   const QString& getName() const;
    int getVersion() const;
    const Type getType() const;
    const QString& getTypeString() const;
@@ -62,9 +62,9 @@ public:
    double getColor_srm() const;
    
    bool getAddAfterBoil() const;
-   const std::string& getOrigin() const;
-   const std::string& getSupplier() const;
-   const std::string& getNotes() const;
+   const QString& getOrigin() const;
+   const QString& getSupplier() const;
+   const QString& getNotes() const;
    double getCoarseFineDiff_pct() const;
    double getMoisture_pct() const;
    double getDiastaticPower_lintner() const;
@@ -79,7 +79,7 @@ public:
    double getEquivSucrose_kg() const;
 
    // Set
-   void setName( const std::string& str );
+   void setName( const QString& str );
    void setVersion( int num );
    void setType( Type t );
    void setAmount_kg( double num );
@@ -87,9 +87,9 @@ public:
    void setColor_srm( double num );
    
    void setAddAfterBoil( bool b );
-   void setOrigin( const std::string& str );
-   void setSupplier( const std::string& str);
-   void setNotes( const std::string& str );
+   void setOrigin( const QString& str );
+   void setSupplier( const QString& str);
+   void setNotes( const QString& str );
    void setCoarseFineDiff_pct( double num );
    void setMoisture_pct( double num );
    void setDiastaticPower_lintner( double num );
@@ -104,7 +104,7 @@ public:
    /*** END my extensions ***/
    
 private:
-   std::string name;
+   QString name;
    static const int version = 1;
    Type type;
    double amount_kg;
@@ -112,9 +112,9 @@ private:
    double color_srm;
 
    bool addAfterBoil;
-   std::string origin;
-   std::string supplier;
-   std::string notes;
+   QString origin;
+   QString supplier;
+   QString notes;
    double coarseFineDiff_pct;
    double moisture_pct;
    double diastaticPower_lintner;
@@ -126,7 +126,7 @@ private:
    bool isMashed;
    /*** END my extensions ***/
 
-   static bool isValidType( const std::string& str );
+   static bool isValidType( const QString& str );
    void setDefaults();
 
    static QStringList types;

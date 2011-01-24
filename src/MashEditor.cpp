@@ -64,7 +64,7 @@ void MashEditor::saveAndClose()
    mash->disableNotification(); // If we don't do this, the notification will propagate to a showChanges() and we'll lose any info we want saved.
    mash->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
-   mash->setName( lineEdit_name->text().toStdString() );
+   mash->setName( lineEdit_name->text() );
    mash->setGrainTemp_c(Brewtarget::tempQStringToSI(lineEdit_grainTemp->text()));
    mash->setSpargeTemp_c(Brewtarget::tempQStringToSI(lineEdit_spargeTemp->text()));
    mash->setPh(lineEdit_spargePh->text().toDouble());
@@ -72,7 +72,7 @@ void MashEditor::saveAndClose()
    mash->setTunWeight_kg(Brewtarget::weightQStringToSI(lineEdit_tunMass->text()));
    mash->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->text().toDouble() );
 
-   mash->setNotes( textEdit_notes->toPlainText().toStdString() );
+   mash->setNotes( textEdit_notes->toPlainText() );
    
    mash->reenableNotification();
    mash->forceNotify();
@@ -107,7 +107,7 @@ void MashEditor::showChanges()
 
    Mash* mash = rec->getMash();
    
-   lineEdit_name->setText(mash->getName().c_str());
+   lineEdit_name->setText(mash->getName());
    lineEdit_grainTemp->setText(Brewtarget::displayAmount(mash->getGrainTemp_c(), Units::celsius));
    lineEdit_spargeTemp->setText(Brewtarget::displayAmount(mash->getSpargeTemp_c(), Units::celsius));
    lineEdit_spargePh->setText(Brewtarget::displayAmount(mash->getPh()));
@@ -115,7 +115,7 @@ void MashEditor::showChanges()
    lineEdit_tunMass->setText(Brewtarget::displayAmount(mash->getTunWeight_kg(), Units::kilograms));
    lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(mash->getTunSpecificHeat_calGC()));
 
-   textEdit_notes->setPlainText(mash->getNotes().c_str());
+   textEdit_notes->setPlainText(mash->getNotes());
 }
 
 void MashEditor::clear()

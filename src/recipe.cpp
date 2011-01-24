@@ -65,7 +65,7 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    recipeNode = doc.createElement("RECIPE");
    
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -75,7 +75,7 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    recipeNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type.c_str());
+   tmpText = doc.createTextNode(type);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -240,7 +240,7 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    recipeNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("PRIMING_SUGAR_NAME");
-   tmpText = doc.createTextNode(primingSugarName.c_str());
+   tmpText = doc.createTextNode(primingSugarName);
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -363,7 +363,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
       
       if( property == "NAME" )
       {
-         setName(value.toStdString());
+         setName(value);
       }
       else if( property == "VERSION" )
       {
@@ -378,8 +378,8 @@ void Recipe::fromNode(const QDomNode& recipeNode)
             continue;
          }
          
-         if( isValidType(value.toStdString()) )
-            setType(value.toStdString());
+         if( isValidType(value) )
+            setType(value);
          else
             Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for RECIPE. Line %2").arg(value).arg(textNode.lineNumber()));
       }
@@ -626,7 +626,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
          {
             continue;
          }
-         setPrimingSugarName(value.toStdString());
+         setPrimingSugarName(value);
       }
       else if( property == "CARBONATION_TEMP" )
       {
@@ -761,7 +761,7 @@ void Recipe::generateInstructions()
          if( fermentables[j]->getIsMashed() )
 			 tmp = QString("%1 %2, ")
 				.arg(Brewtarget::displayAmount(fermentables[j]->getAmount_kg(), Units::kilograms))
-				.arg(fermentables[j]->getName().c_str());
+            .arg(fermentables[j]->getName());
 		 	 str += tmp;
 			 ins->setReagent(tmp);
       }
@@ -826,8 +826,8 @@ void Recipe::generateInstructions()
 
          str += QObject::tr(" Hold for %1.").arg(Brewtarget::displayAmount(mstep->getStepTime_min(), Units::minutes));
 
-//         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getType().c_str()).arg(mstep->getName().c_str()), timeRemaining));
-         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getTypeString()).arg(mstep->getName().c_str()),
+//         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getType()()).arg(mstep->getName()()), timeRemaining));
+         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getTypeString()).arg(mstep->getName()),
                      timeRemaining));
          timeRemaining -= mstep->getStepTime_min();
       }
@@ -841,7 +841,7 @@ void Recipe::generateInstructions()
          {
             str = QObject::tr("Put %1 %2 into mash for %3.")
                   .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-                  .arg(hop->getName().c_str())
+                  .arg(hop->getName())
                   .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
                   preinstructions.push_back(PreInstruction(str, QObject::tr("Mash hop addition"), hop->getTime_min()));
          }
@@ -856,7 +856,7 @@ void Recipe::generateInstructions()
          {
             str = QObject::tr("Put %1 %2 into mash for %3.")
                   .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
-                  .arg(misc->getName().c_str())
+                  .arg(misc->getName())
                   .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
                   preinstructions.push_back(PreInstruction(str, QObject::tr("Mash misc addition"), misc->getTime()));
          }
@@ -887,7 +887,7 @@ void Recipe::generateInstructions()
       {
          tmp = QString("%1 %2,")
                 .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-                .arg(hop->getName().c_str());
+                .arg(hop->getName());
 		 str += tmp;
          hasHop = true;
       }
@@ -956,7 +956,7 @@ void Recipe::generateInstructions()
       hasFerms = true;
       str += QString("%1 %2, ")
              .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
-             .arg(ferm->getName().c_str());
+             .arg(ferm->getName());
    }
    str += QObject::tr("to the boil.");
    if( hasFerms )
@@ -973,7 +973,7 @@ void Recipe::generateInstructions()
       {
          str = QObject::tr("Put %1 %2 into boil for %3.")
                .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-               .arg(hop->getName().c_str())
+               .arg(hop->getName())
                .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
                preinstructions.push_back(PreInstruction(str, QObject::tr("Boil hop addition"), hop->getTime_min()));
       }
@@ -988,7 +988,7 @@ void Recipe::generateInstructions()
       {
          str = QObject::tr("Put %1 %2 into boil for %3.")
                .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
-               .arg(misc->getName().c_str())
+               .arg(misc->getName())
                .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
                preinstructions.push_back(PreInstruction(str, QObject::tr("Mash misc addition"), misc->getTime()));
       }
@@ -1024,7 +1024,7 @@ void Recipe::generateInstructions()
       hasFerms = true;
       tmp = QString("%1 %2, ")
              .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
-             .arg(ferm->getName().c_str());
+             .arg(ferm->getName());
 	  str += tmp;
    }
    str += QObject::tr("to the boil at knockout.");
@@ -1067,7 +1067,7 @@ void Recipe::generateInstructions()
    {
       Yeast* yeast = yeasts[i];
       if( ! yeast->getAddToSecondary() )
-         str += QObject::tr("%1 %2 yeast, ").arg(yeast->getName().c_str()).arg(yeast->getTypeString());
+         str += QObject::tr("%1 %2 yeast, ").arg(yeast->getName()).arg(yeast->getTypeString());
    }
    str += QObject::tr("to the primary.");
    ins = new Instruction();
@@ -1086,7 +1086,7 @@ void Recipe::generateInstructions()
       {
          str += QString("%1 %2, ")
                 .arg(Brewtarget::displayAmount(misc->getAmount(), (misc->getAmountIsWeight()) ? ((Unit*)Units::kilograms) : ((Unit*)Units::liters) ))
-                .arg(misc->getName().c_str());
+                .arg(misc->getName());
          hasMisc = true;
       }
    }
@@ -1121,7 +1121,7 @@ void Recipe::generateInstructions()
       {
          str = QObject::tr("Add %1 %2 to secondary for %3.")
                .arg(Brewtarget::displayAmount(misc->getAmount(), (misc->getAmountIsWeight()) ? ((Unit*)Units::kilograms) : ((Unit*)Units::liters) ))
-               .arg(misc->getName().c_str())
+               .arg(misc->getName())
                .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
 
          ins = new Instruction();
@@ -1140,7 +1140,7 @@ void Recipe::generateInstructions()
       {
          str = QObject::tr("Dry hop %1 %2 for %3.")
                .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-               .arg(hop->getName().c_str())
+               .arg(hop->getName())
                .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
          ins = new Instruction();
          ins->setName(QObject::tr("Dry hop"));
@@ -1174,7 +1174,7 @@ QString Recipe::nextAddToBoil(double& time)
       {
          ret = QObject::tr("Add %1 %2 to boil at %3.")
                .arg(Brewtarget::displayAmount(h->getAmount_kg(), Units::kilograms))
-               .arg(h->getName().c_str())
+               .arg(h->getName())
                .arg(Brewtarget::displayAmount(h->getTime_min(), Units::minutes));
 
          max = h->getTime_min();
@@ -1197,7 +1197,7 @@ QString Recipe::nextAddToBoil(double& time)
          else
             ret = ret.arg(Brewtarget::displayAmount(m->getAmount(), Units::liters));
 
-         ret = ret.arg(m->getName().c_str());
+         ret = ret.arg(m->getName());
          ret = ret.arg(Brewtarget::displayAmount(m->getTime(), Units::minutes));
          max = m->getTime();
          foundSomething = true;
@@ -1209,22 +1209,22 @@ QString Recipe::nextAddToBoil(double& time)
 }
 
 //================================"SET" METHODS=================================
-void Recipe::setName( const std::string &var )
+void Recipe::setName( const QString &var )
 {
-   name = std::string(var);
+   name = QString(var);
    hasChanged();
 }
 
-void Recipe::setType( const std::string &var )
+void Recipe::setType( const QString &var )
 {
    if( ! isValidType(var) )
    {
-      Brewtarget::logW( QString("Recipe: invalid type: %1").arg(var.c_str()) );
+      Brewtarget::logW( QString("Recipe: invalid type: %1").arg(var) );
       type = "All Grain";
    }
    else
    {
-      type = std::string(var);
+      type = QString(var);
    }
 
    hasChanged();
@@ -1581,9 +1581,9 @@ void Recipe::setForcedCarbonation( bool var )
    hasChanged();
 }
 
-void Recipe::setPrimingSugarName( const std::string &var )
+void Recipe::setPrimingSugarName( const QString &var )
 {
-   primingSugarName = std::string(var);
+   primingSugarName = QString(var);
    hasChanged();
 }
 
@@ -1624,12 +1624,12 @@ void Recipe::setKegPrimingFactor( double var )
 }
 
 //=============================="GET" METHODS===================================
-std::string Recipe::getName() const
+QString Recipe::getName() const
 {
    return name;
 }
 
-std::string Recipe::getType() const
+QString Recipe::getType() const
 {
    return type;
 }
@@ -1844,7 +1844,7 @@ bool Recipe::getForcedCarbonation() const
    return forcedCarbonation;
 }
 
-std::string Recipe::getPrimingSugarName() const
+QString Recipe::getPrimingSugarName() const
 {
    return primingSugarName;
 }
@@ -1864,9 +1864,9 @@ double Recipe::getKegPrimingFactor() const
    return kegPrimingFactor;
 }
 
-bool Recipe::isValidType( const std::string &str )
+bool Recipe::isValidType( const QString &str )
 {
-   static const std::string types[] = {"Extract", "Partial Mash", "All Grain"};
+   static const QString types[] = {"Extract", "Partial Mash", "All Grain"};
    static const unsigned int size = 3;
    unsigned int i;
    
@@ -1884,7 +1884,7 @@ void Recipe::recalculate()
    double ratio = 0;
    double sugar_kg = 0;
    double sugar_kg_ignoreEfficiency = 0.0;
-   std::string fermtype;
+   QString fermtype;
    double attenuation_pct = 0.0;
    Fermentable* ferm;
    Yeast* yeast;
@@ -2108,7 +2108,7 @@ double Recipe::getBoilGrav()
    Fermentable* ferm;
    double sugar_kg = 0.0;
    double sugar_kg_ignoreEfficiency = 0.0;
-   std::string type;
+   QString type;
 
    // Calculate OG
    for( i = 0; i < fermentables.size(); ++i )
@@ -2203,7 +2203,7 @@ double Recipe::getIBUFromHop( unsigned int i )
 
 void Recipe::clear()
 {
-   std::string name = getName();
+   QString name = getName();
    setDefaults();
    setName(name);
    hasChanged();

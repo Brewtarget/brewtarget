@@ -17,7 +17,6 @@
  */
 
 #include <iostream>
-#include <string>
 #include <stdlib.h>
 #include "hop.h"
 #include "brewtarget.h"
@@ -39,9 +38,9 @@ bool operator==( Hop &h1, Hop &h2 )
    return h1.name == h2.name;
 }
 
-bool Hop::isValidUse(const string &str)
+bool Hop::isValidUse(const QString &str)
 {
-   static const string uses[] = {"Boil", "Dry Hop", "Mash", "First Wort", "Aroma"};
+   static const QString uses[] = {"Boil", "Dry Hop", "Mash", "First Wort", "Aroma"};
    static const int length = 5;
    
    int i;
@@ -52,9 +51,9 @@ bool Hop::isValidUse(const string &str)
    return false;
 }
 
-bool Hop::isValidType(const string &str)
+bool Hop::isValidType(const QString &str)
 {
-   static const string types[] = {"Bittering", "Aroma", "Both"};
+   static const QString types[] = {"Bittering", "Aroma", "Both"};
    static const int length = 3;
    
    int i;
@@ -65,9 +64,9 @@ bool Hop::isValidType(const string &str)
    return false;
 }
 
-bool Hop::isValidForm(const string &str)
+bool Hop::isValidForm(const QString &str)
 {
-   static const string forms[] = {"Pellet", "Plug", "Leaf", ""};
+   static const QString forms[] = {"Pellet", "Plug", "Leaf", ""};
    static const int length = 4;
    
    int i;
@@ -87,7 +86,7 @@ void Hop::toXml(QDomDocument& doc, QDomNode& parent)
    hopNode = doc.createElement("HOP");
    
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
@@ -117,7 +116,7 @@ void Hop::toXml(QDomDocument& doc, QDomNode& parent)
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
@@ -142,12 +141,12 @@ void Hop::toXml(QDomDocument& doc, QDomNode& parent)
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("ORIGIN");
-   tmpText = doc.createTextNode(origin.c_str());
+   tmpText = doc.createTextNode(origin);
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("SUBSTITUTES");
-   tmpText = doc.createTextNode(substitutes.c_str());
+   tmpText = doc.createTextNode(substitutes);
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
@@ -253,7 +252,7 @@ void Hop::fromNode(const QDomNode& hopNode)
       
       if( property == "NAME" )
       {
-         name = value.toStdString();
+         name = value;
       }
       else if( property == "VERSION" )
       {
@@ -282,7 +281,7 @@ void Hop::fromNode(const QDomNode& hopNode)
       }
       else if( property == "NOTES" )
       {
-         setNotes(value.toStdString());
+         setNotes(value);
       }
       else if( property == "TYPE" )
       {
@@ -310,11 +309,11 @@ void Hop::fromNode(const QDomNode& hopNode)
       }
       else if( property == "ORIGIN" )
       {
-         setOrigin(value.toStdString());
+         setOrigin(value);
       }
       else if( property == "SUBSTITUTES" )
       {
-         setSubstitutes(value.toStdString());
+         setSubstitutes(value);
       }
       else if( property == "HUMULENE" )
       {
@@ -338,9 +337,9 @@ void Hop::fromNode(const QDomNode& hopNode)
 }
 
 //============================="SET" METHODS====================================
-void Hop::setName( const string &str )
+void Hop::setName( const QString &str )
 {
-   name = string(str);
+   name = QString(str);
    hasChanged();
 }
 
@@ -396,9 +395,9 @@ void Hop::setTime_min( double num )
    hasChanged();
 }
       
-void Hop::setNotes( const string &str )
+void Hop::setNotes( const QString &str )
 {
-   notes = string(str);
+   notes = QString(str);
    hasChanged();
 }
 
@@ -446,15 +445,15 @@ void Hop::setHsi_pct( double num )
    hasChanged();
 }
 
-void Hop::setOrigin( const string &str )
+void Hop::setOrigin( const QString &str )
 {
-   origin = string(str);
+   origin = QString(str);
    hasChanged();
 }
 
-void Hop::setSubstitutes( const string &str )
+void Hop::setSubstitutes( const QString &str )
 {
-   substitutes = string(str);
+   substitutes = QString(str);
    hasChanged();
 }
 
@@ -520,7 +519,7 @@ void Hop::setMyrcene_pct( double num )
 
 //============================="GET" METHODS====================================
 
-const string& Hop::getName() const
+const QString& Hop::getName() const
 {
    return name;
 }
@@ -555,7 +554,7 @@ double Hop::getTime_min() const
    return time_min;
 }
 
-const string& Hop::getNotes() const
+const QString& Hop::getNotes() const
 {
    return notes;
 }
@@ -590,12 +589,12 @@ double Hop::getHsi_pct() const
    return hsi_pct;
 }
 
-const string& Hop::getOrigin() const
+const QString& Hop::getOrigin() const
 {
    return origin;
 }
 
-const string& Hop::getSubstitutes() const
+const QString& Hop::getSubstitutes() const
 {
    return substitutes;
 }

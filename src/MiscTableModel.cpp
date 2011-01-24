@@ -123,7 +123,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    if( index.column() == MISCNAMECOL )
    {
       if( role == Qt::DisplayRole )
-         return QVariant(row->getName().c_str());
+         return QVariant(row->getName());
       else
          return QVariant();
    }
@@ -221,7 +221,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
       if( value.canConvert(QVariant::String) )
       {
          tmpStr = value.toString();
-         row->setName(tmpStr.toStdString());
+         row->setName(tmpStr);
       }
       else
          return false;

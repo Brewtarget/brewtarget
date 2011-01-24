@@ -174,7 +174,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
    {
       case FERMNAMECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getName().c_str());
+            return QVariant(row->getName());
          else
             return QVariant();
       case FERMTYPECOL:
@@ -288,7 +288,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMNAMECOL:
          if( value.canConvert(QVariant::String))
          {
-            row->setName(value.toString().toStdString());
+            row->setName(value.toString());
             return true;
          }
          else

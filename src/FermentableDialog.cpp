@@ -151,7 +151,7 @@ void FermentableDialog::newFermentable()
       return;
    
    Fermentable *ferm = new Fermentable();
-   std::string stdname = name.toStdString();
+   QString stdname = name;
    ferm->setName(stdname);
 
    dbObs->addFermentable(ferm);

@@ -86,11 +86,11 @@ public:
    /*!
     * Set recipe name.
     */
-   void setName( const std::string &var );
+   void setName( const QString &var );
    /*!
     * Set recipe type.
     */
-   void setType( const std::string &var );
+   void setType( const QString &var );
    /*!
     * Set brewer.
     */
@@ -233,7 +233,7 @@ public:
    /*!
     * \todo Change to QString.
     */
-   void setPrimingSugarName( const std::string &var );
+   void setPrimingSugarName( const QString &var );
    //! Set carbonation temp in C.
    void setCarbonationTemp_c( double var );
    //! Set the multiplication factor to convert mass of glucose to mass of this priming sugar.
@@ -241,8 +241,8 @@ public:
    //! Set multiplication factor to convert mass of glucose reqd. to bottle prime to that required to keg prime.
    void setKegPrimingFactor( double var );
 
-   std::string getName() const;
-   std::string getType() const;
+   QString getName() const;
+   QString getType() const;
    QString getBrewer() const;
    Style *getStyle() const;
    double getBatchSize_l() const;
@@ -282,7 +282,7 @@ public:
    QString getDate() const;
    double getCarbonation_vols() const;
    bool getForcedCarbonation() const;
-   std::string getPrimingSugarName() const;
+   QString getPrimingSugarName() const;
    double getCarbonationTemp_c() const;
    double getPrimingSugarEquiv() const;
    double getKegPrimingFactor() const;
@@ -304,9 +304,9 @@ public:
 
 private:
 
-   std::string name;
+   QString name;
    static const int version = 1;
-   std::string type;
+   QString type;
    QString brewer;
    Style* style;
    double batchSize_l;
@@ -340,14 +340,14 @@ private:
    QString date;
    double carbonation_vols;
    bool forcedCarbonation;
-   std::string primingSugarName;
+   QString primingSugarName;
    double carbonationTemp_c;
    double primingSugarEquiv;
    double kegPrimingFactor;
    double estimatedCalories;
    
    void setDefaults();
-   bool isValidType( const std::string &str );
+   bool isValidType( const QString &str );
 };
 
 struct Recipe_ptr_cmp

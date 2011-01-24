@@ -61,14 +61,14 @@ void YeastEditor::save()
    // will revert any changes made.
    y->disableNotification();
 
-   y->setName(lineEdit_name->text().toStdString());
+   y->setName(lineEdit_name->text());
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
    y->setAmount( y->getAmountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()) );
 
-   y->setLaboratory( lineEdit_laboratory->text().toStdString() );
-   y->setProductID( lineEdit_productID->text().toStdString() );
+   y->setLaboratory( lineEdit_laboratory->text() );
+   y->setProductID( lineEdit_productID->text() );
    y->setMinTemperature_c( Brewtarget::tempQStringToSI(lineEdit_minTemperature->text()) );
    y->setMaxTemperature_c( Brewtarget::tempQStringToSI(lineEdit_maxTemperature->text()) );
    y->setFlocculation( static_cast<Yeast::Flocculation>(comboBox_flocculation->currentIndex()) );
@@ -76,7 +76,7 @@ void YeastEditor::save()
    y->setTimesCultured(lineEdit_timesCultured->text().toInt());
    y->setMaxReuse(lineEdit_maxReuse->text().toInt());
    y->setAddToSecondary( (checkBox_addToSecondary->checkState() == Qt::Checked)? true : false );
-   y->setNotes(textEdit_notes->toPlainText().toStdString());
+   y->setNotes(textEdit_notes->toPlainText());
 
    y->reenableNotification();
    y->forceNotify();
@@ -108,15 +108,15 @@ void YeastEditor::showChanges()
    if( y == 0 )
       return;
 
-   lineEdit_name->setText(y->getName().c_str());
+   lineEdit_name->setText(y->getName());
    lineEdit_name->setCursorPosition(0);
    comboBox_type->setCurrentIndex(y->getType());
    comboBox_form->setCurrentIndex(y->getForm());
    lineEdit_amount->setText( Brewtarget::displayAmount(y->getAmount(), (y->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
    checkBox_amountIsWeight->setCheckState( (y->getAmountIsWeight())? Qt::Checked : Qt::Unchecked );
-   lineEdit_laboratory->setText(y->getLaboratory().c_str());
+   lineEdit_laboratory->setText(y->getLaboratory());
    lineEdit_laboratory->setCursorPosition(0);
-   lineEdit_productID->setText(y->getProductID().c_str());
+   lineEdit_productID->setText(y->getProductID());
    lineEdit_productID->setCursorPosition(0);
    lineEdit_minTemperature->setText(Brewtarget::displayAmount(y->getMinTemperature_c(), Units::celsius));
    lineEdit_maxTemperature->setText(Brewtarget::displayAmount(y->getMaxTemperature_c(), Units::celsius));
@@ -126,6 +126,6 @@ void YeastEditor::showChanges()
    lineEdit_maxReuse->setText(QString::number(y->getMaxReuse()));
    checkBox_addToSecondary->setCheckState( (y->getAddToSecondary())? Qt::Checked : Qt::Unchecked );
 
-   textEdit_bestFor->setPlainText(y->getBestFor().c_str());
-   textEdit_notes->setPlainText(y->getNotes().c_str());
+   textEdit_bestFor->setPlainText(y->getBestFor());
+   textEdit_notes->setPlainText(y->getNotes());
 }

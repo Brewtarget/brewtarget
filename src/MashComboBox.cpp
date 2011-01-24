@@ -50,7 +50,7 @@ void MashComboBox::addMash(Mash* m)
    mashObs.push_back(m);
    addObserved(m);
    
-   addItem( m->getName().c_str() );
+   addItem( m->getName() );
 }
 
 void MashComboBox::removeAllMashs()
@@ -65,7 +65,7 @@ void MashComboBox::removeAllMashs()
 
 void MashComboBox::notify(Observable *notifier, QVariant info)
 {
-   unsigned int i, size;
+   unsigned int size;
    QString saveText = currentText();
    
    
@@ -101,11 +101,11 @@ void MashComboBox::notify(Observable *notifier, QVariant info)
    }
 }
 
-void MashComboBox::setIndexByMashName(std::string name)
+void MashComboBox::setIndexByMashName(QString name)
 {
    int ndx;
    
-   ndx = findText( name.c_str(), Qt::MatchExactly );
+   ndx = findText( name, Qt::MatchExactly );
    
    setCurrentIndex(ndx);
 }
@@ -122,7 +122,7 @@ void MashComboBox::repopulateList()
    
    size = mashObs.size();
    for( i = 0; i < size; ++i )
-      addItem( mashObs[i]->getName().c_str() );
+      addItem( mashObs[i]->getName() );
    
    setCurrentIndex(-1);
 }

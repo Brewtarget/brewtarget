@@ -38,7 +38,7 @@ public:
    RecipeComboBox(QWidget* parent=0);
    void startObservingDB();
    void addRecipe(Recipe* recipe);
-   void setIndexByRecipeName(std::string name);
+   void setIndexByRecipeName(QString name);
    void setIndex(int ndx);
    void removeAllRecipes();
    void repopulateList();

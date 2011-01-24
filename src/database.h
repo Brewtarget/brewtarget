@@ -108,16 +108,16 @@ public:
    unsigned int getNumYeasts();
 
    // These all return null on failure.
-   Equipment* findEquipmentByName(std::string name);
-   Fermentable* findFermentableByName(std::string name);
-   Hop* findHopByName(std::string name);
-   Mash* findMashByName(std::string name);
-   MashStep* findMashStepByName(std::string name);
-   Misc* findMiscByName(std::string name);
-   Recipe* findRecipeByName(std::string name);
-   Style* findStyleByName(std::string name);
-   Water* findWaterByName(std::string name);
-   Yeast* findYeastByName(std::string name);
+   Equipment* findEquipmentByName(QString name);
+   Fermentable* findFermentableByName(QString name);
+   Hop* findHopByName(QString name);
+   Mash* findMashByName(QString name);
+   MashStep* findMashStepByName(QString name);
+   Misc* findMiscByName(QString name);
+   Recipe* findRecipeByName(QString name);
+   Style* findStyleByName(QString name);
+   Water* findWaterByName(QString name);
+   Yeast* findYeastByName(QString name);
 
    std::list<Equipment*>::iterator getEquipmentBegin();
    std::list<Equipment*>::iterator getEquipmentEnd();

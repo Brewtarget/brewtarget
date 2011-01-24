@@ -765,7 +765,7 @@ std::list<Yeast*>::iterator Database::getYeastEnd()
    return yeasts.end();
 }
 
-Equipment* Database::findEquipmentByName(std::string name)
+Equipment* Database::findEquipmentByName(QString name)
 {
    std::list<Equipment*>::iterator it, end;
    end = equipments.end();
@@ -779,7 +779,7 @@ Equipment* Database::findEquipmentByName(std::string name)
    return 0;
 }
 
-Fermentable* Database::findFermentableByName(std::string name)
+Fermentable* Database::findFermentableByName(QString name)
 {
    std::list<Fermentable*>::iterator it, end;
    end = fermentables.end();
@@ -793,7 +793,7 @@ Fermentable* Database::findFermentableByName(std::string name)
    return 0;
 }
 
-Hop* Database::findHopByName(std::string name)
+Hop* Database::findHopByName(QString name)
 {
    std::list<Hop*>::iterator it, end;
    end = hops.end();
@@ -807,7 +807,7 @@ Hop* Database::findHopByName(std::string name)
    return 0;
 }
 
-Mash* Database::findMashByName(std::string name)
+Mash* Database::findMashByName(QString name)
 {
    std::list<Mash*>::iterator it, end;
    end = mashs.end();
@@ -821,7 +821,7 @@ Mash* Database::findMashByName(std::string name)
    return 0;
 }
 
-MashStep* Database::findMashStepByName(std::string name)
+MashStep* Database::findMashStepByName(QString name)
 {
    std::list<MashStep*>::iterator it, end;
    end = mashSteps.end();
@@ -835,7 +835,7 @@ MashStep* Database::findMashStepByName(std::string name)
    return 0;
 }
 
-Misc* Database::findMiscByName(std::string name)
+Misc* Database::findMiscByName(QString name)
 {
    std::list<Misc*>::iterator it, end;
    end = miscs.end();
@@ -849,7 +849,7 @@ Misc* Database::findMiscByName(std::string name)
    return 0;
 }
 
-Recipe* Database::findRecipeByName(std::string name)
+Recipe* Database::findRecipeByName(QString name)
 {
    std::list<Recipe*>::iterator it, end;
    end = recipes.end();
@@ -863,7 +863,7 @@ Recipe* Database::findRecipeByName(std::string name)
    return 0;
 }
 
-Style* Database::findStyleByName(std::string name)
+Style* Database::findStyleByName(QString name)
 {
    std::list<Style*>::iterator it, end;
    end = styles.end();
@@ -877,21 +877,21 @@ Style* Database::findStyleByName(std::string name)
    return 0;
 }
 
-Water* Database::findWaterByName(std::string name)
+Water* Database::findWaterByName(QString name)
 {
    std::list<Water*>::iterator it, end;
    end = waters.end();
 
    for( it = waters.begin(); it != end; it++ )
    {
-      if( (*it)->getName() == QString(name.c_str()) )
+      if( (*it)->getName() == name )
          return *it;
    }
 
    return 0;
 }
 
-Yeast* Database::findYeastByName(std::string name)
+Yeast* Database::findYeastByName(QString name)
 {
    std::list<Yeast*>::iterator it, end;
    end = yeasts.end();

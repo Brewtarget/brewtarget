@@ -45,20 +45,20 @@ public:
 
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //std::string toXml();
+   //QString toXml();
    
    // Set
-   void setName( const std::string &var );
+   void setName( const QString &var );
    void setType( Type t );
    void setUse( Use u );
    void setAmount( double var );
    void setTime( double var );
    void setAmountIsWeight( bool var );
-   void setUseFor( const std::string &var );
-   void setNotes( const std::string &var );
+   void setUseFor( const QString &var );
+   void setNotes( const QString &var );
    
    // Get
-   std::string getName() const;
+   QString getName() const;
    Type getType() const;
    const QString& getTypeString() const;
    Use getUse() const;
@@ -66,13 +66,13 @@ public:
    double getAmount() const;
    double getTime() const;
    bool getAmountIsWeight() const;
-   std::string getUseFor() const;
-   std::string getNotes() const;
+   QString getUseFor() const;
+   QString getNotes() const;
    
 private:
    
    // Required fields.
-   std::string name;
+   QString name;
    static const int version = 1;
    Type type;
    Use use;
@@ -81,13 +81,13 @@ private:
    
    // Optional fields.
    bool amountIsWeight;
-   std::string useFor;
-   std::string notes;
+   QString useFor;
+   QString notes;
 
    // Private methods
    void setDefaults();
-   bool isValidType( const std::string &var );
-   bool isValidUse( const std::string &var );
+   bool isValidType( const QString &var );
+   bool isValidUse( const QString &var );
    
    static QStringList types;
    static QStringList uses;

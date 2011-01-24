@@ -345,7 +345,7 @@ void MainWindow::setRecipeByName(const QString& name)
    if(  ! Database::isInitialized() )
       return;
 
-   setRecipe( db->findRecipeByName( name.toStdString() ) );
+   setRecipe( db->findRecipeByName( name ) );
 }
 
 // Can handle null recipes.
@@ -470,7 +470,7 @@ void MainWindow::showChanges(const QVariant& info)
 
    recipeObs->recalculate();
 
-   lineEdit_name->setText(recipeObs->getName().c_str());
+   lineEdit_name->setText(recipeObs->getName());
    lineEdit_name->setCursorPosition(0);
    lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->getBatchSize_l(), Units::liters) );
    lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->getBoilSize_l(), Units::liters) );
@@ -567,7 +567,7 @@ void MainWindow::updateRecipeName()
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setName(lineEdit_name->text().toStdString());
+   recipeObs->setName(lineEdit_name->text());
 }
 
 void MainWindow::updateRecipeStyle()
@@ -897,7 +897,7 @@ void MainWindow::newRecipe()
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   recipe->setName(name.toStdString());
+   recipe->setName(name);
    recipe->setBatchSize_l(18.93); // 5 gallons
    recipe->setBoilSize_l(23.47);  // 6.2 gallons
    recipe->setEfficiency_pct(70.0);
@@ -905,7 +905,7 @@ void MainWindow::newRecipe()
    db->addRecipe(recipe, false);
    setRecipe(recipe);
 
-   recipeComboBox->setIndexByRecipeName(name.toStdString());
+   recipeComboBox->setIndexByRecipeName(name);
 }
 
 void MainWindow::backup()
@@ -980,7 +980,7 @@ void MainWindow::importRecipes()
 		  newRec = new Recipe(list.at(i));
 
 		  if( QMessageBox::question(this, tr("Import recipe?"),
-		   tr("Import %1?").arg(newRec->getName().c_str()),
+         tr("Import %1?").arg(newRec->getName()),
 		   QMessageBox::Yes,
 		   QMessageBox::No)
 		 == QMessageBox::Yes )
@@ -1149,7 +1149,7 @@ void MainWindow::copyRecipe()
       return;
    
    Recipe* newRec = new Recipe(recipeObs); // Create a deep copy.
-   newRec->setName(name.toStdString());
+   newRec->setName(name);
    
    (Database::getDatabase())->addRecipe( newRec, false );
 }
@@ -1159,7 +1159,7 @@ void MainWindow::setMashByName(const QString& name)
    if( recipeObs == 0 )
       return;
    
-   Mash* mash = (Database::getDatabase())->findMashByName(name.toStdString());
+   Mash* mash = (Database::getDatabase())->findMashByName(name);
    
    // Do nothing if the mash retrieved is null or if it has the same name as the one in the recipe.
    if( mash == 0 || (recipeObs->getMash() != 0 && recipeObs->getMash()->getName() == mash->getName()) )

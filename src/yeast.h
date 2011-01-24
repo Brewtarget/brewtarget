@@ -47,47 +47,47 @@ public:
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
    // Set
-   void setName( const std::string& var );
+   void setName( const QString& var );
    void setType( Type t );
    void setForm( Form f );
    void setAmount( double var );
    void setAmountIsWeight( bool var );
-   void setLaboratory( const std::string& var );
-   void setProductID( const std::string& var );
+   void setLaboratory( const QString& var );
+   void setProductID( const QString& var );
    void setMinTemperature_c( double var );
    void setMaxTemperature_c( double var );
    void setFlocculation( Flocculation f );
    void setAttenuation_pct( double var );
-   void setNotes( const std::string& var );
-   void setBestFor( const std::string& var );
+   void setNotes( const QString& var );
+   void setBestFor( const QString& var );
    void setTimesCultured( int var );
    void setMaxReuse( int var );
    void setAddToSecondary( bool var );
    
    // Get
-   std::string getName() const;
+   QString getName() const;
    Type getType() const;
    const QString& getTypeString() const;
    Form getForm() const;
    const QString& getFormString() const;
    double getAmount() const;
    bool getAmountIsWeight() const;
-   std::string getLaboratory() const;
-   std::string getProductID() const;
+   QString getLaboratory() const;
+   QString getProductID() const;
    double getMinTemperature_c() const;
    double getMaxTemperature_c() const;
    Flocculation getFlocculation() const;
    const QString& getFlocculationString() const;
    double getAttenuation_pct() const;
-   std::string getNotes() const;
-   std::string getBestFor() const;
+   QString getNotes() const;
+   QString getBestFor() const;
    int getTimesCultured() const;
    int getMaxReuse() const;
    bool getAddToSecondary() const;
    
 private:
    // Required fields.
-   std::string name;
+   QString name;
    static const int version = 1;
    Type type;
    Form form;
@@ -95,14 +95,14 @@ private:
    
    // Optional fields.
    bool amountIsWeight;
-   std::string laboratory;
-   std::string productID;
+   QString laboratory;
+   QString productID;
    double minTemperature_c;
    double maxTemperature_c;
    Flocculation flocculation;
    double attenuation_pct;
-   std::string notes;
-   std::string bestFor;
+   QString notes;
+   QString bestFor;
    int timesCultured;
    int maxReuse;
    bool addToSecondary;
@@ -112,9 +112,9 @@ private:
    static QStringList flocculations;
 
    // Methods
-   bool isValidType(const std::string& str) const;
-   bool isValidForm(const std::string& str) const;
-   bool isValidFlocculation(const std::string& str) const;
+   bool isValidType(const QString& str) const;
+   bool isValidForm(const QString& str) const;
+   bool isValidFlocculation(const QString& str) const;
    void setDefaults();
 };
 

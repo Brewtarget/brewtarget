@@ -60,8 +60,8 @@ void FermentableEditor::save()
    // will revert any changes made.
    obsFerm->disableNotification();
 
-   obsFerm->setName(lineEdit_name->text().toStdString());
-   //obsFerm->setType(comboBox_type->currentText().toStdString());
+   obsFerm->setName(lineEdit_name->text());
+   //obsFerm->setType(comboBox_type->currentText());
    // NOTE: the following assumes that Fermentable::Type is enumerated in the same
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
@@ -69,8 +69,8 @@ void FermentableEditor::save()
    obsFerm->setYield_pct(lineEdit_yield->text().toDouble());
    obsFerm->setColor_srm(lineEdit_color->text().toDouble());
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
-   obsFerm->setOrigin( lineEdit_origin->text().toStdString() );
-   obsFerm->setSupplier( lineEdit_supplier->text().toStdString() );
+   obsFerm->setOrigin( lineEdit_origin->text() );
+   obsFerm->setSupplier( lineEdit_supplier->text() );
    obsFerm->setCoarseFineDiff_pct( lineEdit_coarseFineDiff->text().toDouble() );
    obsFerm->setMoisture_pct( lineEdit_moisture->text().toDouble() );
    obsFerm->setDiastaticPower_lintner( lineEdit_diastaticPower->text().toDouble() );
@@ -79,7 +79,7 @@ void FermentableEditor::save()
    obsFerm->setRecommendMash( (checkBox_recommendMash->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIsMashed( (checkBox_isMashed->checkState() == Qt::Checked) ? true : false );
    obsFerm->setIbuGalPerLb( lineEdit_ibuGalPerLb->text().toDouble() );
-   obsFerm->setNotes( textEdit_notes->toPlainText().toStdString() );
+   obsFerm->setNotes( textEdit_notes->toPlainText() );
 
    obsFerm->reenableNotification();
    obsFerm->forceNotify();
@@ -108,7 +108,7 @@ void FermentableEditor::showChanges()
    if( obsFerm == 0 )
       return;
 
-   lineEdit_name->setText(obsFerm->getName().c_str());
+   lineEdit_name->setText(obsFerm->getName());
    lineEdit_name->setCursorPosition(0);
    // NOTE: assumes the comboBox entries are in same order as Fermentable::Type
    comboBox_type->setCurrentIndex(obsFerm->getType());
@@ -117,9 +117,9 @@ void FermentableEditor::showChanges()
    lineEdit_yield->setText(Brewtarget::displayAmount(obsFerm->getYield_pct(), 0));
    lineEdit_color->setText(Brewtarget::displayAmount(obsFerm->getColor_srm(), 0));
    checkBox_addAfterBoil->setCheckState( obsFerm->getAddAfterBoil()? Qt::Checked : Qt::Unchecked );
-   lineEdit_origin->setText(obsFerm->getOrigin().c_str());
+   lineEdit_origin->setText(obsFerm->getOrigin());
    lineEdit_origin->setCursorPosition(0);
-   lineEdit_supplier->setText(obsFerm->getSupplier().c_str());
+   lineEdit_supplier->setText(obsFerm->getSupplier());
    lineEdit_supplier->setCursorPosition(0);
    lineEdit_coarseFineDiff->setText(Brewtarget::displayAmount(obsFerm->getCoarseFineDiff_pct(), 0));
    lineEdit_moisture->setText(Brewtarget::displayAmount(obsFerm->getMoisture_pct(), 0));
@@ -129,5 +129,5 @@ void FermentableEditor::showChanges()
    checkBox_recommendMash->setCheckState( obsFerm->getRecommendMash()? Qt::Checked : Qt::Unchecked );
    checkBox_isMashed->setCheckState( obsFerm->getIsMashed() ? Qt::Checked : Qt::Unchecked );
    lineEdit_ibuGalPerLb->setText(Brewtarget::displayAmount(obsFerm->getIbuGalPerLb(), 0));
-   textEdit_notes->setPlainText( obsFerm->getNotes().c_str() );
+   textEdit_notes->setPlainText( obsFerm->getNotes() );
 }

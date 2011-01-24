@@ -49,7 +49,7 @@ void StyleComboBox::addStyle(Style* style)
    styleObs.push_back(style);
    addObserved(style);
 
-   addItem( style->getName().c_str() );
+   addItem( style->getName() );
 }
 
 void StyleComboBox::removeAllStyles()
@@ -104,16 +104,16 @@ void StyleComboBox::notify(Observable *notifier, QVariant info)
          {
             // Notice we assume 'i' is an index into both 'styleObs' and also
             // to the text list in this combo box...
-            setItemText(i, styleObs[i]->getName().c_str());
+            setItemText(i, styleObs[i]->getName());
          }
    }
 }
 
-void StyleComboBox::setIndexByStyleName(std::string name)
+void StyleComboBox::setIndexByStyleName(QString name)
 {
    int ndx;
 
-   ndx = findText( name.c_str(), Qt::MatchExactly );
+   ndx = findText( name, Qt::MatchExactly );
    /*
    if( ndx == -1 )
       return;
@@ -129,7 +129,7 @@ void StyleComboBox::repopulateList()
 
    size = styleObs.size();
    for( i = 0; i < size; ++i )
-      addItem( styleObs[i]->getName().c_str() );
+      addItem( styleObs[i]->getName() );
 }
 
 Style* StyleComboBox::getSelected()

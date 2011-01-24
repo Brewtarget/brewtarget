@@ -39,12 +39,12 @@ public:
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
-   void setName( const std::string& var );
-   void setCategory( const std::string& var );
-   void setCategoryNumber( const std::string& var );
-   void setStyleLetter( const std::string& var );
-   void setStyleGuide( const std::string& var );
-   void setType( const std::string& var );
+   void setName( const QString& var );
+   void setCategory( const QString& var );
+   void setCategoryNumber( const QString& var );
+   void setStyleLetter( const QString& var );
+   void setStyleGuide( const QString& var );
+   void setType( const QString& var );
    void setOgMin( double var );
    void setOgMax( double var );
    void setFgMin( double var );
@@ -57,17 +57,17 @@ public:
    void setCarbMax_vol( double var );
    void setAbvMin_pct( double var );
    void setAbvMax_pct( double var );
-   void setNotes( const std::string& var );
-   void setProfile( const std::string& var );
-   void setIngredients( const std::string& var );
-   void setExamples( const std::string& var );
+   void setNotes( const QString& var );
+   void setProfile( const QString& var );
+   void setIngredients( const QString& var );
+   void setExamples( const QString& var );
 
-   std::string getName() const;
-   std::string getCategory() const;
-   std::string getCategoryNumber() const;
-   std::string getStyleLetter() const;
-   std::string getStyleGuide() const;
-   std::string getType() const;
+   QString getName() const;
+   QString getCategory() const;
+   QString getCategoryNumber() const;
+   QString getStyleLetter() const;
+   QString getStyleGuide() const;
+   QString getType() const;
    double getOgMin() const;
    double getOgMax() const;
    double getFgMin() const;
@@ -80,21 +80,21 @@ public:
    double getCarbMax_vol() const;
    double getAbvMin_pct() const;
    double getAbvMax_pct() const;
-   std::string getNotes() const;
-   std::string getProfile() const;
-   std::string getIngredients() const;
-   std::string getExamples() const;
+   QString getNotes() const;
+   QString getProfile() const;
+   QString getIngredients() const;
+   QString getExamples() const;
 
 private:
 
    // Mandatory fields.
-   std::string name;
+   QString name;
    static const int version = 1;
-   std::string category;
-   std::string categoryNumber;
-   std::string styleLetter;
-   std::string styleGuide;
-   std::string type;
+   QString category;
+   QString categoryNumber;
+   QString styleLetter;
+   QString styleGuide;
+   QString type;
    double ogMin;
    double ogMax;
    double fgMin;
@@ -109,13 +109,13 @@ private:
    double carbMax_vol;
    double abvMin_pct;
    double abvMax_pct;
-   std::string notes;
-   std::string profile;
-   std::string ingredients;
-   std::string examples;
+   QString notes;
+   QString profile;
+   QString ingredients;
+   QString examples;
 
    void setDefaults();
-   bool isValidType( const std::string &str );
+   bool isValidType( const QString &str );
 };
 
 struct Style_ptr_cmp

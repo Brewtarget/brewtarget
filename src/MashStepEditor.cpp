@@ -40,7 +40,7 @@ void MashStepEditor::showChanges()
       return;
    }
 
-   lineEdit_name->setText(obs->getName().c_str());
+   lineEdit_name->setText(obs->getName());
    comboBox_type->setCurrentIndex(obs->getType());
    lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->getInfuseAmount_l(), Units::liters));
    lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->getInfuseTemp_c(), Units::celsius));
@@ -88,7 +88,7 @@ void MashStepEditor::saveAndClose()
 {
    obs->disableNotification();
 
-   obs->setName(lineEdit_name->text().toStdString());
+   obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
    obs->setInfuseAmount_l(Brewtarget::volQStringToSI(lineEdit_infuseAmount->text()));
    obs->setInfuseTemp_c(Brewtarget::tempQStringToSI(lineEdit_infuseTemp->text()));

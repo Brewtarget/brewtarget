@@ -49,7 +49,7 @@ void EquipmentComboBox::addEquipment(Equipment* equipment)
    equipmentObs.push_back(equipment);
    addObserved(equipment);
 
-   addItem( tr(equipment->getName().c_str()) );
+   addItem( equipment->getName() );
 }
 
 void EquipmentComboBox::removeAllEquipments()
@@ -109,16 +109,16 @@ void EquipmentComboBox::notify(Observable *notifier, QVariant info)
          {
             // Notice we assume 'i' is an index into both 'equipmentObs' and also
             // to the text list in this combo box...
-            setItemText(i, tr(equipmentObs[i]->getName().c_str()));
+            setItemText(i, equipmentObs[i]->getName());
          }
    }
 }
 
-void EquipmentComboBox::setIndexByEquipmentName(std::string name)
+void EquipmentComboBox::setIndexByEquipmentName(QString name)
 {
    int ndx;
 
-   ndx = findText( tr(name.c_str()), Qt::MatchExactly );
+   ndx = findText( name, Qt::MatchExactly );
    /*
    if( ndx == -1 )
       return;
@@ -134,7 +134,7 @@ void EquipmentComboBox::repopulateList()
 
    size = equipmentObs.size();
    for( i = 0; i < size; ++i )
-      addItem( tr(equipmentObs[i]->getName().c_str()) );
+      addItem( equipmentObs[i]->getName() );
 }
 
 Equipment* EquipmentComboBox::getSelected()

@@ -130,7 +130,7 @@ void MashDesigner::saveStep()
    MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
 
    mashStep->disableNotification();
-   mashStep->setName( lineEdit_name->text().toStdString() );
+   mashStep->setName( lineEdit_name->text() );
    mashStep->setType( type );
    mashStep->setStepTemp_c( Brewtarget::tempQStringToSI(lineEdit_temp->text()) );
    mashStep->setStepTime_min( Brewtarget::timeQStringToSI(lineEdit_time->text()) );

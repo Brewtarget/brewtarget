@@ -153,7 +153,7 @@ void HopDialog::newHop()
       return;
 
    Hop* hop = new Hop();
-   std::string stdname = name.toStdString();
+   QString stdname = name;
    hop->setName(stdname);
 
    dbObs->addHop(hop);

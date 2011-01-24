@@ -64,15 +64,15 @@ void MiscEditor::save()
    // will revert any changes made.
    m->disableNotification();
 
-   m->setName(lineEdit_name->text().toStdString());
+   m->setName(lineEdit_name->text());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
    m->setUse( static_cast<Misc::Use>(comboBox_use->currentIndex()) );
    // TODO: fill in the rest of the "set" methods.
    m->setTime(Brewtarget::timeQStringToSI(lineEdit_time->text()));
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
    m->setAmount( m->getAmountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()));
-   m->setUseFor(textEdit_useFor->toPlainText().toStdString());
-   m->setNotes( textEdit_notes->toPlainText().toStdString() );
+   m->setUseFor(textEdit_useFor->toPlainText());
+   m->setNotes( textEdit_notes->toPlainText() );
 
    m->reenableNotification();
    m->forceNotify();
@@ -103,13 +103,13 @@ void MiscEditor::showChanges()
    if( obsMisc == 0 )
       return;
    
-   lineEdit_name->setText(obsMisc->getName().c_str());
+   lineEdit_name->setText(obsMisc->getName());
    lineEdit_name->setCursorPosition(0);
    comboBox_type->setCurrentIndex(obsMisc->getType());
    comboBox_use->setCurrentIndex(obsMisc->getUse());
    lineEdit_time->setText(Brewtarget::displayAmount(obsMisc->getTime(), Units::minutes));
    lineEdit_amount->setText(Brewtarget::displayAmount(obsMisc->getAmount(), (obsMisc->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
    checkBox_isWeight->setCheckState( obsMisc->getAmountIsWeight()? Qt::Checked : Qt::Unchecked );
-   textEdit_useFor->setPlainText( obsMisc->getUseFor().c_str() );
-   textEdit_notes->setPlainText( obsMisc->getNotes().c_str() );
+   textEdit_useFor->setPlainText( obsMisc->getUseFor() );
+   textEdit_notes->setPlainText( obsMisc->getNotes() );
 }

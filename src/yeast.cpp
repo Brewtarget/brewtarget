@@ -48,7 +48,7 @@ void Yeast::toXml(QDomDocument& doc, QDomNode& parent)
    yeastNode = doc.createElement("YEAST");
    
    tmpElement = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
    
@@ -78,12 +78,12 @@ void Yeast::toXml(QDomDocument& doc, QDomNode& parent)
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("LABORATORY");
-   tmpText = doc.createTextNode(laboratory.c_str());
+   tmpText = doc.createTextNode(laboratory);
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("PRODUCT_ID");
-   tmpText = doc.createTextNode(productID.c_str());
+   tmpText = doc.createTextNode(productID);
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 
@@ -108,12 +108,12 @@ void Yeast::toXml(QDomDocument& doc, QDomNode& parent)
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("BEST_FOR");
-   tmpText = doc.createTextNode(bestFor.c_str());
+   tmpText = doc.createTextNode(bestFor);
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 
@@ -216,7 +216,7 @@ void Yeast::fromNode(const QDomNode& yeastNode)
       
       if( property == "NAME" )
       {
-         name = value.toStdString();
+         name = value;
       }
       else if( property == "VERSION" )
       {
@@ -249,11 +249,11 @@ void Yeast::fromNode(const QDomNode& yeastNode)
       }
       else if( property == "LABORATORY" )
       {
-         laboratory = value.toStdString();
+         laboratory = value;
       }
       else if( property == "PRODUCT_ID" )
       {
-         productID = value.toStdString();
+         productID = value;
       }
       else if( property == "MIN_TEMPERATURE" )
       {
@@ -277,11 +277,11 @@ void Yeast::fromNode(const QDomNode& yeastNode)
       }
       else if( property == "NOTES" )
       {
-         notes = value.toStdString();
+         notes = value;
       }
       else if( property == "BEST_FOR" )
       {
-         bestFor = value.toStdString();
+         bestFor = value;
       }
       else if( property == "TIMES_CULTURED" )
       {
@@ -305,9 +305,9 @@ void Yeast::fromNode(const QDomNode& yeastNode)
 }
 
 //============================="SET" METHODS====================================
-void Yeast::setName( const std::string& var )
+void Yeast::setName( const QString& var )
 {
-   name = std::string(var);
+   name = QString(var);
    hasChanged();
 }
 
@@ -340,15 +340,15 @@ void Yeast::setAmountIsWeight( bool var )
    hasChanged();
 }
 
-void Yeast::setLaboratory( const std::string& var )
+void Yeast::setLaboratory( const QString& var )
 {
-   laboratory = std::string(var);
+   laboratory = QString(var);
    hasChanged();
 }
 
-void Yeast::setProductID( const std::string& var )
+void Yeast::setProductID( const QString& var )
 {
-   productID = std::string(var);
+   productID = QString(var);
    hasChanged();
 }
 
@@ -391,15 +391,15 @@ void Yeast::setAttenuation_pct( double var )
    }
 }
 
-void Yeast::setNotes( const std::string& var )
+void Yeast::setNotes( const QString& var )
 {
-   notes = std::string(var);
+   notes = QString(var);
    hasChanged();
 }
 
-void Yeast::setBestFor( const std::string& var )
+void Yeast::setBestFor( const QString& var )
 {
-   bestFor = std::string(var);
+   bestFor = QString(var);
    hasChanged();
 }
 
@@ -431,29 +431,29 @@ void Yeast::setAddToSecondary( bool var )
 }
    
 //============================="GET" METHODS====================================
-std::string Yeast::getName() const { return name; }
+QString Yeast::getName() const { return name; }
 Yeast::Type Yeast::getType() const { return type; }
 const QString& Yeast::getTypeString() const { return types.at(type); }
 Yeast::Form Yeast::getForm() const { return form; }
 const QString& Yeast::getFormString() const { return forms.at(form); }
 double Yeast::getAmount() const { return amount; }
 bool Yeast::getAmountIsWeight() const { return amountIsWeight; }
-std::string Yeast::getLaboratory() const { return laboratory; }
-std::string Yeast::getProductID() const { return productID; }
+QString Yeast::getLaboratory() const { return laboratory; }
+QString Yeast::getProductID() const { return productID; }
 double Yeast::getMinTemperature_c() const { return minTemperature_c; }
 double Yeast::getMaxTemperature_c() const { return maxTemperature_c; }
 Yeast::Flocculation Yeast::getFlocculation() const { return flocculation; }
 const QString& Yeast::getFlocculationString() const { return flocculations.at(flocculation); }
 double Yeast::getAttenuation_pct() const { return attenuation_pct; }
-std::string Yeast::getNotes() const { return notes; }
-std::string Yeast::getBestFor() const { return bestFor; }
+QString Yeast::getNotes() const { return notes; }
+QString Yeast::getBestFor() const { return bestFor; }
 int Yeast::getTimesCultured() const { return timesCultured; }
 int Yeast::getMaxReuse() const { return maxReuse; }
 bool Yeast::getAddToSecondary() const { return addToSecondary; }
 
-bool Yeast::isValidType(const std::string& str) const
+bool Yeast::isValidType(const QString& str) const
 {
-   static const std::string types[] = {"Ale", "Lager", "Wheat", "Wine", "Champagne"};
+   static const QString types[] = {"Ale", "Lager", "Wheat", "Wine", "Champagne"};
    unsigned int i, size = 5;
    
    for( i = 0; i < size; ++i )
@@ -463,9 +463,9 @@ bool Yeast::isValidType(const std::string& str) const
    return false;
 }
 
-bool Yeast::isValidForm(const std::string& str) const
+bool Yeast::isValidForm(const QString& str) const
 {
-   static const std::string forms[] = {"Liquid", "Dry", "Slant", "Culture"};
+   static const QString forms[] = {"Liquid", "Dry", "Slant", "Culture"};
    unsigned int i, size=4;
    
    for( i = 0; i < size; ++i )
@@ -475,9 +475,9 @@ bool Yeast::isValidForm(const std::string& str) const
    return false;
 }
 
-bool Yeast::isValidFlocculation(const std::string& str) const
+bool Yeast::isValidFlocculation(const QString& str) const
 {
-   static const std::string floc[] = {"Low", "Medium", "High", "Very High"};
+   static const QString floc[] = {"Low", "Medium", "High", "Very High"};
    unsigned int i, size=4;
    
    for( i = 0; i < size; ++i )

@@ -48,7 +48,7 @@ void Mash::toXml(QDomDocument& doc, QDomNode& parent)
    mashNode = doc.createElement("MASH");
    
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
    
@@ -69,7 +69,7 @@ void Mash::toXml(QDomDocument& doc, QDomNode& parent)
    mashNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpNode.appendChild(tmpText);
    mashNode.appendChild(tmpNode);
    
@@ -157,7 +157,7 @@ void Mash::fromNode(const QDomNode& mashNode)
       
       if( property == "NAME" )
       {
-         name = value.toStdString();
+         name = value;
       }
       else if( property == "VERSION" )
       {
@@ -177,7 +177,7 @@ void Mash::fromNode(const QDomNode& mashNode)
       }
       else if( property == "NOTES" )
       {
-         setNotes(value.toStdString());
+         setNotes(value);
       }
       else if( property == "TUN_TEMP" )
       {
@@ -210,9 +210,9 @@ void Mash::fromNode(const QDomNode& mashNode)
    }
 }
 
-void Mash::setName( const std::string& var )
+void Mash::setName( const QString& var )
 {
-   name = std::string(var);
+   name = QString(var);
    hasChanged();
 }
 
@@ -222,9 +222,9 @@ void Mash::setGrainTemp_c( double var )
    hasChanged();
 }
 
-void Mash::setNotes( const std::string& var )
+void Mash::setNotes( const QString& var )
 {
-   notes = std::string(var);
+   notes = QString(var);
    hasChanged();
 }
 
@@ -333,7 +333,7 @@ void Mash::removeAllMashSteps()
 }
 
 //============================="GET" METHODS====================================
-std::string Mash::getName() const
+QString Mash::getName() const
 {
    return name;
 }
@@ -356,7 +356,7 @@ MashStep* Mash::getMashStep( unsigned int i )
       return mashSteps[i];
 }
 
-std::string Mash::getNotes() const
+QString Mash::getNotes() const
 {
    return notes;
 }

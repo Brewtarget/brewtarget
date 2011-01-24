@@ -141,7 +141,7 @@ QString BrewDayScrollWidget::buildTitleTable()
    header += "</style></head>";
 
    body   = "<body>";
-   body += QString("<h1>%1</h1>").arg(recObs->getName().c_str());
+   body += QString("<h1>%1</h1>").arg(recObs->getName());
    body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
 
    // Build the top table
@@ -150,7 +150,7 @@ QString BrewDayScrollWidget::buildTitleTable()
    body += QString("<tr><td class=\"left\">%1</td>")
 		   .arg(tr("Style"));
    body += tr("<td class=\"value\">%1</td>")
-           .arg(recObs->getStyle()->getName().c_str());
+           .arg(recObs->getStyle()->getName());
    body += QString("<td class=\"right\">%1</td>")
 		   .arg(tr("Date"));
    body += tr("<td class=\"value\">%1</td></tr>")

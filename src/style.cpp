@@ -44,7 +44,7 @@ void Style::toXml(QDomDocument& doc, QDomNode& parent)
    styleNode = doc.createElement("STYLE");
 
    tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name.c_str());
+   tmpText = doc.createTextNode(name);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
@@ -54,27 +54,27 @@ void Style::toXml(QDomDocument& doc, QDomNode& parent)
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("CATEGORY");
-   tmpText = doc.createTextNode(category.c_str());
+   tmpText = doc.createTextNode(category);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("CATEGORY_NUMBER");
-   tmpText = doc.createTextNode(categoryNumber.c_str());
+   tmpText = doc.createTextNode(categoryNumber);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("STYLE_LETTER");
-   tmpText = doc.createTextNode(styleLetter.c_str());
+   tmpText = doc.createTextNode(styleLetter);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("STYLE_GUIDE");
-   tmpText = doc.createTextNode(styleGuide.c_str());
+   tmpText = doc.createTextNode(styleGuide);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type.c_str());
+   tmpText = doc.createTextNode(type);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
@@ -139,22 +139,22 @@ void Style::toXml(QDomDocument& doc, QDomNode& parent)
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes.c_str());
+   tmpText = doc.createTextNode(notes);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("PROFILE");
-   tmpText = doc.createTextNode(profile.c_str());
+   tmpText = doc.createTextNode(profile);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("INGREDIENTS");
-   tmpText = doc.createTextNode(ingredients.c_str());
+   tmpText = doc.createTextNode(ingredients);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("EXAMPLES");
-   tmpText = doc.createTextNode(examples.c_str());
+   tmpText = doc.createTextNode(examples);
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
@@ -227,7 +227,7 @@ void Style::fromNode(const QDomNode& styleNode)
       
       if( property == "NAME" )
       {
-         setName(value.toStdString());
+         setName(value);
       }
       else if( property == "VERSION" )
       {
@@ -236,23 +236,23 @@ void Style::fromNode(const QDomNode& styleNode)
       }
       else if( property == "CATEGORY" )
       {
-         setCategory(value.toStdString());
+         setCategory(value);
       }
       else if( property == "CATEGORY_NUMBER" )
       {
-         setCategoryNumber(value.toStdString());
+         setCategoryNumber(value);
       }
       else if( property == "STYLE_LETTER" )
       {
-         setStyleLetter(value.toStdString());
+         setStyleLetter(value);
       }
       else if( property == "STYLE_GUIDE" )
       {
-         setStyleGuide(value.toStdString());
+         setStyleGuide(value);
       }
       else if( property == "TYPE" )
       {
-         setType(value.toStdString());
+         setType(value);
       }
       else if( property == "OG_MIN" )
       {
@@ -304,19 +304,19 @@ void Style::fromNode(const QDomNode& styleNode)
       }
       else if( property == "NOTES" )
       {
-         setNotes(value.toStdString());
+         setNotes(value);
       }
       else if( property == "PROFILE" )
       {
-         setProfile(value.toStdString());
+         setProfile(value);
       }
       else if( property == "INGREDIENTS" )
       {
-         setIngredients(value.toStdString());
+         setIngredients(value);
       }
       else if( property == "EXAMPLES" )
       {
-         setExamples(value.toStdString());
+         setExamples(value);
       }
       else
       {
@@ -326,43 +326,43 @@ void Style::fromNode(const QDomNode& styleNode)
 }
 
 //==============================="SET" METHODS==================================
-void Style::setName( const std::string& var )
+void Style::setName( const QString& var )
 {
-   name = std::string(var);
+   name = QString(var);
    hasChanged();
 }
 
-void Style::setCategory( const std::string& var )
+void Style::setCategory( const QString& var )
 {
-   category = std::string(var);
+   category = QString(var);
    hasChanged();
 }
 
-void Style::setCategoryNumber( const std::string& var )
+void Style::setCategoryNumber( const QString& var )
 {
-   categoryNumber = std::string(var);
+   categoryNumber = QString(var);
    hasChanged();
 }
 
-void Style::setStyleLetter( const std::string& var )
+void Style::setStyleLetter( const QString& var )
 {
-   styleLetter= std::string(var);
+   styleLetter= QString(var);
    hasChanged();
 }
 
-void Style::setStyleGuide( const std::string& var )
+void Style::setStyleGuide( const QString& var )
 {
-   styleGuide = std::string(var);
+   styleGuide = QString(var);
    hasChanged();
 }
 
-void Style::setType( const std::string& var )
+void Style::setType( const QString& var )
 {
    if( ! isValidType(var) )
       return;
    else
    {
-      type = std::string(var);
+      type = QString(var);
       hasChanged();
    }
 }
@@ -499,57 +499,57 @@ void Style::setAbvMax_pct( double var )
    }
 }
 
-void Style::setNotes( const std::string& var )
+void Style::setNotes( const QString& var )
 {
-   notes = std::string(var);
+   notes = QString(var);
    hasChanged();
 }
 
-void Style::setProfile( const std::string& var )
+void Style::setProfile( const QString& var )
 {
-   profile = std::string(var);
+   profile = QString(var);
    hasChanged();
 }
 
-void Style::setIngredients( const std::string& var )
+void Style::setIngredients( const QString& var )
 {
-   ingredients = std::string(var);
+   ingredients = QString(var);
    hasChanged();
 }
 
-void Style::setExamples( const std::string& var )
+void Style::setExamples( const QString& var )
 {
-   examples = std::string(var);
+   examples = QString(var);
    hasChanged();
 }
 
 //============================="GET" METHODS====================================
-std::string Style::getName() const
+QString Style::getName() const
 {
    return name;
 }
 
-std::string Style::getCategory() const
+QString Style::getCategory() const
 {
    return category;
 }
 
-std::string Style::getCategoryNumber() const
+QString Style::getCategoryNumber() const
 {
    return categoryNumber;
 }
 
-std::string Style::getStyleLetter() const
+QString Style::getStyleLetter() const
 {
    return styleLetter;
 }
 
-std::string Style::getStyleGuide() const
+QString Style::getStyleGuide() const
 {
    return styleGuide;
 }
 
-std::string Style::getType() const
+QString Style::getType() const
 {
    return type;
 }
@@ -614,29 +614,29 @@ double Style::getAbvMax_pct() const
    return abvMax_pct;
 }
 
-std::string Style::getNotes() const
+QString Style::getNotes() const
 {
    return notes;
 }
 
-std::string Style::getProfile() const
+QString Style::getProfile() const
 {
    return profile;
 }
 
-std::string Style::getIngredients() const
+QString Style::getIngredients() const
 {
    return ingredients;
 }
 
-std::string Style::getExamples() const
+QString Style::getExamples() const
 {
    return examples;
 }
 
-bool Style::isValidType( const std::string &str )
+bool Style::isValidType( const QString &str )
 {
-   static const std::string types[] = {"Lager", "Ale", "Mead", "Wheat", "Mixed", "Cider"};
+   static const QString types[] = {"Lager", "Ale", "Mead", "Wheat", "Mixed", "Cider"};
    static const unsigned int size = 7;
    unsigned int i;
    
