@@ -48,7 +48,7 @@ HopTableModel::HopTableModel(HopTableWidget* parent)
 
 void HopTableModel::addHop(Hop* hop)
 {
-   std::vector<Hop*>::iterator iter;
+   QVector<Hop*>::iterator iter;
    
    //Check to see if it's already in the list
    for( iter=hopObs.begin(); iter != hopObs.end(); iter++ )
@@ -85,7 +85,7 @@ void HopTableModel::setRecipe( Recipe* rec )
 
 bool HopTableModel::removeHop(Hop* hop)
 {
-   std::vector<Hop*>::iterator iter;
+   QVector<Hop*>::iterator iter;
    
    for( iter=hopObs.begin(); iter != hopObs.end(); iter++ )
       if( *iter == hop )
@@ -108,7 +108,7 @@ bool HopTableModel::removeHop(Hop* hop)
 
 void HopTableModel::removeAll()
 {
-   unsigned int i;
+   int i;
 
    for( i = 0; i < hopObs.size(); ++i )
       removeObserved(hopObs[i]);

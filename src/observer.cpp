@@ -70,7 +70,7 @@ void MultipleObserver::addObserved(Observable* obs)
 
 void MultipleObserver::removeObserved(Observable* obs)
 {
-   std::vector<Observable*>::iterator iter;
+   QVector<Observable*>::iterator iter;
    
    if( !obs )
       return;

@@ -21,7 +21,7 @@
 
 void Observable::setDefaults()
 {
-   observers = std::vector<Observer*>();
+   observers = QVector<Observer*>();
    doNotify = true;
 }
 
@@ -43,7 +43,7 @@ void Observable::addObserver(Observer* obs)
 
 bool Observable::removeObserver(Observer* obs)
 {
-   std::vector<Observer*>::iterator iter;
+   QVector<Observer*>::iterator iter;
    
    for( iter = observers.begin(); iter != observers.end(); ++iter )
       if( *iter == obs )

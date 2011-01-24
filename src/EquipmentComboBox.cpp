@@ -59,7 +59,7 @@ void EquipmentComboBox::removeAllEquipments()
    equipmentObs.clear(); // Delete internal list.
     */
 
-   unsigned int i;
+   int i;
    for( i=0; i < equipmentObs.size(); ++i )
       removeObserved(equipmentObs[i]);
    equipmentObs.clear(); // Clear internal list.

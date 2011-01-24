@@ -45,7 +45,7 @@ YeastTableModel::YeastTableModel(YeastTableWidget* parent)
 
 void YeastTableModel::addYeast(Yeast* yeast)
 {
-   std::vector<Yeast*>::iterator iter;
+   QVector<Yeast*>::iterator iter;
 
    //Check to see if it's already in the list
    for( iter=yeastObs.begin(); iter != yeastObs.end(); iter++ )
@@ -65,7 +65,7 @@ void YeastTableModel::addYeast(Yeast* yeast)
 
 bool YeastTableModel::removeYeast(Yeast* yeast)
 {
-   std::vector<Yeast*>::iterator iter;
+   QVector<Yeast*>::iterator iter;
 
    for( iter=yeastObs.begin(); iter != yeastObs.end(); iter++ )
       if( *iter == yeast )
@@ -88,7 +88,7 @@ bool YeastTableModel::removeYeast(Yeast* yeast)
 
 void YeastTableModel::removeAll()
 {
-   unsigned int i;
+   int i;
 
    for( i = 0; i < yeastObs.size(); ++i )
       removeObserved(yeastObs[i]);

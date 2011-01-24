@@ -18,7 +18,7 @@
 
 #ifndef _OBSERVABLE_H
 #define	_OBSERVABLE_H
-#include <vector>
+#include <QVector>
 #include <QVariant>
 
 class Observable;
@@ -42,7 +42,7 @@ public:
    void forceNotify();
    
 private:
-   std::vector<Observer*> observers;
+   QVector<Observer*> observers;
    bool doNotify;
    
    void notifyObservers(QVariant info);
@@ -74,7 +74,7 @@ public:
    // virtual void notify(Observable* notifier, QVariant info); // Don't forget to overload from class Observer.
    
 private:
-   std::vector<Observable*> obsVec;
+   QVector<Observable*> obsVec;
 };
 
 #endif	/* _OBSERVABLE_H */

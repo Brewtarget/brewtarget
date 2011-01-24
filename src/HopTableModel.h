@@ -59,7 +59,7 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
 private:
-   std::vector<Hop*> hopObs;
+   QVector<Hop*> hopObs;
    Recipe* recObs;
    HopTableWidget* parentTableWidget;
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.

@@ -58,7 +58,7 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
 private:
-   std::vector<Misc*> miscObs;
+   QVector<Misc*> miscObs;
    MiscTableWidget* parentTableWidget;
 };
 

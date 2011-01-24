@@ -55,7 +55,7 @@ FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
 
 void FermentableTableModel::addFermentable(Fermentable* ferm)
 {
-   std::vector<Fermentable*>::iterator iter;
+   QVector<Fermentable*>::iterator iter;
    
    //Check to see if it's already in the list
    for( iter=fermObs.begin(); iter != fermObs.end(); iter++ )
@@ -76,7 +76,7 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
 
 bool FermentableTableModel::removeFermentable(Fermentable* ferm)
 {
-   std::vector<Fermentable*>::iterator iter;
+   QVector<Fermentable*>::iterator iter;
    
    for( iter=fermObs.begin(); iter != fermObs.end(); iter++ )
       if( *iter == ferm )
@@ -100,7 +100,7 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
 
 void FermentableTableModel::removeAll()
 {
-   unsigned int i;
+   int i;
 
    for( i = 0; i < fermObs.size(); ++i )
       removeObserved(fermObs[i]);

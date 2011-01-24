@@ -54,7 +54,7 @@ void StyleComboBox::addStyle(Style* style)
 
 void StyleComboBox::removeAllStyles()
 {
-   unsigned int i;
+   int i;
    for( i = 0; i < styleObs.size(); ++i )
       removeObserved(styleObs[i]);
    styleObs.clear(); // Clear the internal list.

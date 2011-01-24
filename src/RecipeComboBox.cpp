@@ -58,7 +58,7 @@ void RecipeComboBox::addRecipe(Recipe* recipe)
 
 void RecipeComboBox::removeAllRecipes()
 {
-   unsigned int i;
+   int i;
    for( i = 0; i < recipeObs.size(); ++i )
       removeObserved(recipeObs[i]);
    recipeObs.clear(); // Clear internal list.

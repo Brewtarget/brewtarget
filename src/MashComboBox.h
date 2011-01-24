@@ -48,7 +48,7 @@ class MashComboBox : public QComboBox, public MultipleObserver
       virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
       
    private:
-      std::vector<Mash*> mashObs;
+      QVector<Mash*> mashObs;
       Database* dbObs;
 };
 

@@ -75,7 +75,7 @@ private:
    QString name;
    static const int version = 1;
    double grainTemp_c;
-   std::vector<MashStep *> mashSteps;
+   QVector<MashStep *> mashSteps;
    QString notes;
    double tunTemp_c;
    double spargeTemp_c;

@@ -57,7 +57,7 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
 private:
-   std::vector<Water*> waterObs;
+   QVector<Water*> waterObs;
    WaterTableWidget* parentTableWidget;
 };
 

@@ -110,7 +110,7 @@ void Mash::setDefaults()
 {
    name = "";
    grainTemp_c = 21.0;
-   mashSteps = std::vector<MashStep *>();
+   mashSteps = QVector<MashStep *>();
    notes = "";
    tunTemp_c = 21.0;
    spargeTemp_c = 74.0; // 74C is recommended in John Palmer's How to Brew.
@@ -305,7 +305,7 @@ void Mash::removeMashStep(MashStep* step)
    if( step == 0 )
       return;
 
-   std::vector<MashStep*>::iterator it;
+   QVector<MashStep*>::iterator it;
    for( it = mashSteps.begin(); it != mashSteps.end(); it++ )
    {
       if(*it == step )
@@ -350,7 +350,7 @@ unsigned int Mash::getNumMashSteps() const
 
 MashStep* Mash::getMashStep( unsigned int i )
 {
-   if( i >= mashSteps.size() )
+   if( static_cast<int>(i) >= mashSteps.size() )
       return 0;
    else
       return mashSteps[i];
@@ -427,7 +427,7 @@ void Mash::notify(Observable *notifier, QVariant info)
 
 void Mash::swapSteps( unsigned int i, unsigned int j )
 {
-   if( i < 0 || j < 0 || i >= mashSteps.size() || j >= mashSteps.size() )
+   if( i < 0 || j < 0 || static_cast<int>(i) >= mashSteps.size() || static_cast<int>(j) >= mashSteps.size() )
       return; // Bad indices.
 
    MashStep* tmp = mashSteps[i];

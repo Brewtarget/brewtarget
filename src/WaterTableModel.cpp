@@ -44,7 +44,7 @@ WaterTableModel::WaterTableModel(WaterTableWidget* parent)
 
 void WaterTableModel::addWater(Water* water)
 {
-   std::vector<Water*>::iterator iter;
+   QVector<Water*>::iterator iter;
 
    //Check to see if it's already in the list
    for( iter=waterObs.begin(); iter != waterObs.end(); iter++ )
@@ -64,7 +64,7 @@ void WaterTableModel::addWater(Water* water)
 
 bool WaterTableModel::removeWater(Water* water)
 {
-   std::vector<Water*>::iterator iter;
+   QVector<Water*>::iterator iter;
 
    for( iter=waterObs.begin(); iter != waterObs.end(); iter++ )
       if( *iter == water )
@@ -87,7 +87,7 @@ bool WaterTableModel::removeWater(Water* water)
 
 void WaterTableModel::removeAll()
 {
-   unsigned int i;
+   int i;
 
    for( i = 0; i < waterObs.size(); ++i )
       removeObserved(waterObs[i]);

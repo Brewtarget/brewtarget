@@ -942,7 +942,7 @@ void MainWindow::importRecipes()
 //   const char* filename;
    unsigned int numRecipes, i;
    //std::fstream in;
-   //std::vector<XmlNode*> nodes;
+   //QVector<XmlNode*> nodes;
    Recipe* newRec;
    QFile inFile;
    QDomDocument xmlDoc;

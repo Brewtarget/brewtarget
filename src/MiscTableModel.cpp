@@ -44,7 +44,7 @@ MiscTableModel::MiscTableModel(MiscTableWidget* parent)
 
 void MiscTableModel::addMisc(Misc* misc)
 {
-   unsigned int i;
+   int i;
    // Check to see if it's already in the list.
    for( i = 0; i < miscObs.size(); ++i )
       if( miscObs[i] == misc )
@@ -64,7 +64,7 @@ void MiscTableModel::addMisc(Misc* misc)
 // Returns true when misc is successfully found and removed.
 bool MiscTableModel::removeMisc(Misc* misc)
 {
-   std::vector<Misc*>::iterator iter;
+   QVector<Misc*>::iterator iter;
    
    for( iter=miscObs.begin(); iter != miscObs.end(); iter++ )
       if( *iter == misc )
@@ -87,7 +87,7 @@ bool MiscTableModel::removeMisc(Misc* misc)
 
 void MiscTableModel::removeAll()
 {
-   unsigned int i;
+   int i;
 
    for( i = 0; i < miscObs.size(); ++i )
       removeObserved(miscObs[i]);

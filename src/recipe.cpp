@@ -273,11 +273,11 @@ void Recipe::setDefaults()
    boilSize_l = 0.0;
    boilTime_min = 0.0;
    efficiency_pct = 0.0;
-   hops = std::vector<Hop*>();
-   fermentables = std::vector<Fermentable*>();
-   miscs = std::vector<Misc*>();
-   yeasts = std::vector<Yeast*>();
-   waters = std::vector<Water*>();
+   hops = QVector<Hop*>();
+   fermentables = QVector<Fermentable*>();
+   miscs = QVector<Misc*>();
+   yeasts = QVector<Yeast*>();
+   waters = QVector<Water*>();
    mash = new Mash();
    addObserved(mash);
 
@@ -668,7 +668,7 @@ void Recipe::addInstruction(Instruction* ins)
 
 void Recipe::removeInstruction(Instruction* ins)
 {
-   std::vector<Instruction*>::iterator it;
+   QVector<Instruction*>::iterator it;
 
    for( it = instructions.begin(); it != instructions.end(); it++ )
    {
@@ -683,7 +683,7 @@ void Recipe::removeInstruction(Instruction* ins)
 
 void Recipe::swapInstructions(unsigned int j, unsigned int k)
 {
-   if( j == k || j >= instructions.size() || k >= instructions.size() )
+   if( j == k || static_cast<int>(j) >= instructions.size() || static_cast<int>(k) >= instructions.size() )
       return;
    
    Instruction* tmp;
@@ -705,7 +705,7 @@ void Recipe::clearInstructions()
 
 void Recipe::insertInstruction(Instruction* ins, int pos)
 {
-   std::vector<Instruction*>::iterator it;
+   QVector<Instruction*>::iterator it;
    int i;
 
    if( ins == 0 )
@@ -728,7 +728,7 @@ int Recipe::getNumInstructions()
 
 Instruction* Recipe::getInstruction(unsigned int i)
 {
-   if( i < instructions.size() )
+   if( static_cast<int>(i) < instructions.size() )
       return instructions[i];
    else
       return 0;
@@ -745,7 +745,7 @@ void Recipe::generateInstructions()
    double totalWaterAdded_l = 0.0;
    double wortInBoil_l = 0.0;
    double wort_l = 0.0;
-   std::vector<PreInstruction> preinstructions;
+   QVector<PreInstruction> preinstructions;
 
    // Mash instructions
    if( mash != 0 && mash->getNumMashSteps() > 0 )
@@ -756,7 +756,7 @@ void Recipe::generateInstructions()
       ins = new Instruction();
       ins->setName(QObject::tr("Add grains"));
       str = QObject::tr("Add ");
-      for( j = 0; j < fermentables.size(); ++j )
+      for( j = 0; static_cast<int>(j) < fermentables.size(); ++j )
       {
          if( fermentables[j]->getIsMashed() )
 			 tmp = QString("%1 %2, ")
@@ -834,7 +834,7 @@ void Recipe::generateInstructions()
       /*** END do each mash step ***/
 
       /*** Hops mash additions ***/
-      for( j = 0; j < hops.size(); ++j )
+      for( j = 0; static_cast<int>(j) < hops.size(); ++j )
       {
          Hop* hop = hops[j];
          if( hop->getUse() == Hop::USEMASH )
@@ -849,7 +849,7 @@ void Recipe::generateInstructions()
       /*** END hop mash additions ***/
 
       /*** Misc mash additions ***/
-      for( j = 0; j < miscs.size(); ++j )
+      for( j = 0; static_cast<int>(j) < miscs.size(); ++j )
       {
          Misc* misc = miscs[j];
          if( misc->getUse() == Misc::USEMASH )
@@ -865,7 +865,7 @@ void Recipe::generateInstructions()
 
       // Add instructions in descending mash time order.
       std::sort(preinstructions.begin(), preinstructions.end());
-      for( i=0; i < preinstructions.size(); i++ )
+      for( i=0; static_cast<int>(i) < preinstructions.size(); i++ )
       {
          j = preinstructions.size()- i - 1;
          PreInstruction pi = preinstructions[j];
@@ -880,7 +880,7 @@ void Recipe::generateInstructions()
    // First wort hopping
    bool hasHop = false;
    str = QObject::tr("Do first wort hopping with ");
-   for( i = 0; i < hops.size(); ++i )
+   for( i = 0; static_cast<int>(i) < hops.size(); ++i )
    {
       Hop* hop = hops[i];
       if( hop->getUse() == Hop::USEFIRST_WORT )
@@ -947,7 +947,7 @@ void Recipe::generateInstructions()
    /*** Get fermentables we haven't added yet ***/
    bool hasFerms = false;
    str = QObject::tr("Add ");
-   for( i = 0; i < fermentables.size(); ++i )
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
    {
       Fermentable* ferm = fermentables[i];
       if( ferm->getIsMashed() || ferm->getAddAfterBoil() )
@@ -966,7 +966,7 @@ void Recipe::generateInstructions()
    /*** END Get fermentables we haven't added yet ***/
    
    /*** Boiled hops ***/
-   for( i = 0; i < hops.size(); ++i )
+   for( i = 0; static_cast<int>(i) < hops.size(); ++i )
    {
       Hop* hop = hops[i];
       if( hop->getUse() == Hop::USEBOIL )
@@ -981,7 +981,7 @@ void Recipe::generateInstructions()
    /*** END boiled hops***/
 
    /*** Boiled miscs ***/
-   for( i = 0; i < miscs.size(); ++i )
+   for( i = 0; static_cast<int>(i) < miscs.size(); ++i )
    {
       Misc* misc = miscs[i];
       if( misc->getUse() == Misc::USEBOIL )
@@ -998,7 +998,7 @@ void Recipe::generateInstructions()
 
    // Add instructions in descending mash time order.
    std::sort(preinstructions.begin(), preinstructions.end());
-  for( i=0; i < preinstructions.size(); i++ )
+  for( i=0; static_cast<int>(i) < preinstructions.size(); i++ )
   {
 	  j = preinstructions.size()- i - 1;
       PreInstruction pi = preinstructions[j];
@@ -1015,7 +1015,7 @@ void Recipe::generateInstructions()
    /*** Fermentables added after boil ***/
    hasFerms = false;
    str = QObject::tr("Add ");
-   for( i = 0; i < fermentables.size(); ++i )
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
    {
       Fermentable* ferm = fermentables[i];
       if( ! ferm->getAddAfterBoil() )
@@ -1063,7 +1063,7 @@ void Recipe::generateInstructions()
    
    /*** Primary yeast ***/
    str = QObject::tr("Cool wort and pitch ");
-   for( i = 0; i < yeasts.size(); ++i )
+   for( i = 0; static_cast<int>(i) < yeasts.size(); ++i )
    {
       Yeast* yeast = yeasts[i];
       if( ! yeast->getAddToSecondary() )
@@ -1079,7 +1079,7 @@ void Recipe::generateInstructions()
    /*** Primary misc ***/
    str = QObject::tr("Add ");
    bool hasMisc = false;
-   for( i = 0; i < miscs.size(); ++i )
+   for( i = 0; static_cast<int>(i) < miscs.size(); ++i )
    {
       Misc* misc = miscs[i];
       if( misc->getUse() == Misc::USEPRIMARY )
@@ -1114,7 +1114,7 @@ void Recipe::generateInstructions()
    instructions.push_back(ins);
 
    /*** Secondary misc ***/
-   for( i = 0; i < miscs.size(); ++i )
+   for( i = 0; static_cast<int>(i) < miscs.size(); ++i )
    {
       Misc* misc = miscs[i];
       if( misc->getUse() == Misc::USESECONDARY )
@@ -1133,7 +1133,7 @@ void Recipe::generateInstructions()
    /*** END secondary misc ***/
 
    /*** Dry hopping ***/
-   for( i = 0; i < hops.size(); ++i )
+   for( i = 0; static_cast<int>(i) < hops.size(); ++i )
    {
       Hop* hop = hops[i];
       if( hop->getUse() == Hop::USEDRY_HOP )
@@ -1671,7 +1671,7 @@ unsigned int Recipe::getNumHops() const
 
 Hop* Recipe::getHop(unsigned int i)
 {
-   if( i >= hops.size() )
+   if( static_cast<int>(i) >= hops.size() )
    {
       Brewtarget::logE( QString("Recipe: bad index into hops: %1").arg(i) );
       return 0;
@@ -1687,7 +1687,7 @@ unsigned int Recipe::getNumFermentables() const
 
 Fermentable* Recipe::getFermentable(unsigned int i)
 {
-   if( i >= fermentables.size() )
+   if( static_cast<int>(i) >= fermentables.size() )
    {
       Brewtarget::logE( QString("Recipe: bad index into fermentables: %1").arg(i) );
       return 0;
@@ -1703,7 +1703,7 @@ unsigned int Recipe::getNumMiscs() const
 
 Misc* Recipe::getMisc(unsigned int i)
 {
-   if( i >= miscs.size() )
+   if( static_cast<int>(i) >= miscs.size() )
    {
       Brewtarget::logW( QString("Recipe: bad index into miscs: %1").arg(i) );
       return 0;
@@ -1719,7 +1719,7 @@ unsigned int Recipe::getNumYeasts() const
 
 Yeast* Recipe::getYeast(unsigned int i)
 {
-   if( i >= yeasts.size() )
+   if( static_cast<int>(i) >= yeasts.size() )
    {
       Brewtarget::logW( QString("Recipe: bad index into yeasts: %1").arg(i) );
       return 0;
@@ -1735,7 +1735,7 @@ unsigned int Recipe::getNumWaters() const
 
 Water* Recipe::getWater(unsigned int i)
 {
-   if( i >= waters.size() )
+   if( static_cast<int>(i) >= waters.size() )
    {
       Brewtarget::logW( QString("Recipe: bad index into water: %1").arg(i) );
       return 0;
@@ -1890,7 +1890,7 @@ void Recipe::recalculate()
    Yeast* yeast;
    
    // Calculate OG
-   for( i = 0; i < fermentables.size(); ++i )
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
    {
       ferm = fermentables[i];
 
@@ -1952,7 +1952,7 @@ void Recipe::recalculate()
    points = (og-1)*1000.0;
 
    // Calculage FG
-   for( i = 0; i < yeasts.size(); ++i )
+   for( i = 0; static_cast<int>(i) < yeasts.size(); ++i )
    {
       yeast = yeasts[i];
       // Get the yeast with the greatest attenuation.
@@ -1981,7 +1981,7 @@ double Recipe::getColor_srm()
    double mcu = 0.0;
    unsigned int i;
 
-   for( i = 0; i < fermentables.size(); ++i )
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
    {
       ferm = fermentables[i];
       // Conversion factor for lb/gal to kg/l = 8.34538.
@@ -2014,7 +2014,7 @@ void Recipe::notify(Observable* /*notifier*/, QVariant info)
 // Returns true if var is found and removed.
 bool Recipe::removeHop( Hop *var )
 {
-   std::vector<Hop*>::iterator iter;
+   QVector<Hop*>::iterator iter;
 
    for( iter = hops.begin(); iter != hops.end(); iter++ )
    {
@@ -2032,7 +2032,7 @@ bool Recipe::removeHop( Hop *var )
 
 bool Recipe::removeFermentable(Fermentable* var)
 {
-   std::vector<Fermentable*>::iterator iter;
+   QVector<Fermentable*>::iterator iter;
 
    for( iter = fermentables.begin(); iter != fermentables.end(); iter++ )
    {
@@ -2050,7 +2050,7 @@ bool Recipe::removeFermentable(Fermentable* var)
 
 bool Recipe::removeMisc(Misc* var)
 {
-   std::vector<Misc*>::iterator iter;
+   QVector<Misc*>::iterator iter;
 
    for( iter = miscs.begin(); iter != miscs.end(); iter++ )
    {
@@ -2068,7 +2068,7 @@ bool Recipe::removeMisc(Misc* var)
 
 bool Recipe::removeWater(Water* var)
 {
-   std::vector<Water*>::iterator iter;
+   QVector<Water*>::iterator iter;
 
    for( iter = waters.begin(); iter != waters.end(); iter++ )
    {
@@ -2086,7 +2086,7 @@ bool Recipe::removeWater(Water* var)
 
 bool Recipe::removeYeast(Yeast* var)
 {
-   std::vector<Yeast*>::iterator iter;
+   QVector<Yeast*>::iterator iter;
 
    for( iter = yeasts.begin(); iter != yeasts.end(); iter++ )
    {
@@ -2111,7 +2111,7 @@ double Recipe::getBoilGrav()
    QString type;
 
    // Calculate OG
-   for( i = 0; i < fermentables.size(); ++i )
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
    {
       ferm = fermentables[i];
       if( ferm->getAddAfterBoil() )
@@ -2150,11 +2150,11 @@ double Recipe::getIBU()
    double ibus = 0.0;
    
    // Bitterness due to hops...
-   for( i = 0; i < hops.size(); ++i )
+   for( i = 0; static_cast<int>(i) < hops.size(); ++i )
       ibus += getIBUFromHop(i);
 
    // Bitterness due to hopped extracts...
-   for( i = 0; i < fermentables.size(); ++i )
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
    {
       // Conversion factor for lb/gal to kg/l = 8.34538.
       ibus +=
@@ -2169,7 +2169,7 @@ double Recipe::getIBUFromHop( unsigned int i )
 {
    double ibus = 0.0;
    
-   if( i >= hops.size() )
+   if( static_cast<int>(i) >= hops.size() )
       return 0.0;
    
    double AArating = hops[i]->getAlpha_pct()/100.0;

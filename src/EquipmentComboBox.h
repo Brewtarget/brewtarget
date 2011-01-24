@@ -49,7 +49,7 @@ public:
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
 
 private:
-   std::vector<Equipment*> equipmentObs;
+   QVector<Equipment*> equipmentObs;
    Recipe* recipeObs;
    Database* dbObs;
 };

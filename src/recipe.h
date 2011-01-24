@@ -313,13 +313,13 @@ private:
    double boilSize_l;
    double boilTime_min;
    double efficiency_pct;
-   std::vector<Hop*> hops;
-   std::vector<Fermentable*> fermentables;
-   std::vector<Misc*> miscs;
-   std::vector<Yeast*> yeasts;
-   std::vector<Water*> waters;
+   QVector<Hop*> hops;
+   QVector<Fermentable*> fermentables;
+   QVector<Misc*> miscs;
+   QVector<Yeast*> yeasts;
+   QVector<Water*> waters;
    Mash *mash;
-   std::vector<Instruction*> instructions;
+   QVector<Instruction*> instructions;
    
    QString asstBrewer;
    Equipment* equipment;

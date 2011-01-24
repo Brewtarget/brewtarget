@@ -27,7 +27,7 @@
 
 int main( int argc, char **argv )
 {
-   std::vector<const XmlNode*> nodes;
+   QVector<const XmlNode*> nodes;
    Misc *misc;
    XmlTree tree = XmlTree( std::cin );
    std::cout << "Is valid: " << tree.isValid() << std::endl;

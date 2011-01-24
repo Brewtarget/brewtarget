@@ -56,7 +56,7 @@ void MashStepTableModel::setMash( Mash* m )
 /***************************************************
 void MashStepTableModel::addMashStep(MashStep* step)
 {
-   std::vector<MashStep*>::iterator iter;
+   QVector<MashStep*>::iterator iter;
 
    //Check to see if it's already in the list
    for( iter=stepObs.begin(); iter != stepObs.end(); iter++ )
@@ -76,7 +76,7 @@ void MashStepTableModel::addMashStep(MashStep* step)
 
 bool MashStepTableModel::removeMashStep(MashStep* step)
 {
-   std::vector<MashStep*>::iterator iter;
+   QVector<MashStep*>::iterator iter;
 
    for( iter=stepObs.begin(); iter != stepObs.end(); iter++ )
       if( *iter == step )
