@@ -122,7 +122,7 @@ void HopTableModel::notify(Observable* notifier, QVariant info)
    int i;
    
    if( notifier == recObs )
-      emit headerDataChanged( Qt::Vertical, 0, hopObs.size() );
+      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
    
    // Find the notifier in the list
    for( i = 0; i < (int)hopObs.size(); ++i )
