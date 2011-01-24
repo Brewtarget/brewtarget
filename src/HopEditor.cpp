@@ -21,7 +21,6 @@
 #include <string>
 #include <QIcon>
 #include "HopEditor.h"
-#include "stringparsing.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"

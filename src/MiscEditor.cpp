@@ -23,7 +23,6 @@
 #include <string>
 #include <QIcon>
 #include "MiscEditor.h"
-#include "stringparsing.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"

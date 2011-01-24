@@ -20,7 +20,6 @@
 #include "FermentableEditor.h"
 #include "fermentable.h"
 #include "observable.h"
-#include "stringparsing.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"

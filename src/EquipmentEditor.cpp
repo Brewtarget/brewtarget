@@ -25,7 +25,6 @@
 #include "equipment.h"
 #include "EquipmentEditor.h"
 #include "EquipmentComboBox.h"
-#include "stringparsing.h"
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"

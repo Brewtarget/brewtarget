@@ -19,7 +19,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "stringparsing.h"
 #include "mash.h"
 #include "mashstep.h"
 #include "ui_mainWindow.h"

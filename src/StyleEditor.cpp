@@ -24,7 +24,6 @@
 #include "style.h"
 #include "StyleEditor.h"
 #include "StyleComboBox.h"
-#include "stringparsing.h"
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"

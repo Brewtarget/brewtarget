@@ -23,7 +23,6 @@
 #include "fermentable.h"
 #include <QMessageBox>
 #include "HeatCalculations.h"
-#include "stringparsing.h"
 #include "brewtarget.h"
 
 MashWizard::MashWizard(QWidget* parent) : QDialog(parent)

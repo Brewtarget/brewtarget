@@ -52,7 +52,6 @@ public:
    static QString getDocDir();
    static QString getConfigDir(bool* success = 0);
    static int run();
-   static void log( LogType lt, std::string message );
    static void log( LogType lt, QString message );
    static void logE( QString message ); // Error message.
    static void logW( QString message ); // Warning message.

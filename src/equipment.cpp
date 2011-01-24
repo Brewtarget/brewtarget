@@ -19,8 +19,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "xmlnode.h"
-#include "stringparsing.h"
 #include "equipment.h"
 #include "brewtarget.h"
 #include <QDomElement>

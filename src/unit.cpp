@@ -20,7 +20,6 @@
 #include <string>
 #include <iostream>
 #include "unit.h"
-#include "stringparsing.h"
 #include "brewtarget.h"
 
 QMultiMap<QString, Unit*> Unit::nameToUnit;

@@ -21,7 +21,6 @@
 #include <string>
 #include <vector>
 #include "misc.h"
-#include "stringparsing.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>

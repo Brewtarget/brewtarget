@@ -20,9 +20,6 @@
 #include <string>
 #include <stdlib.h>
 #include "hop.h"
-#include "xml.h"
-#include "xmlnode.h"
-#include "stringparsing.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>

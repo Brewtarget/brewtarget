@@ -20,7 +20,6 @@
 #include <string>
 #include <QIcon>
 #include "YeastEditor.h"
-#include "stringparsing.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"

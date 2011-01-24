@@ -19,7 +19,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "stringparsing.h"
 #include "water.h"
 #include "brewtarget.h"
 #include <QDomElement>

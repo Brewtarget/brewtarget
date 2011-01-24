@@ -19,7 +19,6 @@
 #include <iostream>
 #include <string>
 #include "fermentable.h"
-#include "stringparsing.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>

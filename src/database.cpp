@@ -40,8 +40,6 @@
 #include "water.h"
 #include "yeast.h"
 
-#include "xmlnode.h"
-#include "xmltree.h"
 #include "config.h"
 #include "brewtarget.h"
 

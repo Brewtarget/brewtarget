@@ -23,7 +23,6 @@
 #include <QDomText>
 #include <QObject>
 #include "yeast.h"
-#include "stringparsing.h"
 #include "brewtarget.h"
 
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";

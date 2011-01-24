@@ -18,8 +18,6 @@
 
 #include "instruction.h"
 #include <vector>
-#include "stringparsing.h"
-#include "xml.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>

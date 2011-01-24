@@ -21,7 +21,6 @@
 
 #include <string>
 #include <exception>
-#include "xmlnode.h"
 #include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
@@ -40,7 +39,6 @@ public:
 
    Fermentable();
    Fermentable( Fermentable& other );
-   Fermentable( const XmlNode* node );
    Fermentable(const QDomNode& fermentableNode);
    
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement

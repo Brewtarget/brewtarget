@@ -45,7 +45,6 @@
 #include "recipe.h"
 #include "MainWindow.h"
 #include "AboutDialog.h"
-#include "stringparsing.h"
 #include "database.h"
 #include "MiscTableWidget.h"
 #include "YeastTableWidget.h"

@@ -301,11 +301,6 @@ int Brewtarget::run()
    return ret;
 }
 
-void Brewtarget::log( LogType lt, std::string message )
-{
-   log( lt, QString(message.c_str()) );
-}
-
 void Brewtarget::log(LogType lt, QString message)
 {
    QString m;

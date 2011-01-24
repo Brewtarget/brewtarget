@@ -20,7 +20,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "stringparsing.h"
 #include "style.h"
 #include <QDomElement>
 #include <QDomText>
