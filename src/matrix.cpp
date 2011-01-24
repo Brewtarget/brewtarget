@@ -21,8 +21,6 @@
 #include <cmath>
 #include "matrix.h"
 
-using namespace std;
-
 Matrix::~Matrix()
 {
    delete [] _data;
@@ -35,7 +33,7 @@ Matrix::Matrix( unsigned int rows, unsigned int cols )
    _data = new double[ rows * cols ];
 }
 
-Matrix::Matrix( const vector<Matrix> &colVec )
+Matrix::Matrix( const QVector<Matrix> &colVec )
 {
    unsigned int i, j;
    
@@ -50,11 +48,11 @@ Matrix::Matrix( const vector<Matrix> &colVec )
    
    _data = new double[ _cols * _rows ];
    
-   for( j = 0; j < colVec.size(); ++j )
+   for( j = 0; static_cast<int>(j) < colVec.size(); ++j )
    {
       if( colVec[j]._rows != _rows )
       {
-         cerr << "Matrix: dimension error in initialization\n";
+         std::cerr << "Matrix: dimension error in initialization\n";
          throw DimensionException( colVec[j]._rows, 0, true, false );
       }
       
@@ -109,7 +107,7 @@ Matrix& Matrix::operator=( const Matrix &rhs )
    return *this;
 }
 
-ostream& operator<<( ostream &os, const Matrix &rhs )
+std::ostream& operator<<( std::ostream &os, const Matrix &rhs )
 {
    unsigned int i;
    unsigned int j;
@@ -138,7 +136,7 @@ Matrix& Matrix::operator+=( const Matrix &rhs )
    
    if( !(_rows == rhs._rows && _cols == rhs._cols) )
    {
-      cerr << "Matrix: dimension error with +=\n";
+      std::cerr << "Matrix: dimension error with +=\n";
       throw DimensionException( rhs._rows, rhs._cols, true, true);
    }
    
@@ -155,7 +153,7 @@ Matrix& Matrix::operator-=( const Matrix &rhs )
    
    if( !(_rows == rhs._rows && _cols == rhs._cols) )
    {
-      cerr << "Matrix: dimension error with -=\n";
+      std::cerr << "Matrix: dimension error with -=\n";
       throw DimensionException( rhs._rows, rhs._cols, true, true);
    }
    
@@ -172,7 +170,7 @@ const Matrix Matrix::operator*( const Matrix &rhs ) const
    
    if( rhs._rows != _cols )
    {
-      cerr << "Matrix: dimension error with *\n";
+      std::cerr << "Matrix: dimension error with *\n";
       throw DimensionException( rhs._rows, 0, true, false );
    }
    
@@ -213,7 +211,7 @@ Matrix Matrix::getRow( unsigned int row ) const
    
    if( row >= _rows )
    {
-      cerr << "Matrix: dimension error in getRow()\n";
+      std::cerr << "Matrix: dimension error in getRow()\n";
       throw DimensionException( _rows, 0, true, false );
    }
    
@@ -231,7 +229,7 @@ Matrix Matrix::getCol( unsigned int col ) const
    
    if( col >= _cols )
    {
-      cerr << "Matrix: dimension error in getCol()\n";
+      std::cerr << "Matrix: dimension error in getCol()\n";
       throw DimensionException( 0, _cols, false, true );
    }
    
@@ -249,7 +247,7 @@ inline double Matrix::getVal( unsigned int row, unsigned int col ) const
       return _data[ _cols*row + col ];
    else
    {
-      cerr << "Matrix: invalid access at _data[" << row << "][" << col << "]\n";
+      std::cerr << "Matrix: invalid access at _data[" << row << "][" << col << "]\n";
       throw DimensionException( _rows, _cols, true, true );
    }
 }
@@ -260,7 +258,7 @@ inline void Matrix::setVal( unsigned int row, unsigned int col, double val )
       _data[ _cols*row + col ] = val;
    else
    {
-      cerr << "Matrix: invalid access at _data[" << row << "][" << col << "]\n";
+      std::cerr << "Matrix: invalid access at _data[" << row << "][" << col << "]\n";
       throw DimensionException( _rows, _cols, true, true );
    }
 
@@ -274,7 +272,7 @@ void Matrix::swapRows( unsigned int row1, unsigned int row2 )
    
    if( row1 >= _rows || row2 >= _rows )
    {
-      cerr << "Matrix: swapRows(): can't swap row " << row1 << " and row " << row2;
+      std::cerr << "Matrix: swapRows(): can't swap row " << row1 << " and row " << row2;
       throw DimensionException( _rows, 0, true, false );
    }
    
@@ -295,11 +293,11 @@ void Matrix::rref()
    for( i = 0; i < _rows && k < _cols; ++i )
    {
       // If this row's kth column is zero...
-      if( fabs( getVal( i, k ) ) < EPSILON )
+      if( qAbs( getVal( i, k ) ) < EPSILON )
       {
          // Search for nonzero entry in this column (after the ith row).
          for( l = i+1; l < _rows; ++l )
-            if( fabs( getVal( l, k ) ) >= EPSILON )
+            if( qAbs( getVal( l, k ) ) >= EPSILON )
                break;
 
          // Make sure we didn't fall off the edge
@@ -326,7 +324,7 @@ void Matrix::rref()
          if( l == i )
             continue;
 
-         if( fabs( getVal( l, k ) ) >= EPSILON )
+         if( qAbs( getVal( l, k ) ) >= EPSILON )
          {
             mult = getVal(l,k);
             for( m = 0; m < _cols; ++m )
@@ -346,7 +344,7 @@ bool Matrix::hasNonZeroDiags() const
    bool ret = true;
    
    for( i = 0; i < _rows && i < _cols; ++i )
-      ret = ret & ( fabs(getVal(i,i)) >= EPSILON );
+      ret = ret & ( qAbs(getVal(i,i)) >= EPSILON );
       
    return ret;
 }
@@ -361,13 +359,13 @@ unsigned int Matrix::getCols() const
    return _cols;
 }
 
-void Matrix::setRow( unsigned int row, vector<double> vec )
+void Matrix::setRow( unsigned int row, QVector<double> vec )
 {
    unsigned int j;
    
-   if( vec.size() != _cols )
+   if( vec.size() != static_cast<int>(_cols) )
    {
-      cerr << "Matrix: setRow(): dimension error\n";
+      std::cerr << "Matrix: setRow(): dimension error\n";
       throw DimensionException( 0, _cols, false, true );
    }
    
@@ -375,13 +373,13 @@ void Matrix::setRow( unsigned int row, vector<double> vec )
       setVal( row, j, vec[j] );
 }
 
-void Matrix::setCol( unsigned int col, vector<double> vec )
+void Matrix::setCol( unsigned int col, QVector<double> vec )
 {
    unsigned int i;
    
-   if( vec.size() != _rows )
+   if( vec.size() != static_cast<int>(_rows) )
    {
-      cerr << "Matrix: setCol(): dimension error\n";
+      std::cerr << "Matrix: setCol(): dimension error\n";
       throw DimensionException( _rows, 0, true, false );
    }
    
@@ -418,7 +416,7 @@ void Matrix::appendCols( const Matrix& other )
    
    if( _rows != other._rows )
    {
-      cerr << "Matrix: appendCols(): dimension error\n";
+      std::cerr << "Matrix: appendCols(): dimension error\n";
       throw DimensionException( other._rows, 0, true, false );
    }
    
@@ -446,7 +444,7 @@ Matrix Matrix::inverse() const
 {
    if( _rows != _cols )
    {
-      cerr << "Matrix: inverse(): must be square";
+      std::cerr << "Matrix: inverse(): must be square";
       throw DimensionException( _rows, _cols, true, true );
    }
    
@@ -457,7 +455,7 @@ Matrix Matrix::inverse() const
 
    if( ! m.hasNonZeroDiags() )
    {
-      cerr << "Matrix: inverse(): did not have an inverse";
+      std::cerr << "Matrix: inverse(): did not have an inverse";
       throw IncomputableException();
    }
    

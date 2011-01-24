@@ -27,9 +27,7 @@ class TimerWidget;
 #include <QString>
 #include <QPalette>
 
-#define Q_WS_WIN 42 //Pour desactiver phonon
-
-#if !defined(Q_WS_WIN) // I think Windows can't handle Phonon.
+#if !defined(NO_PHONON) // I think Windows can't handle Phonon.
 
  #include <mediaobject.h>
  #include <audiooutput.h>
@@ -69,7 +67,7 @@ private:
    QTimer* timer;
    QTimer* flashTimer;
    QPalette paletteOld, paletteNew;
-   #if !defined(Q_WS_WIN)
+   #if !defined(NO_PHONON)
 
     Phonon::MediaObject *mediaObject;
     Phonon::AudioOutput *audioOutput;
@@ -77,8 +75,6 @@ private:
    #endif
    bool oldColors;
 };
-
-#undef Q_WS_WIN
 
 #endif	/* _TIMERWIDGET_H */
 

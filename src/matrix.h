@@ -26,24 +26,22 @@
 
 #define EPSILON 0.00001
 
-using namespace std;
-
 //======================Class Defns.=============================
 class Matrix;
 class DimensionException;
 class IncomputableException;
 
-ostream& operator<<( ostream &os, const Matrix &rhs );
+std::ostream& operator<<( std::ostream &os, const Matrix &rhs );
 
 //======================Class: Matrix=============================
 class Matrix
 {
-   friend ostream& operator<<( ostream &os, const Matrix &rhs );
+   friend std::ostream& operator<<( std::ostream &os, const Matrix &rhs );
 
    public:
       ~Matrix(); // Destructor
       Matrix( unsigned int rows, unsigned int cols ); // Constructor
-      Matrix( const vector<Matrix> &colVec ); // Constructor
+      Matrix( const QVector<Matrix> &colVec ); // Constructor
       Matrix( const Matrix &m, unsigned int colStart, unsigned int colEnd ); // Constructor
       Matrix( const Matrix &rhs ); // Copy constructor
       
@@ -61,8 +59,8 @@ class Matrix
       unsigned int getCols() const;
       inline double getVal( unsigned int row, unsigned int col ) const;
       inline void setVal( unsigned int row, unsigned int col, double val );
-      void setRow( unsigned int row, vector<double> vec );
-      void setCol( unsigned int col, vector<double> vec );
+      void setRow( unsigned int row, QVector<double> vec );
+      void setCol( unsigned int col, QVector<double> vec );
       Matrix inverse() const;
       bool hasInverse() const;
       
@@ -78,7 +76,7 @@ class Matrix
 };
 
 //======================Class: DimensionException=============================
-class DimensionException: public exception
+class DimensionException: public std::exception
 {
    virtual const char* what() const throw()
    {
@@ -107,7 +105,7 @@ class DimensionException: public exception
 };
 
 //======================Class: IncomputableException=============================
-class IncomputableException: public exception
+class IncomputableException: public std::exception
 {
    virtual const char* what() const throw()
    {

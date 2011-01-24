@@ -86,16 +86,16 @@ double Algorithms::rootFind( double* poly, unsigned int order, double x0, double
 {
    double guesses[] = { x0, x1 };
    double newGuess;
-   double maxAllowableSeparation = fabs( x0 - x1 ) * 1e3;
+   double maxAllowableSeparation = qAbs( x0 - x1 ) * 1e3;
 
-   while( fabs( guesses[0] - guesses[1] ) > ROOT_PRECISION )
+   while( qAbs( guesses[0] - guesses[1] ) > ROOT_PRECISION )
    {
       newGuess = guesses[1] - (guesses[1] - guesses[0]) * polyEval( poly, order, guesses[1]) / ( polyEval( poly, order, guesses[1]) - polyEval( poly, order, guesses[0]) );
 
       guesses[0] = guesses[1];
       guesses[1] = newGuess;
 
-      if( fabs( guesses[0] - guesses[1] ) > maxAllowableSeparation )
+      if( qAbs( guesses[0] - guesses[1] ) > maxAllowableSeparation )
          return HUGE_VAL;
    }
 

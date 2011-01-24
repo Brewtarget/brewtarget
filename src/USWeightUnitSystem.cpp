@@ -38,7 +38,7 @@ QString USWeightUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("kg") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( std::abs(SIAmount) < Units::pounds->toSI(1.0) ) // If less than 1 pound, display ounces.
+   if( qAbs(SIAmount) < Units::pounds->toSI(1.0) ) // If less than 1 pound, display ounces.
       ret = QString("%1 %2").arg(Units::ounces->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::ounces->getUnitName());
    else // Otherwise, display pounds.
       ret = QString("%1 %2").arg(Units::pounds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::pounds->getUnitName());

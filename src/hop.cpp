@@ -17,7 +17,6 @@
  */
 
 #include <iostream>
-#include <stdlib.h>
 #include "hop.h"
 #include "brewtarget.h"
 #include <QDomElement>

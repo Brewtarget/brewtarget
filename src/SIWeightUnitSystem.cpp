@@ -31,7 +31,7 @@ QString SIWeightUnitSystem::displayAmount( double amount, Unit* units )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
-   double absSIAmount = std::abs(SIAmount);
+   double absSIAmount = qAbs(SIAmount);
    QString ret;
 
    // Special cases. Make sure the unit isn't null and that we're

@@ -22,8 +22,6 @@
 #include <QFileDialog>
 #include <iostream>
 
-#define Q_WS_WIN 42
-
 TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 {
    setupUi(this);
@@ -38,7 +36,7 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    timer->setInterval(1000); // One second between timeouts.
    flashTimer->setInterval(500);
 
-   #if !defined(Q_WS_WIN)
+   #if !defined(NO_PHONON)
    
     mediaObject = new Phonon::MediaObject(this);
     mediaObject->setTransitionTime(0);
@@ -70,7 +68,7 @@ TimerWidget::~TimerWidget()
 
 void TimerWidget::getSound()
 {
-   #if !defined(Q_WS_WIN)
+   #if !defined(NO_PHONON)
     QString soundFile = QFileDialog::getOpenFileName(this, tr("Open Sound"), "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)"));
     if (! soundFile.isNull()) {
       mediaObject->setCurrentSource(soundFile);
@@ -101,7 +99,7 @@ void TimerWidget::flash()
 
 void TimerWidget::setTimer()
 {
-   #if !defined(Q_WS_WIN)
+   #if !defined(NO_PHONON)
     mediaObject->stop();
    #endif
    flashTimer->stop();
@@ -117,7 +115,7 @@ void TimerWidget::endTimer()
    timer->stop();
    flashTimer->start();
 
-   #if !defined(Q_WS_WIN)
+   #if !defined(NO_PHONON)
     mediaObject->play();
    #endif
 
@@ -230,5 +228,3 @@ void TimerWidget::showChanges()
 {
    lcdNumber->display(getTimerValue());
 }
-
-#undef Q_WS_WIN

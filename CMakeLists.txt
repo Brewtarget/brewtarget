@@ -24,12 +24,19 @@ OPTION( DO_RELEASE_BUILD
 OPTION( ENABLE_PROFILING
         "If on, builds with necessary profiling options."
         OFF )
+OPTION( NO_PHONON,
+        "If on, does not build any Phonon code."
+        OFF )
 #==============================Compile flags===================================
 SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
 SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -gstabs+" )
 
 IF( ${ENABLE_PROFILING} )
    SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pg" )
+ENDIF()
+
+IF( ${NO_PHONON} )
+   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_PHONON" )
 ENDIF()
 
 IF( ${DO_RELEASE_BUILD} )

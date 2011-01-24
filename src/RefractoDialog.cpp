@@ -82,7 +82,7 @@ void RefractoDialog::calculate()
    abw = Algorithms::Instance().getABWBySGPlato( sg, currentPlato );
 
    // Warn the user if the inputOG and calculated og don't match.
-   if( abs(og - inputOG) > 0.002 )
+   if( qAbs(og - inputOG) > 0.002 )
       QMessageBox::warning(this, tr("OG Mismatch"),
                            tr("Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.").arg(og,0,'f',3).arg(inputOG,0,'f',3));
 

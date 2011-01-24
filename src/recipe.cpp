@@ -864,10 +864,9 @@ void Recipe::generateInstructions()
       /*** END misc mash additions ***/
 
       // Add instructions in descending mash time order.
-      std::sort(preinstructions.begin(), preinstructions.end());
-      for( i=0; static_cast<int>(i) < preinstructions.size(); i++ )
+      qSort( preinstructions.begin(), preinstructions.end(), qGreater<PreInstruction>() );
+      for( j=0; static_cast<int>(j) < preinstructions.size(); j++ )
       {
-         j = preinstructions.size()- i - 1;
          PreInstruction pi = preinstructions[j];
          ins = new Instruction();
          ins->setName(pi.getTitle());
@@ -997,15 +996,14 @@ void Recipe::generateInstructions()
    // END boil instructions.
 
    // Add instructions in descending mash time order.
-   std::sort(preinstructions.begin(), preinstructions.end());
-  for( i=0; static_cast<int>(i) < preinstructions.size(); i++ )
-  {
-	  j = preinstructions.size()- i - 1;
+   qSort(preinstructions.begin(), preinstructions.end(), qGreater<PreInstruction>());
+   for( j=0; static_cast<int>(j) < preinstructions.size(); j++ )
+   {
       PreInstruction pi = preinstructions[j];
       ins = new Instruction();
       ins->setName(pi.getTitle());
       ins->setDirections(pi.getText());
-	  ins->setInterval(pi.getTime());
+      ins->setInterval(pi.getTime());
       instructions.push_back(ins);
    }
 
