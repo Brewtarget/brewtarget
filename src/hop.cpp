@@ -49,7 +49,7 @@ bool Hop::isValidUse(const string &str)
    
    int i;
    for( i = 0; i < length; ++i )
-      if( beginsWith( str, uses[i] ) )
+      if( str == uses[i] )
          return true;
          
    return false;
@@ -62,7 +62,7 @@ bool Hop::isValidType(const string &str)
    
    int i;
    for( i = 0; i < length; ++i )
-      if( beginsWith( str, types[i] ) )
+      if( str == types[i] )
          return true;
          
    return false;
@@ -75,7 +75,7 @@ bool Hop::isValidForm(const string &str)
    
    int i;
    for( i = 0; i < length; ++i )
-      if( beginsWith( str, forms[i] ) )
+      if( str == forms[i] )
          return true;
          
    return false;

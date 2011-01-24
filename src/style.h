@@ -25,7 +25,6 @@
 #include "BeerXMLElement.h"
 
 class Style;
-class StyleException;
 
 class Style : public Observable, public BeerXMLElement
 {
@@ -117,27 +116,6 @@ private:
 
    void setDefaults();
    bool isValidType( const std::string &str );
-};
-
-class StyleException : public std::exception
-{
-public:
-
-   virtual const char* what() const throw()
-   {
-      return std::string("BeerXML STYLE error: " + _err + "\n").c_str();
-   }
-
-   StyleException( const std::string& message )
-   {
-      _err = message;
-   }
-
-   ~StyleException() throw() {}
-
-private:
-
-   std::string _err;
 };
 
 struct Style_ptr_cmp

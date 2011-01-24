@@ -360,7 +360,7 @@ void Style::setStyleGuide( const std::string& var )
 void Style::setType( const std::string& var )
 {
    if( ! isValidType(var) )
-      throw StyleException("invalid style: " + var );
+      return;
    else
    {
       type = std::string(var);
@@ -371,7 +371,7 @@ void Style::setType( const std::string& var )
 void Style::setOgMin( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad OG: " + doubleToString(var));
+      return;
    else
    {
       ogMin = var;
@@ -382,7 +382,7 @@ void Style::setOgMin( double var )
 void Style::setOgMax( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad OG: " + doubleToString(var));
+      return;
    else
    {
       ogMax = var;
@@ -393,7 +393,7 @@ void Style::setOgMax( double var )
 void Style::setFgMin( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad FG: " + doubleToString(var));
+      return;
    else
    {
       fgMin = var;
@@ -404,7 +404,7 @@ void Style::setFgMin( double var )
 void Style::setFgMax( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad FG: " + doubleToString(var));
+      return;
    else
    {
       fgMax = var;
@@ -415,7 +415,7 @@ void Style::setFgMax( double var )
 void Style::setIbuMin( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad IBU: " + doubleToString(var));
+      return;
    else
    {
       ibuMin = var;
@@ -426,7 +426,7 @@ void Style::setIbuMin( double var )
 void Style::setIbuMax( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad IBU: " + doubleToString(var));
+      return;
    else
    {
       ibuMax = var;
@@ -437,7 +437,7 @@ void Style::setIbuMax( double var )
 void Style::setColorMin_srm( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad color: " + doubleToString(var));
+      return;
    else
    {
       colorMin_srm = var;
@@ -448,7 +448,7 @@ void Style::setColorMin_srm( double var )
 void Style::setColorMax_srm( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad color: " + doubleToString(var));
+      return;
    else
    {
       colorMax_srm = var;
@@ -459,7 +459,7 @@ void Style::setColorMax_srm( double var )
 void Style::setCarbMin_vol( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad carb: " + doubleToString(var));
+      return;
    else
    {
       carbMin_vol = var;
@@ -470,7 +470,7 @@ void Style::setCarbMin_vol( double var )
 void Style::setCarbMax_vol( double var )
 {
    if( var < 0.0 )
-      throw StyleException("bad carb: " + doubleToString(var));
+      return;
    else
    {
       carbMax_vol = var;
@@ -481,7 +481,7 @@ void Style::setCarbMax_vol( double var )
 void Style::setAbvMin_pct( double var )
 {
    if( var < 0.0 || var > 100.0 )
-      throw StyleException("bad ABV: " + doubleToString(var));
+      return;
    else
    {
       abvMin_pct = var;
@@ -492,7 +492,7 @@ void Style::setAbvMin_pct( double var )
 void Style::setAbvMax_pct( double var )
 {
    if( var < 0.0 || var > 100.0 )
-      throw StyleException("bad ABV: " + doubleToString(var));
+      return;
    else
    {
       abvMax_pct = var;

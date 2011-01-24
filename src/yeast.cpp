@@ -327,7 +327,7 @@ void Yeast::setForm( Yeast::Form f )
 void Yeast::setAmount( double var )
 {
    if( var < 0.0 )
-      throw YeastException("amount cannot be negative: " + doubleToString(var) );
+      return;
    else
    {
       amount = var;
@@ -356,7 +356,7 @@ void Yeast::setProductID( const std::string& var )
 void Yeast::setMinTemperature_c( double var )
 {
    if( var < -273.15 )
-      throw YeastException("Temperature below absolute zero: " + doubleToString(var));
+      return;
    else
    {
       minTemperature_c = var;
@@ -367,7 +367,7 @@ void Yeast::setMinTemperature_c( double var )
 void Yeast::setMaxTemperature_c( double var )
 {
    if( var < -273.15 )
-      throw YeastException("Temperature below absolute zero: " + doubleToString(var));
+      return;
    else
    {
       maxTemperature_c = var;
@@ -384,7 +384,7 @@ void Yeast::setFlocculation( Yeast::Flocculation f )
 void Yeast::setAttenuation_pct( double var )
 {
    if( var < 0.0 || var > 100.0 )
-      throw YeastException("invalid attenuation percentage: " + doubleToString(var) );
+      return;
    else
    {
       attenuation_pct = var;
@@ -407,7 +407,7 @@ void Yeast::setBestFor( const std::string& var )
 void Yeast::setTimesCultured( int var )
 {
    if( var < 0 )
-      throw YeastException("times cultured cannot be negative: " +  intToString(var) );
+      return;
    else
    {
       timesCultured = var;
@@ -417,7 +417,7 @@ void Yeast::setTimesCultured( int var )
 void Yeast::setMaxReuse( int var )
 {
    if( var < 0 )
-      throw YeastException("max reuse cannot be negative: " +  intToString(var) );
+      return;
    else
    {
       maxReuse = var;

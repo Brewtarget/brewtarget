@@ -65,7 +65,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
-    ${SRCDIR}/stringparsing.cpp
     ${SRCDIR}/style.cpp
     ${SRCDIR}/StyleComboBox.cpp
     ${SRCDIR}/StyleEditor.cpp
@@ -80,9 +79,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/WaterTableModel.cpp
     ${SRCDIR}/WaterTableWidget.cpp
     ${SRCDIR}/WaterEditor.cpp
-    ${SRCDIR}/xml.cpp
-    ${SRCDIR}/xmlnode.cpp
-    ${SRCDIR}/xmltree.cpp
     ${SRCDIR}/yeast.cpp
     ${SRCDIR}/YeastDialog.cpp
     ${SRCDIR}/YeastEditor.cpp

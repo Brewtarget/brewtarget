@@ -74,8 +74,8 @@ void YeastEditor::save()
    y->setMaxTemperature_c( Brewtarget::tempQStringToSI(lineEdit_maxTemperature->text()) );
    y->setFlocculation( static_cast<Yeast::Flocculation>(comboBox_flocculation->currentIndex()) );
    y->setAttenuation_pct(lineEdit_attenuation->text().toDouble());
-   y->setTimesCultured(parseInt(lineEdit_timesCultured->text().toStdString()));
-   y->setMaxReuse(parseInt(lineEdit_maxReuse->text().toStdString()));
+   y->setTimesCultured(lineEdit_timesCultured->text().toInt());
+   y->setMaxReuse(lineEdit_maxReuse->text().toInt());
    y->setAddToSecondary( (checkBox_addToSecondary->checkState() == Qt::Checked)? true : false );
    y->setNotes(textEdit_notes->toPlainText().toStdString());
 

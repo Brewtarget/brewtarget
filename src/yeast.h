@@ -28,7 +28,6 @@
 #include <QStringList>
 
 class Yeast;
-class YeastException;
 
 class Yeast : public Observable, public BeerXMLElement
 {
@@ -117,29 +116,6 @@ private:
    bool isValidForm(const std::string& str) const;
    bool isValidFlocculation(const std::string& str) const;
    void setDefaults();
-};
-
-class YeastException : public std::exception
-{
-public:
-   
-   virtual const char* what() const throw()
-   {
-      // Note: this temporary object might get destroyed too early.
-      // I'm not really sure.
-      return std::string("BeerXml YEAST error: " + _err + "\n").c_str();
-   }
-   
-   YeastException( std::string message )
-   {
-      _err = message;
-   }
-   
-   ~YeastException() throw() {}
-   
-private:
-   
-   std::string _err;
 };
 
 struct Yeast_ptr_cmp
