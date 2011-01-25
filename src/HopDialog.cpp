@@ -47,23 +47,29 @@ HopDialog::HopDialog(MainWindow* parent)
 
 void HopDialog::removeHop()
 {
-   QModelIndexList selected = hopTableWidget->selectedIndexes();
-   QModelIndex modelIndex;
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
-   size = selected.size();
-   if( size == 0 )
-      return;
-
-   // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
+   // ---------------Artificial block-------------------
    {
-      if( selected[i].row() != row )
+      QModelIndexList selected = hopTableWidget->selectedIndexes();
+      size = selected.size();
+      if( size == 0 )
          return;
-   }
 
-   modelIndex = hopTableWidget->getProxy()->mapToSource(selected[0]);
+      // Make sure only one row is selected.
+      row = selected[0].row();
+      for( i = 1; i < size; ++i )
+      {
+         if( selected[i].row() != row )
+            return;
+      }
+
+      viewIndex = selected[0];
+   } // If we blow up here, it's because something is wrong with selected's destructor.
+   //----------------END Artificial block---------------
+
+   modelIndex = hopTableWidget->getProxy()->mapToSource(viewIndex);
    Hop *hop = hopTableWidget->getModel()->getHop(modelIndex.row());
    dbObs->removeHop(hop);
 }

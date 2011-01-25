@@ -24,7 +24,7 @@ OPTION( DO_RELEASE_BUILD
 OPTION( ENABLE_PROFILING
         "If on, builds with necessary profiling options."
         OFF )
-OPTION( NO_PHONON,
+OPTION( NO_PHONON
         "If on, does not build any Phonon code."
         OFF )
 #==============================Compile flags===================================
@@ -36,7 +36,7 @@ IF( ${ENABLE_PROFILING} )
 ENDIF()
 
 IF( ${NO_PHONON} )
-   SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_PHONON" )
+   ADD_DEFINITIONS( -DNO_PHONON )
 ENDIF()
 
 IF( ${DO_RELEASE_BUILD} )

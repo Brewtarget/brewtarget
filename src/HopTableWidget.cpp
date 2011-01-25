@@ -27,6 +27,7 @@ HopTableWidget::HopTableWidget(QWidget* parent)
 
    hfpm = new HopSortFilterProxyModel(parent);
    model = new HopTableModel(this);
+   setModel(model);
 
    hfpm->setSourceModel(model);
    hfpm->setDynamicSortFilter(true);
