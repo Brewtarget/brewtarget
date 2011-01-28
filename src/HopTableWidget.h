@@ -37,7 +37,7 @@ public:
    HopSortFilterProxyModel* getProxy();
    
 private:
-   HopTableModel* model;
+   HopTableModel* hopTableModel;
    HopSortFilterProxyModel* hfpm;
 };
 

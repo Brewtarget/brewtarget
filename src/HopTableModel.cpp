@@ -309,9 +309,17 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
    }
 }
 
+// Returns null on failure.
 Hop* HopTableModel::getHop(unsigned int i)
 {
-   return hopObs[i];
+   //std::cerr << "HopTableModel::getHop( " << i << "/" << hopObs.size()  << " )" << std::endl;
+   if( static_cast<int>(i) < hopObs.size() )
+      return hopObs[i];
+   else
+   {
+      Brewtarget::logW( QString("HopTableModel::getHop( %1/%2 )").arg(i).arg(hopObs.size()) );
+      return 0;
+   }
 }
 
 //==========================CLASS HopItemDelegate===============================

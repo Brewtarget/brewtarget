@@ -139,7 +139,7 @@ void Database::initialize()
    list = dbDoc.elementsByTagName("EQUIPMENT");
    size = list.size();
    for( i = 0; i < size; ++i )
-      equipments.push_back(new Equipment( list.at(i) ));
+      equipments.push_back(new Equipment(list.at(i)));
    list = dbDoc.elementsByTagName("FERMENTABLE");
    size = list.size();
    for( i = 0; i < size; ++i )

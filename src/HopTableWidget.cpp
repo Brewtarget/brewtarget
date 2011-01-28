@@ -26,20 +26,18 @@ HopTableWidget::HopTableWidget(QWidget* parent)
 {
 
    hfpm = new HopSortFilterProxyModel(parent);
-   model = new HopTableModel(this);
-   setModel(model);
+   hopTableModel = new HopTableModel(this);
 
-   hfpm->setSourceModel(model);
+   hfpm->setSourceModel(hopTableModel);
    hfpm->setDynamicSortFilter(true);
-
    setModel(hfpm);
-   setItemDelegate(new HopItemDelegate(this));
 
+   setItemDelegate(new HopItemDelegate(this));
 }
 
 HopTableModel* HopTableWidget::getModel()
 {
-   return model;
+   return hopTableModel;
 }
 
 HopSortFilterProxyModel* HopTableWidget::getProxy()

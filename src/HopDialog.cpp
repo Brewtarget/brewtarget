@@ -58,18 +58,21 @@ void HopDialog::removeHop()
          return;
 
       // Make sure only one row is selected.
-      row = selected[0].row();
+      row = selected.value(0).row();
       for( i = 1; i < size; ++i )
       {
-         if( selected[i].row() != row )
+         if( selected.value(i).row() != row )
             return;
       }
 
-      viewIndex = selected[0];
+      viewIndex = selected.value(0);
    } // If we blow up here, it's because something is wrong with selected's destructor.
    //----------------END Artificial block---------------
 
    modelIndex = hopTableWidget->getProxy()->mapToSource(viewIndex);
+
+   //std::cerr << "Model: " << modelIndex.row() << " View: " << viewIndex.row() << std::endl;
+
    Hop *hop = hopTableWidget->getModel()->getHop(modelIndex.row());
    dbObs->removeHop(hop);
 }
@@ -115,14 +118,14 @@ void HopDialog::addHop()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   row = selected.value(0).row();
    for( i = 1; i < size; ++i )
    {
-      if( selected[i].row() != row )
+      if( selected.value(i).row() != row )
          return;
    }
 
-   translated = hopTableWidget->getProxy()->mapToSource(selected[0]);
+   translated = hopTableWidget->getProxy()->mapToSource(selected.value(0));
    Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
    mainWindow->addHopToRecipe(new Hop(*hop) ); // Need to add a copy so we don't change the database.
 }
@@ -138,14 +141,14 @@ void HopDialog::editSelected()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   row = selected.value(0).row();
    for( i = 1; i < size; ++i )
    {
-      if( selected[i].row() != row )
+      if( selected.value(i).row() != row )
          return;
    }
 
-   translated = hopTableWidget->getProxy()->mapToSource(selected[0]);
+   translated = hopTableWidget->getProxy()->mapToSource(selected.value(0));
    Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
    hopEditor->setHop(hop);
    hopEditor->show();
