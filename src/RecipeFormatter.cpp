@@ -688,7 +688,7 @@ QString RecipeFormatter::buildMashTable()
    m = rec->getMash();
 
    mtable = QString("<h3>%1</h3>").arg(tr("Mash"));
-   mtable += "<table id=\"yeast\">";
+   mtable += "<table id=\"mash\">";
 
    // Header row.
    mtable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th></tr>")

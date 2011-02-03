@@ -203,6 +203,32 @@ img
     text-align: center;
     font-weight:bold;
 }
+#mash
+{
+	border-collapse:collapse;
+	width:100%;
+	empty-cells:hide;
+}
+#mash td
+{
+	border: 0px solid white;
+	padding: 3px 7px 2px 7px;
+	empty-cells:show;
+}
+#mash th
+{
+	border: 0px solid white;
+    padding: 3px 7px 2px 7px;
+    font-weight:bold;
+    text-align:left;
+    empty-cells:show;
+}
+#mash caption 
+{ 
+    caption-side:bottom; 
+    text-align: center;
+    font-weight:bold;
+}
 #instruction
 {
     list-style-type:decimal;
