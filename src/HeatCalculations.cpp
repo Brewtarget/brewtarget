@@ -21,7 +21,10 @@
 double HeatCalculations::Cw_JKgK = 4184.0;
 double HeatCalculations::Cw_calGC = 1.0;
 double HeatCalculations::Cgrain_calGC = 0.4;
-double HeatCalculations::rhoGrain_KgL = 0.432;
+// I don't know where I got the 0.432 estimate from.
+//double HeatCalculations::rhoGrain_KgL = 0.432;
+// The estimate for grain density below is from my own (Philip G. Lee) experiments.
+double HeatCalculations::rhoGrain_KgL = 0.963;
 double HeatCalculations::absorption_LKg = 0.13 * (3.78541178)/(0.45359237); // 0.13 gal/lb
 
 double HeatCalculations::equivalentMCProduct(double m1, double c1, double m2, double c2)
