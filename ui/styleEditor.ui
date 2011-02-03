@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>518</width>
-    <height>639</height>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -945,8 +945,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/images/smallPlus.png</normaloff>:/images/smallPlus.png</iconset>
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -962,8 +962,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/images/filesave.png</normaloff>:/images/filesave.png</iconset>
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
@@ -982,8 +982,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>:/images/exit.png</normaloff>:/images/exit.png</iconset>
+        <iconset resource="../brewtarget.qrc">
+         <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
