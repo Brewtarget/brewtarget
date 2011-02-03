@@ -33,6 +33,7 @@ class HopTableWidget : public QTableView
    friend class MainWindow;
 public:
    HopTableWidget(QWidget* parent=0);
+   ~HopTableWidget();
    HopTableModel* getModel();
    HopSortFilterProxyModel* getProxy();
    

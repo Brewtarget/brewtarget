@@ -355,10 +355,11 @@ ENDIF()
 #============================Icon for Windows==================================
 
 IF( WIN32 AND MINGW )
-  ADD_CUSTOM_COMMAND(OUTPUT ${RCFILE}
+  ADD_CUSTOM_COMMAND(OUTPUT ${WINDIR}/icon.o
                      COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
                      -i${RCFILE}
                      -o${WINDIR}/icon.o
+					 DEPENDS ${RCFILE}
   )
   SET(brewtarget_SRCS ${brewtarget_SRCS} ${WINDIR}/icon.o)
 ELSEIF(WIN32)
@@ -367,80 +368,27 @@ ENDIF()
 
 #===========================Create the binary==================================
 
-# The executable.
-#IF( APPLE )
-#   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} MACOSX_BUNDLE
-#                   ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H}
-#                   # Do I need to include this since I want them to go in the bundle?
-#                   ${brewtarget_DOCS} ${brewtarget_DATA}
-#   )
-#
-#   # Want the docs in the en.lproj folder.
-#   SET_SOURCE_FILES_PROPERTIES(
-#      ${brewtarget_DOCS}
-#      PROPERTIES
-#      MACOSX_PACKAGE_LOCATION Resources/en.lproj
-#   )
-#
-#   # Want the data in the resources folder.
-#   SET_SOURCE_FILES_PROPERTIES(
-#      ${brewtarget_DATA}
-#      PROPERTIES
-#      MACOSX_PACKAGE_LOCATION Resources
-#   )
-#
-#   SET( MACOSX_BUNDLE_INFO_STRING "Info string" )
-#   SET( MACOSX_BUNDLE_ICON_FILE "../mac/BrewtargetIcon.icns" )
-#   SET( MACOSX_BUNDLE_GUI_IDENTIFIER "Bundle gui identifier" )
-#   SET( MACOSX_BUNDLE_LONG_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
-#   SET( MACOSX_BUNDLE_BUNDLE_NAME "Brewtarget" )
-#   SET( MACOSX_BUNDLE_SHORT_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}" )
-#   SET( MACOSX_BUNDLE_BUNDLE_VERSION "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
-#   SET( MACOSX_BUNDLE_COPYRIGHT "Brewtarget is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    Brewtarget is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with brewtarget;if not, write to the Free Software Foundation,
-#    Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA, or visit
-#    http://www.gnu.org/copyleft/gpl.html"
-#   )
-#ELSE()
-#   ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
-#ENDIF()
-
 ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
 
-# Link brewtarget against Qt libraries defined by QT_USE_FILE.
-TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} ${QT_LIBRARIES})
+# Link brewtarget against appropriate libraries.
+IF( WIN32 AND MINGW )
+   ############################################################################
+   # I don't know why, but QT_LIBRARIES is NOT correct under mingw32.
+   # It outputs things like "C:/Qt/4.7.1/lib/QtSvg4.lib".
+   #
+   # Also, need to set some linker flags that I don't know how to get
+   # automatically.
+   ############################################################################
+   TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} mingw32 QtWebKit4 QtXml4 QtGui4 QtCore4 QtSvg4 phonon4)
+   SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows -Lc:/Qt/4.7.1/lib" )
+ELSE()
+   # Link brewtarget against Qt libraries defined by QT_LIBRARIES
+   TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} ${QT_LIBRARIES})
+ENDIF()
+
+MESSAGE( STATUS "Libraries: ${QT_LIBRARIES}" )
 
 #==============================Setup install targets===========================
-
-#IF(APPLE)
-#
-#   # I don't think we need to do any install targets here.
-#
-#ELSE()
-#
-#   # Install the executable.
-#   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-#            RUNTIME DESTINATION ${TARGETPATH} )
-#
-#   # Install the data.
-#   INSTALL( FILES ${brewtarget_DATA}
-#            DESTINATION ${DATAPATH} )
-#
-#   # Install the documentation.
-#   INSTALL( FILES ${brewtarget_DOCS}
-#            DESTINATION ${DOCPATH} )
-#
-#ENDIF()
 
 IF( UNIX AND NOT APPLE )
   INSTALL( TARGETS ${brewtarget_EXECUTABLE}

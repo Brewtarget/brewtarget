@@ -35,6 +35,10 @@ HopTableWidget::HopTableWidget(QWidget* parent)
    setItemDelegate(new HopItemDelegate(this));
 }
 
+HopTableWidget::~HopTableWidget()
+{
+}
+
 HopTableModel* HopTableWidget::getModel()
 {
    return hopTableModel;

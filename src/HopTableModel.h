@@ -42,6 +42,7 @@ class HopTableModel : public QAbstractTableModel, public MultipleObserver
            
 public:
    HopTableModel(HopTableWidget* parent=0);
+   ~HopTableModel();
    void setRecipe( Recipe* rec ); // You need to set a recipe if you want to show IBUs.
    void setShowIBUs( bool var ); // If you want to show IBUs.
    void addHop(Hop* hop);

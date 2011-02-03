@@ -46,6 +46,11 @@ HopTableModel::HopTableModel(HopTableWidget* parent)
    recObs = 0;
 }
 
+HopTableModel::~HopTableModel()
+{
+   hopObs.clear();
+}
+
 void HopTableModel::addHop(Hop* hop)
 {
    QVector<Hop*>::iterator iter;
