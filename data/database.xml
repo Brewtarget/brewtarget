@@ -4092,13 +4092,13 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <EXAMPLES>Schlenkerla Rauchbier M?rzen, Kaiserdom Rauchbier, Eisenbahn Rauchbier, Victory Scarlet Fire Rauchbier, Spezial Rauchbier M?rzen, Saranac Rauchbier</EXAMPLES>
  </STYLE>
  <STYLE>
-  <NAME>Common Cider </NAME>
+  <NAME>Common Cider</NAME>
   <VERSION>1</VERSION>
   <CATEGORY>Standard Cider and Perry</CATEGORY>
   <CATEGORY_NUMBER>27</CATEGORY_NUMBER>
   <STYLE_LETTER>A</STYLE_LETTER>
   <STYLE_GUIDE>BJCP</STYLE_GUIDE>
-  <TYPE>Ale</TYPE>
+  <TYPE>Cider</TYPE>
   <OG_MIN>1.04500e+00</OG_MIN>
   <OG_MAX>1.06500e+00</OG_MAX>
   <FG_MIN>1.00000e+00</FG_MIN>

@@ -18,8 +18,9 @@
 
 #ifndef _STYLE_H
 #define _STYLE_H
-#include <string>
 #include <exception>
+#include <QString>
+#include <QStringList>
 #include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
@@ -36,6 +37,8 @@ public:
    friend bool operator<(Style &s1, Style &s2);
    friend bool operator==(Style &s1, Style &s2);
 
+   enum Type { TYPELAGER=0, TYPEALE, TYPEMEAD, TYPEWHEAT, TYPEMIXED, TYPECIDER, NUMTYPES };
+
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
@@ -44,7 +47,7 @@ public:
    void setCategoryNumber( const QString& var );
    void setStyleLetter( const QString& var );
    void setStyleGuide( const QString& var );
-   void setType( const QString& var );
+   void setType( Type t );
    void setOgMin( double var );
    void setOgMax( double var );
    void setFgMin( double var );
@@ -67,7 +70,8 @@ public:
    QString getCategoryNumber() const;
    QString getStyleLetter() const;
    QString getStyleGuide() const;
-   QString getType() const;
+   const Type getType() const;
+   const QString& getTypeString() const;
    double getOgMin() const;
    double getOgMax() const;
    double getFgMin() const;
@@ -94,7 +98,7 @@ private:
    QString categoryNumber;
    QString styleLetter;
    QString styleGuide;
-   QString type;
+   Type type;
    double ogMin;
    double ogMax;
    double fgMin;
@@ -116,6 +120,7 @@ private:
 
    void setDefaults();
    bool isValidType( const QString &str );
+   static QStringList types;
 };
 
 inline bool StylePtrLt( Style* lhs, Style* rhs)

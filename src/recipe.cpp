@@ -1882,7 +1882,7 @@ void Recipe::recalculate()
    double ratio = 0;
    double sugar_kg = 0;
    double sugar_kg_ignoreEfficiency = 0.0;
-   QString fermtype;
+   Fermentable::Type fermtype;
    double attenuation_pct = 0.0;
    Fermentable* ferm;
    Yeast* yeast;
@@ -1894,11 +1894,9 @@ void Recipe::recalculate()
 
       // If we have some sort of non-grain, we have to ignore efficiency.
       fermtype = ferm->getType();
-      if( fermtype.compare("Sugar") == 0 || fermtype.compare("Extract") == 0 || fermtype.compare("Dry Extract") == 0 )
-         //sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+      if( fermtype==Fermentable::TYPESUGAR || fermtype==Fermentable::TYPEEXTRACT || fermtype==Fermentable::TYPEDRY_EXTRACT )
          sugar_kg_ignoreEfficiency += ferm->getEquivSucrose_kg();
       else
-         //sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
          sugar_kg += ferm->getEquivSucrose_kg();
    }
 
@@ -1934,13 +1932,6 @@ void Recipe::recalculate()
       //sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
    }
-
-   // Conversion factor for lb/gal to kg/l = 8.34538.
-   /*
-   points = (383.89 * sugar_kg / estimateFinalVolume_l()) * getEfficiency_pct()/100.0;
-   points += 383.89 * sugar_kg_ignoreEfficiency / estimateFinalVolume_l();
-   og = 1 + points/1000.0;
-   */
 
    // Combine the two sugars.
    sugar_kg = sugar_kg * getEfficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
@@ -2106,7 +2097,7 @@ double Recipe::getBoilGrav()
    Fermentable* ferm;
    double sugar_kg = 0.0;
    double sugar_kg_ignoreEfficiency = 0.0;
-   QString type;
+   Fermentable::Type type;
 
    // Calculate OG
    for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
@@ -2117,7 +2108,7 @@ double Recipe::getBoilGrav()
 
       // If we have some sort of non-grain, we have to ignore efficiency.
       type = ferm->getType();
-      if( type.compare("Sugar") == 0 || type.compare("Extract") == 0 || type.compare("Dry Extract") == 0 )
+      if( type==Fermentable::TYPESUGAR || type==Fermentable::TYPEEXTRACT || type==Fermentable::TYPEDRY_EXTRACT )
          sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
       else
          sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
@@ -2133,13 +2124,6 @@ double Recipe::getBoilGrav()
       sugar_kg = sugar_kg / (1 - equipment->getTrubChillerLoss_l()/estimatePostBoilVolume_l());
 
    return Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
-
-   // Conversion factor for lb/gal to kg/l = 8.34538.
-   /*
-   points = (383.89 * sugar_kg / estimateBoilVolume_l()) * getEfficiency_pct()/100.0;
-   points += 383.89 * sugar_kg_ignoreEfficiency / estimateBoilVolume_l();
-   return (1.0 + points/1000.0);
-   */
 }
 
 double Recipe::getIBU()

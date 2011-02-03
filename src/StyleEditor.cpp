@@ -88,7 +88,7 @@ void StyleEditor::save()
    s->setCategoryNumber( lineEdit_categoryNumber->text() );
    s->setStyleLetter( lineEdit_styleLetter->text() );
    s->setStyleGuide( lineEdit_styleGuide->text() );
-   s->setType( comboBox_type->currentText() );
+   s->setType( static_cast<Style::Type>(comboBox_type->currentIndex()) );
    s->setOgMin( lineEdit_ogMin->text().toDouble() );
    s->setOgMax( lineEdit_ogMax->text().toDouble() );
    s->setFgMin( lineEdit_fgMin->text().toDouble() );
@@ -181,7 +181,7 @@ void StyleEditor::showChanges()
    lineEdit_categoryNumber->setText(s->getCategoryNumber());
    lineEdit_styleLetter->setText(s->getStyleLetter());
    lineEdit_styleGuide->setText(s->getStyleGuide());
-   comboBox_type->setCurrentIndex(comboBox_type->findText(s->getType(), Qt::MatchExactly));
+   comboBox_type->setCurrentIndex(s->getType());
    lineEdit_ogMin->setText(Brewtarget::displayAmount(s->getOgMin(), 0));
    lineEdit_ogMax->setText(Brewtarget::displayAmount(s->getOgMax(), 0));
    lineEdit_fgMin->setText(Brewtarget::displayAmount(s->getFgMin(), 0));

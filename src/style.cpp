@@ -17,13 +17,13 @@
  */
 
 #include "brewtarget.h"
-#include <iostream>
-#include <string>
 #include <QVector>
 #include "style.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+
+QStringList Style::types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 
 bool operator<(Style &s1, Style &s2)
 {
@@ -74,7 +74,7 @@ void Style::toXml(QDomDocument& doc, QDomNode& parent)
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(type);
+   tmpText = doc.createTextNode(getTypeString());
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
@@ -170,7 +170,7 @@ void Style::setDefaults()
    categoryNumber = "";
    styleLetter = "";
    styleGuide = "";
-   type = "Ale";
+   type = TYPEALE;
    ogMin = 0.0;
    ogMax = 0.0;
    fgMin = 0.0;
@@ -252,7 +252,11 @@ void Style::fromNode(const QDomNode& styleNode)
       }
       else if( property == "TYPE" )
       {
-         setType(value);
+         int ndx = types.indexOf(value);
+         if( ndx < 0 )
+            Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a valid type for STYLE. Line %2").arg(value).arg(textNode.lineNumber()) );
+         else
+            type = static_cast<Style::Type>( ndx );
       }
       else if( property == "OG_MIN" )
       {
@@ -356,13 +360,11 @@ void Style::setStyleGuide( const QString& var )
    hasChanged();
 }
 
-void Style::setType( const QString& var )
+void Style::setType( Type t )
 {
-   if( ! isValidType(var) )
-      return;
-   else
+   if( static_cast<int>(t) >= 0 && t < NUMTYPES )
    {
-      type = QString(var);
+      type = t;
       hasChanged();
    }
 }
@@ -549,9 +551,14 @@ QString Style::getStyleGuide() const
    return styleGuide;
 }
 
-QString Style::getType() const
+const Style::Type Style::getType() const
 {
    return type;
+}
+
+const QString& Style::getTypeString() const
+{
+   return types.at(type);
 }
 
 double Style::getOgMin() const
@@ -636,13 +643,6 @@ QString Style::getExamples() const
 
 bool Style::isValidType( const QString &str )
 {
-   static const QString types[] = {"Lager", "Ale", "Mead", "Wheat", "Mixed", "Cider"};
-   static const unsigned int size = 7;
-   unsigned int i;
-   
-   for( i = 0; i < size; ++i )
-      if( str == types[i] )
-         return true;
-   
-   return false;
+   return types.contains( str, Qt::CaseSensitive );
 }
+
