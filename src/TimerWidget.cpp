@@ -102,12 +102,17 @@ void TimerWidget::setTimer()
    #if !defined(NO_PHONON)
     mediaObject->stop();
    #endif
-   flashTimer->stop();
-   lcdNumber->setPalette(paletteOld);
-   lcdNumber->update();
+   stopFlashing();
 
    setTimer(lineEdit->text());
    emit timerSet(getTimerValue());
+}
+
+void TimerWidget::stopFlashing()
+{
+   flashTimer->stop();
+   lcdNumber->setPalette(paletteOld);
+   lcdNumber->update();
 }
 
 void TimerWidget::endTimer()
@@ -119,8 +124,8 @@ void TimerWidget::endTimer()
     mediaObject->play();
    #endif
 
-   pushButton_startStop->setText("Start");
-   start = true;
+   //pushButton_startStop->setText("Start");
+   //start = true;
 }
 
 void TimerWidget::setTimer(QString text)
@@ -190,6 +195,8 @@ void TimerWidget::startStop()
    else
    {
       timer->stop();
+      mediaObject->stop();
+      stopFlashing();
       pushButton_startStop->setText(tr("Start"));
       start = true;
    }

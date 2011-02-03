@@ -59,6 +59,7 @@ signals:
 
 private:
    void subtractOneMinute();
+   void stopFlashing();
 
    unsigned int hours;
    unsigned int minutes;
