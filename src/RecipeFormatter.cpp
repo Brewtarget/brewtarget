@@ -29,7 +29,9 @@
 #include <QObject>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "instruction.h"
 
 RecipeFormatter::RecipeFormatter()
@@ -37,13 +39,22 @@ RecipeFormatter::RecipeFormatter()
    textSeparator = 0;
    rec = 0;
 
-   // Put the doc widget inside a dialog.
+   //===Construct a print-preview dialog.===
    docDialog = new QDialog(Brewtarget::mainWindow);
+   docDialog->setWindowTitle("Print Preview");
    if( docDialog->layout() == 0 )
-      docDialog->setLayout(new QVBoxLayout());
+      docDialog->setLayout(new QVBoxLayout(docDialog));
    doc = new QWebView(docDialog);
    docDialog->layout()->addWidget(doc);
-   
+   /*
+   // Add a print button at the bottom.
+   QHBoxLayout* buttonBox = new QHBoxLayout(docDialog);
+   QPushButton* print = new QPushButton(QObject::tr("Print"), docDialog);
+   connect(print, SLOT(clicked()), Brewtarget::mainWindow, SLOT(printRecipe()));
+   buttonBox->addStretch();
+   buttonBox->addWidget(print);
+   docDialog->layout()->addItem(buttonBox);
+   */
 }
 
 RecipeFormatter::~RecipeFormatter()
@@ -344,7 +355,20 @@ QString RecipeFormatter::getTextSeparator()
 
 QString RecipeFormatter::getHTMLFormat()
 {
-   return "";
+   QString pDoc;
+
+   pDoc = buildTitleTable();
+   pDoc += buildFermentableTable();
+   pDoc += buildHopsTable();
+   pDoc += buildMiscTable();
+   pDoc += buildYeastTable();
+   pDoc += buildMashTable();
+   pDoc += buildNotes();
+   pDoc += buildInstructionTable();
+
+   pDoc += "</body></html>";
+
+   return pDoc;
 }
 
 QString RecipeFormatter::getBBCodeFormat()
@@ -521,7 +545,7 @@ QString RecipeFormatter::buildFermentableTable()
 		return "";
 
 	ftable = QString("<h3>%1</h3>").arg(tr("Fermentables"));
-	ftable += QString("<table id=\"fermentables\"");
+   ftable += QString("<table id=\"fermentables\">");
 	ftable += QString("<caption>%1 %2</caption>")
                   .arg(tr("Total grain:"))
                   .arg(Brewtarget::displayAmount(rec->getGrains_kg(), Units::kilograms));
@@ -561,7 +585,7 @@ QString RecipeFormatter::buildHopsTable()
 		return "";
 
 	hTable = QString("<h3>%1</h3>").arg(tr("Hops"));
-	hTable += QString("<table id=\"hops\"");
+   hTable += QString("<table id=\"hops\">");
 	// Set up the header row.
 	hTable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th><th>%7</th></tr>")
 			.arg(tr("Name"))
@@ -596,7 +620,7 @@ QString RecipeFormatter::buildMiscTable()
 		return "";
 
 	mtable = QString("<h3>%1</h3>").arg(tr("Misc"));
-	mtable += QString("<table id=\"misc\"");
+   mtable += QString("<table id=\"misc\">");
 	// Set up the header row.
 	mtable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
 			.arg(tr("Name"))
@@ -628,7 +652,7 @@ QString RecipeFormatter::buildYeastTable()
 		return "";
 
 	ytable = QString("<h3>%1</h3>").arg(tr("Yeast"));
-	ytable += QString("<table id=\"yeast\"");
+   ytable += QString("<table id=\"yeast\">");
 	// Set up the header row.
 	ytable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
 			.arg(tr("Name"))
@@ -649,6 +673,61 @@ QString RecipeFormatter::buildYeastTable()
 	}
 	ytable += "</table>";
 	return ytable;
+}
+
+QString RecipeFormatter::buildMashTable()
+{
+   QString mtable;
+   Mash* m;
+   MashStep* ms;
+   unsigned int i;
+
+   if( rec == 0 || rec->getMash() == 0 || rec->getMash()->getNumMashSteps() <= 0 )
+      return "";
+
+   m = rec->getMash();
+
+   mtable = QString("<h3>%1</h3>").arg(tr("Mash"));
+   mtable += "<table id=\"yeast\">";
+
+   // Header row.
+   mtable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th></tr>")
+             .arg( tr("Name") )
+             .arg(tr("Type"))
+             .arg(tr("Amount"))
+             .arg(tr("Temp"))
+             .arg(tr("Target Temp"))
+             .arg(tr("Time"));
+   for( i = 0; i < m->getNumMashSteps(); ++i )
+   {
+      QString tmp = "<tr>";
+      ms = m->getMashStep(i);
+      tmp += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td>")
+             .arg(ms->getName())
+             .arg(ms->getTypeString());
+
+      if( ms->getType() == MashStep::TYPEINFUSION )
+      {
+         tmp = tmp.arg(Brewtarget::displayAmount(ms->getInfuseAmount_l(), Units::liters))
+               .arg(Brewtarget::displayAmount(ms->getInfuseTemp_c(), Units::celsius));
+      }
+      else if( ms->getType() == MashStep::TYPEDECOCTION )
+      {
+         tmp = tmp.arg( Brewtarget::displayAmount( ms->getDecoctionAmount_l(), Units::liters ) )
+               .arg("---");
+      }
+      else
+         tmp = tmp.arg( "---" ).arg("---");
+
+      tmp = tmp.arg( Brewtarget::displayAmount(ms->getStepTemp_c(), Units::celsius) );
+      tmp = tmp.arg( Brewtarget::displayAmount(ms->getStepTime_min(), Units::minutes) );
+
+      mtable += tmp + "</tr>";
+   }
+
+   mtable += "</table>";
+
+   return mtable;
 }
 
 QString RecipeFormatter::buildNotes()
@@ -694,9 +773,6 @@ bool RecipeFormatter::loadComplete(bool ok)
 
 void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog)
 {
-   QString pDoc;
-//   QPrintDialog *dialog = new QPrintDialog(printer, parent);
-
    printer = mainPrinter;
    /* Instantiate the Webview and then connect its signal */
    connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
@@ -708,37 +784,14 @@ void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog)
    if( rec == 0 )
       return;
 
-   // Start building the document to be printed.  I think.
-   pDoc = buildTitleTable();
-   pDoc += buildFermentableTable();
-   pDoc += buildHopsTable();
-   pDoc += buildMiscTable();
-   pDoc += buildYeastTable();
-   pDoc += buildNotes();
-   pDoc += buildInstructionTable();
-
-   pDoc += "</body></html>";
-
-   doc->setHtml(pDoc);
+   doc->setHtml(getHTMLFormat());
 }
 
 void RecipeFormatter::printPreview()
 {
-   QString pDoc;
-
    if( rec == 0 )
       return;
 
-   // Start building the document to be printed.  I think.
-   pDoc = buildTitleTable();
-   pDoc += buildFermentableTable();
-   pDoc += buildHopsTable();
-   pDoc += buildMiscTable();
-   pDoc += buildYeastTable();
-   pDoc += buildNotes();
-   pDoc += buildInstructionTable();
-   pDoc += "</body></html>";
-
-   doc->setHtml(pDoc);
+   doc->setHtml(getHTMLFormat());
    docDialog->show();
 }

@@ -57,6 +57,7 @@ private:
    QString buildFermentableTable();
    QString buildHopsTable();
    QString buildYeastTable();
+   QString buildMashTable();
    QString buildMiscTable();
    QString buildNotes();
    QString buildInstructionTable();
