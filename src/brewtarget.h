@@ -79,6 +79,23 @@ public:
    static void readPersistentOptions();
    static void savePersistentOptions();
 
+   /*!
+    * Loads the brewtarget translator with two letter ISO 639-1 code
+    * 'twoLetterLanguage'. For example, for spanish, it would
+    * be 'es'.
+    * Currently, this does NO checking to make sure the locale
+    * code is acceptable.
+    */
+   static void setLanguage(QString twoLetterLanguage);
+   /*!
+    * Gets the 2-letter ISO 639-1 language code we are currently using.
+    */
+   static const QString& getCurrentLanguage();
+   /*!
+    * Gets the ISO 639-1 language code for the system.
+    */
+   static const QString& getSystemLanguage();
+
 private:
    static QApplication* app;
    static MainWindow* mainWindow;
@@ -87,6 +104,7 @@ private:
    static QTranslator* btTrans;
    static QFile* logFile;
    static QTextStream* logStream;
+   static QString currentLanguage;
 
    //! Ensure the db and option files exist.
    static bool ensureFilesExist();

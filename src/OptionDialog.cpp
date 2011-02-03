@@ -31,6 +31,7 @@ OptionDialog::OptionDialog(QWidget* parent)
       setWindowIcon(parent->windowIcon());
    }
 
+   languageGroup = new QButtonGroup(this);
    colorGroup = new QButtonGroup(this);
    ibuGroup = new QButtonGroup(this);
    weightGroup = new QButtonGroup(this);
@@ -39,7 +40,16 @@ OptionDialog::OptionDialog(QWidget* parent)
    gravGroup = new QButtonGroup(this);
    colorUnitGroup = new QButtonGroup(this);
 
+   // Set up language map.
+   languageToButtonMap["de"] = pushButton_de;
+   languageToButtonMap["en"] = pushButton_en;
+   languageToButtonMap["es"] = pushButton_es;
+   languageToButtonMap["fr"] = pushButton_fr;
+   languageToButtonMap["pl"] = pushButton_pl;
+   languageToButtonMap["pt"] = pushButton_pt;
+
    // Want you to only be able to select exactly one in each group.
+   languageGroup->setExclusive(true);
    colorGroup->setExclusive(true);
    ibuGroup->setExclusive(true);
    weightGroup->setExclusive(true);
@@ -47,6 +57,14 @@ OptionDialog::OptionDialog(QWidget* parent)
    tempGroup->setExclusive(true);
    gravGroup->setExclusive(true);
    colorUnitGroup->setExclusive(true);
+
+   // Set up the buttons in languageGroup;
+   languageGroup->addButton(pushButton_de);
+   languageGroup->addButton(pushButton_en);
+   languageGroup->addButton(pushButton_es);
+   languageGroup->addButton(pushButton_fr);
+   languageGroup->addButton(pushButton_pl);
+   languageGroup->addButton(pushButton_pt);
 
    // Set up the buttons in the colorGroup
    colorGroup->addButton(checkBox_mosher);
@@ -109,7 +127,7 @@ void OptionDialog::saveAndClose()
    Brewtarget::ColorType cformula;
    Brewtarget::IbuType iformula;
    Brewtarget::ColorUnitType colorUnit;
-   
+
    button = colorGroup->checkedButton();
    if( button == checkBox_mosher )
       cformula = Brewtarget::MOSHER;
@@ -195,6 +213,8 @@ void OptionDialog::saveAndClose()
    Brewtarget::volumeUnitSystem = volumeUnitSystem;
    Brewtarget::tempScale = temperatureScale;
    Brewtarget::colorUnit = colorUnit;
+
+   Brewtarget::setLanguage( languageToButtonMap.key(reinterpret_cast<QPushButton*>(languageGroup->checkedButton())) );
    
    if( Brewtarget::mainWindow != 0 )
       Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
@@ -209,6 +229,11 @@ void OptionDialog::cancel()
 
 void OptionDialog::showChanges()
 {
+   // Check the right language button
+   QPushButton* lButton = languageToButtonMap[Brewtarget::getCurrentLanguage()];
+   if( lButton != 0 )
+      lButton->setChecked(true);
+
    // Check the right color formula box.
    switch( Brewtarget::colorFormula )
    {

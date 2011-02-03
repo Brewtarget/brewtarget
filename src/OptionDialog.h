@@ -24,6 +24,8 @@ class OptionDialog;
 #include <QDialog>
 #include <QWidget>
 #include <QAbstractButton>
+#include <QMap>
+#include <QString>
 #include "ui_optionsDialog.h"
 #include "unit.h"
 
@@ -40,8 +42,11 @@ public slots:
    
 private:
    void showChanges();
+   QButtonGroup *languageGroup;
    QButtonGroup *colorGroup, *ibuGroup;
    QButtonGroup *weightGroup, *volumeGroup, *tempGroup, *gravGroup, *colorUnitGroup;
+   //! This map makes correspondences from two-letter language codes ("es" for spanish) to their push buttons.
+   QMap<QString,QPushButton*> languageToButtonMap;
 };
 
 #endif	/* _OPTIONDIALOG_H */

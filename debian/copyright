@@ -12,7 +12,7 @@ Upstream Author:
 
 The Debian packaging is:
 
-    Copyright (C) 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+    Copyright (C) 2009-2011, Philip G. Lee <rocketman768@gmail.com>
 
 and is licensed under the GPL-3.
 
@@ -24,6 +24,10 @@ Files: images/*
 Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
            2009-2010, Eric Tamme
 License: WTFPL-2
+
+Files: images/flag*.png
+Copyright: 2009-2010, A68 Freelance Graphics Designs <a68designs@gmail.com>
+License: CC-BY-NC-ND-3.0
 
 License: GPL-3
     This package is free software; you can redistribute it and/or modify

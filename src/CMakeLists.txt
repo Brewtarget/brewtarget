@@ -244,9 +244,6 @@ QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
 
 # Translations
-OPTION(UPDATE_TRANSLATIONS
-       "Update source translation *.ts files (WARNING: make clean will delete the source .ts files! Danger!)"
-       OFF)
 IF(UPDATE_TRANSLATIONS)
   # Updates the .ts files with translatable strings, AND creates the binary .qm files
   QT4_CREATE_TRANSLATION(QM_FILES
@@ -258,10 +255,10 @@ ELSE()
   QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
 ENDIF() 
 
+# Add a target for the QM_FILES so that we can add
+# the translations as a dependency for the executable later.
 ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
 
-#INSTALL(FILES ${QM_FILES}
-#        DESTINATION ${somewhere}/translations)
 
 #===============================Packaging======================================
 
@@ -369,6 +366,7 @@ ENDIF()
 #===========================Create the binary==================================
 
 ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
+ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
 
 # Link brewtarget against appropriate libraries.
 IF( WIN32 AND MINGW )
@@ -395,13 +393,17 @@ IF( UNIX AND NOT APPLE )
            RUNTIME DESTINATION ${TARGETPATH} )
 ENDIF()
 
- # Install the data.
- INSTALL( FILES ${brewtarget_DATA}
-          DESTINATION ${DATAPATH} )
+# Install the data.
+INSTALL( FILES ${brewtarget_DATA}
+         DESTINATION ${DATAPATH} )
 
- # Install the documentation.
- INSTALL( FILES ${brewtarget_DOCS}
-          DESTINATION ${DOCPATH} )
+# Install the translations
+INSTALL(FILES ${QM_FILES}
+        DESTINATION ${DATAPATH}/translations_qm)
+
+# Install the documentation.
+INSTALL( FILES ${brewtarget_DOCS}
+         DESTINATION ${DOCPATH} )
 
 # Some extra targets for unix.
 IF( UNIX AND NOT APPLE )

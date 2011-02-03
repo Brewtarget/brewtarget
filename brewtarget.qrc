@@ -43,5 +43,11 @@
    <file>images/clock.svg</file>
    <file>css/brewday.css</file>
    <file>css/recipe.css</file>
+   <file>images/flagFrance.png</file>
+   <file>images/flagGermany.png</file>
+   <file>images/flagPoland.png</file>
+   <file>images/flagPortugal.png</file>
+   <file>images/flagSpain.png</file>
+   <file>images/flagUK.png</file>
 </qresource>
 </RCC>

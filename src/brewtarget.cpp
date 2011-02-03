@@ -43,6 +43,9 @@ QTranslator* Brewtarget::defaultTrans = 0;
 QTranslator* Brewtarget::btTrans = 0;
 QTextStream* Brewtarget::logStream = 0;
 QFile* Brewtarget::logFile = 0;
+
+QString Brewtarget::currentLanguage = "en";
+
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
 
@@ -114,6 +117,14 @@ bool Brewtarget::ensureFilesExist()
    return success;
 }
 
+const QString& Brewtarget::getSystemLanguage()
+{
+   // QLocale::name() is of the form language_country,
+   // where 'language' is a lowercase 2-letter ISO 639-1 language code,
+   // and 'country' is an uppercase 2-letter ISO 3166 country code.
+   return QLocale::system().name().split("_")[0];
+}
+
 void Brewtarget::loadTranslations()
 {
    if( app == 0 )
@@ -126,13 +137,26 @@ void Brewtarget::loadTranslations()
 
    // Load translators.
    defaultTrans->load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-   //defaultTrans->load("qt_es", QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-   btTrans->load("bt_" + QLocale::system().name());
-   //btTrans->load("bt_es");
+   if( getCurrentLanguage().isEmpty() )
+      setLanguage(getSystemLanguage());
+   //btTrans->load("bt_" + getSystemLanguage());
 
    // Install translators.
    app->installTranslator(defaultTrans);
-   app->installTranslator(btTrans);
+   //app->installTranslator(btTrans);
+}
+
+void Brewtarget::setLanguage(QString twoLetterLanguage)
+{
+   currentLanguage = twoLetterLanguage;
+   app->removeTranslator(btTrans);
+   if( btTrans->load( getDataDir() + "translations_qm/bt_" + twoLetterLanguage) );
+      app->installTranslator(btTrans);
+}
+
+const QString& Brewtarget::getCurrentLanguage()
+{
+   return currentLanguage;
 }
 
 QApplication* Brewtarget::getApp()
@@ -438,8 +462,8 @@ void Brewtarget::readPersistentOptions()
          tempScale = Fahrenheit;
 
          weightSystem = UnitSystems::usWeightUnitSystem();
-	 volumeSystem = UnitSystems::usVolumeUnitSystem();
-	 tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+         volumeSystem = UnitSystems::usVolumeUnitSystem();
+         tempSystem = UnitSystems::fahrenheitTempUnitSystem();
       }
       else
       {
@@ -447,13 +471,28 @@ void Brewtarget::readPersistentOptions()
          volumeUnitSystem = SI;
          tempScale = Celsius;
 
-	 weightSystem = UnitSystems::siWeightUnitSystem();
-	 volumeSystem = UnitSystems::siVolumeUnitSystem();
-	 tempSystem = UnitSystems::celsiusTempUnitSystem();
+         weightSystem = UnitSystems::siWeightUnitSystem();
+         volumeSystem = UnitSystems::siVolumeUnitSystem();
+         tempSystem = UnitSystems::celsiusTempUnitSystem();
       }
  
    }
 
+   //=====================Language====================
+   list = optionsDoc->elementsByTagName(QString("language"));
+   if(list.length() <= 0)
+      Brewtarget::logW(QString("Could not find the language tag in the option file."));
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      setLanguage(text);
+   }
+
+   //=======================Weight=====================
    list = optionsDoc->elementsByTagName(QString("weight_unit_system"));
    if( list.length() <= 0 )
    {
@@ -469,20 +508,21 @@ void Brewtarget::readPersistentOptions()
       if( text == "Imperial" )
       {
          weightUnitSystem = Imperial;
-	 weightSystem = UnitSystems::usWeightUnitSystem();
+         weightSystem = UnitSystems::usWeightUnitSystem();
       }
       else if (text == "USCustomary")
       {
          weightUnitSystem = USCustomary;
-	 weightSystem = UnitSystems::usWeightUnitSystem();
+         weightSystem = UnitSystems::usWeightUnitSystem();
       }
       else
       {
          weightUnitSystem = SI;
-	 weightSystem = UnitSystems::siWeightUnitSystem();
+         weightSystem = UnitSystems::siWeightUnitSystem();
       }
    }
 
+   //===========================Volume=======================
    list = optionsDoc->elementsByTagName(QString("volume_unit_system"));
    if( list.length() <= 0 )
    {
@@ -512,6 +552,7 @@ void Brewtarget::readPersistentOptions()
       }
    }
 
+   //=======================Temp======================
    list = optionsDoc->elementsByTagName(QString("temperature_scale"));
    if( list.length() <= 0 )
    {
@@ -539,6 +580,7 @@ void Brewtarget::readPersistentOptions()
    // Set the one and only time system.
    timeSystem = UnitSystems::timeUnitSystem();
 
+   //===================IBU===================
    // Get IBU formula.
    list = optionsDoc->elementsByTagName(QString("ibu_formula"));
    if( list.length() <= 0 )
@@ -562,6 +604,7 @@ void Brewtarget::readPersistentOptions()
       }
    }
 
+   //========================Color======================
    // Get color formula.
    list = optionsDoc->elementsByTagName(QString("color_formula"));
    if( list.length() <= 0 )
@@ -587,6 +630,7 @@ void Brewtarget::readPersistentOptions()
       }
    }
 
+   //========================Gravity==================
    // Get plato usage.
    list = optionsDoc->elementsByTagName(QString("use_plato"));
    if( list.length() <= 0 )
@@ -608,6 +652,7 @@ void Brewtarget::readPersistentOptions()
       }
    }
 
+   //=======================Color unit===================
    list = optionsDoc->elementsByTagName("color_unit");
    if( list.length() <= 0 )
       Brewtarget::logW( "Could not find the color_unit tag in the option file." );
@@ -663,6 +708,11 @@ void Brewtarget::savePersistentOptions()
    node.appendChild(child);
    root.appendChild(node);
 
+   // Language
+   node = optionsDoc->createElement("language");
+   child = optionsDoc->createTextNode(getCurrentLanguage());
+   node.appendChild(child);
+   root.appendChild(node);
 
    // IBU formula.
    node = optionsDoc->createElement("ibu_formula");
