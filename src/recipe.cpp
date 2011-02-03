@@ -759,11 +759,13 @@ void Recipe::generateInstructions()
       for( j = 0; static_cast<int>(j) < fermentables.size(); ++j )
       {
          if( fermentables[j]->getIsMashed() )
-			 tmp = QString("%1 %2, ")
-				.arg(Brewtarget::displayAmount(fermentables[j]->getAmount_kg(), Units::kilograms))
-            .arg(fermentables[j]->getName());
-		 	 str += tmp;
-			 ins->setReagent(tmp);
+         {
+            tmp = QString("%1 %2, ")
+                  .arg(Brewtarget::displayAmount(fermentables[j]->getAmount_kg(), Units::kilograms))
+                  .arg(fermentables[j]->getName());
+            str += tmp;
+            ins->setReagent(tmp);
+         }
       }
       str += QObject::tr("to the mash tun.");
       ins->setDirections(str);
@@ -945,7 +947,7 @@ void Recipe::generateInstructions()
    
    /*** Get fermentables we haven't added yet ***/
    bool hasFerms = false;
-   str = QObject::tr("Add ");
+   str = QObject::tr("Boil or steep ");
    for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
    {
       Fermentable* ferm = fermentables[i];
@@ -957,10 +959,10 @@ void Recipe::generateInstructions()
              .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
              .arg(ferm->getName());
    }
-   str += QObject::tr("to the boil.");
+   str += ".";
    if( hasFerms )
    {
-      preinstructions.push_back(PreInstruction(str, QObject::tr("Boil fermentables"), timeRemaining));
+      preinstructions.push_back(PreInstruction(str, QObject::tr("Boil/steep fermentables"), timeRemaining));
    }
    /*** END Get fermentables we haven't added yet ***/
    
