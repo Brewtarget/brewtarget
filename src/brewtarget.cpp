@@ -39,8 +39,8 @@
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
 QDomDocument* Brewtarget::optionsDoc;
-QTranslator* Brewtarget::defaultTrans = 0;
-QTranslator* Brewtarget::btTrans = 0;
+QTranslator* Brewtarget::defaultTrans = new QTranslator();
+QTranslator* Brewtarget::btTrans = new QTranslator();
 QTextStream* Brewtarget::logStream = 0;
 QFile* Brewtarget::logFile = 0;
 
@@ -130,11 +130,6 @@ void Brewtarget::loadTranslations()
    if( app == 0 )
       return;
 
-   if( defaultTrans == 0 )
-      defaultTrans = new QTranslator();
-   if( btTrans == 0 )
-      btTrans = new QTranslator();
-
    // Load translators.
    defaultTrans->load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
    if( getCurrentLanguage().isEmpty() )
@@ -150,7 +145,10 @@ void Brewtarget::setLanguage(QString twoLetterLanguage)
 {
    currentLanguage = twoLetterLanguage;
    app->removeTranslator(btTrans);
-   if( btTrans->load( getDataDir() + "translations_qm/bt_" + twoLetterLanguage) );
+
+   QString filename = QString("bt_%1").arg(twoLetterLanguage);
+   QString dir = QString("%1translations_qm/").arg(getDataDir());
+   if( btTrans->load( filename, dir ) )
       app->installTranslator(btTrans);
 }
 
