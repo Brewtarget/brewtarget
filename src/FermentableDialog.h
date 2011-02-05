@@ -27,7 +27,8 @@ class FermentableDialog;
 #include "ui_fermentableDialog.h"
 #include "observable.h"
 #include "database.h"
-#include "MainWindow.h"
+//#include "MainWindow.h"
+class MainWindow;
 #include "FermentableEditor.h"
 
 class FermentableDialog : public QDialog, public Ui::fermentableDialog, public Observer

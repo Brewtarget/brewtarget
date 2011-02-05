@@ -28,7 +28,7 @@ OPTION( NO_PHONON
         "If on, does not build any Phonon code."
         OFF )
 OPTION(UPDATE_TRANSLATIONS
-       "Update source translation *.ts files (WARNING: make clean will delete the source .ts files! Danger!)"
+       "Update source translation *.ts files (WARNING: 'make clean' will delete the source .ts files! Danger!)"
        OFF)
 #==============================Compile flags===================================
 SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )

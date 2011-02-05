@@ -1,0 +1,5 @@
+All the files in this directory should have the form:
+bt_<lang>.ts
+
+where <lang> is a two-letter ISO 639-1 language code corresponding
+to the target language of the translation.
