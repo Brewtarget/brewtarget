@@ -1,11 +1,15 @@
 Files: *
-Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+Copyright: 2009-2011, Philip G. Lee <rocketman768@gmail.com>
 License: GPL-3
 
 Files: images/*
 Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
            2009-2010, Eric Tamme
 License: WTFPL-2
+
+File: images/flag*
+Copyright: 2009-2010 A68 Freelance Graphics Designs <a68designs@gmail.com>
+License: CC-BY-NC-ND-3.0
 
 License: GPL-3
     This package is free software; you can redistribute it and/or modify
