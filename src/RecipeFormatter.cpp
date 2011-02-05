@@ -280,7 +280,7 @@ QString RecipeFormatter::getTextFormat()
    
    if( mash && mash->getNumMashSteps() > 0 )
    {
-      QStringList names, types, amounts, targets, times;
+      QStringList names, types, amounts, temps, targets, times;
       ret += "\n";
       ret += QObject::tr("Mash\n");
       ret += getTextSeparator();
@@ -288,6 +288,7 @@ QString RecipeFormatter::getTextFormat()
       names.append(QObject::tr("Name"));
       types.append(QObject::tr("Type"));
       amounts.append(QObject::tr("Amount"));
+      temps.append(QObject::tr("Temp"));
       targets.append(QObject::tr("Target"));
       times.append(QObject::tr("Time"));
       
@@ -298,11 +299,20 @@ QString RecipeFormatter::getTextFormat()
          names.append(s->getName());
          types.append(s->getTypeString());
          if( s->getType() == MashStep::TYPEINFUSION )
+         {
             amounts.append( Brewtarget::displayAmount( s->getInfuseAmount_l(), Units::liters ) );
+            temps.append( Brewtarget::displayAmount( s->getInfuseTemp_c(), Units::celsius ) );
+         }
          else if( s->getType() == MashStep::TYPEDECOCTION )
+         {
             amounts.append( Brewtarget::displayAmount( s->getDecoctionAmount_l(), Units::liters ) );
+            temps.append("---");
+         }
          else
+         {
             amounts.append( "---" );
+            temps.append("---");
+         }
          targets.append( Brewtarget::displayAmount( s->getStepTemp_c(), Units::celsius ) );
          times.append( Brewtarget::displayAmount( s->getStepTime_min(), Units::minutes ) );
       }
@@ -310,11 +320,12 @@ QString RecipeFormatter::getTextFormat()
       padAllToMaxLength(&names);
       padAllToMaxLength(&types);
       padAllToMaxLength(&amounts);
+      padAllToMaxLength(&temps);
       padAllToMaxLength(&targets);
       padAllToMaxLength(&times);
       
       for( i = 0; i < size+1; ++i )
-         ret += names.at(i) + types.at(i) + amounts.at(i) + targets.at(i) + times.at(i) + "\n";
+         ret += names.at(i) + types.at(i) + amounts.at(i) + temps.at(i) + targets.at(i) + times.at(i) + "\n";
    }
    
    if( rec->getNotes() != "" )
