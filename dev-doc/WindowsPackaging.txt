@@ -1,0 +1,8 @@
+To distribute brewtarget, we need to add several files and folders to the main brewtarget directory from the Qt directory.
+
+Qt\<version>\bin\[phonon4.dll,QtCore4.dll,QtGui4.dll,QtSvg4.dll,QtWebKit4.dll,QtXml4.dll]
+Qt\<version>\plugins\[iconengines,imageformats,phonon_backend]
+
+Also, depending, we may need the following:
+libgcc_s_dw2-1.dll
+mingwm10.dll
