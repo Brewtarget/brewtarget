@@ -310,7 +310,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   #SET(CPACK_STRIP_FILES TRUE)
   SET(CPACK_COMPONENTS_ALL Libraries ApplicationData)
 
- IF(UNIX)#===========================UNIX======================================
+ #===========================UNIX======================================
+ IF(UNIX)
   SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
 
   #-----------------DEB----------------
@@ -335,7 +336,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
   SET(CPACK_RPM_PACKAGE_REQUIRES "qt(>= 4.6.0), phonon(>= 4.2.0)") # NOTE: I'm just guessing here. Somebody needs to check.
 
- ELSEIF(APPLE)#============================APPLE=================================
+ #============================APPLE=================================
+ ELSEIF(APPLE)
   #---------------App Bundle---------------
   SET( CPACK_GENERATOR "Bundle" )
 
@@ -356,7 +358,7 @@ IF( WIN32 AND MINGW )
                      COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
                      -i${RCFILE}
                      -o${WINDIR}/icon.o
-					 DEPENDS ${RCFILE}
+                     DEPENDS ${RCFILE}
   )
   SET(brewtarget_SRCS ${brewtarget_SRCS} ${WINDIR}/icon.o)
 ELSEIF(WIN32)
@@ -388,11 +390,6 @@ MESSAGE( STATUS "Libraries: ${QT_LIBRARIES}" )
 
 #==============================Setup install targets===========================
 
-IF( UNIX AND NOT APPLE )
-  INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-           RUNTIME DESTINATION ${TARGETPATH} )
-ENDIF()
-
 # Install the data.
 INSTALL( FILES ${brewtarget_DATA}
          DESTINATION ${DATAPATH} )
@@ -405,8 +402,11 @@ INSTALL(FILES ${QM_FILES}
 INSTALL( FILES ${brewtarget_DOCS}
          DESTINATION ${DOCPATH} )
 
-# Some extra targets for unix.
+# ---------Unix installs-----------
 IF( UNIX AND NOT APPLE )
+
+   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+            RUNTIME DESTINATION ${TARGETPATH} )
 
    # Install the icons.
    INSTALL( FILES ${brewtarget_ICONS}
@@ -415,5 +415,10 @@ IF( UNIX AND NOT APPLE )
    # Install the .desktop file.
    INSTALL( FILES ${brewtarget_DESKTOP}
             DESTINATION "${DATAROOTDIR}/applications" )
+ENDIF()
 
+#--------Windows installs---------
+IF( WIN32 )
+   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+            RUNTIME DESTINATION ${TARGETPATH} )
 ENDIF()
