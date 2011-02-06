@@ -48,6 +48,11 @@ ELSE()
    SET( CMAKE_BUILD_TYPE "Debug" )
 ENDIF()
 
+IF( APPLE )
+   SET( CMAKE_OSX_ARCHITECTURES ppc i386 ) # Build universal binary
+   #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary for 32 and 64 bit.
+ENDIF()
+
 #============================Directories=======================================
 SET(ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(SRCDIR "${ROOTDIR}/src")
