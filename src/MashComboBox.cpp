@@ -17,6 +17,7 @@
 */
 
 #include "MashComboBox.h"
+#include <QList>
 
 MashComboBox::MashComboBox(QWidget* parent)
 : QComboBox(parent)
@@ -65,9 +66,7 @@ void MashComboBox::removeAllMashs()
 
 void MashComboBox::notify(Observable *notifier, QVariant info)
 {
-   unsigned int size;
-   QString saveText = currentText();
-   
+   unsigned int i, size;
    
    // Notifier could be the database. Only pay attention if the number of
    // mashs has changed.
@@ -81,23 +80,17 @@ void MashComboBox::notify(Observable *notifier, QVariant info)
       for( it = dbObs->getMashBegin(); it != end; ++it )
          addMash(*it);
       repopulateList();
-
-      int saveIndex = findText(saveText);
-      if(saveIndex >= 0)
-         setCurrentIndex(saveIndex);
    }
    else // Otherwise, we know that one of the mashs changed.
    {
       size = mashObs.size();
-     
-      removeAllMashs();
-      QList<Mash*>::iterator it, end;
-      
-      end = dbObs->getMashEnd();
-      
-      for( it = dbObs->getMashBegin(); it != end; ++it )
-         addMash(*it);
-      repopulateList();
+      for( i = 0; i < size; ++i )
+         if( notifier == mashObs[i] )
+         {
+            // Notice we assume 'i' is an index into both 'mashObs' and also
+            // to the text list in this combo box...
+            setItemText( i, mashObs[i]->getName() );
+         }
    }
 }
 
