@@ -410,6 +410,20 @@ double Mash::totalMashWater_l() const
    return waterAdded_l;
 }
 
+double Mash::getTotalTime()
+{
+	unsigned int i;
+	double totalTime = 0.0;
+	MashStep* mstep;
+
+	for( i = 0; i < getNumMashSteps(); ++i )
+	{
+		mstep = getMashStep(i);
+		totalTime += mstep->getStepTime_min();
+	}
+	return totalTime;
+}
+
 void Mash::notify(Observable *notifier, QVariant info)
 {
    unsigned int i, size;

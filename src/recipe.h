@@ -38,6 +38,7 @@ class Recipe;
 #include "water.h"
 #include "observable.h"
 #include "instruction.h"
+#include "PreInstruction.h"
 
 class Recipe : public Observable, public MultipleObserver, public BeerXMLElement
 {
@@ -302,6 +303,19 @@ public:
    double getGrainsInMash_kg() const;
    double getGrains_kg() const;
 
+   Instruction* getMashFermentable() const;
+   Instruction* getMashWater(unsigned int size) const;
+   QVector<PreInstruction> getMashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) const;
+   QVector<PreInstruction> getMashSteps() const;
+   QVector<PreInstruction> getHopSteps(Hop::Use type = Hop::USEBOIL) const;
+   QVector<PreInstruction> getMiscSteps(Misc::Use type = Misc::USEBOIL) const;
+   Instruction* getFirstWortHops() const;
+   Instruction* getTopOff() const;
+   PreInstruction getBoilFermentables(double timeRemaining) const;
+   bool hasBoilFermentable();
+   Instruction* getPostboilFermentables();
+   Instruction* getPostboilSteps();
+
 private:
 
    QString name;
@@ -347,6 +361,7 @@ private:
    double estimatedCalories;
    
    void setDefaults();
+   void addPreinstructions( QVector<PreInstruction> preins );
    bool isValidType( const QString &str );
 };
 

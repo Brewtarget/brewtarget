@@ -696,7 +696,6 @@ void Recipe::swapInstructions(unsigned int j, unsigned int k)
    return;
 }
 
-
 void Recipe::clearInstructions()
 {
    instructions.clear();
@@ -734,196 +733,384 @@ Instruction* Recipe::getInstruction(unsigned int i)
       return 0;
 }
 
-void Recipe::generateInstructions()
+Instruction* Recipe::getMashFermentable() const
 {
-   Instruction* ins;
-   MashStep* mstep;
-   instructions.clear();
-   QString str, tmp;
-   unsigned int i, j, size;
-   double timeRemaining;
-   double totalWaterAdded_l = 0.0;
-   double wortInBoil_l = 0.0;
-   double wort_l = 0.0;
-   QVector<PreInstruction> preinstructions;
+	Instruction* ins;
+	QString str,tmp;
+	unsigned int i;
 
-   // Mash instructions
-   if( mash != 0 && mash->getNumMashSteps() > 0 )
-   {
-      size = mash->getNumMashSteps();
+    /*** Add grains ***/
+     ins = new Instruction();
+     ins->setName(QObject::tr("Add grains"));
+     str = QObject::tr("Add ");
+     for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+     {
+        if( fermentables[i]->getIsMashed() )
+			 tmp = QString("%1 %2, ")
+				.arg(Brewtarget::displayAmount(fermentables[i]->getAmount_kg(), Units::kilograms))
+				.arg(fermentables[i]->getName());
+		 	 str += tmp;
+		 	 ins->setReagent(tmp);
+     }
+     str += QObject::tr("to the mash tun.");
+     ins->setDirections(str);
 
-      /*** Add grains ***/
-      ins = new Instruction();
-      ins->setName(QObject::tr("Add grains"));
-      str = QObject::tr("Add ");
-      for( j = 0; static_cast<int>(j) < fermentables.size(); ++j )
-      {
-         if( fermentables[j]->getIsMashed() )
-         {
-            tmp = QString("%1 %2, ")
-                  .arg(Brewtarget::displayAmount(fermentables[j]->getAmount_kg(), Units::kilograms))
-                  .arg(fermentables[j]->getName());
-            str += tmp;
-            ins->setReagent(tmp);
-         }
-      }
-      str += QObject::tr("to the mash tun.");
-      ins->setDirections(str);
-      instructions.push_back(ins);
-      /*** END Add grains ***/
+     return ins;
 
-      /*** Prepare water additions ***/
-      ins = new Instruction();
-      ins->setName(QObject::tr("Heat water"));
-      str = QObject::tr("Bring ");
-      for( i = 0; i < size; ++i )
-      {
-         mstep = mash->getMashStep(i);
-         if( mstep->getType() != MashStep::TYPEINFUSION )
-            continue;
-         
-         tmp = QObject::tr("%1 water to %2, ")
-                .arg(Brewtarget::displayAmount(mstep->getInfuseAmount_l(), Units::liters))
-                .arg(Brewtarget::displayAmount(mstep->getInfuseTemp_c(), Units::celsius));
+}
+
+Instruction* Recipe::getMashWater(unsigned int size) const
+{
+	Instruction* ins;
+	MashStep* mstep;
+	QString str, tmp;
+	unsigned int i;
+
+    ins = new Instruction();
+    ins->setName(QObject::tr("Heat water"));
+    str = QObject::tr("Bring ");
+    for( i = 0; i < size; ++i )
+    {
+       mstep = mash->getMashStep(i);
+       if( mstep->getType() != MashStep::TYPEINFUSION )
+          continue;
+
+       tmp = QObject::tr("%1 water to %2, ")
+              .arg(Brewtarget::displayAmount(mstep->getInfuseAmount_l(), Units::liters))
+              .arg(Brewtarget::displayAmount(mstep->getInfuseTemp_c(), Units::celsius));
 		 str += tmp;
 		 ins->setReagent(tmp);
-      }
-      str += QObject::tr("for upcoming infusions.");
-      ins->setDirections(str);
-      instructions.push_back(ins);
-      /*** END prepare water additions ***/
+    }
+    str += QObject::tr("for upcoming infusions.");
+    ins->setDirections(str);
 
-      timeRemaining = 0.0;
-      for( i = 0; i < size; ++i )
-      {
-         mstep = mash->getMashStep(i);
-         timeRemaining += mstep->getStepTime_min();
-      }
+    return ins;
+}
 
-      /*** Do each mash step ***/
-      preinstructions.clear();
-      for( i = 0; i < size; ++i )
-      {
-         mstep = mash->getMashStep(i);
-         
-         if( mstep->getType() == MashStep::TYPEINFUSION)
-         {
-            str = QObject::tr("Add %1 water at %2 to mash to bring it to %3.")
-                  .arg(Brewtarget::displayAmount(mstep->getInfuseAmount_l(), Units::liters))
-                  .arg(Brewtarget::displayAmount(mstep->getInfuseTemp_c(), Units::celsius))
-                  .arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
-		  
-            totalWaterAdded_l += mstep->getInfuseAmount_l();
-         }
-         else if( mstep->getType() == MashStep::TYPETEMPERATURE )
-         {
-            str = QObject::tr("Heat mash to %1.").arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
-         }
-         else if( mstep->getType() == MashStep::TYPEDECOCTION )
-         {
-            str = QObject::tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
-                  .arg(Brewtarget::displayAmount(mstep->getDecoctionAmount_l(), Units::liters))
-                  .arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
-         }
+QVector<PreInstruction> Recipe::getMashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) const
+{
+	QVector<PreInstruction> preins;
+	MashStep* mstep;
+	QString str;
 
-         str += QObject::tr(" Hold for %1.").arg(Brewtarget::displayAmount(mstep->getStepTime_min(), Units::minutes));
+	unsigned int i;
 
-//         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getType()()).arg(mstep->getName()()), timeRemaining));
-         preinstructions.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getTypeString()).arg(mstep->getName()),
-                     timeRemaining));
-         timeRemaining -= mstep->getStepTime_min();
-      }
-      /*** END do each mash step ***/
+	preins.clear();
+    for( i = 0; i < size; ++i )
+    {
+       mstep = mash->getMashStep(i);
 
-      /*** Hops mash additions ***/
-      for( j = 0; static_cast<int>(j) < hops.size(); ++j )
-      {
-         Hop* hop = hops[j];
-         if( hop->getUse() == Hop::USEMASH )
-         {
-            str = QObject::tr("Put %1 %2 into mash for %3.")
-                  .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-                  .arg(hop->getName())
-                  .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
-                  preinstructions.push_back(PreInstruction(str, QObject::tr("Mash hop addition"), hop->getTime_min()));
-         }
-      }
-      /*** END hop mash additions ***/
+       if( mstep->getType() == MashStep::TYPEINFUSION)
+       {
+          str = QObject::tr("Add %1 water at %2 to mash to bring it to %3.")
+                .arg(Brewtarget::displayAmount(mstep->getInfuseAmount_l(), Units::liters))
+                .arg(Brewtarget::displayAmount(mstep->getInfuseTemp_c(), Units::celsius))
+                .arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
 
-      /*** Misc mash additions ***/
-      for( j = 0; static_cast<int>(j) < miscs.size(); ++j )
-      {
-         Misc* misc = miscs[j];
-         if( misc->getUse() == Misc::USEMASH )
-         {
-            str = QObject::tr("Put %1 %2 into mash for %3.")
-                  .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
-                  .arg(misc->getName())
-                  .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
-                  preinstructions.push_back(PreInstruction(str, QObject::tr("Mash misc addition"), misc->getTime()));
-         }
-      }
-      /*** END misc mash additions ***/
+          totalWaterAdded_l += mstep->getInfuseAmount_l();
+       }
+       else if( mstep->getType() == MashStep::TYPETEMPERATURE )
+       {
+          str = QObject::tr("Heat mash to %1.").arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
+       }
+       else if( mstep->getType() == MashStep::TYPEDECOCTION )
+       {
+          str = QObject::tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
+                .arg(Brewtarget::displayAmount(mstep->getDecoctionAmount_l(), Units::liters))
+                .arg(Brewtarget::displayAmount(mstep->getStepTemp_c(), Units::celsius));
+       }
 
-      // Add instructions in descending mash time order.
-      qSort( preinstructions.begin(), preinstructions.end(), qGreater<PreInstruction>() );
-      for( j=0; static_cast<int>(j) < preinstructions.size(); j++ )
-      {
-         PreInstruction pi = preinstructions[j];
-         ins = new Instruction();
-         ins->setName(pi.getTitle());
-         ins->setDirections(pi.getText());
-         ins->setInterval(pi.getTime());
-         instructions.push_back(ins);
-      }
-   } // END mash instructions.
+       str += QObject::tr(" Hold for %1.").arg(Brewtarget::displayAmount(mstep->getStepTime_min(), Units::minutes));
 
-   // First wort hopping
+       preins.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getTypeString()).arg(mstep->getName()),
+                   timeRemaining));
+       timeRemaining -= mstep->getStepTime_min();
+    }
+    return preins;
+}
+
+QVector<PreInstruction> Recipe::getHopSteps(Hop::Use type) const
+{
+	QVector<PreInstruction> preins;
+	QString str;
+	unsigned int i;
+
+	preins.clear();
+
+    for( i = 0; static_cast<int>(i) < hops.size(); ++i )
+    {
+       Hop* hop = hops[i];
+       if( hop->getUse() == type )
+       {
+          str = QObject::tr("Put %1 %2 into mash for %3.")
+                .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
+                .arg(hop->getName())
+                .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
+                preins.push_back(PreInstruction(str, QObject::tr("Mash hop addition"), hop->getTime_min()));
+       }
+    }
+	return preins;
+}
+
+QVector<PreInstruction> Recipe::getMiscSteps(Misc::Use type) const
+{
+	QVector<PreInstruction> preins;
+	QString str;
+	unsigned int i;
+
+    for( i = 0; static_cast<int>(i) < miscs.size(); ++i )
+    {
+       Misc* misc = miscs[i];
+       if( misc->getUse() == type )
+       {
+          str = QObject::tr("Put %1 %2 into mash for %3.")
+                .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
+                .arg(misc->getName())
+                .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
+                preins.push_back(PreInstruction(str, QObject::tr("Mash misc addition"), misc->getTime()));
+       }
+    }
+    return preins;
+}
+
+Instruction* Recipe::getFirstWortHops() const
+{
+   Instruction* ins;
+   QString str,tmp;
+   unsigned int i;
    bool hasHop = false;
+
    str = QObject::tr("Do first wort hopping with ");
+
    for( i = 0; static_cast<int>(i) < hops.size(); ++i )
    {
-      Hop* hop = hops[i];
-      if( hop->getUse() == Hop::USEFIRST_WORT )
-      {
-         tmp = QString("%1 %2,")
-                .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-                .arg(hop->getName());
+	  Hop* hop = hops[i];
+	  if( hop->getUse() == Hop::USEFIRST_WORT )
+	  {
+		 tmp = QString("%1 %2,")
+				.arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
+				.arg(hop->getName());
 		 str += tmp;
-         hasHop = true;
-      }
+		 hasHop = true;
+	  }
    }
    str += ".";
    if( hasHop )
    {
+	  ins = new Instruction();
+	  ins->setName(QObject::tr("First wort hopping"));
+	  ins->setDirections(str);
+	  ins->setReagent(tmp);
+	  return ins;
+   }
+   return 0;
+}
+
+Instruction* Recipe::getTopOff() const
+{
+	double wortInBoil_l = 0.0;
+	QString str,tmp;
+	Instruction* ins;
+
+	if( equipment != 0 )
+	{
+		wortInBoil_l = estimateWortFromMash_l() - equipment->getLauterDeadspace_l();
+		str = QObject::tr("You should now have %1 wort.")
+			.arg(Brewtarget::displayAmount( wortInBoil_l, Units::liters));
+		if ( equipment->getTopUpKettle_l() != 0 )
+		{
+			wortInBoil_l += equipment->getTopUpKettle_l();
+			tmp = QObject::tr(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
+				.arg(Brewtarget::displayAmount(equipment->getTopUpKettle_l(), Units::liters))
+				.arg(Brewtarget::displayAmount(wortInBoil_l, Units::liters));
+
+			str += tmp;
+
+			ins = new Instruction();
+			ins->setName(QObject::tr("Pre-boil"));
+			ins->setDirections(str);
+			ins->setReagent(tmp);
+			return ins;
+		}
+	}
+	return 0;
+}
+
+bool Recipe::hasBoilFermentable()
+{
+	unsigned int i;
+	for ( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+	{
+		Fermentable* ferm = fermentables[i];
+		if( ferm->getIsMashed() || ferm->getAddAfterBoil() )
+			continue;
+		return true;
+	}
+	return false;
+}
+
+PreInstruction Recipe::getBoilFermentables(double timeRemaining) const
+{
+	bool hasFerms = false;
+	QString str;
+	unsigned int i;
+
+	str = QObject::tr("Boil or steep ");
+	for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+	{
+	  Fermentable* ferm = fermentables[i];
+	  if( ferm->getIsMashed() || ferm->getAddAfterBoil() )
+		 continue;
+
+	  hasFerms = true;
+	  str += QString("%1 %2, ")
+			 .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
+			 .arg(ferm->getName());
+	}
+	str += ".";
+
+	return PreInstruction(str, QObject::tr("Boil/steep fermentables"), timeRemaining);
+}
+
+Instruction* Recipe::getPostboilFermentables()
+{
+   Instruction* ins;
+   QString str,tmp;
+   unsigned int i;
+   bool hasFerms = false;
+
+   str = QObject::tr("Add ");
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+   {
+      Fermentable* ferm = fermentables[i];
+      if( ! ferm->getAddAfterBoil() )
+         continue;
+
+      hasFerms = true;
+      tmp = QString("%1 %2, ")
+             .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
+             .arg(ferm->getName());
+	  str += tmp;
+   }
+   str += QObject::tr("to the boil at knockout.");
+
+   if( hasFerms )
+   {
       ins = new Instruction();
-      ins->setName(QObject::tr("First wort hopping"));
+      ins->setName(QObject::tr("Knockout additions"));
       ins->setDirections(str);
 	  ins->setReagent(tmp);
-      instructions.push_back(ins);
+      return ins;
    }
-   // END first wort hopping
+   else
+   {
+	   return 0;
+   }
+}
+
+Instruction* Recipe::getPostboilSteps()
+{
+	QString str;
+	Instruction* ins;
+	double wort_l = 0.0;
+	double wortInBoil_l = 0.0;
+
+	if( equipment != 0 )
+	{
+		wortInBoil_l = estimateWortFromMash_l() - equipment->getLauterDeadspace_l();
+		if ( equipment->getTopUpKettle_l() != 0 )
+			wortInBoil_l += equipment->getTopUpKettle_l();
+
+		wort_l = equipment->wortEndOfBoil_l(wortInBoil_l);
+		str = QObject::tr("You should have %1 wort post-boil.")
+				.arg(Brewtarget::displayAmount( wort_l, Units::liters));
+		str += QObject::tr("\nYou anticipate losing %1 to trub and chiller loss.")
+				.arg(Brewtarget::displayAmount( equipment->getTrubChillerLoss_l(), Units::liters));
+		wort_l -= equipment->getTrubChillerLoss_l();
+		if( equipment->getTopUpWater_l() > 0.0 )
+			 str += QObject::tr("\nAdd %1 top up water into primary.")
+				   .arg(Brewtarget::displayAmount( equipment->getTopUpWater_l(), Units::liters));
+		wort_l += equipment->getTopUpWater_l();
+		str += QObject::tr("\nThe final volume in the primary is %1.")
+				 .arg(Brewtarget::displayAmount(wort_l, Units::liters));
+
+		ins = new Instruction();
+		ins->setName(QObject::tr("Post boil"));
+		ins->setDirections(str);
+		return ins;
+   }
+   else
+   {
+      return 0;
+   }
+}
+
+void Recipe::addPreinstructions( QVector<PreInstruction> preins )
+{
+	unsigned int i;
+	Instruction* ins;
+
+    // Add instructions in descending mash time order.
+    qSort( preins.begin(), preins.end(), qGreater<PreInstruction>() );
+    for( i=0; static_cast<int>(i) < preins.size(); ++i )
+    {
+       PreInstruction pi = preins[i];
+       ins = new Instruction();
+       ins->setName(pi.getTitle());
+       ins->setDirections(pi.getText());
+       ins->setInterval(pi.getTime());
+       instructions.push_back(ins);
+    }
+}
+
+void Recipe::generateInstructions()
+{
+   Instruction* ins;
+   instructions.clear();
+   QString str, tmp;
+   unsigned int i, size;
+   double timeRemaining;
+   double totalWaterAdded_l = 0.0;
+
+   QVector<PreInstruction> preinstructions;
+
+   // Mash instructions
+
+   if( mash != 0 && mash->getNumMashSteps() > 0 )
+   {
+	  size = mash->getNumMashSteps();
+
+	  /*** prepare mashed fermentables ***/
+	  instructions += getMashFermentable();
+
+	  /*** Prepare water additions ***/
+	  instructions += getMashWater(size);
+
+	  timeRemaining = mash->getTotalTime();
+
+	  /*** Generate the mash instructions ***/
+	  preinstructions = getMashInstructions(timeRemaining, totalWaterAdded_l, size);
+
+      /*** Hops mash additions ***/
+	  preinstructions += getHopSteps(Hop::USEMASH);
+
+      /*** Misc mash additions ***/
+	  preinstructions += getMiscSteps(Misc::USEMASH);
+
+	  /*** Add the preinstructions into the instructions ***/
+	  addPreinstructions(preinstructions);
+
+   } // END mash instructions.
+
+   // First wort hopping
+   ins = getFirstWortHops();
+   if ( ins )
+	   instructions += ins;
 
    // Need to top up the kettle before boil?
-   if( equipment != 0 )
-   {
-      wortInBoil_l = estimateWortFromMash_l() - equipment->getLauterDeadspace_l();
-      str = QObject::tr("You should now have %1 wort.")
-      .arg(Brewtarget::displayAmount( wortInBoil_l, Units::liters));
-	  if ( equipment->getTopUpKettle_l() != 0 ) {
-		  wortInBoil_l += equipment->getTopUpKettle_l();
-		  tmp = QObject::tr(" Add %1 water to the kettle, bringing pre-boil volume to %2.")
-			.arg(Brewtarget::displayAmount(equipment->getTopUpKettle_l(), Units::liters))
-			.arg(Brewtarget::displayAmount(wortInBoil_l, Units::liters));
-		
-		  str += tmp;
-		  ins = new Instruction();
-		  ins->setName(QObject::tr("Pre-boil"));
-		  ins->setDirections(str);
-		  ins->setReagent(tmp);
-		  instructions.push_back(ins);
-	  }
-   }
+   ins = getTopOff();
+   if ( ins )
+	   instructions += ins;
 
    // Boil instructions
    preinstructions.clear();   
@@ -946,120 +1133,32 @@ void Recipe::generateInstructions()
    instructions.push_back(ins);
    
    /*** Get fermentables we haven't added yet ***/
-   bool hasFerms = false;
-   str = QObject::tr("Boil or steep ");
-   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
-   {
-      Fermentable* ferm = fermentables[i];
-      if( ferm->getIsMashed() || ferm->getAddAfterBoil() )
-         continue;
-
-      hasFerms = true;
-      str += QString("%1 %2, ")
-             .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
-             .arg(ferm->getName());
-   }
-   str += ".";
-   if( hasFerms )
-   {
-      preinstructions.push_back(PreInstruction(str, QObject::tr("Boil/steep fermentables"), timeRemaining));
-   }
-   /*** END Get fermentables we haven't added yet ***/
+   if ( hasBoilFermentable() )
+	   preinstructions.push_back(getBoilFermentables(timeRemaining));
    
    /*** Boiled hops ***/
-   for( i = 0; static_cast<int>(i) < hops.size(); ++i )
-   {
-      Hop* hop = hops[i];
-      if( hop->getUse() == Hop::USEBOIL )
-      {
-         str = QObject::tr("Put %1 %2 into boil for %3.")
-               .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-               .arg(hop->getName())
-               .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
-               preinstructions.push_back(PreInstruction(str, QObject::tr("Boil hop addition"), hop->getTime_min()));
-      }
-   }
-   /*** END boiled hops***/
+   preinstructions += getHopSteps(Hop::USEBOIL);
 
    /*** Boiled miscs ***/
-   for( i = 0; static_cast<int>(i) < miscs.size(); ++i )
-   {
-      Misc* misc = miscs[i];
-      if( misc->getUse() == Misc::USEBOIL )
-      {
-         str = QObject::tr("Put %1 %2 into boil for %3.")
-               .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
-               .arg(misc->getName())
-               .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
-               preinstructions.push_back(PreInstruction(str, QObject::tr("Mash misc addition"), misc->getTime()));
-      }
-   }
-   /*** End boiled miscs ***/
+   preinstructions += getMiscSteps(Misc::USEBOIL);
+
    // END boil instructions.
 
    // Add instructions in descending mash time order.
-   qSort(preinstructions.begin(), preinstructions.end(), qGreater<PreInstruction>());
-   for( j=0; static_cast<int>(j) < preinstructions.size(); j++ )
-   {
-      PreInstruction pi = preinstructions[j];
-      ins = new Instruction();
-      ins->setName(pi.getTitle());
-      ins->setDirections(pi.getText());
-      ins->setInterval(pi.getTime());
-      instructions.push_back(ins);
-   }
+   addPreinstructions(preinstructions);
 
    // Fermentation instructions
    preinstructions.clear();
 
    /*** Fermentables added after boil ***/
-   hasFerms = false;
-   str = QObject::tr("Add ");
-   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
-   {
-      Fermentable* ferm = fermentables[i];
-      if( ! ferm->getAddAfterBoil() )
-         continue;
-
-      hasFerms = true;
-      tmp = QString("%1 %2, ")
-             .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
-             .arg(ferm->getName());
-	  str += tmp;
-   }
-   str += QObject::tr("to the boil at knockout.");
-   if( hasFerms )
-   {
-      ins = new Instruction();
-      ins->setName(QObject::tr("Knockout additions"));
-      ins->setDirections(str);
-	  ins->setReagent(tmp);
-      instructions.push_back(ins);
-   }
-   /*** END fermentables added after boil ***/
+   ins = getPostboilFermentables();
+   if ( ins )
+	   instructions += ins;
 
    /*** post boil ***/
-   if( equipment != 0 )
-   {
-      wort_l = equipment->wortEndOfBoil_l(wortInBoil_l);
-      str = QObject::tr("You should have %1 wort post-boil.")
-            .arg(Brewtarget::displayAmount( wort_l, Units::liters));
-      str += QObject::tr("\nYou anticipate losing %1 to trub and chiller loss.")
-               .arg(Brewtarget::displayAmount( equipment->getTrubChillerLoss_l(), Units::liters));
-      wort_l -= equipment->getTrubChillerLoss_l();
-      if( equipment->getTopUpWater_l() > 0.0 )
-         str += QObject::tr("\nAdd %1 top up water into primary.")
-               .arg(Brewtarget::displayAmount( equipment->getTopUpWater_l(), Units::liters));
-      wort_l += equipment->getTopUpWater_l();
-      str += QObject::tr("\nThe final volume in the primary is %1.")
-             .arg(Brewtarget::displayAmount(wort_l, Units::liters));
-	     
-      ins = new Instruction();
-      ins->setName(QObject::tr("Post boil"));
-      ins->setDirections(str);
-      instructions.push_back(ins);
-   }
-   /*** end post boil ***/
+   ins = getPostboilSteps();
+   if ( ins )
+	   instructions += ins;
    
    /*** Primary yeast ***/
    str = QObject::tr("Cool wort and pitch ");
@@ -1077,28 +1176,8 @@ void Recipe::generateInstructions()
    /*** End primary yeast ***/
 
    /*** Primary misc ***/
-   str = QObject::tr("Add ");
-   bool hasMisc = false;
-   for( i = 0; static_cast<int>(i) < miscs.size(); ++i )
-   {
-      Misc* misc = miscs[i];
-      if( misc->getUse() == Misc::USEPRIMARY )
-      {
-         str += QString("%1 %2, ")
-                .arg(Brewtarget::displayAmount(misc->getAmount(), (misc->getAmountIsWeight()) ? ((Unit*)Units::kilograms) : ((Unit*)Units::liters) ))
-                .arg(misc->getName());
-         hasMisc = true;
-      }
-   }
-   str += QObject::tr("to primary.");
-   if( hasMisc )
-   {
-      ins = new Instruction();
-      ins->setName(QObject::tr("Additions to primary"));
-      ins->setDirections(str);
-      instructions.push_back(ins);
-   }
-   /*** END primary misc ***/
+   addPreinstructions( getMiscSteps(Misc::USEPRIMARY));
+//   instructions += getMiscSteps(Misc::USEPRIMARY);
 
    str = QObject::tr("Let ferment until FG is %1.")
          .arg(Brewtarget::displayAmount(fg));
@@ -1114,41 +1193,10 @@ void Recipe::generateInstructions()
    instructions.push_back(ins);
 
    /*** Secondary misc ***/
-   for( i = 0; static_cast<int>(i) < miscs.size(); ++i )
-   {
-      Misc* misc = miscs[i];
-      if( misc->getUse() == Misc::USESECONDARY )
-      {
-         str = QObject::tr("Add %1 %2 to secondary for %3.")
-               .arg(Brewtarget::displayAmount(misc->getAmount(), (misc->getAmountIsWeight()) ? ((Unit*)Units::kilograms) : ((Unit*)Units::liters) ))
-               .arg(misc->getName())
-               .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
-
-         ins = new Instruction();
-         ins->setName(QObject::tr("Secondary addition"));
-         ins->setDirections(str);
-         instructions.push_back(ins);
-      }
-   }
-   /*** END secondary misc ***/
+   addPreinstructions( getMiscSteps(Misc::USESECONDARY));
 
    /*** Dry hopping ***/
-   for( i = 0; static_cast<int>(i) < hops.size(); ++i )
-   {
-      Hop* hop = hops[i];
-      if( hop->getUse() == Hop::USEDRY_HOP )
-      {
-         str = QObject::tr("Dry hop %1 %2 for %3.")
-               .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-               .arg(hop->getName())
-               .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
-         ins = new Instruction();
-         ins->setName(QObject::tr("Dry hop"));
-         ins->setDirections(str);
-         instructions.push_back(ins);
-      }
-   }
-   /*** END dry hopping ***/
+   addPreinstructions(getHopSteps(Hop::USEDRY_HOP));
 
    // END fermentation instructions
    hasChanged(QVariant(Recipe::INSTRUCTION));

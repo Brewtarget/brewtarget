@@ -67,6 +67,7 @@ public:
    void removeMashStep(MashStep* step);
    void removeAllMashSteps();
    double totalMashWater_l() const; // Total amount of water that went INTO the mash.
+   double getTotalTime();
 
    void swapSteps( unsigned int i, unsigned int j );
 

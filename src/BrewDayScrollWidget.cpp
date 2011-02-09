@@ -157,7 +157,7 @@ QString BrewDayScrollWidget::buildTitleTable()
            .arg(QDate::currentDate().toString());
 
    // second row:  boil time and efficiency.  I think there is something wrong w/ the call to getBoilTime_min(), because it returns
-      // 0 a lot.  I need to get this figured out.
+   // 0 a lot.  I need to get this figured out.
       body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
     		  .arg(tr("Boil Time"))
               .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
@@ -223,17 +223,33 @@ QString BrewDayScrollWidget::buildInstructionTable()
 
       tmp = "";
       reagents = ins->getReagents();
-      if ( reagents.size() > 1 ) {
-         tmp = tr("<ul>");
-         for ( j = 0; j < reagents.size(); j++ ) 
+
+      if ( ins->getName() == "Add grains")
+      {
+          Instruction* temp = recObs->getMashFermentable();
+          reagents = temp->getReagents();
+      }
+      else if ( ins->getName() == "Heat water")
+      {
+    	  int mashSize = recObs->getMash()->getNumMashSteps();
+    	  Instruction* temp = recObs->getMashWater(mashSize);
+    	  reagents = temp->getReagents();
+
+      }
+
+      if ( reagents.size() > 1 )
+      {
+         tmp = QString("<ul>");
+         for ( j = 0; j < reagents.size(); j++ )
          {
-            tmp += tr("<li>%1</li>")
+            tmp += QString("<li>%1</li>")
                    .arg(reagents[j]);
          }
-         tmp += tr("</ul>");
+         tmp += QString("</ul>");
       }
-      else {
-         tmp = reagents[0];
+      else
+      {
+    	  tmp = reagents[0];
       }
 
       QString altTag = i % 2 ? "alt" : "norm";
