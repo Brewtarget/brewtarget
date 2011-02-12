@@ -53,6 +53,12 @@ public slots:
    void flash();
    void getSound();
 
+private slots:
+   /*!
+    * Puts another copy of the file on queue to be played.
+    */
+   void doReplay(qint32 msecToEnd);
+
 signals:
    void timerDone();
    void timerSet(QString text);

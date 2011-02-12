@@ -42,6 +42,7 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    
     mediaObject = new Phonon::MediaObject(this);
     mediaObject->setTransitionTime(0);
+    mediaObject->setPrefinishMark(10); // 10 ms.
     audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
     Phonon::createPath(mediaObject, audioOutput);
    
@@ -59,6 +60,9 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    connect( pushButton_set, SIGNAL(clicked()), this, SLOT(setTimer()) );
    connect( pushButton_startStop, SIGNAL(clicked()), this, SLOT(startStop()) );
    connect( pushButton_sound, SIGNAL(clicked()), this, SLOT(getSound()) );
+   // The following signal is emitted when we are almost at the end of the sound.
+   // The slot re-queues the same song, so we get a loop.
+   connect( mediaObject, SIGNAL(prefinishMarkReached(qint32)), this, SLOT(doReplay(qint32)) );
 
    showChanges();
 }
@@ -66,6 +70,13 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 TimerWidget::~TimerWidget()
 {
    delete timer;
+}
+
+void TimerWidget::doReplay(qint32 /*msecToEnd*/)
+{
+   #if !defined(NO_PHONON)
+     mediaObject->enqueue( mediaObject->currentSource() );
+   #endif
 }
 
 void TimerWidget::getSound()
