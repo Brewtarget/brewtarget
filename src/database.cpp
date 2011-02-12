@@ -26,6 +26,7 @@
 #include <QDomNodeList>
 #include <QDomNode>
 #include <QTextStream>
+#include <QTextCodec>
 #include <QObject>
 #include <QString>
 
@@ -359,6 +360,10 @@ void Database::savePersistent()
    QTextStream recipeOut(&recipeFile);
    QTextStream mashOut(&mashFile);
 
+   dbOut.setCodec( "UTF-8" );
+   recipeOut.setCodec( "UTF-8" );
+   mashOut.setCodec( "UTF-8" );
+
    /*** dbDoc ***/
    dbRoot = dbDoc.createElement("DATABASE");
    
@@ -403,6 +408,7 @@ void Database::savePersistent()
       (*yit)->toXml(dbDoc, dbRoot);
    
    dbDoc.appendChild(dbRoot);
+   dbOut <<  "<?xml version=\"1.0\" encoding=\"" << dbOut.codec()->name() << "\"?>\n";
    dbOut << dbDoc.toString();
    /*** END dbDoc ***/
    
@@ -415,6 +421,7 @@ void Database::savePersistent()
       (*rit)->toXml(recDoc, recRoot);
    
    recDoc.appendChild(recRoot);
+   recipeOut <<  "<?xml version=\"1.0\" encoding=\"" << recipeOut.codec()->name() << "\"?>\n";
    recipeOut << recDoc.toString();
    /*** END recDoc ***/
    
@@ -427,6 +434,7 @@ void Database::savePersistent()
       (*mait)->toXml(mashDoc, mashRoot);
    
    mashDoc.appendChild(mashRoot);
+   mashOut <<  "<?xml version=\"1.0\" encoding=\"" << mashOut.codec()->name() << "\"?>\n";
    mashOut << mashDoc.toString();
    /*** END mashDoc ***/
    
