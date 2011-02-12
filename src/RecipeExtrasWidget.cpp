@@ -134,7 +134,7 @@ void RecipeExtrasWidget::updateAge()
    if( recObs == 0 )
       return;
 
-   recObs->setAge_days( lineEdit_tertAge->text().toDouble() );
+   recObs->setAge_days( lineEdit_age->text().toDouble() );
 }
 
 void RecipeExtrasWidget::updateAgeTemp()
@@ -142,7 +142,7 @@ void RecipeExtrasWidget::updateAgeTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setAgeTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
+   recObs->setAgeTemp_c( Brewtarget::tempQStringToSI( lineEdit_ageTemp->text() ) );
 }
 
 void RecipeExtrasWidget::updateDate()
