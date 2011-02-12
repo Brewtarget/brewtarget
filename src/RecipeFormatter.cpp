@@ -785,8 +785,6 @@ bool RecipeFormatter::loadComplete(bool ok)
 void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog)
 {
    printer = mainPrinter;
-   /* Instantiate the Webview and then connect its signal */
-   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
 
    dialog->setWindowTitle(tr("Print Document"));
    if (dialog->exec() != QDialog::Accepted)
@@ -795,6 +793,8 @@ void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog)
    if( rec == 0 )
       return;
 
+   /* Instantiate the Webview and then connect its signal */
+   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
    doc->setHtml(getHTMLFormat());
 }
 
