@@ -835,7 +835,14 @@ QString Brewtarget::displayFG( double fg, double og, bool showUnits )
       if( og < fg || og < 1.000 || fg < 0.001 )
          plato = 0; // Strange input, so just say 0.
       else
-         plato = Algorithms::Instance().ogFgToPlato( og, fg );
+      {
+         // The following shows Plato as it would be on a
+         // hydrometer.
+         //plato = Algorithms::Instance().ogFgToPlato( og, fg );
+
+         // The following shows ACTUAL Plato
+         plato = Algorithms::Instance().SG_20C20C_toPlato(fg);
+      }
       ret = ret.arg( plato, 0, 'f', 1 );
    }
 
