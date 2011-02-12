@@ -842,11 +842,25 @@ QVector<PreInstruction> Recipe::getHopSteps(Hop::Use type) const
        Hop* hop = hops[i];
        if( hop->getUse() == type )
        {
-          str = QObject::tr("Put %1 %2 into mash for %3.")
-                .arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-                .arg(hop->getName())
-                .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
-                preins.push_back(PreInstruction(str, QObject::tr("Mash hop addition"), hop->getTime_min()));
+          if( type == Hop::USEAROMA  || type == Hop::USEBOIL )
+             str = QObject::tr("Put %1 %2 into boil for %3.");
+          else if( type == Hop::USEDRY_HOP )
+             str = QObject::tr("Put %1 %2 into fermenter for %3.");
+          else if( type == Hop::USEFIRST_WORT )
+             str = QObject::tr("Put %1 %2 into first wort for %3.");
+          else if( type == Hop::USEMASH )
+             str = QObject::tr("Put %1 %2 into mash for %3.");
+          else
+          {
+             Brewtarget::logW("Recipe::getHopSteps(): Unrecognized hop use.");
+             str = QObject::tr("Use %1 %2 for %3");
+          }
+
+          str = str.arg(Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
+                   .arg(hop->getName())
+                   .arg(Brewtarget::displayAmount(hop->getTime_min(), Units::minutes));
+
+          preins.push_back(PreInstruction(str, QObject::tr("Hop addition"), hop->getTime_min()));
        }
     }
 	return preins;
@@ -863,11 +877,27 @@ QVector<PreInstruction> Recipe::getMiscSteps(Misc::Use type) const
        Misc* misc = miscs[i];
        if( misc->getUse() == type )
        {
-          str = QObject::tr("Put %1 %2 into mash for %3.")
-                .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
-                .arg(misc->getName())
-                .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
-                preins.push_back(PreInstruction(str, QObject::tr("Mash misc addition"), misc->getTime()));
+          if( type == Misc::USEBOIL )
+             str = QObject::tr("Put %1 %2 into boil for %3.");
+          else if( type == Misc::USEBOTTLING )
+             str = QObject::tr("Use %1 %2 at bottling for %3.");
+          else if( type == Misc::USEMASH )
+             str = QObject::tr("Put %1 %2 into mash for %3.");
+          else if( type == Misc::USEPRIMARY )
+             str = QObject::tr("Put %1 %2 into primary for %3.");
+          else if( type == Misc::USESECONDARY )
+             str = QObject::tr("Put %1 %2 into secondary for %3.");
+          else
+          {
+             Brewtarget::logW("Recipe::getMiscSteps(): Unrecognized misc use.");
+             str = QObject::tr("Use %1 %2 for %3.");
+          }
+
+          str = str .arg(Brewtarget::displayAmount(misc->getAmount(), ((misc->getAmountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
+                    .arg(misc->getName())
+                    .arg(Brewtarget::displayAmount(misc->getTime(), Units::minutes));
+
+          preins.push_back(PreInstruction(str, QObject::tr("Misc addition"), misc->getTime()));
        }
     }
     return preins;
@@ -990,7 +1020,7 @@ Instruction* Recipe::getPostboilFermentables()
       tmp = QString("%1 %2, ")
              .arg(Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
              .arg(ferm->getName());
-	  str += tmp;
+      str += tmp;
    }
    str += QObject::tr("to the boil at knockout.");
 
@@ -999,7 +1029,7 @@ Instruction* Recipe::getPostboilFermentables()
       ins = new Instruction();
       ins->setName(QObject::tr("Knockout additions"));
       ins->setDirections(str);
-	  ins->setReagent(tmp);
+      ins->setReagent(tmp);
       return ins;
    }
    else
