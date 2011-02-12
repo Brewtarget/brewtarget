@@ -17,11 +17,15 @@ The Debian packaging is:
 and is licensed under the GPL-3.
 
 Files: *
-Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+Copyright: 2009-2011, Philip G. Lee <rocketman768@gmail.com>
+License: GPL-3
+
+Files: data/sounds/*
+Copyright: 2011, Jay Cummings <finalgravitypodcast@gmail.com>
 License: GPL-3
 
 Files: images/*
-Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
+Copyright: 2009-2011, Philip G. Lee <rocketman768@gmail.com>
            2009-2010, Eric Tamme
 License: WTFPL-2
 

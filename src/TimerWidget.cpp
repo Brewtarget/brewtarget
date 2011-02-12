@@ -20,7 +20,9 @@
 #include <QStringList>
 #include <QChar>
 #include <QFileDialog>
+#include <QDir>
 #include <iostream>
+#include "brewtarget.h"
 
 TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 {
@@ -68,8 +70,10 @@ TimerWidget::~TimerWidget()
 
 void TimerWidget::getSound()
 {
+   QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
+
    #if !defined(NO_PHONON)
-    QString soundFile = QFileDialog::getOpenFileName(this, tr("Open Sound"), "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)"));
+   QString soundFile = QFileDialog::getOpenFileName( reinterpret_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
     if (! soundFile.isNull()) {
       mediaObject->setCurrentSource(soundFile);
       pushButton_sound->setCheckable(true); // indicate a sound is loaded

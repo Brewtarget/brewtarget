@@ -2,6 +2,10 @@ Files: *
 Copyright: 2009-2011, Philip G. Lee <rocketman768@gmail.com>
 License: GPL-3
 
+Files: data/sounds/*
+Copyright: 2011, Jay Cummings <finalgravitypodcast@gmail.com>
+License: GPL-3
+
 Files: images/*
 Copyright: 2009-2010, Philip G. Lee <rocketman768@gmail.com>
            2009-2010, Eric Tamme

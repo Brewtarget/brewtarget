@@ -232,6 +232,38 @@ SET( FILES_TO_TRANSLATE
 
 SET( RCFILE ${WINDIR}/icon.rc )
 
+SET( brewtarget_SOUNDS
+     ${DATADIR}/sounds/45minLeft.mp3
+     ${DATADIR}/sounds/addFuckinHops.mp3
+     ${DATADIR}/sounds/aromaHops.mp3
+     ${DATADIR}/sounds/bitteringHops.mp3
+     ${DATADIR}/sounds/checkBoil.mp3
+     ${DATADIR}/sounds/checkFirstRunnings.mp3
+     ${DATADIR}/sounds/checkGravity.mp3
+     ${DATADIR}/sounds/checkHydrometer.mp3
+     ${DATADIR}/sounds/checkMashTemps.mp3
+     ${DATADIR}/sounds/checkTemp.mp3
+     ${DATADIR}/sounds/clarifyingAgent.mp3
+     ${DATADIR}/sounds/cleanup.mp3
+     ${DATADIR}/sounds/closeFuckinValves.mp3
+     ${DATADIR}/sounds/closeValves.mp3
+     ${DATADIR}/sounds/doughIn.mp3
+     ${DATADIR}/sounds/drinkAnotherHomebrew.mp3
+     ${DATADIR}/sounds/drinkHomebrew.mp3
+     ${DATADIR}/sounds/emptyMashTun.mp3
+     ${DATADIR}/sounds/extraPropane.mp3
+     ${DATADIR}/sounds/flameout.mp3
+     ${DATADIR}/sounds/flavorHops.mp3
+     ${DATADIR}/sounds/heatWater.mp3
+     ${DATADIR}/sounds/mashHops.mp3
+     ${DATADIR}/sounds/pitchYeast.mp3
+     ${DATADIR}/sounds/sanitize.mp3
+     ${DATADIR}/sounds/sparge.mp3
+     ${DATADIR}/sounds/startBurner.mp3
+     ${DATADIR}/sounds/startChill.mp3
+     ${DATADIR}/sounds/stirMash.mp3
+)
+
 #==================================Qt Junk=====================================
 
 # Create the moc sources from the headers.
@@ -401,6 +433,10 @@ INSTALL(FILES ${QM_FILES}
 # Install the documentation.
 INSTALL( FILES ${brewtarget_DOCS}
          DESTINATION ${DOCPATH} )
+
+# Install sounds.
+INSTALL( FILES ${brewtarget_SOUNDS}
+         DESTINATION "${DATAPATH}/sounds" )
 
 # ---------Unix installs-----------
 IF( UNIX AND NOT APPLE )
