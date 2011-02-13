@@ -192,7 +192,7 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
          case YEASTLABCOL:
              return QVariant(tr("Laboratory"));
          case YEASTPRODIDCOL:
-             return QVariant(tr("ProductId"));
+             return QVariant(tr("Product ID"));
          default:
             Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();

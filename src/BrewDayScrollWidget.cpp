@@ -115,7 +115,7 @@ void BrewDayScrollWidget::pushInstructionDown()
 QString BrewDayScrollWidget::getCSS() 
 {
    if ( cssName == NULL )
-       cssName = tr(":/css/brewday.css");
+       cssName = ":/css/brewday.css";
 
    QFile cssInput(cssName);
    QString css;
@@ -149,11 +149,11 @@ QString BrewDayScrollWidget::buildTitleTable()
    body += "<table id=\"title\">";
    body += QString("<tr><td class=\"left\">%1</td>")
 		   .arg(tr("Style"));
-   body += tr("<td class=\"value\">%1</td>")
+   body += QString("<td class=\"value\">%1</td>")
            .arg(recObs->getStyle()->getName());
    body += QString("<td class=\"right\">%1</td>")
 		   .arg(tr("Date"));
-   body += tr("<td class=\"value\">%1</td></tr>")
+   body += QString("<td class=\"value\">%1</td></tr>")
            .arg(QDate::currentDate().toString());
 
    // second row:  boil time and efficiency.  I think there is something wrong w/ the call to getBoilTime_min(), because it returns
@@ -254,7 +254,7 @@ QString BrewDayScrollWidget::buildInstructionTable()
 
       QString altTag = i % 2 ? "alt" : "norm";
 
-      middle += tr("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
+      middle += QString("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
                .arg(altTag)
                .arg(stepTime)
                .arg(ins->getName())
