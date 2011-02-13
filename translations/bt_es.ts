@@ -130,108 +130,108 @@
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="135"/>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="138"/>
         <source>Date</source>
-        <translation type="unfinished">Fecha</translation>
+        <translation>Fecha</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="143"/>
         <source>Boil Volume</source>
-        <translation type="unfinished">Volumen de la Ebullición</translation>
+        <translation>Volumen de la Ebullición</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="145"/>
         <source>Preboil Gravity</source>
-        <translation type="unfinished">Densidad antes de la Ebullición</translation>
+        <translation>Densidad antes de la Ebullición</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="149"/>
         <source>Final Volume</source>
-        <translation type="unfinished">Volumen Final</translation>
+        <translation>Volumen Final</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="151"/>
         <source>Starting Gravity</source>
-        <translation type="unfinished">Densidad Inicial</translation>
+        <translation>Densidad Inicial</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="155"/>
         <source>Boil Time</source>
-        <translation type="unfinished">Tiempo de Ebullición</translation>
+        <translation>Tiempo de Ebullición</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="157"/>
         <source>IBU</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="161"/>
         <source>Predicted Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation>Eficiencia Estimada</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="163"/>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorías estimadas (por 12 oz)</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="177"/>
         <source>Instructions</source>
-        <translation type="unfinished">Instrucciones</translation>
+        <translation>Instrucciones</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="180"/>
         <source>Completed</source>
-        <translation type="unfinished">Completado</translation>
+        <translation>Completado</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="181"/>
         <source>Time</source>
-        <translation type="unfinished">Tiempo</translation>
+        <translation>Tiempo</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="182"/>
         <source>Step</source>
-        <translation type="unfinished">Paso</translation>
+        <translation>Paso</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="229"/>
         <source>Actual Pre-boil Volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen real antes de la ebullición:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="230"/>
         <source>Actual Pre-boil Gravity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Densidad real antes de la ebullición:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="233"/>
         <source>Post-boil Volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen después de la ebullición:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="234"/>
         <source>Post-boil Gravity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Densidad después de la ebullición:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="237"/>
         <source>Volume in fermenter:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen en el fermentador:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="258"/>
         <source>Print Document</source>
-        <translation type="unfinished">Imprimir Documento</translation>
+        <translation>Imprimir Documento</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="270"/>
         <location filename="../src/BrewDayWidget.cpp" line="288"/>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="388"/>
@@ -308,27 +308,27 @@
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="376"/>
         <source>Grain</source>
-        <translation type="unfinished">Grain</translation>
+        <translation>Grano</translation>
     </message>
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="377"/>
         <source>Sugar</source>
-        <translation type="unfinished">Azúcar</translation>
+        <translation>Azúcar</translation>
     </message>
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="378"/>
         <source>Extract</source>
-        <translation type="unfinished">Extracto</translation>
+        <translation>Extracto</translation>
     </message>
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="379"/>
         <source>Dry Extract</source>
-        <translation type="unfinished">Extracto Seco</translation>
+        <translation>Extracto Seco</translation>
     </message>
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="380"/>
         <source>Adjunct</source>
-        <translation type="unfinished">Adjunto</translation>
+        <translation>Adjunto</translation>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="198"/>
         <source>Steeped</source>
-        <translation type="unfinished"></translation>
+        <translation>Remojado</translation>
     </message>
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="200"/>
@@ -421,42 +421,42 @@
     <message>
         <location filename="../src/HopTableModel.cpp" line="343"/>
         <source>Boil</source>
-        <translation type="unfinished">Hervor</translation>
+        <translation>Hervir</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="344"/>
         <source>Dry Hop</source>
-        <translation type="unfinished">Dry Hop</translation>
+        <translation>Lúpulos secos</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="345"/>
         <source>Mash</source>
-        <translation type="unfinished">Maceración</translation>
+        <translation>Maceración</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="346"/>
         <source>First Wort</source>
-        <translation type="unfinished">First Wort</translation>
+        <translation>First Wort</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="347"/>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="356"/>
         <source>Leaf</source>
-        <translation type="unfinished">Flor</translation>
+        <translation>Flor</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="357"/>
         <source>Pellet</source>
-        <translation type="unfinished">Pellet</translation>
+        <translation>Bolita</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="358"/>
         <source>Plug</source>
-        <translation type="unfinished">Plug</translation>
+        <translation>Tableta</translation>
     </message>
 </context>
 <context>
@@ -473,7 +473,7 @@
     <message>
         <location filename="../src/HopTableModel.cpp" line="201"/>
         <source>HopTableModel::data Bad column: %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="213"/>
@@ -503,12 +503,12 @@
     <message>
         <location filename="../src/HopTableModel.cpp" line="223"/>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="225"/>
         <source>HopTableModel::headerdata Bad column: %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -954,57 +954,57 @@ Cuidado.</translation>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="295"/>
         <source>Spice</source>
-        <translation type="unfinished">Especia</translation>
+        <translation>Especia</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="296"/>
         <source>Fining</source>
-        <translation type="unfinished">Aclarador</translation>
+        <translation>Aclarador</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="297"/>
         <source>Water Agent</source>
-        <translation type="unfinished">Agente para Agua</translation>
+        <translation>Agente para Agua</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="298"/>
         <source>Herb</source>
-        <translation type="unfinished">Hierba</translation>
+        <translation>Hierba</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="299"/>
         <source>Flavor</source>
-        <translation type="unfinished">Sabor</translation>
+        <translation>Sabor</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="300"/>
         <source>Other</source>
-        <translation type="unfinished">Otro</translation>
+        <translation>Otro</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="308"/>
         <source>Boil</source>
-        <translation type="unfinished">Hervor</translation>
+        <translation>Hervir</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="309"/>
         <source>Mash</source>
-        <translation type="unfinished">Maceración</translation>
+        <translation>Maceración</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="310"/>
         <source>Primary</source>
-        <translation type="unfinished">Primario</translation>
+        <translation>Primario</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="311"/>
         <source>Secondary</source>
-        <translation type="unfinished">Secundario</translation>
+        <translation>Secundario</translation>
     </message>
     <message>
         <location filename="../src/MiscTableModel.cpp" line="312"/>
         <source>Bottling</source>
-        <translation type="unfinished">Embotellar</translation>
+        <translation>Embotellar</translation>
     </message>
 </context>
 <context>
@@ -1244,13 +1244,15 @@ Cuidado.</translation>
         <location filename="../src/RecipeFormatter.cpp" line="97"/>
         <source>Efficiency: %1%%
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Eficiencia: %1%%
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="100"/>
         <source>ABV: %1%%
 </source>
-        <translation type="unfinished"></translation>
+        <translation>APV: %1%%
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="258"/>
@@ -1277,7 +1279,7 @@ Cuidado.</translation>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="291"/>
         <source>Temp</source>
-        <translation type="unfinished">Temp</translation>
+        <translation>Temp</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="292"/>
@@ -1553,12 +1555,12 @@ Cuidado.</translation>
     <message>
         <location filename="../src/recipe.cpp" line="848"/>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar %1 %2 al fermentador por %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="850"/>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar %1 %2 al first wort por %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="852"/>
@@ -1622,47 +1624,47 @@ Cuidado.</translation>
     <message>
         <location filename="../src/recipe.cpp" line="988"/>
         <source>Boil or steep </source>
-        <translation type="unfinished"></translation>
+        <translation>Hervir o remojar </translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="856"/>
         <source>Use %1 %2 for %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar %1 %2 por %3</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="863"/>
         <source>Hop addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Adición de lúpolos</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="883"/>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa %1 %2 al embotellar por %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="887"/>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Agrega %1 %2 al primario por %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="889"/>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Agregar %1 %2 al secundario por %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="893"/>
         <source>Use %1 %2 for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar %1 %2 por %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="900"/>
         <source>Misc addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Adición de misc</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="1002"/>
         <source>Boil/steep fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>Hervir/remojar fermentables</translation>
     </message>
     <message>
         <source>to the boil.</source>
@@ -1840,93 +1842,93 @@ El volumen final en el primario es %1.</translation>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="466"/>
         <source>unknown style</source>
-        <translation type="unfinished"></translation>
+        <translation>estilo desconocido</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="467"/>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="471"/>
         <source>Brewer</source>
-        <translation type="unfinished">Fabricante</translation>
+        <translation>Fabricante</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="474"/>
         <source>Date</source>
-        <translation type="unfinished">Fecha</translation>
+        <translation>Fecha</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="482"/>
         <source>Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño del lote</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="485"/>
         <source>Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño de la Ebullición</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="489"/>
         <source>Boil Time</source>
-        <translation type="unfinished">Tiempo de Ebullición</translation>
+        <translation>Tiempo de Ebullición</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="494"/>
         <source>Efficiency</source>
-        <translation type="unfinished">Eficiencia</translation>
+        <translation>Eficiencia</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="499"/>
         <source>OG</source>
-        <translation type="unfinished">DI</translation>
+        <translation>DI</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="502"/>
         <source>FG</source>
-        <translation type="unfinished">DF</translation>
+        <translation>DF</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="517"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Desconocido</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="520"/>
         <source>ABV</source>
-        <translation type="unfinished">APV</translation>
+        <translation>APV</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="523"/>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation>Amargor</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="526"/>
         <source>%1 SRM (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 SRM (%2)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="540"/>
         <location filename="../src/RecipeFormatter.cpp" line="571"/>
         <source>Color</source>
-        <translation type="unfinished">Color</translation>
+        <translation>Color</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="543"/>
         <source>Calories (per 12 oz.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calorías (por 12 oz)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="558"/>
         <source>Fermentables</source>
-        <translation type="unfinished">Fermentables</translation>
+        <translation>Fermentables</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="561"/>
         <source>Total grain:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grano total:</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="565"/>
@@ -1935,7 +1937,7 @@ El volumen final en el primario es %1.</translation>
         <location filename="../src/RecipeFormatter.cpp" line="669"/>
         <location filename="../src/RecipeFormatter.cpp" line="706"/>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="566"/>
@@ -1943,7 +1945,7 @@ El volumen final en el primario es %1.</translation>
         <location filename="../src/RecipeFormatter.cpp" line="670"/>
         <location filename="../src/RecipeFormatter.cpp" line="707"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="567"/>
@@ -1952,123 +1954,124 @@ El volumen final en el primario es %1.</translation>
         <location filename="../src/RecipeFormatter.cpp" line="672"/>
         <location filename="../src/RecipeFormatter.cpp" line="708"/>
         <source>Amount</source>
-        <translation type="unfinished">Cantidad</translation>
+        <translation>Cantidad</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="568"/>
         <source>Mashed</source>
-        <translation type="unfinished">Macerado</translation>
+        <translation>Macerado</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="569"/>
         <source>Late</source>
-        <translation type="unfinished"></translation>
+        <translation>Atrasado</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="570"/>
         <source>Yield</source>
-        <translation type="unfinished">Rendimiento</translation>
+        <translation>Rendimiento</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="581"/>
         <location filename="../src/RecipeFormatter.cpp" line="582"/>
         <source>Yes</source>
-        <translation type="unfinished">Sí</translation>
+        <translation>Sí</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="581"/>
         <location filename="../src/RecipeFormatter.cpp" line="582"/>
         <source>No</source>
-        <translation type="unfinished">No</translation>
+        <translation>No</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="598"/>
         <source>Hops</source>
-        <translation type="unfinished">Lúpulos</translation>
+        <translation>Lúpulos</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="603"/>
         <source>Alpha</source>
-        <translation type="unfinished">Alfa</translation>
+        <translation>Alfa</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="605"/>
         <location filename="../src/RecipeFormatter.cpp" line="639"/>
         <source>Use</source>
-        <translation type="unfinished">Uso</translation>
+        <translation>Uso</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="606"/>
         <location filename="../src/RecipeFormatter.cpp" line="641"/>
         <location filename="../src/RecipeFormatter.cpp" line="711"/>
         <source>Time</source>
-        <translation type="unfinished">Tiempo</translation>
+        <translation>Tiempo</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="607"/>
         <location filename="../src/RecipeFormatter.cpp" line="671"/>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="608"/>
         <source>IBU</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="633"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Misc
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="665"/>
         <source>Yeast</source>
-        <translation type="unfinished">Levadura</translation>
+        <translation>Levadura</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="673"/>
         <source>Stage</source>
-        <translation type="unfinished">Etapa</translation>
+        <translation>Etapa</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="682"/>
         <source>Secondary</source>
-        <translation type="unfinished">Secundario</translation>
+        <translation>Secundario</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="682"/>
         <source>Primary</source>
-        <translation type="unfinished">Primario</translation>
+        <translation>Primario</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="701"/>
         <source>Mash</source>
-        <translation type="unfinished">Maceración</translation>
+        <translation>Maceración</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="709"/>
         <source>Temp</source>
-        <translation type="unfinished">Temp</translation>
+        <translation>Temp</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="710"/>
         <source>Target Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. Deseado</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="751"/>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="764"/>
         <source>Instructions</source>
-        <translation type="unfinished">Instrucciones</translation>
+        <translation>Instrucciones</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="789"/>
         <source>Print Document</source>
-        <translation type="unfinished">Imprimir Documento</translation>
+        <translation>Imprimir Documento</translation>
     </message>
 </context>
 <context>
@@ -2095,7 +2098,7 @@ El volumen final en el primario es %1.</translation>
     <message>
         <location filename="../src/ScaleRecipeTool.cpp" line="127"/>
         <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation type="unfinished"></translation>
+        <translation>La maceración se ha reiniciado por el hecho que las temperaturas de la maceración no se ajustan facilmente. Favor de ver la maceración.</translation>
     </message>
     <message>
         <location filename="../src/ScaleRecipeTool.cpp" line="208"/>
@@ -2212,47 +2215,47 @@ El volumen final en el primario es %1.</translation>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="303"/>
         <source>Ale</source>
-        <translation type="unfinished">Ale</translation>
+        <translation>Ale</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="304"/>
         <source>Lager</source>
-        <translation type="unfinished">Lager</translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="305"/>
         <source>Wheat</source>
-        <translation type="unfinished">Trigo</translation>
+        <translation>Trigo</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="306"/>
         <source>Wine</source>
-        <translation type="unfinished">Vino</translation>
+        <translation>Vino</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="307"/>
         <source>Champagne</source>
-        <translation type="unfinished">Champán</translation>
+        <translation>Champán</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="316"/>
         <source>Liquid</source>
-        <translation type="unfinished">Liquida</translation>
+        <translation>Líquida</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="317"/>
         <source>Dry</source>
-        <translation type="unfinished">Seca</translation>
+        <translation>Seca</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="318"/>
         <source>Slant</source>
-        <translation type="unfinished">Slant</translation>
+        <translation>Slant</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="319"/>
         <source>Culture</source>
-        <translation type="unfinished">Cultura</translation>
+        <translation>Cultura</translation>
     </message>
 </context>
 <context>
@@ -2292,12 +2295,12 @@ El volumen final en el primario es %1.</translation>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="193"/>
         <source>Laboratory</source>
-        <translation type="unfinished"></translation>
+        <translation>Laboratorio</translation>
     </message>
     <message>
         <location filename="../src/YeastTableModel.cpp" line="195"/>
         <source>Product ID</source>
-        <translation type="unfinished">No. ID</translation>
+        <translation>No. ID</translation>
     </message>
 </context>
 <context>
@@ -2397,82 +2400,82 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="61"/>
         <source>Generate Instructions</source>
-        <translation type="unfinished"></translation>
+        <translation>Hacer Instrucciones</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="89"/>
         <source>Insert step</source>
-        <translation type="unfinished">Introducir un paso</translation>
+        <translation>Introducir un paso</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="108"/>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="133"/>
         <source>Name of new step</source>
-        <translation type="unfinished">Nombre del paso nuevo</translation>
+        <translation>Nombre del paso nuevo</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="144"/>
         <source>Step #</source>
-        <translation type="unfinished"># del paso</translation>
+        <translation># del paso</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="169"/>
         <source>The number where the new step should be placed</source>
-        <translation type="unfinished">El numero en donde el paso debería estar colocado</translation>
+        <translation>El numero en donde el paso debería estar colocado</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="196"/>
         <source>Insert the new step</source>
-        <translation type="unfinished">Introducir el paso nuevo</translation>
+        <translation>Introducir el paso nuevo</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="199"/>
         <source>Insert</source>
-        <translation type="unfinished">Introducir</translation>
+        <translation>Introducir</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="239"/>
         <source>Move steps</source>
-        <translation type="unfinished"></translation>
+        <translation>Colocar Pasos</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="269"/>
         <source>Move currently selected step up</source>
-        <translation type="unfinished">Mover paso seleccionado arriba</translation>
+        <translation>Mover paso seleccionado para arriba</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="272"/>
         <source>Up</source>
-        <translation type="unfinished">Arriba</translation>
+        <translation>Arriba</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="318"/>
         <source>Move currently selected step down</source>
-        <translation type="unfinished">Mover paso seleccionado abajo</translation>
+        <translation>Mover paso seleccionado para abajo</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="321"/>
         <source>Down</source>
-        <translation type="unfinished">Abajo</translation>
+        <translation>Abajo</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="367"/>
         <source>Remove currently selected step</source>
-        <translation type="unfinished">Remover paso seleccionado</translation>
+        <translation>Remover paso seleccionado</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="370"/>
         <source>Remove</source>
-        <translation type="unfinished">Remover</translation>
+        <translation>Remover</translation>
     </message>
 </context>
 <context>
@@ -3401,17 +3404,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="26"/>
         <source>Brewtarget - 1.2.3</source>
-        <translation type="unfinished">Brewtarget - 1.2.3</translation>
+        <translation>Brewtarget - 1.2.3</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="105"/>
         <source>Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Receta</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="409"/>
         <source>Color</source>
-        <translation type="unfinished">Color</translation>
+        <translation>Color</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="416"/>
@@ -3426,12 +3429,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="999"/>
         <source>Extras</source>
-        <translation type="unfinished">Extras</translation>
+        <translation>Extras</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1009"/>
         <source>Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Brewday</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1038"/>
@@ -3588,7 +3591,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="1551"/>
         <source>Donate</source>
-        <translation type="unfinished"></translation>
+        <translation>Donar</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1598"/>
@@ -3599,7 +3602,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="1602"/>
         <location filename="../ui/mainWindow.ui" line="1816"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimir</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1801"/>
@@ -3614,7 +3617,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="1811"/>
         <source>Print Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista Previa</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1580"/>
@@ -4385,17 +4388,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/optionsDialog.ui" line="171"/>
         <source>Use SRM</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar SRM</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="178"/>
         <source>Use EBC</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar EBC</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="191"/>
         <source>Formulas</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulas</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="211"/>
@@ -4430,37 +4433,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/optionsDialog.ui" line="310"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Lenguaje</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="318"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Alemán</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="341"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Inglés</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="364"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Español</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="394"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polaco</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="417"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Francés</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="440"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugués</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="484"/>
@@ -4471,7 +4474,13 @@ p, li { white-space: pre-wrap; }
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;
+   &lt;b&gt;¿Conoces otra idioma?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   ¿O, te gustaría mejorar una traducción? ¡Ayudanos y
+  &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
+  da una traducción&lt;/a&gt; para que tus amigos utilizen brewtarget!
+&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -4728,87 +4737,87 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="40"/>
         <source>Brewer</source>
-        <translation type="unfinished">Fabricante</translation>
+        <translation>Fabricante</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="63"/>
         <source>Asst. Brewer</source>
-        <translation type="unfinished">Asst. del Fabricante</translation>
+        <translation>Asst. del Fabricante</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="70"/>
         <source>Taste Rating</source>
-        <translation type="unfinished">Calificacción del Sabor</translation>
+        <translation>Calificacción del Sabor</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="109"/>
         <source>Primary Age (days)</source>
-        <translation type="unfinished">Días en el Primario</translation>
+        <translation>Días en el Primario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="132"/>
         <source>Primary Temp</source>
-        <translation type="unfinished">Temp. del Primario</translation>
+        <translation>Temp. del Primario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="155"/>
         <source>Secondary Age (days)</source>
-        <translation type="unfinished">Dias en el Secundario</translation>
+        <translation>Dias en el Secundario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="178"/>
         <source>Secondary Temp</source>
-        <translation type="unfinished">Temp. del Secundario</translation>
+        <translation>Temp. del Secundario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="201"/>
         <source>Tertiary Age (days)</source>
-        <translation type="unfinished">Dias en el Terciario</translation>
+        <translation>Dias en el Terciario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="224"/>
         <source>Tertiary Temp</source>
-        <translation type="unfinished">Temp. del Terciario</translation>
+        <translation>Temp. del Terciario</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="247"/>
         <source>Bottle/Keg Age (days)</source>
-        <translation type="unfinished">Dias en la Botella o Barrica</translation>
+        <translation>Dias en la Botella o Barrica</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="270"/>
         <source>Bottle/Keg Temp</source>
-        <translation type="unfinished">Temp. de la Botella o Barrica</translation>
+        <translation>Temp. de la Botella o Barrica</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="293"/>
         <source>Date First Brewed</source>
-        <translation type="unfinished">Fecha de Primera Fabricación</translation>
+        <translation>Fecha de Primera Fabricación</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="316"/>
         <source>dd MMM yyyy</source>
-        <translation type="unfinished">dd MMM yyyy</translation>
+        <translation>dd MMM yyyy</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="323"/>
         <source>Carbonation Volumes</source>
-        <translation type="unfinished">Volúmenes de CO2</translation>
+        <translation>Volúmenes de CO2</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="350"/>
         <source>Taste Notes</source>
-        <translation type="unfinished">Notas del Sabor</translation>
+        <translation>Notas del Sabor</translation>
     </message>
     <message>
         <location filename="../ui/recipeExtrasWidget.ui" line="369"/>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
 </context>
 <context>
@@ -4889,7 +4898,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/scaleRecipeTool.ui" line="42"/>
         <source>New efficiency (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nueva eficiencia (%)</translation>
     </message>
     <message>
         <source>New Batch Size</source>
@@ -5137,17 +5146,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/waterEditor.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialog</translation>
     </message>
     <message>
         <location filename="../ui/waterEditor.ui" line="22"/>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../ui/waterEditor.ui" line="512"/>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
 </context>
 <context>
