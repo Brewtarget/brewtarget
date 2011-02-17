@@ -28,13 +28,31 @@
 #include <QObject>
 #include <QLocale>
 #include <QLibraryInfo>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QEventLoop>
+#include <QUrl>
+#include <QtNetwork/QNetworkReply>
+#include <QObject>
+#include <QMessageBox>
+#include <QDesktopServices>
+#include <QSharedPointer>
+#include <QtNetwork/QNetworkRequest>
 
 #include "brewtarget.h"
 #include "config.h"
 #include "database.h"
-#include "UnitSystem.h"
 #include "Algorithms.h"
 #include "fermentable.h"
+#include "UnitSystem.h"
+#include "UnitSystems.h"
+#include "USWeightUnitSystem.h"
+#include "USVolumeUnitSystem.h"
+#include "FahrenheitTempUnitSystem.h"
+#include "TimeUnitSystem.h"
+#include "SIWeightUnitSystem.h"
+#include "SIVolumeUnitSystem.h"
+#include "CelsiusTempUnitSystem.h"
+#include "ImperialVolumeUnitSystem.h"
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
@@ -45,6 +63,8 @@ QTextStream* Brewtarget::logStream = 0;
 QFile* Brewtarget::logFile = 0;
 
 QString Brewtarget::currentLanguage = "en";
+
+bool Brewtarget::checkVersion = true;
 
 iUnitSystem Brewtarget::weightUnitSystem = SI;
 iUnitSystem Brewtarget::volumeUnitSystem = SI;
@@ -67,6 +87,58 @@ void Brewtarget::setApp(QApplication& a)
    ensureFilesExist(); // Make sure all the files we need exist before starting.
    readPersistentOptions(); // Read all the options for bt.
    loadTranslations(); // Do internationalization.
+}
+
+void Brewtarget::checkForNewVersion()
+{
+   QNetworkAccessManager manager;
+   QEventLoop loop;
+   QUrl url("http://brewtarget.sourceforge.net/version");
+   QSharedPointer<QNetworkReply> reply = QSharedPointer<QNetworkReply>(manager.get( QNetworkRequest(url) ));
+   QObject::connect( reply.data(), SIGNAL(finished()), &loop, SLOT(quit()));
+
+   loop.exec(); // Waits until the reply comes back.
+
+   QString remoteVersion(reply->readAll());
+
+   // If there is an error, just return.
+   if( reply->error() != QNetworkReply::NoError )
+      return;
+
+   // If the remote version is newer...
+   if( !remoteVersion.startsWith(VERSIONSTRING) )
+   {
+      // ...and the user wants to download the new version...
+      if( QMessageBox::information(mainWindow,
+                               QObject::tr("New Version"),
+                               QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
+                               QMessageBox::Yes | QMessageBox::No,
+                               QMessageBox::Yes) == QMessageBox::Yes )
+      {
+         // ...take them to the website.
+         QDesktopServices::openUrl(QUrl("http://brewtarget.sourceforge.net"));
+      }
+      else // ... and the user does NOT want to download the new version...
+      {
+         // ... and they want us to stop bothering them...
+         if( QMessageBox::question(mainWindow,
+                                  QObject::tr("New Version"),
+                                  QObject::tr("Stop bothering you about new versions?"),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::Yes) == QMessageBox::Yes)
+         {
+            // ... tell brewtarget to stop bothering the user about the new version.
+            checkVersion = false;
+         }
+      }
+   }
+   else // The current version is newest so...
+   {
+      // ...tell brewtarget to bother users about future new versions.
+      // This means that when a user downloads the new version, this
+      // variable will always get reset to true.
+      checkVersion = true;
+   }
 }
 
 bool Brewtarget::ensureFilesExist()
@@ -312,8 +384,9 @@ int Brewtarget::run()
    Database::initialize();
    
    mainWindow = new MainWindow();
-
    mainWindow->setVisible(true);
+
+   checkForNewVersion();
 
    ret = app->exec();
    savePersistentOptions();
@@ -474,6 +547,21 @@ void Brewtarget::readPersistentOptions()
          tempSystem = UnitSystems::celsiusTempUnitSystem();
       }
  
+   }
+
+   //================Version Checking========================
+   list = optionsDoc->elementsByTagName(QString("check_version"));
+   if( list.length() > 0 )
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      if( text == "true" )
+         checkVersion = true;
+      else
+         checkVersion = false;
    }
 
    //=====================Language====================
@@ -689,6 +777,12 @@ void Brewtarget::savePersistentOptions()
    }
 
    root = optionsDoc->createElement("options");
+
+   // Version checking.
+   node = optionsDoc->createElement("check_version");
+   child = optionsDoc->createTextNode( checkVersion ? "true" : "false" );
+   node.appendChild(child);
+   root.appendChild(node);
 
    // Unit Systems.
    node = optionsDoc->createElement("weight_unit_system");

@@ -23,7 +23,7 @@ class HopTableWidget;
 
 #include <QTableView>
 #include <QWidget>
-#include "HopTableModel.h"
+class HopTableModel;
 #include "HopSortFilterProxyModel.h"
 
 class HopTableWidget : public QTableView

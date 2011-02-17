@@ -39,12 +39,13 @@
 #define SAVEPNG ":/images/filesave.svg"
 #define CLOCKPNG ":/images/clock.svg"
 
-/* Things that will get configured by configure script */
+//===Things that will get configured by cmake===
 
-// This only gets used by linux OS version.
-// Variables are set by cmake.
+// These two only get used by Linux OS version.
 #define CONFIGDATADIR "${CONFIGDATADIR}"
 #define CONFIGDOCDIR "${CONFIGDOCDIR}"
+
+#define VERSIONSTRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}"
 
 #endif /*_CONFIG_H*/
 

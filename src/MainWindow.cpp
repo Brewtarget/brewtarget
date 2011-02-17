@@ -67,6 +67,7 @@
 #include "BtDigitWidget.h"
 #include <QUrl>
 #include <QDesktopServices>
+#include "FermentableTableModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -194,8 +195,8 @@ MainWindow::MainWindow(QWidget* parent)
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );
 
-   // Resize to the smallest possible size.
-   this->resize(0,0);
+   // Resize to a reasonable size.
+   this->resize(750, 800);
 
    // Connect signals.
    connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );

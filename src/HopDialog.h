@@ -27,7 +27,7 @@ class HopDialog;
 #include "ui_hopDialog.h"
 #include "observable.h"
 #include "database.h"
-#include "MainWindow.h"
+class MainWindow;
 #include "HopEditor.h"
 
 class HopDialog : public QDialog, public Ui::hopDialog, public Observer

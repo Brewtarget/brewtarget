@@ -110,7 +110,12 @@ private:
    static bool ensureFilesExist();
    //! Load translation files.
    static void loadTranslations();
+   //! Checks for a newer version and prompts user to download.
+   static void checkForNewVersion();
    
+   //! If this option is false, do not bother the user about new versions.
+   static bool checkVersion;
+
    // These are options that are ONLY to be edited by the OptionDialog.
    static bool usePlato; // Whether or not to display plato instead of SG.
    //

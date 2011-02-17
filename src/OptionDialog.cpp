@@ -19,7 +19,14 @@
 #include "OptionDialog.h"
 #include "brewtarget.h"
 #include "UnitSystem.h"
-
+#include "UnitSystems.h"
+#include "USWeightUnitSystem.h"
+#include "SIWeightUnitSystem.h"
+#include "ImperialVolumeUnitSystem.h"
+#include "USVolumeUnitSystem.h"
+#include "SIVolumeUnitSystem.h"
+#include "FahrenheitTempUnitSystem.h"
+#include "CelsiusTempUnitSystem.h"
 #include <QButtonGroup>
 
 OptionDialog::OptionDialog(QWidget* parent)

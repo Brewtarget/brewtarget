@@ -72,7 +72,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/TimerWidget.cpp
     ${SRCDIR}/TimeUnitSystem.cpp
     ${SRCDIR}/unit.cpp
-    ${SRCDIR}/UnitSystem.cpp
+    ${SRCDIR}/UnitSystems.cpp
     ${SRCDIR}/USVolumeUnitSystem.cpp
     ${SRCDIR}/USWeightUnitSystem.cpp
     ${SRCDIR}/water.cpp

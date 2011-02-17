@@ -19,8 +19,6 @@
 #ifndef _USWEIGHTUNITSYSTEM_H
 #define _USWEIGHTUNITSYSTEM_H
 
-class USWeightUnitSystem;
-
 #include <QMap>
 #include "UnitSystem.h"
 

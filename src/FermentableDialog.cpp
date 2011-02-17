@@ -23,6 +23,7 @@
 #include <QList>
 #include <string>
 #include "FermentableDialog.h"
+#include "FermentableTableModel.h"
 #include "observable.h"
 #include "database.h"
 #include "recipe.h"

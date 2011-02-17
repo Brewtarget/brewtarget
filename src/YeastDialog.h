@@ -27,7 +27,7 @@ class YeastDialog;
 #include "ui_yeastDialog.h"
 #include "observable.h"
 #include "database.h"
-#include "MainWindow.h"
+class MainWindow;
 #include "YeastEditor.h"
 
 class YeastDialog : public QDialog, public Ui::yeastDialog, public Observer

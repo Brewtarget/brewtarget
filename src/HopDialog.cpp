@@ -29,6 +29,7 @@
 #include "MainWindow.h"
 #include "hop.h"
 #include "HopEditor.h"
+#include "HopTableModel.h"
 
 HopDialog::HopDialog(MainWindow* parent)
         : QDialog(parent)

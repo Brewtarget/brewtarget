@@ -29,6 +29,7 @@
 #include "MainWindow.h"
 #include "misc.h"
 #include "MiscEditor.h"
+#include "MiscTableModel.h"
 
 MiscDialog::MiscDialog(MainWindow* parent)
         : QDialog(parent)

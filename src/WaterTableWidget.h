@@ -23,7 +23,7 @@ class WaterTableWidget;
 
 #include <QTableView>
 #include <QWidget>
-#include "WaterTableModel.h"
+class WaterTableModel;
 
 class WaterTableWidget : public QTableView
 {

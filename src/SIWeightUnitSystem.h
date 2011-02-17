@@ -23,6 +23,7 @@ class SIWeightUnitSystem;
 
 #include <QMap>
 #include "UnitSystem.h"
+class Unit;
 
 class SIWeightUnitSystem : public UnitSystem
 {

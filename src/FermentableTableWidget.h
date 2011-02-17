@@ -24,7 +24,7 @@ class FermentableTableWidget;
 #include <QTableView>
 #include <QWidget>
 #include "FermentableSortFilterProxyModel.h"
-#include "FermentableTableModel.h"
+class FermentableTableModel;
 
 class FermentableTableWidget : public QTableView
 {

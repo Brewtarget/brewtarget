@@ -55,29 +55,4 @@ protected:
    static const int precision = 3;
 };
 
-#include "USWeightUnitSystem.h"
-#include "SIWeightUnitSystem.h"
-#include "ImperialVolumeUnitSystem.h"
-#include "USVolumeUnitSystem.h"
-#include "SIVolumeUnitSystem.h"
-#include "CelsiusTempUnitSystem.h"
-#include "FahrenheitTempUnitSystem.h"
-#include "TimeUnitSystem.h"
-
-class UnitSystems
-{
-public:
-   static USWeightUnitSystem* usWeightUnitSystem();
-   static SIWeightUnitSystem* siWeightUnitSystem();
-
-   static ImperialVolumeUnitSystem* imperialVolumeUnitSystem();
-   static USVolumeUnitSystem* usVolumeUnitSystem();
-   static SIVolumeUnitSystem* siVolumeUnitSystem();
-
-   static CelsiusTempUnitSystem* celsiusTempUnitSystem();
-   static FahrenheitTempUnitSystem* fahrenheitTempUnitSystem();
-
-   static TimeUnitSystem* timeUnitSystem();
-};
-
 #endif /*_UNITSYSTEM_H*/

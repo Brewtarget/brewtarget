@@ -23,7 +23,7 @@ class MiscTableWidget;
 
 #include <QTableView>
 #include <QWidget>
-#include "MiscTableModel.h"
+class MiscTableModel;
 
 class MiscTableWidget : public QTableView
 {

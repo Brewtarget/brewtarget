@@ -1,6 +1,6 @@
 /*
- * UnitSystem.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2010.
+ * UnitSystems.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * (rocketman768@gmail.com), 2009-2011.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "UnitSystem.h"
+
+#include "UnitSystems.h"
+#include "USWeightUnitSystem.h"
+#include "SIWeightUnitSystem.h"
+#include "ImperialVolumeUnitSystem.h"
+#include "USVolumeUnitSystem.h"
+#include "SIVolumeUnitSystem.h"
+#include "CelsiusTempUnitSystem.h"
+#include "FahrenheitTempUnitSystem.h"
+#include "TimeUnitSystem.h"
 
 USWeightUnitSystem* UnitSystems::usWeightUnitSystem()
 {
@@ -65,3 +74,4 @@ TimeUnitSystem* UnitSystems::timeUnitSystem()
    static TimeUnitSystem* t = new TimeUnitSystem();
    return t;
 }
+

@@ -23,7 +23,7 @@ class MashStepTableWidget;
 
 #include <QTableView>
 #include <QWidget>
-#include "MashStepTableModel.h"
+class MashStepTableModel;
 
 class MashStepTableWidget : public QTableView
 {

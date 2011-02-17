@@ -30,6 +30,7 @@
 #include "yeast.h"
 #include "YeastEditor.h"
 #include <iostream>
+#include "YeastTableModel.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
         : QDialog(parent)

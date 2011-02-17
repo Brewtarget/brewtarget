@@ -27,7 +27,7 @@ class MiscDialog;
 #include "ui_miscDialog.h"
 #include "observable.h"
 #include "database.h"
-#include "MainWindow.h"
+class MainWindow;
 #include "MiscEditor.h"
 
 class MiscDialog : public QDialog, public Ui::miscDialog, public Observer

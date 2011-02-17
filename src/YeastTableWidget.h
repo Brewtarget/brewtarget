@@ -24,7 +24,7 @@ class YeastTableWidget;
 #include <QTableView>
 #include <QWidget>
 #include "YeastSortFilterProxyModel.h"
-#include "YeastTableModel.h"
+class YeastTableModel;
 
 class YeastTableWidget : public QTableView
 {
