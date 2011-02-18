@@ -25,7 +25,7 @@ HopTableWidget::HopTableWidget(QWidget* parent)
         : QTableView(parent)
 {
 
-   hfpm = new HopSortFilterProxyModel(parent);
+   hfpm = new HopSortFilterProxyModel(this);
    hopTableModel = new HopTableModel(this);
 
    hfpm->setSourceModel(hopTableModel);
@@ -48,3 +48,4 @@ HopSortFilterProxyModel* HopTableWidget::getProxy()
 {
     return hfpm;
 }
+

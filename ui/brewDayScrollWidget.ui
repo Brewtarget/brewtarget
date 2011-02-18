@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>535</width>
-        <height>344</height>
+        <width>541</width>
+        <height>326</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -196,7 +196,11 @@
                    <string>Insert the new step</string>
                   </property>
                   <property name="text">
-                   <string>Insert</string>
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../brewtarget.qrc">
+                    <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
                   </property>
                  </widget>
                 </item>
@@ -269,42 +273,13 @@
                  <string>Move currently selected step up</string>
                 </property>
                 <property name="text">
-                 <string>Up</string>
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../brewtarget.qrc">
+                  <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
                 </property>
                </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_8">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
-              <property name="margin">
-               <number>0</number>
-              </property>
-              <item>
-               <spacer name="horizontalSpacer_6">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
               <item>
                <widget class="QPushButton" name="pushButton_down">
@@ -318,12 +293,16 @@
                  <string>Move currently selected step down</string>
                 </property>
                 <property name="text">
-                 <string>Down</string>
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../brewtarget.qrc">
+                  <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_9">
+               <spacer name="horizontalSpacer_8">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -367,7 +346,11 @@
                  <string>Remove currently selected step</string>
                 </property>
                 <property name="text">
-                 <string>Remove</string>
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../brewtarget.qrc">
+                  <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
                 </property>
                </widget>
               </item>
@@ -442,6 +425,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../brewtarget.qrc"/>
+ </resources>
  <connections/>
 </ui>
