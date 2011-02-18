@@ -106,6 +106,8 @@ private:
    static QTextStream* logStream;
    static QString currentLanguage;
 
+   //! Ensure our directories exist.
+   static bool ensureDirectoriesExist();
    //! Ensure the db and option files exist.
    static bool ensureFilesExist();
    //! Load translation files.

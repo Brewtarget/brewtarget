@@ -84,9 +84,41 @@ bool Brewtarget::usePlato = false;
 void Brewtarget::setApp(QApplication& a)
 {
    app = &a;
-   ensureFilesExist(); // Make sure all the files we need exist before starting.
-   readPersistentOptions(); // Read all the options for bt.
-   loadTranslations(); // Do internationalization.
+}
+
+bool Brewtarget::ensureDirectoriesExist()
+{
+   bool success;
+   QDir dir;
+
+   dir.setPath(getDataDir());
+   if( ! dir.exists() || ! dir.isReadable() )
+   {
+      QMessageBox::information(0,
+                               QObject::tr("Directory Problem"),
+                               QObject::tr("\"%1\" cannot be read.").arg(dir.path()));
+      return false;
+   }
+
+   dir.setPath(getDocDir());
+   if( ! dir.exists() || ! dir.isReadable() )
+   {
+      QMessageBox::information(0,
+                               QObject::tr("Directory Problem"),
+                               QObject::tr("\"%1\" cannot be read.").arg(dir.path()));
+      return false;
+   }
+
+   dir.setPath(getConfigDir(&success));
+   if( !success || ! dir.exists() || ! dir.isReadable() )
+   {
+      QMessageBox::information(0,
+                               QObject::tr("Directory Problem"),
+                               QObject::tr("Config directory \"%1\" cannot be read.").arg(dir.path()));
+      return false;
+   }
+
+   return true;
 }
 
 void Brewtarget::checkForNewVersion()
@@ -160,15 +192,6 @@ bool Brewtarget::ensureFilesExist()
    mashFile.setFileName(mashFileName);
    optionsFile.setFileName(optionsFileName);
    
-   if( !dbFile.exists() )
-      success &= QFile::copy(Brewtarget::getDataDir() + "database.xml", dbFileName);
-   if( !recipeFile.exists() )
-      success &= QFile::copy(Brewtarget::getDataDir() + "recipes.xml", recipeFileName);
-   if( !mashFile.exists() )
-      success &= QFile::copy(Brewtarget::getDataDir() + "mashs.xml", mashFileName);
-   if( !optionsFile.exists() )
-      success &= QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
-   
    // Log file
    logFile->setFileName(getConfigDir() + "brewtarget_log.txt");
    if( logFile->open(QFile::WriteOnly | QFile::Truncate) )
@@ -184,6 +207,43 @@ bool Brewtarget::ensureFilesExist()
       }
       else
          logW(QString("Could not create a log file."));
+   }
+
+   if( !dbFile.exists() )
+   {
+      success = QFile::copy(Brewtarget::getDataDir() + "database.xml", dbFileName);
+      if( ! success )
+      {
+         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "database.xml").arg(dbFileName));
+         return false;
+      }
+   }
+   if( !recipeFile.exists() )
+   {
+      success = QFile::copy(Brewtarget::getDataDir() + "recipes.xml", recipeFileName);
+      if( ! success )
+      {
+         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "recipes.xml").arg(recipeFileName));
+         return false;
+      }
+   }
+   if( !mashFile.exists() )
+   {
+      success &= QFile::copy(Brewtarget::getDataDir() + "mashs.xml", mashFileName);
+      if( ! success )
+      {
+         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "mashs.xml").arg(mashFileName));
+         return false;
+      }
+   }
+   if( !optionsFile.exists() )
+   {
+      success &= QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
+      if( ! success )
+      {
+         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "options.xml").arg(optionsFileName));
+         return false;
+      }
    }
 
    return success;
@@ -381,6 +441,17 @@ QString Brewtarget::getConfigDir(bool *success)
 int Brewtarget::run()
 {
    int ret;
+   bool success;
+
+   success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
+   if( success )
+      success = ensureFilesExist(); // Make sure all the files we need exist before starting.
+   if( ! success )
+      return 1;
+
+   readPersistentOptions(); // Read all the options for bt.
+   loadTranslations(); // Do internationalization.
+
    Database::initialize();
    
    mainWindow = new MainWindow();
