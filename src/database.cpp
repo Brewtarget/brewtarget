@@ -446,7 +446,7 @@ void Database::savePersistent()
 //=========================accessor methods=====================================
 
 // TODO: restructure the database to use maps so that this process is fast.
-void Database::addEquipment(Equipment* equip)
+void Database::addEquipment(Equipment* equip, bool disableNotify)
 {
    if( equip != 0 )
    {
@@ -454,11 +454,12 @@ void Database::addEquipment(Equipment* equip)
       qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
       Algorithms::Instance().unDup(equipments, EquipmentPtrEq);
       //equipments.unique(Equipment_ptr_equals()); // No dups.
-      hasChanged(QVariant(DBEQUIP));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBEQUIP));
    }
 }
 
-void Database::addFermentable(Fermentable* ferm)
+void Database::addFermentable(Fermentable* ferm, bool disableNotify)
 {
    if( ferm != 0 )
    {
@@ -466,11 +467,12 @@ void Database::addFermentable(Fermentable* ferm)
       qSort(fermentables.begin(), fermentables.end(), FermentablePtrLt );
       Algorithms::Instance().unDup(fermentables, FermentablePtrEq);
       //fermentables.unique(Fermentable_ptr_equals());
-      hasChanged(QVariant(DBFERM));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBFERM));
    }
 }
 
-void Database::addHop(Hop* hop)
+void Database::addHop(Hop* hop, bool disableNotify)
 {
    if( hop != 0 )
    {
@@ -478,11 +480,12 @@ void Database::addHop(Hop* hop)
       qSort(hops.begin(), hops.end(), HopPtrLt );
       Algorithms::Instance().unDup(hops, HopPtrEq);
       //hops.unique(Hop_ptr_equals());
-      hasChanged(QVariant(DBHOP));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBHOP));
    }
 }
 
-void Database::addMash(Mash* mash)
+void Database::addMash(Mash* mash, bool disableNotify)
 {
    if( mash != 0 )
    {
@@ -490,11 +493,12 @@ void Database::addMash(Mash* mash)
       qSort(mashs.begin(), mashs.end(), MashPtrLt );
       Algorithms::Instance().unDup(mashs, MashPtrEq);
       //mashs.unique(Mash_ptr_equals());
-      hasChanged(QVariant(DBMASH));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBMASH));
    }
 }
 
-void Database::addMashStep(MashStep* mashStep)
+void Database::addMashStep(MashStep* mashStep, bool disableNotify)
 {
    if( mashStep != 0 )
    {
@@ -502,11 +506,12 @@ void Database::addMashStep(MashStep* mashStep)
       qSort(mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
       Algorithms::Instance().unDup(mashSteps, MashStepPtrEq);
       //mashSteps.unique(MashStep_ptr_equals());
-      hasChanged(QVariant(DBMASHSTEP));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBMASHSTEP));
    }
 }
 
-void Database::addMisc(Misc* misc)
+void Database::addMisc(Misc* misc, bool disableNotify)
 {
    if( misc != 0 )
    {
@@ -514,7 +519,8 @@ void Database::addMisc(Misc* misc)
       qSort(miscs.begin(), miscs.end(), MiscPtrLt );
       Algorithms::Instance().unDup(miscs, MiscPtrEq);
       //miscs.unique(Misc_ptr_equals());
-      hasChanged(QVariant(DBMISC));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBMISC));
    }
 }
 
@@ -531,32 +537,31 @@ void Database::addRecipe(Recipe* rec, bool copySubelements)
    if( copySubelements )
    {
       unsigned int i, size;
-      addEquipment(rec->getEquipment());
-      addMash(rec->getMash());
-      addStyle(rec->getStyle());
+      addEquipment(rec->getEquipment(), true);
+      addMash(rec->getMash(), true);
+      addStyle(rec->getStyle(), true);
 
       size = rec->getNumFermentables();
       for( i = 0; i < size; ++i )
-         addFermentable( rec->getFermentable(i) );
+         addFermentable( rec->getFermentable(i), true );
       size = rec->getNumHops();
       for( i = 0; i < size; ++i )
-         addHop( rec->getHop(i) );
+         addHop( rec->getHop(i), true );
       size = rec->getNumMiscs();
       for( i = 0; i < size; ++i )
-         addMisc( rec->getMisc(i) );
+         addMisc( rec->getMisc(i), true );
       size = rec->getNumWaters();
       for( i = 0; i < size; ++i )
-         addWater( rec->getWater(i) );
+         addWater( rec->getWater(i), true );
       size = rec->getNumYeasts();
       for( i = 0; i < size; ++i )
-         addYeast( rec->getYeast(i) );
+         addYeast( rec->getYeast(i), true );
    }
 
-   hasChanged(DBRECIPE);
-
+   hasChanged(DBALL);
 }
 
-void Database::addStyle(Style* style)
+void Database::addStyle(Style* style, bool disableNotify)
 {
    if( style != 0 )
    {
@@ -564,7 +569,8 @@ void Database::addStyle(Style* style)
       qSort(styles.begin(), styles.end(), StylePtrLt );
       Algorithms::Instance().unDup(styles, StylePtrEq);
       //styles.unique(Style_ptr_equals());
-      hasChanged(QVariant(DBSTYLE));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBSTYLE));
    }
 }
 
@@ -628,7 +634,7 @@ void Database::removeYeast(Yeast* yeast)
    hasChanged(QVariant(DBYEAST));
 }
 
-void Database::addWater(Water* water)
+void Database::addWater(Water* water, bool disableNotify)
 {
    if( water != 0 )
    {
@@ -636,11 +642,12 @@ void Database::addWater(Water* water)
       qSort(waters.begin(), waters.end(), WaterPtrLt );
       Algorithms::Instance().unDup(waters, WaterPtrEq);
       //waters.unique(Water_ptr_equals());
-      hasChanged(QVariant(DBWATER));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBWATER));
    }
 }
 
-void Database::addYeast(Yeast* yeast)
+void Database::addYeast(Yeast* yeast, bool disableNotify)
 {
    if( yeast != 0 )
    {
@@ -648,7 +655,8 @@ void Database::addYeast(Yeast* yeast)
       qSort(yeasts.begin(), yeasts.end(), YeastPtrLt );
       Algorithms::Instance().unDup(yeasts, YeastPtrEq);
       //yeasts.unique(Yeast_ptr_equals());
-      hasChanged(QVariant(DBYEAST));
+      if( ! disableNotify )
+         hasChanged(QVariant(DBYEAST));
    }
 }
 

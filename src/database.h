@@ -65,16 +65,16 @@ public:
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
    
-   void addEquipment(Equipment* equip);
-   void addFermentable(Fermentable* ferm);
-   void addHop(Hop* hop);
-   void addMash(Mash* mash);
-   void addMashStep(MashStep* mashStep);
-   void addMisc(Misc* misc);
+   void addEquipment(Equipment* equip, bool disableNotify = false);
+   void addFermentable(Fermentable* ferm, bool disableNotify = false);
+   void addHop(Hop* hop, bool disableNotify = false);
+   void addMash(Mash* mash, bool disableNotify = false);
+   void addMashStep(MashStep* mashStep, bool disableNotify = false);
+   void addMisc(Misc* misc, bool disableNotify = false);
    void addRecipe(Recipe* rec, bool copySubelements);
-   void addStyle(Style* style);
-   void addWater(Water* water);
-   void addYeast(Yeast* yeast);
+   void addStyle(Style* style, bool disableNotify = false);
+   void addWater(Water* water, bool disableNotify = false);
+   void addYeast(Yeast* yeast, bool disableNotify = false);
 
    void removeEquipment(Equipment* equip);
    void removeFermentable(Fermentable* ferm);

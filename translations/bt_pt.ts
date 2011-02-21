@@ -1103,23 +1103,41 @@ Use por sua conta e risco.</translation>
         <translation type="obsolete">Tipo de uso de plato ruim: %1</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="113"/>
-        <location filename="../src/brewtarget.cpp" line="125"/>
+        <location filename="../src/brewtarget.cpp" line="98"/>
+        <location filename="../src/brewtarget.cpp" line="107"/>
+        <location filename="../src/brewtarget.cpp" line="116"/>
+        <source>Directory Problem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/brewtarget.cpp" line="99"/>
+        <location filename="../src/brewtarget.cpp" line="108"/>
+        <source>&quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/brewtarget.cpp" line="117"/>
+        <source>Config directory &quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/brewtarget.cpp" line="145"/>
+        <location filename="../src/brewtarget.cpp" line="157"/>
         <source>New Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="114"/>
+        <location filename="../src/brewtarget.cpp" line="146"/>
         <source>Version %1 is now available. Download it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="126"/>
+        <location filename="../src/brewtarget.cpp" line="158"/>
         <source>Stop bothering you about new versions?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="775"/>
+        <location filename="../src/brewtarget.cpp" line="846"/>
         <source>Could not open %1 for writing</source>
         <translation>Não foi possível abrir %1 para gravação</translation>
     </message>
@@ -2472,44 +2490,40 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Inserir a nova etapa</translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="199"/>
         <source>Insert</source>
-        <translation type="unfinished">Inserir</translation>
+        <translation type="obsolete">Inserir</translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="239"/>
+        <location filename="../ui/brewDayScrollWidget.ui" line="243"/>
         <source>Move steps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="269"/>
+        <location filename="../ui/brewDayScrollWidget.ui" line="273"/>
         <source>Move currently selected step up</source>
         <translation type="unfinished">Mover etapa selecionada para cima</translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="272"/>
         <source>Up</source>
-        <translation type="unfinished">Para cima</translation>
+        <translation type="obsolete">Para cima</translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="318"/>
+        <location filename="../ui/brewDayScrollWidget.ui" line="293"/>
         <source>Move currently selected step down</source>
         <translation type="unfinished">Mover etapa selecionada para baixo</translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="321"/>
         <source>Down</source>
-        <translation type="unfinished">Para baixo</translation>
+        <translation type="obsolete">Para baixo</translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="367"/>
+        <location filename="../ui/brewDayScrollWidget.ui" line="346"/>
         <source>Remove currently selected step</source>
         <translation type="unfinished">Remover etapa selecionada</translation>
     </message>
     <message>
-        <location filename="../ui/brewDayScrollWidget.ui" line="370"/>
         <source>Remove</source>
-        <translation type="unfinished">Remover</translation>
+        <translation type="obsolete">Remover</translation>
     </message>
 </context>
 <context>

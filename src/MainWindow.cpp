@@ -958,39 +958,39 @@ void MainWindow::importRecipes()
 //     filename = fileOpener->selectedFiles()[0].toAscii();
 //   else
 //      return;
-   foreach ( QString filename, fileOpener->selectedFiles())
+   foreach( QString filename, fileOpener->selectedFiles() )
    {
-	   inFile.setFileName(filename);
-	   if( ! inFile.open(QIODevice::ReadOnly) )
-	   {
-		  Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for reading.").arg(filename));
-		  return;
-	   }
+      inFile.setFileName(filename);
+      if( ! inFile.open(QIODevice::ReadOnly) )
+      {
+         Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for reading.").arg(filename));
+         return;
+      }
 
-	   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-		  Brewtarget::log(Brewtarget::WARNING, tr("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+      if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
+         Brewtarget::log(Brewtarget::WARNING, tr("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
 
-	   list = xmlDoc.elementsByTagName("RECIPE");
-	   numRecipes = list.size();
+      list = xmlDoc.elementsByTagName("RECIPE");
+      numRecipes = list.size();
 
-	   // Tell how many recipes there were in the status bar.
-	   statusBar()->showMessage( tr("Found %1 recipes.").arg(numRecipes), 5000 );
+      // Tell how many recipes there were in the status bar.
+      statusBar()->showMessage( tr("Found %1 recipes.").arg(numRecipes), 5000 );
 
-	   for( i = 0; i < numRecipes; ++i )
-	   {
-		  newRec = new Recipe(list.at(i));
+      for( i = 0; i < numRecipes; ++i )
+      {
+         newRec = new Recipe(list.at(i));
 
-		  if( QMessageBox::question(this, tr("Import recipe?"),
-         tr("Import %1?").arg(newRec->getName()),
-		   QMessageBox::Yes,
-		   QMessageBox::No)
-		 == QMessageBox::Yes )
-		  {
-		 db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
-		  }
-	   }
+         if( QMessageBox::question(this, tr("Import recipe?"),
+                                   tr("Import %1?").arg(newRec->getName()),
+                                   QMessageBox::Yes,
+                                   QMessageBox::No)
+             == QMessageBox::Yes )
+         {
+            db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+         }
+      }
 
-	   inFile.close();
+      inFile.close();
    }
 }
 
