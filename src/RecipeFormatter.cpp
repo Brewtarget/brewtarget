@@ -609,7 +609,7 @@ QString RecipeFormatter::buildHopsTable()
 	for( unsigned int i = 0; i < rec->getNumHops(); ++i)
 	{
 		Hop *hop = rec->getHop(i);
-		hTable += QString("<td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7%</td>")
+      hTable += QString("<td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td>")
             .arg( hop->getName())
 				.arg( hop->getAlpha_pct(), 0, 'f', 0)
 				.arg( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
