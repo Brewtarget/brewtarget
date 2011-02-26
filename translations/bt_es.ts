@@ -1350,34 +1350,34 @@ Cuidado.</translation>
         <location filename="../src/brewtarget.cpp" line="107"/>
         <location filename="../src/brewtarget.cpp" line="116"/>
         <source>Directory Problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Problema con la Carpeta</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="99"/>
         <location filename="../src/brewtarget.cpp" line="108"/>
         <source>&quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; no se puede leer.</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="117"/>
         <source>Config directory &quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Carpeta de configuración &quot;%1% no se puede leer.</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="145"/>
         <location filename="../src/brewtarget.cpp" line="157"/>
         <source>New Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versión Nueva</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="146"/>
         <source>Version %1 is now available. Download it?</source>
-        <translation type="unfinished"></translation>
+        <translation>La versión %1 ahora está disponible. ¿La quieres bajar?</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="158"/>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿No te molesto más por la versión nueva?</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="846"/>
@@ -1424,27 +1424,27 @@ Cuidado.</translation>
     <message>
         <location filename="../src/fermentable.cpp" line="29"/>
         <source>Grain</source>
-        <translation type="unfinished"></translation>
+        <translation>Grano</translation>
     </message>
     <message>
         <location filename="../src/fermentable.cpp" line="29"/>
         <source>Sugar</source>
-        <translation type="unfinished">Azúcar</translation>
+        <translation>Azúcar</translation>
     </message>
     <message>
         <location filename="../src/fermentable.cpp" line="29"/>
         <source>Extract</source>
-        <translation type="unfinished">Extracto</translation>
+        <translation>Extracto</translation>
     </message>
     <message>
         <location filename="../src/fermentable.cpp" line="29"/>
         <source>Dry Extract</source>
-        <translation type="unfinished">Extracto Seco</translation>
+        <translation>Extracto Seco</translation>
     </message>
     <message>
         <location filename="../src/fermentable.cpp" line="29"/>
         <source>Adjunct</source>
-        <translation type="unfinished">Adjunto</translation>
+        <translation>Adjunto</translation>
     </message>
     <message>
         <location filename="../src/fermentable.cpp" line="206"/>
@@ -1464,55 +1464,55 @@ Cuidado.</translation>
     <message>
         <location filename="../src/hop.cpp" line="27"/>
         <source>Bittering</source>
-        <translation type="unfinished">Amargor</translation>
+        <translation>Amargor</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="27"/>
         <location filename="../src/hop.cpp" line="31"/>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="27"/>
         <source>Both</source>
-        <translation type="unfinished">Los dos</translation>
+        <translation>Los dos</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="29"/>
         <source>Leaf</source>
-        <translation type="unfinished">Flor</translation>
+        <translation>Flor</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="29"/>
         <source>Pellet</source>
-        <translation type="unfinished"></translation>
+        <translation>Bolita</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="29"/>
         <source>Plug</source>
-        <translation type="unfinished"></translation>
+        <translation>Tableta</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="31"/>
         <location filename="../src/misc.cpp" line="30"/>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Hervir</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="31"/>
         <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Lúpulos secos</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="31"/>
         <location filename="../src/misc.cpp" line="30"/>
         <source>Mash</source>
-        <translation type="unfinished">Maceración</translation>
+        <translation>Maceración</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="31"/>
         <source>First Wort</source>
-        <translation type="unfinished">First Wort</translation>
+        <translation>First Wort</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="262"/>
@@ -1559,17 +1559,17 @@ Cuidado.</translation>
     <message>
         <location filename="../src/mashstep.cpp" line="28"/>
         <source>Infusion</source>
-        <translation type="unfinished">Infusión</translation>
+        <translation>Infusión</translation>
     </message>
     <message>
         <location filename="../src/mashstep.cpp" line="28"/>
         <source>Temperature</source>
-        <translation type="unfinished">Temperatura</translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <location filename="../src/mashstep.cpp" line="28"/>
         <source>Decoction</source>
-        <translation type="unfinished">Cocción</translation>
+        <translation>Cocción</translation>
     </message>
     <message>
         <location filename="../src/mashstep.cpp" line="163"/>
@@ -1584,37 +1584,37 @@ Cuidado.</translation>
     <message>
         <location filename="../src/misc.cpp" line="30"/>
         <source>Bottling</source>
-        <translation type="unfinished">Embotellar</translation>
+        <translation>Embotellar</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="32"/>
         <source>Spice</source>
-        <translation type="unfinished">Especia</translation>
+        <translation>Especia</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="32"/>
         <source>Fining</source>
-        <translation type="unfinished">Aclarador</translation>
+        <translation>Aclarador</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="32"/>
         <source>Water Agent</source>
-        <translation type="unfinished">Agente para Agua</translation>
+        <translation>Agente para Agua</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="32"/>
         <source>Herb</source>
-        <translation type="unfinished">Hierba</translation>
+        <translation>Hierba</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="32"/>
         <source>Flavor</source>
-        <translation type="unfinished">Sabor</translation>
+        <translation>Sabor</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="32"/>
         <source>Other</source>
-        <translation type="unfinished">Otro</translation>
+        <translation>Otro</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="169"/>
@@ -1983,67 +1983,67 @@ El volumen final en el primario es %1.</translation>
     <message>
         <location filename="../src/yeast.cpp" line="29"/>
         <source>Ale</source>
-        <translation type="unfinished">Ale</translation>
+        <translation>Ale</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="29"/>
         <source>Lager</source>
-        <translation type="unfinished">Lager</translation>
+        <translation>Lager</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="29"/>
         <source>Wheat</source>
-        <translation type="unfinished">Trigo</translation>
+        <translation>Trigo</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="29"/>
         <source>Wine</source>
-        <translation type="unfinished">Vino</translation>
+        <translation>Vino</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="29"/>
         <source>Champagne</source>
-        <translation type="unfinished">Champán</translation>
+        <translation>Champán</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="31"/>
         <source>Liquid</source>
-        <translation type="unfinished"></translation>
+        <translation>Líquida</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="31"/>
         <source>Dry</source>
-        <translation type="unfinished">Seca</translation>
+        <translation>Seca</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="31"/>
         <source>Slant</source>
-        <translation type="unfinished">Slant</translation>
+        <translation>Slant</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="31"/>
         <source>Culture</source>
-        <translation type="unfinished">Cultura</translation>
+        <translation>Cultura</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="33"/>
         <source>Low</source>
-        <translation type="unfinished">Bajo</translation>
+        <translation>Bajo</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="33"/>
         <source>Medium</source>
-        <translation type="unfinished">Medio</translation>
+        <translation>Medio</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="33"/>
         <source>High</source>
-        <translation type="unfinished">Alto</translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="33"/>
         <source>Very High</source>
-        <translation type="unfinished">Muy Alto</translation>
+        <translation>Muy Alto</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="233"/>
