@@ -2062,16 +2062,27 @@ double Recipe::getColor_srm()
 
 double Recipe::getABV_pct()
 {
-    double abw, og, fg;
+    double og, fg;
 
     og = getOg();
     fg = getFg();
 
     // Alcohol by weight.  This is a different formula than used
     // when calculating the calories.
-    abw = 76.08 * (og-fg)/(1.775-og);
+    //abw = 76.08 * (og-fg)/(1.775-og);
+    //return abw * (fg/0.794);
 
-    return abw * (fg/0.794);
+    // George Fix: Brewing Science and Practice, page 686.
+    // The multiplicative factor actually varies from
+    // 125 for weak beers to 135 for strong beers.
+    return 130*(og-fg);
+
+    // From http://en.wikipedia.org/w/index.php?title=Alcohol_by_volume&oldid=414661414
+    // Has no citations, so I don't know how trustworthy it is.
+    // It seems to be in conflict with Fix's method above, because
+    // if the beer is weak, it should have a low fg, meaning the
+    // multiplicative factor is higher.
+    // return 132.9*(og - fg)/fg;
 }
 
 void Recipe::notify(Observable* /*notifier*/, QVariant info)
