@@ -180,7 +180,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
             return QVariant();
       case HOPUSECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getUseString());
+            return QVariant(row->getUseStringTr());
          else if( role == Qt::UserRole )
             return QVariant(row->getUse());
          else
@@ -192,7 +192,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
             return QVariant();
       case HOPFORMCOL:
     	 if ( role == Qt::DisplayRole )
-    		 return QVariant( row->getFormString());
+          return QVariant( row->getFormStringTr() );
     	 else if ( role == Qt::UserRole )
     		 return QVariant( row->getForm());
     	 else
@@ -356,7 +356,6 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
 		box->addItem(tr("Leaf"));
 		box->addItem(tr("Pellet"));
 		box->addItem(tr("Plug"));
-
 
 		box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 

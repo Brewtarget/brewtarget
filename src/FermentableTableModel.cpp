@@ -179,7 +179,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
             return QVariant();
       case FERMTYPECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getTypeString());
+            return QVariant(row->getTypeStringTr());
          else if( role == Qt::UserRole )
             return QVariant(row->getType());
          else

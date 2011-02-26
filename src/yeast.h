@@ -68,8 +68,12 @@ public:
    QString getName() const;
    Type getType() const;
    const QString& getTypeString() const;
+   //! Returns a translated type string.
+   const QString& getTypeStringTr() const;
    Form getForm() const;
    const QString& getFormString() const;
+   //! Returns a translated form string.
+   const QString& getFormStringTr() const;
    double getAmount() const;
    bool getAmountIsWeight() const;
    QString getLaboratory() const;
@@ -78,6 +82,8 @@ public:
    double getMaxTemperature_c() const;
    Flocculation getFlocculation() const;
    const QString& getFlocculationString() const;
+   //! Returns a flocculation string.
+   const QString& getFlocculationStringTr() const;
    double getAttenuation_pct() const;
    QString getNotes() const;
    QString getBestFor() const;
@@ -108,8 +114,11 @@ private:
    bool addToSecondary;
    
    static QStringList types;
+   static QStringList typesTr;
    static QStringList forms;
+   static QStringList formsTr;
    static QStringList flocculations;
+   static QStringList flocculationsTr;
 
    // Methods
    bool isValidType(const QString& str) const;

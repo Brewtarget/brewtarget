@@ -26,8 +26,11 @@
 #include "brewtarget.h"
 
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
+QStringList Yeast::typesTr = QStringList() << QObject::tr("Ale") << QObject::tr("Lager") << QObject::tr("Wheat") << QObject::tr("Wine") << QObject::tr("Champagne");
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
+QStringList Yeast::formsTr = QStringList() << QObject::tr("Liquid") << QObject::tr("Dry") << QObject::tr("Slant") << QObject::tr("Culture");
 QStringList Yeast::flocculations = QStringList() << "Low" << "Medium" << "High" << "Very High";
+QStringList Yeast::flocculationsTr = QStringList() << QObject::tr("Low") << QObject::tr("Medium") << QObject::tr("High") << QObject::tr("Very High");
 
 bool operator<(Yeast &y1, Yeast &y2)
 {
@@ -434,8 +437,10 @@ void Yeast::setAddToSecondary( bool var )
 QString Yeast::getName() const { return name; }
 Yeast::Type Yeast::getType() const { return type; }
 const QString& Yeast::getTypeString() const { return types.at(type); }
+const QString& Yeast::getTypeStringTr() const { return typesTr.at(type); }
 Yeast::Form Yeast::getForm() const { return form; }
 const QString& Yeast::getFormString() const { return forms.at(form); }
+const QString& Yeast::getFormStringTr() const { return formsTr.at(form); }
 double Yeast::getAmount() const { return amount; }
 bool Yeast::getAmountIsWeight() const { return amountIsWeight; }
 QString Yeast::getLaboratory() const { return laboratory; }
@@ -444,6 +449,7 @@ double Yeast::getMinTemperature_c() const { return minTemperature_c; }
 double Yeast::getMaxTemperature_c() const { return maxTemperature_c; }
 Yeast::Flocculation Yeast::getFlocculation() const { return flocculation; }
 const QString& Yeast::getFlocculationString() const { return flocculations.at(flocculation); }
+const QString& Yeast::getFlocculationStringTr() const { return flocculationsTr.at(flocculation); }
 double Yeast::getAttenuation_pct() const { return attenuation_pct; }
 QString Yeast::getNotes() const { return notes; }
 QString Yeast::getBestFor() const { return bestFor; }

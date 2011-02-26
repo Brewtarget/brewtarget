@@ -142,7 +142,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
          return QVariant();
       case YEASTTYPECOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getTypeString());
+         return QVariant(row->getTypeStringTr());
       else if( role == Qt::UserRole )
          return QVariant(row->getType());
       else
@@ -159,7 +159,7 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
          return QVariant();
       case YEASTFORMCOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getFormString());
+         return QVariant(row->getFormStringTr());
       else if( role == Qt::UserRole )
          return QVariant(row->getForm());
       else

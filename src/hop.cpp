@@ -24,8 +24,11 @@
 #include <QObject>
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
+QStringList Hop::typesTr = QStringList() << QObject::tr("Bittering") << QObject::tr("Aroma") << QObject::tr("Both");
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
+QStringList Hop::formsTr = QStringList() << QObject::tr("Leaf") << QObject::tr("Pellet") << QObject::tr("Plug");
 QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First Wort" << "Aroma";
+QStringList Hop::usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Dry Hop") << QObject::tr("Mash") << QObject::tr("First Wort") << QObject::tr("Aroma");
 
 bool operator<( Hop &h1, Hop &h2 )
 {
@@ -548,6 +551,11 @@ const QString& Hop::getUseString() const
    return uses.at(use);
 }
 
+const QString& Hop::getUseStringTr() const
+{
+   return usesTr.at(use);
+}
+
 double Hop::getTime_min() const
 {
    return time_min;
@@ -568,6 +576,11 @@ const QString& Hop::getTypeString() const
    return types.at(type);
 }
 
+const QString& Hop::getTypeStringTr() const
+{
+   return typesTr.at(type);
+}
+
 Hop::Form Hop::getForm() const
 {
    return form;
@@ -576,6 +589,11 @@ Hop::Form Hop::getForm() const
 const QString& Hop::getFormString() const
 {
    return forms.at(form);
+}
+
+const QString& Hop::getFormStringTr() const
+{
+   return formsTr.at(form);
 }
 
 double Hop::getBeta_pct() const

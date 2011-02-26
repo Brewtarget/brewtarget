@@ -130,7 +130,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    else if( index.column() == MISCTYPECOL )
    {
       if( role == Qt::DisplayRole )
-         return QVariant(row->getTypeString());
+         return QVariant(row->getTypeStringTr());
       else if( role == Qt::UserRole )
          return QVariant(row->getType());
       else
@@ -139,7 +139,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    else if( index.column() == MISCUSECOL )
    {
       if( role == Qt::DisplayRole )
-         return QVariant(row->getUseString());
+         return QVariant(row->getUseStringTr());
       else if( role == Qt::UserRole )
          return QVariant(row->getUse());
       else
