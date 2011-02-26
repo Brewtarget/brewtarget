@@ -2540,40 +2540,6 @@ El volumen final en el primario es %1.</translation>
         <translation>Sobre Brewtarget</translation>
     </message>
     <message>
-        <location filename="../ui/aboutDialog.ui" line="20"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for brewing beer.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2011 Philip G. Lee (rocketman768@gmail.com)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (Portuguese translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alpha tester)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;A68 - Freelance Graphics Design (flag images)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3527,98 +3493,98 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">La Receta</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="169"/>
+        <location filename="../ui/mainWindow.ui" line="158"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="194"/>
+        <location filename="../ui/mainWindow.ui" line="183"/>
         <source>Name of recipe</source>
         <translation>Nombre de la receta</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="201"/>
+        <location filename="../ui/mainWindow.ui" line="190"/>
         <source>Style</source>
         <translation>Estilo</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="220"/>
+        <location filename="../ui/mainWindow.ui" line="209"/>
         <source>Style of this recipe</source>
         <translation>Estilo de la receta</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="230"/>
+        <location filename="../ui/mainWindow.ui" line="219"/>
         <source>Equipment</source>
         <translation>Equipaje</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="249"/>
+        <location filename="../ui/mainWindow.ui" line="238"/>
         <source>Equipment to brew this with</source>
         <translation>Equipaje con el cual cocinar</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="259"/>
+        <location filename="../ui/mainWindow.ui" line="248"/>
         <source>Target Batch Size</source>
         <translation>Tamaño de lote deseado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="284"/>
+        <location filename="../ui/mainWindow.ui" line="273"/>
         <source>Target batch size</source>
         <translation>Tamaño de lote que deseas</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="291"/>
+        <location filename="../ui/mainWindow.ui" line="280"/>
         <source>Calculated Batch Size</source>
         <translation>Tamaño de lote calculado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="298"/>
-        <location filename="../ui/mainWindow.ui" line="344"/>
+        <location filename="../ui/mainWindow.ui" line="287"/>
+        <location filename="../ui/mainWindow.ui" line="333"/>
         <source>5 gal</source>
         <translation>5 gal</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="305"/>
+        <location filename="../ui/mainWindow.ui" line="294"/>
         <source>Target Boil Size</source>
         <translation>Tamaño de hervor deseado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="330"/>
+        <location filename="../ui/mainWindow.ui" line="319"/>
         <source>Target boil size</source>
         <translation>Tamaño de hervor que deseas</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="337"/>
+        <location filename="../ui/mainWindow.ui" line="326"/>
         <source>Calculated Boil Size</source>
         <translation>Tamaño de hervor calculado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="351"/>
+        <location filename="../ui/mainWindow.ui" line="340"/>
         <source>Efficiency (%)</source>
         <translation>Eficiencia (%)</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="376"/>
+        <location filename="../ui/mainWindow.ui" line="365"/>
         <source>The extraction efficiency you expect</source>
         <translation>La eficiencia de extracción que esperas</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="403"/>
+        <location filename="../ui/mainWindow.ui" line="392"/>
         <source>OG</source>
         <translation>DI</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="410"/>
+        <location filename="../ui/mainWindow.ui" line="399"/>
         <source>FG</source>
         <translation>DF</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="417"/>
+        <location filename="../ui/mainWindow.ui" line="406"/>
         <source>ABV</source>
         <translation>APV</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="424"/>
+        <location filename="../ui/mainWindow.ui" line="413"/>
         <source>Bitterness (IBU)</source>
         <translation>Amargor (IBU)</translation>
     </message>
@@ -3637,215 +3603,215 @@ p, li { white-space: pre-wrap; }
         <translation>Receta</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="431"/>
+        <location filename="../ui/mainWindow.ui" line="420"/>
         <source>Color</source>
         <translation>Color</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="438"/>
+        <location filename="../ui/mainWindow.ui" line="427"/>
         <source>Boil SG</source>
         <translation>Densidad del hervor</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="445"/>
+        <location filename="../ui/mainWindow.ui" line="434"/>
         <source>IBU/GU</source>
         <translation>IBU por Densidad</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1021"/>
+        <location filename="../ui/mainWindow.ui" line="1011"/>
         <source>Extras</source>
         <translation>Extras</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1031"/>
+        <location filename="../ui/mainWindow.ui" line="1021"/>
         <source>Brewday</source>
         <translation>Brewday</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1077"/>
-        <location filename="../ui/mainWindow.ui" line="1727"/>
+        <location filename="../ui/mainWindow.ui" line="1067"/>
+        <location filename="../ui/mainWindow.ui" line="1717"/>
         <source>Fermentables</source>
         <translation>Fermentables</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1116"/>
+        <location filename="../ui/mainWindow.ui" line="1106"/>
         <source>Add a fermentable</source>
         <translation>Agregar un fermentable</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1130"/>
+        <location filename="../ui/mainWindow.ui" line="1120"/>
         <source>Remove selected fermentable</source>
         <translation>Remover fermentable seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1144"/>
+        <location filename="../ui/mainWindow.ui" line="1134"/>
         <source>Edit selected fermentable</source>
         <translation>Editar fermentable seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1174"/>
-        <location filename="../ui/mainWindow.ui" line="1736"/>
+        <location filename="../ui/mainWindow.ui" line="1164"/>
+        <location filename="../ui/mainWindow.ui" line="1726"/>
         <source>Hops</source>
         <translation>Lúpulos</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1188"/>
+        <location filename="../ui/mainWindow.ui" line="1178"/>
         <source>Add hop</source>
         <translation>Agregar lúpulo</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1202"/>
+        <location filename="../ui/mainWindow.ui" line="1192"/>
         <source>Remove selected hop</source>
         <translation>Remover lúpulo seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1216"/>
+        <location filename="../ui/mainWindow.ui" line="1206"/>
         <source>Edit selected hop</source>
         <translation>Editar lúpulo seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1246"/>
+        <location filename="../ui/mainWindow.ui" line="1236"/>
         <source>Miscellaneous</source>
         <translation>Misc</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1260"/>
+        <location filename="../ui/mainWindow.ui" line="1250"/>
         <source>Add misc</source>
         <translation>Agregar misc</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1274"/>
+        <location filename="../ui/mainWindow.ui" line="1264"/>
         <source>Remove selected misc</source>
         <translation>Remover misc seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1288"/>
+        <location filename="../ui/mainWindow.ui" line="1278"/>
         <source>Edit selected misc</source>
         <translation>Editor misc seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1318"/>
+        <location filename="../ui/mainWindow.ui" line="1308"/>
         <source>Yeast</source>
         <translation>Levadura</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1332"/>
+        <location filename="../ui/mainWindow.ui" line="1322"/>
         <source>Add yeast</source>
         <translation>Agregar levadura</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1346"/>
+        <location filename="../ui/mainWindow.ui" line="1336"/>
         <source>Remove selected yeast</source>
         <translation>Remover levadura seleccionada</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1360"/>
+        <location filename="../ui/mainWindow.ui" line="1350"/>
         <source>Edit selected yeast</source>
         <translation>Editar levadura seleccionada</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1390"/>
+        <location filename="../ui/mainWindow.ui" line="1380"/>
         <source>Mash</source>
         <translation>Maceración</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1406"/>
+        <location filename="../ui/mainWindow.ui" line="1396"/>
         <source>Add mash step</source>
         <translation>Agregar paso de maceración</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1420"/>
+        <location filename="../ui/mainWindow.ui" line="1410"/>
         <source>Remove selected mash step</source>
         <translation>Remover paso seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1434"/>
+        <location filename="../ui/mainWindow.ui" line="1424"/>
         <source>Edit selected mash step</source>
         <translation>Editar paso seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1448"/>
+        <location filename="../ui/mainWindow.ui" line="1438"/>
         <source>Edit mash properties</source>
         <translation>Editar características de la maceración</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1451"/>
+        <location filename="../ui/mainWindow.ui" line="1441"/>
         <source>Edit mash</source>
         <translation>Editar maceración</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1458"/>
+        <location filename="../ui/mainWindow.ui" line="1448"/>
         <source>Mash Des</source>
         <translation>Diseñador</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1465"/>
+        <location filename="../ui/mainWindow.ui" line="1455"/>
         <source>Invoke the mash wizard</source>
         <translation>Ejecutar el asistente de maceración</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1468"/>
+        <location filename="../ui/mainWindow.ui" line="1458"/>
         <source>Mash wiz</source>
         <translation>Asistente</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1503"/>
+        <location filename="../ui/mainWindow.ui" line="1493"/>
         <source>Mashs</source>
         <translation>Maceraciones</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1534"/>
+        <location filename="../ui/mainWindow.ui" line="1524"/>
         <source>Mash step up</source>
         <translation>Paso para arriba</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1545"/>
+        <location filename="../ui/mainWindow.ui" line="1535"/>
         <source>Mash step down</source>
         <translation>Paso para abajo</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1556"/>
+        <location filename="../ui/mainWindow.ui" line="1546"/>
         <source>Save this mash profile</source>
         <translation>Guardar esta perfil de maceración</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1559"/>
+        <location filename="../ui/mainWindow.ui" line="1549"/>
         <source>Save Mash</source>
         <translation>Guardar Maceración</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1595"/>
+        <location filename="../ui/mainWindow.ui" line="1585"/>
         <source>Donate</source>
         <translation>Donar</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1642"/>
+        <location filename="../ui/mainWindow.ui" line="1632"/>
         <source>File</source>
         <translation>Archivo</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1646"/>
-        <location filename="../ui/mainWindow.ui" line="1860"/>
+        <location filename="../ui/mainWindow.ui" line="1636"/>
+        <location filename="../ui/mainWindow.ui" line="1850"/>
         <source>Print</source>
         <translation>Imprimir</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1845"/>
+        <location filename="../ui/mainWindow.ui" line="1835"/>
         <source>Refractometer Tools</source>
         <translation>Calculadoras para Refractómetro</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1850"/>
+        <location filename="../ui/mainWindow.ui" line="1840"/>
         <source>Pitch Rate Calculator</source>
         <translation>Calculadora para Levadura</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1855"/>
+        <location filename="../ui/mainWindow.ui" line="1845"/>
         <source>Print Preview</source>
         <translation>Vista Previa</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1624"/>
+        <location filename="../ui/mainWindow.ui" line="1614"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
@@ -3854,112 +3820,112 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Brewtarget - 1.2.2</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1631"/>
+        <location filename="../ui/mainWindow.ui" line="1621"/>
         <source>View</source>
         <translation>Ver</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1665"/>
+        <location filename="../ui/mainWindow.ui" line="1655"/>
         <source>Tools</source>
         <translation>Herramientas</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1685"/>
+        <location filename="../ui/mainWindow.ui" line="1675"/>
         <source>toolBar</source>
         <translation>toolBar</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1700"/>
+        <location filename="../ui/mainWindow.ui" line="1690"/>
         <source>About BrewTarget</source>
         <translation>Sobre Brewtarget</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1709"/>
+        <location filename="../ui/mainWindow.ui" line="1699"/>
         <source>Export Recipe</source>
         <translation>Exportar Receta</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1718"/>
+        <location filename="../ui/mainWindow.ui" line="1708"/>
         <source>New Recipe</source>
         <translation>Receta Nueva</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1745"/>
+        <location filename="../ui/mainWindow.ui" line="1735"/>
         <source>Miscs</source>
         <translation>Miscs</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1754"/>
+        <location filename="../ui/mainWindow.ui" line="1744"/>
         <source>Yeasts</source>
         <translation>Levaduras</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1763"/>
+        <location filename="../ui/mainWindow.ui" line="1753"/>
         <source>Equipments</source>
         <translation>Equipajes</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1772"/>
+        <location filename="../ui/mainWindow.ui" line="1762"/>
         <source>Styles</source>
         <translation>Estilos</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1781"/>
+        <location filename="../ui/mainWindow.ui" line="1771"/>
         <source>Exit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1790"/>
+        <location filename="../ui/mainWindow.ui" line="1780"/>
         <source>Import Recipes</source>
         <translation>Importar Recetas</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1795"/>
+        <location filename="../ui/mainWindow.ui" line="1785"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1800"/>
+        <location filename="../ui/mainWindow.ui" line="1790"/>
         <source>Manual</source>
         <translation>Manual</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1805"/>
+        <location filename="../ui/mainWindow.ui" line="1795"/>
         <source>Scale Recipe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1810"/>
+        <location filename="../ui/mainWindow.ui" line="1800"/>
         <source>Recipe to Clipboard as Text</source>
         <translation>Receta al portapapeles como texto</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1815"/>
+        <location filename="../ui/mainWindow.ui" line="1805"/>
         <source>OG Correction Help</source>
         <translation>Ayuda para Corrección de DI</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1820"/>
+        <location filename="../ui/mainWindow.ui" line="1810"/>
         <source>Convert Units</source>
         <translation>Convertar Unidades</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1825"/>
+        <location filename="../ui/mainWindow.ui" line="1815"/>
         <source>Backup Database</source>
         <translation>Reservar Base de Datos</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1830"/>
+        <location filename="../ui/mainWindow.ui" line="1820"/>
         <source>Restore Database</source>
         <translation>Restituir Base de Datos</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1835"/>
+        <location filename="../ui/mainWindow.ui" line="1825"/>
         <source>Copy Recipe</source>
         <translation>Copiar Receta</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1840"/>
+        <location filename="../ui/mainWindow.ui" line="1830"/>
         <source>Priming Calculator</source>
         <translation>Calculadora de Cebadura</translation>
     </message>
