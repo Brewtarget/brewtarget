@@ -48,14 +48,16 @@ fi
 echo "Prefix: $PREFIX";
 
 # If we have a prefix...
-if [ -z $PREFIX ]
+if [ -n $PREFIX ]
 then
    #...define the prefix.
-   CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_INSTALL_PREFIX=\"$PREFIX\"";
+   CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_INSTALL_PREFIX=$PREFIX";
 fi
 
-# NOTE: This is an in-source build, which will create lots of extraneous
-# files in the source directory. Really, we should probably "cd ../some_empty_directory" and
-# then call cmake on the source tree.
-cmake $CMAKEOPTIONS .
+echo "CMAKEOPTIONS: $CMAKEOPTIONS";
 
+# Do all the building in build/
+cd build/
+cmake $CMAKEOPTIONS ../
+
+echo "Now, cd to build/ and run \"make\""
