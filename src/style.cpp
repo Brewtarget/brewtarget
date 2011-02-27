@@ -556,7 +556,7 @@ const Style::Type Style::getType() const
    return type;
 }
 
-const QString& Style::getTypeString() const
+const QString Style::getTypeString() const
 {
    return types.at(type);
 }

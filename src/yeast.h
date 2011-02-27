@@ -67,11 +67,11 @@ public:
    // Get
    QString getName() const;
    Type getType() const;
-   const QString& getTypeString() const;
+   const QString getTypeString() const;
    //! Returns a translated type string.
    const QString getTypeStringTr() const;
    Form getForm() const;
-   const QString& getFormString() const;
+   const QString getFormString() const;
    //! Returns a translated form string.
    const QString getFormStringTr() const;
    double getAmount() const;
@@ -81,7 +81,7 @@ public:
    double getMinTemperature_c() const;
    double getMaxTemperature_c() const;
    Flocculation getFlocculation() const;
-   const QString& getFlocculationString() const;
+   const QString getFlocculationString() const;
    //! Returns a flocculation string.
    const QString getFlocculationStringTr() const;
    double getAttenuation_pct() const;

@@ -48,29 +48,29 @@ class Hop : public Observable, public BeerXMLElement
       virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
       //QString toXml();
       
-      const QString& getName() const;
+      const QString getName() const;
       int getVersion() const;
       double getAlpha_pct() const;
       double getAmount_kg() const;
       Use getUse() const;
-      const QString& getUseString() const;
+      const QString getUseString() const;
       //! Returns a translated use string.
       const QString getUseStringTr() const;
       double getTime_min() const;
       
-      const QString& getNotes() const;
+      const QString getNotes() const;
       Type getType() const;
-      const QString& getTypeString() const;
+      const QString getTypeString() const;
       //! Returns a translated type string.
       const QString getTypeStringTr() const;
       Form getForm() const;
-      const QString& getFormString() const;
+      const QString getFormString() const;
       //! Returns a translated form string.
       const QString getFormStringTr() const;
       double getBeta_pct() const;
       double getHsi_pct() const;
-      const QString& getOrigin() const;
-      const QString& getSubstitutes() const;
+      const QString getOrigin() const;
+      const QString getSubstitutes() const;
       double getHumulene_pct() const;
       double getCaryophyllene_pct() const;
       double getCohumulone_pct() const;

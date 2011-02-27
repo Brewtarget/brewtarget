@@ -71,7 +71,7 @@ public:
    QString getStyleLetter() const;
    QString getStyleGuide() const;
    const Type getType() const;
-   const QString& getTypeString() const;
+   const QString getTypeString() const;
    double getOgMin() const;
    double getOgMax() const;
    double getFgMin() const;

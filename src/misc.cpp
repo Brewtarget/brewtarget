@@ -222,7 +222,7 @@ Misc::Type Misc::getType() const
    return type;
 }
 
-const QString& Misc::getTypeString() const
+const QString Misc::getTypeString() const
 {
    return types.at(type);
 }
@@ -238,7 +238,7 @@ Misc::Use Misc::getUse() const
    return use;
 }
 
-const QString& Misc::getUseString() const
+const QString Misc::getUseString() const
 {
    return uses.at(use);
 }
@@ -275,7 +275,7 @@ QString Misc::getNotes() const
 }
 
 //============================"SET" METHODS=====================================
-void Misc::setName( const QString &var )
+void Misc::setName( const QString& var )
 {
    name = QString(var);
    hasChanged();
@@ -330,13 +330,13 @@ void Misc::setAmountIsWeight( bool var )
    hasChanged();
 }
 
-void Misc::setUseFor( const QString &var )
+void Misc::setUseFor( const QString& var )
 {
    useFor = QString(var);
    hasChanged();
 }
 
-void Misc::setNotes( const QString &var )
+void Misc::setNotes( const QString& var )
 {
    notes = QString(var);
    hasChanged();
@@ -344,7 +344,7 @@ void Misc::setNotes( const QString &var )
 
 //========================OTHER METHODS=========================================
 
-bool Misc::isValidUse( const QString &var )
+bool Misc::isValidUse( const QString& var )
 {
    static const QString uses[] = {"Boil", "Mash", "Primary", "Secondary", "Bottling"};
    static const unsigned int size = 5;
@@ -357,7 +357,7 @@ bool Misc::isValidUse( const QString &var )
    return false;
 }
 
-bool Misc::isValidType( const QString &var )
+bool Misc::isValidType( const QString& var )
 {
    static const QString types[] = {"Spice", "Fining", "Water Agent", "Herb", "Flavor", "Other"};
    static const unsigned int size = 6;

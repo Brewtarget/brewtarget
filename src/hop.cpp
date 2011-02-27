@@ -37,7 +37,7 @@ bool operator==( Hop &h1, Hop &h2 )
    return h1.name == h2.name;
 }
 
-bool Hop::isValidUse(const QString &str)
+bool Hop::isValidUse(const QString& str)
 {
    static const QString uses[] = {"Boil", "Dry Hop", "Mash", "First Wort", "Aroma"};
    static const int length = 5;
@@ -50,7 +50,7 @@ bool Hop::isValidUse(const QString &str)
    return false;
 }
 
-bool Hop::isValidType(const QString &str)
+bool Hop::isValidType(const QString& str)
 {
    static const QString types[] = {"Bittering", "Aroma", "Both"};
    static const int length = 3;
@@ -63,7 +63,7 @@ bool Hop::isValidType(const QString &str)
    return false;
 }
 
-bool Hop::isValidForm(const QString &str)
+bool Hop::isValidForm(const QString& str)
 {
    static const QString forms[] = {"Pellet", "Plug", "Leaf", ""};
    static const int length = 4;
@@ -336,7 +336,7 @@ void Hop::fromNode(const QDomNode& hopNode)
 }
 
 //============================="SET" METHODS====================================
-void Hop::setName( const QString &str )
+void Hop::setName( const QString& str )
 {
    name = QString(str);
    hasChanged();
@@ -394,7 +394,7 @@ void Hop::setTime_min( double num )
    hasChanged();
 }
       
-void Hop::setNotes( const QString &str )
+void Hop::setNotes( const QString& str )
 {
    notes = QString(str);
    hasChanged();
@@ -444,13 +444,13 @@ void Hop::setHsi_pct( double num )
    hasChanged();
 }
 
-void Hop::setOrigin( const QString &str )
+void Hop::setOrigin( const QString& str )
 {
    origin = QString(str);
    hasChanged();
 }
 
-void Hop::setSubstitutes( const QString &str )
+void Hop::setSubstitutes( const QString& str )
 {
    substitutes = QString(str);
    hasChanged();
@@ -518,7 +518,7 @@ void Hop::setMyrcene_pct( double num )
 
 //============================="GET" METHODS====================================
 
-const QString& Hop::getName() const
+const QString Hop::getName() const
 {
    return name;
 }
@@ -543,7 +543,7 @@ Hop::Use Hop::getUse() const
    return use;
 }
 
-const QString& Hop::getUseString() const
+const QString Hop::getUseString() const
 {
    return uses.at(use);
 }
@@ -559,7 +559,7 @@ double Hop::getTime_min() const
    return time_min;
 }
 
-const QString& Hop::getNotes() const
+const QString Hop::getNotes() const
 {
    return notes;
 }
@@ -569,7 +569,7 @@ Hop::Type Hop::getType() const
    return type;
 }
 
-const QString& Hop::getTypeString() const
+const QString Hop::getTypeString() const
 {
    return types.at(type);
 }
@@ -585,7 +585,7 @@ Hop::Form Hop::getForm() const
    return form;
 }
 
-const QString& Hop::getFormString() const
+const QString Hop::getFormString() const
 {
    return forms.at(form);
 }
@@ -606,12 +606,12 @@ double Hop::getHsi_pct() const
    return hsi_pct;
 }
 
-const QString& Hop::getOrigin() const
+const QString Hop::getOrigin() const
 {
    return origin;
 }
 
-const QString& Hop::getSubstitutes() const
+const QString Hop::getSubstitutes() const
 {
    return substitutes;
 }

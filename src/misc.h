@@ -60,11 +60,11 @@ public:
    // Get
    QString getName() const;
    Type getType() const;
-   const QString& getTypeString() const;
+   const QString getTypeString() const;
    //! Returns a translated type string.
    const QString getTypeStringTr() const;
    Use getUse() const;
-   const QString& getUseString() const;
+   const QString getUseString() const;
    //! Returns a translated use string.
    const QString getUseStringTr() const;
    double getAmount() const;

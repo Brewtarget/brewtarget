@@ -300,10 +300,10 @@ void Fermentable::setDefaults()
 }
 
 // Get
-const QString& Fermentable::getName() const { return name; }
+const QString Fermentable::getName() const { return name; }
 int Fermentable::getVersion() const { return version; }
 const Fermentable::Type Fermentable::getType() const { return type; }
-const QString& Fermentable::getTypeString() const
+const QString Fermentable::getTypeString() const
 {
    return types.at(type);
 }
@@ -317,9 +317,9 @@ double Fermentable::getYield_pct() const { return yield_pct; }
 double Fermentable::getColor_srm() const { return color_srm; }
 
 bool Fermentable::getAddAfterBoil() const { return addAfterBoil; }
-const QString& Fermentable::getOrigin() const { return origin; }
-const QString& Fermentable::getSupplier() const { return supplier; }
-const QString& Fermentable::getNotes() const { return notes; }
+const QString Fermentable::getOrigin() const { return origin; }
+const QString Fermentable::getSupplier() const { return supplier; }
+const QString Fermentable::getNotes() const { return notes; }
 double Fermentable::getCoarseFineDiff_pct() const { return coarseFineDiff_pct; }
 double Fermentable::getMoisture_pct() const { return moisture_pct; }
 double Fermentable::getDiastaticPower_lintner() const { return diastaticPower_lintner; }

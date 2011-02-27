@@ -53,10 +53,10 @@ public:
          DIASTATICPOWER, PROTEIN, MAXINBATCH, ISMASHED };
    
    // Get
-   const QString& getName() const;
+   const QString getName() const;
    int getVersion() const;
    const Type getType() const;
-   const QString& getTypeString() const;
+   const QString getTypeString() const;
    //! Returns a translated type string.
    const QString getTypeStringTr() const;
    double getAmount_kg() const;
@@ -64,9 +64,9 @@ public:
    double getColor_srm() const;
    
    bool getAddAfterBoil() const;
-   const QString& getOrigin() const;
-   const QString& getSupplier() const;
-   const QString& getNotes() const;
+   const QString getOrigin() const;
+   const QString getSupplier() const;
+   const QString getNotes() const;
    double getCoarseFineDiff_pct() const;
    double getMoisture_pct() const;
    double getDiastaticPower_lintner() const;

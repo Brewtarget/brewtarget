@@ -101,8 +101,8 @@ class Unit
       virtual double toSI( double amt ) const =0;// { return amt; }
       virtual double fromSI( double amt ) const =0;// { return amt; }
       // The unit name will be the singular of the commonly used abbreviation.
-      virtual const QString& getUnitName() const = 0; //{ return 0; }
-      virtual const QString& getSIUnitName() const = 0;// { return 0; }
+      virtual const QString getUnitName() const = 0; //{ return 0; }
+      virtual const QString getSIUnitName() const = 0;// { return 0; }
 
       virtual const int getUnitType() const = 0;//{ return 0; }
       virtual const int getUnitOrTempSystem() const = 0;// { return 0; }
@@ -128,8 +128,8 @@ class KilogramUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; };
       const int getUnitOrTempSystem() const { return SI; };
 
@@ -146,8 +146,8 @@ class GramUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; };
       const int getUnitOrTempSystem() const { return SI; };
 
@@ -164,8 +164,8 @@ class MilligramUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; };
       const int getUnitOrTempSystem() const { return SI; };
 
@@ -182,8 +182,8 @@ class PoundUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; }
       const int getUnitOrTempSystem() const { return ImperialAndUS; }
       
@@ -200,8 +200,8 @@ class OunceUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; }
       const int getUnitOrTempSystem() const { return ImperialAndUS; }
 
@@ -219,8 +219,8 @@ class LiterUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return SI; }
 
@@ -237,8 +237,8 @@ class MilliliterUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return SI; }
 
@@ -255,8 +255,8 @@ class USGallonUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
 
@@ -273,8 +273,8 @@ class USQuartUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
 
@@ -291,8 +291,8 @@ class USCupUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
 
@@ -309,8 +309,8 @@ class ImperialGallonUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
 
@@ -327,8 +327,8 @@ class ImperialQuartUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
 
@@ -345,8 +345,8 @@ class ImperialCupUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
 
@@ -363,8 +363,8 @@ class ImperialTablespoonUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
 
@@ -381,8 +381,8 @@ class ImperialTeaspoonUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
 
@@ -399,8 +399,8 @@ class USTablespoonUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
 
@@ -417,8 +417,8 @@ class USTeaspoonUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
 
@@ -436,8 +436,8 @@ class SecondUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Time; }
       const int getUnitOrTempSystem() const { return Any; }
 
@@ -454,8 +454,8 @@ class MinuteUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Time; }
       const int getUnitOrTempSystem() const { return Any; }
       
@@ -472,8 +472,8 @@ class HourUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Time; }
       const int getUnitOrTempSystem() const { return Any; }
 
@@ -490,8 +490,8 @@ public:
    // Inherited methods.
    double toSI( double amt ) const;
    double fromSI( double amt ) const;
-   const QString& getUnitName() const { return unitName; }
-   const QString& getSIUnitName() const { return SIUnitName; }
+   const QString getUnitName() const { return unitName; }
+   const QString getSIUnitName() const { return SIUnitName; }
    const int getUnitType() const { return Time; }
    const int getUnitOrTempSystem() const { return Any; }
 
@@ -510,8 +510,8 @@ class CelsiusUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Temp; }
       const int getUnitOrTempSystem() const { return Celsius; }
 
@@ -528,8 +528,8 @@ class KelvinUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Temp; }
       const int getUnitOrTempSystem() const { return Kelvin; }
 
@@ -546,8 +546,8 @@ class FahrenheitUnit : public Unit
       // Inherited methods.
       double toSI( double amt ) const;
       double fromSI( double amt ) const;
-      const QString& getUnitName() const { return unitName; }
-      const QString& getSIUnitName() const { return SIUnitName; }
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Temp; }
       const int getUnitOrTempSystem() const { return Fahrenheit; }
 
@@ -566,8 +566,8 @@ public:
    // Inherited methods.
    double toSI( double amt ) const;
    double fromSI( double amt ) const;
-   const QString& getUnitName() const { return unitName; }
-   const QString& getSIUnitName() const { return SIUnitName; }
+   const QString getUnitName() const { return unitName; }
+   const QString getSIUnitName() const { return SIUnitName; }
    const int getUnitType() const { return Color; }
    const int getUnitOrTempSystem() const { return Any; }
 
@@ -586,8 +586,8 @@ public:
    // Inherited methods.
    double toSI( double amt ) const;
    double fromSI( double amt ) const;
-   const QString& getUnitName() const { return unitName; }
-   const QString& getSIUnitName() const { return SIUnitName; }
+   const QString getUnitName() const { return unitName; }
+   const QString getSIUnitName() const { return SIUnitName; }
    const int getUnitType() const { return Color; }
    const int getUnitOrTempSystem() const { return Any; }
 

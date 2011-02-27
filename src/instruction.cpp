@@ -170,7 +170,7 @@ void Instruction::setCompleted(bool comp)
 
 void Instruction::setReagent(const QString& reagent)
 {
-   reagents.push_back(reagent);
+   reagents.push_back(QString(reagent));
 }
 
 void Instruction::setInterval(double time) 
