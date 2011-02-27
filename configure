@@ -60,4 +60,8 @@ echo "CMAKEOPTIONS: $CMAKEOPTIONS";
 cd build/
 cmake $CMAKEOPTIONS ../
 
-echo "Now, cd to build/ and run \"make\""
+# Tell the user what to do.
+echo ""
+echo ""
+echo -e "\tNow, cd to build/ and run \"make\""
+echo ""
