@@ -1369,13 +1369,13 @@ Używaj na własną odpowiedzialność.</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="268"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Secondary</source>
         <translation>Cicha</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="268"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Primary</source>
         <translation>Burzliwa</translation>
     </message>
@@ -1508,14 +1508,14 @@ Używaj na własną odpowiedzialność.</translation>
     </message>
     <message>
         <location filename="../src/equipment.cpp" line="187"/>
-        <location filename="../src/fermentable.cpp" line="187"/>
-        <location filename="../src/hop.cpp" line="243"/>
+        <location filename="../src/fermentable.cpp" line="186"/>
+        <location filename="../src/hop.cpp" line="240"/>
         <location filename="../src/instruction.cpp" line="99"/>
         <location filename="../src/mash.cpp" line="145"/>
-        <location filename="../src/mashstep.cpp" line="138"/>
-        <location filename="../src/misc.cpp" line="150"/>
+        <location filename="../src/mashstep.cpp" line="137"/>
+        <location filename="../src/misc.cpp" line="148"/>
         <location filename="../src/recipe.cpp" line="344"/>
-        <location filename="../src/yeast.cpp" line="208"/>
+        <location filename="../src/yeast.cpp" line="205"/>
         <source>Node at line %1 is not an element.</source>
         <translation>Węzeł w linii %1 nie jest elementem.</translation>
     </message>
@@ -1530,120 +1530,120 @@ Używaj na własną odpowiedzialność.</translation>
         <translation>Nieobsługiwana właściwość WYPOSAŻENIA %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Grain</source>
         <translation type="unfinished">Słód</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Sugar</source>
         <translation type="unfinished">Cukier</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Extract</source>
         <translation type="unfinished">Ekstrakt</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Dry Extract</source>
         <translation type="unfinished">Suchy ekstrakt</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Adjunct</source>
         <translation type="unfinished">Dodatek</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="206"/>
+        <location filename="../src/fermentable.cpp" line="205"/>
         <source>FERMENTABLE says it is not version %1. Line %2</source>
         <translation>SKŁADNIK twierdzi, że nie jest wersją %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="212"/>
+        <location filename="../src/fermentable.cpp" line="211"/>
         <source>%1 is not a valid type for FERMENTABLE. Line %2</source>
         <translation>%1 nie jest prawidłowym typem dla SKŁADNIK. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="277"/>
+        <location filename="../src/fermentable.cpp" line="276"/>
         <source>Unsupported FERMENTABLE property: %1. Line %2</source>
         <translation>Nieobsługiwana właściwość SKŁADNIK %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="27"/>
+        <location filename="../src/hop.cpp" line="579"/>
         <source>Bittering</source>
         <translation type="unfinished">Goryczkowy</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="27"/>
-        <location filename="../src/hop.cpp" line="31"/>
+        <location filename="../src/hop.cpp" line="553"/>
+        <location filename="../src/hop.cpp" line="579"/>
         <source>Aroma</source>
         <translation type="unfinished">Chmielenie na aromat</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="27"/>
+        <location filename="../src/hop.cpp" line="579"/>
         <source>Both</source>
         <translation type="unfinished">Uniwersalny</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="29"/>
+        <location filename="../src/hop.cpp" line="595"/>
         <source>Leaf</source>
         <translation type="unfinished">Szyszka</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="29"/>
+        <location filename="../src/hop.cpp" line="595"/>
         <source>Pellet</source>
         <translation type="unfinished">Granulat</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="29"/>
+        <location filename="../src/hop.cpp" line="595"/>
         <source>Plug</source>
         <translation type="unfinished">Tabletka</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/hop.cpp" line="553"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Boil</source>
         <translation type="unfinished">Gotowanie</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
+        <location filename="../src/hop.cpp" line="553"/>
         <source>Dry Hop</source>
         <translation type="unfinished">Chmielenie na zimno</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/hop.cpp" line="553"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Mash</source>
         <translation type="unfinished">Zacieranie</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
+        <location filename="../src/hop.cpp" line="553"/>
         <source>First Wort</source>
         <translation type="unfinished">Chmielenie przedniej brzeczki</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="262"/>
+        <location filename="../src/hop.cpp" line="259"/>
         <source>HOP says it is not version %1. Line %2</source>
         <translation>CHMIEL twierdzi, że nie jest wersją %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="276"/>
+        <location filename="../src/hop.cpp" line="273"/>
         <source>%1 is not a valid use for HOP. Line %2</source>
         <translation>%1 nie jest prawidłowym użyciem dla CHMIEL. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="292"/>
+        <location filename="../src/hop.cpp" line="289"/>
         <source>%1 is not a valid type for HOP. Line %2</source>
         <translation>%1 nie jest prawidłowym typem dla CHMIEL. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="300"/>
+        <location filename="../src/hop.cpp" line="297"/>
         <source>%1 is not a valid form for HOP. Line %2</source>
         <translation>%1 nie jest prawidłową formą dla CHMIEL. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="337"/>
+        <location filename="../src/hop.cpp" line="334"/>
         <source>Unsupported HOP property: %1. Line %2</source>
         <translation>Nieobsługiwana właściwość CHMIEL %1. Linia %2</translation>
     </message>
@@ -1654,8 +1654,8 @@ Używaj na własną odpowiedzialność.</translation>
     </message>
     <message>
         <location filename="../src/mash.cpp" line="165"/>
-        <location filename="../src/mashstep.cpp" line="157"/>
-        <location filename="../src/yeast.cpp" line="227"/>
+        <location filename="../src/mashstep.cpp" line="156"/>
+        <location filename="../src/yeast.cpp" line="224"/>
         <source>YEAST says it is not version %1. Line %2</source>
         <translation>DROŻDŻE twierdzi, że nie jest wersją %1. Linia %2</translation>
     </message>
@@ -1665,82 +1665,82 @@ Używaj na własną odpowiedzialność.</translation>
         <translation>Nieobsługiwana właściwość ZACIERANIE %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="28"/>
+        <location filename="../src/mashstep.cpp" line="322"/>
         <source>Infusion</source>
         <translation type="unfinished">Infuzja</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="28"/>
+        <location filename="../src/mashstep.cpp" line="322"/>
         <source>Temperature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="28"/>
+        <location filename="../src/mashstep.cpp" line="322"/>
         <source>Decoction</source>
         <translation type="unfinished">Dekokcja</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="163"/>
+        <location filename="../src/mashstep.cpp" line="162"/>
         <source>%1 is not a valid type for MASHSTEP. Line %2</source>
         <translation>%1 nie jest prawidłowym typem dla PRZERWA. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="196"/>
+        <location filename="../src/mashstep.cpp" line="195"/>
         <source>Unsupported MASHSTEP property: %1. Line %2</source>
         <translation>Nieobsługiwana właściwość PRZERWA %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Bottling</source>
         <translation type="unfinished">Butlekowanie</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Spice</source>
         <translation type="unfinished">Przyprawa</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Fining</source>
         <translation type="unfinished">Substancja klarująca</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Water Agent</source>
         <translation type="unfinished">Uzdatnianie wody</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Herb</source>
         <translation type="unfinished">Zioło</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Flavor</source>
         <translation type="unfinished">Aromat</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Other</source>
         <translation type="unfinished">Inny</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="169"/>
+        <location filename="../src/misc.cpp" line="167"/>
         <source>MISC says it is not version %1. Line %2</source>
         <translation>RÓŻNE twierdzi, że nie jest wersją %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/misc.cpp" line="173"/>
         <source>%1 is not a valid type for MISC. Line %2</source>
         <translation>%1 nie jest prawidłowym typem dla RÓŻNE. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="183"/>
+        <location filename="../src/misc.cpp" line="181"/>
         <source>%1 is not a valid use for MISC. Line %2</source>
         <translation>%1 nie jest prawidłowym użyciem dla RÓŻNE. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="209"/>
+        <location filename="../src/misc.cpp" line="207"/>
         <source>Unsupported MISC property: %1. Line %2</source>
         <translation>Nieobsługiwana właściwość RÓŻNE %1. Linia %2</translation>
     </message>
@@ -2089,87 +2089,87 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
         <translation>Nieobsługiwana właściwość WODA %1. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Ale</source>
         <translation type="unfinished">Ale</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Lager</source>
         <translation type="unfinished">Lager</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Wheat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Wine</source>
         <translation type="unfinished">Wino</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Champagne</source>
         <translation type="unfinished">Szampan</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Liquid</source>
         <translation type="unfinished">Płynne</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Dry</source>
         <translation type="unfinished">Suche</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Slant</source>
         <translation type="unfinished">Skos</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Culture</source>
         <translation type="unfinished">Gęstwa</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>Low</source>
         <translation type="unfinished">Niska</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>Medium</source>
         <translation type="unfinished">Średnia</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>High</source>
         <translation type="unfinished">Wysoka</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>Very High</source>
         <translation type="unfinished">Bardzo wysoka</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="233"/>
+        <location filename="../src/yeast.cpp" line="230"/>
         <source>%1 is not a valid type for yeast. Line %2</source>
         <translation>%1 nie jest prawidłowym typem dla DROŻDŻE. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="241"/>
+        <location filename="../src/yeast.cpp" line="238"/>
         <source>%1 is not a valid form for yeast. Line %2</source>
         <translation>%1 nie jest prawidłową formą dla DROŻDŻE. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="273"/>
+        <location filename="../src/yeast.cpp" line="270"/>
         <source>%1 is not a valid flocculation for yeast. Line %2</source>
         <translation>%1 nie jest prawidłową flokulacją dla DROŻDŻE. Linia %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="303"/>
+        <location filename="../src/yeast.cpp" line="300"/>
         <source>Unsupported YEAST property: %1. Line %2</source>
         <translation>Nieobsługiwana właściwość DROŻDŻE %1. Linia %2</translation>
     </message>

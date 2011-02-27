@@ -1261,13 +1261,13 @@ Cuidado.</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="268"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Secondary</source>
         <translation>Secundario</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="268"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Primary</source>
         <translation>Primario</translation>
     </message>
@@ -1400,14 +1400,14 @@ Cuidado.</translation>
     </message>
     <message>
         <location filename="../src/equipment.cpp" line="187"/>
-        <location filename="../src/fermentable.cpp" line="187"/>
-        <location filename="../src/hop.cpp" line="243"/>
+        <location filename="../src/fermentable.cpp" line="186"/>
+        <location filename="../src/hop.cpp" line="240"/>
         <location filename="../src/instruction.cpp" line="99"/>
         <location filename="../src/mash.cpp" line="145"/>
-        <location filename="../src/mashstep.cpp" line="138"/>
-        <location filename="../src/misc.cpp" line="150"/>
+        <location filename="../src/mashstep.cpp" line="137"/>
+        <location filename="../src/misc.cpp" line="148"/>
         <location filename="../src/recipe.cpp" line="344"/>
-        <location filename="../src/yeast.cpp" line="208"/>
+        <location filename="../src/yeast.cpp" line="205"/>
         <source>Node at line %1 is not an element.</source>
         <translation>Node at line %1 is not an element.</translation>
     </message>
@@ -1422,120 +1422,120 @@ Cuidado.</translation>
         <translation>Unsupported EQUIPMENT property: %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Grain</source>
         <translation>Grano</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Sugar</source>
         <translation>Azúcar</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Extract</source>
         <translation>Extracto</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Dry Extract</source>
         <translation>Extracto Seco</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="29"/>
+        <location filename="../src/fermentable.cpp" line="312"/>
         <source>Adjunct</source>
         <translation>Adjunto</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="206"/>
+        <location filename="../src/fermentable.cpp" line="205"/>
         <source>FERMENTABLE says it is not version %1. Line %2</source>
         <translation>FERMENTABLE says it is not version %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="212"/>
+        <location filename="../src/fermentable.cpp" line="211"/>
         <source>%1 is not a valid type for FERMENTABLE. Line %2</source>
         <translation>%1 is not a valid type for FERMENTABLE. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/fermentable.cpp" line="277"/>
+        <location filename="../src/fermentable.cpp" line="276"/>
         <source>Unsupported FERMENTABLE property: %1. Line %2</source>
         <translation>Unsupported FERMENTABLE property: %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="27"/>
+        <location filename="../src/hop.cpp" line="579"/>
         <source>Bittering</source>
         <translation>Amargor</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="27"/>
-        <location filename="../src/hop.cpp" line="31"/>
+        <location filename="../src/hop.cpp" line="553"/>
+        <location filename="../src/hop.cpp" line="579"/>
         <source>Aroma</source>
         <translation>Aroma</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="27"/>
+        <location filename="../src/hop.cpp" line="579"/>
         <source>Both</source>
         <translation>Los dos</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="29"/>
+        <location filename="../src/hop.cpp" line="595"/>
         <source>Leaf</source>
         <translation>Flor</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="29"/>
+        <location filename="../src/hop.cpp" line="595"/>
         <source>Pellet</source>
         <translation>Bolita</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="29"/>
+        <location filename="../src/hop.cpp" line="595"/>
         <source>Plug</source>
         <translation>Tableta</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/hop.cpp" line="553"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Boil</source>
         <translation>Hervir</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
+        <location filename="../src/hop.cpp" line="553"/>
         <source>Dry Hop</source>
         <translation>Lúpulos secos</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/hop.cpp" line="553"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Mash</source>
         <translation>Maceración</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="31"/>
+        <location filename="../src/hop.cpp" line="553"/>
         <source>First Wort</source>
         <translation>First Wort</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="262"/>
+        <location filename="../src/hop.cpp" line="259"/>
         <source>HOP says it is not version %1. Line %2</source>
         <translation>HOP says it is not version %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="276"/>
+        <location filename="../src/hop.cpp" line="273"/>
         <source>%1 is not a valid use for HOP. Line %2</source>
         <translation>%1 is not a valid use for HOP. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="292"/>
+        <location filename="../src/hop.cpp" line="289"/>
         <source>%1 is not a valid type for HOP. Line %2</source>
         <translation>%1 is not a valid type for HOP. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="300"/>
+        <location filename="../src/hop.cpp" line="297"/>
         <source>%1 is not a valid form for HOP. Line %2</source>
         <translation>%1 is not a valid form for HOP. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="337"/>
+        <location filename="../src/hop.cpp" line="334"/>
         <source>Unsupported HOP property: %1. Line %2</source>
         <translation>Unsupported HOP property: %1. Line %2</translation>
     </message>
@@ -1546,8 +1546,8 @@ Cuidado.</translation>
     </message>
     <message>
         <location filename="../src/mash.cpp" line="165"/>
-        <location filename="../src/mashstep.cpp" line="157"/>
-        <location filename="../src/yeast.cpp" line="227"/>
+        <location filename="../src/mashstep.cpp" line="156"/>
+        <location filename="../src/yeast.cpp" line="224"/>
         <source>YEAST says it is not version %1. Line %2</source>
         <translation>YEAST says it is not version %1. Line %2</translation>
     </message>
@@ -1557,82 +1557,82 @@ Cuidado.</translation>
         <translation>Unsupported MASH property: %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="28"/>
+        <location filename="../src/mashstep.cpp" line="322"/>
         <source>Infusion</source>
         <translation>Infusión</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="28"/>
+        <location filename="../src/mashstep.cpp" line="322"/>
         <source>Temperature</source>
         <translation>Temperatura</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="28"/>
+        <location filename="../src/mashstep.cpp" line="322"/>
         <source>Decoction</source>
         <translation>Cocción</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="163"/>
+        <location filename="../src/mashstep.cpp" line="162"/>
         <source>%1 is not a valid type for MASHSTEP. Line %2</source>
         <translation>%1 is not a valid type for MASHSTEP. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/mashstep.cpp" line="196"/>
+        <location filename="../src/mashstep.cpp" line="195"/>
         <source>Unsupported MASHSTEP property: %1. Line %2</source>
         <translation>Unsupported MASHSTEP property: %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="30"/>
+        <location filename="../src/misc.cpp" line="248"/>
         <source>Bottling</source>
         <translation>Embotellar</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Spice</source>
         <translation>Especia</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Fining</source>
         <translation>Aclarador</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Water Agent</source>
         <translation>Agente para Agua</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Herb</source>
         <translation>Hierba</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Flavor</source>
         <translation>Sabor</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="32"/>
+        <location filename="../src/misc.cpp" line="232"/>
         <source>Other</source>
         <translation>Otro</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="169"/>
+        <location filename="../src/misc.cpp" line="167"/>
         <source>MISC says it is not version %1. Line %2</source>
         <translation>MISC says it is not version %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/misc.cpp" line="173"/>
         <source>%1 is not a valid type for MISC. Line %2</source>
         <translation>%1 is not a valid type for MISC. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="183"/>
+        <location filename="../src/misc.cpp" line="181"/>
         <source>%1 is not a valid use for MISC. Line %2</source>
         <translation>%1 is not a valid use for MISC. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="209"/>
+        <location filename="../src/misc.cpp" line="207"/>
         <source>Unsupported MISC property: %1. Line %2</source>
         <translation>Unsupported MISC property: %1. Line %2</translation>
     </message>
@@ -1981,87 +1981,87 @@ El volumen final en el primario es %1.</translation>
         <translation>Unsupported WATER property: %1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Ale</source>
         <translation>Ale</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Lager</source>
         <translation>Lager</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Wheat</source>
         <translation>Trigo</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Wine</source>
         <translation>Vino</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="29"/>
+        <location filename="../src/yeast.cpp" line="439"/>
         <source>Champagne</source>
         <translation>Champán</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Liquid</source>
         <translation>Líquida</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Dry</source>
         <translation>Seca</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Slant</source>
         <translation>Slant</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="31"/>
+        <location filename="../src/yeast.cpp" line="446"/>
         <source>Culture</source>
         <translation>Cultura</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>Low</source>
         <translation>Bajo</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>Medium</source>
         <translation>Medio</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>High</source>
         <translation>Alto</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="33"/>
+        <location filename="../src/yeast.cpp" line="459"/>
         <source>Very High</source>
         <translation>Muy Alto</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="233"/>
+        <location filename="../src/yeast.cpp" line="230"/>
         <source>%1 is not a valid type for yeast. Line %2</source>
         <translation>%1 is not a valid type for yeast. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="241"/>
+        <location filename="../src/yeast.cpp" line="238"/>
         <source>%1 is not a valid form for yeast. Line %2</source>
         <translation>%1 is not a valid form for yeast. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="273"/>
+        <location filename="../src/yeast.cpp" line="270"/>
         <source>%1 is not a valid flocculation for yeast. Line %2</source>
         <translation>%1 is not a valid flocculation for yeast. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/yeast.cpp" line="303"/>
+        <location filename="../src/yeast.cpp" line="300"/>
         <source>Unsupported YEAST property: %1. Line %2</source>
         <translation>Unsupported YEAST property: %1. Line %2</translation>
     </message>

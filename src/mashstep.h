@@ -56,7 +56,7 @@ public:
    Type getType() const;
    const QString& getTypeString() const;
    //! Returns a translated type string.
-   const QString& getTypeStringTr() const;
+   const QString getTypeStringTr() const;
    double getInfuseAmount_l() const;
    double getStepTemp_c() const;
    double getStepTime_min() const;
@@ -90,7 +90,6 @@ private:
    void setDefaults();
 
    static QStringList types;
-   static QStringList typesTr;
 };
 
 inline bool MashStepPtrLt( MashStep* lhs, MashStep* rhs)

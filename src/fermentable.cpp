@@ -26,7 +26,6 @@
 #include <QObject>
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
-QStringList Fermentable::typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");
 
 bool operator<(Fermentable &f1, Fermentable &f2)
 {
@@ -304,8 +303,15 @@ void Fermentable::setDefaults()
 const QString& Fermentable::getName() const { return name; }
 int Fermentable::getVersion() const { return version; }
 const Fermentable::Type Fermentable::getType() const { return type; }
-const QString& Fermentable::getTypeString() const { return types.at(type); }
-const QString& Fermentable::getTypeStringTr() const { return typesTr.at(type); }
+const QString& Fermentable::getTypeString() const
+{
+   return types.at(type);
+}
+const QString Fermentable::getTypeStringTr() const
+{
+   QStringList typesTr = QStringList () << QObject::tr("Grain") << QObject::tr("Sugar") << QObject::tr("Extract") << QObject::tr("Dry Extract") << QObject::tr("Adjunct");
+   return typesTr.at(type);
+}
 double Fermentable::getAmount_kg() const { return amount_kg; }
 double Fermentable::getYield_pct() const { return yield_pct; }
 double Fermentable::getColor_srm() const { return color_srm; }

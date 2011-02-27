@@ -62,11 +62,11 @@ public:
    Type getType() const;
    const QString& getTypeString() const;
    //! Returns a translated type string.
-   const QString& getTypeStringTr() const;
+   const QString getTypeStringTr() const;
    Use getUse() const;
    const QString& getUseString() const;
    //! Returns a translated use string.
-   const QString& getUseStringTr() const;
+   const QString getUseStringTr() const;
    double getAmount() const;
    double getTime() const;
    bool getAmountIsWeight() const;
@@ -94,9 +94,7 @@ private:
    bool isValidUse( const QString &var );
    
    static QStringList types;
-   static QStringList typesTr;
    static QStringList uses;
-   static QStringList usesTr;
 };
 
 inline bool MiscPtrLt( Misc* lhs, Misc* rhs)

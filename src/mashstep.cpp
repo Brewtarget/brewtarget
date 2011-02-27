@@ -25,7 +25,6 @@
 #include <QDomText>
 
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction";
-QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
 
 bool operator<(MashStep &m1, MashStep &m2)
 {
@@ -318,8 +317,9 @@ const QString& MashStep::getTypeString() const
    return types.at(type);
 }
 
-const QString& MashStep::getTypeStringTr() const
+const QString MashStep::getTypeStringTr() const
 {
+   QStringList typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
    return typesTr.at(type);
 }
 

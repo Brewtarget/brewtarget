@@ -24,11 +24,8 @@
 #include <QObject>
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
-QStringList Hop::typesTr = QStringList() << QObject::tr("Bittering") << QObject::tr("Aroma") << QObject::tr("Both");
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
-QStringList Hop::formsTr = QStringList() << QObject::tr("Leaf") << QObject::tr("Pellet") << QObject::tr("Plug");
 QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First Wort" << "Aroma";
-QStringList Hop::usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Dry Hop") << QObject::tr("Mash") << QObject::tr("First Wort") << QObject::tr("Aroma");
 
 bool operator<( Hop &h1, Hop &h2 )
 {
@@ -551,8 +548,9 @@ const QString& Hop::getUseString() const
    return uses.at(use);
 }
 
-const QString& Hop::getUseStringTr() const
+const QString Hop::getUseStringTr() const
 {
+   QStringList usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Dry Hop") << QObject::tr("Mash") << QObject::tr("First Wort") << QObject::tr("Aroma");
    return usesTr.at(use);
 }
 
@@ -576,8 +574,9 @@ const QString& Hop::getTypeString() const
    return types.at(type);
 }
 
-const QString& Hop::getTypeStringTr() const
+const QString Hop::getTypeStringTr() const
 {
+   QStringList typesTr = QStringList() << QObject::tr("Bittering") << QObject::tr("Aroma") << QObject::tr("Both");
    return typesTr.at(type);
 }
 
@@ -591,8 +590,9 @@ const QString& Hop::getFormString() const
    return forms.at(form);
 }
 
-const QString& Hop::getFormStringTr() const
+const QString Hop::getFormStringTr() const
 {
+   QStringList formsTr = QStringList() << QObject::tr("Leaf") << QObject::tr("Pellet") << QObject::tr("Plug");
    return formsTr.at(form);
 }
 

@@ -27,9 +27,7 @@
 #include <QObject>
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
-QStringList Misc::usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Mash") << QObject::tr("Primary") << QObject::tr("Secondary") << QObject::tr("Bottling");
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
-QStringList Misc::typesTr = QStringList() << QObject::tr("Spice") << QObject::tr("Fining") << QObject::tr("Water Agent") << QObject::tr("Herb") << QObject::tr("Flavor") << QObject::tr("Other");
 
 bool operator<(Misc &m1, Misc &m2)
 {
@@ -229,8 +227,9 @@ const QString& Misc::getTypeString() const
    return types.at(type);
 }
 
-const QString& Misc::getTypeStringTr() const
+const QString Misc::getTypeStringTr() const
 {
+   QStringList typesTr = QStringList() << QObject::tr("Spice") << QObject::tr("Fining") << QObject::tr("Water Agent") << QObject::tr("Herb") << QObject::tr("Flavor") << QObject::tr("Other");
    return typesTr.at(type);
 }
 
@@ -244,8 +243,9 @@ const QString& Misc::getUseString() const
    return uses.at(use);
 }
 
-const QString& Misc::getUseStringTr() const
+const QString Misc::getUseStringTr() const
 {
+   QStringList usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Mash") << QObject::tr("Primary") << QObject::tr("Secondary") << QObject::tr("Bottling");
    return usesTr.at(use);
 }
 

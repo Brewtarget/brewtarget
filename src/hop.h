@@ -55,18 +55,18 @@ class Hop : public Observable, public BeerXMLElement
       Use getUse() const;
       const QString& getUseString() const;
       //! Returns a translated use string.
-      const QString& getUseStringTr() const;
+      const QString getUseStringTr() const;
       double getTime_min() const;
       
       const QString& getNotes() const;
       Type getType() const;
       const QString& getTypeString() const;
       //! Returns a translated type string.
-      const QString& getTypeStringTr() const;
+      const QString getTypeStringTr() const;
       Form getForm() const;
       const QString& getFormString() const;
       //! Returns a translated form string.
-      const QString& getFormStringTr() const;
+      const QString getFormStringTr() const;
       double getBeta_pct() const;
       double getHsi_pct() const;
       const QString& getOrigin() const;
@@ -125,11 +125,8 @@ class Hop : public Observable, public BeerXMLElement
       static bool isValidForm(const QString& str);
 
       static QStringList uses;
-      static QStringList usesTr;
       static QStringList types;
-      static QStringList typesTr;
       static QStringList forms;
-      static QStringList formsTr;
 };
 
 inline bool HopPtrLt( Hop* lhs, Hop* rhs)
