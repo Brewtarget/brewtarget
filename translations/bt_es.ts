@@ -923,7 +923,7 @@ Cuidado.</translation>
     <message>
         <location filename="../src/MashWizard.cpp" line="245"/>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation>Para alcanzar la temp del lavado, el agua debe estar encima del hervor. Baja la temp del lavado, o permite más agua para el lavado.</translation>
+        <translation>Para alcanzar la temp del lavado, el agua debe estar encima de la ebullición. Baja la temp del lavado, o permite más agua para el lavado.</translation>
     </message>
     <message>
         <location filename="../src/MashWizard.cpp" line="260"/>
@@ -1709,7 +1709,7 @@ Cuidado.</translation>
     <message>
         <location filename="../src/recipe.cpp" line="818"/>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation>Calentar %1 de la maceración a un hervor y devolver a la cuba para alcanzar %2.</translation>
+        <translation>Calentar %1 de la maceración a la ebullición y devolverla a la cuba para alcanzar %2.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="823"/>
@@ -1783,7 +1783,7 @@ Cuidado.</translation>
     <message>
         <location filename="../src/recipe.cpp" line="1160"/>
         <source>Start boil</source>
-        <translation>Empezar el hervor</translation>
+        <translation>Empezar le ebullición</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="988"/>

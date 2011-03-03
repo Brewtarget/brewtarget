@@ -145,7 +145,7 @@ QString RecipeFormatter::getTextFormat()
       {
          Fermentable* ferm =  rec->getFermentable(i);
          names.append( ferm->getName() );
-         types.append( ferm->getTypeString() );
+         types.append( ferm->getTypeStringTr() );
          amounts.append( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms) );
          masheds.append( ferm->getIsMashed() ? QObject::tr("Yes") : QObject::tr("No") );
          lates.append( ferm->getAddAfterBoil() ? QObject::tr("Yes") : QObject::tr("No") );
@@ -192,9 +192,9 @@ QString RecipeFormatter::getTextFormat()
          names.append( hop->getName() );
          alphas.append( QString("%1%%").arg(hop->getAlpha_pct(), 0, 'f', 1) );
          amounts.append( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms) );
-         uses.append( hop->getUseString() );
+         uses.append( hop->getUseStringTr() );
          times.append( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) );
-         forms.append( hop->getFormString() );
+         forms.append( hop->getFormStringTr() );
          ibus.append( QString("%1").arg( rec->getIBUFromHop(i), 0, 'f', 1 ) );
       }
       
@@ -228,8 +228,8 @@ QString RecipeFormatter::getTextFormat()
       {
          Misc* misc = rec->getMisc(i);
          names.append(misc->getName());
-         types.append(misc->getTypeString());
-         uses.append(misc->getUseString());
+         types.append(misc->getTypeStringTr());
+         uses.append(misc->getUseStringTr());
          amounts.append(Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters));
          times.append( Brewtarget::displayAmount(misc->getTime(), Units::minutes) );
       }
@@ -262,8 +262,8 @@ QString RecipeFormatter::getTextFormat()
       {
          Yeast* y = rec->getYeast(i);
          names.append( y->getName() );
-         types.append( y->getTypeString() );
-         forms.append( y->getFormString() );
+         types.append( y->getTypeStringTr() );
+         forms.append( y->getFormStringTr() );
          amounts.append( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
          stages.append( y->getAddToSecondary() ? QObject::tr("Secondary") : QObject::tr("Primary") );
       }
@@ -297,7 +297,7 @@ QString RecipeFormatter::getTextFormat()
       {
          MashStep* s = mash->getMashStep(i);
          names.append(s->getName());
-         types.append(s->getTypeString());
+         types.append(s->getTypeStringTr());
          if( s->getType() == MashStep::TYPEINFUSION )
          {
             amounts.append( Brewtarget::displayAmount( s->getInfuseAmount_l(), Units::liters ) );
@@ -576,7 +576,7 @@ QString RecipeFormatter::buildFermentableTable()
 		ftable += "<tr>";
 		ftable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7 L</td>")
             .arg( ferm->getName())
-				.arg( ferm->getTypeString())
+				.arg( ferm->getTypeStringTr())
 				.arg( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
 				.arg( ferm->getIsMashed() ? tr("Yes") : tr("No") )
 				.arg( ferm->getAddAfterBoil() ? tr("Yes") : tr("No"))
@@ -613,9 +613,9 @@ QString RecipeFormatter::buildHopsTable()
             .arg( hop->getName())
 				.arg( hop->getAlpha_pct(), 0, 'f', 0)
 				.arg( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-				.arg( hop->getUseString())
+				.arg( hop->getUseStringTr())
 				.arg( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) )
-				.arg( hop->getFormString())
+				.arg( hop->getFormStringTr())
 				.arg( rec->getIBUFromHop(i), 0, 'f', 1);
 		hTable += "</tr>";
 	}
@@ -644,8 +644,8 @@ QString RecipeFormatter::buildMiscTable()
 		Misc *misc = rec->getMisc(i);
 		mtable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
             .arg( misc->getName())
-				.arg( misc->getTypeString())
-				.arg( misc->getUseString())
+				.arg( misc->getTypeStringTr())
+				.arg( misc->getUseStringTr())
 				.arg( Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters))
 				.arg( Brewtarget::displayAmount(misc->getTime(), Units::minutes) );
 		mtable += "</tr>";
@@ -676,8 +676,8 @@ QString RecipeFormatter::buildYeastTable()
 		Yeast *y = rec->getYeast(i);
 		ytable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
             .arg( y->getName())
-				.arg( y->getTypeString())
-				.arg( y->getFormString())
+				.arg( y->getTypeStringTr())
+				.arg( y->getFormStringTr())
 				.arg( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) )
 				.arg( y->getAddToSecondary() ? tr("Secondary") : tr("Primary"));
 		ytable += "</tr>";
@@ -715,7 +715,7 @@ QString RecipeFormatter::buildMashTable()
       ms = m->getMashStep(i);
       tmp += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td>")
              .arg(ms->getName())
-             .arg(ms->getTypeString());
+             .arg(ms->getTypeStringTr());
 
       if( ms->getType() == MashStep::TYPEINFUSION )
       {
