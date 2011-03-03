@@ -143,6 +143,12 @@ MainWindow::MainWindow(QWidget* parent)
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
 
+   // Enable sorting in the main tables.
+   fermentableTable->setSortingEnabled(true);
+   hopTable->setSortingEnabled(true);
+   miscTable->setSortingEnabled(true);
+   mashStepTableWidget->setSortingEnabled(true);
+
    setupToolbar();
 
    // Set up the printer
@@ -714,6 +720,7 @@ void MainWindow::exportRecipe()
 void MainWindow::removeSelectedFermentable()
 {
    QModelIndexList selected = fermentableTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -721,14 +728,17 @@ void MainWindow::removeSelectedFermentable()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   viewIndex = selected[0];
+   row = viewIndex.row();
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
    }
 
-   Fermentable* ferm = fermentableTable->getModel()->getFermentable(row);
+   modelIndex = fermentableTable->getProxy()->mapToSource(viewIndex);
+
+   Fermentable* ferm = fermentableTable->getModel()->getFermentable(modelIndex.row());
    fermentableTable->getModel()->removeFermentable(ferm);
    recipeObs->removeFermentable(ferm);
 }
@@ -736,6 +746,7 @@ void MainWindow::removeSelectedFermentable()
 void MainWindow::editSelectedFermentable()
 {
    QModelIndexList selected = fermentableTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -743,14 +754,17 @@ void MainWindow::editSelectedFermentable()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   viewIndex = selected[0];
+   row = viewIndex.row();
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
    }
 
-   Fermentable* ferm = fermentableTable->getModel()->getFermentable(row);
+   modelIndex = fermentableTable->getProxy()->mapToSource(viewIndex);
+
+   Fermentable* ferm = fermentableTable->getModel()->getFermentable(modelIndex.row());
    fermEditor->setFermentable(ferm);
    fermEditor->show();
 }
@@ -758,6 +772,7 @@ void MainWindow::editSelectedFermentable()
 void MainWindow::editSelectedMisc()
 {
    QModelIndexList selected = miscTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -765,12 +780,15 @@ void MainWindow::editSelectedMisc()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   viewIndex = selected[0];
+   row = viewIndex.row();
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
    }
+
+   //
 
    Misc* m = miscTable->getModel()->getMisc(row);
    miscEditor->setMisc(m);
@@ -780,6 +798,7 @@ void MainWindow::editSelectedMisc()
 void MainWindow::editSelectedHop()
 {
    QModelIndexList selected = hopTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -787,14 +806,17 @@ void MainWindow::editSelectedHop()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   viewIndex = selected[0];
+   row = viewIndex.row();
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
    }
 
-   Hop* h = hopTable->getModel()->getHop(row);
+   modelIndex = hopTable->getProxy()->mapToSource(viewIndex);
+
+   Hop* h = hopTable->getModel()->getHop(modelIndex.row());
    hopEditor->setHop(h);
    hopEditor->show();
 }
@@ -802,6 +824,7 @@ void MainWindow::editSelectedHop()
 void MainWindow::editSelectedYeast()
 {
    QModelIndexList selected = yeastTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -809,14 +832,17 @@ void MainWindow::editSelectedYeast()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   viewIndex = selected[0];
+   row = viewIndex.row();
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
    }
 
-   Yeast* y = yeastTable->getModel()->getYeast(row);
+   modelIndex = yeastTable->getProxy()->mapToSource(viewIndex);
+
+   Yeast* y = yeastTable->getModel()->getYeast(modelIndex.row());
    yeastEditor->setYeast(y);
    yeastEditor->show();
 }
@@ -824,6 +850,7 @@ void MainWindow::editSelectedYeast()
 void MainWindow::removeSelectedHop()
 {
    QModelIndexList selected = hopTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -831,14 +858,17 @@ void MainWindow::removeSelectedHop()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   viewIndex = selected[0];
+   row = viewIndex.row();
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
    }
 
-   Hop* hop = hopTable->getModel()->getHop(row);
+   modelIndex = hopTable->getProxy()->mapToSource(viewIndex);
+
+   Hop* hop = hopTable->getModel()->getHop(modelIndex.row());
    hopTable->getModel()->removeHop(hop);
    recipeObs->removeHop(hop);
 }
@@ -846,6 +876,7 @@ void MainWindow::removeSelectedHop()
 void MainWindow::removeSelectedMisc()
 {
    QModelIndexList selected = miscTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -868,6 +899,7 @@ void MainWindow::removeSelectedMisc()
 void MainWindow::removeSelectedYeast()
 {
    QModelIndexList selected = yeastTable->selectedIndexes();
+   QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
    size = selected.size();
@@ -875,14 +907,17 @@ void MainWindow::removeSelectedYeast()
       return;
 
    // Make sure only one row is selected.
-   row = selected[0].row();
+   viewIndex = selected[0];
+   row = viewIndex.row();
    for( i = 1; i < size; ++i )
    {
       if( selected[i].row() != row )
          return;
    }
 
-   Yeast* yeast = yeastTable->getModel()->getYeast(row);
+   modelIndex = yeastTable->getProxy()->mapToSource(viewIndex);
+
+   Yeast* yeast = yeastTable->getModel()->getYeast(modelIndex.row());
    yeastTable->getModel()->removeYeast(yeast);
    recipeObs->removeYeast(yeast);
 }
