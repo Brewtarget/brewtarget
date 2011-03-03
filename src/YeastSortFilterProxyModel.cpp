@@ -33,9 +33,9 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 
     if ( left.column() == YEASTAMOUNTCOL )
     {
-        return Unit::qstringToSI(leftYeast.toString()) > Unit::qstringToSI(rightYeast.toString());
+        return Unit::qstringToSI(leftYeast.toString()) < Unit::qstringToSI(rightYeast.toString());
     }
 
-    return leftYeast.toString() > rightYeast.toString();
+    return leftYeast.toString() < rightYeast.toString();
 }
 

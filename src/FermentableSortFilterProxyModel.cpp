@@ -35,13 +35,13 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
    switch( left.column() )
    {
       case FERMAMOUNTCOL:
-        return Unit::qstringToSI(leftFermentable.toString()) > Unit::qstringToSI(rightFermentable.toString());
+        return Unit::qstringToSI(leftFermentable.toString()) < Unit::qstringToSI(rightFermentable.toString());
       case FERMYIELDCOL:
-        return leftFermentable.toDouble() > rightFermentable.toDouble();
+        return leftFermentable.toDouble() < rightFermentable.toDouble();
       case FERMCOLORCOL:
-        return leftFermentable.toDouble() > rightFermentable.toDouble();
+        return leftFermentable.toDouble() < rightFermentable.toDouble();
     }
 
-    return leftFermentable.toString() > rightFermentable.toString();
+    return leftFermentable.toString() < rightFermentable.toString();
 }
 

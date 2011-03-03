@@ -34,13 +34,13 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
    switch( left.column() )
    {
       case HOPALPHACOL:
-        return leftHop.toDouble() > rightHop.toDouble();
+        return leftHop.toDouble() < rightHop.toDouble();
       case HOPAMOUNTCOL:
       case HOPTIMECOL:
-        return Unit::qstringToSI(leftHop.toString()) > Unit::qstringToSI(rightHop.toString());
+        return Unit::qstringToSI(leftHop.toString()) < Unit::qstringToSI(rightHop.toString());
     }
 
-    return leftHop.toString() > rightHop.toString();
+    return leftHop.toString() < rightHop.toString();
 }
 
 

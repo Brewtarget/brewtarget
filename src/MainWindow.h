@@ -164,6 +164,15 @@ private:
 
    QPrinter *printer;
 
+   //! Currently highlighted fermentable in the fermentable table.
+   Fermentable* selectedFermentable();
+   //! Currently highlighted hop in the hop table.
+   Hop* selectedHop();
+   //! Currently highlighted misc in the misc table.
+   Misc* selectedMisc();
+   //! Currently highlighted yeast in the yeast table
+   Yeast* selectedYeast();
+
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());
 };

@@ -1,6 +1,6 @@
 /*
- * MiscTableWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009.
+ * MiscSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright
+ * Philip G. Lee <rocketman768@gmail.com>, 2011.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MISCTABLEWIDGET_H
-#define	_MISCTABLEWIDGET_H
+#ifndef _MISCSORTFILTERPROXYMODEL_H
+#define _MISCSORTFILTERPROXYMODEL_H
 
-class MiscTableWidget;
+class MiscSortFilterProxyModel;
 
-#include <QTableView>
-#include <QWidget>
-class MiscTableModel;
-#include "MiscSortFilterProxyModel.h"
+#include <QSortFilterProxyModel>
 
-class MiscTableWidget : public QTableView
+class MiscSortFilterProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT
-   friend class MiscDialog;
-   friend class MainWindow;
+
 public:
-   MiscTableWidget(QWidget *parent=0);
-   MiscTableModel* getModel();
-   MiscSortFilterProxyModel* getProxy();
-   
-private:
-   MiscTableModel* model;
-   MiscSortFilterProxyModel* proxy;
+   MiscSortFilterProxyModel(QObject *parent = 0);
+
+protected:
+   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+
 };
 
-#endif	/* _MISCTABLEWIDGET_H */
-
+#endif

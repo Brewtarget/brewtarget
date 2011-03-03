@@ -20,16 +20,27 @@
 #include <QWidget>
 #include "MiscTableWidget.h"
 #include "MiscTableModel.h"
+#include "MiscSortFilterProxyModel.h"
 
 MiscTableWidget::MiscTableWidget(QWidget *parent)
         : QTableView(parent)
 {
+   proxy = new MiscSortFilterProxyModel(this);
    model = new MiscTableModel(this);
-   setModel(model);
+
+   proxy->setSourceModel(model);
+   proxy->setDynamicSortFilter(true);
+
+   setModel(proxy);
    setItemDelegate(new MiscItemDelegate());
 }
 
 MiscTableModel* MiscTableWidget::getModel()
 {
    return model;
+}
+
+MiscSortFilterProxyModel* MiscTableWidget::getProxy()
+{
+   return proxy;
 }

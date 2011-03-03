@@ -50,6 +50,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/misc.cpp
     ${SRCDIR}/MiscEditor.cpp
     ${SRCDIR}/MiscDialog.cpp
+    ${SRCDIR}/MiscSortFilterProxyModel.cpp
     ${SRCDIR}/MiscTableModel.cpp
     ${SRCDIR}/MiscTableWidget.cpp
     ${SRCDIR}/observable.cpp
@@ -163,6 +164,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/MashWizard.h
     ${SRCDIR}/MiscDialog.h
     ${SRCDIR}/MiscEditor.h
+    ${SRCDIR}/MiscSortFilterProxyModel.h
     ${SRCDIR}/MiscTableModel.h
     ${SRCDIR}/MiscTableWidget.h
     ${SRCDIR}/OgAdjuster.h
