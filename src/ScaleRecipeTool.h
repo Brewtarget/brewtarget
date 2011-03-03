@@ -1,6 +1,6 @@
 /*
 * ScaleRecipeTool.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009.
+* (rocketman768@gmail.com), 2009-2011.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

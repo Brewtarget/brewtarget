@@ -1,6 +1,6 @@
 /*
  * YeastSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
- * Firestone (mikfire@gmail.com), 2010.
+ * Firestone (mikfire@gmail.com), 2010-2011.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,4 +38,3 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 
     return leftYeast.toString() < rightYeast.toString();
 }
-
