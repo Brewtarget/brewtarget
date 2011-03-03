@@ -2822,22 +2822,22 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/equipmentEditor.ui" line="139"/>
         <location filename="../ui/equipmentEditor.ui" line="164"/>
         <source>Pre-boil volume</source>
-        <translation>Volumen pre-hervor</translation>
+        <translation>Volumen antes de la ebullición</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="177"/>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>Si está seleccionado, calcularemos el volumen pre-hervor basado en el tamaño de lote deseado, tiempo de ebullición, tasa de evaporación, pérdidas, etc.</translation>
+        <translation>Si está seleccionado, calcularemos el volumen antes de la ebullición basado en el tamaño de lote deseado, tiempo de ebullición, tasa de evaporación, pérdidas, etc.</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="180"/>
         <source>Calculate pre-boil volume</source>
-        <translation>Calcular volumen pre-hervor</translation>
+        <translation>Calcular volumen antes del la ebullición</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="187"/>
         <source>Automatically fill in pre-boil volume</source>
-        <translation>Automaticamente calcular el volumen pre-hervor</translation>
+        <translation>Automaticamente calcular el volumen antes de la ebullición</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="203"/>
@@ -2908,7 +2908,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/equipmentEditor.ui" line="358"/>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation>Cantidad de agua que se agrega a la olla inmediatamente antes del hervor</translation>
+        <translation>Cantidad de agua que se agrega a la olla inmediatamente antes de la ebullición</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="371"/>

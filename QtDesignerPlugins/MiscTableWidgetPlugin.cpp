@@ -24,7 +24,7 @@
 #include <QtPlugin>
 
 #include "MiscTableWidgetPlugin.h"
-#include "../MiscTableWidget.h"
+#include "MiscTableWidget.h"
 
 MiscTableWidgetPlugin::MiscTableWidgetPlugin(QObject* parent)
         : QObject(parent)
@@ -58,7 +58,7 @@ QString MiscTableWidgetPlugin::name() const
 
 QString MiscTableWidgetPlugin::group() const
 {
-   return "BrewTarget Widgets";
+   return "Brewtarget Widgets";
 }
 
 QIcon MiscTableWidgetPlugin::icon() const
@@ -91,5 +91,3 @@ QString MiscTableWidgetPlugin::includeFile() const
 {
    return "MiscTableWidget.h";
 }
-
-Q_EXPORT_PLUGIN2( misctablewidgetplugin, MiscTableWidgetPlugin )

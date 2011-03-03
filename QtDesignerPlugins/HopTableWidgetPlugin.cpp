@@ -24,7 +24,7 @@
 #include <QtPlugin>
 
 #include "HopTableWidgetPlugin.h"
-#include "../HopTableWidget.h"
+#include "HopTableWidget.h"
 
 HopTableWidgetPlugin::HopTableWidgetPlugin(QObject* parent)
         : QObject(parent)
@@ -58,7 +58,7 @@ QString HopTableWidgetPlugin::name() const
 
 QString HopTableWidgetPlugin::group() const
 {
-   return "BrewTarget Widgets";
+   return "Brewtarget Widgets";
 }
 
 QIcon HopTableWidgetPlugin::icon() const
@@ -91,5 +91,3 @@ QString HopTableWidgetPlugin::includeFile() const
 {
    return "HopTableWidget.h";
 }
-
-Q_EXPORT_PLUGIN2( hoptablewidgetplugin, HopTableWidgetPlugin )

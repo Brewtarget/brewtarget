@@ -32,19 +32,19 @@ set( SRC_FILES
    #${SRCDIR}/equipment.cpp
    #${SRCDIR}/EquipmentEditor.cpp
    ${SRCDIR}/FahrenheitTempUnitSystem.cpp
-   #${SRCDIR}/fermentable.cpp
+   ${SRCDIR}/fermentable.cpp
    #${SRCDIR}/FermentableDialog.cpp
    #${SRCDIR}/FermentableEditor.cpp
-   #${SRCDIR}/FermentableSortFilterProxyModel.cpp
-   #${SRCDIR}/FermentableTableModel.cpp
-   #${SRCDIR}/FermentableTableWidget.cpp
+   ${SRCDIR}/FermentableSortFilterProxyModel.cpp
+   ${SRCDIR}/FermentableTableModel.cpp
+   ${SRCDIR}/FermentableTableWidget.cpp
    #${SRCDIR}/HeatCalculations.cpp
-   #${SRCDIR}/hop.cpp
+   ${SRCDIR}/hop.cpp
    #${SRCDIR}/HopDialog.cpp
    #${SRCDIR}/HopEditor.cpp
-   #${SRCDIR}/HopSortFilterProxyModel.cpp
-   #${SRCDIR}/HopTableModel.cpp
-   #${SRCDIR}/HopTableWidget.cpp
+   ${SRCDIR}/HopSortFilterProxyModel.cpp
+   ${SRCDIR}/HopTableModel.cpp
+   ${SRCDIR}/HopTableWidget.cpp
    #${SRCDIR}/HtmlViewer.cpp
    #${SRCDIR}/IbuMethods.cpp
    ${SRCDIR}/ImperialVolumeUnitSystem.cpp
@@ -53,20 +53,20 @@ set( SRC_FILES
    #${SRCDIR}/MainWindow.cpp
    #${SRCDIR}/MaltinessWidget.cpp
    #${SRCDIR}/MashComboBox.cpp
-   #${SRCDIR}/mash.cpp
+   ${SRCDIR}/mash.cpp
    #${SRCDIR}/MashDesigner.cpp
    #${SRCDIR}/MashEditor.cpp
-   #${SRCDIR}/mashstep.cpp
+   ${SRCDIR}/mashstep.cpp
    #${SRCDIR}/MashStepEditor.cpp
-   #${SRCDIR}/MashStepTableModel.cpp
-   #${SRCDIR}/MashStepTableWidget.cpp
+   ${SRCDIR}/MashStepTableModel.cpp
+   ${SRCDIR}/MashStepTableWidget.cpp
    #${SRCDIR}/MashWizard.cpp
    #${SRCDIR}/matrix.cpp
-   #${SRCDIR}/misc.cpp
+   ${SRCDIR}/misc.cpp
    #${SRCDIR}/MiscDialog.cpp
    #${SRCDIR}/MiscEditor.cpp
-   #${SRCDIR}/MiscTableModel.cpp
-   #${SRCDIR}/MiscTableWidget.cpp
+   ${SRCDIR}/MiscTableModel.cpp
+   ${SRCDIR}/MiscTableWidget.cpp
    ${SRCDIR}/observable.cpp
    ${SRCDIR}/observer.cpp
    #${SRCDIR}/OgAdjuster.cpp
@@ -90,19 +90,19 @@ set( SRC_FILES
    ${SRCDIR}/TimerWidget.cpp # BrewDayScrollWidget
    ${SRCDIR}/TimeUnitSystem.cpp
    ${SRCDIR}/unit.cpp
-   ${SRCDIR}/UnitSystem.cpp
+   ${SRCDIR}/UnitSystems.cpp
    ${SRCDIR}/USVolumeUnitSystem.cpp
    ${SRCDIR}/USWeightUnitSystem.cpp
    #${SRCDIR}/water.cpp
    #${SRCDIR}/WaterEditor.cpp
    #${SRCDIR}/WaterTableModel.cpp
    #${SRCDIR}/WaterTableWidget.cpp
-   #${SRCDIR}/yeast.cpp
+   ${SRCDIR}/yeast.cpp
    #${SRCDIR}/YeastDialog.cpp
    #${SRCDIR}/YeastEditor.cpp
-   #${SRCDIR}/YeastSortFilterProxyModel.cpp
-   #${SRCDIR}/YeastTableModel.cpp
-   #${SRCDIR}/YeastTableWidget.cpp
+   ${SRCDIR}/YeastSortFilterProxyModel.cpp
+   ${SRCDIR}/YeastTableModel.cpp
+   ${SRCDIR}/YeastTableWidget.cpp
 )
 
 set( MOC_FILES
@@ -115,14 +115,14 @@ set( MOC_FILES
     #${SRCDIR}/EquipmentEditor.h
     #${SRCDIR}/FermentableEditor.h
     #${SRCDIR}/FermentableDialog.h
-    #${SRCDIR}/FermentableSortFilterProxyModel.h
-    #${SRCDIR}/FermentableTableModel.h
-    #${SRCDIR}/FermentableTableWidget.h
+    ${SRCDIR}/FermentableSortFilterProxyModel.h
+    ${SRCDIR}/FermentableTableModel.h
+    ${SRCDIR}/FermentableTableWidget.h
     #${SRCDIR}/HopDialog.h
     #${SRCDIR}/HopEditor.h
-    #${SRCDIR}/HopSortFilterProxyModel.h
-    #${SRCDIR}/HopTableModel.h
-    #${SRCDIR}/HopTableWidget.h
+    ${SRCDIR}/HopSortFilterProxyModel.h
+    ${SRCDIR}/HopTableModel.h
+    ${SRCDIR}/HopTableWidget.h
     ${SRCDIR}/InstructionWidget.h # BrewDayScrollWidget
     #${SRCDIR}/MainWindow.h
     #${SRCDIR}/MaltinessWidget.h
@@ -130,13 +130,13 @@ set( MOC_FILES
     #${SRCDIR}/MashDesigner.h
     #${SRCDIR}/MashEditor.h
     #${SRCDIR}/MashStepEditor.h
-    #${SRCDIR}/MashStepTableModel.h
-    #${SRCDIR}/MashStepTableWidget.h
+    ${SRCDIR}/MashStepTableModel.h
+    ${SRCDIR}/MashStepTableWidget.h
     #${SRCDIR}/MashWizard.h
     #${SRCDIR}/MiscDialog.h
     #${SRCDIR}/MiscEditor.h
-    #${SRCDIR}/MiscTableModel.h
-    #${SRCDIR}/MiscTableWidget.h
+    ${SRCDIR}/MiscTableModel.h
+    ${SRCDIR}/MiscTableWidget.h
     #${SRCDIR}/OgAdjuster.h
     #${SRCDIR}/OptionDialog.h
     #${SRCDIR}/PitchDialog.h
@@ -156,9 +156,9 @@ set( MOC_FILES
     #${SRCDIR}/WaterEditor.h
     #${SRCDIR}/YeastDialog.h
     #${SRCDIR}/YeastEditor.h
-    #${SRCDIR}/YeastSortFilterProxyModel.h
-    #${SRCDIR}/YeastTableModel.h
-    #${SRCDIR}/YeastTableWidget.h
+    ${SRCDIR}/YeastSortFilterProxyModel.h
+    ${SRCDIR}/YeastTableModel.h
+    ${SRCDIR}/YeastTableWidget.h
 )
 
 set( UI_FILES
@@ -201,19 +201,29 @@ SET( PLUGIN_MOCS
    BrewtargetPlugins.h
    BeerColorWidgetPlugin.h
    BrewDayScrollWidgetPlugin.h
+   FermentableTableWidgetPlugin.h
+   HopTableWidgetPlugin.h
+   MashStepTableWidgetPlugin.h
+   MiscTableWidgetPlugin.h
    RecipeExtrasWidgetPlugin.h
+   YeastTableWidgetPlugin.h
 )
 
 SET( PLUGIN_SRCS
    BrewtargetPlugins.cpp
    BeerColorWidgetPlugin.cpp
    BrewDayScrollWidgetPlugin.cpp
+   FermentableTableWidgetPlugin.cpp
+   HopTableWidgetPlugin.cpp
+   MashStepTableWidgetPlugin.cpp
+   MiscTableWidgetPlugin.cpp
    RecipeExtrasWidgetPlugin.cpp
+   YeastTableWidgetPlugin.cpp
 )
 
 QT4_WRAP_CPP( GEN_MOC_FILES ${MOC_FILES} ${PLUGIN_MOCS} )
 QT4_WRAP_UI( GEN_UI_FILES ${UI_FILES})
-#QT4_ADD_RESOURCES( GEN_RCC_FILES "../brewtarget.qrc")
+QT4_ADD_RESOURCES( GEN_RCC_FILES "../brewtarget.qrc")
 #QT4_WRAP_CPP( GEN_MOC_UI_FILES ${GEN_UI_FILES})
 
 #========================All Plugins Together==================================
@@ -221,6 +231,7 @@ QT4_WRAP_UI( GEN_UI_FILES ${UI_FILES})
 add_library( brewtargetplugins SHARED 
         ${SRC_FILES}
         ${PLUGIN_SRCS}
+        ${GEN_RCC_FILES}
         ${GEN_UI_FILES}
         ${GEN_MOC_FILES}
 )

@@ -24,7 +24,7 @@
 #include <QtPlugin>
 
 #include "YeastTableWidgetPlugin.h"
-#include "../YeastTableWidget.h"
+#include "YeastTableWidget.h"
 
 YeastTableWidgetPlugin::YeastTableWidgetPlugin(QObject* parent)
         : QObject(parent)
@@ -58,7 +58,7 @@ QString YeastTableWidgetPlugin::name() const
 
 QString YeastTableWidgetPlugin::group() const
 {
-   return "BrewTarget Widgets";
+   return "Brewtarget Widgets";
 }
 
 QIcon YeastTableWidgetPlugin::icon() const
@@ -91,5 +91,3 @@ QString YeastTableWidgetPlugin::includeFile() const
 {
    return "YeastTableWidget.h";
 }
-
-Q_EXPORT_PLUGIN2( yeasttablewidgetplugin, YeastTableWidgetPlugin )

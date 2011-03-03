@@ -24,7 +24,7 @@
 #include <QtPlugin>
 
 #include "FermentableTableWidgetPlugin.h"
-#include "../FermentableTableWidget.h"
+#include "FermentableTableWidget.h"
 
 FermentableTableWidgetPlugin::FermentableTableWidgetPlugin(QObject* parent)
         : QObject(parent)
@@ -58,7 +58,7 @@ QString FermentableTableWidgetPlugin::name() const
 
 QString FermentableTableWidgetPlugin::group() const
 {
-   return "BrewTarget Widgets";
+   return "Brewtarget Widgets";
 }
 
 QIcon FermentableTableWidgetPlugin::icon() const
@@ -91,5 +91,3 @@ QString FermentableTableWidgetPlugin::includeFile() const
 {
    return "FermentableTableWidget.h";
 }
-
-Q_EXPORT_PLUGIN2( fermentabletablewidgetplugin, FermentableTableWidgetPlugin )

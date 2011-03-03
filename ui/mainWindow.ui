@@ -113,7 +113,7 @@
           <x>0</x>
           <y>0</y>
           <width>729</width>
-          <height>305</height>
+          <height>306</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -975,7 +975,7 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_9">
                   <item>
-                   <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
+                   <widget class="BeerColorWidget" name="beerColorWidget"/>
                   </item>
                  </layout>
                 </widget>
@@ -1001,7 +1001,6 @@
             </layout>
             <zorder></zorder>
             <zorder></zorder>
-            <zorder></zorder>
             <zorder>horizontalSpacer_3</zorder>
             <zorder></zorder>
             <zorder>horizontalSpacer</zorder>
@@ -1012,7 +1011,7 @@
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_10">
              <item>
-              <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
+              <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
              </item>
             </layout>
            </widget>
@@ -1022,7 +1021,7 @@
             </attribute>
             <layout class="QHBoxLayout" name="horizontalLayout_17">
              <item>
-              <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
+              <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
              </item>
             </layout>
            </widget>
@@ -1041,7 +1040,7 @@
           <x>0</x>
           <y>0</y>
           <width>747</width>
-          <height>246</height>
+          <height>238</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1606,7 +1605,7 @@
      <x>0</x>
      <y>0</y>
      <width>761</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1863,6 +1862,11 @@
    <header>BrewDayScrollWidget.h</header>
   </customwidget>
   <customwidget>
+   <class>HopTableWidget</class>
+   <extends>QTableView</extends>
+   <header>HopTableWidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>RecipeExtrasWidget.h</header>
@@ -1881,11 +1885,6 @@
    <class>FermentableTableWidget</class>
    <extends>QTableView</extends>
    <header>FermentableTableWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>HopTableWidget</class>
-   <extends>QTableView</extends>
-   <header>HopTableWidget.h</header>
   </customwidget>
   <customwidget>
    <class>MashStepTableWidget</class>

@@ -24,7 +24,7 @@
 #include <QtPlugin>
 
 #include "MashStepTableWidgetPlugin.h"
-#include "../MashStepTableWidget.h"
+#include "MashStepTableWidget.h"
 
 MashStepTableWidgetPlugin::MashStepTableWidgetPlugin(QObject* parent)
         : QObject(parent)
@@ -58,7 +58,7 @@ QString MashStepTableWidgetPlugin::name() const
 
 QString MashStepTableWidgetPlugin::group() const
 {
-   return "BrewTarget Widgets";
+   return "Brewtarget Widgets";
 }
 
 QIcon MashStepTableWidgetPlugin::icon() const
@@ -91,5 +91,3 @@ QString MashStepTableWidgetPlugin::includeFile() const
 {
    return "MashStepTableWidget.h";
 }
-
-Q_EXPORT_PLUGIN2( mashsteptablewidgetplugin, MashStepTableWidgetPlugin )
