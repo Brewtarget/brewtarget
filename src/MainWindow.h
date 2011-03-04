@@ -115,7 +115,9 @@ public slots:
    void copyRecipe();
    
    void printRecipe();
-   void printPreview();
+   void printBrewday();
+   void printPreviewRecipe();
+   void printPreviewBrewday();
 
    void backup(); // Backup the database.
    void restoreFromBackup(); // Restore the database.

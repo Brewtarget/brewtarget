@@ -1626,29 +1626,6 @@
     <addaction name="actionStyles"/>
     <addaction name="actionYeasts"/>
    </widget>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <widget class="QMenu" name="menuPrint">
-     <property name="title">
-      <string>Print</string>
-     </property>
-     <addaction name="actionPrint_Preview"/>
-     <addaction name="actionPrint_2"/>
-    </widget>
-    <addaction name="actionNewRecipe"/>
-    <addaction name="actionCopy_Recipe"/>
-    <addaction name="separator"/>
-    <addaction name="actionImport_Recipes"/>
-    <addaction name="actionExportRecipe"/>
-    <addaction name="actionBackup_Database"/>
-    <addaction name="actionRestore_Database"/>
-    <addaction name="separator"/>
-    <addaction name="menuPrint"/>
-    <addaction name="separator"/>
-    <addaction name="actionExit"/>
-   </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
@@ -1662,6 +1639,37 @@
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
     <addaction name="actionPitch_Rate_Calculator"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuPrint">
+     <property name="title">
+      <string>Print</string>
+     </property>
+     <addaction name="actionBrewdayPrint"/>
+     <addaction name="actionRecipePrint"/>
+    </widget>
+    <widget class="QMenu" name="menuPrint_Preview">
+     <property name="title">
+      <string>Print Preview</string>
+     </property>
+     <addaction name="actionBrewdayPreview"/>
+     <addaction name="actionRecipePreview"/>
+    </widget>
+    <addaction name="actionNewRecipe"/>
+    <addaction name="actionCopy_Recipe"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport_Recipes"/>
+    <addaction name="actionExportRecipe"/>
+    <addaction name="actionBackup_Database"/>
+    <addaction name="actionRestore_Database"/>
+    <addaction name="separator"/>
+    <addaction name="menuPrint"/>
+    <addaction name="menuPrint_Preview"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -1839,14 +1847,24 @@
     <string>Pitch Rate Calculator</string>
    </property>
   </action>
-  <action name="actionPrint_Preview">
+  <action name="actionBrewdayPrint">
    <property name="text">
-    <string>Print Preview</string>
+    <string>Brewday</string>
    </property>
   </action>
-  <action name="actionPrint_2">
+  <action name="actionRecipePreview">
    <property name="text">
-    <string>Print</string>
+    <string>Recipe</string>
+   </property>
+  </action>
+  <action name="actionBrewdayPreview">
+   <property name="text">
+    <string>Brewday</string>
+   </property>
+  </action>
+  <action name="actionRecipePrint">
+   <property name="text">
+    <string>Recipe</string>
    </property>
   </action>
  </widget>
@@ -1862,29 +1880,14 @@
    <header>BrewDayScrollWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>HopTableWidget</class>
-   <extends>QTableView</extends>
-   <header>HopTableWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>RecipeExtrasWidget</class>
-   <extends>QWidget</extends>
-   <header>RecipeExtrasWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtDigitWidget</class>
-   <extends>QLabel</extends>
-   <header>BtDigitWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>EquipmentComboBox</class>
-   <extends>QComboBox</extends>
-   <header>EquipmentComboBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>FermentableTableWidget</class>
    <extends>QTableView</extends>
    <header>FermentableTableWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HopTableWidget</class>
+   <extends>QTableView</extends>
+   <header>HopTableWidget.h</header>
   </customwidget>
   <customwidget>
    <class>MashStepTableWidget</class>
@@ -1897,6 +1900,26 @@
    <header>MiscTableWidget.h</header>
   </customwidget>
   <customwidget>
+   <class>RecipeExtrasWidget</class>
+   <extends>QWidget</extends>
+   <header>RecipeExtrasWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>YeastTableWidget</class>
+   <extends>QTableView</extends>
+   <header>YeastTableWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtDigitWidget</class>
+   <extends>QLabel</extends>
+   <header>BtDigitWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EquipmentComboBox</class>
+   <extends>QComboBox</extends>
+   <header>EquipmentComboBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>RecipeComboBox</class>
    <extends>QComboBox</extends>
    <header>RecipeComboBox.h</header>
@@ -1905,11 +1928,6 @@
    <class>StyleComboBox</class>
    <extends>QComboBox</extends>
    <header>StyleComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>YeastTableWidget</class>
-   <extends>QTableView</extends>
-   <header>YeastTableWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

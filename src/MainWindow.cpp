@@ -237,8 +237,11 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), pitchDialog, SLOT(show()));
 
-   connect( actionPrint_Preview, SIGNAL(triggered()), this, SLOT( printPreview()));
-   connect( actionPrint_2, SIGNAL(triggered()), this, SLOT( printRecipe()));
+   // Printing signals/slots.
+   connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(printRecipe()));
+   connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(printBrewday()));
+   connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(printPreviewRecipe()));
+   connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(printPreviewBrewday()));
 
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
@@ -1202,24 +1205,26 @@ void MainWindow::openDonateLink()
    QDesktopServices::openUrl(QUrl("http://sourceforge.net/project/project_donations.php?group_id=249733"));
 }
 
-void MainWindow::printPreview()
+void MainWindow::printPreviewRecipe()
 {
+   recipeFormatter->printPreview();
+}
 
-   QTabWidget* currentTab = reinterpret_cast<QTabWidget*>(tabWidget_recipeView->currentWidget());
-   if( currentTab == tab_recipe || currentTab == tab_extras )
-      recipeFormatter->printPreview();
-   else if( currentTab == tab_brewday )
-      brewDayScrollWidget->printPreview();
+void MainWindow::printPreviewBrewday()
+{
+   brewDayScrollWidget->printPreview();
 }
 
 void MainWindow::printRecipe()
 {
    QPrintDialog printerDialog(printer, this);
 
-   QTabWidget* currentTab = reinterpret_cast<QTabWidget*>(tabWidget_recipeView->currentWidget());
-   if( currentTab == tab_recipe || currentTab == tab_extras )
-      recipeFormatter->print( printer, &printerDialog );
-   else if( currentTab == tab_brewday )
-      brewDayScrollWidget->print( printer, &printerDialog );
+   recipeFormatter->print( printer, &printerDialog );
 }
 
+void MainWindow::printBrewday()
+{
+   QPrintDialog printerDialog(printer, this);
+
+   brewDayScrollWidget->print( printer, &printerDialog );
+}
