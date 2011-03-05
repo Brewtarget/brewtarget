@@ -1,6 +1,7 @@
 /*
- * YeastSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
- * Firestone (mikfire@gmail.com), 2010-2011.
+ * YeastSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright
+ * Mik Firestone (mikfire@gmail.com), 2010-2011,
+ * Philip G. Lee <rocketman768@gmail.com>, 2010-2011.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +32,13 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
     QVariant leftYeast = sourceModel()->data(left);
     QVariant rightYeast = sourceModel()->data(right);
 
-    if ( left.column() == YEASTAMOUNTCOL )
+    switch( left.column() )
     {
-        return Unit::qstringToSI(leftYeast.toString()) < Unit::qstringToSI(rightYeast.toString());
+    case YEASTAMOUNTCOL:
+      return Unit::qstringToSI(leftYeast.toString()) < Unit::qstringToSI(rightYeast.toString());
+    case YEASTPRODIDCOL:
+      return leftYeast.toDouble() < rightYeast.toDouble();
+    default:
+      return leftYeast.toString() < rightYeast.toString();
     }
-
-    return leftYeast.toString() < rightYeast.toString();
 }
