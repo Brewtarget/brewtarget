@@ -29,6 +29,9 @@
 #include <QTextCodec>
 #include <QObject>
 #include <QString>
+#include <QFileInfo>
+#include <QFile>
+#include <QMessageBox>
 
 #include "Algorithms.h"
 #include "equipment.h"
@@ -85,7 +88,9 @@ bool Database::isInitialized()
 
 void Database::initialize()
 {
-   QDomDocument dbDoc, recDoc, mashDoc;
+   // These are the user-space database, recipe and mash documents.
+   QDomDocument dbDoc, recDoc, mashDoc, tmpDoc;
+   QFile origDbFile, origRecFile, origMashFile;
    QDomNodeList list;
    QString err;
    int line;
@@ -103,27 +108,76 @@ void Database::initialize()
    // Try to open the files.
    if( ! dbFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for reading.").arg(dbFile.fileName()));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not open %1 for reading.").arg(dbFile.fileName()));
       return;
    }
    if( ! recipeFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for reading.").arg(recipeFile.fileName()));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not open %1 for reading.").arg(recipeFile.fileName()));
       return;
    }
    if( ! mashFile.open(QIODevice::ReadOnly) )
    {
-      Brewtarget::log(Brewtarget::ERROR, QObject::tr("Could not open %1 for reading.").arg(recipeFile.fileName()));
+      Brewtarget::log(Brewtarget::ERROR, QString("Could not open %1 for reading.").arg(recipeFile.fileName()));
       return;
    }
 
    // Parse the xml documents.
    if( ! dbDoc.setContent(&dbFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad document formatting in %1 %2:%3. %4").arg(dbFile.fileName()).arg(line).arg(col).arg(err) );
+      Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(dbFile.fileName()).arg(line).arg(col).arg(err) );
    if( ! recDoc.setContent(&recipeFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad document formatting in %1 %2:%3. %4").arg(recipeFile.fileName()).arg(line).arg(col).arg(err) );
+      Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(recipeFile.fileName()).arg(line).arg(col).arg(err) );
    if( ! mashDoc.setContent(&mashFile, false, &err, &line, &col) )
-      Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad document formatting in %1 %2:%3. %4").arg(mashFile.fileName()).arg(line).arg(col).arg(err) );
+      Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(mashFile.fileName()).arg(line).arg(col).arg(err) );
+
+   // See if we should merge the dataspace database with the userspace
+   // ones.
+   origDbFile.setFileName( Brewtarget::getDataDir() + "database.xml" );
+   origRecFile.setFileName( Brewtarget::getDataDir() + "recipes.xml" );
+   origMashFile.setFileName( Brewtarget::getDataDir() + "mashs.xml" );
+   if( origDbFile.open(QIODevice::ReadOnly)
+       && origRecFile.open(QIODevice::ReadOnly)
+       && origMashFile.open(QIODevice::ReadOnly)
+       && origDbFile.fileName() != dbFile.fileName()
+       && origRecFile.fileName() != recipeFile.fileName()
+       && origMashFile.fileName() != mashFile.fileName()
+       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
+       && QFileInfo(origDbFile).lastModified() > Brewtarget::lastDbMergeRequest )
+   {
+      // This works because the combination of stable sorting and undup's in this
+      // class will ensure that there is exactly 1 entry with a certain name, and
+      // if there is an ingredient in the dataspace database with the same name
+      // as one in the userspace, then the userspace one is kept.
+
+      if( QMessageBox::question(0,
+                                QObject::tr("Merge Database"),
+                                QObject::tr("There may be new ingredients and recipes available. Would you like to add these to your database?"),
+                                QMessageBox::Yes | QMessageBox::No,
+                                QMessageBox::Yes)
+         == QMessageBox::Yes
+         )
+      {
+         if( ! tmpDoc.setContent(&origDbFile, false, &err, &line, &col) )
+            Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(origDbFile.fileName()).arg(line).arg(col).arg(err) );
+         mergeBeerXMLDocs(dbDoc, tmpDoc);
+
+         if( ! tmpDoc.setContent(&origRecFile, false, &err, &line, &col) )
+            Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(origRecFile.fileName()).arg(line).arg(col).arg(err) );
+         mergeBeerXMLDocs(recDoc, tmpDoc);
+
+         if( ! tmpDoc.setContent(&origMashFile, false, &err, &line, &col) )
+            Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(origMashFile.fileName()).arg(line).arg(col).arg(err) );
+         mergeBeerXMLDocs(mashDoc, tmpDoc);
+      }
+
+      // Update this field.
+      Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
+   }
+
+   // Close the "orig" files.
+   origDbFile.close();
+   origRecFile.close();
+   origMashFile.close();
 
    equipments.clear();
    fermentables.clear();
@@ -183,26 +237,28 @@ void Database::initialize()
       recipes.push_back(new Recipe(list.at(i)));
 
    // Sort everything by name.
-   qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
-   //equipments.sort(Equipment_ptr_cmp());
-   qSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
-   //fermentables.sort(Fermentable_ptr_cmp());
-   qSort( hops.begin(), hops.end(), HopPtrLt );
-   //hops.sort(Hop_ptr_cmp());
-   qSort( mashs.begin(), mashs.end(), MashPtrLt );
-   //mashs.sort(Mash_ptr_cmp());
-   qSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
-   //mashSteps.sort(MashStep_ptr_cmp());
-   qSort( miscs.begin(), miscs.end(), MiscPtrLt );
-   //miscs.sort(Misc_ptr_cmp());
-   qSort( recipes.begin(), recipes.end(), RecipePtrLt );
-   //recipes.sort(Recipe_ptr_cmp());
-   qSort( styles.begin(), styles.end(), StylePtrLt );
-   //styles.sort(Style_ptr_cmp());
-   qSort( waters.begin(), waters.end(), WaterPtrLt );
-   //waters.sort(Water_ptr_cmp());
-   qSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
-   //yeasts.sort(Yeast_ptr_cmp());
+   qStableSort( equipments.begin(), equipments.end(), EquipmentPtrLt );
+   qStableSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
+   qStableSort( hops.begin(), hops.end(), HopPtrLt );
+   qStableSort( mashs.begin(), mashs.end(), MashPtrLt );
+   qStableSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
+   qStableSort( miscs.begin(), miscs.end(), MiscPtrLt );
+   qStableSort( recipes.begin(), recipes.end(), RecipePtrLt );
+   qStableSort( styles.begin(), styles.end(), StylePtrLt );
+   qStableSort( waters.begin(), waters.end(), WaterPtrLt );
+   qStableSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
+
+   // Remove duplicates
+   Algorithms::Instance().unDup( equipments, EquipmentPtrEq );
+   Algorithms::Instance().unDup( fermentables, FermentablePtrEq );
+   Algorithms::Instance().unDup( hops, HopPtrEq );
+   Algorithms::Instance().unDup( mashs, MashPtrEq );
+   Algorithms::Instance().unDup( mashSteps, MashStepPtrEq );
+   Algorithms::Instance().unDup( miscs, MiscPtrEq );
+   Algorithms::Instance().unDup( recipes, RecipePtrEq );
+   Algorithms::Instance().unDup( styles, StylePtrEq );
+   Algorithms::Instance().unDup( waters, WaterPtrEq );
+   Algorithms::Instance().unDup( yeasts, YeastPtrEq );
 
    dbFile.close();
    recipeFile.close();
@@ -215,66 +271,118 @@ void Database::initialize()
    internalDBInstance->hasChanged(QVariant(DBALL));
 }
 
+void Database::mergeBeerXMLDocs( QDomDocument& first, const QDomDocument& last )
+{
+   QDomNode root = first.firstChild();
+   QDomNodeList list;
+   int i, size;
+
+   /*** Items in dbDoc ***/
+   list = last.elementsByTagName("EQUIPMENT");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   list = last.elementsByTagName("FERMENTABLE");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   list = last.elementsByTagName("HOP");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   list = last.elementsByTagName("MASH_STEP");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   list = last.elementsByTagName("MISC");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   list = last.elementsByTagName("STYLE");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   list = last.elementsByTagName("WATER");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   list = last.elementsByTagName("YEAST");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   /*** Items in mashDoc ***/
+   list = last.elementsByTagName("MASH");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   /*** Items in recDoc ***/
+   list = last.elementsByTagName("RECIPE");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+
+   qDebug() << first.toString();
+}
+
 void Database::resortAll()
 {
    // Sort everything by name.
-   qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
-   //equipments.sort(Equipment_ptr_cmp());
-   qSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
-   //fermentables.sort(Fermentable_ptr_cmp());
-   qSort( hops.begin(), hops.end(), HopPtrLt );
-   //hops.sort(Hop_ptr_cmp());
-   qSort( mashs.begin(), mashs.end(), MashPtrLt );
-   //mashs.sort(Mash_ptr_cmp());
-   qSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
-   //mashSteps.sort(MashStep_ptr_cmp());
-   qSort( miscs.begin(), miscs.end(), MiscPtrLt );
-   //miscs.sort(Misc_ptr_cmp());
-   qSort( recipes.begin(), recipes.end(), RecipePtrLt );
-   //recipes.sort(Recipe_ptr_cmp());
-   qSort( styles.begin(), styles.end(), StylePtrLt );
-   //styles.sort(Style_ptr_cmp());
-   qSort( waters.begin(), waters.end(), WaterPtrLt );
-   //waters.sort(Water_ptr_cmp());
-   qSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
-   //yeasts.sort(Yeast_ptr_cmp());
+   qStableSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
+   qStableSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
+   qStableSort( hops.begin(), hops.end(), HopPtrLt );
+   qStableSort( mashs.begin(), mashs.end(), MashPtrLt );
+   qStableSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
+   qStableSort( miscs.begin(), miscs.end(), MiscPtrLt );
+   qStableSort( recipes.begin(), recipes.end(), RecipePtrLt );
+   qStableSort( styles.begin(), styles.end(), StylePtrLt );
+   qStableSort( waters.begin(), waters.end(), WaterPtrLt );
+   qStableSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
 
    hasChanged(QVariant(DBALL));
 }
 
 void Database::resortEquipments()
 {
-   qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
+   qStableSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
    hasChanged(QVariant(DBEQUIP));
 }
 
 void Database::resortFermentables()
 {
-   qSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
+   qStableSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
    hasChanged(QVariant(DBFERM));
 }
 
 void Database::resortHops()
 {
-   qSort( hops.begin(), hops.end(), HopPtrLt );
+   qStableSort( hops.begin(), hops.end(), HopPtrLt );
    hasChanged(QVariant(DBHOP));
 }
 
 void Database::resortMiscs()
 {
-   qSort( miscs.begin(), miscs.end(), MiscPtrLt );
+   qStableSort( miscs.begin(), miscs.end(), MiscPtrLt );
    hasChanged(QVariant(DBMISC));
 }
 
 void Database::resortStyles()
 {
-   qSort( styles.begin(), styles.end(), StylePtrLt );
+   qStableSort( styles.begin(), styles.end(), StylePtrLt );
    hasChanged(QVariant(DBSTYLE));
 }
 
 void Database::resortYeasts()
 {
-   qSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
+   qStableSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
    hasChanged(QVariant(DBYEAST));
 }
 
@@ -451,7 +559,7 @@ void Database::addEquipment(Equipment* equip, bool disableNotify)
    if( equip != 0 )
    {
       equipments.push_back(equip);
-      qSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
+      qStableSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
       Algorithms::Instance().unDup(equipments, EquipmentPtrEq);
       //equipments.unique(Equipment_ptr_equals()); // No dups.
       if( ! disableNotify )
@@ -464,7 +572,7 @@ void Database::addFermentable(Fermentable* ferm, bool disableNotify)
    if( ferm != 0 )
    {
       fermentables.push_back(ferm);
-      qSort(fermentables.begin(), fermentables.end(), FermentablePtrLt );
+      qStableSort(fermentables.begin(), fermentables.end(), FermentablePtrLt );
       Algorithms::Instance().unDup(fermentables, FermentablePtrEq);
       //fermentables.unique(Fermentable_ptr_equals());
       if( ! disableNotify )
@@ -477,7 +585,7 @@ void Database::addHop(Hop* hop, bool disableNotify)
    if( hop != 0 )
    {
       hops.push_back(hop);
-      qSort(hops.begin(), hops.end(), HopPtrLt );
+      qStableSort(hops.begin(), hops.end(), HopPtrLt );
       Algorithms::Instance().unDup(hops, HopPtrEq);
       //hops.unique(Hop_ptr_equals());
       if( ! disableNotify )
@@ -490,7 +598,7 @@ void Database::addMash(Mash* mash, bool disableNotify)
    if( mash != 0 )
    {
       mashs.push_back(mash);
-      qSort(mashs.begin(), mashs.end(), MashPtrLt );
+      qStableSort(mashs.begin(), mashs.end(), MashPtrLt );
       Algorithms::Instance().unDup(mashs, MashPtrEq);
       //mashs.unique(Mash_ptr_equals());
       if( ! disableNotify )
@@ -503,7 +611,7 @@ void Database::addMashStep(MashStep* mashStep, bool disableNotify)
    if( mashStep != 0 )
    {
       mashSteps.push_back(mashStep);
-      qSort(mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
+      qStableSort(mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
       Algorithms::Instance().unDup(mashSteps, MashStepPtrEq);
       //mashSteps.unique(MashStep_ptr_equals());
       if( ! disableNotify )
@@ -516,7 +624,7 @@ void Database::addMisc(Misc* misc, bool disableNotify)
    if( misc != 0 )
    {
       miscs.push_back(misc);
-      qSort(miscs.begin(), miscs.end(), MiscPtrLt );
+      qStableSort(miscs.begin(), miscs.end(), MiscPtrLt );
       Algorithms::Instance().unDup(miscs, MiscPtrEq);
       //miscs.unique(Misc_ptr_equals());
       if( ! disableNotify )
@@ -530,7 +638,7 @@ void Database::addRecipe(Recipe* rec, bool copySubelements)
       return;
 
    recipes.push_back(rec);
-   qSort(recipes.begin(), recipes.end(), RecipePtrLt );
+   qStableSort(recipes.begin(), recipes.end(), RecipePtrLt );
    Algorithms::Instance().unDup(recipes, RecipePtrEq);
    //recipes.unique(Recipe_ptr_equals());
 
@@ -566,7 +674,7 @@ void Database::addStyle(Style* style, bool disableNotify)
    if( style != 0 )
    {
       styles.push_back(style);
-      qSort(styles.begin(), styles.end(), StylePtrLt );
+      qStableSort(styles.begin(), styles.end(), StylePtrLt );
       Algorithms::Instance().unDup(styles, StylePtrEq);
       //styles.unique(Style_ptr_equals());
       if( ! disableNotify )
@@ -639,7 +747,7 @@ void Database::addWater(Water* water, bool disableNotify)
    if( water != 0 )
    {
       waters.push_back(water);
-      qSort(waters.begin(), waters.end(), WaterPtrLt );
+      qStableSort(waters.begin(), waters.end(), WaterPtrLt );
       Algorithms::Instance().unDup(waters, WaterPtrEq);
       //waters.unique(Water_ptr_equals());
       if( ! disableNotify )
@@ -652,7 +760,7 @@ void Database::addYeast(Yeast* yeast, bool disableNotify)
    if( yeast != 0 )
    {
       yeasts.push_back(yeast);
-      qSort(yeasts.begin(), yeasts.end(), YeastPtrLt );
+      qStableSort(yeasts.begin(), yeasts.end(), YeastPtrLt );
       Algorithms::Instance().unDup(yeasts, YeastPtrEq);
       //yeasts.unique(Yeast_ptr_equals());
       if( ! disableNotify )

@@ -30,6 +30,7 @@ class Brewtarget;
 #include "unit.h"
 #include "UnitSystem.h"
 #include <QTextStream>
+#include <QDateTime>
 
 class Brewtarget
 {
@@ -38,6 +39,7 @@ class Brewtarget
    friend class ColorMethods;
    friend class RecipeFormatter;
    friend class Unit;
+   friend class Database;
 public:
    Brewtarget();
 
@@ -105,6 +107,7 @@ private:
    static QFile* logFile;
    static QTextStream* logStream;
    static QString currentLanguage;
+   static bool userDatabaseDidNotExist;
 
    //! Ensure our directories exist.
    static bool ensureDirectoriesExist();
@@ -117,6 +120,11 @@ private:
    
    //! If this option is false, do not bother the user about new versions.
    static bool checkVersion;
+
+   /*! Stores the date that we last asked the user to merge the
+    *  data-space database to the user-space database.
+    */
+   static QDateTime lastDbMergeRequest;
 
    // These are options that are ONLY to be edited by the OptionDialog.
    static bool usePlato; // Whether or not to display plato instead of SG.

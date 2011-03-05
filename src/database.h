@@ -65,15 +65,45 @@ public:
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
    
+   /*! Adds a new Equipment. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addEquipment(Equipment* equip, bool disableNotify = false);
+   /*! Adds a new Fermentable. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addFermentable(Fermentable* ferm, bool disableNotify = false);
+   /*! Adds a new Hop. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addHop(Hop* hop, bool disableNotify = false);
+   /*! Adds a new Mash. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addMash(Mash* mash, bool disableNotify = false);
+   /*! Adds a new MashStep. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addMashStep(MashStep* mashStep, bool disableNotify = false);
+   /*! Adds a new Misc. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addMisc(Misc* misc, bool disableNotify = false);
+   /*! Adds a new Recipe. If \b copySubelements == \b true,
+    *  also inserts the recipe's ingredients into the database.
+    */
    void addRecipe(Recipe* rec, bool copySubelements);
+   /*! Adds a new Style. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addStyle(Style* style, bool disableNotify = false);
+   /*! Adds a new Water. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addWater(Water* water, bool disableNotify = false);
+   /*! Adds a new Yeast. If \b disableNotify == \b true,
+    *  does not notify any database observers of the change.
+    */
    void addYeast(Yeast* yeast, bool disableNotify = false);
 
    void removeEquipment(Equipment* equip);
@@ -149,6 +179,11 @@ private:
    static QString recipeFileName;
    static QFile mashFile; // Why are these separate from the dbFile? To prevent duplicates.
    static QString mashFileName;
+
+   /*! Merges all the children of \b last 's root to the bottom of \b first.
+    *  Does nothing fancier than this.
+    */
+   static void mergeBeerXMLDocs( QDomDocument& first, const QDomDocument& last );
 
    // The stuff we care about...
    static QList<Equipment*> equipments;

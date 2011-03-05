@@ -61,6 +61,8 @@ QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
 QTextStream* Brewtarget::logStream = 0;
 QFile* Brewtarget::logFile = 0;
+bool Brewtarget::userDatabaseDidNotExist = false;
+QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
 
@@ -211,6 +213,7 @@ bool Brewtarget::ensureFilesExist()
 
    if( !dbFile.exists() )
    {
+      userDatabaseDidNotExist = true;
       success = QFile::copy(Brewtarget::getDataDir() + "database.xml", dbFileName);
       if( ! success )
       {
@@ -220,6 +223,7 @@ bool Brewtarget::ensureFilesExist()
    }
    if( !recipeFile.exists() )
    {
+      userDatabaseDidNotExist = true;
       success = QFile::copy(Brewtarget::getDataDir() + "recipes.xml", recipeFileName);
       if( ! success )
       {
@@ -229,6 +233,7 @@ bool Brewtarget::ensureFilesExist()
    }
    if( !mashFile.exists() )
    {
+      userDatabaseDidNotExist = true;
       success &= QFile::copy(Brewtarget::getDataDir() + "mashs.xml", mashFileName);
       if( ! success )
       {
@@ -635,6 +640,18 @@ void Brewtarget::readPersistentOptions()
          checkVersion = false;
    }
 
+   //=====================Last DB Merge Request======================
+   list = optionsDoc->elementsByTagName(QString("last_db_merge_req"));
+   if( list.length() > 0 )
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+      text = textNode.nodeValue();
+
+      lastDbMergeRequest = QDateTime::fromString(text, Qt::ISODate);
+   }
+
    //=====================Language====================
    list = optionsDoc->elementsByTagName(QString("language"));
    if(list.length() <= 0)
@@ -852,6 +869,12 @@ void Brewtarget::savePersistentOptions()
    // Version checking.
    node = optionsDoc->createElement("check_version");
    child = optionsDoc->createTextNode( checkVersion ? "true" : "false" );
+   node.appendChild(child);
+   root.appendChild(node);
+
+   // Last DB merge request.
+   node = optionsDoc->createElement("last_db_merge_req");
+   child = optionsDoc->createTextNode( lastDbMergeRequest.toString(Qt::ISODate) );
    node.appendChild(child);
    root.appendChild(node);
 
