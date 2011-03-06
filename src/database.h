@@ -180,10 +180,14 @@ private:
    static QFile mashFile; // Why are these separate from the dbFile? To prevent duplicates.
    static QString mashFileName;
 
-   /*! Merges all the children of \b last 's root to the bottom of \b first.
-    *  Does nothing fancier than this.
+   /*! Merges \b last 's BeerXML elements to \b first.
+    *  Neither document should have recipes in them.
     */
-   static void mergeBeerXMLDocs( QDomDocument& first, const QDomDocument& last );
+   static void mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last );
+   /*! Merges \b last 's BeerXML elements to \b first.
+    *  For documents that ONLY contain recipes.
+    */
+   static void mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last );
 
    // The stuff we care about...
    static QList<Equipment*> equipments;

@@ -159,15 +159,15 @@ void Database::initialize()
       {
          if( ! tmpDoc.setContent(&origDbFile, false, &err, &line, &col) )
             Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(origDbFile.fileName()).arg(line).arg(col).arg(err) );
-         mergeBeerXMLDocs(dbDoc, tmpDoc);
+         mergeBeerXMLDBDocs(dbDoc, tmpDoc);
 
          if( ! tmpDoc.setContent(&origRecFile, false, &err, &line, &col) )
             Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(origRecFile.fileName()).arg(line).arg(col).arg(err) );
-         mergeBeerXMLDocs(recDoc, tmpDoc);
+         mergeBeerXMLRecDocs(recDoc, tmpDoc);
 
          if( ! tmpDoc.setContent(&origMashFile, false, &err, &line, &col) )
             Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(origMashFile.fileName()).arg(line).arg(col).arg(err) );
-         mergeBeerXMLDocs(mashDoc, tmpDoc);
+         mergeBeerXMLDBDocs(mashDoc, tmpDoc);
       }
 
       // Update this field.
@@ -271,7 +271,20 @@ void Database::initialize()
    internalDBInstance->hasChanged(QVariant(DBALL));
 }
 
-void Database::mergeBeerXMLDocs( QDomDocument& first, const QDomDocument& last )
+void Database::mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last )
+{
+   QDomNode root = first.firstChild();
+   QDomNodeList list;
+   int i, size;
+
+   /*** Items in recDoc ***/
+   list = last.elementsByTagName("RECIPE");
+   size = list.size();
+   for( i = 0; i < size; ++i )
+      root.appendChild(list.at(i));
+}
+
+void Database::mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last )
 {
    QDomNode root = first.firstChild();
    QDomNodeList list;

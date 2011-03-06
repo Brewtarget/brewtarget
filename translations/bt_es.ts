@@ -1396,9 +1396,9 @@ Cuidado.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="451"/>
-        <location filename="../src/database.cpp" line="456"/>
-        <location filename="../src/database.cpp" line="461"/>
+        <location filename="../src/database.cpp" line="464"/>
+        <location filename="../src/database.cpp" line="469"/>
+        <location filename="../src/database.cpp" line="474"/>
         <source>Could not open %1 for writing.</source>
         <translation>Could not open %1 for writing.</translation>
     </message>
