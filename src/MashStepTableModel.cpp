@@ -183,6 +183,10 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
                 ? QVariant( Brewtarget::displayAmount(row->getDecoctionAmount_l(), Units::liters ) )
                 : QVariant( Brewtarget::displayAmount(row->getInfuseAmount_l(), Units::liters) );
       case MASHSTEPTEMPCOL:
+         return (row->getType() == MashStep::TYPEDECOCTION)
+                ? QVariant("---")
+                : QVariant( Brewtarget::displayAmount(row->getInfuseTemp_c(), Units::celsius) );
+      case MASHSTEPTARGETTEMPCOL:
          return QVariant( Brewtarget::displayAmount(row->getStepTemp_c(), Units::celsius) );
       case MASHSTEPTIMECOL:
          return QVariant( Brewtarget::displayAmount(row->getStepTime_min(), Units::minutes) );
@@ -205,7 +209,9 @@ QVariant MashStepTableModel::headerData( int section, Qt::Orientation orientatio
          case MASHSTEPAMOUNTCOL:
             return QVariant(tr("Amount"));
          case MASHSTEPTEMPCOL:
-            return QVariant(tr("Temp"));
+            return QVariant(tr("Infusion Temp"));
+         case MASHSTEPTARGETTEMPCOL:
+            return QVariant(tr("Target Temp"));
          case MASHSTEPTIMECOL:
             return QVariant(tr("Time"));
          default:
@@ -271,6 +277,14 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          else
             return false;
       case MASHSTEPTEMPCOL:
+         if( value.canConvert(QVariant::String) && row->getType() != MashStep::TYPEDECOCTION )
+         {
+            row->setInfuseTemp_c( Brewtarget::tempQStringToSI(value.toString()) );
+            return true;
+         }
+         else
+            return false;
+      case MASHSTEPTARGETTEMPCOL:
          if( value.canConvert(QVariant::String) )
          {
             row->setStepTemp_c( Brewtarget::tempQStringToSI(value.toString()) );

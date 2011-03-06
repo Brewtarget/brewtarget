@@ -925,32 +925,41 @@ Jeśli nie zapiszesz, utracisz wszystkie aktualne zmiany.</translation>
         <translation>Niepoprawy indeks modelu: wiersz = %1</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="190"/>
+        <location filename="../src/MashStepTableModel.cpp" line="194"/>
         <source>Bad column: %1</source>
         <translation>NIepoprawna kolumna: %1</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="202"/>
+        <location filename="../src/MashStepTableModel.cpp" line="206"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="204"/>
+        <location filename="../src/MashStepTableModel.cpp" line="208"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="206"/>
+        <location filename="../src/MashStepTableModel.cpp" line="210"/>
         <source>Amount</source>
         <translation>Ilość</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="208"/>
-        <source>Temp</source>
-        <translation>Temp</translation>
+        <location filename="../src/MashStepTableModel.cpp" line="212"/>
+        <source>Infusion Temp</source>
+        <translation type="unfinished">Temperatura infuzji</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="210"/>
+        <location filename="../src/MashStepTableModel.cpp" line="214"/>
+        <source>Target Temp</source>
+        <translation type="unfinished">Docelowa temp.</translation>
+    </message>
+    <message>
+        <source>Temp</source>
+        <translation type="obsolete">Temp</translation>
+    </message>
+    <message>
+        <location filename="../src/MashStepTableModel.cpp" line="216"/>
         <source>Time</source>
         <translation>Czas</translation>
     </message>
@@ -1504,9 +1513,9 @@ Używaj na własną odpowiedzialność.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="464"/>
-        <location filename="../src/database.cpp" line="469"/>
-        <location filename="../src/database.cpp" line="474"/>
+        <location filename="../src/database.cpp" line="458"/>
+        <location filename="../src/database.cpp" line="463"/>
+        <location filename="../src/database.cpp" line="468"/>
         <source>Could not open %1 for writing.</source>
         <translation>Nie mozna otworzyć %1 do zapisu.</translation>
     </message>
