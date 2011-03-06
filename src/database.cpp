@@ -336,12 +336,6 @@ void Database::mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last
    size = list.size();
    for( i = 0; i < size; ++i )
       root.appendChild(list.at(i));
-
-   /*** Items in recDoc ***/
-   list = last.elementsByTagName("RECIPE");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      root.appendChild(list.at(i));
 }
 
 void Database::resortAll()
