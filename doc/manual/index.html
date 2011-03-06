@@ -1,10 +1,10 @@
 <html>
 <head>
-	<title>Brewtarget 1.2.2 Manual</title>
+	<title>Brewtarget 1.2.3 Manual</title>
 </head>
 <body>
 
-<h1>Brewtarget 1.2.2 Manual</h1>
+<h1>Brewtarget 1.2.3 Manual</h1>
 
 <h2>A Walkthrough</h2>
 <p>
@@ -19,7 +19,7 @@ Brewtarget's options are in Tools-&gt;Options. Here you should set your preferen
 system you wish to use, and which formulae you want to use in creating your recipes. For the purposes
 of this walkthrough, set the units to US traditional, temperature to Fahrenheit, gravity to specific gravity,
 color to Morey, and IBU to Tinseth. Note: if you choose Plato for gravity, then all the displayed FG
-numbers are already corrected to the estimated OG so that the displayed FG reflects what you will see if
+numbers are <i>not</i> corrected. So, the displayed FG reflects the actual FG: not what you will see if
 you use your refractometer.
 </p>
 
@@ -75,7 +75,6 @@ Then, press the diskette button at the bottom to save.
 
 <h3>Adjusting Recipe Parameters</h3>
 <p>
-Now that you're back at the main window, open the Style drop-down list and choose &quot;American Amber Ale&quot;.
 From the Equipment drop-down list, choose &quot;5 gal batch - Ideal&quot; (which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses)
 which is already provided by Brewtarget, just for the sake of demonstration. For now, leave
 the efficiency at 70% for the same reason. After selecting the equipment, you will be asked if you want to set the batch
@@ -117,23 +116,20 @@ results.
 Now you should notice something different about the OG, FG, etc., displayed in the main window.
 The OG now reads 1.045, and it is green which indicates &quot;to style&quot; as dictated by the amber ale
 style we chose. However, the FG is red, which means it's too high, the ABV is blue which means
-it is too low, and the color is green: just right. The glass of beer to the right of that represents the approximate color of your beer,
+it is too low, and the Color number is green: just right. The glass of beer to the right represents the approximate color of your beer,
 and the thing right below that which reads &quot;Cloying&quot; is the maltiness indicator (based on IBU/GU ratio which now shows 0).
+Please note that the maltiness indicator is just a general guide.
 </p>
 <p>
 Now, go to the Hops tab and add 1 oz Cascade at 1 hr, 1 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
 be about 37.6, and in the green. Add Wyeast American Ale yeast to the recipe. Now everything should be in
 the green except for the ABV which is about 4.4%, but that's ok (you can correct this if you want by
-adding a little more fermentable stuff).
+adding more fermentables).
 </p>
 
 <h3>Making a Mash</h3>
 <p>
-Let's do a 2-step mash with a protein rest at 121 F and a conversion rest at 152 F. Go to the mash
-tab and click the blue plus. Name it &quot;Protein&quot; and click &quot;OK&quot;. Double click its &quot;Temp&quot; cell and
-change to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;. This means we want
-to hit a target temperature of 121 F for 20 minutes. Do the same for a &quot;Conversion&quot; step at &quot;152 F&quot;
-for &quot;1 hr&quot;.
+Let's do a 2-step mash with a protein rest at 121 F and a conversion rest at 152 F.
 </p>
 <p>
 I should mention something here. Until now, Brewtarget has been <b>lying</b> to you. Underneath the
@@ -157,6 +153,13 @@ From here, there are two ways to create the mash.
 </p>
 
 <h3>Method 1: Mash wiz</h3>
+<p>
+Go to the mash
+tab and click the blue plus. Name it &quot;Protein&quot; and click &quot;OK&quot;. Double click its &quot;Temp&quot; cell and
+change to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;. This means we want
+to hit a target temperature of 121 F for 20 minutes. Do the same for a &quot;Conversion&quot; step at &quot;152 F&quot;
+for &quot;1 hr&quot;.
+</p>
 <p>
 The mash wiz is for quickly and easily getting the correct mash temperatures and volumes for a single
 batch sparge mash.
@@ -188,12 +191,12 @@ amount and infusion temp causes you to hit 121 F. The upper and lower limits of 
 are based on the maximum available space left in the tun (as given by the current equipment), and
 the boiling temperature of water. Start the amount slider at the far left. You will see that the
 tun fullness meter on the right shows an infusion ratio of 0.11 qt/lb which is far too low. How
-do I know it's too low? The total collected wort meter shows -2.768 qt, meaning that the grain
-will absorb all of the 3.020 cups and could absorb another 2.768 qt more. So, slowly move the amount
-slider until the infusion ratio reaches 1.25 qt/lb.
+do I know it's too low? The total collected wort meter shows -3.444 qt, meaning that the grain
+will absorb all of the 3.020 cups and could absorb another 3.444 qt more. So, slowly move the amount
+slider until the infusion ratio reaches about 1.25 qt/lb.
 </p>
 <p>
-You should see that the tun is about half full, and we have reached 1.304 gal of the 5.75 gal that we
+You should see that the tun is about half full, and we have reached 1.628 gal of the 5.75 gal that we
 plan to collect pre-boil. Click &quot;Next&quot;. Title this step &quot;Conversion&quot; and set the
 target temp to 152 F and the time to 1 hr. Slowly move the temp slider all the way to 212 F. Click
 &quot;Next&quot;. Entitle this step &quot;Batch Sparge&quot;. Click the &quot;Batch Sparge&quot;
@@ -208,16 +211,27 @@ to return to the main window.
 <h3>Brewday Mode</h3>
 <p>
 Now that your recipe is all planned, wouldn't it be good to have some instructions on your
-brewday? Click the &quot;Brewday mode&quot; button in the toolbar at the top, and answer &quot;yes&quot;. It
-has made all instructions for you and listed them on the left in order. There are 3 timers to help you with
+brewday? Click the &quot;Brewday&quot; tab at the top of the main window. Click &quot;Generate Instructions&quot;.
+It has made all instructions for you and listed them on the left in order.
+You can remove, shift up/down, insert, change steps as you see fit to help you be organized
+on your brew day.
+</p>
+<p>
+There are 3 timers to help you with
 time-critical steps if you click the clock button in the toolbar of the main window.
 They are in HH:MM:SS format, and the text box above each
 one is what you use to set it. Just enter &quot;1:00:00&quot; and press &quot;set&quot; to set the timer for
-1 hour, for example.
+1 hour, for example. The &quot;Sound&quot; button allows you to select a sound that will be played when
+the timer reaches zero. Brewtarget has provided many default sounds to choose from, or you can
+select any other sound file on your computer.
 </p>
+
+<h3>Printing the Recipe</h3>
 <p>
-You can remove, shift up/down, insert, change steps as you see fit to help you be organized
-on your brew day.
+Print and print preview are available under the &quot;File&quot; menu. There are two printouts
+available. One is &quot;Recipe&quot; and the other is &quot;Brewday&quot;. The recipe printout is
+all the info related to the recipe you have made. The brewday printout is formatted in an organized
+fashion specifically for following when you actually brew the recipe.
 </p>
 
 <h3>Saving your work</h3>
@@ -263,11 +277,11 @@ just as simple. However, be aware that when you restore a database, anything in 
 be wiped out.
 </p>
 
-<h2>Posting or Printing Your Recipe - Recipe to Clipboard</h2>
+<h2>Posting Your Recipe - Recipe to Clipboard</h2>
 <p>
-This tool is used to make a text version of the recipe so that you may print it out, post it online,
-or whatever else you can do with a text version. To print, Tools-&gt;&quot;Recipe to Clipboard as Text&quot;,
-open up a text editor, click paste in the text editor, and then print.
+This tool is used to make a text version of the recipe so that you may post it online
+or whatever else you can do with a text version. To get the text version, Tools-&gt;&quot;Recipe to Clipboard as Text&quot;,
+then click paste in a text editor or other paste-able window.
 </p>
 
 <h2>OG Correction Tool</h2>
@@ -294,15 +308,15 @@ size of the starter needed to reach the cell count at the given starter OG (usua
 
 <h2>Priming Calculator</h2>
 <p>
-Tools->&gt;&quot;Priming Calculator&quot;. Put in the required input values, select a priming agent, and
+Tools-&gt;&quot;Priming Calculator&quot;. Put in the required input values, select a priming agent, and
 press calculate.
 </p>
 
 <h2>Refractometer Tools</h2>
 <p>
-Tools->&gt;&quot;Refractometer Tools&quot;. Here, you can find OG and current SG by using refractometer
+Tools-&gt;&quot;Refractometer Tools&quot;. Here, you can find OG and current SG by using refractometer
 readings. You must always enter the current plato and either the original plato OR the OG. If you just
-want to find out what 11.2 plato corresponds to, enter 11.2 in both the original plato and current plato
+want to find out what 11.2 Plato corresponds to, enter 11.2 in both the original plato and current plato
 fields.
 </p>
 

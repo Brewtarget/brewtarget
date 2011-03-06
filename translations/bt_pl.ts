@@ -626,18 +626,18 @@
         <translation type="obsolete">Tryb dnia warzenia</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="162"/>
+        <location filename="../src/MainWindow.cpp" line="172"/>
         <source>Open</source>
         <translation>Otwórz</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="162"/>
-        <location filename="../src/MainWindow.cpp" line="168"/>
+        <location filename="../src/MainWindow.cpp" line="172"/>
+        <location filename="../src/MainWindow.cpp" line="178"/>
         <source>BeerXML files (*.xml)</source>
         <translation>Plik BeerXML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="168"/>
+        <location filename="../src/MainWindow.cpp" line="178"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
@@ -650,164 +650,164 @@
         <translation type="obsolete">Różne</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="295"/>
+        <location filename="../src/MainWindow.cpp" line="308"/>
         <source>New recipe</source>
         <translation>Nowa receptura</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="296"/>
+        <location filename="../src/MainWindow.cpp" line="309"/>
         <source>Clear recipe</source>
         <translation>Wyczyść recepturę</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="297"/>
+        <location filename="../src/MainWindow.cpp" line="310"/>
         <source>Remove recipe</source>
         <translation>Usuń recepturę</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="298"/>
+        <location filename="../src/MainWindow.cpp" line="311"/>
         <source>Save database</source>
         <translation>Zapisz bazę danych</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="299"/>
+        <location filename="../src/MainWindow.cpp" line="312"/>
         <source>View equipments</source>
         <translation>Pokaż sprzęt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="300"/>
+        <location filename="../src/MainWindow.cpp" line="313"/>
         <source>View fermentables</source>
         <translation>Pokaż składniki fermentacji</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="301"/>
+        <location filename="../src/MainWindow.cpp" line="314"/>
         <source>View hops</source>
         <translation>Pokaż chmiele</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="302"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>View miscs</source>
         <translation>Pokaż dodatki</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="303"/>
+        <location filename="../src/MainWindow.cpp" line="316"/>
         <source>View styles</source>
         <translation>Pokaż style</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="304"/>
+        <location filename="../src/MainWindow.cpp" line="317"/>
         <source>View yeasts</source>
         <translation>Pokaż drożdże</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="305"/>
+        <location filename="../src/MainWindow.cpp" line="318"/>
         <source>Timers</source>
         <translation>Minutniki</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="555"/>
+        <location filename="../src/MainWindow.cpp" line="568"/>
         <source>Sure about that?</source>
         <translation>Czy jesteś pewny?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="556"/>
+        <location filename="../src/MainWindow.cpp" line="569"/>
         <source>You are about to obliterate the recipe. Is that ok?</source>
         <translation>Zamierzasz zniszczyć recepturę. Czy jesteś pewien?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="595"/>
+        <location filename="../src/MainWindow.cpp" line="608"/>
         <source>Equipment request</source>
         <translation>Potrzebny sprzęt</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="596"/>
+        <location filename="../src/MainWindow.cpp" line="609"/>
         <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
         <translation>Czy chcesz ustawić wielkość warki i objętość brzeczki do gotowania na podstawie wybranego sprzętu?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="691"/>
+        <location filename="../src/MainWindow.cpp" line="704"/>
         <source>Could not open %1 for writing.</source>
         <translation>Nie można otworzyć %1 do zapisu.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="892"/>
+        <location filename="../src/MainWindow.cpp" line="913"/>
         <source>Recipe name</source>
         <translation>Nazwa receptury</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="893"/>
+        <location filename="../src/MainWindow.cpp" line="914"/>
         <source>Recipe name:</source>
         <translation>Nazwa receptury:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="914"/>
+        <location filename="../src/MainWindow.cpp" line="935"/>
         <source>Backup Database</source>
         <translation>Stwórz kopię zapasową bazy danych</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="919"/>
-        <location filename="../src/MainWindow.cpp" line="937"/>
-        <location filename="../src/MainWindow.cpp" line="1187"/>
+        <location filename="../src/MainWindow.cpp" line="940"/>
+        <location filename="../src/MainWindow.cpp" line="958"/>
+        <location filename="../src/MainWindow.cpp" line="1194"/>
         <source>Oops!</source>
         <translation>Coś poszło nie tak!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="919"/>
+        <location filename="../src/MainWindow.cpp" line="940"/>
         <source>Could not copy the files for some reason.</source>
         <translation>Z jakiegoś powodu nie mozna skopiować plików.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="924"/>
+        <location filename="../src/MainWindow.cpp" line="945"/>
         <source>A Warning</source>
         <translation>Ostrzeżenie</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="925"/>
+        <location filename="../src/MainWindow.cpp" line="946"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Ustawienia receptury oraz składników zostaną usunięte. Czy chcesz kontynuować?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="932"/>
+        <location filename="../src/MainWindow.cpp" line="953"/>
         <source>Restore Database</source>
         <translation>Przywróć bazę danych</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="937"/>
+        <location filename="../src/MainWindow.cpp" line="958"/>
         <source>For some reason, the operation failed.</source>
         <translation>Z jakiegoś powodu operacja się nie powiodła.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="966"/>
+        <location filename="../src/MainWindow.cpp" line="987"/>
         <source>Could not open %1 for reading.</source>
         <translation>Nie mozna otworzyć %1 do odczytu.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="971"/>
+        <location filename="../src/MainWindow.cpp" line="992"/>
         <source>Bad document formatting in %1 %2:%3. %4</source>
         <translation>Złe formatowanie dokumentu w %1 %2:%3. %4</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="977"/>
+        <location filename="../src/MainWindow.cpp" line="998"/>
         <source>Found %1 recipes.</source>
         <translation>Znaleziono receptur: %1.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="983"/>
+        <location filename="../src/MainWindow.cpp" line="1004"/>
         <source>Import recipe?</source>
         <translation>Czy zaimportować recepturę?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="984"/>
+        <location filename="../src/MainWindow.cpp" line="1005"/>
         <source>Import %1?</source>
         <translation>Zaimportować %1?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1006"/>
+        <location filename="../src/MainWindow.cpp" line="1027"/>
         <source>No mash</source>
         <translation>Brak zacierania</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1006"/>
+        <location filename="../src/MainWindow.cpp" line="1027"/>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
         <translation>Próba dodania kroku zacierania bez zdefiniowanego zacierania. Proszę stwórz najpierw zacieranie.</translation>
     </message>
@@ -820,28 +820,28 @@
         <translation type="obsolete">Czy wygenerować nową instrukcję?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1123"/>
+        <location filename="../src/MainWindow.cpp" line="1130"/>
         <source>Save database?</source>
         <translation>Czy zapisać bazę danych?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1124"/>
+        <location filename="../src/MainWindow.cpp" line="1131"/>
         <source>Do you want to save the changes made? If not, you will lose anything you changed in this session.</source>
         <translation>Czy chcesz zapisać wprowadzone zmiany? 
 Jeśli nie zapiszesz, utracisz wszystkie aktualne zmiany.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1147"/>
+        <location filename="../src/MainWindow.cpp" line="1154"/>
         <source>Copy Recipe</source>
         <translation>Skopiuj recepturę</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1147"/>
+        <location filename="../src/MainWindow.cpp" line="1154"/>
         <source>Enter a unique name for the copy.</source>
         <translation>Podaj nazwę dla kopii.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1187"/>
+        <location filename="../src/MainWindow.cpp" line="1194"/>
         <source>Please give your mash a name before saving.</source>
         <translation>Podaj nazwę zacierania przed zapisaniem.</translation>
     </message>
@@ -1411,11 +1411,8 @@ Używaj na własną odpowiedzialność.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="106"/>
-        <location filename="../src/database.cpp" line="111"/>
-        <location filename="../src/database.cpp" line="116"/>
         <source>Could not open %1 for reading.</source>
-        <translation>Nie można otworzyć %1 do odczytu.</translation>
+        <translation type="obsolete">Nie można otworzyć %1 do odczytu.</translation>
     </message>
     <message>
         <source>Could not find the weight_unit_system tag in the option file.</source>
@@ -1454,55 +1451,62 @@ Używaj na własną odpowiedzialność.</translation>
         <translation type="obsolete">Zły typ use_plato: %1</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="98"/>
-        <location filename="../src/brewtarget.cpp" line="107"/>
-        <location filename="../src/brewtarget.cpp" line="116"/>
+        <location filename="../src/brewtarget.cpp" line="100"/>
+        <location filename="../src/brewtarget.cpp" line="109"/>
+        <location filename="../src/brewtarget.cpp" line="118"/>
         <source>Directory Problem</source>
         <translation>Problem z katalogiem</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="99"/>
-        <location filename="../src/brewtarget.cpp" line="108"/>
+        <location filename="../src/brewtarget.cpp" line="101"/>
+        <location filename="../src/brewtarget.cpp" line="110"/>
         <source>&quot;%1&quot; cannot be read.</source>
         <translation>&quot;%1&quot; nie może zostać odczytany.</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="117"/>
+        <location filename="../src/brewtarget.cpp" line="119"/>
         <source>Config directory &quot;%1&quot; cannot be read.</source>
         <translation>Katalog konfiguracyjny &quot;%1&quot; nie może zostać odczytany.</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="145"/>
-        <location filename="../src/brewtarget.cpp" line="157"/>
+        <location filename="../src/brewtarget.cpp" line="147"/>
+        <location filename="../src/brewtarget.cpp" line="159"/>
         <source>New Version</source>
         <translation>Nowa Wersja</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="146"/>
+        <location filename="../src/brewtarget.cpp" line="148"/>
         <source>Version %1 is now available. Download it?</source>
         <translation>Wersja %1 jest dostępna. Czy ją pobrać?</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="158"/>
+        <location filename="../src/brewtarget.cpp" line="160"/>
         <source>Stop bothering you about new versions?</source>
         <translation>Nie pytać o nowe wersje?</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="846"/>
+        <location filename="../src/brewtarget.cpp" line="863"/>
         <source>Could not open %1 for writing</source>
         <translation>Nie mozna otworzyć %1 do zapisu</translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="122"/>
-        <location filename="../src/database.cpp" line="124"/>
-        <location filename="../src/database.cpp" line="126"/>
         <source>Bad document formatting in %1 %2:%3. %4</source>
-        <translation>Złe formatowanie dokumentu w %1 %2:%3. %4</translation>
+        <translation type="obsolete">Złe formatowanie dokumentu w %1 %2:%3. %4</translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="345"/>
-        <location filename="../src/database.cpp" line="350"/>
-        <location filename="../src/database.cpp" line="355"/>
+        <location filename="../src/database.cpp" line="153"/>
+        <source>Merge Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/database.cpp" line="154"/>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/database.cpp" line="451"/>
+        <location filename="../src/database.cpp" line="456"/>
+        <location filename="../src/database.cpp" line="461"/>
         <source>Could not open %1 for writing.</source>
         <translation>Nie mozna otworzyć %1 do zapisu.</translation>
     </message>
@@ -3714,6 +3718,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="127"/>
+        <location filename="../ui/mainWindow.ui" line="1857"/>
+        <location filename="../ui/mainWindow.ui" line="1867"/>
         <source>Recipe</source>
         <translation>Receptura</translation>
     </message>
@@ -3733,200 +3739,201 @@ p, li { white-space: pre-wrap; }
         <translation>Wskaźnik goryczki</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1011"/>
+        <location filename="../ui/mainWindow.ui" line="1010"/>
         <source>Extras</source>
         <translation>Szczegóły</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1021"/>
+        <location filename="../ui/mainWindow.ui" line="1020"/>
+        <location filename="../ui/mainWindow.ui" line="1852"/>
+        <location filename="../ui/mainWindow.ui" line="1862"/>
         <source>Brewday</source>
         <translation>Dzień warzenia</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1067"/>
-        <location filename="../ui/mainWindow.ui" line="1717"/>
+        <location filename="../ui/mainWindow.ui" line="1066"/>
+        <location filename="../ui/mainWindow.ui" line="1724"/>
         <source>Fermentables</source>
         <translation>Składniki fermentacji</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1106"/>
+        <location filename="../ui/mainWindow.ui" line="1105"/>
         <source>Add a fermentable</source>
         <translation>Dodaj składnik fermentacji</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1120"/>
+        <location filename="../ui/mainWindow.ui" line="1119"/>
         <source>Remove selected fermentable</source>
         <translation>Usuń składnik fermentacji</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1134"/>
+        <location filename="../ui/mainWindow.ui" line="1133"/>
         <source>Edit selected fermentable</source>
         <translation>Edutj wybrany składnik fermentacji</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1164"/>
-        <location filename="../ui/mainWindow.ui" line="1726"/>
+        <location filename="../ui/mainWindow.ui" line="1163"/>
+        <location filename="../ui/mainWindow.ui" line="1733"/>
         <source>Hops</source>
         <translation>Chmiele</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1178"/>
+        <location filename="../ui/mainWindow.ui" line="1177"/>
         <source>Add hop</source>
         <translation>Dodaj chmiel</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1192"/>
+        <location filename="../ui/mainWindow.ui" line="1191"/>
         <source>Remove selected hop</source>
         <translation>Usuń wybrany chmiel</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1206"/>
+        <location filename="../ui/mainWindow.ui" line="1205"/>
         <source>Edit selected hop</source>
         <translation>Edytuj wybrany chmiel</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1236"/>
+        <location filename="../ui/mainWindow.ui" line="1235"/>
         <source>Miscellaneous</source>
         <translation>Dodatki</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1250"/>
+        <location filename="../ui/mainWindow.ui" line="1249"/>
         <source>Add misc</source>
         <translation>Dodaj dodatek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1264"/>
+        <location filename="../ui/mainWindow.ui" line="1263"/>
         <source>Remove selected misc</source>
         <translation>Usuń wybrany dodatek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1278"/>
+        <location filename="../ui/mainWindow.ui" line="1277"/>
         <source>Edit selected misc</source>
         <translation>Edytuj wybrany dodatek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1308"/>
+        <location filename="../ui/mainWindow.ui" line="1307"/>
         <source>Yeast</source>
         <translation>Drożdże</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1322"/>
+        <location filename="../ui/mainWindow.ui" line="1321"/>
         <source>Add yeast</source>
         <translation>Dodaj drożdże</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1336"/>
+        <location filename="../ui/mainWindow.ui" line="1335"/>
         <source>Remove selected yeast</source>
         <translation>Usuń wybrane drożdże</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1350"/>
+        <location filename="../ui/mainWindow.ui" line="1349"/>
         <source>Edit selected yeast</source>
         <translation>Edytuj wybrane drożdże</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1380"/>
+        <location filename="../ui/mainWindow.ui" line="1379"/>
         <source>Mash</source>
         <translation>Zacieranie</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1396"/>
+        <location filename="../ui/mainWindow.ui" line="1395"/>
         <source>Add mash step</source>
         <translation>Dodaj krok zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1410"/>
+        <location filename="../ui/mainWindow.ui" line="1409"/>
         <source>Remove selected mash step</source>
         <translation>Usuń wybrany krok zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1424"/>
+        <location filename="../ui/mainWindow.ui" line="1423"/>
         <source>Edit selected mash step</source>
         <translation>Etytuj wybrany krok zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1438"/>
+        <location filename="../ui/mainWindow.ui" line="1437"/>
         <source>Edit mash properties</source>
         <translation>Edytuj właściwości zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1441"/>
+        <location filename="../ui/mainWindow.ui" line="1440"/>
         <source>Edit mash</source>
         <translation>Właściwości zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1448"/>
+        <location filename="../ui/mainWindow.ui" line="1447"/>
         <source>Mash Des</source>
         <translation>Kreator zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1455"/>
+        <location filename="../ui/mainWindow.ui" line="1454"/>
         <source>Invoke the mash wizard</source>
         <translation>Wywołaj pomocnika zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1458"/>
+        <location filename="../ui/mainWindow.ui" line="1457"/>
         <source>Mash wiz</source>
         <translation>Pomocnik zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1493"/>
+        <location filename="../ui/mainWindow.ui" line="1492"/>
         <source>Mashs</source>
         <translation>Schematy zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1524"/>
+        <location filename="../ui/mainWindow.ui" line="1523"/>
         <source>Mash step up</source>
         <translation>Nastepna przerwa</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1535"/>
+        <location filename="../ui/mainWindow.ui" line="1534"/>
         <source>Mash step down</source>
         <translation>Poprzednia przerwa</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1546"/>
+        <location filename="../ui/mainWindow.ui" line="1545"/>
         <source>Save this mash profile</source>
         <translation>Zapisz schemat zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1549"/>
+        <location filename="../ui/mainWindow.ui" line="1548"/>
         <source>Save Mash</source>
         <translation>Zapisz schemat zacierania</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1585"/>
+        <location filename="../ui/mainWindow.ui" line="1584"/>
         <source>Donate</source>
         <translation>Dotacja</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1632"/>
+        <location filename="../ui/mainWindow.ui" line="1645"/>
         <source>File</source>
         <translation>Plik</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1636"/>
-        <location filename="../ui/mainWindow.ui" line="1850"/>
+        <location filename="../ui/mainWindow.ui" line="1649"/>
         <source>Print</source>
         <translation>Drukuj</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1835"/>
+        <location filename="../ui/mainWindow.ui" line="1842"/>
         <source>Refractometer Tools</source>
         <translation>Narzędzia refraktometru</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1840"/>
+        <location filename="../ui/mainWindow.ui" line="1847"/>
         <source>Pitch Rate Calculator</source>
         <translation>Kalkulator ilości drożdży</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1845"/>
+        <location filename="../ui/mainWindow.ui" line="1656"/>
         <source>Print Preview</source>
         <translation>Podgląd wydruku</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1614"/>
+        <location filename="../ui/mainWindow.ui" line="1613"/>
         <source>About</source>
         <translation>Pomoc</translation>
     </message>
@@ -3935,112 +3942,112 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Brewtarget - 1.2.2</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1621"/>
+        <location filename="../ui/mainWindow.ui" line="1620"/>
         <source>View</source>
         <translation>Widok</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1655"/>
+        <location filename="../ui/mainWindow.ui" line="1631"/>
         <source>Tools</source>
         <translation>Narzędzia</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1675"/>
+        <location filename="../ui/mainWindow.ui" line="1682"/>
         <source>toolBar</source>
         <translation>Pasek narzędzi</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1690"/>
+        <location filename="../ui/mainWindow.ui" line="1697"/>
         <source>About BrewTarget</source>
         <translation>O BrewTarget</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1699"/>
+        <location filename="../ui/mainWindow.ui" line="1706"/>
         <source>Export Recipe</source>
         <translation>Eksportuj recepturę</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1708"/>
+        <location filename="../ui/mainWindow.ui" line="1715"/>
         <source>New Recipe</source>
         <translation>Nowa receptura</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1735"/>
+        <location filename="../ui/mainWindow.ui" line="1742"/>
         <source>Miscs</source>
         <translation>Dodatki</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1744"/>
+        <location filename="../ui/mainWindow.ui" line="1751"/>
         <source>Yeasts</source>
         <translation>Drożdze</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1753"/>
+        <location filename="../ui/mainWindow.ui" line="1760"/>
         <source>Equipments</source>
         <translation>Sprzęt</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1762"/>
+        <location filename="../ui/mainWindow.ui" line="1769"/>
         <source>Styles</source>
         <translation>Style</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1771"/>
+        <location filename="../ui/mainWindow.ui" line="1778"/>
         <source>Exit</source>
         <translation>Wyjście</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1780"/>
+        <location filename="../ui/mainWindow.ui" line="1787"/>
         <source>Import Recipes</source>
         <translation>Importuj receptury</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1785"/>
+        <location filename="../ui/mainWindow.ui" line="1792"/>
         <source>Options</source>
         <translation>Opcje</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1790"/>
+        <location filename="../ui/mainWindow.ui" line="1797"/>
         <source>Manual</source>
         <translation>Podręcznik</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1795"/>
+        <location filename="../ui/mainWindow.ui" line="1802"/>
         <source>Scale Recipe</source>
         <translation>Skaluj recepturę</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1800"/>
+        <location filename="../ui/mainWindow.ui" line="1807"/>
         <source>Recipe to Clipboard as Text</source>
         <translation>Kopiuj recepturę do schowka jako tekst</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1805"/>
+        <location filename="../ui/mainWindow.ui" line="1812"/>
         <source>OG Correction Help</source>
         <translation>Korekcja gęstości</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1810"/>
+        <location filename="../ui/mainWindow.ui" line="1817"/>
         <source>Convert Units</source>
         <translation>Konwerter jednostek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1815"/>
+        <location filename="../ui/mainWindow.ui" line="1822"/>
         <source>Backup Database</source>
         <translation>Stwórz kopię zapasową bazy danych</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1820"/>
+        <location filename="../ui/mainWindow.ui" line="1827"/>
         <source>Restore Database</source>
         <translation>Przywróć bazę danych</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1825"/>
+        <location filename="../ui/mainWindow.ui" line="1832"/>
         <source>Copy Recipe</source>
         <translation>Skopiuj recepturę</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1830"/>
+        <location filename="../ui/mainWindow.ui" line="1837"/>
         <source>Priming Calculator</source>
         <translation>Kalkulator surowca do refermantacji</translation>
     </message>
