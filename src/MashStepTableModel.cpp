@@ -177,7 +177,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       case MASHSTEPNAMECOL:
          return QVariant(row->getName());
       case MASHSTEPTYPECOL:
-         return QVariant(row->getTypeString());
+         return QVariant(row->getTypeStringTr());
       case MASHSTEPAMOUNTCOL:
          return (row->getType() == MashStep::TYPEDECOCTION)
                 ? QVariant( Brewtarget::displayAmount(row->getDecoctionAmount_l(), Units::liters ) )

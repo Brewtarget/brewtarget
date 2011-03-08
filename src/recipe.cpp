@@ -822,7 +822,7 @@ QVector<PreInstruction> Recipe::getMashInstructions(double timeRemaining, double
 
        str += QObject::tr(" Hold for %1.").arg(Brewtarget::displayAmount(mstep->getStepTime_min(), Units::minutes));
 
-       preins.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getTypeString()).arg(mstep->getName()),
+       preins.push_back(PreInstruction(str, QString("%1 - %2").arg(mstep->getTypeStringTr()).arg(mstep->getName()),
                    timeRemaining));
        timeRemaining -= mstep->getStepTime_min();
     }
