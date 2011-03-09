@@ -219,6 +219,7 @@ SET( brewtarget_ICONS
 )
 
 SET( TRANSLATIONS_FILES
+     ${TRANSLATIONSDIR}/bt_cs.ts # Czech
      ${TRANSLATIONSDIR}/bt_de.ts # German
      ${TRANSLATIONSDIR}/bt_en.ts # English
      ${TRANSLATIONSDIR}/bt_es.ts # Spanish
@@ -292,7 +293,6 @@ ENDIF()
 # Add a target for the QM_FILES so that we can add
 # the translations as a dependency for the executable later.
 ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
-
 
 #===============================Packaging======================================
 
