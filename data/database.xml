@@ -2042,6 +2042,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <IBU_GAL_PER_LB>0.00000e+00</IBU_GAL_PER_LB>
  </FERMENTABLE>
  <HOP>
+  <NAME>Agnus</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.40000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>High alpha variety with relatively large beta content, this hop is descended from Sladek. Comparable to Magnum, Taurus, Columbus, Target.</NOTES>
+  <TYPE>Bittering</TYPE>
+  <FORM>Pellet</FORM>
+  <BETA>7.50000e+00</BETA>
+  <HSI>5.00000e+01</HSI>
+  <ORIGIN>Czech Republic</ORIGIN>
+  <SUBSTITUTES>Magnum, Taurus, Columbus, Target</SUBSTITUTES>
+  <HUMULENE>0.00000e+00</HUMULENE>
+  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>0.00000e+00</COHUMULONE>
+  <MYRCENE>0.00000e+00</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Ahtanum</NAME>
   <VERSION>1</VERSION>
   <ALPHA>9.50000e+00</ALPHA>
@@ -2097,6 +2116,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>1.70000e+01</CARYOPHYLLENE>
   <COHUMULONE>2.60000e+01</COHUMULONE>
   <MYRCENE>4.00000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Bor</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>8.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>This hop is now primarily being substituted with Premiant, which is more stable with respect to alpha content and yield.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM>Pellet</FORM>
+  <BETA>5.00000e+00</BETA>
+  <HSI>5.00000e+01</HSI>
+  <ORIGIN>Czech Republic</ORIGIN>
+  <SUBSTITUTES>Premiant</SUBSTITUTES>
+  <HUMULENE>3.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.35000e+01</COHUMULONE>
+  <MYRCENE>4.50000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Bramling</NAME>
@@ -2441,6 +2479,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>1.65000e+01</MYRCENE>
  </HOP>
  <HOP>
+  <NAME>Harmonie</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>6.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Introduced in 2004, this variety is mainly being used for aroma. This variety has a high ratio of beta to alpha (1:1), and has a bit more alpha acid than Sladek.</NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM>Pellet</FORM>
+  <BETA>6.00000e+00</BETA>
+  <HSI>5.00000e+01</HSI>
+  <ORIGIN>Czech Republic</ORIGIN>
+  <SUBSTITUTES>Saaz, Sladek</SUBSTITUTES>
+  <HUMULENE>1.50000e+01</HUMULENE>
+  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.10000e+01</COHUMULONE>
+  <MYRCENE>3.50000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Hersbrucker</NAME>
   <VERSION>1</VERSION>
   <ALPHA>3.00000e+00</ALPHA>
@@ -2650,6 +2707,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <MYRCENE>2.80000e+01</MYRCENE>
  </HOP>
  <HOP>
+  <NAME>Premiant</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>8.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Characterized by high alpha content and yield, Premiant was registered in 1996 and has been bred mostly out of Saaz. Tends to have a fine, neutral bitterness due to low cohumulone content. It is usually used as a flavor addition, and compares with Sladek.</NOTES>
+  <TYPE>Both</TYPE>
+  <FORM>Pellet</FORM>
+  <BETA>4.50000e+00</BETA>
+  <HSI>5.00000e+01</HSI>
+  <ORIGIN>Czech Republic</ORIGIN>
+  <SUBSTITUTES>Czech Saaz, Sladek, Bor</SUBSTITUTES>
+  <HUMULENE>3.00000e+01</HUMULENE>
+  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.10000e+01</COHUMULONE>
+  <MYRCENE>4.25000e+01</MYRCENE>
+ </HOP>
+ <HOP>
   <NAME>Pride of Ringwood</NAME>
   <VERSION>1</VERSION>
   <ALPHA>8.50000e+00</ALPHA>
@@ -2686,6 +2762,25 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <CARYOPHYLLENE>1.35000e+01</CARYOPHYLLENE>
   <COHUMULONE>3.05000e+01</COHUMULONE>
   <MYRCENE>3.25000e+01</MYRCENE>
+ </HOP>
+ <HOP>
+  <NAME>Rubin</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>1.20000e+01</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>This is a bittering hop descended from European aroma hops and Saaz. It has a fine bitterness with a longer finish than Saaz.</NOTES>
+  <TYPE>Bittering</TYPE>
+  <FORM>Pellet</FORM>
+  <BETA>5.00000e+00</BETA>
+  <HSI>5.00000e+01</HSI>
+  <ORIGIN>Czech Republic</ORIGIN>
+  <SUBSTITUTES>Saaz</SUBSTITUTES>
+  <HUMULENE>1.65000e+01</HUMULENE>
+  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.90000e+01</COHUMULONE>
+  <MYRCENE>4.00000e+01</MYRCENE>
  </HOP>
  <HOP>
   <NAME>Saaz (Czech Republic)</NAME>
@@ -2744,6 +2839,26 @@ Intensely sweet - adds a sweet malty flavor sometimes associated with honey. </N
   <COHUMULONE>1.75000e+01</COHUMULONE>
   <MYRCENE>6.25000e+01</MYRCENE>
  </HOP>
+ <HOP>
+  <NAME>Sladek</NAME>
+  <VERSION>1</VERSION>
+  <ALPHA>6.00000e+00</ALPHA>
+  <AMOUNT>0.00000e+00</AMOUNT>
+  <USE>Boil</USE>
+  <TIME>6.00000e+01</TIME>
+  <NOTES>Characterized by a high ratio of beta acids and high yield. This variety was introduced in 1994, and was bred from Saaz. It is primarily used in flavor additions of lager beers, often with Saaz being the finishing hop. Some breweries also use it as the finishing hop for non-premium beers.</NOTES>
+  <TYPE>Aroma</TYPE>
+  <FORM>Pellet</FORM>
+  <BETA>7.50000e+00</BETA>
+  <HSI>5.00000e+01</HSI>
+  <ORIGIN>Czech Republic</ORIGIN>
+  <SUBSTITUTES>Czech Saaz</SUBSTITUTES>
+  <HUMULENE>2.50000e+01</HUMULENE>
+  <CARYOPHYLLENE>0.00000e+00</CARYOPHYLLENE>
+  <COHUMULONE>2.75000e+01</COHUMULONE>
+  <MYRCENE>4.50000e+01</MYRCENE>
+ </HOP>
+ <HOP>
  <HOP>
   <NAME>Spalt</NAME>
   <VERSION>1</VERSION>
