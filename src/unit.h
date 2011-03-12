@@ -109,7 +109,8 @@ class Unit
 
       static double convert( double amount, QString& fromUnit, QString& toUnit );
       static QString convert( QString qstr, QString toUnit );
-      static double qstringToSI( QString qstr, Unit** unit = 0 ); // Returns SI. Places unit in 'unit*'.
+      //! Returns SI. Places unit in \b *unit
+      static double qstringToSI( QString qstr, Unit** unit = 0, bool mathCurrentSystem = true );
 
    private:
       static Unit* getUnit(QString& name, bool matchCurrentSystem = true);

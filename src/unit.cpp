@@ -141,7 +141,7 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
 }
 
 // Translates something like "5.0 gal" into the appropriate SI units.
-double Unit::qstringToSI( QString qstr, Unit** unit )
+double Unit::qstringToSI( QString qstr, Unit** unit, bool matchCurrentSystem )
 {
    if( ! Unit::isMapSetup )
       Unit::setupMap();
@@ -166,16 +166,14 @@ double Unit::qstringToSI( QString qstr, Unit** unit )
    }
    else // Provided a number and unit.
    {
-      Unit* u = getUnit(list1[1]);
-
+      Unit* u = getUnit(list1[1], matchCurrentSystem);
+      if( unit != 0 )
+         *unit = u;
+      
       if( u == 0 ) // Invalid unit since it's not in the map.
          return list1[0].toDouble(); // Assume units are already SI.
       else
-      {
-         if( unit != 0 )
-            *unit = u;
          return u->toSI(list1[0].toDouble());
-      }
    }
 }
 
@@ -186,7 +184,8 @@ QString Unit::convert(QString qstr, QString toUnit)
       Unit::setupMap();
 
    Unit* f;
-   double si = qstringToSI( qstr, &f );
+   Unit** ff = &f;
+   double si = qstringToSI( qstr, ff, false );
    Unit* u = getUnit(toUnit, false);
    
    if( u == 0 || f == 0 || u->getUnitType() != f->getUnitType() )
