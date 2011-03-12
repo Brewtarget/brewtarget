@@ -67,9 +67,9 @@ INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
 
 # ======================Find Qt4 (>= 4.6.0) for this project===================
 IF( ${BUILD_DESIGNER_PLUGINS} )
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebKit QtXml Phonon QtDesigner REQUIRED)
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSvg QtWebKit QtXml Phonon QtDesigner REQUIRED)
 ELSE()
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtSvg QtWebkit QtXml Phonon REQUIRED)
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSvg QtWebkit QtXml Phonon REQUIRED)
 ENDIF()
 
 # Some extra files for the "make clean" target.

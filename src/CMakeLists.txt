@@ -415,7 +415,7 @@ IF( WIN32 AND MINGW )
    # Also, need to set some linker flags that I don't know how to get
    # automatically.
    ############################################################################
-   TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} mingw32 QtWebKit4 QtXml4 QtGui4 QtCore4 QtSvg4 phonon4)
+   TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} mingw32 QtWebKit4 QtXml4 QtNetwork4 QtGui4 QtCore4 QtSvg4 phonon4)
    SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows -Lc:/Qt/4.7.1/lib" )
 ELSE()
    # Link brewtarget against Qt libraries defined by QT_LIBRARIES
