@@ -9,15 +9,15 @@ TARFILE="${NAME}_${VERSION}.orig.tar"
 # Copy SVNDIR to TARDIR
 cp -r ${SVNDIR} ${TARDIR}
 
-# Move debian/ outside
-mv "${TARDIR}/debian" .
-
 # Clean the source dir of extraneous files/dirs
 cd ${TARDIR}
 rm -rf $(svn status | grep '?' | sed 's/[?]\s*//') # Remove files not under svn control.
 cd ..
 rm -rf $(find ${TARDIR} | grep '.svn') # Remove svn files.
 rm -rf $(find ${TARDIR} | grep -e '.*[~]') # Remove backup files.
+
+# Move debian/ outside
+mv "${TARDIR}/debian" .
 
 # Create tar file
 tar -cf ${TARFILE} ${TARDIR}

@@ -1,8 +1,7 @@
 brewtarget (1.2.3-1) unstable; urgency=low
 
-  * 1.2.2 release.
   * New upstream release 1.2.3
   * Initial debian release (Closes: #538751)
 
- -- Philip G. Lee <rocketman768@gmail.com>  Sat, 01 Jan 2011 20:13:00 -0600
+ -- Philip G. Lee <rocketman768@gmail.com>  Sun, 13 Mar 2011 09:38:00 -0600
  
