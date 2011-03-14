@@ -313,6 +313,29 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_14">
          <item>
+          <widget class="QPushButton" name="pushButton_cs">
+           <property name="toolTip">
+            <string>Czech</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../brewtarget.qrc">
+             <normaloff>:/images/flagCzech.png</normaloff>:/images/flagCzech.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="pushButton_de">
            <property name="toolTip">
             <string>German</string>
@@ -358,6 +381,13 @@
            </property>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_15">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QPushButton" name="pushButton_es">
            <property name="toolTip">
@@ -369,36 +399,6 @@
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagSpain.png</normaloff>:/images/flagSpain.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_15">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="pushButton_pl">
-           <property name="toolTip">
-            <string>Polish</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagPoland.png</normaloff>:/images/flagPoland.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -434,6 +434,36 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_pl">
+           <property name="toolTip">
+            <string>Polish</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../brewtarget.qrc">
+             <normaloff>:/images/flagPoland.png</normaloff>:/images/flagPoland.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_16">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QPushButton" name="pushButton_pt">
            <property name="toolTip">

@@ -1,53 +1,37 @@
-<!--
-   - brewtarget.qrc is part of Brewtarget, and is Copyright Philip G. Lee
-   - (rocketman768@gmail.com), 2009.
-   - 
-   - Brewtarget is free software: you can redistribute it and/or modify
-   - it under the terms of the GNU General Public License as published by
-   - the Free Software Foundation, either version 3 of the License, or
-   - (at your option) any later version.
-   - 
-   - Brewtarget is distributed in the hope that it will be useful,
-   - but WITHOUT ANY WARRANTY; without even the implied warranty of
-   - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   - GNU General Public License for more details.
-   - 
-   - You should have received a copy of the GNU General Public License
-   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-   <file>images/glass2.png</file>
-   <file>images/brewtarget_icon.svg</file>
-   <file>images/donate.svg</file>
-   <file>images/smallBarley.svg</file>
-   <file>images/smallWater.svg</file>
-   <file>images/smallHop.svg</file>
-   <file>images/smallYeast.svg</file>
-   <file>images/smallKettle.svg</file>
-   <file>images/smallQuestion.svg</file>
-   <file>images/smallStyle.svg</file>
-   <file>images/smallPlus.svg</file>
-   <file>images/smallArrow.svg</file>
-   <file>images/smallUpArrow.svg</file>
-   <file>images/smallDownArrow.svg</file>
-   <file>images/smallInfo.svg</file>
-   <file>images/smallOutArrow.svg</file>
-   <file>images/editshred.svg</file>
-   <file>images/exit.svg</file>
-   <file>images/filesave.svg</file>
-   <file>images/smallMinus.svg</file>
-   <file>images/edit.svg</file>
-   <file>images/title.svg</file>
-   <file>images/title.png</file>
-   <file>images/clock.svg</file>
-   <file>css/brewday.css</file>
-   <file>css/recipe.css</file>
-   <file>images/flagFrance.png</file>
-   <file>images/flagGermany.png</file>
-   <file>images/flagPoland.png</file>
-   <file>images/flagPortugal.png</file>
-   <file>images/flagSpain.png</file>
-   <file>images/flagUK.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>images/glass2.png</file>
+        <file>images/brewtarget_icon.svg</file>
+        <file>images/donate.svg</file>
+        <file>images/smallBarley.svg</file>
+        <file>images/smallWater.svg</file>
+        <file>images/smallHop.svg</file>
+        <file>images/smallYeast.svg</file>
+        <file>images/smallKettle.svg</file>
+        <file>images/smallQuestion.svg</file>
+        <file>images/smallStyle.svg</file>
+        <file>images/smallPlus.svg</file>
+        <file>images/smallArrow.svg</file>
+        <file>images/smallUpArrow.svg</file>
+        <file>images/smallDownArrow.svg</file>
+        <file>images/smallInfo.svg</file>
+        <file>images/smallOutArrow.svg</file>
+        <file>images/editshred.svg</file>
+        <file>images/exit.svg</file>
+        <file>images/filesave.svg</file>
+        <file>images/smallMinus.svg</file>
+        <file>images/edit.svg</file>
+        <file>images/title.svg</file>
+        <file>images/title.png</file>
+        <file>images/clock.svg</file>
+        <file>css/brewday.css</file>
+        <file>css/recipe.css</file>
+        <file>images/flagFrance.png</file>
+        <file>images/flagGermany.png</file>
+        <file>images/flagPoland.png</file>
+        <file>images/flagPortugal.png</file>
+        <file>images/flagSpain.png</file>
+        <file>images/flagUK.png</file>
+        <file>images/flagCzech.png</file>
+    </qresource>
 </RCC>
