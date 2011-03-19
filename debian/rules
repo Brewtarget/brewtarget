@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-install-dir = "$(shell pwd)/debian/brewtarget/usr"
+install-dir = "$(shell pwd)/debian/brewtarget"
 
 override_dh_auto_configure:
 	if ! test -d build; then mkdir build; fi
