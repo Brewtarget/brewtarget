@@ -5,7 +5,7 @@ override_dh_auto_configure:
 	if ! test -d build; then mkdir build; fi
 	if ! test -d build/cmake; then mkdir build/cmake; fi
 	cd build/cmake; \
-	cmake ../../ -DCMAKE_INSTALL_PREFIX=$(install-dir)
+	cmake ../../ -DDO_RELEASE_BUILD=ON -DCMAKE_INSTALL_PREFIX=$(install-dir) -DEXEC_PREFIX=/usr
 
 override_dh_auto_build:
 	cd build/cmake; \
