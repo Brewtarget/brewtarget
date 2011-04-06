@@ -1,9 +1,21 @@
 /*
- * BrewTargetTreeModel.h
+ * BrewTargetTreeModel.h is part of Brewtarget and was written by Mik
+ * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
+ * (rocketman768@gmail.com), 2009-2011.
  *
- *  Created on: Apr 3, 2011
- *      Author: mik
- */
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef RECEIPTREEMODEL_H_
 #define RECEIPTREEMODEL_H_
@@ -45,10 +57,10 @@ public:
 	Qt::ItemFlags flags( const QModelIndex &index) const;
 //	bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 //	bool setHeaderData( int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
-	bool insertRow(int position, Recipe* data, const QModelIndex &parent = QModelIndex());
-	bool insertRow(int position, Equipment* data, const QModelIndex &parent = QModelIndex());
-	bool insertRow(int position, Fermentable* data, const QModelIndex &parent = QModelIndex());
-	bool insertRow(int position, Hop* data, const QModelIndex &parent = QModelIndex());
+	bool insertRow(int position, int type, void* data, const QModelIndex &parent = QModelIndex());
+//	bool insertRow(int position, Equipment* data, const QModelIndex &parent = QModelIndex());
+//	bool insertRow(int position, Fermentable* data, const QModelIndex &parent = QModelIndex());
+//	bool insertRow(int position, Hop* data, const QModelIndex &parent = QModelIndex());
 
 	bool removeRows( int position, int rows, const QModelIndex &parent = QModelIndex());
 

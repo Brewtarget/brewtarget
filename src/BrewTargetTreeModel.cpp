@@ -1,9 +1,21 @@
 /*
- * BrewTargetTreeModel.cpp
+ * BrewTargetTreeModel.cpp is part of Brewtarget and was written by Mik
+ * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
+ * (rocketman768@gmail.com), 2009-2011.
  *
- *  Created on: Apr 3, 2011
- *      Author: mik
- */
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include <QModelIndex>
 #include <QVariant>
@@ -23,21 +35,10 @@ BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent)
 {
 	// Initialize the tree structure
     rootItem = new BrewTargetTreeItem();
-
-    BrewTargetTreeItem* foo;
-    rootItem->insertChildren(0,4);
-
-    foo =  rootItem->child((int)BrewTargetTreeItem::RECIPE);
-    foo->setType(BrewTargetTreeItem::RECIPE);
-
-    foo =  rootItem->child((int)BrewTargetTreeItem::EQUIPMENT);
-    foo->setType(BrewTargetTreeItem::EQUIPMENT);
-
-    foo =  rootItem->child((int)BrewTargetTreeItem::FERMENTABLE);
-    foo->setType(BrewTargetTreeItem::FERMENTABLE);
-
-    foo =  rootItem->child((int)BrewTargetTreeItem::HOP);
-    foo->setType(BrewTargetTreeItem::HOP);
+    rootItem->insertChildren(0,1,BrewTargetTreeItem::RECIPE);
+    rootItem->insertChildren(1,1,BrewTargetTreeItem::EQUIPMENT);
+    rootItem->insertChildren(2,1,BrewTargetTreeItem::FERMENTABLE);
+    rootItem->insertChildren(3,1,BrewTargetTreeItem::HOP);
 
 	parentTree = parent;
 }
@@ -53,12 +54,9 @@ BrewTargetTreeItem *BrewTargetTreeModel::getItem( const QModelIndex &index ) con
 	{
 		BrewTargetTreeItem *item = static_cast<BrewTargetTreeItem*>(index.internalPointer());
 		if (item)
-        {
 			return item;
-        }
 	}
 
-//	return rootItem->child(BrewTargetTreeItem::RECIPE);
 	return rootItem;
 }
 
@@ -147,7 +145,7 @@ QVariant BrewTargetTreeModel::headerData(int section, Qt::Orientation orientatio
 	}
 }
 
-bool BrewTargetTreeModel::insertRow(int position, Recipe *data, const QModelIndex &parent)
+bool BrewTargetTreeModel::insertRow(int position, int type, void *data, const QModelIndex &parent)
 {
 	BrewTargetTreeItem *pItem = getItem(parent);
 	bool success = true;
@@ -157,52 +155,8 @@ bool BrewTargetTreeModel::insertRow(int position, Recipe *data, const QModelInde
     if ( success ) 
     {
         BrewTargetTreeItem* newItem = pItem->child(position);
-        newItem->setData(data);
-        newItem->setType( pItem->getType() );
-
+        newItem->setData(type,data);
     }
-	endInsertRows();
-
-	return success;
-}
-
-bool BrewTargetTreeModel::insertRow(int position, Equipment *data, const QModelIndex &parent)
-{
-	BrewTargetTreeItem *pItem = getItem(parent);
-	bool success = true;
-
-	beginInsertRows(parent, position, position);
-	success = pItem->insertChildren(position, 1);
-    if ( success ) 
-        (pItem->child(position))->setData(data);
-	endInsertRows();
-
-	return success;
-}
-
-bool BrewTargetTreeModel::insertRow(int position, Fermentable *data, const QModelIndex &parent)
-{
-	BrewTargetTreeItem *pItem = getItem(parent);
-	bool success = true;
-
-	beginInsertRows(parent, position, position);
-	success = pItem->insertChildren(position, 1);
-    if ( success ) 
-        pItem->child(position)->setData(data);
-	endInsertRows();
-
-	return success;
-}
-
-bool BrewTargetTreeModel::insertRow(int position, Hop *data, const QModelIndex &parent)
-{
-	BrewTargetTreeItem *pItem = getItem(parent);
-	bool success = true;
-
-	beginInsertRows(parent, position, position);
-	success = pItem->insertChildren(position, 1);
-    if ( success ) 
-        pItem->child(position)->setData(data);
 	endInsertRows();
 
 	return success;
@@ -303,7 +257,7 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
 	   QList<Recipe*>::iterator it, end;
 	   end = dbObs->getRecipeEnd();
 	   for( it = dbObs->getRecipeBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i,*it,createIndex(i,0,local));
+		  insertRow(i,BrewTargetTreeItem::RECIPE,*it,createIndex(i,0,local));
    }
 
    if ( reload == DBALL || reload == DBEQUIP)
@@ -312,7 +266,7 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
 	   QList<Equipment*>::iterator it, end;
 	   end = dbObs->getEquipmentEnd();
 	   for( it = dbObs->getEquipmentBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i, *it, createIndex(i,0,local));
+		  insertRow(i,BrewTargetTreeItem::EQUIPMENT,*it,createIndex(i,0,local));
    }
 
    if ( reload == DBALL || reload == DBFERM)
@@ -321,7 +275,7 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
 	   QList<Fermentable*>::iterator it, end;
 	   end = dbObs->getFermentableEnd();
 	   for( it = dbObs->getFermentableBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i, *it, createIndex(i,0,local));
+		  insertRow(i,BrewTargetTreeItem::FERMENTABLE,*it,createIndex(i,0,local));
    }
 
    if ( reload == DBALL || reload == DBHOP)
@@ -330,7 +284,7 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
 	   QList<Hop*>::iterator it, end;
 	   end = dbObs->getHopEnd();
 	   for( it = dbObs->getHopBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i, *it, createIndex(i,0,local));
+		  insertRow(i,BrewTargetTreeItem::HOP,*it,createIndex(i,0,local));
    }
 
 }

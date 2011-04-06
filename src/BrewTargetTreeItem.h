@@ -1,10 +1,20 @@
 /*
- * BrewTargetTreeItem.h
+ * BrewTargetTreeItem.h is part of Brewtarget and was written by Mik Firestone
+ * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
+ * (rocketman768@gmail.com), 2009-2011.
  *
- *  Created on: Apr 3, 2011
- *      Author: mik
- *
- *      This is intended to wrap the Recipe objects and make them suitable for a tree view.
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef BREWTARGETTREEITEM_H_
@@ -39,7 +49,7 @@ public:
     enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP};
 
 
-	BrewTargetTreeItem(BrewTargetTreeItem *parent=0 );
+	BrewTargetTreeItem(int type = RECIPE, BrewTargetTreeItem *parent=0 );
 	virtual ~BrewTargetTreeItem();
 
 	BrewTargetTreeItem *child(int number);       // Gets the child object
@@ -56,31 +66,22 @@ public:
 	// column data
     QVariant getData(int column);
 
-	void setData(Recipe *data);
-	void setData(Equipment *data);
-	void setData(Fermentable *data);
-	void setData(Hop *data);
+	void setData(int type, void *d);
 
-	Recipe* getRecipe();
-	Equipment* getEquipment();
+	Recipe*      getRecipe();
+	Equipment*   getEquipment();
 	Fermentable* getFermentable();
-	Hop* getHop();
+	Hop*         getHop();
 
-	bool insertChildren(int position, int count);
+	bool insertChildren(int position, int count, int type = RECIPE);
 	bool removeChildren(int position, int count);
 
-    // Don't use this
-    void setType(int t);
 private:
+	BrewTargetTreeItem* parentItem;
 	QList<BrewTargetTreeItem*> childItems;
 
-	Recipe      *recipe;
-	Equipment   *kit;
-	Fermentable *ferm;
-	Hop         *hop;
-
 	int type;
-	BrewTargetTreeItem* parentItem;
+	void *thing;
 
     // With great abstraction comes great ... sorry, I was distracted.
     QVariant dataRecipe(int column);
@@ -88,6 +89,7 @@ private:
     QVariant dataFermentable(int column);
     QVariant dataHop(int column);
 
+    void setType(int t);
 };
 
 #endif /* BREWTARGETTREEITEM_H_ */

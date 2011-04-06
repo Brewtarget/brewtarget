@@ -1,8 +1,20 @@
 /*
- * BrewTargetTreeItem.cpp
+ * BrewTargetTreeItem.cpp is part of Brewtarget and was written by Mik
+ * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
+ * (rocketman768@gmail.com), 2009-2011.
  *
- *  Created on: Apr 3, 2011
- *      Author: mik
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <QString>
@@ -17,14 +29,11 @@
 #include "recipe.h"
 #include "BrewTargetTreeItem.h"
 
-BrewTargetTreeItem::BrewTargetTreeItem(BrewTargetTreeItem *parent)
+BrewTargetTreeItem::BrewTargetTreeItem(int type, BrewTargetTreeItem *parent)
 {
 	parentItem = parent;
-	// 0 everything out.
-	recipe = 0;
-	kit    = 0;
-	ferm   = 0;
-	hop    = 0;
+    setType(type);
+	thing = 0;
 }
 
 BrewTargetTreeItem::~BrewTargetTreeItem()
@@ -99,32 +108,18 @@ int BrewTargetTreeItem::childNumber() const
 	return 0;
 }
 
-void BrewTargetTreeItem::setData(Recipe* data)
+void BrewTargetTreeItem::setData(int type, void* d)
 {
-	recipe = data;
-}
-
-void BrewTargetTreeItem::setData(Fermentable* data)
-{
-	ferm = data;
-}
-
-void BrewTargetTreeItem::setData(Equipment* data)
-{
-	kit = data;
-}
-
-void BrewTargetTreeItem::setData(Hop* data)
-{
-	hop = data;
+	thing = d;
+    setType(type);
 }
 
 QVariant BrewTargetTreeItem::getData(int column)
 {
-    return data(type,column);
+    return data(getType(),column);
 }
 
-bool BrewTargetTreeItem::insertChildren(int position, int count)
+bool BrewTargetTreeItem::insertChildren(int position, int count, int type)
 {
     int i;
 	if ( position < 0  || position > childItems.size())
@@ -132,8 +127,7 @@ bool BrewTargetTreeItem::insertChildren(int position, int count)
 
     for(i=0; i < count; ++i)
     {
-        BrewTargetTreeItem *newItem = new BrewTargetTreeItem(this);
-        newItem->setType(this->getType());
+        BrewTargetTreeItem *newItem = new BrewTargetTreeItem(type,this);
         childItems.insert(position+i,newItem);
     }
 
@@ -153,10 +147,11 @@ bool BrewTargetTreeItem::removeChildren(int position, int count)
 
 QVariant BrewTargetTreeItem::dataRecipe( int column ) 
 {
+    Recipe* recipe = static_cast<Recipe*>(thing);
 	switch(column)
 	{
         case RECIPENAMECOL:
-			if ( ! recipe )
+			if (! thing)
 				return QVariant(QObject::tr("Recipes"));
 			else
 				return QVariant(recipe->getName());
@@ -174,6 +169,7 @@ QVariant BrewTargetTreeItem::dataRecipe( int column )
 
 QVariant BrewTargetTreeItem::dataEquipment(int column) 
 {
+    Equipment* kit = static_cast<Equipment*>(thing);
 	switch(column)
 	{
         case EQUIPMENTNAMECOL:
@@ -192,6 +188,7 @@ QVariant BrewTargetTreeItem::dataEquipment(int column)
 
 QVariant BrewTargetTreeItem::dataFermentable(int column)
 {
+    Fermentable* ferm = static_cast<Fermentable*>(thing);
 	switch(column)
 	{
         case FERMENTABLENAMECOL:
@@ -213,6 +210,7 @@ QVariant BrewTargetTreeItem::dataFermentable(int column)
 
 QVariant BrewTargetTreeItem::dataHop(int column)
 {
+    Hop* hop = static_cast<Hop*>(thing);
 	switch(column)
 	{
 		case HOPNAMECOL:
@@ -239,20 +237,28 @@ void BrewTargetTreeItem::setType(int t)
 
 Recipe* BrewTargetTreeItem::getRecipe()
 {
-	return recipe;
+    if ( type == RECIPE )
+        return static_cast<Recipe*>(thing);
+    return 0;
 }
 
 Equipment* BrewTargetTreeItem::getEquipment()
 {
-	return kit;
+    if ( type == EQUIPMENT )
+        return static_cast<Equipment*>(thing);
+    return 0;
 }
 
 Fermentable* BrewTargetTreeItem::getFermentable()
 {
-	return ferm;
+    if ( type == FERMENTABLE )
+        return static_cast<Fermentable*>(thing);
+    return 0;
 }
 
 Hop* BrewTargetTreeItem::getHop()
 {
-	return hop;
+    if ( type == HOP ) 
+        return static_cast<Hop*>(thing);
+    return 0;
 }
