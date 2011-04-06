@@ -78,6 +78,8 @@ public:
 public slots:
    void save();
    void setRecipeByName(const QString& name);
+   void setRecipeByIndex(const QModelIndex &index);
+   void treeActivated(const QModelIndex &index);
    void clear();
 
    void updateRecipeName();
@@ -163,7 +165,6 @@ private:
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
-
    QPrinter *printer;
 
    //! Currently highlighted fermentable in the fermentable table.

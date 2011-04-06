@@ -8,6 +8,9 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
+    ${SRCDIR}/BrewTargetTreeItem.cpp
+    ${SRCDIR}/BrewTargetTreeModel.cpp
+    ${SRCDIR}/BrewTargetTreeView.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
@@ -138,6 +141,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
+    ${SRCDIR}/BrewTargetTreeModel.h
+    ${SRCDIR}/BrewTargetTreeView.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/EquipmentComboBox.h

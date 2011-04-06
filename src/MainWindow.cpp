@@ -193,7 +193,7 @@ MainWindow::MainWindow(QWidget* parent)
    htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
 
    // Setup some of the widgets.
-   recipeComboBox->startObservingDB();
+//   recipeComboBox->startObservingDB();
    equipmentComboBox->startObservingDB();
    styleComboBox->startObservingDB();
    mashComboBox->startObservingDB();
@@ -201,15 +201,23 @@ MainWindow::MainWindow(QWidget* parent)
    hopDialog->startObservingDB();
    miscDialog->startObservingDB();
    yeastDialog->startObservingDB();
-   
+
+   // Set up the tree view by hiding two columns and resizing the remaining
+   brewTargetTreeView->setColumnHidden(BrewTargetTreeItem::RECIPEBREWDATECOL, true);
+   brewTargetTreeView->setColumnHidden(BrewTargetTreeItem::RECIPESTYLECOL, true);
+   brewTargetTreeView->resizeColumnToContents(BrewTargetTreeItem::RECIPENAMECOL);
+   brewTargetTreeView->setCurrentIndex(brewTargetTreeView->findRecipe(0));
+   brewTargetTreeView->setExpanded(brewTargetTreeView->findRecipe(0), true);
+
+
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );
 
    // Resize to a reasonable size.
-   this->resize(750, 800);
+   this->resize(1072, 800);
 
    // Connect signals.
-   connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
+//   connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashByName(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
@@ -236,6 +244,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), pitchDialog, SLOT(show()));
+
+   // TreeView signal/slot
+   connect( brewTargetTreeView, SIGNAL(activated(const QModelIndex &)), this,
+		   SLOT(treeActivated(const QModelIndex &)));
 
    // Printing signals/slots.
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(printRecipe()));
@@ -345,6 +357,7 @@ void MainWindow::setupToolbar()
    //connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
 }
 
+/*
 void MainWindow::removeRecipe()
 {
    Recipe* rec = recipeComboBox->getSelectedRecipe();
@@ -353,6 +366,63 @@ void MainWindow::removeRecipe()
    recipeComboBox->setIndex(0);
    setRecipe(recipeComboBox->getSelectedRecipe());
 }
+*/
+
+void MainWindow::removeRecipe()
+{
+	const QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
+	QModelIndex above = brewTargetTreeView->findRecipe(0);
+	QList<QModelIndex>::const_iterator at,end;
+	QList<Recipe*> deadRec;
+	QList<Equipment*> deadKit;
+	QList<Fermentable*> deadFerm;
+	QList<Hop*> deadHop;
+
+	// Get the dead things first.  Deleting as we process the list doesn't work, because the
+	// delete updates the database and the indices get recalculated.
+	for(at = selected.begin(),end = selected.end();at < end;++at)
+	{
+		// Don't delete the root items.  Bad things will happen
+		if ( *at != brewTargetTreeView->findRecipe(0)      &&
+			 *at != brewTargetTreeView->findEquipment(0)   &&
+			 *at != brewTargetTreeView->findFermentable(0) &&
+			 *at != brewTargetTreeView->findHop(0) )
+		{
+			switch(brewTargetTreeView->getType(*at))
+			{
+				case BrewTargetTreeItem::RECIPE:
+					deadRec.append(brewTargetTreeView->getRecipe(*at));
+					break;
+				case BrewTargetTreeItem::EQUIPMENT:
+					deadKit.append(brewTargetTreeView->getEquipment(*at));
+					break;
+				case BrewTargetTreeItem::FERMENTABLE:
+					deadFerm.append(brewTargetTreeView->getFermentable(*at));
+					break;
+				case BrewTargetTreeItem::HOP:
+					deadHop.append(brewTargetTreeView->getHop(*at));
+					break;
+				default:
+					Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
+			}
+		}
+	}
+
+
+	for(int i=0; i < deadRec.count();++i)
+		db->removeRecipe(deadRec.at(i));
+	for(int i=0; i < deadKit.count();++i)
+		db->removeEquipment(deadKit.at(i));
+	for(int i=0; i < deadFerm.count();++i)
+		db->removeFermentable(deadFerm.at(i));
+	for(int i=0; i < deadHop.count();++i)
+		db->removeHop(deadHop.at(i));
+
+	setRecipeByIndex(above);
+	brewTargetTreeView->setCurrentIndex(above);
+	brewTargetTreeView->scrollTo(above,QAbstractItemView::PositionAtCenter);
+
+}
 
 void MainWindow::setRecipeByName(const QString& name)
 {
@@ -360,6 +430,64 @@ void MainWindow::setRecipeByName(const QString& name)
       return;
 
    setRecipe( db->findRecipeByName( name ) );
+}
+
+void MainWindow::treeActivated(const QModelIndex &index)
+{
+	Equipment *kit;
+	Fermentable *ferm;
+	Hop* h;
+
+	QAbstractItemView::SelectionMode origMode = brewTargetTreeView->selectionMode();
+
+	// The pop-up windows cause odd things to happen.  So I disable the selection model
+	brewTargetTreeView->setSelectionMode(QAbstractItemView::NoSelection);
+	switch( brewTargetTreeView->getType(index))
+	{
+		case BrewTargetTreeItem::RECIPE:
+			setRecipeByIndex(index);
+			break;
+		case BrewTargetTreeItem::EQUIPMENT:
+			kit = brewTargetTreeView->getEquipment(index);
+			if ( kit )
+			{
+				equipEditor->setEquipment(kit);
+				equipEditor->show();
+			}
+			break;
+		case BrewTargetTreeItem::FERMENTABLE:
+			ferm = brewTargetTreeView->getFermentable(index);
+			if ( ferm )
+			{
+				fermEditor->setFermentable(ferm);
+				fermEditor->show();
+			}
+			break;
+		case BrewTargetTreeItem::HOP:
+			h = brewTargetTreeView->getHop(index);
+			if (h)
+			{
+				hopEditor->setHop(h);
+				hopEditor->show();
+			}
+			break;
+		default:
+			Brewtarget::log(Brewtarget::WARNING, tr("Unknown type %1.").arg(brewTargetTreeView->getType(index)));
+	}
+	// Re-enable the selection model and make sure the item we selected is displayed
+	brewTargetTreeView->setSelectionMode(origMode);
+	brewTargetTreeView->setCurrentIndex(index);
+}
+
+void MainWindow::setRecipeByIndex(const QModelIndex &index)
+{
+	Recipe *rec;
+	if ( ! Database::isInitialized() )
+		return;
+
+	rec = brewTargetTreeView->getRecipe(index);
+	if ( rec )
+		setRecipe(rec);
 }
 
 // Can handle null recipes.
@@ -912,6 +1040,8 @@ void MainWindow::newRecipe()
 {
    QString name = QInputDialog::getText(this, tr("Recipe name"),
                                           tr("Recipe name:"));
+   QModelIndex newItem;
+
    if( name.isEmpty() )
       return;
 
@@ -925,9 +1055,12 @@ void MainWindow::newRecipe()
    recipe->setEfficiency_pct(70.0);
 
    db->addRecipe(recipe, false);
-   setRecipe(recipe);
+   newItem = brewTargetTreeView->findRecipe(recipe);
 
-   recipeComboBox->setIndexByRecipeName(name);
+   setRecipeByIndex(newItem);
+   brewTargetTreeView->setCurrentIndex(newItem);
+   brewTargetTreeView->scrollTo(newItem,QAbstractItemView::PositionAtCenter);
+//   recipeComboBox->setIndexByRecipeName(name);
 }
 
 void MainWindow::backup()
