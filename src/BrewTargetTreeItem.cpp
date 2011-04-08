@@ -76,6 +76,10 @@ int BrewTargetTreeItem::columnCount(int type) const
             return FERMENTABLENUMCOLS;
         case HOP:
             return HOPNUMCOLS;
+        case MISC:
+            return MISCNUMCOLS;
+        case YEAST:
+            return YEASTNUMCOLS;
         default:
 			Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(type));
             return 0;
@@ -95,6 +99,10 @@ QVariant BrewTargetTreeItem::data(int type, int column)
 			return dataFermentable(column);
         case HOP:
 			return dataHop(column);
+        case MISC:
+            return dataMisc(column);
+        case YEAST:
+            return dataYeast(column);
         default:
 			Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(column));
             return QVariant();
@@ -230,6 +238,50 @@ QVariant BrewTargetTreeItem::dataHop(int column)
 	return QVariant();
 }
 
+QVariant BrewTargetTreeItem::dataMisc(int column)
+{
+    Misc* misc = static_cast<Misc*>(thing);
+	switch(column)
+	{
+		case MISCNAMECOL:
+			if ( ! misc )
+				return QVariant(QObject::tr("Miscellaneous"));
+			else
+				return QVariant(misc->getName());
+		case MISCTYPECOL:
+			if ( misc )
+				return QVariant(misc->getTypeStringTr());
+		case MISCUSECOL:
+			if ( misc )
+				return QVariant(misc->getUseStringTr());
+		default :
+			Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(column));
+	}
+	return QVariant();
+}
+
+QVariant BrewTargetTreeItem::dataYeast(int column)
+{
+    Yeast* yeast = static_cast<Yeast*>(thing);
+	switch(column)
+	{
+		case YEASTNAMECOL:
+			if ( ! yeast )
+				return QVariant(QObject::tr("Yeast"));
+			else
+				return QVariant(yeast->getName());
+		case YEASTTYPECOL:
+			if ( yeast )
+				return QVariant(yeast->getTypeStringTr());
+		case YEASTFORMCOL:
+			if ( yeast )
+				return QVariant(yeast->getFormStringTr());
+		default :
+			Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(column));
+	}
+	return QVariant();
+}
+
 void BrewTargetTreeItem::setType(int t)
 {
     type = t;
@@ -260,5 +312,19 @@ Hop* BrewTargetTreeItem::getHop()
 {
     if ( type == HOP ) 
         return static_cast<Hop*>(thing);
+    return 0;
+}
+
+Misc* BrewTargetTreeItem::getMisc()
+{
+    if ( type == MISC ) 
+        return static_cast<Misc*>(thing);
+    return 0;
+}
+
+Yeast* BrewTargetTreeItem::getYeast()
+{
+    if ( type == YEAST ) 
+        return static_cast<Yeast*>(thing);
     return 0;
 }

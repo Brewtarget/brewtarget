@@ -90,6 +90,26 @@ QModelIndex BrewTargetTreeView::findHop(Hop* hop)
 	return model->findHop(hop);
 }
 
+Misc* BrewTargetTreeView::getMisc(const QModelIndex &index) const
+{
+	return model->getMisc(index);
+}
+
+QModelIndex BrewTargetTreeView::findMisc(Misc* misc)
+{
+	return model->findMisc(misc);
+}
+
+Yeast* BrewTargetTreeView::getYeast(const QModelIndex &index) const
+{
+	return model->getYeast(index);
+}
+
+QModelIndex BrewTargetTreeView::findYeast(Yeast* yeast)
+{
+	return model->findYeast(yeast);
+}
+
 int BrewTargetTreeView::getType(const QModelIndex &index)
 {
 	return model->getType(index);
@@ -146,6 +166,12 @@ QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes)
                     break;
                 case BrewTargetTreeItem::HOP:
                     name = model->getHop(index)->getName();
+                    break;
+                case BrewTargetTreeItem::MISC:
+                    name = model->getMisc(index)->getName();
+                    break;
+                case BrewTargetTreeItem::YEAST:
+                    name = model->getYeast(index)->getName();
                     break;
                 default:
                     name = "";

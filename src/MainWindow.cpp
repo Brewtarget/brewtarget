@@ -370,6 +370,8 @@ void MainWindow::removeRecipe()
 	QList<Equipment*> deadKit;
 	QList<Fermentable*> deadFerm;
 	QList<Hop*> deadHop;
+	QList<Misc*> deadMisc;
+	QList<Yeast*> deadYeast;
 
 	// Get the dead things first.  Deleting as we process the list doesn't work, because the
 	// delete updates the database and the indices get recalculated.
@@ -379,7 +381,9 @@ void MainWindow::removeRecipe()
 		if ( *at != brewTargetTreeView->findRecipe(0)      &&
 			 *at != brewTargetTreeView->findEquipment(0)   &&
 			 *at != brewTargetTreeView->findFermentable(0) &&
-			 *at != brewTargetTreeView->findHop(0) )
+			 *at != brewTargetTreeView->findHop(0)         &&
+             *at != brewTargetTreeView->findMisc(0)        &&
+             *at != brewTargetTreeView->findYeast(0))
 		{
 			switch(brewTargetTreeView->getType(*at))
 			{
@@ -395,6 +399,12 @@ void MainWindow::removeRecipe()
 				case BrewTargetTreeItem::HOP:
 					deadHop.append(brewTargetTreeView->getHop(*at));
 					break;
+				case BrewTargetTreeItem::MISC:
+					deadMisc.append(brewTargetTreeView->getMisc(*at));
+					break;
+				case BrewTargetTreeItem::YEAST:
+					deadYeast.append(brewTargetTreeView->getYeast(*at));
+					break;
 				default:
 					Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
 			}
@@ -402,14 +412,12 @@ void MainWindow::removeRecipe()
 	}
 
 
-	for(int i=0; i < deadRec.count();++i)
-		db->removeRecipe(deadRec.at(i));
-	for(int i=0; i < deadKit.count();++i)
-		db->removeEquipment(deadKit.at(i));
-	for(int i=0; i < deadFerm.count();++i)
-		db->removeFermentable(deadFerm.at(i));
-	for(int i=0; i < deadHop.count();++i)
-		db->removeHop(deadHop.at(i));
+    db->removeRecipe(deadRec);
+    db->removeEquipment(deadKit);
+    db->removeFermentable(deadFerm);
+	db->removeHop(deadHop);
+	db->removeMisc(deadMisc);
+	db->removeYeast(deadYeast);
 
 	setRecipeByIndex(above);
 	brewTargetTreeView->setCurrentIndex(above);
@@ -430,6 +438,8 @@ void MainWindow::treeActivated(const QModelIndex &index)
 	Equipment *kit;
 	Fermentable *ferm;
 	Hop* h;
+    Misc *m;
+    Yeast *y;
 
 	QAbstractItemView::SelectionMode origMode = brewTargetTreeView->selectionMode();
 
@@ -462,6 +472,22 @@ void MainWindow::treeActivated(const QModelIndex &index)
 			{
 				hopEditor->setHop(h);
 				hopEditor->show();
+			}
+			break;
+		case BrewTargetTreeItem::MISC:
+			m = brewTargetTreeView->getMisc(index);
+			if (m)
+			{
+				miscEditor->setMisc(m);
+				miscEditor->show();
+			}
+			break;
+		case BrewTargetTreeItem::YEAST:
+			y = brewTargetTreeView->getYeast(index);
+			if (y)
+			{
+				yeastEditor->setYeast(y);
+				yeastEditor->show();
 			}
 			break;
 		default:
@@ -1417,6 +1443,12 @@ void MainWindow::dropEvent(QDropEvent *event)
                     break;
                 case BrewTargetTreeItem::HOP:
                     addHopToRecipe(brewTargetTreeView->getHop(index));
+                    break;
+                case BrewTargetTreeItem::MISC:
+                    addMiscToRecipe(brewTargetTreeView->getMisc(index));
+                    break;
+                case BrewTargetTreeItem::YEAST:
+                    addYeastToRecipe(brewTargetTreeView->getYeast(index));
                     break;
             }
             event->accept();

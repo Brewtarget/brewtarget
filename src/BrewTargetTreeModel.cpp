@@ -39,6 +39,8 @@ BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent)
     rootItem->insertChildren(1,1,BrewTargetTreeItem::EQUIPMENT);
     rootItem->insertChildren(2,1,BrewTargetTreeItem::FERMENTABLE);
     rootItem->insertChildren(3,1,BrewTargetTreeItem::HOP);
+    rootItem->insertChildren(4,1,BrewTargetTreeItem::MISC);
+    rootItem->insertChildren(5,1,BrewTargetTreeItem::YEAST);
 
 	parentTree = parent;
 }
@@ -124,8 +126,8 @@ QVariant BrewTargetTreeModel::data(const QModelIndex &index, int role) const
 	return item->getData(index.column());
 }
 
-// This needs a metric crap ton of help.  How in hell do I figure out what the
-// type is to do the right switches? Right now, it is wrong
+// This is still wrong.  Working on it.  I think if I stablize everything on
+// the idea of "name, form and use" I can get this to work
 QVariant BrewTargetTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	if ( orientation != Qt::Horizontal || role != Qt::DisplayRole )
@@ -223,7 +225,7 @@ QModelIndex BrewTargetTreeModel::findFermentable(Fermentable* ferm)
 
 QModelIndex BrewTargetTreeModel::findHop(Hop* hop)
 {
-	BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::FERMENTABLE);
+	BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::HOP);
 	int i;
 
 	if (! hop )
@@ -232,6 +234,38 @@ QModelIndex BrewTargetTreeModel::findHop(Hop* hop)
 	for(i=0; i < pItem->childCount(); ++i)
 	{
 		if ( pItem->child(i)->getHop() == hop )
+			return createIndex(i,0,pItem->child(i));
+	}
+	return QModelIndex();
+}
+
+QModelIndex BrewTargetTreeModel::findMisc(Misc* misc)
+{
+	BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::MISC);
+	int i;
+
+	if (! misc )
+		return createIndex(0,0,pItem);
+
+	for(i=0; i < pItem->childCount(); ++i)
+	{
+		if ( pItem->child(i)->getMisc() == misc )
+			return createIndex(i,0,pItem->child(i));
+	}
+	return QModelIndex();
+}
+
+QModelIndex BrewTargetTreeModel::findYeast(Yeast* yeast)
+{
+	BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::YEAST);
+	int i;
+
+	if (! yeast )
+		return createIndex(0,0,pItem);
+
+	for(i=0; i < pItem->childCount(); ++i)
+	{
+		if ( pItem->child(i)->getYeast() == yeast )
 			return createIndex(i,0,pItem->child(i));
 	}
 	return QModelIndex();
@@ -286,6 +320,22 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
 	   for( it = dbObs->getHopBegin(), i = 0; it != end; ++it,++i )
 		  insertRow(i,BrewTargetTreeItem::HOP,*it,createIndex(i,0,local));
    }
+   if ( reload == DBALL || reload == DBMISC)
+   {
+	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::MISC);
+	   QList<Misc*>::iterator it, end;
+	   end = dbObs->getMiscEnd();
+	   for( it = dbObs->getMiscBegin(), i = 0; it != end; ++it,++i )
+		  insertRow(i,BrewTargetTreeItem::MISC,*it,createIndex(i,0,local));
+   }
+   if ( reload == DBALL || reload == DBYEAST)
+   {
+	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::YEAST);
+	   QList<Yeast*>::iterator it, end;
+	   end = dbObs->getYeastEnd();
+	   for( it = dbObs->getYeastBegin(), i = 0; it != end; ++it,++i )
+		  insertRow(i,BrewTargetTreeItem::YEAST,*it,createIndex(i,0,local));
+   }
 
 }
 
@@ -318,6 +368,18 @@ void BrewTargetTreeModel::unloadTreeModel(int unload)
 	if (unload == DBALL || unload == DBHOP)
 	{
 		parent = createIndex(BrewTargetTreeItem::HOP,0,rootItem->child(BrewTargetTreeItem::HOP));
+		breadth = rowCount(parent);
+		removeRows(0,breadth,parent);
+	}
+	if (unload == DBALL || unload == DBMISC)
+	{
+		parent = createIndex(BrewTargetTreeItem::MISC,0,rootItem->child(BrewTargetTreeItem::MISC));
+		breadth = rowCount(parent);
+		removeRows(0,breadth,parent);
+	}
+	if (unload == DBALL || unload == DBYEAST)
+	{
+		parent = createIndex(BrewTargetTreeItem::YEAST,0,rootItem->child(BrewTargetTreeItem::YEAST));
 		breadth = rowCount(parent);
 		removeRows(0,breadth,parent);
 	}
@@ -382,6 +444,20 @@ Hop* BrewTargetTreeModel::getHop(const QModelIndex &index) const
 	return item->getHop();
 }
 
+Misc* BrewTargetTreeModel::getMisc(const QModelIndex &index) const
+{
+	BrewTargetTreeItem* item = getItem(index);
+
+	return item->getMisc();
+}
+
+Yeast* BrewTargetTreeModel::getYeast(const QModelIndex &index) const
+{
+	BrewTargetTreeItem* item = getItem(index);
+
+	return item->getYeast();
+}
+
 bool BrewTargetTreeModel::isRecipe(const QModelIndex &index)
 {
 	BrewTargetTreeItem* item = getItem(index);
@@ -404,6 +480,18 @@ bool BrewTargetTreeModel::isHop(const QModelIndex &index)
 {
 	BrewTargetTreeItem* item = getItem(index);
 	return item->getType() == BrewTargetTreeItem::HOP;
+}
+
+bool BrewTargetTreeModel::isMisc(const QModelIndex &index)
+{
+	BrewTargetTreeItem* item = getItem(index);
+	return item->getType() == BrewTargetTreeItem::MISC;
+}
+
+bool BrewTargetTreeModel::isYeast(const QModelIndex &index)
+{
+	BrewTargetTreeItem* item = getItem(index);
+	return item->getType() == BrewTargetTreeItem::YEAST;
 }
 
 int BrewTargetTreeModel::getType(const QModelIndex &index)

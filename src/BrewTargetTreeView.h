@@ -53,6 +53,12 @@ public:
 	Hop* getHop(const QModelIndex &index) const;
 	QModelIndex findHop(Hop* hop);
 
+	Misc* getMisc(const QModelIndex &index) const;
+	QModelIndex findMisc(Misc* misc);
+
+	Yeast* getYeast(const QModelIndex &index) const;
+	QModelIndex findYeast(Yeast* yeast);
+
 	int getType(const QModelIndex &index);
 
     // Another try at drag and drop

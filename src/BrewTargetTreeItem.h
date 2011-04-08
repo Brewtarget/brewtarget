@@ -34,7 +34,8 @@ class BrewTargetTreeItem;
 #include "fermentable.h"
 #include "hop.h"
 #include "recipe.h"
-
+#include "misc.h"
+#include "yeast.h"
 
 class BrewTargetTreeItem
 {
@@ -45,8 +46,10 @@ public:
     enum{EQUIPMENTNAMECOL, EQUIPMENTBOILTIMECOL, EQUIPMENTNUMCOLS};
     enum{FERMENTABLENAMECOL, FERMENTABLETYPECOL, FERMENTABLECOLORCOL, FERMENTABLENUMCOLS};
     enum{HOPNAMECOL, HOPFORMCOL, HOPUSECOL, HOPNUMCOLS};
+    enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCNUMCOLS};
+    enum{YEASTNAMECOL, YEASTTYPECOL, YEASTFORMCOL, YEASTNUMCOLS};
     
-    enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP};
+    enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST};
 
 
 	BrewTargetTreeItem(int type = RECIPE, BrewTargetTreeItem *parent=0 );
@@ -72,6 +75,8 @@ public:
 	Equipment*   getEquipment();
 	Fermentable* getFermentable();
 	Hop*         getHop();
+    Misc*        getMisc();
+    Yeast*       getYeast();
 
 	bool insertChildren(int position, int count, int type = RECIPE);
 	bool removeChildren(int position, int count);
@@ -88,6 +93,8 @@ private:
     QVariant dataEquipment(int column);
     QVariant dataFermentable(int column);
     QVariant dataHop(int column);
+    QVariant dataMisc(int column);
+    QVariant dataYeast(int column);
 
     void setType(int t);
 };

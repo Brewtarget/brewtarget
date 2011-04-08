@@ -55,12 +55,7 @@ public:
 
 	// Methods required for read-write access.  Remember, we are not implementing adding or removing columns
 	Qt::ItemFlags flags( const QModelIndex &index) const;
-//	bool setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-//	bool setHeaderData( int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 	bool insertRow(int position, int type, void* data, const QModelIndex &parent = QModelIndex());
-//	bool insertRow(int position, Equipment* data, const QModelIndex &parent = QModelIndex());
-//	bool insertRow(int position, Fermentable* data, const QModelIndex &parent = QModelIndex());
-//	bool insertRow(int position, Hop* data, const QModelIndex &parent = QModelIndex());
 
 	bool removeRows( int position, int rows, const QModelIndex &parent = QModelIndex());
 
@@ -69,6 +64,8 @@ public:
 	bool isEquipment(const QModelIndex &index);
 	bool isFermentable(const QModelIndex &index);
 	bool isHop(const QModelIndex &index);
+	bool isMisc(const QModelIndex &index);
+	bool isYeast(const QModelIndex &index);
 
 	int getType(const QModelIndex &index);
 
@@ -81,11 +78,15 @@ public:
 	Equipment* getEquipment(const QModelIndex &index) const;
 	Fermentable* getFermentable(const QModelIndex &index) const;
 	Hop* getHop(const QModelIndex &index) const;
+	Misc* getMisc(const QModelIndex &index) const;
+	Yeast* getYeast(const QModelIndex &index) const;
 
 	QModelIndex findRecipe(Recipe* rec);
 	QModelIndex findEquipment(Equipment* kit);
 	QModelIndex findFermentable(Fermentable* ferm);
 	QModelIndex findHop(Hop* hop);
+	QModelIndex findMisc(Misc* misc);
+	QModelIndex findYeast(Yeast* yeast);
 
 private:
 	BrewTargetTreeItem *getItem(const QModelIndex &index) const;
