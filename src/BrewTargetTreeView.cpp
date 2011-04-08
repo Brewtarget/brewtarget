@@ -18,6 +18,8 @@
 */
 
 #include <QDebug>
+#include <QApplication>
+#include <QDrag>
 #include "BrewTargetTreeView.h"
 #include "BrewTargetTreeModel.h"
 
@@ -91,4 +93,67 @@ QModelIndex BrewTargetTreeView::findHop(Hop* hop)
 int BrewTargetTreeView::getType(const QModelIndex &index)
 {
 	return model->getType(index);
+}
+
+void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+        dragStart = event->pos();
+
+    // Send the event on its way up to the parent
+    QTreeView::mousePressEvent(event);
+}
+
+void BrewTargetTreeView::mouseMoveEvent(QMouseEvent *event)
+{
+    // Return if the left button isn't down
+    if (!(event->buttons() & Qt::LeftButton))
+        return;
+
+    // Return if the length of movement isn't far enough.
+    if ((event->pos() - dragStart).manhattanLength() <
+            QApplication::startDragDistance())
+        return;
+
+    QDrag *drag = new QDrag(this);
+    QMimeData *data = mimeData(selectionModel()->selectedRows());
+
+    drag->setMimeData(data);
+    drag->start(Qt::CopyAction);
+} 
+
+QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes) 
+{
+    QMimeData *mimeData = new QMimeData();
+    QByteArray encodedData;
+    QString name;
+    int type;
+
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+    foreach (QModelIndex index, indexes)
+    {
+        if (index.isValid())
+        {
+            type = getType(index);
+            switch(type)
+            {
+                case BrewTargetTreeItem::EQUIPMENT:
+                    name = model->getEquipment(index)->getName();
+                    break;
+                case BrewTargetTreeItem::FERMENTABLE:
+                    name = model->getFermentable(index)->getName();
+                    break;
+                case BrewTargetTreeItem::HOP:
+                    name = model->getHop(index)->getName();
+                    break;
+                default:
+                    name = "";
+            }
+            stream << type << name;
+        }
+    }
+
+    mimeData->setData("application/x-brewtarget", encodedData);
+    return mimeData;
 }

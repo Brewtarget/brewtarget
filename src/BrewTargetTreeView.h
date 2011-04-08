@@ -24,6 +24,8 @@ class BrewTargetTreeView;
 
 #include <QTreeView>
 #include <QWidget>
+#include <QPoint>
+#include <QMouseEvent>
 #include "database.h"
 #include "BrewTargetTreeModel.h"
 
@@ -53,9 +55,15 @@ public:
 
 	int getType(const QModelIndex &index);
 
+    // Another try at drag and drop
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+
 private:
 	BrewTargetTreeModel* model;
+    QPoint dragStart;
 
+    QMimeData *mimeData(QModelIndexList indexes);
 };
 
 #endif /* BREWTARGETTREEVIEW_H_ */

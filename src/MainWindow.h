@@ -128,6 +128,9 @@ public slots:
 
    void openDonateLink();
 
+   void dragEnterEvent(QDragEnterEvent *event);
+   void dropEvent( QDropEvent *event);
+
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
@@ -175,7 +178,8 @@ private:
    Misc* selectedMisc();
    //! Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
-
+   //! set the equipment based on a drop event
+   void droppedRecipeEquipment(Equipment *kit);
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());
 };

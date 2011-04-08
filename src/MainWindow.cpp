@@ -159,15 +159,6 @@ MainWindow::MainWindow(QWidget* parent)
    printer = new QPrinter;
    printer->setPageSize(QPrinter::Letter);
 
-   // Set up brewDayDialog
-   /*
-   brewDayDialog->setModal(false);
-   QVBoxLayout* vblayout = new QVBoxLayout();
-   vblayout->addWidget(brewDayWidget);
-   brewDayDialog->setLayout(vblayout);
-   brewDayDialog->setWindowTitle(tr("Brew day mode"));
-   */
-
    // Set up the fileOpener dialog.
    fileOpener = new QFileDialog(this, tr("Open"), QDir::homePath(), tr("BeerXML files (*.xml)"));
    fileOpener->setAcceptMode(QFileDialog::AcceptOpen);
@@ -209,6 +200,8 @@ MainWindow::MainWindow(QWidget* parent)
    brewTargetTreeView->setCurrentIndex(brewTargetTreeView->findRecipe(0));
    brewTargetTreeView->setExpanded(brewTargetTreeView->findRecipe(0), true);
 
+   // Once more with the drag and drop.
+   setAcceptDrops(true);
 
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );
@@ -744,6 +737,35 @@ void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
       {
          recipeObs->setBatchSize_l( equip->getBatchSize_l() );
          recipeObs->setBoilSize_l( equip->getBoilSize_l() );
+      }
+   }
+}
+
+void MainWindow::droppedRecipeEquipment(Equipment *kit)
+{
+   if( recipeObs == 0 )
+      return;
+
+   // equip may be null.
+   if( kit == 0 )
+      return;
+
+   // Notice that we are using a reference from the database, not a copy.
+   // So, if the equip in the database is changed, this one will change also.
+   recipeObs->setEquipment(kit);
+
+   if( QMessageBox::question(this,
+                             tr("Equipment request"),
+                             tr("Would you like to set the batch and boil size to that requested by the equipment?"),
+                             QMessageBox::Yes,
+                             QMessageBox::No)
+        == QMessageBox::Yes
+     )
+   {
+      if( recipeObs )
+      {
+         recipeObs->setBatchSize_l( kit->getBatchSize_l() );
+         recipeObs->setBoilSize_l( kit->getBoilSize_l() );
       }
    }
 }
@@ -1360,4 +1382,44 @@ void MainWindow::printBrewday()
    QPrintDialog printerDialog(printer, this);
 
    brewDayScrollWidget->print( printer, &printerDialog );
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-brewtarget"))
+        event->acceptProposedAction();
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    QModelIndexList indexes;
+    QString name;
+    int type;
+
+    if (! event->mimeData()->hasFormat("application/x-brewtarget"))
+        return;
+
+    indexes = brewTargetTreeView->selectionModel()->selectedRows();
+    foreach(QModelIndex index, indexes)
+    {
+        if ( index.isValid() )
+        {
+            type = brewTargetTreeView->getType(index);
+            switch(type)
+            {
+                case BrewTargetTreeItem::EQUIPMENT:
+                    name = brewTargetTreeView->getEquipment(index)->getName();
+                    equipmentComboBox->setIndexByEquipmentName(name);
+                    droppedRecipeEquipment(brewTargetTreeView->getEquipment(index));
+                    break;
+                case BrewTargetTreeItem::FERMENTABLE:
+                    addFermentableToRecipe(brewTargetTreeView->getFermentable(index));
+                    break;
+                case BrewTargetTreeItem::HOP:
+                    addHopToRecipe(brewTargetTreeView->getHop(index));
+                    break;
+            }
+            event->accept();
+        }
+    }
 }
