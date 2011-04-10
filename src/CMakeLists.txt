@@ -370,7 +370,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   #-----------------RPM-----------------
   SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
   SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
-  SET(CPACK_RPM_PACKAGE_REQUIRES "qt(>= 4.6.0), phonon(>= 4.2.0)") # NOTE: I'm just guessing here. Somebody needs to check.
+  SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
 
  #============================APPLE=================================
  ELSEIF(APPLE)
