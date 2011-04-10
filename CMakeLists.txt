@@ -48,7 +48,7 @@ ELSE()
    SET( CMAKE_BUILD_TYPE "Debug" )
 ENDIF()
 
-IF( APPLE )
+IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
    SET( CMAKE_OSX_ARCHITECTURES ppc i386 ) # Build universal binary
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary for 32 and 64 bit.
 ENDIF()

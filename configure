@@ -6,6 +6,7 @@ CMAKEOPTIONS=""
 function printUsageAndExit {
    echo -e "Usage\n" \
            "   Options:\n" \
+           "      -m T   Set mac arch (\"i386 ppc\" for universal binary)\n" \
            "      -p T   Set prefix to T.\n" \
            "      -t     Update translation files (*.ts).\n" \
            "      -v     Verbose compilation.\n" \
@@ -27,9 +28,10 @@ function findCMake {
 findCMake;
 
 # Get options.
-while getopts "p:t:h:v" option
+while getopts "m:p:t:h:v" option
 do
    case $option in
+      m) CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_OSX_ARCHITECTURES=$OPTARG";;
       p) PREFIX="$OPTARG";;
       t) CMAKEOPTIONS="$CMAKEOPTIONS -DUPDATE_TRANSLATIONS=ON";;
       v) CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_VERBOSE_MAKEFILE=TRUE";;
