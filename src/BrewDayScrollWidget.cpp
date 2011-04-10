@@ -33,14 +33,8 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent), Obs
    setupUi(this);
    recObs = 0;
 
-   // HAVE to do this since apparently the stackedWidget NEEDS at least 1
-   // widget at all times.
-   //stackedWidget->insertWidget(0, new InstructionWidget(stackedWidget) );
-   //stackedWidget->widget(0)->setVisible(false);
-   //stackedWidget->removeWidget(stackedWidget->widget(1));
-
-   //connect( listWidget, SIGNAL(currentRowChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)) );
    connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
+   connect( plainTextEdit, SIGNAL(textChanged()), this, SLOT(saveInstruction()) );
    connect( pushButton_insert, SIGNAL(clicked()), this, SLOT(insertInstruction()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
    connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
@@ -48,6 +42,14 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent), Obs
    connect( pushButton_generateInstructions, SIGNAL(clicked()), this, SLOT(generateInstructions()) );
 
    doc = new QWebView();
+}
+
+void BrewDayScrollWidget::saveInstruction()
+{
+   // Need to disable notification to avoid a possible infinite loop.
+   recObs->disableNotification();
+   recObs->getInstruction( listWidget->currentRow() )->setDirections( plainTextEdit->toPlainText() );
+   recObs->reenableNotification();
 }
 
 void BrewDayScrollWidget::showInstruction(int insNdx)
@@ -379,51 +381,13 @@ void BrewDayScrollWidget::notify(Observable* notifier, QVariant info)
 void BrewDayScrollWidget::clear()
 {
    listWidget->clear();
-
-   /*
-   while( stackedWidget->count() > 0 )
-   {
-      InstructionWidget* iw = (InstructionWidget*)stackedWidget->widget(0);
-      stackedWidget->removeWidget(iw);
-      delete iw;
-   }
-
-   stackedWidget->setCurrentIndex(0);
-   */
 }
 
 void BrewDayScrollWidget::showChanges()
 {
    clear();
    if( recObs == 0 )
-   {
-      //clear();
       return;
-   }
-
-   /*
-   int i, size;
-   InstructionWidget* iw;
-   size = recObs->getNumInstructions();
-
-   for( i = 0; i < size; ++i )
-   {
-      if(stackedWidget->widget(i) == 0)
-      {
-         iw = new InstructionWidget(stackedWidget);
-         stackedWidget->addWidget(iw);
-      }
-      else
-      {
-         iw = (InstructionWidget*)stackedWidget->widget(i);
-         iw->setVisible(true);
-      }
-
-      iw->setInstruction(recObs->getInstruction(i));
-   }
-
-   stackedWidget->update(); // Whatever, I give up.
-   */
 
    repopulateListWidget();
 }

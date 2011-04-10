@@ -35,24 +35,39 @@ class BrewDayScrollWidget : public QWidget, public Ui::brewDayScrollWidget, publ
    Q_OBJECT
 public:
    BrewDayScrollWidget(QWidget* parent=0);
+   //! Sets the observed recipe.
    void setRecipe(Recipe* rec);
 
    virtual QSize sizeHint() const; // From QWidget
    virtual void notify(Observable *notifier, QVariant info); // From Observer.
 
+   /*!
+    * Prints a paper version of the info in this dialog.
+    * Should probably be moved to its own view class.
+    */
    void print(QPrinter* mainPrinter, QPrintDialog *dialog);
+   /*!
+    * Shows what the \b print method will output.
+    * Should probably be moved to its own view class.
+    */
    void printPreview();
 
 public slots:
+   //! Automatically generate a new list of instructions.
    void generateInstructions();
+   //! Insert a custom instruction into the recipe.
    void insertInstruction();
+   //! Remove the instruction selected in the list view.
    void removeSelectedInstruction();
+   //! Push selected instruction up.
    void pushInstructionUp();
+   //! Push selected instruction down.
    void pushInstructionDown();
 
-
 private:
+   //! Update the view.
    void showChanges();
+   //! Repopulate the list widget with all the instructions.
    void repopulateListWidget();
    void clear();
    QString buildTitleTable();
@@ -69,6 +84,7 @@ private:
 private slots:
    bool loadComplete(bool ok);
    void showInstruction(int insNdx);
+   void saveInstruction();
 };
 
 #endif  /* _BREWDAYSCROLLWIDGET_H */
