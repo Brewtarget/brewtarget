@@ -113,7 +113,7 @@
           <x>0</x>
           <y>0</y>
           <width>729</width>
-          <height>306</height>
+          <height>305</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -975,7 +975,7 @@
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_9">
                   <item>
-                   <widget class="BeerColorWidget" name="beerColorWidget"/>
+                   <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
                   </item>
                  </layout>
                 </widget>
@@ -1011,7 +1011,7 @@
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_10">
              <item>
-              <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+              <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
              </item>
             </layout>
            </widget>
@@ -1021,7 +1021,7 @@
             </attribute>
             <layout class="QHBoxLayout" name="horizontalLayout_17">
              <item>
-              <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+              <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
              </item>
             </layout>
            </widget>
@@ -1040,7 +1040,7 @@
           <x>0</x>
           <y>0</y>
           <width>747</width>
-          <height>238</height>
+          <height>246</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1059,7 +1059,7 @@
             </size>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>4</number>
            </property>
            <widget class="QWidget" name="fermentableTab">
             <attribute name="title">
@@ -1489,7 +1489,7 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>Mashs</string>
+                  <string>Load Mash</string>
                  </property>
                 </widget>
                </item>
@@ -1605,7 +1605,7 @@
      <x>0</x>
      <y>0</y>
      <width>761</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
