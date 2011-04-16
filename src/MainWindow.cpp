@@ -75,6 +75,8 @@ MainWindow::MainWindow(QWidget* parent)
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
 
+   QDesktopWidget *desktop = QApplication::desktop();
+
    if( Database::isInitialized() )
       db = Database::getDatabase();
    else
@@ -172,9 +174,6 @@ MainWindow::MainWindow(QWidget* parent)
    fileSaver->setViewMode(QFileDialog::List);
    fileSaver->setDefaultSuffix(QString("xml"));
 
-   // Set up and place the BeerColorWidget
-   //verticalLayout_beerColor->insertWidget( 0, &beerColorWidget);
-
    // And test out the maltiness widget.
    maltWidget = new MaltinessWidget(tabWidget_recipeView);
    verticalLayout_beerColor->insertWidget( -1, maltWidget );
@@ -184,7 +183,6 @@ MainWindow::MainWindow(QWidget* parent)
    htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
 
    // Setup some of the widgets.
-//   recipeComboBox->startObservingDB();
    equipmentComboBox->startObservingDB();
    styleComboBox->startObservingDB();
    mashComboBox->startObservingDB();
@@ -200,17 +198,33 @@ MainWindow::MainWindow(QWidget* parent)
    brewTargetTreeView->setCurrentIndex(brewTargetTreeView->findRecipe(0));
    brewTargetTreeView->setExpanded(brewTargetTreeView->findRecipe(0), true);
 
+   // And do some magic on the splitter widget to keep the tree from expanding
+   splitter_2->setStretchFactor(0,0);
+   splitter_2->setStretchFactor(1,1);
+
    // Once more with the drag and drop.
    setAcceptDrops(true);
+
+   // If we saved a size the last time we ran, use it
+   QSettings settings("Philip G. Lee", "brewtarget");
+   if ( settings.contains("geometry"))
+   {
+	   restoreGeometry(settings.value("geometry").toByteArray());
+	   restoreState(settings.value("windowState").toByteArray());
+   }
+   else
+   {
+	   // otherwise, guess a reasonable size at 1/4 of the screen.
+	   int width = desktop->width();
+	   int height = desktop->height();
+
+	   this->resize(width/2,height/2);
+   }
 
    if( db->getNumRecipes() > 0 )
       setRecipe( *(db->getRecipeBegin()) );
 
-   // Resize to a reasonable size.
-   this->resize(1072, 800);
-
    // Connect signals.
-//   connect( recipeComboBox, SIGNAL( activated(const QString&) ), this, SLOT(setRecipeByName(const QString&)) );
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashByName(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
@@ -247,7 +261,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(printBrewday()));
    connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(printPreviewRecipe()));
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(printPreviewBrewday()));
-
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -349,17 +362,6 @@ void MainWindow::setupToolbar()
    connect( timers, SIGNAL(clicked()), timerListDialog, SLOT(show()) );
    //connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
 }
-
-/*
-void MainWindow::removeRecipe()
-{
-   Recipe* rec = recipeComboBox->getSelectedRecipe();
-   db->removeRecipe(rec);
-
-   recipeComboBox->setIndex(0);
-   setRecipe(recipeComboBox->getSelectedRecipe());
-}
-*/
 
 void MainWindow::removeRecipe()
 {
@@ -1318,7 +1320,9 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    }
 
    Brewtarget::savePersistentOptions();
-
+   QSettings settings("Philip G. Lee", "brewtarget");
+   settings.setValue("geometry", saveGeometry());
+   settings.setValue("windowState", saveState());
    setVisible(false);
 }
 

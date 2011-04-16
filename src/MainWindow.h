@@ -182,6 +182,7 @@ private:
    void droppedRecipeEquipment(Equipment *kit);
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());
+
 };
 
 #endif	/* _MAINWINDOW_H */

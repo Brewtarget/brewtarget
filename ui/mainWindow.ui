@@ -63,6 +63,9 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
+      <property name="handleWidth">
+       <number>10</number>
+      </property>
       <widget class="BrewTargetTreeView" name="brewTargetTreeView">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
@@ -111,8 +114,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>720</width>
-           <height>305</height>
+           <width>702</width>
+           <height>318</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1033,8 +1036,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>738</width>
-           <height>246</height>
+           <width>718</width>
+           <height>242</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1600,7 +1603,7 @@
      <x>0</x>
      <y>0</y>
      <width>1035</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
