@@ -205,6 +205,9 @@ MainWindow::MainWindow(QWidget* parent)
    // Once more with the drag and drop.
    setAcceptDrops(true);
 
+   // Once more with the context menus too
+   brewTargetTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+
    // If we saved a size the last time we ran, use it
    QSettings settings("Philip G. Lee", "brewtarget");
    if ( settings.contains("geometry"))
@@ -222,7 +225,21 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    if( db->getNumRecipes() > 0 )
-      setRecipe( *(db->getRecipeBegin()) );
+   {
+	  // If we saved the selected recipe name the last time we ran, select it and show it.
+      if (settings.contains("recipeName"))
+      {
+          QString name = settings.value("recipeName").toString();
+          recipeObs = db->findRecipeByName( name );
+
+         setRecipe(recipeObs);
+         brewTargetTreeView->setCurrentIndex(brewTargetTreeView->findRecipe(recipeObs));
+      }
+         
+      else
+         setRecipe( *(db->getRecipeBegin()) );
+   }
+
 
    // Connect signals.
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
@@ -252,9 +269,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), pitchDialog, SLOT(show()));
 
-   // TreeView signal/slot
-   connect( brewTargetTreeView, SIGNAL(activated(const QModelIndex &)), this,
+   // TreeView for clicks, both double and right
+   connect( brewTargetTreeView, SIGNAL(doubleClicked(const QModelIndex &)), this,
 		   SLOT(treeActivated(const QModelIndex &)));
+   connect( brewTargetTreeView, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
 
    // Printing signals/slots.
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(printRecipe()));
@@ -292,7 +310,7 @@ MainWindow::MainWindow(QWidget* parent)
 
 void MainWindow::setupToolbar()
 {
-   QToolButton *newRec, *clearRec, *save, *removeRec,
+   QToolButton *newRec, *clearRec, *save, *removeSel,
                *viewEquip, *viewFerm, *viewHops,
                *viewMiscs, *viewStyles, *viewYeast,
                *timers;
@@ -301,7 +319,7 @@ void MainWindow::setupToolbar()
 
    newRec = new QToolButton(toolBar);
    clearRec = new QToolButton(toolBar);
-   removeRec = new QToolButton(toolBar);
+   removeSel = new QToolButton(toolBar);
    save = new QToolButton(toolBar);
    viewEquip = new QToolButton(toolBar);
    viewFerm = new QToolButton(toolBar);
@@ -313,7 +331,7 @@ void MainWindow::setupToolbar()
    
    newRec->setIcon(QIcon(SMALLPLUS));
    clearRec->setIcon(QIcon(SHRED));
-   removeRec->setIcon(QIcon(SMALLMINUS));
+   removeSel->setIcon(QIcon(SMALLMINUS));
    save->setIcon(QIcon(SAVEPNG));
    viewEquip->setIcon(QIcon(SMALLKETTLE));
    viewFerm->setIcon(QIcon(SMALLBARLEY));
@@ -325,7 +343,7 @@ void MainWindow::setupToolbar()
 
    newRec->setToolTip(tr("New recipe"));
    clearRec->setToolTip(tr("Clear recipe"));
-   removeRec->setToolTip(tr("Remove recipe"));
+   removeSel->setToolTip(tr("Remove recipe"));
    save->setToolTip(tr("Save database"));
    viewEquip->setToolTip(tr("View equipments"));
    viewFerm->setToolTip(tr("View fermentables"));
@@ -338,7 +356,7 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
    toolBar->addWidget(clearRec);
-   toolBar->addWidget(removeRec);
+   toolBar->addWidget(removeSel);
    toolBar->addSeparator();
    toolBar->addWidget(viewEquip);
    toolBar->addWidget(viewFerm);
@@ -350,7 +368,7 @@ void MainWindow::setupToolbar()
    toolBar->addWidget(timers);
 
    connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
-   connect( removeRec, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
+   connect( removeSel, SIGNAL(clicked()), this, SLOT(deleteSelected()) );
    connect( save, SIGNAL(clicked()), this, SLOT(save()) );
    connect( clearRec, SIGNAL(clicked()), this, SLOT(clear()) );
    connect( viewEquip, SIGNAL(clicked()), equipEditor, SLOT(show()) );
@@ -363,7 +381,7 @@ void MainWindow::setupToolbar()
    //connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
 }
 
-void MainWindow::removeRecipe()
+void MainWindow::deleteSelected()
 {
 	const QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
 	QModelIndex above = brewTargetTreeView->findRecipe(0);
@@ -443,10 +461,6 @@ void MainWindow::treeActivated(const QModelIndex &index)
     Misc *m;
     Yeast *y;
 
-	QAbstractItemView::SelectionMode origMode = brewTargetTreeView->selectionMode();
-
-	// The pop-up windows cause odd things to happen.  So I disable the selection model
-	brewTargetTreeView->setSelectionMode(QAbstractItemView::NoSelection);
 	switch( brewTargetTreeView->getType(index))
 	{
 		case BrewTargetTreeItem::RECIPE:
@@ -495,8 +509,6 @@ void MainWindow::treeActivated(const QModelIndex &index)
 		default:
 			Brewtarget::log(Brewtarget::WARNING, tr("Unknown type %1.").arg(brewTargetTreeView->getType(index)));
 	}
-	// Re-enable the selection model and make sure the item we selected is displayed
-	brewTargetTreeView->setSelectionMode(origMode);
 	brewTargetTreeView->setCurrentIndex(index);
 }
 
@@ -1323,6 +1335,7 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    QSettings settings("Philip G. Lee", "brewtarget");
    settings.setValue("geometry", saveGeometry());
    settings.setValue("windowState", saveState());
+   settings.setValue("recipeName", recipeObs->getName());
    setVisible(false);
 }
 
@@ -1423,6 +1436,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 void MainWindow::dropEvent(QDropEvent *event)
 {
     QModelIndexList indexes;
+    QWidget *last;
     QString name;
     int type;
 
@@ -1444,18 +1458,227 @@ void MainWindow::dropEvent(QDropEvent *event)
                     break;
                 case BrewTargetTreeItem::FERMENTABLE:
                     addFermentableToRecipe(brewTargetTreeView->getFermentable(index));
+                    last = fermentableTab;
                     break;
                 case BrewTargetTreeItem::HOP:
                     addHopToRecipe(brewTargetTreeView->getHop(index));
+                    last = hopsTab;
                     break;
                 case BrewTargetTreeItem::MISC:
                     addMiscToRecipe(brewTargetTreeView->getMisc(index));
+                    last = miscTab;
                     break;
                 case BrewTargetTreeItem::YEAST:
                     addYeastToRecipe(brewTargetTreeView->getYeast(index));
+                    last = yeastTable;
                     break;
             }
+
             event->accept();
         }
     }
+    if (last)
+    	tabWidget->setCurrentWidget(last);
+}
+
+void MainWindow::contextMenu(const QPoint &point)
+{
+	QModelIndex selected;
+	QMenu  *cMenu = new QMenu();
+	QMenu  *sMenu = new QMenu();
+	QAction *temp;
+	bool multiselect = brewTargetTreeView->selectionModel()->selectedRows().count() > 1;
+
+	// Figure out what was right clicked
+	selected = brewTargetTreeView->indexAt(point);
+
+	// And use that to set up the top level menu item
+	switch (brewTargetTreeView->getType(selected))
+	{
+		case BrewTargetTreeItem::RECIPE:
+			temp = cMenu->addAction(tr("New Recipe"), this, SLOT(newRecipe()));
+			break;
+		case BrewTargetTreeItem::EQUIPMENT:
+			temp = cMenu->addAction(tr("New Equipment"), equipEditor, SLOT(newEquipment()));
+			break;
+		case BrewTargetTreeItem::FERMENTABLE:
+			temp = cMenu->addAction(tr("New Fermentable"), fermDialog, SLOT(newFermentable()));
+			break;
+		case BrewTargetTreeItem::HOP:
+			temp = cMenu->addAction(tr("New Hop"), hopDialog, SLOT(newHop()));
+			break;
+		case BrewTargetTreeItem::MISC:
+			temp = cMenu->addAction(tr("New miscellaneous"), miscDialog, SLOT(newMisc()));
+			break;
+		case BrewTargetTreeItem::YEAST:
+			temp = cMenu->addAction(tr("New Yeast"), yeastDialog, SLOT(newYeast()));
+			break;
+		default:
+			Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(selected)));
+	}
+	temp->setEnabled(!multiselect);
+
+	cMenu->addSeparator();
+	// Set up the "new" submenu
+	sMenu->setTitle(tr("New"));
+	sMenu->addAction(tr("Recipe"), this, SLOT(newRecipe()));
+	sMenu->addAction(tr("Equipment"), equipEditor, SLOT(newEquipment()));
+	sMenu->addAction(tr("Fermentable"), fermDialog, SLOT(newFermentable()));
+	sMenu->addAction(tr("Hop"), hopDialog, SLOT(newHop()));
+	sMenu->addAction(tr("Miscellaneous"), miscDialog, SLOT(newMisc()));
+	sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
+	cMenu->addMenu(sMenu);
+
+	// Copy
+	cMenu->addAction(tr("Copy"), this, SLOT(copySelected()));
+	// Delete
+	cMenu->addAction(tr("Delete"), this, SLOT(deleteSelected()));
+
+	cMenu->exec(brewTargetTreeView->mapToGlobal(point));
+}
+
+void MainWindow::copyThis(Recipe *rec)
+{
+   QString name = QInputDialog::getText( this, tr("Copy %1").arg(rec->getName()), tr("Enter a unique name for the copy of %1.").arg(rec->getName()) );
+
+   if( name.isEmpty() )
+      return;
+
+   Recipe* newRec = new Recipe(rec); // Create a deep copy.
+   newRec->setName(name);
+
+   (Database::getDatabase())->addRecipe( newRec, false );
+}
+
+void MainWindow::copyThis(Equipment *kit)
+{
+   QString name = QInputDialog::getText( this, tr("Copy Equipment"), tr("Enter a unique name for the copy of %1.").arg(kit->getName()) );
+
+   if( name.isEmpty() )
+      return;
+
+   Equipment* newKit = new Equipment(kit); // Create a deep copy.
+   newKit->setName(name);
+
+   (Database::getDatabase())->addEquipment( newKit, false );
+}
+
+void MainWindow::copyThis(Fermentable *ferm)
+{
+   QString name = QInputDialog::getText( this, tr("Copy Fermentable"), tr("Enter a unique name for the copy of %1.").arg(ferm->getName()) );
+
+   if( name.isEmpty() )
+      return;
+
+   Fermentable* newFerm = new Fermentable(*ferm); // Create a deep copy.
+   newFerm->setName(name);
+
+   (Database::getDatabase())->addFermentable( newFerm, false );
+}
+
+void MainWindow::copyThis(Hop *hop)
+{
+   QString name = QInputDialog::getText( this, tr("Copy Hop"), tr("Enter a unique name for the copy of %1.").arg(hop->getName()));
+
+   if( name.isEmpty() )
+      return;
+
+   Hop* newHop = new Hop(*hop); // Create a deep copy.
+   newHop->setName(name);
+
+   (Database::getDatabase())->addHop( newHop, false );
+}
+
+void MainWindow::copyThis(Misc *misc)
+{
+   QString name = QInputDialog::getText( this, tr("Copy Miscellaneous"), tr("Enter a unique name for the copy of %1.").arg(misc->getName()) );
+
+   if( name.isEmpty() )
+      return;
+
+   Misc* newMisc = new Misc(*misc); // Create a deep copy.
+   newMisc->setName(name);
+
+   (Database::getDatabase())->addMisc( newMisc, false );
+}
+
+void MainWindow::copyThis(Yeast *yeast)
+{
+   QString name = QInputDialog::getText( this, tr("Copy Yeast"), tr("Enter a unique name for the copy of %1.").arg(yeast->getName()) );
+
+   if( name.isEmpty() )
+      return;
+
+   Yeast* newYeast = new Yeast(*yeast); // Create a deep copy.
+   newYeast->setName(name);
+
+   (Database::getDatabase())->addYeast( newYeast, false );
+}
+
+void MainWindow::copySelected()
+{
+	const QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
+	QList<QModelIndex>::const_iterator at, end;
+	QModelIndex above = brewTargetTreeView->findRecipe(0);
+	QList<Recipe*> copyRec;
+	QList<Equipment*> copyKit;
+	QList<Fermentable*> copyFerm;
+	QList<Hop*> copyHop;
+	QList<Misc*> copyMisc;
+	QList<Yeast*> copyYeast;
+
+	// We need to process them all before we get the names, because adding new things does mess
+	// up the indexes.  This ... is not gonna be pretty.
+	for(at = selected.begin(),end = selected.end();at < end;++at)
+	{
+		qDebug() << "new thing = " << *at;
+		// Don't copy the root items.  Bad things will happen
+		if ( *at != brewTargetTreeView->findRecipe(0)      &&
+			 *at != brewTargetTreeView->findEquipment(0)   &&
+			 *at != brewTargetTreeView->findFermentable(0) &&
+			 *at != brewTargetTreeView->findHop(0)         &&
+             *at != brewTargetTreeView->findMisc(0)        &&
+             *at != brewTargetTreeView->findYeast(0))
+		{
+			switch(brewTargetTreeView->getType(*at))
+			{
+				case BrewTargetTreeItem::RECIPE:
+					copyRec.append(brewTargetTreeView->getRecipe(*at));
+					break;
+				case BrewTargetTreeItem::EQUIPMENT:
+					copyKit.append(brewTargetTreeView->getEquipment(*at));
+					break;
+				case BrewTargetTreeItem::FERMENTABLE:
+					copyFerm.append(brewTargetTreeView->getFermentable(*at));
+					break;
+				case BrewTargetTreeItem::HOP:
+					copyHop.append(brewTargetTreeView->getHop(*at));
+					break;
+				case BrewTargetTreeItem::MISC:
+					copyMisc.append(brewTargetTreeView->getMisc(*at));
+					break;
+				case BrewTargetTreeItem::YEAST:
+					copyYeast.append(brewTargetTreeView->getYeast(*at));
+					break;
+				default:
+					Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
+			}
+		}
+	}
+
+	for(int i = 0; i < copyRec.count(); ++i)
+		copyThis(copyRec.at(i));
+	for(int i = 0; i < copyKit.count(); ++i)
+		copyThis(copyKit.at(i));
+	for(int i = 0; i < copyFerm.count(); ++i)
+		copyThis(copyFerm.at(i));
+	for(int i = 0; i < copyMisc.count(); ++i)
+		copyThis(copyMisc.at(i));
+	for(int i = 0; i < copyYeast.count(); ++i)
+		copyThis(copyYeast.at(i));
+
+
+	setRecipeByIndex(above);
+	brewTargetTreeView->setCurrentIndex(above);
+	brewTargetTreeView->scrollTo(above,QAbstractItemView::PositionAtCenter);
 }

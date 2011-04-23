@@ -93,12 +93,15 @@ public slots:
    void addFermentableToRecipe(Fermentable* ferm);
    void removeSelectedFermentable();
    void editSelectedFermentable();
+
    void addHopToRecipe(Hop *hop);
    void removeSelectedHop();
    void editSelectedHop();
+
    void addMiscToRecipe(Misc* misc);
    void removeSelectedMisc();
    void editSelectedMisc();
+
    void addYeastToRecipe(Yeast* yeast);
    void removeSelectedYeast();
    void editSelectedYeast();
@@ -108,14 +111,16 @@ public slots:
    void editSelectedMashStep();
    void setMashByName(const QString& name);
    void saveMash();
-	void removeMash();
+   void removeMash();
 
    void newRecipe();
-   void removeRecipe();
    void exportRecipe();
    void importRecipes();
    void copyRecipe();
    
+   void deleteSelected();
+   void copySelected();
+
    void printRecipe();
    void printBrewday();
    void printPreviewRecipe();
@@ -124,7 +129,7 @@ public slots:
    void backup(); // Backup the database.
    void restoreFromBackup(); // Restore the database.
 
-   //void brewDayMode();
+   void contextMenu(const QPoint &point);
 
    void openDonateLink();
 
@@ -183,6 +188,13 @@ private:
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());
 
+   // Copy methods used by copySelected()
+   void copyThis(Recipe *rec);
+   void copyThis(Equipment *kit);
+   void copyThis(Fermentable *ferm);
+   void copyThis(Hop *hop);
+   void copyThis(Misc *misc);
+   void copyThis(Yeast *yeast);
 };
 
 #endif	/* _MAINWINDOW_H */

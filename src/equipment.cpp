@@ -171,6 +171,17 @@ Equipment::Equipment(const QDomNode& equipmentNode)
    fromNode(equipmentNode);
 }
 
+Equipment::Equipment( Equipment* other )
+{
+   QDomDocument doc;
+   QDomElement root = doc.createElement("root");
+   QDomNodeList list;
+
+   other->toXml(doc, root);
+
+   fromNode(root.firstChild());
+}
+
 void Equipment::fromNode(const QDomNode& equipmentNode)
 {
    QDomNode node, child;
