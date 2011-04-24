@@ -1492,6 +1492,7 @@ void MainWindow::contextMenu(const QPoint &point)
 	// Figure out what was right clicked
 	selected = brewTargetTreeView->indexAt(point);
 
+
 	// And use that to set up the top level menu item
 	switch (brewTargetTreeView->getType(selected))
 	{
@@ -1514,9 +1515,11 @@ void MainWindow::contextMenu(const QPoint &point)
 			temp = cMenu->addAction(tr("New Yeast"), yeastDialog, SLOT(newYeast()));
 			break;
 		default:
+			temp = 0;
 			Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(selected)));
 	}
-	temp->setEnabled(!multiselect);
+	if (temp)
+		temp->setEnabled(!multiselect);
 
 	cMenu->addSeparator();
 	// Set up the "new" submenu
