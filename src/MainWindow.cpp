@@ -1634,7 +1634,6 @@ void MainWindow::copySelected()
 	// up the indexes.  This ... is not gonna be pretty.
 	for(at = selected.begin(),end = selected.end();at < end;++at)
 	{
-		qDebug() << "new thing = " << *at;
 		// Don't copy the root items.  Bad things will happen
 		if ( *at != brewTargetTreeView->findRecipe(0)      &&
 			 *at != brewTargetTreeView->findEquipment(0)   &&
