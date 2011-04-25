@@ -697,7 +697,8 @@ void Database::removeEquipment(QList<Equipment*> equip)
 {
     foreach (Equipment* doa, equip)
         equipments.removeOne(doa);
-    hasChanged(QVariant(DBEQUIP));
+    if ( equip.count() )
+        hasChanged(QVariant(DBEQUIP));
 }
 
 void Database::removeFermentable(Fermentable* ferm)
@@ -710,7 +711,8 @@ void Database::removeFermentable(QList<Fermentable*> ferm)
 {
    foreach (Fermentable* doa, ferm)
       fermentables.removeOne(doa);
-   hasChanged(QVariant(DBFERM));
+   if (ferm.count())
+       hasChanged(QVariant(DBFERM));
 }
 
 void Database::removeHop(Hop* hop)
@@ -723,7 +725,9 @@ void Database::removeHop(QList<Hop*> hop)
 {
    foreach (Hop* doa, hop)
        hops.removeOne(doa);
-   hasChanged(QVariant(DBHOP));
+
+   if (hop.count())
+       hasChanged(QVariant(DBHOP));
 }
 
 void Database::removeMash(Mash* mash)
@@ -736,7 +740,8 @@ void Database::removeMash(QList<Mash*> mash)
 {
    foreach( Mash* doa, mash)
        mashs.removeOne(doa);
-   hasChanged(QVariant(DBMASH));
+   if (mash.count())
+       hasChanged(QVariant(DBMASH));
 }
 
 void Database::removeMashStep(MashStep* mashStep)
@@ -749,7 +754,8 @@ void Database::removeMashStep(QList<MashStep*> mashStep)
 {
    foreach( MashStep* doa, mashStep)
        mashSteps.removeOne(doa);
-   hasChanged(QVariant(DBMASHSTEP));
+   if (mashStep.count())
+       hasChanged(QVariant(DBMASHSTEP));
 }
 
 void Database::removeMisc(Misc* misc)
@@ -762,7 +768,8 @@ void Database::removeMisc(QList<Misc*> misc)
 {
    foreach( Misc* doa, misc)
        miscs.removeOne(doa);
-   hasChanged(QVariant(DBMISC));
+   if (misc.count())
+       hasChanged(QVariant(DBMISC));
 }
 
 void Database::removeRecipe(Recipe* rec)
@@ -775,7 +782,8 @@ void Database::removeRecipe(QList<Recipe*> rec)
 {
    foreach( Recipe *doa, rec)
        recipes.removeOne(doa);
-   hasChanged(QVariant(DBRECIPE));
+   if (rec.count())
+       hasChanged(QVariant(DBRECIPE));
 }
 
 void Database::removeStyle(Style* style)
@@ -788,7 +796,8 @@ void Database::removeStyle(QList<Style*> style)
 {
    foreach (Style* doa, style)
        styles.removeOne(doa); // Wow, that was easy.
-   hasChanged(QVariant(DBSTYLE));
+   if (style.count())
+       hasChanged(QVariant(DBSTYLE));
 }
 
 void Database::removeWater(Water* water)
@@ -801,7 +810,8 @@ void Database::removeWater(QList<Water*> water)
 {
    foreach(Water* doa, water)
        waters.removeOne(doa);
-   hasChanged(QVariant(DBWATER));
+   if (water.count())
+       hasChanged(QVariant(DBWATER));
 }
 
 void Database::removeYeast(Yeast* yeast)
@@ -814,7 +824,8 @@ void Database::removeYeast(QList<Yeast*> yeast)
 {
    foreach( Yeast* doa, yeast)
        yeasts.removeOne(doa);
-   hasChanged(QVariant(DBYEAST));
+   if (yeast.count())
+       hasChanged(QVariant(DBYEAST));
 }
 
 void Database::addWater(Water* water, bool disableNotify)
