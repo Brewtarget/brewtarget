@@ -46,18 +46,19 @@ public:
 	// Methods required for read-only stuff
 	QVariant data(const QModelIndex &index, int role) const;
 	QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
-	QModelIndex index( int row, int col, const QModelIndex &parent = QModelIndex()) const;
-	QModelIndex parent( const QModelIndex &index) const;
-
+	Qt::ItemFlags flags( const QModelIndex &index) const;
 	int rowCount( const QModelIndex &parent = QModelIndex()) const;
 	int columnCount( const QModelIndex &index = QModelIndex()) const;
 
-	// Methods required for read-write access.  Remember, we are not implementing adding or removing columns
-	Qt::ItemFlags flags( const QModelIndex &index) const;
-	bool insertRow(int position, int type, void* data, const QModelIndex &parent = QModelIndex());
+    // Methods required for tree views (odd we are worried about the view in
+    // the model).
+	QModelIndex index( int row, int col, const QModelIndex &parent = QModelIndex()) const;
+	QModelIndex parent( const QModelIndex &index) const;
 
-	bool removeRows( int position, int rows, const QModelIndex &parent = QModelIndex());
+    // Methods required for read-write access.  We are not implementing adding
+    // or removing columns because that doesn't make sense for this model.
+	bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+	bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
 	// Good stuff to have.  Like a Ruination clone happily dry hopping
 	bool isRecipe(const QModelIndex &index);

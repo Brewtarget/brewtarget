@@ -23,6 +23,7 @@
 #include <QAbstractItemModel>
 #include <Qt>
 #include <QObject>
+#include <QDebug>
 
 #include "brewtarget.h"
 #include "recipe.h"
@@ -64,6 +65,9 @@ BrewTargetTreeItem *BrewTargetTreeModel::getItem( const QModelIndex &index ) con
 
 int BrewTargetTreeModel::rowCount(const QModelIndex &parent) const
 {
+    if (! parent.isValid())
+        return rootItem->childCount();
+
 	BrewTargetTreeItem *pItem = getItem(parent);
 
 	return pItem->childCount();
@@ -101,9 +105,9 @@ QModelIndex BrewTargetTreeModel::index( int row, int column, const QModelIndex &
 QModelIndex BrewTargetTreeModel::parent(const QModelIndex &index) const
 {
 	BrewTargetTreeItem *pItem, *cItem;
+
 	if (!index.isValid())
 		return QModelIndex();
-
 
 	cItem = getItem(index);
 	pItem = cItem->parent();
@@ -116,7 +120,7 @@ QModelIndex BrewTargetTreeModel::parent(const QModelIndex &index) const
 
 QVariant BrewTargetTreeModel::data(const QModelIndex &index, int role) const
 {
-	if ( !index.isValid())
+	if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= BrewTargetTreeItem::RECIPENUMCOLS)
 		return QVariant();
 
 	if ( role != Qt::DisplayRole && role != Qt::EditRole)
@@ -147,29 +151,30 @@ QVariant BrewTargetTreeModel::headerData(int section, Qt::Orientation orientatio
 	}
 }
 
-bool BrewTargetTreeModel::insertRow(int position, int type, void *data, const QModelIndex &parent)
+bool BrewTargetTreeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+    if ( ! parent.isValid() )
+        return false;
+
 	BrewTargetTreeItem *pItem = getItem(parent);
+    int type = pItem->getType();
+
 	bool success = true;
 
-	beginInsertRows(parent, position, position);
-	success = pItem->insertChildren(position, 1);
-    if ( success ) 
-    {
-        BrewTargetTreeItem* newItem = pItem->child(position);
-        newItem->setData(type,data);
-    }
+	beginInsertRows(parent, row, row + count - 1);
+	success = pItem->insertChildren(row, count, type);
 	endInsertRows();
 
 	return success;
 }
 
-bool BrewTargetTreeModel::removeRows(int position, int rows, const QModelIndex &parent)
+bool BrewTargetTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 	BrewTargetTreeItem *pItem = getItem(parent);
 	bool success = true;
-	beginRemoveRows(parent, position, position + rows -1 );
-	success = pItem->removeChildren(position,rows);
+    
+	beginRemoveRows(parent, row, row + count -1 );
+	success = pItem->removeChildren(row,count);
 	endRemoveRows();
 
 	return success;
@@ -281,6 +286,7 @@ void BrewTargetTreeModel::startObservingDB()
 void BrewTargetTreeModel::loadTreeModel(int reload)
 {
    int i;
+   int rows;
 
    if( ! Database::isInitialized() )
 	   return;
@@ -288,55 +294,96 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
    if ( reload == DBALL || reload == DBRECIPE)
    {
 	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::RECIPE);
-	   QList<Recipe*>::iterator it, end;
-	   end = dbObs->getRecipeEnd();
-	   for( it = dbObs->getRecipeBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i,BrewTargetTreeItem::RECIPE,*it,createIndex(i,0,local));
+
+	   QList<Recipe*>::iterator it;
+
+       rows = dbObs->getNumRecipes();
+
+       // Insert all the rows
+       insertRows(0,rows, createIndex(BrewTargetTreeItem::RECIPE,0,local));
+
+       // And set the data
+	   for( i = 0, it = dbObs->getRecipeBegin(); it != dbObs->getRecipeEnd(); ++it, ++i )
+       {
+          BrewTargetTreeItem* temp = local->child(i);
+		  temp->setData(BrewTargetTreeItem::RECIPE,*it);
+       }
    }
 
    if ( reload == DBALL || reload == DBEQUIP)
    {
 	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::EQUIPMENT);
-	   QList<Equipment*>::iterator it, end;
-	   end = dbObs->getEquipmentEnd();
-	   for( it = dbObs->getEquipmentBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i,BrewTargetTreeItem::EQUIPMENT,*it,createIndex(i,0,local));
+	   QList<Equipment*>::iterator it;
+
+       rows = dbObs->getNumEquipments();
+       insertRows(0,rows, createIndex(BrewTargetTreeItem::EQUIPMENT,0,local));
+
+	   for( i = 0, it = dbObs->getEquipmentBegin(); it != dbObs->getEquipmentEnd(); ++it, ++i )
+       {
+          BrewTargetTreeItem* temp = local->child(i);
+		  temp->setData(BrewTargetTreeItem::EQUIPMENT,*it);
+       }
    }
 
    if ( reload == DBALL || reload == DBFERM)
    {
 	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::FERMENTABLE);
-	   QList<Fermentable*>::iterator it, end;
-	   end = dbObs->getFermentableEnd();
-	   for( it = dbObs->getFermentableBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i,BrewTargetTreeItem::FERMENTABLE,*it,createIndex(i,0,local));
+	   QList<Fermentable*>::iterator it;
+
+       rows = dbObs->getNumFermentables();
+       insertRows(0,rows,createIndex(BrewTargetTreeItem::FERMENTABLE,0,local));
+
+	   for( i = 0, it = dbObs->getFermentableBegin(); it != dbObs->getFermentableEnd(); ++it, ++i )
+       {
+          BrewTargetTreeItem* temp = local->child(i);
+		  temp->setData(BrewTargetTreeItem::FERMENTABLE,*it);
+       }
    }
 
    if ( reload == DBALL || reload == DBHOP)
    {
 	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::HOP);
-	   QList<Hop*>::iterator it, end;
-	   end = dbObs->getHopEnd();
-	   for( it = dbObs->getHopBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i,BrewTargetTreeItem::HOP,*it,createIndex(i,0,local));
+	   QList<Hop*>::iterator it;
+
+       rows = dbObs->getNumHops();
+       insertRows(0,rows,createIndex(BrewTargetTreeItem::HOP,0,local));
+
+	   for( i = 0, it = dbObs->getHopBegin(); it != dbObs->getHopEnd(); ++it, ++i )
+       {
+          BrewTargetTreeItem* temp = local->child(i);
+		  temp->setData(BrewTargetTreeItem::HOP,*it);
+       }
    }
+
    if ( reload == DBALL || reload == DBMISC)
    {
 	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::MISC);
-	   QList<Misc*>::iterator it, end;
-	   end = dbObs->getMiscEnd();
-	   for( it = dbObs->getMiscBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i,BrewTargetTreeItem::MISC,*it,createIndex(i,0,local));
+	   QList<Misc*>::iterator it;
+
+       rows = dbObs->getNumMiscs();
+       insertRows(0,rows,createIndex(BrewTargetTreeItem::MISC,0,local));
+
+	   for( i = 0, it = dbObs->getMiscBegin(); it != dbObs->getMiscEnd(); ++it, ++i )
+       {
+          BrewTargetTreeItem* temp = local->child(i);
+		  temp->setData(BrewTargetTreeItem::MISC,*it);
+       }
    }
+
    if ( reload == DBALL || reload == DBYEAST)
    {
 	   BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::YEAST);
-	   QList<Yeast*>::iterator it, end;
-	   end = dbObs->getYeastEnd();
-	   for( it = dbObs->getYeastBegin(), i = 0; it != end; ++it,++i )
-		  insertRow(i,BrewTargetTreeItem::YEAST,*it,createIndex(i,0,local));
-   }
+	   QList<Yeast*>::iterator it;
 
+       rows = dbObs->getNumYeasts();
+       insertRows(0,rows,createIndex(BrewTargetTreeItem::YEAST,0,local));
+
+	   for( i = 0, it = dbObs->getYeastBegin(); it != dbObs->getYeastEnd(); ++it, ++i )
+       {
+          BrewTargetTreeItem* temp = local->child(i);
+		  temp->setData(BrewTargetTreeItem::YEAST,*it);
+       }
+   }
 }
 
 void BrewTargetTreeModel::unloadTreeModel(int unload)
