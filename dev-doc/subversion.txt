@@ -1,0 +1,7 @@
+==Merging Branches==
+If a branch diverges at revision 400, do this:
+
+$ svn merge -r 400:HEAD branches/<whatever> trunk/
+Fix any conflicts
+$ svn rm branches/<whatever>
+$ svn ci

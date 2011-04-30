@@ -693,10 +693,26 @@ void Database::removeEquipment(Equipment* equip)
    hasChanged(QVariant(DBEQUIP));
 }
 
+void Database::removeEquipment(QList<Equipment*> equip)
+{
+    foreach (Equipment* doa, equip)
+        equipments.removeOne(doa);
+    if ( equip.count() )
+        hasChanged(QVariant(DBEQUIP));
+}
+
 void Database::removeFermentable(Fermentable* ferm)
 {
    fermentables.removeOne(ferm);
    hasChanged(QVariant(DBFERM));
+}
+
+void Database::removeFermentable(QList<Fermentable*> ferm)
+{
+   foreach (Fermentable* doa, ferm)
+      fermentables.removeOne(doa);
+   if (ferm.count())
+       hasChanged(QVariant(DBFERM));
 }
 
 void Database::removeHop(Hop* hop)
@@ -705,10 +721,27 @@ void Database::removeHop(Hop* hop)
    hasChanged(QVariant(DBHOP));
 }
 
+void Database::removeHop(QList<Hop*> hop)
+{
+   foreach (Hop* doa, hop)
+       hops.removeOne(doa);
+
+   if (hop.count())
+       hasChanged(QVariant(DBHOP));
+}
+
 void Database::removeMash(Mash* mash)
 {
    mashs.removeOne(mash);
    hasChanged(QVariant(DBMASH));
+}
+
+void Database::removeMash(QList<Mash*> mash)
+{
+   foreach( Mash* doa, mash)
+       mashs.removeOne(doa);
+   if (mash.count())
+       hasChanged(QVariant(DBMASH));
 }
 
 void Database::removeMashStep(MashStep* mashStep)
@@ -717,10 +750,26 @@ void Database::removeMashStep(MashStep* mashStep)
    hasChanged(QVariant(DBMASHSTEP));
 }
 
+void Database::removeMashStep(QList<MashStep*> mashStep)
+{
+   foreach( MashStep* doa, mashStep)
+       mashSteps.removeOne(doa);
+   if (mashStep.count())
+       hasChanged(QVariant(DBMASHSTEP));
+}
+
 void Database::removeMisc(Misc* misc)
 {
    miscs.removeOne(misc);
    hasChanged(QVariant(DBMISC));
+}
+
+void Database::removeMisc(QList<Misc*> misc)
+{
+   foreach( Misc* doa, misc)
+       miscs.removeOne(doa);
+   if (misc.count())
+       hasChanged(QVariant(DBMISC));
 }
 
 void Database::removeRecipe(Recipe* rec)
@@ -729,10 +778,26 @@ void Database::removeRecipe(Recipe* rec)
    hasChanged(QVariant(DBRECIPE));
 }
 
+void Database::removeRecipe(QList<Recipe*> rec)
+{
+   foreach( Recipe *doa, rec)
+       recipes.removeOne(doa);
+   if (rec.count())
+       hasChanged(QVariant(DBRECIPE));
+}
+
 void Database::removeStyle(Style* style)
 {
    styles.removeOne(style); // Wow, that was easy.
    hasChanged(QVariant(DBSTYLE));
+}
+
+void Database::removeStyle(QList<Style*> style)
+{
+   foreach (Style* doa, style)
+       styles.removeOne(doa); // Wow, that was easy.
+   if (style.count())
+       hasChanged(QVariant(DBSTYLE));
 }
 
 void Database::removeWater(Water* water)
@@ -741,10 +806,26 @@ void Database::removeWater(Water* water)
    hasChanged(QVariant(DBWATER));
 }
 
+void Database::removeWater(QList<Water*> water)
+{
+   foreach(Water* doa, water)
+       waters.removeOne(doa);
+   if (water.count())
+       hasChanged(QVariant(DBWATER));
+}
+
 void Database::removeYeast(Yeast* yeast)
 {
    yeasts.removeOne(yeast);
    hasChanged(QVariant(DBYEAST));
+}
+
+void Database::removeYeast(QList<Yeast*> yeast)
+{
+   foreach( Yeast* doa, yeast)
+       yeasts.removeOne(doa);
+   if (yeast.count())
+       hasChanged(QVariant(DBYEAST));
 }
 
 void Database::addWater(Water* water, bool disableNotify)

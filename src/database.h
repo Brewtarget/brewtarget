@@ -106,6 +106,7 @@ public:
     */
    void addYeast(Yeast* yeast, bool disableNotify = false);
 
+   // You can remove one
    void removeEquipment(Equipment* equip);
    void removeFermentable(Fermentable* ferm);
    void removeHop(Hop* hop);
@@ -116,6 +117,18 @@ public:
    void removeStyle(Style* style);
    void removeWater(Water* water);
    void removeYeast(Yeast* yeast);
+
+   // Or you can remove lists
+   void removeEquipment(QList<Equipment*> equip);
+   void removeFermentable(QList<Fermentable*> ferm);
+   void removeHop(QList<Hop*> hop);
+   void removeMash(QList<Mash*> mash);
+   void removeMashStep(QList<MashStep*> mashStep);
+   void removeMisc(QList<Misc*> misc);
+   void removeRecipe(QList<Recipe*> rec);
+   void removeStyle(QList<Style*> style);
+   void removeWater(QList<Water*> water);
+   void removeYeast(QList<Yeast*> yeast);
 
    //! Sorts all the lists by their compare methods.
    void resortAll();

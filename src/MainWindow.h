@@ -78,6 +78,8 @@ public:
 public slots:
    void save();
    void setRecipeByName(const QString& name);
+   void setRecipeByIndex(const QModelIndex &index);
+   void treeActivated(const QModelIndex &index);
    void clear();
 
    void updateRecipeName();
@@ -91,12 +93,15 @@ public slots:
    void addFermentableToRecipe(Fermentable* ferm);
    void removeSelectedFermentable();
    void editSelectedFermentable();
+
    void addHopToRecipe(Hop *hop);
    void removeSelectedHop();
    void editSelectedHop();
+
    void addMiscToRecipe(Misc* misc);
    void removeSelectedMisc();
    void editSelectedMisc();
+
    void addYeastToRecipe(Yeast* yeast);
    void removeSelectedYeast();
    void editSelectedYeast();
@@ -106,14 +111,16 @@ public slots:
    void editSelectedMashStep();
    void setMashByName(const QString& name);
    void saveMash();
-	void removeMash();
+   void removeMash();
 
    void newRecipe();
-   void removeRecipe();
    void exportRecipe();
    void importRecipes();
    void copyRecipe();
    
+   void deleteSelected();
+   void copySelected();
+
    void printRecipe();
    void printBrewday();
    void printPreviewRecipe();
@@ -122,9 +129,12 @@ public slots:
    void backup(); // Backup the database.
    void restoreFromBackup(); // Restore the database.
 
-   //void brewDayMode();
+   void contextMenu(const QPoint &point);
 
    void openDonateLink();
+
+   void dragEnterEvent(QDragEnterEvent *event);
+   void dropEvent( QDropEvent *event);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
@@ -163,7 +173,6 @@ private:
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
-
    QPrinter *printer;
 
    //! Currently highlighted fermentable in the fermentable table.
@@ -174,9 +183,18 @@ private:
    Misc* selectedMisc();
    //! Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
-
+   //! set the equipment based on a drop event
+   void droppedRecipeEquipment(Equipment *kit);
    void setupToolbar();
    void showChanges(const QVariant& info = QVariant());
+
+   // Copy methods used by copySelected()
+   void copyThis(Recipe *rec);
+   void copyThis(Equipment *kit);
+   void copyThis(Fermentable *ferm);
+   void copyThis(Hop *hop);
+   void copyThis(Misc *misc);
+   void copyThis(Yeast *yeast);
 };
 
 #endif	/* _MAINWINDOW_H */
