@@ -195,7 +195,6 @@ MainWindow::MainWindow(QWidget* parent)
    brewTargetTreeView->setColumnHidden(BrewTargetTreeItem::RECIPEBREWDATECOL, true);
    brewTargetTreeView->setColumnHidden(BrewTargetTreeItem::RECIPESTYLECOL, true);
    brewTargetTreeView->resizeColumnToContents(BrewTargetTreeItem::RECIPENAMECOL);
-   brewTargetTreeView->setCurrentIndex(brewTargetTreeView->findRecipe(0));
    brewTargetTreeView->setExpanded(brewTargetTreeView->findRecipe(0), true);
 
    // And do some magic on the splitter widget to keep the tree from expanding
@@ -1451,6 +1450,9 @@ void MainWindow::dropEvent(QDropEvent *event)
             type = brewTargetTreeView->getType(index);
             switch(type)
             {
+                case BrewTargetTreeItem::RECIPE:
+                    setRecipeByIndex(index);
+                    break;
                 case BrewTargetTreeItem::EQUIPMENT:
                     name = brewTargetTreeView->getEquipment(index)->getName();
                     equipmentComboBox->setIndexByEquipmentName(name);
