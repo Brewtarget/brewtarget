@@ -118,10 +118,22 @@ int BrewTargetTreeView::getType(const QModelIndex &index)
 void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
+    {
         dragStart = event->pos();
+        doubleClick = false;
+    }
 
     // Send the event on its way up to the parent
     QTreeView::mousePressEvent(event);
+}
+
+void BrewTargetTreeView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+        doubleClick = true;
+
+    // Send the event on its way up to the parent
+    QTreeView::mouseDoubleClickEvent(event);
 }
 
 void BrewTargetTreeView::mouseMoveEvent(QMouseEvent *event)
@@ -133,6 +145,9 @@ void BrewTargetTreeView::mouseMoveEvent(QMouseEvent *event)
     // Return if the length of movement isn't far enough.
     if ((event->pos() - dragStart).manhattanLength() <
             QApplication::startDragDistance())
+        return;
+
+    if ( doubleClick )
         return;
 
     QDrag *drag = new QDrag(this);

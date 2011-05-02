@@ -64,10 +64,12 @@ public:
     // Another try at drag and drop
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
 	BrewTargetTreeModel* model;
     QPoint dragStart;
+    bool doubleClick;
 
     QMimeData *mimeData(QModelIndexList indexes);
 };
