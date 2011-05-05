@@ -97,9 +97,9 @@ void Database::initialize()
    int col;
    unsigned int i, size;
 
-   dbFileName = (Brewtarget::getConfigDir() + "database.xml");
-   recipeFileName = (Brewtarget::getConfigDir() + "recipes.xml");
-   mashFileName = (Brewtarget::getConfigDir() + "mashs.xml");
+   dbFileName = (Brewtarget::getUserDataDir() + "database.xml");
+   recipeFileName = (Brewtarget::getUserDataDir() + "recipes.xml");
+   mashFileName = (Brewtarget::getUserDataDir() + "mashs.xml");
 
    dbFile.setFileName(dbFileName);
    recipeFile.setFileName(recipeFileName);

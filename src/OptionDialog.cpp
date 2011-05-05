@@ -28,6 +28,9 @@
 #include "FahrenheitTempUnitSystem.h"
 #include "CelsiusTempUnitSystem.h"
 #include <QButtonGroup>
+#include <QMessageBox>
+#include <QFileInfo>
+#include <QFileDialog>
 
 OptionDialog::OptionDialog(QWidget* parent)
 {
@@ -117,12 +120,26 @@ OptionDialog::OptionDialog(QWidget* parent)
 
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
+   connect( pushButton_dbDirBrowse, SIGNAL( clicked() ), this, SLOT( setDataDir() ) );
+   connect( pushButton_dbDirDefault, SIGNAL( clicked() ), this, SLOT( defaultDataDir() ) );
 }
 
 void OptionDialog::show()
 {
    showChanges();
    setVisible(true);
+}
+
+void OptionDialog::setDataDir()
+{
+   QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"), Brewtarget::getUserDataDir(), QFileDialog::ShowDirsOnly);
+   if( ! dir.isEmpty() )
+      lineEdit_dbDir->setText( dir );
+}
+
+void OptionDialog::defaultDataDir()
+{
+   lineEdit_dbDir->setText( Brewtarget::getConfigDir() );
 }
 
 void OptionDialog::saveAndClose()
@@ -139,6 +156,7 @@ void OptionDialog::saveAndClose()
    Brewtarget::ColorType cformula;
    Brewtarget::IbuType iformula;
    Brewtarget::ColorUnitType colorUnit;
+   QString newUserDataDir;
 
    button = colorGroup->checkedButton();
    if( button == checkBox_mosher )
@@ -228,6 +246,24 @@ void OptionDialog::saveAndClose()
 
    Brewtarget::setLanguage( languageToButtonMap.key(reinterpret_cast<QPushButton*>(languageGroup->checkedButton())) );
    
+   // Check the new userDataDir.
+   newUserDataDir = lineEdit_dbDir->text();
+   if( newUserDataDir != Brewtarget::getUserDataDir() )
+   {
+      // If there are no data files present...
+      if( ! QFileInfo(newUserDataDir + "database.xml").exists() )
+      {
+         // ...tell user we will copy old data files to new location.
+         QMessageBox::information(this,
+                                  tr("Copy Data"),
+                                  tr("There does not seem to be any data files in this directory, so we will copy your old data here.")
+                                 );
+         Brewtarget::copyDataFiles(newUserDataDir);
+      }
+
+      Brewtarget::userDataDir = newUserDataDir;
+   }
+
    if( Brewtarget::mainWindow != 0 )
       Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
 
@@ -327,4 +363,7 @@ void OptionDialog::showChanges()
    default:
       radioButton_srm->setChecked(true);
    }
+
+   // Data directory
+   lineEdit_dbDir->setText(Brewtarget::getUserDataDir());
 }

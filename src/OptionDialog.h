@@ -39,6 +39,8 @@ public slots:
    void show();
    void saveAndClose();
    void cancel();
+   void setDataDir();
+   void defaultDataDir();
    
 private:
    void showChanges();

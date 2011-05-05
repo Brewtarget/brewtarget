@@ -65,6 +65,7 @@ bool Brewtarget::userDatabaseDidNotExist = false;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
+QString Brewtarget::userDataDir = getConfigDir();
 
 bool Brewtarget::checkVersion = true;
 
@@ -175,7 +176,48 @@ void Brewtarget::checkForNewVersion()
    }
 }
 
-bool Brewtarget::ensureFilesExist()
+bool Brewtarget::copyDataFiles(QString newPath)
+{
+   QString dbFileName, recipeFileName, mashFileName, optionsFileName;
+   bool success = true;
+
+   // Database files.
+   dbFileName = getUserDataDir() + "database.xml";
+   recipeFileName = getUserDataDir() + "recipes.xml";
+   mashFileName = getUserDataDir() + "mashs.xml";
+   //optionsFileName = getUserDataDir() + "options.xml";
+
+   success &= QFile::copy(dbFileName, newPath + "database.xml");
+   success &= QFile::copy(recipeFileName, newPath + "recipes.xml");
+   success &= QFile::copy(mashFileName, newPath + "mashs.xml");
+   //success &= QFile::copy(optionsFileName, newPath + "options.xml");
+
+   return success;
+}
+
+bool Brewtarget::ensureOptionFileExists()
+{
+   QString optionsFileName;
+   QFile optionsFile;
+   bool success = true;
+
+   optionsFileName = getConfigDir() + "options.xml";
+   optionsFile.setFileName(optionsFileName);
+
+   if( !optionsFile.exists() )
+   {
+      success = QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
+      if( ! success )
+      {
+         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "options.xml").arg(optionsFileName));
+         return false;
+      }
+   }
+
+   return success;
+}
+
+bool Brewtarget::ensureDataFilesExist()
 {
    QString dbFileName, recipeFileName, mashFileName, optionsFileName, logFileName;
    QFile dbFile, recipeFile, mashFile, optionsFile;
@@ -184,18 +226,16 @@ bool Brewtarget::ensureFilesExist()
    logFile = new QFile();
 
    // Database files.
-   dbFileName = getConfigDir() + "database.xml";
-   recipeFileName = getConfigDir() + "recipes.xml";
-   mashFileName = getConfigDir() + "mashs.xml";
-   optionsFileName = getConfigDir() + "options.xml";
+   dbFileName = getUserDataDir() + "database.xml";
+   recipeFileName = getUserDataDir() + "recipes.xml";
+   mashFileName = getUserDataDir() + "mashs.xml";
    
    dbFile.setFileName(dbFileName);
    recipeFile.setFileName(recipeFileName);
    mashFile.setFileName(mashFileName);
-   optionsFile.setFileName(optionsFileName);
    
    // Log file
-   logFile->setFileName(getConfigDir() + "brewtarget_log.txt");
+   logFile->setFileName(getUserDataDir() + "brewtarget_log.txt");
    if( logFile->open(QFile::WriteOnly | QFile::Truncate) )
       logStream = new QTextStream(logFile);
    else
@@ -238,15 +278,6 @@ bool Brewtarget::ensureFilesExist()
       if( ! success )
       {
          logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "mashs.xml").arg(mashFileName));
-         return false;
-      }
-   }
-   if( !optionsFile.exists() )
-   {
-      success &= QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
-      if( ! success )
-      {
-         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "options.xml").arg(optionsFileName));
          return false;
       }
    }
@@ -443,9 +474,12 @@ QString Brewtarget::getConfigDir(bool *success)
 #endif
 }
 
-QString getUserDataDir()
+QString Brewtarget::getUserDataDir()
 {
-   return "";
+   if( userDataDir.endsWith('/') || userDataDir.endsWith('\\') )
+      return userDataDir;
+   else
+      return userDataDir + "/";
 }
 
 int Brewtarget::run()
@@ -454,12 +488,14 @@ int Brewtarget::run()
    bool success;
 
    success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
+   ensureOptionFileExists();
+   readPersistentOptions(); // Read all the options for bt.
+
    if( success )
-      success = ensureFilesExist(); // Make sure all the files we need exist before starting.
+      success = ensureDataFilesExist(); // Make sure all the files we need exist before starting.
    if( ! success )
       return 1;
 
-   readPersistentOptions(); // Read all the options for bt.
    loadTranslations(); // Do internationalization.
 
    Database::initialize();
@@ -591,9 +627,6 @@ void Brewtarget::readPersistentOptions()
    QFile xmlFile(getConfigDir() + "options.xml");
    optionsDoc = new QDomDocument();
    QDomElement root;
-   QDomNode node, child;
-   QDomText textNode;
-   QDomNodeList list;
    QString err;
    QString text;
    int line;
@@ -630,6 +663,11 @@ void Brewtarget::readPersistentOptions()
    text = getOptionValue(*optionsDoc, "language", &hasOption);
    if( hasOption )
       setLanguage(text);
+
+   //=======================Data Dir===========================
+   text = getOptionValue(*optionsDoc, "user_data_dir", &hasOption);
+   if( hasOption )
+      userDataDir = text;
 
    //=======================Weight=====================
    text = getOptionValue(*optionsDoc, "weight_unit_system", &hasOption);
@@ -779,6 +817,12 @@ void Brewtarget::savePersistentOptions()
    // Last DB merge request.
    node = optionsDoc->createElement("last_db_merge_req");
    child = optionsDoc->createTextNode( lastDbMergeRequest.toString(Qt::ISODate) );
+   node.appendChild(child);
+   root.appendChild(node);
+
+   // User data dir.
+   node = optionsDoc->createElement("user_data_dir");
+   child = optionsDoc->createTextNode( userDataDir );
    node.appendChild(child);
    root.appendChild(node);
 

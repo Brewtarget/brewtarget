@@ -118,10 +118,17 @@ private:
                                  const QString& option,
                                  bool* hasOption = 0);
 
+   /*! Copies the user xml files to another directory. Returns
+    *  false iff the copy is unsuccessful.
+    */
+   static bool copyDataFiles(QString newPath);
+
    //! Ensure our directories exist.
    static bool ensureDirectoriesExist();
-   //! Ensure the db and option files exist.
-   static bool ensureFilesExist();
+   //! Ensure the datafiles exist.
+   static bool ensureDataFilesExist();
+   //! Ensure the option file exists.
+   static bool ensureOptionFileExists();
    //! Load translation files.
    static void loadTranslations();
    //! Checks for a newer version and prompts user to download.
