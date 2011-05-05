@@ -443,6 +443,11 @@ QString Brewtarget::getConfigDir(bool *success)
 #endif
 }
 
+QString getUserDataDir()
+{
+   return "";
+}
+
 int Brewtarget::run()
 {
    int ret;
@@ -554,6 +559,33 @@ QString Brewtarget::displayThickness(double thick_lkg)
    return QString("%1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
 }
 
+QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString& option, bool* hasOption)
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QDomNodeList list;
+
+   list = optionsDoc.elementsByTagName(option);
+   if(list.length() <= 0)
+   {
+      Brewtarget::logW(QString("Could not find the <%1> tag in the option file.").arg(option));
+      if( hasOption != 0 )
+         *hasOption = false;
+      return "";
+   }
+   else
+   {
+      node = list.at(0);
+      child = node.firstChild();
+      textNode = child.toText();
+
+      if( hasOption != 0 )
+         *hasOption = true;
+
+      return textNode.nodeValue();
+   }
+}
+
 void Brewtarget::readPersistentOptions()
 {
    QFile xmlFile(getConfigDir() + "options.xml");
@@ -566,6 +598,7 @@ void Brewtarget::readPersistentOptions()
    QString text;
    int line;
    int col;
+   bool hasOption;
 
    // Try to open xmlFile.
    if( ! xmlFile.open(QIODevice::ReadOnly) )
@@ -581,104 +614,27 @@ void Brewtarget::readPersistentOptions()
 
    root = optionsDoc->documentElement();
 
-   // backwards compat for old 'english units' - these were US Customary
-   // for weight and volume and fahrenheit for temp
-   list = optionsDoc->elementsByTagName(QString("english_units"));
-   if( list.length() <= 0 )
-   {
-      //could be pre 'english_units', in which case default to US Customary
-      weightUnitSystem = USCustomary;
-      volumeUnitSystem = USCustomary;
-      tempScale = Fahrenheit;
-
-      weightSystem = UnitSystems::usWeightUnitSystem();
-      volumeSystem = UnitSystems::usVolumeUnitSystem();
-      tempSystem = UnitSystems::fahrenheitTempUnitSystem();
-   }
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
-      if( text == "true" )
-      {
-         weightUnitSystem = USCustomary;
-         volumeUnitSystem = USCustomary;
-         tempScale = Fahrenheit;
-
-         weightSystem = UnitSystems::usWeightUnitSystem();
-         volumeSystem = UnitSystems::usVolumeUnitSystem();
-         tempSystem = UnitSystems::fahrenheitTempUnitSystem();
-      }
-      else
-      {
-         weightUnitSystem = SI;
-         volumeUnitSystem = SI;
-         tempScale = Celsius;
-
-         weightSystem = UnitSystems::siWeightUnitSystem();
-         volumeSystem = UnitSystems::siVolumeUnitSystem();
-         tempSystem = UnitSystems::celsiusTempUnitSystem();
-      }
- 
-   }
-
    //================Version Checking========================
-   list = optionsDoc->elementsByTagName(QString("check_version"));
-   if( list.length() > 0 )
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
-      if( text == "true" )
-         checkVersion = true;
-      else
-         checkVersion = false;
-   }
+   text = getOptionValue(*optionsDoc, "check_version");
+   if( text == "true" )
+      checkVersion = true;
+   else
+      checkVersion = false;
 
    //=====================Last DB Merge Request======================
-   list = optionsDoc->elementsByTagName(QString("last_db_merge_req"));
-   if( list.length() > 0 )
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
+   text = getOptionValue(*optionsDoc, "last_db_merge_req", &hasOption);
+   if( hasOption )
       lastDbMergeRequest = QDateTime::fromString(text, Qt::ISODate);
-   }
 
    //=====================Language====================
-   list = optionsDoc->elementsByTagName(QString("language"));
-   if(list.length() <= 0)
-      Brewtarget::logW(QString("Could not find the language tag in the option file."));
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
+   text = getOptionValue(*optionsDoc, "language", &hasOption);
+   if( hasOption )
       setLanguage(text);
-   }
 
    //=======================Weight=====================
-   list = optionsDoc->elementsByTagName(QString("weight_unit_system"));
-   if( list.length() <= 0 )
+   text = getOptionValue(*optionsDoc, "weight_unit_system", &hasOption);
+   if( hasOption )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the weight_unit_system tag in the option file."));
-   }
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
       if( text == "Imperial" )
       {
          weightUnitSystem = Imperial;
@@ -697,77 +653,50 @@ void Brewtarget::readPersistentOptions()
    }
 
    //===========================Volume=======================
-   list = optionsDoc->elementsByTagName(QString("volume_unit_system"));
-   if( list.length() <= 0 )
+   text = getOptionValue(*optionsDoc, "volume_unit_system", &hasOption);
+   if( hasOption )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the volume_unit_system tag in the option file."));
-   }
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
       if( text == "Imperial" )
       {
          volumeUnitSystem = Imperial;
-    volumeSystem = UnitSystems::imperialVolumeUnitSystem();
+         volumeSystem = UnitSystems::imperialVolumeUnitSystem();
       }
       else if (text == "USCustomary")
       {
          volumeUnitSystem = USCustomary;
-    volumeSystem = UnitSystems::usVolumeUnitSystem();
+         volumeSystem = UnitSystems::usVolumeUnitSystem();
       }
       else
       {
          volumeUnitSystem = SI;
-    volumeSystem = UnitSystems::siVolumeUnitSystem();
+         volumeSystem = UnitSystems::siVolumeUnitSystem();
       }
    }
 
    //=======================Temp======================
-   list = optionsDoc->elementsByTagName(QString("temperature_scale"));
-   if( list.length() <= 0 )
+   text = getOptionValue(*optionsDoc, "temperature_scale", &hasOption);
+   if( hasOption )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the temperature_scale tag in the option file."));
-   }
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
       if( text == "Fahrenheit" )
       {
          tempScale = Fahrenheit;
-    tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+         tempSystem = UnitSystems::fahrenheitTempUnitSystem();
       }
       else
       {
          tempScale = Celsius;
-    tempSystem = UnitSystems::celsiusTempUnitSystem();
+         tempSystem = UnitSystems::celsiusTempUnitSystem();
       }
    }
 
+   //======================Time======================
    // Set the one and only time system.
    timeSystem = UnitSystems::timeUnitSystem();
 
    //===================IBU===================
-   // Get IBU formula.
-   list = optionsDoc->elementsByTagName(QString("ibu_formula"));
-   if( list.length() <= 0 )
+   text = getOptionValue(*optionsDoc, "ibu_formula", &hasOption);
+   if( hasOption )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the ibu_formula tag in the option file."));
-   }
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
       if( text == "tinseth" )
          ibuFormula = TINSETH;
       else if( text == "rager" )
@@ -779,19 +708,9 @@ void Brewtarget::readPersistentOptions()
    }
 
    //========================Color======================
-   // Get color formula.
-   list = optionsDoc->elementsByTagName(QString("color_formula"));
-   if( list.length() <= 0 )
+   text = getOptionValue(*optionsDoc, "color_formula", &hasOption);
+   if( hasOption )
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Could not find the color_formula tag in the option file."));
-   }
-   else
-   {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
       if( text == "morey" )
          colorFormula = MOREY;
       else if( text == "daniel" )
@@ -805,17 +724,9 @@ void Brewtarget::readPersistentOptions()
    }
 
    //========================Gravity==================
-   // Get plato usage.
-   list = optionsDoc->elementsByTagName(QString("use_plato"));
-   if( list.length() <= 0 )
-      Brewtarget::logW( "Could not find the use_plato tag in the option file." );
-   else
+   text = getOptionValue(*optionsDoc, "use_plato", &hasOption);
+   if( hasOption )
    {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
       if( text == "true" )
          usePlato = true;
       else if( text == "false" )
@@ -827,22 +738,15 @@ void Brewtarget::readPersistentOptions()
    }
 
    //=======================Color unit===================
-   list = optionsDoc->elementsByTagName("color_unit");
-   if( list.length() <= 0 )
-      Brewtarget::logW( "Could not find the color_unit tag in the option file." );
-   else
+   text = getOptionValue(*optionsDoc, "color_unit", &hasOption);
+   if( hasOption )
    {
-      node = list.at(0);
-      child = node.firstChild();
-      textNode = child.toText();
-      text = textNode.nodeValue();
-
       if( text == "srm" )
          colorUnit = SRM;
       else if( text == "ebc" )
          colorUnit = EBC;
       else
-         Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));;
+         Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
    }
 
    delete optionsDoc;

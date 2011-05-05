@@ -53,6 +53,8 @@ public:
    static QString getDataDir();
    static QString getDocDir();
    static QString getConfigDir(bool* success = 0);
+   //! Get user-specified directory where the .xml files reside.
+   static QString getUserDataDir();
    static int run();
    static void log( LogType lt, QString message );
    static void logE( QString message ); // Error message.
@@ -109,6 +111,13 @@ private:
    static QString currentLanguage;
    static bool userDatabaseDidNotExist;
 
+   /*! Helper to get option values. If \b hasOption is not null,
+    *  is set to true iff the option exists in the document.
+    */
+   static QString getOptionValue(const QDomDocument& optionsDoc,
+                                 const QString& option,
+                                 bool* hasOption = 0);
+
    //! Ensure our directories exist.
    static bool ensureDirectoriesExist();
    //! Ensure the db and option files exist.
@@ -125,6 +134,9 @@ private:
     *  data-space database to the user-space database.
     */
    static QDateTime lastDbMergeRequest;
+
+   //! Where the user says the .xml files are
+   static QString userDataDir;
 
    // These are options that are ONLY to be edited by the OptionDialog.
    static bool usePlato; // Whether or not to display plato instead of SG.
