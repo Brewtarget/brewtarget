@@ -17,7 +17,7 @@
  */
 
 #ifndef _MISC_H
-#define	_MISC_H
+#define   _MISC_H
 
 #include <string>
 #include <exception>
@@ -123,4 +123,4 @@ struct Misc_ptr_equals
    }
 };
 
-#endif	/* _MISC_H */
+#endif   /* _MISC_H */

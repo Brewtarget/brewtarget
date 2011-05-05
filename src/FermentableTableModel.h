@@ -17,7 +17,7 @@
  */
 
 #ifndef _FERMENTABLETABLEMODEL_H
-#define	_FERMENTABLETABLEMODEL_H
+#define   _FERMENTABLETABLEMODEL_H
 
 class FermentableTableModel;
 class FermentableItemDelegate;
@@ -87,5 +87,5 @@ public slots:
 private:
 };
 
-#endif	/* _FERMENTABLETABLEMODEL_H */
+#endif   /* _FERMENTABLETABLEMODEL_H */
 

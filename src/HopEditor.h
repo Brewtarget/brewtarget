@@ -17,7 +17,7 @@
  */
 
 #ifndef _HOPEDITOR_H
-#define	_HOPEDITOR_H
+#define   _HOPEDITOR_H
 
 class HopEditor;
 
@@ -44,5 +44,5 @@ private:
    void showChanges();
 };
 
-#endif	/* _HOPEDITOR_H */
+#endif   /* _HOPEDITOR_H */
 

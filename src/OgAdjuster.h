@@ -25,7 +25,7 @@ class StyleEditor;
 #include "recipe.h"
 
 /**
-	@author Philip G. Lee <rocketman768@gmail.com>
+   @author Philip G. Lee <rocketman768@gmail.com>
 */
 
 class OgAdjuster : public QDialog, public Ui::ogAdjuster

@@ -17,7 +17,7 @@
  */
 
 #ifndef _HOPTABLEMODEL_H
-#define	_HOPTABLEMODEL_H
+#define   _HOPTABLEMODEL_H
 
 class HopTableModel;
 class HopItemDelegate;
@@ -82,5 +82,5 @@ public:
 private:
 };
 
-#endif	/* _HOPTABLEMODEL_H */
+#endif   /* _HOPTABLEMODEL_H */
 

@@ -17,7 +17,7 @@
  */
 
 #ifndef _HOPTABLEWIDGET_H
-#define	_HOPTABLEWIDGET_H
+#define   _HOPTABLEWIDGET_H
 
 class HopTableWidget;
 
@@ -42,5 +42,5 @@ private:
    HopSortFilterProxyModel* hfpm;
 };
 
-#endif	/* _HOPTABLEWIDGET_H */
+#endif   /* _HOPTABLEWIDGET_H */
 

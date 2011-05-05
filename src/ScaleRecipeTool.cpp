@@ -149,7 +149,7 @@ void ScaleRecipeTool::scaleByVolume()
    {
       Fermentable* ferm = recObs->getFermentable(i);
       if( ferm == 0 )
-	 continue;
+    continue;
       
       ferm->setAmount_kg(ferm->getAmount_kg() * ratio);
    }
@@ -159,7 +159,7 @@ void ScaleRecipeTool::scaleByVolume()
    {
       Hop* hop = recObs->getHop(i);
       if( hop == 0 )
-	 continue;
+    continue;
       
       hop->setAmount_kg(hop->getAmount_kg() * ratio);
    }
@@ -169,7 +169,7 @@ void ScaleRecipeTool::scaleByVolume()
    {
       Misc* misc = recObs->getMisc(i);
       if( misc == 0 )
-	 continue;
+    continue;
       
       misc->setAmount( misc->getAmount() * ratio );
    }
@@ -179,7 +179,7 @@ void ScaleRecipeTool::scaleByVolume()
    {
       Water* water = recObs->getWater(i);
       if( water == 0 )
-	 continue;
+    continue;
       
       water->setAmount_l(water->getAmount_l() * ratio);
    }
@@ -193,7 +193,7 @@ void ScaleRecipeTool::scaleByVolume()
    {
       MashStep* step = mash->getMashStep(i);
       if( step == 0 )
-	 continue;
+    continue;
       
       // Reset all these to zero so that the user
       // will know to re-run the mash wizard.
@@ -205,5 +205,5 @@ void ScaleRecipeTool::scaleByVolume()
    
    // Let the user know what happened.
    QMessageBox::information(this, tr("Recipe Scaled"),
-			    tr("The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.") );
+             tr("The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.") );
 }

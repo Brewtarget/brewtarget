@@ -17,7 +17,7 @@
  */
 
 #ifndef _MASHSTEPEDITOR_H
-#define	_MASHSTEPEDITOR_H
+#define   _MASHSTEPEDITOR_H
 
 class MashStepEditor;
 
@@ -47,5 +47,5 @@ private:
    MashStep* obs;
 };
 
-#endif	/* _MASHSTEPEDITOR_H */
+#endif   /* _MASHSTEPEDITOR_H */
 

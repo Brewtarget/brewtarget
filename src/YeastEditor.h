@@ -17,7 +17,7 @@
  */
 
 #ifndef _YEASTEDITOR_H
-#define	_YEASTEDITOR_H
+#define   _YEASTEDITOR_H
 
 class YeastEditor;
 
@@ -44,5 +44,5 @@ private:
    void showChanges();
 };
 
-#endif	/* _YEASTEDITOR_H */
+#endif   /* _YEASTEDITOR_H */
 

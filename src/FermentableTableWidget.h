@@ -17,7 +17,7 @@
  */
 
 #ifndef _FERMENTABLETABLEWIDGET_H
-#define	_FERMENTABLETABLEWIDGET_H
+#define   _FERMENTABLETABLEWIDGET_H
 
 class FermentableTableWidget;
 
@@ -42,4 +42,4 @@ private:
    FermentableSortFilterProxyModel* ffpm;
 };
 
-#endif	/* _FERMENTABLETABLEWIDGET_H */
+#endif   /* _FERMENTABLETABLEWIDGET_H */

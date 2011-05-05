@@ -17,7 +17,7 @@
  */
 
 #ifndef _STYLEEDITOR_H
-#define	_STYLEEDITOR_H
+#define   _STYLEEDITOR_H
 
 class StyleEditor;
 
@@ -50,5 +50,5 @@ private:
    void showChanges();
 };
 
-#endif	/* _STYLEEDITOR_H */
+#endif   /* _STYLEEDITOR_H */
 

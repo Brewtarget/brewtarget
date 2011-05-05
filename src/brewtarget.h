@@ -17,7 +17,7 @@
  */
 
 #ifndef _BREWTARGET_H
-#define	_BREWTARGET_H
+#define   _BREWTARGET_H
 
 class Brewtarget;
 
@@ -143,5 +143,5 @@ private:
    static IbuType ibuFormula;
 };
 
-#endif	/* _BREWTARGET_H */
+#endif   /* _BREWTARGET_H */
 

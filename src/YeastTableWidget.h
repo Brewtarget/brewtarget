@@ -17,7 +17,7 @@
  */
 
 #ifndef _YEASTTABLEWIDGET_H
-#define	_YEASTTABLEWIDGET_H
+#define   _YEASTTABLEWIDGET_H
 
 class YeastTableWidget;
 
@@ -41,5 +41,5 @@ private:
    YeastSortFilterProxyModel *yfpm;
 };
 
-#endif	/* _YEASTTABLEWIDGET_H */
+#endif   /* _YEASTTABLEWIDGET_H */
 

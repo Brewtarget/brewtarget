@@ -24,95 +24,95 @@
 #include "BrewTargetTreeModel.h"
 
 BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
-	QTreeView(parent)
+   QTreeView(parent)
 {
-	model = new BrewTargetTreeModel(this);
-	model->startObservingDB();
+   model = new BrewTargetTreeModel(this);
+   model->startObservingDB();
 
-	setModel(model);
+   setModel(model);
 }
 
 BrewTargetTreeView::~BrewTargetTreeView()
 {
-	delete model;
+   delete model;
 }
 
 BrewTargetTreeModel* BrewTargetTreeView::getModel()
 {
-	return model;
+   return model;
 }
 
 bool BrewTargetTreeView::removeRow(const QModelIndex &index)
 {
-	QModelIndex parent = model->parent(index);
-	int position       = index.row();
+   QModelIndex parent = model->parent(index);
+   int position       = index.row();
 
-	return model->removeRows(position,1,parent);
+   return model->removeRows(position,1,parent);
 }
 
 Recipe* BrewTargetTreeView::getRecipe(const QModelIndex &index) const
 {
-	return model->getRecipe(index);
+   return model->getRecipe(index);
 }
 
 QModelIndex BrewTargetTreeView::findRecipe(Recipe* rec)
 {
-	return model->findRecipe(rec);
+   return model->findRecipe(rec);
 }
 
 Equipment* BrewTargetTreeView::getEquipment(const QModelIndex &index) const
 {
-	return model->getEquipment(index);
+   return model->getEquipment(index);
 }
 
 QModelIndex BrewTargetTreeView::findEquipment(Equipment* kit)
 {
-	return model->findEquipment(kit);
+   return model->findEquipment(kit);
 }
 
 Fermentable* BrewTargetTreeView::getFermentable(const QModelIndex &index) const
 {
-	return model->getFermentable(index);
+   return model->getFermentable(index);
 }
 
 QModelIndex BrewTargetTreeView::findFermentable(Fermentable* ferm)
 {
-	return model->findFermentable(ferm);
+   return model->findFermentable(ferm);
 }
 
 Hop* BrewTargetTreeView::getHop(const QModelIndex &index) const
 {
-	return model->getHop(index);
+   return model->getHop(index);
 }
 
 QModelIndex BrewTargetTreeView::findHop(Hop* hop)
 {
-	return model->findHop(hop);
+   return model->findHop(hop);
 }
 
 Misc* BrewTargetTreeView::getMisc(const QModelIndex &index) const
 {
-	return model->getMisc(index);
+   return model->getMisc(index);
 }
 
 QModelIndex BrewTargetTreeView::findMisc(Misc* misc)
 {
-	return model->findMisc(misc);
+   return model->findMisc(misc);
 }
 
 Yeast* BrewTargetTreeView::getYeast(const QModelIndex &index) const
 {
-	return model->getYeast(index);
+   return model->getYeast(index);
 }
 
 QModelIndex BrewTargetTreeView::findYeast(Yeast* yeast)
 {
-	return model->findYeast(yeast);
+   return model->findYeast(yeast);
 }
 
 int BrewTargetTreeView::getType(const QModelIndex &index)
 {
-	return model->getType(index);
+   return model->getType(index);
 }
 
 void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)

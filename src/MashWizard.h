@@ -17,7 +17,7 @@
  */
 
 #ifndef _MASHWIZARD_H
-#define	_MASHWIZARD_H
+#define   _MASHWIZARD_H
 
 class MashWizard;
 
@@ -43,5 +43,5 @@ private:
    Unit *volumeUnit;
 };
 
-#endif	/* _MASHWIZARD_H */
+#endif   /* _MASHWIZARD_H */
 

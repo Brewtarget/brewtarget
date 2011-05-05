@@ -17,7 +17,7 @@
  */
 
 #ifndef _EQUIPMENTCOMBOBOX_H
-#define	_EQUIPMENTCOMBOBOX_H
+#define   _EQUIPMENTCOMBOBOX_H
 
 class EquipmentComboBox;
 
@@ -54,5 +54,5 @@ private:
    Database* dbObs;
 };
 
-#endif	/* _EQUIPMENTCOMBOBOX_H */
+#endif   /* _EQUIPMENTCOMBOBOX_H */
 

@@ -127,7 +127,7 @@ void MashStepTableModel::notify(Observable* notifier, QVariant info)
    if( ok )
    {
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-			QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS));
+         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS));
    }
    else
       reset();

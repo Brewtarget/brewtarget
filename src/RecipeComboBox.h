@@ -17,7 +17,7 @@
  */
 
 #ifndef _RECIPECOMBOBOX_H
-#define	_RECIPECOMBOBOX_H
+#define   _RECIPECOMBOBOX_H
 
 #include <QComboBox>
 #include <QWidget>
@@ -52,5 +52,5 @@ private:
    Database* dbObs;
 };
 
-#endif	/* _RECIPECOMBOBOX_H */
+#endif   /* _RECIPECOMBOBOX_H */
 

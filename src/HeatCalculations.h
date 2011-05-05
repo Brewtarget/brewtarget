@@ -17,7 +17,7 @@
  */
 
 #ifndef _HEATCALCULATIONS_H
-#define	_HEATCALCULATIONS_H
+#define   _HEATCALCULATIONS_H
 
 class HeatCalculations;
 
@@ -43,5 +43,5 @@ public:
    static double absorption_LKg;
 };
 
-#endif	/* _HEATCALCULATIONS_H */
+#endif   /* _HEATCALCULATIONS_H */
 

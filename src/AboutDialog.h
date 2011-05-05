@@ -17,7 +17,7 @@
  */
 
 #ifndef _ABOUTDIALOG_H
-#define	_ABOUTDIALOG_H
+#define   _ABOUTDIALOG_H
 
 #include <QDialog>
 #include <QWidget>
@@ -33,5 +33,5 @@ public:
            { setupUi(this); }
 };
 
-#endif	/* _ABOUTDIALOG_H */
+#endif   /* _ABOUTDIALOG_H */
 

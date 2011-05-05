@@ -17,7 +17,7 @@
  */
 
 #ifndef _MISCEDITOR_H
-#define	_MISCEDITOR_H
+#define   _MISCEDITOR_H
 
 #include "ui_miscEditor.h"
 #include "misc.h"
@@ -42,5 +42,5 @@ private:
    void showChanges();
 };
 
-#endif	/* _MISCEDITOR_H */
+#endif   /* _MISCEDITOR_H */
 

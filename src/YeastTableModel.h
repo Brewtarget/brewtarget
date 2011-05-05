@@ -17,7 +17,7 @@
  */
 
 #ifndef _YEASTTABLEMODEL_H
-#define	_YEASTTABLEMODEL_H
+#define   _YEASTTABLEMODEL_H
 
 class YeastTableModel;
 class YeastItemDelegate;
@@ -76,5 +76,5 @@ public:
 private:
 };
 
-#endif	/* _YEASTTABLEMODEL_H */
+#endif   /* _YEASTTABLEMODEL_H */
 

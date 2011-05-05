@@ -17,7 +17,7 @@
  */
 
 #ifndef _OBSERVABLE_H
-#define	_OBSERVABLE_H
+#define   _OBSERVABLE_H
 #include <QVector>
 #include <QVariant>
 
@@ -77,5 +77,5 @@ private:
    QVector<Observable*> obsVec;
 };
 
-#endif	/* _OBSERVABLE_H */
+#endif   /* _OBSERVABLE_H */
 

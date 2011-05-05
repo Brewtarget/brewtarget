@@ -17,7 +17,7 @@
  */
 
 #ifndef _WATERTABLEMODEL_H
-#define	_WATERTABLEMODEL_H
+#define   _WATERTABLEMODEL_H
 
 class WaterTableModel;
 class WaterItemDelegate;
@@ -77,5 +77,5 @@ public:
 private:
 };
 
-#endif	/* _WATERTABLEMODEL_H */
+#endif   /* _WATERTABLEMODEL_H */
 

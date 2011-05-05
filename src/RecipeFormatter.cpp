@@ -448,7 +448,7 @@ QString RecipeFormatter::buildTitleTable()
    Style* style = 0;
 
    if ( rec == 0 )
-	   return "";
+      return "";
 
    style = rec->getStyle();
 
@@ -469,10 +469,10 @@ QString RecipeFormatter::buildTitleTable()
 
    body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Brewer"))
-		   .arg(rec->getBrewer());
+         .arg(rec->getBrewer());
    body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Date"))
-		   .arg(rec->getDate());
+         .arg(rec->getDate());
    body += "</table>";
 
    // Build the top table
@@ -504,15 +504,15 @@ QString RecipeFormatter::buildTitleTable()
 
    // Fourth row: ABV and Bitterness.  We need to set the bitterness string up first
    bitterness = QString("%1 IBU (%2)")
-		   .arg( rec->getIBU(), 0, 'f', 1);
+         .arg( rec->getIBU(), 0, 'f', 1);
    switch ( Brewtarget::ibuFormula )
    {
-	   case Brewtarget::TINSETH:
-		   bitterness = bitterness.arg("Tinseth");
-		   break;
-	   case Brewtarget::RAGER:
-		   bitterness = bitterness.arg("Rager");
-		   break;
+      case Brewtarget::TINSETH:
+         bitterness = bitterness.arg("Tinseth");
+         break;
+      case Brewtarget::RAGER:
+         bitterness = bitterness.arg("Rager");
+         break;
        default:
            bitterness = bitterness.arg(tr("Unknown"));
    }
@@ -526,15 +526,15 @@ QString RecipeFormatter::buildTitleTable()
    color = tr("%1 SRM (%2)").arg(rec->getColor_srm(), 0, 'f', 0);
    switch( Brewtarget::colorFormula )
    {
-	   case Brewtarget::MOREY:
-		   color = color.arg("Morey");
-		   break;
-	   case Brewtarget::DANIEL:
-		   color = color.arg("Daniels");
-		   break;
-	   case Brewtarget::MOSHER:
-		   color = color.arg("Mosher");
-		   break;
+      case Brewtarget::MOREY:
+         color = color.arg("Morey");
+         break;
+      case Brewtarget::DANIEL:
+         color = color.arg("Daniels");
+         break;
+      case Brewtarget::MOSHER:
+         color = color.arg("Mosher");
+         break;
    }
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Color"))
@@ -551,139 +551,139 @@ QString RecipeFormatter::buildTitleTable()
 
 QString RecipeFormatter::buildFermentableTable()
 {
-	QString ftable;
-	if ( rec == 0 || rec->getNumFermentables() < 1 )
-		return "";
+   QString ftable;
+   if ( rec == 0 || rec->getNumFermentables() < 1 )
+      return "";
 
-	ftable = QString("<h3>%1</h3>").arg(tr("Fermentables"));
+   ftable = QString("<h3>%1</h3>").arg(tr("Fermentables"));
    ftable += QString("<table id=\"fermentables\">");
-	ftable += QString("<caption>%1 %2</caption>")
+   ftable += QString("<caption>%1 %2</caption>")
                   .arg(tr("Total grain:"))
                   .arg(Brewtarget::displayAmount(rec->getGrains_kg(), Units::kilograms));
-	// Set up the header row.
-	ftable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th><th>%7</th></tr>")
-			.arg(tr("Name"))
-			.arg(tr("Type"))
-			.arg(tr("Amount"))
-			.arg(tr("Mashed"))
-			.arg(tr("Late"))
-			.arg(tr("Yield"))
-			.arg(tr("Color"));
-	// Now add a row for each fermentable
-	for(unsigned int i=0; i < rec->getNumFermentables(); ++i)
-	{
-		Fermentable* ferm = rec->getFermentable(i);
-		ftable += "<tr>";
-		ftable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7 L</td>")
+   // Set up the header row.
+   ftable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th><th>%7</th></tr>")
+         .arg(tr("Name"))
+         .arg(tr("Type"))
+         .arg(tr("Amount"))
+         .arg(tr("Mashed"))
+         .arg(tr("Late"))
+         .arg(tr("Yield"))
+         .arg(tr("Color"));
+   // Now add a row for each fermentable
+   for(unsigned int i=0; i < rec->getNumFermentables(); ++i)
+   {
+      Fermentable* ferm = rec->getFermentable(i);
+      ftable += "<tr>";
+      ftable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7 L</td>")
             .arg( ferm->getName())
-				.arg( ferm->getTypeStringTr())
-				.arg( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
-				.arg( ferm->getIsMashed() ? tr("Yes") : tr("No") )
-				.arg( ferm->getAddAfterBoil() ? tr("Yes") : tr("No"))
-				.arg( ferm->getYield_pct(), 0, 'f', 0)
-				.arg( ferm->getColor_srm(), 0, 'f', 0);
-		ftable += "</tr>";
-	}
-	ftable += "</table>";
-	return ftable;
+            .arg( ferm->getTypeStringTr())
+            .arg( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
+            .arg( ferm->getIsMashed() ? tr("Yes") : tr("No") )
+            .arg( ferm->getAddAfterBoil() ? tr("Yes") : tr("No"))
+            .arg( ferm->getYield_pct(), 0, 'f', 0)
+            .arg( ferm->getColor_srm(), 0, 'f', 0);
+      ftable += "</tr>";
+   }
+   ftable += "</table>";
+   return ftable;
 }
 
 QString RecipeFormatter::buildHopsTable()
 {
-	QString hTable;
+   QString hTable;
 
-	if ( rec == 0 || rec->getNumHops() < 1 )
-		return "";
+   if ( rec == 0 || rec->getNumHops() < 1 )
+      return "";
 
-	hTable = QString("<h3>%1</h3>").arg(tr("Hops"));
+   hTable = QString("<h3>%1</h3>").arg(tr("Hops"));
    hTable += QString("<table id=\"hops\">");
-	// Set up the header row.
-	hTable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th><th>%7</th></tr>")
-			.arg(tr("Name"))
-			.arg(tr("Alpha"))
-			.arg(tr("Amount"))
-			.arg(tr("Use"))
-			.arg(tr("Time"))
-			.arg(tr("Form"))
-			.arg(tr("IBU"));
-	for( unsigned int i = 0; i < rec->getNumHops(); ++i)
-	{
-		Hop *hop = rec->getHop(i);
+   // Set up the header row.
+   hTable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th><th>%6</th><th>%7</th></tr>")
+         .arg(tr("Name"))
+         .arg(tr("Alpha"))
+         .arg(tr("Amount"))
+         .arg(tr("Use"))
+         .arg(tr("Time"))
+         .arg(tr("Form"))
+         .arg(tr("IBU"));
+   for( unsigned int i = 0; i < rec->getNumHops(); ++i)
+   {
+      Hop *hop = rec->getHop(i);
       hTable += QString("<td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td>")
             .arg( hop->getName())
-				.arg( hop->getAlpha_pct(), 0, 'f', 0)
-				.arg( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
-				.arg( hop->getUseStringTr())
-				.arg( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) )
-				.arg( hop->getFormStringTr())
-				.arg( rec->getIBUFromHop(i), 0, 'f', 1);
-		hTable += "</tr>";
-	}
-	hTable += "</table>";
-	return hTable;
+            .arg( hop->getAlpha_pct(), 0, 'f', 0)
+            .arg( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
+            .arg( hop->getUseStringTr())
+            .arg( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) )
+            .arg( hop->getFormStringTr())
+            .arg( rec->getIBUFromHop(i), 0, 'f', 1);
+      hTable += "</tr>";
+   }
+   hTable += "</table>";
+   return hTable;
 }
 
 QString RecipeFormatter::buildMiscTable()
 {
-	QString mtable;
+   QString mtable;
 
-	if ( rec == 0 || rec->getNumMiscs() < 1 )
-		return "";
+   if ( rec == 0 || rec->getNumMiscs() < 1 )
+      return "";
 
-	mtable = QString("<h3>%1</h3>").arg(tr("Misc"));
+   mtable = QString("<h3>%1</h3>").arg(tr("Misc"));
    mtable += QString("<table id=\"misc\">");
-	// Set up the header row.
-	mtable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
-			.arg(tr("Name"))
-			.arg(tr("Type"))
-			.arg(tr("Use"))
-			.arg(tr("Amount"))
-			.arg(tr("Time"));
-	for( unsigned int i = 0; i < rec->getNumMiscs(); ++i)
-	{
-		Misc *misc = rec->getMisc(i);
-		mtable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
+   // Set up the header row.
+   mtable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
+         .arg(tr("Name"))
+         .arg(tr("Type"))
+         .arg(tr("Use"))
+         .arg(tr("Amount"))
+         .arg(tr("Time"));
+   for( unsigned int i = 0; i < rec->getNumMiscs(); ++i)
+   {
+      Misc *misc = rec->getMisc(i);
+      mtable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
             .arg( misc->getName())
-				.arg( misc->getTypeStringTr())
-				.arg( misc->getUseStringTr())
-				.arg( Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters))
-				.arg( Brewtarget::displayAmount(misc->getTime(), Units::minutes) );
-		mtable += "</tr>";
-	}
-	mtable += "</table>";
-	return mtable;
+            .arg( misc->getTypeStringTr())
+            .arg( misc->getUseStringTr())
+            .arg( Brewtarget::displayAmount(misc->getAmount(), misc->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters))
+            .arg( Brewtarget::displayAmount(misc->getTime(), Units::minutes) );
+      mtable += "</tr>";
+   }
+   mtable += "</table>";
+   return mtable;
 
 }
 
 QString RecipeFormatter::buildYeastTable()
 {
-	QString ytable;
+   QString ytable;
 
-	if ( rec == 0 || rec->getNumYeasts() < 1 )
-		return "";
+   if ( rec == 0 || rec->getNumYeasts() < 1 )
+      return "";
 
-	ytable = QString("<h3>%1</h3>").arg(tr("Yeast"));
+   ytable = QString("<h3>%1</h3>").arg(tr("Yeast"));
    ytable += QString("<table id=\"yeast\">");
-	// Set up the header row.
-	ytable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
-			.arg(tr("Name"))
-			.arg(tr("Type"))
-			.arg(tr("Form"))
-			.arg(tr("Amount"))
-			.arg(tr("Stage"));
-	for( unsigned int i = 0; i < rec->getNumYeasts(); ++i)
-	{
-		Yeast *y = rec->getYeast(i);
-		ytable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
+   // Set up the header row.
+   ytable += QString("<tr><th>%1</th><th>%2</th><th>%3</th><th>%4</th><th>%5</th></tr>")
+         .arg(tr("Name"))
+         .arg(tr("Type"))
+         .arg(tr("Form"))
+         .arg(tr("Amount"))
+         .arg(tr("Stage"));
+   for( unsigned int i = 0; i < rec->getNumYeasts(); ++i)
+   {
+      Yeast *y = rec->getYeast(i);
+      ytable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td>")
             .arg( y->getName())
-				.arg( y->getTypeStringTr())
-				.arg( y->getFormStringTr())
-				.arg( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) )
-				.arg( y->getAddToSecondary() ? tr("Secondary") : tr("Primary"));
-		ytable += "</tr>";
-	}
-	ytable += "</table>";
-	return ytable;
+            .arg( y->getTypeStringTr())
+            .arg( y->getFormStringTr())
+            .arg( Brewtarget::displayAmount( y->getAmount(), y->getAmountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters ) )
+            .arg( y->getAddToSecondary() ? tr("Secondary") : tr("Primary"));
+      ytable += "</tr>";
+   }
+   ytable += "</table>";
+   return ytable;
 }
 
 QString RecipeFormatter::buildMashTable()
@@ -743,15 +743,15 @@ QString RecipeFormatter::buildMashTable()
 
 QString RecipeFormatter::buildNotes()
 {
-	QString notes;
+   QString notes;
 
-	if ( rec == 0 || rec->getNotes() == "" )
-		return "";
+   if ( rec == 0 || rec->getNotes() == "" )
+      return "";
 
-	notes = QString("<h3>%1</h3>").arg(tr("Notes"));
-	notes += QString("%1").arg( rec->getNotes());
+   notes = QString("<h3>%1</h3>").arg(tr("Notes"));
+   notes += QString("%1").arg( rec->getNotes());
 
-	return notes;
+   return notes;
 }
 
 QString RecipeFormatter::buildInstructionTable()
@@ -759,15 +759,15 @@ QString RecipeFormatter::buildInstructionTable()
    QString itable;
 
    if ( rec == 0 || rec->getNumInstructions() < 1 )
-	   return "";
+      return "";
 
    itable = QString("<h3>%1</h3>").arg(tr("Instructions"));
    itable += "<ol id=\"instruction\">";
 
    for(int i = 0; i < rec->getNumInstructions(); ++i )
    {
-	   Instruction* ins = rec->getInstruction(i);
-	   itable += QString("<li>%1</li>").arg( ins->getDirections());
+      Instruction* ins = rec->getInstruction(i);
+      itable += QString("<li>%1</li>").arg( ins->getDirections());
    }
 
    itable += "</table>";

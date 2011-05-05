@@ -22,25 +22,25 @@
 // Called when Instance() is called, should only initialize once.
 Algorithms::Algorithms()
 {
-	PlatoFromSG_20C20C_order = 3;
-	PlatoFromSG_20C20C[0] = -616.868;
-	PlatoFromSG_20C20C[1] = 1111.14;
-	PlatoFromSG_20C20C[2] = -630.272;
-	PlatoFromSG_20C20C[3] = 135.997;
+   PlatoFromSG_20C20C_order = 3;
+   PlatoFromSG_20C20C[0] = -616.868;
+   PlatoFromSG_20C20C[1] = 1111.14;
+   PlatoFromSG_20C20C[2] = -630.272;
+   PlatoFromSG_20C20C[3] = 135.997;
 
-	waterDensityPoly_C_order = 5;
-	waterDensityPoly_C[0] = 0.9999776532;
-	waterDensityPoly_C[1] = 6.557692037e-5;
-	waterDensityPoly_C[2] = -1.007534371e-5;
-	waterDensityPoly_C[3] = 1.372076106e-7;
-	waterDensityPoly_C[4] = -1.414581892e-9;
-	waterDensityPoly_C[5] = 5.6890971e-12;
+   waterDensityPoly_C_order = 5;
+   waterDensityPoly_C[0] = 0.9999776532;
+   waterDensityPoly_C[1] = 6.557692037e-5;
+   waterDensityPoly_C[2] = -1.007534371e-5;
+   waterDensityPoly_C[3] = 1.372076106e-7;
+   waterDensityPoly_C[4] = -1.414581892e-9;
+   waterDensityPoly_C[5] = 5.6890971e-12;
 
-	hydroCorrection15CPoly_order = 3;
-	hydroCorrection15CPoly[0] = -0.911045;
-	hydroCorrection15CPoly[1] = -16.2853e-3;
-	hydroCorrection15CPoly[2] = 5.84346e-3;
-	hydroCorrection15CPoly[3] = -15.3243e-6;
+   hydroCorrection15CPoly_order = 3;
+   hydroCorrection15CPoly[0] = -0.911045;
+   hydroCorrection15CPoly[1] = -16.2853e-3;
+   hydroCorrection15CPoly[2] = 5.84346e-3;
+   hydroCorrection15CPoly[3] = -15.3243e-6;
 
    sucroseDensity_kgL = 1.587;
 }

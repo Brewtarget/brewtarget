@@ -17,7 +17,7 @@
  */
 
 #ifndef _WATER_H
-#define	_WATER_H
+#define   _WATER_H
 
 #include <string>
 #include <exception>
@@ -107,5 +107,5 @@ struct Water_ptr_equals
    }
 };
 
-#endif	/* _WATER_H */
+#endif   /* _WATER_H */
 

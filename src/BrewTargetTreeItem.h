@@ -42,7 +42,7 @@ class BrewTargetTreeItem
 
 public:
 
-	enum{RECIPENAMECOL, RECIPEBREWDATECOL, RECIPESTYLECOL, RECIPENUMCOLS /*This one MUST be last*/};
+   enum{RECIPENAMECOL, RECIPEBREWDATECOL, RECIPESTYLECOL, RECIPENUMCOLS /*This one MUST be last*/};
     enum{EQUIPMENTNAMECOL, EQUIPMENTBOILTIMECOL, EQUIPMENTNUMCOLS};
     enum{FERMENTABLENAMECOL, FERMENTABLETYPECOL, FERMENTABLECOLORCOL, FERMENTABLENUMCOLS};
     enum{HOPNAMECOL, HOPFORMCOL, HOPUSECOL, HOPNUMCOLS};
@@ -52,41 +52,41 @@ public:
     enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST};
 
 
-	BrewTargetTreeItem(int type = RECIPE, BrewTargetTreeItem *parent=0 );
-	virtual ~BrewTargetTreeItem();
+   BrewTargetTreeItem(int type = RECIPE, BrewTargetTreeItem *parent=0 );
+   virtual ~BrewTargetTreeItem();
 
-	BrewTargetTreeItem *child(int number);       // Gets the child object
-	BrewTargetTreeItem *parent();
+   BrewTargetTreeItem *child(int number);       // Gets the child object
+   BrewTargetTreeItem *parent();
 
     int getType();
-	int childCount() const;
-	int columnCount(int type) const;
-	QVariant data(int type, int column);		  // gets the information at column X
-	int childNumber() const;
+   int childCount() const;
+   int columnCount(int type) const;
+   QVariant data(int type, int column);        // gets the information at column X
+   int childNumber() const;
 
-	// The nature of the data means we only add entire rows/recipes.
-	// Therefore, we don't need to implement anything for changing the
-	// column data
+   // The nature of the data means we only add entire rows/recipes.
+   // Therefore, we don't need to implement anything for changing the
+   // column data
     QVariant getData(int column);
 
-	void setData(int type, void *d);
+   void setData(int type, void *d);
 
-	Recipe*      getRecipe();
-	Equipment*   getEquipment();
-	Fermentable* getFermentable();
-	Hop*         getHop();
+   Recipe*      getRecipe();
+   Equipment*   getEquipment();
+   Fermentable* getFermentable();
+   Hop*         getHop();
     Misc*        getMisc();
     Yeast*       getYeast();
 
-	bool insertChildren(int position, int count, int type = RECIPE);
-	bool removeChildren(int position, int count);
+   bool insertChildren(int position, int count, int type = RECIPE);
+   bool removeChildren(int position, int count);
 
 private:
-	BrewTargetTreeItem* parentItem;
-	QList<BrewTargetTreeItem*> childItems;
+   BrewTargetTreeItem* parentItem;
+   QList<BrewTargetTreeItem*> childItems;
 
-	int type;
-	void *thing;
+   int type;
+   void *thing;
 
     // With great abstraction comes great ... sorry, I was distracted.
     QVariant dataRecipe(int column);

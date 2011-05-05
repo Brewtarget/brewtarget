@@ -17,7 +17,7 @@
  */
 
 #ifndef _MAINWINDOW_H
-#define	_MAINWINDOW_H
+#define   _MAINWINDOW_H
 
 class MainWindow;
 
@@ -197,5 +197,5 @@ private:
    void copyThis(Yeast *yeast);
 };
 
-#endif	/* _MAINWINDOW_H */
+#endif   /* _MAINWINDOW_H */
 

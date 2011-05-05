@@ -17,7 +17,7 @@
  */
 
 #ifndef _MISCTABLEMODEL_H
-#define	_MISCTABLEMODEL_H
+#define   _MISCTABLEMODEL_H
 
 class MiscTableModel;
 class MiscItemDelegate;
@@ -78,5 +78,5 @@ public:
 private:
 };
 
-#endif	/* _MISCTABLEMODEL_H */
+#endif   /* _MISCTABLEMODEL_H */
 

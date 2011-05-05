@@ -17,7 +17,7 @@
  */
 
 #ifndef _INSTRUCTION_H
-#define	_INSTRUCTION_H
+#define   _INSTRUCTION_H
 
 // This class is completely outside the BeerXML spec.
 class Instruction;
@@ -71,5 +71,5 @@ private:
    QVector<QString> reagents; // what the action works on
 };
 
-#endif	/* _INSTRUCTION_H */
+#endif   /* _INSTRUCTION_H */
 

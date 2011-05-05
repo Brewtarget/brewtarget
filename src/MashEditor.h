@@ -17,7 +17,7 @@
  */
 
 #ifndef _MASHEDITOR_H
-#define	_MASHEDITOR_H
+#define   _MASHEDITOR_H
 
 class MashEditor;
 
@@ -45,5 +45,5 @@ private:
 
 };
 
-#endif	/* _MASHEDITOR_H */
+#endif   /* _MASHEDITOR_H */
 

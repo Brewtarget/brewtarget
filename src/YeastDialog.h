@@ -17,7 +17,7 @@
  */
 
 #ifndef _YEASTDIALOG_H
-#define	_YEASTDIALOG_H
+#define   _YEASTDIALOG_H
 
 class YeastDialog;
 
@@ -54,5 +54,5 @@ private:
    void populateTable();
 };
 
-#endif	/* _YEASTDIALOG_H */
+#endif   /* _YEASTDIALOG_H */
 

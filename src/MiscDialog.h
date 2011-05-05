@@ -17,7 +17,7 @@
  */
 
 #ifndef _MISCDIALOG_H
-#define	_MISCDIALOG_H
+#define   _MISCDIALOG_H
 
 class MiscDialog;
 
@@ -54,5 +54,5 @@ private:
    void populateTable();
 };
 
-#endif	/* _MISCDIALOG_H */
+#endif   /* _MISCDIALOG_H */
 

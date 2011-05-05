@@ -17,7 +17,7 @@
  */
 
 #ifndef _MALTINESSWIDGET_H
-#define	_MALTINESSWIDGET_H
+#define   _MALTINESSWIDGET_H
 
 class MaltinessWidget;
 
@@ -52,5 +52,5 @@ private:
    Recipe* recObs;
 };
 
-#endif	/* _MALTINESSWIDGET_H */
+#endif   /* _MALTINESSWIDGET_H */
 

@@ -17,7 +17,7 @@
  */
 
 #ifndef _OPTIONDIALOG_H
-#define	_OPTIONDIALOG_H
+#define   _OPTIONDIALOG_H
 
 class OptionDialog;
 
@@ -49,5 +49,5 @@ private:
    QMap<QString,QPushButton*> languageToButtonMap;
 };
 
-#endif	/* _OPTIONDIALOG_H */
+#endif   /* _OPTIONDIALOG_H */
 

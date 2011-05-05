@@ -17,7 +17,7 @@
  */
 
 #ifndef _PREINSTRUCTION_H
-#define	_PREINSTRUCTION_H
+#define   _PREINSTRUCTION_H
 
 class PreInstruction;
 
@@ -40,5 +40,5 @@ private:
    double time;
 };
 
-#endif	/* _PREINSTRUCTION_H */
+#endif   /* _PREINSTRUCTION_H */
 

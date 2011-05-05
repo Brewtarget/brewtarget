@@ -31,35 +31,35 @@ class BrewTargetTreeView;
 
 class BrewTargetTreeView : public QTreeView
 {
-	Q_OBJECT
+   Q_OBJECT
 public:
-	BrewTargetTreeView(QWidget *parent = 0);
-	virtual ~BrewTargetTreeView();
-	void startObservingDB();
-	BrewTargetTreeModel* getModel();
+   BrewTargetTreeView(QWidget *parent = 0);
+   virtual ~BrewTargetTreeView();
+   void startObservingDB();
+   BrewTargetTreeModel* getModel();
 
-	bool removeRow(const QModelIndex &index);
+   bool removeRow(const QModelIndex &index);
 
-	// Ugh
-	Recipe* getRecipe(const QModelIndex &index) const;
-	QModelIndex findRecipe(Recipe* rec);
+   // Ugh
+   Recipe* getRecipe(const QModelIndex &index) const;
+   QModelIndex findRecipe(Recipe* rec);
 
-	Equipment* getEquipment(const QModelIndex &index) const;
-	QModelIndex findEquipment(Equipment* kit);
+   Equipment* getEquipment(const QModelIndex &index) const;
+   QModelIndex findEquipment(Equipment* kit);
 
-	Fermentable* getFermentable(const QModelIndex &index) const;
-	QModelIndex findFermentable(Fermentable* ferm);
+   Fermentable* getFermentable(const QModelIndex &index) const;
+   QModelIndex findFermentable(Fermentable* ferm);
 
-	Hop* getHop(const QModelIndex &index) const;
-	QModelIndex findHop(Hop* hop);
+   Hop* getHop(const QModelIndex &index) const;
+   QModelIndex findHop(Hop* hop);
 
-	Misc* getMisc(const QModelIndex &index) const;
-	QModelIndex findMisc(Misc* misc);
+   Misc* getMisc(const QModelIndex &index) const;
+   QModelIndex findMisc(Misc* misc);
 
-	Yeast* getYeast(const QModelIndex &index) const;
-	QModelIndex findYeast(Yeast* yeast);
+   Yeast* getYeast(const QModelIndex &index) const;
+   QModelIndex findYeast(Yeast* yeast);
 
-	int getType(const QModelIndex &index);
+   int getType(const QModelIndex &index);
 
     // Another try at drag and drop
     void mousePressEvent(QMouseEvent *event);
@@ -67,7 +67,7 @@ public:
     void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
-	BrewTargetTreeModel* model;
+   BrewTargetTreeModel* model;
     QPoint dragStart;
     bool doubleClick;
 

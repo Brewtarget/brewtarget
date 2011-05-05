@@ -37,66 +37,66 @@ class BrewTargetTreeModel;
 
 class BrewTargetTreeModel : public QAbstractItemModel, public MultipleObserver
 {
-	Q_OBJECT;
+   Q_OBJECT;
 
 public:
-	BrewTargetTreeModel(BrewTargetTreeView *parent = 0);
-	virtual ~BrewTargetTreeModel();
+   BrewTargetTreeModel(BrewTargetTreeView *parent = 0);
+   virtual ~BrewTargetTreeModel();
 
-	// Methods required for read-only stuff
-	QVariant data(const QModelIndex &index, int role) const;
-	QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-	Qt::ItemFlags flags( const QModelIndex &index) const;
-	int rowCount( const QModelIndex &parent = QModelIndex()) const;
-	int columnCount( const QModelIndex &index = QModelIndex()) const;
+   // Methods required for read-only stuff
+   QVariant data(const QModelIndex &index, int role) const;
+   QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+   Qt::ItemFlags flags( const QModelIndex &index) const;
+   int rowCount( const QModelIndex &parent = QModelIndex()) const;
+   int columnCount( const QModelIndex &index = QModelIndex()) const;
 
     // Methods required for tree views (odd we are worried about the view in
     // the model).
-	QModelIndex index( int row, int col, const QModelIndex &parent = QModelIndex()) const;
-	QModelIndex parent( const QModelIndex &index) const;
+   QModelIndex index( int row, int col, const QModelIndex &parent = QModelIndex()) const;
+   QModelIndex parent( const QModelIndex &index) const;
 
     // Methods required for read-write access.  We are not implementing adding
     // or removing columns because that doesn't make sense for this model.
-	bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-	bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-	// Good stuff to have.  Like a Ruination clone happily dry hopping
-	bool isRecipe(const QModelIndex &index);
-	bool isEquipment(const QModelIndex &index);
-	bool isFermentable(const QModelIndex &index);
-	bool isHop(const QModelIndex &index);
-	bool isMisc(const QModelIndex &index);
-	bool isYeast(const QModelIndex &index);
+   // Good stuff to have.  Like a Ruination clone happily dry hopping
+   bool isRecipe(const QModelIndex &index);
+   bool isEquipment(const QModelIndex &index);
+   bool isFermentable(const QModelIndex &index);
+   bool isHop(const QModelIndex &index);
+   bool isMisc(const QModelIndex &index);
+   bool isYeast(const QModelIndex &index);
 
-	int getType(const QModelIndex &index);
+   int getType(const QModelIndex &index);
 
-	// Methods required for observable
-	virtual void notify(Observable *notifier, QVariant info = QVariant());
-	void startObservingDB();
+   // Methods required for observable
+   virtual void notify(Observable *notifier, QVariant info = QVariant());
+   void startObservingDB();
 
-	// Convenience functions to make the rest of the software play nice
-	Recipe* getRecipe(const QModelIndex &index) const;
-	Equipment* getEquipment(const QModelIndex &index) const;
-	Fermentable* getFermentable(const QModelIndex &index) const;
-	Hop* getHop(const QModelIndex &index) const;
-	Misc* getMisc(const QModelIndex &index) const;
-	Yeast* getYeast(const QModelIndex &index) const;
+   // Convenience functions to make the rest of the software play nice
+   Recipe* getRecipe(const QModelIndex &index) const;
+   Equipment* getEquipment(const QModelIndex &index) const;
+   Fermentable* getFermentable(const QModelIndex &index) const;
+   Hop* getHop(const QModelIndex &index) const;
+   Misc* getMisc(const QModelIndex &index) const;
+   Yeast* getYeast(const QModelIndex &index) const;
 
-	QModelIndex findRecipe(Recipe* rec);
-	QModelIndex findEquipment(Equipment* kit);
-	QModelIndex findFermentable(Fermentable* ferm);
-	QModelIndex findHop(Hop* hop);
-	QModelIndex findMisc(Misc* misc);
-	QModelIndex findYeast(Yeast* yeast);
+   QModelIndex findRecipe(Recipe* rec);
+   QModelIndex findEquipment(Equipment* kit);
+   QModelIndex findFermentable(Fermentable* ferm);
+   QModelIndex findHop(Hop* hop);
+   QModelIndex findMisc(Misc* misc);
+   QModelIndex findYeast(Yeast* yeast);
 
 private:
-	BrewTargetTreeItem *getItem(const QModelIndex &index) const;
-	void loadTreeModel(int reload);
-	void unloadTreeModel(int unload);
+   BrewTargetTreeItem *getItem(const QModelIndex &index) const;
+   void loadTreeModel(int reload);
+   void unloadTreeModel(int unload);
 
-	BrewTargetTreeItem* rootItem;
-	BrewTargetTreeView *parentTree;
-	Database* dbObs;
+   BrewTargetTreeItem* rootItem;
+   BrewTargetTreeView *parentTree;
+   Database* dbObs;
 };
 
 #endif /* RECEIPTREEMODEL_H_ */

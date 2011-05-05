@@ -17,7 +17,7 @@
  */
 
 #ifndef _FERMENTABLEDIALOG_H
-#define	_FERMENTABLEDIALOG_H
+#define   _FERMENTABLEDIALOG_H
 
 class FermentableDialog;
 
@@ -55,5 +55,5 @@ private:
    void populateTable();
 };
 
-#endif	/* _FERMENTABLEDIALOG_H */
+#endif   /* _FERMENTABLEDIALOG_H */
 

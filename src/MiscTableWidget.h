@@ -17,7 +17,7 @@
  */
 
 #ifndef _MISCTABLEWIDGET_H
-#define	_MISCTABLEWIDGET_H
+#define   _MISCTABLEWIDGET_H
 
 class MiscTableWidget;
 
@@ -41,5 +41,5 @@ private:
    MiscSortFilterProxyModel* proxy;
 };
 
-#endif	/* _MISCTABLEWIDGET_H */
+#endif   /* _MISCTABLEWIDGET_H */
 

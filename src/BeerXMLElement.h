@@ -17,7 +17,7 @@
  */
 
 #ifndef _BEERXMLELEMENT_H
-#define	_BEERXMLELEMENT_H
+#define   _BEERXMLELEMENT_H
 
 class BeerXMLElement;
 
@@ -44,5 +44,5 @@ public:
    virtual void toXml(QDomDocument& doc, QDomNode& parent) = 0;
 };
 
-#endif	/* _BEERXMLELEMENT_H */
+#endif   /* _BEERXMLELEMENT_H */
 

@@ -17,7 +17,7 @@
  */
 
 #ifndef _MASHSTEPTABLEWIDGET_H
-#define	_MASHSTEPTABLEWIDGET_H
+#define   _MASHSTEPTABLEWIDGET_H
 
 class MashStepTableWidget;
 
@@ -41,5 +41,5 @@ private:
    MashStepTableModel* model;
 };
 
-#endif	/* _MASHSTEPTABLEWIDGET_H */
+#endif   /* _MASHSTEPTABLEWIDGET_H */
 

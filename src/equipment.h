@@ -17,7 +17,7 @@
  */
 
 #ifndef _EQUIPMENT_H
-#define	_EQUIPMENT_H
+#define   _EQUIPMENT_H
 
 #include <string>
 #include <exception>
@@ -135,5 +135,5 @@ struct Equipment_ptr_equals
    }
 };
 
-#endif	/* _EQUIPMENT_H */
+#endif   /* _EQUIPMENT_H */
 

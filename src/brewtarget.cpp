@@ -712,17 +712,17 @@ void Brewtarget::readPersistentOptions()
       if( text == "Imperial" )
       {
          volumeUnitSystem = Imperial;
-	 volumeSystem = UnitSystems::imperialVolumeUnitSystem();
+    volumeSystem = UnitSystems::imperialVolumeUnitSystem();
       }
       else if (text == "USCustomary")
       {
          volumeUnitSystem = USCustomary;
-	 volumeSystem = UnitSystems::usVolumeUnitSystem();
+    volumeSystem = UnitSystems::usVolumeUnitSystem();
       }
       else
       {
          volumeUnitSystem = SI;
-	 volumeSystem = UnitSystems::siVolumeUnitSystem();
+    volumeSystem = UnitSystems::siVolumeUnitSystem();
       }
    }
 
@@ -742,12 +742,12 @@ void Brewtarget::readPersistentOptions()
       if( text == "Fahrenheit" )
       {
          tempScale = Fahrenheit;
-	 tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+    tempSystem = UnitSystems::fahrenheitTempUnitSystem();
       }
       else
       {
          tempScale = Celsius;
-	 tempSystem = UnitSystems::celsiusTempUnitSystem();
+    tempSystem = UnitSystems::celsiusTempUnitSystem();
       }
    }
 

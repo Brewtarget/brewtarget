@@ -17,7 +17,7 @@
  */
 
 #ifndef _BEERCOLORWIDGET_H
-#define	_BEERCOLORWIDGET_H
+#define   _BEERCOLORWIDGET_H
 
 class BeerColorWidget;
 
@@ -48,5 +48,5 @@ private:
    Recipe* recObs;
 };
 
-#endif	/* _BEERCOLORWIDGET_H */
+#endif   /* _BEERCOLORWIDGET_H */
 

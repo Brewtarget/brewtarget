@@ -17,7 +17,7 @@
  */
 
 #ifndef _FERMENTABLEEDITOR_H
-#define	_FERMENTABLEEDITOR_H
+#define   _FERMENTABLEEDITOR_H
 
 class FermentableEditor;
 
@@ -44,5 +44,5 @@ private:
    void showChanges();
 };
 
-#endif	/* _FERMENTABLEEDITOR_H */
+#endif   /* _FERMENTABLEEDITOR_H */
 

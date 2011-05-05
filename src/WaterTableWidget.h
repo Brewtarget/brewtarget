@@ -17,7 +17,7 @@
  */
 
 #ifndef _WATERTABLEWIDGET_H
-#define	_WATERTABLEWIDGET_H
+#define   _WATERTABLEWIDGET_H
 
 class WaterTableWidget;
 
@@ -37,5 +37,5 @@ private:
    WaterTableModel* model;
 };
 
-#endif	/* _WATERTABLEWIDGET_H */
+#endif   /* _WATERTABLEWIDGET_H */
 

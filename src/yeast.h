@@ -17,7 +17,7 @@
  */
 
 #ifndef _YEAST_H
-#define	_YEAST_H
+#define   _YEAST_H
 
 #include <string>
 #include <exception>
@@ -150,5 +150,5 @@ struct Yeast_ptr_equals
    }
 };
 
-#endif	/* _YEAST_H */
+#endif   /* _YEAST_H */
 

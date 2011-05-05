@@ -55,10 +55,10 @@ void MashWizard::show()
    switch (Brewtarget::getVolumeUnitSystem())
    {
       case USCustomary:
-	      volumeUnit = Units::us_quarts;
+         volumeUnit = Units::us_quarts;
          break;
       case Imperial:
-         volumeUnit = Units::imperial_quarts;	
+         volumeUnit = Units::imperial_quarts;   
          break;
       case SI:
       default:
@@ -235,7 +235,7 @@ void MashWizard::wizardry()
       t1 = mash->getMashStep(mash->getNumMashSteps()-1)->getStepTemp_c() - 10.0; // You will lose about 10C from last step.
       MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC
            + absorption_LKg * recObs->getGrainsInMash_kg() * HeatCalculations::Cw_calGC
-	   + mash->getTunWeight_kg() * mash->getTunSpecificHeat_calGC();
+      + mash->getTunWeight_kg() * mash->getTunSpecificHeat_calGC();
       massWater = spargeWater_l;
       
       tw = (MC/(massWater*HeatCalculations::Cw_calGC))*(tf-t1) + tf;
@@ -253,7 +253,7 @@ void MashWizard::wizardry()
       mashStep->setStepTime_min(15);
       
       if( ! foundSparge )
-	 mash->addMashStep(mashStep);
+    mash->addMashStep(mashStep);
    }
    else
    {

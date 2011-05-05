@@ -17,7 +17,7 @@
  */
 
 #ifndef _INGREDIENTWIDGET_H
-#define	_INGREDIENTWIDGET_H
+#define   _INGREDIENTWIDGET_H
 
 class InstructionWidget;
 
@@ -53,5 +53,5 @@ private:
    TimerWidget* timer;
 };
 
-#endif	/* _INGREDIENTWIDGET_H */
+#endif   /* _INGREDIENTWIDGET_H */
 

@@ -17,7 +17,7 @@
  */
 
 #ifndef _MASHSTEPTABLEMODEL_H
-#define	_MASHSTEPTABLEMODEL_H
+#define   _MASHSTEPTABLEMODEL_H
 
 class MashStepTableModel;
 class MashStepItemDelegate;
@@ -81,5 +81,5 @@ public:
 private:
 };
 
-#endif	/* _MASHSTEPTABLEMODEL_H */
+#endif   /* _MASHSTEPTABLEMODEL_H */
 

@@ -17,7 +17,7 @@
  */
 
 #ifndef _DATABASE_H
-#define	_DATABASE_H
+#define   _DATABASE_H
 
 #include <QList>
 #include <iostream>
@@ -215,5 +215,5 @@ private:
    static QList<Yeast*> yeasts;
 };
 
-#endif	/* _DATABASE_H */
+#endif   /* _DATABASE_H */
 

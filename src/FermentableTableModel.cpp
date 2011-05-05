@@ -83,7 +83,7 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
       {
          fermObs.erase(iter);
          removeObserved(ferm);
-	 totalFermMass_kg -= ferm->getAmount_kg();
+    totalFermMass_kg -= ferm->getAmount_kg();
          reset(); // Tell everybody the table has changed.
          
          if(parentTableWidget)

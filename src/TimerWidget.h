@@ -17,7 +17,7 @@
  */
 
 #ifndef _TIMERWIDGET_H
-#define	_TIMERWIDGET_H
+#define   _TIMERWIDGET_H
 
 class TimerWidget;
 
@@ -83,5 +83,5 @@ private:
    bool oldColors;
 };
 
-#endif	/* _TIMERWIDGET_H */
+#endif   /* _TIMERWIDGET_H */
 

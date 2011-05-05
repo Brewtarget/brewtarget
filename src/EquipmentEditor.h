@@ -17,7 +17,7 @@
  */
 
 #ifndef _EQUIPMENTEDITOR_H
-#define	_EQUIPMENTEDITOR_H
+#define   _EQUIPMENTEDITOR_H
 
 class EquipmentEditor;
 
@@ -51,5 +51,5 @@ private:
    void showChanges();
 };
 
-#endif	/* _EQUIPMENTEDITOR_H */
+#endif   /* _EQUIPMENTEDITOR_H */
 

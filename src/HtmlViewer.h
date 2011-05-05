@@ -17,7 +17,7 @@
  */
 
 #ifndef _HTMLVIEWER_H
-#define	_HTMLVIEWER_H
+#define   _HTMLVIEWER_H
 
 class HtmlEditor;
 
@@ -33,5 +33,5 @@ public:
    void setHtml(const QString& fileName);
 };
 
-#endif	/* _HTMLVIEWER_H */
+#endif   /* _HTMLVIEWER_H */
 

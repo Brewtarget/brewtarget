@@ -17,7 +17,7 @@
  */
 
 #ifndef _STYLECOMBOBOX_H
-#define	_STYLECOMBOBOX_H
+#define   _STYLECOMBOBOX_H
 
 class StyleComboBox;
 
@@ -54,5 +54,5 @@ private:
    Database* dbObs;
 };
 
-#endif	/* _STYLECOMBOBOX_H */
+#endif   /* _STYLECOMBOBOX_H */
 

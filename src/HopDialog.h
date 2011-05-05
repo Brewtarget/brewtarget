@@ -17,7 +17,7 @@
  */
 
 #ifndef _HOPDIALOG_H
-#define	_HOPDIALOG_H
+#define   _HOPDIALOG_H
 
 class HopDialog;
 
@@ -55,5 +55,5 @@ private:
 };
 
 
-#endif	/* _HOPDIALOG_H */
+#endif   /* _HOPDIALOG_H */
 
