@@ -433,37 +433,37 @@ MESSAGE( STATUS "Libraries: ${QT_LIBRARIES}" )
 
 # Install the data.
 INSTALL( FILES ${brewtarget_DATA}
-         DESTINATION "${CMAKE_INSTALL_PREFIX}/${DATAPATH}" )
+         DESTINATION "${DATAPATH}" )
 
 # Install the translations
 INSTALL(FILES ${QM_FILES}
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${DATAPATH}/translations_qm")
+        DESTINATION "${DATAPATH}/translations_qm")
 
 # Install the documentation.
 INSTALL( FILES ${brewtarget_DOCS}
-         DESTINATION "${CMAKE_INSTALL_PREFIX}/${DOCPATH}" )
+         DESTINATION "${DOCPATH}" )
 
 # Install sounds.
 INSTALL( FILES ${brewtarget_SOUNDS}
-         DESTINATION "${CMAKE_INSTALL_PREFIX}/${DATAPATH}/sounds" )
+         DESTINATION "${DATAPATH}/sounds" )
 
 # ---------Unix installs-----------
 IF( UNIX AND NOT APPLE )
 
    INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-            RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/${TARGETPATH}" )
+            RUNTIME DESTINATION "${TARGETPATH}" )
 
    # Install the icons.
    INSTALL( FILES ${brewtarget_ICONS}
-            DESTINATION "${CMAKE_INSTALL_PREFIX}/${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+            DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
 
    # Install the .desktop file.
    INSTALL( FILES ${brewtarget_DESKTOP}
-            DESTINATION "${CMAKE_INSTALL_PREFIX}/${DATAROOTDIR}/applications" )
+            DESTINATION "${DATAROOTDIR}/applications" )
 ENDIF()
 
 #--------Windows installs---------
 IF( WIN32 )
    INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-            RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/${TARGETPATH}" )
+            RUNTIME DESTINATION "${TARGETPATH}" )
 ENDIF()
