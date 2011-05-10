@@ -201,14 +201,12 @@ MainWindow::MainWindow(QWidget* parent)
    splitter_2->setStretchFactor(0,0);
    splitter_2->setStretchFactor(1,1);
 
-   // Once more with the drag and drop.
-   setAcceptDrops(true);
-
    // Once more with the context menus too
+   setupContextMenu();
    brewTargetTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
    // If we saved a size the last time we ran, use it
-   QSettings settings("Philip G. Lee", "brewtarget");
+   QSettings settings("brewtarget");
    if ( settings.contains("geometry"))
    {
       restoreGeometry(settings.value("geometry").toByteArray());
@@ -247,7 +245,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
-   connect( actionImport_Recipes, SIGNAL( triggered() ), this, SLOT( importRecipes() ) );
+   connect( actionImport_Recipes, SIGNAL( triggered() ), this, SLOT( importFiles() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
    connect( actionEquipments, SIGNAL( triggered() ), equipEditor, SLOT( show() ) );
    connect( actionStyles, SIGNAL( triggered() ), styleEditor, SLOT( show() ) );
@@ -874,27 +872,18 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
 
 void MainWindow::exportRecipe()
 {
-   const char* filename;
-   QFile outFile;
+   QFile* outFile;
    QDomDocument doc;
 
    if( recipeObs == 0 )
       return;
-   
-   if( fileSaver->exec() )
-     filename = fileSaver->selectedFiles()[0].toAscii();
-   else
+  
+   outFile = openForWrite();
+   if ( ! outFile ) 
       return;
 
-   outFile.setFileName(filename);
-   
-   if( ! outFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
-   {
-      Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for writing.").arg(filename));
-      return;
-   }
-   
-   QTextStream out(&outFile);
+   QTextStream out(outFile);
+
    QString xmlHead = QString("version=\"1.0\" encoding=\"%1\"").arg(QTextCodec::codecForLocale()->name().data());
 
    // Create the headers to make other BeerXML parsers happy
@@ -910,7 +899,7 @@ void MainWindow::exportRecipe()
    
    out << doc.toString();
    
-   outFile.close();
+   outFile->close();
 }
 
 Fermentable* MainWindow::selectedFermentable()
@@ -1153,26 +1142,21 @@ void MainWindow::restoreFromBackup()
 }
 
 // Imports all the recipes from a file into the database.
-void MainWindow::importRecipes()
+void MainWindow::importFiles()
 {
-//   const char* filename;
-   unsigned int numRecipes, i;
-   //std::fstream in;
-   //QVector<XmlNode*> nodes;
-   Recipe* newRec;
+   unsigned int count;
+   int line, col;
+   QStringList tags;
    QFile inFile;
    QDomDocument xmlDoc;
+   QDomElement root;
    QDomNodeList list;
    QString err;
-   int line, col;
 
+   tags << "EQUIPMENT" << "HOP" << "MISC" << "YEAST";
    if ( ! fileOpener->exec() )
       return;
    
-//   if( fileOpener->exec() )
-//     filename = fileOpener->selectedFiles()[0].toAscii();
-//   else
-//      return;
    foreach( QString filename, fileOpener->selectedFiles() )
    {
       inFile.setFileName(filename);
@@ -1186,27 +1170,82 @@ void MainWindow::importRecipes()
          Brewtarget::log(Brewtarget::WARNING, tr("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
 
       list = xmlDoc.elementsByTagName("RECIPE");
-      numRecipes = list.size();
-
-      // Tell how many recipes there were in the status bar.
-      statusBar()->showMessage( tr("Found %1 recipes.").arg(numRecipes), 5000 );
-
-      for( i = 0; i < numRecipes; ++i )
+      if ( list.count() )
       {
-         newRec = new Recipe(list.at(i));
-
-         if( QMessageBox::question(this, tr("Import recipe?"),
-                                   tr("Import %1?").arg(newRec->getName()),
-                                   QMessageBox::Yes,
-                                   QMessageBox::No)
-             == QMessageBox::Yes )
+         for(int i = 0; i < list.count(); ++i )
          {
-            db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+            Recipe* newRec = new Recipe(list.at(i));
+
+            if(verifyImport("recipe",newRec->getName()))
+               db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
          }
       }
+      else
+      {
+         foreach (QString tag, tags)
+         {
+            list = xmlDoc.elementsByTagName(tag);
+            count = list.size();
 
+            if ( count > 0 ) 
+            {
+               // Tell how many there were in the status bar.
+               statusBar()->showMessage( tr("Found %1 %2.").arg(count).arg(tag.toLower()), 5000 );
+
+               if (tag == "RECIPE")
+               {
+               }
+               else if ( tag == "EQUIPMENT" )
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     Equipment* newEquip = new Equipment(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newEquip->getName()))
+                        db->addEquipment( newEquip, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+               else if (tag == "HOP")
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     Hop* newHop = new Hop(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newHop->getName()))
+                        db->addHop( newHop, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+               else if (tag == "MISC")
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     Misc* newMisc = new Misc(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newMisc->getName()))
+                        db->addMisc( newMisc, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+               else if (tag == "YEAST")
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     Yeast* newYeast = new Yeast(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newYeast->getName()))
+                        db->addYeast( newYeast, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+            }
+         }
+      }
       inFile.close();
    }
+}
+
+bool MainWindow::verifyImport(QString tag, QString name)
+{
+   return QMessageBox::question(this, tr("Import %1?").arg(tag), tr("Import %1?").arg(name),
+                                QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
 }
 
 void MainWindow::addMashStep()
@@ -1331,7 +1370,7 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    }
 
    Brewtarget::savePersistentOptions();
-   QSettings settings("Philip G. Lee", "brewtarget");
+   QSettings settings("brewtarget");
    settings.setValue("geometry", saveGeometry());
    settings.setValue("windowState", saveState());
    settings.setValue("recipeName", recipeObs->getName());
@@ -1434,112 +1473,127 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 
 void MainWindow::dropEvent(QDropEvent *event)
 {
-    QModelIndexList indexes;
-    QWidget *last;
-    QString name;
-    int type;
+   QModelIndexList indexes;
+   QWidget *last;
+   QString name;
+   int type;
 
-    if (! event->mimeData()->hasFormat("application/x-brewtarget"))
-        return;
+   if (! event->mimeData()->hasFormat("application/x-brewtarget"))
+      return;
 
-    indexes = brewTargetTreeView->selectionModel()->selectedRows();
-    foreach(QModelIndex index, indexes)
-    {
-        if ( index.isValid() )
-        {
-            type = brewTargetTreeView->getType(index);
-            switch(type)
-            {
-                case BrewTargetTreeItem::RECIPE:
-                    setRecipeByIndex(index);
-                    break;
-                case BrewTargetTreeItem::EQUIPMENT:
-                    name = brewTargetTreeView->getEquipment(index)->getName();
-                    equipmentComboBox->setIndexByEquipmentName(name);
-                    droppedRecipeEquipment(brewTargetTreeView->getEquipment(index));
-                    break;
-                case BrewTargetTreeItem::FERMENTABLE:
-                    addFermentableToRecipe(brewTargetTreeView->getFermentable(index));
-                    last = fermentableTab;
-                    break;
-                case BrewTargetTreeItem::HOP:
-                    addHopToRecipe(brewTargetTreeView->getHop(index));
-                    last = hopsTab;
-                    break;
-                case BrewTargetTreeItem::MISC:
-                    addMiscToRecipe(brewTargetTreeView->getMisc(index));
-                    last = miscTab;
-                    break;
-                case BrewTargetTreeItem::YEAST:
-                    addYeastToRecipe(brewTargetTreeView->getYeast(index));
-                    last = yeastTable;
-                    break;
-            }
+   indexes = brewTargetTreeView->selectionModel()->selectedRows();
+   foreach(QModelIndex index, indexes)
+   {
+      if ( index.isValid() )
+      {
+         type = brewTargetTreeView->getType(index);
+         switch(type)
+         {
+            case BrewTargetTreeItem::RECIPE:
+               setRecipeByIndex(index);
+               break;
+            case BrewTargetTreeItem::EQUIPMENT:
+               name = brewTargetTreeView->getEquipment(index)->getName();
+               equipmentComboBox->setIndexByEquipmentName(name);
+               droppedRecipeEquipment(brewTargetTreeView->getEquipment(index));
+               break;
+            case BrewTargetTreeItem::FERMENTABLE:
+               addFermentableToRecipe(brewTargetTreeView->getFermentable(index));
+               last = fermentableTab;
+               break;
+            case BrewTargetTreeItem::HOP:
+               addHopToRecipe(brewTargetTreeView->getHop(index));
+               last = hopsTab;
+               break;
+            case BrewTargetTreeItem::MISC:
+               addMiscToRecipe(brewTargetTreeView->getMisc(index));
+               last = miscTab;
+               break;
+            case BrewTargetTreeItem::YEAST:
+               addYeastToRecipe(brewTargetTreeView->getYeast(index));
+               last = yeastTable;
+               break;
+         }
 
-            event->accept();
-        }
-    }
-    if (last)
-       tabWidget->setCurrentWidget(last);
+         event->accept();
+      }
+   }
+   if (last)
+      tabWidget->setCurrentWidget(last);
 }
 
+// We build the menus at start up time.  This just needs to exec the proper
+// menu.  
 void MainWindow::contextMenu(const QPoint &point)
 {
    QModelIndex selected;
-   QMenu  *cMenu = new QMenu();
-   QMenu  *sMenu = new QMenu();
-   QAction *temp;
-   bool multiselect = brewTargetTreeView->selectionModel()->selectedRows().count() > 1;
+   QMenu* tempMenu;
+	QModelIndexList selections = brewTargetTreeView->selectionModel()->selectedRows();
 
-   // Figure out what was right clicked
    selected = brewTargetTreeView->indexAt(point);
+   if (! selected.isValid())
+      return;
 
+   if (brewTargetTreeView->multiSelected())
+      tempMenu = contextMenus.last();
+   else 
+      tempMenu = contextMenus.at(brewTargetTreeView->getType(selected));
 
-   // And use that to set up the top level menu item
-   switch (brewTargetTreeView->getType(selected))
+   if (tempMenu)
+      tempMenu->exec(brewTargetTreeView->mapToGlobal(point));
+}
+
+// Set up the context menus.  There may be a better way of doing this, but I
+// am at least only setting the menus up once.
+void MainWindow::setupContextMenu()
+{
+   QMenu *cMenu;
+	QMenu *sMenu = new QMenu();
+	QAction *temp;
+   int i;
+
+   // I did mean the <=.  I am using the last slot to hold the multiselect
+   // menu
+   for(i=0; i <= BrewTargetTreeItem::NUMTYPES; ++i)
    {
-      case BrewTargetTreeItem::RECIPE:
-         temp = cMenu->addAction(tr("New Recipe"), this, SLOT(newRecipe()));
-         break;
-      case BrewTargetTreeItem::EQUIPMENT:
-         temp = cMenu->addAction(tr("New Equipment"), equipEditor, SLOT(newEquipment()));
-         break;
-      case BrewTargetTreeItem::FERMENTABLE:
-         temp = cMenu->addAction(tr("New Fermentable"), fermDialog, SLOT(newFermentable()));
-         break;
-      case BrewTargetTreeItem::HOP:
-         temp = cMenu->addAction(tr("New Hop"), hopDialog, SLOT(newHop()));
-         break;
-      case BrewTargetTreeItem::MISC:
-         temp = cMenu->addAction(tr("New miscellaneous"), miscDialog, SLOT(newMisc()));
-         break;
-      case BrewTargetTreeItem::YEAST:
-         temp = cMenu->addAction(tr("New Yeast"), yeastDialog, SLOT(newYeast()));
-         break;
-      default:
-         temp = 0;
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(selected)));
+      cMenu = new QMenu();
+      contextMenus.append(cMenu);
    }
-   if (temp)
-      temp->setEnabled(!multiselect);
+   // Top level item
+	
+	contextMenus.at(BrewTargetTreeItem::RECIPE)->addAction(tr("New Recipe"), this, SLOT(newRecipe()));
+   contextMenus.at(BrewTargetTreeItem::EQUIPMENT)->addAction(tr("New Equipment"), equipEditor, SLOT(newEquipment()));
+   contextMenus.at(BrewTargetTreeItem::FERMENTABLE)->addAction(tr("New Fermentable"), fermDialog, SLOT(newFermentable()));
+   contextMenus.at(BrewTargetTreeItem::HOP)->addAction(tr("New Hop"), hopDialog, SLOT(newHop()));
+   contextMenus.at(BrewTargetTreeItem::MISC)->addAction(tr("New miscellaneous"), miscDialog, SLOT(newMisc()));
+   contextMenus.at(BrewTargetTreeItem::YEAST)->addAction(tr("New Yeast"), yeastDialog, SLOT(newYeast()));
 
-   cMenu->addSeparator();
    // Set up the "new" submenu
-   sMenu->setTitle(tr("New"));
-   sMenu->addAction(tr("Recipe"), this, SLOT(newRecipe()));
-   sMenu->addAction(tr("Equipment"), equipEditor, SLOT(newEquipment()));
-   sMenu->addAction(tr("Fermentable"), fermDialog, SLOT(newFermentable()));
-   sMenu->addAction(tr("Hop"), hopDialog, SLOT(newHop()));
-   sMenu->addAction(tr("Miscellaneous"), miscDialog, SLOT(newMisc()));
-   sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
-   cMenu->addMenu(sMenu);
+	sMenu->setTitle(tr("New"));
+	sMenu->addAction(tr("Recipe"), this, SLOT(newRecipe()));
+	sMenu->addAction(tr("Equipment"), equipEditor, SLOT(newEquipment()));
+	sMenu->addAction(tr("Fermentable"), fermDialog, SLOT(newFermentable()));
+	sMenu->addAction(tr("Hop"), hopDialog, SLOT(newHop()));
+	sMenu->addAction(tr("Miscellaneous"), miscDialog, SLOT(newMisc()));
+	sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
 
-   // Copy
-   cMenu->addAction(tr("Copy"), this, SLOT(copySelected()));
-   // Delete
-   cMenu->addAction(tr("Delete"), this, SLOT(deleteSelected()));
-
-   cMenu->exec(brewTargetTreeView->mapToGlobal(point));
+   // And do the stuff that is common to all the menus.
+   for(i=0; i <= BrewTargetTreeItem::NUMTYPES; ++i)
+   {
+      if ( i != BrewTargetTreeItem::NUMTYPES )
+         contextMenus.at(i)->addSeparator();
+      contextMenus.at(i)->addMenu(sMenu);
+      // Copy
+      contextMenus.at(i)->addAction(tr("Copy"), this, SLOT(copySelected()));
+      // Delete
+      contextMenus.at(i)->addAction(tr("Delete"), this, SLOT(deleteSelected()));
+      // export and import
+      contextMenus.at(i)->addSeparator();
+      temp = contextMenus.at(i)->addAction(tr("Export"), this, SLOT(exportSelected()));
+      if ( i == BrewTargetTreeItem::NUMTYPES )
+         temp->setEnabled(false);
+      contextMenus.at(i)->addAction(tr("Import"), this, SLOT(importFiles()));
+   }
 }
 
 void MainWindow::copyThis(Recipe *rec)
@@ -1638,11 +1692,11 @@ void MainWindow::copySelected()
    {
       // Don't copy the root items.  Bad things will happen
       if ( *at != brewTargetTreeView->findRecipe(0)      &&
-          *at != brewTargetTreeView->findEquipment(0)   &&
-          *at != brewTargetTreeView->findFermentable(0) &&
-          *at != brewTargetTreeView->findHop(0)         &&
-             *at != brewTargetTreeView->findMisc(0)        &&
-             *at != brewTargetTreeView->findYeast(0))
+           *at != brewTargetTreeView->findEquipment(0)   &&
+           *at != brewTargetTreeView->findFermentable(0) &&
+           *at != brewTargetTreeView->findHop(0)         &&
+           *at != brewTargetTreeView->findMisc(0)        &&
+           *at != brewTargetTreeView->findYeast(0))
       {
          switch(brewTargetTreeView->getType(*at))
          {
@@ -1686,3 +1740,92 @@ void MainWindow::copySelected()
    brewTargetTreeView->setCurrentIndex(above);
    brewTargetTreeView->scrollTo(above,QAbstractItemView::PositionAtCenter);
 }
+
+QFile* MainWindow::openForWrite()
+{
+   const char* filename;
+   QFile* outFile = new QFile();
+
+   if( fileSaver->exec() )
+     filename = fileSaver->selectedFiles()[0].toAscii();
+   else
+      return 0;
+
+   outFile->setFileName(filename);
+   
+   if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
+   {
+      Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for writing.").arg(filename));
+      return 0;
+   }
+   return outFile;
+}
+
+void MainWindow::exportSelected()
+{
+	QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
+   QDomDocument doc;
+   QFile* outFile;
+   QDomElement root,dbase,recipe;
+   bool didRecipe = false;
+
+   if( selected.count() == 0 )
+      return;
+
+   outFile = openForWrite(); 
+   if ( !outFile )
+      return;
+
+   QTextStream out(outFile);
+
+   QString xmlHead = QString("version=\"1.0\" encoding=\"%1\"").arg(QTextCodec::codecForLocale()->name().data());
+
+   // Create the headers to make other BeerXML parsers happy
+   QDomProcessingInstruction inst = doc.createProcessingInstruction("xml", xmlHead);
+   QDomComment beerxml = doc.createComment("BeerXML generated by brewtarget");
+
+   doc.appendChild(inst);
+   doc.appendChild(beerxml);
+
+   // We need to handle the recipes separate from the normal database
+   // elements.  All recipes live under the RECIPES tag, whereas the
+   // equipment, hops, etc. go under DATABASE.
+   dbase = doc.createElement("DATABASE"); 
+   recipe = doc.createElement("RECIPES"); 
+
+   for(int i=0; i < selected.count(); ++i)
+   {
+      QModelIndex selection = selected.value(i);
+      int type = brewTargetTreeView->getType(selection);
+
+      switch(type)
+      {
+         case BrewTargetTreeItem::RECIPE:
+            brewTargetTreeView->getRecipe(selection)->toXml(doc,recipe);
+            didRecipe = true;
+            break;
+         case BrewTargetTreeItem::EQUIPMENT:
+            brewTargetTreeView->getEquipment(selection)->toXml(doc,dbase);
+            break;
+         case BrewTargetTreeItem::HOP:
+            brewTargetTreeView->getHop(selection)->toXml(doc,dbase);
+            break;
+         case BrewTargetTreeItem::MISC:
+            brewTargetTreeView->getMisc(selection)->toXml(doc,dbase);
+            break;
+         case BrewTargetTreeItem::YEAST:
+            brewTargetTreeView->getYeast(selection)->toXml(doc,dbase);
+            break;
+      }
+   }
+
+   if ( didRecipe )
+      doc.appendChild(recipe);
+   else
+      doc.appendChild(dbase);
+
+   out << doc.toString();
+   
+   outFile->close();
+}
+

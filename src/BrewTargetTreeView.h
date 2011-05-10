@@ -60,6 +60,7 @@ public:
    QModelIndex findYeast(Yeast* yeast);
 
    int getType(const QModelIndex &index);
+   bool multiSelected();
 
     // Another try at drag and drop
     void mousePressEvent(QMouseEvent *event);

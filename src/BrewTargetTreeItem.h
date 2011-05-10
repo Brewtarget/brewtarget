@@ -43,13 +43,13 @@ class BrewTargetTreeItem
 public:
 
    enum{RECIPENAMECOL, RECIPEBREWDATECOL, RECIPESTYLECOL, RECIPENUMCOLS /*This one MUST be last*/};
-    enum{EQUIPMENTNAMECOL, EQUIPMENTBOILTIMECOL, EQUIPMENTNUMCOLS};
-    enum{FERMENTABLENAMECOL, FERMENTABLETYPECOL, FERMENTABLECOLORCOL, FERMENTABLENUMCOLS};
-    enum{HOPNAMECOL, HOPFORMCOL, HOPUSECOL, HOPNUMCOLS};
-    enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCNUMCOLS};
-    enum{YEASTNAMECOL, YEASTTYPECOL, YEASTFORMCOL, YEASTNUMCOLS};
+   enum{EQUIPMENTNAMECOL, EQUIPMENTBOILTIMECOL, EQUIPMENTNUMCOLS};
+   enum{FERMENTABLENAMECOL, FERMENTABLETYPECOL, FERMENTABLECOLORCOL, FERMENTABLENUMCOLS};
+   enum{HOPNAMECOL, HOPFORMCOL, HOPUSECOL, HOPNUMCOLS};
+   enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCNUMCOLS};
+   enum{YEASTNAMECOL, YEASTTYPECOL, YEASTFORMCOL, YEASTNUMCOLS};
     
-    enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST};
+   enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST,NUMTYPES};
 
 
    BrewTargetTreeItem(int type = RECIPE, BrewTargetTreeItem *parent=0 );
@@ -58,7 +58,7 @@ public:
    BrewTargetTreeItem *child(int number);       // Gets the child object
    BrewTargetTreeItem *parent();
 
-    int getType();
+   int getType();
    int childCount() const;
    int columnCount(int type) const;
    QVariant data(int type, int column);        // gets the information at column X
@@ -75,8 +75,8 @@ public:
    Equipment*   getEquipment();
    Fermentable* getFermentable();
    Hop*         getHop();
-    Misc*        getMisc();
-    Yeast*       getYeast();
+   Misc*        getMisc();
+   Yeast*       getYeast();
 
    bool insertChildren(int position, int count, int type = RECIPE);
    bool removeChildren(int position, int count);
@@ -88,15 +88,15 @@ private:
    int type;
    void *thing;
 
-    // With great abstraction comes great ... sorry, I was distracted.
-    QVariant dataRecipe(int column);
-    QVariant dataEquipment(int column);
-    QVariant dataFermentable(int column);
-    QVariant dataHop(int column);
-    QVariant dataMisc(int column);
-    QVariant dataYeast(int column);
+   // With great abstraction comes great ... sorry, I was distracted.
+   QVariant dataRecipe(int column);
+   QVariant dataEquipment(int column);
+   QVariant dataFermentable(int column);
+   QVariant dataHop(int column);
+   QVariant dataMisc(int column);
+   QVariant dataYeast(int column);
 
-    void setType(int t);
+   void setType(int t);
 };
 
 #endif /* BREWTARGETTREEITEM_H_ */

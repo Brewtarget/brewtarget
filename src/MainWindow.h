@@ -74,6 +74,8 @@ public:
    void setRecipe(Recipe* recipe);
    virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
+   QFile* openForWrite();
+   bool verifyImport(QString tag, QString name);
 
 public slots:
    void save();
@@ -115,11 +117,12 @@ public slots:
 
    void newRecipe();
    void exportRecipe();
-   void importRecipes();
+   void importFiles();
    void copyRecipe();
    
    void deleteSelected();
    void copySelected();
+   void exportSelected();
 
    void printRecipe();
    void printBrewday();
@@ -144,6 +147,7 @@ private:
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
    QFileDialog* fileSaver;
+   QList<QMenu*> contextMenus;
    EquipmentEditor* equipEditor;
    FermentableDialog* fermDialog;
    FermentableEditor* fermEditor;
@@ -186,6 +190,8 @@ private:
    //! set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
    void setupToolbar();
+   void setupContextMenu();
+
    void showChanges(const QVariant& info = QVariant());
 
    // Copy methods used by copySelected()
@@ -195,6 +201,7 @@ private:
    void copyThis(Hop *hop);
    void copyThis(Misc *misc);
    void copyThis(Yeast *yeast);
+
 };
 
 #endif   /* _MAINWINDOW_H */
