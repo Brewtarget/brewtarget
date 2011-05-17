@@ -231,6 +231,7 @@ SET( TRANSLATIONS_FILES
      ${TRANSLATIONSDIR}/bt_fr.ts # French
      ${TRANSLATIONSDIR}/bt_pl.ts # Polish
      ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese
+     ${TRANSLATIONSDIR}/bt_hu.ts # Hungarian
 )
 
 SET( FILES_TO_TRANSLATE
