@@ -48,11 +48,11 @@ public:
    enum{HOPNAMECOL, HOPFORMCOL, HOPUSECOL, HOPNUMCOLS};
    enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCNUMCOLS};
    enum{YEASTNAMECOL, YEASTTYPECOL, YEASTFORMCOL, YEASTNUMCOLS};
+   enum{BREWDATE,BREWNUMCOLS};
     
-   enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST,NUMTYPES};
+   enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST,BREWNOTE,NUMTYPES};
 
-
-   BrewTargetTreeItem(int type = RECIPE, BrewTargetTreeItem *parent=0 );
+   BrewTargetTreeItem(int type = NUMTYPES, BrewTargetTreeItem *parent=0 );
    virtual ~BrewTargetTreeItem();
 
    BrewTargetTreeItem *child(int number);       // Gets the child object
@@ -69,7 +69,7 @@ public:
    // column data
     QVariant getData(int column);
 
-   void setData(int type, void *d);
+   void setData(int t, void *d);
 
    Recipe*      getRecipe();
    Equipment*   getEquipment();
@@ -77,9 +77,11 @@ public:
    Hop*         getHop();
    Misc*        getMisc();
    Yeast*       getYeast();
+   BrewNote*    getBrewNote();
 
    bool insertChildren(int position, int count, int type = RECIPE);
    bool removeChildren(int position, int count);
+
 
 private:
    BrewTargetTreeItem* parentItem;
@@ -95,6 +97,7 @@ private:
    QVariant dataHop(int column);
    QVariant dataMisc(int column);
    QVariant dataYeast(int column);
+   QVariant dataBrewNote(int column);
 
    void setType(int t);
 };

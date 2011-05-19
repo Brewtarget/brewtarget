@@ -39,6 +39,8 @@ public:
    BrewTargetTreeModel* getModel();
 
    bool removeRow(const QModelIndex &index);
+   bool isParent(const QModelIndex& parent, const QModelIndex& child);
+   QModelIndex getParent(const QModelIndex& child);
 
    // Ugh
    Recipe* getRecipe(const QModelIndex &index) const;
@@ -59,20 +61,23 @@ public:
    Yeast* getYeast(const QModelIndex &index) const;
    QModelIndex findYeast(Yeast* yeast);
 
+   BrewNote* getBrewNote(const QModelIndex &index) const;
+   QModelIndex findBrewNote( BrewNote* bNote);
+
    int getType(const QModelIndex &index);
    bool multiSelected();
 
-    // Another try at drag and drop
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
+   // Another try at drag and drop
+   void mousePressEvent(QMouseEvent *event);
+   void mouseMoveEvent(QMouseEvent *event);
+   void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
    BrewTargetTreeModel* model;
-    QPoint dragStart;
-    bool doubleClick;
+   QPoint dragStart;
+   bool doubleClick;
 
-    QMimeData *mimeData(QModelIndexList indexes);
+   QMimeData *mimeData(QModelIndexList indexes);
 };
 
 #endif /* BREWTARGETTREEVIEW_H_ */

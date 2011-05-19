@@ -1145,3 +1145,4 @@ Yeast* Database::findYeastByName(QString name)
 
    return 0;
 }
+

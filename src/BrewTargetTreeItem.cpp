@@ -32,7 +32,7 @@
 BrewTargetTreeItem::BrewTargetTreeItem(int type, BrewTargetTreeItem *parent)
 {
    parentItem = parent;
-    setType(type);
+   setType(type);
    thing = 0;
 }
 
@@ -80,6 +80,8 @@ int BrewTargetTreeItem::columnCount(int type) const
             return MISCNUMCOLS;
         case YEAST:
             return YEASTNUMCOLS;
+        case BREWNOTE:
+            return BREWNUMCOLS;
         default:
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(type));
             return 0;
@@ -89,23 +91,26 @@ int BrewTargetTreeItem::columnCount(int type) const
 
 QVariant BrewTargetTreeItem::data(int type, int column)
 {
-    switch(type)
-    {
-        case RECIPE:
+
+   switch(type)
+   {
+      case RECIPE:
          return dataRecipe(column);
-        case EQUIPMENT:
+      case EQUIPMENT:
          return dataEquipment(column);
-        case FERMENTABLE:
+      case FERMENTABLE:
          return dataFermentable(column);
-        case HOP:
+      case HOP:
          return dataHop(column);
-        case MISC:
-            return dataMisc(column);
-        case YEAST:
-            return dataYeast(column);
-        default:
+      case MISC:
+         return dataMisc(column);
+      case YEAST:
+         return dataYeast(column);
+      case BREWNOTE:
+         return dataBrewNote(column);
+      default:
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(column));
-            return QVariant();
+         return QVariant();
     }
 }
 
@@ -116,28 +121,28 @@ int BrewTargetTreeItem::childNumber() const
    return 0;
 }
 
-void BrewTargetTreeItem::setData(int type, void* d)
+void BrewTargetTreeItem::setData(int t, void* d)
 {
    thing = d;
-    setType(type);
+   type  = t;
 }
 
 QVariant BrewTargetTreeItem::getData(int column)
 {
-    return data(getType(),column);
+   return data(getType(),column);
 }
 
 bool BrewTargetTreeItem::insertChildren(int position, int count, int type)
 {
-    int i;
+   int i;
    if ( position < 0  || position > childItems.size())
       return false;
 
-    for(i=0; i < count; ++i)
-    {
-        BrewTargetTreeItem *newItem = new BrewTargetTreeItem(type,this);
-        childItems.insert(position+i,newItem);
-    }
+   for(i=0; i < count; ++i)
+   {
+      BrewTargetTreeItem *newItem = new BrewTargetTreeItem(type,this);
+      childItems.insert(position+i,newItem);
+   }
 
    return true;
 }
@@ -155,7 +160,7 @@ bool BrewTargetTreeItem::removeChildren(int position, int count)
 
 QVariant BrewTargetTreeItem::dataRecipe( int column ) 
 {
-    Recipe* recipe = static_cast<Recipe*>(thing);
+   Recipe* recipe = static_cast<Recipe*>(thing);
    switch(column)
    {
         case RECIPENAMECOL:
@@ -262,7 +267,7 @@ QVariant BrewTargetTreeItem::dataMisc(int column)
 
 QVariant BrewTargetTreeItem::dataYeast(int column)
 {
-    Yeast* yeast = static_cast<Yeast*>(thing);
+   Yeast* yeast = static_cast<Yeast*>(thing);
    switch(column)
    {
       case YEASTNAMECOL:
@@ -280,6 +285,17 @@ QVariant BrewTargetTreeItem::dataYeast(int column)
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(column));
    }
    return QVariant();
+}
+
+QVariant BrewTargetTreeItem::dataBrewNote(int column)
+{
+   if ( ! thing )
+      return QVariant();
+
+   BrewNote* bNote = static_cast<BrewNote*>(thing);
+   QDate     twelve = bNote->getBrewDate();
+
+   return twelve.toString(Qt::ISODate);
 }
 
 void BrewTargetTreeItem::setType(int t)
@@ -326,5 +342,12 @@ Yeast* BrewTargetTreeItem::getYeast()
 {
     if ( type == YEAST ) 
         return static_cast<Yeast*>(thing);
+    return 0;
+}
+
+BrewNote* BrewTargetTreeItem::getBrewNote()
+{
+    if ( type == BREWNOTE ) 
+        return static_cast<BrewNote*>(thing);
     return 0;
 }

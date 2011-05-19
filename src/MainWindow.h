@@ -63,6 +63,7 @@ class MainWindow;
 #include "RefractoDialog.h"
 #include "MashDesigner.h"
 #include "PitchDialog.h"
+#include "BrewNoteWidget.h"
 
 class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
 {
@@ -76,6 +77,9 @@ public:
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
    QFile* openForWrite();
    bool verifyImport(QString tag, QString name);
+
+   void setBrewNoteByIndex(const QModelIndex &index);
+   void setBrewNote(BrewNote* bNote);
 
 public slots:
    void save();
@@ -133,6 +137,8 @@ public slots:
    void restoreFromBackup(); // Restore the database.
 
    void contextMenu(const QPoint &point);
+   void newBrewNote();
+   void reBrewNote();
 
    void openDonateLink();
 
@@ -178,6 +184,9 @@ private:
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
    QPrinter *printer;
+   // This is getting silly
+   QHash<QString, int> brewNotes;
+   int startTab;
 
    //! Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();

@@ -8,6 +8,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
+    ${SRCDIR}/brewnote.cpp
+    ${SRCDIR}/BrewNoteWidget.cpp
     ${SRCDIR}/BrewTargetTreeItem.cpp
     ${SRCDIR}/BrewTargetTreeModel.cpp
     ${SRCDIR}/BrewTargetTreeView.cpp
@@ -103,6 +105,7 @@ SET( brewtarget_UIS
     ${UIDIR}/aboutDialog.ui
     ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
+    ${UIDIR}/brewNoteWidget.ui
     ${UIDIR}/converterTool.ui
     ${UIDIR}/mainWindow.ui
     ${UIDIR}/mashStepEditor.ui
@@ -141,6 +144,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
+    ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/BrewTargetTreeModel.h
     ${SRCDIR}/BrewTargetTreeView.h
     ${SRCDIR}/BtDigitWidget.h

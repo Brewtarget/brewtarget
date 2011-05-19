@@ -68,6 +68,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include "FermentableTableModel.h"
+#include "BrewNoteWidget.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -204,6 +205,9 @@ MainWindow::MainWindow(QWidget* parent)
    // Once more with the context menus too
    setupContextMenu();
    brewTargetTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+
+   // clear out the brewnotes 
+   brewNotes.clear();
 
    // If we saved a size the last time we ran, use it
    QSettings settings("brewtarget");
@@ -389,6 +393,7 @@ void MainWindow::deleteSelected()
    QList<Hop*> deadHop;
    QList<Misc*> deadMisc;
    QList<Yeast*> deadYeast;
+   QList<QModelIndex> deadNote;
 
    // Get the dead things first.  Deleting as we process the list doesn't work, because the
    // delete updates the database and the indices get recalculated.
@@ -399,8 +404,8 @@ void MainWindow::deleteSelected()
           *at != brewTargetTreeView->findEquipment(0)   &&
           *at != brewTargetTreeView->findFermentable(0) &&
           *at != brewTargetTreeView->findHop(0)         &&
-             *at != brewTargetTreeView->findMisc(0)        &&
-             *at != brewTargetTreeView->findYeast(0))
+          *at != brewTargetTreeView->findMisc(0)        &&
+          *at != brewTargetTreeView->findYeast(0))
       {
          switch(brewTargetTreeView->getType(*at))
          {
@@ -422,16 +427,37 @@ void MainWindow::deleteSelected()
             case BrewTargetTreeItem::YEAST:
                deadYeast.append(brewTargetTreeView->getYeast(*at));
                break;
+            case BrewTargetTreeItem::BREWNOTE:
+               deadNote.append(*at);
+               break;
             default:
                Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
          }
       }
    }
 
+   // Deleting brewnotes is kind of annoying, actually.  BUt do it before you
+   // delete recipes.  Unpleasant things will happen... I really want to
+   // isolate this so it looks as clean as the others do.
+   for (int i = 0; i < deadNote.count(); ++i)
+   {
+      QModelIndex index = deadNote.at(i);
+      if ( ! index.isValid() )
+         continue;
 
-    db->removeRecipe(deadRec);
-    db->removeEquipment(deadKit);
-    db->removeFermentable(deadFerm);
+      QModelIndex parent = brewTargetTreeView->getParent(index);
+      BrewNote* dNote    = brewTargetTreeView->getBrewNote(index);
+
+      if ( !parent.isValid() || ! dNote)
+         continue;
+
+      Recipe* rec = brewTargetTreeView->getRecipe(parent);
+      rec->removeBrewNote(dNote);
+   }
+
+   db->removeRecipe(deadRec);
+   db->removeEquipment(deadKit);
+   db->removeFermentable(deadFerm);
    db->removeHop(deadHop);
    db->removeMisc(deadMisc);
    db->removeYeast(deadYeast);
@@ -439,7 +465,6 @@ void MainWindow::deleteSelected()
    setRecipeByIndex(above);
    brewTargetTreeView->setCurrentIndex(above);
    brewTargetTreeView->scrollTo(above,QAbstractItemView::PositionAtCenter);
-
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -455,8 +480,8 @@ void MainWindow::treeActivated(const QModelIndex &index)
    Equipment *kit;
    Fermentable *ferm;
    Hop* h;
-    Misc *m;
-    Yeast *y;
+   Misc *m;
+   Yeast *y;
 
    switch( brewTargetTreeView->getType(index))
    {
@@ -503,10 +528,60 @@ void MainWindow::treeActivated(const QModelIndex &index)
             yeastEditor->show();
          }
          break;
+      case BrewTargetTreeItem::BREWNOTE:
+         setBrewNoteByIndex(index);
+         break;
       default:
          Brewtarget::log(Brewtarget::WARNING, tr("Unknown type %1.").arg(brewTargetTreeView->getType(index)));
    }
    brewTargetTreeView->setCurrentIndex(index);
+}
+
+void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
+{
+   int numtabs;
+   BrewNoteWidget* ni;
+
+   BrewNote* bNote = brewTargetTreeView->getBrewNote(index);
+
+   if ( ! bNote )
+      return;
+
+   // I think this means a brew note for a different recipe has been selected.
+   // We need to select that recipe, which will clear the current tabs
+   if (! brewTargetTreeView->isParent( brewTargetTreeView->findRecipe(recipeObs), index) )
+   {
+      setRecipeByIndex(brewTargetTreeView->getParent(index));
+   }
+   else if (brewNotes.contains(bNote->getBrewDate_str()))
+   {
+      tabWidget_recipeView->setCurrentIndex(brewNotes.value(bNote->getBrewDate_str()));
+      return;
+   }
+
+   numtabs = tabWidget_recipeView->count();
+   ni = new BrewNoteWidget(tabWidget_recipeView);
+   ni->setBrewNote(bNote);
+
+   tabWidget_recipeView->insertTab(numtabs,ni,bNote->getBrewDate_str());
+   brewNotes.insert(bNote->getBrewDate_str(), numtabs);
+   tabWidget_recipeView->setCurrentIndex(numtabs);
+
+}
+
+void MainWindow::setBrewNote(BrewNote* bNote)
+{
+   int numtabs;
+   BrewNoteWidget* ni;
+
+   numtabs = tabWidget_recipeView->count();
+   ni = new BrewNoteWidget(tabWidget_recipeView);
+   ni->setBrewNote(bNote);
+
+   tabWidget_recipeView->insertTab(numtabs,ni,bNote->getBrewDate_str());
+   brewNotes.insert(bNote->getBrewDate_str(), numtabs);
+   tabWidget_recipeView->setCurrentIndex(numtabs);
+
 }
 
 void MainWindow::setRecipeByIndex(const QModelIndex &index)
@@ -523,6 +598,7 @@ void MainWindow::setRecipeByIndex(const QModelIndex &index)
 // Can handle null recipes.
 void MainWindow::setRecipe(Recipe* recipe)
 {
+   QHashIterator<QString,int> b(brewNotes);
    // Don't like void pointers.
    if( recipe == 0 )
       return;
@@ -569,6 +645,16 @@ void MainWindow::setRecipe(Recipe* recipe)
    yeastTable->getModel()->removeAll();
    //mashStepTableWidget->getModel()->removeAll();
 
+   // Clean out any brew notes
+   tabWidget_recipeView->setCurrentIndex(0);
+   startTab = tabWidget_recipeView->count() - brewNotes.size();
+
+   while( b.hasNext() )
+   {
+      b.next();
+      tabWidget_recipeView->removeTab(startTab);
+   }
+   brewNotes.clear();
    // Make sure this MainWindow is paying attention...
    recipeObs = recipe;
    setObserved(recipeObs); // Automatically removes the previous observer.
@@ -1110,7 +1196,44 @@ void MainWindow::newRecipe()
    setRecipeByIndex(newItem);
    brewTargetTreeView->setCurrentIndex(newItem);
    brewTargetTreeView->scrollTo(newItem,QAbstractItemView::PositionAtCenter);
-//   recipeComboBox->setIndexByRecipeName(name);
+}
+
+void MainWindow::newBrewNote()
+{
+   QModelIndexList indexes = brewTargetTreeView->selectionModel()->selectedRows();
+
+   foreach(QModelIndex selected, indexes)
+   {
+      Recipe*   rec   = brewTargetTreeView->getRecipe(selected);
+      BrewNote* bNote = new BrewNote(rec);
+
+      if ( ! rec )
+         return;
+
+      setRecipe(rec);
+      setBrewNote(bNote);
+      rec->addBrewNote(bNote);
+   }
+}
+  
+void MainWindow::reBrewNote()
+{
+   QModelIndexList indexes = brewTargetTreeView->selectionModel()->selectedRows();
+   foreach(QModelIndex selected, indexes)
+   {
+      BrewNote* old   = brewTargetTreeView->getBrewNote(selected);
+      Recipe* rec     = brewTargetTreeView->getRecipe(brewTargetTreeView->getParent(selected));
+
+      if (! old || ! rec)
+         return;
+
+      BrewNote* bNote = new BrewNote(*old);
+      bNote->setBrewDate();
+
+      setRecipe(rec);
+      setBrewNote(bNote);
+      rec->addBrewNote(bNote);
+   }
 }
 
 void MainWindow::backup()
@@ -1513,6 +1636,10 @@ void MainWindow::dropEvent(QDropEvent *event)
                addYeastToRecipe(brewTargetTreeView->getYeast(index));
                last = yeastTable;
                break;
+            case BrewTargetTreeItem::BREWNOTE:
+               setBrewNoteByIndex(index);
+               last = brewNoteWidget;
+               break;
          }
 
          event->accept();
@@ -1562,6 +1689,8 @@ void MainWindow::setupContextMenu()
    // Top level item
 	
 	contextMenus.at(BrewTargetTreeItem::RECIPE)->addAction(tr("New Recipe"), this, SLOT(newRecipe()));
+   contextMenus.at(BrewTargetTreeItem::RECIPE)->addAction(tr("Brew it!"), this, SLOT(newBrewNote()));
+
    contextMenus.at(BrewTargetTreeItem::EQUIPMENT)->addAction(tr("New Equipment"), equipEditor, SLOT(newEquipment()));
    contextMenus.at(BrewTargetTreeItem::FERMENTABLE)->addAction(tr("New Fermentable"), fermDialog, SLOT(newFermentable()));
    contextMenus.at(BrewTargetTreeItem::HOP)->addAction(tr("New Hop"), hopDialog, SLOT(newHop()));
@@ -1580,6 +1709,11 @@ void MainWindow::setupContextMenu()
    // And do the stuff that is common to all the menus.
    for(i=0; i <= BrewTargetTreeItem::NUMTYPES; ++i)
    {
+      // I hate this, but the brewnotes are a very special case and a very
+      // limited context menu
+      if ( i == BrewTargetTreeItem::BREWNOTE)
+         continue;
+
       if ( i != BrewTargetTreeItem::NUMTYPES )
          contextMenus.at(i)->addSeparator();
       contextMenus.at(i)->addMenu(sMenu);
@@ -1594,6 +1728,10 @@ void MainWindow::setupContextMenu()
          temp->setEnabled(false);
       contextMenus.at(i)->addAction(tr("Import"), this, SLOT(importFiles()));
    }
+
+   // Handle the brewnotes outside the normal flow
+   contextMenus.at(BrewTargetTreeItem::BREWNOTE)->addAction(tr("Brew Again"), this, SLOT(reBrewNote()));
+   contextMenus.at(BrewTargetTreeItem::BREWNOTE)->addAction(tr("Delete"), this, SLOT(deleteSelected()));
 }
 
 void MainWindow::copyThis(Recipe *rec)
@@ -1718,6 +1856,7 @@ void MainWindow::copySelected()
             case BrewTargetTreeItem::YEAST:
                copyYeast.append(brewTargetTreeView->getYeast(*at));
                break;
+               // No Brewnote, because it just doesn't make sense
             default:
                Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
          }

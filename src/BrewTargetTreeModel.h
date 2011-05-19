@@ -34,6 +34,7 @@ class BrewTargetTreeModel;
 #include "BrewTargetTreeView.h"
 #include "database.h"
 #include "observable.h"
+#include "brewnote.h"
 
 class BrewTargetTreeModel : public QAbstractItemModel, public MultipleObserver
 {
@@ -67,6 +68,7 @@ public:
    bool isHop(const QModelIndex &index);
    bool isMisc(const QModelIndex &index);
    bool isYeast(const QModelIndex &index);
+   bool isBrewNote(const QModelIndex &index);
 
    int getType(const QModelIndex &index);
 
@@ -81,6 +83,7 @@ public:
    Hop* getHop(const QModelIndex &index) const;
    Misc* getMisc(const QModelIndex &index) const;
    Yeast* getYeast(const QModelIndex &index) const;
+   BrewNote* getBrewNote(const QModelIndex &index) const;
 
    QModelIndex findRecipe(Recipe* rec);
    QModelIndex findEquipment(Equipment* kit);
@@ -88,6 +91,7 @@ public:
    QModelIndex findHop(Hop* hop);
    QModelIndex findMisc(Misc* misc);
    QModelIndex findYeast(Yeast* yeast);
+   QModelIndex findBrewNote(BrewNote* bNote);
 
 private:
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
@@ -97,6 +101,7 @@ private:
    BrewTargetTreeItem* rootItem;
    BrewTargetTreeView *parentTree;
    Database* dbObs;
+   Recipe* recObs;
 };
 
 #endif /* RECEIPTREEMODEL_H_ */

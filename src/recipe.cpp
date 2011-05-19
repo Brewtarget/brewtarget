@@ -145,7 +145,13 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    for( i = 0; i < size; ++i )
       instructions[i]->toXml(doc, tmpNode);
    recipeNode.appendChild(tmpNode);
-   
+
+   tmpNode = doc.createElement("BREWNOTES");
+   size = brewNotes.size();
+   for(i=0; i < size; ++i)
+      brewNotes[i]->toXml(doc,tmpNode);
+   recipeNode.appendChild(tmpNode);
+
    tmpNode = doc.createElement("ASST_BREWER");
    tmpText = doc.createTextNode(asstBrewer);
    tmpNode.appendChild(tmpText);
@@ -278,6 +284,7 @@ void Recipe::setDefaults()
    miscs = QVector<Misc*>();
    yeasts = QVector<Yeast*>();
    waters = QVector<Water*>();
+   brewNotes = QVector<BrewNote*>();
    mash = new Mash();
    addObserved(mash);
 
@@ -467,6 +474,12 @@ void Recipe::fromNode(const QDomNode& recipeNode)
          QDomNode instructionNode;
          for( instructionNode = child; ! instructionNode.isNull(); instructionNode = instructionNode.nextSibling() )
             addInstruction(new Instruction(instructionNode));
+      }
+      else if( property == "BREWNOTES" )
+      {
+         QDomNode bnNode;
+         for( bnNode = child; ! bnNode.isNull(); bnNode = bnNode.nextSibling() )
+            addBrewNote(new BrewNote(bnNode));
       }
       else if( property == "MASH" )
       {
@@ -1412,6 +1425,7 @@ void Recipe::addFermentable( Fermentable* var )
       hasChanged();
    }
 }
+
 void Recipe::addMisc( Misc* var )
 {
    if( var == NULL )
@@ -1448,6 +1462,18 @@ void Recipe::addWater( Water* var )
    }
 }
 
+void Recipe::addBrewNote(BrewNote* var)
+{
+   if ( var == NULL ) 
+      Brewtarget::logW( QString("Recipe: null brewnote"));
+   else 
+   {
+      brewNotes.push_back(var);
+      addObserved(var);
+      hasChanged();
+   }
+}
+
 void Recipe::setMash( Mash *var )
 {
    if( var == NULL )
@@ -1457,7 +1483,6 @@ void Recipe::setMash( Mash *var )
    addObserved(mash);
    hasChanged(QVariant(MASH));
 }
-
 
 void Recipe::setAsstBrewer( const QString &var )
 {
@@ -1822,6 +1847,22 @@ Water* Recipe::getWater(unsigned int i)
       return waters[i];
 }
 
+unsigned int Recipe::getNumBrewNotes() const
+{
+   return brewNotes.size();
+}
+
+BrewNote* Recipe::getBrewNote(unsigned int i)
+{
+   if ( static_cast<int>(i) >= brewNotes.size())
+   {
+      Brewtarget::logW( QString("Recipe: bad index into brewnotes: %1").arg(i) );
+      return 0;
+   }
+   else
+      return brewNotes[i];
+}
+
 Mash* Recipe::getMash() const
 {
    return mash;
@@ -2182,6 +2223,39 @@ bool Recipe::removeYeast(Yeast* var)
    return false;
 }
 
+bool Recipe::removeBrewNote(BrewNote* var)
+{
+   QVector<BrewNote*>::iterator iter;
+
+   for( iter = brewNotes.begin(); iter != brewNotes.end(); iter++ )
+   {
+      if( *iter == var )
+      {
+         brewNotes.erase(iter);
+         hasChanged();
+         return true;
+      }
+   }
+
+   return false;
+}
+
+bool Recipe::removeBrewNote(QList<BrewNote*> var)
+{
+   QVector<BrewNote*>::iterator iter;
+
+   for( iter = brewNotes.begin(); iter != brewNotes.end(); iter++ )
+   {
+      if( var.contains(*iter) )
+      {
+         brewNotes.erase(iter);
+         hasChanged();
+         return true;
+      }
+   }
+   return false;
+}
+
 double Recipe::getBoilGrav()
 {
    unsigned int i;
@@ -2215,6 +2289,34 @@ double Recipe::getBoilGrav()
       sugar_kg = sugar_kg / (1 - equipment->getTrubChillerLoss_l()/estimatePostBoilVolume_l());
 
    return Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
+}
+
+// Return the theoretical maximum yield without any non-mashed anything.  This
+// will need to be communicated somewhere.
+double Recipe::getPoints(double volume)
+{
+   unsigned int i;
+   Fermentable* ferm;
+   double sugar_kg = 0.0;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   Fermentable::Type type;
+
+   // Calculate OG
+   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+   {
+      ferm = fermentables[i];
+      if( ferm->getAddAfterBoil() )
+         continue;
+
+      // If we have some sort of non-grain, we have to ignore efficiency.
+      type = ferm->getType();
+      if( type==Fermentable::TYPESUGAR || type==Fermentable::TYPEEXTRACT || type==Fermentable::TYPEDRY_EXTRACT )
+         sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+      else
+         sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+   }
+
+   return 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
 }
 
 double Recipe::getIBU()

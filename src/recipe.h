@@ -39,6 +39,7 @@ class Recipe;
 #include "observable.h"
 #include "instruction.h"
 #include "PreInstruction.h"
+#include "brewnote.h"
 
 class Recipe : public Observable, public MultipleObserver, public BeerXMLElement
 {
@@ -157,7 +158,15 @@ public:
     * Remove a water.
     */
    bool removeWater( Water* var );
-
+   /*!
+    * Add a brewnote
+    */
+   void addBrewNote(BrewNote* var);
+   /*!
+    * Remove a brewnote
+    */
+   bool removeBrewNote(BrewNote* var);
+   bool removeBrewNote(QList<BrewNote*> var);
    /*!
     * Add an instruction.
     */
@@ -231,9 +240,6 @@ public:
    //! Set the forced carbonation flag.
    void setForcedCarbonation( bool var );
    //! Set the priming sugar name. Change this to QString.
-   /*!
-    * \todo Change to QString.
-    */
    void setPrimingSugarName( const QString &var );
    //! Set carbonation temp in C.
    void setCarbonationTemp_c( double var );
@@ -261,6 +267,8 @@ public:
    Yeast* getYeast(unsigned int i);
    unsigned int getNumWaters() const;
    Water* getWater(unsigned int i);
+   unsigned int getNumBrewNotes() const;
+   BrewNote* getBrewNote(unsigned int i);
    
    Mash* getMash() const;
 
@@ -289,6 +297,7 @@ public:
    double getKegPrimingFactor() const;
 
    void recalculate(); // Calculates some parameters.
+   double getPoints(double volume);
    double getABV_pct();
    double getColor_srm();
    double getBoilGrav();
@@ -334,6 +343,7 @@ private:
    QVector<Water*> waters;
    Mash *mash;
    QVector<Instruction*> instructions;
+   QVector<BrewNote*> brewNotes;
    
    QString asstBrewer;
    Equipment* equipment;

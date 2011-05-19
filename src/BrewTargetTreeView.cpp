@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QDebug>
 #include <QApplication>
 #include <QDrag>
 #include "BrewTargetTreeView.h"
@@ -48,6 +47,16 @@ bool BrewTargetTreeView::removeRow(const QModelIndex &index)
    int position       = index.row();
 
    return model->removeRows(position,1,parent);
+}
+
+bool BrewTargetTreeView::isParent(const QModelIndex& parent, const QModelIndex& child)
+{
+   return parent == model->parent(child);
+}
+
+QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
+{
+   return model->parent(child);
 }
 
 Recipe* BrewTargetTreeView::getRecipe(const QModelIndex &index) const
@@ -108,6 +117,19 @@ Yeast* BrewTargetTreeView::getYeast(const QModelIndex &index) const
 QModelIndex BrewTargetTreeView::findYeast(Yeast* yeast)
 {
    return model->findYeast(yeast);
+}
+
+BrewNote* BrewTargetTreeView::getBrewNote(const QModelIndex &index) const
+{
+   if ( ! index.isValid() ) 
+      return NULL;
+
+   return model->getBrewNote(index);
+}
+
+QModelIndex BrewTargetTreeView::findBrewNote(BrewNote* bNote)
+{
+   return model->findBrewNote(bNote);
 }
 
 int BrewTargetTreeView::getType(const QModelIndex &index)
