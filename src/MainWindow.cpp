@@ -1638,7 +1638,6 @@ void MainWindow::dropEvent(QDropEvent *event)
                break;
             case BrewTargetTreeItem::BREWNOTE:
                setBrewNoteByIndex(index);
-               last = brewNoteWidget;
                break;
          }
 
