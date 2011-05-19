@@ -36,6 +36,24 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QToolBox" name="toolBox_brewnote">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>252</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>252</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="currentIndex">
             <number>0</number>
            </property>
@@ -44,14 +62,14 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>197</width>
-              <height>311</height>
+              <width>242</width>
+              <height>328</height>
              </rect>
             </property>
             <attribute name="label">
              <string>Preboil</string>
             </attribute>
-            <layout class="QFormLayout" name="formLayout">
+            <layout class="QFormLayout" name="formLayout_2">
              <item row="0" column="0">
               <widget class="QLabel" name="label">
                <property name="text">
@@ -85,12 +103,18 @@
                <property name="toolTip">
                 <string>Preboil gravity</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_2">
                <property name="text">
                 <string>Volume</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -124,6 +148,9 @@
                <property name="text">
                 <string>Strike Temp</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item row="2" column="1">
@@ -155,6 +182,9 @@
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Final Temp</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -190,18 +220,21 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>265</width>
-              <height>311</height>
+              <width>242</width>
+              <height>328</height>
              </rect>
             </property>
             <attribute name="label">
              <string>Postboil</string>
             </attribute>
-            <layout class="QFormLayout" name="formLayout_4">
+            <layout class="QFormLayout" name="formLayout">
              <item row="0" column="0">
               <widget class="QLabel" name="label_6">
                <property name="text">
                 <string>OG</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -230,7 +263,23 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>     Postboil Volume</string>
+               </property>
+               <property name="scaledContents">
+                <bool>false</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
               <widget class="QLineEdit" name="lineEdit_postBoilVol">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -251,25 +300,62 @@
                 </size>
                </property>
                <property name="toolTip">
-                <string>Volume of wort into fermenter</string>
+                <string>Volume of wort in BK after boil</string>
                </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_7">
+              <widget class="QLabel" name="label_16">
+               <property name="toolTip">
+                <string>Volume of wort transferred to fermenter</string>
+               </property>
                <property name="text">
-                <string>Postboil Volume</string>
+                <string>Volume into fermenter</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
-             <item row="4" column="0">
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineEdit_volIntoFerm">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>100</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
               <widget class="QLabel" name="label_8">
                <property name="text">
                 <string> Pitch Temp</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
-             <item row="4" column="1">
+             <item row="3" column="1">
               <widget class="QLineEdit" name="lineEdit_pitchTemp">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -294,35 +380,6 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_16">
-               <property name="text">
-                <string>Volume in Fermenter</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLineEdit" name="lineEdit_volIntoFerm">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>100</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
-             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="page_postferment">
@@ -330,8 +387,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>197</width>
-              <height>311</height>
+              <width>242</width>
+              <height>328</height>
              </rect>
             </property>
             <attribute name="label">
@@ -380,7 +437,7 @@
              <item row="1" column="1">
               <widget class="QLineEdit" name="lineEdit_finalVol">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -412,7 +469,7 @@
              <item row="2" column="1">
               <widget class="QLineEdit" name="lineEdit_fermentDate">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -441,7 +498,10 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <layout class="QGridLayout" name="gridLayout">
+            <layout class="QFormLayout" name="formLayout_3">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::ExpandingFieldsGrow</enum>
+             </property>
              <item row="0" column="0">
               <widget class="QLabel" name="label_5">
                <property name="statusTip">
@@ -526,32 +586,6 @@
                 <string/>
                </property>
               </widget>
-             </item>
-             <item row="5" column="0">
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item row="5" column="1">
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </item>
