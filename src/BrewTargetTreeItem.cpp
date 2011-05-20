@@ -21,6 +21,7 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <Qt>
+#include <QDateTime>
 #include <QString>
 #include <QObject>
 #include <QVector>
@@ -293,9 +294,8 @@ QVariant BrewTargetTreeItem::dataBrewNote(int column)
       return QVariant();
 
    BrewNote* bNote = static_cast<BrewNote*>(thing);
-   QDate     twelve = bNote->getBrewDate();
 
-   return twelve.toString(Qt::ISODate);
+   return bNote->getBrewDate_short();
 }
 
 void BrewTargetTreeItem::setType(int t)
@@ -305,8 +305,9 @@ void BrewTargetTreeItem::setType(int t)
 
 Recipe* BrewTargetTreeItem::getRecipe()
 {
-    if ( type == RECIPE )
+    if ( type == RECIPE && thing )
         return static_cast<Recipe*>(thing);
+
     return 0;
 }
 
@@ -347,7 +348,8 @@ Yeast* BrewTargetTreeItem::getYeast()
 
 BrewNote* BrewTargetTreeItem::getBrewNote()
 {
-    if ( type == BREWNOTE ) 
-        return static_cast<BrewNote*>(thing);
+    if ( type == BREWNOTE && thing ) 
+       return static_cast<BrewNote*>(thing);
+
     return 0;
 }

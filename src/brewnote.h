@@ -39,7 +39,7 @@ public:
 
    BrewNote(Recipe* parent);
    BrewNote(BrewNote& other);
-   BrewNote(const QDomNode& bnoteNode);
+   BrewNote(Recipe* parent, const QDomNode& bnoteNode);
 
    friend bool operator<(BrewNote &b1, BrewNote &b2);
    friend bool operator==(BrewNote &b1, BrewNote &b2);
@@ -48,6 +48,7 @@ public:
    virtual void toXml(QDomDocument& doc, QDomNode& parent);
 
    // Sets
+   void setParent(Recipe* parent);
    void setBrewDate(QString date = "");
    void setFermentDate(QString date);
    void setNotes(const QString& var);
@@ -65,10 +66,12 @@ public:
    void setBoilOff(double var);  
 
    // Gets
-   QDate getBrewDate() const;
-   QString getBrewDate_str() const;
-   QDate getFermentDate() const;
-   QString getFermentDate_str() const;
+   Recipe*   getParent() const;
+   QDateTime getBrewDate() const;
+   QString   getBrewDate_str() const;
+   QString   getBrewDate_short() const;
+   QDateTime getFermentDate() const;
+   QString   getFermentDate_str() const;
 
    double getSG() const;
    double getVolumeIntoBK() const;
@@ -118,9 +121,10 @@ public:
 
 private:
    static const int version = 1;
+   Recipe* rec;
 
-   QDate brewDate;
-   QDate fermentDate;
+   QDateTime brewDate;
+   QDateTime fermentDate;
    QString notes;
 
    QHash<QString,double> info;

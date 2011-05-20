@@ -479,7 +479,7 @@ void Recipe::fromNode(const QDomNode& recipeNode)
       {
          QDomNode bnNode;
          for( bnNode = child; ! bnNode.isNull(); bnNode = bnNode.nextSibling() )
-            addBrewNote(new BrewNote(bnNode));
+            addBrewNote(new BrewNote(this,bnNode));
       }
       else if( property == "MASH" )
       {

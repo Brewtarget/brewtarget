@@ -393,7 +393,7 @@ void MainWindow::deleteSelected()
    QList<Hop*> deadHop;
    QList<Misc*> deadMisc;
    QList<Yeast*> deadYeast;
-   QList<QModelIndex> deadNote;
+   QList<BrewNote*> deadNote;
 
    // Get the dead things first.  Deleting as we process the list doesn't work, because the
    // delete updates the database and the indices get recalculated.
@@ -428,7 +428,7 @@ void MainWindow::deleteSelected()
                deadYeast.append(brewTargetTreeView->getYeast(*at));
                break;
             case BrewTargetTreeItem::BREWNOTE:
-               deadNote.append(*at);
+               deadNote.append(brewTargetTreeView->getBrewNote(*at));
                break;
             default:
                Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
@@ -441,18 +441,12 @@ void MainWindow::deleteSelected()
    // isolate this so it looks as clean as the others do.
    for (int i = 0; i < deadNote.count(); ++i)
    {
-      QModelIndex index = deadNote.at(i);
-      if ( ! index.isValid() )
-         continue;
+      BrewNoteWidget* ni = brewNotes.value(deadNote.at(i)->getBrewDate_str());
+      Recipe* rec = deadNote.at(i)->getParent();
+      int numtab = tabWidget_recipeView->indexOf(ni);
 
-      QModelIndex parent = brewTargetTreeView->getParent(index);
-      BrewNote* dNote    = brewTargetTreeView->getBrewNote(index);
-
-      if ( !parent.isValid() || ! dNote)
-         continue;
-
-      Recipe* rec = brewTargetTreeView->getRecipe(parent);
-      rec->removeBrewNote(dNote);
+      rec->removeBrewNote(deadNote.at(i));
+      tabWidget_recipeView->removeTab(numtab);
    }
 
    db->removeRecipe(deadRec);
@@ -539,7 +533,6 @@ void MainWindow::treeActivated(const QModelIndex &index)
 
 void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
 {
-   int numtabs;
    BrewNoteWidget* ni;
 
    BrewNote* bNote = brewTargetTreeView->getBrewNote(index);
@@ -547,45 +540,46 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
    if ( ! bNote )
       return;
 
+   Recipe* parent  = bNote->getParent();
    // I think this means a brew note for a different recipe has been selected.
    // We need to select that recipe, which will clear the current tabs
-   if (! brewTargetTreeView->isParent( brewTargetTreeView->findRecipe(recipeObs), index) )
+   if (  parent != recipeObs )
    {
-      setRecipeByIndex(brewTargetTreeView->getParent(index));
+      setRecipe(parent);
    }
    else if (brewNotes.contains(bNote->getBrewDate_str()))
    {
-      tabWidget_recipeView->setCurrentIndex(brewNotes.value(bNote->getBrewDate_str()));
+      tabWidget_recipeView->setCurrentWidget(brewNotes.value(bNote->getBrewDate_str()));
       return;
    }
 
-   numtabs = tabWidget_recipeView->count();
    ni = new BrewNoteWidget(tabWidget_recipeView);
    ni->setBrewNote(bNote);
 
-   tabWidget_recipeView->insertTab(numtabs,ni,bNote->getBrewDate_str());
-   brewNotes.insert(bNote->getBrewDate_str(), numtabs);
-   tabWidget_recipeView->setCurrentIndex(numtabs);
+   tabWidget_recipeView->addTab(ni,bNote->getBrewDate_short());
+   brewNotes.insert(bNote->getBrewDate_str(), ni);
+   tabWidget_recipeView->setCurrentWidget(ni);
 
 }
 
 void MainWindow::setBrewNote(BrewNote* bNote)
 {
-   int numtabs;
    QString tabname;
    BrewNoteWidget* ni;
 
-   numtabs = tabWidget_recipeView->count();
+   if (brewNotes.contains(bNote->getBrewDate_str()))
+   {
+      ni = brewNotes.value(bNote->getBrewDate_str());
+      tabWidget_recipeView->setCurrentWidget(ni);
+      return;
+   }
 
    ni = new BrewNoteWidget(tabWidget_recipeView);
    ni->setBrewNote(bNote);
 
-   tabname = bNote->getBrewDate_str();
-
-   brewNotes.insert(tabname, numtabs);
-   tabWidget_recipeView->insertTab(numtabs+1,ni,tabname);
-   tabWidget_recipeView->setCurrentIndex(numtabs);
-
+   brewNotes.insert(bNote->getBrewDate_str(), ni);
+   tabWidget_recipeView->addTab(ni,bNote->getBrewDate_short());
+   tabWidget_recipeView->setCurrentWidget(ni);
 }
 
 void MainWindow::setRecipeByIndex(const QModelIndex &index)
@@ -602,7 +596,6 @@ void MainWindow::setRecipeByIndex(const QModelIndex &index)
 // Can handle null recipes.
 void MainWindow::setRecipe(Recipe* recipe)
 {
-   QHashIterator<QString,int> b(brewNotes);
    // Don't like void pointers.
    if( recipe == 0 )
       return;
@@ -616,6 +609,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    Style* dbStyle;
    Equipment* equip;
    Equipment* dbEquip;
+   QHashIterator<QString,BrewNoteWidget*> b(brewNotes);
 
    // Force the Style and Equipment pointers of the recipe to point
    // inside the database so that if we make changes to the database versions

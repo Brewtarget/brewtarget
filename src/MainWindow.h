@@ -185,7 +185,7 @@ private:
    PitchDialog* pitchDialog;
    QPrinter *printer;
    // This is getting silly
-   QMultiHash<QString, int> brewNotes;
+   QMultiHash<QString, BrewNoteWidget*> brewNotes;
    int startTab;
 
    //! Currently highlighted fermentable in the fermentable table.

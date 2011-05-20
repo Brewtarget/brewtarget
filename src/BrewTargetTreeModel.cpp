@@ -282,23 +282,20 @@ QModelIndex BrewTargetTreeModel::findYeast(Yeast* yeast)
 
 QModelIndex BrewTargetTreeModel::findBrewNote(BrewNote* bNote)
 {
-   BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::RECIPE);
-   int i;
+   Recipe *parent = bNote->getParent();
+   int i,j; 
 
    if (! bNote )
-      return createIndex(0,0,pItem);
+      return QModelIndex();
 
-   for(i=0; i < pItem->childCount(); ++i)
-   {
-      Recipe* foo = pItem->child(i)->getRecipe();
-      for (unsigned int j=0; j < foo->getNumBrewNotes(); ++j)
-      {
-         BrewNote* bar = foo->getBrewNote(j);
-         if ( bar == bNote )
-            return createIndex(j,0,pItem->child(i));
-      }
+   j = -1;
+   for (i=0; static_cast<unsigned int>(i) < parent->getNumBrewNotes();++i)
+      if ( parent->getBrewNote(i) == bNote )
+         j = i;
 
-   }
+   if ( j != -1 )
+      return createIndex(j,0, getItem(findRecipe(parent)));
+
    return QModelIndex();
 }
 

@@ -23,7 +23,7 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
-#include <QDate>
+#include <QDateTime>
 #include "brewnote.h"
 #include "brewtarget.h"
 
@@ -106,28 +106,30 @@ void BrewNote::fromNode(const QDomNode& bNoteNode)
    hasChanged();
 }
 
-void BrewNote::setDefaults(Recipe* recipe)
+void BrewNote::setDefaults(Recipe* parent)
 {
    Mash* mash;
    MashStep* temp;
    Yeast *yeast;
    Equipment* equip;
-   int numYeast = recipe->getNumYeasts();
+   int numYeast = parent->getNumYeasts();
    double atten_pct = -1.0;
 
    int i;
 
-   brewDate = QDate::currentDate();
+   brewDate = QDateTime::currentDateTime();
    fermentDate = brewDate.addDays(7);
  
-   setInfo("SG",recipe->getBoilGrav());
-   setInfo("projBoilGrav",recipe->getBoilGrav());
+   setInfo("SG",parent->getBoilGrav());
+   setInfo("projBoilGrav",parent->getBoilGrav());
 
-   setInfo("volumeIntoBK",recipe->getBoilSize_l());
-   setInfo("projVolIntoBK",recipe->getBoilSize_l());
+   setInfo("volumeIntoBK",parent->getBoilSize_l());
+   setInfo("projVolIntoBK",parent->getBoilSize_l());
 
-   mash = recipe->getMash();
-   temp = mash->getMashStep(0);
+   mash = parent->getMash();
+
+   if ( mash ) 
+      temp = mash->getMashStep(0);
 
    if ( temp ) 
    {
@@ -141,7 +143,8 @@ void BrewNote::setDefaults(Recipe* recipe)
    i = mash->getNumMashSteps();
    if ( i - 2 >= 0 )
    {
-      temp = recipe->getMash()->getMashStep(i-2);
+      if ( mash )
+         temp = mash->getMashStep(i-2);
       if ( temp )
       {
          setInfo("mashFinTemp",temp->getEndTemp_c());
@@ -149,26 +152,26 @@ void BrewNote::setDefaults(Recipe* recipe)
       }
    }
 
-   setInfo("OG",recipe->getOg());
-   setInfo("projOG",recipe->getOg());
+   setInfo("OG",parent->getOg());
+   setInfo("projOG",parent->getOg());
 
-   setInfo("volumeIntoFerm",recipe->estimateFinalVolume_l());
-   setInfo("projVolIntoFerm",recipe->estimateFinalVolume_l());
+   setInfo("volumeIntoFerm",parent->estimateFinalVolume_l());
+   setInfo("projVolIntoFerm",parent->estimateFinalVolume_l());
 
-   setInfo("pitchTemp",recipe->getPrimaryTemp_c());
+   setInfo("pitchTemp",parent->getPrimaryTemp_c());
 
-   setInfo("FG",recipe->getFg());
-   setInfo("projFG",recipe->getFg());
+   setInfo("FG",parent->getFg());
+   setInfo("projFG",parent->getFg());
 
-   setInfo("finalVolume",recipe->estimateFinalVolume_l());
+   setInfo("finalVolume",parent->estimateFinalVolume_l());
 
-   setInfo("projEff",recipe->getEfficiency_pct());
-   setInfo("projPoints",recipe->getPoints(recipe->getBoilSize_l()));
-   setInfo("projABV", recipe->getABV_pct());
+   setInfo("projEff",parent->getEfficiency_pct());
+   setInfo("projPoints",parent->getPoints(parent->getBoilSize_l()));
+   setInfo("projABV", parent->getABV_pct());
 
    for( i = 0; i < numYeast; ++i )
    {
-      yeast = recipe->getYeast(i);
+      yeast = parent->getYeast(i);
       if ( yeast->getAttenuation_pct() > atten_pct )
          atten_pct = yeast->getAttenuation_pct();
    }
@@ -177,7 +180,7 @@ void BrewNote::setDefaults(Recipe* recipe)
       atten_pct = 75;
    setInfo("projAtten", atten_pct);
 
-   equip = recipe->getEquipment();
+   equip = parent->getEquipment();
    if ( equip ) 
    {
       double boiloff_hr = equip->getEvapRate_lHr();
@@ -194,14 +197,17 @@ void BrewNote::setDefaults(Recipe* recipe)
 }
 
 // Initializers
-BrewNote::BrewNote(Recipe* recipe)
+BrewNote::BrewNote(Recipe* parent)
 {
-   setDefaults(recipe);
+   setDefaults(parent);
+   rec = parent;
 }
 
 BrewNote::BrewNote(BrewNote& other)
    : Observable()
 {
+   rec         = other.rec;
+
    brewDate    = other.getBrewDate();
    fermentDate = other.getFermentDate();
 
@@ -234,29 +240,35 @@ BrewNote::BrewNote(BrewNote& other)
    setInfo("projPoints",other.getProjPoints());
 }
 
-BrewNote::BrewNote(const QDomNode& bnoteNode)
+BrewNote::BrewNote(Recipe* parent, const QDomNode& bnoteNode)
 {
    fromNode(bnoteNode);
+   rec = parent;
 }
 
 // Setters
+void BrewNote::setParent(Recipe* parent)
+{
+   rec = parent;
+}
+
 void BrewNote::setBrewDate(QString date)
 {
-   QDate temp;
+   QDateTime temp;
    
    if ( date != "" ) 
    {
-      temp = QDate::fromString(date,Qt::ISODate);
+      temp = QDateTime::fromString(date,Qt::ISODate);
       if ( temp.isValid() ) 
          brewDate = temp;
       else
       {
          Brewtarget::logW(QObject::tr("Invalid date string %1, defaulting to today").arg(date));
-         brewDate = QDate::currentDate();
+         brewDate = QDateTime::currentDateTime();
       }
    }
    else
-      brewDate = QDate::currentDate();
+      brewDate = QDateTime::currentDateTime();
 
    hasChanged();
 }
@@ -264,7 +276,7 @@ void BrewNote::setBrewDate(QString date)
 void BrewNote::setFermentDate(QString date)
 {
 
-   fermentDate = QDate::fromString(date, Qt::ISODate);
+   fermentDate = QDateTime::fromString(date, Qt::ISODate);
    hasChanged();
 }
 
@@ -311,9 +323,11 @@ void BrewNote::setProjAtten(double var)       { setInfo("projAtten", var); }
 void BrewNote::setBoilOff(double var)         { setInfo("boilOff", var); }
 
 // Getters
-QDate BrewNote::getBrewDate()          const { return brewDate; }
+Recipe* BrewNote::getParent()          const { return rec; }
+QDateTime BrewNote::getBrewDate()      const { return brewDate; }
 QString BrewNote::getBrewDate_str()    const { return brewDate.toString(Qt::ISODate); }
-QDate BrewNote::getFermentDate()       const { return fermentDate; }
+QString BrewNote::getBrewDate_short()  const { return brewDate.toString("yyyy-MM-dd"); }
+QDateTime BrewNote::getFermentDate()   const { return fermentDate; }
 QString BrewNote::getFermentDate_str() const { return fermentDate.toString(Qt::ISODate); }
 QString BrewNote::getNotes()           const { return notes; }
 

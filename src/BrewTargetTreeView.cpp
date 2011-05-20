@@ -19,6 +19,7 @@
 
 #include <QApplication>
 #include <QDrag>
+#include <QDebug>
 #include "BrewTargetTreeView.h"
 #include "BrewTargetTreeModel.h"
 
@@ -56,7 +57,10 @@ bool BrewTargetTreeView::isParent(const QModelIndex& parent, const QModelIndex& 
 
 QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
 {
-   return model->parent(child);
+   if ( child.isValid())
+      return model->parent(child);
+
+   return QModelIndex();
 }
 
 Recipe* BrewTargetTreeView::getRecipe(const QModelIndex &index) const
