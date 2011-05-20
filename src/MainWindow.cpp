@@ -572,14 +572,18 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
 void MainWindow::setBrewNote(BrewNote* bNote)
 {
    int numtabs;
+   QString tabname;
    BrewNoteWidget* ni;
 
    numtabs = tabWidget_recipeView->count();
+
    ni = new BrewNoteWidget(tabWidget_recipeView);
    ni->setBrewNote(bNote);
 
-   tabWidget_recipeView->insertTab(numtabs,ni,bNote->getBrewDate_str());
-   brewNotes.insert(bNote->getBrewDate_str(), numtabs);
+   tabname = bNote->getBrewDate_str();
+
+   brewNotes.insert(tabname, numtabs);
+   tabWidget_recipeView->insertTab(numtabs+1,ni,tabname);
    tabWidget_recipeView->setCurrentIndex(numtabs);
 
 }
@@ -1205,14 +1209,15 @@ void MainWindow::newBrewNote()
    foreach(QModelIndex selected, indexes)
    {
       Recipe*   rec   = brewTargetTreeView->getRecipe(selected);
-      BrewNote* bNote = new BrewNote(rec);
 
       if ( ! rec )
          return;
 
-      setRecipe(rec);
+      BrewNote* bNote = new BrewNote(rec);
+      if ( rec != recipeObs)
+         setRecipe(rec);
+      recipeObs->addBrewNote(bNote);
       setBrewNote(bNote);
-      rec->addBrewNote(bNote);
    }
 }
   
@@ -1230,9 +1235,10 @@ void MainWindow::reBrewNote()
       BrewNote* bNote = new BrewNote(*old);
       bNote->setBrewDate();
 
-      setRecipe(rec);
+      if (rec != recipeObs)
+         setRecipe(rec);
+      recipeObs->addBrewNote(bNote);
       setBrewNote(bNote);
-      rec->addBrewNote(bNote);
    }
 }
 
