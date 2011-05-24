@@ -54,16 +54,16 @@ public:
    void setNotes(const QString& var);
 
    void setSG(double var);
-   void setVolumeIntoBK(double var);
-   void setStrikeTemp(double var);
-   void setMashFinTemp(double var);
+   void setVolumeIntoBK_l(double var);
+   void setStrikeTemp_c(double var);
+   void setMashFinTemp_c(double var);
    void setOG(double var);
-   void setPostBoilVolume(double var);
-   void setVolumeIntoFerm(double var);
-   void setPitchTemp(double var);
+   void setPostBoilVolume_l(double var);
+   void setVolumeIntoFerm_l(double var);
+   void setPitchTemp_c(double var);
    void setFG(double var);
-   void setFinalVolume(double var);  
-   void setBoilOff(double var);  
+   void setFinalVolume_l(double var);  
+   void setBoilOff_l(double var);  
 
    // Gets
    Recipe*   getParent() const;
@@ -74,48 +74,48 @@ public:
    QString   getFermentDate_str() const;
 
    double getSG() const;
-   double getVolumeIntoBK() const;
-   double getStrikeTemp() const;
-   double getMashFinTemp() const;
+   double getVolumeIntoBK_l() const;
+   double getStrikeTemp_c() const;
+   double getMashFinTemp_c() const;
    double getOG() const;
-   double getPostBoilVolume() const;
-   double getVolumeIntoFerm() const;
-   double getPitchTemp() const;
+   double getPostBoilVolume_l() const;
+   double getVolumeIntoFerm_l() const;
+   double getPitchTemp_c() const;
    double getFG() const;
-   double getFinalVolume() const;  
-   double getBoilOff() const;  
+   double getFinalVolume_l() const;  
+   double getBoilOff_l() const;  
 
    QString getNotes() const;
 
    // Calculations
-   double calculateEffIntoBK();
+   double calculateEffIntoBK_pct();
    double calculateOG();
-   double calculateBrewHouseEff();
-   double calculateABV();
-   double actualABV();
+   double calculateBrewHouseEff_pct();
+   double calculateABV_pct();
+   double actualABV_pct();
 
    // Projected values
    void setProjBoilGrav(double var);
-   void setProjVolIntoBK(double var);
-   void setProjStrikeTemp(double var);
-   void setProjMashFinTemp(double var);
+   void setProjVolIntoBK_l(double var);
+   void setProjStrikeTemp_c(double var);
+   void setProjMashFinTemp_c(double var);
    void setProjOG(double var);
-   void setProjVolIntoFerm(double var);
+   void setProjVolIntoFerm_l(double var);
    void setProjFG(double var);
-   void setProjEff(double var);
-   void setProjABV(double var);
+   void setProjEff_pct(double var);
+   void setProjABV_pct(double var);
    void setProjPoints(double var);
    void setProjAtten(double var);
 
    double getProjBoilGrav() const;
-   double getProjVolIntoBK() const;
-   double getProjStrikeTemp() const;
-   double getProjMashFinTemp() const;
+   double getProjVolIntoBK_l() const;
+   double getProjStrikeTemp_c() const;
+   double getProjMashFinTemp_c() const;
    double getProjOG() const;
-   double getProjVolIntoFerm() const;
+   double getProjVolIntoFerm_l() const;
    double getProjFG() const;
-   double getProjEff() const;
-   double getProjABV() const;
+   double getProjEff_pct() const;
+   double getProjABV_pct() const;
    double getProjPoints() const;
    double getProjAtten() const;
 

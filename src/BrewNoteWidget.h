@@ -22,17 +22,17 @@ public:
 public slots:
    void updateBrewDate();
    void updateSG();
-   void updateVolumeIntoBK();
-   void updateStrikeTemp();
-   void updateMashFinTemp();
+   void updateVolumeIntoBK_l();
+   void updateStrikeTemp_c();
+   void updateMashFinTemp_c();
 
    void updateOG();
-   void updatePostBoilVolume();
-   void updateVolumeIntoFerm();
-   void updatePitchTemp();
+   void updatePostBoilVolume_l();
+   void updateVolumeIntoFerm_l();
+   void updatePitchTemp_c();
 
    void updateFG();
-   void updateFinalVolume();
+   void updateFinalVolume_l();
    void updateFermentDate();
 
    void updateNotes();
