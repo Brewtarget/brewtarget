@@ -249,6 +249,7 @@ Qt::ItemFlags HopTableModel::flags(const QModelIndex& index ) const
 bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Hop *row;
+   QString val;
    
    if( index.row() >= (int)hopObs.size() || role != Qt::EditRole )
       return false;
@@ -277,7 +278,11 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
+            val = value.toString();
+            if (!Brewtarget::hasUnits(val))
+               val = QString("%1%2").arg(val).arg( Brewtarget::getWeightUnitSystem() == SI ? "g" : "oz");
+
+            row->setAmount_kg( Brewtarget::weightQStringToSI(val));
             headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
             return true;
          }
