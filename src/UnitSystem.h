@@ -23,11 +23,15 @@ class UnitSystem;
 class UnitSystems;
 
 #include <QString>
+#include <QRegExp>
 #include "unit.h"
 
 class UnitSystem
 {
 public:
+   UnitSystem();
+   ~UnitSystem();
+
    /*!
     * displayAmount() should return a string appropriately displaying
     * 'amount' of type 'units' in this UnitSystem. This string should also
@@ -49,10 +53,17 @@ public:
     */
    virtual Unit* thicknessUnit() = 0;
 
+   double qstringToSI(QString qstr, Unit* defUnit);
+
 protected:
    static const int fieldWidth = 0;
    static const char format = 'f';
    static const int precision = 3;
+   static QMap<QString, Unit*> nameToUnit;
+   static QRegExp amtUnit;
+
+   Unit* getUnit(const QString& name);
+
 };
 
 #endif /*_UNITSYSTEM_H*/

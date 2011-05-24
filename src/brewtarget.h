@@ -76,6 +76,7 @@ public:
    static double tempQStringToSI( QString qstr );
    static double timeQStringToSI( QString qstr );
 
+   static bool hasUnits(QString qstr);
    static iUnitSystem getWeightUnitSystem();
    static iUnitSystem getVolumeUnitSystem();
    static TempScale getTemperatureScale();

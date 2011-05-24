@@ -21,9 +21,9 @@
 #include <cmath>
 
 bool SIWeightUnitSystem::isMapSetup = false;
-QMap<QString, Unit*> SIWeightUnitSystem::nameToUnit;
 
 SIWeightUnitSystem::SIWeightUnitSystem()
+   : UnitSystem()
 {
 }
 
@@ -53,27 +53,7 @@ double SIWeightUnitSystem::qstringToSI( QString qstr )
 {
    ensureMapIsSetup();
 
-   QStringList list1 = qstr.split(" ");
-   int listSize = list1.size();
-   double amt = 0.0;
-
-   // If we have more than one item, assume the first is the amount.
-   if( listSize >= 1 )
-      amt = list1[0].toDouble();
-
-   if( listSize < 1 ) // Didn't even provide a number.
-      return 0.0;
-   else if( listSize < 2  ) // Only provided a number.
-      return amt;
-   else // Provided a number and unit.
-   {
-      Unit* u = getUnit(list1[1]);
-
-      if( u == 0 ) // Invalid unit since it's not in the map.
-         return amt; // Assume units are already SI.
-      else
-         return u->toSI(amt);
-   }
+   return UnitSystem::qstringToSI(qstr, Units::kilograms);
 }
 
 void SIWeightUnitSystem::ensureMapIsSetup()
@@ -90,40 +70,7 @@ void SIWeightUnitSystem::ensureMapIsSetup()
    nameToUnit.insert(Units::pounds->getUnitName(), Units::pounds);
    nameToUnit.insert(Units::ounces->getUnitName(), Units::ounces);
 
-   //nameToUnit.insert(Units::liters->getUnitName(), Units::liters);
-   //nameToUnit.insert(Units::milliliters->getUnitName(), Units::milliliters);
-
-   //nameToUnit.insert(Units::us_gallons->getUnitName(), Units::us_gallons);
-   //nameToUnit.insert(Units::us_quarts->getUnitName(), Units::us_quarts);
-   //nameToUnit.insert(Units::us_cups->getUnitName(), Units::us_cups);
-   //nameToUnit.insert(Units::us_tablespoons->getUnitName(), Units::us_tablespoons);
-   //nameToUnit.insert(Units::us_teaspoons->getUnitName(), Units::us_teaspoons);
-
-   // Assume that "gal" "qt" etc. do NOT refer to the imperial versions.
-   /*
-   nameToUnit.insert(Units::imperial_gallons->getUnitName(), Units::imperial_gallons);
-   nameToUnit.insert(Units::imperial_quarts->getUnitName(), Units::imperial_quarts);
-   nameToUnit.insert(Units::imperial_cups->getUnitName(), Units::imperial_cups);
-   nameToUnit.insert(Units::imperial_tablespoons->getUnitName(), Units::imperial_tablespoons);
-   nameToUnit.insert(Units::imperial_teaspoons->getUnitName(), Units::imperial_teaspoons);
-   */
-
-   //nameToUnit.insert(Units::seconds->getUnitName(), Units::seconds);
-   //nameToUnit.insert(Units::minutes->getUnitName(), Units::minutes);
-   //nameToUnit.insert(Units::hours->getUnitName(), Units::hours);
-   //nameToUnit.insert(Units::celsius->getUnitName(), Units::celsius);
-   //nameToUnit.insert(Units::kelvin->getUnitName(), Units::kelvin);
-   //nameToUnit.insert(Units::fahrenheit->getUnitName(), Units::fahrenheit);
-
    isMapSetup = true;
-}
-
-Unit* SIWeightUnitSystem::getUnit(const QString& name)
-{
-   if( nameToUnit.count(name) < 1 )
-      return 0;
-   else
-      return nameToUnit[name];
 }
 
 Unit* SIWeightUnitSystem::thicknessUnit()

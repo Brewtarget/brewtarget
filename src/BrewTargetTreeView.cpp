@@ -19,7 +19,6 @@
 
 #include <QApplication>
 #include <QDrag>
-#include <QDebug>
 #include "BrewTargetTreeView.h"
 #include "BrewTargetTreeModel.h"
 

@@ -939,6 +939,14 @@ double Brewtarget::timeQStringToSI(QString qstr)
    return timeSystem->qstringToSI(qstr);
 }
 
+bool Brewtarget::hasUnits(QString qstr)
+{
+   QRegExp amtUnit("(\\d+)\\s*(\\w+)");
+   amtUnit.indexIn(qstr);
+
+   return amtUnit.cap(2).size() > 0;
+}
+
 QString Brewtarget::displayOG( double og, bool showUnits )
 {
    QString tmp = (showUnits & usePlato) ? "%1 %2" : "%1";

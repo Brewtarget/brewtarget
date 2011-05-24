@@ -34,11 +34,6 @@ public:
 
 private:
    static void ensureMapIsSetup();
-
-   // Tries to find 'name' in the QMap 'nameToUnit'. Returns 0 on failure.
-   static Unit* getUnit(const QString& name);
-
-   static QMap<QString, Unit*> nameToUnit;
    static bool isMapSetup;
 };
 
