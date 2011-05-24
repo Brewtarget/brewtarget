@@ -26,7 +26,7 @@ QRegExp UnitSystem::amtUnit;
 
 UnitSystem::UnitSystem()
 {
-   amtUnit.setPattern("(\\d+)\\s*(\\w+)?");
+   amtUnit.setPattern("(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(\\w+)?");
    amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
 }
 
