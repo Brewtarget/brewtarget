@@ -72,7 +72,7 @@ void BrewNoteWidget::updateSG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setSG(lineEdit_SG->text().toDouble());
+   bNoteObs->setSG(lineEdit_SG->text());
    showChanges();
 }
 
@@ -108,7 +108,7 @@ void BrewNoteWidget::updateOG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setOG(lineEdit_OG->text().toDouble());
+   bNoteObs->setOG(lineEdit_OG->text());
    showChanges();
 }
 
@@ -144,7 +144,7 @@ void BrewNoteWidget::updateFG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setFG(lineEdit_FG->text().toDouble());
+   bNoteObs->setFG(lineEdit_FG->text());
    showChanges();
 }
 
@@ -215,15 +215,15 @@ void BrewNoteWidget::showChanges()
    if (bNoteObs == 0)
       return;
 
-   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs->getSG()));
+   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs->getSG(),true));
    lineEdit_volIntoBK->setText(Brewtarget::displayAmount(bNoteObs->getVolumeIntoBK_l(),Units::liters));
    lineEdit_strikeTemp->setText(Brewtarget::displayAmount(bNoteObs->getStrikeTemp_c(),Units::celsius));
    lineEdit_mashFinTemp->setText(Brewtarget::displayAmount(bNoteObs->getMashFinTemp_c(),Units::celsius));
-   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs->getOG()));
+   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs->getOG(),true));
    lineEdit_postBoilVol->setText(Brewtarget::displayAmount(bNoteObs->getPostBoilVolume_l(),Units::liters));
    lineEdit_volIntoFerm->setText(Brewtarget::displayAmount(bNoteObs->getVolumeIntoFerm_l(),Units::liters));
    lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs->getPitchTemp_c(),Units::celsius));
-   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->getFG()));
+   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->getFG(),true));
    lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs->getFinalVolume_l(),Units::liters));
    lineEdit_fermentDate->setText(bNoteObs->getFermentDate().toString(Qt::ISODate));
    plainTextEdit_brewNotes->setPlainText(bNoteObs->getNotes());
@@ -237,17 +237,3 @@ void BrewNoteWidget::showChanges()
    
 }
 
-/*
-QPalette selectPalette( int highLow )
-{
-   return 0;
-   switch(highLow)
-   {
-      case -1:
-         return btColors.value("tooLow");
-      case 1:
-         return btColors.value("tooHigh");
-   }
-   return btColors.value("good");
-}
-*/

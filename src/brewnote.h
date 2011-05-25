@@ -53,15 +53,15 @@ public:
    void setFermentDate(QString date);
    void setNotes(const QString& var);
 
-   void setSG(double var);
+   void setSG(QString var);
    void setVolumeIntoBK_l(double var);
    void setStrikeTemp_c(double var);
    void setMashFinTemp_c(double var);
-   void setOG(double var);
+   void setOG(QString var);
    void setPostBoilVolume_l(double var);
    void setVolumeIntoFerm_l(double var);
    void setPitchTemp_c(double var);
-   void setFG(double var);
+   void setFG(QString var);
    void setFinalVolume_l(double var);  
    void setBoilOff_l(double var);  
 
@@ -136,7 +136,7 @@ private:
    void setInfo(QString label, double var);
    void setDefaults(Recipe* parent);
 
-   int baseCompare(double lhs, double rhs);
+   double translateSG(QString qstr);
 };
 
 inline bool BrewNotePtrLt( BrewNote* lhs, BrewNote* rhs)

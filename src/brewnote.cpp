@@ -24,8 +24,11 @@
 #include <QDomText>
 #include <QObject>
 #include <QDateTime>
+#include <algorithm>
+#include <QRegExp>
 #include "brewnote.h"
 #include "brewtarget.h"
+#include "Algorithms.h"
 
 // operators for sorts and things
 bool operator<(BrewNote& lhs, BrewNote& rhs)
@@ -298,22 +301,55 @@ void BrewNote::setInfo(QString label, double var)
 
    hasChanged();
 }
+/*
+   there is no UnitSystem for gravity, so we need to translate here.  
+   If the user has appended a "P" (case insensitive, with or without a space),
+   the gravity reading will be assumed to be in plato/brix.
+   If there is no unit, and the value is < 2.0, it will be assumed to be a
+   specific gravity.
+   If there is no unit and the value is greater than 2.0, it will be assumed
+   to be a plato/brix
+*/
+double BrewNote::translateSG(QString qstr)
+{
+   double var;
+   QString unit;
+   QRegExp numUnit;
 
-void BrewNote::setSG(double var)              { setInfo("SG", var); }
+   // Try to make some guesses about what is there.
+   numUnit.setPattern("(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(\\w+)?");
+   numUnit.setCaseSensitivity(Qt::CaseInsensitive);
+
+   if ( qstr.contains(numUnit) )
+   {
+      var  = numUnit.capturedTexts()[1].toDouble();
+      unit = numUnit.capturedTexts()[2];
+   }
+   else 
+      var = qstr.toDouble();
+
+
+   if ( unit.contains("p", Qt::CaseInsensitive) || var > 1.2)
+      return Algorithms::Instance().PlatoToSG_20C20C(var);
+
+   return var;
+}
+
+void BrewNote::setSG(QString var)              { setInfo("SG", translateSG(var)); }
 void BrewNote::setVolumeIntoBK_l(double var)    { setInfo("volumeIntoBK", var); }
 void BrewNote::setStrikeTemp_c(double var)      { setInfo("strikeTemp", var); }
 void BrewNote::setMashFinTemp_c(double var)     { setInfo("mashFinTemp", var); }
-void BrewNote::setOG(double var)              { setInfo("OG", var); }
+void BrewNote::setOG(QString var)              { setInfo("OG", translateSG(var)); }
 void BrewNote::setPostBoilVolume_l(double var)  { setInfo("postBoilVolume", var); }
 void BrewNote::setVolumeIntoFerm_l(double var)  { setInfo("volumeIntoFerm", var); }
 void BrewNote::setPitchTemp_c(double var)       { setInfo("pitchTemp", var); }
-void BrewNote::setFG(double var)              { setInfo("FG", var); }
+void BrewNote::setFG(QString var)              { setInfo("FG", translateSG(var)); }
 void BrewNote::setFinalVolume_l(double var)     { setInfo("finalVolume", var); }
-void BrewNote::setProjBoilGrav(double var)    { setInfo("projBoilGrav", var); }
+void BrewNote::setProjBoilGrav(double var)      { setInfo("projBoilGrav", var); }
 void BrewNote::setProjVolIntoBK_l(double var)   { setInfo("projVolIntoBK", var); }
 void BrewNote::setProjStrikeTemp_c(double var)  { setInfo("projStrikeTemp", var); }
 void BrewNote::setProjMashFinTemp_c(double var) { setInfo("projMashFinTemp", var); }
-void BrewNote::setProjOG(double var)          { setInfo("projOG", var); }
+void BrewNote::setProjOG(double var)            { setInfo("projOG", var); }
 void BrewNote::setProjVolIntoFerm_l(double var) { setInfo("projVolIntoFerm", var); }
 void BrewNote::setProjFG(double var)          { setInfo("projFG", var); }
 void BrewNote::setProjEff_pct(double var)         { setInfo("projEff", var); }
