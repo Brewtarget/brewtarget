@@ -60,7 +60,7 @@ protected:
    static const char format = 'f';
    static const int precision = 3;
    static QMap<QString, Unit*> nameToUnit;
-   static QRegExp amtUnit;
+   QRegExp amtUnit;
 
    Unit* getUnit(const QString& name);
 

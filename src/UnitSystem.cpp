@@ -22,7 +22,6 @@
 #include <QString>
 
 QMap<QString, Unit*> UnitSystem::nameToUnit;
-QRegExp UnitSystem::amtUnit;
 
 UnitSystem::UnitSystem()
 {
