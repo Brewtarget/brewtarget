@@ -225,7 +225,7 @@ void BrewNoteWidget::showChanges()
    lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs->getPitchTemp_c(),Units::celsius));
    lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->getFG(),true));
    lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs->getFinalVolume_l(),Units::liters));
-   lineEdit_fermentDate->setText(bNoteObs->getFermentDate().toString(Qt::ISODate));
+   lineEdit_fermentDate->setText(bNoteObs->getFermentDate_short());
    plainTextEdit_brewNotes->setPlainText(bNoteObs->getNotes());
 
    // Now with the calculated stuff

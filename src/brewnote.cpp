@@ -158,6 +158,7 @@ void BrewNote::setDefaults(Recipe* parent)
    setInfo("OG",parent->getOg());
    setInfo("projOG",parent->getOg());
 
+   setInfo("postBoilVolume",parent->estimatePostBoilVolume_l());
    setInfo("volumeIntoFerm",parent->estimateFinalVolume_l());
    setInfo("projVolIntoFerm",parent->estimateFinalVolume_l());
 
@@ -365,6 +366,7 @@ QString BrewNote::getBrewDate_str()    const { return brewDate.toString(Qt::ISOD
 QString BrewNote::getBrewDate_short()  const { return brewDate.toString("yyyy-MM-dd"); }
 QDateTime BrewNote::getFermentDate()   const { return fermentDate; }
 QString BrewNote::getFermentDate_str() const { return fermentDate.toString(Qt::ISODate); }
+QString BrewNote::getFermentDate_short() const { return fermentDate.toString("yyyy-MM-dd"); }
 QString BrewNote::getNotes()           const { return notes; }
 
 double BrewNote::getSG() const              { return info.value("SG"); }

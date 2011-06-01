@@ -72,6 +72,7 @@ public:
    QString   getBrewDate_short() const;
    QDateTime getFermentDate() const;
    QString   getFermentDate_str() const;
+   QString   getFermentDate_short() const;
 
    double getSG() const;
    double getVolumeIntoBK_l() const;
