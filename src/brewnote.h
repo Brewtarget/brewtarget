@@ -41,8 +41,8 @@ public:
    BrewNote(BrewNote& other);
    BrewNote(Recipe* parent, const QDomNode& bnoteNode);
 
-   friend bool operator<(BrewNote &b1, BrewNote &b2);
-   friend bool operator==(BrewNote &b1, BrewNote &b2);
+   friend bool operator<(BrewNote &lhs, BrewNote &rhs);
+   friend bool operator==(BrewNote &lhs, BrewNote &rhs);
 
    virtual void fromNode(const QDomNode& node);
    virtual void toXml(QDomDocument& doc, QDomNode& parent);

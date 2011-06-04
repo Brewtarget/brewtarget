@@ -56,7 +56,9 @@ public:
    QModelIndex index( int row, int col, const QModelIndex &parent = QModelIndex()) const;
    QModelIndex parent( const QModelIndex &index) const;
 
-    // Methods required for read-write access.  We are not implementing adding
+
+   QModelIndex getFirst(int type);
+   // Methods required for read-write access.  We are not implementing adding
     // or removing columns because that doesn't make sense for this model.
    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());

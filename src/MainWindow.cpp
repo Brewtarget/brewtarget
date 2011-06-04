@@ -234,7 +234,7 @@ MainWindow::MainWindow(QWidget* parent)
           recipeObs = db->findRecipeByName( name );
 
          setRecipe(recipeObs);
-         brewTargetTreeView->setCurrentIndex(brewTargetTreeView->findRecipe(recipeObs));
+         setSelection(brewTargetTreeView->findRecipe(recipeObs));
       }
          
       else
@@ -385,7 +385,7 @@ void MainWindow::setupToolbar()
 void MainWindow::deleteSelected()
 {
    const QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
-   QModelIndex above = brewTargetTreeView->findRecipe(0);
+   QModelIndex first;
    QList<QModelIndex>::const_iterator at,end;
    QList<Recipe*> deadRec;
    QList<Equipment*> deadKit;
@@ -395,45 +395,59 @@ void MainWindow::deleteSelected()
    QList<Yeast*> deadYeast;
    QList<BrewNote*> deadNote;
 
+   confirmDelete = QMessageBox::NoButton;
    // Get the dead things first.  Deleting as we process the list doesn't work, because the
    // delete updates the database and the indices get recalculated.
    for(at = selected.begin(),end = selected.end();at < end;++at)
    {
       // Don't delete the root items.  Bad things will happen
-      if ( *at != brewTargetTreeView->findRecipe(0)      &&
-          *at != brewTargetTreeView->findEquipment(0)   &&
-          *at != brewTargetTreeView->findFermentable(0) &&
-          *at != brewTargetTreeView->findHop(0)         &&
-          *at != brewTargetTreeView->findMisc(0)        &&
-          *at != brewTargetTreeView->findYeast(0))
+      if ( *at == brewTargetTreeView->findRecipe(0)      || *at == brewTargetTreeView->findEquipment(0)   ||
+           *at == brewTargetTreeView->findFermentable(0) || *at == brewTargetTreeView->findHop(0)         ||
+           *at == brewTargetTreeView->findMisc(0)        || *at == brewTargetTreeView->findYeast(0))
+         continue;
+
+      switch(brewTargetTreeView->getType(*at))
       {
-         switch(brewTargetTreeView->getType(*at))
-         {
-            case BrewTargetTreeItem::RECIPE:
+         case BrewTargetTreeItem::RECIPE:
+            if ( verifyDelete("Recipe",brewTargetTreeView->getRecipe(*at)->getName()))
                deadRec.append(brewTargetTreeView->getRecipe(*at));
-               break;
-            case BrewTargetTreeItem::EQUIPMENT:
+            break;
+
+         case BrewTargetTreeItem::EQUIPMENT:
+            if (verifyDelete("Equipment",brewTargetTreeView->getEquipment(*at)->getName()))
                deadKit.append(brewTargetTreeView->getEquipment(*at));
-               break;
-            case BrewTargetTreeItem::FERMENTABLE:
+            break;
+
+         case BrewTargetTreeItem::FERMENTABLE:
+            if (verifyDelete("Fermentable",brewTargetTreeView->getFermentable(*at)->getName()))
                deadFerm.append(brewTargetTreeView->getFermentable(*at));
-               break;
-            case BrewTargetTreeItem::HOP:
+            break;
+
+         case BrewTargetTreeItem::HOP:
+            if (verifyDelete("Hop",brewTargetTreeView->getHop(*at)->getName()))
                deadHop.append(brewTargetTreeView->getHop(*at));
-               break;
-            case BrewTargetTreeItem::MISC:
+            break;
+            
+         case BrewTargetTreeItem::MISC:
+            if (verifyDelete("Misc",brewTargetTreeView->getMisc(*at)->getName()))
                deadMisc.append(brewTargetTreeView->getMisc(*at));
-               break;
-            case BrewTargetTreeItem::YEAST:
+            break;
+
+         case BrewTargetTreeItem::YEAST:
+            if (verifyDelete("Yeast",brewTargetTreeView->getYeast(*at)->getName()))
                deadYeast.append(brewTargetTreeView->getYeast(*at));
-               break;
-            case BrewTargetTreeItem::BREWNOTE:
+            break;
+
+         case BrewTargetTreeItem::BREWNOTE:
+            if (verifyDelete("BrewNote",brewTargetTreeView->getBrewNote(*at)->getBrewDate_short()))
                deadNote.append(brewTargetTreeView->getBrewNote(*at));
-               break;
-            default:
-               Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
-         }
+            break;
+
+         default:
+            Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
       }
+      if ( confirmDelete == QMessageBox::Cancel )
+         return;
    }
 
    // Deleting brewnotes is kind of annoying, actually.  BUt do it before you
@@ -456,9 +470,9 @@ void MainWindow::deleteSelected()
    db->removeMisc(deadMisc);
    db->removeYeast(deadYeast);
 
-   setRecipeByIndex(above);
-   brewTargetTreeView->setCurrentIndex(above);
-   brewTargetTreeView->scrollTo(above,QAbstractItemView::PositionAtCenter);
+   first = brewTargetTreeView->getFirst(BrewTargetTreeItem::RECIPE);
+   setRecipeByIndex(first);
+   setSelection(first);
 }
 
 void MainWindow::setRecipeByName(const QString& name)
@@ -601,6 +615,7 @@ void MainWindow::setRecipe(Recipe* recipe)
       return;
 
    unsigned int i;
+   int startTab;
    Fermentable *ferm;
    Hop *hop;
    Misc *misc;
@@ -1189,29 +1204,47 @@ void MainWindow::newRecipe()
    recipe->setEfficiency_pct(70.0);
 
    db->addRecipe(recipe, false);
-   newItem = brewTargetTreeView->findRecipe(recipe);
 
-   setRecipeByIndex(newItem);
-   brewTargetTreeView->setCurrentIndex(newItem);
-   brewTargetTreeView->scrollTo(newItem,QAbstractItemView::PositionAtCenter);
+   setSelection(brewTargetTreeView->findRecipe(recipe));
+}
+
+void MainWindow::setSelection(QModelIndex item)
+{
+   if (! item.isValid())
+      return;
+
+   QModelIndex parent = brewTargetTreeView->getParent(item);
+
+   brewTargetTreeView->setCurrentIndex(item);
+   brewTargetTreeView->scrollTo(item,QAbstractItemView::PositionAtCenter);
+   brewTargetTreeView->expand(parent);
+   
 }
 
 void MainWindow::newBrewNote()
 {
    QModelIndexList indexes = brewTargetTreeView->selectionModel()->selectedRows();
+   QModelIndex bIndex;
 
    foreach(QModelIndex selected, indexes)
    {
       Recipe*   rec   = brewTargetTreeView->getRecipe(selected);
+      QModelIndex newItem;
 
       if ( ! rec )
-         return;
+         continue;
 
       BrewNote* bNote = new BrewNote(rec);
+      // Make sure everything is properly set and selected
       if ( rec != recipeObs)
          setRecipe(rec);
+
       recipeObs->addBrewNote(bNote);
       setBrewNote(bNote);
+
+      bIndex = brewTargetTreeView->findBrewNote(bNote);
+      if ( bIndex.isValid() )
+         setSelection(bIndex);
    }
 }
   
@@ -1233,6 +1266,8 @@ void MainWindow::reBrewNote()
          setRecipe(rec);
       recipeObs->addBrewNote(bNote);
       setBrewNote(bNote);
+
+      setSelection(brewTargetTreeView->findBrewNote(bNote));
    }
 }
 
@@ -1369,6 +1404,18 @@ bool MainWindow::verifyImport(QString tag, QString name)
 {
    return QMessageBox::question(this, tr("Import %1?").arg(tag), tr("Import %1?").arg(name),
                                 QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
+}
+
+bool MainWindow::verifyDelete(QString tag, QString name)
+{
+   if ( confirmDelete == QMessageBox::YesToAll )
+      return true;
+
+   confirmDelete = QMessageBox::question(this, tr("Delete %1").arg(tag), tr("Delete %1 %2?").arg(tag).arg(name),
+                                  QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::Cancel,
+                                  QMessageBox::No);
+
+   return (confirmDelete == QMessageBox::Yes || confirmDelete ==  QMessageBox::YesToAll); 
 }
 
 void MainWindow::addMashStep()
@@ -1875,8 +1922,7 @@ void MainWindow::copySelected()
 
 
    setRecipeByIndex(above);
-   brewTargetTreeView->setCurrentIndex(above);
-   brewTargetTreeView->scrollTo(above,QAbstractItemView::PositionAtCenter);
+   setSelection(above);
 }
 
 QFile* MainWindow::openForWrite()

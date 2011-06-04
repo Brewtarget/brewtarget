@@ -42,6 +42,8 @@ public:
    bool isParent(const QModelIndex& parent, const QModelIndex& child);
    QModelIndex getParent(const QModelIndex& child);
 
+   QModelIndex getFirst(int type);
+
    // Ugh
    Recipe* getRecipe(const QModelIndex &index) const;
    QModelIndex findRecipe(Recipe* rec);

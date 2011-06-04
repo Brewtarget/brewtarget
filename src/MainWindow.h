@@ -77,6 +77,7 @@ public:
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
    QFile* openForWrite();
    bool verifyImport(QString tag, QString name);
+   bool verifyDelete(QString tab, QString name);
 
    void setBrewNoteByIndex(const QModelIndex &index);
    void setBrewNote(BrewNote* bNote);
@@ -184,9 +185,9 @@ private:
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
    QPrinter *printer;
-   // This is getting silly
+
    QMultiHash<QString, BrewNoteWidget*> brewNotes;
-   int startTab;
+   int confirmDelete;
 
    //! Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();
@@ -196,6 +197,9 @@ private:
    Misc* selectedMisc();
    //! Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
+
+   void setSelection(QModelIndex item);
+
    //! set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
    void setupToolbar();

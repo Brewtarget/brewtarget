@@ -30,6 +30,15 @@
 #include "recipe.h"
 #include "BrewTargetTreeItem.h"
 
+bool operator==(BrewTargetTreeItem& lhs, BrewTargetTreeItem& rhs)
+{
+   // Things of different types are not equal
+   if ( lhs.type != rhs.type )
+      return false;
+
+   return lhs.data(lhs.type,0) == rhs.data(rhs.type,0);
+}
+
 BrewTargetTreeItem::BrewTargetTreeItem(int type, BrewTargetTreeItem *parent)
 {
    parentItem = parent;

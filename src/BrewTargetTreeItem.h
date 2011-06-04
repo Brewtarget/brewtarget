@@ -52,6 +52,8 @@ public:
     
    enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST,BREWNOTE,NUMTYPES};
 
+   friend bool operator==(BrewTargetTreeItem &lhs, BrewTargetTreeItem &rhs);
+
    BrewTargetTreeItem(int type = NUMTYPES, BrewTargetTreeItem *parent=0 );
    virtual ~BrewTargetTreeItem();
 

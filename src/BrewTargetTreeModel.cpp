@@ -117,6 +117,20 @@ QModelIndex BrewTargetTreeModel::parent(const QModelIndex &index) const
    return createIndex(pItem->childNumber(),0,pItem);
 }
 
+QModelIndex BrewTargetTreeModel::getFirst(int type)
+{
+   QModelIndex parent;
+   BrewTargetTreeItem* pItem; 
+
+   if ( type < BrewTargetTreeItem::NUMTYPES )
+   {
+      pItem = rootItem->child(type);
+      return createIndex(0,0,pItem->child(0));
+   }
+
+   return QModelIndex();
+}
+
 QVariant BrewTargetTreeModel::data(const QModelIndex &index, int role) const
 {
    if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= BrewTargetTreeItem::RECIPENUMCOLS)
@@ -280,22 +294,28 @@ QModelIndex BrewTargetTreeModel::findYeast(Yeast* yeast)
    return QModelIndex();
 }
 
+/* Important lesson here.  When building the index, the pointer needs to be to
+ * the child's parent item, as understood by the model.  Not the pointer to
+ * the actual object (e.g., the BrewNote) or the recipe, or the brewnote's
+ * place in the recipe.
+ */
 QModelIndex BrewTargetTreeModel::findBrewNote(BrewNote* bNote)
 {
+   // Get the brewnote's parent
    Recipe *parent = bNote->getParent();
-   int i,j; 
+   // Find that recipe in the list
+   QModelIndex pInd = findRecipe(parent);
+   // and get the associated treeItem
+   BrewTargetTreeItem* pItem = getItem(pInd);
 
    if (! bNote )
       return QModelIndex();
 
-   j = -1;
-   for (i=0; static_cast<unsigned int>(i) < parent->getNumBrewNotes();++i)
+   for (int i=0; static_cast<unsigned int>(i) < parent->getNumBrewNotes();++i)
+   {
       if ( parent->getBrewNote(i) == bNote )
-         j = i;
-
-   if ( j != -1 )
-      return createIndex(j,0, getItem(findRecipe(parent)));
-
+         return createIndex(i,0,pItem->child(i));
+   }
    return QModelIndex();
 }
 

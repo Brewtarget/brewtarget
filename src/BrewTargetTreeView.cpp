@@ -62,6 +62,12 @@ QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
    return QModelIndex();
 }
 
+QModelIndex BrewTargetTreeView::getFirst(int type)
+{
+
+   return model->getFirst(type);
+}
+
 Recipe* BrewTargetTreeView::getRecipe(const QModelIndex &index) const
 {
    return model->getRecipe(index);
