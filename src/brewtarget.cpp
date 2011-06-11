@@ -941,7 +941,7 @@ double Brewtarget::timeQStringToSI(QString qstr)
 
 bool Brewtarget::hasUnits(QString qstr)
 {
-   QRegExp amtUnit("(\\d+)\\s*(\\w+)");
+   QRegExp amtUnit("(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(\\w+)?");
    amtUnit.indexIn(qstr);
 
    return amtUnit.cap(2).size() > 0;
