@@ -1302,7 +1302,7 @@
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="tab_3">
+            <widget class="QWidget" name="yeastTab">
              <attribute name="title">
               <string>Yeast</string>
              </attribute>

@@ -1668,26 +1668,25 @@ void MainWindow::dropEvent(QDropEvent *event)
                droppedRecipeEquipment(brewTargetTreeView->getEquipment(index));
                break;
             case BrewTargetTreeItem::FERMENTABLE:
-               addFermentableToRecipe(brewTargetTreeView->getFermentable(index));
+               addFermentableToRecipe(new Fermentable(*brewTargetTreeView->getFermentable(index)));
                last = fermentableTab;
                break;
             case BrewTargetTreeItem::HOP:
-               addHopToRecipe(brewTargetTreeView->getHop(index));
+               addHopToRecipe(new Hop(*brewTargetTreeView->getHop(index)));
                last = hopsTab;
                break;
             case BrewTargetTreeItem::MISC:
-               addMiscToRecipe(brewTargetTreeView->getMisc(index));
+               addMiscToRecipe(new Misc(*brewTargetTreeView->getMisc(index)));
                last = miscTab;
                break;
             case BrewTargetTreeItem::YEAST:
-               addYeastToRecipe(brewTargetTreeView->getYeast(index));
-               last = yeastTable;
+               addYeastToRecipe(new Yeast(*brewTargetTreeView->getYeast(index)));
+               last = yeastTab;
                break;
             case BrewTargetTreeItem::BREWNOTE:
                setBrewNoteByIndex(index);
                break;
          }
-
          event->accept();
       }
    }
