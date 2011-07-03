@@ -56,6 +56,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    languageToButtonMap["en"] = pushButton_en;
    languageToButtonMap["es"] = pushButton_es;
    languageToButtonMap["fr"] = pushButton_fr;
+   languageToButtonMap["nl"] = pushButton_nl;
    languageToButtonMap["pl"] = pushButton_pl;
    languageToButtonMap["pt"] = pushButton_pt;
 
@@ -78,6 +79,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    languageGroup->addButton(pushButton_en);
    languageGroup->addButton(pushButton_es);
    languageGroup->addButton(pushButton_fr);
+   languageGroup->addButton(pushButton_nl);
    languageGroup->addButton(pushButton_pl);
    languageGroup->addButton(pushButton_pt);
 
@@ -244,6 +246,7 @@ void OptionDialog::saveAndClose()
    Brewtarget::tempScale = temperatureScale;
    Brewtarget::colorUnit = colorUnit;
 
+   // Set the right language.
    Brewtarget::setLanguage( languageToButtonMap.key(reinterpret_cast<QPushButton*>(languageGroup->checkedButton())) );
    
    // Check the new userDataDir.

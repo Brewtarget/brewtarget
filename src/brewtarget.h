@@ -17,7 +17,7 @@
  */
 
 #ifndef _BREWTARGET_H
-#define   _BREWTARGET_H
+#define _BREWTARGET_H
 
 class Brewtarget;
 

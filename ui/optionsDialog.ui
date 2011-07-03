@@ -503,6 +503,36 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="pushButton_nl">
+           <property name="toolTip">
+            <string>Dutch</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../brewtarget.qrc">
+             <normaloff>:/images/flagNetherlands.png</normaloff>:/images/flagNetherlands.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_16">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <item>
           <widget class="QPushButton" name="pushButton_pl">
            <property name="toolTip">
             <string>Polish</string>
@@ -525,13 +555,6 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_16">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
          <item>
           <widget class="QPushButton" name="pushButton_pt">
            <property name="toolTip">
