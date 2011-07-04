@@ -873,6 +873,7 @@ void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
       {
          recipeObs->setBatchSize_l( equip->getBatchSize_l() );
          recipeObs->setBoilSize_l( equip->getBoilSize_l() );
+         recipeObs->setBoilTime_min( equip->getBoilTime_min() );
       }
    }
 }
