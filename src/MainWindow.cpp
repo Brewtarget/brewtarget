@@ -280,6 +280,8 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(printBrewday()));
    connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(printPreviewRecipe()));
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(printPreviewBrewday()));
+   connect( actionRecipeHTML, SIGNAL(triggered()), this, SLOT(printRecipeToHTML()));
+   connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(printBrewdayToHTML()));
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -1614,26 +1616,46 @@ void MainWindow::openDonateLink()
 
 void MainWindow::printPreviewRecipe()
 {
-   recipeFormatter->printPreview();
-}
-
-void MainWindow::printPreviewBrewday()
-{
-   brewDayScrollWidget->printPreview();
+   recipeFormatter->print(printer, 0, RecipeFormatter::PREVIEW);
 }
 
 void MainWindow::printRecipe()
 {
    QPrintDialog printerDialog(printer, this);
 
-   recipeFormatter->print( printer, &printerDialog );
+   recipeFormatter->print( printer, &printerDialog, RecipeFormatter::PRINT);
+}
+
+void MainWindow::printRecipeToHTML()
+{
+   QFile* outfile = openForWrite(tr("HTML files (*.html)"), QString("html"));
+
+   if (! outfile )
+      return;
+
+   recipeFormatter->print(printer, 0, RecipeFormatter::HTML, outfile);
+}
+
+void MainWindow::printPreviewBrewday()
+{
+   brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::PREVIEW);
 }
 
 void MainWindow::printBrewday()
 {
    QPrintDialog printerDialog(printer, this);
 
-   brewDayScrollWidget->print( printer, &printerDialog );
+   brewDayScrollWidget->print( printer, &printerDialog, BrewDayScrollWidget::PRINT);
+}
+
+void MainWindow::printBrewdayToHTML()
+{
+   QFile* outfile = openForWrite(tr("HTML files (*.html)"), QString("html"));
+
+   if (! outfile )
+      return;
+
+   brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::HTML, outfile);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
@@ -1925,23 +1947,28 @@ void MainWindow::copySelected()
    setSelection(above);
 }
 
-QFile* MainWindow::openForWrite()
+QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 {
    const char* filename;
    QFile* outFile = new QFile();
 
-   if( fileSaver->exec() )
-     filename = fileSaver->selectedFiles()[0].toAscii();
-   else
-      return 0;
+   fileSaver->setFilter( filterStr );
+   fileSaver->setDefaultSuffix( defaultSuff );
 
-   outFile->setFileName(filename);
-   
-   if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
+   if( fileSaver->exec() )
    {
-      Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for writing.").arg(filename));
-      return 0;
+      filename = fileSaver->selectedFiles()[0].toAscii();
+      outFile->setFileName(filename);
+
+      if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
+      {
+         Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for writing.").arg(filename));
+         outFile = 0;
+      }
    }
+   else
+     outFile = 0;
+
    return outFile;
 }
 

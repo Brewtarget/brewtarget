@@ -1659,6 +1659,13 @@
      <addaction name="actionBrewdayPreview"/>
      <addaction name="actionRecipePreview"/>
     </widget>
+    <widget class="QMenu" name="menuSave_To_HTML">
+     <property name="title">
+      <string>Save To HTML</string>
+     </property>
+     <addaction name="actionBrewdayHTML"/>
+     <addaction name="actionRecipeHTML"/>
+    </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
@@ -1669,6 +1676,7 @@
     <addaction name="separator"/>
     <addaction name="menuPrint"/>
     <addaction name="menuPrint_Preview"/>
+    <addaction name="menuSave_To_HTML"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1864,6 +1872,16 @@
    </property>
   </action>
   <action name="actionRecipePrint">
+   <property name="text">
+    <string>Recipe</string>
+   </property>
+  </action>
+  <action name="actionBrewdayHTML">
+   <property name="text">
+    <string>Brewday</string>
+   </property>
+  </action>
+  <action name="actionRecipeHTML">
    <property name="text">
     <string>Recipe</string>
    </property>

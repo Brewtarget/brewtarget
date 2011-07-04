@@ -75,7 +75,8 @@ public:
    void setRecipe(Recipe* recipe);
    virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
-   QFile* openForWrite();
+   QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
+
    bool verifyImport(QString tag, QString name);
    bool verifyDelete(QString tab, QString name);
 
@@ -133,6 +134,8 @@ public slots:
    void printBrewday();
    void printPreviewRecipe();
    void printPreviewBrewday();
+   void printRecipeToHTML();
+   void printBrewdayToHTML();
 
    void backup(); // Backup the database.
    void restoreFromBackup(); // Restore the database.

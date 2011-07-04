@@ -132,7 +132,7 @@ QString BrewDayScrollWidget::getCSS()
    return css;
 }
 
-QString BrewDayScrollWidget::buildTitleTable()
+QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
 {
    QString header;
    QString body;
@@ -144,7 +144,8 @@ QString BrewDayScrollWidget::buildTitleTable()
 
    body   = "<body>";
    body += QString("<h1>%1</h1>").arg(recObs->getName());
-   body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
+   if ( includeImage )
+      body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
 
    // Build the top table
    // Build the first row: Style and Date
@@ -158,41 +159,40 @@ QString BrewDayScrollWidget::buildTitleTable()
    body += QString("<td class=\"value\">%1</td></tr>")
            .arg(QDate::currentDate().toString());
 
-   // second row:  boil time and efficiency.  I think there is something wrong w/ the call to getBoilTime_min(), because it returns
-   // 0 a lot.  I need to get this figured out.
-      body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
+   // second row:  boil time and efficiency.  
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Time"))
-              .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
-              .arg(tr("Efficiency"))
-              .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0));
+            .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
+            .arg(tr("Efficiency"))
+            .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0));
 
    // third row: pre-Boil Volume and Preboil Gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
-         .arg(tr("Boil Volume"))
-           .arg(Brewtarget::displayAmount(recObs->getBoilSize_l(),Units::liters,2))
-           .arg(tr("Preboil Gravity"))
-           .arg(Brewtarget::displayOG(recObs->getBoilGrav()));
+            .arg(tr("Boil Volume"))
+            .arg(Brewtarget::displayAmount(recObs->getBoilSize_l(),Units::liters,2))
+            .arg(tr("Preboil Gravity"))
+            .arg(Brewtarget::displayOG(recObs->getBoilGrav()));
 
    // fourth row: Final volume and starting gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
-         .arg(tr("Final Volume"))
-           .arg(Brewtarget::displayAmount(recObs->getBatchSize_l(), Units::liters,2))
-           .arg(tr("Starting Gravity"))
-           .arg(Brewtarget::displayOG(recObs->getOg(), true));
+            .arg(tr("Final Volume"))
+            .arg(Brewtarget::displayAmount(recObs->getBatchSize_l(), Units::liters,2))
+            .arg(tr("Starting Gravity"))
+            .arg(Brewtarget::displayOG(recObs->getOg(), true));
 
    // fifth row: IBU and Final gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
-         .arg(tr("IBU"))
-           .arg( recObs->getIBU(),0,'f',1)
-           .arg(tr("Final Gravity"))
-           .arg(Brewtarget::displayFG(recObs->getFg(), recObs->getOg(), true));
+            .arg(tr("IBU"))
+            .arg( recObs->getIBU(),0,'f',1)
+            .arg(tr("Final Gravity"))
+            .arg(Brewtarget::displayFG(recObs->getFg(), recObs->getOg(), true));
 
    // sixth row: ABV and estimate calories
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
-         .arg(tr("ABV"))
-         .arg( recObs->getABV_pct(), 0, 'f', 1)
-         .arg(tr("Estimated calories(per 12 oz)"))
-         .arg( recObs->estimateCalories(), 0, 'f', 0);
+            .arg(tr("ABV"))
+            .arg( recObs->getABV_pct(), 0, 'f', 1)
+            .arg(tr("Estimated calories(per 12 oz)"))
+            .arg( recObs->estimateCalories(), 0, 'f', 0);
    body += "</table>";
 
    return header + body;
@@ -294,7 +294,8 @@ bool BrewDayScrollWidget::loadComplete(bool ok)
    return ok;
 }
 
-void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog)
+void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
+      int action, QFile* outFile)
 {
    QString pDoc;
 //   QPrintDialog *dialog = new QPrintDialog(printer, this);
@@ -302,17 +303,20 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog)
    if( recObs == 0 )
       return;
 
-   printer = mainPrinter;
-
    /* Connect the webview's signal */
-   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+   if ( action == PRINT )
+   {
+      printer = mainPrinter;
+      connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
 
-   dialog->setWindowTitle(tr("Print Document"));
-   if (dialog->exec() != QDialog::Accepted)
-      return;
+      dialog->setWindowTitle(tr("Print Document"));
+      if (dialog->exec() != QDialog::Accepted)
+         return;
+   }
 
-   // Start building the document to be printed.  I think.
-   pDoc = buildTitleTable();
+   // Start building the document to be printed.  The HTML doesn't work with
+   // the image since it is a compiled resource
+   pDoc = buildTitleTable( action != HTML );
    pDoc += buildInstructionTable();
    pDoc += buildFooterTable();
 
@@ -323,25 +327,14 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog)
    pDoc += "</body></html>";
 
    doc->setHtml(pDoc);
-}
-
-void BrewDayScrollWidget::printPreview()
-{
-   QString pDoc;
-
-   if( recObs == 0 )
-      return;
-
-   // Start building the document to be printed.  I think.
-   pDoc = buildTitleTable();
-   pDoc += buildInstructionTable();
-   pDoc += buildFooterTable();
-
-   pDoc += tr("<h2>Notes</h2>");
-   pDoc += "</body></html>";
-
-   doc->setHtml(pDoc);
-   doc->show();
+   if ( action == PREVIEW )
+      doc->show();
+   else if ( action == HTML )
+   {
+      QTextStream out(outFile);
+      out << pDoc;
+      outFile->close();
+   }
 }
 
 void BrewDayScrollWidget::setRecipe(Recipe* rec)

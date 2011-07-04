@@ -782,27 +782,32 @@ bool RecipeFormatter::loadComplete(bool ok)
    return ok;
 }
 
-void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog)
-{
-   printer = mainPrinter;
-
-   dialog->setWindowTitle(tr("Print Document"));
-   if (dialog->exec() != QDialog::Accepted)
-      return;
-
-   if( rec == 0 )
-      return;
-
-   /* Instantiate the Webview and then connect its signal */
-   connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
-   doc->setHtml(getHTMLFormat());
-}
-
-void RecipeFormatter::printPreview()
+void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog, 
+      int action, QFile* outFile)
 {
    if( rec == 0 )
       return;
 
+   // Short cut if we are saving to HTML
+   if ( action == HTML )
+   {
+      QTextStream out(outFile);
+      out << getHTMLFormat();
+      outFile->close();
+      return;
+   }
+   // We are printing hard copy
+   if ( action == PRINT )
+   {
+      printer = mainPrinter;
+      dialog->setWindowTitle(tr("Print Document"));
+      if (dialog->exec() != QDialog::Accepted)
+         return;
+      connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+   }
+
    doc->setHtml(getHTMLFormat());
-   docDialog->show();
+   if ( action == PREVIEW )
+      docDialog->show();
 }
+

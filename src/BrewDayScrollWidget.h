@@ -27,6 +27,7 @@ class BrewDayScrollWidget;
 #include <QWebView>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QFile>
 #include "observable.h"
 #include "recipe.h"
 
@@ -34,6 +35,8 @@ class BrewDayScrollWidget : public QWidget, public Ui::brewDayScrollWidget, publ
 {
    Q_OBJECT
 public:
+   enum { PRINT, PREVIEW, HTML, NUMACTIONS };
+
    BrewDayScrollWidget(QWidget* parent=0);
    //! Sets the observed recipe.
    void setRecipe(Recipe* rec);
@@ -45,12 +48,7 @@ public:
     * Prints a paper version of the info in this dialog.
     * Should probably be moved to its own view class.
     */
-   void print(QPrinter* mainPrinter, QPrintDialog *dialog);
-   /*!
-    * Shows what the \b print method will output.
-    * Should probably be moved to its own view class.
-    */
-   void printPreview();
+   void print(QPrinter* mainPrinter, QPrintDialog *dialog, int action = PRINT, QFile* outFile = 0);
 
 public slots:
    //! Automatically generate a new list of instructions.
@@ -70,7 +68,7 @@ private:
    //! Repopulate the list widget with all the instructions.
    void repopulateListWidget();
    void clear();
-   QString buildTitleTable();
+   QString buildTitleTable(bool includeImage = true);
    QString buildInstructionTable();
    QString buildFooterTable();
    QString getCSS();

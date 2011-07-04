@@ -28,12 +28,16 @@ class RecipeFormatter;
 #include <QPrintDialog>
 #include <QWebView>
 #include <QDialog>
+#include <QFile>
 #include "recipe.h"
 
 class RecipeFormatter : public QObject
 {
    Q_OBJECT
 public:
+
+   enum { PRINT, PREVIEW, HTML, NUMACTIONS };
+   
    RecipeFormatter();
    ~RecipeFormatter();
    void setRecipe(Recipe* recipe);
@@ -44,8 +48,7 @@ public:
    QString padToLength( QString str, unsigned int length );
    void padAllToMaxLength( QStringList* list );
    
-   void print(QPrinter *mainPrinter, QPrintDialog* dialog);
-   void printPreview();
+   void print(QPrinter *mainPrinter, QPrintDialog* dialog, int action = PRINT, QFile* outFile=0);
 
 public slots:
    void toTextClipboard();
