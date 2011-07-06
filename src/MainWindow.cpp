@@ -110,6 +110,7 @@ MainWindow::MainWindow(QWidget* parent)
    lcdNumber_srmHigh->setConstantColor(BtDigitWidget::HIGH);
    lcdNumber_boilSG->setConstantColor(BtDigitWidget::BLACK);
    lcdNumber_ibugu->setConstantColor(BtDigitWidget::BLACK);
+   lcdNumber_calories->setConstantColor(BtDigitWidget::BLACK);
 
    // Null out the recipe
    recipeObs = 0;
@@ -781,6 +782,7 @@ void MainWindow::showChanges(const QVariant& info)
    lcdNumber_ibu->display(recipeObs->getIBU(), 1);
    lcdNumber_srm->display(Brewtarget::displayColor(recipeObs->getColor_srm(),false));
    lcdNumber_ibugu->display(recipeObs->getIBU()/((recipeObs->getOg()-1)*1000), 2);
+   lcdNumber_calories->display( recipeObs->estimateCalories(), 0);
 
    // Want to do some manipulation based on selected style.
    Style* recipeStyle = recipeObs->getStyle();
