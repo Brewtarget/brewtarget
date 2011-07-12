@@ -89,8 +89,8 @@ QString RecipeFormatter::getTextFormat()
    
    ret += getTextSeparator();
    
-   ret += QObject::tr("Batch Size: %1\n").arg(Brewtarget::displayAmount(rec->getBatchSize_l(), Units::liters));
-   ret += QObject::tr("Boil Size: %1\n").arg(Brewtarget::displayAmount(rec->getBoilSize_l(), Units::liters));
+   ret += QObject::tr("Batch Size: %1\n").arg(Brewtarget::displayAmount(rec->estimateFinalVolume_l(), Units::liters));
+   ret += QObject::tr("Boil Size: %1\n").arg(Brewtarget::displayAmount(rec->estimateBoilVolume_l(), Units::liters));
    ret += QObject::tr("Boil Time: %1\n").arg( (rec->getEquipment() == 0)?
                                               Brewtarget::displayAmount(0, Units::minutes)
                                             : Brewtarget::displayAmount( (rec->getEquipment())->getBoilTime_min(), Units::minutes));
@@ -470,20 +470,24 @@ QString RecipeFormatter::buildTitleTable()
    body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Brewer"))
          .arg(rec->getBrewer());
-   body += QString("<tr><td class=\"label\">%1</td><td class=\"value\">%2</td></tr>")
+   body += QString("<tr><td class=\"label\">%1</td><td class=\"value \">%2</td></tr>")
            .arg(tr("Date"))
          .arg(rec->getDate());
    body += "</table>";
 
    // Build the top table
-   // Build the first row: Batch Size and Boil Size
+   // Build the first row: Batch Size and Boil Size.
+   // NOTE: using getBatchSize_l() and/or getBoilSize_l() only gives the
+   // *target* batch and boil size.  I think we want the actual (aka,
+   // estimated) sizes
+
    body += "<table id=\"title\">";
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Batch Size"))
-           .arg(Brewtarget::displayAmount(rec->getBatchSize_l(), Units::liters));
+           .arg(Brewtarget::displayAmount(rec->estimateFinalVolume_l(), Units::liters));
    body += QString("<td class=\"right\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Boil Size"))
-           .arg(Brewtarget::displayAmount(rec->getBoilSize_l(), Units::liters));
+           .arg(Brewtarget::displayAmount(rec->estimateBoilVolume_l(), Units::liters));
    // Second row: Boil Time and Efficiency
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
            .arg(tr("Boil Time"))

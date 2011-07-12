@@ -162,14 +162,14 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    // second row:  boil time and efficiency.  
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Time"))
-            .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
+            .arg(Brewtarget::displayAmount(recObs->estimateFinalVolume_l(),Units::minutes))
             .arg(tr("Efficiency"))
             .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0));
 
    // third row: pre-Boil Volume and Preboil Gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Volume"))
-            .arg(Brewtarget::displayAmount(recObs->getBoilSize_l(),Units::liters,2))
+            .arg(Brewtarget::displayAmount(recObs->estimateBoilVolume_l(),Units::liters,2))
             .arg(tr("Preboil Gravity"))
             .arg(Brewtarget::displayOG(recObs->getBoilGrav()));
 
