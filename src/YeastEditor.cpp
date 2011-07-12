@@ -76,7 +76,8 @@ void YeastEditor::save()
    y->setTimesCultured(lineEdit_timesCultured->text().toInt());
    y->setMaxReuse(lineEdit_maxReuse->text().toInt());
    y->setAddToSecondary( (checkBox_addToSecondary->checkState() == Qt::Checked)? true : false );
-   y->setNotes(textEdit_notes->toPlainText());
+   y->setBestFor(textEdit_bestFor->toPlainText());
+   y->setNotes(textEdit_notes->toPlainText()); 
 
    y->reenableNotification();
    y->forceNotify();
