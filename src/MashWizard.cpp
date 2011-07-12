@@ -87,10 +87,18 @@ void MashWizard::wizardry()
    double grainMass = 0.0, massWater = 0.0;
    double grainDensity = HeatCalculations::rhoGrain_KgL;
    double absorption_LKg;
+   double boilingPoint_c; 
+
    if( recObs->getEquipment() != 0 )
+   {
       absorption_LKg = recObs->getEquipment()->getGrainAbsorption_LKg();
+      boilingPoint_c = recObs->getEquipment()->getBoilingPoint_c();
+   }
    else
+   {
       absorption_LKg = HeatCalculations::absorption_LKg;
+      boilingPoint_c = 100.0;
+   }
 
    thickNum = lineEdit_mashThickness->text().toDouble();
    thickness_LKg = thickNum * volumeUnit->toSI(1) / weightUnit->toSI(1);
@@ -140,7 +148,7 @@ void MashWizard::wizardry()
    //   tw = MC/MCw * (tf-t1) + tf;
 
    // Can't have water above boiling.
-   if( tw > 100 )
+   if( tw > boilingPoint_c )
    {
       QMessageBox::information(this, tr("Mash too thick"), tr("Your mash is too thick for desired temp. at first step."));
       return;
@@ -181,7 +189,7 @@ void MashWizard::wizardry()
          c_e = (mash->getEquipAdjust()) ? mash->getTunSpecificHeat_calGC() : 0;
 
          // r is the ratio of water and grain to take out for decoction.
-         r = ((m_w*c_w + m_g*c_g + m_e*c_e)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(100-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
+         r = ((m_w*c_w + m_g*c_g + m_e*c_e)*(tf-t1)) / ((m_w*c_w + m_g*c_g)*(boilingPoint_c-tf) + (m_w*c_w + m_g*c_g)*(tf-t1));
          if( r < 0 || r > 1 )
          {
             QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
@@ -195,7 +203,7 @@ void MashWizard::wizardry()
       {
          tf = mashStep->getStepTemp_c();
          t1 = mash->getMashStep(i-1)->getStepTemp_c();
-         tw = 100; // Assume adding boiling water to minimize final volume.
+         tw = boilingPoint_c; // Assume adding boiling water to minimize final volume.
          MC += massWater * HeatCalculations::Cw_calGC; // Add MC product of last addition.
 
          massWater = (MC*(tf-t1))/(HeatCalculations::Cw_calGC * (tw-tf));
@@ -240,7 +248,7 @@ void MashWizard::wizardry()
       
       tw = (MC/(massWater*HeatCalculations::Cw_calGC))*(tf-t1) + tf;
       
-      if(tw > 100.0)
+      if(tw > boilingPoint_c)
          QMessageBox::information(this, tr("Sparge temp."),
                                    tr("In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water."));
 

@@ -62,6 +62,7 @@ public:
    void setHopUtilization_pct( double var );
    void setNotes( const QString &var );
    void setGrainAbsorption_LKg(double var);
+   void setBoilingPoint_c(double var);
 
    // Get
    QString getName() const;
@@ -81,6 +82,7 @@ public:
    double getHopUtilization_pct() const;
    QString getNotes() const;
    double getGrainAbsorption_LKg();
+   double getBoilingPoint_c() const;
 
    double wortEndOfBoil_l( double kettleWort_l ) const; // Calculate how much wort is left immediately at knockout.
 
@@ -104,6 +106,7 @@ private:
    QString notes;
    // My extensions below.
    double absorption_LKg;
+   double boilingPoint_c;
 
    void setDefaults();
    void doCalculations();

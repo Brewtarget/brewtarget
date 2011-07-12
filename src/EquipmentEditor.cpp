@@ -132,6 +132,7 @@ void EquipmentEditor::save()
 
    obsEquip->setNotes(textEdit_notes->toPlainText());
    obsEquip->setGrainAbsorption_LKg( lineEdit_grainAbsorption->text().toDouble() );
+   obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
 
    obsEquip->reenableNotification();
    obsEquip->forceNotify();
@@ -214,4 +215,5 @@ void EquipmentEditor::showChanges()
    textEdit_notes->setText(e->getNotes());
 
    lineEdit_grainAbsorption->setText(QString("%1").arg(e->getGrainAbsorption_LKg(), 0, 'f', 3));
+   lineEdit_boilingPoint->setText(Brewtarget::displayAmount(e->getBoilingPoint_c(), Units::celsius));
 }

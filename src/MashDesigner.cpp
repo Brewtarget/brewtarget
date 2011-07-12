@@ -147,7 +147,13 @@ void MashDesigner::saveStep()
 
 double MashDesigner::maxTemp_c()
 {
-   return 100;
+   if ( recObs && recObs->getEquipment())
+   {
+      qDebug() << "Returning boiling temp from equipement " <<  recObs->getEquipment()->getBoilingPoint_c();
+      return recObs->getEquipment()->getBoilingPoint_c();
+   }
+   else
+      return 100;
 }
 
 double MashDesigner::minTemp_c()

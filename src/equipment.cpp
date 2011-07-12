@@ -135,6 +135,10 @@ void Equipment::toXml(QDomDocument& doc, QDomNode& parent)
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
    
+   tmpNode = doc.createElement("BOILING_POINT");
+   tmpText = doc.createTextNode(text(boilingPoint_c));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
    parent.appendChild(equipNode);
 }
 
@@ -159,6 +163,7 @@ void Equipment::setDefaults()
    hopUtilization_pct = 0.0;
    notes = "";
    absorption_LKg = HeatCalculations::absorption_LKg;
+   boilingPoint_c = 100.0;
 }
 
 Equipment::Equipment()
@@ -280,6 +285,10 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
       else if( property == "ABSORPTION" ) // My extension.
       {
          setGrainAbsorption_LKg( getDouble(textNode) );
+      }
+      else if ( property == "BOILING_POINT")
+      {
+         setBoilingPoint_c( getDouble(textNode) );
       }
       else
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported EQUIPMENT property: %1. Line %2").arg(property).arg(node.lineNumber()) );
@@ -534,6 +543,19 @@ void Equipment::setGrainAbsorption_LKg(double var)
    hasChanged();
 }
 
+void Equipment::setBoilingPoint_c(double var)
+{
+   if ( var < 0.0 )
+   {
+      Brewtarget::logW( QString("Equipment: boiling point of water < 0: %1").arg(var));
+      boilingPoint_c = 100.0;
+   }
+   else 
+   {
+      boilingPoint_c = var;
+   }
+}
+
 //============================"GET" METHODS=====================================
 
 QString Equipment::getName() const
@@ -619,6 +641,11 @@ QString Equipment::getNotes() const
 double Equipment::getGrainAbsorption_LKg()
 {
    return absorption_LKg;
+}
+
+double Equipment::getBoilingPoint_c() const
+{
+   return boilingPoint_c;
 }
 
 //TODO: take a look at evapRate_pctHr.
