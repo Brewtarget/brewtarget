@@ -130,12 +130,7 @@ public slots:
    void copySelected();
    void exportSelected();
 
-   void printRecipe();
-   void printBrewday();
-   void printPreviewRecipe();
-   void printPreviewBrewday();
-   void printRecipeToHTML();
-   void printBrewdayToHTML();
+   void print();
 
    void backup(); // Backup the database.
    void restoreFromBackup(); // Restore the database.

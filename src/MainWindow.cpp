@@ -277,12 +277,15 @@ MainWindow::MainWindow(QWidget* parent)
    connect( brewTargetTreeView, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
 
    // Printing signals/slots.
-   connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(printRecipe()));
-   connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(printBrewday()));
-   connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(printPreviewRecipe()));
-   connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(printPreviewBrewday()));
-   connect( actionRecipeHTML, SIGNAL(triggered()), this, SLOT(printRecipeToHTML()));
-   connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(printBrewdayToHTML()));
+   // Refactoring is good.  It's like a rye saison fermenting away
+   connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
+   connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(print()));
+   connect( actionRecipeHTML, SIGNAL(triggered()), this, SLOT(print()));
+
+   connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(print()));
+   connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
+   connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
+
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -1616,48 +1619,35 @@ void MainWindow::openDonateLink()
    QDesktopServices::openUrl(QUrl("http://sourceforge.net/project/project_donations.php?group_id=249733"));
 }
 
-void MainWindow::printPreviewRecipe()
+// One print function to rule them all. Now we just need to make the menuing
+// system make sense
+void MainWindow::print()
 {
-   recipeFormatter->print(printer, 0, RecipeFormatter::PREVIEW);
-}
+   QObject* selection = sender();
 
-void MainWindow::printRecipe()
-{
-   QPrintDialog printerDialog(printer, this);
+   if ( selection == actionRecipePrint || selection == actionBrewdayPrint )
+   {
+      QPrintDialog printerDialog(printer, this);
+      selection == actionRecipePrint ?  recipeFormatter->print( printer, &printerDialog, RecipeFormatter::PRINT) :
+                                        brewDayScrollWidget->print( printer, &printerDialog, BrewDayScrollWidget::PRINT);
+   }
+   else if ( selection == actionRecipePreview )
+   {
+      recipeFormatter->print(printer, 0, RecipeFormatter::PREVIEW);
+   }
+   else if ( selection == actionBrewdayPreview )
+   {
+      brewDayScrollWidget->print(printer, 0, RecipeFormatter::PREVIEW);
+   }
+   else if ( selection == actionRecipeHTML || selection == actionBrewdayHTML)
+   {
+      QFile* outfile = openForWrite(tr("HTML files (*.html)"), QString("html"));
 
-   recipeFormatter->print( printer, &printerDialog, RecipeFormatter::PRINT);
-}
-
-void MainWindow::printRecipeToHTML()
-{
-   QFile* outfile = openForWrite(tr("HTML files (*.html)"), QString("html"));
-
-   if (! outfile )
-      return;
-
-   recipeFormatter->print(printer, 0, RecipeFormatter::HTML, outfile);
-}
-
-void MainWindow::printPreviewBrewday()
-{
-   brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::PREVIEW);
-}
-
-void MainWindow::printBrewday()
-{
-   QPrintDialog printerDialog(printer, this);
-
-   brewDayScrollWidget->print( printer, &printerDialog, BrewDayScrollWidget::PRINT);
-}
-
-void MainWindow::printBrewdayToHTML()
-{
-   QFile* outfile = openForWrite(tr("HTML files (*.html)"), QString("html"));
-
-   if (! outfile )
-      return;
-
-   brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::HTML, outfile);
+      if (! outfile )
+         return;
+      selection == actionRecipeHTML ? recipeFormatter->print(printer, 0, RecipeFormatter::HTML, outfile) : 
+                                      brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::HTML, outfile);
+   }
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
