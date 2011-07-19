@@ -1213,6 +1213,7 @@ void MainWindow::newRecipe()
 
    db->addRecipe(recipe, false);
 
+   setRecipe(recipe);
    setSelection(brewTargetTreeView->findRecipe(recipe));
 }
 
