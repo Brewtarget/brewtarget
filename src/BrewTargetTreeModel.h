@@ -38,7 +38,7 @@ class BrewTargetTreeModel;
 
 class BrewTargetTreeModel : public QAbstractItemModel, public MultipleObserver
 {
-   Q_OBJECT;
+   Q_OBJECT
 
 public:
    BrewTargetTreeModel(BrewTargetTreeView *parent = 0);
