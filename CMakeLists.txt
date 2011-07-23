@@ -74,20 +74,24 @@ ELSE()
    FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSvg QtWebkit QtXml Phonon REQUIRED)
 ENDIF()
 
+MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
+
 # Some distros seem to treat Qt and Phonon as separate, so try to find Phonon.
 IF( NOT QT_PHONON_FOUND )
    MESSAGE( STATUS "Phonon not found as a part of Qt; trying another approach." )
+
 	 FIND_LIBRARY( EXT_PHONON_LIB phonon )
 	 FIND_PATH( EXT_PHONON_PATH "mediaobject.h" )
-	 IF( EXT_PHONON_LIB-NOTFOUND OR EXT_PHONON_PATH-NOTFOUND )
-	    MESSAGE( STATUS "Phonon not found." )
-   ELSE()
+
+	 IF( EXISTS ${EXT_PHONON_LIB} AND EXISTS ${EXT_PHONON_PATH} )
       MESSAGE( STATUS "Hooray! Phonon found." )
 			MESSAGE( STATUS "Phonon dir: ${EXT_PHONON_PATH}")
 			MESSAGE( STATUS "Phonon lib: ${EXT_PHONON_LIB}")
 
 	    SET( EXT_LIBS ${EXT_LIBS} ${EXT_PHONON_LIB} )
 	    INCLUDE_DIRECTORIES( ${EXT_PHONON_PATH} )
+   ELSE()
+	    MESSAGE( STATUS "Phonon not found. Run cmake again with the option -DCMAKE_PREFIX_PATH=/path/to/phonon" )
    ENDIF()
 ENDIF()
 
