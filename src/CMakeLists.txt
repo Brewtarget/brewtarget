@@ -431,10 +431,10 @@ IF( WIN32 AND MINGW )
    SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows -Lc:/Qt/4.7.1/lib" )
 ELSE()
    # Link brewtarget against Qt libraries defined by QT_LIBRARIES
-   TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} ${QT_LIBRARIES})
+   TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${EXT_LIBRARIES} )
 ENDIF()
 
-MESSAGE( STATUS "Libraries: ${QT_LIBRARIES}" )
+MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${EXT_LIBRARIES}" )
 
 #==============================Setup install targets===========================
 

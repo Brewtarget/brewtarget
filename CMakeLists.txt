@@ -27,9 +27,9 @@ OPTION( ENABLE_PROFILING
 OPTION( NO_PHONON
         "If on, does not build any Phonon code."
         OFF )
-OPTION(UPDATE_TRANSLATIONS
-       "Update source translation *.ts files (WARNING: 'make clean' will delete the source .ts files! Danger!)"
-       OFF)
+OPTION( UPDATE_TRANSLATIONS
+        "Update source translation *.ts files (WARNING: 'make clean' will delete the source .ts files! Danger!)"
+        OFF)
 #==============================Compile flags===================================
 SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
 SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -gstabs+" )
@@ -66,10 +66,29 @@ INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
 
 # ======================Find Qt4 (>= 4.6.0) for this project===================
+SET( EXT_LIBS "" )
+
 IF( ${BUILD_DESIGNER_PLUGINS} )
    FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSvg QtWebKit QtXml Phonon QtDesigner REQUIRED)
 ELSE()
    FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSvg QtWebkit QtXml Phonon REQUIRED)
+ENDIF()
+
+# Some distros seem to treat Qt and Phonon as separate, so try to find Phonon.
+IF( NOT QT_PHONON_FOUND )
+   MESSAGE( STATUS "Phonon not found as a part of Qt; trying another approach." )
+	 FIND_LIBRARY( EXT_PHONON_LIB phonon )
+	 FIND_PATH( EXT_PHONON_PATH "mediaobject.h" )
+	 IF( EXT_PHONON_LIB-NOTFOUND OR EXT_PHONON_PATH-NOTFOUND )
+	    MESSAGE( STATUS "Phonon not found." )
+   ELSE()
+      MESSAGE( STATUS "Hooray! Phonon found." )
+			MESSAGE( STATUS "Phonon dir: ${EXT_PHONON_PATH}")
+			MESSAGE( STATUS "Phonon lib: ${EXT_PHONON_LIB}")
+
+	    SET( EXT_LIBS ${EXT_LIBS} ${EXT_PHONON_LIB} )
+	    INCLUDE_DIRECTORIES( ${EXT_PHONON_PATH} )
+   ENDIF()
 ENDIF()
 
 # Some extra files for the "make clean" target.
