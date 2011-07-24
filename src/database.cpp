@@ -671,7 +671,7 @@ void Database::addRecipe(Recipe* rec, bool copySubelements)
          addYeast( rec->getYeast(i), true );
    }
 
-   hasChanged(DBALL);
+   hasChanged(DBRECIPE);
 }
 
 void Database::addStyle(Style* style, bool disableNotify)
