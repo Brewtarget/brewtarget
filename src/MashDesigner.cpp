@@ -327,6 +327,10 @@ void MashDesigner::updateFullness()
    else
       vol_l = grainVolume_l() + getSelectedAmount_l();
    double ratio = vol_l / equip->getTunVolume_l();
+   if( ratio < 0 )
+     ratio = 0;
+   if( ratio > 1 )
+     ratio = 1;
 
    progressBar_fullness->setValue(ratio*progressBar_fullness->maximum());
    label_mashVol->setText(Brewtarget::displayAmount(vol_l, Units::liters));
@@ -340,6 +344,10 @@ void MashDesigner::updateCollectedWort()
 
    double wort_l = recObs->estimateWortFromMash_l();
    double ratio = wort_l / recObs->getBoilSize_l();
+   if( ratio < 0 )
+     ratio = 0;
+   if( ratio > 1 )
+     ratio = 1;
 
    label_wort->setText(Brewtarget::displayAmount(wort_l, Units::liters));
    progressBar_wort->setValue( ratio * progressBar_wort->maximum() );
