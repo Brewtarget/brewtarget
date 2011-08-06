@@ -31,6 +31,7 @@ FermentableTableWidget::FermentableTableWidget(QWidget* parent)
    ffpm->setDynamicSortFilter(true);
 
    setModel(ffpm);
+   sortByColumn( FERMNAMECOL, Qt::AscendingOrder );
 
    setItemDelegate(new FermentableItemDelegate(this));
 }

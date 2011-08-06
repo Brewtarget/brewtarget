@@ -33,6 +33,7 @@ YeastTableWidget::YeastTableWidget(QWidget* parent)
    yfpm->setDynamicSortFilter(true);
 
    setModel(yfpm);
+   sortByColumn(YEASTNAMECOL, Qt::AscendingOrder);
    setItemDelegate(new YeastItemDelegate(this));
 
 }

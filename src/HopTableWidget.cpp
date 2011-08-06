@@ -32,6 +32,7 @@ HopTableWidget::HopTableWidget(QWidget* parent)
    hfpm->setDynamicSortFilter(true);
    setModel(hfpm);
 
+   sortByColumn(HOPNAMECOL, Qt::AscendingOrder);
    setItemDelegate(new HopItemDelegate(this));
 }
 

@@ -32,6 +32,7 @@ MiscTableWidget::MiscTableWidget(QWidget *parent)
    proxy->setDynamicSortFilter(true);
 
    setModel(proxy);
+   sortByColumn(MISCNAMECOL, Qt::AscendingOrder);
    setItemDelegate(new MiscItemDelegate());
 }
 
