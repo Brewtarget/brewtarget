@@ -17,6 +17,7 @@
  */
 
 #include <QVector>
+#include <typeinfo>
 #include "observable.h"
 
 void Observable::setDefaults()
@@ -69,6 +70,9 @@ void Observable::notifyObservers(QVariant info)
 
    for( i = 0; i < size; ++i )
       observers[i]->notify(this, info);
+
+   if (! Observer::dirty )
+      Observer::dirty = true;
 }
 
 void Observable::forceNotify()

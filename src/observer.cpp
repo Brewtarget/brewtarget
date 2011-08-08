@@ -20,6 +20,8 @@
 #include "observable.h"
 #include "observable.h"
 
+bool Observer::dirty = false;
+
 Observer::Observer()
 {
    observed = 0;
@@ -41,6 +43,16 @@ void Observer::setObserved(Observable* obs)
    observed = obs;
    if( observed )
       observed->addObserver(this);
+}
+
+bool Observer::isDirty()
+{
+   return Observer::dirty;
+}
+
+void Observer::setDirty(bool flag)
+{
+   Observer::dirty = flag;
 }
 
 MultipleObserver::MultipleObserver()

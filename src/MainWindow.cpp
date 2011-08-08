@@ -243,6 +243,7 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
 
+   setDirty(false);
    // Connect signals.
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashByName(const QString&)) );
@@ -313,6 +314,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashDown, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepDown() ) );
    connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
    connect( pushButton_donate, SIGNAL( clicked() ), this, SLOT( openDonateLink() ) );
+
 }
 
 void MainWindow::setupToolbar()
@@ -819,12 +821,15 @@ void MainWindow::showChanges(const QVariant& info)
 
    // See if we need to change the mash in the table.
    if( info.toInt() == Recipe::MASH && recipeObs->getMash() != 0 )
+   {
       mashStepTableWidget->getModel()->setMash(recipeObs->getMash());
+   }
 }
 
 void MainWindow::save()
 {
    Database::savePersistent();
+   setDirty(false);
 }
 
 void MainWindow::clear()
@@ -1197,24 +1202,22 @@ void MainWindow::newRecipe()
 {
    QString name = QInputDialog::getText(this, tr("Recipe name"),
                                           tr("Recipe name:"));
-   QModelIndex newItem;
-
    if( name.isEmpty() )
       return;
 
-   Recipe* recipe = new Recipe();
+   Recipe* newRec = new Recipe();
 
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
-   recipe->setName(name);
-   recipe->setBatchSize_l(18.93); // 5 gallons
-   recipe->setBoilSize_l(23.47);  // 6.2 gallons
-   recipe->setEfficiency_pct(70.0);
+   newRec->setName(name);
+   newRec->setBatchSize_l(18.93); // 5 gallons
+   newRec->setBoilSize_l(23.47);  // 6.2 gallons
+   newRec->setEfficiency_pct(70.0);
 
-   db->addRecipe(recipe, false);
+   db->addRecipe(newRec, false);
 
-   setRecipe(recipe);
-   setSelection(brewTargetTreeView->findRecipe(recipe));
+   setSelection(brewTargetTreeView->findRecipe(newRec));
+   setRecipe(newRec);
 }
 
 void MainWindow::setSelection(QModelIndex item)
@@ -1539,7 +1542,7 @@ void MainWindow::removeMash()
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-   if( QMessageBox::question(this, tr("Save database?"),
+   if( isDirty() && QMessageBox::question(this, tr("Save database?"),
                              tr("Do you want to save the changes made? If not, you will lose anything you changed in this session."),
                              QMessageBox::Yes,
                              QMessageBox::No)
@@ -1591,7 +1594,7 @@ void MainWindow::setMashByName(const QString& name)
    Mash* newMash = new Mash();
    
    newMash->deepCopy(mash); // Make a copy so we don't modify the database version.
-   
+
    recipeObs->setMash(newMash);
 }
 

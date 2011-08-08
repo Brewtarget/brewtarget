@@ -55,8 +55,11 @@ public:
    Observer();
    Observer(Observable* obs);
    void setObserved(Observable* obs);
+   static bool dirty;
    
    virtual void notify(Observable *notifier, QVariant info) = 0; // This will get called by observed whenever it changes.
+   bool isDirty();
+   void setDirty(bool flag = true);
    
 private:
    Observable* observed;
