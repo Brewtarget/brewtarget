@@ -624,6 +624,7 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    unsigned int i;
    int startTab;
+   bool dirty;
    Fermentable *ferm;
    Hop *hop;
    Misc *misc;
@@ -640,6 +641,8 @@ void MainWindow::setRecipe(Recipe* recipe)
    // reflected in the recipe.
    // If there is not a version in the database, we copy the one in the recipe
    // to the database.
+   dirty = isDirty();
+
    style = recipe->getStyle();
    equip = recipe->getEquipment();
    if( style )
@@ -729,6 +732,8 @@ void MainWindow::setRecipe(Recipe* recipe)
    recipeScaler->setRecipe(recipeObs);
 
    showChanges();
+
+   setDirty(dirty);
 }
 
 void MainWindow::notify(Observable* notifier, QVariant info)
