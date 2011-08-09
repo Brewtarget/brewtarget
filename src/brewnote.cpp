@@ -515,6 +515,7 @@ QHash<QString,QString> BrewNote::XMLTagToName()
    temp.insert("PROJECTED_POINTS","projPoints");
    temp.insert("PROJECTED_ATTEN","projAtten");
    temp.insert("BOIL_OFF", "boilOff");
+   temp.insert("FINAL_VOLUME","finalVolume");
 
    return temp;
 }

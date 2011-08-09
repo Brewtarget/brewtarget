@@ -64,6 +64,7 @@ private:
    QString buildMiscTable();
    QString buildNotes();
    QString buildInstructionTable();
+   QString buildBrewNotes();
    QString getCSS();
 
    QString* textSeparator;
