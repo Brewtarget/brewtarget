@@ -41,6 +41,16 @@ void MashWizard::setRecipe(Recipe* rec)
 
 void MashWizard::show()
 {
+   if( recObs == 0 || recObs->getMash() == 0 )
+      return;
+
+   // Ensure at least one mash step.
+   if( recObs->getMash()->getNumMashSteps() == 0 )
+   {
+      QMessageBox::information(this, tr("No steps"), tr("There must be at least one mash step to run the wizard."));
+      return;
+   }
+
    switch (Brewtarget::getWeightUnitSystem())
    {
       case USCustomary:
@@ -108,13 +118,7 @@ void MashWizard::wizardry()
       QMessageBox::information(this, tr("Bad thickness"), tr("You must have a positive mash thickness."));
       return;
    }
-   // Ensure at least one mash step.
-   if( mash->getNumMashSteps() == 0 )
-   {
-      QMessageBox::information(this, tr("No steps"), tr("You must have at least one mash step to run the wizard."));
-      return;
-   }
-
+   // we ensured that there was at least one mash step when we displayed the thickness dialog
    mashStep = mash->getMashStep(0);
    // Ensure first mash step is an infusion.
    if( mashStep->getType() != MashStep::TYPEINFUSION )
