@@ -62,6 +62,8 @@ void BrewNote::toXml(QDomDocument& doc, QDomNode& parent)
          tmpText = doc.createTextNode(fermentDate.toString(Qt::ISODate));
       else if (i.key() == "VERSION")
          tmpText = doc.createTextNode(QString("%1").arg(version));
+      else if (i.key() == "NOTES")
+         tmpText = doc.createTextNode(QString("%1").arg(notes));
       else
          tmpText    = doc.createTextNode(text(info.value(i.value())));
 
@@ -103,6 +105,8 @@ void BrewNote::fromNode(const QDomNode& bNoteNode)
                .arg(getInt(textNode)).arg(version).arg(textNode.lineNumber()) );
       else if ( property == "DATE_FERMENTED_OUT" )
          setFermentDate(value);
+      else if ( property == "NOTES")
+         setNotes(value);
       else if ( tags.contains(property) ) // make sure we have that property defined.
          setInfo( tags.value(property), value.toDouble());
    }
@@ -516,6 +520,7 @@ QHash<QString,QString> BrewNote::XMLTagToName()
    temp.insert("PROJECTED_ATTEN","projAtten");
    temp.insert("BOIL_OFF", "boilOff");
    temp.insert("FINAL_VOLUME","finalVolume");
+   temp.insert("NOTES","notes");
 
    return temp;
 }
