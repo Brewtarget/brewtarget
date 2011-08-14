@@ -11,7 +11,7 @@ SET(brewtarget_EXECUTABLE "brewtarget")
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 1 )
 SET( brewtarget_VERSION_MINOR 2 )
-SET( brewtarget_VERSION_PATCH 3 )
+SET( brewtarget_VERSION_PATCH 4 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
 #===================================Options====================================
@@ -80,18 +80,18 @@ MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 IF( NOT QT_PHONON_FOUND )
    MESSAGE( STATUS "Phonon not found as a part of Qt; trying another approach." )
 
-	 FIND_LIBRARY( EXT_PHONON_LIB phonon )
-	 FIND_PATH( EXT_PHONON_PATH "mediaobject.h" )
+   FIND_LIBRARY( EXT_PHONON_LIB phonon )
+   FIND_PATH( EXT_PHONON_PATH "mediaobject.h" )
 
-	 IF( EXISTS ${EXT_PHONON_LIB} AND EXISTS ${EXT_PHONON_PATH} )
+   IF( EXISTS ${EXT_PHONON_LIB} AND EXISTS ${EXT_PHONON_PATH} )
       MESSAGE( STATUS "Hooray! Phonon found." )
-			MESSAGE( STATUS "Phonon dir: ${EXT_PHONON_PATH}")
-			MESSAGE( STATUS "Phonon lib: ${EXT_PHONON_LIB}")
+      MESSAGE( STATUS "Phonon dir: ${EXT_PHONON_PATH}")
+      MESSAGE( STATUS "Phonon lib: ${EXT_PHONON_LIB}")
 
-	    SET( EXT_LIBS ${EXT_LIBS} ${EXT_PHONON_LIB} )
-	    INCLUDE_DIRECTORIES( ${EXT_PHONON_PATH} )
+      SET( EXT_LIBS ${EXT_LIBS} ${EXT_PHONON_LIB} )
+      INCLUDE_DIRECTORIES( ${EXT_PHONON_PATH} )
    ELSE()
-	    MESSAGE( STATUS "Phonon not found. Run cmake again with the option -DCMAKE_PREFIX_PATH=/path/to/phonon" )
+      MESSAGE( STATUS "Phonon not found. Run cmake again with the option -DCMAKE_PREFIX_PATH=/path/to/phonon" )
    ENDIF()
 ENDIF()
 

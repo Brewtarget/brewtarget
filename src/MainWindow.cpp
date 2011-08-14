@@ -1668,7 +1668,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 void MainWindow::dropEvent(QDropEvent *event)
 {
    QModelIndexList indexes;
-   QWidget *last;
+   QWidget *last = 0;
    QString name;
    int type;
 
@@ -1709,6 +1709,8 @@ void MainWindow::dropEvent(QDropEvent *event)
                break;
             case BrewTargetTreeItem::BREWNOTE:
                setBrewNoteByIndex(index);
+               break;
+            default:
                break;
          }
          event->accept();
