@@ -19,7 +19,7 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-#define ICON48 ":/images/brewtarget_icon.svg"
+#define BTICON ":/images/brewtarget_icon.svg"
 //#define ICON96 ":/images/BrewtargetIcon_96.png"
 #define GLASS ":/images/glass2.png"
 #define SMALLBARLEY ":/images/smallBarley.svg"

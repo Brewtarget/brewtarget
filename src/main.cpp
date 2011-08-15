@@ -19,12 +19,13 @@
 #include <iostream>
 #include <QApplication>
 #include "brewtarget.h"
+#include "config.h"
 
 int main(int argc, char **argv)
 {
    QApplication app(argc, argv);
    app.setApplicationName("brewtarget");
-   app.setApplicationVersion("1.2.3");
+   app.setApplicationVersion(VERSIONSTRING);
    app.setOrganizationName("Philip G. Lee");
    Brewtarget::setApp(app);
 

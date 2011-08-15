@@ -37,6 +37,8 @@
 #include <QDesktopServices>
 #include <QSharedPointer>
 #include <QtNetwork/QNetworkRequest>
+#include <QPixmap>
+#include <QSplashScreen>
 
 #include "brewtarget.h"
 #include "config.h"
@@ -486,7 +488,13 @@ int Brewtarget::run()
 {
    int ret;
    bool success;
-
+   
+   QPixmap splashImg(BTICON);
+   QSplashScreen splashScreen(splashImg);
+   splashScreen.show();
+   
+   app->processEvents(); // So we can process mouse clicks on splash window.
+   
    success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
    ensureOptionFileExists();
    readPersistentOptions(); // Read all the options for bt.
@@ -498,10 +506,15 @@ int Brewtarget::run()
 
    loadTranslations(); // Do internationalization.
 
+   app->processEvents();
+   
+   splashScreen.showMessage("Loading...");
    Database::initialize();
    
    mainWindow = new MainWindow();
    mainWindow->setVisible(true);
+   
+   splashScreen.finish(mainWindow);
 
    checkForNewVersion();
 
