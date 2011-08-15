@@ -25,8 +25,8 @@ you use your refractometer.
 
 <h3>Making a New Recipe</h3>
 <p>
-Click on either File-&gt;&quot;New Recipe&quot;, or click the blue plus in the toolbar at the top of the main
-window. Now, title your recipe in the box that pops up, and click &quot;OK&quot;.
+Click on either File-&gt;&quot;New Recipe&quot;, click the blue plus in the toolbar at the top of the main
+window or right-click on the recipe part of the tree and select &quot;New Recipe&quot;. Now, title your recipe in the box that pops up, and click &quot;OK&quot;.
 </p>
 
 <h3>Making a New Equipment Record</h3>
@@ -54,6 +54,7 @@ these fields as you can.
    <li><b>Grain absorption</b> - How many liters of water are permanently lost to each kilogram of grain during
           mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of
           your grind, humidity, brand, and other factors.
+   <li><b>Boiling Point of Water</b> - The temperature at which water boils. This will vary with altitude. </li>
 
    <li><b>Volume</b> - The maximum volume your mash tun can hold.</li>
    <li><b>Mass</b> - Mass of your mash tun.</li>
@@ -74,11 +75,14 @@ Then, press the diskette button at the bottom to save.
 </p>
 
 <h3>Adjusting Recipe Parameters</h3>
-<p>
-From the Equipment drop-down list, choose &quot;5 gal batch - Ideal&quot; (which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses)
-which is already provided by Brewtarget, just for the sake of demonstration. For now, leave
-the efficiency at 70% for the same reason. After selecting the equipment, you will be asked if you want to set the batch
-and boil size of the recipe to that of the equipment. Click &quot;Yes&quot;.
+<p> From the Equipment drop-down list, choose &quot;5 gal batch - Ideal&quot;
+(which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses) 
+which is already provided by Brewtarget, just for the sake of demonstration.
+You can also drag the &quot;5 gal batch - Ideal&qout; item from the tree on
+the left and drop it on the recipe. For now, leave
+the efficiency at 70% for the same reason. After selecting or dropping the
+equipment or , you will be asked if you want to set the batch and boil size of
+the recipe to that of the equipment. Click &quot;Yes&quot;.
 </p>
 
 <p>
@@ -99,32 +103,51 @@ single-click the name (or anywhere in the row) and press &quot;Add to Recipe&quo
 &quot;Caramel/Crystal Malt - 40L&quot;, and close the fermentable database window.
 </p>
 <p>
+Alternately, you can open the &quot;Fermentable&quot; tree in the left pane,
+and drag'n'drop the &quot;Pale Malt (2 row) US&quot;, &quot;Caramel/Crystal Malt - 40L&quot; onto the recipe pane.
+<p>
 Back at the main window, you will see those two malts in your recipe. Click on the Crystal 40's &quot;Mashed&quot;
 checkbox to tell it that we want to have this in the mash (this malt can also be simply steeped).
 </p>
 <p>
 Here's a cool feature about Brewtarget: you can enter amounts of stuff in pretty much any units you want.
-Let's see what I mean. Double-click the 2-row's &quot;amount&quot; cell and enter &quot;3.175 kg&quot;. You will see that
-it immediately gets converted into &quot;7.000 lb&quot; if you're using US units. For the crystal 40, tell it &quot;32 oz&quot; and watch it get
-converted into &quot;2.000 lb&quot;. You can change US/English/SI preferences in Tools-&gt;Options. Please see the
-section called &quot;Supported Units&quot; in this document to see the correct abbreviation for each unit.
-<b>Important</b>: do not forget that you MUST enter the unit suffix (lb, kg, L, mL, etc.) for almost all amount
-boxes in brewtarget. If you do not, brewtarget will simply try to guess what you mean, which can give unexpected
-results.
+Let's see what I mean. Double-click the 2-row's &quot;amount&quot; cell and
+enter &quot;3.175 kg&quot;. You will see that it immediately gets converted
+into &quot;7.000 lb&quot; if you're using US units. For the crystal 40, tell
+it &quot;32 oz&quot; and watch it get converted into &quot;2.000 lb&quot;. You
+can change US/English/SI preferences in Tools-&gt;Options. Please see the
+section called &quot;Supported Units&quot; in this document to see the correct
+abbreviation for each unit.
+<b>Important</b>: do not forget that you SHOULD enter the unit suffix (lb, kg,
+L, mL, etc.) for almost all amount boxes in brewtarget. If you do not,
+brewtarget will simply try to guess what you mean, which can give unexpected
+results. In this case, brewtarget will assume that fermentables are entered in
+either lbs or kg, depending on how you have configured brewtarget.
 </p>
 <p>
-Now you should notice something different about the OG, FG, etc., displayed in the main window.
-The OG now reads 1.045, and it is green which indicates &quot;to style&quot; as dictated by the amber ale
-style we chose. However, the FG is red, which means it's too high, the ABV is blue which means
-it is too low, and the Color number is green: just right. The glass of beer to the right represents the approximate color of your beer,
-and the thing right below that which reads &quot;Cloying&quot; is the maltiness indicator (based on IBU/GU ratio which now shows 0).
-Please note that the maltiness indicator is just a general guide.
+Now you should notice something different about the OG, FG, etc., displayed in
+the main window.  The OG now reads 1.045, and it is green which indicates
+&quot;to style&quot; as dictated by the amber ale style we chose. However, the
+FG is red, which means it's too high, the ABV is blue which means it is too
+low, and the Color number is green: just right. The glass of beer to the right
+represents the approximate color of your beer, and the thing right below that
+which reads &quot;Cloying&quot; is the maltiness indicator (based on IBU/GU
+ratio which now shows 0).  Please note that the maltiness indicator is just a
+general guide.
 </p>
 <p>
 Now, go to the Hops tab and add 1 oz Cascade at 1 hr, 1 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
 be about 37.6, and in the green. Add Wyeast American Ale yeast to the recipe. Now everything should be in
 the green except for the ABV which is about 4.4%, but that's ok (you can correct this if you want by
 adding more fermentables).
+<b>Note:</b> If you do not provide a unit for the hops (e.g., oz), brewtarget
+will assume you are discussing ounces or grams, depending on which units you
+have configured brewtarget to use.
+</p>
+<p>
+Like the &quot;Fermentables&quot;, you can also add the hops and the yeast by
+opening up the &quot;Hops&quot; or the &quot;Yeast&quot;, respectively, tree in the left pane and 
+dragging the ingredients onto the recipe pane and dropping them.
 </p>
 
 <h3>Making a Mash</h3>
@@ -248,14 +271,119 @@ you decide to press &quot;save&quot; on the main window. At this point, all your
 the BeerXML database on disk.
 </p>
 
+<h2>Trees</h2>
+<p>
+The old recipe dropdown box has been replaced by a tree view in the left pane.
+As a rule, double clicking on any item in the tree will open up the
+appropriate editor for that item. In the case of recipes, it will open the
+recipe in the main window.
+</p>
+
+There are 6 entries in the tree:
+<ul>
+   <li>Recipes - replacing the old drop down box, this tree shows all your
+   recipes.  You can drag'n'drop the recipe onto the main
+   window and that recipe will be loaded</li>
+   <li>Equipment - this shows all your defined kit. You can drag'n'drop a
+   piece of equipment onto your recipe which will have the same effect as
+   changing the equipment via the dropdown box. </li>
+   <li>Fermentables, Hops, Misc and Yeast - these show all of your defined
+   fermentables, hops, miscellaneous and yeasts, respectively. Dragging an
+   item onto the main window will add that item to the selected
+   recipe.</li>
+</ul>
+
+<h3>Context menus</h3>
+<p>
+You can right click almost anywhere in the tree and get a menu of options.
+Depending on where you click, the menus will change a bit. If you right click
+on a recipe, the first option will be "new recipe". If you right click on a
+fermentable, the first option will be "new fermentable". Otherwise, the
+available options will be the same.
+</p>
+<p>
+You can select multiple items, right click and then perform an action on the
+entire selected list. The only exception is the &quot;Export&quot; function.
+Limitations in the BeerXML format makes it very difficult to export both recipes
+and anything else at the same time.
+</p>
+
+<h3>BrewNotes</h3>
+<p>
+If you right-click a recipe, you may notice an action called &quot;Brew
+It!&quot;. If you select this option, a new entry will be created underneath
+the recipe and a new tab will be opened in the main window. This new tab
+allows you to record important information about your beer during its creation
+(sg, volumes, temperatures, etc.). This should allow the brewer to track
+performance over time and adjust their equipment and efficiencies to better
+predict what you brew.
+</p>
+<b>Note:</b> The current list of fields is our initial pass only. If you want
+more fields available, open a feature request on source forge
+
+<p>
+The values are preloaded based on the recipe as written. As you move through
+your brewday, you can record the actual numbers. The calculated values in the
+middle of the screen will change based on those inputs.  For example, if you
+expected an SG of 1.036 but only got 1.032 the projected OG, ABV and ABV will
+all change to reflect the lower SG.
+</p>
+
+<p>
+There are three main sections on the brewnote tab. 
+<ul>
+   <li>Preboil is for mash information
+      <ul>
+         <li>SG - starting gravity</li>
+         <li>Volume - the volume of wort that made it into your boil kettle</li>
+         <li>Strike Temp - the temperature of your mash after dough in </li>
+         <li>Final Temp - the temperature of your mash at the end of the mash </li>
+      </ul>
+   </li>
+   <li>Postboil is for information after the boil is complete
+      <ul>
+         <li>OG - original gravity </li>
+         <li>Postboil Volume - the volume of wort in the boil kettle after the
+         boil</li>
+         <li>Volume into fermenter - the volume of wort that actually makes it
+         into the fermenter.</li>
+         <li>Pitch temp - the temperature of the wort when you pitched the
+         yeast</li>
+      </ul>
+   </li>
+   <li>Postferment is for information after the beer is fermented
+      <ul>
+         <li>FG - final gravity </li>
+         <li>Volume - the volume of beer that actually makes it into your
+         bottles or kegs</li>
+         <li>Date - the date the beer finished fermenting</li>
+      </ul>
+   </li>
+</ul>
+</p>
+
 <h2>Adding Ingredients to a Recipe</h2>
+<h3>Using the editors</h3>
+If you are looking for a fermentable with a specific SRM or a yeast from a
+specific lab, this approach allows you to sort on any column you want.
 <ol>
 	<li>Choose the appropriate tab in the main window (Fermentable, Hops,...).</li>
 	<li>Click the &quot;add&quot; button in the tab.</li>
 	<li>Select any column of the row of the ingredient you wish to add.</li>
 	<li>Click &quot;Add to Recipe&quot;.</li>
 </ol>
-
+<h3>Using drag'n'drop</h3>
+This is the lazy way of doing it, as long as you don't mind the default sort
+order.
+<ol>
+   <li> Open the appropriate tree in the left pane. </li>
+   <li> Click on the item you wish to add </li>
+   <li> Drag it anywhere in the main part of the window </li>
+   <li> And drop </li>
+   <li> The tabs will change if required. E.g., if you drop a hop onto the
+   &quot;Fermentables&quot; tab, the focus will change to the &quot;Hops&quot;
+   tab. </li>
+</ol>
 <h2>Importing Recipes</h2>
 <p>
 You can import other BeerXML recipes (such as, from Beersmith) by using File-&gt;Import Recipes.
@@ -282,6 +410,13 @@ be wiped out.
 This tool is used to make a text version of the recipe so that you may post it online
 or whatever else you can do with a text version. To get the text version, Tools-&gt;&quot;Recipe to Clipboard as Text&quot;,
 then click paste in a text editor or other paste-able window.
+</p>
+
+<h2>Posting Your Recipe - Save to HTML</h2>
+<p>
+Another way you can share you recipes is to export them to HTML. Use
+File-&gt;&quot;Save to HTML&quot;. You can export either the recipe or the
+brewday instructions.
 </p>
 
 <h2>OG Correction Tool</h2>
