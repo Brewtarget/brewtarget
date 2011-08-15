@@ -369,14 +369,6 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
   SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
   SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
 
-  #FIND_PROGRAM(DPKG_CMD dpkg)
-  #IF(DPKG_CMD)
-  #  EXECUTE_PROCESS(COMMAND "${DPKG_CMD}" --print-architecture
-  #    OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
-  #    OUTPUT_STRIP_TRAILING_WHITESPACE)
-  #  SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE})
-  #ENDIF(DPKG_CMD)
-
   SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING})
 
   #-----------------RPM-----------------
@@ -421,18 +413,17 @@ ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
 # Link brewtarget against appropriate libraries.
 IF( WIN32 AND MINGW )
    ############################################################################
-   # I don't know why, but QT_LIBRARIES is NOT correct under mingw32.
-   # It outputs things like "C:/Qt/4.7.1/lib/QtSvg4.lib".
-   #
-   # Also, need to set some linker flags that I don't know how to get
+   # Need to set some linker flags that I don't know how to get
    # automatically.
    ############################################################################
-   TARGET_LINK_LIBRARIES(${brewtarget_EXECUTABLE} mingw32 QtWebKit4 QtXml4 QtNetwork4 QtGui4 QtCore4 QtSvg4 phonon4)
-   SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows -Lc:/Qt/4.7.1/lib" )
-ELSE()
-   # Link brewtarget against Qt libraries defined by QT_LIBRARIES
-   TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${EXT_LIBRARIES} )
+
+   # MinGW-specific flags.
+   #    '-Wl,-subsystem,windows' supresses the output command window.
+   SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows")
 ENDIF()
+
+# Link brewtarget against Qt libraries defined by QT_LIBRARIES
+TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${EXT_LIBRARIES} )
 
 MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${EXT_LIBRARIES}" )
 
