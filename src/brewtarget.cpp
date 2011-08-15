@@ -128,6 +128,11 @@ bool Brewtarget::ensureDirectoriesExist()
 
 void Brewtarget::checkForNewVersion()
 {
+
+   // Don't do anything if the checkVersion flag was set false
+   if ( checkVersion == false ) 
+      return;
+
    QNetworkAccessManager manager;
    QEventLoop loop;
    QUrl url("http://brewtarget.sourceforge.net/version");
