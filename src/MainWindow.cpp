@@ -1301,7 +1301,7 @@ void MainWindow::backup()
 void MainWindow::restoreFromBackup()
 {
    if( QMessageBox::question( this, tr("A Warning"),
-         tr("This will obliterate your current set of recipes and ingredients. Do you want to continue?") )
+         tr("This will obliterate your current set of recipes and ingredients. Do you want to continue?"),QMessageBox::Yes, QMessageBox::No )
        == QMessageBox::No
       )
    {
