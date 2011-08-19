@@ -32,6 +32,7 @@ class StyleEditor : public QDialog, public Ui::styleEditor, public Observer
 
 public:
    StyleEditor( QWidget *parent=0 );
+   virtual ~StyleEditor() {}
    void setStyle( Style* s );
 
 public slots:

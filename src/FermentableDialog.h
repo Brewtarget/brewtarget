@@ -37,6 +37,7 @@ class FermentableDialog : public QDialog, public Ui::fermentableDialog, public O
 
 public:
    FermentableDialog(MainWindow* parent);
+   virtual ~FermentableDialog() {}
    void startObservingDB();
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 

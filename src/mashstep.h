@@ -37,6 +37,8 @@ public:
    MashStep();
    MashStep( const QDomNode& mashStepNode );
 
+   virtual ~MashStep() {}
+
    friend bool operator<(MashStep &m1, MashStep &m2);
    friend bool operator==(MashStep &m1, MashStep &m2);
 

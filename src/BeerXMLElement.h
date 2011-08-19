@@ -29,6 +29,7 @@ class BeerXMLElement;
 class BeerXMLElement
 {
 public:
+   virtual ~BeerXMLElement() {}
 
    double getDouble( const QDomText& textNode );
    bool getBool( const QDomText& textNode );

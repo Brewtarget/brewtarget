@@ -33,6 +33,7 @@ class MashStepEditor : public QDialog, public Ui::mashStepEditor, public Observe
    Q_OBJECT
 public:
    MashStepEditor(QWidget* parent=0);
+   virtual ~MashStepEditor() {}
    virtual void notify(Observable *notifier, QVariant info=QVariant());
 
 public slots:

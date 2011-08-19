@@ -40,6 +40,8 @@ public:
    Yeast(Yeast& other);
    Yeast( const QDomNode& yeastNode );
 
+   virtual ~Yeast() {}
+
    friend bool operator<(Yeast &y1, Yeast &y2);
    friend bool operator==(Yeast &y1, Yeast &y2);
 

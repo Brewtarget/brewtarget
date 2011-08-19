@@ -15,7 +15,7 @@ class BrewNoteWidget : public QWidget, public Ui::brewNoteWidget, public Observe
 
 public:
    BrewNoteWidget(QWidget *parent = 0);
-   ~BrewNoteWidget();
+   virtual ~BrewNoteWidget() {}
 
    void setBrewNote(BrewNote* bNote);
 

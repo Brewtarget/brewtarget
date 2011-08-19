@@ -40,6 +40,8 @@ public:
    Misc(Misc& other);
    Misc( const QDomNode& miscNode );
 
+   virtual ~Misc() {}
+
    friend bool operator<(Misc &m1, Misc &m2);
    friend bool operator==(Misc &m1, Misc &m2);
 

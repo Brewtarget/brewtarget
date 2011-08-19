@@ -42,6 +42,7 @@ class MashStepTableModel : public QAbstractTableModel, public Observer
 
 public:
    MashStepTableModel(MashStepTableWidget* parent=0);
+   virtual ~MashStepTableModel() {}
    void setMash( Mash* m );
    //void addMashStep(MashStep* step);
    //bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.

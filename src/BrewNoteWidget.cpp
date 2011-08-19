@@ -28,10 +28,6 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent)
    connect(plainTextEdit_brewNotes,SIGNAL(textChanged()), this, SLOT(updateNotes()));
 }
 
-BrewNoteWidget::~BrewNoteWidget()
-{
-}
-
 void BrewNoteWidget::setBrewNote(BrewNote* bNote)
 {
    double low = 0.95;

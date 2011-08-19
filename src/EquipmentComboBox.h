@@ -37,6 +37,7 @@ class EquipmentComboBox : public QComboBox, public MultipleObserver
 
 public:
    EquipmentComboBox(QWidget* parent=0);
+   virtual ~EquipmentComboBox() {}
    void startObservingDB();
    void observeRecipe(Recipe* rec);
    void addEquipment(Equipment* equipment);

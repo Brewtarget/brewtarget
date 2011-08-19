@@ -31,6 +31,7 @@ class HopEditor : public QDialog, private Ui::hopEditor, Observer
 
 public:
    HopEditor( QWidget *parent=0 );
+   virtual ~HopEditor() {}
    void setHop( Hop* h );
 
 public slots:

@@ -31,6 +31,7 @@ class FermentableEditor : public QDialog, private Ui::fermentableEditor, Observe
 
 public:
    FermentableEditor( QWidget *parent=0 );
+   virtual ~FermentableEditor() {}
    void setFermentable( Fermentable* f );
 
 public slots:

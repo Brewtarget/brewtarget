@@ -33,6 +33,7 @@ class BrewDayWidget : public QWidget, public Ui::brewDayWidget, public Observer
    Q_OBJECT
 public:
    BrewDayWidget(QWidget* parent=0);
+   virtual ~BrewDayWidget() {}
    void setRecipe(Recipe* rec);
 
    virtual QSize sizeHint() const; // From QWidget

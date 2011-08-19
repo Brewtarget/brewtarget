@@ -29,7 +29,7 @@ class WaterEditor : public QDialog, public Ui::waterEditor, public Observer
     Q_OBJECT
 public:
     WaterEditor(QWidget *parent = 0);
-    ~WaterEditor();
+    virtual ~WaterEditor() {}
 
     /*!
      * Sets the water we want to observe.

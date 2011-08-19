@@ -32,6 +32,7 @@ class EquipmentEditor : public QDialog, public Ui::equipmentEditor, public Obser
 
 public:
    EquipmentEditor( QWidget *parent=0 );
+   virtual ~EquipmentEditor() {}
    void setEquipment( Equipment* e );
 
 public slots:

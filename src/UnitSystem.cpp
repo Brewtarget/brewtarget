@@ -29,10 +29,6 @@ UnitSystem::UnitSystem()
    amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
 }
 
-UnitSystem::~UnitSystem()
-{
-}
-
 double UnitSystem::qstringToSI(QString qstr, Unit* defUnit)
 {
    

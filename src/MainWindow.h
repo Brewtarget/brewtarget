@@ -72,6 +72,7 @@ class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
    friend class OptionDialog;
 public:
    MainWindow(QWidget* parent=0);
+   virtual ~MainWindow() {}
    void setRecipe(Recipe* recipe);
    virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().

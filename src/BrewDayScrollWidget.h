@@ -38,6 +38,7 @@ public:
    enum { PRINT, PREVIEW, HTML, NUMACTIONS };
 
    BrewDayScrollWidget(QWidget* parent=0);
+   virtual ~BrewDayScrollWidget() {}
    //! Sets the observed recipe.
    void setRecipe(Recipe* rec);
 

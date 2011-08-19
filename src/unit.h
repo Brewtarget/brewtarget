@@ -98,6 +98,7 @@ inline QString tempScaleToString(TempScale ts)
 class Unit
 {
    public:
+      virtual ~Unit() {}
       virtual double toSI( double amt ) const =0;// { return amt; }
       virtual double fromSI( double amt ) const =0;// { return amt; }
       // The unit name will be the singular of the commonly used abbreviation.

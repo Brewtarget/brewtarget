@@ -35,7 +35,7 @@ class MashComboBox : public QComboBox, public MultipleObserver
   
    public:
       MashComboBox(QWidget* parent=0);
-      ~MashComboBox();
+      virtual ~MashComboBox() {}
       void startObservingDB();
       void addMash(Mash* m);
       void setIndexByMashName(QString name);

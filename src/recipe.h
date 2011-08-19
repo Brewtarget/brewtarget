@@ -49,6 +49,8 @@ public:
    Recipe(const QDomNode& recipeNode);
    Recipe(Recipe* other); // Deep copy constructor.
 
+   virtual ~Recipe() {}
+
    /*!
     * This enum is for passing information via Observer::notify().
     * DONOTUSE is first because it will equal zero, and by default, QVariant.toInt() returns 0. So,

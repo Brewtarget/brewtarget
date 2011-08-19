@@ -34,6 +34,8 @@ public:
    Mash();
    Mash( const QDomNode& mashNode );
 
+   virtual ~Mash() {}
+
    friend bool operator<(Mash &m1, Mash &m2);
    friend bool operator==(Mash &m1, Mash &m2);
 

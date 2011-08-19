@@ -36,6 +36,8 @@ public:
    Equipment();
    Equipment(const QDomNode& equipmentNode);
    Equipment( Equipment* other);
+
+   virtual ~Equipment() {}
    
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement

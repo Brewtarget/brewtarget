@@ -35,6 +35,8 @@ public:
    Instruction();
    Instruction(const QDomNode& instructionNode);
 
+   virtual ~Instruction() {}
+
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    //QString toXml();

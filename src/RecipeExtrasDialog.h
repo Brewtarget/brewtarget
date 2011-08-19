@@ -33,6 +33,7 @@ class RecipeExtrasDialog : public QDialog, public Ui::recipeExtrasDialog, public
 
 public:
    RecipeExtrasDialog(QWidget* parent=0);
+   virtual ~RecipeExtrasDialog() {}
    void setRecipe(Recipe* rec);
 
 public slots:

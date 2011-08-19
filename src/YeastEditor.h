@@ -31,6 +31,7 @@ class YeastEditor : public QDialog, private Ui::yeastEditor, Observer
 
 public:
    YeastEditor( QWidget *parent=0 );
+   virtual ~YeastEditor() {}
    void setYeast( Yeast* y );
 
 public slots:

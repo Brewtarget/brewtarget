@@ -33,6 +33,7 @@ class RecipeExtrasWidget : public QWidget, public Ui::recipeExtrasWidget, public
 
 public:
    RecipeExtrasWidget(QWidget* parent=0);
+   virtual ~RecipeExtrasWidget() {}
    void setRecipe(Recipe* rec);
 
 public slots:

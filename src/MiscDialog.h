@@ -36,6 +36,7 @@ class MiscDialog : public QDialog, public Ui::miscDialog, public Observer
 
 public:
    MiscDialog(MainWindow* parent);
+   virtual ~MiscDialog() {}
    void startObservingDB();
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 

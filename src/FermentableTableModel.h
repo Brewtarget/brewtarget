@@ -43,6 +43,7 @@ class FermentableTableModel : public QAbstractTableModel, public MultipleObserve
            
 public:
    FermentableTableModel(FermentableTableWidget* parent=0);
+   virtual ~FermentableTableModel() {}
    void addFermentable(Fermentable* ferm);
    bool removeFermentable(Fermentable* ferm); // Returns true if "ferm" is successfully found and removed.
    void removeAll();

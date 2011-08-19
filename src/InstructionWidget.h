@@ -33,7 +33,7 @@ class InstructionWidget : public QWidget, public Ui::instructionWidget, public O
    Q_OBJECT
 public:
    InstructionWidget(QWidget* parent=0);
-   ~InstructionWidget();
+   virtual ~InstructionWidget();
    void setInstruction(Instruction* ins);
 
    virtual QSize sizeHint() const; // From QWidget

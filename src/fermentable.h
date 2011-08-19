@@ -40,6 +40,8 @@ public:
    Fermentable();
    Fermentable( Fermentable& other );
    Fermentable(const QDomNode& fermentableNode);
+
+   virtual ~Fermentable() {}
    
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement

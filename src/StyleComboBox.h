@@ -37,6 +37,7 @@ class StyleComboBox : public QComboBox, public MultipleObserver
 
 public:
    StyleComboBox(QWidget* parent=0);
+   virtual ~StyleComboBox() {}
    void startObservingDB();
    void observeRecipe(Recipe* rec);
    void addStyle(Style* style);

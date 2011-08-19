@@ -29,6 +29,7 @@ class MiscEditor : public QDialog, private Ui::miscEditor, Observer
 
 public:
    MiscEditor( QWidget *parent=0 );
+   virtual ~MiscEditor() {}
    void setMisc( Misc* m );
    
 public slots:

@@ -30,7 +30,7 @@ class UnitSystem
 {
 public:
    UnitSystem();
-   ~UnitSystem();
+   virtual ~UnitSystem() {}
 
    /*!
     * displayAmount() should return a string appropriately displaying

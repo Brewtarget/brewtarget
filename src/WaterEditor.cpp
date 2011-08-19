@@ -24,10 +24,6 @@ WaterEditor::WaterEditor(QWidget *parent) : QDialog(parent)
     obs = 0;
 }
 
-WaterEditor::~WaterEditor()
-{
-}
-
 void WaterEditor::setWater(Water *water)
 {
    obs = water;

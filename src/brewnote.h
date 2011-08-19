@@ -41,6 +41,8 @@ public:
    BrewNote(BrewNote& other);
    BrewNote(Recipe* parent, const QDomNode& bnoteNode);
 
+   virtual ~BrewNote() {}
+
    friend bool operator<(BrewNote &lhs, BrewNote &rhs);
    friend bool operator==(BrewNote &lhs, BrewNote &rhs);
 

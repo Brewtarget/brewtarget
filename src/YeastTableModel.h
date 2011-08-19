@@ -41,6 +41,7 @@ class YeastTableModel : public QAbstractTableModel, public MultipleObserver
 
 public:
    YeastTableModel(YeastTableWidget* parent=0);
+   virtual ~YeastTableModel() {}
    void addYeast(Yeast* yeast);
    Yeast* getYeast(unsigned int i);
    bool removeYeast(Yeast* yeast); // Returns true if "hop" is successfully found and removed.

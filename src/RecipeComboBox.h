@@ -36,6 +36,7 @@ class RecipeComboBox : public QComboBox, public MultipleObserver
 
 public:
    RecipeComboBox(QWidget* parent=0);
+   virtual ~RecipeComboBox() {}
    void startObservingDB();
    void addRecipe(Recipe* recipe);
    void setIndexByRecipeName(QString name);

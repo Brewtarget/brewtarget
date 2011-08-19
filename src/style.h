@@ -34,6 +34,8 @@ public:
    Style();
    Style(const QDomNode& styleNode);
 
+   virtual ~Style() {}
+
    friend bool operator<(Style &s1, Style &s2);
    friend bool operator==(Style &s1, Style &s2);
 

@@ -54,6 +54,7 @@ class Observer
 public:
    Observer();
    Observer(Observable* obs);
+   virtual ~Observer() {}
    void setObserved(Observable* obs);
    static bool dirty;
    

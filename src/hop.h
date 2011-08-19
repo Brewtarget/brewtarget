@@ -41,6 +41,8 @@ class Hop : public Observable, public BeerXMLElement
       Hop( Hop& other );
       Hop(const QDomNode& hopNode);
 
+      virtual ~Hop() {}
+
       friend bool operator<( Hop &h1, Hop &h2 );
       friend bool operator==( Hop &h1, Hop &h2 );
 

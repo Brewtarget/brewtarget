@@ -25,10 +25,6 @@ MashComboBox::MashComboBox(QWidget* parent)
    setCurrentIndex(-1);
 }
 
-MashComboBox::~MashComboBox()
-{
-}
-
 void MashComboBox::startObservingDB()
 {
    if( Database::isInitialized() )

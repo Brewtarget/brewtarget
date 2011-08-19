@@ -36,6 +36,7 @@ class HopDialog : public QDialog, public Ui::hopDialog, public Observer
 
 public:
    HopDialog(MainWindow* parent);
+   virtual ~HopDialog() {}
    void startObservingDB();
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 

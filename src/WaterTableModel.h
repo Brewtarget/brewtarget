@@ -43,6 +43,7 @@ class WaterTableModel : public QAbstractTableModel, public MultipleObserver
 
 public:
    WaterTableModel(WaterTableWidget* parent=0);
+   virtual ~WaterTableModel() {}
    void addWater(Water* water);
    bool removeWater(Water* water); // Returns true if "water" is successfully found and removed.
    void removeAll();

@@ -35,6 +35,7 @@ class MaltinessWidget : public QLabel, public Observer
 
 public:
    MaltinessWidget(QWidget* parent=0);
+   virtual ~MaltinessWidget() {}
 
    void observeRecipe(Recipe* recipe);
 

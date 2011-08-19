@@ -36,6 +36,8 @@ public:
    Water();
    Water( const QDomNode& waterNode );
 
+   virtual ~Water() {}
+
    friend bool operator<(Water &w1, Water &w2);
    friend bool operator==(Water &w1, Water &w2);
 

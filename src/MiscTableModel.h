@@ -43,6 +43,7 @@ class MiscTableModel : public QAbstractTableModel, public MultipleObserver
    
 public:
    MiscTableModel(MiscTableWidget* parent=0);
+   virtual ~MiscTableModel() {}
    void addMisc(Misc* misc);
    Misc* getMisc(unsigned int i);
    bool removeMisc(Misc* misc);

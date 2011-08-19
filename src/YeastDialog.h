@@ -36,6 +36,7 @@ class YeastDialog : public QDialog, public Ui::yeastDialog, public Observer
 
 public:
    YeastDialog(MainWindow* parent);
+   virtual ~YeastDialog() {}
    void startObservingDB();
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
