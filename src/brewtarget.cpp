@@ -55,6 +55,7 @@
 #include "SIVolumeUnitSystem.h"
 #include "CelsiusTempUnitSystem.h"
 #include "ImperialVolumeUnitSystem.h"
+#include "BtSplashScreen.h"
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
@@ -494,8 +495,9 @@ int Brewtarget::run()
    int ret;
    bool success;
    
-   QPixmap splashImg(BTICON);
-   QSplashScreen splashScreen(splashImg);
+   //QPixmap splashImg(BTICON);
+   //QSplashScreen splashScreen(splashImg);
+   BtSplashScreen splashScreen;
    splashScreen.show();
    
    app->processEvents(); // So we can process mouse clicks on splash window.

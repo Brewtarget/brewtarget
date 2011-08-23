@@ -15,6 +15,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BrewTargetTreeView.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/brewtarget.cpp
+		${SRCDIR}/BtSplashScreen.cpp
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
@@ -107,6 +108,7 @@ SET( brewtarget_UIS
     ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/brewNoteWidget.ui
+		${UIDIR}/btSplashScreen.ui
     ${UIDIR}/converterTool.ui
     ${UIDIR}/mainWindow.ui
     ${UIDIR}/mashStepEditor.ui
@@ -149,6 +151,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BrewTargetTreeModel.h
     ${SRCDIR}/BrewTargetTreeView.h
     ${SRCDIR}/BtDigitWidget.h
+		${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/EquipmentComboBox.h
     ${SRCDIR}/EquipmentEditor.h
