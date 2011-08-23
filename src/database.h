@@ -183,6 +183,26 @@ public:
    QList<Yeast*>::iterator getYeastBegin();
    QList<Yeast*>::iterator getYeastEnd();
 
+   /*! Merges \b last 's BeerXML elements to \b first.
+   *  Neither document should have recipes in them. If
+   *  \b undup is true, removes duplicate entries preferring to remove
+   *  items from \b last first.
+   */
+   static void mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last );
+   
+   /*! Merges \b last 's BeerXML elements to \b first.
+   *  For documents that ONLY contain recipes. If
+   *  \b undup is true, removes duplicate entries preferring to remove
+   *  items from \b last first.
+   */
+   static void mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last );
+   
+   //! Get the file where this database was loaded from.
+   static QString getDbFileName();
+   
+   //! Get the recipe file this database was loaded from.
+   static QString getRecipeFileName();
+   
 private:
    static bool initialized;
    static Database* internalDBInstance;
@@ -192,15 +212,6 @@ private:
    static QString recipeFileName;
    static QFile mashFile; // Why are these separate from the dbFile? To prevent duplicates.
    static QString mashFileName;
-
-   /*! Merges \b last 's BeerXML elements to \b first.
-    *  Neither document should have recipes in them.
-    */
-   static void mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last );
-   /*! Merges \b last 's BeerXML elements to \b first.
-    *  For documents that ONLY contain recipes.
-    */
-   static void mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last );
 
    // The stuff we care about...
    static QList<Equipment*> equipments;

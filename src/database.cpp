@@ -273,7 +273,7 @@ void Database::initialize()
 
 void Database::mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last )
 {
-   QDomNode root = first.firstChild();
+  QDomNode root = first.elementsByTagName("RECIPES").at(0);;
    QDomNodeList list;
    int i, size;
 
@@ -286,7 +286,7 @@ void Database::mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& las
 
 void Database::mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last )
 {
-   QDomNode root = first.firstChild();
+   QDomNode root = first.elementsByTagName("DATABASE").at(0);
    QDomNodeList list;
    int i, size;
 
@@ -336,6 +336,7 @@ void Database::mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last
    size = list.size();
    for( i = 0; i < size; ++i )
       root.appendChild(list.at(i));
+   
 }
 
 void Database::resortAll()
@@ -1146,3 +1147,12 @@ Yeast* Database::findYeastByName(QString name)
    return 0;
 }
 
+QString Database::getDbFileName()
+{
+   return dbFileName;
+}
+
+QString Database::getRecipeFileName()
+{
+   return recipeFileName;
+}

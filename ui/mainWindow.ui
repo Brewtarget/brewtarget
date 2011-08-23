@@ -1717,6 +1717,7 @@
     <addaction name="actionExportRecipe"/>
     <addaction name="actionBackup_Database"/>
     <addaction name="actionRestore_Database"/>
+    <addaction name="actionMergeDatabases"/>
     <addaction name="separator"/>
     <addaction name="menuPrint"/>
     <addaction name="menuPrint_Preview"/>
@@ -1928,6 +1929,14 @@
   <action name="actionRecipeHTML">
    <property name="text">
     <string>Recipe</string>
+   </property>
+  </action>
+  <action name="actionMergeDatabases">
+   <property name="text">
+    <string>Merge Databases</string>
+   </property>
+   <property name="toolTip">
+    <string>Select another database to merge into the current one.</string>
    </property>
   </action>
  </widget>
