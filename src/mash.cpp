@@ -350,7 +350,7 @@ unsigned int Mash::getNumMashSteps() const
 
 MashStep* Mash::getMashStep( unsigned int i )
 {
-   if( static_cast<int>(i) >= mashSteps.size() )
+  if( i >= static_cast<unsigned int>(mashSteps.size()) )
       return 0;
    else
       return mashSteps[i];

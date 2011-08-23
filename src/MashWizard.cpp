@@ -99,6 +99,7 @@ void MashWizard::wizardry()
    double absorption_LKg;
    double boilingPoint_c; 
 
+   // If we have an equipment, utilize the custom absorption and boiling temp.
    if( recObs->getEquipment() != 0 )
    {
       absorption_LKg = recObs->getEquipment()->getGrainAbsorption_LKg();
@@ -118,8 +119,15 @@ void MashWizard::wizardry()
       QMessageBox::information(this, tr("Bad thickness"), tr("You must have a positive mash thickness."));
       return;
    }
-   // we ensured that there was at least one mash step when we displayed the thickness dialog
+   
+   // We ensured that there was at least one mash step when we displayed the thickness dialog in show().
    mashStep = mash->getMashStep(0);
+   if( mashStep == 0 )
+   {
+      Brewtarget::logE( "MashWizard::wizardry(): first mash step was null." );
+      return;
+   }
+   
    // Ensure first mash step is an infusion.
    if( mashStep->getType() != MashStep::TYPEINFUSION )
    {
@@ -146,6 +154,7 @@ void MashWizard::wizardry()
    MCw = HeatCalculations::Cw_calGC * massWater;
    MC = HeatCalculations::Cgrain_calGC * grainMass;
    // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
+   // Good or bad?
    //if( mash->getEquipAdjust() )
       tw = MC/MCw * (tf-t1) + (mash->getTunSpecificHeat_calGC()*mash->getTunWeight_kg())/MCw * (tf-mash->getTunTemp_c()) + tf;
    //else
@@ -154,13 +163,15 @@ void MashWizard::wizardry()
    // Can't have water above boiling.
    if( tw > boilingPoint_c )
    {
-      QMessageBox::information(this, tr("Mash too thick"), tr("Your mash is too thick for desired temp. at first step."));
+      QMessageBox::information(this,
+                               tr("Mash too thick"),
+                               tr("Your mash is too thick for desired temp. at first step."));
       return;
    }
 
    mashStep->setInfuseAmount_l(massWater);
    mashStep->setInfuseTemp_c(tw);
-   // End of first step.
+   //================End of first step=====================
 
    // Do rest of steps.
    // Add mass*specific heat constant of equipment to MC.
@@ -243,8 +254,15 @@ void MashWizard::wizardry()
       if( ! foundSparge )
          mashStep = new MashStep(); // Or just make a new one.
 
+      int lastMashStep = static_cast<int>(mash->getNumMashSteps())-1;
       tf = mash->getSpargeTemp_c();
-      t1 = mash->getMashStep(mash->getNumMashSteps()-1)->getStepTemp_c() - 10.0; // You will lose about 10C from last step.
+      if( lastMashStep >= 0 )
+         t1 = mash->getMashStep(lastMashStep)->getStepTemp_c() - 10.0; // You will lose about 10C from last step.
+      else
+      {
+         Brewtarget::logE( "MashWizard::wizardry(): Should have had at least one mash step before getting to sparging." );
+         return;
+      }
       MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC
            + absorption_LKg * recObs->getGrainsInMash_kg() * HeatCalculations::Cw_calGC
       + mash->getTunWeight_kg() * mash->getTunSpecificHeat_calGC();
@@ -253,8 +271,9 @@ void MashWizard::wizardry()
       tw = (MC/(massWater*HeatCalculations::Cw_calGC))*(tf-t1) + tf;
       
       if(tw > boilingPoint_c)
-         QMessageBox::information(this, tr("Sparge temp."),
-                                   tr("In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water."));
+         QMessageBox::information(this,
+                                  tr("Sparge temp."),
+                                  tr("In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water."));
 
       mashStep->setName("Final Batch Sparge");
       mashStep->setType(MashStep::TYPEINFUSION);
@@ -269,8 +288,9 @@ void MashWizard::wizardry()
    }
    else
    {
-      QMessageBox::information(this, tr("Too much wort"),
-      tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness."));
+      QMessageBox::information(this,
+                               tr("Too much wort"),
+                               tr("You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness."));
    }
 }
 
