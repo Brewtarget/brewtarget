@@ -1561,7 +1561,8 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    QSettings settings("brewtarget");
    settings.setValue("geometry", saveGeometry());
    settings.setValue("windowState", saveState());
-   settings.setValue("recipeName", recipeObs->getName());
+   if ( recipeObs )
+      settings.setValue("recipeName", recipeObs->getName());
    setVisible(false);
 }
 
