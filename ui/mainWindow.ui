@@ -106,6 +106,9 @@
        <attribute name="headerVisible">
         <bool>false</bool>
        </attribute>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
       </widget>
       <widget class="QSplitter" name="splitter">
        <property name="acceptDrops">
@@ -123,8 +126,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>728</width>
-           <height>345</height>
+           <width>675</width>
+           <height>341</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1080,8 +1083,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>743</width>
-           <height>267</height>
+           <width>693</width>
+           <height>263</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1125,6 +1128,12 @@
                  <bool>false</bool>
                 </attribute>
                 <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderCascadingSectionResizes">
                  <bool>false</bool>
                 </attribute>
                </widget>
@@ -1641,7 +1650,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1668,13 +1677,13 @@
     </property>
     <addaction name="actionConvert_Units"/>
     <addaction name="actionOG_Correction_Help"/>
+    <addaction name="actionPitch_Rate_Calculator"/>
     <addaction name="actionPriming_Calculator"/>
     <addaction name="action_recipeToTextClipboard"/>
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
-    <addaction name="actionPitch_Rate_Calculator"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -1991,6 +2000,9 @@
    <property name="text">
     <string>Backup</string>
    </property>
+   <property name="toolTip">
+    <string>Save all recipes, ingredients, etc. to a backup folder</string>
+   </property>
   </action>
   <action name="actionRestore_Database">
    <property name="icon">
@@ -2000,6 +2012,9 @@
    <property name="text">
     <string>Restore</string>
    </property>
+   <property name="toolTip">
+    <string>Restore recipes, ingredients, etc. from a previous backup</string>
+   </property>
   </action>
   <action name="actionMergeDatabases">
    <property name="icon">
@@ -2008,6 +2023,9 @@
    </property>
    <property name="text">
     <string>Merge</string>
+   </property>
+   <property name="toolTip">
+    <string>Merge another set of recipes, ingredients, etc. into the current set</string>
    </property>
   </action>
   <action name="actionNewRecipe">
