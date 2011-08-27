@@ -33,6 +33,19 @@ Files: images/flag*.png
 Copyright: 2009-2010, A68 Freelance Graphics Designs <a68designs@gmail.com>
 License: CC-BY-NC-ND-3.0
 
+Files: images/edit-copy.png images/document-print-preview.png
+       images/merge.png images/printer.png images/server-database.png
+Copyright: David Vignoni et al. <www.oxygen-icons.org>
+License: CC-BY-SA-3.0
+
+Files: images/backup.png
+Copyright: David Vignoni <www.icon-king.com/projects/nuvola>
+License: LGPL-2.1
+
+Files: images/restore.png
+Copyright: FatCow Web Hosting <www.fatcow.com/free-icons>
+License: CC-BY-3.0
+
 License: GPL-3
     This package is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
