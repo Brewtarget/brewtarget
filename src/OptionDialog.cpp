@@ -251,6 +251,16 @@ void OptionDialog::saveAndClose()
    
    // Check the new userDataDir.
    newUserDataDir = lineEdit_dbDir->text();
+
+	 // Make sure the dir ends with a "/" or "\"
+#if defined(Q_WS_X11) || defined(Q_WS_MAC)
+	 if( !newUserDataDir.endsWith("/") )
+		 newUserDataDir += "/";
+#else
+	 if( !newUserDataDir.endsWith("\\") && !newUserDataDir.endsWidth("/") )
+		 newUserDataDir += "\\";
+#endif
+
    if( newUserDataDir != Brewtarget::getUserDataDir() )
    {
       // If there are no data files present...
@@ -259,7 +269,7 @@ void OptionDialog::saveAndClose()
          // ...tell user we will copy old data files to new location.
          QMessageBox::information(this,
                                   tr("Copy Data"),
-                                  tr("There does not seem to be any data files in this directory, so we will copy your old data here.")
+                                  tr("There do not seem to be any data files in this directory, so we will copy your old data here.")
                                  );
          Brewtarget::copyDataFiles(newUserDataDir);
       }
