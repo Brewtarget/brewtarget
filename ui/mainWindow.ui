@@ -106,9 +106,6 @@
        <attribute name="headerVisible">
         <bool>false</bool>
        </attribute>
-       <attribute name="headerVisible">
-        <bool>false</bool>
-       </attribute>
       </widget>
       <widget class="QSplitter" name="splitter">
        <property name="acceptDrops">
@@ -126,8 +123,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>675</width>
-           <height>341</height>
+           <width>728</width>
+           <height>345</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1083,8 +1080,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>693</width>
-           <height>263</height>
+           <width>743</width>
+           <height>267</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1128,12 +1125,6 @@
                  <bool>false</bool>
                 </attribute>
                 <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderCascadingSectionResizes">
                  <bool>false</bool>
                 </attribute>
                </widget>
@@ -1650,7 +1641,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1689,39 +1680,43 @@
     <property name="title">
      <string>File</string>
     </property>
-    <widget class="QMenu" name="menuPrint">
+    <widget class="QMenu" name="menuBrewday">
      <property name="title">
-      <string>Print</string>
-     </property>
-     <addaction name="actionBrewdayPrint"/>
-     <addaction name="actionRecipePrint"/>
-    </widget>
-    <widget class="QMenu" name="menuPrint_Preview">
-     <property name="title">
-      <string>Print Preview</string>
+      <string>Brewday</string>
      </property>
      <addaction name="actionBrewdayPreview"/>
-     <addaction name="actionRecipePreview"/>
-    </widget>
-    <widget class="QMenu" name="menuSave_To_HTML">
-     <property name="title">
-      <string>Save To HTML</string>
-     </property>
+     <addaction name="actionBrewdayPrint"/>
      <addaction name="actionBrewdayHTML"/>
+    </widget>
+    <widget class="QMenu" name="menuRecipe">
+     <property name="title">
+      <string>Recipe</string>
+     </property>
+     <addaction name="actionRecipePreview"/>
+     <addaction name="actionRecipePrint"/>
      <addaction name="actionRecipeHTML"/>
+    </widget>
+    <widget class="QMenu" name="menuDatabase">
+     <property name="title">
+      <string>Database</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../brewtarget.qrc">
+       <normaloff>:/images/server-database.png</normaloff>:/images/server-database.png</iconset>
+     </property>
+     <addaction name="actionBackup_Database"/>
+     <addaction name="actionRestore_Database"/>
+     <addaction name="actionMergeDatabases"/>
     </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
     <addaction name="separator"/>
     <addaction name="actionImport_Recipes"/>
     <addaction name="actionExportRecipe"/>
-    <addaction name="actionBackup_Database"/>
-    <addaction name="actionRestore_Database"/>
-    <addaction name="actionMergeDatabases"/>
+    <addaction name="menuDatabase"/>
     <addaction name="separator"/>
-    <addaction name="menuPrint"/>
-    <addaction name="menuPrint_Preview"/>
-    <addaction name="menuSave_To_HTML"/>
+    <addaction name="menuBrewday"/>
+    <addaction name="menuRecipe"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1758,15 +1753,6 @@
    </property>
    <property name="text">
     <string>Export Recipe</string>
-   </property>
-  </action>
-  <action name="actionNewRecipe">
-   <property name="icon">
-    <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
-   </property>
-   <property name="text">
-    <string>New Recipe</string>
    </property>
   </action>
   <action name="actionFermentables">
@@ -1871,17 +1857,21 @@
     <string>Convert Units</string>
    </property>
   </action>
-  <action name="actionBackup_Database">
+  <action name="actionBackup_Database_old">
    <property name="text">
     <string>Backup Database</string>
    </property>
   </action>
-  <action name="actionRestore_Database">
+  <action name="actionRestore_Database_old">
    <property name="text">
     <string>Restore Database</string>
    </property>
   </action>
   <action name="actionCopy_Recipe">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/edit-copy.png</normaloff>:/images/edit-copy.png</iconset>
+   </property>
    <property name="text">
     <string>Copy Recipe</string>
    </property>
@@ -1901,42 +1891,132 @@
     <string>Pitch Rate Calculator</string>
    </property>
   </action>
-  <action name="actionBrewdayPrint">
+  <action name="actionBrewdayPrint_old">
    <property name="text">
     <string>Brewday</string>
    </property>
   </action>
-  <action name="actionRecipePreview">
+  <action name="actionRecipePreview_old">
    <property name="text">
     <string>Recipe</string>
    </property>
   </action>
-  <action name="actionBrewdayPreview">
+  <action name="actionBrewdayPreview_old">
    <property name="text">
     <string>Brewday</string>
    </property>
   </action>
-  <action name="actionRecipePrint">
+  <action name="actionRecipePrint_old">
    <property name="text">
     <string>Recipe</string>
    </property>
   </action>
-  <action name="actionBrewdayHTML">
+  <action name="actionBrewdayHTML_old">
    <property name="text">
     <string>Brewday</string>
    </property>
   </action>
-  <action name="actionRecipeHTML">
+  <action name="actionRecipeHTML_old">
    <property name="text">
     <string>Recipe</string>
    </property>
   </action>
-  <action name="actionMergeDatabases">
+  <action name="action">
    <property name="text">
     <string>Merge Databases</string>
    </property>
    <property name="toolTip">
     <string>Select another database to merge into the current one.</string>
+   </property>
+  </action>
+  <action name="actionBrewdayPrint">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionBrewdayPreview">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print Preview</string>
+   </property>
+  </action>
+  <action name="actionBrewdayHTML">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export To HTML</string>
+   </property>
+  </action>
+  <action name="actionRecipePreview">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print Preview</string>
+   </property>
+  </action>
+  <action name="actionRecipePrint">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionRecipeHTML">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export to HTML</string>
+   </property>
+  </action>
+  <action name="actionBackup_Database">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/backup.png</normaloff>:/images/backup.png</iconset>
+   </property>
+   <property name="text">
+    <string>Backup</string>
+   </property>
+  </action>
+  <action name="actionRestore_Database">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/restore.png</normaloff>:/images/restore.png</iconset>
+   </property>
+   <property name="text">
+    <string>Restore</string>
+   </property>
+  </action>
+  <action name="actionMergeDatabases">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/merge.png</normaloff>:/images/merge.png</iconset>
+   </property>
+   <property name="text">
+    <string>Merge</string>
+   </property>
+  </action>
+  <action name="actionNewRecipe">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
+   </property>
+   <property name="text">
+    <string>New Recipe</string>
    </property>
   </action>
  </widget>
