@@ -1660,31 +1660,6 @@
     <addaction name="actionAbout_BrewTarget"/>
     <addaction name="actionManual"/>
    </widget>
-   <widget class="QMenu" name="menuView">
-    <property name="title">
-     <string>View</string>
-    </property>
-    <addaction name="actionEquipments"/>
-    <addaction name="actionFermentables"/>
-    <addaction name="actionHops"/>
-    <addaction name="actionMiscs"/>
-    <addaction name="actionStyles"/>
-    <addaction name="actionYeasts"/>
-   </widget>
-   <widget class="QMenu" name="menuTools">
-    <property name="title">
-     <string>Tools</string>
-    </property>
-    <addaction name="actionConvert_Units"/>
-    <addaction name="actionOG_Correction_Help"/>
-    <addaction name="actionPitch_Rate_Calculator"/>
-    <addaction name="actionPriming_Calculator"/>
-    <addaction name="action_recipeToTextClipboard"/>
-    <addaction name="actionRefractometer_Tools"/>
-    <addaction name="actionScale_Recipe"/>
-    <addaction name="separator"/>
-    <addaction name="actionOptions"/>
-   </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
@@ -1728,6 +1703,31 @@
     <addaction name="menuRecipe"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionEquipments"/>
+    <addaction name="actionFermentables"/>
+    <addaction name="actionHops"/>
+    <addaction name="actionMiscs"/>
+    <addaction name="actionStyles"/>
+    <addaction name="actionYeasts"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionConvert_Units"/>
+    <addaction name="actionOG_Correction_Help"/>
+    <addaction name="actionPitch_Rate_Calculator"/>
+    <addaction name="actionPriming_Calculator"/>
+    <addaction name="action_recipeToTextClipboard"/>
+    <addaction name="actionRefractometer_Tools"/>
+    <addaction name="actionScale_Recipe"/>
+    <addaction name="separator"/>
+    <addaction name="actionOptions"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
