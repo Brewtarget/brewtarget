@@ -22,6 +22,7 @@
 #include <QDialog>
 #include <QWidget>
 #include "ui_aboutDialog.h"
+#include "config.h"
 
 class AboutDialog;
 
@@ -30,7 +31,11 @@ class AboutDialog : public QDialog, public Ui::aboutDialog
 public:
    AboutDialog(QWidget* parent=0)
            : QDialog(parent)
-           { setupUi(this); }
+   {
+      setupUi(this);
+			// Replaces the "%1" from the .ui with version number.
+      textBrowser->setHtml( textBrowser->toHtml().arg(VERSIONSTRING) );
+   }
 };
 
 #endif   /* _ABOUTDIALOG_H */

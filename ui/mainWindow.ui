@@ -26,7 +26,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>Brewtarget - 1.2.4</string>
+   <string>Brewtarget - $VERSIONSTRING</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../brewtarget.qrc">

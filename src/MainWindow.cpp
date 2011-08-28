@@ -86,7 +86,8 @@ MainWindow::MainWindow(QWidget* parent)
       db = Database::getDatabase();
    }
 
-   //setWindowIcon(QIcon(ICON48));
+   // Set the window title.
+   setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
    
    // Different palettes for some text.
    lcdPalette_old = lcdNumber_og->palette();
