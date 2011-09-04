@@ -107,7 +107,13 @@ void BrewDayScrollWidget::pushInstructionDown()
       return;
    
    int row = listWidget->currentRow();
+
    if( row >= listWidget->count() )
+      return;
+
+   // This happens when the user is bouncing on the Step Down button but no
+   // instruction is selected.
+   if ( row < 0 )
       return;
    
    recObs->swapInstructions(row, row+1);

@@ -308,7 +308,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
 
 void MashStepTableModel::moveStepUp(unsigned int i)
 {
-   if( mashObs == 0 || i-1 < 0 || i >= mashObs->getNumMashSteps() )
+   if( mashObs == 0 || i == 0 || i >= mashObs->getNumMashSteps() )
       return;
 
    mashObs->swapSteps(i, i-1);
@@ -316,6 +316,7 @@ void MashStepTableModel::moveStepUp(unsigned int i)
 
 void MashStepTableModel::moveStepDown(unsigned int i)
 {
+   // i is an unsigned int. How can i be less than 0?
    if( mashObs == 0 || i < 0 || i+1 >= mashObs->getNumMashSteps() )
       return;
 
