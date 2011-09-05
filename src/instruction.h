@@ -34,7 +34,10 @@ class Instruction : public Observable, public BeerXMLElement
 public:
    Instruction();
    Instruction(const QDomNode& instructionNode);
-
+   Instruction( const QString& name,
+                const QString& directions,
+                bool hasTimer = false,
+                const QString& timerVal = "0" );
    virtual ~Instruction() {}
 
    virtual void fromNode(const QDomNode& node); // From BeerXMLElement

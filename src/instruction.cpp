@@ -79,6 +79,19 @@ Instruction::Instruction() : Observable()
    setDefaults();
 }
 
+Instruction::Instruction(
+             const QString& n,
+             const QString& dir,
+             bool hasT,
+             const QString& timerVal
+             ) :
+             name(n),
+             directions(dir),
+             hasTimer(hasT),
+             timerValue(timerVal)
+{
+}
+
 Instruction::Instruction(const QDomNode& instructionNode)
 {
    fromNode(instructionNode);

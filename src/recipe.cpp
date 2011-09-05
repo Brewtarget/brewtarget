@@ -855,7 +855,7 @@ QVector<PreInstruction> Recipe::getHopSteps(Hop::Use type) const
        Hop* hop = hops[i];
        if( hop->getUse() == type )
        {
-          if( type == Hop::USEAROMA  || type == Hop::USEBOIL )
+          if( type == Hop::USEBOIL )
              str = QObject::tr("Put %1 %2 into boil for %3.");
           else if( type == Hop::USEDRY_HOP )
              str = QObject::tr("Put %1 %2 into fermenter for %3.");
@@ -863,6 +863,8 @@ QVector<PreInstruction> Recipe::getHopSteps(Hop::Use type) const
              str = QObject::tr("Put %1 %2 into first wort for %3.");
           else if( type == Hop::USEMASH )
              str = QObject::tr("Put %1 %2 into mash for %3.");
+          else if( type == Hop::USEAROMA )
+             str = QObject::tr("Steep %1 %2 in wort for %3.");
           else
           {
              Brewtarget::logW("Recipe::getHopSteps(): Unrecognized hop use.");
@@ -1190,6 +1192,15 @@ void Recipe::generateInstructions()
    // Add instructions in descending mash time order.
    addPreinstructions(preinstructions);
 
+   // FLAMEOUT
+   instructions += new Instruction(QObject::tr("Flameout"),
+                                   QObject::tr("Stop boiling the wort."));
+
+   // Steeped aroma hops
+   preinstructions.clear();
+   preinstructions += getHopSteps(Hop::USEAROMA);
+   addPreinstructions(preinstructions);
+   
    // Fermentation instructions
    preinstructions.clear();
 
