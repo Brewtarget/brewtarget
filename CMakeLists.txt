@@ -209,7 +209,7 @@ IF( WIN32 )
          FIND_PATH(MINGW_BIN_DIR "mingw32-c++.exe")
       ENDIF()
      
-     IF()
+     IF( NOT EXISTS ${MINGW_BIN_DIR} )
         MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw" )
      ELSE()
         SET( Qt_DLLs
