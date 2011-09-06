@@ -15,7 +15,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BrewTargetTreeView.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/brewtarget.cpp
-		${SRCDIR}/BtSplashScreen.cpp
+    ${SRCDIR}/BtSplashScreen.cpp
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
@@ -108,7 +108,7 @@ SET( brewtarget_UIS
     ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/brewNoteWidget.ui
-		${UIDIR}/btSplashScreen.ui
+    ${UIDIR}/btSplashScreen.ui
     ${UIDIR}/converterTool.ui
     ${UIDIR}/mainWindow.ui
     ${UIDIR}/mashStepEditor.ui
@@ -151,7 +151,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BrewTargetTreeModel.h
     ${SRCDIR}/BrewTargetTreeView.h
     ${SRCDIR}/BtDigitWidget.h
-		${SRCDIR}/BtSplashScreen.h
+    ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/EquipmentComboBox.h
     ${SRCDIR}/EquipmentEditor.h
@@ -207,8 +207,6 @@ SET( brewtarget_MOC_HEADERS
 # List of documentation files to be installed.
 SET( brewtarget_DOCS
      ${ROOTDIR}/README
-#     ${ROOTDIR}/COPYING.GPLv3
-#     ${ROOTDIR}/COPYING.WTFPL
      ${ROOTDIR}/COPYRIGHT
      ${ROOTDIR}/doc/manual/index.html
 )
@@ -315,7 +313,7 @@ ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
 # for apple bundles and microsoft NSIS installer.
 #
 # To make the packages, "make package". For source packages, "make package_source"
-IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
+IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND NOT APPLE)
   MESSAGE(STATUS "CMakeRoot: ${CMAKE_ROOT}/Modules/CPack.cmake")
 
   SET(CPACK_SET_DESTDIR "on")
@@ -350,46 +348,55 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND UNIX AND NOT APPLE)
        the important parameters, helps you with mash temperatures, and just makes the
        process of recipe formulation much easier." )
 
-#	SET(CPACK_RESOURCE_FILE_LICENSE		${CMAKE_CURRENT_SOURCE_DIR}//COPYING)
   SET(CPACK_PACKAGE_VERSION_MAJOR       ${brewtarget_VERSION_MAJOR})
-  SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})	# to create a debian confirm file-version-string
+  SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})   # to create a debian confirm file-version-string
   SET(CPACK_PACKAGE_FILE_NAME           "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CMAKE_SYSTEM_PROCESSOR}")
   SET(CPACK_SOURCE_PACKAGE_FILE_NAME    "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_source")
   SET(CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
-  #SET(CPACK_STRIP_FILES TRUE)
-  SET(CPACK_COMPONENTS_ALL Libraries ApplicationData)
+  IF( ${DO_RELEASE_BUILD} )
+    SET(CPACK_STRIP_FILES ${brewtarget_EXECUTABLE})
+  ENDIF()
 
- #===========================UNIX======================================
- IF(UNIX)
-  SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
+  #===========================UNIX======================================
+  IF(UNIX AND NOT APPLE)
+    SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
 
-  #-----------------DEB----------------
-  SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
-  # NOTE: Use the getdependencies script to get the dependencies!
-  SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), libx11-6, phonon (>= 4:4.5.2)" )
+    #-----------------DEB----------------
+    SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
+    # NOTE: Use the getdependencies script to get the dependencies!
+    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), libx11-6, phonon (>= 4:4.5.2)" )
 
-  SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
-  SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
-  SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
+    SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
+    SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
+    SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
 
-  SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING})
+    SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING})
 
-  #-----------------RPM-----------------
-  SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
-  SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
-  SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
+    #-----------------RPM-----------------
+    SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
+    SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
+    SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
+  #============================WINDOWS===============================
+  ELSEIF(WIN32)
+    # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
+    SET( CPACK_GENERATOR "NSIS" )
+   
+   SET( CPACK_RESOURCE_FILE_LICENSE "${ROOTDIR}/COPYRIGHT" )
+    # Extra start menu items.
+    #SET( CPACK_NSIS_MENU_LINKS
+    #     "bin/${brewtarget_EXECUTABLE}" "My Brewtarget"
+    #   )
+  #============================APPLE=================================
+  # NOTE: none of this gets executed right now.
+  ELSEIF(APPLE)
+    SET( CPACK_GENERATOR "Bundle" )
 
- #============================APPLE=================================
- ELSEIF(APPLE)
-  #---------------App Bundle---------------
-  SET( CPACK_GENERATOR "Bundle" )
+    SET( CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}" )
+    SET( CPACK_BUNDLE_ICON            "../mac/BrewtargetIcon.icns" )
+    SET( CPACK_BUNDLE_PLIST           "../mac/Info.plist" )
+    SET( CPACK_BUNDLE_STARTUP_COMMAND "${brewtarget_EXECUTABLE}")
 
-  SET( CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}" )
-  SET( CPACK_BUNDLE_ICON            "../mac/BrewtargetIcon.icns" )
-  SET( CPACK_BUNDLE_PLIST           "../mac/Info.plist" )
-  SET( CPACK_BUNDLE_STARTUP_COMMAND "${brewtarget_EXECUTABLE}")
-
- ENDIF()#========================================================================
+  ENDIF()#========================================================================
 
  INCLUDE(CPack)
 ENDIF()
@@ -466,5 +473,5 @@ ENDIF()
 #--------Windows installs---------
 IF( WIN32 )
    INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-            RUNTIME DESTINATION "${TARGETPATH}" )
+            RUNTIME DESTINATION ${TARGETPATH} )
 ENDIF()

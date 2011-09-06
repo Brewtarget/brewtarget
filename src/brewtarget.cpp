@@ -367,7 +367,7 @@ QString Brewtarget::getDataDir()
 
 #else // Windows OS.
 
-   dir += "/";
+   dir += "/../data/";
 
 #endif
 
@@ -391,7 +391,7 @@ QString Brewtarget::getDocDir()
 
 #else // Windows OS.
 
-   dir += "/doc/";
+   dir += "/../doc/";
 
 #endif
 
@@ -474,7 +474,7 @@ QString Brewtarget::getConfigDir(bool *success)
 #else // Windows OS.
 
    QString dir= app->applicationDirPath();
-   dir += "/";
+   dir += "/../data/";
    if( success != 0 )
       *success = true;
    return dir;

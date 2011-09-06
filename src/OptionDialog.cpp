@@ -257,7 +257,7 @@ void OptionDialog::saveAndClose()
 	 if( !newUserDataDir.endsWith("/") )
 		 newUserDataDir += "/";
 #else
-	 if( !newUserDataDir.endsWith("\\") && !newUserDataDir.endsWidth("/") )
+	 if( !newUserDataDir.endsWith("\\") && !newUserDataDir.endsWith("/") )
 		 newUserDataDir += "\\";
 #endif
 

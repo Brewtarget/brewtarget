@@ -91,7 +91,7 @@ IF( NOT QT_PHONON_FOUND )
       SET( EXT_LIBS ${EXT_LIBS} ${EXT_PHONON_LIB} )
       INCLUDE_DIRECTORIES( ${EXT_PHONON_PATH} )
    ELSE()
-      MESSAGE( STATUS "Phonon not found. Run cmake again with the option -DCMAKE_PREFIX_PATH=/path/to/phonon" )
+      MESSAGE( FATAL_ERROR "Phonon not found. Run cmake again with the option -DCMAKE_PREFIX_PATH=/path/to/phonon" )
    ENDIF()
 ENDIF()
 
@@ -141,9 +141,20 @@ IF( UNIX AND NOT APPLE )
   SET( TARGETPATH ${BINDIR} )
   SET( DOCPATH ${DOCDIR} )
 ELSEIF( WIN32 )
-  SET( DATAPATH "release" )
-  SET( TARGETPATH "release" )
-  SET( DOCPATH "release/doc" )
+  # Works for regular "make install", but not CPack/NSIS installer.
+  #SET( CMAKE_INSTALL_PREFIX "C:/Program Files/brewtarget-${brewtarget_VERSION_STRING}" )
+  #SET( DATAPATH "brewtarget-${brewtarget_VERSION_STRING}" )
+  #SET( TARGETPATH "brewtarget-${brewtarget_VERSION_STRING}" )
+  #SET( DOCPATH "brewtarget-${brewtarget_VERSION_STRING}/doc" )
+  
+  # For some damn reason, for the NSIS installer,
+  # the prefix needs to be empty. Also, seems that the .exe
+  # needs to be in bin/. Fucking piece of shit CPack...
+  # Can anybody shed some light on this situation?
+  SET( CMAKE_INSTALL_PREFIX "" )
+  SET( DATAPATH "data" )
+  SET( TARGETPATH "bin" )
+  SET( DOCPATH "doc" )
 ELSEIF( APPLE )
   SET( DATAPATH "Resources" )
   SET( DOCPATH  "Resources/en.lproj" )
@@ -165,6 +176,60 @@ SET( CONFIGDOCDIR "${DOCPATH}/" )
 # will be replaced by VAR as determined by cmake in config.h.
 CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
 
+#==========================Find dlls for Win32=================================
+
+IF( WIN32 )
+   SET( Qt_DLLs
+        ${QT_BINARY_DIR}/phonon4.dll
+        ${QT_BINARY_DIR}/QtCore4.dll
+        ${QT_BINARY_DIR}/QtGui4.dll
+        ${QT_BINARY_DIR}/QtNetwork4.dll
+        ${QT_BINARY_DIR}/QtSvg4.dll
+        ${QT_BINARY_DIR}/QtWebKit4.dll
+        ${QT_BINARY_DIR}/QtXml4.dll
+   )
+   SET( Phonon_Backend_DLLs
+        ${QT_PLUGINS_DIR}/phonon_backend/phonon_ds94.dll
+   )
+   SET( Image_Formats_DLLs
+        ${QT_PLUGINS_DIR}/imageformats/qgif4.dll
+        ${QT_PLUGINS_DIR}/imageformats/qico4.dll
+        ${QT_PLUGINS_DIR}/imageformats/qjpeg4.dll
+        ${QT_PLUGINS_DIR}/imageformats/qmng4.dll
+        ${QT_PLUGINS_DIR}/imageformats/qsvg4.dll
+        ${QT_PLUGINS_DIR}/imageformats/qtiff4.dll
+   )
+   SET( Icon_Engines_DLLs
+        ${QT_PLUGINS_DIR}/iconengines/qsvgicon4.dll
+   )
+
+   # Find extra MinGW-specific dlls.
+   IF( MINGW )
+      IF( NOT MINGW_BIN_DIR )
+         FIND_PATH(MINGW_BIN_DIR "mingw32-c++.exe")
+      ENDIF()
+     
+     IF()
+        MESSAGE( FATAL_ERROR "MinGW bin dir not found. Run cmake again with the option -DMINGW_BIN_DIR=c:/path/to/mingw" )
+     ELSE()
+        SET( Qt_DLLs
+             ${Qt_DLLs}
+             ${MINGW_BIN_DIR}/libgcc_s_dw2-1.dll
+             ${MINGW_BIN_DIR}/libstdc++-6.dll
+             ${MINGW_BIN_DIR}/mingwm10.dll
+        )
+     ENDIF()
+   ENDIF()
+   
+   INSTALL( FILES ${Qt_DLLs}
+            DESTINATION "bin" )
+   INSTALL( FILES ${Phonon_Backend_DLLs}
+            DESTINATION "bin/phonon_backend" )
+   INSTALL( FILES ${Image_Formats_DLLs}
+            DESTINATION "bin/imageformats" )
+   INSTALL( FILES ${Icon_Engines_DLLs}
+            DESTINATION "bin/iconengines" )
+ENDIF()
 
 # =====================Process other CMakeList.txt's===========================
 IF( ${BUILD_DESIGNER_PLUGINS} )
