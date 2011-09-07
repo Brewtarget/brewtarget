@@ -44,6 +44,8 @@ public slots:
    void resetAbsorption();
 
    void equipmentSelected( const QString& text );
+   void updateRecord();
+   void updateCheckboxRecord(int state);
 
 private:
    Equipment* obsEquip;
