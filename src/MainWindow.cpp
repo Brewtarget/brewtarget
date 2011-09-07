@@ -1624,6 +1624,7 @@ void MainWindow::saveMash()
    newMash->deepCopy(mash);
    
    (Database::getDatabase())->addMash(newMash);
+   mashComboBox->setIndexByMashName(newMash->getName());
 }
 
 void MainWindow::openDonateLink()
