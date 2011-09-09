@@ -34,6 +34,7 @@ public:
    EquipmentEditor( QWidget *parent=0 );
    virtual ~EquipmentEditor() {}
    void setEquipment( Equipment* e );
+   void resetEquipment();
 
 public slots:
    void save();
@@ -46,11 +47,16 @@ public slots:
    void equipmentSelected( const QString& text );
    void updateRecord();
    void updateCheckboxRecord(int state);
+   void changedText();
 
 private:
    Equipment* obsEquip;
+   Equipment* copyEquip;
+
+   bool changeText;
 
    virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
+   bool eventFilter(QObject *object, QEvent* event);
    void showChanges();
 };
 
