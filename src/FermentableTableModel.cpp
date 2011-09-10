@@ -126,7 +126,6 @@ void FermentableTableModel::setDisplayPercentages(bool var)
    displayPercentages = var;
 }
 
-
 void FermentableTableModel::notify(Observable* notifier, QVariant info)
 {
    int i;
@@ -251,7 +250,10 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
    }
    else if( displayPercentages && orientation == Qt::Vertical && role == Qt::DisplayRole )
    {
-      return QVariant( QString("%1%").arg( (double)100.0 *fermObs[section]->getAmount_kg()/totalFermMass_kg, 0, 'f', 0 ) );
+      double perMass = 0.0;
+      if ( totalFermMass_kg > 0.0 )
+         perMass = fermObs[section]->getAmount_kg()/totalFermMass_kg;
+      return QVariant( QString("%1%").arg( (double)100.0 * perMass, 0, 'f', 0 ) );
    }
    else
       return QVariant();
