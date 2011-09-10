@@ -245,6 +245,9 @@
           </property>
           <item>
            <layout class="QFormLayout" name="formLayout_5">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_9">
               <property name="sizePolicy">
@@ -398,58 +401,13 @@
              </widget>
             </item>
             <item row="4" column="0">
-             <widget class="QLabel" name="label_13">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>Hop utilization (pct)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QLineEdit" name="lineEdit_hopUtilization">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>100</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>100</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>Don't use this field. It is ignored.</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
              <widget class="QLabel" name="label_16">
               <property name="text">
                <string>Grain Absorption (L/kg)</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
-             <widget class="QPushButton" name="pushButton_absorption">
-              <property name="text">
-               <string>Default Absorption</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
+            <item row="4" column="1">
              <widget class="QLineEdit" name="lineEdit_grainAbsorption"/>
             </item>
             <item row="6" column="0">
@@ -461,6 +419,13 @@
             </item>
             <item row="6" column="1">
              <widget class="QLineEdit" name="lineEdit_boilingPoint"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QPushButton" name="pushButton_absorption">
+              <property name="text">
+               <string>Default Absorption</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

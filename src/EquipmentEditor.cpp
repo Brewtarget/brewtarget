@@ -60,7 +60,6 @@ EquipmentEditor::EquipmentEditor(QWidget* parent)
    connect(lineEdit_evaporationRate,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
    connect(lineEdit_topUpKettle,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
    connect(lineEdit_topUpWater,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_hopUtilization,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
    connect(lineEdit_trubChillerLoss,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
    connect(lineEdit_lauterDeadspace,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
    connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
@@ -128,7 +127,6 @@ void EquipmentEditor::clear()
    lineEdit_evaporationRate->setText(QString(""));
    lineEdit_topUpKettle->setText(QString(""));
    lineEdit_topUpWater->setText(QString(""));
-   lineEdit_hopUtilization->setText(QString(""));
 
    lineEdit_trubChillerLoss->setText(QString(""));
    lineEdit_lauterDeadspace->setText(QString(""));
@@ -176,7 +174,6 @@ void EquipmentEditor::save()
    obsEquip->setEvapRate_lHr(copyEquip->getEvapRate_lHr());
    obsEquip->setTopUpKettle_l( copyEquip->getTopUpKettle_l());
    obsEquip->setTopUpWater_l( copyEquip->getTopUpWater_l());
-   obsEquip->setHopUtilization_pct( copyEquip->getHopUtilization_pct());
 
    obsEquip->setTrubChillerLoss_l( copyEquip->getTrubChillerLoss_l());
    obsEquip->setLauterDeadspace_l( copyEquip->getLauterDeadspace_l());
@@ -273,7 +270,6 @@ void EquipmentEditor::showChanges()
    lineEdit_evaporationRate->setText(Brewtarget::displayAmount(e->getEvapRate_lHr(), Units::liters) );
    lineEdit_topUpKettle->setText(Brewtarget::displayAmount(e->getTopUpKettle_l(), Units::liters) );
    lineEdit_topUpWater->setText(Brewtarget::displayAmount(e->getTopUpWater_l(), Units::liters) );
-   lineEdit_hopUtilization->setText(Brewtarget::displayAmount(e->getHopUtilization_pct(), 0) );
 
    lineEdit_trubChillerLoss->setText(Brewtarget::displayAmount(e->getTrubChillerLoss_l(), Units::liters) );
    lineEdit_lauterDeadspace->setText(Brewtarget::displayAmount(e->getLauterDeadspace_l(), Units::liters) );
@@ -315,8 +311,6 @@ void EquipmentEditor::updateRecord()
       copyEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
    else if ( selection == lineEdit_topUpWater )
       copyEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
-   else if ( selection == lineEdit_hopUtilization )
-      copyEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble() );
    else if ( selection == lineEdit_trubChillerLoss )
       copyEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
    else if ( selection == lineEdit_lauterDeadspace )
@@ -358,5 +352,4 @@ bool EquipmentEditor::eventFilter(QObject *object, QEvent* event)
    changeText = false;
    return false;
 }
-
 
