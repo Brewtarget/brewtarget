@@ -178,6 +178,12 @@ Equipment::Equipment(const QDomNode& equipmentNode)
 
 Equipment::Equipment( Equipment* other )
 {
+   if( other == 0 )
+   {
+      setDefaults();
+      return;
+   }
+
    QDomDocument doc;
    QDomElement root = doc.createElement("root");
    QDomNodeList list;
