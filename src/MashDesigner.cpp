@@ -77,7 +77,14 @@ void MashDesigner::show()
 {
    // No point to run unless we have fermentables.
    if( recObs && recObs->getNumFermentables() == 0 )
+   {
+      QMessageBox::information(
+			   this,
+         tr("No Fermentables"),
+         tr("Your recipe must have fermentables to design a mash.")
+      );
       return;
+   }
 
    setVisible(nextStep(0));
 }
