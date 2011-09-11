@@ -75,6 +75,10 @@ void MashDesigner::setRecipe(Recipe* rec)
 
 void MashDesigner::show()
 {
+   // No point to run unless we have fermentables.
+   if( recObs && recObs->getNumFermentables() == 0 )
+      return;
+
    setVisible(nextStep(0));
 }
 
