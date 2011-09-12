@@ -204,80 +204,9 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastTableWidget.h
 )
 
-# List of documentation files to be installed.
-SET( brewtarget_DOCS
-     ${ROOTDIR}/README
-     ${ROOTDIR}/COPYRIGHT
-     ${ROOTDIR}/doc/manual/index.html
-)
-
-# List of data files to be installed.
-SET( brewtarget_DATA
-     ${DATADIR}/database.xml
-     ${DATADIR}/mashs.xml
-     ${DATADIR}/options.xml
-     ${DATADIR}/recipes.xml
-)
-
-# Desktop files to install.
-SET( brewtarget_DESKTOP
-     ${ROOTDIR}/brewtarget.desktop
-)
-
-# Icon files to install.
-SET( brewtarget_ICONS
-     ${ROOTDIR}/images/BrewtargetIcon.png
-)
-
-SET( TRANSLATIONS_FILES
-     ${TRANSLATIONSDIR}/bt_cs.ts # Czech
-     ${TRANSLATIONSDIR}/bt_de.ts # German
-     ${TRANSLATIONSDIR}/bt_en.ts # English
-     ${TRANSLATIONSDIR}/bt_es.ts # Spanish
-     ${TRANSLATIONSDIR}/bt_fr.ts # French
-     ${TRANSLATIONSDIR}/bt_nl.ts # Dutch
-     ${TRANSLATIONSDIR}/bt_pl.ts # Polish
-     ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese
-     ${TRANSLATIONSDIR}/bt_hu.ts # Hungarian
-)
-
 SET( FILES_TO_TRANSLATE
      ${brewtarget_SRCS}
      ${brewtarget_UIS}
-)
-
-SET( RCFILE ${WINDIR}/icon.rc )
-
-SET( brewtarget_SOUNDS
-     ${DATADIR}/sounds/45minLeft.mp3
-     ${DATADIR}/sounds/addFuckinHops.mp3
-     ${DATADIR}/sounds/aromaHops.mp3
-     ${DATADIR}/sounds/bitteringHops.mp3
-     ${DATADIR}/sounds/checkBoil.mp3
-     ${DATADIR}/sounds/checkFirstRunnings.mp3
-     ${DATADIR}/sounds/checkGravity.mp3
-     ${DATADIR}/sounds/checkHydrometer.mp3
-     ${DATADIR}/sounds/checkMashTemps.mp3
-     ${DATADIR}/sounds/checkTemp.mp3
-     ${DATADIR}/sounds/clarifyingAgent.mp3
-     ${DATADIR}/sounds/cleanup.mp3
-     ${DATADIR}/sounds/closeFuckinValves.mp3
-     ${DATADIR}/sounds/closeValves.mp3
-     ${DATADIR}/sounds/doughIn.mp3
-     ${DATADIR}/sounds/drinkAnotherHomebrew.mp3
-     ${DATADIR}/sounds/drinkHomebrew.mp3
-     ${DATADIR}/sounds/emptyMashTun.mp3
-     ${DATADIR}/sounds/extraPropane.mp3
-     ${DATADIR}/sounds/flameout.mp3
-     ${DATADIR}/sounds/flavorHops.mp3
-     ${DATADIR}/sounds/heatWater.mp3
-     ${DATADIR}/sounds/mashHops.mp3
-     ${DATADIR}/sounds/pitchYeast.mp3
-     ${DATADIR}/sounds/sanitize.mp3
-     ${DATADIR}/sounds/sparge.mp3
-     ${DATADIR}/sounds/startBurner.mp3
-     ${DATADIR}/sounds/startChill.mp3
-     ${DATADIR}/sounds/stirMash.mp3
 )
 
 #==================================Qt Junk=====================================
@@ -306,100 +235,6 @@ ENDIF()
 # Add a target for the QM_FILES so that we can add
 # the translations as a dependency for the executable later.
 ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
-
-#===============================Packaging======================================
-
-# NOTE: For now, this only calls CPack when we are unix. Need to add support
-# for apple bundles and microsoft NSIS installer.
-#
-# To make the packages, "make package". For source packages, "make package_source"
-IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND NOT APPLE)
-  MESSAGE(STATUS "CMakeRoot: ${CMAKE_ROOT}/Modules/CPack.cmake")
-
-  SET(CPACK_SET_DESTDIR "on")
-  SET(CPACK_PACKAGING_INSTALL_PREFIX "/tmp")
-  SET(CPACK_SOURCE_GENERATOR "TBZ2;")
-  SET(CPACK_SOURCE_IGNORE_FILES 
-      "/.svn/"
-      "~$"
-      "/CMakeFiles/"
-      "/_CPack_Packages/"
-      "^brewtarget.*deb$"
-      "^brewtarget.*rpm$"
-      "^brewtarget.*tar.*$"
-      "CPack.*"
-      "Makefile"
-      "cmake_install.*"
-      "\\\\.o$"
-      "/brewtarget.dir/"
-      "moc_.*"
-      "qrc_brewtarget.*"
-      "ui_.*h"
-      "install_manifest.*"
-      "config\\\\.h"
-  )
-
-  SET( CPACK_PACKAGE_VERSION ${brewtarget_VERSION_STRING} )
-  SET( CPACK_PACKAGE_VENDOR  "Philip G. Lee" )
-  SET( CPACK_PACKAGE_CONTACT "Philip G. Lee <rocketman768@gmail.com>" )
-  SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY "GUI beer brewing software" )
-  SET( CPACK_PACKAGE_DESCRIPTION "Brewtarget is a calculator for brewing beer. It is a Qt-based program which
-       allows you to create recipes from a database of ingredients. It calculates all
-       the important parameters, helps you with mash temperatures, and just makes the
-       process of recipe formulation much easier." )
-
-  SET(CPACK_PACKAGE_VERSION_MAJOR       ${brewtarget_VERSION_MAJOR})
-  SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})   # to create a debian confirm file-version-string
-  SET(CPACK_PACKAGE_FILE_NAME           "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CMAKE_SYSTEM_PROCESSOR}")
-  SET(CPACK_SOURCE_PACKAGE_FILE_NAME    "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_source")
-  SET(CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
-  IF( ${DO_RELEASE_BUILD} )
-    SET(CPACK_STRIP_FILES ${brewtarget_EXECUTABLE})
-  ENDIF()
-
-  #===========================UNIX======================================
-  IF(UNIX AND NOT APPLE)
-    SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
-
-    #-----------------DEB----------------
-    SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
-    # NOTE: Use the getdependencies script to get the dependencies!
-    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), libx11-6, phonon (>= 4:4.5.2)" )
-
-    SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
-    SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
-    SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
-
-    SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING})
-
-    #-----------------RPM-----------------
-    SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
-    SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
-    SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
-  #============================WINDOWS===============================
-  ELSEIF(WIN32)
-    # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
-    SET( CPACK_GENERATOR "NSIS" )
-   
-   SET( CPACK_RESOURCE_FILE_LICENSE "${ROOTDIR}/COPYRIGHT" )
-    # Extra start menu items.
-    #SET( CPACK_NSIS_MENU_LINKS
-    #     "bin/${brewtarget_EXECUTABLE}" "My Brewtarget"
-    #   )
-  #============================APPLE=================================
-  # NOTE: none of this gets executed right now.
-  ELSEIF(APPLE)
-    SET( CPACK_GENERATOR "Bundle" )
-
-    SET( CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}" )
-    SET( CPACK_BUNDLE_ICON            "../mac/BrewtargetIcon.icns" )
-    SET( CPACK_BUNDLE_PLIST           "../mac/Info.plist" )
-    SET( CPACK_BUNDLE_STARTUP_COMMAND "${brewtarget_EXECUTABLE}")
-
-  ENDIF()#========================================================================
-
- INCLUDE(CPack)
-ENDIF()
 
 #============================Icon for Windows==================================
 
@@ -434,44 +269,22 @@ ENDIF()
 
 # Link brewtarget against Qt libraries defined by QT_LIBRARIES
 TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${EXT_LIBRARIES} )
-
 MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${EXT_LIBRARIES}" )
 
-#==============================Setup install targets===========================
+#=================================Installs=====================================
 
-# Install the data.
-INSTALL( FILES ${brewtarget_DATA}
-         DESTINATION "${DATAPATH}" )
+# Install executable.
+INSTALL( TARGETS ${brewtarget_EXECUTABLE}
+         RUNTIME DESTINATION ${TARGETPATH} )
 
-# Install the translations
+# Install the translations.
 INSTALL(FILES ${QM_FILES}
         DESTINATION "${DATAPATH}/translations_qm")
 
-# Install the documentation.
-INSTALL( FILES ${brewtarget_DOCS}
-         DESTINATION "${DOCPATH}" )
-
-# Install sounds.
-INSTALL( FILES ${brewtarget_SOUNDS}
-         DESTINATION "${DATAPATH}/sounds" )
-
-# ---------Unix installs-----------
-IF( UNIX AND NOT APPLE )
-
-   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-            RUNTIME DESTINATION "${TARGETPATH}" )
-
-   # Install the icons.
-   INSTALL( FILES ${brewtarget_ICONS}
-            DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
-
-   # Install the .desktop file.
-   INSTALL( FILES ${brewtarget_DESKTOP}
-            DESTINATION "${DATAROOTDIR}/applications" )
-ENDIF()
-
-#--------Windows installs---------
-IF( WIN32 )
-   INSTALL( TARGETS ${brewtarget_EXECUTABLE}
-            RUNTIME DESTINATION ${TARGETPATH} )
+IF( APPLE )
+   # This SHOULD run macdeployqt on the app bundle at install time.
+   # Don't know if it works. Could someone try?
+   # May have to add a WORKING_DIRECTORY.
+   INSTALL( CODE
+            "EXECUTE_PROCESS( COMMAND ${QT_BINARY_DIR}/macdeployqt ${BT_BUNDLE_DIR} )" )
 ENDIF()

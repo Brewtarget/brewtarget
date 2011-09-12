@@ -156,12 +156,13 @@ ELSEIF( WIN32 )
   SET( TARGETPATH "bin" )
   SET( DOCPATH "doc" )
 ELSEIF( APPLE )
-  SET( DATAPATH "Resources" )
-  SET( DOCPATH  "Resources/en.lproj" )
+  SET( CMAKE_INSTALL_PREFIX "/" )
+	SET( BT_BUNDLE "Brewtarget-${brewtarget_VERSION_STRING}.app" )
+	SET( BT_BUNDLE_DIR "Applications/${BT_BUNDLE}" )
+  SET( DATAPATH "${BT_BUNDLE_DIR}/Contents/Resources" )
+  SET( TARGETPATH "${BT_BUNDLE_DIR}/Contents/MacOS" )
+  SET( DOCPATH  "${BT_BUNDLE_DIR}/Contents/Resources/en.lproj" )
 ENDIF()
-
-# DATAPATH=/usr/share/brewtarget
-#MESSAGE( STATUS "DATAPATH=${DATAPATH}" )
 
 #==============================Setup the config.h==============================
 
@@ -175,6 +176,83 @@ SET( CONFIGDOCDIR "${DOCPATH}/" )
 # to put the output. All variables in config.in written as "${VAR}$
 # will be replaced by VAR as determined by cmake in config.h.
 CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
+
+#================================Files=========================================
+
+# List of documentation files to be installed.
+SET( brewtarget_DOCS
+     ${ROOTDIR}/README
+     ${ROOTDIR}/COPYRIGHT
+     ${ROOTDIR}/doc/manual/index.html
+)
+
+# List of data files to be installed.
+SET( brewtarget_DATA
+     ${DATADIR}/database.xml
+     ${DATADIR}/mashs.xml
+     ${DATADIR}/options.xml
+     ${DATADIR}/recipes.xml
+)
+
+# Desktop files to install.
+SET( brewtarget_DESKTOP
+     ${ROOTDIR}/brewtarget.desktop
+)
+
+# Icon files to install.
+SET( brewtarget_ICONS
+     ${ROOTDIR}/images/BrewtargetIcon.png
+)
+
+SET( TRANSLATIONS_FILES
+     ${TRANSLATIONSDIR}/bt_cs.ts # Czech
+     ${TRANSLATIONSDIR}/bt_de.ts # German
+     ${TRANSLATIONSDIR}/bt_en.ts # English
+     ${TRANSLATIONSDIR}/bt_es.ts # Spanish
+     ${TRANSLATIONSDIR}/bt_fr.ts # French
+     ${TRANSLATIONSDIR}/bt_nl.ts # Dutch
+     ${TRANSLATIONSDIR}/bt_pl.ts # Polish
+     ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese
+     ${TRANSLATIONSDIR}/bt_hu.ts # Hungarian
+)
+
+SET( RCFILE ${WINDIR}/icon.rc )
+
+SET( brewtarget_SOUNDS
+     ${DATADIR}/sounds/45minLeft.mp3
+     ${DATADIR}/sounds/addFuckinHops.mp3
+     ${DATADIR}/sounds/aromaHops.mp3
+     ${DATADIR}/sounds/bitteringHops.mp3
+     ${DATADIR}/sounds/checkBoil.mp3
+     ${DATADIR}/sounds/checkFirstRunnings.mp3
+     ${DATADIR}/sounds/checkGravity.mp3
+     ${DATADIR}/sounds/checkHydrometer.mp3
+     ${DATADIR}/sounds/checkMashTemps.mp3
+     ${DATADIR}/sounds/checkTemp.mp3
+     ${DATADIR}/sounds/clarifyingAgent.mp3
+     ${DATADIR}/sounds/cleanup.mp3
+     ${DATADIR}/sounds/closeFuckinValves.mp3
+     ${DATADIR}/sounds/closeValves.mp3
+     ${DATADIR}/sounds/doughIn.mp3
+     ${DATADIR}/sounds/drinkAnotherHomebrew.mp3
+     ${DATADIR}/sounds/drinkHomebrew.mp3
+     ${DATADIR}/sounds/emptyMashTun.mp3
+     ${DATADIR}/sounds/extraPropane.mp3
+     ${DATADIR}/sounds/flameout.mp3
+     ${DATADIR}/sounds/flavorHops.mp3
+     ${DATADIR}/sounds/heatWater.mp3
+     ${DATADIR}/sounds/mashHops.mp3
+     ${DATADIR}/sounds/pitchYeast.mp3
+     ${DATADIR}/sounds/sanitize.mp3
+     ${DATADIR}/sounds/sparge.mp3
+     ${DATADIR}/sounds/startBurner.mp3
+     ${DATADIR}/sounds/startChill.mp3
+     ${DATADIR}/sounds/stirMash.mp3
+)
+
+SET( brewtarget_INFO_PLIST "${ROOTDIR}/mac/Info.plist" )
+
+SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 
 #==========================Find dlls for Win32=================================
 
@@ -220,7 +298,127 @@ IF( WIN32 )
         )
      ENDIF()
    ENDIF()
+ENDIF()
+
+#===============================Packaging======================================
+# To make the packages, "make package". For source packages, "make package_source"
+
+IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND NOT APPLE)
+  SET(CPACK_SET_DESTDIR "on")
+  SET(CPACK_PACKAGING_INSTALL_PREFIX "/tmp")
+  SET(CPACK_SOURCE_GENERATOR "TBZ2;")
+  SET(CPACK_SOURCE_IGNORE_FILES 
+      "/.svn/"
+      "~$"
+      "/CMakeFiles/"
+      "/_CPack_Packages/"
+      "^brewtarget.*deb$"
+      "^brewtarget.*rpm$"
+      "^brewtarget.*tar.*$"
+      "CPack.*"
+      "Makefile"
+      "cmake_install.*"
+      "\\\\.o$"
+      "/brewtarget.dir/"
+      "moc_.*"
+      "qrc_brewtarget.*"
+      "ui_.*h"
+      "install_manifest.*"
+      "config\\\\.h"
+  )
+
+  SET( CPACK_PACKAGE_VERSION ${brewtarget_VERSION_STRING} )
+  SET( CPACK_PACKAGE_VENDOR  "Philip G. Lee" )
+  SET( CPACK_PACKAGE_CONTACT "Philip G. Lee <rocketman768@gmail.com>" )
+  SET( CPACK_PACKAGE_DESCRIPTION_SUMMARY "GUI beer brewing software" )
+  SET( CPACK_PACKAGE_DESCRIPTION
+       "Brewtarget is a calculator for brewing beer. It is a Qt-based program which
+       allows you to create recipes from a database of ingredients. It calculates all
+       the important parameters, helps you with mash temperatures, and just makes the
+       process of recipe formulation much easier." )
+
+  SET(CPACK_PACKAGE_VERSION_MAJOR       ${brewtarget_VERSION_MAJOR})
+  SET(CPACK_PACKAGE_VERSION_MINOR       ${brewtarget_VERSION_MINOR})   # to create a debian confirm file-version-string
+  SET(CPACK_PACKAGE_FILE_NAME           "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_${CMAKE_SYSTEM_PROCESSOR}")
+  SET(CPACK_SOURCE_PACKAGE_FILE_NAME    "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}_source")
+  SET(CPACK_PACKAGE_EXECUTABLES "${brewtarget_EXECUTABLE}" "Brewtarget" )
+  IF( ${DO_RELEASE_BUILD} )
+    SET(CPACK_STRIP_FILES ${brewtarget_EXECUTABLE})
+  ENDIF()
+
+  #===========================UNIX======================================
+  IF(UNIX AND NOT APPLE)
+    SET(CPACK_GENERATOR "DEB;RPM;TBZ2;")
+
+    #-----------------DEB----------------
+    SET( CPACK_DEBIAN_PACKAGE_MAINTAINER "Philip G. Lee <rocketman768@gmail.com>" )
+    # NOTE: Use the getdependencies script to get the dependencies!
+    SET( CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.6-6~), libc6 (>= 2.4), libgcc1 (>= 1:4.1.1), libphonon4 (>= 4:4.2.0), libqt4-dbus (>= 4:4.5.3), libqt4-svg (>= 4:4.5.3), libqt4-webkit (>= 4:4.5.3), libqt4-xml (>= 4:4.5.3), libqtcore4 (>= 4:4.6.1), libqtgui4 (>= 4:4.5.3), libstdc++6 (>= 4.1.1), libx11-6, phonon (>= 4:4.5.2)" )
+
+    SET( CPACK_DEBIAN_PACKAGE_SECTION "misc" )
+    SET( CPACK_DEBIAN_PACKAGE_VERSION "${brewtarget_VERSION_STRING}-1")
+    SET( CPACK_DEBIAN_PACKAGE_PRIORITY "optional" )
+
+    SET(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING})
+
+    #-----------------RPM-----------------
+    SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
+    SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
+    SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
+  #============================WINDOWS===============================
+  ELSEIF(WIN32)
+    # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
+    SET( CPACK_GENERATOR "NSIS" )
    
+    SET( CPACK_RESOURCE_FILE_LICENSE "${ROOTDIR}/COPYRIGHT" )
+    # Extra start menu items.
+    #SET( CPACK_NSIS_MENU_LINKS
+    #     "bin/${brewtarget_EXECUTABLE}" "My Brewtarget"
+    #   )
+  #============================APPLE=================================
+  #ELSEIF(APPLE)
+  #  SET( CPACK_GENERATOR "Bundle" )
+  #
+  #  SET( CPACK_BUNDLE_NAME            "${CMAKE_PROJECT_NAME}_${brewtarget_VERSION_STRING}" )
+  #  SET( CPACK_BUNDLE_ICON            "../mac/BrewtargetIcon.icns" )
+  #  SET( CPACK_BUNDLE_PLIST           "../mac/Info.plist" )
+  #  SET( CPACK_BUNDLE_STARTUP_COMMAND "${brewtarget_EXECUTABLE}")
+  #
+  ELSEIF(APPLE)
+    SET( CPACK_GENERATOR "DragNDrop" )
+    SET( CPACK_DMG_FORMAT "UDBZ" )
+  ENDIF()
+
+ INCLUDE(CPack)
+ENDIF()
+
+#================================Installs======================================
+
+# Install the data.
+INSTALL( FILES ${brewtarget_DATA}
+         DESTINATION ${DATAPATH} )
+
+# Install the documentation.
+INSTALL( FILES ${brewtarget_DOCS}
+         DESTINATION ${DOCPATH} )
+
+# Install sounds.
+INSTALL( FILES ${brewtarget_SOUNDS}
+         DESTINATION "${DATAPATH}/sounds" )
+
+#-----------Unix-----------
+IF( UNIX AND NOT APPLE )
+   # Install the icons.
+   INSTALL( FILES ${brewtarget_ICONS}
+            DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+
+   # Install the .desktop file.
+   INSTALL( FILES ${brewtarget_DESKTOP}
+            DESTINATION "${DATAROOTDIR}/applications" )
+ENDIF()
+
+#--------Windows--------
+IF( WIN32 )
    INSTALL( FILES ${Qt_DLLs}
             DESTINATION "bin" )
    INSTALL( FILES ${Phonon_Backend_DLLs}
@@ -231,6 +429,22 @@ IF( WIN32 )
             DESTINATION "bin/iconengines" )
 ENDIF()
 
+#---------Mac--------
+# http://pmarinc-tidylib.googlecode.com/hg/src/Sigil/CMakeLists.txt?r=8276c61e05bc385d5ffbcc58e1f007f84b0c52df
+IF( APPLE )
+   # Info.plist
+   INSTALL( FILES ${brewtarget_INFO_PLIST}
+            DESTINATION "${BT_BUNDLE_DIR}/Contents" )
+   # Icons
+   INSTALL( FILES ${brewtarget_MAC_ICNS}
+            DESTINATION ${DATAPATH} )
+
+   # make addframeworks should copy the Qt libraries to the app.
+   # May have to add a WORKING_DIRECTORY.
+   ADD_CUSTOM_TARGET( addframeworks ALL
+                      COMMAND ${QT_BINARY_DIR}/macdeployqt ${BT_BUNDLE_DIR} )
+ENDIF()
+
 # =====================Process other CMakeList.txt's===========================
 IF( ${BUILD_DESIGNER_PLUGINS} )
    MESSAGE( STATUS "Building Qt Designer plugins." )
@@ -239,4 +453,3 @@ ELSE()
    MESSAGE( STATUS "Building Brewtarget." )
    ADD_SUBDIRECTORY(${SRCDIR})
 ENDIF()
-
