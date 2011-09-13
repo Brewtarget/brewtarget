@@ -106,9 +106,6 @@
        <attribute name="headerVisible">
         <bool>false</bool>
        </attribute>
-       <attribute name="headerVisible">
-        <bool>false</bool>
-       </attribute>
       </widget>
       <widget class="QSplitter" name="splitter">
        <property name="acceptDrops">
@@ -126,8 +123,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>675</width>
-           <height>341</height>
+           <width>728</width>
+           <height>345</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1083,8 +1080,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>693</width>
-           <height>263</height>
+           <width>743</width>
+           <height>267</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1128,12 +1125,6 @@
                  <bool>false</bool>
                 </attribute>
                 <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderCascadingSectionResizes">
                  <bool>false</bool>
                 </attribute>
                </widget>
@@ -1650,23 +1641,23 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>About</string>
+     <string>&amp;About</string>
     </property>
     <addaction name="actionAbout_BrewTarget"/>
     <addaction name="actionManual"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <widget class="QMenu" name="menuBrewday">
      <property name="title">
-      <string>Brewday</string>
+      <string>&amp;Brewday</string>
      </property>
      <addaction name="actionBrewdayPreview"/>
      <addaction name="actionBrewdayPrint"/>
@@ -1674,7 +1665,7 @@
     </widget>
     <widget class="QMenu" name="menuRecipe">
      <property name="title">
-      <string>Recipe</string>
+      <string>&amp;Recipe</string>
      </property>
      <addaction name="actionRecipePreview"/>
      <addaction name="actionRecipePrint"/>
@@ -1682,7 +1673,7 @@
     </widget>
     <widget class="QMenu" name="menuDatabase">
      <property name="title">
-      <string>Database</string>
+      <string>&amp;Database</string>
      </property>
      <property name="icon">
       <iconset resource="../brewtarget.qrc">
@@ -1706,7 +1697,7 @@
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>View</string>
+     <string>&amp;View</string>
     </property>
     <addaction name="actionEquipments"/>
     <addaction name="actionFermentables"/>
@@ -1717,7 +1708,7 @@
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Tools</string>
+     <string>&amp;Tools</string>
     </property>
     <addaction name="actionConvert_Units"/>
     <addaction name="actionOG_Correction_Help"/>
@@ -1752,7 +1743,7 @@
      <normaloff>:/images/smallInfo.svg</normaloff>:/images/smallInfo.svg</iconset>
    </property>
    <property name="text">
-    <string>About BrewTarget</string>
+    <string>About &amp;BrewTarget</string>
    </property>
   </action>
   <action name="actionExportRecipe">
@@ -1761,7 +1752,7 @@
      <normaloff>:/images/smallOutArrow.svg</normaloff>:/images/smallOutArrow.svg</iconset>
    </property>
    <property name="text">
-    <string>Export Recipe</string>
+    <string>&amp;Export Recipe</string>
    </property>
   </action>
   <action name="actionFermentables">
@@ -1770,7 +1761,10 @@
      <normaloff>:/images/smallBarley.svg</normaloff>:/images/smallBarley.svg</iconset>
    </property>
    <property name="text">
-    <string>Fermentables</string>
+    <string>&amp;Fermentables</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionHops">
@@ -1779,7 +1773,10 @@
      <normaloff>:/images/smallHop.svg</normaloff>:/images/smallHop.svg</iconset>
    </property>
    <property name="text">
-    <string>Hops</string>
+    <string>&amp;Hops</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
   <action name="actionMiscs">
@@ -1788,7 +1785,10 @@
      <normaloff>:/images/smallQuestion.svg</normaloff>:/images/smallQuestion.svg</iconset>
    </property>
    <property name="text">
-    <string>Miscs</string>
+    <string>&amp;Miscs</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
    </property>
   </action>
   <action name="actionYeasts">
@@ -1797,7 +1797,10 @@
      <normaloff>:/images/smallYeast.svg</normaloff>:/images/smallYeast.svg</iconset>
    </property>
    <property name="text">
-    <string>Yeasts</string>
+    <string>&amp;Yeasts</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
   <action name="actionEquipments">
@@ -1806,7 +1809,10 @@
      <normaloff>:/images/smallKettle.svg</normaloff>:/images/smallKettle.svg</iconset>
    </property>
    <property name="text">
-    <string>Equipments</string>
+    <string>&amp;Equipments</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
   <action name="actionStyles">
@@ -1815,7 +1821,10 @@
      <normaloff>:/images/smallStyle.svg</normaloff>:/images/smallStyle.svg</iconset>
    </property>
    <property name="text">
-    <string>Styles</string>
+    <string>&amp;Styles</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="actionExit">
@@ -1824,7 +1833,10 @@
      <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionImport_Recipes">
@@ -1833,37 +1845,37 @@
      <normaloff>:/images/smallArrow.svg</normaloff>:/images/smallArrow.svg</iconset>
    </property>
    <property name="text">
-    <string>Import Recipes</string>
+    <string>&amp;Import Recipes</string>
    </property>
   </action>
   <action name="actionOptions">
    <property name="text">
-    <string>Options</string>
+    <string>&amp;Options</string>
    </property>
   </action>
   <action name="actionManual">
    <property name="text">
-    <string>Manual</string>
+    <string>&amp;Manual</string>
    </property>
   </action>
   <action name="actionScale_Recipe">
    <property name="text">
-    <string>Scale Recipe</string>
+    <string>&amp;Scale Recipe</string>
    </property>
   </action>
   <action name="action_recipeToTextClipboard">
    <property name="text">
-    <string>Recipe to Clipboard as Text</string>
+    <string>Recipe to Clipboard as &amp;Text</string>
    </property>
   </action>
   <action name="actionOG_Correction_Help">
    <property name="text">
-    <string>OG Correction Help</string>
+    <string>&amp;OG Correction Help</string>
    </property>
   </action>
   <action name="actionConvert_Units">
    <property name="text">
-    <string>Convert Units</string>
+    <string>&amp;Convert Units</string>
    </property>
   </action>
   <action name="actionBackup_Database_old">
@@ -1882,22 +1894,25 @@
      <normaloff>:/images/edit-copy.png</normaloff>:/images/edit-copy.png</iconset>
    </property>
    <property name="text">
-    <string>Copy Recipe</string>
+    <string>&amp;Copy Recipe</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="actionPriming_Calculator">
    <property name="text">
-    <string>Priming Calculator</string>
+    <string>Pr&amp;iming Calculator</string>
    </property>
   </action>
   <action name="actionRefractometer_Tools">
    <property name="text">
-    <string>Refractometer Tools</string>
+    <string>&amp;Refractometer Tools</string>
    </property>
   </action>
   <action name="actionPitch_Rate_Calculator">
    <property name="text">
-    <string>Pitch Rate Calculator</string>
+    <string>&amp;Pitch Rate Calculator</string>
    </property>
   </action>
   <action name="actionBrewdayPrint_old">
@@ -1944,7 +1959,7 @@
      <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
    </property>
    <property name="text">
-    <string>Print</string>
+    <string>&amp;Print</string>
    </property>
   </action>
   <action name="actionBrewdayPreview">
@@ -1953,7 +1968,7 @@
      <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
    </property>
    <property name="text">
-    <string>Print Preview</string>
+    <string>Print Pre&amp;view</string>
    </property>
   </action>
   <action name="actionBrewdayHTML">
@@ -1962,7 +1977,7 @@
      <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
    </property>
    <property name="text">
-    <string>Export To HTML</string>
+    <string>&amp;Export To HTML</string>
    </property>
   </action>
   <action name="actionRecipePreview">
@@ -1971,7 +1986,7 @@
      <normaloff>:/images/document-print-preview.png</normaloff>:/images/document-print-preview.png</iconset>
    </property>
    <property name="text">
-    <string>Print Preview</string>
+    <string>Print Pre&amp;view</string>
    </property>
   </action>
   <action name="actionRecipePrint">
@@ -1980,7 +1995,7 @@
      <normaloff>:/images/printer.png</normaloff>:/images/printer.png</iconset>
    </property>
    <property name="text">
-    <string>Print</string>
+    <string>&amp;Print</string>
    </property>
   </action>
   <action name="actionRecipeHTML">
@@ -1989,7 +2004,7 @@
      <normaloff>:/images/document-export.png</normaloff>:/images/document-export.png</iconset>
    </property>
    <property name="text">
-    <string>Export to HTML</string>
+    <string>&amp;Export to HTML</string>
    </property>
   </action>
   <action name="actionBackup_Database">
@@ -1998,7 +2013,7 @@
      <normaloff>:/images/backup.png</normaloff>:/images/backup.png</iconset>
    </property>
    <property name="text">
-    <string>Backup</string>
+    <string>&amp;Backup</string>
    </property>
    <property name="toolTip">
     <string>Save all recipes, ingredients, etc. to a backup folder</string>
@@ -2010,7 +2025,7 @@
      <normaloff>:/images/restore.png</normaloff>:/images/restore.png</iconset>
    </property>
    <property name="text">
-    <string>Restore</string>
+    <string>&amp;Restore</string>
    </property>
    <property name="toolTip">
     <string>Restore recipes, ingredients, etc. from a previous backup</string>
@@ -2022,7 +2037,7 @@
      <normaloff>:/images/merge.png</normaloff>:/images/merge.png</iconset>
    </property>
    <property name="text">
-    <string>Merge</string>
+    <string>&amp;Merge</string>
    </property>
    <property name="toolTip">
     <string>Merge another set of recipes, ingredients, etc. into the current set</string>
@@ -2034,7 +2049,10 @@
      <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
    </property>
    <property name="text">
-    <string>New Recipe</string>
+    <string>&amp;New Recipe</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

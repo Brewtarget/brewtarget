@@ -364,6 +364,7 @@ void MainWindow::setupToolbar()
    viewYeast->setToolTip(tr("View yeasts"));
    timers->setToolTip(tr("Timers"));
 
+   save->setShortcut(QKeySequence::Save);
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
    toolBar->addWidget(clearRec);
