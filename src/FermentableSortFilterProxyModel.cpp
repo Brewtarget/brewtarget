@@ -20,6 +20,7 @@
 #include "FermentableSortFilterProxyModel.h"
 #include "FermentableTableModel.h"
 #include <iostream>
+#include <QDebug>
 
 FermentableSortFilterProxyModel::FermentableSortFilterProxyModel(QObject *parent) 
 : QSortFilterProxyModel(parent)
@@ -35,13 +36,29 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
    switch( left.column() )
    {
       case FERMAMOUNTCOL:
-        return Unit::qstringToSI(leftFermentable.toString()) < Unit::qstringToSI(rightFermentable.toString());
+         // This is a bit twisted. If the numbers are equal, reset the left
+         // and right to the names and let it hit the default
+         if (Unit::qstringToSI(leftFermentable.toString()) == Unit::qstringToSI(rightFermentable.toString()))
+            return getName(right) < getName(left);
+         else
+            return Unit::qstringToSI(leftFermentable.toString()) < Unit::qstringToSI(rightFermentable.toString());
       case FERMYIELDCOL:
-        return leftFermentable.toDouble() < rightFermentable.toDouble();
+         if (leftFermentable.toDouble() == rightFermentable.toDouble() )
+            return getName(right) < getName(left);
+         else
+            return leftFermentable.toDouble() < rightFermentable.toDouble();
       case FERMCOLORCOL:
-        return leftFermentable.toDouble() < rightFermentable.toDouble();
-    }
+         if (leftFermentable.toDouble() == rightFermentable.toDouble())
+            return getName(right) < getName(left);
+         else
+            return leftFermentable.toDouble() < rightFermentable.toDouble();
+   }
 
-    return leftFermentable.toString() < rightFermentable.toString();
+   return leftFermentable.toString() < rightFermentable.toString();
 }
 
+QString FermentableSortFilterProxyModel::getName( const QModelIndex &index ) const
+{
+   QVariant info = sourceModel()->data(QAbstractItemModel::createIndex(index.row(),FERMNAMECOL));
+   return info.toString();
+}

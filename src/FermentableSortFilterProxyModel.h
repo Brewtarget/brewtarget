@@ -33,6 +33,8 @@ public:
 protected:
    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
+private:
+   QString getName( const QModelIndex &index ) const;
 };
 
 #endif
