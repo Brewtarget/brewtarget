@@ -123,8 +123,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>728</width>
-           <height>345</height>
+           <width>645</width>
+           <height>339</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1080,8 +1080,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>743</width>
-           <height>267</height>
+           <width>660</width>
+           <height>271</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1641,7 +1641,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>25</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1896,9 +1896,6 @@
    <property name="text">
     <string>&amp;Copy Recipe</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+C</string>
-   </property>
   </action>
   <action name="actionPriming_Calculator">
    <property name="text">
@@ -2050,9 +2047,6 @@
    </property>
    <property name="text">
     <string>&amp;New Recipe</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

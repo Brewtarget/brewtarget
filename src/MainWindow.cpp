@@ -158,7 +158,9 @@ MainWindow::MainWindow(QWidget* parent)
    yeastTable->setSortingEnabled(true);
    yeastTable->sortByColumn( YEASTNAMECOL, Qt::DescendingOrder );
 
+   // Create the toolbar and the keyboard shortcuts
    setupToolbar();
+   setupShortCuts();
 
    // Set up the printer
    printer = new QPrinter;
@@ -319,6 +321,14 @@ MainWindow::MainWindow(QWidget* parent)
 
 }
 
+// This can't be done in qtCreator, because it doesn't understand the
+// QKeySequence:: constructs
+void MainWindow::setupShortCuts()
+{
+   actionNewRecipe->setShortcut(QKeySequence::New);
+   actionCopy_Recipe->setShortcut(QKeySequence::Copy);
+}
+
 void MainWindow::setupToolbar()
 {
    QToolButton *newRec, *clearRec, *save, *removeSel,
@@ -364,7 +374,10 @@ void MainWindow::setupToolbar()
    viewYeast->setToolTip(tr("View yeasts"));
    timers->setToolTip(tr("Timers"));
 
+   // These are done here because we have access to the QToolButton objects
    save->setShortcut(QKeySequence::Save);
+   removeSel->setShortcut(QKeySequence::Delete);
+
    toolBar->addWidget(newRec);
    toolBar->addWidget(save);
    toolBar->addWidget(clearRec);

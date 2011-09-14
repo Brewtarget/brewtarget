@@ -205,6 +205,7 @@ private:
    //! set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
    void setupToolbar();
+   void setupShortCuts();
    void setupContextMenu();
 
    void showChanges(const QVariant& info = QVariant());
