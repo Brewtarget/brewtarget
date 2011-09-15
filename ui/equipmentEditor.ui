@@ -575,7 +575,7 @@ p, li { white-space: pre-wrap; }
   &lt;tr&gt; &lt;td&gt;Aluminum&lt;/td&gt; &lt;td&gt;- 0.215&lt;/td&gt;&lt;/tr&gt;
   &lt;tr&gt; &lt;td&gt;Brass&lt;/td&gt; &lt;td&gt;- 0.092&lt;/td&gt;&lt;/tr&gt;
   &lt;tr&gt; &lt;td&gt;Copper&lt;/td&gt; &lt;td&gt;- 0.092&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Plastic&lt;/td&gt; &lt;td&gt;- 0.260&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt; &lt;td&gt;Plastic&lt;/td&gt; &lt;td&gt;- 0.359&lt;/td&gt;&lt;/tr&gt;
   &lt;tr&gt; &lt;td&gt;Steel&lt;/td&gt; &lt;td&gt;- 0.120&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;
 &lt;/body&gt;&lt;/html&gt;</string>
