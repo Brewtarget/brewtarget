@@ -616,7 +616,7 @@ QString RecipeFormatter::buildHopsTable()
       Hop *hop = rec->getHop(i);
       hTable += QString("<tr><td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>")
             .arg( hop->getName())
-            .arg( hop->getAlpha_pct(), 0, 'f', 0)
+            .arg( hop->getAlpha_pct(), 0, 'g', 3)
             .arg( Brewtarget::displayAmount(hop->getAmount_kg(), Units::kilograms))
             .arg( hop->getUseStringTr())
             .arg( Brewtarget::displayAmount(hop->getTime_min(), Units::minutes) )
