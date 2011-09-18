@@ -303,7 +303,7 @@ ENDIF()
 #===============================Packaging======================================
 # To make the packages, "make package". For source packages, "make package_source"
 
-IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" AND NOT APPLE)
+IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_SET_DESTDIR "on")
   SET(CPACK_PACKAGING_INSTALL_PREFIX "/tmp")
   SET(CPACK_SOURCE_GENERATOR "TBZ2;")
