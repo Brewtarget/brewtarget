@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1048</width>
-    <height>776</height>
+    <height>829</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -63,11 +63,17 @@
     </item>
     <item>
      <widget class="QSplitter" name="splitter_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
       <property name="handleWidth">
-       <number>10</number>
+       <number>2</number>
       </property>
       <widget class="BrewTargetTreeView" name="brewTargetTreeView">
        <property name="sizePolicy">
@@ -123,8 +129,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>645</width>
-           <height>339</height>
+           <width>682</width>
+           <height>346</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -380,6 +386,13 @@
                  </layout>
                 </item>
                </layout>
+              </item>
+              <item>
+               <widget class="Line" name="line">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_lcd">
@@ -1080,8 +1093,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>660</width>
-           <height>271</height>
+           <width>682</width>
+           <height>286</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1641,7 +1654,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1685,6 +1698,7 @@
     </widget>
     <addaction name="actionNewRecipe"/>
     <addaction name="actionCopy_Recipe"/>
+    <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionImport_Recipes"/>
     <addaction name="actionExportRecipe"/>
@@ -1717,6 +1731,7 @@
     <addaction name="action_recipeToTextClipboard"/>
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
+    <addaction name="actionTimers"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
@@ -1736,6 +1751,19 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNewRecipe"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionClearRecipe"/>
+   <addaction name="actionDeleteSelected"/>
+   <addaction name="separator"/>
+   <addaction name="actionEquipments"/>
+   <addaction name="actionFermentables"/>
+   <addaction name="actionHops"/>
+   <addaction name="actionMiscs"/>
+   <addaction name="actionStyles"/>
+   <addaction name="actionYeasts"/>
+   <addaction name="separator"/>
+   <addaction name="actionTimers"/>
   </widget>
   <action name="actionAbout_BrewTarget">
    <property name="icon">
@@ -2047,6 +2075,54 @@
    </property>
    <property name="text">
     <string>&amp;New Recipe</string>
+   </property>
+  </action>
+  <action name="actionTimers">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/clock.svg</normaloff>:/images/clock.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Timers</string>
+   </property>
+   <property name="toolTip">
+    <string>Show timers</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionClearRecipe">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/editshred.svg</normaloff>:/images/editshred.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Clear recipe</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear recipe</string>
+   </property>
+  </action>
+  <action name="actionDeleteSelected">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete selected</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete recipe</string>
    </property>
   </action>
  </widget>

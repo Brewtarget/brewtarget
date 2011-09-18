@@ -158,8 +158,7 @@ MainWindow::MainWindow(QWidget* parent)
    yeastTable->setSortingEnabled(true);
    yeastTable->sortByColumn( YEASTNAMECOL, Qt::DescendingOrder );
 
-   // Create the toolbar and the keyboard shortcuts
-   setupToolbar();
+   // Create the keyboard shortcuts
    setupShortCuts();
 
    // Set up the printer
@@ -245,12 +244,10 @@ MainWindow::MainWindow(QWidget* parent)
          setRecipe( *(db->getRecipeBegin()) );
    }
 
-
    setDirty(false);
+
    // Connect signals.
-   connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
-   connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashByName(const QString&)) );
-   connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
+   // actions
    connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
    connect( actionAbout_BrewTarget, SIGNAL( triggered() ), dialog_about, SLOT( show() ) );
    connect( actionNewRecipe, SIGNAL( triggered() ), this, SLOT( newRecipe() ) );
@@ -275,21 +272,28 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), pitchDialog, SLOT(show()));
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(mergeDatabases()) );
-
-   // TreeView for clicks, both double and right
-   connect( brewTargetTreeView, SIGNAL(doubleClicked(const QModelIndex &)), this,
-         SLOT(treeActivated(const QModelIndex &)));
-   connect( brewTargetTreeView, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
+   connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
+   connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
+   connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
+   connect( actionClearRecipe, SIGNAL(triggered()), this, SLOT(clear()) );
 
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionRecipePreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionRecipeHTML, SIGNAL(triggered()), this, SLOT(print()));
-
    connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
+
+   connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
+   connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashByName(const QString&)) );
+   connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
+
+   // TreeView for clicks, both double and right
+   connect( brewTargetTreeView, SIGNAL(doubleClicked(const QModelIndex &)), this,
+            SLOT(treeActivated(const QModelIndex &)));
+   connect( brewTargetTreeView, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
 
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
@@ -321,89 +325,12 @@ MainWindow::MainWindow(QWidget* parent)
 
 }
 
-// This can't be done in qtCreator, because it doesn't understand the
-// QKeySequence:: constructs
 void MainWindow::setupShortCuts()
 {
    actionNewRecipe->setShortcut(QKeySequence::New);
    actionCopy_Recipe->setShortcut(QKeySequence::Copy);
-}
-
-void MainWindow::setupToolbar()
-{
-   QToolButton *newRec, *clearRec, *save, *removeSel,
-               *viewEquip, *viewFerm, *viewHops,
-               *viewMiscs, *viewStyles, *viewYeast,
-               *timers;
-
-   setIconSize(QSize(16, 16));
-
-   newRec = new QToolButton(toolBar);
-   clearRec = new QToolButton(toolBar);
-   removeSel = new QToolButton(toolBar);
-   save = new QToolButton(toolBar);
-   viewEquip = new QToolButton(toolBar);
-   viewFerm = new QToolButton(toolBar);
-   viewHops = new QToolButton(toolBar);
-   viewMiscs = new QToolButton(toolBar);
-   viewStyles = new QToolButton(toolBar);
-   viewYeast = new QToolButton(toolBar);
-   timers = new QToolButton(toolBar);
-   
-   newRec->setIcon(QIcon(SMALLPLUS));
-   clearRec->setIcon(QIcon(SHRED));
-   removeSel->setIcon(QIcon(SMALLMINUS));
-   save->setIcon(QIcon(SAVEPNG));
-   viewEquip->setIcon(QIcon(SMALLKETTLE));
-   viewFerm->setIcon(QIcon(SMALLBARLEY));
-   viewHops->setIcon(QIcon(SMALLHOP));
-   viewMiscs->setIcon(QIcon(SMALLQUESTION));
-   viewStyles->setIcon(QIcon(SMALLSTYLE));
-   viewYeast->setIcon(QIcon(SMALLYEAST));
-   timers->setIcon(QIcon(CLOCKPNG));
-
-   newRec->setToolTip(tr("New recipe"));
-   clearRec->setToolTip(tr("Clear recipe"));
-   removeSel->setToolTip(tr("Remove recipe"));
-   save->setToolTip(tr("Save database"));
-   viewEquip->setToolTip(tr("View equipments"));
-   viewFerm->setToolTip(tr("View fermentables"));
-   viewHops->setToolTip(tr("View hops"));
-   viewMiscs->setToolTip(tr("View miscs"));
-   viewStyles->setToolTip(tr("View styles"));
-   viewYeast->setToolTip(tr("View yeasts"));
-   timers->setToolTip(tr("Timers"));
-
-   // These are done here because we have access to the QToolButton objects
-   save->setShortcut(QKeySequence::Save);
-   removeSel->setShortcut(QKeySequence::Delete);
-
-   toolBar->addWidget(newRec);
-   toolBar->addWidget(save);
-   toolBar->addWidget(clearRec);
-   toolBar->addWidget(removeSel);
-   toolBar->addSeparator();
-   toolBar->addWidget(viewEquip);
-   toolBar->addWidget(viewFerm);
-   toolBar->addWidget(viewHops);
-   toolBar->addWidget(viewMiscs);
-   toolBar->addWidget(viewStyles);
-   toolBar->addWidget(viewYeast);
-   toolBar->addSeparator();
-   toolBar->addWidget(timers);
-
-   connect( newRec, SIGNAL(clicked()), this, SLOT(newRecipe()) );
-   connect( removeSel, SIGNAL(clicked()), this, SLOT(deleteSelected()) );
-   connect( save, SIGNAL(clicked()), this, SLOT(save()) );
-   connect( clearRec, SIGNAL(clicked()), this, SLOT(clear()) );
-   connect( viewEquip, SIGNAL(clicked()), equipEditor, SLOT(show()) );
-   connect( viewFerm, SIGNAL(clicked()), fermDialog, SLOT(show()) );
-   connect( viewHops, SIGNAL(clicked()), hopDialog, SLOT(show()) );
-   connect( viewMiscs, SIGNAL(clicked()), miscDialog, SLOT(show()) );
-   connect( viewStyles, SIGNAL(clicked()), styleEditor, SLOT(show()) );
-   connect( viewYeast, SIGNAL(clicked()), yeastDialog, SLOT(show()) );
-   connect( timers, SIGNAL(clicked()), timerListDialog, SLOT(show()) );
-   //connect( extras, SIGNAL(clicked()), recipeExtrasDialog, SLOT(show()) );
+   actionSave->setShortcut(QKeySequence::Save);
+   actionDeleteSelected->setShortcut(QKeySequence::Delete);
 }
 
 void MainWindow::deleteSelected()
