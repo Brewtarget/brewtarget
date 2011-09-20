@@ -75,11 +75,13 @@ public:
    static double volQStringToSI( QString qstr );
    static double tempQStringToSI( QString qstr );
    static double timeQStringToSI( QString qstr );
+   static double colorQStringToSI(QString qstr);
 
    static bool hasUnits(QString qstr);
    static iUnitSystem getWeightUnitSystem();
    static iUnitSystem getVolumeUnitSystem();
    static TempScale getTemperatureScale();
+   static int getColorUnit();
    
    static void readPersistentOptions();
    static void savePersistentOptions();

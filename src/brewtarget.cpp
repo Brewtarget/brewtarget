@@ -348,6 +348,11 @@ iUnitSystem Brewtarget::getVolumeUnitSystem()
    return volumeUnitSystem;
 }
 
+int Brewtarget::getColorUnit()
+{
+   return colorUnit;
+}
+
 TempScale Brewtarget::getTemperatureScale()
 {
    return tempScale;
@@ -954,6 +959,14 @@ double Brewtarget::tempQStringToSI(QString qstr)
    return tempSystem->qstringToSI(qstr);
 }
 
+double Brewtarget::colorQStringToSI(QString qstr)
+{
+   if ( colorUnit == SRM )
+      return qstr.toDouble();
+   else
+      return qstr.toDouble() * 12.7/25.0;
+}
+
 double Brewtarget::timeQStringToSI(QString qstr)
 {
    return timeSystem->qstringToSI(qstr);
@@ -961,6 +974,7 @@ double Brewtarget::timeQStringToSI(QString qstr)
 
 bool Brewtarget::hasUnits(QString qstr)
 {
+   // accepts X.YZ as well as .YZ followed by some unit string
    QRegExp amtUnit("(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(\\w+)?");
    amtUnit.indexIn(qstr);
 

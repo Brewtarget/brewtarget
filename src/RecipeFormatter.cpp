@@ -528,7 +528,7 @@ QString RecipeFormatter::buildTitleTable()
            .arg(tr("Bitterness"))
            .arg(bitterness);
    // Fifth row: Color and calories.  Set up the color string first
-   color = tr("%1 SRM (%2)").arg(rec->getColor_srm(), 0, 'f', 0);
+   color = tr("%1 (%2)").arg(Brewtarget::displayColor(rec->getColor_srm(),true));
    switch( Brewtarget::colorFormula )
    {
       case Brewtarget::MOREY:
@@ -579,14 +579,14 @@ QString RecipeFormatter::buildFermentableTable()
    {
       Fermentable* ferm = rec->getFermentable(i);
       ftable += "<tr>";
-      ftable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7 L</td>")
+      ftable += QString("<td>%1</td><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6%</td><td>%7</td>")
             .arg( ferm->getName())
             .arg( ferm->getTypeStringTr())
             .arg( Brewtarget::displayAmount(ferm->getAmount_kg(), Units::kilograms))
             .arg( ferm->getIsMashed() ? tr("Yes") : tr("No") )
             .arg( ferm->getAddAfterBoil() ? tr("Yes") : tr("No"))
             .arg( ferm->getYield_pct(), 0, 'f', 0)
-            .arg( ferm->getColor_srm(), 0, 'f', 0);
+            .arg( Brewtarget::displayColor(ferm->getColor_srm(),true));
       ftable += "</tr>";
    }
    ftable += "</table>";

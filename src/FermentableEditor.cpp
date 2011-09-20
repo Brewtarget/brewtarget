@@ -67,7 +67,7 @@ void FermentableEditor::save()
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
    obsFerm->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
    obsFerm->setYield_pct(lineEdit_yield->text().toDouble());
-   obsFerm->setColor_srm(lineEdit_color->text().toDouble());
+   obsFerm->setColor_srm(Brewtarget::colorQStringToSI(lineEdit_color->text()));
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
    obsFerm->setOrigin( lineEdit_origin->text() );
    obsFerm->setSupplier( lineEdit_supplier->text() );
@@ -108,6 +108,11 @@ void FermentableEditor::showChanges()
    if( obsFerm == 0 )
       return;
 
+   if (Brewtarget::getColorUnit() == Brewtarget::SRM)
+      label_5->setText(QString("Color (Lovibond)"));
+   else
+      label_5->setText(QString("Color (EBC)"));
+
    lineEdit_name->setText(obsFerm->getName());
    lineEdit_name->setCursorPosition(0);
    // NOTE: assumes the comboBox entries are in same order as Fermentable::Type
@@ -115,7 +120,7 @@ void FermentableEditor::showChanges()
 
    lineEdit_amount->setText(Brewtarget::displayAmount(obsFerm->getAmount_kg(), Units::kilograms));
    lineEdit_yield->setText(Brewtarget::displayAmount(obsFerm->getYield_pct(), 0));
-   lineEdit_color->setText(Brewtarget::displayAmount(obsFerm->getColor_srm(), 0));
+   lineEdit_color->setText(Brewtarget::displayColor(obsFerm->getColor_srm(), false));
    checkBox_addAfterBoil->setCheckState( obsFerm->getAddAfterBoil()? Qt::Checked : Qt::Unchecked );
    lineEdit_origin->setText(obsFerm->getOrigin());
    lineEdit_origin->setCursorPosition(0);

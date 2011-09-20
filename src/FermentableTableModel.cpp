@@ -214,7 +214,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
             return QVariant();
       case FERMCOLORCOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->getColor_srm(), 0) );
+            return QVariant( Brewtarget::displayColor(row->getColor_srm(), 0) );
          else
             return QVariant();
       default :
@@ -242,7 +242,10 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
          case FERMYIELDCOL:
             return QVariant(tr("Yield %"));
          case FERMCOLORCOL:
-            return QVariant(tr("Color (SRM)"));
+            if ( Brewtarget::getColorUnit() == Brewtarget::SRM)
+               return QVariant(tr("Color (SRM)"));
+            else
+               return QVariant(tr("Color (EBC)"));
          default:
             Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
             return QVariant();
