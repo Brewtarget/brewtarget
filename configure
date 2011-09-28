@@ -50,7 +50,7 @@ fi
 echo "Prefix: $PREFIX";
 
 # If we have a prefix...
-if [ -n $PREFIX ]
+if [ -n "$PREFIX" ]
 then
    #...define the prefix.
    CMAKEOPTIONS="$CMAKEOPTIONS -DCMAKE_INSTALL_PREFIX=$PREFIX";
