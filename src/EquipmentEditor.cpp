@@ -73,8 +73,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent)
    connect(lineEdit_boilingPoint,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
 
    // Doing the text properly is actually a two step thing. The first is to
-   // connect to the textChanged() signal, but only to do a flag. The second
-   // is to use an event filter to actually handle the updates
+   // connect to the textChanged() signal, but only to set a "has changed" flag. The second
+   // is to use an event filter to actually handle the updates.
    connect(textEdit_notes, SIGNAL(textChanged()),this,SLOT(changedText()));
    textEdit_notes->installEventFilter(this);
 
@@ -376,9 +376,13 @@ bool EquipmentEditor::eventFilter(QObject *object, QEvent* event)
          copyEquip = new Equipment( obsEquip );
 
       textptr = qobject_cast<QTextEdit*>(object);
-      copyEquip->setNotes( textptr->toPlainText());
+      if( textptr )
+      {
+         copyEquip->setNotes( textptr->toPlainText());
+         changeText = false;
+      }
    }
-   changeText = false;
+   
    return false;
 }
 
