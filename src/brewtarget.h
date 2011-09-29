@@ -66,7 +66,9 @@ public:
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3 );
    //! Displays thickness in appropriate units from standard thickness in L/kg.
-   static QString displayThickness( double thick_lkg );
+   static QString displayThickness( double thick_lkg, bool showUnits=true );
+   //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.
+   static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
    //! Display gravity appropriately.
    static QString displayOG( double og, bool showUnits=false );
    static QString displayFG( double fg, double og, bool showUnits=false ); // Need OG if we're using plato.

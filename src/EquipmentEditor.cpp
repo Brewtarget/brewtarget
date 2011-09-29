@@ -37,6 +37,12 @@ EquipmentEditor::EquipmentEditor(QWidget* parent)
 
    setWindowIcon(QIcon(SMALLKETTLE));
 
+   // Set grain absorption label based on units.
+   Unit* weightUnit = 0;
+   Unit* volumeUnit = 0;
+   Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
+   label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
+   
    equipmentComboBox->startObservingDB();
    obsEquip = 0;
    copyEquip = 0;
@@ -179,6 +185,8 @@ void EquipmentEditor::save()
    obsEquip->setLauterDeadspace_l( copyEquip->getLauterDeadspace_l());
 
    obsEquip->setNotes(copyEquip->getNotes());
+   
+   
    obsEquip->setGrainAbsorption_LKg( copyEquip->getGrainAbsorption_LKg());
    obsEquip->setBoilingPoint_c( copyEquip->getBoilingPoint_c());
 
@@ -230,8 +238,14 @@ void EquipmentEditor::resetAbsorption()
       copyEquip = new Equipment(obsEquip);
    }
 
+   // Get weight and volume units for grain absorption.
+   Unit* weightUnit = 0;
+   Unit* volumeUnit = 0;
+   Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
+   double gaCustomUnits = HeatCalculations::absorption_LKg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
+   
    copyEquip->setGrainAbsorption_LKg( HeatCalculations::absorption_LKg );
-   lineEdit_grainAbsorption->setText(QString("%1").arg(copyEquip->getGrainAbsorption_LKg(), 0, 'f', 3));
+   lineEdit_grainAbsorption->setText(QString("%1").arg(gaCustomUnits, 0, 'f', 3));
 }
 
 void EquipmentEditor::notify(Observable* /*notifier*/, QVariant info)
@@ -254,6 +268,12 @@ void EquipmentEditor::showChanges()
       return;
    }
 
+   // Get weight and volume units for grain absorption.
+   Unit* weightUnit = 0;
+   Unit* volumeUnit = 0;
+   Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
+   label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
+
    equipmentComboBox->setIndexByEquipmentName(e->getName());
 
    lineEdit_name->setText(e->getName());
@@ -263,21 +283,23 @@ void EquipmentEditor::showChanges()
    lineEdit_batchSize->setText( Brewtarget::displayAmount(e->getBatchSize_l(), Units::liters) );
 
    lineEdit_tunVolume->setText( Brewtarget::displayAmount(e->getTunVolume_l(), Units::liters) );
-   lineEdit_tunWeight->setText(Brewtarget::displayAmount(e->getTunWeight_kg(), Units::kilograms));
-   lineEdit_tunSpecificHeat->setText(Brewtarget::displayAmount(e->getTunSpecificHeat_calGC(), 0) );
+   lineEdit_tunWeight->setText( Brewtarget::displayAmount(e->getTunWeight_kg(), Units::kilograms) );
+   lineEdit_tunSpecificHeat->setText( Brewtarget::displayAmount(e->getTunSpecificHeat_calGC(), 0) );
 
-   lineEdit_boilTime->setText(Brewtarget::displayAmount(e->getBoilTime_min(), Units::minutes) );
-   lineEdit_evaporationRate->setText(Brewtarget::displayAmount(e->getEvapRate_lHr(), Units::liters) );
-   lineEdit_topUpKettle->setText(Brewtarget::displayAmount(e->getTopUpKettle_l(), Units::liters) );
-   lineEdit_topUpWater->setText(Brewtarget::displayAmount(e->getTopUpWater_l(), Units::liters) );
+   lineEdit_boilTime->setText( Brewtarget::displayAmount(e->getBoilTime_min(), Units::minutes) );
+   lineEdit_evaporationRate->setText( Brewtarget::displayAmount(e->getEvapRate_lHr(), Units::liters) );
+   lineEdit_topUpKettle->setText( Brewtarget::displayAmount(e->getTopUpKettle_l(), Units::liters) );
+   lineEdit_topUpWater->setText( Brewtarget::displayAmount(e->getTopUpWater_l(), Units::liters) );
 
-   lineEdit_trubChillerLoss->setText(Brewtarget::displayAmount(e->getTrubChillerLoss_l(), Units::liters) );
-   lineEdit_lauterDeadspace->setText(Brewtarget::displayAmount(e->getLauterDeadspace_l(), Units::liters) );
+   lineEdit_trubChillerLoss->setText( Brewtarget::displayAmount(e->getTrubChillerLoss_l(), Units::liters) );
+   lineEdit_lauterDeadspace->setText( Brewtarget::displayAmount(e->getLauterDeadspace_l(), Units::liters) );
 
-   textEdit_notes->setText(e->getNotes());
+   textEdit_notes->setText( e->getNotes() );
 
-   lineEdit_grainAbsorption->setText(QString("%1").arg(e->getGrainAbsorption_LKg(), 0, 'f', 3));
-   lineEdit_boilingPoint->setText(Brewtarget::displayAmount(e->getBoilingPoint_c(), Units::celsius));
+   double gaCustomUnits = e->getGrainAbsorption_LKg() * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
+   lineEdit_grainAbsorption->setText( QString("%1").arg( gaCustomUnits, 0, 'f', 3) );
+   
+   lineEdit_boilingPoint->setText( Brewtarget::displayAmount(e->getBoilingPoint_c(), Units::celsius) );
 }
 
 void EquipmentEditor::updateRecord()
@@ -287,6 +309,10 @@ void EquipmentEditor::updateRecord()
    if( obsEquip == 0 )
       return;
  
+   Unit* weightUnit = 0;
+   Unit* volumeUnit = 0;
+   Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
+   
    // First change, perform the deep copy
    if ( copyEquip == 0 )
       copyEquip = new Equipment( obsEquip );
@@ -316,7 +342,10 @@ void EquipmentEditor::updateRecord()
    else if ( selection == lineEdit_lauterDeadspace )
       copyEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
    else if ( selection == lineEdit_grainAbsorption )
-      copyEquip->setGrainAbsorption_LKg( lineEdit_grainAbsorption->text().toDouble() );
+   {
+      double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
+      copyEquip->setGrainAbsorption_LKg( ga_LKg );
+   }
    else if ( selection == lineEdit_boilingPoint )
       copyEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
 

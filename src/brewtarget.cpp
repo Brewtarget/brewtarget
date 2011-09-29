@@ -605,7 +605,13 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
    return ret;
 }
 
-QString Brewtarget::displayThickness(double thick_lkg)
+void Brewtarget::getThicknessUnits( Unit** volumeUnit, Unit** weightUnit )
+{
+   *volumeUnit = volumeSystem->thicknessUnit();
+   *weightUnit = weightSystem->thicknessUnit();
+}
+
+QString Brewtarget::displayThickness( double thick_lkg, bool showUnits )
 {
    int fieldWidth = 0;
    char format = 'f';
@@ -617,7 +623,10 @@ QString Brewtarget::displayThickness(double thick_lkg)
    double num = volUnit->fromSI(thick_lkg);
    double den = weightUnit->fromSI(1.0);
 
-   return QString("%1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
+   if( showUnits )
+      return QString("%1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
+   else
+      return QString("%1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
 }
 
 QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString& option, bool* hasOption)

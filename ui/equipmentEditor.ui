@@ -401,7 +401,7 @@
              </widget>
             </item>
             <item row="4" column="0">
-             <widget class="QLabel" name="label_16">
+             <widget class="QLabel" name="label_absorption">
               <property name="text">
                <string>Grain Absorption (L/kg)</string>
               </property>
