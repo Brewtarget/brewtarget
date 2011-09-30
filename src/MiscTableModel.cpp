@@ -323,7 +323,9 @@ void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 
    if( column == MISCTYPECOL || column == MISCUSECOL )
    {
-      QComboBox* box = reinterpret_cast<QComboBox*>(editor);
+      QComboBox* box = qobject_cast<QComboBox*>(editor);
+      if( box == 0 )
+         return;
       box->setCurrentIndex(index.model()->data(index, Qt::UserRole).toInt());
    }
    else

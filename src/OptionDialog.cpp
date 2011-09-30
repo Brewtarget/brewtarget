@@ -247,7 +247,7 @@ void OptionDialog::saveAndClose()
    Brewtarget::colorUnit = colorUnit;
 
    // Set the right language.
-   Brewtarget::setLanguage( languageToButtonMap.key(reinterpret_cast<QPushButton*>(languageGroup->checkedButton())) );
+   Brewtarget::setLanguage( languageToButtonMap.key(qobject_cast<QPushButton*>(languageGroup->checkedButton())) );
    
    // Check the new userDataDir.
    newUserDataDir = lineEdit_dbDir->text();

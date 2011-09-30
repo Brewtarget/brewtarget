@@ -39,14 +39,14 @@ ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) : QDialog(parent)
 
 void ScaleRecipeTool::scaleGroupButtonPressed(QAbstractButton *button)
 {
-   if( button == reinterpret_cast<QAbstractButton*>(checkBox_batchSize) )
+   if( button == qobject_cast<QAbstractButton*>(checkBox_batchSize) )
    {
       lineEdit_newBatchSize->setDisabled(false);
       lineEdit_newEfficiency->setDisabled(true);
       return;
    }
 
-   if( button == reinterpret_cast<QAbstractButton*>(checkBox_efficiency) )
+   if( button == qobject_cast<QAbstractButton*>(checkBox_efficiency) )
    {
       lineEdit_newBatchSize->setDisabled(true);
       lineEdit_newEfficiency->setDisabled(false);
@@ -73,7 +73,7 @@ void ScaleRecipeTool::show()
 
 void ScaleRecipeTool::scale()
 {
-   QCheckBox* button = reinterpret_cast<QCheckBox*>(scaleGroup.checkedButton());
+   QCheckBox* button = qobject_cast<QCheckBox*>(scaleGroup.checkedButton());
 
    if( button == checkBox_batchSize )
       scaleByVolume();
