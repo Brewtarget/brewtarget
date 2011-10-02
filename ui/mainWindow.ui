@@ -112,6 +112,9 @@
        <attribute name="headerVisible">
         <bool>false</bool>
        </attribute>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
       </widget>
       <widget class="QSplitter" name="splitter">
        <property name="acceptDrops">
@@ -130,7 +133,7 @@
            <x>0</x>
            <y>0</y>
            <width>682</width>
-           <height>346</height>
+           <height>345</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1140,6 +1143,12 @@
                 <attribute name="horizontalHeaderStretchLastSection">
                  <bool>false</bool>
                 </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderCascadingSectionResizes">
+                 <bool>false</bool>
+                </attribute>
                </widget>
               </item>
               <item>
@@ -1753,14 +1762,15 @@
    </attribute>
    <addaction name="actionNewRecipe"/>
    <addaction name="actionSave"/>
-   <addaction name="actionClearRecipe"/>
    <addaction name="actionDeleteSelected"/>
+   <addaction name="actionClearRecipe"/>
    <addaction name="separator"/>
    <addaction name="actionEquipments"/>
+   <addaction name="actionStyles"/>
+   <addaction name="separator"/>
    <addaction name="actionFermentables"/>
    <addaction name="actionHops"/>
    <addaction name="actionMiscs"/>
-   <addaction name="actionStyles"/>
    <addaction name="actionYeasts"/>
    <addaction name="separator"/>
    <addaction name="actionTimers"/>
