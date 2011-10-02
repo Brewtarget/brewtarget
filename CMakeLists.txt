@@ -205,6 +205,7 @@ SET( brewtarget_ICONS
 )
 
 SET( TRANSLATIONS_FILES
+     ${TRANSLATIONSDIR}/bt_ca.ts # Catalan
      ${TRANSLATIONSDIR}/bt_cs.ts # Czech
      ${TRANSLATIONSDIR}/bt_de.ts # German
      ${TRANSLATIONSDIR}/bt_en.ts # English
