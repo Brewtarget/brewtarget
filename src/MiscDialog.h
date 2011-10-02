@@ -41,7 +41,7 @@ public:
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
-   void addMisc();
+   void addMisc(const QModelIndex& = QModelIndex());
    void removeMisc();
    void editSelected();
    void newMisc();

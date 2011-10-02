@@ -44,6 +44,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
+   connect( miscTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
 }
 
 void MiscDialog::removeMisc()
@@ -96,24 +97,41 @@ void MiscDialog::populateTable()
       miscTableWidget->getModel()->addMisc(*it);
 }
 
-void MiscDialog::addMisc()
+void MiscDialog::addMisc(const QModelIndex& index)
 {
-   QModelIndexList selected = miscTableWidget->selectedIndexes();
-   int row, size, i;
-
-   size = selected.size();
-   if( size == 0 )
-      return;
-
-   // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
+   QModelIndex translated;
+   
+   if( !index.isValid() )
    {
-      if( selected[i].row() != row )
+      QModelIndexList selected = miscTableWidget->selectedIndexes();
+      int row, size, i;
+
+      size = selected.size();
+      if( size == 0 )
+         return;
+
+      // Make sure only one row is selected.
+      row = selected[0].row();
+      for( i = 1; i < size; ++i )
+      {
+         if( selected[i].row() != row )
+            return;
+      }
+      
+      translated = selected[0];
+   }
+   else
+   {
+      // Only respond if the name is selected. Since we connect to double-click signal,
+      // this keeps us from adding something to the recipe when we just want to edit
+      // one of the other columns.
+      if( index.column() == MISCNAMECOL )
+         translated = miscTableWidget->getProxy()->mapToSource(index);
+      else
          return;
    }
-
-   Misc *misc = miscTableWidget->getModel()->getMisc(row);
+   
+   Misc *misc = miscTableWidget->getModel()->getMisc(translated.row());
    mainWindow->addMiscToRecipe(new Misc(*misc) ); // Need to add a copy so we don't change the database.
 }
 

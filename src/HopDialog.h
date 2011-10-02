@@ -41,7 +41,7 @@ public:
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
-   void addHop();
+   void addHop(const QModelIndex& = QModelIndex());
    void removeHop();
    void editSelected();
    void newHop();

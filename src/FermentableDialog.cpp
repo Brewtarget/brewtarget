@@ -43,6 +43,7 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeFermentable() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
+   connect( fermentableTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT(addFermentable(const QModelIndex&)) );
 }
 
 void FermentableDialog::removeFermentable()
@@ -121,25 +122,41 @@ void FermentableDialog::populateTable()
       fermentableTableWidget->getModel()->addFermentable(*it);
 }
 
-void FermentableDialog::addFermentable()
+void FermentableDialog::addFermentable(const QModelIndex& index)
 {
-   QModelIndexList selected = fermentableTableWidget->selectedIndexes();
    QModelIndex translated;
-   int row, size, i;
-
-   size = selected.size();
-   if( size == 0 )
-      return;
-
-   // Make sure only one row is selected.
-   row = selected[0].row();
-   for( i = 1; i < size; ++i )
+   
+   // If there is no provided index, get the selected index.
+   if( !index.isValid() )
    {
-      if( selected[i].row() != row )
+      QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+      int row, size, i;
+
+      size = selected.size();
+      if( size == 0 )
+         return;
+
+      // Make sure only one row is selected.
+      row = selected[0].row();
+      for( i = 1; i < size; ++i )
+      {
+         if( selected[i].row() != row )
+            return;
+      }
+      
+      translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
+   }
+   else
+   {
+      // Only respond if the name is selected. Since we connect to double-click signal,
+      // this keeps us from adding something to the recipe when we just want to edit
+      // one of the other fermentable fields.
+      if( index.column() == FERMNAMECOL )
+         translated = fermentableTableWidget->getProxy()->mapToSource(index);
+      else
          return;
    }
-
-   translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
+   
    Fermentable *ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
    mainWindow->addFermentableToRecipe(new Fermentable(*ferm) ); // Need to add a copy so we don't change the database.
 }

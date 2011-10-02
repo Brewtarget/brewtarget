@@ -42,7 +42,10 @@ public:
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
-   void addFermentable();
+   /*! If \b index is the default, will add the selected fermentable to list.
+    *  Otherwise, will add the fermentable at the specified index.
+    */
+   void addFermentable(const QModelIndex& index = QModelIndex());
    void removeFermentable();
    void editSelected();
    void newFermentable();

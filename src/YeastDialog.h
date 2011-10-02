@@ -41,7 +41,7 @@ public:
    virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
-   void addYeast();
+   void addYeast(const QModelIndex& = QModelIndex());
    void removeYeast();
    void editSelected();
    void newYeast();

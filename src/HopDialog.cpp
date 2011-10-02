@@ -44,6 +44,7 @@ HopDialog::HopDialog(MainWindow* parent)
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
+   connect( hopTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
 }
 
 void HopDialog::removeHop()
@@ -108,25 +109,39 @@ void HopDialog::populateTable()
       hopTableWidget->getModel()->addHop(*it);
 }
 
-void HopDialog::addHop()
+void HopDialog::addHop(const QModelIndex& index)
 {
-   QModelIndexList selected = hopTableWidget->selectedIndexes();
    QModelIndex translated;
-   int row, size, i;
-
-   size = selected.size();
-   if( size == 0 )
-      return;
-
-   // Make sure only one row is selected.
-   row = selected.value(0).row();
-   for( i = 1; i < size; ++i )
+   if( !index.isValid() )
    {
-      if( selected.value(i).row() != row )
+      QModelIndexList selected = hopTableWidget->selectedIndexes();
+      int row, size, i;
+
+      size = selected.size();
+      if( size == 0 )
+         return;
+
+      // Make sure only one row is selected.
+      row = selected.value(0).row();
+      for( i = 1; i < size; ++i )
+      {
+         if( selected.value(i).row() != row )
+            return;
+      }
+
+      translated = hopTableWidget->getProxy()->mapToSource(selected.value(0));
+   }
+   else
+   {
+      // Only respond if the name is selected. Since we connect to double-click signal,
+      // this keeps us from adding something to the recipe when we just want to edit
+      // one of the other columns.
+      if( index.column() == HOPNAMECOL )
+         translated = hopTableWidget->getProxy()->mapToSource(index);
+      else
          return;
    }
-
-   translated = hopTableWidget->getProxy()->mapToSource(selected.value(0));
+   
    Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
    mainWindow->addHopToRecipe(new Hop(*hop) ); // Need to add a copy so we don't change the database.
 }
