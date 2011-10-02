@@ -371,7 +371,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
     SET( CPACK_GENERATOR "NSIS" )
    
-    SET( CPACK_RESOURCE_FILE_LICENSE "${ROOTDIR}/COPYRIGHT" )
+    SET( CPACK_RESOURCE_FILE_LICENSE "${ROOTDIR}/COPYING.GPLv3" )
     # Extra start menu items.
     #SET( CPACK_NSIS_MENU_LINKS
     #     "bin/${brewtarget_EXECUTABLE}" "My Brewtarget"
