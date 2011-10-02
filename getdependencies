@@ -16,7 +16,7 @@ then
   exit 1;
 fi
 
-if [ -ne ${EXECUTABLE} ]
+if [ ! -e ${EXECUTABLE} ]
 then
   echo "${EXECUTABLE} does not exist";
   exit 1;
