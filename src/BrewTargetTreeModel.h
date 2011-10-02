@@ -31,7 +31,8 @@ class BrewTargetTreeModel;
 
 #include "recipe.h"
 #include "BrewTargetTreeItem.h"
-#include "BrewTargetTreeView.h"
+class BrewTargetTreeView; // Avoids a circular include. This class will be defined in a later include.
+//#include "BrewTargetTreeView.h"
 #include "database.h"
 #include "observable.h"
 #include "brewnote.h"
