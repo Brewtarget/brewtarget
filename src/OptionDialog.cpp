@@ -51,6 +51,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    colorUnitGroup = new QButtonGroup(this);
 
    // Set up language map.
+   languageToButtonMap["ca"] = pushButton_ca;
    languageToButtonMap["cs"] = pushButton_cs;
    languageToButtonMap["de"] = pushButton_de;
    languageToButtonMap["en"] = pushButton_en;
@@ -74,6 +75,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    pushButton_de->setEnabled(false);
 
    // Set up the buttons in languageGroup;
+   languageGroup->addButton(pushButton_ca);
    languageGroup->addButton(pushButton_cs);
    languageGroup->addButton(pushButton_de);
    languageGroup->addButton(pushButton_en);
