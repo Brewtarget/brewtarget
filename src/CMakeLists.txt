@@ -1,3 +1,7 @@
+# The current directory in the original source.
+INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR} )
+# The current directory in the output build directory.
+INCLUDE( ${CMAKE_CURRENT_BINARY_DIR} )
 # Put all the required Qt dirs in the includes.
 INCLUDE(${QT_USE_FILE})
 
@@ -208,6 +212,20 @@ SET( FILES_TO_TRANSLATE
      ${brewtarget_SRCS}
      ${brewtarget_UIS}
 )
+
+#==============================Setup the config.h==============================
+
+# "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
+# by the below corresponding value in ${CONFIGDATADIR} below when
+# CONFIGURE_FILE() is called.
+SET( CONFIGDATADIR "${DATAPATH}/" )
+SET( CONFIGDOCDIR "${DOCPATH}/" )
+
+# Tell cmake where the configure file is and where
+# to put the output. All variables in config.in written as "${VAR}$
+# will be replaced by VAR as determined by cmake in config.h.
+# Outputs only in the build directory.
+CONFIGURE_FILE( config.in config.h )
 
 #==================================Qt Junk=====================================
 

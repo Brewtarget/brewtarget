@@ -164,18 +164,16 @@ ELSEIF( APPLE )
   SET( DOCPATH  "${BT_BUNDLE_DIR}/Contents/Resources/en.lproj" )
 ENDIF()
 
-#==============================Setup the config.h==============================
+#=========================Configure brewtarget.desktop=========================
 
-# "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
-# by the below corresponding value in ${CONFIGDATADIR} below when
-# CONFIGURE_FILE() is called.
-SET( CONFIGDATADIR "${DATAPATH}/" )
-SET( CONFIGDOCDIR "${DOCPATH}/" )
+# If it begins with a '/'
+IF( IS_ABSOLUTE ${DATAROOTDIR} )
+   SET( brewtarget_ICONS_LOCATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+ELSE()
+   SET( brewtarget_ICONS_LOCATION "/${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+ENDIF()
 
-# Tell cmake where the configure file is and where
-# to put the output. All variables in config.in written as "${VAR}$
-# will be replaced by VAR as determined by cmake in config.h.
-CONFIGURE_FILE( "${SRCDIR}/config.in" "${SRCDIR}/config.h" )
+CONFIGURE_FILE( brewtarget.desktop.in brewtarget.desktop )
 
 #================================Files=========================================
 
@@ -195,8 +193,10 @@ SET( brewtarget_DATA
 )
 
 # Desktop files to install.
+# This is not prefixed with ${ROOTDIR} b/c it is a configured file that will
+# only exist in the build directory.
 SET( brewtarget_DESKTOP
-     ${ROOTDIR}/brewtarget.desktop
+     ${CMAKE_CURRENT_BINARY_DIR}/brewtarget.desktop
 )
 
 # Icon files to install.
