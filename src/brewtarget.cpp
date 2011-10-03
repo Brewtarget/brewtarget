@@ -478,7 +478,12 @@ QString Brewtarget::getConfigDir(bool *success)
 
 #else // Windows OS.
 
-   QString dir= app->applicationDirPath();
+   QString dir;
+   // Before the app is running, app==0
+   if( app != 0 )
+      dir = app->applicationDirPath();
+   else
+      dir = QDir::currentPath(); // Guess it's the current working dir.
    dir += "/../data/";
    if( success != 0 )
       *success = true;
