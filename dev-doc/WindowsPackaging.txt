@@ -6,3 +6,10 @@ Qt\<version>\plugins\[iconengines,imageformats,phonon_backend]
 Also, depending, we may need the following:
 libgcc_s_dw2-1.dll
 mingwm10.dll
+
+==MinGW 4.4.0 Bug==
+In MinGW that comes with Qt, there is a bug http://sourceforge.net/tracker/?func=detail&aid=2373234&group_id=2435&atid=102435
+It causes the compiler to fail with: "error: '::swprintf' has not been declared"
+
+Temporary fix:
+Comment out "using ::swprintf", "using ::vfwprintf", and "using ::vswprintf" in C:\MinGW\lib\gcc\mingw32\4.4.0\include\c++\cwchar

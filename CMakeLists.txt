@@ -372,6 +372,13 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET( CPACK_GENERATOR "NSIS" )
    
     SET( CPACK_RESOURCE_FILE_LICENSE "${ROOTDIR}/COPYING.GPLv3" )
+
+    SET( CPACK_NSIS_PACKAGE_NAME "Brewtarget-${brewtarget_VERSION_STRING}" )
+    SET( CPACK_NSIS_DISPLAY__NAME "Brewtarget-${brewtarget_VERSION_STRING}" )
+    SET( CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Brewtarget-${brewtarget_VERSION_STRING}" )
+    SET( CPACK_PACKAGE_INSTALL_DIRECTORY "Brewtarget-${brewtarget_VERSION_STRING}" )
+    SET( CPACK_NSIS_MODIFY_PATH ON )
+
     # Extra start menu items.
     #SET( CPACK_NSIS_MENU_LINKS
     #     "bin/${brewtarget_EXECUTABLE}" "My Brewtarget"

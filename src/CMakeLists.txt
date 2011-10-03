@@ -1,7 +1,8 @@
 # The current directory in the original source.
-INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR} )
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} )
 # The current directory in the output build directory.
-INCLUDE( ${CMAKE_CURRENT_BINARY_DIR} )
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
+
 # Put all the required Qt dirs in the includes.
 INCLUDE(${QT_USE_FILE})
 
@@ -282,7 +283,8 @@ IF( WIN32 AND MINGW )
 
    # MinGW-specific flags.
    #    '-Wl,-subsystem,windows' supresses the output command window.
-   SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-s -mthreads -Wl,-subsystem,windows")
+   #    '-Wl,-s' strips the executable of symbols.
+   SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows")
 ENDIF()
 
 # Link brewtarget against Qt libraries defined by QT_LIBRARIES
