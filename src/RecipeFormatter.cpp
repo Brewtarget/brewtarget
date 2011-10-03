@@ -528,7 +528,7 @@ QString RecipeFormatter::buildTitleTable()
            .arg(tr("Bitterness"))
            .arg(bitterness);
    // Fifth row: Color and calories.  Set up the color string first
-   color = tr("%1 (%2)").arg(Brewtarget::displayColor(rec->getColor_srm(),true));
+   color = QString("%1 (%2)").arg(Brewtarget::displayColor(rec->getColor_srm(),true));
    switch( Brewtarget::colorFormula )
    {
       case Brewtarget::MOREY:

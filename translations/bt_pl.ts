@@ -4561,7 +4561,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="1793"/>
         <source>&amp;Export Recipe</source>
-        <translation type="unfinished">&amp;Eksportuj receptury</translation>
+        <translation>&amp;Eksportuj receptury</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1802"/>

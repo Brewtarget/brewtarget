@@ -243,17 +243,17 @@
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="156"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="158"/>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Poprvé uvařeno</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="160"/>
         <source>Style</source>
-        <translation type="unfinished">Styl</translation>
+        <translation>Styl</translation>
     </message>
 </context>
 <context>
@@ -280,7 +280,7 @@
         <location filename="../src/EquipmentEditor.cpp" line="44"/>
         <location filename="../src/EquipmentEditor.cpp" line="275"/>
         <source>Grain absorption (%1/%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Absorbce sladu (%1/%2)</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="200"/>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="248"/>
         <source>Color (EBC)</source>
-        <translation type="unfinished"></translation>
+        <translation>Barva (EBC)</translation>
     </message>
 </context>
 <context>
@@ -647,7 +647,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1707"/>
         <source>New Recipe</source>
-        <translation type="unfinished">Nový recept</translation>
+        <translation>Nový recept</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1708"/>
@@ -687,12 +687,12 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1718"/>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
+        <translation>Recept</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1719"/>
         <source>Equipment</source>
-        <translation type="unfinished">Vybavení</translation>
+        <translation>Vybavení</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1720"/>
@@ -707,12 +707,12 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1722"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Přípravky</translation>
+        <translation>Přípravky</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1723"/>
         <source>Yeast</source>
-        <translation type="unfinished">Kvasnice</translation>
+        <translation>Kvasnice</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1737"/>
@@ -1074,7 +1074,7 @@
     <message>
         <location filename="../src/MashWizard.cpp" line="50"/>
         <source>There must be at least one mash step to run the wizard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pro spuštění průvodce musíte mít alespoň jeden rmutovací krok.</translation>
     </message>
     <message>
         <location filename="../src/MashWizard.cpp" line="134"/>
@@ -2313,7 +2313,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="531"/>
         <source>%1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="545"/>
@@ -3995,7 +3995,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="948"/>
         <source>Calories/12oz</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalorická hodnota (na 340 g)</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1067"/>
@@ -4168,52 +4168,52 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1671"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>Nápověda</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1678"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubor</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1682"/>
         <source>&amp;Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Plán vaření</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1690"/>
         <source>&amp;Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1698"/>
         <source>&amp;Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Datbáze</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1723"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1734"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Nástroje</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1784"/>
         <source>About &amp;BrewTarget</source>
-        <translation type="unfinished"></translation>
+        <translation>O aplikaci Brewtarget</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1793"/>
         <source>&amp;Export Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportovat recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1802"/>
         <source>&amp;Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>Suroviny</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1805"/>
@@ -4223,7 +4223,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1814"/>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>Chmele</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1817"/>
@@ -4233,7 +4233,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1826"/>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>Přípravky</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1829"/>
@@ -4243,7 +4243,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1838"/>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvasnice</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1841"/>
@@ -4253,7 +4253,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1850"/>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybavení</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1853"/>
@@ -4263,7 +4263,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1862"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Styly</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1865"/>
@@ -4273,7 +4273,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1874"/>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Konec</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1877"/>
@@ -4283,62 +4283,62 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1886"/>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>Importovat recepty</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1891"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Možnosti</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1896"/>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Návod</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1901"/>
         <source>&amp;Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Změnit množství</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1906"/>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Recept do schránky jako text</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1911"/>
         <source>&amp;OG Correction Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Úprava objemu pro dosažení hustoty</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1916"/>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Převody jednotek</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1935"/>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Zkopírovat recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1940"/>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Výpočet kvasných cukrů</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1945"/>
         <source>&amp;Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Nástroje pro refraktometr</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1950"/>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Výpočet rozkvašení kvasnic</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1985"/>
         <source>Merge Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Spojit databáze</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1988"/>
@@ -4349,13 +4349,13 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <location filename="../ui/mainWindow.ui" line="1997"/>
         <location filename="../ui/mainWindow.ui" line="2033"/>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Tisk</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2006"/>
         <location filename="../ui/mainWindow.ui" line="2024"/>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiskový náhled</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2015"/>
@@ -4400,39 +4400,39 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="2087"/>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Nový recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2096"/>
         <source>Timers</source>
-        <translation type="unfinished">Časovače</translation>
+        <translation>Časovače</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2099"/>
         <source>Show timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Zobrazit časovač</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2108"/>
         <location filename="../ui/mainWindow.ui" line="2111"/>
         <source>Save</source>
-        <translation type="unfinished">Uložit</translation>
+        <translation>Uložit</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2120"/>
         <location filename="../ui/mainWindow.ui" line="2123"/>
         <source>Clear recipe</source>
-        <translation type="unfinished">Vyprázdnit recept</translation>
+        <translation>Vyprázdnit recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2132"/>
         <source>Delete selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Odstranit vybraný</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2135"/>
         <source>Delete recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Odebrat recept</translation>
     </message>
     <message>
         <source>About</source>
@@ -5240,7 +5240,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../ui/optionsDialog.ui" line="310"/>
         <source>Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresářem</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="318"/>

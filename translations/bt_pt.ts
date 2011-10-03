@@ -4229,7 +4229,7 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1067"/>
         <source>Extras</source>
-        <translation type="unfinished">Extras</translation>
+        <translation>Extras</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1077"/>
@@ -4237,7 +4237,7 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
         <location filename="../ui/mainWindow.ui" line="1965"/>
         <location filename="../ui/mainWindow.ui" line="1975"/>
         <source>Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Brassagem do dia</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1123"/>
@@ -4322,7 +4322,7 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1436"/>
         <source>Mash</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation>Brassagem</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1452"/>
@@ -4397,17 +4397,17 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1784"/>
         <source>About &amp;BrewTarget</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobre o Brewtarget</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1793"/>
         <source>&amp;Export Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Receita de exportação</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1802"/>
         <source>&amp;Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermentáveis</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1805"/>
@@ -4417,7 +4417,8 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1814"/>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>Lúpulos
+</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1817"/>
@@ -4427,7 +4428,7 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1826"/>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>Diversos</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1829"/>
@@ -4437,7 +4438,8 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1838"/>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermento
+</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1841"/>
@@ -4447,7 +4449,7 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1850"/>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>Equipamento</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1853"/>
@@ -4457,7 +4459,7 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1862"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1865"/>
@@ -4467,7 +4469,7 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1874"/>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Saia</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1877"/>
@@ -4477,17 +4479,17 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1886"/>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar receita</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1891"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opções</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1896"/>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manual</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1901"/>
@@ -4507,12 +4509,12 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1916"/>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferramenta de conversão</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1935"/>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar receita</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1940"/>
@@ -4594,29 +4596,29 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="2087"/>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Nova receita</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2096"/>
         <source>Timers</source>
-        <translation type="unfinished">Cronómetros</translation>
+        <translation>Cronómetros</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2099"/>
         <source>Show timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar cronômetro</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2108"/>
         <location filename="../ui/mainWindow.ui" line="2111"/>
         <source>Save</source>
-        <translation type="unfinished">Salvar</translation>
+        <translation>Salvar</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2120"/>
         <location filename="../ui/mainWindow.ui" line="2123"/>
         <source>Clear recipe</source>
-        <translation type="unfinished">Limpar receita</translation>
+        <translation>Limpar receita</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2132"/>
@@ -4648,37 +4650,37 @@ e é medido em ° Lintner (por vezes referido como IOB ou 0,25 equivalentes malt
     <message>
         <location filename="../ui/mainWindow.ui" line="1671"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobre</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1678"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>Arquivo</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1682"/>
         <source>&amp;Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Brassagem do dia</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1690"/>
         <source>&amp;Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Receita</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1698"/>
         <source>&amp;Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Banco de dados</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1723"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1734"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Ferramentas</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1755"/>

@@ -243,7 +243,7 @@
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="156"/>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="158"/>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="160"/>
         <source>Style</source>
-        <translation type="unfinished">Stijl</translation>
+        <translation>Stijl</translation>
     </message>
 </context>
 <context>
@@ -632,7 +632,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1707"/>
         <source>New Recipe</source>
-        <translation type="unfinished">Nieuw Recept</translation>
+        <translation>Nieuw Recept</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1708"/>
@@ -667,17 +667,17 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1717"/>
         <source>New</source>
-        <translation type="unfinished">Nieuw</translation>
+        <translation>Nieuw</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1718"/>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
+        <translation>Recept</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1719"/>
         <source>Equipment</source>
-        <translation type="unfinished">Apparatuur</translation>
+        <translation>Apparatuur</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1720"/>
@@ -692,12 +692,12 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1722"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Diversen</translation>
+        <translation>Diversen</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1723"/>
         <source>Yeast</source>
-        <translation type="unfinished">Gist</translation>
+        <translation>Gist</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1737"/>
@@ -2938,7 +2938,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Vorm</translation>
+        <translation>Vorm</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="70"/>
@@ -2948,7 +2948,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="76"/>
         <source>SG</source>
-        <translation type="unfinished">SG</translation>
+        <translation>SG</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="104"/>
@@ -2959,7 +2959,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <location filename="../ui/brewNoteWidget.ui" line="114"/>
         <location filename="../ui/brewNoteWidget.ui" line="433"/>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="142"/>
@@ -3019,7 +3019,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="313"/>
         <source>Volume into fermenter</source>
-        <translation type="unfinished">Volume in het vergistingsvat</translation>
+        <translation>Volume in het vergistingsvat</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="348"/>
@@ -3109,12 +3109,12 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="579"/>
         <source>ABV</source>
-        <translation type="unfinished">Alc (vol%)</translation>
+        <translation>Alc (vol%)</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="599"/>
         <source>Notes</source>
-        <translation type="unfinished">Aantekeningen</translation>
+        <translation>Aantekeningen</translation>
     </message>
 </context>
 <context>
@@ -3122,7 +3122,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/btSplashScreen.ui" line="78"/>
         <source>Form</source>
-        <translation type="unfinished">Vorm</translation>
+        <translation>Vorm</translation>
     </message>
 </context>
 <context>
@@ -4168,52 +4168,53 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1671"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>Over</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1678"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1682"/>
         <source>&amp;Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Brouwdag</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1690"/>
         <source>&amp;Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1698"/>
         <source>&amp;Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Database</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1723"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekijk</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1734"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Gereedschap</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1784"/>
         <source>About &amp;BrewTarget</source>
-        <translation type="unfinished"></translation>
+        <translation>Over Brewtarget</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1793"/>
         <source>&amp;Export Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporteer recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1802"/>
         <source>&amp;Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>Mout
+</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1805"/>
@@ -4223,7 +4224,8 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1814"/>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>Hop
+</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1817"/>
@@ -4233,7 +4235,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1826"/>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>Diversen</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1829"/>
@@ -4243,7 +4245,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1838"/>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>Gist</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1841"/>
@@ -4253,7 +4255,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1850"/>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>Apparatuur</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1853"/>
@@ -4263,7 +4265,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1862"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stijlen</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1865"/>
@@ -4273,7 +4275,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1874"/>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Einde</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1877"/>
@@ -4283,62 +4285,62 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="1886"/>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>Importeer Recepten</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1891"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opties</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1896"/>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Handleiding</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1901"/>
         <source>&amp;Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Schaal Recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1906"/>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Recept naar Klembord als Tekst</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1911"/>
         <source>&amp;OG Correction Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hulp bij correctie oorspronkelijk SG</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1916"/>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Conversie Eenheden</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1935"/>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiëer Recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1940"/>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekenhulp suiker toevoeging</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1945"/>
         <source>&amp;Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Refractometer Gereedschap</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1950"/>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Gistgift rekenhulp</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1985"/>
         <source>Merge Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Database Samenvoegen</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1988"/>
@@ -4349,13 +4351,13 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <location filename="../ui/mainWindow.ui" line="1997"/>
         <location filename="../ui/mainWindow.ui" line="2033"/>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Print</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2006"/>
         <location filename="../ui/mainWindow.ui" line="2024"/>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Print Preview</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2015"/>
@@ -4400,29 +4402,29 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="2087"/>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieuw recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2096"/>
         <source>Timers</source>
-        <translation type="unfinished">Timers</translation>
+        <translation>Timers</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2099"/>
         <source>Show timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Toon timer</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2108"/>
         <location filename="../ui/mainWindow.ui" line="2111"/>
         <source>Save</source>
-        <translation type="unfinished">Opslaan</translation>
+        <translation>Opslaan</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2120"/>
         <location filename="../ui/mainWindow.ui" line="2123"/>
         <source>Clear recipe</source>
-        <translation type="unfinished">Wis recept</translation>
+        <translation>Wis recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2132"/>
@@ -4432,7 +4434,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/mainWindow.ui" line="2135"/>
         <source>Delete recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder recept</translation>
     </message>
     <message>
         <source>File</source>
@@ -5240,12 +5242,12 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/optionsDialog.ui" line="310"/>
         <source>Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>Directories</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="318"/>
         <source>Database Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Directory van de database</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="325"/>
@@ -5255,12 +5257,12 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     <message>
         <location filename="../ui/optionsDialog.ui" line="335"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoeken</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="342"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="378"/>

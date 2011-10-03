@@ -243,7 +243,7 @@
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="156"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="158"/>
@@ -253,7 +253,7 @@
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="160"/>
         <source>Style</source>
-        <translation type="unfinished">Style</translation>
+        <translation>Style</translation>
     </message>
 </context>
 <context>
@@ -663,7 +663,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1707"/>
         <source>New Recipe</source>
-        <translation type="unfinished">Nouvelle recette</translation>
+        <translation>Nouvelle recette</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1708"/>
@@ -698,7 +698,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1717"/>
         <source>New</source>
-        <translation type="unfinished">Nouveau</translation>
+        <translation>Nouveau</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1718"/>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1719"/>
         <source>Equipment</source>
-        <translation type="unfinished">Équipement</translation>
+        <translation>Équipement</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1720"/>
@@ -723,12 +723,12 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1722"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Autres</translation>
+        <translation>Autres</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1723"/>
         <source>Yeast</source>
-        <translation type="unfinished">Levures</translation>
+        <translation>Levures</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1737"/>
@@ -4122,7 +4122,7 @@ The final volume in the primary is %1.</source>
         <location filename="../ui/mainWindow.ui" line="1970"/>
         <location filename="../ui/mainWindow.ui" line="1980"/>
         <source>Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="840"/>
@@ -4161,7 +4161,7 @@ The final volume in the primary is %1.</source>
         <location filename="../ui/mainWindow.ui" line="1965"/>
         <location filename="../ui/mainWindow.ui" line="1975"/>
         <source>Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Journée de brassage</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1123"/>
@@ -4316,57 +4316,57 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1642"/>
         <source>Donate</source>
-        <translation type="unfinished"></translation>
+        <translation>Don</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1671"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1678"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1682"/>
         <source>&amp;Brewday</source>
-        <translation type="unfinished"></translation>
+        <translation>Journée de brassage</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1690"/>
         <source>&amp;Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1698"/>
         <source>&amp;Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de données</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1723"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>Visulaliser</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1734"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Outils</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1784"/>
         <source>About &amp;BrewTarget</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos de Brewtarget</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1793"/>
         <source>&amp;Export Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter une recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1802"/>
         <source>&amp;Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingrédients fermentescibles</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1805"/>
@@ -4376,7 +4376,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1814"/>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>Houblon</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1817"/>
@@ -4386,7 +4386,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1826"/>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>Autres</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1829"/>
@@ -4396,7 +4396,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1838"/>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>Levures</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1841"/>
@@ -4406,7 +4406,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1850"/>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>Équipement</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1853"/>
@@ -4416,7 +4416,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1862"/>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Styles</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1865"/>
@@ -4426,7 +4426,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1874"/>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortie</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1877"/>
@@ -4436,47 +4436,47 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1886"/>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer recettes</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1891"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1896"/>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuel</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1901"/>
         <source>&amp;Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Recette ajustée</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1906"/>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter la recette en format texte</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1911"/>
         <source>&amp;OG Correction Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide à la correction de DP</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1916"/>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir unités</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1935"/>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier la recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1940"/>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculateur d&apos;édulcoration</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1945"/>
@@ -4502,7 +4502,7 @@ The final volume in the primary is %1.</source>
         <location filename="../ui/mainWindow.ui" line="1997"/>
         <location filename="../ui/mainWindow.ui" line="2033"/>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2006"/>
@@ -4553,39 +4553,39 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="2087"/>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2096"/>
         <source>Timers</source>
-        <translation type="unfinished">Minuteries</translation>
+        <translation>Minuteries</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2099"/>
         <source>Show timers</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualiser la minuterie</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2108"/>
         <location filename="../ui/mainWindow.ui" line="2111"/>
         <source>Save</source>
-        <translation type="unfinished">Sauvegardez</translation>
+        <translation>Sauvegardez</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2120"/>
         <location filename="../ui/mainWindow.ui" line="2123"/>
         <source>Clear recipe</source>
-        <translation type="unfinished">Supprimer recette</translation>
+        <translation>Supprimer recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2132"/>
         <source>Delete selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimez le sélectionné</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2135"/>
         <source>Delete recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Retirer recette</translation>
     </message>
     <message>
         <source>File</source>
@@ -5346,17 +5346,17 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="171"/>
         <source>Use SRM</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisé SRM</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="178"/>
         <source>Use EBC</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisé EBC</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="191"/>
         <source>Formulas</source>
-        <translation type="unfinished"></translation>
+        <translation>Formule</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="211"/>
@@ -5391,12 +5391,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="310"/>
         <source>Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoires</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="318"/>
         <source>Database Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de la base de données</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="325"/>
@@ -5406,12 +5406,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="335"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechercher</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="342"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="378"/>
