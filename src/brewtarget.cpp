@@ -478,16 +478,27 @@ QString Brewtarget::getConfigDir(bool *success)
 
 #else // Windows OS.
 
-   QString dir;
+   QDir dir;
    // Before the app is running, app==0
    if( app != 0 )
-      dir = app->applicationDirPath();
+   {
+      // This is the bin/ directory.
+      dir = QDir(app->applicationDirPath());
+      dir.cdUp();
+   }
    else
-      dir = QDir::currentPath(); // Guess it's the current working dir.
-   dir += "/../data/";
+   {
+      // We're either in bin/ or bin/../
+      dir = QDir::current(); // Guess it's bin/../.
+      if( ! dir.exists("bin") ) // Already in bin/
+         dir.cdUp();
+   }
+   // Now we should be in the base directory (i.e. Brewtarget-1.2.4/)
+
+   dir.cd("data");
    if( success != 0 )
       *success = true;
-   return dir;
+   return dir.absolutePath() + "/";
 
 #endif
 }
