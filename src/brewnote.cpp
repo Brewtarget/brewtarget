@@ -85,7 +85,7 @@ void BrewNote::fromNode(const QDomNode& bNoteNode)
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       
@@ -101,7 +101,7 @@ void BrewNote::fromNode(const QDomNode& bNoteNode)
       if( property == "BREWDATE" )
          setBrewDate(value);
       else if( property == "VERSION" && version != getInt(textNode) )
-         Brewtarget::log(Brewtarget::ERROR, QObject::tr("BREWNOTE says it is version %1, not version %2. Line %3")
+         Brewtarget::log(Brewtarget::ERROR, QString("BREWNOTE says it is version %1, not version %2. Line %3")
                .arg(getInt(textNode)).arg(version).arg(textNode.lineNumber()) );
       else if ( property == "DATE_FERMENTED_OUT" )
          setFermentDate(value);
@@ -271,7 +271,7 @@ void BrewNote::setBrewDate(QString date)
          brewDate = temp;
       else
       {
-         Brewtarget::logW(QObject::tr("Invalid date string %1, defaulting to today").arg(date));
+         Brewtarget::logW(QString("Invalid date string %1, defaulting to today").arg(date));
          brewDate = QDateTime::currentDateTime();
       }
    }
@@ -298,7 +298,7 @@ void BrewNote::setInfo(QString label, double var)
 {
    if ( var < 0.0 ) 
    {
-      Brewtarget::logW(QObject::tr("Brewnote: %1 < 0: %2").arg(label).arg(var));
+      Brewtarget::logW(QString("Brewnote: %1 < 0: %2").arg(label).arg(var));
       var = 1.0;
    }
    else 
@@ -409,7 +409,7 @@ double BrewNote::calculateEffIntoBK_pct()
 
    if (maxPoints <= 0.0)
    {
-      Brewtarget::logW(QObject::tr("Avoiding div by 0, maxpoints is %1").arg(maxPoints));
+      Brewtarget::logW(QString("Avoiding div by 0, maxpoints is %1").arg(maxPoints));
       return 0.0;
    }
    effIntoBK = actualPoints/maxPoints * 100;
@@ -431,7 +431,7 @@ double BrewNote::calculateOG()
 
    if ( expectedVol <= 0.0 )
    {
-      Brewtarget::logW(QObject::tr("calculated OG will be off because of bad expected volume into bk %1").arg(expectedVol));
+      Brewtarget::logW(QString("calculated OG will be off because of bad expected volume into bk %1").arg(expectedVol));
       return 0.0;
    }
 

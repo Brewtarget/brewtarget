@@ -1277,17 +1277,17 @@ Use at own risk.</source>
 <context>
     <name>OptionDialog</name>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="137"/>
+        <location filename="../src/OptionDialog.cpp" line="139"/>
         <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="271"/>
+        <location filename="../src/OptionDialog.cpp" line="273"/>
         <source>Copy Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/OptionDialog.cpp" line="272"/>
+        <location filename="../src/OptionDialog.cpp" line="274"/>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1612,7 +1612,7 @@ Use at own risk.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="839"/>
+        <location filename="../src/brewtarget.cpp" line="855"/>
         <source>Could not open %1 for writing</source>
         <translation>Impossible d&apos;ouvrir %1 pour écriture</translation>
     </message>
@@ -1638,7 +1638,6 @@ Use at own risk.</source>
         <translation>Impossible d&apos;ouvrir %1 pour écriture.</translation>
     </message>
     <message>
-        <location filename="../src/brewnote.cpp" line="88"/>
         <location filename="../src/equipment.cpp" line="209"/>
         <location filename="../src/fermentable.cpp" line="186"/>
         <location filename="../src/hop.cpp" line="240"/>
@@ -1650,31 +1649,6 @@ Use at own risk.</source>
         <location filename="../src/yeast.cpp" line="205"/>
         <source>Node at line %1 is not an element.</source>
         <translation>Noeud at la ligne %1 n&apos;est pas un élément.</translation>
-    </message>
-    <message>
-        <location filename="../src/brewnote.cpp" line="104"/>
-        <source>BREWNOTE says it is version %1, not version %2. Line %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/brewnote.cpp" line="274"/>
-        <source>Invalid date string %1, defaulting to today</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/brewnote.cpp" line="301"/>
-        <source>Brewnote: %1 &lt; 0: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/brewnote.cpp" line="412"/>
-        <source>Avoiding div by 0, maxpoints is %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/brewnote.cpp" line="434"/>
-        <source>calculated OG will be off because of bad expected volume into bk %1</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/equipment.cpp" line="228"/>
@@ -2343,14 +2317,7 @@ The final volume in the primary is %1.</source>
         <translation>Propriété LEVURES non supportée:%1. Line %2</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="96"/>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="122"/>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="188"/>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="207"/>
         <location filename="../src/BrewTargetTreeItem.cpp" line="229"/>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="251"/>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="273"/>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="295"/>
         <location filename="../src/BrewTargetTreeModel.cpp" line="162"/>
         <source>Bad column: %1</source>
         <translation type="unfinished"></translation>
@@ -2386,7 +2353,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished">Levures</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="398"/>
         <location filename="../src/MainWindow.cpp" line="1877"/>
         <source>Unknown type: %1</source>
         <translation type="unfinished"></translation>
@@ -5479,6 +5445,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="538"/>
+        <source>Catalan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/optionsDialog.ui" line="558"/>
         <source>Polish</source>
         <translation>Polonaise</translation>
     </message>
@@ -5488,12 +5459,12 @@ The final volume in the primary is %1.</source>
         <translation>Française</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="561"/>
+        <location filename="../ui/optionsDialog.ui" line="581"/>
         <source>Portuguese</source>
         <translation>Portugaise</translation>
     </message>
     <message>
-        <location filename="../ui/optionsDialog.ui" line="605"/>
+        <location filename="../ui/optionsDialog.ui" line="625"/>
         <source>&lt;qt&gt;
    &lt;b&gt;Know another language?&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;

@@ -395,7 +395,7 @@ void MainWindow::deleteSelected()
             break;
 
          default:
-            Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
+            Brewtarget::log(Brewtarget::WARNING, QString("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
       }
       if ( confirmDelete == QMessageBox::Cancel )
          return;

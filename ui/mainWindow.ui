@@ -1723,10 +1723,11 @@
      <string>&amp;View</string>
     </property>
     <addaction name="actionEquipments"/>
+    <addaction name="actionStyles"/>
+    <addaction name="separator"/>
     <addaction name="actionFermentables"/>
     <addaction name="actionHops"/>
     <addaction name="actionMiscs"/>
-    <addaction name="actionStyles"/>
     <addaction name="actionYeasts"/>
    </widget>
    <widget class="QMenu" name="menuTools">
