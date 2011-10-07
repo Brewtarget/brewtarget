@@ -38,6 +38,9 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    timer->setInterval(1000); // One second between timeouts.
    flashTimer->setInterval(500);
 
+   // PlaceholderText only exists in Qt 4.7 or greater.
+   //lineEdit->setPlaceholderText( tr("HH:MM:SS") );
+
    #if !defined(NO_PHONON)
    
     mediaObject = new Phonon::MediaObject(this);
