@@ -31,8 +31,7 @@ class BrewTargetTreeModel;
 
 #include "recipe.h"
 #include "BrewTargetTreeItem.h"
-class BrewTargetTreeView; // Avoids a circular include. This class will be defined in a later include.
-//#include "BrewTargetTreeView.h"
+#include "BrewTargetTreeView.h"
 #include "database.h"
 #include "observable.h"
 #include "brewnote.h"
@@ -42,7 +41,18 @@ class BrewTargetTreeModel : public QAbstractItemModel, public MultipleObserver
    Q_OBJECT
 
 public:
-   BrewTargetTreeModel(BrewTargetTreeView *parent = 0);
+   enum TypeMasks
+   {
+      RECIPEMASK        = 1,
+      EQUIPMASK         = 2,
+      FERMENTMASK       = 4,
+      HOPMASK           = 8,
+      MISCMASK          = 16,
+      YEASTMASK         = 32,
+      BREWNOTEMASK      = 64,
+      ALLMASK           = 127
+   };
+   BrewTargetTreeModel(BrewTargetTreeView *parent = 0, TypeMasks type = ALLMASK);
    virtual ~BrewTargetTreeModel();
 
    // Methods required for read-only stuff
@@ -74,6 +84,7 @@ public:
    bool isBrewNote(const QModelIndex &index);
 
    int getType(const QModelIndex &index);
+   int getMask();
 
    // Methods required for observable
    virtual void notify(Observable *notifier, QVariant info = QVariant());
@@ -101,10 +112,21 @@ private:
    void loadTreeModel(int reload);
    void unloadTreeModel(int unload);
 
+   // Helper methods for recipe headers
+   QVariant getRecipeHeader(int section) const;
+   QVariant getEquipmentHeader(int section) const;
+   QVariant getFermentableHeader(int section) const;
+   QVariant getHopHeader(int section) const;
+   QVariant getMiscHeader(int section) const;
+   QVariant getYeastHeader(int section) const;
+
    BrewTargetTreeItem* rootItem;
+   QHash<TypeMasks, int> trees;
    BrewTargetTreeView *parentTree;
    Database* dbObs;
    Recipe* recObs;
+   TypeMasks treeMask;
+
 };
 
 #endif /* RECEIPTREEMODEL_H_ */

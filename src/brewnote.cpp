@@ -115,10 +115,10 @@ void BrewNote::fromNode(const QDomNode& bNoteNode)
 
 void BrewNote::setDefaults(Recipe* parent)
 {
-   Mash* mash;
-   MashStep* temp;
-   Yeast *yeast;
-   Equipment* equip;
+   Mash* mash = 0;
+   MashStep* temp = 0;
+   Yeast *yeast = 0;
+   Equipment* equip = 0;
    int numYeast = parent->getNumYeasts();
    double atten_pct = -1.0;
 

@@ -195,19 +195,12 @@ MainWindow::MainWindow(QWidget* parent)
    miscDialog->startObservingDB();
    yeastDialog->startObservingDB();
 
-   // Set up the tree view by hiding two columns and resizing the remaining
-   brewTargetTreeView->setColumnHidden(BrewTargetTreeItem::RECIPEBREWDATECOL, true);
-   brewTargetTreeView->setColumnHidden(BrewTargetTreeItem::RECIPESTYLECOL, true);
-   brewTargetTreeView->resizeColumnToContents(BrewTargetTreeItem::RECIPENAMECOL);
-   brewTargetTreeView->setExpanded(brewTargetTreeView->findRecipe(0), true);
-
-   // And do some magic on the splitter widget to keep the tree from expanding
+   // Do some magic on the splitter widget to keep the tree from expanding
    splitter_2->setStretchFactor(0,0);
    splitter_2->setStretchFactor(1,1);
 
    // Once more with the context menus too
    setupContextMenu();
-   brewTargetTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
    // clear out the brewnotes 
    brewNotes.clear();
@@ -237,7 +230,7 @@ MainWindow::MainWindow(QWidget* parent)
           recipeObs = db->findRecipeByName( name );
 
          setRecipe(recipeObs);
-         setSelection(brewTargetTreeView->findRecipe(recipeObs));
+         setSelection(treeView_recipe->findRecipe(recipeObs));
       }
          
       else
@@ -246,6 +239,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    setDirty(false);
 
+   setDirty(false);
    // Connect signals.
    // actions
    connect( actionExit, SIGNAL( triggered() ), this, SLOT( close() ) );
@@ -277,6 +271,25 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    connect( actionClearRecipe, SIGNAL(triggered()), this, SLOT(clear()) );
 
+   // TreeView for clicks, both double and right
+   connect( treeView_recipe, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_recipe, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_equip, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_equip, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_ferm, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_ferm, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_hops, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_hops, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_misc, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_misc, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_yeast, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_yeast, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
@@ -289,12 +302,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashByName(const QString&)) );
    connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
-
-   // TreeView for clicks, both double and right
-   connect( brewTargetTreeView, SIGNAL(doubleClicked(const QModelIndex &)), this,
-            SLOT(treeActivated(const QModelIndex &)));
-   connect( brewTargetTreeView, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
-
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -333,10 +340,12 @@ void MainWindow::setupShortCuts()
    actionDeleteSelected->setShortcut(QKeySequence::Delete);
 }
 
+
 void MainWindow::deleteSelected()
 {
-   const QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
-   QModelIndex first;
+   QModelIndexList selected; 
+   BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   QModelIndex first, top;
    QList<QModelIndex>::const_iterator at,end;
    QList<Recipe*> deadRec;
    QList<Equipment*> deadKit;
@@ -346,62 +355,55 @@ void MainWindow::deleteSelected()
    QList<Yeast*> deadYeast;
    QList<BrewNote*> deadNote;
 
+
+   if ( active == 0 )
+      return;
+
+   selected = active->selectionModel()->selectedRows();
+
    confirmDelete = QMessageBox::NoButton;
    // Get the dead things first.  Deleting as we process the list doesn't work, because the
    // delete updates the database and the indices get recalculated.
    for(at = selected.begin(),end = selected.end();at < end;++at)
    {
-      // Don't delete the root items.  Bad things will happen
-      if ( *at == brewTargetTreeView->findRecipe(0)      || *at == brewTargetTreeView->findEquipment(0)   ||
-           *at == brewTargetTreeView->findFermentable(0) || *at == brewTargetTreeView->findHop(0)         ||
-           *at == brewTargetTreeView->findMisc(0)        || *at == brewTargetTreeView->findYeast(0))
-         continue;
-
-      switch(brewTargetTreeView->getType(*at))
+      switch(active->getType(*at))
       {
          case BrewTargetTreeItem::RECIPE:
-            if ( verifyDelete("Recipe",brewTargetTreeView->getRecipe(*at)->getName()))
-               deadRec.append(brewTargetTreeView->getRecipe(*at));
+            if ( *at != active->findRecipe(0) && verifyDelete("Recipe",active->getRecipe(*at)->getName()))
+               deadRec.append(active->getRecipe(*at));
             break;
-
          case BrewTargetTreeItem::EQUIPMENT:
-            if (verifyDelete("Equipment",brewTargetTreeView->getEquipment(*at)->getName()))
-               deadKit.append(brewTargetTreeView->getEquipment(*at));
+            if (*at != active->findEquipment(0) && verifyDelete("Equipment",active->getEquipment(*at)->getName()))
+               deadKit.append(active->getEquipment(*at));
             break;
-
          case BrewTargetTreeItem::FERMENTABLE:
-            if (verifyDelete("Fermentable",brewTargetTreeView->getFermentable(*at)->getName()))
-               deadFerm.append(brewTargetTreeView->getFermentable(*at));
+            if (*at != active->findFermentable(0) && verifyDelete("Fermentable",active->getFermentable(*at)->getName()))
+               deadFerm.append(active->getFermentable(*at));
             break;
-
          case BrewTargetTreeItem::HOP:
-            if (verifyDelete("Hop",brewTargetTreeView->getHop(*at)->getName()))
-               deadHop.append(brewTargetTreeView->getHop(*at));
+            if (*at != active->findHop(0) && verifyDelete("Hop",active->getHop(*at)->getName()))
+               deadHop.append(active->getHop(*at));
             break;
-            
          case BrewTargetTreeItem::MISC:
-            if (verifyDelete("Misc",brewTargetTreeView->getMisc(*at)->getName()))
-               deadMisc.append(brewTargetTreeView->getMisc(*at));
+            if (*at != active->findMisc(0) && verifyDelete("Misc",active->getMisc(*at)->getName()))
+               deadMisc.append(active->getMisc(*at));
             break;
-
          case BrewTargetTreeItem::YEAST:
-            if (verifyDelete("Yeast",brewTargetTreeView->getYeast(*at)->getName()))
-               deadYeast.append(brewTargetTreeView->getYeast(*at));
+            if (*at != active->findYeast(0) && verifyDelete("Yeast",active->getYeast(*at)->getName()))
+               deadYeast.append(active->getYeast(*at));
             break;
-
          case BrewTargetTreeItem::BREWNOTE:
-            if (verifyDelete("BrewNote",brewTargetTreeView->getBrewNote(*at)->getBrewDate_short()))
-               deadNote.append(brewTargetTreeView->getBrewNote(*at));
+            if (verifyDelete("BrewNote",active->getBrewNote(*at)->getBrewDate_short()))
+               deadNote.append(active->getBrewNote(*at));
             break;
-
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
+            Brewtarget::log(Brewtarget::WARNING, QObject::tr("MainWindow::deleteSelected Unknown type: %1").arg(treeView_recipe->getType(*at)));
       }
       if ( confirmDelete == QMessageBox::Cancel )
          return;
    }
 
-   // Deleting brewnotes is kind of annoying, actually.  BUt do it before you
+   // Deleting brewnotes is kind of annoying, actually.  But do it before you
    // delete recipes.  Unpleasant things will happen... I really want to
    // isolate this so it looks as clean as the others do.
    for (int i = 0; i < deadNote.count(); ++i)
@@ -421,8 +423,13 @@ void MainWindow::deleteSelected()
    db->removeMisc(deadMisc);
    db->removeYeast(deadYeast);
 
-   first = brewTargetTreeView->getFirst(BrewTargetTreeItem::RECIPE);
-   setRecipeByIndex(first);
+   // This is wrong. Since we have split the trees out, the selection should
+   // be set to the top element of the active tree. I am just not sure how to
+   // do it
+   first = active->getFirst();
+   if ( active->getType(first) == BrewTargetTreeItem::RECIPE)
+      setRecipeByIndex(first);
+
    setSelection(first);
 }
 
@@ -442,13 +449,26 @@ void MainWindow::treeActivated(const QModelIndex &index)
    Misc *m;
    Yeast *y;
 
-   switch( brewTargetTreeView->getType(index))
+   QObject* calledBy = sender();
+   BrewTargetTreeView* active;
+
+   // Not sure how this could happen, but better safe the sigsegv'd
+   if ( calledBy == 0 )
+      return;
+
+   active = qobject_cast<BrewTargetTreeView*>(calledBy);
+
+   // If the sender cannot be morphed into a BrewTargetTreeView object
+   if ( active == 0 )
+      return;
+
+   switch( active->getType(index))
    {
       case BrewTargetTreeItem::RECIPE:
          setRecipeByIndex(index);
          break;
       case BrewTargetTreeItem::EQUIPMENT:
-         kit = brewTargetTreeView->getEquipment(index);
+         kit = active->getEquipment(index);
          if ( kit )
          {
             equipEditor->setEquipment(kit);
@@ -456,7 +476,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
          }
          break;
       case BrewTargetTreeItem::FERMENTABLE:
-         ferm = brewTargetTreeView->getFermentable(index);
+         ferm = active->getFermentable(index);
          if ( ferm )
          {
             fermEditor->setFermentable(ferm);
@@ -464,7 +484,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
          }
          break;
       case BrewTargetTreeItem::HOP:
-         h = brewTargetTreeView->getHop(index);
+         h = active->getHop(index);
          if (h)
          {
             hopEditor->setHop(h);
@@ -472,7 +492,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
          }
          break;
       case BrewTargetTreeItem::MISC:
-         m = brewTargetTreeView->getMisc(index);
+         m = active->getMisc(index);
          if (m)
          {
             miscEditor->setMisc(m);
@@ -480,7 +500,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
          }
          break;
       case BrewTargetTreeItem::YEAST:
-         y = brewTargetTreeView->getYeast(index);
+         y = active->getYeast(index);
          if (y)
          {
             yeastEditor->setYeast(y);
@@ -491,16 +511,16 @@ void MainWindow::treeActivated(const QModelIndex &index)
          setBrewNoteByIndex(index);
          break;
       default:
-         Brewtarget::log(Brewtarget::WARNING, tr("Unknown type %1.").arg(brewTargetTreeView->getType(index)));
+         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->getType(index)));
    }
-   brewTargetTreeView->setCurrentIndex(index);
+   treeView_recipe->setCurrentIndex(index);
 }
 
 void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
 {
    BrewNoteWidget* ni;
 
-   BrewNote* bNote = brewTargetTreeView->getBrewNote(index);
+   BrewNote* bNote = treeView_recipe->getBrewNote(index);
 
    if ( ! bNote )
       return;
@@ -553,7 +573,7 @@ void MainWindow::setRecipeByIndex(const QModelIndex &index)
    if ( ! Database::isInitialized() )
       return;
 
-   rec = brewTargetTreeView->getRecipe(index);
+   rec = treeView_recipe->getRecipe(index);
    if ( rec )
       setRecipe(rec);
 }
@@ -1164,31 +1184,37 @@ void MainWindow::newRecipe()
 
    db->addRecipe(newRec, false);
 
-   setSelection(brewTargetTreeView->findRecipe(newRec));
+   setSelection(treeView_recipe->findRecipe(newRec));
    setRecipe(newRec);
 }
 
 void MainWindow::setSelection(QModelIndex item)
 {
+   BrewTargetTreeView *active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+
    if (! item.isValid())
       return;
 
-   QModelIndex parent = brewTargetTreeView->getParent(item);
+   if ( active == 0 )
+      active = qobject_cast<BrewTargetTreeView*>(treeView_recipe);
 
-   brewTargetTreeView->setCurrentIndex(item);
-   brewTargetTreeView->scrollTo(item,QAbstractItemView::PositionAtCenter);
-   brewTargetTreeView->expand(parent);
+   QModelIndex parent = active->getParent(item);
+
+   active->setCurrentIndex(item);
+   active->scrollTo(item,QAbstractItemView::PositionAtCenter);
+//   treeView_recipe->expand(parent);
    
 }
 
+// Need to make sure the recipe tree is active, I think
 void MainWindow::newBrewNote()
 {
-   QModelIndexList indexes = brewTargetTreeView->selectionModel()->selectedRows();
+   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    QModelIndex bIndex;
 
    foreach(QModelIndex selected, indexes)
    {
-      Recipe*   rec   = brewTargetTreeView->getRecipe(selected);
+      Recipe*   rec   = treeView_recipe->getRecipe(selected);
       QModelIndex newItem;
 
       if ( ! rec )
@@ -1202,7 +1228,7 @@ void MainWindow::newBrewNote()
       recipeObs->addBrewNote(bNote);
       setBrewNote(bNote);
 
-      bIndex = brewTargetTreeView->findBrewNote(bNote);
+      bIndex = treeView_recipe->findBrewNote(bNote);
       if ( bIndex.isValid() )
          setSelection(bIndex);
    }
@@ -1210,11 +1236,11 @@ void MainWindow::newBrewNote()
   
 void MainWindow::reBrewNote()
 {
-   QModelIndexList indexes = brewTargetTreeView->selectionModel()->selectedRows();
+   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
    foreach(QModelIndex selected, indexes)
    {
-      BrewNote* old   = brewTargetTreeView->getBrewNote(selected);
-      Recipe* rec     = brewTargetTreeView->getRecipe(brewTargetTreeView->getParent(selected));
+      BrewNote* old   = treeView_recipe->getBrewNote(selected);
+      Recipe* rec     = treeView_recipe->getRecipe(treeView_recipe->getParent(selected));
 
       if (! old || ! rec)
          return;
@@ -1227,7 +1253,7 @@ void MainWindow::reBrewNote()
       recipeObs->addBrewNote(bNote);
       setBrewNote(bNote);
 
-      setSelection(brewTargetTreeView->findBrewNote(bNote));
+      setSelection(treeView_recipe->findBrewNote(bNote));
    }
 }
 
@@ -1280,12 +1306,12 @@ void MainWindow::importFiles()
       inFile.setFileName(filename);
       if( ! inFile.open(QIODevice::ReadOnly) )
       {
-         Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for reading.").arg(filename));
+         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::importFiles Could not open %1 for reading.").arg(filename));
          return;
       }
 
       if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-         Brewtarget::log(Brewtarget::WARNING, tr("Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::importFiles Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
 
       list = xmlDoc.elementsByTagName("RECIPE");
       if ( list.count() )
@@ -1606,8 +1632,8 @@ void MainWindow::print()
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat("application/x-brewtarget"))
-        event->acceptProposedAction();
+   if (event->mimeData()->hasFormat("application/x-brewtarget"))
+      event->acceptProposedAction();
 }
 
 void MainWindow::dropEvent(QDropEvent *event)
@@ -1615,47 +1641,52 @@ void MainWindow::dropEvent(QDropEvent *event)
    QModelIndexList indexes;
    QWidget *last = 0;
    QString name;
+   BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
    int type;
+
+
+   // If the sender cannot be morphed into a BrewTargetTreeView object
+   if ( active == 0 )
+      return;
 
    if (! event->mimeData()->hasFormat("application/x-brewtarget"))
       return;
 
-   indexes = brewTargetTreeView->selectionModel()->selectedRows();
+   indexes = active->selectionModel()->selectedRows();
+
    foreach(QModelIndex index, indexes)
    {
       if ( index.isValid() )
       {
-         type = brewTargetTreeView->getType(index);
+         type = active->getType(index);
          switch(type)
          {
             case BrewTargetTreeItem::RECIPE:
                setRecipeByIndex(index);
                break;
             case BrewTargetTreeItem::EQUIPMENT:
-               name = brewTargetTreeView->getEquipment(index)->getName();
+               name = active->getEquipment(index)->getName();
                equipmentComboBox->setIndexByEquipmentName(name);
-               droppedRecipeEquipment(brewTargetTreeView->getEquipment(index));
+               droppedRecipeEquipment(active->getEquipment(index));
                break;
             case BrewTargetTreeItem::FERMENTABLE:
-               addFermentableToRecipe(new Fermentable(*brewTargetTreeView->getFermentable(index)));
+               addFermentableToRecipe(new Fermentable(*active->getFermentable(index)));
                last = fermentableTab;
                break;
             case BrewTargetTreeItem::HOP:
-               addHopToRecipe(new Hop(*brewTargetTreeView->getHop(index)));
+               addHopToRecipe(new Hop(*active->getHop(index)));
                last = hopsTab;
                break;
             case BrewTargetTreeItem::MISC:
-               addMiscToRecipe(new Misc(*brewTargetTreeView->getMisc(index)));
+               addMiscToRecipe(new Misc(*active->getMisc(index)));
                last = miscTab;
                break;
             case BrewTargetTreeItem::YEAST:
-               addYeastToRecipe(new Yeast(*brewTargetTreeView->getYeast(index)));
+               addYeastToRecipe(new Yeast(*active->getYeast(index)));
                last = yeastTab;
                break;
             case BrewTargetTreeItem::BREWNOTE:
                setBrewNoteByIndex(index);
-               break;
-            default:
                break;
          }
          event->accept();
@@ -1669,85 +1700,54 @@ void MainWindow::dropEvent(QDropEvent *event)
 // menu.  
 void MainWindow::contextMenu(const QPoint &point)
 {
+   QObject* calledBy = sender();
+   BrewTargetTreeView* active;
    QModelIndex selected;
    QMenu* tempMenu;
-	QModelIndexList selections = brewTargetTreeView->selectionModel()->selectedRows();
 
-   selected = brewTargetTreeView->indexAt(point);
+   // Not sure how this could happen, but better safe the sigsegv'd
+   if ( calledBy == 0 )
+      return;
+
+   active = qobject_cast<BrewTargetTreeView*>(calledBy);
+
+   // If the sender cannot be morphed into a BrewTargetTreeView object
+   if ( active == 0 )
+      return;
+
+   selected = active->indexAt(point);
    if (! selected.isValid())
       return;
 
-   if (brewTargetTreeView->multiSelected())
-      tempMenu = contextMenus.last();
-   else 
-      tempMenu = contextMenus.at(brewTargetTreeView->getType(selected));
+   tempMenu = active->getContextMenu(selected);
 
    if (tempMenu)
-      tempMenu->exec(brewTargetTreeView->mapToGlobal(point));
+      tempMenu->exec(active->mapToGlobal(point));
 }
 
-// Set up the context menus.  There may be a better way of doing this, but I
-// am at least only setting the menus up once.
+// Set up the context menus.  This is much prettier now that I moved the
+// tree-specific pieces into the treeview objects.
 void MainWindow::setupContextMenu()
 {
-   QMenu *cMenu;
-	QMenu *sMenu = new QMenu();
-	QAction *temp;
-   int i;
-
-   // I did mean the <=.  I am using the last slot to hold the multiselect
-   // menu
-   for(i=0; i <= BrewTargetTreeItem::NUMTYPES; ++i)
-   {
-      cMenu = new QMenu();
-      contextMenus.append(cMenu);
-   }
-   // Top level item
-	
-	contextMenus.at(BrewTargetTreeItem::RECIPE)->addAction(tr("New Recipe"), this, SLOT(newRecipe()));
-   contextMenus.at(BrewTargetTreeItem::RECIPE)->addAction(tr("Brew it!"), this, SLOT(newBrewNote()));
-
-   contextMenus.at(BrewTargetTreeItem::EQUIPMENT)->addAction(tr("New Equipment"), equipEditor, SLOT(newEquipment()));
-   contextMenus.at(BrewTargetTreeItem::FERMENTABLE)->addAction(tr("New Fermentable"), fermDialog, SLOT(newFermentable()));
-   contextMenus.at(BrewTargetTreeItem::HOP)->addAction(tr("New Hop"), hopDialog, SLOT(newHop()));
-   contextMenus.at(BrewTargetTreeItem::MISC)->addAction(tr("New miscellaneous"), miscDialog, SLOT(newMisc()));
-   contextMenus.at(BrewTargetTreeItem::YEAST)->addAction(tr("New Yeast"), yeastDialog, SLOT(newYeast()));
+   QMenu *sMenu = new QMenu();
 
    // Set up the "new" submenu
-	sMenu->setTitle(tr("New"));
-	sMenu->addAction(tr("Recipe"), this, SLOT(newRecipe()));
-	sMenu->addAction(tr("Equipment"), equipEditor, SLOT(newEquipment()));
-	sMenu->addAction(tr("Fermentable"), fermDialog, SLOT(newFermentable()));
-	sMenu->addAction(tr("Hop"), hopDialog, SLOT(newHop()));
-	sMenu->addAction(tr("Miscellaneous"), miscDialog, SLOT(newMisc()));
-	sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
+   sMenu->setTitle(tr("New"));
+   sMenu->addAction(tr("Recipe"), this, SLOT(newRecipe()));
+   sMenu->addAction(tr("Equipment"), equipEditor, SLOT(newEquipment()));
+   sMenu->addAction(tr("Fermentable"), fermDialog, SLOT(newFermentable()));
+   sMenu->addAction(tr("Hop"), hopDialog, SLOT(newHop()));
+   sMenu->addAction(tr("Miscellaneous"), miscDialog, SLOT(newMisc()));
+   sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
 
-   // And do the stuff that is common to all the menus.
-   for(i=0; i <= BrewTargetTreeItem::NUMTYPES; ++i)
-   {
-      // I hate this, but the brewnotes are a very special case and a very
-      // limited context menu
-      if ( i == BrewTargetTreeItem::BREWNOTE)
-         continue;
+   treeView_recipe->setupContextMenu(this,this,sMenu,BrewTargetTreeItem::RECIPE);
+   treeView_equip->setupContextMenu(this,equipEditor,sMenu,BrewTargetTreeItem::EQUIPMENT);
 
-      if ( i != BrewTargetTreeItem::NUMTYPES )
-         contextMenus.at(i)->addSeparator();
-      contextMenus.at(i)->addMenu(sMenu);
-      // Copy
-      contextMenus.at(i)->addAction(tr("Copy"), this, SLOT(copySelected()));
-      // Delete
-      contextMenus.at(i)->addAction(tr("Delete"), this, SLOT(deleteSelected()));
-      // export and import
-      contextMenus.at(i)->addSeparator();
-      temp = contextMenus.at(i)->addAction(tr("Export"), this, SLOT(exportSelected()));
-      if ( i == BrewTargetTreeItem::NUMTYPES )
-         temp->setEnabled(false);
-      contextMenus.at(i)->addAction(tr("Import"), this, SLOT(importFiles()));
-   }
+   treeView_ferm->setupContextMenu(this,fermDialog,sMenu,BrewTargetTreeItem::FERMENTABLE);
+   treeView_hops->setupContextMenu(this,hopDialog,sMenu,BrewTargetTreeItem::HOP);
+   treeView_misc->setupContextMenu(this,miscDialog,sMenu,BrewTargetTreeItem::MISC);
+   treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,BrewTargetTreeItem::YEAST);
 
-   // Handle the brewnotes outside the normal flow
-   contextMenus.at(BrewTargetTreeItem::BREWNOTE)->addAction(tr("Brew Again"), this, SLOT(reBrewNote()));
-   contextMenus.at(BrewTargetTreeItem::BREWNOTE)->addAction(tr("Delete"), this, SLOT(deleteSelected()));
 }
 
 void MainWindow::copyThis(Recipe *rec)
@@ -1830,9 +1830,10 @@ void MainWindow::copyThis(Yeast *yeast)
 
 void MainWindow::copySelected()
 {
-   const QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
+   BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+
    QList<QModelIndex>::const_iterator at, end;
-   QModelIndex above = brewTargetTreeView->findRecipe(0);
+   QModelIndex above;
    QList<Recipe*> copyRec;
    QList<Equipment*> copyKit;
    QList<Fermentable*> copyFerm;
@@ -1840,47 +1841,58 @@ void MainWindow::copySelected()
    QList<Misc*> copyMisc;
    QList<Yeast*> copyYeast;
 
+   if ( active == 0 )
+      return;
+
+   const QModelIndexList selected = active->selectionModel()->selectedRows();
+   above = active->getFirst();
+
    // We need to process them all before we get the names, because adding new things does mess
    // up the indexes.  This ... is not gonna be pretty.
    for(at = selected.begin(),end = selected.end();at < end;++at)
    {
-      // Don't copy the root items.  Bad things will happen
-      if ( *at != brewTargetTreeView->findRecipe(0)      &&
-           *at != brewTargetTreeView->findEquipment(0)   &&
-           *at != brewTargetTreeView->findFermentable(0) &&
-           *at != brewTargetTreeView->findHop(0)         &&
-           *at != brewTargetTreeView->findMisc(0)        &&
-           *at != brewTargetTreeView->findYeast(0))
+      switch(active->getType(*at))
       {
-         switch(brewTargetTreeView->getType(*at))
-         {
-            case BrewTargetTreeItem::RECIPE:
-               copyRec.append(brewTargetTreeView->getRecipe(*at));
-               break;
-            case BrewTargetTreeItem::EQUIPMENT:
-               copyKit.append(brewTargetTreeView->getEquipment(*at));
-               break;
-            case BrewTargetTreeItem::FERMENTABLE:
-               copyFerm.append(brewTargetTreeView->getFermentable(*at));
-               break;
-            case BrewTargetTreeItem::HOP:
-               copyHop.append(brewTargetTreeView->getHop(*at));
-               break;
-            case BrewTargetTreeItem::MISC:
-               copyMisc.append(brewTargetTreeView->getMisc(*at));
-               break;
-            case BrewTargetTreeItem::YEAST:
-               copyYeast.append(brewTargetTreeView->getYeast(*at));
-               break;
-               // No Brewnote, because it just doesn't make sense
-            default:
-               Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unknown type: %1").arg(brewTargetTreeView->getType(*at)));
-         }
+         case BrewTargetTreeItem::RECIPE:
+            if ( *at == active->findRecipe(0) )
+               continue;
+            copyRec.append(active->getRecipe(*at));
+            break;
+         case BrewTargetTreeItem::EQUIPMENT:
+            if ( *at == active->findEquipment(0) )
+               continue;
+            copyKit.append(active->getEquipment(*at));
+            break;
+         case BrewTargetTreeItem::FERMENTABLE:
+            if ( *at == active->findFermentable(0) )
+               continue;
+            copyFerm.append(active->getFermentable(*at));
+            break;
+         case BrewTargetTreeItem::HOP:
+            if ( *at == active->findHop(0) )
+               continue;
+            copyHop.append(active->getHop(*at));
+            break;
+         case BrewTargetTreeItem::MISC:
+            if ( *at == active->findMisc(0) )
+               continue;
+            copyMisc.append(active->getMisc(*at));
+            break;
+         case BrewTargetTreeItem::YEAST:
+            if ( *at == active->findYeast(0) )
+               continue;
+            copyYeast.append(active->getYeast(*at));
+            break;
+            // No Brewnote, because it just doesn't make sense
+         default:
+            Brewtarget::log(Brewtarget::WARNING, QObject::tr("MainWindow::copySelected Unknown type: %1").arg(active->getType(*at)));
       }
    }
 
    for(int i = 0; i < copyRec.count(); ++i)
+   {
       copyThis(copyRec.at(i));
+   }
    for(int i = 0; i < copyKit.count(); ++i)
       copyThis(copyKit.at(i));
    for(int i = 0; i < copyFerm.count(); ++i)
@@ -1891,7 +1903,8 @@ void MainWindow::copySelected()
       copyThis(copyYeast.at(i));
 
 
-   setRecipeByIndex(above);
+   if ( active->getType(above) == BrewTargetTreeItem::RECIPE )
+      setRecipeByIndex(above);
    setSelection(above);
 }
 
@@ -1910,7 +1923,7 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 
       if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
       {
-         Brewtarget::log(Brewtarget::WARNING, tr("Could not open %1 for writing.").arg(filename));
+         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::openForWrite Could not open %1 for writing.").arg(filename));
          outFile = 0;
       }
    }
@@ -1922,12 +1935,17 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 
 void MainWindow::exportSelected()
 {
-	QModelIndexList selected = brewTargetTreeView->selectionModel()->selectedRows();
+   BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   QModelIndexList selected;
    QDomDocument doc;
    QFile* outFile;
    QDomElement root,dbase,recipe;
    bool didRecipe = false;
 
+   if ( active == 0 ) 
+      return;
+
+   selected = active->selectionModel()->selectedRows();
    if( selected.count() == 0 )
       return;
 
@@ -1955,25 +1973,25 @@ void MainWindow::exportSelected()
    for(int i=0; i < selected.count(); ++i)
    {
       QModelIndex selection = selected.value(i);
-      int type = brewTargetTreeView->getType(selection);
+      int type = treeView_recipe->getType(selection);
 
       switch(type)
       {
          case BrewTargetTreeItem::RECIPE:
-            brewTargetTreeView->getRecipe(selection)->toXml(doc,recipe);
+            treeView_recipe->getRecipe(selection)->toXml(doc,recipe);
             didRecipe = true;
             break;
          case BrewTargetTreeItem::EQUIPMENT:
-            brewTargetTreeView->getEquipment(selection)->toXml(doc,dbase);
+            treeView_recipe->getEquipment(selection)->toXml(doc,dbase);
             break;
          case BrewTargetTreeItem::HOP:
-            brewTargetTreeView->getHop(selection)->toXml(doc,dbase);
+            treeView_recipe->getHop(selection)->toXml(doc,dbase);
             break;
          case BrewTargetTreeItem::MISC:
-            brewTargetTreeView->getMisc(selection)->toXml(doc,dbase);
+            treeView_recipe->getMisc(selection)->toXml(doc,dbase);
             break;
          case BrewTargetTreeItem::YEAST:
-            brewTargetTreeView->getYeast(selection)->toXml(doc,dbase);
+            treeView_recipe->getYeast(selection)->toXml(doc,dbase);
             break;
       }
    }

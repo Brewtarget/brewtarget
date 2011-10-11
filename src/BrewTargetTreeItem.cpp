@@ -93,7 +93,7 @@ int BrewTargetTreeItem::columnCount(int type) const
         case BREWNOTE:
             return BREWNUMCOLS;
         default:
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(type));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::columnCount Bad column: %1").arg(type));
             return 0;
     }
             
@@ -119,7 +119,7 @@ QVariant BrewTargetTreeItem::data(int type, int column)
       case BREWNOTE:
          return dataBrewNote(column);
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::data Bad column: %1").arg(column));
          return QVariant();
     }
 }
@@ -176,16 +176,19 @@ QVariant BrewTargetTreeItem::dataRecipe( int column )
         case RECIPENAMECOL:
          if (! thing)
             return QVariant(QObject::tr("Recipes"));
-         else
+        else
             return QVariant(recipe->getName());
+         break;
         case RECIPEBREWDATECOL:
          if ( recipe )
             return QVariant(recipe->getDate());
+         break;
         case RECIPESTYLECOL:
          if ( recipe )
             return QVariant(recipe->getStyle()->getName());
+         break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataRecipe Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -203,8 +206,9 @@ QVariant BrewTargetTreeItem::dataEquipment(int column)
         case EQUIPMENTBOILTIMECOL:
          if ( kit )
             return QVariant(kit->getBoilTime_min());
+         break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataEquipment Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -222,11 +226,13 @@ QVariant BrewTargetTreeItem::dataFermentable(int column)
         case FERMENTABLETYPECOL:
          if ( ferm )
             return QVariant(ferm->getTypeStringTr());
+         break;
         case FERMENTABLECOLORCOL:
          if ( ferm )
             return QVariant(ferm->getColor_srm());
+         break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataFermentable Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -244,11 +250,13 @@ QVariant BrewTargetTreeItem::dataHop(int column)
       case HOPFORMCOL:
          if ( hop )
             return QVariant(hop->getFormStringTr());
+         break;
       case HOPUSECOL:
          if ( hop )
             return QVariant(hop->getUseStringTr());
+         break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataHop Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -266,11 +274,13 @@ QVariant BrewTargetTreeItem::dataMisc(int column)
       case MISCTYPECOL:
          if ( misc )
             return QVariant(misc->getTypeStringTr());
+         break;
       case MISCUSECOL:
          if ( misc )
             return QVariant(misc->getUseStringTr());
+         break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataMisc Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -288,11 +298,13 @@ QVariant BrewTargetTreeItem::dataYeast(int column)
       case YEASTTYPECOL:
          if ( yeast )
             return QVariant(yeast->getTypeStringTr());
+         break;
       case YEASTFORMCOL:
          if ( yeast )
             return QVariant(yeast->getFormStringTr());
+         break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataYeast Bad column: %1").arg(column));
    }
    return QVariant();
 }

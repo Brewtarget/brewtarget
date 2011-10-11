@@ -30,18 +30,51 @@
 #include "BrewTargetTreeModel.h"
 #include "BrewTargetTreeView.h"
 
-BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent)
+BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks type)
    : QAbstractItemModel(parent)
 {
    // Initialize the tree structure
-    rootItem = new BrewTargetTreeItem();
-    rootItem->insertChildren(0,1,BrewTargetTreeItem::RECIPE);
-    rootItem->insertChildren(1,1,BrewTargetTreeItem::EQUIPMENT);
-    rootItem->insertChildren(2,1,BrewTargetTreeItem::FERMENTABLE);
-    rootItem->insertChildren(3,1,BrewTargetTreeItem::HOP);
-    rootItem->insertChildren(4,1,BrewTargetTreeItem::MISC);
-    rootItem->insertChildren(5,1,BrewTargetTreeItem::YEAST);
+   int items = 0;
 
+   rootItem = new BrewTargetTreeItem();
+
+   if ( type & RECIPEMASK)
+   {
+      rootItem->insertChildren(items,1,BrewTargetTreeItem::RECIPE);
+      trees.insert(RECIPEMASK, items++);
+   }
+
+   if ( type & EQUIPMASK )
+   {
+     rootItem->insertChildren(items,1,BrewTargetTreeItem::EQUIPMENT);
+     trees.insert(EQUIPMASK, items++);
+   }
+
+   if ( type & FERMENTMASK )
+   {
+      rootItem->insertChildren(items,1,BrewTargetTreeItem::FERMENTABLE);
+      trees.insert(FERMENTMASK,items++);
+   }
+
+   if ( type & HOPMASK )
+   {
+     rootItem->insertChildren(items,1,BrewTargetTreeItem::HOP);
+     trees.insert(HOPMASK,items++);
+   }
+
+   if ( type & MISCMASK )
+   {
+     rootItem->insertChildren(items,1,BrewTargetTreeItem::MISC);
+     trees.insert(MISCMASK,items++);
+   }
+
+   if ( type & YEASTMASK )
+   {
+     rootItem->insertChildren(items,1,BrewTargetTreeItem::YEAST);
+     trees.insert(YEASTMASK,items++);
+   }
+
+   treeMask = type;
    parentTree = parent;
 }
 
@@ -64,9 +97,9 @@ BrewTargetTreeItem *BrewTargetTreeModel::getItem( const QModelIndex &index ) con
 
 int BrewTargetTreeModel::rowCount(const QModelIndex &parent) const
 {
-    if (! parent.isValid())
-        return rootItem->childCount();
-
+   if (! parent.isValid())
+      return rootItem->childCount();
+   
    BrewTargetTreeItem *pItem = getItem(parent);
 
    return pItem->childCount();
@@ -74,7 +107,25 @@ int BrewTargetTreeModel::rowCount(const QModelIndex &parent) const
 
 int BrewTargetTreeModel::columnCount( const QModelIndex &parent) const
 {
-    return BrewTargetTreeItem::RECIPENUMCOLS;
+   switch(treeMask)
+   {
+   case RECIPEMASK:
+      return BrewTargetTreeItem::RECIPENUMCOLS;
+   case EQUIPMASK:
+      return BrewTargetTreeItem::EQUIPMENTNUMCOLS;
+   case FERMENTMASK:
+      return BrewTargetTreeItem::FERMENTABLENUMCOLS;
+   case HOPMASK:
+      return BrewTargetTreeItem::HOPNUMCOLS;
+   case MISCMASK:
+      return BrewTargetTreeItem::MISCNUMCOLS;
+   case YEASTMASK:
+      return BrewTargetTreeItem::YEASTNUMCOLS;
+   case ALLMASK:
+      return BrewTargetTreeItem::RECIPENUMCOLS;
+   }
+   // Backwards compatibility. This MUST be fixed before the code goes live.
+   return BrewTargetTreeItem::RECIPENUMCOLS;
 }
 
 Qt::ItemFlags BrewTargetTreeModel::flags(const QModelIndex &index) const
@@ -121,19 +172,65 @@ QModelIndex BrewTargetTreeModel::getFirst(int type)
 {
    QModelIndex parent;
    BrewTargetTreeItem* pItem; 
+   TypeMasks index;
 
-   if ( type < BrewTargetTreeItem::NUMTYPES )
+   switch(type) 
    {
-      pItem = rootItem->child(type);
-      return createIndex(0,0,pItem->child(0));
+      case BrewTargetTreeItem::RECIPE:
+         index = RECIPEMASK;
+         break;
+      case BrewTargetTreeItem::EQUIPMENT:
+         index = EQUIPMASK;
+         break;
+      case BrewTargetTreeItem::FERMENTABLE:
+         index = FERMENTMASK;
+         break;
+      case BrewTargetTreeItem::HOP:
+         index = HOPMASK;
+         break;
+      case BrewTargetTreeItem::MISC:
+         index = MISCMASK;
+         break;
+      case BrewTargetTreeItem::YEAST:
+         index = YEASTMASK;
+         break;
+      default:
+         index  = treeMask;
    }
-
-   return QModelIndex();
+   pItem = rootItem->child(trees.value(index));
+   return createIndex(0,0,pItem->child(0));
 }
 
 QVariant BrewTargetTreeModel::data(const QModelIndex &index, int role) const
 {
-   if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= BrewTargetTreeItem::RECIPENUMCOLS)
+   int maxColumns;
+
+   switch(treeMask)
+   {
+   case RECIPEMASK:
+      maxColumns = BrewTargetTreeItem::RECIPENUMCOLS;
+      break;
+   case EQUIPMASK:
+      maxColumns = BrewTargetTreeItem::EQUIPMENTNUMCOLS;
+      break;
+   case FERMENTMASK:
+      maxColumns = BrewTargetTreeItem::FERMENTABLENUMCOLS;
+      break;
+   case HOPMASK:
+      maxColumns = BrewTargetTreeItem::HOPNUMCOLS;
+      break;
+   case MISCMASK:
+      maxColumns = BrewTargetTreeItem::MISCNUMCOLS;
+      break;
+   case YEASTMASK:
+      maxColumns = BrewTargetTreeItem::YEASTNUMCOLS;
+      break;
+   default:
+      // Backwards compatibility. This MUST be fixed prior to releasing the code
+      maxColumns = BrewTargetTreeItem::RECIPENUMCOLS;
+   }
+
+   if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= maxColumns)
       return QVariant();
 
    if ( role != Qt::DisplayRole && role != Qt::EditRole)
@@ -143,13 +240,34 @@ QVariant BrewTargetTreeModel::data(const QModelIndex &index, int role) const
    return item->getData(index.column());
 }
 
-// This is still wrong.  Working on it.  I think if I stablize everything on
-// the idea of "name, form and use" I can get this to work
+// This is much better, assuming the rest can be made to work
 QVariant BrewTargetTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    if ( orientation != Qt::Horizontal || role != Qt::DisplayRole )
       return QVariant();
 
+   switch(treeMask)
+   {
+   case RECIPEMASK:
+      return getRecipeHeader(section);
+   case EQUIPMASK:
+      return getEquipmentHeader(section);
+   case FERMENTMASK:
+      return getFermentableHeader(section);
+   case HOPMASK:
+      return getHopHeader(section);
+   case MISCMASK:
+      return getMiscHeader(section);
+   case YEASTMASK:
+      return getYeastHeader(section);
+   default: // This needs to be fixed later
+      return getRecipeHeader(section);
+
+   }
+}
+
+QVariant BrewTargetTreeModel::getRecipeHeader(int section) const
+{
    switch(section)
    {
    case BrewTargetTreeItem::RECIPENAMECOL:
@@ -158,10 +276,88 @@ QVariant BrewTargetTreeModel::headerData(int section, Qt::Orientation orientatio
       return QVariant(tr("Brew Date"));
    case BrewTargetTreeItem::RECIPESTYLECOL:
       return QVariant(tr("Style"));
-   default:
-      Brewtarget::log(Brewtarget::WARNING, QObject::tr("Bad column: %1").arg(section));
-      return QVariant();
    }
+
+   Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeModel::getRecipeHeader Bad column: %1").arg(section));
+   return QVariant();
+}
+
+QVariant BrewTargetTreeModel::getEquipmentHeader(int section) const
+{
+   switch(section)
+   {
+   case BrewTargetTreeItem::EQUIPMENTNAMECOL:
+      return QVariant(tr("Name"));
+   case BrewTargetTreeItem::EQUIPMENTBOILTIMECOL:
+      return QVariant(tr("Boil Time"));
+   }
+
+   Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeModel::getEquipmentHeader Bad column: %1").arg(section));
+   return QVariant();
+}
+
+QVariant BrewTargetTreeModel::getFermentableHeader(int section) const
+{
+   switch(section)
+   {
+   case BrewTargetTreeItem::FERMENTABLENAMECOL:
+      return QVariant(tr("Name"));
+   case BrewTargetTreeItem::FERMENTABLECOLORCOL:
+      return QVariant(tr("Color"));
+   case BrewTargetTreeItem::FERMENTABLETYPECOL:
+      return QVariant(tr("Type"));
+   }
+
+   Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeModel::getFermentableHeader Bad column: %1").arg(section));
+   return QVariant();
+}
+
+QVariant BrewTargetTreeModel::getHopHeader(int section) const
+{
+   switch(section)
+   {
+   case BrewTargetTreeItem::HOPNAMECOL:
+      return QVariant(tr("Name"));
+   case BrewTargetTreeItem::HOPFORMCOL:
+      return QVariant(tr("Type"));
+   case BrewTargetTreeItem::HOPUSECOL:
+      return QVariant(tr("Use"));
+   }
+
+   Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeModel::getHopHeader Bad column: %1").arg(section));
+   return QVariant();
+}
+
+QVariant BrewTargetTreeModel::getMiscHeader(int section) const
+{
+   switch(section)
+   {
+   case BrewTargetTreeItem::MISCNAMECOL:
+      return QVariant(tr("Name"));
+   case BrewTargetTreeItem::MISCTYPECOL:
+      return QVariant(tr("Type"));
+   case BrewTargetTreeItem::MISCUSECOL:
+      return QVariant(tr("Use"));
+   }
+
+   Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeModel::getMiscHeader Bad column: %1").arg(section));
+   return QVariant();
+}
+
+QVariant BrewTargetTreeModel::getYeastHeader(int section) const
+{
+   switch(section)
+   {
+   case BrewTargetTreeItem::YEASTNAMECOL:
+      return QVariant(tr("Name"));
+   case BrewTargetTreeItem::YEASTTYPECOL:
+      return QVariant(tr("Brew Date"));
+   case BrewTargetTreeItem::YEASTFORMCOL:
+      return QVariant(tr("Form"));
+   }
+
+   Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeModel::getYeastHeader Bad column: %1").arg(section));
+   return QVariant();
 }
 
 bool BrewTargetTreeModel::insertRows(int row, int count, const QModelIndex &parent)
@@ -171,10 +367,20 @@ bool BrewTargetTreeModel::insertRows(int row, int count, const QModelIndex &pare
 
    BrewTargetTreeItem *pItem = getItem(parent);
    int type = pItem->getType();
+   int gpType;
 
-   BrewTargetTreeItem *gpItem = pItem->parent();
+   if ( treeMask == ALLMASK )
+   {
+      BrewTargetTreeItem *gpItem = pItem->parent();
+      gpType = gpItem->getType();
+   }
+   else
+      gpType = type;
 
-   if (gpItem->getType() == BrewTargetTreeItem::RECIPE && pItem->getType() == BrewTargetTreeItem::RECIPE)
+   // This is somehwat tricky. Basically, if the current item and its grandparent are both
+   // recipes, then this must be a brewnote. This makes some sense (not much, but some)
+   // when doing an ALLMASK tree. I am not certain it makes sense for the new trees.
+   if (gpType == BrewTargetTreeItem::RECIPE && type == BrewTargetTreeItem::RECIPE)
       type = BrewTargetTreeItem::BREWNOTE;
 
    bool success = true;
@@ -200,10 +406,10 @@ bool BrewTargetTreeModel::removeRows(int row, int count, const QModelIndex &pare
 
 QModelIndex BrewTargetTreeModel::findRecipe(Recipe* rec)
 {
-   BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::RECIPE);
+   BrewTargetTreeItem* pItem = rootItem->child(trees.value(RECIPEMASK));
    int i;
 
-   if (! rec )
+   if (! rec || (treeMask & RECIPEMASK) == 0)
       return createIndex(0,0,pItem);
 
    for(i=0; i < pItem->childCount(); ++i)
@@ -216,10 +422,10 @@ QModelIndex BrewTargetTreeModel::findRecipe(Recipe* rec)
 
 QModelIndex BrewTargetTreeModel::findEquipment(Equipment* kit)
 {
-   BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::EQUIPMENT);
+   BrewTargetTreeItem* pItem = rootItem->child(trees.value(EQUIPMASK));
    int i;
 
-   if (! kit )
+   if (! kit || (treeMask & EQUIPMASK) == 0)
       return createIndex(0,0,pItem);
 
    for(i=0; i < pItem->childCount(); ++i)
@@ -232,10 +438,10 @@ QModelIndex BrewTargetTreeModel::findEquipment(Equipment* kit)
 
 QModelIndex BrewTargetTreeModel::findFermentable(Fermentable* ferm)
 {
-   BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::FERMENTABLE);
+   BrewTargetTreeItem* pItem = rootItem->child(trees.value(EQUIPMASK));
    int i;
 
-   if (! ferm )
+   if (! ferm || (treeMask & FERMENTMASK) == 0)
       return createIndex(0,0,pItem);
 
    for(i=0; i < pItem->childCount(); ++i)
@@ -248,10 +454,10 @@ QModelIndex BrewTargetTreeModel::findFermentable(Fermentable* ferm)
 
 QModelIndex BrewTargetTreeModel::findHop(Hop* hop)
 {
-   BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::HOP);
+   BrewTargetTreeItem* pItem = rootItem->child(trees.value(HOPMASK));
    int i;
 
-   if (! hop )
+   if (! hop || (treeMask & HOPMASK) == 0)
       return createIndex(0,0,pItem);
 
    for(i=0; i < pItem->childCount(); ++i)
@@ -264,10 +470,10 @@ QModelIndex BrewTargetTreeModel::findHop(Hop* hop)
 
 QModelIndex BrewTargetTreeModel::findMisc(Misc* misc)
 {
-   BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::MISC);
+   BrewTargetTreeItem* pItem = rootItem->child(trees.value(MISCMASK));
    int i;
 
-   if (! misc )
+   if (! misc || (treeMask & MISCMASK) == 0)
       return createIndex(0,0,pItem);
 
    for(i=0; i < pItem->childCount(); ++i)
@@ -280,10 +486,10 @@ QModelIndex BrewTargetTreeModel::findMisc(Misc* misc)
 
 QModelIndex BrewTargetTreeModel::findYeast(Yeast* yeast)
 {
-   BrewTargetTreeItem* pItem = rootItem->child(BrewTargetTreeItem::YEAST);
+   BrewTargetTreeItem* pItem = rootItem->child(trees.value(YEASTMASK));
    int i;
 
-   if (! yeast )
+   if (! yeast || (treeMask & YEASTMASK) == 0)
       return createIndex(0,0,pItem);
 
    for(i=0; i < pItem->childCount(); ++i)
@@ -335,16 +541,17 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
    if( ! Database::isInitialized() )
       return;
 
-   if ( reload == DBALL || reload == DBRECIPE)
+   if ( (treeMask & RECIPEMASK ) &&
+        (reload == DBALL || reload == DBRECIPE))
    {
-      BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::RECIPE);
+      BrewTargetTreeItem* local = rootItem->child(trees.value(RECIPEMASK));
 
       QList<Recipe*>::iterator it;
 
       rows = dbObs->getNumRecipes();
 
       // Insert all the rows
-      insertRows(0,rows, createIndex(BrewTargetTreeItem::RECIPE,0,local));
+      insertRows(0,rows, createIndex(trees.value(RECIPEMASK),0,local));
 
        // And set the data
       for( i = 0, it = dbObs->getRecipeBegin(); it != dbObs->getRecipeEnd(); ++it, ++i )
@@ -370,13 +577,14 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
       }
    }
 
-   if ( reload == DBALL || reload == DBEQUIP)
+   if ( (treeMask & EQUIPMASK) &&
+        ( reload == DBALL || reload == DBEQUIP))
    {
-      BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::EQUIPMENT);
+      BrewTargetTreeItem* local = rootItem->child(trees.value(EQUIPMASK));
       QList<Equipment*>::iterator it;
 
       rows = dbObs->getNumEquipments();
-      insertRows(0,rows, createIndex(BrewTargetTreeItem::EQUIPMENT,0,local));
+      insertRows(0, rows, createIndex(trees.value(EQUIPMASK),0,local));
 
       for( i = 0, it = dbObs->getEquipmentBegin(); it != dbObs->getEquipmentEnd(); ++it, ++i )
       {
@@ -385,13 +593,14 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
       }
    }
 
-   if ( reload == DBALL || reload == DBFERM)
+   if ( (treeMask & FERMENTMASK) &&
+        (reload == DBALL || reload == DBFERM))
    {
-      BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::FERMENTABLE);
+      BrewTargetTreeItem* local = rootItem->child(trees.value(FERMENTMASK));
       QList<Fermentable*>::iterator it;
 
       rows = dbObs->getNumFermentables();
-      insertRows(0,rows,createIndex(BrewTargetTreeItem::FERMENTABLE,0,local));
+      insertRows(0,rows,createIndex(trees.value(FERMENTMASK),0,local));
 
       for( i = 0, it = dbObs->getFermentableBegin(); it != dbObs->getFermentableEnd(); ++it, ++i )
       {
@@ -400,13 +609,14 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
       }
    }
 
-   if ( reload == DBALL || reload == DBHOP)
+   if ( (treeMask & HOPMASK) &&
+        (reload == DBALL || reload == DBHOP))
    {
-      BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::HOP);
+      BrewTargetTreeItem* local = rootItem->child(trees.value(HOPMASK));
       QList<Hop*>::iterator it;
 
       rows = dbObs->getNumHops();
-      insertRows(0,rows,createIndex(BrewTargetTreeItem::HOP,0,local));
+      insertRows(0,rows,createIndex(trees.value(HOPMASK),0,local));
 
       for( i = 0, it = dbObs->getHopBegin(); it != dbObs->getHopEnd(); ++it, ++i )
       {
@@ -415,13 +625,14 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
       }
    }
 
-   if ( reload == DBALL || reload == DBMISC)
+   if ( (treeMask & MISCMASK) &&
+        (reload == DBALL || reload == DBMISC))
    {
-      BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::MISC);
+      BrewTargetTreeItem* local = rootItem->child(trees.value(MISCMASK));
       QList<Misc*>::iterator it;
 
       rows = dbObs->getNumMiscs();
-      insertRows(0,rows,createIndex(BrewTargetTreeItem::MISC,0,local));
+      insertRows(0,rows,createIndex(trees.value(MISCMASK),0,local));
 
       for( i = 0, it = dbObs->getMiscBegin(); it != dbObs->getMiscEnd(); ++it, ++i )
       {
@@ -430,13 +641,14 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
       }
    }
 
-   if ( reload == DBALL || reload == DBYEAST)
+   if ( (treeMask & YEASTMASK) &&
+        (reload == DBALL || reload == DBYEAST))
    {
-      BrewTargetTreeItem* local = rootItem->child(BrewTargetTreeItem::YEAST);
+      BrewTargetTreeItem* local = rootItem->child(trees.value(YEASTMASK));
       QList<Yeast*>::iterator it;
 
       rows = dbObs->getNumYeasts();
-      insertRows(0,rows,createIndex(BrewTargetTreeItem::YEAST,0,local));
+      insertRows(0,rows,createIndex(trees.value(YEASTMASK),0,local));
 
       for( i = 0, it = dbObs->getYeastBegin(); it != dbObs->getYeastEnd(); ++it, ++i )
       {
@@ -451,43 +663,49 @@ void BrewTargetTreeModel::unloadTreeModel(int unload)
    int breadth;
    QModelIndex parent;
 
-   if ( unload == DBALL || unload == DBRECIPE)
+   if ( (treeMask & RECIPEMASK) &&
+        (unload == DBALL || unload == DBRECIPE))
    {
       removeAllObserved();
-      parent = createIndex(BrewTargetTreeItem::RECIPE,0,rootItem->child(BrewTargetTreeItem::RECIPE));
+      parent = createIndex(BrewTargetTreeItem::RECIPE,0,rootItem->child(trees.value(RECIPEMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
 
-   if (unload == DBALL || unload == DBEQUIP)
+   if ((treeMask & EQUIPMASK) &&
+       (unload == DBALL || unload == DBEQUIP))
    {
-      parent = createIndex(BrewTargetTreeItem::EQUIPMENT,0,rootItem->child(BrewTargetTreeItem::EQUIPMENT));
+      parent = createIndex(BrewTargetTreeItem::EQUIPMENT,0,rootItem->child(trees.value(EQUIPMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
 
-   if (unload == DBALL || unload == DBFERM)
+   if ((treeMask & FERMENTMASK) &&
+       (unload == DBALL || unload == DBFERM))
    {
-      parent = createIndex(BrewTargetTreeItem::FERMENTABLE,0,rootItem->child(BrewTargetTreeItem::FERMENTABLE));
+      parent = createIndex(BrewTargetTreeItem::FERMENTABLE,0,rootItem->child(trees.value(FERMENTMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
 
-   if (unload == DBALL || unload == DBHOP)
+   if ((treeMask & HOPMASK) &&
+       (unload == DBALL || unload == DBHOP))
    {
-      parent = createIndex(BrewTargetTreeItem::HOP,0,rootItem->child(BrewTargetTreeItem::HOP));
+      parent = createIndex(BrewTargetTreeItem::HOP,0,rootItem->child(trees.value(HOPMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
-   if (unload == DBALL || unload == DBMISC)
+   if ((treeMask & MISCMASK) &&
+       (unload == DBALL || unload == DBMISC))
    {
-      parent = createIndex(BrewTargetTreeItem::MISC,0,rootItem->child(BrewTargetTreeItem::MISC));
+      parent = createIndex(BrewTargetTreeItem::MISC,0,rootItem->child(trees.value(MISCMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
-   if (unload == DBALL || unload == DBYEAST)
+   if ((treeMask & YEASTMASK) &&
+       (unload == DBALL || unload == DBYEAST))
    {
-      parent = createIndex(BrewTargetTreeItem::YEAST,0,rootItem->child(BrewTargetTreeItem::YEAST));
+      parent = createIndex(BrewTargetTreeItem::YEAST,0,rootItem->child(trees.value(YEASTMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
@@ -495,7 +713,6 @@ void BrewTargetTreeModel::unloadTreeModel(int unload)
 
 void BrewTargetTreeModel::notify(Observable* notifier, QVariant info)
 {
-
    // Notifier could be the database. 
    if( notifier == dbObs )
    {
@@ -504,7 +721,12 @@ void BrewTargetTreeModel::notify(Observable* notifier, QVariant info)
    }
    else // Otherwise, we know that one of the recipes changed.
    {
+      // Do nothing if this isn't a recipe tree
+      if ( ! treeMask & RECIPEMASK )
+         return;
+
       Recipe* foo = static_cast<Recipe*>(notifier);
+
       QModelIndex changed = findRecipe(foo);
 
       if ( ! changed.isValid() )
@@ -628,3 +850,9 @@ int BrewTargetTreeModel::getType(const QModelIndex &index)
    BrewTargetTreeItem* item = getItem(index);
    return item->getType();
 }
+
+int BrewTargetTreeModel::getMask()
+{
+   return treeMask;
+}
+

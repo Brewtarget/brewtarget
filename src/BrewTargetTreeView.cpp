@@ -19,16 +19,20 @@
 
 #include <QApplication>
 #include <QDrag>
+#include <QMenu>
 #include "BrewTargetTreeView.h"
 #include "BrewTargetTreeModel.h"
 
 BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    QTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this);
-   model->startObservingDB();
+   // Set some global properties that all the kids will use.
+   setContextMenuPolicy(Qt::CustomContextMenu);
+   setRootIsDecorated(false);
+   resizeColumnToContents(0);
+   setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-   setModel(model);
+
 }
 
 BrewTargetTreeView::~BrewTargetTreeView()
@@ -64,7 +68,6 @@ QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
 
 QModelIndex BrewTargetTreeView::getFirst(int type)
 {
-
    return model->getFirst(type);
 }
 
@@ -250,3 +253,159 @@ bool BrewTargetTreeView::multiSelected()
 
    return hasRecipe && hasSomethingElse;
 }
+
+void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu,int type)
+{
+
+   contextMenu = new QMenu();
+   subMenu = new QMenu();
+
+   switch(type) 
+   {
+      // the recipe case is a bit more complex, because we need to handle the brewnotes too
+      case BrewTargetTreeItem::RECIPE:
+         contextMenu->addAction(tr("New Recipe"), editor, SLOT(newRecipe()));
+         contextMenu->addAction(tr("Brew It!"), top, SLOT(newBrewNote()));
+         contextMenu->addSeparator();
+
+         subMenu->addAction(tr("Brew Again"), top, SLOT(reBrewNote()));
+         subMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
+
+         break;
+      case BrewTargetTreeItem::EQUIPMENT:
+         contextMenu->addAction(tr("New Equipment"), editor, SLOT(newEquipment()));
+         contextMenu->addSeparator();
+         break;
+      case BrewTargetTreeItem::FERMENTABLE:
+         contextMenu->addAction(tr("New Fermentable"), editor, SLOT(newFermentable()));
+         contextMenu->addSeparator();
+         break;
+      case BrewTargetTreeItem::HOP:
+         contextMenu->addAction(tr("New Hop"), editor, SLOT(newHop()));
+         contextMenu->addSeparator();
+         break;
+      case BrewTargetTreeItem::MISC:
+         contextMenu->addAction(tr("New Misc"), editor, SLOT(newMisc()));
+         contextMenu->addSeparator();
+         break;
+      case BrewTargetTreeItem::YEAST:
+         contextMenu->addAction(tr("New Yeast"), editor, SLOT(newYeast()));
+         contextMenu->addSeparator();
+         break;
+   }
+
+   contextMenu->addMenu(sMenu);
+   // Copy
+   contextMenu->addAction(tr("Copy"), top, SLOT(copySelected()));
+   // Delete
+   contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
+   // export and import
+   contextMenu->addSeparator();
+   contextMenu->addAction(tr("Export"), top, SLOT(exportSelected()));
+   contextMenu->addAction(tr("Import"), top, SLOT(importFiles()));
+   
+}
+
+QMenu* BrewTargetTreeView::getContextMenu(QModelIndex selected)
+{
+   if ( getType(selected) == BrewTargetTreeItem::BREWNOTE )
+      return subMenu;
+
+   return contextMenu;
+}
+
+// Bad form likely
+
+RecipeTreeView::RecipeTreeView(QWidget *parent)
+{
+   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::RECIPEMASK);
+   model->startObservingDB();
+
+   setModel(model);
+   setExpanded(findRecipe(0), true);
+}
+
+RecipeTreeView::~RecipeTreeView()
+{
+   delete model;
+}
+
+EquipmentTreeView::EquipmentTreeView(QWidget *parent)
+{
+   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::EQUIPMASK);
+   model->startObservingDB();
+
+   setModel(model);
+   setExpanded(findEquipment(0), true);
+
+}
+
+EquipmentTreeView::~EquipmentTreeView()
+{
+   delete model;
+}
+
+// Icky ick ikcy
+FermentableTreeView::FermentableTreeView(QWidget *parent)
+{
+   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::FERMENTMASK);
+   model->startObservingDB();
+
+   setModel(model);
+   setExpanded(findFermentable(0), true);
+
+}
+
+FermentableTreeView::~FermentableTreeView()
+{
+   delete model;
+}
+
+// More Ick
+HopTreeView::HopTreeView(QWidget *parent)
+{
+   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::HOPMASK);
+   model->startObservingDB();
+
+   setModel(model);
+   setExpanded(findHop(0), true);
+
+}
+
+HopTreeView::~HopTreeView()
+{
+   delete model;
+}
+
+// Ick some more
+MiscTreeView::MiscTreeView(QWidget *parent)
+{
+   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::MISCMASK);
+   model->startObservingDB();
+
+   setModel(model);
+   setExpanded(findMisc(0), true);
+
+}
+
+MiscTreeView::~MiscTreeView()
+{
+   delete model;
+}
+
+// Will this ick never end?
+YeastTreeView::YeastTreeView(QWidget *parent)
+{
+   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::YEASTMASK);
+   model->startObservingDB();
+
+   setModel(model);
+   setExpanded(findYeast(0), true);
+
+}
+
+YeastTreeView::~YeastTreeView()
+{
+   delete model;
+}
+

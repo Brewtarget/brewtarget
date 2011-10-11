@@ -146,7 +146,7 @@ public slots:
    void mergeDatabases();
    
    void dragEnterEvent(QDragEnterEvent *event);
-   void dropEvent( QDropEvent *event);
+   void dropEvent(QDropEvent *event);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
