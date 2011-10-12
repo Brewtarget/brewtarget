@@ -270,6 +270,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    connect( actionClearRecipe, SIGNAL(triggered()), this, SLOT(clear()) );
+   connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // TreeView for clicks, both double and right
    connect( treeView_recipe, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(treeActivated(const QModelIndex &)));
@@ -328,7 +329,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashUp, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepUp() ) );
    connect( pushButton_mashDown, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepDown() ) );
    connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
-   connect( pushButton_donate, SIGNAL( clicked() ), this, SLOT( openDonateLink() ) );
 
 }
 
