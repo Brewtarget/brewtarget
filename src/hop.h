@@ -19,8 +19,6 @@
 #ifndef _HOP_H
 #define _HOP_H
 
-#include <exception>
-#include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
 #include <QString>
@@ -29,106 +27,115 @@
 class Hop;
 class HopException;
 
-class Hop : public Observable, public BeerXMLElement
+class Hop : public BeerXMLElement
 {
-   public:
+   Q_OBJECT
+public:
 
    enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
    enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
    enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
 
-      Hop();
-      Hop( Hop& other );
-      Hop(const QDomNode& hopNode);
+   Hop();
+   Hop( Hop const& other );
 
-      virtual ~Hop() {}
+   virtual ~Hop() {}
 
-      friend bool operator<( Hop &h1, Hop &h2 );
-      friend bool operator==( Hop &h1, Hop &h2 );
+   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
+   Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct NOTIFY changed /*changedAlpha_pct*/ )
+   Q_PROPERTY( double amount_kg READ amount_kg WRITE setAmount_kg NOTIFY changed /*changedAmount_kg*/ )
+   Q_PROPERTY( Use use READ use WRITE setUse NOTIFY changed /*changedUse*/ )
+   Q_PROPERTY( double time_min READ time_min WRITE setTime_min NOTIFY changed /*changedTime_min*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
+   Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )
+   Q_PROPERTY( Form form READ form WRITE setForm NOTIFY changed /*changedForm*/ )
+   Q_PROPERTY( double beta_pct READ beta_pct WRITE setBeta_pct NOTIFY changed /*changedBeta_pct*/ )
+   Q_PROPERTY( double hsi_pct READ hsi_pct WRITE setHsi_pct NOTIFY changed /*changedHsi_pct*/ )
+   Q_PROPERTY( QString origin READ origin WRITE setOrigin NOTIFY changed /*changedOrigin*/ )
+   Q_PROPERTY( QString substitutes READ substitutes WRITE setSubstitutes NOTIFY changed /*changedSubstitutes*/ )
+   Q_PROPERTY( double humulene_pct READ humulene_pct WRITE setHumulene_pct NOTIFY changed /*changedHumulene_pct*/ )
+   Q_PROPERTY( double caryophyllene_pct READ caryophyllene_pct WRITE setCaryophyllene_pct NOTIFY changed /*changedCaryophyllene_pct*/ )
+   Q_PROPERTY( double cohumulone_pct READ cohumulone_pct WRITE setCohumulone_pct NOTIFY changed /*changedCohumulone_pct*/ )
+   Q_PROPERTY( double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct NOTIFY changed /*changedMyrcene_pct*/ )
+   
+   const QString name() const;
+   double alpha_pct() const;
+   double amount_kg() const;
+   Use use() const;
+   const QString useString() const;
+   //! Returns a translated use string.
+   const QString useStringTr() const;
+   double time_min() const;
+   const QString notes() const;
+   Type type() const;
+   const QString typeString() const;
+   //! Returns a translated type string.
+   const QString typeStringTr() const;
+   Form form() const;
+   const QString formString() const;
+   //! Returns a translated form string.
+   const QString formStringTr() const;
+   double beta_pct() const;
+   double hsi_pct() const;
+   const QString origin() const;
+   const QString substitutes() const;
+   double humulene_pct() const;
+   double caryophyllene_pct() const;
+   double cohumulone_pct() const;
+   double myrcene_pct() const;
+   
+   //set
+   void setName( const QString& str );
+   void setAlpha_pct( double num );
+   void setAmount_kg( double num );
+   bool setUse( Use u );
+   void setTime_min( double num );
+   
+   void setNotes( const QString& str );
+   bool setType( Type t );
+   bool setForm( Form f );
+   void setBeta_pct( double num );
+   void setHsi_pct( double num );
+   void setOrigin( const QString& str );
+   void setSubstitutes( const QString& str );
+   void setHumulene_pct( double num );
+   void setCaryophyllene_pct( double num );
+   void setCohumulone_pct( double num );
+   void setMyrcene_pct( double num );
 
-      virtual void fromNode(const QDomNode& node); // From BeerXMLElement
-      virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-      //QString toXml();
-      
-      const QString getName() const;
-      int getVersion() const;
-      double getAlpha_pct() const;
-      double getAmount_kg() const;
-      Use getUse() const;
-      const QString getUseString() const;
-      //! Returns a translated use string.
-      const QString getUseStringTr() const;
-      double getTime_min() const;
-      
-      const QString getNotes() const;
-      Type getType() const;
-      const QString getTypeString() const;
-      //! Returns a translated type string.
-      const QString getTypeStringTr() const;
-      Form getForm() const;
-      const QString getFormString() const;
-      //! Returns a translated form string.
-      const QString getFormStringTr() const;
-      double getBeta_pct() const;
-      double getHsi_pct() const;
-      const QString getOrigin() const;
-      const QString getSubstitutes() const;
-      double getHumulene_pct() const;
-      double getCaryophyllene_pct() const;
-      double getCohumulone_pct() const;
-      double getMyrcene_pct() const;
-      
-      //set
-      void setName( const QString& str );
-      void setAlpha_pct( double num );
-      void setAmount_kg( double num );
-      bool setUse( Use u );
-      void setTime_min( double num );
-      
-      void setNotes( const QString& str );
-      bool setType( Type t );
-      bool setForm( Form f );
-      void setBeta_pct( double num );
-      void setHsi_pct( double num );
-      void setOrigin( const QString& str );
-      void setSubstitutes( const QString& str );
-      void setHumulene_pct( double num );
-      void setCaryophyllene_pct( double num );
-      void setCohumulone_pct( double num );
-      void setMyrcene_pct( double num );
-      
-   private:
-      // Mandatory members.
-      QString name;
-      const static int version = 1;
-      double alpha_pct;
-      double amount_kg;
-      Use use;
-      double time_min;
-      
-      // Optional members.
-      QString notes;
-      Type type;
-      Form form;
-      double beta_pct;
-      double hsi_pct;
-      QString origin;
-      QString substitutes;
-      double humulene_pct;
-      double caryophyllene_pct;
-      double cohumulone_pct;
-      double myrcene_pct;
-      
-      // Sets every member to zero or blank or whatever.
-      void setDefaults();
-      // Misc functions.
-      static bool isValidUse(const QString& str);
-      static bool isValidType(const QString& str);
-      static bool isValidForm(const QString& str);
+signals:
+   /*
+   void changedName(QString);
+   void changedAlpha_pct(double);
+   void changedAmount_kg(double);
+   void changedUse(Use);
+   void changedTime_min(double);
+   void changedNotes(QString);
+   void changedType(Type);
+   void changedForm(Form);
+   void changedBeta_pct(double);
+   void changedHsi_pct(double);
+   void changedOrigin(QString);
+   void changedSubstitutes(QString);
+   void changedHumulene_pct(double);
+   void changedCaryophyllene_pct(double);
+   void changedCohumulone_pct(double);
+   void changedMyrcene_pct(double);
+   */
+   
+private:
+   
+   void setDefaults();
 
-      static QStringList uses;
-      static QStringList types;
-      static QStringList forms;
+   static bool isValidUse(const QString& str);
+   static bool isValidType(const QString& str);
+   static bool isValidForm(const QString& str);
+
+   static QStringList uses;
+   static QStringList types;
+   static QStringList forms;
 };
 
 inline bool HopPtrLt( Hop* lhs, Hop* rhs)

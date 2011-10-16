@@ -18,31 +18,38 @@
 
 #ifndef _MASH_H
 #define _MASH_H
-#include <string>
-#include <exception>
+
 #include "mashstep.h"
-#include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
 class Mash;
 
-class Mash : public Observable, public MultipleObserver, public BeerXMLElement
+class Mash : public BeerXMLElement
 {
+   Q_OBJECT
 public:
 
    Mash();
-   Mash( const QDomNode& mashNode );
+   Mash( Mash const& other );
 
    virtual ~Mash() {}
 
-   friend bool operator<(Mash &m1, Mash &m2);
-   friend bool operator==(Mash &m1, Mash &m2);
-
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   virtual void notify(Observable *notifier, QVariant info); // From MultipleObserver
    
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
+   Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c NOTIFY changed /*changedGrainTemp_c*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
+   Q_PROPERTY( double tunTemp_c READ tunTemp_c WRITE setTunTemp_c NOTIFY changed /*changedTunTemp_c*/ )
+   Q_PROPERTY( double spargeTemp_c READ spargeTemp_c WRITE setSpargeTemp_c NOTIFY changed /*changedSpargeTemp_c*/ )
+   Q_PROPERTY( double ph READ ph WRITE setPh NOTIFY changed /*changedPh*/ )
+   Q_PROPERTY( double tunWeight_kg READ tunWeight_kg WRITE setTunWeight_kg NOTIFY changed /*changedTunWeight_kg*/ )
+   Q_PROPERTY( double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC NOTIFY changed /*changedTunSpecificHeat_calGC*/ )
+   Q_PROPERTY( bool equipAdjust READ equipAdjust WRITE setEquipAdjust NOTIFY changed /*changedEquipAdjust*/ )
+   Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ NOTIFY changed /*changedTotalMashWater_l*/ STORED false )
+   Q_PROPERTY( double totalTime READ totalTime /*WRITE*/ NOTIFY changed /*changedTotalTime*/ STORED false )
+   
+   // Setters
    void setName( const QString &var );
    void setGrainTemp_c( double var );
    void setNotes( const QString &var );
@@ -53,41 +60,48 @@ public:
    void setTunSpecificHeat_calGC( double var );
    void setEquipAdjust( bool var );
 
-   QString getName() const;
-   double getGrainTemp_c() const;
-   unsigned int getNumMashSteps() const;
-   MashStep* getMashStep( unsigned int i );
-   QString getNotes() const;
-   double getTunTemp_c() const;
-   double getSpargeTemp_c() const;
-   double getPh() const;
-   double getTunWeight_kg() const;
-   double getTunSpecificHeat_calGC() const;
-   bool getEquipAdjust() const;
-
+   // Getters
+   QString name() const;
+   double grainTemp_c() const;
+   unsigned int numMashSteps() const;
+   QString notes() const;
+   double tunTemp_c() const;
+   double spargeTemp_c() const;
+   double ph() const;
+   double tunWeight_kg() const;
+   double tunSpecificHeat_calGC() const;
+   bool equipAdjust() const;
+   
+   // Calculated getters
+   double totalMashWater_l() const; // Total amount of water that went INTO the mash.
+   double getTotalTime();
+   
+   // Relational getters
+   MashStep* mashStep( unsigned int i );
+   
+   // QUESTION: is this the right place for these?
    void addMashStep(MashStep* step);
    void removeMashStep(MashStep* step);
    void removeAllMashSteps();
-   double totalMashWater_l() const; // Total amount of water that went INTO the mash.
-   double getTotalTime();
-
    void swapSteps( unsigned int i, unsigned int j );
 
-private:
-
-   QString name;
-   static const int version = 1;
-   double grainTemp_c;
-   QVector<MashStep *> mashSteps;
-   QString notes;
-   double tunTemp_c;
-   double spargeTemp_c;
-   double ph;
-   double tunWeight_kg;
-   double tunSpecificHeat_calGC;
-   bool equipAdjust;
+signals:
+   /*
+   void changedName(QString);
+   void changedGrainTemp_c(double);
+   void changedTunTemp_c(double);
+   void changedSpargeTemp_c(double);
+   void changedPh(double);
+   void changedTunWeight_kg(double);
+   void changedTunSpecificHeat_calGC(double);
+   void changedEquipAdjust(bool);
+   void changedTotalMashWater_l(double);
+   void changedTotalTime(double);
+   */
    
-   void setDefaults();
+private:
+   // Get via the relational relationship.
+   //QVector<MashStep *> mashSteps;
 
 };
 

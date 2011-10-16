@@ -25,24 +25,60 @@ class BeerXMLElement;
 #include <QDomNode>
 #include <QDomDocument>
 #include <QString>
+#include <QObject>
+#include <QMetaProperty>
+#include <QVariant>
+#include "database.h"
 
-class BeerXMLElement
+class BeerXMLElement : QObject
 {
+   Q_OBJECT
+   Q_CLASSINFO("version","1")
 public:
+   BeerXMLElement();
    virtual ~BeerXMLElement() {}
 
-   double getDouble( const QDomText& textNode );
-   bool getBool( const QDomText& textNode );
-   int getInt( const QDomText& textNode );
-
-   QString text(bool val);
-   QString text(double val);
-   QString text(int val);
-
-   void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
+   // There should be Database::createClone(BeerXMLElement&) that does this.
+   //void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
    
+   // Move this to Database to convert to/from XML from/to SQLite tables.
+   /*
    virtual void fromNode(const QDomNode& node) = 0; // Should initialize this element from the node.
+   */
    virtual void toXml(QDomDocument& doc, QDomNode& parent) = 0;
+   
+   // Some static helpers to convert to/from text.
+   static double getDouble( const QDomText& textNode );
+   static bool getBool( const QDomText& textNode );
+   static int getInt( const QDomText& textNode );
+   static QString text(bool val);
+   static QString text(double val);
+   static QString text(int val);
+   
+signals:
+   //! Passes the meta property that has changed about this object.
+   void changed(QMetaProperty, QVariant);
+   
+private:
+   
+   // They key/table where this ingredient is.
+   int key;
+   Database::DBTable table;
+   
+   /*!
+    * \param prop_name - A meta-property name
+    * \param col_name - The appropriate column in the table.
+    * Should do the following:
+    * 1) Set the appropriate value in the appropriate table row.
+    * 2) Call the NOTIFY method associated with \b prop_name.
+    */
+   void set( const char* prop_name, const char* col_name, QVariant const& value );
+   
+   /*!
+    * \param col_name - The database column of the attribute we want to get.
+    * Returns the value of the attribute specified by key/table/col_name.
+    */
+   QVariant get( const char* col_name );
 };
 
 #endif   /* _BEERXMLELEMENT_H */

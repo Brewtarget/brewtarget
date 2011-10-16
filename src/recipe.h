@@ -26,8 +26,6 @@ class Recipe;
 #include <QDomDocument>
 #include <QString>
 #include "BeerXMLElement.h"
-#include <string>
-#include <exception>
 #include "style.h"
 #include "misc.h"
 #include "mash.h"
@@ -36,28 +34,19 @@ class Recipe;
 #include "equipment.h"
 #include "yeast.h"
 #include "water.h"
-#include "observable.h"
 #include "instruction.h"
 #include "PreInstruction.h"
 #include "brewnote.h"
 
-class Recipe : public Observable, public MultipleObserver, public BeerXMLElement
+class Recipe : public BeerXMLElement
 {
+   Q_OBJECT
 public:
 
    Recipe();
-   Recipe(const QDomNode& recipeNode);
-   Recipe(Recipe* other); // Deep copy constructor.
+   Recipe(Recipe const& other);
 
    virtual ~Recipe() {}
-
-   /*!
-    * This enum is for passing information via Observer::notify().
-    * DONOTUSE is first because it will equal zero, and by default, QVariant.toInt() returns 0. So,
-    * put this as a place holder and don't ever use it.
-    * \todo Make sure other Observables have this dummy element.
-    */
-   enum{DONOTUSE, INSTRUCTION, MASH};
 
    /*!
     * Compares recipes based on name.
@@ -87,95 +76,102 @@ public:
     */
    virtual void notify(Observable *notifier, QVariant info = QVariant());
    
-   /*!
-    * Set recipe name.
-    */
-   void setName( const QString &var );
-   /*!
-    * Set recipe type.
-    */
-   void setType( const QString &var );
-   /*!
-    * Set brewer.
-    */
-   void setBrewer( const QString &var );
-   /*!
-    * Set style.
-    */
-   void setStyle( Style *var );
-   /*!
-    * Set the batch size in liters.
-    */
-   void setBatchSize_l( double var );
-   /*!
-    * Set the boil size in liters.
-    */
-   void setBoilSize_l( double var );
-   /*!
-    * Set the boil time in minutes.
-    */
-   void setBoilTime_min( double var );
-   /*!
-    * Set the overall efficiency in percent (out of 100).
-    */
-   void setEfficiency_pct( double var );
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
+   Q_PROPERTY( QString type READ type WRITE setType NOTIFY changed /*changedType*/ )
+   Q_PROPERTY( QString brewer READ brewer WRITE setBrewer NOTIFY changed /*changedBrewer*/ )
+   Q_PROPERTY( double batchSize_l READ batchSize_l WRITE setBatchSize_l NOTIFY changed /*changedBatchSize_l*/ )
+   Q_PROPERTY( double boilSize_l READ boilSize_l WRITE setBoilSize_l NOTIFY changed /*changedBoilSize_l*/ )
+   Q_PROPERTY( double boilTime_min READ boilTime_min WRITE setBoilTime_min NOTIFY changed /*changedBoilTime_min*/ )
+   Q_PROPERTY( double efficiency_pct READ efficiency_pct WRITE setEfficiency_pct NOTIFY changed /*changedEfficiency_pct*/ )
+   Q_PROPERTY( QString asstBrewer READ asstBrewer WRITE setAsstBrewer NOTIFY changed /*changedAsstBrewer*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
+   Q_PROPERTY( QString tasteNotes READ tasteNotes WRITE setTasteNotes NOTIFY changed /*changedTasteNotes*/ )
+   Q_PROPERTY( double tasteRating READ tasteRating WRITE setTasteRating NOTIFY changed /*changedTasteRating*/ )
+   Q_PROPERTY( double og READ og WRITE setOg NOTIFY changed /*changedOg*/ )
+   Q_PROPERTY( double fg READ fg WRITE setFg NOTIFY changed /*changedFg*/ )
+   Q_PROPERTY( int fermentationStages READ fermentationStages WRITE setFermentationStages NOTIFY changed /*changedFermentationStages*/ )
+   Q_PROPERTY( double primaryAge_days READ primaryAge_days WRITE setPrimaryAge_days NOTIFY changed /*changedPrimaryAge_days*/ )
+   Q_PROPERTY( double primaryTemp_c READ primaryTemp_c WRITE setPrimaryTemp_c NOTIFY changed /*changedPrimaryTemp_c*/ )
+   Q_PROPERTY( double secondaryAge_days READ secondaryAge_days WRITE setSecondaryAge_days NOTIFY changed /*changedSecondaryAge_days*/ )
+   Q_PROPERTY( double secondaryTemp_c READ secondaryTemp_c WRITE setSecondaryTemp_c NOTIFY changed /*changedSecondaryTemp_c*/ )
+   Q_PROPERTY( double tertiaryAge_days READ tertiaryAge_days WRITE setTertiaryAge_days NOTIFY changed /*changedTertiaryAge_days*/ )
+   Q_PROPERTY( double tertiaryTemp_c READ tertiaryTemp_c WRITE setTertiaryTemp_c NOTIFY changed /*changedTertiaryTemp_c*/ )
+   Q_PROPERTY( double age_days READ age_days WRITE setAge_days NOTIFY changed /*changedAge_days*/ )
+   Q_PROPERTY( double ageTemp_c READ ageTemp_c WRITE setAgeTemp_c NOTIFY changed /*changedAgeTemp_c*/ )
+   Q_PROPERTY( QString date READ date WRITE setDate NOTIFY changed /*changedDate*/ )
+   Q_PROPERTY( double carbonation_vols READ carbonation_vols WRITE setCarbonation_vols NOTIFY changed /*changedCarbonation_vols*/ )
+   Q_PROPERTY( bool forcedCarbonation READ forcedCarbonation WRITE setForcedCarbonation NOTIFY changed /*changedForcedCarbonation*/ )
+   Q_PROPERTY( QString primingSugarName READ primingSugarName WRITE setPrimingSugarName NOTIFY changed /*changedPrimingSugarName*/ )
+   Q_PROPERTY( double carbonationTemp_c READ carbonationTemp_c WRITE setCarbonationTemp_c NOTIFY changed /*changedCarbonationTemp_c*/ )
+   Q_PROPERTY( double primingSugarEquiv READ primingSugarEquiv WRITE setPrimingSugarEquiv NOTIFY changed /*changedPrimingSugarEquiv*/ )
+   Q_PROPERTY( double kegPrimingFactor READ kegPrimingFactor WRITE setKegPrimingFactor NOTIFY changed /*changedKegPrimingFactor*/ )
+   Q_PROPERTY( double estimatedCalories READ estimatedCalories WRITE setEstimatedCalories NOTIFY changed /*changedEstimatedCalories*/ )
    
-   /*!
-    * Add a hop.
-    */
+   // Calculated properties.
+   Q_PROPERTY( double points READ points /*WRITE*/ NOTIFY changed /*changedPoints*/ STORED false)
+   Q_PROPERTY( double ABV READ ABV /*WRITE*/ NOTIFY changed /*changedABV*/ STORED false)
+   Q_PROPERTY( double color_srm READ color_srm /*WRITE*/ NOTIFY changed /*changedColor_srm*/ STORED false)
+   Q_PROPERTY( double boilGrav READ boilGrav /*WRITE*/ NOTIFY changed /*changedBoilGrav*/ STORED false)
+   Q_PROPERTY( double IBU READ IBU /*WRITE*/ NOTIFY changed /*changedIBU*/ )
+   Q_PROPERTY( double estimateWortFromMash_l READ estimateWortFromMash_l /*WRITE*/ NOTIFY changed /*changedEstimateWortFromMash_l*/ STORED false)
+   Q_PROPERTY( double estimateBoilVolume_l READ estimateBoilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateBoilVolume_l*/ STORED false)
+   Q_PROPERTY( double estimatePostBoilVolume_l READ estimatePostBoilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimatePostBoilVolume_l*/ STORED false)
+   Q_PROPERTY( double estimateFinalVolume_l READ estimateFinalVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateFinalVolume_l*/ STORED false)
+   Q_PROPERTY( double estimateCalories READ estimateCalories /*WRITE*/ NOTIFY changed /*changedEstimateCalories*/ STORED false)
+   Q_PROPERTY( double grainsInMash_kg READ grainsInMash_kg /*WRITE*/ NOTIFY changed /*changedGrainsInMash_kg*/ STORED false)
+   Q_PROPERTY( double grains_kg READ grains_kg /*WRITE*/ NOTIFY changed /*changedGrains_kg*/ STORED false)
+   
+   // Setters
+   void setName( const QString &var );
+   void setType( const QString &var );
+   void setBrewer( const QString &var );
+   void setStyle( Style *var );
+   void setBatchSize_l( double var );
+   void setBoilSize_l( double var );
+   void setBoilTime_min( double var );
+   void setEfficiency_pct( double var );
+   void setMash( Mash *var );
+   void setAsstBrewer( const QString &var );
+   void setEquipment( Equipment *var );
+   void setNotes( const QString &var );
+   void setTasteNotes( const QString &var );
+   void setTasteRating( double var );
+   void setOg( double var );
+   void setFg( double var );
+   void setFermentationStages( int var );
+   void setPrimaryAge_days( double var );
+   void setPrimaryTemp_c( double var );
+   void setSecondaryAge_days( double var );
+   void setSecondaryTemp_c( double var );
+   void setTertiaryAge_days( double var );
+   void setTertiaryTemp_c( double var );
+   void setAge_days( double var );
+   void setAgeTemp_c( double var );
+   void setDate( const QString &var );
+   void setCarbonation_vols( double var );
+   void setForcedCarbonation( bool var );
+   void setPrimingSugarName( const QString &var );
+   void setCarbonationTemp_c( double var );
+   //! Set the multiplication factor to convert mass of glucose to mass of this priming sugar.
+   void setPrimingSugarEquiv( double var );
+   //! Set multiplication factor to convert mass of glucose reqd. to bottle prime to that required to keg prime.
+   void setKegPrimingFactor( double var );
+
+   // Relational setters
    void addHop( Hop *var );
-   /*!
-    * Remove a hop.
-    */
    bool removeHop( Hop *var );
-   /*!
-    * Add a fermentable.
-    */
    void addFermentable( Fermentable* var );
-   /*!
-    * Remove a fermentable.
-    */
    bool removeFermentable( Fermentable* var );
-   /*!
-    * Add a misc.
-    */
    void addMisc( Misc* var );
-   /*!
-    * Remove a misc.
-    */
    bool removeMisc( Misc* var );
-   /*!
-    * Add a yeast.
-    */
    void addYeast( Yeast* var );
-   /*!
-    * Remove a yeast.
-    */
    bool removeYeast( Yeast* var );
-   /*!
-    * Add a water.
-    */
    void addWater( Water* var );
-   /*!
-    * Remove a water.
-    */
    bool removeWater( Water* var );
-   /*!
-    * Add a brewnote
-    */
    void addBrewNote(BrewNote* var);
-   /*!
-    * Remove a brewnote
-    */
    bool removeBrewNote(BrewNote* var);
    bool removeBrewNote(QList<BrewNote*> var);
-   /*!
-    * Add an instruction.
-    */
    void addInstruction( Instruction* ins );
-   /*!
-    * Remove an instruction.
-    */
    void removeInstruction( Instruction* ins );
    /*!
     * Swap instructions j and k.
@@ -201,143 +197,134 @@ public:
     */
    QString nextAddToBoil(double& time);
 
-   //! Set mash.
-   void setMash( Mash *var );
-   //! Set assistant brewer.
-   void setAsstBrewer( const QString &var );
-   //! Set equipment.
-   void setEquipment( Equipment *var );
-   //! Set notes.
-   void setNotes( const QString &var );
-   //! Set taste notes.
-   void setTasteNotes( const QString &var );
-   //! Set taste rating.
-   void setTasteRating( double var );
-   //! Set OG.
-   void setOg( double var );
-   //! Set FG.
-   void setFg( double var );
-   //! Set the number of fermentation stages.
-   void setFermentationStages( int var );
-   //! Set the primary age in days.
-   void setPrimaryAge_days( double var );
-   //! Set the primary temp in celsius.
-   void setPrimaryTemp_c( double var );
-   //! Set the secondary age in days.
-   void setSecondaryAge_days( double var );
-   //! Set the secondary temp in celsius.
-   void setSecondaryTemp_c( double var );
-   //! Set the tertiary time in days.
-   void setTertiaryAge_days( double var );
-   //! Set the tertiary temp in celsius.
-   void setTertiaryTemp_c( double var );
-   //! Set the age time in days.
-   void setAge_days( double var );
-   //! Set the age temp in celsius.
-   void setAgeTemp_c( double var );
-   //! Set the date in a reasonable date format.
-   void setDate( const QString &var );
-   //! Set the carbonation in volumes of CO2 (1L CO2 per liter of beer at standard temp and pressure).
-   void setCarbonation_vols( double var );
-   //! Set the forced carbonation flag.
-   void setForcedCarbonation( bool var );
-   //! Set the priming sugar name. Change this to QString.
-   void setPrimingSugarName( const QString &var );
-   //! Set carbonation temp in C.
-   void setCarbonationTemp_c( double var );
-   //! Set the multiplication factor to convert mass of glucose to mass of this priming sugar.
-   void setPrimingSugarEquiv( double var );
-   //! Set multiplication factor to convert mass of glucose reqd. to bottle prime to that required to keg prime.
-   void setKegPrimingFactor( double var );
-
-   QString getName() const;
-   QString getType() const;
-   QString getBrewer() const;
-   Style *getStyle() const;
-   double getBatchSize_l() const;
-   double getBoilSize_l() const;
-   double getBoilTime_min() const;
-   double getEfficiency_pct() const;
+   // Getters
+   QString name() const;
+   QString type() const;
+   QString brewer() const;
+   double batchSize_l() const;
+   double boilSize_l() const;
+   double boilTime_min() const;
+   double efficiency_pct() const;
+   QString asstBrewer() const;
+   QString notes() const;
+   QString tasteNotes() const;
+   double tasteRating() const;
+   double og() const;
+   double fg() const;
+   int fermentationStages() const;
+   double primaryAge_days() const;
+   double primaryTemp_c() const;
+   double secondaryAge_days() const;
+   double secondaryTemp_c() const;
+   double tertiaryAge_days() const;
+   double tertiaryTemp_c() const;
+   double age_days() const;
+   double ageTemp_c() const;
+   QString date() const;
+   double carbonation_vols() const;
+   bool forcedCarbonation() const;
+   QString primingSugarName() const;
+   double carbonationTemp_c() const;
+   double primingSugarEquiv() const;
+   double kegPrimingFactor() const;
    
-   unsigned int getNumHops() const;
-   Hop* getHop(unsigned int i);
-   unsigned int getNumFermentables() const;
-   Fermentable* getFermentable(unsigned int i);
-   unsigned int getNumMiscs() const;
-   Misc* getMisc(unsigned int i);
-   unsigned int getNumYeasts() const;
-   Yeast* getYeast(unsigned int i);
-   unsigned int getNumWaters() const;
-   Water* getWater(unsigned int i);
-   unsigned int getNumBrewNotes() const;
-   BrewNote* getBrewNote(unsigned int i);
-   
-   Mash* getMash() const;
-
-   QString getAsstBrewer() const;
-   Equipment* getEquipment() const;
-   QString getNotes() const;
-   QString getTasteNotes() const;
-   double getTasteRating() const;
-   double getOg() const;
-   double getFg() const;
-   int getFermentationStages() const;
-   double getPrimaryAge_days() const;
-   double getPrimaryTemp_c() const;
-   double getSecondaryAge_days() const;
-   double getSecondaryTemp_c() const;
-   double getTertiaryAge_days() const;
-   double getTertiaryTemp_c() const;
-   double getAge_days() const;
-   double getAgeTemp_c() const;
-   QString getDate() const;
-   double getCarbonation_vols() const;
-   bool getForcedCarbonation() const;
-   QString getPrimingSugarName() const;
-   double getCarbonationTemp_c() const;
-   double getPrimingSugarEquiv() const;
-   double getKegPrimingFactor() const;
-
-   void recalculate(); // Calculates some parameters.
-   double getPoints(double volume);
-   double getABV_pct();
-   double getColor_srm();
-   double getBoilGrav();
-   double getIBU();
-   double getIBUFromHop( unsigned int i );
-   QColor getSRMColor();
+   // Calculated getters.
+   double points(double volume);
+   double ABV_pct();
+   double color_srm();
+   double boilGrav();
+   double IBU();
+   QColor SRMColor();
    double estimateWortFromMash_l() const; // Estimate amount of wort collected immediately after the mash.
    double estimateBoilVolume_l() const; // Estimate boil volume based on user inputs.
    double estimatePostBoilVolume_l() const; // How much wort immediately post boil.
    double estimateFinalVolume_l() const; // Estimate final volume based on user inputs.
    double estimateCalories() const;    // Estimate final calories of the beer
-   double getGrainsInMash_kg() const;
-   double getGrains_kg() const;
-
-   Instruction* getMashFermentable() const;
-   Instruction* getMashWater(unsigned int size) const;
-   QVector<PreInstruction> getMashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) const;
-   QVector<PreInstruction> getMashSteps() const;
-   QVector<PreInstruction> getHopSteps(Hop::Use type = Hop::USEBOIL) const;
-   QVector<PreInstruction> getMiscSteps(Misc::Use type = Misc::USEBOIL) const;
-   Instruction* getFirstWortHops() const;
-   Instruction* getTopOff() const;
-   PreInstruction getBoilFermentables(double timeRemaining) const;
+   double grainsInMash_kg() const;
+   double grains_kg() const;
    bool hasBoilFermentable();
+   
+   // Relational getters
+   Style* style() const;
+   unsigned int numHops() const;
+   Hop* getHop(unsigned int i);
+   unsigned int numFermentables() const;
+   Fermentable* fermentable(unsigned int i);
+   unsigned int numMiscs() const;
+   Misc* misc(unsigned int i);
+   unsigned int numYeasts() const;
+   Yeast* yeast(unsigned int i);
+   unsigned int numWaters() const;
+   Water* water(unsigned int i);
+   unsigned int numBrewNotes() const;
+   BrewNote* brewNote(unsigned int i);
+   Mash* mash() const;
+   Equipment* equipment() const;
+   double IBUFromHop( unsigned int i );
+   
+   // Other junk.
    Instruction* getPostboilFermentables();
    Instruction* getPostboilSteps();
+   Instruction* getMashFermentable() const;
+   Instruction* getMashWater(unsigned int size) const;
+   Instruction* getFirstWortHops() const;
+   Instruction* getTopOff() const;
+   QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) const;
+   QVector<PreInstruction> mashSteps() const;
+   QVector<PreInstruction> hopSteps(Hop::Use type = Hop::USEBOIL) const;
+   QVector<PreInstruction> miscSteps(Misc::Use type = Misc::USEBOIL) const;
+   PreInstruction boilFermentables(double timeRemaining) const;
 
+signals:
+   /*
+   void changedName(QString);
+   void changedType(QString);
+   void changedBrewer(QString);
+   void changedBatchSize_l(double);
+   void changedBoilSize_l(double);
+   void changedBoilTime_min(double);
+   void changedEfficiency_pct(double);
+   void changedAsstBrewer(QString);
+   void changedNotes(QString);
+   void changedTasteNotes(QString);
+   void changedTasteRating(double);
+   void changedOg(double);
+   void changedFg(double);
+   void changedFermentationStages(int);
+   void changedPrimaryAge_days(double);
+   void changedPrimaryTemp_c(double);
+   void changedSecondaryAge_days(double);
+   void changedSecondaryTemp_c(double);
+   void changedTertiaryAge_days(double);
+   void changedTertiaryTemp_c(double);
+   void changedAge_days(double);
+   void changedAgeTemp_c(double);
+   void changedDate(QString);
+   void changedCarbonation_vols(double);
+   void changedForcedCarbonation(bool);
+   void changedPrimingSugarName(QString);
+   void changedCarbonationTemp_c(double);
+   void changedPrimingSugarEquiv(double);
+   void changedKegPrimingFactor(double);
+   void changedEstimatedCalories(double);
+   void changedPoints(double);
+   void changedABV(double);
+   void changedColor_srm(double);
+   void changedBoilGrav(double);
+   void changedIBU(double);
+   void changedEstimateWortFromMash_l(double);
+   void changedEstimateBoilVolume_l(double);
+   void changedEstimatePostBoilVolume_l(double);
+   void changedEstimateFinalVolume_l(double);
+   void changedEstimateCalories(double);
+   void changedGrainsInMash_kg(double);
+   void changedGrains_kg(double);
+   */
+   
 private:
-
-   QString name;
-   static const int version = 1;
-   QString type;
-   QString brewer;
+   // Relational members.
+   /*
    Style* style;
-   double batchSize_l;
-   double boilSize_l;
-   double boilTime_min;
-   double efficiency_pct;
    QVector<Hop*> hops;
    QVector<Fermentable*> fermentables;
    QVector<Misc*> miscs;
@@ -346,35 +333,13 @@ private:
    Mash *mash;
    QVector<Instruction*> instructions;
    QVector<BrewNote*> brewNotes;
-   
-   QString asstBrewer;
    Equipment* equipment;
-   QString notes;
-   QString tasteNotes;
-   double tasteRating;
-   double og;
-   double fg;
-   int fermentationStages;
-   double primaryAge_days;
-   double primaryTemp_c;
-   double secondaryAge_days;
-   double secondaryTemp_c;
-   double tertiaryAge_days;
-   double tertiaryTemp_c;
-   double age_days;
-   double ageTemp_c;
-   QString date;
-   double carbonation_vols;
-   bool forcedCarbonation;
-   QString primingSugarName;
-   double carbonationTemp_c;
-   double primingSugarEquiv;
-   double kegPrimingFactor;
-   double estimatedCalories;
+   */
    
    void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );
    bool isValidType( const QString &str );
+   void recalculate(); // Calculates some parameters.
 };
 
 inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)

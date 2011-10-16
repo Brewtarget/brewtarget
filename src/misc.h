@@ -19,35 +19,40 @@
 #ifndef _MISC_H
 #define   _MISC_H
 
-#include <string>
-#include <exception>
 #include <QDomNode>
 #include <QDomText>
 #include <QString>
-#include "observable.h"
 #include "BeerXMLElement.h"
 
 class Misc;
 
-class Misc : public Observable, public BeerXMLElement
+class Misc : public BeerXMLElement
 {
+   Q_OBJECT
 public:
   
    enum Type{ TYPESPICE, TYPEFINING, TYPEWATER_AGENT, TYPEHERB, TYPEFLAVOR, TYPEOTHER };
    enum Use{ USEBOIL, USEMASH, USEPRIMARY, USESECONDARY, USEBOTTLING };
    
    Misc();
-   Misc(Misc& other);
-   Misc( const QDomNode& miscNode );
+   Misc(Misc const& other);
 
    virtual ~Misc() {}
 
-   friend bool operator<(Misc &m1, Misc &m2);
-   friend bool operator==(Misc &m1, Misc &m2);
-
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //QString toXml();
+   
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
+   Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )
+   Q_PROPERTY( QString typeString READ typeString NOTIFY changed STORED false )
+   Q_PROPERTY( QString typeStringTr READ typeStringTr NOTIFY changed STORED false )
+   Q_PROPERTY( Use use READ use WRITE setUse NOTIFY changed /*changedUse*/ )
+   Q_PROPERTY( QString useString READ useString NOTIFY changed /*changedUse*/ STORED false )
+   Q_PROPERTY( QString useStringTr READ useStringTr NOTIFY changed /*changedUse*/ STORED false )
+   Q_PROPERTY( double time READ time WRITE setTime NOTIFY changed /*changedTime*/ )
+   Q_PROPERTY( double amount READ amount WRITE setAmount NOTIFY changed /*changedAmount*/ )
+   Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight NOTIFY changed /*changedAmountIsWeight*/ )
+   Q_PROPERTY( QString useFor READ useFor WRITE setUseFor NOTIFY changed /*changedUseFor*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
    
    // Set
    void setName( const QString &var );
@@ -60,38 +65,34 @@ public:
    void setNotes( const QString &var );
    
    // Get
-   QString getName() const;
-   Type getType() const;
-   const QString getTypeString() const;
+   QString name() const;
+   Type type() const;
+   const QString typeString() const;
    //! Returns a translated type string.
-   const QString getTypeStringTr() const;
-   Use getUse() const;
-   const QString getUseString() const;
+   const QString typeStringTr() const;
+   Use use() const;
+   const QString useString() const;
    //! Returns a translated use string.
-   const QString getUseStringTr() const;
-   double getAmount() const;
-   double getTime() const;
-   bool getAmountIsWeight() const;
-   QString getUseFor() const;
-   QString getNotes() const;
+   const QString useStringTr() const;
+   double amount() const;
+   double time() const;
+   bool amountIsWeight() const;
+   QString useFor() const;
+   QString notes() const;
+   
+signals:
+   /*
+   void changedName(QString);
+   void changedType(Type);
+   void changedUse(Use);
+   void changedTime(double);
+   void changedAmount(double);
+   void changedAmountIsWeight(bool);
+   void changedUseFor(QString);
+   void changedNotes(QString);
+   */
    
 private:
-   
-   // Required fields.
-   QString name;
-   static const int version = 1;
-   Type type;
-   Use use;
-   double time;
-   double amount;
-   
-   // Optional fields.
-   bool amountIsWeight;
-   QString useFor;
-   QString notes;
-
-   // Private methods
-   void setDefaults();
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );
    

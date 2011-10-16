@@ -23,6 +23,9 @@
 #include <iostream>
 #include <QFile>
 #include <QString>
+#include <QSqlRelationalTableModel>
+#include <QMetaProperty>
+#include <QUndoStack>
 #include "equipment.h"
 #include "fermentable.h"
 #include "hop.h"
@@ -33,13 +36,8 @@
 #include "style.h"
 #include "water.h"
 #include "yeast.h"
-#include "observable.h"
 
 class Database;
-
-//! Used in the hasChanged() function. Never use \b DONOTUSE ok?
-enum {DONOTUSE, DBEQUIP, DBFERM, DBHOP, DBMASH, DBMASHSTEP, DBMISC, DBRECIPE,
-      DBSTYLE, DBWATER, DBYEAST, DBALL};
 
 /*!
  * \class Database
@@ -50,9 +48,12 @@ enum {DONOTUSE, DBEQUIP, DBFERM, DBHOP, DBMASH, DBMASHSTEP, DBMISC, DBRECIPE,
  * not when any of them actually changed.
  */
 
-class Database : public Observable
+class Database
 {
 public:
+   enum DBTable{ NOTABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, MASHTABLE, MISCTABLE,
+                 RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE };
+
    //! Don't EVER use this method to get the database!!!
    Database();
    //! This should be the ONLY way you get an instance!!!
@@ -64,48 +65,27 @@ public:
 
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
-   
-   /*! Adds a new Equipment. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addEquipment(Equipment* equip, bool disableNotify = false);
-   /*! Adds a new Fermentable. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addFermentable(Fermentable* ferm, bool disableNotify = false);
-   /*! Adds a new Hop. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addHop(Hop* hop, bool disableNotify = false);
-   /*! Adds a new Mash. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addMash(Mash* mash, bool disableNotify = false);
-   /*! Adds a new MashStep. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addMashStep(MashStep* mashStep, bool disableNotify = false);
-   /*! Adds a new Misc. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addMisc(Misc* misc, bool disableNotify = false);
-   /*! Adds a new Recipe. If \b copySubelements == \b true,
-    *  also inserts the recipe's ingredients into the database.
-    */
-   void addRecipe(Recipe* rec, bool copySubelements);
-   /*! Adds a new Style. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addStyle(Style* style, bool disableNotify = false);
-   /*! Adds a new Water. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addWater(Water* water, bool disableNotify = false);
-   /*! Adds a new Yeast. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addYeast(Yeast* yeast, bool disableNotify = false);
 
+   /*! Schedule an update of the entry, and call the notification when complete.
+    *  Should create an appropriate QUndoCommand and put it into a list somewhere.
+    */
+   void updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object );
+   
+   //! Get the contents of the cell specified by table/key/col_name.
+   QVariant get( DBTable table, int key, const char* col_name );
+   
+   // Create a new ingredient.
+   Equipment* newEquipment();
+   Fermentable* newFermentable();
+   Hop* newHop();
+   Mash* newMash();
+   MashStep* newMashStep();
+   Misc* newMisc();
+   Recipe* newRecipe();
+   Style* newStyle();
+   Water* newWater();
+   Yeast* newYeast();
+   
    // You can remove one
    void removeEquipment(Equipment* equip);
    void removeFermentable(Fermentable* ferm);
@@ -130,15 +110,6 @@ public:
    void removeWater(QList<Water*> water);
    void removeYeast(QList<Yeast*> yeast);
 
-   //! Sorts all the lists by their compare methods.
-   void resortAll();
-   void resortFermentables();
-   void resortEquipments();
-   void resortHops();
-   void resortMiscs();
-   void resortStyles();
-   void resortYeasts();
-
    unsigned int getNumEquipments();
    unsigned int getNumFermentables();
    unsigned int getNumHops();
@@ -150,7 +121,8 @@ public:
    unsigned int getNumWaters();
    unsigned int getNumYeasts();
 
-   // These all return null on failure.
+   // QUESTION: obsolete?.
+   /*
    Equipment* findEquipmentByName(QString name);
    Fermentable* findFermentableByName(QString name);
    Hop* findHopByName(QString name);
@@ -161,7 +133,10 @@ public:
    Style* findStyleByName(QString name);
    Water* findWaterByName(QString name);
    Yeast* findYeastByName(QString name);
+   */
 
+   // QUESTION: obsolete?
+   /*
    QList<Equipment*>::iterator getEquipmentBegin();
    QList<Equipment*>::iterator getEquipmentEnd();
    QList<Fermentable*>::iterator getFermentableBegin();
@@ -182,6 +157,7 @@ public:
    QList<Water*>::iterator getWaterEnd();
    QList<Yeast*>::iterator getYeastBegin();
    QList<Yeast*>::iterator getYeastEnd();
+   */
 
    /*! Merges \b last 's BeerXML elements to \b first.
    *  Neither document should have recipes in them. If
@@ -212,18 +188,18 @@ private:
    static QString recipeFileName;
    static QFile mashFile; // Why are these separate from the dbFile? To prevent duplicates.
    static QString mashFileName;
-
-   // The stuff we care about...
-   static QList<Equipment*> equipments;
-   static QList<Fermentable*> fermentables;
-   static QList<Hop*> hops;
-   static QList<Mash*> mashs;
-   static QList<MashStep*> mashSteps;
-   static QList<Misc*> miscs;
-   static QList<Recipe*> recipes;
-   static QList<Style*> styles;
-   static QList<Water*> waters;
-   static QList<Yeast*> yeasts;
+   
+   QSqlRelationalTableModel equipments;
+   QSqlRelationalTableModel fermentables;
+   QSqlRelationalTableModel hops;
+   QSqlRelationalTableModel mashs;
+   QSqlRelationalTableModel miscs;
+   QSqlRelationalTableModel recipes;
+   QSqlRelationalTableModel styles;
+   QSqlRelationalTableModel waters;
+   QSqlRelationalTableModel yeasts;
+   
+   QUndoStack commandStack;
 };
 
 #endif   /* _DATABASE_H */

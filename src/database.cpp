@@ -48,17 +48,6 @@
 #include "config.h"
 #include "brewtarget.h"
 
-// Grrr... stupid C++. Have to define these outside the class AGAIN.
-QList<Equipment*> Database::equipments;
-QList<Fermentable*> Database::fermentables;
-QList<Hop*> Database::hops;
-QList<Mash*> Database::mashs;
-QList<MashStep*> Database::mashSteps;
-QList<Misc*> Database::miscs;
-QList<Recipe*> Database::recipes;
-QList<Style*> Database::styles;
-QList<Water*> Database::waters;
-QList<Yeast*> Database::yeasts;
 bool Database::initialized = false;
 Database* Database::internalDBInstance = 0;
 QFile Database::dbFile;
@@ -97,6 +86,8 @@ void Database::initialize()
    int col;
    unsigned int i, size;
 
+   commandStack.setUndoLimit(100);
+   
    dbFileName = (Brewtarget::getUserDataDir() + "database.xml");
    recipeFileName = (Brewtarget::getUserDataDir() + "recipes.xml");
    mashFileName = (Brewtarget::getUserDataDir() + "mashs.xml");
@@ -179,87 +170,17 @@ void Database::initialize()
    origRecFile.close();
    origMashFile.close();
 
-   equipments.clear();
-   fermentables.clear();
-   hops.clear();
-   mashSteps.clear();
-   miscs.clear();
-   styles.clear();
-   waters.clear();
-   yeasts.clear();
-   mashs.clear();
-   recipes.clear();
-
-   /*** Items in dbDoc ***/
+   // TODO: implement the rest of this.
+   
+   // Setup equipments, fermentables, and all other table models.
+   
+   /*
    list = dbDoc.elementsByTagName("EQUIPMENT");
    size = list.size();
    for( i = 0; i < size; ++i )
       equipments.push_back(new Equipment(list.at(i)));
-   list = dbDoc.elementsByTagName("FERMENTABLE");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      fermentables.push_back( new Fermentable( list.at(i) ) );
-   list = dbDoc.elementsByTagName("HOP");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      hops.push_back(new Hop( list.at(i) ));
-   list = dbDoc.elementsByTagName("MASH_STEP");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      mashSteps.push_back(new MashStep( list.at(i) ));
-   list = dbDoc.elementsByTagName("MISC");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      miscs.push_back(new Misc( list.at(i) ));
-   list = dbDoc.elementsByTagName("STYLE");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      styles.push_back(new Style(list.at(i)));
-   list = dbDoc.elementsByTagName("WATER");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      waters.push_back(new Water(list.at(i)));
-   list = dbDoc.elementsByTagName("YEAST");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      yeasts.push_back(new Yeast(list.at(i)));
-
-   /*** Items in mashDoc ***/
-   list = mashDoc.elementsByTagName("MASH");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      mashs.push_back(new Mash(list.at(i)));
-
-   /*** Items in recDoc ***/
-   list = recDoc.elementsByTagName("RECIPE");
-   size = list.size();
-   for( i = 0; i < size; ++i )
-      recipes.push_back(new Recipe(list.at(i)));
-
-   // Sort everything by name.
-   qStableSort( equipments.begin(), equipments.end(), EquipmentPtrLt );
-   qStableSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
-   qStableSort( hops.begin(), hops.end(), HopPtrLt );
-   qStableSort( mashs.begin(), mashs.end(), MashPtrLt );
-   qStableSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
-   qStableSort( miscs.begin(), miscs.end(), MiscPtrLt );
-   qStableSort( recipes.begin(), recipes.end(), RecipePtrLt );
-   qStableSort( styles.begin(), styles.end(), StylePtrLt );
-   qStableSort( waters.begin(), waters.end(), WaterPtrLt );
-   qStableSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
-
-   // Remove duplicates
-   Algorithms::Instance().unDup( equipments, EquipmentPtrEq );
-   Algorithms::Instance().unDup( fermentables, FermentablePtrEq );
-   Algorithms::Instance().unDup( hops, HopPtrEq );
-   Algorithms::Instance().unDup( mashs, MashPtrEq );
-   Algorithms::Instance().unDup( mashSteps, MashStepPtrEq );
-   Algorithms::Instance().unDup( miscs, MiscPtrEq );
-   Algorithms::Instance().unDup( recipes, RecipePtrEq );
-   Algorithms::Instance().unDup( styles, StylePtrEq );
-   Algorithms::Instance().unDup( waters, WaterPtrEq );
-   Algorithms::Instance().unDup( yeasts, YeastPtrEq );
-
+   */
+   
    dbFile.close();
    recipeFile.close();
    mashFile.close();
@@ -267,8 +188,6 @@ void Database::initialize()
    if( internalDBInstance == 0 )
       internalDBInstance = new Database();
    Database::initialized = true;
-   
-   internalDBInstance->hasChanged(QVariant(DBALL));
 }
 
 void Database::mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last )
@@ -337,59 +256,6 @@ void Database::mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last
    for( i = 0; i < size; ++i )
       root.appendChild(list.at(i));
    
-}
-
-void Database::resortAll()
-{
-   // Sort everything by name.
-   qStableSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
-   qStableSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
-   qStableSort( hops.begin(), hops.end(), HopPtrLt );
-   qStableSort( mashs.begin(), mashs.end(), MashPtrLt );
-   qStableSort( mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
-   qStableSort( miscs.begin(), miscs.end(), MiscPtrLt );
-   qStableSort( recipes.begin(), recipes.end(), RecipePtrLt );
-   qStableSort( styles.begin(), styles.end(), StylePtrLt );
-   qStableSort( waters.begin(), waters.end(), WaterPtrLt );
-   qStableSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
-
-   hasChanged(QVariant(DBALL));
-}
-
-void Database::resortEquipments()
-{
-   qStableSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
-   hasChanged(QVariant(DBEQUIP));
-}
-
-void Database::resortFermentables()
-{
-   qStableSort( fermentables.begin(), fermentables.end(), FermentablePtrLt );
-   hasChanged(QVariant(DBFERM));
-}
-
-void Database::resortHops()
-{
-   qStableSort( hops.begin(), hops.end(), HopPtrLt );
-   hasChanged(QVariant(DBHOP));
-}
-
-void Database::resortMiscs()
-{
-   qStableSort( miscs.begin(), miscs.end(), MiscPtrLt );
-   hasChanged(QVariant(DBMISC));
-}
-
-void Database::resortStyles()
-{
-   qStableSort( styles.begin(), styles.end(), StylePtrLt );
-   hasChanged(QVariant(DBSTYLE));
-}
-
-void Database::resortYeasts()
-{
-   qStableSort( yeasts.begin(), yeasts.end(), YeastPtrLt );
-   hasChanged(QVariant(DBYEAST));
 }
 
 bool Database::backupToDir(QString dir)
@@ -557,594 +423,315 @@ void Database::savePersistent()
    mashFile.close();
 }
 
-//=========================accessor methods=====================================
-
-// TODO: restructure the database to use maps so that this process is fast.
-void Database::addEquipment(Equipment* equip, bool disableNotify)
+Equipment* Database::newEquipment()
 {
-   if( equip != 0 )
-   {
-      equipments.push_back(equip);
-      qStableSort(equipments.begin(), equipments.end(), EquipmentPtrLt );
-      Algorithms::Instance().unDup(equipments, EquipmentPtrEq);
-      //equipments.unique(Equipment_ptr_equals()); // No dups.
-      if( ! disableNotify )
-         hasChanged(QVariant(DBEQUIP));
-   }
+   // TODO: implement.
+   return 0;
 }
 
-void Database::addFermentable(Fermentable* ferm, bool disableNotify)
+Fermentable* Database::newFermentable()
 {
-   if( ferm != 0 )
-   {
-      fermentables.push_back(ferm);
-      qStableSort(fermentables.begin(), fermentables.end(), FermentablePtrLt );
-      Algorithms::Instance().unDup(fermentables, FermentablePtrEq);
-      //fermentables.unique(Fermentable_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBFERM));
-   }
+   // TODO: implement.
+   return 0;
 }
 
-void Database::addHop(Hop* hop, bool disableNotify)
+Hop* Database::newHop()
 {
-   if( hop != 0 )
-   {
-      hops.push_back(hop);
-      qStableSort(hops.begin(), hops.end(), HopPtrLt );
-      Algorithms::Instance().unDup(hops, HopPtrEq);
-      //hops.unique(Hop_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBHOP));
-   }
+   // TODO: implement.
+   return 0;
 }
 
-void Database::addMash(Mash* mash, bool disableNotify)
+Hop* Database::newHop()
 {
-   if( mash != 0 )
-   {
-      mashs.push_back(mash);
-      qStableSort(mashs.begin(), mashs.end(), MashPtrLt );
-      Algorithms::Instance().unDup(mashs, MashPtrEq);
-      //mashs.unique(Mash_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBMASH));
-   }
+   // TODO: implement.
+   return 0;
 }
 
-void Database::addMashStep(MashStep* mashStep, bool disableNotify)
+MashStep* Database::newMashStep()
 {
-   if( mashStep != 0 )
-   {
-      mashSteps.push_back(mashStep);
-      qStableSort(mashSteps.begin(), mashSteps.end(), MashStepPtrLt );
-      Algorithms::Instance().unDup(mashSteps, MashStepPtrEq);
-      //mashSteps.unique(MashStep_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBMASHSTEP));
-   }
+   // TODO: implement.
+   return 0;
 }
 
-void Database::addMisc(Misc* misc, bool disableNotify)
+Misc* Database::newMisc()
 {
-   if( misc != 0 )
-   {
-      miscs.push_back(misc);
-      qStableSort(miscs.begin(), miscs.end(), MiscPtrLt );
-      Algorithms::Instance().unDup(miscs, MiscPtrEq);
-      //miscs.unique(Misc_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBMISC));
-   }
+   // TODO: implement.
+   return 0;
 }
 
-void Database::addRecipe(Recipe* rec, bool copySubelements)
+Recipe* Database::newRecipe()
 {
-   if( rec == 0 )
-      return;
-
-   recipes.push_back(rec);
-   qStableSort(recipes.begin(), recipes.end(), RecipePtrLt );
-   Algorithms::Instance().unDup(recipes, RecipePtrEq);
-   //recipes.unique(Recipe_ptr_equals());
-
-   if( copySubelements )
-   {
-      unsigned int i, size;
-      addEquipment(rec->getEquipment(), true);
-      addMash(rec->getMash(), true);
-      addStyle(rec->getStyle(), true);
-
-      size = rec->getNumFermentables();
-      for( i = 0; i < size; ++i )
-         addFermentable( rec->getFermentable(i), true );
-      size = rec->getNumHops();
-      for( i = 0; i < size; ++i )
-         addHop( rec->getHop(i), true );
-      size = rec->getNumMiscs();
-      for( i = 0; i < size; ++i )
-         addMisc( rec->getMisc(i), true );
-      size = rec->getNumWaters();
-      for( i = 0; i < size; ++i )
-         addWater( rec->getWater(i), true );
-      size = rec->getNumYeasts();
-      for( i = 0; i < size; ++i )
-         addYeast( rec->getYeast(i), true );
-   }
-
-   hasChanged(DBRECIPE);
+   // TODO: implement.
+   return 0;
 }
 
-void Database::addStyle(Style* style, bool disableNotify)
+Style* Database::newStyle()
 {
-   if( style != 0 )
-   {
-      styles.push_back(style);
-      qStableSort(styles.begin(), styles.end(), StylePtrLt );
-      Algorithms::Instance().unDup(styles, StylePtrEq);
-      //styles.unique(Style_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBSTYLE));
-   }
+   // TODO: implement.
+   return 0;
+}
+
+Water* Database::newWater()
+{
+   // TODO: implement.
+   return 0;
+}
+
+Yeast* Database::newYeast()
+{
+   // TODO: implement.
+   return 0;
 }
 
 void Database::removeEquipment(Equipment* equip)
 {
-   equipments.removeOne(equip);
-   hasChanged(QVariant(DBEQUIP));
+   // TODO: implement.
 }
 
 void Database::removeEquipment(QList<Equipment*> equip)
 {
-    foreach (Equipment* doa, equip)
-        equipments.removeOne(doa);
-    if ( equip.count() )
-        hasChanged(QVariant(DBEQUIP));
+   // TODO: implement.
 }
 
 void Database::removeFermentable(Fermentable* ferm)
 {
-   fermentables.removeOne(ferm);
-   hasChanged(QVariant(DBFERM));
+   // TODO: implement.
 }
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
 {
-   foreach (Fermentable* doa, ferm)
-      fermentables.removeOne(doa);
-   if (ferm.count())
-       hasChanged(QVariant(DBFERM));
+   // TODO: implement.
 }
 
 void Database::removeHop(Hop* hop)
 {
-   hops.removeOne(hop);
-   hasChanged(QVariant(DBHOP));
+   // TODO: implement.
 }
 
 void Database::removeHop(QList<Hop*> hop)
 {
-   foreach (Hop* doa, hop)
-       hops.removeOne(doa);
-
-   if (hop.count())
-       hasChanged(QVariant(DBHOP));
+   // TODO: implement.
 }
 
 void Database::removeMash(Mash* mash)
 {
-   mashs.removeOne(mash);
-   hasChanged(QVariant(DBMASH));
+   // TODO: implement.
 }
 
 void Database::removeMash(QList<Mash*> mash)
 {
-   foreach( Mash* doa, mash)
-       mashs.removeOne(doa);
-   if (mash.count())
-       hasChanged(QVariant(DBMASH));
+   // TODO: implement.
 }
 
 void Database::removeMashStep(MashStep* mashStep)
 {
-   mashSteps.removeOne(mashStep);
-   hasChanged(QVariant(DBMASHSTEP));
+   // TODO: implement.
 }
 
 void Database::removeMashStep(QList<MashStep*> mashStep)
 {
-   foreach( MashStep* doa, mashStep)
-       mashSteps.removeOne(doa);
-   if (mashStep.count())
-       hasChanged(QVariant(DBMASHSTEP));
+   // TODO: implement.
 }
 
 void Database::removeMisc(Misc* misc)
 {
-   miscs.removeOne(misc);
-   hasChanged(QVariant(DBMISC));
+   // TODO: implement.
 }
 
 void Database::removeMisc(QList<Misc*> misc)
 {
-   foreach( Misc* doa, misc)
-       miscs.removeOne(doa);
-   if (misc.count())
-       hasChanged(QVariant(DBMISC));
+   // TODO: implement.
 }
 
 void Database::removeRecipe(Recipe* rec)
 {
-   recipes.removeOne(rec);
-   hasChanged(QVariant(DBRECIPE));
+   // TODO: implement.
 }
 
 void Database::removeRecipe(QList<Recipe*> rec)
 {
-   foreach( Recipe *doa, rec)
-       recipes.removeOne(doa);
-   if (rec.count())
-       hasChanged(QVariant(DBRECIPE));
+   // TODO: implement.
 }
 
 void Database::removeStyle(Style* style)
 {
-   styles.removeOne(style); // Wow, that was easy.
-   hasChanged(QVariant(DBSTYLE));
+   // TODO: implement.
 }
 
 void Database::removeStyle(QList<Style*> style)
 {
-   foreach (Style* doa, style)
-       styles.removeOne(doa); // Wow, that was easy.
-   if (style.count())
-       hasChanged(QVariant(DBSTYLE));
+   // TODO: implement.
 }
 
 void Database::removeWater(Water* water)
 {
-   waters.removeOne(water);
-   hasChanged(QVariant(DBWATER));
+  // TODO: implement.
 }
 
 void Database::removeWater(QList<Water*> water)
 {
-   foreach(Water* doa, water)
-       waters.removeOne(doa);
-   if (water.count())
-       hasChanged(QVariant(DBWATER));
+   // TODO: implement.
 }
 
 void Database::removeYeast(Yeast* yeast)
 {
-   yeasts.removeOne(yeast);
-   hasChanged(QVariant(DBYEAST));
+   // TODO: implement.
 }
 
 void Database::removeYeast(QList<Yeast*> yeast)
 {
-   foreach( Yeast* doa, yeast)
-       yeasts.removeOne(doa);
-   if (yeast.count())
-       hasChanged(QVariant(DBYEAST));
+   // TODO: implement.
 }
-
-void Database::addWater(Water* water, bool disableNotify)
-{
-   if( water != 0 )
-   {
-      waters.push_back(water);
-      qStableSort(waters.begin(), waters.end(), WaterPtrLt );
-      Algorithms::Instance().unDup(waters, WaterPtrEq);
-      //waters.unique(Water_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBWATER));
-   }
-}
-
-void Database::addYeast(Yeast* yeast, bool disableNotify)
-{
-   if( yeast != 0 )
-   {
-      yeasts.push_back(yeast);
-      qStableSort(yeasts.begin(), yeasts.end(), YeastPtrLt );
-      Algorithms::Instance().unDup(yeasts, YeastPtrEq);
-      //yeasts.unique(Yeast_ptr_equals());
-      if( ! disableNotify )
-         hasChanged(QVariant(DBYEAST));
-   }
-}
-
 
 unsigned int Database::getNumEquipments()
 {
-   return equipments.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumFermentables()
 {
-   return fermentables.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumHops()
 {
-   return hops.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumMashs()
 {
-   return mashs.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumMashSteps()
 {
-   return mashSteps.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumMiscs()
 {
-   return miscs.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumRecipes()
 {
-   return recipes.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumStyles()
 {
-   return styles.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumWaters()
 {
-   return waters.size();
+   // TODO: implement.
 }
 
 unsigned int Database::getNumYeasts()
 {
-   return yeasts.size();
+   // TODO: implement.
 }
 
 
 QList<Equipment*>::iterator Database::getEquipmentBegin()
 {
-   return equipments.begin();
+   // TODO: implement.
 }
 
 QList<Equipment*>::iterator Database::getEquipmentEnd()
 {
-   return equipments.end();
+   // TODO: implement.
 }
 
 QList<Fermentable*>::iterator Database::getFermentableBegin()
 {
-   return fermentables.begin();
+   // TODO: implement.
 }
 
 QList<Fermentable*>::iterator Database::getFermentableEnd()
 {
-   return fermentables.end();
+   // TODO: implement.
 }
 
 QList<Hop*>::iterator Database::getHopBegin()
 {
-   return hops.begin();
+   // TODO: implement.
 }
 
 QList<Hop*>::iterator Database::getHopEnd()
 {
-   return hops.end();
+   // TODO: implement.
 }
 
 QList<Mash*>::iterator Database::getMashBegin()
 {
-   return mashs.begin();
+   // TODO: implement.
 }
 
 QList<Mash*>::iterator Database::getMashEnd()
 {
-   return mashs.end();
+   // TODO: implement.
 }
 
 QList<MashStep*>::iterator Database::getMashStepBegin()
 {
-   return mashSteps.begin();
+   // TODO: implement.
 }
 
 QList<MashStep*>::iterator Database::getMashStepEnd()
 {
-   return mashSteps.end();
+   // TODO: implement.
 }
 
 QList<Misc*>::iterator Database::getMiscBegin()
 {
-   return miscs.begin();
+   // TODO: implement.
 }
 
 QList<Misc*>::iterator Database::getMiscEnd()
 {
-   return miscs.end();
+   // TODO: implement.
 }
 
 QList<Recipe*>::iterator Database::getRecipeBegin()
 {
-   return recipes.begin();
+   // TODO: implement.
 }
 
 QList<Recipe*>::iterator Database::getRecipeEnd()
 {
-   return recipes.end();
+   // TODO: implement.
 }
 
 QList<Style*>::iterator Database::getStyleBegin()
 {
-   return styles.begin();
+   // TODO: implement.
 }
 
 QList<Style*>::iterator Database::getStyleEnd()
 {
-   return styles.end();
+   // TODO: implement.
 }
 
 QList<Water*>::iterator Database::getWaterBegin()
 {
-   return waters.begin();
+   // TODO: implement.
 }
 
 QList<Water*>::iterator Database::getWaterEnd()
 {
-   return waters.end();
+   // TODO: implement.
 }
 
 QList<Yeast*>::iterator Database::getYeastBegin()
 {
-   return yeasts.begin();
+   // TODO: implement.
 }
 
 QList<Yeast*>::iterator Database::getYeastEnd()
 {
-   return yeasts.end();
-}
-
-Equipment* Database::findEquipmentByName(QString name)
-{
-   QList<Equipment*>::iterator it, end;
-   end = equipments.end();
-
-   for( it = equipments.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-   
-   return 0;
-}
-
-Fermentable* Database::findFermentableByName(QString name)
-{
-   QList<Fermentable*>::iterator it, end;
-   end = fermentables.end();
-
-   for( it = fermentables.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-Hop* Database::findHopByName(QString name)
-{
-   QList<Hop*>::iterator it, end;
-   end = hops.end();
-
-   for( it = hops.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-Mash* Database::findMashByName(QString name)
-{
-   QList<Mash*>::iterator it, end;
-   end = mashs.end();
-
-   for( it = mashs.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-MashStep* Database::findMashStepByName(QString name)
-{
-   QList<MashStep*>::iterator it, end;
-   end = mashSteps.end();
-
-   for( it = mashSteps.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-Misc* Database::findMiscByName(QString name)
-{
-   QList<Misc*>::iterator it, end;
-   end = miscs.end();
-
-   for( it = miscs.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-Recipe* Database::findRecipeByName(QString name)
-{
-   QList<Recipe*>::iterator it, end;
-   end = recipes.end();
-
-   for( it = recipes.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-Style* Database::findStyleByName(QString name)
-{
-   QList<Style*>::iterator it, end;
-   end = styles.end();
-
-   for( it = styles.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-Water* Database::findWaterByName(QString name)
-{
-   QList<Water*>::iterator it, end;
-   end = waters.end();
-
-   for( it = waters.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
-}
-
-Yeast* Database::findYeastByName(QString name)
-{
-   QList<Yeast*>::iterator it, end;
-   end = yeasts.end();
-
-   for( it = yeasts.begin(); it != end; it++ )
-   {
-      if( (*it)->getName() == name )
-         return *it;
-   }
-
-   return 0;
+   // TODO: implement.
 }
 
 QString Database::getDbFileName()
@@ -1155,4 +742,16 @@ QString Database::getDbFileName()
 QString Database::getRecipeFileName()
 {
    return recipeFileName;
+}
+
+void Database::updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object )
+{
+   SetterCommand command(table,key,col_name,value,prop,object);
+   // For now, immediately execute the command.
+   command.redo();
+   
+   // Push the command on the undo stack.
+   //commandStack.beginMacro("Change an entry");
+   commandStack.push(command);
+   //commandStack.endMacro();
 }

@@ -64,8 +64,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MiscSortFilterProxyModel.cpp
     ${SRCDIR}/MiscTableModel.cpp
     ${SRCDIR}/MiscTableWidget.cpp
-    ${SRCDIR}/observable.cpp
-    ${SRCDIR}/observer.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
@@ -74,6 +72,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RecipeComboBox.cpp
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RefractoDialog.cpp
+    ${SRCDIR}/SetterCommand.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
@@ -207,6 +206,17 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
     ${SRCDIR}/YeastTableWidget.h
+    ${SRCDIR}/equipment.h
+    ${SRCDIR}/fermentable.h
+    ${SRCDIR}/hop.h
+    ${SRCDIR}/instruction.h
+    ${SRCDIR}/mash.h
+    ${SRCDIR}/mashstep.h
+    ${SRCDIR}/misc.h
+    ${SRCDIR}/recipe.h
+    ${SRCDIR}/style.h
+    ${SRCDIR}/water.h
+    ${SRCDIR}/yeast.h
 )
 
 SET( FILES_TO_TRANSLATE

@@ -19,17 +19,11 @@
 #include "BeerXMLElement.h"
 #include <QDomElement>
 #include <QDomNode>
+#include <QMetaProperty>
 #include "brewtarget.h"
 
-void BeerXMLElement::deepCopy( BeerXMLElement* other )
+BeerXMLElement::BeerXMLElement() : key(-1), table(Database::NOTABLE)
 {
-   QDomDocument doc;
-   QDomElement root = doc.createElement("root");
-   QDomNodeList list;
-   
-   other->toXml(doc, root);
-   
-   fromNode(root.firstChild());
 }
 
 double BeerXMLElement::getDouble(const QDomText& textNode)
@@ -89,4 +83,19 @@ QString BeerXMLElement::text(double val)
 QString BeerXMLElement::text(int val)
 {
    return QString("%1").arg(val);
+}
+
+void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant const& value )
+{
+   // Get the meta property.
+   QMetaProperty prop( metaObject().property(prop_name) );
+   
+   // Should schedule an update of the appropriate entry in table,
+   // then use prop to emit its notification signal.
+   Database::instance().updateEntry( table, key, col_name, value, prop, this );
+}
+
+QVariant BeerXMLElement::get( const char* col_name )
+{
+   return Database::instance().get( table, key, col_name );
 }

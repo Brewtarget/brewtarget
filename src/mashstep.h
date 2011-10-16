@@ -18,9 +18,7 @@
 
 #ifndef _MASHSTEP_H
 #define _MASHSTEP_H
-#include <string>
-#include <exception>
-#include "observable.h"
+
 #include <QDomNode>
 #include "BeerXMLElement.h"
 #include <QStringList>
@@ -28,23 +26,29 @@
 
 class MashStep;
 
-class MashStep : public Observable, public BeerXMLElement
+class MashStep : public BeerXMLElement
 {
+   Q_OBJECT
 public:
 
    enum Type {TYPEINFUSION, TYPETEMPERATURE, TYPEDECOCTION};
 
    MashStep();
-   MashStep( const QDomNode& mashStepNode );
+   MashStep( MashStep const& other );
 
    virtual ~MashStep() {}
 
-   friend bool operator<(MashStep &m1, MashStep &m2);
-   friend bool operator==(MashStep &m1, MashStep &m2);
-
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //QString toXml();
+
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
+   Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )
+   Q_PROPERTY( double infuseAmount_l READ infuseAmount_l WRITE setInfuseAmount_l NOTIFY changed /*changedInfuseAmount_l*/ )
+   Q_PROPERTY( double stepTemp_c READ stepTemp_c WRITE setStepTemp_c NOTIFY changed /*changedStepTemp_c*/ )
+   Q_PROPERTY( double stepTime_min READ stepTime_min WRITE setStepTime_min NOTIFY changed /*changedStepTime_min*/ )
+   Q_PROPERTY( double rampTime_min READ rampTime_min WRITE setRampTime_min NOTIFY changed /*changedRampTime_min*/ )
+   Q_PROPERTY( double endTemp_c READ endTemp_c WRITE setEndTemp_c NOTIFY changed /*changedEndTemp_c*/ )
+   Q_PROPERTY( double infuseTemp_c READ infuseTemp_c WRITE setInfuseTemp_c NOTIFY changed /*changedInfuseTemp_c*/ )
+   Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l NOTIFY changed /*changedDecoctionAmount_l*/ )
    
    void setName( const QString &var );
    void setType( Type t );
@@ -53,44 +57,37 @@ public:
    void setStepTime_min( double var );
    void setRampTime_min( double var );
    void setEndTemp_c( double var );
-
-   QString getName() const;
-   Type getType() const;
-   const QString& getTypeString() const;
-   //! Returns a translated type string.
-   const QString getTypeStringTr() const;
-   double getInfuseAmount_l() const;
-   double getStepTemp_c() const;
-   double getStepTime_min() const;
-   double getRampTime_min() const;
-   double getEndTemp_c() const;
-
-   // My extensions
    void setInfuseTemp_c( double var );
-   double getInfuseTemp_c() const;
    void setDecoctionAmount_l( double var );
-   double getDecoctionAmount_l() const;
-   // ===
+   
+   QString name() const;
+   Type type() const;
+   const QString& typeString() const;
+   //! Returns a translated type string.
+   const QString typeStringTr() const;
+   double infuseAmount_l() const;
+   double stepTemp_c() const;
+   double stepTime_min() const;
+   double rampTime_min() const;
+   double endTemp_c() const;
+   double infuseTemp_c() const;
+   double decoctionAmount_l() const;
 
+signals:
+   /*
+   void changedName(QString);
+   void changedType(Type);
+   void changedInfuseAmount_l(double);
+   void changedStepTemp_c(double);
+   void changedStepTime_min(double);
+   void changedRampTime_min(double);
+   void changedEndTemp_c(double);
+   void changedInfuseTemp_c(double);
+   void changedDecoctionAmount_l(double);
+   */
+   
 private:
-
-   QString name;
-   static const int version = 1;
-   Type type;
-   double infuseAmount_l;
-   double stepTemp_c;
-   double stepTime_min;
-   double rampTime_min;
-   double endTemp_c;
-
-   // My extensions
-   double infuseTemp_c;
-   double decoctionAmount_l;
-   // ===
-
    bool isValidType( const QString &str ) const;
-   void setDefaults();
-
    static QStringList types;
 };
 
