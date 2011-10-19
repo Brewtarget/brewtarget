@@ -33,6 +33,7 @@ void SetterCommand::redo()
    
    // Makes the only visible row the one that has our key.
    table->setFilter( QString("key=%1").arg(key) );
+   table->select();
    
    // Record the old data for undo.
    oldValue = table->record(0).value( col_name );
@@ -56,6 +57,7 @@ void SetterCommand::undo()
    
    // Makes the only visible row the one that has our key.
    table->setFilter( QString("key=%1").arg(key) );
+   table->select();
    
    // Change the data back
    table->record(0).setValue( col_name, oldValue );

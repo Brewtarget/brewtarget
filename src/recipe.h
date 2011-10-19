@@ -120,6 +120,7 @@ public:
    Q_PROPERTY( double estimateCalories READ estimateCalories /*WRITE*/ NOTIFY changed /*changedEstimateCalories*/ STORED false)
    Q_PROPERTY( double grainsInMash_kg READ grainsInMash_kg /*WRITE*/ NOTIFY changed /*changedGrainsInMash_kg*/ STORED false)
    Q_PROPERTY( double grains_kg READ grains_kg /*WRITE*/ NOTIFY changed /*changedGrains_kg*/ STORED false)
+   Q_PROPERTY( QColor SRMColor READ SRMColor /*WRITE*/ NOTIFY changed STORED false )
    
    // Setters
    void setName( const QString &var );

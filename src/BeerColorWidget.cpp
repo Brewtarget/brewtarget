@@ -41,18 +41,24 @@ BeerColorWidget::BeerColorWidget(QWidget* parent) : QWidget(parent)
 
 void BeerColorWidget::setRecipe( Recipe* rec )
 {
-   setObserved(rec);
+   if( recObs )
+      disconnect( recObs, SIGNAL(changed(QMetaProperty, QVariant)),
+                  this, SLOT(parseChanges(QMetaProperty, QVariant)) );
+   
    recObs = rec;
    if( recObs )
-      setColor( recObs->getSRMColor() );
+   {
+      connect( recObs, SIGNAL(changed(QMetaProperty, QVariant)),
+               this, SLOT(parseChanges(QMetaProperty, QVariant)) );
+      setColor( recObs->SRMColor() );
+   }
 }
 
-void BeerColorWidget::notify(Observable* notifier, QVariant info)
+void BeerColorWidget::parseChanges(QMetaProperty, QVariant)
 {
-   if( notifier != recObs )
-      return;
-   
-   setColor( recObs->getSRMColor() );
+   // For now, don't check to see what QMetaProperty is, just get the color.
+   if( recObs )
+      setColor( recObs->SRMColor() );
 }
 
 void BeerColorWidget::paintEvent(QPaintEvent *)
