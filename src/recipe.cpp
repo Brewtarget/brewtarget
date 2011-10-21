@@ -675,38 +675,21 @@ void Recipe::addInstruction(Instruction* ins)
    if( ins == 0 )
       return;
    
-   instructions.push_back(ins);
-   hasChanged(QVariant(Recipe::INSTRUCTION));
+   Database::instance().addToRecipe( this, ins );
 }
 
 void Recipe::removeInstruction(Instruction* ins)
 {
-   QVector<Instruction*>::iterator it;
-
-   for( it = instructions.begin(); it != instructions.end(); it++ )
-   {
-      if( *it == ins )
-      {
-         instructions.erase(it);
-         hasChanged(QVariant(Recipe::INSTRUCTION));
-         return;
-      }
-   }
+   Database::instance().removeFromRecipe( this, ins );
 }
 
 void Recipe::swapInstructions(unsigned int j, unsigned int k)
 {
-   if( j == k || static_cast<int>(j) >= instructions.size() || static_cast<int>(k) >= instructions.size() )
+   if( j == k || static_cast<int>(j) >= instructions().size() || static_cast<int>(k) >= instructions().size() )
       return;
    
-   Instruction* tmp;
-   tmp = instructions[j];
-   instructions[j] = instructions[k];
-   instructions[k] = tmp;
-   
-   hasChanged(QVariant(Recipe::INSTRUCTION));
-   
-   return;
+   instructions()[j]->setNumber(k);
+   instructions()[k]->setNumber(j);
 }
 
 void Recipe::clearInstructions()
@@ -717,33 +700,23 @@ void Recipe::clearInstructions()
 
 void Recipe::insertInstruction(Instruction* ins, int pos)
 {
-   QVector<Instruction*>::iterator it;
    int i;
 
    if( ins == 0 )
       return;
 
-   it = instructions.begin();
-   for( i = 0; i < pos && it != instructions.end(); i++ )
+   for( i = pos; i < instructions().size(); ++i )
    {
-      it++;
+      instructions()[i]->setNumber(i+1);
    }
 
-   instructions.insert(it, ins);
-   hasChanged(QVariant(Recipe::INSTRUCTION));
+   ins->setNumber(pos);
+   Database::instance().addToRecipe( this, ins );
 }
 
-int Recipe::getNumInstructions()
+int Recipe::numInstructions()
 {
-   return instructions.size();
-}
-
-Instruction* Recipe::getInstruction(unsigned int i)
-{
-   if( static_cast<int>(i) < instructions.size() )
-      return instructions[i];
-   else
-      return 0;
+   return instructions().size();
 }
 
 Instruction* Recipe::getMashFermentable() const
@@ -984,12 +957,13 @@ Instruction* Recipe::getTopOff() const
 bool Recipe::hasBoilFermentable()
 {
    unsigned int i;
-   for ( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+   for ( i = 0; static_cast<int>(i) < fermentables().size(); ++i )
    {
-      Fermentable* ferm = fermentables[i];
-      if( ferm->getIsMashed() || ferm->getAddAfterBoil() )
+      Fermentable* ferm = fermentables()[i];
+      if( ferm->isMashed() || ferm->addAfterBoil() )
          continue;
-      return true;
+      else
+         return true;
    }
    return false;
 }
@@ -1314,76 +1288,32 @@ QString Recipe::nextAddToBoil(double& time)
 
 void Recipe::addHop( Hop *var )
 {
-   if( var == 0 )
-   {
-      Brewtarget::logW( QString("Recipe: null hop") );
-   }
-   else
-   {
-      hops.push_back(var);
-      addObserved(var);
-      hasChanged();
-   }
+   Database::instance().addToRecipe( this, var );
 }
 
 void Recipe::addFermentable( Fermentable* var )
 {
-   if( var == NULL )
-      Brewtarget::logW( QString("Recipe: null fermentable") );
-   else
-   {
-      fermentables.push_back(var);
-      addObserved(var);
-      hasChanged();
-   }
+   Database::instance().addToRecipe( this, var );
 }
 
 void Recipe::addMisc( Misc* var )
 {
-   if( var == NULL )
-      Brewtarget::logW( QString("Recipe: null misc") );
-   else
-   {
-      miscs.push_back(var);
-      addObserved(var);
-      hasChanged();
-   }
+   Database::instance().addToRecipe( this, var );
 }
 
 void Recipe::addYeast( Yeast* var )
 {
-   if( var == NULL )
-      Brewtarget::logW( QString("Recipe: null yeast") );
-   else
-   {
-      yeasts.push_back(var);
-      addObserved(var);
-      hasChanged();
-   }
+   Database::instance().addToRecipe( this, var );
 }
 
 void Recipe::addWater( Water* var )
 {
-   if( var == NULL )
-      Brewtarget::logW( QString("Recipe: null water") );
-   else
-   {
-      waters.push_back(var);
-      addObserved(var);
-      hasChanged();
-   }
+   Database::instance().addToRecipe( this, var );
 }
 
 void Recipe::addBrewNote(BrewNote* var)
 {
-   if ( var == NULL ) 
-      Brewtarget::logW( QString("Recipe: null brewnote"));
-   else 
-   {
-      brewNotes.push_back(var);
-      addObserved(var);
-      hasChanged();
-   }
+   Database::instance().addToRecipe( this, var );
 }
 
 void Recipe::setMash( Mash *var )
@@ -1950,127 +1880,39 @@ double Recipe::kegPrimingFactor() const
 //=============================Removers========================================
 
 // Returns true if var is found and removed.
-bool Recipe::removeHop( Hop *var )
+void Recipe::removeHop( Hop *var )
 {
-   QVector<Hop*>::iterator iter;
-
-   for( iter = hops.begin(); iter != hops.end(); iter++ )
-   {
-      if( *iter == var )
-      {
-         hops.erase(iter);
-         removeObserved(var);
-         hasChanged();
-         return true;
-      }
-   }
-
-   return false;
+   Database::instance().removeFromRecipe( this, var );
 }
 
-bool Recipe::removeFermentable(Fermentable* var)
+void Recipe::removeFermentable(Fermentable* var)
 {
-   QVector<Fermentable*>::iterator iter;
-
-   for( iter = fermentables.begin(); iter != fermentables.end(); iter++ )
-   {
-      if( *iter == var )
-      {
-         fermentables.erase(iter);
-         removeObserved(var);
-         hasChanged();
-         return true;
-      }
-   }
-
-   return false;
+   Database::instance().removeFromRecipe( this, var );
 }
 
-bool Recipe::removeMisc(Misc* var)
+void Recipe::removeMisc(Misc* var)
 {
-   QVector<Misc*>::iterator iter;
-
-   for( iter = miscs.begin(); iter != miscs.end(); iter++ )
-   {
-      if( *iter == var )
-      {
-         miscs.erase(iter);
-         removeObserved(var);
-         hasChanged();
-         return true;
-      }
-   }
-
-   return false;
+   Database::instance().removeFromRecipe( this, var );
 }
 
-bool Recipe::removeWater(Water* var)
+void Recipe::removeWater(Water* var)
 {
-   QVector<Water*>::iterator iter;
-
-   for( iter = waters.begin(); iter != waters.end(); iter++ )
-   {
-      if( *iter == var )
-      {
-         waters.erase(iter);
-         removeObserved(var);
-         hasChanged();
-         return true;
-      }
-   }
-
-   return false;
+   Database::instance().removeFromRecipe( this, var );
 }
 
-bool Recipe::removeYeast(Yeast* var)
+void Recipe::removeYeast(Yeast* var)
 {
-   QVector<Yeast*>::iterator iter;
-
-   for( iter = yeasts.begin(); iter != yeasts.end(); iter++ )
-   {
-      if( *iter == var )
-      {
-         yeasts.erase(iter);
-         removeObserved(var);
-         hasChanged();
-         return true;
-      }
-   }
-
-   return false;
+   Database::instance().removeFromRecipe( this, var );
 }
 
-bool Recipe::removeBrewNote(BrewNote* var)
+void Recipe::removeBrewNote(BrewNote* var)
 {
-   QVector<BrewNote*>::iterator iter;
-
-   for( iter = brewNotes.begin(); iter != brewNotes.end(); iter++ )
-   {
-      if( *iter == var )
-      {
-         brewNotes.erase(iter);
-         hasChanged();
-         return true;
-      }
-   }
-
-   return false;
+   Database::instance().removeFromRecipe( this, var );
 }
 
-bool Recipe::removeBrewNote(QList<BrewNote*> var)
+void Recipe::removeBrewNote(QList<BrewNote*> var)
 {
-   QVector<BrewNote*>::iterator iter;
-
-   for( iter = brewNotes.begin(); iter != brewNotes.end(); iter++ )
-   {
-      if( var.contains(*iter) )
-      {
-         brewNotes.erase(iter);
-         hasChanged();
-         return true;
-      }
-   }
-   return false;
+   Database::instance().removeFromRecipe( this, var );
 }
 
 //==============================Recalculators==================================

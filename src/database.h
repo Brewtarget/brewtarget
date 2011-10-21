@@ -101,6 +101,36 @@ public:
    Water* water(int key);
    Yeast* yeast(int key);
    
+   // Add these to a recipe, then call the changed()
+   // signal corresponding to the appropriate QVector
+   // of ingredients in rec.
+   void addToRecipe( Recipe* rec, Hop* hop );
+   void addToRecipe( Recipe* rec, Fermentable* ferm );
+   void addToRecipe( Recipe* rec, Misc* m );
+   void addToRecipe( Recipe* rec, Yeast* y );
+   void addToRecipe( Recipe* rec, Water* w );
+   void addToRecipe( Recipe* rec, Instruction* ins );
+   
+   // Remove these from a recipe, then call the changed()
+   // signal corresponding to the appropriate QVector
+   // of ingredients in rec.
+   void removeFromRecipe( Recipe* rec, Hop* hop );
+   void removeFromRecipe( Recipe* rec, Fermentable* ferm );
+   void removeFromRecipe( Recipe* rec, Misc* m );
+   void removeFromRecipe( Recipe* rec, Yeast* y );
+   void removeFromRecipe( Recipe* rec, Water* w );
+   void removeFromRecipe( Recipe* rec, Instruction* ins );
+   
+   // Remove these from a recipe, then call the changed()
+   // signal corresponding to the appropriate QVector
+   // of ingredients in rec.
+   void removeFromRecipe( Recipe* rec, QVector<Hop*> hop );
+   void removeFromRecipe( Recipe* rec, QVector<Fermentable*> ferm );
+   void removeFromRecipe( Recipe* rec, QVector<Misc*> m );
+   void removeFromRecipe( Recipe* rec, QVector<Yeast*> y );
+   void removeFromRecipe( Recipe* rec, QVector<Water*> w );
+   void removeFromRecipe( Recipe* rec, QVector<Instruction*> ins );
+   
    // You can remove one
    void removeEquipment(Equipment* equip);
    void removeFermentable(Fermentable* ferm);

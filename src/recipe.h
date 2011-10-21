@@ -130,6 +130,11 @@ public:
    Q_PROPERTY( unsigned int numYeasts READ numYeasts /*WRITE*/ NOTIFY changed STORED false);
    Q_PROPERTY( unsigned int numWaters READ numWaters /*WRITE*/ NOTIFY changed STORED false);
    Q_PROPERTY( unsigned int numBrewNotes READ numBrewNotes /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( QVector<Hop*> hops READ hops /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QVector<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QVector<Misc*> miscs READ miscs /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QVector<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QVector<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( Mash* mash READ mash /*WRITE*/ NOTIFY changed STORED false);
    Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ NOTIFY changed STORED false);
    Q_PROPERTY( Style* style READ style /*WRITE*/ NOTIFY changed STORED false);
@@ -172,18 +177,18 @@ public:
 
    // Relational setters
    void addHop( Hop *var );
-   bool removeHop( Hop *var );
+   void removeHop( Hop *var );
    void addFermentable( Fermentable* var );
-   bool removeFermentable( Fermentable* var );
+   void removeFermentable( Fermentable* var );
    void addMisc( Misc* var );
-   bool removeMisc( Misc* var );
+   void removeMisc( Misc* var );
    void addYeast( Yeast* var );
-   bool removeYeast( Yeast* var );
+   void removeYeast( Yeast* var );
    void addWater( Water* var );
-   bool removeWater( Water* var );
+   void removeWater( Water* var );
    void addBrewNote(BrewNote* var);
-   bool removeBrewNote(BrewNote* var);
-   bool removeBrewNote(QList<BrewNote*> var);
+   void removeBrewNote(BrewNote* var);
+   void removeBrewNote(QList<BrewNote*> var);
    void addInstruction( Instruction* ins );
    void removeInstruction( Instruction* ins );
    /*!
@@ -260,27 +265,21 @@ public:
    
    // Relational getters
    unsigned int numHops() const;
-   //Hop* getHop(unsigned int i);
    QVector<Hop*> hops();
    unsigned int numFermentables() const;
-   //Fermentable* fermentable(unsigned int i);
    QVector<Fermentable*> fermentables();
    unsigned int numMiscs() const;
-   //Misc* misc(unsigned int i);
    QVector<Misc*> miscs();
    unsigned int numYeasts() const;
-   //Yeast* yeast(unsigned int i);
    QVector<Yeast*> yeasts();
    unsigned int numWaters() const;
-   //Water* water(unsigned int i);
    QVector<Water*> waters();
    unsigned int numBrewNotes() const;
-   //BrewNote* brewNote(unsigned int i);
    QVector<BrewNote*> brewNotes();
+   
    Mash* mash() const;
    Equipment* equipment() const;
    Style* style() const;
-   //double IBUFromHop( unsigned int i );
    
    // Other junk.
    Instruction* getPostboilFermentables();
