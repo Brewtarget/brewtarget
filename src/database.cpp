@@ -746,7 +746,7 @@ QString Database::getRecipeFileName()
 
 void Database::updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object )
 {
-   SetterCommand command(table,key,col_name,value,prop,object);
+   SetterCommand command(table, keyName(table), key, col_name, value, prop, object);
    // For now, immediately execute the command.
    command.redo();
    

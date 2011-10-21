@@ -29,7 +29,7 @@ public:
    /*! A setter command that will set the entry specified by (table,key,col_name)
     * to value, and call prop's notify() method when done.
     */
-   SetterCommand( QSqlRelationalTableModel* table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object);
+   SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object);
    virtual ~SetterCommand();
    
    //virtual int id() const;
@@ -40,6 +40,7 @@ public:
    
 private:
    QSqlRelationalTableModel* table;
+   QString key_name;
    int key;
    QMetaProperty prop;
    QString col_name;

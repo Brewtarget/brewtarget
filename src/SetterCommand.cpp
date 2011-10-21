@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-SetterCommand::SetterCommand( QSqlRelationalTableModel* table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object)
+SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object)
    : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value)),
-     table(table), key(key), prop(prop), col_name(col_name), value(value), object(object)
+     table(table), key_name(key_name), key(key), prop(prop), col_name(col_name), value(value), object(object)
 {
 }
 
@@ -32,7 +32,7 @@ void SetterCommand::redo()
    QString filter = table->filter();
    
    // Makes the only visible row the one that has our key.
-   table->setFilter( QString("key=%1").arg(key) );
+   table->setFilter( QString("%1=%2").arg(key_name).arg(key) );
    table->select();
    
    // Record the old data for undo.
@@ -56,7 +56,7 @@ void SetterCommand::undo()
    QString filter = table->filter();
    
    // Makes the only visible row the one that has our key.
-   table->setFilter( QString("key=%1").arg(key) );
+   table->setFilter( QString("%1=%2").arg(key_name).arg(key) );
    table->select();
    
    // Change the data back

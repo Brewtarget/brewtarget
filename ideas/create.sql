@@ -1,7 +1,6 @@
 create table equipment(
    eid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
    boil_size real,
    batch_size real,
    tun_volume real,
@@ -24,7 +23,6 @@ create table equipment(
 create table fermentable(
    fid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
    ftype varchar(128),
    amount real,
    yield real,
@@ -46,7 +44,6 @@ create table fermentable(
 create table hop(
    hid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
    alpha real,
    amount real,
    use varchar(64),
@@ -67,7 +64,6 @@ create table hop(
 create table misc(
    mid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
    mtype varchar(64),
    use varchar(64),
    time real,
@@ -81,7 +77,6 @@ create table style(
    sid integer primary key autoincrement,
    name varchar(256) not null,
    s_type varchar(64),
-   version integer,
    category varchar(256),
    category_number integer,
    style_letter varchar(1),
@@ -108,7 +103,6 @@ create table style(
 create table yeast(
    yid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
    ytype varchar(32),
    form varchar(32),
    amount real,
@@ -129,7 +123,6 @@ create table yeast(
 create table mash_step(
    msid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
    mstype varchar(32),
    infuse_amount real,
    step_temp real,
@@ -144,7 +137,6 @@ create table mash_step(
 create table mash(
    mid integer primary key autoincrement,
    name varchar(256),
-   version integer,
    grain_temp real,
    notes text,
    tun_temp real,
@@ -160,7 +152,6 @@ create table mash(
 -- using another table
 create table brewnote(
    bnid integer primary key autoincrement,
-   version integer,
    brewDate varchar(32),
    fermentDate varchar(32),
    sg real,
@@ -189,13 +180,13 @@ create table brewnote(
    boil_off real,
    final_volume real
    notes text,
+
    recipe integer,
    foreign key(recipe) references recipe(rid)
 );
 
 create table water(
    wid integer primary key autoincrement,
-   version integer,
    name varchar(256) not null,
    amount real,
    calcium real,
@@ -212,12 +203,13 @@ create table water(
 create table instruction(
    iid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
+   number integer, -- Which instruction number in the list.
    directions text,
    has_timer boolean,
    timer_value real,
    completed boolean,
    interval real,
+
    recipe integer,
    foreign key(recipe) references recipe(rid)
 );
@@ -228,12 +220,12 @@ create table instruction(
 create table recipe(
    rid integer primary key autoincrement,
    name varchar(256) not null,
-   version integer,
    rtype varchar(32),
    brewer varchar(1024),
    assistant_brewer varchar(1024),
    batch_size real,
    boil_size real,
+   boil_time real,
    efficiency real,
    og real,
    fg real,
@@ -246,7 +238,7 @@ create table recipe(
    tertiary_temp real,
    age real,
    age_temp real,
-   brewdate integer,
+   brewdate date,
    carb_volume real,
    forced_carb boolean,
    priming_sugar_name varchar(128),
@@ -255,6 +247,7 @@ create table recipe(
    keg_priming_factor real,
    taste_notes text,
    taste_rating real,
+
    style integer,
    mash integer,
    equipment integer,
@@ -265,6 +258,7 @@ create table recipe(
 
 create table mash_to_mashstep(
    mmid integer primary key autoincrement,
+
    mash integer,
    mashstep integer,
    foreign key(mash) references mash(mid),
@@ -275,6 +269,7 @@ create table hops_in_recipe(
    hrid integer primary key autoincrement,
    use varchar(32),
    time real,
+
    hop integer,
    recipe integer,
    foreign key(hop) references hop(hid),
@@ -286,6 +281,7 @@ create table fermentable_in_recipe(
    is_mashed boolean,
    late_addition boolean,
    amount real,
+
    fermentable integer,
    recipe integer,
    foreign key(fermentable) references fermentable(fid),
@@ -295,6 +291,7 @@ create table fermentable_in_recipe(
 create table misc_in_recipe(
    mrid integer primary key autoincrement,
    time real,
+
    misc integer,
    recipe integer,
    foreign key(misc) references hop(misc),

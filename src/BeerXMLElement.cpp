@@ -26,6 +26,10 @@ BeerXMLElement::BeerXMLElement() : key(-1), table(Database::NOTABLE)
 {
 }
 
+BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : key(other.key), table(other.table)
+{
+}
+
 double BeerXMLElement::getDouble(const QDomText& textNode)
 {
    bool ok;

@@ -36,6 +36,7 @@ class BeerXMLElement : QObject
    Q_CLASSINFO("version","1")
 public:
    BeerXMLElement();
+   BeerXMLElement( BeerXMLElement const& other );
    virtual ~BeerXMLElement() {}
 
    // There should be Database::createClone(BeerXMLElement&) that does this.
@@ -59,12 +60,13 @@ signals:
    //! Passes the meta property that has changed about this object.
    void changed(QMetaProperty, QVariant);
    
-private:
+protected:
    
    // They key/table where this ingredient is.
    int key;
    Database::DBTable table;
-   
+
+private:   
    /*!
     * \param prop_name - A meta-property name
     * \param col_name - The appropriate column in the table.

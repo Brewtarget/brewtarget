@@ -74,6 +74,9 @@ public:
    //! Get the contents of the cell specified by table/key/col_name.
    QVariant get( DBTable table, int key, const char* col_name );
    
+   //! Get the name of the key column for the given table.
+   QString keyName( DBTable table );
+   
    // Create a new ingredient.
    Equipment* newEquipment();
    Fermentable* newFermentable();
@@ -85,6 +88,18 @@ public:
    Style* newStyle();
    Water* newWater();
    Yeast* newYeast();
+   
+   // Get ingredients by key value.
+   Equipment* equipment(int key);
+   Fermentable* fermentable(int key);
+   Hop* hop(int key);
+   Mash* mash(int key);
+   MashStep* mashStep(int key);
+   Misc* misc(int key);
+   Recipe* recipe(int key);
+   Style* style(int key);
+   Water* water(int key);
+   Yeast* yeast(int key);
    
    // You can remove one
    void removeEquipment(Equipment* equip);

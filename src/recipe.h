@@ -22,9 +22,11 @@ class Recipe;
 
 #include <QColor>
 #include <QVariant>
+#include <QVector>
 #include <QDomNode>
 #include <QDomDocument>
 #include <QString>
+#include <QDate>
 #include "BeerXMLElement.h"
 #include "style.h"
 #include "misc.h"
@@ -71,10 +73,6 @@ public:
     * Retains only the name, but sets everything else to defaults.
     */
    void clear();
-   /*!
-    * Inherited from MultipleObserver.
-    */
-   virtual void notify(Observable *notifier, QVariant info = QVariant());
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
    Q_PROPERTY( QString type READ type WRITE setType NOTIFY changed /*changedType*/ )
@@ -87,8 +85,6 @@ public:
    Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
    Q_PROPERTY( QString tasteNotes READ tasteNotes WRITE setTasteNotes NOTIFY changed /*changedTasteNotes*/ )
    Q_PROPERTY( double tasteRating READ tasteRating WRITE setTasteRating NOTIFY changed /*changedTasteRating*/ )
-   Q_PROPERTY( double og READ og WRITE setOg NOTIFY changed /*changedOg*/ )
-   Q_PROPERTY( double fg READ fg WRITE setFg NOTIFY changed /*changedFg*/ )
    Q_PROPERTY( int fermentationStages READ fermentationStages WRITE setFermentationStages NOTIFY changed /*changedFermentationStages*/ )
    Q_PROPERTY( double primaryAge_days READ primaryAge_days WRITE setPrimaryAge_days NOTIFY changed /*changedPrimaryAge_days*/ )
    Q_PROPERTY( double primaryTemp_c READ primaryTemp_c WRITE setPrimaryTemp_c NOTIFY changed /*changedPrimaryTemp_c*/ )
@@ -98,7 +94,7 @@ public:
    Q_PROPERTY( double tertiaryTemp_c READ tertiaryTemp_c WRITE setTertiaryTemp_c NOTIFY changed /*changedTertiaryTemp_c*/ )
    Q_PROPERTY( double age_days READ age_days WRITE setAge_days NOTIFY changed /*changedAge_days*/ )
    Q_PROPERTY( double ageTemp_c READ ageTemp_c WRITE setAgeTemp_c NOTIFY changed /*changedAgeTemp_c*/ )
-   Q_PROPERTY( QString date READ date WRITE setDate NOTIFY changed /*changedDate*/ )
+   Q_PROPERTY( QDate date READ date WRITE setDate NOTIFY changed /*changedDate*/ )
    Q_PROPERTY( double carbonation_vols READ carbonation_vols WRITE setCarbonation_vols NOTIFY changed /*changedCarbonation_vols*/ )
    Q_PROPERTY( bool forcedCarbonation READ forcedCarbonation WRITE setForcedCarbonation NOTIFY changed /*changedForcedCarbonation*/ )
    Q_PROPERTY( QString primingSugarName READ primingSugarName WRITE setPrimingSugarName NOTIFY changed /*changedPrimingSugarName*/ )
@@ -107,20 +103,36 @@ public:
    Q_PROPERTY( double kegPrimingFactor READ kegPrimingFactor WRITE setKegPrimingFactor NOTIFY changed /*changedKegPrimingFactor*/ )
    Q_PROPERTY( double estimatedCalories READ estimatedCalories WRITE setEstimatedCalories NOTIFY changed /*changedEstimatedCalories*/ )
    
-   // Calculated properties.
+   // Calculated stored properties.
+   // Do we need to be able to set og and fg rather than let them be calculated?
+   Q_PROPERTY( double og READ og WRITE setOg NOTIFY changed /*changedOg*/ )
+   Q_PROPERTY( double fg READ fg WRITE setFg NOTIFY changed /*changedFg*/ )
+   
+   // Calculated unstored properties.
    Q_PROPERTY( double points READ points /*WRITE*/ NOTIFY changed /*changedPoints*/ STORED false)
-   Q_PROPERTY( double ABV READ ABV /*WRITE*/ NOTIFY changed /*changedABV*/ STORED false)
+   Q_PROPERTY( double ABV_pct READ ABV_pct /*WRITE*/ NOTIFY changed /*changedABV*/ STORED false)
    Q_PROPERTY( double color_srm READ color_srm /*WRITE*/ NOTIFY changed /*changedColor_srm*/ STORED false)
    Q_PROPERTY( double boilGrav READ boilGrav /*WRITE*/ NOTIFY changed /*changedBoilGrav*/ STORED false)
    Q_PROPERTY( double IBU READ IBU /*WRITE*/ NOTIFY changed /*changedIBU*/ )
-   Q_PROPERTY( double estimateWortFromMash_l READ estimateWortFromMash_l /*WRITE*/ NOTIFY changed /*changedEstimateWortFromMash_l*/ STORED false)
-   Q_PROPERTY( double estimateBoilVolume_l READ estimateBoilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateBoilVolume_l*/ STORED false)
-   Q_PROPERTY( double estimatePostBoilVolume_l READ estimatePostBoilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimatePostBoilVolume_l*/ STORED false)
-   Q_PROPERTY( double estimateFinalVolume_l READ estimateFinalVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateFinalVolume_l*/ STORED false)
-   Q_PROPERTY( double estimateCalories READ estimateCalories /*WRITE*/ NOTIFY changed /*changedEstimateCalories*/ STORED false)
+   Q_PROPERTY( double wortFromMash_l READ wortFromMash_l /*WRITE*/ NOTIFY changed /*changedEstimateWortFromMash_l*/ STORED false)
+   Q_PROPERTY( double boilVolume_l READ boilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateBoilVolume_l*/ STORED false)
+   Q_PROPERTY( double postBoilVolume_l READ postBoilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimatePostBoilVolume_l*/ STORED false)
+   Q_PROPERTY( double finalVolume_l READ finalVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateFinalVolume_l*/ STORED false)
+   Q_PROPERTY( double calories READ estimateCalories /*WRITE*/ NOTIFY changed /*changedEstimateCalories*/ STORED false)
    Q_PROPERTY( double grainsInMash_kg READ grainsInMash_kg /*WRITE*/ NOTIFY changed /*changedGrainsInMash_kg*/ STORED false)
    Q_PROPERTY( double grains_kg READ grains_kg /*WRITE*/ NOTIFY changed /*changedGrains_kg*/ STORED false)
    Q_PROPERTY( QColor SRMColor READ SRMColor /*WRITE*/ NOTIFY changed STORED false )
+   
+   // Relational properties.
+   Q_PROPERTY( unsigned int numHops READ numHops /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( unsigned int numFermentables READ numFermentables /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( unsigned int numMiscs READ numMiscs /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( unsigned int numYeasts READ numYeasts /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( unsigned int numWaters READ numWaters /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( unsigned int numBrewNotes READ numBrewNotes /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( Mash* mash READ mash /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( Style* style READ style /*WRITE*/ NOTIFY changed STORED false);
    
    // Setters
    void setName( const QString &var );
@@ -148,7 +160,7 @@ public:
    void setTertiaryTemp_c( double var );
    void setAge_days( double var );
    void setAgeTemp_c( double var );
-   void setDate( const QString &var );
+   void setDate( const QDate &var );
    void setCarbonation_vols( double var );
    void setForcedCarbonation( bool var );
    void setPrimingSugarName( const QString &var );
@@ -221,7 +233,7 @@ public:
    double tertiaryTemp_c() const;
    double age_days() const;
    double ageTemp_c() const;
-   QString date() const;
+   QDate date() const;
    double carbonation_vols() const;
    bool forcedCarbonation() const;
    QString primingSugarName() const;
@@ -236,32 +248,39 @@ public:
    double boilGrav();
    double IBU();
    QColor SRMColor();
-   double estimateWortFromMash_l() const; // Estimate amount of wort collected immediately after the mash.
-   double estimateBoilVolume_l() const; // Estimate boil volume based on user inputs.
-   double estimatePostBoilVolume_l() const; // How much wort immediately post boil.
-   double estimateFinalVolume_l() const; // Estimate final volume based on user inputs.
-   double estimateCalories() const;    // Estimate final calories of the beer
+   double wortFromMash_l() const; // Estimate amount of wort collected immediately after the mash.
+   double boilVolume_l() const; // Estimate boil volume based on user inputs.
+   double postBoilVolume_l() const; // How much wort immediately post boil.
+   double finalVolume_l() const; // Estimate final volume based on user inputs.
+   double calories() const;    // Estimate final calories of the beer
    double grainsInMash_kg() const;
    double grains_kg() const;
-   bool hasBoilFermentable();
+   //! Get a list of IBU contributions from each hop.
+   QVector<double> IBUs() const;
    
    // Relational getters
-   Style* style() const;
    unsigned int numHops() const;
-   Hop* getHop(unsigned int i);
+   //Hop* getHop(unsigned int i);
+   QVector<Hop*> hops();
    unsigned int numFermentables() const;
-   Fermentable* fermentable(unsigned int i);
+   //Fermentable* fermentable(unsigned int i);
+   QVector<Fermentable*> fermentables();
    unsigned int numMiscs() const;
-   Misc* misc(unsigned int i);
+   //Misc* misc(unsigned int i);
+   QVector<Misc*> miscs();
    unsigned int numYeasts() const;
-   Yeast* yeast(unsigned int i);
+   //Yeast* yeast(unsigned int i);
+   QVector<Yeast*> yeasts();
    unsigned int numWaters() const;
-   Water* water(unsigned int i);
+   //Water* water(unsigned int i);
+   QVector<Water*> waters();
    unsigned int numBrewNotes() const;
-   BrewNote* brewNote(unsigned int i);
+   //BrewNote* brewNote(unsigned int i);
+   QVector<BrewNote*> brewNotes();
    Mash* mash() const;
    Equipment* equipment() const;
-   double IBUFromHop( unsigned int i );
+   Style* style() const;
+   //double IBUFromHop( unsigned int i );
    
    // Other junk.
    Instruction* getPostboilFermentables();
@@ -275,6 +294,7 @@ public:
    QVector<PreInstruction> hopSteps(Hop::Use type = Hop::USEBOIL) const;
    QVector<PreInstruction> miscSteps(Misc::Use type = Misc::USEBOIL) const;
    PreInstruction boilFermentables(double timeRemaining) const;
+   bool hasBoilFermentable();
 
 signals:
    /*
@@ -321,6 +341,9 @@ signals:
    void changedGrainsInMash_kg(double);
    void changedGrains_kg(double);
    */
+
+public slots:
+   void parseChanges(QMetaProperty prop, QVariant val);
    
 private:
    // Relational members.
@@ -336,6 +359,41 @@ private:
    QVector<BrewNote*> brewNotes;
    Equipment* equipment;
    */
+   
+   // Calculated properties.
+   double points;
+   double ABV_pct;
+   double color_srm;
+   double boilGrav;
+   double IBU;
+   double wortFromMash_l;
+   double boilVolume_l;
+   double postBoilVolume_l;
+   double finalVolume_l;
+   double calories;
+   double grainsInMash_kg;
+   double grains_kg;
+   QColor SRMColor;
+   
+   // Calculated, but stored...BeerXML is weird sometimes.
+   double og;
+   double fg;
+   
+   // Some recalculators for calculated properties.
+   void recalcPoints(double volume);
+   void recalcABV_pct();
+   void recalcColor_srm();
+   void recalcBoilGrav();
+   void recalcIBU();
+   void recalcVolumeEstimates();
+   void recalcGrainsInMash_kg();
+   void recalcGrains_kg();
+   void recalcSRMColor();
+   void recalcCalories();
+   void recalcOgFg();
+   
+   // Helper
+   double ibuFromHop(Hop const* hop);
    
    void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );

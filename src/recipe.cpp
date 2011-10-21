@@ -268,6 +268,14 @@ void Recipe::toXml(QDomDocument& doc, QDomNode& parent)
    parent.appendChild(recipeNode);
 }
 
+void Recipe::clear()
+{
+   QString name = getName();
+   setDefaults();
+   setName(name);
+   hasChanged();
+}
+
 //=================================CONSTRUCTORS=================================
 void Recipe::setDefaults()
 {
@@ -315,9 +323,8 @@ void Recipe::setDefaults()
    hops.clear();
 }
 
-Recipe::Recipe()
+Recipe::Recipe() : BeerXMLElement()
 {
-   setDefaults();
 }
 
 Recipe::Recipe(const QDomNode& recipeNode)
@@ -325,15 +332,8 @@ Recipe::Recipe(const QDomNode& recipeNode)
    fromNode(recipeNode);
 }
 
-Recipe::Recipe( Recipe* other )
+Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other)
 {
-   QDomDocument doc;
-   QDomElement root = doc.createElement("root");
-   QDomNodeList list;
-   
-   other->toXml(doc, root);
-   
-   fromNode(root.firstChild());
 }
 
 void Recipe::fromNode(const QDomNode& recipeNode)
@@ -1310,106 +1310,7 @@ QString Recipe::nextAddToBoil(double& time)
    return ret;
 }
 
-//================================"SET" METHODS=================================
-void Recipe::setName( const QString &var )
-{
-   name = QString(var);
-   hasChanged();
-}
-
-void Recipe::setType( const QString &var )
-{
-   if( ! isValidType(var) )
-   {
-      Brewtarget::logW( QString("Recipe: invalid type: %1").arg(var) );
-      type = "All Grain";
-   }
-   else
-   {
-      type = QString(var);
-   }
-
-   hasChanged();
-}
-
-void Recipe::setBrewer( const QString &var )
-{
-   brewer = QString(var);
-   hasChanged();
-}
-
-void Recipe::setStyle( Style *var )
-{
-   if( var == NULL )
-   {
-      Brewtarget::logW( QString("Recipe: null style") );
-   }
-   else
-   {
-      style = var;
-      hasChanged();
-   }
-}
-
-void Recipe::setBatchSize_l( double var )
-{
-   if( var < 0.0 )
-   {
-      Brewtarget::logW( QString("Recipe: batch size < 0: %1").arg(var) );
-      batchSize_l = 0;
-   }
-   else
-   {
-      batchSize_l = var;
-   }
-
-   hasChanged();
-}
-
-void Recipe::setBoilSize_l( double var )
-{
-   if( var < 0.0 )
-   {
-      Brewtarget::logW( QString("Recipe: boil size < 0: %1").arg(var) );
-      boilSize_l = 0;
-   }
-   else
-   {
-      boilSize_l = var;
-   }
-
-   hasChanged();
-}
-
-void Recipe::setBoilTime_min( double var )
-{
-   if( var < 0.0 )
-   {
-      Brewtarget::logW( QString("Recipe: boil time < 0: %1").arg(var) );
-      boilTime_min = 0;
-   }
-   else
-   {
-      boilTime_min = var;
-   }
-
-   hasChanged();
-}
-
-void Recipe::setEfficiency_pct( double var )
-{
-   if( var < 0.0  || var > 100.0 )
-   {
-      Brewtarget::logW( QString("Recipe: 0 < efficiency < 100: %1").arg(var) );
-      efficiency_pct = 70;
-   }
-   else
-   {
-      efficiency_pct = var;
-   }
-
-   hasChanged();
-}
+//============================Relational Setters===============================
 
 void Recipe::addHop( Hop *var )
 {
@@ -1493,131 +1394,234 @@ void Recipe::setMash( Mash *var )
    mash = var;
    addObserved(mash);
    hasChanged(QVariant(MASH));
-}
-
-void Recipe::setAsstBrewer( const QString &var )
-{
-   asstBrewer = QString(var);
-   hasChanged();
+   
+   if( var )
+   {
+      if( mash() )
+         disconnect( mash(), SIGNAL(changed(QMetaProperty,QVariant)), this, 0 );
+      
+      connect( var, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(parseChanges(QMetaProperty,QVariant)) );
+      set( "mash", "mash", var->key );
+   }
 }
 
 void Recipe::setEquipment( Equipment *var )
 {
-   if( var == NULL )
-      Brewtarget::logW( QString("Recipe: null equipment") );
+   if( var )
+      set( "equipment", "equipment", var->key );
+}
+
+void Recipe::setStyle( Style *var )
+{
+   if( var )
+      set( "style", "style", var->key );
+}
+
+//==============================="SET" METHODS=================================
+void Recipe::setName( const QString &var )
+{
+   set( "name", "name", var );
+}
+
+void Recipe::setType( const QString &var )
+{
+   QString tmp;
+   if( ! isValidType(var) )
+   {
+      Brewtarget::logW( QString("Recipe: invalid type: %1").arg(var) );
+      tmp = "All Grain";
+   }
    else
    {
-      equipment = var;
-      hasChanged();
+      tmp = QString(var);
    }
+
+   set( "type", "type", tmp );
+}
+
+void Recipe::setBrewer( const QString &var )
+{
+   set( "brewer", "brewer", var );
+}
+
+void Recipe::setBatchSize_l( double var )
+{
+   double tmp;
+   if( var < 0.0 )
+   {
+      Brewtarget::logW( QString("Recipe: batch size < 0: %1").arg(var) );
+      tmp = 0;
+   }
+   else
+   {
+      tmp = var;
+   }
+
+   set( "batchSize_l", "batch_size", tmp );
+}
+
+void Recipe::setBoilSize_l( double var )
+{
+   double tmp;
+   if( var < 0.0 )
+   {
+      Brewtarget::logW( QString("Recipe: boil size < 0: %1").arg(var) );
+      tmp = 0;
+   }
+   else
+   {
+      tmp = var;
+   }
+
+   set( "boilSize_l", "boil_size", tmp );
+}
+
+void Recipe::setBoilTime_min( double var )
+{
+   double tmp;
+   if( var < 0.0 )
+   {
+      Brewtarget::logW( QString("Recipe: boil time < 0: %1").arg(var) );
+      tmp = 0;
+   }
+   else
+   {
+      tmp = var;
+   }
+
+   set( "boilTime_min", "boil_time", tmp );
+}
+
+void Recipe::setEfficiency_pct( double var )
+{
+   double tmp;
+   if( var < 0.0  || var > 100.0 )
+   {
+      Brewtarget::logW( QString("Recipe: 0 < efficiency < 100: %1").arg(var) );
+      tmp = 70;
+   }
+   else
+   {
+      tmp = var;
+   }
+
+   set( "efficiency_pct", "efficiency", tmp );
+}
+
+void Recipe::setAsstBrewer( const QString &var )
+{
+   set( "asstBrewer", "assistant_brewer", var );
 }
 
 void Recipe::setNotes( const QString &var )
 {
-   notes = QString(var);
-   hasChanged();
+   set( "notes", "notes", var );
 }
 
 void Recipe::setTasteNotes( const QString &var )
 {
-   tasteNotes = QString(var);
-   hasChanged();
+   set( "tasteNotes", "taste_notes", var );
 }
 
 void Recipe::setTasteRating( double var )
 {
+   double tmp;
    if( var < 0.0 || var > 50.0 )
    {
       Brewtarget::logW( QString("Recipe: 0 < taste rating < 50: %1").arg(var) );
-      tasteRating = 0;
+      tmp = 0;
    }
    else
    {
-      tasteRating = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "tasteRating", "taste_rating", var );
 }
 
 void Recipe::setOg( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: og < 0: %1").arg(var) );
-      og = 1.0;
+      tmp = 1.0;
    }
    else
    {
-      og = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "og", "og", tmp );
 }
 
 void Recipe::setFg( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: fg < 0: %1").arg(var) );
-      fg = 1.0;
+      tmp = 1.0;
    }
    else
    {
-      fg = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "fg", "fg", tmp );
 }
 
 void Recipe::setFermentationStages( int var )
 {
+   int tmp;
    if( var < 0 )
    {
       Brewtarget::logW( QString("Recipe: stages < 0: %1").arg(var) );
-      fermentationStages = 0;
+      tmp = 0;
    }
    else
    {
-      fermentationStages = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "fermentationStages", "fermentation_stages", tmp );
 }
 
 void Recipe::setPrimaryAge_days( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: primary age < 0: %1").arg(var) );
-      primaryAge_days = 0;
+      tmp = 0;
    }
    else
    {
-      primaryAge_days = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "primaryAge_days", "primary_age", tmp );
 }
 
 void Recipe::setPrimaryTemp_c( double var )
 {
-   primaryTemp_c = var;
-   hasChanged();
+   set( "primaryTemp_c", "primary_temp", var );
 }
 
 void Recipe::setSecondaryAge_days( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: secondary age < 0: %1").arg(var) );
-      secondaryAge_days = 0;
+      tmp = 0;
    }
    else
    {
-      secondaryAge_days = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "secondaryAge_days", "secondary_age", tmp );
 }
 
 void Recipe::setSecondaryTemp_c( double var )
@@ -1628,281 +1632,116 @@ void Recipe::setSecondaryTemp_c( double var )
 
 void Recipe::setTertiaryAge_days( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: tertiary age < 0: %1").arg(var) );
-      tertiaryAge_days = 0;
+      tmp = 0;
    }
    else
    {
-      tertiaryAge_days = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "tertiaryAge_days", "tertiary_age", tmp );
 }
 
 void Recipe::setTertiaryTemp_c( double var )
 {
-   tertiaryTemp_c = var;
-   hasChanged();
+   set( "tertiaryTemp_c", "tertiary_temp", var );
 }
 
 void Recipe::setAge_days( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: age < 0: %1").arg(var) );
-      age_days = 0;
+      tmp = 0;
    }
    else
    {
-      age_days = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "age_days", "age_days", tmp );
 }
 
 void Recipe::setAgeTemp_c( double var )
 {
-   ageTemp_c = var;
-   hasChanged();
+   set( "ageTemp_c", "age_temp", var );
 }
 
-void Recipe::setDate( const QString &var )
+void Recipe::setDate( const QDate &var )
 {
-   date = QString(var);
-   hasChanged();
+   set( "date", "brew_date", var.toString("yyyy-MM-dd") );
 }
 
 void Recipe::setCarbonation_vols( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: carb < 0: %1").arg(var) );
-      carbonation_vols = 0;
+      tmp = 0;
    }
    else
    {
-      carbonation_vols = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "carbonation_vols", "carb_volume", var );
 }
 
 void Recipe::setForcedCarbonation( bool var )
 {
-   forcedCarbonation = var;
-   hasChanged();
+   set( "forcedCarbonation", "forced_carb", var );
 }
 
 void Recipe::setPrimingSugarName( const QString &var )
 {
-   primingSugarName = QString(var);
-   hasChanged();
+   set( "primingSugarName", "priming_sugar_name", var );
 }
 
 void Recipe::setCarbonationTemp_c( double var )
 {
-   carbonationTemp_c = var;
-   hasChanged();
+   set( "carbonationTemp", "carbonation_temp", var );
 }
 
 void Recipe::setPrimingSugarEquiv( double var )
 {
+   double tmp;
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: primingsugarequiv < 0: %1").arg(var) );
-      primingSugarEquiv = 1;
+      tmp = 1;
    }
    else
    {
-      primingSugarEquiv = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "primingSugarEquiv", "priming_sugar_equiv", tmp );
 }
 
 void Recipe::setKegPrimingFactor( double var )
 {
+   double tmp;
+   
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Recipe: keg priming factor < 0: %1").arg(var) );
-      kegPrimingFactor = 1;
+      tmp = 1;
    }
    else
    {
-      kegPrimingFactor = var;
+      tmp = var;
    }
 
-   hasChanged();
+   set( "kegPrimingFactor", "keg_priming_factor", tmp );
 }
 
-//=============================="GET" METHODS===================================
-QString Recipe::getName() const
-{
-   return name;
-}
-
-QString Recipe::getType() const
-{
-   return type;
-}
-
-QString Recipe::getBrewer() const
-{
-   return brewer;
-}
-
-Style* Recipe::getStyle() const
-{
-   return style;
-}
-
-double Recipe::getBatchSize_l() const
-{
-   return batchSize_l;
-}
-
-double Recipe::getBoilSize_l() const
-{
-   return boilSize_l;
-}
-
-double Recipe::getBoilTime_min() const
-{
-   return boilTime_min;
-}
-
-double Recipe::getEfficiency_pct() const
-{
-   return efficiency_pct;
-}
-
-unsigned int Recipe::getNumHops() const
-{
-   return hops.size();
-}
-
-Hop* Recipe::getHop(unsigned int i)
-{
-   if( static_cast<int>(i) >= hops.size() )
-   {
-      Brewtarget::logE( QString("Recipe: bad index into hops: %1").arg(i) );
-      return 0;
-   }
-   else
-      return hops[i];
-}
-
-unsigned int Recipe::getNumFermentables() const
-{
-   return fermentables.size();
-}
-
-Fermentable* Recipe::getFermentable(unsigned int i)
-{
-   if( static_cast<int>(i) >= fermentables.size() )
-   {
-      Brewtarget::logE( QString("Recipe: bad index into fermentables: %1").arg(i) );
-      return 0;
-   }
-   else
-      return fermentables[i];
-}
-
-unsigned int Recipe::getNumMiscs() const
-{
-   return miscs.size();
-}
-
-Misc* Recipe::getMisc(unsigned int i)
-{
-   if( static_cast<int>(i) >= miscs.size() )
-   {
-      Brewtarget::logW( QString("Recipe: bad index into miscs: %1").arg(i) );
-      return 0;
-   }
-   else
-      return miscs[i];
-}
-
-unsigned int Recipe::getNumYeasts() const
-{
-   return yeasts.size();
-}
-
-Yeast* Recipe::getYeast(unsigned int i)
-{
-   if( static_cast<int>(i) >= yeasts.size() )
-   {
-      Brewtarget::logW( QString("Recipe: bad index into yeasts: %1").arg(i) );
-      return 0;
-   }
-   else
-      return yeasts[i];
-}
-
-unsigned int Recipe::getNumWaters() const
-{
-   return waters.size();
-}
-
-Water* Recipe::getWater(unsigned int i)
-{
-   if( static_cast<int>(i) >= waters.size() )
-   {
-      Brewtarget::logW( QString("Recipe: bad index into water: %1").arg(i) );
-      return 0;
-   }
-   else
-      return waters[i];
-}
-
-unsigned int Recipe::getNumBrewNotes() const
-{
-   return brewNotes.size();
-}
-
-BrewNote* Recipe::getBrewNote(unsigned int i)
-{
-   if ( static_cast<int>(i) >= brewNotes.size())
-   {
-      Brewtarget::logW( QString("Recipe: bad index into brewnotes: %1").arg(i) );
-      return 0;
-   }
-   else
-      return brewNotes[i];
-}
-
-Mash* Recipe::getMash() const
-{
-   return mash;
-}
-
-QString Recipe::getAsstBrewer() const
-{
-   return asstBrewer;
-}
-
-Equipment* Recipe::getEquipment() const
-{
-   return equipment;
-}
-
-QString Recipe::getNotes() const
-{
-   return notes;
-}
-
-QString Recipe::getTasteNotes() const
-{
-   return tasteNotes;
-}
-
-double Recipe::getTasteRating() const
-{
-   return tasteRating;
-}
+//==========================Calculated Getters============================
 
 double Recipe::getOg() const
 {
@@ -1914,234 +1753,201 @@ double Recipe::getFg() const
    return fg;
 }
 
-int Recipe::getFermentationStages() const
+double Recipe::color_srm()
 {
-   return fermentationStages;
+   return color_srm;
 }
 
-double Recipe::getPrimaryAge_days() const
+double Recipe::ABV_pct()
 {
-   return primaryAge_days;
+   return ABV_pct;
 }
 
-double Recipe::getPrimaryTemp_c() const
+//=========================Relational Getters=============================
+
+Style* Recipe::getStyle() const
 {
-   return primaryTemp_c;
+   return Database::instance().style( get("sid").toInt() );
 }
 
-double Recipe::getSecondaryAge_days() const
+Mash* Recipe::getMash() const
 {
-   return secondaryAge_days;
+   return Database::instance().mash( get("mid").toInt() );
 }
 
-double Recipe::getSecondaryTemp_c() const
+Equipment* Recipe::getEquipment() const
 {
-   return secondaryTemp_c;
+   return Database::instance().equipment( get("eid").toInt() );
 }
 
-double Recipe::getTertiaryAge_days() const
+// Should these "num" methods exist?
+unsigned int Recipe::numHops() const
 {
-   return tertiaryAge_days;
+   return hops().size();
 }
 
-double Recipe::getTertiaryTemp_c() const
+unsigned int Recipe::numFermentables() const
 {
-   return tertiaryTemp_c;
+   return fermentables().size();
 }
 
-double Recipe::getAge_days() const
+unsigned int Recipe::numMiscs() const
 {
-   return age_days;
+   return miscs().size();
 }
 
-double Recipe::getAgeTemp_c() const
+unsigned int Recipe::numYeasts() const
 {
-   return ageTemp_c;
+   return yeasts().size();
 }
 
-QString Recipe::getDate() const
+unsigned int Recipe::numWaters() const
 {
-   return date;
+   return waters().size();
 }
 
-double Recipe::getCarbonation_vols() const
+unsigned int Recipe::numBrewNotes() const
 {
-   return carbonation_vols;
+   return brewNotes().size();
 }
 
-bool Recipe::getForcedCarbonation() const
+//==============================Getters===================================
+QString Recipe::name() const
 {
-   return forcedCarbonation;
+   return get("name").toString();
 }
 
-QString Recipe::getPrimingSugarName() const
+QString Recipe::type() const
 {
-   return primingSugarName;
+   return get("type").toString();
 }
 
-double Recipe::getCarbonationTemp_c() const
+QString Recipe::brewer() const
 {
-   return carbonationTemp_c;
+   return get("brewer").toString();
 }
 
-double Recipe::getPrimingSugarEquiv() const
+double Recipe::batchSize_l() const
 {
-   return primingSugarEquiv;
+   return get("batch_size").toDouble();
 }
 
-double Recipe::getKegPrimingFactor() const
+double Recipe::boilSize_l() const
 {
-   return kegPrimingFactor;
+   return get("boil_size").toDouble();
 }
 
-bool Recipe::isValidType( const QString &str )
+double Recipe::boilTime_min() const
 {
-   static const QString types[] = {"Extract", "Partial Mash", "All Grain"};
-   static const unsigned int size = 3;
-   unsigned int i;
-   
-   for( i = 0; i < size; ++i )
-      if( str == types[i] )
-         return true;
-   
-   return false;
+   return get("boil_time").toDouble();
 }
 
-void Recipe::recalculate()
+double Recipe::efficiency_pct() const
 {
-   unsigned int i;
-   double points = 0;
-   double ratio = 0;
-   double sugar_kg = 0;
-   double sugar_kg_ignoreEfficiency = 0.0;
-   Fermentable::Type fermtype;
-   double attenuation_pct = 0.0;
-   Fermentable* ferm;
-   Yeast* yeast;
-   
-   // Calculate OG
-   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
-   {
-      ferm = fermentables[i];
-
-      // If we have some sort of non-grain, we have to ignore efficiency.
-      fermtype = ferm->getType();
-      if( fermtype==Fermentable::TYPESUGAR || fermtype==Fermentable::TYPEEXTRACT || fermtype==Fermentable::TYPEDRY_EXTRACT )
-         sugar_kg_ignoreEfficiency += ferm->getEquivSucrose_kg();
-      else
-         sugar_kg += ferm->getEquivSucrose_kg();
-   }
-
-   // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
-   if( equipment != 0 )
-   {
-      /* Ignore lauter deadspace since it should be included in efficiency ***
-      // First, lauter deadspace.
-      ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
-      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-         ratio = 1.0;
-      else if( ratio < 0.0 ) // Only happens if the user is stupid with lauter deadspace.
-         ratio = 0.0;
-      else if( isnan(ratio) )
-         ratio = 1.0; // Need this in case we have no mash, and therefore end up with NaN.
-      
-      sugar_kg *= ratio;
-      // Don't consider this one since nobody adds sugar or extract to the mash.
-      //sugar_kg_ignoreEfficiency *= ratio;
-      */
-      
-      // Next, trub/chiller loss.
-      double kettleWort_l = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) + equipment->getTopUpKettle_l();
-      double postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
-      ratio = (postBoilWort_l - equipment->getTrubChillerLoss_l()) / postBoilWort_l;
-      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-         ratio = 1.0;
-      else if( ratio < 0.0 )
-         ratio = 0.0;
-      else if( Algorithms::Instance().isnan(ratio) )
-         ratio = 1.0;
-      // Ignore this again since it should be included in efficiency.
-      //sugar_kg *= ratio;
-      sugar_kg_ignoreEfficiency *= ratio;
-   }
-
-   // Combine the two sugars.
-   sugar_kg = sugar_kg * getEfficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
-   double plato = Algorithms::Instance().getPlato( sugar_kg, estimateFinalVolume_l());
-
-   og = Algorithms::Instance().PlatoToSG_20C20C( plato );
-   points = (og-1)*1000.0;
-
-   // Calculage FG
-   for( i = 0; static_cast<int>(i) < yeasts.size(); ++i )
-   {
-      yeast = yeasts[i];
-      // Get the yeast with the greatest attenuation.
-      if( yeast->getAttenuation_pct() > attenuation_pct )
-         attenuation_pct = yeast->getAttenuation_pct();
-   }
-   if( yeasts.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
-      attenuation_pct = 75.0; // 75% is an average attenuation.
-
-   points = points*(1.0 - attenuation_pct/100.0);
-   fg =  1 + points/1000.0;
-
-   // Calculate ABV
-   /* No need, just call getABV_pct() */
-
-   // Calculate color
-   /* No need, just call getColor_srm() */
-
-   // Calculate IBUs
-   /* No need, just call getIBU() */
+   return get("efficiency").toDouble();
 }
 
-double Recipe::getColor_srm()
+QString Recipe::asstBrewer() const
 {
-   Fermentable *ferm;
-   double mcu = 0.0;
-   unsigned int i;
-
-   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
-   {
-      ferm = fermentables[i];
-      // Conversion factor for lb/gal to kg/l = 8.34538.
-      mcu += ferm->getColor_srm()*8.34538 * ferm->getAmount_kg()/estimateFinalVolume_l();
-   }
-
-   return ColorMethods::mcuToSrm(mcu);
+   return get("assistant_brewer").toString();
 }
 
-double Recipe::getABV_pct()
+QString Recipe::notes() const
 {
-    double og, fg;
-
-    og = getOg();
-    fg = getFg();
-
-    // Alcohol by weight.  This is a different formula than used
-    // when calculating the calories.
-    //abw = 76.08 * (og-fg)/(1.775-og);
-    //return abw * (fg/0.794);
-
-    // George Fix: Brewing Science and Practice, page 686.
-    // The multiplicative factor actually varies from
-    // 125 for weak beers to 135 for strong beers.
-    return 130*(og-fg);
-
-    // From http://en.wikipedia.org/w/index.php?title=Alcohol_by_volume&oldid=414661414
-    // Has no citations, so I don't know how trustworthy it is.
-    // It seems to be in conflict with Fix's method above, because
-    // if the beer is weak, it should have a low fg, meaning the
-    // multiplicative factor is higher.
-    // return 132.9*(og - fg)/fg;
+   return get("notes").toString();
 }
 
-void Recipe::notify(Observable* /*notifier*/, QVariant info)
+QString Recipe::tasteNotes() const
 {
-   recalculate();
-   hasChanged();
+   return get("taste_notes").toString();
 }
+
+double Recipe::tasteRating() const
+{
+   return get("taste_rating").toDouble();
+}
+
+int Recipe::fermentationStages() const
+{
+   return get("fermentation_stages").toInt();
+}
+
+double Recipe::primaryAge_days() const
+{
+   return get("primary_age").toDouble();
+}
+
+double Recipe::primaryTemp_c() const
+{
+   return get("primary_temp").toDouble();
+}
+
+double Recipe::secondaryAge_days() const
+{
+   return get("secondary_age").toDouble();
+}
+
+double Recipe::secondaryTemp_c() const
+{
+   return get("secondary_temp").toDouble();
+}
+
+double Recipe::tertiaryAge_days() const
+{
+   return get("tertiary_age").toDouble();
+}
+
+double Recipe::tertiaryTemp_c() const
+{
+   return get("tertiary_temp").toDouble();
+}
+
+double Recipe::age_days() const
+{
+   return get("age").toDouble();
+}
+
+double Recipe::ageTemp_c() const
+{
+   return get("age_temp").toDouble();
+}
+
+QDate Recipe::date() const
+{
+   return QDate::fromString( get("brew_date").toString(), "yyyy-MM-dd" );
+}
+
+double Recipe::carbonation_vols() const
+{
+   return get("carb_volume").toDouble();
+}
+
+bool Recipe::forcedCarbonation() const
+{
+   return get("forced_carb").toBool();
+}
+
+QString Recipe::primingSugarName() const
+{
+   return get("priming_sugar_name").toString();
+}
+
+double Recipe::carbonationTemp_c() const
+{
+   return get("carbonation_temp").toDouble();
+}
+
+double Recipe::primingSugarEquiv() const
+{
+   return get("priming_sugar_equiv").toDouble();
+}
+
+double Recipe::kegPrimingFactor() const
+{
+   return get("keg_priming_factor").toDouble();
+}
+
+//=============================Removers========================================
 
 // Returns true if var is found and removed.
 bool Recipe::removeHop( Hop *var )
@@ -2267,7 +2073,11 @@ bool Recipe::removeBrewNote(QList<BrewNote*> var)
    return false;
 }
 
-double Recipe::getBoilGrav()
+//==============================Recalculators==================================
+
+// The theoretical maximum yield without any non-mashed anything.  This
+// will need to be communicated somewhere.
+void Recipe::recalcPoints(double volume)
 {
    unsigned int i;
    Fermentable* ferm;
@@ -2276,18 +2086,89 @@ double Recipe::getBoilGrav()
    Fermentable::Type type;
 
    // Calculate OG
-   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+   QVector<Fermentable*> ferms = fermentables();
+   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
-      ferm = fermentables[i];
-      if( ferm->getAddAfterBoil() )
+      ferm = ferms[i];
+      if( ferm->addAfterBoil() )
          continue;
 
       // If we have some sort of non-grain, we have to ignore efficiency.
-      type = ferm->getType();
+      type = ferm->type();
       if( type==Fermentable::TYPESUGAR || type==Fermentable::TYPEEXTRACT || type==Fermentable::TYPEDRY_EXTRACT )
-         sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+         sugar_kg_ignoreEfficiency += (ferm->yield_pct()/100.0)*ferm->amount_kg();
       else
-         sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
+         sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
+   }
+
+   points = 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
+   
+   emit changed( metaObject().property( metaObject().indexOfProperty("points") ), points );
+}
+
+void Recipe::recalcABV_pct()
+{
+    // Alcohol by weight.  This is a different formula than used
+    // when calculating the calories.
+    //abw = 76.08 * (og-fg)/(1.775-og);
+    //return abw * (fg/0.794);
+
+    // George Fix: Brewing Science and Practice, page 686.
+    // The multiplicative factor actually varies from
+    // 125 for weak beers to 135 for strong beers.
+    ABV_pct = 130*(og()-fg());
+
+    // From http://en.wikipedia.org/w/index.php?title=Alcohol_by_volume&oldid=414661414
+    // Has no citations, so I don't know how trustworthy it is.
+    // It seems to be in conflict with Fix's method above, because
+    // if the beer is weak, it should have a low fg, meaning the
+    // multiplicative factor is higher.
+    // return 132.9*(og - fg)/fg;
+    
+    emit changed( metaObject().property( metaObject().indexOfProperty("ABV_pct") ), ABV_pct );
+}
+
+void Recipe::recalcColor_srm()
+{
+   Fermentable *ferm;
+   double mcu = 0.0;
+   unsigned int i;
+
+   QVector<Fermentable*> ferms = fermentables();
+   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
+   {
+      ferm = ferms[i];
+      // Conversion factor for lb/gal to kg/l = 8.34538.
+      mcu += ferm->color_srm()*8.34538 * ferm->amount_kg()/finalVolume_l;
+   }
+
+   color_srm = ColorMethods::mcuToSrm(mcu);
+   
+   emit changed( metaObject().property( metaObject().indexOfProperty("color_srm") ), color_srm );
+}
+
+void Recipe::recalcBoilGrav()
+{
+   unsigned int i;
+   Fermentable* ferm;
+   double sugar_kg = 0.0;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   Fermentable::Type type;
+
+   // Calculate OG
+   QVector<Fermentable*> ferms = fermentables();
+   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
+   {
+      ferm = ferms[i];
+      if( ferm->addAfterBoil() )
+         continue;
+
+      // If we have some sort of non-grain, we have to ignore efficiency.
+      type = ferm->type();
+      if( type==Fermentable::TYPESUGAR || type==Fermentable::TYPEEXTRACT || type==Fermentable::TYPEDRY_EXTRACT )
+         sugar_kg_ignoreEfficiency += (ferm->yield_pct()/100.0)*ferm->amount_kg();
+      else
+         sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
    }
 
    // We might lose some sugar in the form of lauter deadspace.
@@ -2295,115 +2176,142 @@ double Recipe::getBoilGrav()
 
    // Since the efficiency refers to how much sugar we get into the fermenter,
    // we need to adjust for that here.
-   sugar_kg = (getEfficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
-   if( equipment != 0 )
-      sugar_kg = sugar_kg / (1 - equipment->getTrubChillerLoss_l()/estimatePostBoilVolume_l());
+   sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
+   if( equipment() )
+      sugar_kg = sugar_kg / (1 - equipment()->getTrubChillerLoss_l()/estimatePostBoilVolume_l());
 
-   return Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
+   boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
+   
+   emit changed( metaObject().property( metaObject().indexOfProperty("boilGrav") ), boilGrav );
 }
 
-// Return the theoretical maximum yield without any non-mashed anything.  This
-// will need to be communicated somewhere.
-double Recipe::getPoints(double volume)
-{
-   unsigned int i;
-   Fermentable* ferm;
-   double sugar_kg = 0.0;
-   double sugar_kg_ignoreEfficiency = 0.0;
-   Fermentable::Type type;
-
-   // Calculate OG
-   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
-   {
-      ferm = fermentables[i];
-      if( ferm->getAddAfterBoil() )
-         continue;
-
-      // If we have some sort of non-grain, we have to ignore efficiency.
-      type = ferm->getType();
-      if( type==Fermentable::TYPESUGAR || type==Fermentable::TYPEEXTRACT || type==Fermentable::TYPEDRY_EXTRACT )
-         sugar_kg_ignoreEfficiency += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
-      else
-         sugar_kg += (ferm->getYield_pct()/100.0)*ferm->getAmount_kg();
-   }
-
-   return 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
-}
-
-double Recipe::getIBU()
+void Recipe::recalcIBU()
 {
    unsigned int i;
    double ibus = 0.0;
    
    // Bitterness due to hops...
+   QVector<Hop*> hops = hops();
    for( i = 0; static_cast<int>(i) < hops.size(); ++i )
-      ibus += getIBUFromHop(i);
+      ibus += ibuFromHop(hops[i]);
 
    // Bitterness due to hopped extracts...
-   for( i = 0; static_cast<int>(i) < fermentables.size(); ++i )
+   QVector<Fermentable*> ferms = fermentables();
+   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
       // Conversion factor for lb/gal to kg/l = 8.34538.
       ibus +=
-              fermentables[i]->getIbuGalPerLb() *
-              (fermentables[i]->getAmount_kg() / batchSize_l) / 8.34538;
+              fermentables[i]->ibuGalPerLb() *
+              (fermentables[i]->amount_kg() / batchSize_l()) / 8.34538;
    }
 
-   return ibus;
+   IBU = ibus;
+   
+   emit changed( metaObject().property( metaObject().indexOfProperty("IBU") ), IBU );
 }
 
-double Recipe::getIBUFromHop( unsigned int i )
+void Recipe::recalcVolumeEstimates()
 {
-   double ibus = 0.0;
+   // wortFromMash_l ==========================
+   double waterAdded_l;
+   double absorption_lKg;
    
-   if( static_cast<int>(i) >= hops.size() )
-      return 0.0;
+   if( mash == 0 )
+      wortFromMash_l = 0.0;
+   else
+   {
    
-   double AArating = hops[i]->getAlpha_pct()/100.0;
-   double grams = hops[i]->getAmount_kg()*1000.0;
-   double water_l = estimateFinalVolume_l();
-   double boilVol_l = estimateBoilVolume_l();
-   double boilGrav = getBoilGrav();
-   double boilGrav_final = boilGrav; 
-   double minutes = hops[i]->getTime_min();
-   double avgBoilGrav;
-   
-   if( equipment )
-      boilGrav_final = boilVol_l / equipment->wortEndOfBoil_l( boilVol_l ) * (boilGrav-1) + 1;
-   
-   avgBoilGrav = (boilGrav + boilGrav_final) / 2;
-   //avgBoilGrav = boilGrav;
-   
-   if( hops[i]->getUse() == Hop::USEBOIL)
-      ibus = IbuMethods::getIbus( AArating, grams, water_l, avgBoilGrav, minutes );
-   else if( hops[i]->getUse() == Hop::USEFIRST_WORT )
-      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, water_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
+       waterAdded_l = mash->totalMashWater_l();
+       if( equipment != 0 )
+          absorption_lKg = equipment->grainAbsorption_LKg();
+       else
+          absorption_lKg = HeatCalculations::absorption_LKg;
 
-   // Adjust for hop form.
-   if( hops[i]->getForm() == Hop::FORMLEAF )
-      ibus *= 0.90;
-   else if( hops[i]->getForm() == Hop::FORMPLUG )
-      ibus *= 0.92;
+       wortFromMash_l = (waterAdded_l - absorption_lKg * grainsInMash_kg);
+   }
    
-   return ibus;
+   // boilVolume_l ==============================
+   double mashVol_l;
+   double tmp = 0.0;
+   
+   //if( mashVol_l <= 0.0 ) // Give up.
+   //   return boilSize_l;
+   
+   if( equipment() != 0 )
+      tmp = wortFromMash_l - equipment()->lauterDeadspace_l() + equipment()->topUpKettle_l();
+   else
+      tmp = wortFromMash_l;
+   
+   if( tmp <= 0.0 )
+      tmp = boilSize_l(); // Give up.
+   
+   boilVolume_l = tmp;
+   
+   // finalVolume_l ==============================
+   
+   if( equipment() != 0 )
+      finalVolume_l = equipment()->wortEndOfBoil_l(boilVolume_l) - equipment->trubChillerLoss_l() + equipment->topUpWater_l();
+   else
+      finalVolume_l = boilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
+   
+   // postBoilVolume_l ===========================
+
+   if( equipment() != 0 )
+      postBoilVolume_l = equipment->wortEndOfBoil_l( boilVolume_l );
+   else
+      postBoilVolume_l = batchSize_l(); // Give up.
+      
+   // Emit changes.
+   emit changed( metaObject().property( metaObject().indexOfProperty("wortFromMash_l") ), wortFromMash_l );
+   emit changed( metaObject().property( metaObject().indexOfProperty("boilVolume_l") ), boilVolume_l );
+   emit changed( metaObject().property( metaObject().indexOfProperty("finalVolume_l") ), finalVolume_l );
+   emit changed( metaObject().property( metaObject().indexOfProperty("postBoilVolume_l") ), postBoilVolume_l );
 }
 
-void Recipe::clear()
+void Recipe::recalcGrainsInMash_kg()
 {
-   QString name = getName();
-   setDefaults();
-   setName(name);
-   hasChanged();
+   unsigned int i, size;
+   double ret = 0.0;
+   Fermentable* ferm;
+   
+   QVector<Fermentable*> ferms = fermentables();
+   size = ferms.size();
+   for( i = 0; i < size; ++i )
+   {
+      ferm = ferms[i];
+      
+      if( ferm->type() == Fermentable::TYPEGRAIN && ferm->isMashed() )
+         ret += ferm->amount_kg();
+   }
+   
+   grainsInMash_kg = ret;
+   
+   emit changed( metaObject().property( metaObject().indexOfProperty("grainsInMash_kg") ), grainsInMash_kg );
 }
 
-QColor Recipe::getSRMColor()
+void Recipe::recalcGrains_kg()
+{
+   unsigned int i, size;
+   double ret = 0.0;
+
+   QVector<Fermentable*> ferms = fermentables();
+   size = ferms.size();
+   for( i = 0; i < size; ++i )
+      ret += ferms[i]->amount_kg();
+
+   grains_kg = ret;
+   
+   emit changed( metaObject().property( metaObject().indexOfProperty("grains_kg") ), grains_kg );
+}
+
+void Recipe::recalcSRMColor()
 {
    /**** Original method from a website: Came out dark. ***
-   double SRM = getColor_srm();
    
    // Luminance Y
-   double Y = 94.6914*exp(-0.131272*SRM);
+   double Y = 94.6914*exp(-0.131272*color_srm);
    // Chroma x
-   double x = 0.73978 - 0.25442*exp(-0.037865*SRM) - 0.017511*exp(-0.24307*SRM);
+   double x = 0.73978 - 0.25442*exp(-0.037865*color_srm) - 0.017511*exp(-0.24307*color_srm);
    // Chroma y
    double y = 0.197785 + 0.260472*exp( -pow( (x-0.491021)/.214194, 2)   );
    // Chroma z
@@ -2430,129 +2338,26 @@ QColor Recipe::getSRMColor()
    ***********/
 
    //==========My approximation from a photo and spreadsheet===========
-   double SRM = getColor_srm();
 
-   double red = 232.9 * pow( (double)0.93, SRM );
-   double green = (double)-106.25 * log(SRM) + 280.9;
+   double red = 232.9 * pow( (double)0.93, color_srm );
+   double green = (double)-106.25 * log(color_srm) + 280.9;
 
    int r = (red < 0)? 0 : ((red > 255)? 255 : (int)Algorithms::Instance().round(red));
    int g = (green < 0)? 0 : ((green > 255)? 255 : (int)Algorithms::Instance().round(green));
    int b = 0;
 
-   QColor ret;
-   ret.setRgb( r, g, b );
+   SRMColor.setRgb( r, g, b );
 
-   return ret;
-}
-
-double Recipe::estimateWortFromMash_l() const
-{
-   if( mash == 0 )
-      return 0.0;
-   
-   double waterAdded_l = mash->totalMashWater_l();
-   double absorption_lKg;
-   if( equipment != 0 )
-      absorption_lKg = equipment->getGrainAbsorption_LKg();
-   else
-      absorption_lKg = HeatCalculations::absorption_LKg;
-   
-   //std::cerr << "estimateWortFromMash_l(): " << waterAdded_l - absorption_lKg*getGrainsInMash_kg() << std::endl;
-
-   return (waterAdded_l - absorption_lKg*getGrainsInMash_kg());
-}
-
-double Recipe::getGrainsInMash_kg() const
-{
-   unsigned int i, size;
-   double grains_kg = 0.0;
-   Fermentable* ferm;
-   
-   size = fermentables.size();
-   for( i = 0; i < size; ++i )
-   {
-      ferm = fermentables[i];
-      
-      if( ferm->getType() == Fermentable::TYPEGRAIN && ferm->getIsMashed() )
-         grains_kg += ferm->getAmount_kg();
-   }
-   
-   return grains_kg;
-}
-
-double Recipe::getGrains_kg() const
-{
-   unsigned int i, size;
-   double grains_kg = 0.0;
-   Fermentable* ferm;
-
-   size = fermentables.size();
-   for( i = 0; i < size; ++i )
-   {
-      ferm = fermentables[i];
-      grains_kg += ferm->getAmount_kg();
-   }
-
-   return grains_kg;
-}
-
-double Recipe::estimateBoilVolume_l() const
-{
-   double mashVol_l;
-   double ret = 0.0;
-   
-   mashVol_l = estimateWortFromMash_l();
-   
-   //if( mashVol_l <= 0.0 ) // Give up.
-   //   return boilSize_l;
-   
-   if( equipment != 0 )
-      ret = mashVol_l - equipment->getLauterDeadspace_l() + equipment->getTopUpKettle_l();
-   else
-      ret = mashVol_l;
-   
-   if( ret <= 0.0 )
-      ret = boilSize_l; // Give up.
-   
-   return ret;
-}
-
-double Recipe::estimateFinalVolume_l() const
-{
-   double boilVol_l;
-   double ret;
-   
-   boilVol_l = estimateBoilVolume_l();
-   
-   if( equipment != 0 )
-      ret = equipment->wortEndOfBoil_l(boilVol_l) - equipment->getTrubChillerLoss_l() + equipment->getTopUpWater_l();
-   else
-      ret = boilVol_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
-
-   return ret;
-}
-
-// Estimates post boil volume. If there is no equipment,
-// defaults to batchSize_l.
-double Recipe::estimatePostBoilVolume_l() const
-{
-   double ret;
-
-   if( equipment != 0 )
-      ret = equipment->wortEndOfBoil_l( estimateBoilVolume_l() );
-   else
-      ret = batchSize_l; // Give up.
-
-   return ret;
+   emit changed( metaObject().property( metaObject().indexOfProperty("SRMColor") ), SRMColor );
 }
 
 // the formula in here are taken from http://hbd.org/ensmingr/
-double Recipe::estimateCalories() const
+void Recipe::recalcCalories()
 {
-    double ret, startPlato, finishPlato, RE, abw, og, fg;
+    double startPlato, finishPlato, RE, abw, og, fg;
 
-    og = getOg();
-    fg = getFg();
+    og = og();
+    fg = fg();
 
     // Need to translate OG and FG into plato
     startPlato  = -463.37 + ( 668.72 * og ) - (205.35 * og * og);
@@ -2564,6 +2369,171 @@ double Recipe::estimateCalories() const
     // Alcohol by weight?
     abw = (startPlato-RE)/(2.0665 - (0.010665 * startPlato));
 
-    ret = ((6.9*abw) + 4.0 * (RE-0.1)) * fg * 3.55;
-    return ret;
+    calories = ((6.9*abw) + 4.0 * (RE-0.1)) * fg * 3.55;
+
+    emit changed( metaObject().property( metaObject().indexOfProperty("calories") ), calories );
+}
+
+void Recipe::recalcOgFg()
+{
+   unsigned int i;
+   double kettleWort_l;
+   double postBoilWort_l;
+   double plato;
+   double points = 0;
+   double ratio = 0;
+   double sugar_kg = 0;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   Fermentable::Type fermtype;
+   double attenuation_pct = 0.0;
+   Fermentable* ferm;
+   Yeast* yeast;
+   
+   QVector<Fermentable*> ferms = fermentables();
+   
+   // Calculate OG
+   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
+   {
+      ferm = ferms[i];
+
+      // If we have some sort of non-grain, we have to ignore efficiency.
+      fermtype = ferm->type();
+      if( fermtype==Fermentable::TYPESUGAR || fermtype==Fermentable::TYPEEXTRACT || fermtype==Fermentable::TYPEDRY_EXTRACT )
+         sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
+      else
+         sugar_kg += ferm->equivSucrose_kg();
+   }
+
+   // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
+   if( equipment() != 0 )
+   {
+      /* Ignore lauter deadspace since it should be included in efficiency ***
+      // First, lauter deadspace.
+      ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
+      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
+         ratio = 1.0;
+      else if( ratio < 0.0 ) // Only happens if the user is stupid with lauter deadspace.
+         ratio = 0.0;
+      else if( isnan(ratio) )
+         ratio = 1.0; // Need this in case we have no mash, and therefore end up with NaN.
+      
+      sugar_kg *= ratio;
+      // Don't consider this one since nobody adds sugar or extract to the mash.
+      //sugar_kg_ignoreEfficiency *= ratio;
+      */
+      
+      // Next, trub/chiller loss.
+      kettleWort_l = (wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
+      postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
+      ratio = (postBoilWort_l - equipment()->trubChillerLoss_l()) / postBoilWort_l;
+      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
+         ratio = 1.0;
+      else if( ratio < 0.0 )
+         ratio = 0.0;
+      else if( Algorithms::Instance().isnan(ratio) )
+         ratio = 1.0;
+      // Ignore this again since it should be included in efficiency.
+      //sugar_kg *= ratio;
+      sugar_kg_ignoreEfficiency *= ratio;
+   }
+
+   // Combine the two sugars.
+   sugar_kg = sugar_kg * getEfficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
+   plato = Algorithms::Instance().getPlato( sugar_kg, estimateFinalVolume_l());
+
+   og = Algorithms::Instance().PlatoToSG_20C20C( plato );
+   points = (og-1)*1000.0;
+
+   // Calculage FG
+   for( i = 0; static_cast<int>(i) < yeasts.size(); ++i )
+   {
+      yeast = yeasts[i];
+      // Get the yeast with the greatest attenuation.
+      if( yeast->getAttenuation_pct() > attenuation_pct )
+         attenuation_pct = yeast->getAttenuation_pct();
+   }
+   if( yeasts.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
+      attenuation_pct = 75.0; // 75% is an average attenuation.
+
+   points = points*(1.0 - attenuation_pct/100.0);
+   fg =  1 + points/1000.0;
+   
+   emit changed( metaObject().property( metaObject().indexOfProperty("og") ), og );
+   emit changed( metaObject().property( metaObject().indexOfProperty("fg") ), fg );
+}
+
+//====================================Helpers===========================================
+
+double Recipe::ibuFromHop(Hop const* hop)
+{
+   double ibus = 0.0;
+   
+   if( hop == 0 )
+      return 0.0;
+   
+   double AArating = hop->alpha_pct()/100.0;
+   double grams = hop->amount_kg()*1000.0;
+   double minutes = hop->time_min();
+   //double water_l = estimateFinalVolume_l();
+   //double boilVol_l = estimateBoilVolume_l();
+   //double boilGrav = boilGrav();
+   double boilGrav_final = boilGrav; 
+   double avgBoilGrav;
+   
+   if( equipment )
+      boilGrav_final = boilVolume_l / equipment->wortEndOfBoil_l( boilVolume_l ) * (boilGrav-1) + 1;
+   
+   avgBoilGrav = (boilGrav + boilGrav_final) / 2;
+   //avgBoilGrav = boilGrav;
+   
+   if( hops[i]->getUse() == Hop::USEBOIL)
+      ibus = IbuMethods::getIbus( AArating, grams, finalVolume_l, avgBoilGrav, minutes );
+   else if( hops[i]->getUse() == Hop::USEFIRST_WORT )
+      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, finalVolume_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
+
+   // Adjust for hop form.
+   if( hops[i]->getForm() == Hop::FORMLEAF )
+      ibus *= 0.90;
+   else if( hops[i]->getForm() == Hop::FORMPLUG )
+      ibus *= 0.92;
+   
+   return ibus;
+}
+
+bool Recipe::isValidType( const QString &str )
+{
+   static const QString types[] = {"Extract", "Partial Mash", "All Grain"};
+   static const unsigned int size = 3;
+   unsigned int i;
+   
+   for( i = 0; i < size; ++i )
+      if( str == types[i] )
+         return true;
+   
+   return false;
+}
+
+void Recipe::parseChanges(QMetaProperty prop, QVariant val)
+{
+   QObject sender = sender();
+   QString senderClass(sender.className());
+   
+   // Pass along the signal if it's one of our ingredients.
+   // I don't know really what to emit here...
+   /*
+   if( senderClass == "Hop" )
+      emit changed(...);
+   else if( senderClass == "Fermentable" )
+      emit changed(...);
+   else if( senderClass == "Misc" )
+      emit changed(...);
+   else if( senderClass == "Yeast" )
+      emit changed(...);
+   else if( senderClass == "Water" )
+      emit changed(...);
+   else if( senderClass == "BrewNote" )
+      emit changed(...);
+   else if( senderClass == "Instruction" )
+      emit changed(...);
+   */
 }
