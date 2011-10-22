@@ -219,7 +219,7 @@ double Yeast::amount() const
 
 bool Yeast::amountIsWeight() const
 {
-   return get("amountIsWeight").toBool();
+   return get("amount_is_weight").toBool();
 }
 
 QString Yeast::laboratory() const
@@ -229,17 +229,17 @@ QString Yeast::laboratory() const
 
 QString Yeast::productID() const
 {
-   return get("productID").toString();
+   return get("product_id").toString();
 }
 
 double Yeast::minTemperature_c() const
 {
-   return get("minTemperature_c").toDouble();
+   return get("min_temperature").toDouble();
 }
 
 double Yeast::maxTemperature_c() const
 {
-   return get("maxTemperature_c").toDouble();
+   return get("max_temperature").toDouble();
 }
 
 Yeast::Flocculation Yeast::flocculation() const
@@ -273,22 +273,22 @@ QString Yeast::notes() const
 
 QString Yeast::bestFor() const
 {
-   return get("bestFor").toString();
+   return get("best_for").toString();
 }
 
 int Yeast::timesCultured() const
 {
-   return get("timesCultured").toInt();
+   return get("times_cultured").toInt();
 }
 
 int Yeast::maxReuse() const
 {
-   return get("maxReuse").toInt();
+   return get("max_reuse").toInt();
 }
 
 bool Yeast::addToSecondary() const
 {
-   return get("addToSecondary").toBool();
+   return get("add_to_secondary").toBool();
 }
 
 //============================="SET" METHODS====================================
