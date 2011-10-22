@@ -62,11 +62,11 @@ signals:
    
 protected:
    
-   // They key/table where this ingredient is.
+   //! The key of this ingredient in its table.
    int key;
+   //! The table where this ingredient is stored.
    Database::DBTable table;
 
-private:   
    /*!
     * \param prop_name - A meta-property name
     * \param col_name - The appropriate column in the table.
@@ -81,6 +81,9 @@ private:
     * Returns the value of the attribute specified by key/table/col_name.
     */
    QVariant get( const char* col_name );
+   
+private:   
+   
 };
 
 #endif   /* _BEERXMLELEMENT_H */
