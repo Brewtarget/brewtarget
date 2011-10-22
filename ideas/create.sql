@@ -1,5 +1,4 @@
 create table equipment(
-   eid integer primary key autoincrement,
    name varchar(256) not null,
    boil_size real,
    batch_size real,
@@ -17,11 +16,14 @@ create table equipment(
    hop_utilization real,
    boiling_point real,
    absorption real,
-   notes text
+   notes text,
+   -- it's metadata all the way down
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
 create table fermentable(
-   fid integer primary key autoincrement,
    name varchar(256) not null,
    ftype varchar(128),
    amount real,
@@ -38,11 +40,13 @@ create table fermentable(
    max_in_batch real,
    recommend_mash boolean,
    is_mashed boolean,
-   ibu_gal_per_lb real
+   ibu_gal_per_lb real,
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
 create table hop(
-   hid integer primary key autoincrement,
    name varchar(256) not null,
    alpha real,
    amount real,
@@ -58,11 +62,13 @@ create table hop(
    humulene real,
    caryophyllene real,
    cohumulone real,
-   myrcene real
+   myrcene real,
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
 create table misc(
-   mid integer primary key autoincrement,
    name varchar(256) not null,
    mtype varchar(64),
    use varchar(64),
@@ -70,12 +76,15 @@ create table misc(
    amount real, 
    amount_is_weight boolean,
    use_for text,
-   notes text
+   notes text,
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
 create table style(
-   sid integer primary key autoincrement,
    name varchar(256) not null,
+   version integer,
    s_type varchar(64),
    category varchar(256),
    category_number integer,
@@ -97,11 +106,13 @@ create table style(
    notes text,
    profile text,
    ingredients text,
-   examples text
+   examples text,
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
 create table yeast(
-   yid integer primary key autoincrement,
    name varchar(256) not null,
    ytype varchar(32),
    form varchar(32),
@@ -117,11 +128,14 @@ create table yeast(
    best_for varchar(256),
    times_cultured integer,
    max_reuse integer,
-   add_to_secondary boolean
+   add_to_secondary boolean,
+   inventory real,
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
-create table mash_step(
-   msid integer primary key autoincrement,
+create table mashstep(
    name varchar(256) not null,
    mstype varchar(32),
    infuse_amount real,
@@ -130,12 +144,16 @@ create table mash_step(
    ramp_time real,
    end_temp real,
    infuse_temp real,
-   decoction_amount real
+   decoction_amount real,
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
 -- unlike some of the other tables, you can have a mash with no name.
+-- which is gonna mess my nice primary key ideas up
 create table mash(
-   mid integer primary key autoincrement,
+   mid integer PRIMARY KEY autoincrement,
    name varchar(256),
    grain_temp real,
    notes text,
@@ -144,15 +162,16 @@ create table mash(
    ph real,
    tun_weight real,
    tun_specific_heat real,
-   equip_adjust boolean
+   equip_adjust boolean,
+   deleted boolean,
+   display boolean
 );
 
 -- since the relationship of recipes to brewnotes is at most one-to-many
 -- I am putting the recipes key in here as a foreign key, instead of
 -- using another table
 create table brewnote(
-   bnid integer primary key autoincrement,
-   brewDate varchar(32),
+   brewDate varchar(32) PRIMARY KEY,
    fermentDate varchar(32),
    sg real,
    volume_into_bk real,
@@ -164,12 +183,14 @@ create table brewnote(
    pitch_temp real,
    fg real,
    eff_into_bk real,
+   actual_abv real,
    predicted_og real,
    brewhouse_eff real,
    predicted_abv real,
    projected_boil_grav real,
    projected_strike_temp real,
    projected_fin_temp real,
+   projected_mash_fin_temp real,
    projected_vol_into_bk real,
    projected_og real,
    projected_vol_into_ferm real,
@@ -177,16 +198,18 @@ create table brewnote(
    projected_eff real,
    projected_abv real,
    projected_atten real,
+   projected_points real,
    boil_off real,
-   final_volume real
+   final_volume real,
    notes text,
-
-   recipe integer,
-   foreign key(recipe) references recipe(rid)
+   deleted boolean,
+   display boolean,
+   recipe_version integer,
+   recipe_name varchar(256),
+   foreign key(recipe_name,recipe_version) references recipe(name,version)
 );
 
 create table water(
-   wid integer primary key autoincrement,
    name varchar(256) not null,
    amount real,
    calcium real,
@@ -196,12 +219,15 @@ create table water(
    sodium real,
    magnesium real,
    ph real,
-   notes text
+   notes text,
+   deleted boolean,
+   display boolean,
+   PRIMARY KEY (name,version)
 );
 
 -- instructions are many-to-one for recipes. 
 create table instruction(
-   iid integer primary key autoincrement,
+   iid integer PRIMARY KEY autoincrement,
    name varchar(256) not null,
    number integer, -- Which instruction number in the list.
    directions text,
@@ -209,16 +235,17 @@ create table instruction(
    timer_value real,
    completed boolean,
    interval real,
-
-   recipe integer,
-   foreign key(recipe) references recipe(rid)
+   deleted boolean,
+   display boolean,
+   recipe_version integer,
+   recipe_name varchar(256),
+   foreign key(recipe_name,recipe_version) references recipe(name,version)
 );
 
 -- The relationship of styles to recipe is one to many, as is the mash and
 -- equipment. It just makes most sense for the recipe to carry that around
 -- instead of using another table
 create table recipe(
-   rid integer primary key autoincrement,
    name varchar(256) not null,
    rtype varchar(32),
    brewer varchar(1024),
@@ -247,53 +274,75 @@ create table recipe(
    keg_priming_factor real,
    taste_notes text,
    taste_rating real,
-
-   style integer,
-   mash integer,
-   equipment integer,
-   foreign key(style) references style(sid),
-   foreign key(mash) references mash(mid)
-   foreign key(equipment) references mash(eid)
+   deleted boolean,
+   display boolean,
+   style_name varchar(256),
+   style_version integer,
+   mash_id integer,
+   equipment_name varchar(256),
+   equipment_version integer,
+   foreign key(style_name,style_version) references style(name,version),
+   foreign key(mash_id) references mash(mid),
+   foreign key(equipment_name,equipment_version) references equipment(name,version),
+   PRIMARY KEY (name,version)
 );
 
 create table mash_to_mashstep(
-   mmid integer primary key autoincrement,
+   mmid integer PRIMARY KEY autoincrement,
 
    mash integer,
-   mashstep integer,
+   mashstep_name varchar(256),
+   mashstep_version integer,
    foreign key(mash) references mash(mid),
-   foreign key(mashstep) references mashsteps(msid)
-);
-
-create table hops_in_recipe(
-   hrid integer primary key autoincrement,
-   use varchar(32),
-   time real,
-
-   hop integer,
-   recipe integer,
-   foreign key(hop) references hop(hid),
-   foreign key(recipe) references recipe(rid)
+   foreign key(mashstep_name,mashstep_version) references mashstep(name,version)
 );
 
 create table fermentable_in_recipe(
    hrid integer primary key autoincrement,
-   is_mashed boolean,
-   late_addition boolean,
-   amount real,
+   fermentable_name varchar(256),
+   fermentable_version integer,
+   recipe_name varchar(256),
+   recipe_version integer,
+   foreign key(fermentable_name,fermentable_version) references fermentable(name,version),
+   foreign key(recipe_name,recipe_version) references recipe(name,version)
+);
 
-   fermentable integer,
-   recipe integer,
-   foreign key(fermentable) references fermentable(fid),
-   foreign key(recipe) references recipe(rid)
+create table hop_in_recipe(
+   hrid integer PRIMARY KEY autoincrement,
+   hop_name varchar(256),
+   hop_version integer,
+   recipe_name varchar(256),
+   recipe_version integer,
+   foreign key(hop_name,hop_version) references hop(name,version),
+   foreign key(recipe_name,recipe_version) references recipe(name,version)
 );
 
 create table misc_in_recipe(
-   mrid integer primary key autoincrement,
-   time real,
+   mrid integer PRIMARY KEY autoincrement,
+   misc_name varchar(256),
+   misc_version,
+   recipe_name varchar(256),
+   recipe_version,
+   foreign key(misc_name,misc_version) references misc(name,version),
+   foreign key(recipe_name,recipe_version) references recipe(name,version)
+);
 
-   misc integer,
-   recipe integer,
-   foreign key(misc) references hop(misc),
-   foreign key(recipe) references recipe(rid)
+create table water_in_recipe(
+   wrid integer PRIMARY KEY autoincrement,
+   water_name varchar(256),
+   water_version,
+   recipe_name varchar(256),
+   recipe_version,
+   foreign key(water_name,water_version) references water(name,version),
+   foreign key(recipe_name,recipe_version) references recipe(name,version)
+);
+
+create table yeast_in_recipe(
+   yrid integer PRIMARY KEY autoincrement,
+   yeast_name varchar(256),
+   yeast_version,
+   recipe_name varchar(256),
+   recipe_version,
+   foreign key(yeast_name,yeast_version) references yeast(name,version),
+   foreign key(recipe_name,recipe_version) references recipe(name,version)
 );
