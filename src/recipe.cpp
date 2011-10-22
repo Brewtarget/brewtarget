@@ -19,7 +19,7 @@
 #include "instruction.h"
 #include "brewtarget.h"
 #include <string>
-#include <QVector>
+#include <QList>
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -1697,17 +1697,17 @@ double Recipe::ABV_pct()
 
 Style* Recipe::getStyle() const
 {
-   return Database::instance().style( get("sid").toInt() );
+   return Database::instance().style( get("style").toInt() );
 }
 
 Mash* Recipe::getMash() const
 {
-   return Database::instance().mash( get("mid").toInt() );
+   return Database::instance().mash( get("mash").toInt() );
 }
 
 Equipment* Recipe::getEquipment() const
 {
-   return Database::instance().equipment( get("eid").toInt() );
+   return Database::instance().equipment( get("equipment").toInt() );
 }
 
 // Should these "num" methods exist?
@@ -1928,7 +1928,7 @@ void Recipe::recalcPoints(double volume)
    Fermentable::Type type;
 
    // Calculate OG
-   QVector<Fermentable*> ferms = fermentables();
+   QList<Fermentable*> ferms = fermentables();
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
       ferm = ferms[i];
@@ -1976,7 +1976,7 @@ void Recipe::recalcColor_srm()
    double mcu = 0.0;
    unsigned int i;
 
-   QVector<Fermentable*> ferms = fermentables();
+   QList<Fermentable*> ferms = fermentables();
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
       ferm = ferms[i];
@@ -1998,7 +1998,7 @@ void Recipe::recalcBoilGrav()
    Fermentable::Type type;
 
    // Calculate OG
-   QVector<Fermentable*> ferms = fermentables();
+   QList<Fermentable*> ferms = fermentables();
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
       ferm = ferms[i];
@@ -2033,12 +2033,12 @@ void Recipe::recalcIBU()
    double ibus = 0.0;
    
    // Bitterness due to hops...
-   QVector<Hop*> hops = hops();
+   QList<Hop*> hops = hops();
    for( i = 0; static_cast<int>(i) < hops.size(); ++i )
       ibus += ibuFromHop(hops[i]);
 
    // Bitterness due to hopped extracts...
-   QVector<Fermentable*> ferms = fermentables();
+   QList<Fermentable*> ferms = fermentables();
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
       // Conversion factor for lb/gal to kg/l = 8.34538.
@@ -2116,7 +2116,7 @@ void Recipe::recalcGrainsInMash_kg()
    double ret = 0.0;
    Fermentable* ferm;
    
-   QVector<Fermentable*> ferms = fermentables();
+   QList<Fermentable*> ferms = fermentables();
    size = ferms.size();
    for( i = 0; i < size; ++i )
    {
@@ -2136,7 +2136,7 @@ void Recipe::recalcGrains_kg()
    unsigned int i, size;
    double ret = 0.0;
 
-   QVector<Fermentable*> ferms = fermentables();
+   QList<Fermentable*> ferms = fermentables();
    size = ferms.size();
    for( i = 0; i < size; ++i )
       ret += ferms[i]->amount_kg();
@@ -2231,7 +2231,7 @@ void Recipe::recalcOgFg()
    Fermentable* ferm;
    Yeast* yeast;
    
-   QVector<Fermentable*> ferms = fermentables();
+   QList<Fermentable*> ferms = fermentables();
    
    // Calculate OG
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )

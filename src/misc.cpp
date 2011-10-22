@@ -90,7 +90,7 @@ Misc::Misc() : BeerXMLElement()
 {
 }
 
-Misc::Misc(Misc const& other) : table(other.table), key(other.key)
+Misc::Misc(Misc const& other) : BeerXMLElement(other)
 {
 }
 

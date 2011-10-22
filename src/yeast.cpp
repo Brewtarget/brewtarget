@@ -141,7 +141,7 @@ Yeast::Yeast()
    setDefaults();
 }
 
-Yeast::Yeast(Yeast& other) : table(other.table), key(other.key)
+Yeast::Yeast(Yeast& other) : BeerXMLElement(other)
 {
 }
 

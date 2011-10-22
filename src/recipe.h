@@ -22,7 +22,7 @@ class Recipe;
 
 #include <QColor>
 #include <QVariant>
-#include <QVector>
+#include <QList>
 #include <QDomNode>
 #include <QDomDocument>
 #include <QString>
@@ -124,17 +124,20 @@ public:
    Q_PROPERTY( QColor SRMColor READ SRMColor /*WRITE*/ NOTIFY changed STORED false )
    
    // Relational properties.
-   Q_PROPERTY( unsigned int numHops READ numHops /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( unsigned int numFermentables READ numFermentables /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( unsigned int numMiscs READ numMiscs /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( unsigned int numYeasts READ numYeasts /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( unsigned int numWaters READ numWaters /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( unsigned int numBrewNotes READ numBrewNotes /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( QVector<Hop*> hops READ hops /*WRITE*/ NOTIFY changed STORED false );
-   Q_PROPERTY( QVector<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );
-   Q_PROPERTY( QVector<Misc*> miscs READ miscs /*WRITE*/ NOTIFY changed STORED false );
-   Q_PROPERTY( QVector<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
-   Q_PROPERTY( QVector<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
+   // These num* methods are redundant. Just use hops().size() for example.
+   //Q_PROPERTY( unsigned int numHops READ numHops /*WRITE*/ NOTIFY changed STORED false);
+   //Q_PROPERTY( unsigned int numFermentables READ numFermentables /*WRITE*/ NOTIFY changed STORED false);
+   //Q_PROPERTY( unsigned int numMiscs READ numMiscs /*WRITE*/ NOTIFY changed STORED false);
+   //Q_PROPERTY( unsigned int numYeasts READ numYeasts /*WRITE*/ NOTIFY changed STORED false);
+   //Q_PROPERTY( unsigned int numWaters READ numWaters /*WRITE*/ NOTIFY changed STORED false);
+   //Q_PROPERTY( unsigned int numBrewNotes READ numBrewNotes /*WRITE*/ NOTIFY changed STORED false);
+   // These QList properties should only emit changed() when their size changes, or when
+   // one of their elements is replaced by another with a different key.
+   Q_PROPERTY( QList<Hop*> hops READ hops /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Misc*> miscs READ miscs /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( Mash* mash READ mash /*WRITE*/ NOTIFY changed STORED false);
    Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ NOTIFY changed STORED false);
    Q_PROPERTY( Style* style READ style /*WRITE*/ NOTIFY changed STORED false);
@@ -261,21 +264,21 @@ public:
    double grainsInMash_kg() const;
    double grains_kg() const;
    //! Get a list of IBU contributions from each hop.
-   QVector<double> IBUs() const;
+   QList<double> IBUs() const;
    
    // Relational getters
    unsigned int numHops() const;
-   QVector<Hop*> hops();
+   QList<Hop*> hops();
    unsigned int numFermentables() const;
-   QVector<Fermentable*> fermentables();
+   QList<Fermentable*> fermentables();
    unsigned int numMiscs() const;
-   QVector<Misc*> miscs();
+   QList<Misc*> miscs();
    unsigned int numYeasts() const;
-   QVector<Yeast*> yeasts();
+   QList<Yeast*> yeasts();
    unsigned int numWaters() const;
-   QVector<Water*> waters();
+   QList<Water*> waters();
    unsigned int numBrewNotes() const;
-   QVector<BrewNote*> brewNotes();
+   QList<BrewNote*> brewNotes();
    
    Mash* mash() const;
    Equipment* equipment() const;
