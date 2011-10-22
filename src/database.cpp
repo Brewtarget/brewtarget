@@ -59,24 +59,6 @@ QString Database::mashFileName;
 
 Database::Database()
 {
-   // Don't EVER use this method to get the database!!!
-}
-
-Database* Database::getDatabase()
-{
-   if( initialized )
-      return internalDBInstance;
-   else
-      return 0;
-}
-
-bool Database::isInitialized()
-{
-   return initialized;
-}
-
-void Database::initialize()
-{
    // These are the user-space database, recipe and mash documents.
    QDomDocument dbDoc, recDoc, mashDoc, tmpDoc;
    QFile origDbFile, origRecFile, origMashFile;
@@ -184,10 +166,12 @@ void Database::initialize()
    dbFile.close();
    recipeFile.close();
    mashFile.close();
+}
 
-   if( internalDBInstance == 0 )
-      internalDBInstance = new Database();
-   Database::initialized = true;
+Database& Database::instance()
+{
+   static Database dbSingleton;
+   return dbSingleton;
 }
 
 void Database::mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last )

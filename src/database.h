@@ -42,7 +42,7 @@ class Database;
 /*!
  * \class Database
  * This class is a singleton, meaning that there should only ever be one
- * instance of this in the whole damn program.
+ * instance of this floating around.
  *
  * It only calls hasChanged() when a new ingredient or whatever gets added,
  * not when any of them actually changed.
@@ -54,12 +54,8 @@ public:
    enum DBTable{ NOTABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, MASHTABLE, MISCTABLE,
                  RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE };
 
-   //! Don't EVER use this method to get the database!!!
-   Database();
-   //! This should be the ONLY way you get an instance!!!
-   static Database* getDatabase();
-   static void initialize();
-   static bool isInitialized();
+   //! This should be the ONLY way you get an instance.
+   static Database& instance();
    //! Save to the persistent medium.
    static void savePersistent();
 
@@ -225,8 +221,6 @@ public:
    static QString getRecipeFileName();
    
 private:
-   static bool initialized;
-   static Database* internalDBInstance;
    static QFile dbFile;
    static QString dbFileName;
    static QFile recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
@@ -245,6 +239,15 @@ private:
    QSqlRelationalTableModel yeasts;
    
    QUndoStack commandStack;
+   
+   //! Hidden constructor.
+   Database();
+   //! Copy constructor hidden.
+   Database(Database const&){}
+   //! Assignment operator hidden.
+   Database& operator=(Database const&){}
+   //! Destructor hidden.
+   ~Database(){}
 };
 
 #endif   /* _DATABASE_H */
