@@ -724,7 +724,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="494"/>
         <source>Unknown type %1.</source>
-        <translation>Nieznany typ %1</translation>
+        <translation>Nieznany typ %1.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="785"/>
@@ -1273,7 +1273,7 @@ Używaj na własną odpowiedzialność.</translation>
     <message>
         <location filename="../src/MashWizard.cpp" line="293"/>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation>Uzyskałeś zbyt dużo brzeczki przedniej w stosunku do możliwości gotowania. Zwiększ objetość gotowania zwiekaszając jego czas lub zmniejsz gęstość zacieru.</translation>
+        <translation>Uzyskałeś zbyt dużo brzeczki przed gotowaniem w stosunku do możliwości gotowania. Zwiększ objetość gotowania zwiąkaszając jego czas lub zmniejsz gęstość zacieru.</translation>
     </message>
 </context>
 <context>
@@ -2139,7 +2139,7 @@ Używaj na własną odpowiedzialność.</translation>
     <message>
         <location filename="../src/recipe.cpp" line="968"/>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation>Dodaj %1 wody do kotła podnosząc ilość brzeczki przedniej do %2.</translation>
+        <translation>Dodaj %1 wody do kotła podnosząc ilość brzeczki przed gotowaniem do %2.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="975"/>
@@ -2268,7 +2268,7 @@ Dodaj %1 początkowej wody do fermentora.</translation>
         <source>
 The final volume in the primary is %1.</source>
         <translation>
-Końcowa pojemność w fermentorze wyniesie %1.</translation>
+Końcowa objętość w fermentorze wyniesie %1.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="1083"/>
@@ -2754,32 +2754,32 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="800"/>
         <source>SG</source>
-        <translation>Gęstość przed gotowaniem (SG)</translation>
+        <translation>SG</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="802"/>
         <source>Volume into BK</source>
-        <translation>Objętość w kadzi warzelnej</translation>
+        <translation>Objętość w kadzi</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="806"/>
         <source>Strike Temp</source>
-        <translation>Temperatura przed wsypaniem słodów</translation>
+        <translation>Temp. początkowa</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="808"/>
         <source>Final Temp</source>
-        <translation>Docelowa temperatura</translation>
+        <translation>Temp. końcowa</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="812"/>
         <source>Eff into BK</source>
-        <translation>Wydajność w kadzi warzelnej</translation>
+        <translation>Wydajność w kadzi</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="814"/>
         <source>Projected OG</source>
-        <translation>Przewidywana gęstość początkowa</translation>
+        <translation>Przewidywana OG</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="820"/>
@@ -2804,7 +2804,7 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="832"/>
         <source>Projected ABV</source>
-        <translation>Przewidywana zawartość alkoholu</translation>
+        <translation>Przewidywana ABV</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="839"/>
@@ -3285,7 +3285,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="76"/>
         <source>SG</source>
-        <translation>Gęstość przed gotowaniem (SG)</translation>
+        <translation>Gęstość (SG)</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="104"/>
@@ -3306,7 +3306,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="149"/>
         <source>Strike Temp</source>
-        <translation>Temperatura przed wsypaniem słodów</translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="177"/>
@@ -3316,7 +3316,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="184"/>
         <source>Final Temp</source>
-        <translation>Docelowa temperatura</translation>
+        <translation>Docelowa temp.</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="212"/>
@@ -3331,7 +3331,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="234"/>
         <source>OG</source>
-        <translation>Gęstość początkowa (OG)</translation>
+        <translation>Gęstość (OG)</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="262"/>
@@ -3341,12 +3341,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="269"/>
         <source>     Postboil Volume</source>
-        <translation>Objętość po gotowaniu</translation>
+        <translation>Obj. po gotowaniu</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="303"/>
         <source>Volume of wort in BK after boil</source>
-        <translation>Objętość brzeczki w kadzi warzelnej po gotowaniu</translation>
+        <translation>Objętość brzeczki w kadzi</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="310"/>
@@ -3356,12 +3356,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="313"/>
         <source>Volume into fermenter</source>
-        <translation>Objętość w fermentorze</translation>
+        <translation>Obj.w fermentorze</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="348"/>
         <source> Pitch Temp</source>
-        <translation>Temperatura zadania drożdży</translation>
+        <translation>Temp. zadania drożdży</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="379"/>
@@ -3376,12 +3376,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="401"/>
         <source>FG</source>
-        <translation>Gęstość końcowa</translation>
+        <translation>Gęstość końcowa (FG)</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="426"/>
         <source>Final gravity</source>
-        <translation>Końcowa gęstość</translation>
+        <translation>Końcowa gęstość (FG)</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="458"/>
@@ -3416,7 +3416,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="528"/>
         <source>Projected OG</source>
-        <translation>Przewidywana gęstość początkowa</translation>
+        <translation>Oczekiwana gęstość (OG)</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="542"/>
@@ -3436,7 +3436,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="562"/>
         <source>Projected ABV</source>
-        <translation>Przewidywana zawartość alkoholu</translation>
+        <translation>Projektowana zaw. alk.</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="576"/>
@@ -3446,7 +3446,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="579"/>
         <source>ABV</source>
-        <translation>Alkohol (ABV)</translation>
+        <translation>Faktyczna zaw. alk.</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="599"/>
@@ -4267,17 +4267,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="314"/>
         <source>Target Boil Size</source>
-        <translation>Docelowa ilość brzeczki przedniej</translation>
+        <translation>Docelowa ilość brzeczki przed gotowaniem</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="339"/>
         <source>Target boil size</source>
-        <translation>Docelowa ilość brzeczki przedniej</translation>
+        <translation>Docelowa ilość brzeczki przed gotowaniem</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="346"/>
         <source>Calculated Boil Size</source>
-        <translation>Obliczona ilość brzeczki przedniej</translation>
+        <translation>Obliczona ilość brzeczki przed gotowaniem</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="360"/>
@@ -4937,7 +4937,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mashDesigner.ui" line="117"/>
         <source>Batch Sparge</source>
-        <translation>Krok jest wysładzaniem?</translation>
+        <translation>Wysładzanie</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="134"/>
@@ -5656,7 +5656,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/optionsDialog.ui" line="538"/>
         <source>Catalan</source>
-        <translation type="unfinished"></translation>
+        <translation>Kataloński</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="558"/>
