@@ -26,6 +26,8 @@ use DBI;
 use Data::Dumper;
 use Getopt::Long;
 
+my $verbose = 0;
+
 sub help {
    print << "EOF";
 usage: $0 [-p PATH] [-admr] [database]
@@ -78,6 +80,8 @@ sub parse_cli {
    if ( $opts->{data} || $opts->{mash} || $opts->{recipe} ) {
       $opts->{all} = 0;
    }
+
+   $verbose = $opts->{verbose};
 }
 
 # I have hidden all the noise of the hashes in subs so that I can do syntax
@@ -258,13 +262,9 @@ sub set_mashses {
          DECOCTION_AMOUNT => { column => 'decoction_amount', type => 'number' },
       },
       mash_to_mashstep => {
-         mash             => { column => 'mash',             
-                               type => 'number',
-                               lookup => 'select max(mid) from mash where name = ?',
-                               LINK => 'NAME',
-                            },
-         mashstep_name    => { column => 'mashstep_name', type   => 'string' },
-         mashstep_version => { column => 'mashstep_version', type   => 'number' },
+         mash             => { column => 'mash',             type => 'number' },
+         mashstep_name    => { column => 'mashstep_name',    type => 'string' },
+         mashstep_version => { column => 'mashstep_version', type => 'number' },
       },
    );
 }
@@ -397,19 +397,6 @@ sub convert_name {
    return $insert;
 }
 
-# This simply loops through one of the hashes and prepares all of the lookups
-sub prepare_all {
-   my ($dbh,$tref) = @_;
-
-   for my $section ( keys %$tref ) {
-      for my $key ( keys %{$tref->{$section}} ) {
-         if ( defined( $tref->{$section}{$key}{lookup} ) ) {
-            $tref->{$section}{$key}{lookup} = $dbh->prepare($tref->{$section}{$key}{lookup});
-         }
-      }
-   }
-}
-
 # Executes one query
 sub lookup_value {
    my ($name, $sth, $dbh) = @_;
@@ -429,10 +416,20 @@ sub lookup_value {
 sub convert_database {
    my ($dbh, $xsref, $translate) = @_;
    my $whirlygig = 1;
+   my %ids = ( EQUIPMENT   => 'eid',
+               FERMENTABLE => 'fid',
+               HOP         => 'hid',
+               MISC        => 'mid',
+               STYLE       => 'sid',
+               WATER       => 'wid',
+               YEAST       => 'yid'
+            );
 
+   local $| = 1;
    for my $section ( keys %$xsref ) {
       die "Unknown section: $section\n" unless defined $translate->{$section};
       my $name = $section eq 'MASH_STEP' ? 'MASHSTEP' : $section;
+      my $lname = lc $name;
 
       for my $ref ( @{$xsref->{$section}} ) {
          if ( ! $ref->{NAME}[0] ) {
@@ -455,23 +452,50 @@ sub convert_database {
             }
          }
 
-         my $insert = "insert into $name (deleted,display,";
-         my $values = "values (0,1,";
-
-         my $maxversion = lookup_value( $ref->{NAME}[0], $dbh->prepare("select max(version) from $name where name = ?"), $dbh );
-         if ( $maxversion ) {
-            $ref->{'VERSION'}[0] = $maxversion + 1;
+         # The notes fields seem to cause issues. This should fix them.
+         if ( defined $ref->{NOTES} ) {
+            $ref->{NOTES}[0] =~ s/[\r\n]/ /msg;
          }
+
+         # Since this is the initial load, assume everything is the root
+         # object.
+         my $insert = "insert into $name (deleted,display,";
+         my $values = "values (0,";
+         my $parent = 0;
+
+         if ( defined $ids{$section} ) {
+            $parent = lookup_value( $ref->{NAME}[0], 
+                                    $dbh->prepare("select min($ids{$section}) from $name where name = ?"), 
+                                    $dbh );
+         }
+         if ( $parent ) {
+            $values .= "0,";
+         }
+         else {
+            $values .= "1,";
+         }
+
          for my $key ( keys %$ref ) {
             $values .= convert_value( $translate->{$section}, $ref, $key, $dbh);
             $insert .= convert_name( $translate->{$section}, $key );
          }
          $insert =~ s/,$/) /;
          $values =~ s/,$/);/;
+
+         print "$insert $values\n" if $verbose;
          $dbh->do("$insert $values");
+         # if this thingy already exists in the database, we need to link it
+         # in
+         if ($parent) {
+            my $id = lookup_value( $ref->{NAME}[0], 
+                                   $dbh->prepare("select max($ids{$section}) from $name where name = ?"), 
+                                   $dbh );
+            $dbh->do("insert into ${lname}_children (parent_id, child_id) values ($parent,$id);");
+         }
+         $whirlygig++;
+         print "$whirlygig\r" if $whirlygig % 10 == 0; 
       }
       $dbh->commit();
-      print "\t$whirlygig\n" if ( ! $whirlygig++ % 10  );
    }
 }
 
@@ -511,52 +535,52 @@ sub convert_mashes {
          for my $step ( @$steps ) {
             next unless $step;
             for my $key ( keys %{$step} ) {
-               for my $noname ( @{$step->{$key}} ) {
+               for my $mashstep ( @{$step->{$key}} ) {
                   my $insert_step = "insert into mashstep (deleted,display,";
                   my $values_step = "values (0,1,";
 
-                  my $maxversion = lookup_value( $noname->{NAME}[0], 
-                                                 $dbh->prepare('select max(version) from mashstep where name = ?'), 
-                                                 $dbh );
-                  if ( $maxversion ) {
-                     $noname->{'VERSION'}[0] = $maxversion + 1;
-                  }
-                  $mashsteps{ $noname->{'NAME'}[0] } = $noname->{'VERSION'}[0];
-                  for my $mstep ( keys %{$noname} ) {
-                     $values_step .= convert_value( $translate->{'MASHSTEP'}, $noname, $mstep, $dbh);
+                  for my $mstep ( keys %{$mashstep} ) {
+                     $values_step .= convert_value( $translate->{'MASHSTEP'}, $mashstep, $mstep, $dbh);
                      $insert_step .= convert_name( $translate->{'MASHSTEP'}, $mstep );
                   }
                   $insert_step =~ s/,$/) /;
                   $values_step =~ s/,$/);/;
                   $dbh->do("$insert_step $values_step");
+                  # get the id we just created. I wonder if there is a better
+                  # way of doing this?
+                  my $name = $mashstep->{NAME}[0];
+                  $mashsteps{$name} = lookup_value( $name,
+                                              $dbh->prepare('select max(msid) from mashstep where name = ?'), 
+                                              $dbh);
                }
             }
          }
          # Now we link all this crap together.
          $mash_id = lookup_value( $mash->{NAME}[0], 
-                                  $dbh->prepare($translate->{mash_to_mashstep}{mash}{lookup}), 
+                                  $dbh->prepare("select max(maid) from mash where name = ?"),
                                   $dbh );
-         for my $ugh ( keys %mashsteps ) {
-            my $insert_map = "insert into mash_to_mashstep (mash,mashstep_name,mashstep_version)";
-            $insert_map .= " values ($mash_id, '$ugh', $mashsteps{$ugh});";
+         for my $step ( keys %mashsteps ) {
+            my $insert_map = "insert into mash_to_mashstep (mash_id,mashstep_id)";
+            $insert_map .= " values ($mash_id, $mashsteps{$step});";
             $dbh->do("$insert_map");
          }
+         $whirlygig++;
+         print "\t$whirlygig\n" if $whirlygig % 10 == 0;
       }
       $dbh->commit();
-      print "\t$whirlygig\n" if ( ++$whirlygig % 10 == 0 );
    }
    return $mash_id || 0;
 }
 
 # This is a helper to convert_recipes. I hate long functions
 sub convert_brewnotes {
-   my ($brewnotes,$rname,$rversion,$translate,$dbh) = @_;
+   my ($brewnotes,$rid,$translate,$dbh) = @_;
 
    return unless $brewnotes->[0];
 
    for my $bnote ( @{$brewnotes->[0]{BREWNOTE}} ) {
-      my $insert = "insert into brewnote (deleted,display,recipe_version,recipe_name,";
-      my $values = "values (0,1,$rversion," . $dbh->quote($rname) . ",";
+      my $insert = "insert into brewnote (deleted,display,recipe_id,";
+      my $values = "values (0,1,$rid,";
 
       for my $key ( keys %$bnote ) {
          next if $key eq 'VERSION';
@@ -571,13 +595,13 @@ sub convert_brewnotes {
 }
 
 sub convert_instructions {
-   my ($instructions,$rname,$rversion,$translate,$dbh) = @_;
+   my ($instructions,$rid,$translate,$dbh) = @_;
 
    return unless $instructions->[0];
 
    for my $ins ( @{$instructions->[0]{INSTRUCTION}} ) {
-      my $insert = "insert into instruction (deleted,display,recipe_version,recipe_name,";
-      my $values = "values (0,1,$rversion," . $dbh->quote($rname) . ",";
+      my $insert = "insert into instruction (deleted,display,recipe_id,";
+      my $values = "values (0,1,$rid,";
 
       for my $key ( keys %$ins ) {
          $values .= convert_value( $translate->{INSTRUCTION}, $ins, $key, $dbh);
@@ -585,17 +609,22 @@ sub convert_instructions {
       }
       $insert =~ s/,$/) /;
       $values =~ s/,$/);/;
-#      print "$insert $values\n";
+      print "$insert $values\n" if $verbose;
       $dbh->do("$insert $values");
    }
    $dbh->commit();
 }
 
 sub convert_ingredients {
-   my ($ingredients,$section,$rname,$rversion,$translate,$dbh) = @_;
+   my ($ingredients,$section,$rid,$translate,$dbh) = @_;
    my $lsec = lc $section;
    my $link_table = $lsec . '_in_recipe';
-
+   my %ids = ( HOP         => 'hid',
+               FERMENTABLE => 'fid',
+               MISC        => 'mid',
+               WATER       => 'wid',
+               YEAST       => 'yid'
+            );
 
    return unless $ingredients->[0];
 
@@ -603,33 +632,49 @@ sub convert_ingredients {
       my $insert = "insert into $section (deleted,display,";
       my $values = "values (0,";
 
-      # Get the ingredient in the main tables.
-      my $maxversion = lookup_value( $ing->{NAME}[0], $dbh->prepare("select max(version) from $section where name = ?"), $dbh );
-      if ( $maxversion ) {
-         $ing->{'VERSION'}[0] = $maxversion + 1;
+      # Get the ingredient in the main tables. The one marked for display has
+      # to be the parent
+      my $parent = lookup_value( $ing->{NAME}[0], 
+                                 $dbh->prepare("select $ids{$section} from $section where name = ? and display = 1"), 
+                                 $dbh );
+
+      # If the ingredient is in the main table, set this not to display 
+      if ( $parent ) {
          $values .= "0,";
       }
+      # Otherwise, display this 
       else {
          $values .= "1,";
       }
+
+      # The notes fields seem to cause issues. This should fix them.
+      if ( defined $ing->{NOTES} ) {
+         $ing->{NOTES}[0] =~ s/[\n\r]/ /msg;
+      }
+
       for my $key ( keys %$ing ) {
          $values .= convert_value( $translate->{$section}, $ing, $key, $dbh);
          $insert .= convert_name( $translate->{$section}, $key );
       }
       $insert =~ s/,$/) /;
       $values =~ s/,$/);/;
-#      print "$insert $values\n";
+      print "$insert $values\n" if $verbose;
       $dbh->do("$insert $values");
+      # grab the ingredient we just created
+
+      my $id = lookup_value( $ing->{NAME}[0], $dbh->prepare("select max($ids{$section}) from $section where name = ?"), $dbh);
+      die "Couldn't find myself: $ing->{NAME}[0] $id\n" unless $id;
+
+      # Set up any necessary parent/child relations
+      if ( $parent ) {
+         $dbh->do("insert into ${lsec}_children (parent_id,child_id) values ($parent,$id)");
+      }
 
       # Now perform the linking.
-      $insert = "insert into $link_table (${lsec}_name,${lsec}_version,recipe_name,recipe_version) ";
-      $values = join (",","values ( ", 
-                           $dbh->quote($ing->{NAME}[0]),
-                           $ing->{VERSION}[0],
-                           $dbh->quote($rname),
-                           $rversion);
+      $insert = "insert into $link_table (${lsec}_id,recipe_id) ";
+      $values = join (",","values ( ", $id, $rid);
       $values =~ s/\( ,/(/;
-#      print "$insert $values);\n";
+      print "$insert $values);\n" if $verbose;
       $dbh->do("$insert $values);");
 
    }
@@ -638,18 +683,28 @@ sub convert_ingredients {
 
 sub convert_withId {
    my ($stuff,$section,$trans,$dbh) = @_;
-   my ($name, $version);
+   my ($name, $id, $parent);
+   my %ids = ( EQUIPMENT   => 'eid',
+               FERMENTABLE => 'fid',
+               HOP         => 'hid',
+               MISC        => 'mid',
+               STYLE       => 'sid',
+               WATER       => 'wid',
+               YEAST       => 'yid'
+            );
+
 
    my $data = $stuff->[0];
    $name = $data->{NAME}[0];
 
-   $version = lookup_value($name, $dbh->prepare("select max(version) from $section where name = ?"), $dbh);
-   if ( $version++ ) {
-      $data->{VERSION}[0] = $version;
-   }
+   $parent = lookup_value($name, 
+                      $dbh->prepare("select $ids{$section} from $section where name = ? and display = 1"), 
+                      $dbh);
+   die "Couldn't find parent $name $section $ids{$section} $parent\n" unless $parent;
 
    my $insert = "insert into $section (deleted,display,";
-   my $values = join( ",", 'values (0', $version > 1 ? "1" : "0") . ",";
+   my $values = sprintf 'values (0,%s,', 
+                        $parent ? "0" : "1";
 
    # The style guide for American Pale Ale and Brown Ale will cause problems.
    # Fix them in transit
@@ -666,6 +721,10 @@ sub convert_withId {
 
       }
    }
+   # The notes fields seem to cause issues. This should fix them.
+   if ( defined $data->{NOTES} ) {
+      $data->{NOTES}[0] =~ s/[\r\n]/ /msg;
+   }
 
    for my $key ( keys %$data ) {
       $values .= convert_value( $trans->{$section}, $data, $key, $dbh);
@@ -673,11 +732,17 @@ sub convert_withId {
    }
    $insert =~ s/,$/) /;
    $values =~ s/,$/);/;
-#   print "$insert $values\n";
+   print "$insert $values\n" if $verbose;
    $dbh->do("$insert $values");
    $dbh->commit();
 
-   return ($name,$version);
+   $id = lookup_value($name, $dbh->prepare("select max($ids{$section}) from $section where name = ?"), $dbh);
+   # Do the child links if required
+   if ( $parent ) {
+      my $lsec = lc $section;
+      $dbh->do("insert into ${lsec}_children (parent_id,child_id) values ($parent,$id);");
+   }
+   return $id;
 }
 
 # This one will be the hardest. Lots of dependencies, lots of keys and 2
@@ -685,8 +750,9 @@ sub convert_withId {
 # convert_database and convert_mashes as required.
 sub convert_recipes {
    my ($dbh, $xsref,$translate,$dbhash,$mshash) = @_;
-   my ($maxver, $rname, $rversion);
+   my ($parent_id, $rname, $rid);
 
+   local $| = 1;
    # Have I complained about these obscenely deep data structures yet?
    for my $section ( keys %$xsref ) {
       for my $recipe ( @{$xsref->{$section}} ) {
@@ -694,17 +760,19 @@ sub convert_recipes {
          # translations hash to decide which values to extract from the recipe
          # XML
          my $ins_rec = "insert into recipe (deleted,display,";
-         my $val_rec = " values (0,1,";
-
-         $maxver = lookup_value( $recipe->{NAME}[0], 
-                                 $dbh->prepare( 'select max(version) from recipe where name = ?'),
-                                 $dbh );
-
-         $recipe->{VERSION}[0] = $maxver+1 if $maxver;
+         my $val_rec = " values (0,";
 
          # Save this to make later things easy
          $rname = $recipe->{NAME}[0];
-         $rversion = $recipe->{VERSION}[0];
+
+         print "\tconverting $rname\n";
+         # See if we have a parent
+         $parent_id = lookup_value( $rname,
+                                    $dbh->prepare('select min(rid) from recipe where name = ? and display = 1'),
+                                    $dbh
+                                  );
+
+         $val_rec .= $parent_id ? "0," : "1,";
 
          for my $key ( keys %{$translate->{RECIPE}} ) {
             my ($val,$name);
@@ -717,42 +785,53 @@ sub convert_recipes {
 
          # We need to find the style, the equipment and do something with the
          # mashes
-         my ($equip_name, $equip_ver) = convert_withId($recipe->{EQUIPMENT},'EQUIPMENT',$dbhash,$dbh);
-         my ($style_name, $style_ver) = convert_withId($recipe->{STYLE},'STYLE', $dbhash, $dbh);
+         my $equip_id = convert_withId($recipe->{EQUIPMENT},'EQUIPMENT',$dbhash,$dbh);
+         my $style_id = convert_withId($recipe->{STYLE},'STYLE', $dbhash, $dbh);
+
          # Round peg, meet square hole. I do not want to completely rewrite
          # convert_mashes, but it expects a few more layers of data structure
          # than the recipe gives me
          my $mash_id = convert_mashes($dbh, { MASH => $recipe->{MASH} }, $mshash);
         
-         $ins_rec .= "equipment_name,equipment_version,mash_id,style_name,style_version,";
+         $ins_rec .= "equipment_id,mash_id,style_id,";
          $val_rec .= join( ",",
-                        $dbh->quote($equip_name),
-                        $equip_ver,
+                        $equip_id,
                         $mash_id,
-                        $dbh->quote($style_name),
-                        $style_ver);
+                        $style_id);
 
          # That should be the recipe. Deceptively easy, but I left all the
          # hard work for later.
          $ins_rec =~ s/,$/) /;
          $val_rec .= ');';
-#         print "$ins_rec $val_rec\n";
+         print "$ins_rec $val_rec\n" if $verbose;
          $dbh->do( "$ins_rec $val_rec");
 
+         # Find the recipe we just made
+         $rid = lookup_value( $rname,
+                              $dbh->prepare('select max(rid) from recipe where name = ?'),
+                              $dbh
+                           );
+
+         die "Could not find myself: $rname $rid\n" unless $rid;
+         # link this one to its parent if we must
+         if ( $parent_id ) {
+            $dbh->do("insert into recipe_children (parent_id,child_id) values ($parent_id,$rid);");
+         }
+
          # Brewnotes 
-         convert_brewnotes($recipe->{BREWNOTES},$rname,$rversion,$translate,$dbh);
+         convert_brewnotes($recipe->{BREWNOTES},$rid,$translate,$dbh);
          # Instructions
-         convert_instructions($recipe->{INSTRUCTIONS},$rname,$rversion,$translate,$dbh);
+         convert_instructions($recipe->{INSTRUCTIONS},$rid,$translate,$dbh);
          # Hops 
-         convert_ingredients($recipe->{HOPS},'HOP',$rname,$rversion,$dbhash,$dbh);
+         convert_ingredients($recipe->{HOPS},'HOP',$rid,$dbhash,$dbh);
          # Fermentables
-         convert_ingredients($recipe->{FERMENATBLES},'FERMENATBLE',$rname,$rversion,$dbhash,$dbh);
+         convert_ingredients($recipe->{FERMENATBLES},'FERMENATBLE',$rid,$dbhash,$dbh);
          # Misc
-         convert_ingredients($recipe->{MISCS},'MISC',$rname,$rversion,$dbhash,$dbh);
+         convert_ingredients($recipe->{MISCS},'MISC',$rid,$dbhash,$dbh);
          # Water
-         convert_ingredients($recipe->{WATERS},'WATER',$rname,$rversion,$dbhash,$dbh);
+         convert_ingredients($recipe->{WATERS},'WATER',$rid,$dbhash,$dbh);
          # Yeast
-         convert_ingredients($recipe->{YEASTS},'YEAST',$rname,$rversion,$dbhash,$dbh);
+         convert_ingredients($recipe->{YEASTS},'YEAST',$rid,$dbhash,$dbh);
       }
    }
 }
