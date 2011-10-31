@@ -6,7 +6,7 @@ CMAKEOPTIONS="-DDO_RELEASE_BUILD=ON"
 function printUsageAndExit {
    echo -e "Usage\n" \
            "   Options:\n" \
-           "      -m T   Set mac arch (\"i386 ppc\" for universal binary)\n" \
+           "      -m T   Set mac arch (\"i386;ppc\" for universal binary)\n" \
            "      -p T   Set prefix to T.\n" \
            "      -t     Update translation files (*.ts).\n" \
            "      -v     Verbose compilation.\n" \

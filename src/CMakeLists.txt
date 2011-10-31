@@ -219,8 +219,17 @@ SET( FILES_TO_TRANSLATE
 # "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
 # by the below corresponding value in ${CONFIGDATADIR} below when
 # CONFIGURE_FILE() is called.
-SET( CONFIGDATADIR "/${DATAPATH}/" )
-SET( CONFIGDOCDIR "/${DOCPATH}/" )
+IF( IS_ABSOLUTE ${DATAPATH} )
+   SET( CONFIGDATADIR "${DATAPATH}/" )
+ELSE()
+   SET( CONFIGDATADIR "/${DATAPATH}/" )
+ENDIF()
+
+IF( IS_ABSOLUTE ${DOCPATH} )
+   SET( CONFIGDOCDIR "${DOCPATH}/" )
+ELSE()
+   SET( CONFIGDOCDIR "/${DOCPATH}/" )
+ENDIF()
 
 # Tell cmake where the configure file is and where
 # to put the output. All variables in config.in written as "${VAR}$
