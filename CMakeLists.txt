@@ -49,8 +49,8 @@ ELSE()
 ENDIF()
 
 IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
-   SET( CMAKE_OSX_ARCHITECTURES ppc i386 ) # Build universal binary
-   #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary for 32 and 64 bit.
+   SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary. 
+   #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
 #============================Directories=======================================
