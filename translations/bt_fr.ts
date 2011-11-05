@@ -16,42 +16,42 @@
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="170"/>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée d&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="172"/>
         <source>Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="177"/>
         <source>Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume à l&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="179"/>
         <source>Preboil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité avant ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="184"/>
         <source>Final Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume final</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="186"/>
         <source>Starting Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité de départ</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="191"/>
         <source>IBU</source>
-        <translation>UAI</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="193"/>
         <source>Final Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité finale</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="198"/>
@@ -61,7 +61,7 @@
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="200"/>
         <source>Estimated calories(per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calories estimées (par 35cl)</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="213"/>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="216"/>
         <source>Completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminé</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="217"/>
@@ -81,42 +81,42 @@
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="218"/>
         <source>Step</source>
-        <translation type="unfinished"></translation>
+        <translation>Étape</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="282"/>
         <source>Actual PreBoil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume réel avant ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="283"/>
         <source>Actual PreBoil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité réelle avant ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="286"/>
         <source>PostBoil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume après ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="287"/>
         <source>PostBoil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité après ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="290"/>
         <source>Volume into fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume dans le fermenteur</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="318"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer le document</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="329"/>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Notes&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../src/BrewDayScrollWidget.cpp" line="406"/>
@@ -134,47 +134,47 @@
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="138"/>
         <source>Date</source>
-        <translation type="unfinished">Date</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="143"/>
         <source>Boil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume à l&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="145"/>
         <source>Preboil Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité avant ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="149"/>
         <source>Final Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume final</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="151"/>
         <source>Starting Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité de départ</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="155"/>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée d&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="157"/>
         <source>IBU</source>
-        <translation>UAI</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="161"/>
         <source>Predicted Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité prévue</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="163"/>
         <source>Estimated calories (per 12 oz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calories estimées (par 35cl)</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="177"/>
@@ -184,7 +184,7 @@
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="180"/>
         <source>Completed</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminé</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="181"/>
@@ -194,37 +194,37 @@
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="182"/>
         <source>Step</source>
-        <translation type="unfinished"></translation>
+        <translation>Étape</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="229"/>
         <source>Actual Pre-boil Volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume réel avant ébullition:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="230"/>
         <source>Actual Pre-boil Gravity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité réelle avant ébullition:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="233"/>
         <source>Post-boil Volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume après ébullition:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="234"/>
         <source>Post-boil Gravity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité après ébullition:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="237"/>
         <source>Volume in fermenter:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume dans le fermenteur:</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="258"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer le document</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="270"/>
@@ -248,7 +248,7 @@
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="158"/>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de brassage</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeModel.cpp" line="160"/>
@@ -261,17 +261,17 @@
     <message>
         <location filename="../src/BtDigitWidget.cpp" line="65"/>
         <source>Too low for style.</source>
-        <translation type="unfinished"></translation>
+        <translation>Trop bas pour le style.</translation>
     </message>
     <message>
         <location filename="../src/BtDigitWidget.cpp" line="70"/>
         <source>In range for style.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dans les normes du style.</translation>
     </message>
     <message>
         <location filename="../src/BtDigitWidget.cpp" line="79"/>
         <source>Too high for style.</source>
-        <translation type="unfinished"></translation>
+        <translation>Trop haut pour le style.</translation>
     </message>
 </context>
 <context>
@@ -280,27 +280,27 @@
         <location filename="../src/EquipmentEditor.cpp" line="44"/>
         <location filename="../src/EquipmentEditor.cpp" line="275"/>
         <source>Grain absorption (%1/%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Absorption du grain (%1/%2)</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="200"/>
         <source>Tun Volume Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Avertissement concernant le volume de la cuve</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="200"/>
         <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le volume de la cuve renseigné est 0. Ceci peut causer des problèmes.</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="202"/>
         <source>Batch Size Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Avertissement concernant la taille du brassin</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="202"/>
         <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="unfinished"></translation>
+        <translation>La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="210"/>
@@ -371,7 +371,7 @@
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="197"/>
         <source>Steeped</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusé</translation>
     </message>
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="199"/>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../src/FermentableTableModel.cpp" line="248"/>
         <source>Color (EBC)</source>
-        <translation type="unfinished"></translation>
+        <translation>Couleur (EBC)</translation>
     </message>
 </context>
 <context>
@@ -501,7 +501,7 @@
     <message>
         <location filename="../src/HopTableModel.cpp" line="201"/>
         <source>HopTableModel::data Bad column: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>HopTableModel::data Mauvaise colonne: %1</translation>
     </message>
     <message>
         <location filename="../src/HopTableModel.cpp" line="213"/>
@@ -536,7 +536,7 @@
     <message>
         <location filename="../src/HopTableModel.cpp" line="225"/>
         <source>HopTableModel::headerdata Bad column: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>HopTableModel::headerdata Mauvaise colonne %1</translation>
     </message>
 </context>
 <context>
@@ -616,7 +616,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="494"/>
         <source>Unknown type %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Type inconnu %1.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="785"/>
@@ -643,22 +643,22 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1311"/>
         <source>Found %1 %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Trouvé %1 %2.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1374"/>
         <source>Delete %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer %1</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1374"/>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer %1 %2 ?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1598"/>
         <source>HTML files (*.html)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier HTML (*.html)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1707"/>
@@ -668,32 +668,32 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1708"/>
         <source>Brew it!</source>
-        <translation type="unfinished"></translation>
+        <translation>Brasser cette recette !</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1710"/>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvel équipement</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1711"/>
         <source>New Fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvel ingrédient fermentescible</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1712"/>
         <source>New Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau houblon</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1713"/>
         <source>New miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvel &quot;autre&quot;</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1714"/>
         <source>New Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle levure</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1717"/>
@@ -703,7 +703,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1718"/>
         <source>Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Recette</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1719"/>
@@ -713,12 +713,12 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1720"/>
         <source>Fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingrédient fermentescible</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1721"/>
         <source>Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Houblon</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1722"/>
@@ -733,33 +733,33 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1737"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1739"/>
         <location filename="../src/MainWindow.cpp" line="1750"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1742"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1745"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1749"/>
         <source>Brew Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Brasser à nouveau</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1755"/>
         <source>Copy %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier %1</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1755"/>
@@ -769,32 +769,32 @@
         <location filename="../src/MainWindow.cpp" line="1807"/>
         <location filename="../src/MainWindow.cpp" line="1820"/>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer un nom unique pour la copie de %1.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1768"/>
         <source>Copy Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier l&apos;équipement</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1781"/>
         <source>Copy Fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier l&apos;ingrédient fermentescible</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1794"/>
         <source>Copy Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier le houblon</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1807"/>
         <source>Copy Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier l&apos;ingrédient</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1820"/>
         <source>Copy Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier la levure</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1913"/>
@@ -804,32 +804,32 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="2002"/>
         <source>Database Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner la base de données</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2003"/>
         <source>You are about to merge another database into the current one. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous êtes sur le point de fusionner une autre base de données dans l&apos;actuelle. Continuer ?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2011"/>
         <source>Select Database File</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectrionner un fichier de base de données</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2013"/>
         <source>BeerXML File (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier BeerXML (*.xml)</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2054"/>
         <source>Database Merged</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de données fusionnée</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2055"/>
         <source>Database successfully merged. Please restart Brewtarget NOW and changes will appear.</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de données a été fusionnée avec succès. Redémarrer Brewtarget pour faire apparaître les changements.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1151"/>
@@ -909,7 +909,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1390"/>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation>Impossible d&apos;ajouter une infusion à pallier sans créer un profil d&apos;infusion.  Veuillez élaborer votre empâtage en premier.</translation>
+        <translation type="unfinished">Impossible d&apos;ajouter une infusion à palier sans créer un profil d&apos;infusion. Veuillez élaborer votre empâtage en premier.</translation>
     </message>
     <message>
         <source>New instructions?</source>
@@ -988,32 +988,32 @@
     <message>
         <location filename="../src/MashDesigner.cpp" line="83"/>
         <source>No Fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;ingrédient fermentescible</translation>
     </message>
     <message>
         <location filename="../src/MashDesigner.cpp" line="84"/>
         <source>Your recipe must have fermentables to design a mash.</source>
-        <translation type="unfinished"></translation>
+        <translation>Votre recette doit comporter au moins un ingrédient fermentescible pour concevoir un brassage.</translation>
     </message>
     <message>
         <location filename="../src/MashDesigner.cpp" line="276"/>
         <source>No Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;équipement</translation>
     </message>
     <message>
         <location filename="../src/MashDesigner.cpp" line="276"/>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous n&apos;avez pas défini d&apos;équipement pour cette recette. Nous ne pouvons vraiment pas continuer sans.</translation>
     </message>
     <message>
         <location filename="../src/MashDesigner.cpp" line="286"/>
         <source>Tun Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température de la cuve</translation>
     </message>
     <message>
         <location filename="../src/MashDesigner.cpp" line="287"/>
         <source>Enter the temperature of the tun before your first infusion.</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer la température de la cuve avant la première infusion.</translation>
     </message>
     <message>
         <location filename="../src/MashDesigner.cpp" line="523"/>
@@ -1023,7 +1023,7 @@
     <message>
         <location filename="../src/MashDesigner.cpp" line="523"/>
         <source>The first mash step cannot be a decoction.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le premier palier ne peut pas être une décoction.</translation>
     </message>
 </context>
 <context>
@@ -1056,12 +1056,12 @@
     <message>
         <location filename="../src/MashStepTableModel.cpp" line="212"/>
         <source>Infusion Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température d&apos;infusion</translation>
     </message>
     <message>
         <location filename="../src/MashStepTableModel.cpp" line="214"/>
         <source>Target Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température cible</translation>
     </message>
     <message>
         <source>Temp</source>
@@ -1093,7 +1093,7 @@
     <message>
         <location filename="../src/MashWizard.cpp" line="50"/>
         <source>No steps</source>
-        <translation>Aucun pallier</translation>
+        <translation>Aucun palier</translation>
     </message>
     <message>
         <source>You must have at least one mash step to run the wizard.</source>
@@ -1102,7 +1102,7 @@
     <message>
         <location filename="../src/MashWizard.cpp" line="50"/>
         <source>There must be at least one mash step to run the wizard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il doit y avoir au moins un palier pour exécuter l&apos;assistant de brassage.</translation>
     </message>
     <message>
         <location filename="../src/MashWizard.cpp" line="134"/>
@@ -1112,7 +1112,7 @@
     <message>
         <location filename="../src/MashWizard.cpp" line="134"/>
         <source>Your first mash step must be an infusion.</source>
-        <translation>Votre premier pallier doit être un d&apos;infusion.</translation>
+        <translation>Votre premier palier doit être un d&apos;infusion.</translation>
     </message>
     <message>
         <location filename="../src/MashWizard.cpp" line="167"/>
@@ -1279,17 +1279,17 @@ Use at own risk.</source>
     <message>
         <location filename="../src/OptionDialog.cpp" line="139"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir le répertoire</translation>
     </message>
     <message>
         <location filename="../src/OptionDialog.cpp" line="273"/>
         <source>Copy Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier les données</translation>
     </message>
     <message>
         <location filename="../src/OptionDialog.cpp" line="274"/>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il ne semble pas y avoir de fichier de données dans ce répertoire, nous allons y copier les données éxistantes.</translation>
     </message>
 </context>
 <context>
@@ -1426,7 +1426,7 @@ Use at own risk.</source>
         <location filename="../src/RecipeFormatter.cpp" line="167"/>
         <source>Total grain: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Total grains: %1</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="174"/>
@@ -1456,7 +1456,7 @@ Use at own risk.</source>
         <location filename="../src/RecipeFormatter.cpp" line="185"/>
         <source>IBU</source>
         <translatorcomment>Unité d&apos;amertume internationale</translatorcomment>
-        <translation>UAI</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="217"/>
@@ -1480,13 +1480,13 @@ Use at own risk.</source>
         <location filename="../src/RecipeFormatter.cpp" line="97"/>
         <source>Efficiency: %1%%
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité: %1%%</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="100"/>
         <source>ABV: %1%%
 </source>
-        <translation type="unfinished"></translation>
+        <translation>ABV: %1%%</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="258"/>
@@ -1582,34 +1582,34 @@ Use at own risk.</source>
         <location filename="../src/brewtarget.cpp" line="113"/>
         <location filename="../src/brewtarget.cpp" line="122"/>
         <source>Directory Problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Problème de répertoire</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="105"/>
         <location filename="../src/brewtarget.cpp" line="114"/>
         <source>&quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; ne peut être lu.</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="123"/>
         <source>Config directory &quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le répertoire de configuration &quot;%1&quot; ne peut être lu.</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="156"/>
         <location filename="../src/brewtarget.cpp" line="168"/>
         <source>New Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle version</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="157"/>
         <source>Version %1 is now available. Download it?</source>
-        <translation type="unfinished"></translation>
+        <translation>La version %1 est maintenant disponible. La télécharger ?</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="169"/>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
+        <translation>Souhaitez-vous désactiver la vérification des nouvelles versions ?</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="855"/>
@@ -1623,12 +1623,12 @@ Use at own risk.</source>
     <message>
         <location filename="../src/database.cpp" line="153"/>
         <source>Merge Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner la base de données</translation>
     </message>
     <message>
         <location filename="../src/database.cpp" line="154"/>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="unfinished"></translation>
+        <translation>Il peut y avoir de nouveaux ingrédients et recettes disponibles. Voulez-vous les ajouter à votre base de données ?</translation>
     </message>
     <message>
         <location filename="../src/database.cpp" line="459"/>
@@ -1958,12 +1958,12 @@ Use at own risk.</source>
     <message>
         <location filename="../src/recipe.cpp" line="861"/>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettez %1 %2 dans la cuve de fermentation pendant%3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="863"/>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettez %1 %2 en premier moût (first wort) pendant %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="865"/>
@@ -2027,52 +2027,52 @@ Use at own risk.</source>
     <message>
         <location filename="../src/recipe.cpp" line="1003"/>
         <source>Boil or steep </source>
-        <translation type="unfinished"></translation>
+        <translation>Bouillir ou infuser</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="867"/>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Infuser %1 %2 dans le moût pendant %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="871"/>
         <source>Use %1 %2 for %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisez %1 %2 pendant %3</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="878"/>
         <source>Hop addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajoût de houblon</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="898"/>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisez %1 %2 àl&apos;embouteillage pendant %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="902"/>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettez %1 %2 en fermentation primaire pendant %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="904"/>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettez %1 %2 en fermentation secondaire pendant %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="908"/>
         <source>Use %1 %2 for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisez %1 %2 pendant %3.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="915"/>
         <source>Misc addition</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajoût d&apos;ingrédients divers</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="1017"/>
         <source>Boil/steep fermentables</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouillir/infuser les ingrédients fermentescibles</translation>
     </message>
     <message>
         <source>to the boil.</source>
@@ -2133,12 +2133,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/recipe.cpp" line="1196"/>
         <source>Flameout</source>
-        <translation type="unfinished"></translation>
+        <translation>Extinction</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="1197"/>
         <source>Stop boiling the wort.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêtez l&apos;ébullition du moût.</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="1218"/>
@@ -2320,42 +2320,42 @@ The final volume in the primary is %1.</source>
         <location filename="../src/BrewTargetTreeItem.cpp" line="229"/>
         <location filename="../src/BrewTargetTreeModel.cpp" line="162"/>
         <source>Bad column: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvaise colonne: %1</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="178"/>
         <source>Recipes</source>
-        <translation type="unfinished">Recettes</translation>
+        <translation>Recettes</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="200"/>
         <source>Equipment</source>
-        <translation type="unfinished">Équipement</translation>
+        <translation>Équipement</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="221"/>
         <source>Fermentables</source>
-        <translation type="unfinished">Ingrédients fermentescibles</translation>
+        <translation>Ingrédients fermentescibles</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="241"/>
         <source>Hops</source>
-        <translation type="unfinished">Houblon</translation>
+        <translation>Houblons</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="263"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Autres</translation>
+        <translation>Autres</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="285"/>
         <source>Yeast</source>
-        <translation type="unfinished">Levures</translation>
+        <translation>Levure</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1877"/>
         <source>Unknown type: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Type inconnu %1</translation>
     </message>
 </context>
 <context>
@@ -2363,12 +2363,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="467"/>
         <source>unknown style</source>
-        <translation type="unfinished"></translation>
+        <translation>Style inconnu</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="468"/>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>N/A</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="472"/>
@@ -2379,27 +2379,27 @@ The final volume in the primary is %1.</source>
         <location filename="../src/RecipeFormatter.cpp" line="475"/>
         <location filename="../src/RecipeFormatter.cpp" line="846"/>
         <source>Date</source>
-        <translation type="unfinished">Date</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="487"/>
         <source>Batch Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille du brassin</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="490"/>
         <source>Boil Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumme à l&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="494"/>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée d&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="499"/>
         <source>Efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="504"/>
@@ -2416,7 +2416,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="522"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Inconnu</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="525"/>
@@ -2427,7 +2427,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="528"/>
         <source>Bitterness</source>
-        <translation type="unfinished"></translation>
+        <translation>Amertume</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="531"/>
@@ -2443,7 +2443,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="548"/>
         <source>Calories (per 12 oz.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Calories (par 35cl)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="563"/>
@@ -2453,7 +2453,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="566"/>
         <source>Total grain:</source>
-        <translation type="unfinished"></translation>
+        <translation>Total grains:</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="570"/>
@@ -2479,7 +2479,7 @@ The final volume in the primary is %1.</source>
         <location filename="../src/RecipeFormatter.cpp" line="677"/>
         <location filename="../src/RecipeFormatter.cpp" line="713"/>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantité</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="573"/>
@@ -2540,12 +2540,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="613"/>
         <source>IBU</source>
-        <translation>UAI</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="638"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Divers</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="670"/>
@@ -2580,7 +2580,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="715"/>
         <source>Target Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température cible</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="756"/>
@@ -2595,12 +2595,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="794"/>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de brassage</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="798"/>
         <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Avant ébullition</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="800"/>
@@ -2610,17 +2610,17 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="802"/>
         <source>Volume into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume dans la cuve d&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="806"/>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température de versement</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="808"/>
         <source>Final Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température finale</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="812"/>
@@ -2635,42 +2635,42 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="820"/>
         <source>Postboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Après ébullition</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="824"/>
         <source>Postboil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume après ébullition</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="827"/>
         <source>Volume Into Fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume dans le fermenteur</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="829"/>
         <source>Brewhouse Eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité de l&apos;installation</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="832"/>
         <source>Projected ABV</source>
-        <translation type="unfinished"></translation>
+        <translation>Alcool prévu</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="839"/>
         <source>Postferment</source>
-        <translation type="unfinished"></translation>
+        <translation>Après fermentation</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="843"/>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="882"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Imprimer le document</translation>
     </message>
 </context>
 <context>
@@ -2678,12 +2678,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/RefractoDialog.cpp" line="86"/>
         <source>OG Mismatch</source>
-        <translation type="unfinished"></translation>
+        <translation>Incohérence de densité initiale</translation>
     </message>
     <message>
         <location filename="../src/RefractoDialog.cpp" line="87"/>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sur base de la teneur en extrait (Plato) renseignée, la densité initiale devrait être %1, mais vous avez renseigné %2. Le calcul continuera avec la densité calculée.</translation>
     </message>
 </context>
 <context>
@@ -2697,7 +2697,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/ScaleRecipeTool.cpp" line="127"/>
         <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le brassage a été réinitialisé, car les températures ne peuvent être ajustées automatiquement. Exécutez l&apos;assistant à nouveau.</translation>
     </message>
     <message>
         <location filename="../src/ScaleRecipeTool.cpp" line="208"/>
@@ -2925,7 +2925,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="89"/>
         <source>Insert step</source>
-        <translation>Insérez un pallier</translation>
+        <translation type="unfinished">Insérez un palier</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="108"/>
@@ -2935,22 +2935,22 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="133"/>
         <source>Name of new step</source>
-        <translation>Nom du nouveau pallier</translation>
+        <translation type="unfinished">Nom du nouveau palier</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="144"/>
         <source>Step #</source>
-        <translation>Pallier #</translation>
+        <translation type="unfinished">Palier #</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="169"/>
         <source>The number where the new step should be placed</source>
-        <translation>Le numéro où le nouveau pallier devrait être inséré</translation>
+        <translation type="unfinished">Le numéro où le nouveau palier devrait être inséré</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="196"/>
         <source>Insert the new step</source>
-        <translation>Insérez un nouveau pallier</translation>
+        <translation type="unfinished">Insérez un nouveau palier</translation>
     </message>
     <message>
         <source>Insert</source>
@@ -2959,12 +2959,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="243"/>
         <source>Move steps</source>
-        <translation>Déplacez les palliers</translation>
+        <translation type="unfinished">Déplacez les paliers</translation>
     </message>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="273"/>
         <source>Move currently selected step up</source>
-        <translation>Déplacez le pallier choisi vers le haut</translation>
+        <translation type="unfinished">Déplacez le palier choisi vers le haut</translation>
     </message>
     <message>
         <source>Up</source>
@@ -2973,7 +2973,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="293"/>
         <source>Move currently selected step down</source>
-        <translation>Déplacez le pallier choisi vers le bas</translation>
+        <translation type="unfinished">Déplacez le palier choisi vers le bas</translation>
     </message>
     <message>
         <source>Down</source>
@@ -2982,7 +2982,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="346"/>
         <source>Remove currently selected step</source>
-        <translation>Supprimez le pallier que vous avez choisi</translation>
+        <translation type="unfinished">Supprimez le palier que vous avez choisi</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -3004,7 +3004,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="164"/>
         <source>Remove currently selected step</source>
-        <translation>Supprimez le pallier que vous avez choisi</translation>
+        <translation type="unfinished">Supprimez le palier que vous avez choisi</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="167"/>
@@ -3014,7 +3014,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="78"/>
         <source>Move currently selected step up</source>
-        <translation>Déplacez le pallier choisi vers le haut</translation>
+        <translation type="unfinished">Déplacez le palier choisi vers le haut</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="81"/>
@@ -3024,7 +3024,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="121"/>
         <source>Move currently selected step down</source>
-        <translation>Déplacez le pallier choisi vers le bas</translation>
+        <translation type="unfinished">Déplacez le palier choisi vers le bas</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="124"/>
@@ -3034,7 +3034,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="208"/>
         <source>Insert step</source>
-        <translation>Insérez un pallier</translation>
+        <translation type="unfinished">Insérez un palier</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="227"/>
@@ -3044,22 +3044,22 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="252"/>
         <source>Name of new step</source>
-        <translation>Nom du nouveau pallier</translation>
+        <translation type="unfinished">Nom du nouveau palier</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="263"/>
         <source>Step #</source>
-        <translation>Pallier #</translation>
+        <translation type="unfinished">Palier #</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="288"/>
         <source>The number where the new step should be placed</source>
-        <translation>Le numéro où le nouveau pallier devrait être inséré</translation>
+        <translation type="unfinished">Le numéro où le nouveau palier devrait être inséré</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="315"/>
         <source>Insert the new step</source>
-        <translation>Insérez un nouveau pallier</translation>
+        <translation type="unfinished">Insérez un nouveau palier</translation>
     </message>
     <message>
         <location filename="../ui/brewDayWidget.ui" line="318"/>
@@ -3072,138 +3072,138 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Format</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="70"/>
         <source>Preboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Avant ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="76"/>
         <source>SG</source>
-        <translation type="unfinished">Densité</translation>
+        <translation>Densité</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="104"/>
         <source>Preboil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité avant ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="114"/>
         <location filename="../ui/brewNoteWidget.ui" line="433"/>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="142"/>
         <source>Volume of wort collected</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume de moût collecté</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="149"/>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp. de versement</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="177"/>
         <source>Temperature of mash after dough in</source>
-        <translation type="unfinished"></translation>
+        <translation>Température après empâtage</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="184"/>
         <source>Final Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température finale</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="212"/>
         <source>Temperature of mash before mash out</source>
-        <translation type="unfinished"></translation>
+        <translation>Température avant mash out</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="228"/>
         <source>Postboil</source>
-        <translation type="unfinished"></translation>
+        <translation>Après ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="234"/>
         <source>OG</source>
-        <translation type="unfinished">DP</translation>
+        <translation>DP</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="262"/>
         <source>Post boil gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité après ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="269"/>
         <source>     Postboil Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume après ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="303"/>
         <source>Volume of wort in BK after boil</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume de moût dans la cuve, après ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="310"/>
         <source>Volume of wort transferred to fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume de moût transféré dans le fermenteur</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="313"/>
         <source>Volume into fermenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume dans le fermenteur</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="348"/>
         <source> Pitch Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température d&apos;inoculation</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="379"/>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation type="unfinished"></translation>
+        <translation>Température du moût lors de l&apos;inoculation</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="395"/>
         <source>Postferment</source>
-        <translation type="unfinished"></translation>
+        <translation>Après fermentation</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="401"/>
         <source>FG</source>
-        <translation type="unfinished">DF</translation>
+        <translation>DF</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="426"/>
         <source>Final gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité finale</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="458"/>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume de bière en fûts/bouteilles</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="465"/>
         <source>          Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Date</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="490"/>
         <source>Date when the yeast fermented out</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de fin de fermentation</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="508"/>
         <source>percent efficiency into boil kettle</source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité dans la cuve d&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="511"/>
         <source>Eff into BK</source>
-        <translation type="unfinished"></translation>
+        <translation>Eff. d&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="525"/>
@@ -3218,12 +3218,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="542"/>
         <source>Brewhouse efficiency</source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité de l&apos;installation</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="545"/>
         <source>Brewhouse Eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Efficacité de l&apos;installation</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="559"/>
@@ -3248,7 +3248,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="599"/>
         <source>Notes</source>
-        <translation type="unfinished">Notes</translation>
+        <translation>Notes</translation>
     </message>
 </context>
 <context>
@@ -3256,7 +3256,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/btSplashScreen.ui" line="78"/>
         <source>Form</source>
-        <translation type="unfinished">Format</translation>
+        <translation>Formulaire</translation>
     </message>
 </context>
 <context>
@@ -3360,7 +3360,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="416"/>
         <source>Boiling Point of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Température d&apos;ébullition de l&apos;eau</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="455"/>
@@ -3448,12 +3448,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="406"/>
         <source>Grain Absorption (L/kg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Absorption du grain (l/kg)</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="426"/>
         <source>Default Absorption</source>
-        <translation type="unfinished"></translation>
+        <translation>Absorption par défaut</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="591"/>
@@ -4143,12 +4143,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="914"/>
         <source>IBU/GU</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU/UD</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="948"/>
         <source>Calories/12oz</source>
-        <translation type="unfinished"></translation>
+        <translation>Calories (par 35cl)</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1067"/>
@@ -4251,17 +4251,17 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1452"/>
         <source>Add mash step</source>
-        <translation>Ajoutez un pallier d&apos;empâtage</translation>
+        <translation type="unfinished">Ajoutez un palier d&apos;empâtage</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1466"/>
         <source>Remove selected mash step</source>
-        <translation>Supprimez le pallier d&apos;empâtage sélectionné</translation>
+        <translation type="unfinished">Supprimez le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1480"/>
         <source>Edit selected mash step</source>
-        <translation>Modifiez le pallier d&apos;empâtage sélectionné</translation>
+        <translation type="unfinished">Modifiez le palier d&apos;empâtage sélectionné</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1494"/>
@@ -4296,12 +4296,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1580"/>
         <source>Mash step up</source>
-        <translation type="unfinished"></translation>
+        <translation>Monter le palier</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1591"/>
         <source>Mash step down</source>
-        <translation type="unfinished"></translation>
+        <translation>Descendre lepalier</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1602"/>
@@ -4481,22 +4481,22 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="1945"/>
         <source>&amp;Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Outils &amp;Réfractomètre</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1950"/>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculateur d&apos;&amp;inoculation</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1985"/>
         <source>Merge Databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner les bases de données</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1988"/>
         <source>Select another database to merge into the current one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez une base de données à fusionner avec l&apos;actuelle.</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1997"/>
@@ -4508,17 +4508,17 @@ The final volume in the primary is %1.</source>
         <location filename="../ui/mainWindow.ui" line="2006"/>
         <location filename="../ui/mainWindow.ui" line="2024"/>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aperçu avant impression</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2015"/>
         <source>&amp;Export To HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exporter en HTML</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2042"/>
         <source>&amp;Export to HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exporter en HTML</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2051"/>
@@ -4528,32 +4528,32 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mainWindow.ui" line="2054"/>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder toutes les recettes, ingrédients, etc. dans un dossier</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2063"/>
         <source>&amp;Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Restaurer</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2066"/>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaure les recettes, ingrédients, etc. depuis une sauvegarde</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2075"/>
         <source>&amp;Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fusionner</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2078"/>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner un autre set de recettes, d&apos;ingrédients, etc.dans l&apos;actuel</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2087"/>
         <source>&amp;New Recipe</source>
-        <translation>Nouvelle recette</translation>
+        <translation>&amp;Nouvelle recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2096"/>
@@ -4700,7 +4700,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashDesigner.ui" line="14"/>
         <source>Mash Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Designer de brassage</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="33"/>
@@ -4725,22 +4725,22 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashDesigner.ui" line="117"/>
         <source>Batch Sparge</source>
-        <translation type="unfinished"></translation>
+        <translation>Rinçage discontinu</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="134"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Suivant</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="141"/>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminer</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="160"/>
         <source>Infusion/Decoction Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantité d&apos;infustion/de décoction</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="168"/>
@@ -4766,12 +4766,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashDesigner.ui" line="225"/>
         <source>Infusion Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Température d&apos;infusion</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="284"/>
         <source>Total Collected Wort</source>
-        <translation type="unfinished"></translation>
+        <translation>Total de moût collecté</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="332"/>
@@ -4782,7 +4782,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashDesigner.ui" line="359"/>
         <source>Tun Fullness</source>
-        <translation type="unfinished"></translation>
+        <translation>Remplissage de la cuve</translation>
     </message>
     <message>
         <location filename="../ui/mashDesigner.ui" line="372"/>
@@ -4792,7 +4792,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashDesigner.ui" line="444"/>
         <source>thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>Épaisseur</translation>
     </message>
 </context>
 <context>
@@ -4878,7 +4878,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="14"/>
         <source>Mash Step Editor</source>
-        <translation>Éditeur de palliers d&apos;empâtage</translation>
+        <translation type="unfinished">Éditeur de paliers d&apos;empâtage</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="33"/>
@@ -4915,7 +4915,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="139"/>
         <source>Target temp. of this step</source>
-        <translation>Température cible de ce pallier</translation>
+        <translation type="unfinished">Température cible de ce palier</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="156"/>
@@ -4955,7 +4955,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="308"/>
         <source>Time to conduct the step</source>
-        <translation>Durée de temps de ce pallier</translation>
+        <translation type="unfinished">Durée de temps de ce palier</translation>
     </message>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="325"/>
@@ -4975,7 +4975,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/mashStepEditor.ui" line="392"/>
         <source>Final temp. of this step</source>
-        <translation>Température finale de ce pallier</translation>
+        <translation type="unfinished">Température finale de ce palier</translation>
     </message>
 </context>
 <context>
@@ -5321,12 +5321,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="125"/>
         <source>Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Desnité</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="131"/>
         <source>20C/20C Specific Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité à 20°C</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="138"/>
@@ -5376,7 +5376,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="258"/>
         <source>IBU</source>
-        <translation>UAI</translation>
+        <translation type="unfinished">IBU</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="264"/>
@@ -5401,7 +5401,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="325"/>
         <source>Where your brewtarget .xml files are.</source>
-        <translation type="unfinished"></translation>
+        <translation>Localisation de vos fichier .xml de brewtarget.</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="335"/>
@@ -5421,7 +5421,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="386"/>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Tchèque</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="409"/>
@@ -5441,12 +5441,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/optionsDialog.ui" line="508"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Néérlandais</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="538"/>
         <source>Catalan</source>
-        <translation type="unfinished"></translation>
+        <translation>Catalan</translation>
     </message>
     <message>
         <location filename="../ui/optionsDialog.ui" line="558"/>
@@ -5486,7 +5486,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/pitchDialog.ui" line="14"/>
         <source>Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Calculateur d&apos;inoculation</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="20"/>
@@ -5496,7 +5496,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/pitchDialog.ui" line="31"/>
         <source>Wort Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume de moût</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="48"/>
@@ -5506,12 +5506,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/pitchDialog.ui" line="65"/>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour ferm. haute: 0.75-1. Pour ferm. basse: 1.5-2.</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="68"/>
         <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux d&apos;inoculation [cellules / (ml * P)]</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="93"/>
@@ -5521,7 +5521,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/pitchDialog.ui" line="102"/>
         <source>Starter OG</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité primitive du starter</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="124"/>
@@ -5531,22 +5531,22 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/pitchDialog.ui" line="132"/>
         <source># Vials/Smack Packs</source>
-        <translation type="unfinished"></translation>
+        <translation>Nb d&apos;éprouvettes ou de paquets</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="139"/>
         <source>Dry Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation>Levure sèche</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="146"/>
         <source>Starter Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume de starter</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="183"/>
         <source>Billions of Yeast Cells Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Millards de cellules requises</translation>
     </message>
 </context>
 <context>
@@ -5823,27 +5823,27 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/refractoDialog.ui" line="14"/>
         <source>Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Outil Réfractomètre</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="22"/>
         <source>Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Données</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="30"/>
         <source>Original Plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité primitive (°P)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="53"/>
         <source>OG (20 C)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DP (20°C)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="87"/>
         <source>Current Plato</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité actuelle (°P)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="142"/>
@@ -5853,12 +5853,12 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/refractoDialog.ui" line="153"/>
         <source>Outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Résultats</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="175"/>
         <source>SG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>Densité (20°C)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="198"/>
@@ -5873,17 +5873,17 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/refractoDialog.ui" line="244"/>
         <source>Refractive Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Indice de réfraction</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="251"/>
         <source>Real Extract (Plato)</source>
-        <translation type="unfinished"></translation>
+        <translation>Extrait réel (°P)</translation>
     </message>
     <message>
         <location filename="../ui/refractoDialog.ui" line="274"/>
         <source>OG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>DP (20°C)</translation>
     </message>
 </context>
 <context>
@@ -5896,7 +5896,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../ui/scaleRecipeTool.ui" line="42"/>
         <source>New efficiency (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle efficacité (pct)</translation>
     </message>
     <message>
         <source>New Batch Size</source>
