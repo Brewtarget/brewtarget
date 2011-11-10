@@ -187,6 +187,20 @@ void BrewTargetTreeView::mouseMoveEvent(QMouseEvent *event)
    drag->start(Qt::CopyAction);
 } 
 
+void BrewTargetTreeView::keyPressEvent(QKeyEvent *event)
+{
+   switch( event->key() )
+   {
+      case Qt::Key_Space:
+      case Qt::Key_Select:
+      case Qt::Key_Enter:
+      case Qt::Key_Return:
+         emit BrewTargetTreeView::doubleClicked(selectedIndexes().first());
+         return;
+   }
+   QTreeView::keyPressEvent(event);
+}
+
 QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes) 
 {
    QMimeData *mimeData = new QMimeData();

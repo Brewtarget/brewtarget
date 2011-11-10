@@ -74,6 +74,9 @@ public:
    void mouseMoveEvent(QMouseEvent *event);
    void mouseDoubleClickEvent(QMouseEvent *event);
 
+   // Getting selections from the keyboard to work.
+   void keyPressEvent(QKeyEvent* event);
+
 private:
    BrewTargetTreeModel* model;
    QPoint dragStart;
