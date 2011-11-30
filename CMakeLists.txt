@@ -211,6 +211,7 @@ SET( TRANSLATIONS_FILES
      ${TRANSLATIONSDIR}/bt_en.ts # English
      ${TRANSLATIONSDIR}/bt_es.ts # Spanish
      ${TRANSLATIONSDIR}/bt_fr.ts # French
+     ${TRANSLATIONSDIR}/bt_nb.ts # Norwegian Bokmal
      ${TRANSLATIONSDIR}/bt_nl.ts # Dutch
      ${TRANSLATIONSDIR}/bt_pl.ts # Polish
      ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese

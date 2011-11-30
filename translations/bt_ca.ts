@@ -2741,22 +2741,22 @@ El volum final a la primària és %1.</translation>
 <context>
     <name>TimerWidget</name>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="87"/>
+        <location filename="../src/TimerWidget.cpp" line="90"/>
         <source>Open Sound</source>
         <translation>Obrir el so</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="87"/>
+        <location filename="../src/TimerWidget.cpp" line="90"/>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
         <translation>Fitxers d&apos;audio (*.wav *.ogg *.mp3 *.aiff)</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="207"/>
+        <location filename="../src/TimerWidget.cpp" line="211"/>
         <source>Stop</source>
         <translation>Parar</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="215"/>
+        <location filename="../src/TimerWidget.cpp" line="219"/>
         <source>Start</source>
         <translation>Iniciar</translation>
     </message>

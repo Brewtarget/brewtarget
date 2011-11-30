@@ -2311,9 +2311,8 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="obsolete">%1 SRM (%2)</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="531"/>
         <source>%1 (%2)</source>
-        <translation>%1 (%2)</translation>
+        <translation type="obsolete">%1 (%2)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="545"/>
@@ -2602,22 +2601,22 @@ Celkový objem pro hlavní kvašení je %1.</translation>
 <context>
     <name>TimerWidget</name>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="87"/>
+        <location filename="../src/TimerWidget.cpp" line="90"/>
         <source>Open Sound</source>
         <translation>Otevřít zvuk</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="87"/>
+        <location filename="../src/TimerWidget.cpp" line="90"/>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
         <translation>Zvukové soubory (*.wav *.ogg *.mp3 *.aiff)</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="207"/>
+        <location filename="../src/TimerWidget.cpp" line="211"/>
         <source>Stop</source>
         <translation>Zastavit</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="215"/>
+        <location filename="../src/TimerWidget.cpp" line="219"/>
         <source>Start</source>
         <translation>Spustit</translation>
     </message>
@@ -3870,9 +3869,9 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="147"/>
-        <location filename="../ui/mainWindow.ui" line="1960"/>
-        <location filename="../ui/mainWindow.ui" line="1970"/>
-        <location filename="../ui/mainWindow.ui" line="1980"/>
+        <location filename="../ui/mainWindow.ui" line="1961"/>
+        <location filename="../ui/mainWindow.ui" line="1971"/>
+        <location filename="../ui/mainWindow.ui" line="1981"/>
         <source>Recipe</source>
         <translation>Recept</translation>
     </message>
@@ -3983,9 +3982,8 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>Hustota při chmelovaru</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="29"/>
         <source>Brewtarget - $VERSIONSTRING</source>
-        <translation>Brewtarget - $VERSIONSTRING</translation>
+        <translation type="obsolete">Brewtarget - $VERSIONSTRING</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="914"/>
@@ -4004,9 +4002,9 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="1077"/>
-        <location filename="../ui/mainWindow.ui" line="1955"/>
-        <location filename="../ui/mainWindow.ui" line="1965"/>
-        <location filename="../ui/mainWindow.ui" line="1975"/>
+        <location filename="../ui/mainWindow.ui" line="1956"/>
+        <location filename="../ui/mainWindow.ui" line="1966"/>
+        <location filename="../ui/mainWindow.ui" line="1976"/>
         <source>Brewday</source>
         <translation>Varní list</translation>
     </message>
@@ -4196,241 +4194,241 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>&amp;Zobrazit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1734"/>
+        <location filename="../ui/mainWindow.ui" line="1735"/>
         <source>&amp;Tools</source>
         <translation>Nás&amp;troje</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1784"/>
+        <location filename="../ui/mainWindow.ui" line="1785"/>
         <source>About &amp;BrewTarget</source>
         <translation>&amp;O aplikaci Brewtarget</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1793"/>
+        <location filename="../ui/mainWindow.ui" line="1794"/>
         <source>&amp;Export Recipe</source>
         <translation>&amp;Exportovat recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1802"/>
+        <location filename="../ui/mainWindow.ui" line="1803"/>
         <source>&amp;Fermentables</source>
         <translation>&amp;Suroviny</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1805"/>
+        <location filename="../ui/mainWindow.ui" line="1806"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1814"/>
+        <location filename="../ui/mainWindow.ui" line="1815"/>
         <source>&amp;Hops</source>
         <translation>&amp;Chmele</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1817"/>
+        <location filename="../ui/mainWindow.ui" line="1818"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1826"/>
+        <location filename="../ui/mainWindow.ui" line="1827"/>
         <source>&amp;Miscs</source>
         <translation>&amp;Přípravky</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1829"/>
+        <location filename="../ui/mainWindow.ui" line="1830"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1838"/>
+        <location filename="../ui/mainWindow.ui" line="1839"/>
         <source>&amp;Yeasts</source>
         <translation>&amp;Kvasnice</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1841"/>
+        <location filename="../ui/mainWindow.ui" line="1842"/>
         <source>Ctrl+Y</source>
         <translation>Ctrl+Y</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1850"/>
+        <location filename="../ui/mainWindow.ui" line="1851"/>
         <source>&amp;Equipments</source>
         <translation>&amp;Vybavení</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1853"/>
+        <location filename="../ui/mainWindow.ui" line="1854"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1862"/>
+        <location filename="../ui/mainWindow.ui" line="1863"/>
         <source>&amp;Styles</source>
         <translation>S&amp;tyly</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1865"/>
+        <location filename="../ui/mainWindow.ui" line="1866"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1874"/>
+        <location filename="../ui/mainWindow.ui" line="1875"/>
         <source>&amp;Exit</source>
         <translation>&amp;Konec</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1877"/>
+        <location filename="../ui/mainWindow.ui" line="1878"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1886"/>
+        <location filename="../ui/mainWindow.ui" line="1887"/>
         <source>&amp;Import Recipes</source>
         <translation>&amp;Importovat recepty</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1891"/>
+        <location filename="../ui/mainWindow.ui" line="1892"/>
         <source>&amp;Options</source>
         <translation>&amp;Možnosti</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1896"/>
+        <location filename="../ui/mainWindow.ui" line="1897"/>
         <source>&amp;Manual</source>
         <translation>&amp;Návod</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1901"/>
+        <location filename="../ui/mainWindow.ui" line="1902"/>
         <source>&amp;Scale Recipe</source>
         <translation>&amp;Změnit množství</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1906"/>
+        <location filename="../ui/mainWindow.ui" line="1907"/>
         <source>Recipe to Clipboard as &amp;Text</source>
         <translation>&amp;Recept do schránky jako text</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1911"/>
+        <location filename="../ui/mainWindow.ui" line="1912"/>
         <source>&amp;OG Correction Help</source>
         <translation>Ú&amp;prava objemu pro dosažení hustoty</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1916"/>
+        <location filename="../ui/mainWindow.ui" line="1917"/>
         <source>&amp;Convert Units</source>
         <translation>&amp;Převody jednotek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1935"/>
+        <location filename="../ui/mainWindow.ui" line="1936"/>
         <source>&amp;Copy Recipe</source>
         <translation>&amp;Kopírovat recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1940"/>
+        <location filename="../ui/mainWindow.ui" line="1941"/>
         <source>Pr&amp;iming Calculator</source>
         <translation>&amp;Výpočet kvasných cukrů</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1945"/>
+        <location filename="../ui/mainWindow.ui" line="1946"/>
         <source>&amp;Refractometer Tools</source>
         <translation>&amp;Nástroje pro refraktometr</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1950"/>
+        <location filename="../ui/mainWindow.ui" line="1951"/>
         <source>&amp;Pitch Rate Calculator</source>
         <translation>Vý&amp;počet rozkvašení kvasnic</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1985"/>
+        <location filename="../ui/mainWindow.ui" line="1986"/>
         <source>Merge Databases</source>
         <translation>Spojit databáze</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1988"/>
+        <location filename="../ui/mainWindow.ui" line="1989"/>
         <source>Select another database to merge into the current one.</source>
         <translation>Vyberte jinou databázi pro spojení se současnou.</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1997"/>
-        <location filename="../ui/mainWindow.ui" line="2033"/>
+        <location filename="../ui/mainWindow.ui" line="1998"/>
+        <location filename="../ui/mainWindow.ui" line="2034"/>
         <source>&amp;Print</source>
         <translation>&amp;Tisk</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2006"/>
-        <location filename="../ui/mainWindow.ui" line="2024"/>
+        <location filename="../ui/mainWindow.ui" line="2007"/>
+        <location filename="../ui/mainWindow.ui" line="2025"/>
         <source>Print Pre&amp;view</source>
         <translation>T&amp;iskový náhled</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2015"/>
+        <location filename="../ui/mainWindow.ui" line="2016"/>
         <source>&amp;Export To HTML</source>
         <translation>&amp;Exportovat do HTML</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2042"/>
+        <location filename="../ui/mainWindow.ui" line="2043"/>
         <source>&amp;Export to HTML</source>
         <translation>&amp;Exportovat do HTML</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2051"/>
+        <location filename="../ui/mainWindow.ui" line="2052"/>
         <source>&amp;Backup</source>
         <translation>&amp;Zálohovat</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2054"/>
+        <location filename="../ui/mainWindow.ui" line="2055"/>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
         <translation>Uložit všechny recepty, přísady a další do adresáře záloh</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2063"/>
+        <location filename="../ui/mainWindow.ui" line="2064"/>
         <source>&amp;Restore</source>
         <translation>&amp;Obnovit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2066"/>
+        <location filename="../ui/mainWindow.ui" line="2067"/>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
         <translation>Obnovit recepty, přísady a další z předchozí zálohy</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2075"/>
+        <location filename="../ui/mainWindow.ui" line="2076"/>
         <source>&amp;Merge</source>
         <translation>&amp;Spojit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2078"/>
+        <location filename="../ui/mainWindow.ui" line="2079"/>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
         <translation>Spojit další sadu receptu, přísad a dalšího se současnou sadou</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2087"/>
+        <location filename="../ui/mainWindow.ui" line="2088"/>
         <source>&amp;New Recipe</source>
         <translation>&amp;Nový recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2096"/>
+        <location filename="../ui/mainWindow.ui" line="2097"/>
         <source>Timers</source>
         <translation>Časovače</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2099"/>
+        <location filename="../ui/mainWindow.ui" line="2100"/>
         <source>Show timers</source>
         <translation>Zobrazit časovač</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2108"/>
-        <location filename="../ui/mainWindow.ui" line="2111"/>
+        <location filename="../ui/mainWindow.ui" line="2109"/>
+        <location filename="../ui/mainWindow.ui" line="2112"/>
         <source>Save</source>
         <translation>Uložit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2120"/>
-        <location filename="../ui/mainWindow.ui" line="2123"/>
+        <location filename="../ui/mainWindow.ui" line="2121"/>
+        <location filename="../ui/mainWindow.ui" line="2124"/>
         <source>Clear recipe</source>
         <translation>Vyprázdnit recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2132"/>
+        <location filename="../ui/mainWindow.ui" line="2133"/>
         <source>Delete selected</source>
         <translation>Odstranit vybraný</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2135"/>
+        <location filename="../ui/mainWindow.ui" line="2136"/>
         <source>Delete recipe</source>
         <translation>Odebrat recept</translation>
     </message>
@@ -4459,7 +4457,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="obsolete">Tiskový náhled</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1755"/>
+        <location filename="../ui/mainWindow.ui" line="1756"/>
         <source>toolBar</source>
         <translation>nástrojováLišta</translation>
     </message>
@@ -4524,12 +4522,12 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="obsolete">Převody jednotek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1921"/>
+        <location filename="../ui/mainWindow.ui" line="1922"/>
         <source>Backup Database</source>
         <translation>Zálohovat databázi</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1926"/>
+        <location filename="../ui/mainWindow.ui" line="1927"/>
         <source>Restore Database</source>
         <translation>Obnovit databázi</translation>
     </message>
