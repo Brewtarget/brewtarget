@@ -108,6 +108,44 @@ void Database::load()
    
    // Set up the tables.
    tableModel = QSqlTableModel( 0, sqldb );
+   tables.clear();
+   
+   equipments = tableModel;
+   equipments.setTable(tableNames[EQUIPTABLE]);
+   tables[EQUIPTABLE] = &equipments;
+   
+   fermentables = tableModel;
+   fermentables.setTable(tableNames[FERMTABLE]);
+   tables[FERMTABLE] = &fermentables;
+   
+   hops = tableModel;
+   hops.setTable(tableNames[HOPTABLE]);
+   tables[HOPTABLE] = &hops;
+   
+   mashs = tableModel;
+   mashs.setTable(tableNames[MASHTABLE]);
+   tables[MASHTABLE] = &mashs;
+   
+   miscs = tableModel;
+   miscs.setTable(tableNames[MISCTABLE]);
+   tables[MISCTABLE] = &miscs;
+   
+   recipes = tableModel;
+   recipes.setTable(tableNames[RECTABLE]);
+   tables[RECTABLE] = &recipes;
+   
+   styles = tableModel;
+   styles.setTable(tableNames[STYLETABLE]);
+   tables[STYLETABLE] = &styles;
+   
+   waters = tableModel;
+   waters.setTable(tableNames[WATERTABLE]);
+   tables[WATERTABLE] = &waters;
+   
+   yeasts = tableModel;
+   yeasts.setTable(tableNames[YEASTTABLE]);
+   tables[YEASTTABLE] = &yeasts;
+   
    // TODO: set relations?
 }
 
@@ -161,69 +199,106 @@ bool Database::restoreFromDir(QString dirStr)
    return success;
 }
 
+int Database::insertNewRecord( DBTable table )
+{
+   tableModel.setTable(tableNames[table]);
+   tableModel.insertRow(-1,tableModel.record());
+   return tableModel.query().lastInsertId().toInt();
+}
+
 Equipment* Database::newEquipment()
 {
-   // TODO: implement.
-   return 0;
+   Equipment* tmp = new Equipment();
+   tmp->key = insertNewRecord(EQUIPTABLE);
+   tmp->table = EQUIPTABLE;
+   return tmp;
 }
 
 Fermentable* Database::newFermentable()
 {
-   // TODO: implement.
-   return 0;
+   Fermentable* tmp = new Fermentable();
+   tmp->key = insertNewRecord(FERMTABLE);
+   tmp->table = FERMTABLE;
+   return tmp;
 }
 
 Hop* Database::newHop()
 {
-   // TODO: implement.
-   return 0;
+   Hop* tmp = new Hop();
+   tmp->key = insertNewRecord(HOPTABLE);
+   tmp->table = HOPTABLE;
+   return tmp;
 }
 
-Hop* Database::newHop()
+Mash* Database::newMash()
 {
-   // TODO: implement.
-   return 0;
+   Mash* tmp = new Mash();
+   tmp->key = insertNewRecord(MASHTABLE);
+   tmp->table = MASHTABLE;
+   return tmp;
 }
 
 MashStep* Database::newMashStep()
 {
-   // TODO: implement.
-   return 0;
+   MashStep* tmp = new MashStep();
+   tmp->key = insertNewRecord(MASHSTEPTABLE);
+   tmp->table = MASHSTEPTABLE;
+   return tmp;
 }
 
 Misc* Database::newMisc()
 {
-   // TODO: implement.
-   return 0;
+   Misc* tmp = new Misc();
+   tmp->key = insertNewRecord(MISCTABLE);
+   tmp->table = MISCTABLE;
+   return tmp;
 }
 
 Recipe* Database::newRecipe()
 {
-   // TODO: implement.
-   return 0;
+   Recipe* tmp = new Recipe();
+   tmp->key = insertNewRecord(RECTABLE);
+   tmp->table = RECTABLE;
+   return tmp;
 }
 
 Style* Database::newStyle()
 {
-   // TODO: implement.
-   return 0;
+   Style* tmp = new Style();
+   tmp->key = insertNewRecord(STYLETABLE);
+   tmp->table = STYLETABLE;
+   return tmp;
 }
 
 Water* Database::newWater()
 {
-   // TODO: implement.
-   return 0;
+   Water* tmp = new Water();
+   tmp->key = insertNewRecord(WATERTABLE);
+   tmp->table = WATERTABLE;
+   return tmp;
 }
 
 Yeast* Database::newYeast()
 {
-   // TODO: implement.
-   return 0;
+   Yeast* tmp = new Yeast();
+   tmp->key = insertNewRecord(YEASTTABLE);
+   tmp->table = YEASTTABLE;
+   return tmp;
+}
+
+int Database::deleteRecord( DBTable table, BeerXMLElement* object )
+{
+   // Assumes the table has a column called 'deleted'.
+   SetterCommand command(tables[table], tables[table].primaryKey().name(), key, "deleted", true, object->property("deleted"), object);
+   // For now, immediately execute the command.
+   command.redo();
+   // Push the command on the undo stack.
+   commandStack.push(command);
 }
 
 void Database::removeEquipment(Equipment* equip)
 {
-   // TODO: implement.
+   deleteRecord(EQUIPTABLE,equip);
 }
 
 void Database::removeEquipment(QList<Equipment*> equip)
@@ -233,7 +308,7 @@ void Database::removeEquipment(QList<Equipment*> equip)
 
 void Database::removeFermentable(Fermentable* ferm)
 {
-   // TODO: implement.
+   deleteRecord(FERMTABLE,ferm);
 }
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
@@ -243,7 +318,7 @@ void Database::removeFermentable(QList<Fermentable*> ferm)
 
 void Database::removeHop(Hop* hop)
 {
-   // TODO: implement.
+   deleteRecord(HOPTABLE,hop);
 }
 
 void Database::removeHop(QList<Hop*> hop)
@@ -253,7 +328,7 @@ void Database::removeHop(QList<Hop*> hop)
 
 void Database::removeMash(Mash* mash)
 {
-   // TODO: implement.
+   deleteRecord(MASHTABLE,mash);
 }
 
 void Database::removeMash(QList<Mash*> mash)
@@ -263,7 +338,7 @@ void Database::removeMash(QList<Mash*> mash)
 
 void Database::removeMashStep(MashStep* mashStep)
 {
-   // TODO: implement.
+   deleteRecord(MASHSTEPTABLE,mashStep);
 }
 
 void Database::removeMashStep(QList<MashStep*> mashStep)
@@ -273,7 +348,7 @@ void Database::removeMashStep(QList<MashStep*> mashStep)
 
 void Database::removeMisc(Misc* misc)
 {
-   // TODO: implement.
+   deleteRecord(MISCTABLE,misc);
 }
 
 void Database::removeMisc(QList<Misc*> misc)
@@ -283,7 +358,7 @@ void Database::removeMisc(QList<Misc*> misc)
 
 void Database::removeRecipe(Recipe* rec)
 {
-   // TODO: implement.
+   deleteRecord(RECTABLE,rec);
 }
 
 void Database::removeRecipe(QList<Recipe*> rec)
@@ -293,7 +368,7 @@ void Database::removeRecipe(QList<Recipe*> rec)
 
 void Database::removeStyle(Style* style)
 {
-   // TODO: implement.
+   deleteRecord(STYLETABLE,style);
 }
 
 void Database::removeStyle(QList<Style*> style)
@@ -303,7 +378,7 @@ void Database::removeStyle(QList<Style*> style)
 
 void Database::removeWater(Water* water)
 {
-  // TODO: implement.
+   deleteRecord(WATERTABLE,water);
 }
 
 void Database::removeWater(QList<Water*> water)
@@ -313,7 +388,7 @@ void Database::removeWater(QList<Water*> water)
 
 void Database::removeYeast(Yeast* yeast)
 {
-   // TODO: implement.
+   deleteRecord(YEASTTABLE,yeast);
 }
 
 void Database::removeYeast(QList<Yeast*> yeast)
@@ -381,7 +456,7 @@ QString Database::getDbFileName()
 
 void Database::updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object )
 {
-   SetterCommand command(table, keyName(table), key, col_name, value, prop, object);
+   SetterCommand command(tables[table], tables[table].primaryKey().name(), key, col_name, value, prop, object);
    // For now, immediately execute the command.
    command.redo();
    

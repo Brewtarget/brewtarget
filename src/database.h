@@ -84,7 +84,7 @@ public:
    Hop* newHop();
    Mash* newMash();
    MashStep* newMashStep();
-   Misc* newMisc();
+   Misc* newMisc(); // DONE
    Recipe* newRecipe();
    Style* newStyle();
    Water* newWater();
@@ -132,19 +132,19 @@ public:
    void removeFromRecipe( Recipe* rec, QVector<Water*> w );
    void removeFromRecipe( Recipe* rec, QVector<Instruction*> ins );
    
-   // You can remove one
-   void removeEquipment(Equipment* equip);
-   void removeFermentable(Fermentable* ferm);
-   void removeHop(Hop* hop);
-   void removeMash(Mash* mash);
-   void removeMashStep(MashStep* mashStep);
-   void removeMisc(Misc* misc);
-   void removeRecipe(Recipe* rec);
-   void removeStyle(Style* style);
-   void removeWater(Water* water);
-   void removeYeast(Yeast* yeast);
+   // Mark an item as deleted.
+   void removeEquipment(Equipment* equip); // DONE
+   void removeFermentable(Fermentable* ferm); // DONE
+   void removeHop(Hop* hop); // DONE
+   void removeMash(Mash* mash); // DONE
+   void removeMashStep(MashStep* mashStep); // DONE
+   void removeMisc(Misc* misc); // DONE
+   void removeRecipe(Recipe* rec); // DONE
+   void removeStyle(Style* style); // DONE
+   void removeWater(Water* water); // DONE
+   void removeYeast(Yeast* yeast); // DONE
 
-   // Or you can remove lists
+   // Or you can mark whole lists as deleted.
    void removeEquipment(QList<Equipment*> equip);
    void removeFermentable(QList<Fermentable*> ferm);
    void removeHop(QList<Hop*> hop);
@@ -156,6 +156,7 @@ public:
    void removeWater(QList<Water*> water);
    void removeYeast(QList<Yeast*> yeast);
 
+   // QUESTION: Necessary?
    unsigned int getNumEquipments();
    unsigned int getNumFermentables();
    unsigned int getNumHops();
@@ -190,7 +191,11 @@ private:
    static QHash<DBTable,QString> tableNames;
    static QHash<DBTable,QString> tableNamesHash(); // DONE
    
-   /*
+   // The connection to the SQLite database.
+   QSqlDatabase sqldb;
+   // Model for all the tables in the db.
+   QSqlRelationalTableModel tableModel;
+   // Models set to specific tables in the db.
    QSqlRelationalTableModel equipments;
    QSqlRelationalTableModel fermentables;
    QSqlRelationalTableModel hops;
@@ -200,12 +205,7 @@ private:
    QSqlRelationalTableModel styles;
    QSqlRelationalTableModel waters;
    QSqlRelationalTableModel yeasts;
-   */
-   
-   // The connection to the SQLite database.
-   QSqlDatabase sqldb;
-   // Model for all the tables in the db.
-   QSqlRelationalTableModel tableModel;
+   QHash<DBTable,QSqlRelationalTable*> tables;
    
    QUndoStack commandStack;
    
@@ -218,7 +218,14 @@ private:
    //! Destructor hidden.
    ~Database(){} // DONE
    
+   //! Load database from file.
    void load(); // DONE
+   
+   //! Make a new row in the \b table. Return key of new row.
+   int insertNewRecord( DBTable table ); // DONE
+   
+   //! Mark the \b object in \b table as deleted.
+   void deleteRecord( DBTable table, BeerXMLElement* object ); // DONE
 };
 
 #endif   /* _DATABASE_H */

@@ -34,11 +34,16 @@ class BeerXMLElement : QObject
 {
    Q_OBJECT
    Q_CLASSINFO("version","1")
+   
+   friend class Database;
 public:
    BeerXMLElement();
    BeerXMLElement( BeerXMLElement const& other );
    virtual ~BeerXMLElement() {}
 
+   Q_PROPERTY( bool deleted READ deleted )
+   bool deleted(){ return get("deleted").toBool(); }
+   
    // There should be Database::createClone(BeerXMLElement&) that does this.
    //void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
    
