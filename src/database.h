@@ -20,9 +20,11 @@
 #define   _DATABASE_H
 
 #include <QList>
+#include <QHash>
 #include <iostream>
 #include <QFile>
 #include <QString>
+#include <QSqlDatabase>
 #include <QSqlRelationalTableModel>
 #include <QMetaProperty>
 #include <QUndoStack>
@@ -51,27 +53,30 @@ class Database;
 class Database
 {
 public:
-   enum DBTable{ NOTABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, MASHTABLE, MISCTABLE,
-                 RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE };
+   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE,
+   INSTRUCTIONTABLE, MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
 
    //! This should be the ONLY way you get an instance.
-   static Database& instance();
-   //! Save to the persistent medium.
-   static void savePersistent();
+   static Database& instance(); // DONE
+   // //! Save to the persistent medium.
+   //static void savePersistent(); // OBSOLETE
 
-   static bool backupToDir(QString dir);
-   static bool restoreFromDir(QString dirStr);
+   static bool backupToDir(QString dir); // DONE
+   static bool restoreFromDir(QString dirStr); // DONE
 
    /*! Schedule an update of the entry, and call the notification when complete.
     *  Should create an appropriate QUndoCommand and put it into a list somewhere.
     */
-   void updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object );
+   void updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object ); // DONE
    
    //! Get the contents of the cell specified by table/key/col_name.
    QVariant get( DBTable table, int key, const char* col_name );
    
    //! Get the name of the key column for the given table.
    QString keyName( DBTable table );
+   
+   //! Get a table view.
+   QTableView* createView( DBTable table );
    
    // Create a new ingredient.
    Equipment* newEquipment();
@@ -175,59 +180,17 @@ public:
    Water* findWaterByName(QString name);
    Yeast* findYeastByName(QString name);
    */
-
-   // QUESTION: obsolete?
-   /*
-   QList<Equipment*>::iterator getEquipmentBegin();
-   QList<Equipment*>::iterator getEquipmentEnd();
-   QList<Fermentable*>::iterator getFermentableBegin();
-   QList<Fermentable*>::iterator getFermentableEnd();
-   QList<Hop*>::iterator getHopBegin();
-   QList<Hop*>::iterator getHopEnd();
-   QList<Mash*>::iterator getMashBegin();
-   QList<Mash*>::iterator getMashEnd();
-   QList<MashStep*>::iterator getMashStepBegin();
-   QList<MashStep*>::iterator getMashStepEnd();
-   QList<Misc*>::iterator getMiscBegin();
-   QList<Misc*>::iterator getMiscEnd();
-   QList<Recipe*>::iterator getRecipeBegin();
-   QList<Recipe*>::iterator getRecipeEnd();
-   QList<Style*>::iterator getStyleBegin();
-   QList<Style*>::iterator getStyleEnd();
-   QList<Water*>::iterator getWaterBegin();
-   QList<Water*>::iterator getWaterEnd();
-   QList<Yeast*>::iterator getYeastBegin();
-   QList<Yeast*>::iterator getYeastEnd();
-   */
-
-   /*! Merges \b last 's BeerXML elements to \b first.
-   *  Neither document should have recipes in them. If
-   *  \b undup is true, removes duplicate entries preferring to remove
-   *  items from \b last first.
-   */
-   static void mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last );
-   
-   /*! Merges \b last 's BeerXML elements to \b first.
-   *  For documents that ONLY contain recipes. If
-   *  \b undup is true, removes duplicate entries preferring to remove
-   *  items from \b last first.
-   */
-   static void mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last );
    
    //! Get the file where this database was loaded from.
-   static QString getDbFileName();
-   
-   //! Get the recipe file this database was loaded from.
-   static QString getRecipeFileName();
+   static QString getDbFileName(); // DONE
    
 private:
    static QFile dbFile;
    static QString dbFileName;
-   static QFile recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static QString recipeFileName;
-   static QFile mashFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static QString mashFileName;
+   static QHash<DBTable,QString> tableNames;
+   static QHash<DBTable,QString> tableNamesHash(); // DONE
    
+   /*
    QSqlRelationalTableModel equipments;
    QSqlRelationalTableModel fermentables;
    QSqlRelationalTableModel hops;
@@ -237,17 +200,25 @@ private:
    QSqlRelationalTableModel styles;
    QSqlRelationalTableModel waters;
    QSqlRelationalTableModel yeasts;
+   */
+   
+   // The connection to the SQLite database.
+   QSqlDatabase sqldb;
+   // Model for all the tables in the db.
+   QSqlRelationalTableModel tableModel;
    
    QUndoStack commandStack;
    
    //! Hidden constructor.
-   Database();
+   Database(); // DONE
    //! Copy constructor hidden.
-   Database(Database const&){}
+   Database(Database const&){} // DONE
    //! Assignment operator hidden.
-   Database& operator=(Database const&){}
+   Database& operator=(Database const&){} // DONE
    //! Destructor hidden.
-   ~Database(){}
+   ~Database(){} // DONE
+   
+   void load(); // DONE
 };
 
 #endif   /* _DATABASE_H */
