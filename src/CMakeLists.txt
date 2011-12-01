@@ -9,7 +9,6 @@ INCLUDE(${QT_USE_FILE})
 # Variable that contains all the .cpp files in this project.
 SET( brewtarget_SRCS
     ${SRCDIR}/Algorithms.cpp
-    ${SRCDIR}/database.cpp
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
@@ -24,6 +23,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
+    ${SRCDIR}/database.cpp
     ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EquipmentComboBox.cpp
     ${SRCDIR}/EquipmentEditor.cpp
@@ -157,6 +157,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/ConverterTool.h
+    ${SRCDIR}/database.h
     ${SRCDIR}/EquipmentComboBox.h
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/FermentableEditor.h

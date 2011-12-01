@@ -130,6 +130,10 @@ void Database::load()
    mashs.setTable(tableNames[MASHTABLE]);
    tables[MASHTABLE] = &mashs;
    
+   mashSteps = tableModel;
+   mashSteps.setTable(tableNames[MASHSTEPTABLE]);
+   tables[MASHSTEPTABLE] = &mashSteps;
+   
    miscs = tableModel;
    miscs.setTable(tableNames[MISCTABLE]);
    tables[MISCTABLE] = &miscs;
@@ -151,6 +155,19 @@ void Database::load()
    tables[YEASTTABLE] = &yeasts;
    
    // TODO: set relations?
+   
+   // Create and store all pointers.
+   populateElements( allEquipments, equipments, EQUIPTABLE );
+   populateElements( allFermentables, fermentables, FERMTABLE );
+   populateElements( allHops, hops, HOPTABLE );
+   populateElements( allInstructions, instructions, INSTRUCTIONTABLE );
+   populateElements( allMashs, mashs, MASHTABLE );
+   populateElements( allMashSteps, mashSteps, MASHSTEPTABLE );
+   populateElements( allMiscs, miscs, MISCTABLE );
+   populateElements( allRecipes, recipes, RECTABLE );
+   populateElements( allStyles, styles, STYLETABLE );
+   populateElements( allWaters, waters, WATERTABLE );
+   populateElements( allYeasts, yeasts, YEASTTABLE );
 }
 
 Database& Database::instance()
@@ -294,6 +311,7 @@ Equipment* Database::newEquipment()
    Equipment* tmp = new Equipment();
    tmp->key = insertNewRecord(EQUIPTABLE);
    tmp->table = EQUIPTABLE;
+   allEquipments.insert(key,tmp);
    return tmp;
 }
 
@@ -302,6 +320,7 @@ Fermentable* Database::newFermentable()
    Fermentable* tmp = new Fermentable();
    tmp->key = insertNewRecord(FERMTABLE);
    tmp->table = FERMTABLE;
+   allFermentables.insert(key,tmp);
    return tmp;
 }
 
@@ -310,6 +329,7 @@ Hop* Database::newHop()
    Hop* tmp = new Hop();
    tmp->key = insertNewRecord(HOPTABLE);
    tmp->table = HOPTABLE;
+   allHops.insert(key,tmp);
    return tmp;
 }
 
@@ -323,7 +343,7 @@ Instruction* newInstruction(Recipe* rec)
                 sqldb );
    q.next();
    q.record().setValue( "recipe_id", rec->key );
-   
+   allInstructions.insert(key,tmp);
    return tmp;
 }
 
@@ -332,6 +352,7 @@ Mash* Database::newMash()
    Mash* tmp = new Mash();
    tmp->key = insertNewRecord(MASHTABLE);
    tmp->table = MASHTABLE;
+   allMashs.insert(key,tmp);
    return tmp;
 }
 
@@ -340,6 +361,7 @@ MashStep* Database::newMashStep()
    MashStep* tmp = new MashStep();
    tmp->key = insertNewRecord(MASHSTEPTABLE);
    tmp->table = MASHSTEPTABLE;
+   allMashSteps.insert(key,tmp);
    return tmp;
 }
 
@@ -348,6 +370,7 @@ Misc* Database::newMisc()
    Misc* tmp = new Misc();
    tmp->key = insertNewRecord(MISCTABLE);
    tmp->table = MISCTABLE;
+   allMiscs.insert(key,tmp);
    return tmp;
 }
 
@@ -356,6 +379,7 @@ Recipe* Database::newRecipe()
    Recipe* tmp = new Recipe();
    tmp->key = insertNewRecord(RECTABLE);
    tmp->table = RECTABLE;
+   allRecipes.insert(key,tmp);
    return tmp;
 }
 
@@ -364,6 +388,7 @@ Style* Database::newStyle()
    Style* tmp = new Style();
    tmp->key = insertNewRecord(STYLETABLE);
    tmp->table = STYLETABLE;
+   allStyles.insert(key,tmp);
    return tmp;
 }
 
@@ -372,6 +397,7 @@ Water* Database::newWater()
    Water* tmp = new Water();
    tmp->key = insertNewRecord(WATERTABLE);
    tmp->table = WATERTABLE;
+   allWaters.insert(key,tmp);
    return tmp;
 }
 
@@ -380,6 +406,7 @@ Yeast* Database::newYeast()
    Yeast* tmp = new Yeast();
    tmp->key = insertNewRecord(YEASTTABLE);
    tmp->table = YEASTTABLE;
+   allYeasts.insert(key,tmp);
    return tmp;
 }
 
@@ -654,6 +681,56 @@ void addToRecipe( Recipe* rec, Water* w )
    addIngredientToRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
 }
 
+void Database::getEquipments( QList<Equipment*>& list, QString filter )
+{
+   getElements( list, filter, equipments, EQUIPTABLE, allEquipments );
+}
+
+void Database::getFermentables( QList<Fermentable*>& list, QString filter )
+{
+   getElements( list, filter, fermentables, FERMTABLE, allFermentables );
+}
+
+void Database::getHops( QList<Hop*>& list, QString filter )
+{
+   getElements( list, filter, hops, HOPTABLE, allHops );
+}
+
+void Database::getMashs( QList<Mash*>& list, QString filter )
+{
+   getElements( list, filter, mashs, MASHTABLE, allMashs );
+}
+
+void Database::getMashSteps( QList<MashStep*>& list, QString filter )
+{
+   getElements( list, filter, mashsteps, MASHSTEPTABLE, allMashSteps );
+}
+
+void Database::getMiscs( QList<Misc*>& list, QString filter )
+{
+   getElements( list, filter, miscs, MISCTABLE, allMiscs );
+}
+
+void Database::getRecipes( QList<Recipe*>& list, QString filter )
+{
+   getElements( list, filter, recipes, RECTABLE, allRecipes );
+}
+
+void Database::getStyles( QList<Style*>& list, QString filter )
+{
+   getElements( list, filter, styles, STYLETABLE, allStyles );
+}
+
+void Database::getWaters( QList<Water*>& list, QString filter )
+{
+   getElements( list, filter, waters, WATERTABLE, allWaters );
+}
+
+void Database::getYeasts( QList<Yeast*>& list, QString filter )
+{
+   getElements( list, filter, yeasts, YEASTTABLE, allYeasts );
+}
+
 QHash<DBTable,QString> Database::tableNamesHash()
 {
    QHash<DBTable,QString> tmp;
@@ -672,4 +749,9 @@ QHash<DBTable,QString> Database::tableNamesHash()
    tmp[ YEASTTABLE ] = "yeast";
    
    return tmp;
+}
+
+const Database::QSqlRelationalTableModel getModel( DBTable table )
+{
+   return *(tables[table]);
 }

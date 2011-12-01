@@ -356,7 +356,7 @@ QVariant BrewTargetTreeModel::getYeastHeader(int section) const
       return QVariant(tr("Form"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeModel::getYeastHeader Bad column: %1").arg(section));
+   Brewtarget::logW( QString("BrewTargetTreeModel::getYeastHeader Bad column: %1").arg(section) );
    return QVariant();
 }
 
@@ -533,28 +533,35 @@ void BrewTargetTreeModel::startObservingDB()
    loadTreeModel(DBALL);
 }
 
+
+void BrewTargetTreeModel::addObserved( BeerXMLElement* element )
+{
+   connect( element, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+}
+
+void BrewTargetTreeModel::removeObserved( BeerXMLElement* element )
+{
+   disconnect( element, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+}
+
 void BrewTargetTreeModel::loadTreeModel(int reload)
 {
    int i;
    int rows;
 
-   if( ! Database::isInitialized() )
-      return;
-
    if ( (treeMask & RECIPEMASK ) &&
         (reload == DBALL || reload == DBRECIPE))
    {
+      recTable->select();
+      
       BrewTargetTreeItem* local = rootItem->child(trees.value(RECIPEMASK));
-
-      QList<Recipe*>::iterator it;
-
-      rows = dbObs->getNumRecipes();
+      rows = recTable->rowCount();
 
       // Insert all the rows
       insertRows(0,rows, createIndex(trees.value(RECIPEMASK),0,local));
 
        // And set the data
-      for( i = 0, it = dbObs->getRecipeBegin(); it != dbObs->getRecipeEnd(); ++it, ++i )
+      for( i = 0; i < rows; ++i )
       {
          BrewTargetTreeItem* temp = local->child(i);
          Recipe* foo = *it;

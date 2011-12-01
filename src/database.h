@@ -28,8 +28,13 @@ class Database;
 #include <QString>
 #include <QSqlDatabase>
 #include <QSqlRelationalTableModel>
+#include <QSqlRecord>
 #include <QMetaProperty>
 #include <QUndoStack>
+#include <QObject>
+#include <QPair>
+#include <QTableView>
+/* Replace with forward declarations
 #include "equipment.h"
 #include "fermentable.h"
 #include "hop.h"
@@ -40,20 +45,33 @@ class Database;
 #include "style.h"
 #include "water.h"
 #include "yeast.h"
+*/
+class BeerXMLElement;
+class Equipment;
+class Fermentable;
+class Hop;
+class Instruction;
+class Mash;
+class MashStep;
+class Misc;
+class Recipe;
+class Style;
+class Water;
+class Yeast;
 
 /*!
  * \class Database
  * This class is a singleton, meaning that there should only ever be one
- * instance of this floating around.
- *
- * It only calls hasChanged() when a new ingredient or whatever gets added,
- * not when any of them actually changed.
+ * instance of this floating around. The Database should be the only way
+ * we ever get pointers to BeerXML ingredients and the like.
  */
-
-class Database
+class Database : public QObject
 {
+   Q_OBJECT
+   
 public:
-   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE, MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
+   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
+                 MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
 
    //! This should be the ONLY way you get an instance.
    static Database& instance(); // DONE
@@ -94,6 +112,9 @@ public:
    Style* newStyle(); // DONE
    Water* newWater(); // DONE
    Yeast* newYeast(); // DONE
+   
+   //! Retrieve a list of elements with given \b filter.
+   QList<BeerXMLElement*> listByFilter( DBTable table, QString filter = "" );
    
    // NOTICE: Necessary?
    // Get ingredients by key value.
@@ -170,6 +191,18 @@ public:
    void removeWater(QList<Water*> water); // DONE
    void removeYeast(QList<Yeast*> yeast); // DONE
 
+   // Return a list of elements according to the given filter.
+   void getEquipments( QList<Equipment*>&, QString filter="" );
+   void getFermentables( QList<Fermentable*>&, QString filter="" );
+   void getHops( QList<Hop*>&, QString filter="" );
+   void getMashs( QList<Mash*>&, QString filter="" );
+   void getMashSteps( QList<MashStep*>&, QString filter="" );
+   void getMiscs( QList<Misc*>&, QString filter="" );
+   void getRecipes( QList<Recipe*>&, QString filter="" );
+   void getStyles( QList<Style*>&, QString filter="" );
+   void getWaters( QList<Water*>&, QString filter="" );
+   void getYeasts( QList<Yeast*>&, QString filter="" );
+   
    // NOTICE: Necessary?
    /*
    unsigned int getNumEquipments();
@@ -201,11 +234,77 @@ public:
    //! Get the file where this database was loaded from.
    static QString getDbFileName(); // DONE
    
+   //! Get a const copy of a particular table model. Const so that no editing can take place outside the db.
+   const QSqlRelationalTableModel getModel( DBTable table );
+   
 private:
    static QFile dbFile;
    static QString dbFileName;
    static QHash<DBTable,QString> tableNames;
    static QHash<DBTable,QString> tableNamesHash(); // DONE
+   
+   // Keeps all pointers to the elements referenced by key.
+   QHash< int, Equipment* > allEquipments;
+   QHash< int, Fermentable* > allFermentables;
+   QHash< int, Hop* > allHops;
+   QHash< int, Instruction* > allInstructions;
+   QHash< int, Mash* > allMashs;
+   QHash< int, MashStep* > allMashSteps;
+   QHash< int, Misc* > allMiscs;
+   QHash< int, Recipe* > allRecipes;
+   QHash< int, Style* > allStyles;
+   QHash< int, Water* > allWaters;
+   QHash< int, Yeast* > allYeasts;
+   
+   // Helper to populate all* hashes. T should be a BeerXMLElement subclass.
+   template <class T> void populateElements( QHash<int,T*> hash, QSqlRelationalTableModel& tm, DBTable table )
+   {
+      int i, size, key;
+      BeerXMLElement* e;
+      T* et;
+      QString filter = tm.filter();
+      
+      tm.setFilter("");
+      tm.select();
+      
+      size = tm.rowCount();
+      for( i = 0; i < size; ++i )
+      {
+         key = tm.record(i).value(keyName(table)).toInt();
+         
+         e = new T();
+         et = e; // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
+         et->key = key;
+         et->table = table;
+         
+         if( ! hash.contains(key) )
+            hash.insert(key,e);
+      }
+      
+      tm.setFilter(filter);
+      tm.select();
+   }
+   
+   // Helper to populate the list using the given filter.
+   template <class T> void getElements( QList<T*>& list, QString filter, QSqlRelationalTableModel& tm, DBTable table, QHash<int,T*> allElements )
+   {
+      int i, size, key;
+      QString oldFilter = tm.filter();
+      
+      tm.setFilter(filter);
+      tm.select();
+      
+      list.clear();
+      size = tm.rowCount();
+      for( i = 0; i < size; ++i )
+      {
+         key = tm.record(i).value(keyName(table));
+         list.append( allElements[key] );
+      }
+      
+      equipments.setFilter(oldFilter);
+      equipments.select();
+   }
    
    // The connection to the SQLite database.
    QSqlDatabase sqldb;
@@ -217,12 +316,13 @@ private:
    QSqlRelationalTableModel hops;
    QSqlRelationalTableModel instructions;
    QSqlRelationalTableModel mashs;
+   QSqlRelationalTableModel mashSteps;
    QSqlRelationalTableModel miscs;
    QSqlRelationalTableModel recipes;
    QSqlRelationalTableModel styles;
    QSqlRelationalTableModel waters;
    QSqlRelationalTableModel yeasts;
-   QHash<DBTable,QSqlRelationalTable*> tables;
+   QHash<DBTable,QSqlRelationalTableModel*> tables;
    
    QUndoStack commandStack;
    
@@ -231,7 +331,7 @@ private:
    //! Copy constructor hidden.
    Database(Database const&){} // DONE
    //! Assignment operator hidden.
-   Database& operator=(Database const&){} // DONE
+   Database& operator=(Database const&){ return *this; } // DONE
    //! Destructor hidden.
    ~Database(){} // DONE
    

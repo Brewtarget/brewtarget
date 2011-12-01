@@ -28,15 +28,15 @@ class BrewTargetTreeModel;
 #include <QAbstractItemModel>
 #include <Qt>
 #include <QObject>
+#include <QSqlRelationalTableModel>
 
-#include "recipe.h"
-#include "BrewTargetTreeItem.h"
-#include "BrewTargetTreeView.h"
-#include "database.h"
-#include "observable.h"
-#include "brewnote.h"
+// Forward declarations
+class Recipe;
+class BrewTargetTreeItem;
+class BrewTargetTreeView;
+class BrewNote;
 
-class BrewTargetTreeModel : public QAbstractItemModel, public MultipleObserver
+class BrewTargetTreeModel : public QAbstractItemModel
 {
    Q_OBJECT
 
@@ -86,6 +86,11 @@ public:
    int getType(const QModelIndex &index);
    int getMask();
 
+   //! Connect the element's changed signal to our slot.
+   void addObserved( BeerXMLElement* element );
+   //! Disconnect the element's changed signal from our slot.
+   void removeObserved( BeerXMLElement* element );
+   
    // Methods required for observable
    virtual void notify(Observable *notifier, QVariant info = QVariant());
    void startObservingDB();
@@ -107,6 +112,9 @@ public:
    QModelIndex findYeast(Yeast* yeast);
    QModelIndex findBrewNote(BrewNote* bNote);
 
+private slots:
+   void changed( QMetaProperty, QVariant );
+   
 private:
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
    void loadTreeModel(int reload);
@@ -119,11 +127,10 @@ private:
    QVariant getHopHeader(int section) const;
    QVariant getMiscHeader(int section) const;
    QVariant getYeastHeader(int section) const;
-
+   
    BrewTargetTreeItem* rootItem;
    QHash<TypeMasks, int> trees;
    BrewTargetTreeView *parentTree;
-   Database* dbObs;
    Recipe* recObs;
    TypeMasks treeMask;
 
