@@ -63,7 +63,7 @@ public:
    
 signals:
    //! Passes the meta property that has changed about this object.
-   void changed(QMetaProperty, QVariant);
+   void changed(QMetaProperty, QVariant value = QVariant());
    
 protected:
    

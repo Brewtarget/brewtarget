@@ -199,8 +199,82 @@ bool Database::restoreFromDir(QString dirStr)
    return success;
 }
 
+/*
+Equipment* Database::equipment(int key)
+{
+}
+
+Fermentable* Database::fermentable(int key)
+{
+}
+
+Hop* Database::hop(int key)
+{
+}
+
+Mash* Database::mash(int key)
+{
+}
+
+MashStep* Database::mashStep(int key)
+{
+}
+
+Misc* Database::misc(int key)
+{
+}
+
+Recipe* Database::recipe(int key)
+{
+}
+
+Style* Database::style(int key)
+{
+}
+
+Water* Database::water(int key)
+{
+}
+
+Yeast* Database::yeast(int key)
+{
+}
+*/
+
+void removeFromRecipe( Recipe* rec, Hop* hop )
+{
+   // TODO: implement.
+}
+
+void removeFromRecipe( Recipe* rec, Fermentable* ferm )
+{
+   // TODO: implement.
+}
+
+void removeFromRecipe( Recipe* rec, Misc* m )
+{
+   // TODO: implement.
+}
+
+void removeFromRecipe( Recipe* rec, Yeast* y )
+{
+   // TODO: implement.
+}
+
+void removeFromRecipe( Recipe* rec, Water* w )
+{
+   // TODO: implement.
+}
+
+void removeFromRecipe( Recipe* rec, Instruction* ins )
+{
+   // TODO: implement.
+}
+
+
 int Database::insertNewRecord( DBTable table )
 {
+   // TODO: encapsulate this in a QUndoCommand so we can undo it.
    tableModel.setTable(tableNames[table]);
    tableModel.insertRow(-1,tableModel.record());
    return tableModel.query().lastInsertId().toInt();
@@ -227,6 +301,20 @@ Hop* Database::newHop()
    Hop* tmp = new Hop();
    tmp->key = insertNewRecord(HOPTABLE);
    tmp->table = HOPTABLE;
+   return tmp;
+}
+
+Instruction* newInstruction(Recipe* rec)
+{
+   // TODO: encapsulate in QUndoCommand.
+   Instruction* tmp = new Instruction();
+   tmp->key = insertNewRecord(INSTRUCTIONTABLE);
+   tmp->table = INSTRUCTIONTABLE;
+   QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(tmp->key),
+                sqldb );
+   q.next();
+   q.record().setValue( "recipe_id", rec->key );
+   
    return tmp;
 }
 
@@ -289,7 +377,7 @@ Yeast* Database::newYeast()
 int Database::deleteRecord( DBTable table, BeerXMLElement* object )
 {
    // Assumes the table has a column called 'deleted'.
-   SetterCommand command(tables[table], tables[table].primaryKey().name(), key, "deleted", true, object->property("deleted"), object);
+   SetterCommand command(tables[table], keyName(table), key, "deleted", true, object->property("deleted"), object);
    // For now, immediately execute the command.
    command.redo();
    // Push the command on the undo stack.
@@ -303,7 +391,12 @@ void Database::removeEquipment(Equipment* equip)
 
 void Database::removeEquipment(QList<Equipment*> equip)
 {
-   // TODO: implement.
+   QList<Equipment*>::Iterator it = equip.begin();
+   while( it != equip.end() )
+   {
+      removeEquipment(*it);
+      it++;
+   }
 }
 
 void Database::removeFermentable(Fermentable* ferm)
@@ -313,7 +406,12 @@ void Database::removeFermentable(Fermentable* ferm)
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
 {
-   // TODO: implement.
+   QList<Fermentable*>::Iterator it = ferm.begin();
+   while( it != ferm.end() )
+   {
+      removeFermentable(*it);
+      it++;
+   }
 }
 
 void Database::removeHop(Hop* hop)
@@ -323,7 +421,12 @@ void Database::removeHop(Hop* hop)
 
 void Database::removeHop(QList<Hop*> hop)
 {
-   // TODO: implement.
+   QList<Hop*>::Iterator it = hop.begin();
+   while( it != hop.end() )
+   {
+      removeHop(*it);
+      it++;
+   }
 }
 
 void Database::removeMash(Mash* mash)
@@ -333,7 +436,12 @@ void Database::removeMash(Mash* mash)
 
 void Database::removeMash(QList<Mash*> mash)
 {
-   // TODO: implement.
+   QList<Mash*>::Iterator it = mash.begin();
+   while( it != mash.end() )
+   {
+      removeMash(*it);
+      it++;
+   }
 }
 
 void Database::removeMashStep(MashStep* mashStep)
@@ -343,7 +451,12 @@ void Database::removeMashStep(MashStep* mashStep)
 
 void Database::removeMashStep(QList<MashStep*> mashStep)
 {
-   // TODO: implement.
+   QList<MashStep*>::Iterator it = mashStep.begin();
+   while( it != mashStep.end() )
+   {
+      removeMashStep(*it);
+      it++;
+   }
 }
 
 void Database::removeMisc(Misc* misc)
@@ -353,7 +466,12 @@ void Database::removeMisc(Misc* misc)
 
 void Database::removeMisc(QList<Misc*> misc)
 {
-   // TODO: implement.
+   QList<Misc*>::Iterator it = misc.begin();
+   while( it != misc.end() )
+   {
+      removeMisc(*it);
+      it++;
+   }
 }
 
 void Database::removeRecipe(Recipe* rec)
@@ -363,7 +481,12 @@ void Database::removeRecipe(Recipe* rec)
 
 void Database::removeRecipe(QList<Recipe*> rec)
 {
-   // TODO: implement.
+   QList<Recipe*>::Iterator it = rec.begin();
+   while( it != rec.end() )
+   {
+      removeRecipe(*it);
+      it++;
+   }
 }
 
 void Database::removeStyle(Style* style)
@@ -373,7 +496,12 @@ void Database::removeStyle(Style* style)
 
 void Database::removeStyle(QList<Style*> style)
 {
-   // TODO: implement.
+   QList<Style*>::Iterator it = style.begin();
+   while( it != style.end() )
+   {
+      removeStyle(*it);
+      it++;
+   }
 }
 
 void Database::removeWater(Water* water)
@@ -383,7 +511,12 @@ void Database::removeWater(Water* water)
 
 void Database::removeWater(QList<Water*> water)
 {
-   // TODO: implement.
+   QList<Water*>::Iterator it = water.begin();
+   while( it != water.end() )
+   {
+      removeWater(*it);
+      it++;
+   }
 }
 
 void Database::removeYeast(Yeast* yeast)
@@ -393,57 +526,12 @@ void Database::removeYeast(Yeast* yeast)
 
 void Database::removeYeast(QList<Yeast*> yeast)
 {
-   // TODO: implement.
-}
-
-unsigned int Database::getNumEquipments()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumFermentables()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumHops()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumMashs()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumMashSteps()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumMiscs()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumRecipes()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumStyles()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumWaters()
-{
-   // TODO: implement.
-}
-
-unsigned int Database::getNumYeasts()
-{
-   // TODO: implement.
+   QList<Yeast*>::Iterator it = yeast.begin();
+   while( it != yeast.end() )
+   {
+      removeYeast(*it);
+      it++;
+   }
 }
 
 QString Database::getDbFileName()
@@ -456,7 +544,7 @@ QString Database::getDbFileName()
 
 void Database::updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object )
 {
-   SetterCommand command(tables[table], tables[table].primaryKey().name(), key, col_name, value, prop, object);
+   SetterCommand command(tables[table], keyName(table), key, col_name, value, prop, object);
    // For now, immediately execute the command.
    command.redo();
    
@@ -464,6 +552,79 @@ void Database::updateEntry( DBTable table, int key, const char* col_name, QVaria
    //commandStack.beginMacro("Change an entry");
    commandStack.push(command);
    //commandStack.endMacro();
+}
+
+QString Database::keyName( DBTable table )
+{
+   return tables[table].primaryKey().name();
+}
+
+void Database::removeIngredientFromRecipe( BeerXMLElement* ing, Recipe* rec, QString propName, QString relTableName, QString ingKeyName )
+{
+   // TODO: encapsulate this in a QUndoCommand.
+   
+   tableModel.setTable(relTableName);
+   QString filter = tableModel.filter();
+   
+   // Find the row in the relational db that connects the ingredient to the recipe.
+   tableModel.setFilter( QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->key).arg(rec->key) );
+   tableModel.select();
+   tableModel.removeRows(0,1);
+   
+   // Restore the old filter.
+   tableModel.setFilter(filter);
+   tableModel.select();
+   
+   emit rec->changed( rec->property(propName) );
+}
+
+void Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString propName, QString relTableName, QString ingKeyName )
+{
+   // TODO: encapsulate this in a QUndoCommand.
+   
+   // Ensure this ingredient is not already in the recipe.
+   QSqlQuery q(
+      QString("SELECT * from %1 WHERE %2 = %3 AND recipe_id = %4")
+        .arg(relTableName).arg(ingKeyName).arg(ing->key).arg(rec->key), sqldb);
+   if( q.next() )
+   {
+      Brewtarget::logW( "Ingredient already exists in recipe." );
+      return;
+   }
+   
+   // Put this (rec,hop) pair in the hop_in_recipe table.
+   tableModel.setTable(relTableName);
+   QSqlRecord r = tableModel.record();
+   r.setValue(ingKeyName, ing->key);
+   r.setValue("recipe_id", rec->key);
+   tableModel.insert(-1,r);
+   
+   emit rec->changed( rec->property(propName) );
+}
+
+void addToRecipe( Recipe* rec, Hop* hop )
+{
+   addIngredientToRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
+}
+
+void addToRecipe( Recipe* rec, Fermentable* ferm )
+{
+   addIngredientToRecipe( rec, ferm, "ferms", "fermentable_in_recipe", "fermentable_id" );
+}
+
+void addToRecipe( Recipe* rec, Misc* m )
+{
+   addIngredientToRecipe( rec, m, "miscs", "misc_in_recipe", "misc_id" );
+}
+
+void addToRecipe( Recipe* rec, Yeast* y )
+{
+   addIngredientToRecipe( rec, y, "yeasts", "yeast_in_recipe", "yeast_id" );
+}
+
+void addToRecipe( Recipe* rec, Water* w )
+{
+   addIngredientToRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
 }
 
 QHash<DBTable,QString> Database::tableNamesHash()
