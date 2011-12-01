@@ -30,13 +30,10 @@ class Instruction;
 class Instruction : public BeerXMLElement
 {
    Q_OBJECT
+   friend class Database;
 public:
-   Instruction();
    Instruction( Instruction const& other );
-   Instruction( const QString& name,
-                const QString& directions,
-                bool hasTimer = false,
-                const QString& timerVal = "0" );
+   
    virtual ~Instruction() {}
 
    virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
@@ -78,8 +75,14 @@ signals:
    void changedInterval(double);
    void changedReagents(QVector<QString>);
    */
-   
+
 private:
+   //! Only database gets to construct instances.
+   Instruction();
+   Instruction( const QString& name,
+                const QString& directions,
+                bool hasTimer = false,
+                const QString& timerVal = "0" );
 };
 
 #endif   /* _INSTRUCTION_H */

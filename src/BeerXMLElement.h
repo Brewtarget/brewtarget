@@ -87,7 +87,7 @@ protected:
     */
    QVariant get( const char* col_name );
    
-private:   
+private:
    
 };
 

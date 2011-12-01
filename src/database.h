@@ -19,6 +19,8 @@
 #ifndef _DATABASE_H
 #define   _DATABASE_H
 
+class Database;
+
 #include <QList>
 #include <QHash>
 #include <iostream>
@@ -39,8 +41,6 @@
 #include "water.h"
 #include "yeast.h"
 
-class Database;
-
 /*!
  * \class Database
  * This class is a singleton, meaning that there should only ever be one
@@ -53,8 +53,7 @@ class Database;
 class Database
 {
 public:
-   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE,
-   INSTRUCTIONTABLE, MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
+   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE, MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
 
    //! This should be the ONLY way you get an instance.
    static Database& instance(); // DONE
@@ -125,24 +124,27 @@ public:
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
-   void removeFromRecipe( Recipe* rec, Hop* hop );
-   void removeFromRecipe( Recipe* rec, Fermentable* ferm );
-   void removeFromRecipe( Recipe* rec, Misc* m );
-   void removeFromRecipe( Recipe* rec, Yeast* y );
-   void removeFromRecipe( Recipe* rec, Water* w );
-   void removeFromRecipe( Recipe* rec, Instruction* ins );
+   void removeFromRecipe( Recipe* rec, Hop* hop ); // DONE
+   void removeFromRecipe( Recipe* rec, Fermentable* ferm ); // DONE
+   void removeFromRecipe( Recipe* rec, Misc* m ); // DONE
+   void removeFromRecipe( Recipe* rec, Yeast* y ); // DONE
+   void removeFromRecipe( Recipe* rec, Water* w ); // DONE
+   void removeFromRecipe( Recipe* rec, Instruction* ins ); // DONE
    
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QVector
    // of ingredients in rec.
+   /*
    void removeFromRecipe( Recipe* rec, QList<Hop*> hop );
    void removeFromRecipe( Recipe* rec, QList<Fermentable*> ferm );
    void removeFromRecipe( Recipe* rec, QList<Misc*> m );
    void removeFromRecipe( Recipe* rec, QList<Yeast*> y );
    void removeFromRecipe( Recipe* rec, QList<Water*> w );
    void removeFromRecipe( Recipe* rec, QList<Instruction*> ins );
+   */
    
    // Mark an item as deleted.
+   // NOTE: should these also remove all references to the ingredients?
    void removeEquipment(Equipment* equip); // DONE
    void removeFermentable(Fermentable* ferm); // DONE
    void removeHop(Hop* hop); // DONE
@@ -155,6 +157,8 @@ public:
    void removeYeast(Yeast* yeast); // DONE
 
    // Or you can mark whole lists as deleted.
+   // NOTE: should these also remove all references to the ingredients?
+   // TODO: convert from a sequence of single removes to one single operation?
    void removeEquipment(QList<Equipment*> equip); // DONE
    void removeFermentable(QList<Fermentable*> ferm); // DONE
    void removeHop(QList<Hop*> hop); // DONE
@@ -211,6 +215,7 @@ private:
    QSqlRelationalTableModel equipments;
    QSqlRelationalTableModel fermentables;
    QSqlRelationalTableModel hops;
+   QSqlRelationalTableModel instructions;
    QSqlRelationalTableModel mashs;
    QSqlRelationalTableModel miscs;
    QSqlRelationalTableModel recipes;
@@ -248,7 +253,7 @@ private:
    
    // TODO: encapsulate in QUndoCommand
    //! Remove ingredient from a recipe.
-   void removeIngredientFromRecipe( BeerXMLElement* ing, Recipe* rec, QString propName, QString relTableName, QString ingKeyName ); // DONE
+   void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName ); // DONE
 };
 
 #endif   /* _DATABASE_H */

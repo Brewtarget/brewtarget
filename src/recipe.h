@@ -134,6 +134,7 @@ public:
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    Q_PROPERTY( QList<Hop*> hops READ hops /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Instruction*> instructions READ instructions /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Misc*> miscs READ miscs /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
@@ -269,6 +270,7 @@ public:
    // Relational getters
    unsigned int numHops() const;
    QList<Hop*> hops();
+   QList<Instruction*> instructions() const;
    unsigned int numFermentables() const;
    QList<Fermentable*> fermentables();
    unsigned int numMiscs() const;

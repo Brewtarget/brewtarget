@@ -28,10 +28,9 @@ class BrewDayScrollWidget;
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QFile>
-#include "observable.h"
 #include "recipe.h"
 
-class BrewDayScrollWidget : public QWidget, public Ui::brewDayScrollWidget, public Observer
+class BrewDayScrollWidget : public QWidget, public Ui::brewDayScrollWidget
 {
    Q_OBJECT
 public:
@@ -43,7 +42,6 @@ public:
    void setRecipe(Recipe* rec);
 
    virtual QSize sizeHint() const; // From QWidget
-   virtual void notify(Observable *notifier, QVariant info); // From Observer.
 
    /*!
     * Prints a paper version of the info in this dialog.
@@ -63,6 +61,10 @@ public slots:
    //! Push selected instruction down.
    void pushInstructionDown();
 
+private slots:
+   //! Receive notifications from the recipe.
+   void acceptChanges( QMetaProperty prop, QVariant value );
+   
 private:
    //! Update the view.
    void showChanges();

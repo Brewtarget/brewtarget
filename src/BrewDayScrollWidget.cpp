@@ -28,7 +28,7 @@
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
 
-BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent), Observer()
+BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent)
 {
    setupUi(this);
    recObs = 0;
@@ -46,10 +46,7 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent), Obs
 
 void BrewDayScrollWidget::saveInstruction()
 {
-   // Need to disable notification to avoid a possible infinite loop.
-   recObs->disableNotification();
-   recObs->getInstruction( listWidget->currentRow() )->setDirections( plainTextEdit->toPlainText() );
-   recObs->reenableNotification();
+   recObs->instructions()[ listWidget->currentRow() ]->setDirections( plainTextEdit->toPlainText() );
 }
 
 void BrewDayScrollWidget::showInstruction(int insNdx)
@@ -57,11 +54,11 @@ void BrewDayScrollWidget::showInstruction(int insNdx)
    if( recObs == 0 )
       return;
 
-   int size = recObs->getNumInstructions();
+   int size = recObs->instructions().size();
    if( insNdx < 0 || insNdx >= size )
       return;
 
-   plainTextEdit->setPlainText(recObs->getInstruction(insNdx)->getDirections());
+   plainTextEdit->setPlainText(recObs->instructions()[insNdx])->getDirections());
 }
 
 void BrewDayScrollWidget::generateInstructions()
@@ -85,11 +82,13 @@ void BrewDayScrollWidget::removeSelectedInstruction()
    int row = listWidget->currentRow();
    if( row < 0 )
       return;
-   recObs->removeInstruction(recObs->getInstruction(row));
+   Database::instance().removeFromRecipe(recObs, recObs->instructions()[row]);
 }
 
 void BrewDayScrollWidget::pushInstructionUp()
 {
+   // TODO: implement
+   /*
    if( recObs == 0 )
       return;
    
@@ -99,10 +98,13 @@ void BrewDayScrollWidget::pushInstructionUp()
    
    recObs->swapInstructions(row, row-1);
    listWidget->setCurrentRow(row-1);
+   */
 }
 
 void BrewDayScrollWidget::pushInstructionDown()
 {
+   // TODO: implement
+   /*
    if( recObs == 0 )
       return;
    
@@ -118,6 +120,7 @@ void BrewDayScrollWidget::pushInstructionDown()
    
    recObs->swapInstructions(row, row+1);
    listWidget->setCurrentRow(row+1);
+   */
 }
 
 QString BrewDayScrollWidget::getCSS() 
@@ -345,18 +348,24 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
 
 void BrewDayScrollWidget::setRecipe(Recipe* rec)
 {
+   // Disconnect old notifier.
+   if( recObs )
+      disconnect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant) );
+   
    recObs = rec;
-   setObserved(recObs);
+   connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant) );
    showChanges();
 }
 
 void BrewDayScrollWidget::insertInstruction()
 {
+   // TODO: implement.
+   /*
    if( recObs == 0 )
       return;
 
    int pos = lineEdit_step->text().toInt();
-   Instruction* ins = new Instruction();
+   Instruction* ins = Database::instance().newInstruction(recObs);
 
    if( pos < 0 || pos > recObs->getNumInstructions() )
       pos = recObs->getNumInstructions();
@@ -364,16 +373,12 @@ void BrewDayScrollWidget::insertInstruction()
    ins->setName(lineEdit_name->text());
 
    recObs->insertInstruction( ins, pos );
+   */
 }
 
-void BrewDayScrollWidget::notify(Observable* notifier, QVariant info)
+void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/)
 {
-   /*
-   if( notifier != recObs || info.toInt() != Recipe::INSTRUCTION )
-      return;
-   */
-
-   if( notifier == recObs && info.toInt() == Recipe::INSTRUCTION )
+   if( recObs && prop.propertyIndex() == recObs->indexOfProperty("instructions") )
       showChanges();
 }
 
@@ -399,11 +404,12 @@ void BrewDayScrollWidget::repopulateListWidget()
       return;
 
    int i, size;
-   size = recObs->getNumInstructions();
+   QList<Instruction*> instructions = recObs->instructions();
+   size = instructions.size();
 
    for( i = 0; i < size; ++i )
    {
-      QString text = tr("Step %1: %2").arg(i).arg(recObs->getInstruction(i)->getName());
+      QString text = tr("Step %1: %2").arg(i).arg(instructions[i]->getName());
       listWidget->addItem(new QListWidgetItem(text));
    }
 

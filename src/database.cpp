@@ -122,6 +122,10 @@ void Database::load()
    hops.setTable(tableNames[HOPTABLE]);
    tables[HOPTABLE] = &hops;
    
+   instructions = tableModel;
+   instructions.setTable(tableNames[INSTRUCTIONTABLE]);
+   tables[INSTRUCTIONTABLE] = &instructions;
+   
    mashs = tableModel;
    mashs.setTable(tableNames[MASHTABLE]);
    tables[MASHTABLE] = &mashs;
@@ -243,32 +247,37 @@ Yeast* Database::yeast(int key)
 
 void removeFromRecipe( Recipe* rec, Hop* hop )
 {
-   // TODO: implement.
+   removeIngredientFromRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
 }
 
 void removeFromRecipe( Recipe* rec, Fermentable* ferm )
 {
-   // TODO: implement.
+   removeIngredientFromRecipe( rec, ferm, "fermentables", "fermentable_in_recipe", "fermentable_id" );
 }
 
 void removeFromRecipe( Recipe* rec, Misc* m )
 {
-   // TODO: implement.
+   removeIngredientFromRecipe( rec, m, "miscs", "misc_in_recipe", "misc_id" );
 }
 
 void removeFromRecipe( Recipe* rec, Yeast* y )
 {
-   // TODO: implement.
+   removeIngredientFromRecipe( rec, y, "yeasts", "yeast_in_recipe", "yeast_id" );
 }
 
 void removeFromRecipe( Recipe* rec, Water* w )
 {
-   // TODO: implement.
+   removeIngredientFromRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
 }
 
 void removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   // TODO: implement.
+   // TODO: encapsulate in QUndoCommand.
+   // NOTE: is this the right thing to do?
+   QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(ins->key),
+                sqldb );
+   if( q.next() )
+      q.record().setValue( "deleted", true );
 }
 
 
@@ -559,7 +568,7 @@ QString Database::keyName( DBTable table )
    return tables[table].primaryKey().name();
 }
 
-void Database::removeIngredientFromRecipe( BeerXMLElement* ing, Recipe* rec, QString propName, QString relTableName, QString ingKeyName )
+void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
 {
    // TODO: encapsulate this in a QUndoCommand.
    
@@ -569,7 +578,8 @@ void Database::removeIngredientFromRecipe( BeerXMLElement* ing, Recipe* rec, QSt
    // Find the row in the relational db that connects the ingredient to the recipe.
    tableModel.setFilter( QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->key).arg(rec->key) );
    tableModel.select();
-   tableModel.removeRows(0,1);
+   if( tableModel.rowCount() > 0 )
+      tableModel.removeRows(0,1);
    
    // Restore the old filter.
    tableModel.setFilter(filter);
@@ -582,7 +592,10 @@ void Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString 
 {
    // TODO: encapsulate this in a QUndoCommand.
    
+   tableModel.setTable(relTableName);
+   
    // Ensure this ingredient is not already in the recipe.
+   /*
    QSqlQuery q(
       QString("SELECT * from %1 WHERE %2 = %3 AND recipe_id = %4")
         .arg(relTableName).arg(ingKeyName).arg(ing->key).arg(rec->key), sqldb);
@@ -591,9 +604,23 @@ void Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString 
       Brewtarget::logW( "Ingredient already exists in recipe." );
       return;
    }
+   */
+   
+   QString filter = tableModel.filter();
+   
+   // Ensure this ingredient is not already in the recipe.
+   tableModel.setFilter(QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->key).arg(rec->key));
+   tableModel.select();
+   if( tableModel.rowCount() > 0 )
+   {
+      Brewtarget::logW( "Ingredient already exists in recipe." );
+      return;
+   }
+   
+   tableModel.setFilter(filter);
+   tableModel.select();
    
    // Put this (rec,hop) pair in the hop_in_recipe table.
-   tableModel.setTable(relTableName);
    QSqlRecord r = tableModel.record();
    r.setValue(ingKeyName, ing->key);
    r.setValue("recipe_id", rec->key);
