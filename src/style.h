@@ -29,10 +29,9 @@ class Style;
 class Style : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
-
-   Style();
-   Style( Style const& other );
 
    virtual ~Style() {}
 
@@ -137,6 +136,9 @@ signals:
    */
 
 private:
+   Style();
+   Style( Style const& other );
+   
    bool isValidType( const QString &str );
    static QStringList types;
 };

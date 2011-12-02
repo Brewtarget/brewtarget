@@ -28,10 +28,9 @@ class Mash;
 class Mash : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
-
-   Mash();
-   Mash( Mash const& other );
 
    virtual ~Mash() {}
 
@@ -100,6 +99,9 @@ signals:
    */
    
 private:
+   Mash();
+   Mash( Mash const& other );
+   
    // Get via the relational relationship.
    //QVector<MashStep *> mashSteps;
 

@@ -30,14 +30,13 @@ class HopException;
 class Hop : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
 
    enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
    enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
    enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
-
-   Hop();
-   Hop( Hop const& other );
 
    virtual ~Hop() {}
 
@@ -126,6 +125,8 @@ signals:
    */
    
 private:
+   Hop();
+   Hop( Hop const& other );
    
    void setDefaults();
 

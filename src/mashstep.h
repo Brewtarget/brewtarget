@@ -29,12 +29,11 @@ class MashStep;
 class MashStep : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
 
    enum Type {TYPEINFUSION, TYPETEMPERATURE, TYPEDECOCTION};
-
-   MashStep();
-   MashStep( MashStep const& other );
 
    virtual ~MashStep() {}
 
@@ -87,6 +86,9 @@ signals:
    */
    
 private:
+   MashStep();
+   MashStep( MashStep const& other );
+   
    bool isValidType( const QString &str ) const;
    static QStringList types;
 };

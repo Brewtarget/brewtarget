@@ -43,10 +43,9 @@ class Recipe;
 class Recipe : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
-
-   Recipe();
-   Recipe(Recipe const& other);
 
    virtual ~Recipe() {}
 
@@ -350,6 +349,10 @@ public slots:
    void parseChanges(QMetaProperty prop, QVariant val);
    
 private:
+   
+   Recipe();
+   Recipe(Recipe const& other);
+   
    // Relational members.
    /*
    Style* style;

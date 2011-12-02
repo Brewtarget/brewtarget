@@ -29,10 +29,9 @@ class EquipmentException;
 class Equipment : public BeerXMLElement
 {
    Q_OBJECT
-public:
    
-   Equipment();
-   Equipment( Equipment const& other);
+   friend class Database;
+public:
 
    virtual ~Equipment() {}
    
@@ -122,6 +121,8 @@ signals:
    void changedBoilingPoint_c(double);
    
 private:
+   Equipment();
+   Equipment( Equipment const& other);
    
    // Obsolete.
    /*

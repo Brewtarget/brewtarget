@@ -29,13 +29,12 @@ class Misc;
 class Misc : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
   
    enum Type{ TYPESPICE, TYPEFINING, TYPEWATER_AGENT, TYPEHERB, TYPEFLAVOR, TYPEOTHER };
    enum Use{ USEBOIL, USEMASH, USEPRIMARY, USESECONDARY, USEBOTTLING };
-   
-   Misc();
-   Misc(Misc const& other);
 
    virtual ~Misc() {}
 
@@ -93,6 +92,9 @@ signals:
    */
    
 private:
+   Misc();
+   Misc(Misc const& other);
+   
    bool isValidType( const QString &var );
    bool isValidUse( const QString &var );
    

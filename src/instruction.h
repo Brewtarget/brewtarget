@@ -32,7 +32,6 @@ class Instruction : public BeerXMLElement
    Q_OBJECT
    friend class Database;
 public:
-   Instruction( Instruction const& other );
    
    virtual ~Instruction() {}
 
@@ -79,6 +78,7 @@ signals:
 private:
    //! Only database gets to construct instances.
    Instruction();
+   Instruction( Instruction const& other );
    Instruction( const QString& name,
                 const QString& directions,
                 bool hasTimer = false,

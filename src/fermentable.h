@@ -30,12 +30,10 @@ class Fermentable : public BeerXMLElement
 {
    Q_OBJECT
    friend class Brewtarget;
+   friend class Database;
 public:
 
    enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
-
-   Fermentable();
-   Fermentable( Fermentable const& other );
 
    virtual ~Fermentable() {}
    
@@ -142,7 +140,8 @@ signals:
    */
    
 private:
-
+   Fermentable();
+   Fermentable( Fermentable const& other );.
    static bool isValidType( const QString& str );
    static QStringList types;
    

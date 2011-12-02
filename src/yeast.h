@@ -29,13 +29,12 @@ class Yeast;
 class Yeast : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
    enum Type {TYPEALE, TYPELAGER, TYPEWHEAT, TYPEWINE, TYPECHAMPAGNE};
    enum Form {FORMLIQUID, FORMDRY, FORMSLANT, FORMCULTURE};
    enum Flocculation {FLOCLOW, FLOCMEDIUM, FLOCHIGH, FLOCVERY_HIGH};
-
-   Yeast();
-   Yeast(Yeast const& other);
 
    virtual ~Yeast() {}
 
@@ -124,6 +123,9 @@ signals:
    */
 
 private:
+   Yeast();
+   Yeast(Yeast const& other);
+   
    static QStringList types;
    static QStringList forms;
    static QStringList flocculations;

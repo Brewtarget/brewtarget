@@ -28,9 +28,9 @@ class Water;
 class Water : public BeerXMLElement
 {
    Q_OBJECT
+   
+   friend class Database;
 public:
-   Water();
-   Water( Water const& other );
 
    virtual ~Water() {}
 
@@ -82,6 +82,10 @@ signals:
    void changedPh(double);
    void changedNotes(QString);
    */
+   
+private:
+   Water();
+   Water( Water const& other );
 };
 
 inline bool WaterPtrLt( Water* lhs, Water* rhs)
