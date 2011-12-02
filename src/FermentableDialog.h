@@ -25,13 +25,12 @@ class FermentableDialog;
 #include <QDialog>
 #include <QVariant>
 #include "ui_fermentableDialog.h"
-#include "observable.h"
-#include "database.h"
-//#include "MainWindow.h"
-class MainWindow;
-#include "FermentableEditor.h"
 
-class FermentableDialog : public QDialog, public Ui::fermentableDialog, public Observer
+// Forward declarations.
+class MainWindow;
+class FermentableEditor;
+
+class FermentableDialog : public QDialog, public Ui::fermentableDialog
 {
    Q_OBJECT
 
@@ -49,11 +48,12 @@ public slots:
    void removeFermentable();
    void editSelected();
    void newFermentable();
+   void changed(QMetaProperty,QVariant);
 
 private:
    Database* dbObs;
    MainWindow* mainWindow;
-   FermentableEditor *fermEdit;
+   FermentableEditor* fermEdit;
    unsigned int numFerms;
 
    void populateTable();

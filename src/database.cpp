@@ -755,3 +755,74 @@ const Database::QSqlRelationalTableModel getModel( DBTable table )
 {
    return *(tables[table]);
 }
+
+// Do this to pacify the READ in Q_PROPERTY.
+QList<Equipment*>& Database::equipments()
+{
+   QList<Equipment*>* tmp = new QList<Equipment*>;
+   getEquipments( *tmp );
+   return *tmp;
+}
+
+QList<Fermentable*>& Database::fermentables()
+{
+   QList<Fermentable*>* tmp = new QList<Fermentable*>;
+   getFermentables( *tmp );
+   return *tmp;
+}
+
+QList<Hop*>& Database::hops()
+{
+   QList<Hop*>* tmp = new QList<Hop*>;
+   getHops( *tmp );
+   return *tmp;
+}
+
+QList<Mash*>& Database::mashs()
+{
+   QList<Mash*>* tmp = new QList<Mash*>;
+   getMashs( *tmp );
+   return *tmp;
+}
+
+QList<MashStep*>& Database::mashSteps()
+{
+   QList<MashStep*>* tmp = new QList<MashStep*>;
+   getMashSteps( *tmp );
+   return *tmp;
+}
+
+QList<Misc*>& Database::miscs()
+{
+   QList<Misc*>* tmp = new QList<Misc*>;
+   getMiscs( *tmp );
+   return *tmp;
+}
+
+QList<Recipe*>& Database::recipes()
+{
+   QList<Recipe*>* tmp = new QList<Recipe*>;
+   getRecipes( *tmp );
+   return *tmp;
+}
+
+QList<Style*>& Database::styles()
+{
+   QList<Style*>* tmp = new QList<Style*>;
+   getStyles( *tmp );
+   return *tmp;
+}
+
+QList<Water*>& Database::waters()
+{
+   QList<Water*>* tmp = new QList<Water*>;
+   getWaters( *tmp );
+   return *tmp;
+}
+
+QList<Yeast*>& Database::yeasts()
+{
+   QList<Yeast*>* tmp = new QList<Yeast*>;
+   getYeasts( *tmp );
+   return *tmp;
+}
