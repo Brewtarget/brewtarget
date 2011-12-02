@@ -131,7 +131,7 @@ void EquipmentComboBox::observeRecipe(Recipe* rec)
    if( rec )
    {
       if( recipe )
-         disconnect( recipe, 0, 0, 0 );
+         disconnect( recipe, 0, this, 0 );
       recipe = rec;
       connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
