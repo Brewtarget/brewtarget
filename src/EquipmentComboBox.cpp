@@ -23,7 +23,7 @@ EquipmentComboBox::EquipmentComboBox(QWidget* parent)
         : QComboBox(parent), recipe(0)
 {
    setCurrentIndex(-1);
-   connect( Database::instance(), SIGNAL(changed(QMetaProperty,QVariant)), this SLOT(changed(QMetaProperty,QVariant)) );
+   connect( Database::instance(), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    repopulateList();
 }
 
@@ -33,7 +33,7 @@ void EquipmentComboBox::addEquipment(Equipment* equipment)
       equipments.append(equipment);
    connect( equipment, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
-   addItem( equipment->getName() );
+   addItem( equipment->name() );
 }
 
 void EquipmentComboBox::removeEquipment(Equipment* equipment)
@@ -62,8 +62,8 @@ void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
       repopulateList();
 
       // Need to reset the selected entry if we observe a recipe.
-      if( recipeObs && recipe->getEquipment() )
-         setIndexByEquipment( recipe->getEquipment() );
+      if( recipe && recipe->equipment() )
+         setIndexByEquipment( recipe->equipment() );
       // Or, try to select the same thing we had selected last.
       else if( previousSelection )
          setIndexByEquipment(previousSelection);
@@ -78,7 +78,7 @@ void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
       
       // All we care about is the equipment in the recipe.
       if( recipe->getEquipment() )
-         setIndexByEquipment( recipeObs->getEquipment() );
+         setIndexByEquipment( recipeObs->equipment() );
       else
          setCurrentIndex(-1); // Or just give up.
    }
@@ -87,7 +87,7 @@ void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
       Equipment* e = qobject_cast<Equipment*>(sender());
       i = equipments.indexOf(e);
       if( i > 0 )
-         setItemText(i, equipments[i]->getName());
+         setItemText(i, equipments[i]->name());
    }
 }
 
@@ -135,8 +135,8 @@ void EquipmentComboBox::observeRecipe(Recipe* rec)
       recipe = rec;
       connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
-      if( recipe->getEquipment() )
-         setIndexByEquipment( recipe->getEquipment() );
+      if( recipe->equipment() )
+         setIndexByEquipment( recipe->equipment() );
       else
          setCurrentIndex(-1);
    }

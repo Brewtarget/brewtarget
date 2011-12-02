@@ -20,140 +20,122 @@
 #include <QList>
 
 StyleComboBox::StyleComboBox(QWidget* parent)
-        : QComboBox(parent)
+        : QComboBox(parent), recipe(0)
 {
-   recipeObs = 0;
-}
-
-void StyleComboBox::startObservingDB()
-{
-   if( ! Database::isInitialized() )
-      Database::initialize();
-
-   dbObs = Database::getDatabase();
-   addObserved(dbObs);
-
-   QList<Style*>::iterator it, end;
-
-   end = dbObs->getStyleEnd();
-
-   for( it = dbObs->getStyleBegin(); it != end; ++it )
-      addStyle(*it);
-   repopulateList();
-
    setCurrentIndex(-1);
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   repopulateList();
 }
 
 void StyleComboBox::addStyle(Style* style)
 {
-   styleObs.push_back(style);
-   addObserved(style);
-
-   addItem( style->getName() );
+   if( !styles.contains(style) )
+      styles.append(style);
+   connect( style, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   
+   addItem( style->name() );
 }
 
-void StyleComboBox::removeAllStyles()
+void StyleComboBox::removeStyle(Style* style)
 {
-   int i;
-   for( i = 0; i < styleObs.size(); ++i )
-      removeObserved(styleObs[i]);
-   styleObs.clear(); // Clear the internal list.
-   clear(); // Clear the combo box's visible list.
+   disconnect( style, 0, this, 0 );
+   int ndx = styles.indexOf(style);
+   if( ndx > 0 )
+   {
+      styles.removeAt(ndx);
+      removeItem(ndx);
+   }
 }
 
-void StyleComboBox::notify(Observable *notifier, QVariant info)
+void StyleComboBox::changed(QMetaProperty prop, QVariant val)
 {
    unsigned int i, size;
-
+   
    // Notifier could be the database.
-   if( notifier == dbObs && (info.toInt() == DBSTYLE || info.toInt() == DBALL) )
+   if( sender() == &(Database::instance()) &&
+      prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("styles") )
    {
-      Style* previousSelection = getSelected(); // Remember what we had.
-      
-      removeAllStyles();
-      QList<Style*>::iterator it, end;
-
-      end = dbObs->getStyleEnd();
-
-      for( it = dbObs->getStyleBegin(); it != end; ++it )
-         addStyle(*it);
+      Style* previousSelection = getSelected();
+         
       repopulateList();
-
+         
       // Need to reset the selected entry if we observe a recipe.
-      if( recipeObs && recipeObs->getStyle() )
-         setIndexByStyleName( (recipeObs->getStyle())->getName() );
+      if( recipe && recipe->style() )
+         setIndexByStyle( recipe->style() );
       // Or, try to select the same thing we had selected last.
       else if( previousSelection )
-         setIndexByStyleName(previousSelection->getName());
+         setIndexByStyle(previousSelection);
       else
          setCurrentIndex(-1); // Or just give up.
    }
-   else if( notifier == recipeObs )
+   else if( sender() == recipe )
    {
+      // Only respond if the style changed.
+      if( prop.propertyIndex() != recipe->metaObject().indexOfProperty("style") )
+         return;
+         
       // All we care about is the style in the recipe.
-      if( recipeObs->getStyle() )
-         setIndexByStyleName( (recipeObs->getStyle())->getName() );
+      if( recipe->style() )
+         setIndexByStyle( recipeObs->getStyle() );
       else
          setCurrentIndex(-1); // Or just give up.
    }
    else // Otherwise, we know that one of the styles changed.
    {
-      size = styleObs.size();
-      for( i = 0; i < size; ++i )
-         if( notifier == styleObs[i] )
-         {
-            // Notice we assume 'i' is an index into both 'styleObs' and also
-            // to the text list in this combo box...
-            setItemText(i, styleObs[i]->getName());
-         }
+      Style* s = qobject_cast<Style*>(sender());
+      i = equipments.indexOf(s);
+      if( i > 0 )
+         setItemText(i, styles[i]->name());
    }
 }
 
-void StyleComboBox::setIndexByStyleName(QString name)
+void StyleComboBox::setIndexByStyle(Style* s)
 {
    int ndx;
 
-   ndx = findText( name, Qt::MatchExactly );
-   /*
-   if( ndx == -1 )
-      return;
-   */
-   
+   ndx = styles.indexOf(s);
    setCurrentIndex(ndx);
 }
 
 void StyleComboBox::repopulateList()
 {
-   unsigned int i, size;
+   int i, size;
    clear(); // Remove all items in the visible list.
 
-   size = styleObs.size();
+   // Disconnect all  current styles.
+   size = styles.size();
    for( i = 0; i < size; ++i )
-      addItem( styleObs[i]->getName() );
+      removeStyle(styles[i]);
+   
+   // Get new list of styles.
+   Database::instance().getStyle( styles );
+   
+   // Connect and add all new styles.
+   size = styles.size();
+   for( i = 0; i < size; ++i )
+      addStyle(styles[i]);
 }
 
 Style* StyleComboBox::getSelected()
 {
    if( currentIndex() >= 0 )
-      return styleObs[currentIndex()];
+      return styles[currentIndex()];
    else
       return 0;
 }
 
 void StyleComboBox::observeRecipe(Recipe* rec)
 {
-   // Make sure caller isn't stupid.
    if( rec )
    {
-      // Remove any previous association.
-      if( recipeObs )
-         removeObserved(recipeObs);
+      if( recipe )
+         disconnect( recipe, 0, this, 0 );
       
-      recipeObs = rec;
-      addObserved(recipeObs);
+      recipe = rec;
+      connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
-      if( recipeObs->getStyle() )
-         setIndexByStyleName( (recipeObs->getStyle())->getName() );
+      if( recipe->style() )
+         setIndexByStyle( recipe->style() );
       else
          setCurrentIndex(-1);
    }

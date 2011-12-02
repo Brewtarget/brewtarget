@@ -24,35 +24,33 @@ class StyleComboBox;
 #include <QComboBox>
 #include <QWidget>
 #include <QVariant>
-#include <QVector>
-#include <string>
-#include "observable.h"
-#include "style.h"
-#include "database.h"
-#include "recipe.h"
+#include <QList>
 
-class StyleComboBox : public QComboBox, public MultipleObserver
+// Forward declarations.
+class Recipe;
+class Style;
+
+class StyleComboBox : public QComboBox
 {
    Q_OBJECT
 
 public:
    StyleComboBox(QWidget* parent=0);
    virtual ~StyleComboBox() {}
-   void startObservingDB();
    void observeRecipe(Recipe* rec);
    void addStyle(Style* style);
-   void setIndexByStyleName(QString name);
-   void removeAllStyles();
+   void removeStyle(Style* style);
+   void setIndexByStyle(Style* style);
    void repopulateList();
 
    Style* getSelected();
 
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
+public slots:
+   void changed(QMetaProperty,QVariant);
 
 private:
-   QVector<Style*> styleObs;
-   Recipe* recipeObs;
-   Database* dbObs;
+   QList<Style*> styles;
+   Recipe* recipe;
 };
 
 #endif   /* _STYLECOMBOBOX_H */
