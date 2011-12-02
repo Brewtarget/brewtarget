@@ -563,6 +563,7 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
        // And set the data
       for( i = 0; i < rows; ++i )
       {
+         // TODO: rewrite this loop.
          BrewTargetTreeItem* temp = local->child(i);
          Recipe* foo = *it;
 

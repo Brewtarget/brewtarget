@@ -203,6 +203,16 @@ public:
    void getWaters( QList<Water*>&, QString filter="" );
    void getYeasts( QList<Yeast*>&, QString filter="" );
    
+   Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false );
+   
+   // Do this to pacify the READ in Q_PROPERTY.
+   QList<Equipment*>& equipments()
+   {
+      QList<Equipment*>* tmp = new QList<Equipment*>;
+      getEquipments( *tmp );
+      return *tmp;
+   }
+   
    // NOTICE: Necessary?
    /*
    unsigned int getNumEquipments();
@@ -236,6 +246,9 @@ public:
    
    //! Get a const copy of a particular table model. Const so that no editing can take place outside the db.
    const QSqlRelationalTableModel getModel( DBTable table );
+   
+signals:
+   void changed(QMetaProperty prop, QVariant value);
    
 private:
    static QFile dbFile;
@@ -302,8 +315,8 @@ private:
          list.append( allElements[key] );
       }
       
-      equipments.setFilter(oldFilter);
-      equipments.select();
+      tm.setFilter(oldFilter);
+      tm.select();
    }
    
    // The connection to the SQLite database.
@@ -311,17 +324,17 @@ private:
    // Model for all the tables in the db.
    QSqlRelationalTableModel tableModel;
    // Models set to specific tables in the db.
-   QSqlRelationalTableModel equipments;
-   QSqlRelationalTableModel fermentables;
-   QSqlRelationalTableModel hops;
-   QSqlRelationalTableModel instructions;
-   QSqlRelationalTableModel mashs;
-   QSqlRelationalTableModel mashSteps;
-   QSqlRelationalTableModel miscs;
-   QSqlRelationalTableModel recipes;
-   QSqlRelationalTableModel styles;
-   QSqlRelationalTableModel waters;
-   QSqlRelationalTableModel yeasts;
+   QSqlRelationalTableModel equipments_tm;
+   QSqlRelationalTableModel fermentables_tm;
+   QSqlRelationalTableModel hops_tm;
+   QSqlRelationalTableModel instructions_tm;
+   QSqlRelationalTableModel mashs_tm;
+   QSqlRelationalTableModel mashSteps_tm;
+   QSqlRelationalTableModel miscs_tm;
+   QSqlRelationalTableModel recipes_tm;
+   QSqlRelationalTableModel styles_tm;
+   QSqlRelationalTableModel waters_tm;
+   QSqlRelationalTableModel yeasts_tm;
    QHash<DBTable,QSqlRelationalTableModel*> tables;
    
    QUndoStack commandStack;

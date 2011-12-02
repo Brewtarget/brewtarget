@@ -26,33 +26,35 @@ class EquipmentComboBox;
 #include <QVariant>
 #include <QVector>
 #include <string>
-#include "observable.h"
-#include "equipment.h"
-#include "database.h"
-#include "recipe.h"
 
-class EquipmentComboBox : public QComboBox, public MultipleObserver
+// Forward declarations
+class Equipment;
+class Recipe;
+
+// NOTE: class is 1.2.5-compatible.
+class EquipmentComboBox : public QComboBox
 {
    Q_OBJECT
 
 public:
    EquipmentComboBox(QWidget* parent=0);
    virtual ~EquipmentComboBox() {}
-   void startObservingDB();
+   
    void observeRecipe(Recipe* rec);
    void addEquipment(Equipment* equipment);
-   void setIndexByEquipmentName(QString name);
-   void removeAllEquipments();
+   void removeEquipment(Equipment* equipment);
+   void setIndexByEquipment(Equipment* equipment);
+   void removeEquipment(Equipment* equipment);
    void repopulateList();
 
    Equipment* getSelected();
 
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
-
+private slots:
+   void changed(QMetaProperty,QVariant);
+   
 private:
-   QVector<Equipment*> equipmentObs;
-   Recipe* recipeObs;
-   Database* dbObs;
+   QList<Equipment*> equipments;
+   Recipe* recipe;
 };
 
 #endif   /* _EQUIPMENTCOMBOBOX_H */

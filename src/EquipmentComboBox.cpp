@@ -20,127 +20,108 @@
 #include <QList>
 
 EquipmentComboBox::EquipmentComboBox(QWidget* parent)
-        : QComboBox(parent)
+        : QComboBox(parent), recipe(0)
 {
-   recipeObs = 0;
-}
-
-void EquipmentComboBox::startObservingDB()
-{
-   if( Database::isInitialized() )
-   {
-      dbObs = Database::getDatabase();
-      addObserved(dbObs);
-
-      QList<Equipment*>::iterator it, end;
-
-      end = dbObs->getEquipmentEnd();
-
-      for( it = dbObs->getEquipmentBegin(); it != end; ++it )
-         addEquipment(*it);
-      repopulateList();
-   }
-
    setCurrentIndex(-1);
+   connect( Database::instance(), SIGNAL(changed(QMetaProperty,QVariant)), this SLOT(changed(QMetaProperty,QVariant)) );
+   repopulateList();
 }
 
 void EquipmentComboBox::addEquipment(Equipment* equipment)
 {
-   equipmentObs.push_back(equipment);
-   addObserved(equipment);
+   if( !equipments.contains(equipment) )
+      equipments.append(equipment);
+   connect( equipment, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
    addItem( equipment->getName() );
 }
 
-void EquipmentComboBox::removeAllEquipments()
+void EquipmentComboBox::removeEquipment(Equipment* equipment)
 {
-   /*
-   removeAllObserved(); // Don't want to observe anything.
-   equipmentObs.clear(); // Delete internal list.
-    */
-
-   int i;
-   for( i=0; i < equipmentObs.size(); ++i )
-      removeObserved(equipmentObs[i]);
-   equipmentObs.clear(); // Clear internal list.
-   clear(); // Clear the combo box's visible list.
+   disconnect( equipment, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   int ndx = equipments.indexOf(equipment);
+   if( ndx > 0 )
+   {
+      equipments.removeAt(ndx);
+      removeItem(ndx);
+   }
+   
 }
 
-void EquipmentComboBox::notify(Observable *notifier, QVariant info)
+//void EquipmentComboBox::notify(Observable *notifier, QVariant info)
+void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
 {
    unsigned int i, size;
 
    // Notifier could be the database.
-   if( notifier == dbObs && (info.toInt() == DBEQUIP || info.toInt() == DBALL) )
+   if( sender() == &(Database::instance()) &&
+       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("equipments") )
    {
       Equipment* previousSelection = getSelected();
       
-      removeAllEquipments();
-      QList<Equipment*>::iterator it, end;
-
-      end = dbObs->getEquipmentEnd();
-
-      for( it = dbObs->getEquipmentBegin(); it != end; ++it )
-         addEquipment(*it);
       repopulateList();
 
       // Need to reset the selected entry if we observe a recipe.
-      if( recipeObs && recipeObs->getEquipment() )
-         setIndexByEquipmentName( (recipeObs->getEquipment())->getName() );
+      if( recipeObs && recipe->getEquipment() )
+         setIndexByEquipment( recipe->getEquipment() );
       // Or, try to select the same thing we had selected last.
       else if( previousSelection )
-         setIndexByEquipmentName(previousSelection->getName());
+         setIndexByEquipment(previousSelection);
       else
          setCurrentIndex(-1); // Or just give up.
    }
-   else if( notifier == recipeObs )
+   else if( sender() == recipe )
    {
+      // Only respond if the equipment changed.
+      if( prop.propertyIndex() != recipe->metaObject().indexOfProperty("equipment") )
+         return;
+      
       // All we care about is the equipment in the recipe.
-      if( recipeObs->getEquipment() )
-         setIndexByEquipmentName( (recipeObs->getEquipment())->getName() );
+      if( recipe->getEquipment() )
+         setIndexByEquipment( recipeObs->getEquipment() );
       else
          setCurrentIndex(-1); // Or just give up.
    }
    else // Otherwise, we know that one of the equipments changed.
    {
-      size = equipmentObs.size();
-      for( i = 0; i < size; ++i )
-         if( notifier == equipmentObs[i] )
-         {
-            // Notice we assume 'i' is an index into both 'equipmentObs' and also
-            // to the text list in this combo box...
-            setItemText(i, equipmentObs[i]->getName());
-         }
+      Equipment* e = qobject_cast<Equipment*>(sender());
+      i = equipments.indexOf(e);
+      if( i > 0 )
+         setItemText(i, equipments[i]->getName());
    }
 }
 
-void EquipmentComboBox::setIndexByEquipmentName(QString name)
+void EquipmentComboBox::setIndexByEquipment(Equipment* e)
 {
    int ndx;
 
-   ndx = findText( name, Qt::MatchExactly );
-   /*
-   if( ndx == -1 )
-      return;
-   */
-   
+   ndx = equipments.indexOf(e);
    setCurrentIndex(ndx);
 }
 
 void EquipmentComboBox::repopulateList()
 {
-   unsigned int i, size;
+   int i, size;
    clear();
 
-   size = equipmentObs.size();
+   // Disconnect all current equipments.
+   size = equipments.size();
    for( i = 0; i < size; ++i )
-      addItem( equipmentObs[i]->getName() );
+      removeEquipment(equipments[i]);
+   
+   // Get the new list of equipments.
+   Database::instance().getEquipments( equipments );
+   
+   // Connect and add all new equipments.
+   size = equipments.size();
+   for( i = 0; i < size; ++i )
+      addEquipment(equipments[i]);
 }
 
 Equipment* EquipmentComboBox::getSelected()
 {
    if( currentIndex() >= 0 )
-      return equipmentObs[currentIndex()];
+      return equipments[currentIndex()];
    else
       return 0;
 }
@@ -149,13 +130,13 @@ void EquipmentComboBox::observeRecipe(Recipe* rec)
 {
    if( rec )
    {
-      if( recipeObs )
-         removeObserved(recipeObs);
-      recipeObs = rec;
-      addObserved(recipeObs);
+      if( recipe )
+         disconnect( recipe, 0, 0, 0 );
+      recipe = rec;
+      connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
-      if( recipeObs->getEquipment() )
-         setIndexByEquipmentName( (recipeObs->getEquipment())->getName() );
+      if( recipe->getEquipment() )
+         setIndexByEquipment( recipe->getEquipment() );
       else
          setCurrentIndex(-1);
    }
