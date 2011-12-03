@@ -20,32 +20,28 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QString>
-#include <string>
 #include <QList>
 #include "YeastDialog.h"
-#include "observable.h"
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
 #include "yeast.h"
 #include "YeastEditor.h"
-#include <iostream>
 #include "YeastTableModel.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
-        : QDialog(parent)
+        : QDialog(parent), mainWindow(parent), yeastEditor(new YeastEditor(this)), numYeast(0)
 {
    setupUi(this);
-   mainWindow = parent;
-   yeastEditor = new YeastEditor(this);
-   dbObs = 0;
-   numYeasts = 0;
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT( removeYeast() ) );
    connect( yeastTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addYeast(const QModelIndex&) ) );
+   
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   populateTable();
 }
 
 void YeastDialog::removeYeast()
@@ -70,37 +66,30 @@ void YeastDialog::removeYeast()
    // proxy model does the heavy lifting, as long as we do the call.
    translated = yeastTableWidget->getProxy()->mapToSource(selected[0]);
    Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
-   dbObs->removeYeast(yeast);
+   Database::instance().removeYeast(yeast);
 }
 
-void YeastDialog::notify(Observable *notifier, QVariant info)
+void YeastDialog::changed(QMetaProperty prop, QVariant val)
 {
-   if( notifier != dbObs || (info.toInt() != DBYEAST && info.toInt() != DBALL) )
-      return;
+   // Notifier should only be the database.
+   if( sender() == &(Database::instance()) &&
+       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("yeasts") )
+   {
+      yeastTableWidget->getModel()->removeAll();
+      populateTable();
+   }
 
-   yeastTableWidget->getModel()->removeAll();
-   populateTable();
-
-}
-
-void YeastDialog::startObservingDB()
-{
-   dbObs = Database::getDatabase();
-   setObserved(dbObs);
-   populateTable();
 }
 
 void YeastDialog::populateTable()
 {
-   QList<Yeast*>::iterator it, end;
-
-   if( ! Database::isInitialized() )
-      return;
-
-   numYeasts = dbObs->getNumYeasts();
-   end = dbObs->getYeastEnd();
-   for( it = dbObs->getYeastBegin(); it != end; ++it )
-      yeastTableWidget->getModel()->addYeast(*it);
+   QList<Yeast*> yeasts;
+   Database::instance().getYeasts(yeasts);
+   
+   numYeasts = yeasts.size();
+   int i;
+   for( i = 0; i < numYeasts; ++i )
+      yeastTableWidget->getModel()->addYeast(yeasts[i]);
 }
 
 void YeastDialog::addYeast(const QModelIndex& index)
@@ -138,6 +127,8 @@ void YeastDialog::addYeast(const QModelIndex& index)
    }
    
    Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
+   
+   // TODO: how should we restructure this call?
    mainWindow->addYeastToRecipe(new Yeast(*yeast) ); // Need to add a copy so we don't change the database.
 }
 
@@ -173,11 +164,8 @@ void YeastDialog::newYeast()
    if( name.isEmpty() )
       return;
 
-   Yeast* y = new Yeast();
-   QString stdname = name;
-   y->setName(stdname);
-
-   dbObs->addYeast(y);
+   Yeast* y = Database::instance().newYeast();
+   y->setName(name);
    yeastEditor->setYeast(y);
    yeastEditor->show();
 }
