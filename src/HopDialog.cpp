@@ -23,7 +23,6 @@
 #include <string>
 #include <QList>
 #include "HopDialog.h"
-#include "observable.h"
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
@@ -45,6 +44,9 @@ HopDialog::HopDialog(MainWindow* parent)
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
    connect( hopTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
+   
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   populateTable();
 }
 
 void HopDialog::removeHop()
@@ -76,37 +78,28 @@ void HopDialog::removeHop()
    //std::cerr << "Model: " << modelIndex.row() << " View: " << viewIndex.row() << std::endl;
 
    Hop *hop = hopTableWidget->getModel()->getHop(modelIndex.row());
-   dbObs->removeHop(hop);
+   Database::instance().removeHop(hop);
 }
 
-void HopDialog::notify(Observable *notifier, QVariant info)
+void HopDialog::changed(QMetaProperty prop, QVariant val)
 {
-   if( notifier != dbObs || (info.toInt() != DBHOP && info.toInt() != DBALL) )
-      return;
-
-   hopTableWidget->getModel()->removeAll();
-   populateTable();
-}
-
-void HopDialog::startObservingDB()
-{
-   dbObs = Database::getDatabase();
-   setObserved(dbObs);
-   populateTable();
+   if( sender() == &(Database::instance()) &&
+       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("hops") )
+   {
+      hopTableWidget->getModel()->removeAll();
+      populateTable();
+   }
 }
 
 void HopDialog::populateTable()
 {
-   QList<Hop*>::iterator it, end;
+   QList<Hop*> hops;
+   Database::instance().getHops(hops);
 
-
-   if( ! Database::isInitialized() )
-      return;
-
-   numHops = dbObs->getNumHops();
-   end = dbObs->getHopEnd();
-   for( it = dbObs->getHopBegin(); it != end; ++it )
-      hopTableWidget->getModel()->addHop(*it);
+   numHops = hops.length();
+   int i;
+   for( i = 0; i < numHops; ++i )
+      hopTableWidget->getModel()->addHop(hops[i]);
 }
 
 void HopDialog::addHop(const QModelIndex& index)
@@ -143,6 +136,8 @@ void HopDialog::addHop(const QModelIndex& index)
    }
    
    Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
+   
+   // TODO: how should we restructure this call?
    mainWindow->addHopToRecipe(new Hop(*hop) ); // Need to add a copy so we don't change the database.
 }
 
@@ -177,11 +172,8 @@ void HopDialog::newHop()
    if( name.isEmpty() )
       return;
 
-   Hop* hop = new Hop();
-   QString stdname = name;
-   hop->setName(stdname);
-
-   dbObs->addHop(hop);
+   Hop* hop = Database::instance().newHop();
+   hop->setName(name);
    hopEditor->setHop(hop);
    hopEditor->show();
 }
