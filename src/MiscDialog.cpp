@@ -23,7 +23,6 @@
 #include <string>
 #include <QList>
 #include "MiscDialog.h"
-#include "observable.h"
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
@@ -32,19 +31,18 @@
 #include "MiscTableModel.h"
 
 MiscDialog::MiscDialog(MainWindow* parent)
-        : QDialog(parent)
+        : QDialog(parent), mainWindow(parent), numMiscs(0), miscEdit(newMiscEditor(this))
 {
    setupUi(this);
-   mainWindow = parent;
-   dbObs = 0;
-   numMiscs = 0;
-   miscEdit = new MiscEditor(this);
 
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
    connect( miscTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
+   
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   populateTable();
 }
 
 void MiscDialog::removeMisc()
@@ -65,36 +63,28 @@ void MiscDialog::removeMisc()
    }
 
    Misc* m = miscTableWidget->getModel()->getMisc(row);
-   dbObs->removeMisc(m);
+   Database::instance().removeMisc(m);
 }
 
-void MiscDialog::notify(Observable *notifier, QVariant info)
+void MiscDialog::changed(QMetaProperty prop, QVariant /*value*/)
 {
-   if( notifier != dbObs || (info.toInt() != DBMISC && info.toInt() != DBALL) )
-      return;
-
-   miscTableWidget->getModel()->removeAll();
-   populateTable();
-}
-
-void MiscDialog::startObservingDB()
-{
-   dbObs = Database::getDatabase();
-   setObserved(dbObs);
-   populateTable();
+   if( sender() == &(Database::instance()) &&
+       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("miscs") )
+   {
+      miscTableWidget->getModel()->removeAll();
+      populateTable();
+   }
 }
 
 void MiscDialog::populateTable()
 {
-   QList<Misc*>::iterator it, end;
+   QList<Misc*> miscs;
+   Database::instance().getFermentables(ferms);
 
-   if( ! Database::isInitialized() )
-      return;
-
-   numMiscs = dbObs->getNumMiscs();
-   end = dbObs->getMiscEnd();
-   for( it = dbObs->getMiscBegin(); it != end; ++it )
-      miscTableWidget->getModel()->addMisc(*it);
+   numMiscs = miscs.size();
+   int i;
+   for( i = 0; i < numMiscs; ++i )
+      miscTableWidget->getModel()->addMisc(miscs[i]);
 }
 
 void MiscDialog::addMisc(const QModelIndex& index)
@@ -132,6 +122,8 @@ void MiscDialog::addMisc(const QModelIndex& index)
    }
    
    Misc *misc = miscTableWidget->getModel()->getMisc(translated.row());
+   
+   // TODO: how should we restructure this call?
    mainWindow->addMiscToRecipe(new Misc(*misc) ); // Need to add a copy so we don't change the database.
 }
 
@@ -164,11 +156,8 @@ void MiscDialog::newMisc()
    if(name.isEmpty())
       return;
 
-   Misc *m = new Misc();
-   QString stdname = name;
-   m->setName(stdname);
-
-   dbObs->addMisc(m);
+   Misc* m = Database::instance().newMisc();
+   m->setName(name);
    miscEdit->setMisc(m);
    miscEdit->show();
 }
