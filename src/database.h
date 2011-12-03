@@ -98,7 +98,7 @@ public:
    //! Get a table view.
    QTableView* createView( DBTable table );
    
-   // Create a new ingredient.
+   // Named constructors for new BeerXML stuff.
    Equipment* newEquipment(); // DONE
    Fermentable* newFermentable(); // DONE
    Hop* newHop(); // DONE
@@ -111,6 +111,9 @@ public:
    Style* newStyle(); // DONE
    Water* newWater(); // DONE
    Yeast* newYeast(); // DONE
+   
+   //! Import ingredients from BeerXML documents.
+   void importFromXML(const QString& filename);
    
    //! Retrieve a list of elements with given \b filter.
    QList<BeerXMLElement*> listByFilter( DBTable table, QString filter = "" );
@@ -130,7 +133,7 @@ public:
    Yeast* yeast(int key);
    */
    
-   // Add these to a recipe, then call the changed()
+   // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
    void addToRecipe( Recipe* rec, Hop* hop ); // DONE
@@ -255,6 +258,8 @@ private:
    static QString dbFileName;
    static QHash<DBTable,QString> tableNames;
    static QHash<DBTable,QString> tableNamesHash(); // DONE
+   static QHash<QString,DBTable> classNameToTable;
+   static QHash<QString,DBTable> classNameToTableHash();
    
    // Keeps all pointers to the elements referenced by key.
    QHash< int, Equipment* > allEquipments;
@@ -361,12 +366,22 @@ private:
    void deleteRecord( DBTable table, BeerXMLElement* object ); // DONE
    
    // TODO: encapsulate this in a QUndoCommand.
-   //! Add \b ing to \b recipe where \b ing's key is \b ingKeyName and the relational table is \b relTableName.
-   void addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName ); // DONE
+   /*!
+    * Create a \e copy of \b ing and add the copy to \b recipe where \b ing's
+    * key is \b ingKeyName and the relational table is \b relTableName.
+    * \returns the key of the new ingredient.
+    */
+   int addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName ); // DONE
    
    // TODO: encapsulate in QUndoCommand
    //! Remove ingredient from a recipe.
    void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName ); // DONE
+   
+   /*!
+    * Create a deep copy of the \b object.
+    * \returns a record to the new copy.
+    */
+   QSqlRecord copy( BeerXMLElement* object );
 };
 
 #endif   /* _DATABASE_H */

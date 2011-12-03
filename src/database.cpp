@@ -51,7 +51,8 @@
 // Static members.
 QFile Database::dbFile;
 QString Database::dbFileName;
-QHash<DBTable,QString> Database::tableNames = tableNamesHash();
+QHash<DBTable,QString> Database::tableNames = Database::tableNamesHash();
+QHash<QString,DBTable> Database::classNameToTable = Database::classNameToTableHash();
 
 Database::Database()
 {
@@ -313,6 +314,7 @@ void removeFromRecipe( Recipe* rec, Instruction* ins )
 int Database::insertNewRecord( DBTable table )
 {
    // TODO: encapsulate this in a QUndoCommand so we can undo it.
+   // TODO: implement default values with QSqlQuery::prepare().
    tableModel.setTable(tableNames[table]);
    tableModel.insertRow(-1,tableModel.record());
    return tableModel.query().lastInsertId().toInt();
@@ -627,10 +629,11 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QSt
    emit rec->changed( rec->property(propName) );
 }
 
-void Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString propName, QString relTableName, QString ingKeyName )
+int Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString propName, QString relTableName, QString ingKeyName )
 {
    // TODO: encapsulate this in a QUndoCommand.
-   
+   int newKey;
+   QSqlRecord r;
    tableModel.setTable(relTableName);
    
    // Ensure this ingredient is not already in the recipe.
@@ -656,16 +659,73 @@ void Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString 
       return;
    }
    
+   // Create a copy of the ingredient.
+   r = copy(ing);
+   newKey = r.value(ingKeyName).toInt();
+   
+   // Reset the original filter.
    tableModel.setFilter(filter);
    tableModel.select();
    
-   // Put this (rec,hop) pair in the hop_in_recipe table.
-   QSqlRecord r = tableModel.record();
-   r.setValue(ingKeyName, ing->key);
-   r.setValue("recipe_id", rec->key);
+   // Put this (rec,ing) pair in the <ing_type>_in_recipe table.
+   r = tableModel.record(); // Should create a new record in that table.
+   r.setValue(ingKeyName, newKey);
+   r.setValue("recipe_id", rec->_key);
    tableModel.insert(-1,r);
    
    emit rec->changed( rec->property(propName) );
+}
+
+int Database::copy( BeerXMLElement* object )
+{
+   int newKey;
+   int i;
+   DBTable t = classNameToTable[object->metaObject()->className()];
+   QString tName = tableNames[t];
+   QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
+               .arg(tName).arg(keyName(t)).arg(object->_key),
+               sqldb
+              );
+   
+   if( !q.next() )
+      return -1;
+   
+   QSqlRecord oldRecord = q.record();
+   
+   // Create a new row.
+   newKey = insertNewRecord(t);
+   QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
+               .arg(tName).arg(keyName(t)).arg(object->_key),
+               sqldb
+              );
+   q.next();
+   QSqlRecord newRecord = q.record();
+   
+   // Set the new row's columns equal to the old one's, except for any "parent"
+   // field, which should be set to the oldRecord's key.
+   QString newValString;
+   for( i = 0; i < oldRecord.count() - 1; ++i )
+   {
+      if( oldRecord.fieldName(i) != "parent" )
+         newValString += QString("%1 = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i));
+      else
+         newValString += QString("%1 = '%2',").arg(oldRecord.fieldName(i)).arg(object->_key);
+   }
+   if( oldRecord.fieldName(i) != "parent" )
+      newValString += QString("%1 = %2").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i));
+   else
+      newValString += QString("%1 = '%2'").arg(oldRecord.fieldName(i)).arg(object->_key);
+   
+   QString updateString = QString("UPDATE %1 SET %2 WHERE %3 = %4")
+                          .arg(tName)
+                          .arg(newValString)
+                          .arg(keyName(t))
+                          .arg(newKey);
+   q = QSqlQuery();
+   q.prepare(updateString);
+   q.exec();
+   
+   return newKey;
 }
 
 void addToRecipe( Recipe* rec, Hop* hop )
@@ -763,6 +823,26 @@ QHash<DBTable,QString> Database::tableNamesHash()
    return tmp;
 }
 
+QHash<QString,DBTable> Database::classNameToTableHash()
+{
+   QHash<QString,DBTable> tmp;
+   
+   tmp["BrewNote"] = BREWNOTETABLE;
+   tmp["Equipment"] = EQUIPTABLE;
+   tmp["Fermentable"] = FERMTABLE;
+   tmp["Hop"] = HOPTABLE;
+   tmp["Instruction"] = INSTRUCTTABLE;
+   tmp["MashStep"] = MASHSTEPTABLE;
+   tmp["Mash"] = MASHTABLE;
+   tmp["Misc"] = MISCTABLE;
+   tmp["Recipe"] = RECTABLE;
+   tmp["Style"] = STYLETABLE;
+   tmp["Water"] = WATERTABLE;
+   tmp["Yeast"] = YEASTTABLE;
+   
+   return tmp;
+}
+
 const Database::QSqlRelationalTableModel getModel( DBTable table )
 {
    return *(tables[table]);
@@ -837,4 +917,106 @@ QList<Yeast*>& Database::yeasts()
    QList<Yeast*>* tmp = new QList<Yeast*>;
    getYeasts( *tmp );
    return *tmp;
+}
+
+void Database::importFromXML(const QString& filename)
+{
+   // TODO: implement.
+   // NOTE: grab code from the old fromXML() methods and put it into this class.
+   // NOTE: code from MainWindow follows.
+   /*
+      unsigned int count;
+      int line, col;
+      QDomDocument xmlDoc;
+      QDomElement root;
+      QDomNodeList list;
+      QString err;
+      QFile inFile;
+      QStringList tags << "EQUIPMENT" << "HOP" << "MISC" << "YEAST";
+      inFile.setFileName(filename);
+      if( ! inFile.open(QIODevice::ReadOnly) )
+      {
+         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::importFiles Could not open %1 for reading.").arg(filename));
+         return;
+      }
+
+      if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
+         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::importFiles Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+
+      list = xmlDoc.elementsByTagName("RECIPE");
+      if ( list.count() )
+      {
+         for(int i = 0; i < list.count(); ++i )
+         {
+            // TODO: figure out best way to deep-copy recipes.
+            Recipe* newRec = new Recipe(list.at(i));
+
+            if(verifyImport("recipe",newRec->getName()))
+               db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
+         }
+      }
+      else
+      {
+         foreach (QString tag, tags)
+         {
+            list = xmlDoc.elementsByTagName(tag);
+            count = list.size();
+
+            if ( count > 0 ) 
+            {
+               // Tell how many there were in the status bar.
+               statusBar()->showMessage( tr("Found %1 %2.").arg(count).arg(tag.toLower()), 5000 );
+
+               if (tag == "RECIPE")
+               {
+               }
+               else if ( tag == "EQUIPMENT" )
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     // TODO: figure out best way to deep-copy ingredients.
+                     Equipment* newEquip = new Equipment(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newEquip->getName()))
+                        db->addEquipment( newEquip, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+               else if (tag == "HOP")
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     // TODO: figure out best way to deep-copy ingredients.
+                     Hop* newHop = new Hop(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newHop->getName()))
+                        db->addHop( newHop, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+               else if (tag == "MISC")
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     // TODO: figure out best way to deep-copy ingredients.
+                     Misc* newMisc = new Misc(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newMisc->getName()))
+                        db->addMisc( newMisc, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+               else if (tag == "YEAST")
+               {
+                  for(int i = 0; i < list.count(); ++i )
+                  {
+                     // TODO: figure out best way to deep-copy ingredients.
+                     Yeast* newYeast = new Yeast(list.at(i));
+
+                     if(verifyImport(tag.toLower(),newYeast->getName()))
+                        db->addYeast( newYeast, true ); // Copy all subelements of the recipe into the db also.
+                  }
+               }
+            }
+         }
+      }
+      inFile.close();
+   */
 }
