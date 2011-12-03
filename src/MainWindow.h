@@ -46,7 +46,7 @@ class HopEditor;
 class YeastEditor;
 class EquipmentEditor;
 class StyleEditor;
-class OptionsDialog;
+class OptionDialog;
 class MaltinessWidget;
 class MashEditor;
 class MashStepEditor;
@@ -75,7 +75,6 @@ public:
    MainWindow(QWidget* parent=0);
    virtual ~MainWindow() {}
    void setRecipe(Recipe* recipe);
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
    QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 

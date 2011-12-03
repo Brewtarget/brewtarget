@@ -92,8 +92,8 @@ public:
    void removeObserved( BeerXMLElement* element );
    
    // Methods required for observable
-   virtual void notify(Observable *notifier, QVariant info = QVariant());
-   void startObservingDB();
+   //virtual void notify(Observable *notifier, QVariant info = QVariant());
+   //void startObservingDB();
 
    // Convenience functions to make the rest of the software play nice
    Recipe* getRecipe(const QModelIndex &index) const;

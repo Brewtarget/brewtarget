@@ -132,6 +132,7 @@ public:
    //Q_PROPERTY( unsigned int numBrewNotes READ numBrewNotes /*WRITE*/ NOTIFY changed STORED false);
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
+   Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Hop*> hops READ hops /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Instruction*> instructions READ instructions /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );

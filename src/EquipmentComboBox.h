@@ -44,7 +44,6 @@ public:
    void addEquipment(Equipment* equipment);
    void removeEquipment(Equipment* equipment);
    void setIndexByEquipment(Equipment* equipment);
-   void removeEquipment(Equipment* equipment);
    void repopulateList();
 
    Equipment* getSelected();

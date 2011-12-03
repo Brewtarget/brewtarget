@@ -26,8 +26,10 @@ class BrewTargetTreeView;
 #include <QWidget>
 #include <QPoint>
 #include <QMouseEvent>
-#include "database.h"
-#include "BrewTargetTreeModel.h"
+#include "BrewTargetTreeItem.h"
+
+// Forward declarations.
+class BrewTargetTreeModel;
 
 class BrewTargetTreeView : public QTreeView
 {
@@ -35,7 +37,6 @@ class BrewTargetTreeView : public QTreeView
 public:
    BrewTargetTreeView(QWidget *parent = 0);
    virtual ~BrewTargetTreeView();
-   void startObservingDB();
    BrewTargetTreeModel* getModel();
    QMenu* getContextMenu(QModelIndex selected);
 

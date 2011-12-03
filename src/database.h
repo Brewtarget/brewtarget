@@ -92,9 +92,8 @@ public:
    // TODO
    // ###
    
-   // NOTICE: Necessary?
-   // //! Get the contents of the cell specified by table/key/col_name.
-   // QVariant get( DBTable table, int key, const char* col_name );
+   //! Get the contents of the cell specified by table/key/col_name. Mostly for BeerXMLElement.
+   QVariant get( DBTable table, int key, const char* col_name );
       
    //! Get a table view.
    QTableView* createView( DBTable table );

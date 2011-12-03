@@ -719,10 +719,10 @@ void BrewTargetTreeModel::unloadTreeModel(int unload)
    }
 }
 
-void BrewTargetTreeModel::notify(Observable* notifier, QVariant info)
+void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant /*value*/)
 {
    // Notifier could be the database. 
-   if( notifier == dbObs )
+   if( sender() == &(Database::instance()) )
    {
      unloadTreeModel(info.toInt());
      loadTreeModel(info.toInt());
@@ -733,7 +733,7 @@ void BrewTargetTreeModel::notify(Observable* notifier, QVariant info)
       if ( ! treeMask & RECIPEMASK )
          return;
 
-      Recipe* foo = static_cast<Recipe*>(notifier);
+      Recipe* foo = qobject_cast<Recipe*>(sender());
 
       QModelIndex changed = findRecipe(foo);
 
@@ -748,15 +748,17 @@ void BrewTargetTreeModel::notify(Observable* notifier, QVariant info)
       if ( temp->childCount() )
          removeRows(0,temp->childCount(),changed);
       
-      if ( foo->getNumBrewNotes() > 0 ) {
+      QList<BrewNote*> brewNotes = foo->brewNotes();
+      if ( brewNotes.size() > 0 )
+      {
 
          // Put back how many ever rows are left
-         insertRows(0,foo->getNumBrewNotes(),changed);
-         for (unsigned int j=0; j < foo->getNumBrewNotes(); ++j)
+         insertRows(0,brewNotes.size(),changed);
+         for (unsigned int j=0; j < brewNotes.size(); ++j)
          {
             // And populate them.
             BrewTargetTreeItem* bar = temp->child(j);
-            bar->setData(BrewTargetTreeItem::BREWNOTE,foo->getBrewNote(j));
+            bar->setData(BrewTargetTreeItem::BREWNOTE,brewNotes[j]);
          }
       }
    }

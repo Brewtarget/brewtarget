@@ -22,11 +22,11 @@
 #include <QMetaProperty>
 #include "brewtarget.h"
 
-BeerXMLElement::BeerXMLElement() : key(-1), table(Database::NOTABLE)
+BeerXMLElement::BeerXMLElement() : _key(-1), _table(Database::NOTABLE)
 {
 }
 
-BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : key(other.key), table(other.table)
+BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : _key(other._key), _table(other._table)
 {
 }
 
@@ -92,14 +92,14 @@ QString BeerXMLElement::text(int val)
 void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant const& value )
 {
    // Get the meta property.
-   QMetaProperty prop( metaObject().property(prop_name) );
+   int ndx = metaObject()->indexOfProperty(prop_name);
    
    // Should schedule an update of the appropriate entry in table,
    // then use prop to emit its notification signal.
-   Database::instance().updateEntry( table, key, col_name, value, prop, this );
+   Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this );
 }
 
 QVariant BeerXMLElement::get( const char* col_name )
 {
-   return Database::instance().get( table, key, col_name );
+   return Database::instance().get( _table, _key, col_name );
 }
