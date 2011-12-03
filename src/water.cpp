@@ -16,23 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <string>
 #include <QVector>
 #include "water.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include "water.h"
+#include "brewtarget.h"
 
 bool operator<(Water &w1, Water &w2)
 {
-   return w1.name < w2.name;
+   return w1.name() < w2.name();
 }
 
 bool operator==(Water &w1, Water &w2)
 {
-   return w1.name == w2.name;
+   return w1.name() == w2.name();
 }
 
 void Water::toXml(QDomDocument& doc, QDomNode& parent)

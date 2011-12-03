@@ -20,11 +20,14 @@
 #define _FERMENTABLE_H
 
 #include <QDomNode>
-#include "BeerXMLElement.h"
 #include <QStringList>
 #include <QString>
+#include "BeerXMLElement.h"
 
+// Forward declarations.
 class Fermentable;
+bool operator<(Fermentable &f1, Fermentable &f2);
+bool operator==(Fermentable &f1, Fermentable &f2);
 
 class Fermentable : public BeerXMLElement
 {
@@ -92,7 +95,7 @@ public:
    //! Get the maximum kg of equivalent sucrose that will come out of this ferm.
    double equivSucrose_kg() const;
 
-   void setName( const QString& str )
+   void setName( const QString& str );
    void setType( Type t );
    void setAmount_kg( double num );
    void setYield_pct( double num );
@@ -141,7 +144,7 @@ signals:
    
 private:
    Fermentable();
-   Fermentable( Fermentable const& other );.
+   Fermentable( Fermentable const& other );
    static bool isValidType( const QString& str );
    static QStringList types;
    

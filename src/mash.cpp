@@ -29,12 +29,12 @@
 
 bool operator<(Mash &m1, Mash &m2)
 {
-   return m1.name < m2.name;
+   return m1.name() < m2.name();
 }
 
 bool operator==(Mash &m1, Mash &m2)
 {
-   return m1.name == m2.name;
+   return m1.name() == m2.name();
 }
 
 void Mash::toXml(QDomDocument& doc, QDomNode& parent)

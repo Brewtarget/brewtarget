@@ -24,7 +24,10 @@
 #include <QString>
 #include <QStringList>
 
+// Forward declarations.
 class Yeast;
+bool operator<(Yeast &y1, Yeast &y2);
+bool operator==(Yeast &y1, Yeast &y2);
 
 class Yeast : public BeerXMLElement
 {

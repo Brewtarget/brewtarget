@@ -20,19 +20,19 @@
 #ifndef _BREWNOTE_H
 #define _BREWNOTE_H
 
-class BrewNote;
-
-#include <string>
-#include <exception>
-#include "BeerXMLElement.h"
 #include <QDomNode>
 #include <QDomDocument>
 #include <QString>
 #include <QStringList>
 #include <QDate>
-#include "recipe.h"
+#include "BeerXMLElement.h"
 
-class BrewNote : public Observable, public BeerXMLElement
+// Forward declarations;
+class Recipe;
+class BrewNote;
+
+
+class BrewNote : public BeerXMLElement
 {
 public:
    enum {DONOTUSE, RECIPE};

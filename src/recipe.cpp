@@ -1675,24 +1675,28 @@ void Recipe::setKegPrimingFactor( double var )
 
 double Recipe::getOg() const
 {
-   return og;
+   return _og;
 }
 
 double Recipe::getFg() const
 {
-   return fg;
+   return _fg;
 }
 
 double Recipe::color_srm()
 {
-   return color_srm;
+   return _color_srm;
 }
 
 double Recipe::ABV_pct()
 {
-   return ABV_pct;
+   return _ABV_pct;
 }
 
+double Recipe::IBU()
+{
+   return _IBU;
+}
 //=========================Relational Getters=============================
 
 Style* Recipe::getStyle() const
@@ -1943,9 +1947,9 @@ void Recipe::recalcPoints(double volume)
          sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
    }
 
-   points = 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
+   _points = 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("points") ), points );
+   emit changed( metaObject().property( metaObject().indexOfProperty("points") ), _points );
 }
 
 void Recipe::recalcABV_pct()
@@ -1958,7 +1962,7 @@ void Recipe::recalcABV_pct()
     // George Fix: Brewing Science and Practice, page 686.
     // The multiplicative factor actually varies from
     // 125 for weak beers to 135 for strong beers.
-    ABV_pct = 130*(og()-fg());
+    _ABV_pct = 130*(og()-fg());
 
     // From http://en.wikipedia.org/w/index.php?title=Alcohol_by_volume&oldid=414661414
     // Has no citations, so I don't know how trustworthy it is.
@@ -1967,7 +1971,7 @@ void Recipe::recalcABV_pct()
     // multiplicative factor is higher.
     // return 132.9*(og - fg)/fg;
     
-    emit changed( metaObject().property( metaObject().indexOfProperty("ABV_pct") ), ABV_pct );
+    emit changed( metaObject().property( metaObject().indexOfProperty("ABV_pct") ), _ABV_pct );
 }
 
 void Recipe::recalcColor_srm()
@@ -1981,12 +1985,12 @@ void Recipe::recalcColor_srm()
    {
       ferm = ferms[i];
       // Conversion factor for lb/gal to kg/l = 8.34538.
-      mcu += ferm->color_srm()*8.34538 * ferm->amount_kg()/finalVolume_l;
+      mcu += ferm->color_srm()*8.34538 * ferm->amount_kg()/_finalVolume_l;
    }
 
-   color_srm = ColorMethods::mcuToSrm(mcu);
+   _color_srm = ColorMethods::mcuToSrm(mcu);
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("color_srm") ), color_srm );
+   emit changed( metaObject().property( metaObject().indexOfProperty("color_srm") ), _color_srm );
 }
 
 void Recipe::recalcBoilGrav()
@@ -2022,9 +2026,9 @@ void Recipe::recalcBoilGrav()
    if( equipment() )
       sugar_kg = sugar_kg / (1 - equipment()->getTrubChillerLoss_l()/estimatePostBoilVolume_l());
 
-   boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
+   _boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("boilGrav") ), boilGrav );
+   emit changed( metaObject().property( metaObject().indexOfProperty("boilGrav") ), _boilGrav );
 }
 
 void Recipe::recalcIBU()
@@ -2047,9 +2051,9 @@ void Recipe::recalcIBU()
               (fermentables[i]->amount_kg() / batchSize_l()) / 8.34538;
    }
 
-   IBU = ibus;
+   _IBU = ibus;
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("IBU") ), IBU );
+   emit changed( metaObject().property( metaObject().indexOfProperty("IBU") ), _IBU );
 }
 
 void Recipe::recalcVolumeEstimates()
@@ -2059,7 +2063,7 @@ void Recipe::recalcVolumeEstimates()
    double absorption_lKg;
    
    if( mash == 0 )
-      wortFromMash_l = 0.0;
+      _wortFromMash_l = 0.0;
    else
    {
    
@@ -2069,7 +2073,7 @@ void Recipe::recalcVolumeEstimates()
        else
           absorption_lKg = HeatCalculations::absorption_LKg;
 
-       wortFromMash_l = (waterAdded_l - absorption_lKg * grainsInMash_kg);
+       _wortFromMash_l = (waterAdded_l - absorption_lKg * _grainsInMash_kg);
    }
    
    // boilVolume_l ==============================
@@ -2080,34 +2084,34 @@ void Recipe::recalcVolumeEstimates()
    //   return boilSize_l;
    
    if( equipment() != 0 )
-      tmp = wortFromMash_l - equipment()->lauterDeadspace_l() + equipment()->topUpKettle_l();
+      tmp = _wortFromMash_l - equipment()->lauterDeadspace_l() + equipment()->topUpKettle_l();
    else
-      tmp = wortFromMash_l;
+      tmp = _wortFromMash_l;
    
    if( tmp <= 0.0 )
       tmp = boilSize_l(); // Give up.
    
-   boilVolume_l = tmp;
+   _boilVolume_l = tmp;
    
    // finalVolume_l ==============================
    
    if( equipment() != 0 )
-      finalVolume_l = equipment()->wortEndOfBoil_l(boilVolume_l) - equipment->trubChillerLoss_l() + equipment->topUpWater_l();
+      _finalVolume_l = equipment()->wortEndOfBoil_l(_boilVolume_l) - equipment->trubChillerLoss_l() + equipment->topUpWater_l();
    else
-      finalVolume_l = boilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
+      _finalVolume_l = _boilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
    
    // postBoilVolume_l ===========================
 
    if( equipment() != 0 )
-      postBoilVolume_l = equipment->wortEndOfBoil_l( boilVolume_l );
+      _postBoilVolume_l = equipment->wortEndOfBoil_l( _boilVolume_l );
    else
-      postBoilVolume_l = batchSize_l(); // Give up.
+      _postBoilVolume_l = batchSize_l(); // Give up.
       
    // Emit changes.
-   emit changed( metaObject().property( metaObject().indexOfProperty("wortFromMash_l") ), wortFromMash_l );
-   emit changed( metaObject().property( metaObject().indexOfProperty("boilVolume_l") ), boilVolume_l );
-   emit changed( metaObject().property( metaObject().indexOfProperty("finalVolume_l") ), finalVolume_l );
-   emit changed( metaObject().property( metaObject().indexOfProperty("postBoilVolume_l") ), postBoilVolume_l );
+   emit changed( metaObject().property( metaObject().indexOfProperty("wortFromMash_l") ), _wortFromMash_l );
+   emit changed( metaObject().property( metaObject().indexOfProperty("boilVolume_l") ), _boilVolume_l );
+   emit changed( metaObject().property( metaObject().indexOfProperty("finalVolume_l") ), _finalVolume_l );
+   emit changed( metaObject().property( metaObject().indexOfProperty("postBoilVolume_l") ), _postBoilVolume_l );
 }
 
 void Recipe::recalcGrainsInMash_kg()
@@ -2126,9 +2130,9 @@ void Recipe::recalcGrainsInMash_kg()
          ret += ferm->amount_kg();
    }
    
-   grainsInMash_kg = ret;
+   _grainsInMash_kg = ret;
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("grainsInMash_kg") ), grainsInMash_kg );
+   emit changed( metaObject().property( metaObject().indexOfProperty("grainsInMash_kg") ), _grainsInMash_kg );
 }
 
 void Recipe::recalcGrains_kg()
@@ -2141,9 +2145,9 @@ void Recipe::recalcGrains_kg()
    for( i = 0; i < size; ++i )
       ret += ferms[i]->amount_kg();
 
-   grains_kg = ret;
+   _grains_kg = ret;
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("grains_kg") ), grains_kg );
+   emit changed( metaObject().property( metaObject().indexOfProperty("grains_kg") ), _grains_kg );
 }
 
 void Recipe::recalcSRMColor()
@@ -2181,16 +2185,16 @@ void Recipe::recalcSRMColor()
 
    //==========My approximation from a photo and spreadsheet===========
 
-   double red = 232.9 * pow( (double)0.93, color_srm );
-   double green = (double)-106.25 * log(color_srm) + 280.9;
+   double red = 232.9 * pow( (double)0.93, _color_srm );
+   double green = (double)-106.25 * log(_color_srm) + 280.9;
 
    int r = (red < 0)? 0 : ((red > 255)? 255 : (int)Algorithms::Instance().round(red));
    int g = (green < 0)? 0 : ((green > 255)? 255 : (int)Algorithms::Instance().round(green));
    int b = 0;
 
-   SRMColor.setRgb( r, g, b );
+   _SRMColor.setRgb( r, g, b );
 
-   emit changed( metaObject().property( metaObject().indexOfProperty("SRMColor") ), SRMColor );
+   emit changed( metaObject().property( metaObject().indexOfProperty("SRMColor") ), _SRMColor );
 }
 
 // the formula in here are taken from http://hbd.org/ensmingr/
@@ -2211,9 +2215,9 @@ void Recipe::recalcCalories()
     // Alcohol by weight?
     abw = (startPlato-RE)/(2.0665 - (0.010665 * startPlato));
 
-    calories = ((6.9*abw) + 4.0 * (RE-0.1)) * fg * 3.55;
+    _calories = ((6.9*abw) + 4.0 * (RE-0.1)) * fg * 3.55;
 
-    emit changed( metaObject().property( metaObject().indexOfProperty("calories") ), calories );
+    emit changed( metaObject().property( metaObject().indexOfProperty("calories") ), _calories );
 }
 
 void Recipe::recalcOgFg()
@@ -2222,7 +2226,6 @@ void Recipe::recalcOgFg()
    double kettleWort_l;
    double postBoilWort_l;
    double plato;
-   double points = 0;
    double ratio = 0;
    double sugar_kg = 0;
    double sugar_kg_ignoreEfficiency = 0.0;
@@ -2233,6 +2236,7 @@ void Recipe::recalcOgFg()
    
    QList<Fermentable*> ferms = fermentables();
    
+   _points = 0;
    // Calculate OG
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
@@ -2265,7 +2269,7 @@ void Recipe::recalcOgFg()
       */
       
       // Next, trub/chiller loss.
-      kettleWort_l = (wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
+      kettleWort_l = (_wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
       postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
       ratio = (postBoilWort_l - equipment()->trubChillerLoss_l()) / postBoilWort_l;
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
@@ -2283,8 +2287,8 @@ void Recipe::recalcOgFg()
    sugar_kg = sugar_kg * getEfficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
    plato = Algorithms::Instance().getPlato( sugar_kg, estimateFinalVolume_l());
 
-   og = Algorithms::Instance().PlatoToSG_20C20C( plato );
-   points = (og-1)*1000.0;
+   _og = Algorithms::Instance().PlatoToSG_20C20C( plato );
+   _points = (og-1)*1000.0;
 
    // Calculage FG
    for( i = 0; static_cast<int>(i) < yeasts.size(); ++i )
@@ -2297,8 +2301,8 @@ void Recipe::recalcOgFg()
    if( yeasts.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
 
-   points = points*(1.0 - attenuation_pct/100.0);
-   fg =  1 + points/1000.0;
+   _points = _points*(1.0 - attenuation_pct/100.0);
+   _fg =  1 + _points/1000.0;
    
    emit changed( metaObject().property( metaObject().indexOfProperty("og") ), og );
    emit changed( metaObject().property( metaObject().indexOfProperty("fg") ), fg );
@@ -2319,19 +2323,18 @@ double Recipe::ibuFromHop(Hop const* hop)
    //double water_l = estimateFinalVolume_l();
    //double boilVol_l = estimateBoilVolume_l();
    //double boilGrav = boilGrav();
-   double boilGrav_final = boilGrav; 
+   double boilGrav_final = _boilGrav; 
    double avgBoilGrav;
    
    if( equipment )
-      boilGrav_final = boilVolume_l / equipment->wortEndOfBoil_l( boilVolume_l ) * (boilGrav-1) + 1;
+      boilGrav_final = _boilVolume_l / equipment->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
    
-   avgBoilGrav = (boilGrav + boilGrav_final) / 2;
-   //avgBoilGrav = boilGrav;
+   avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
    
    if( hops[i]->getUse() == Hop::USEBOIL)
-      ibus = IbuMethods::getIbus( AArating, grams, finalVolume_l, avgBoilGrav, minutes );
+      ibus = IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, minutes );
    else if( hops[i]->getUse() == Hop::USEFIRST_WORT )
-      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, finalVolume_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
+      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
 
    // Adjust for hop form.
    if( hops[i]->getForm() == Hop::FORMLEAF )

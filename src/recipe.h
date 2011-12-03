@@ -368,23 +368,23 @@ private:
    */
    
    // Calculated properties.
-   double points;
-   double ABV_pct;
-   double color_srm;
-   double boilGrav;
-   double IBU;
-   double wortFromMash_l;
-   double boilVolume_l;
-   double postBoilVolume_l;
-   double finalVolume_l;
-   double calories;
-   double grainsInMash_kg;
-   double grains_kg;
-   QColor SRMColor;
+   double _points;
+   double _ABV_pct;
+   double _color_srm;
+   double _boilGrav;
+   double _IBU;
+   double _wortFromMash_l;
+   double _boilVolume_l;
+   double _postBoilVolume_l;
+   double _finalVolume_l;
+   double _calories;
+   double _grainsInMash_kg;
+   double _grains_kg;
+   QColor _SRMColor;
    
    // Calculated, but stored...BeerXML is weird sometimes.
-   double og;
-   double fg;
+   double _og;
+   double _fg;
    
    // Some recalculators for calculated properties.
    void recalcPoints(double volume);

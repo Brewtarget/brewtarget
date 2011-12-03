@@ -29,12 +29,12 @@ QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract
 
 bool operator<(Fermentable &f1, Fermentable &f2)
 {
-   return f1.name < f2.name;
+   return f1.name() < f2.name();
 }
 
 bool operator==(Fermentable &f1, Fermentable &f2)
 {
-   return f1.name == f2.name;
+   return f1.name() == f2.name();
 }
 
 void Fermentable::toXml(QDomDocument& doc, QDomNode& parent)

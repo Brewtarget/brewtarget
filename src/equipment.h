@@ -19,12 +19,14 @@
 #ifndef _EQUIPMENT_H
 #define   _EQUIPMENT_H
 
-#include <ostream>
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
+// Forward declarations.
 class Equipment;
 class EquipmentException;
+bool operator<(Equipment &e1, Equipment &e2);
+bool operator==(Equipment &e1, Equipment &e2);
 
 class Equipment : public BeerXMLElement
 {

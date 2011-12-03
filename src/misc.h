@@ -24,6 +24,7 @@
 #include <QString>
 #include "BeerXMLElement.h"
 
+// Forward declarations.
 class Misc;
 
 class Misc : public BeerXMLElement
@@ -104,19 +105,19 @@ private:
 
 inline bool MiscPtrLt( Misc* lhs, Misc* rhs)
 {
-   return *lhs < *rhs;
+   return lhs->name() < rhs->name();
 }
 
 inline bool MiscPtrEq( Misc* lhs, Misc* rhs)
 {
-   return *lhs == *rhs;
+   return lhs->name() == rhs->name();
 }
 
 struct Misc_ptr_cmp
 {
    bool operator()( Misc* lhs, Misc* rhs)
    {
-      return *lhs < *rhs;
+      return lhs->name() < rhs->name();
    }
 };
 
@@ -124,7 +125,7 @@ struct Misc_ptr_equals
 {
    bool operator()( Misc* lhs, Misc* rhs )
    {
-      return *lhs == *rhs;
+      return lhs->name() == rhs->name();
    }
 };
 

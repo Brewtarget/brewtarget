@@ -29,12 +29,12 @@ QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First
 
 bool operator<( Hop &h1, Hop &h2 )
 {
-   return h1.name < h2.name;
+   return h1.name() < h2.name();
 }
 
 bool operator==( Hop &h1, Hop &h2 )
 {
-   return h1.name == h2.name;
+   return h1.name() == h2.name();
 }
 
 bool Hop::isValidUse(const QString& str)

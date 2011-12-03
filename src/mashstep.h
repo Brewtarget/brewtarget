@@ -24,7 +24,10 @@
 #include <QStringList>
 #include <QString>
 
+// Forward declarations.
 class MashStep;
+bool operator<(MashStep &m1, MashStep &m2);
+bool operator==(MashStep &m1, MashStep &m2);
 
 class MashStep : public BeerXMLElement
 {

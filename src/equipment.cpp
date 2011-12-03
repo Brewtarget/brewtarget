@@ -16,24 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <string>
 #include <QVector>
-#include "equipment.h"
-#include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include "equipment.h"
+#include "brewtarget.h"
 #include "HeatCalculations.h"
 
 bool operator<(Equipment &e1, Equipment &e2)
 {
-   return e1.name < e2.name;
+   return e1.name() < e2.name();
 }
 
 bool operator==(Equipment &e1, Equipment &e2)
 {
-   return e1.name == e2.name;
+   return e1.name() == e2.name();
 }
 
 void Equipment::toXml(QDomDocument& doc, QDomNode& parent)

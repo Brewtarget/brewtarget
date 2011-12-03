@@ -24,8 +24,11 @@
 #include <QString>
 #include <QStringList>
 
+// Forward declarations.
 class Hop;
 class HopException;
+bool operator<( Hop &h1, Hop &h2 );
+bool operator==( Hop &h1, Hop &h2 );
 
 class Hop : public BeerXMLElement
 {

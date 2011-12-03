@@ -16,8 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
-#include <iostream>
 #include <QDomNode>
 #include <QDomElement>
 #include <QDomText>
@@ -31,12 +29,12 @@ QStringList Yeast::flocculations = QStringList() << "Low" << "Medium" << "High" 
 
 bool operator<(Yeast &y1, Yeast &y2)
 {
-   return y1.name < y2.name;
+   return y1.name() < y2.name();
 }
 
 bool operator==(Yeast &y1, Yeast &y2)
 {
-   return y1.name == y2.name;
+   return y1.name() == y2.name();
 }
 
 void Yeast::toXml(QDomDocument& doc, QDomNode& parent)

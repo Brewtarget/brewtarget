@@ -20,10 +20,13 @@
 #define   _WATER_H
 
 #include <QDomNode>
-#include "BeerXMLElement.h"
 #include <QString>
+#include "BeerXMLElement.h"
 
+// Forward declarations.
 class Water;
+bool operator<(Water &w1, Water &w2);
+bool operator==(Water &w1, Water &w2);
 
 class Water : public BeerXMLElement
 {

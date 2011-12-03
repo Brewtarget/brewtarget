@@ -24,7 +24,10 @@
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
+// Forward declarations.
 class Style;
+bool operator<(Style &s1, Style &s2);
+bool operator==(Style &s1, Style &s2);
 
 class Style : public BeerXMLElement
 {

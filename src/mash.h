@@ -23,7 +23,10 @@
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
+// Forward declarations.
 class Mash;
+bool operator<(Mash &m1, Mash &m2);
+bool operator==(Mash &m1, Mash &m2);
 
 class Mash : public BeerXMLElement
 {
