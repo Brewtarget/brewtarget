@@ -118,6 +118,7 @@ public:
    
    // NOTICE: Necessary?
    // Get ingredients by key value.
+   Recipe* recipe(int key);
    /*
    Equipment* equipment(int key);
    Fermentable* fermentable(int key);
@@ -125,7 +126,6 @@ public:
    Mash* mash(int key);
    MashStep* mashStep(int key);
    Misc* misc(int key);
-   Recipe* recipe(int key);
    Style* style(int key);
    Water* water(int key);
    Yeast* yeast(int key);

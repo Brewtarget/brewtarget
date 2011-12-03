@@ -31,41 +31,42 @@ class MainWindow;
 #include <QPrinter>
 #include <QPrintDialog>
 #include "ui_mainWindow.h"
-#include "FermentableDialog.h"
-#include "HopDialog.h"
-#include "MiscDialog.h"
-#include "YeastDialog.h"
-#include "AboutDialog.h"
-#include "observable.h"
-#include "recipe.h"
-#include "BeerColorWidget.h"
-#include "FermentableEditor.h"
-#include "MiscEditor.h"
-#include "HopEditor.h"
-#include "YeastEditor.h"
-#include "EquipmentEditor.h"
-#include "StyleEditor.h"
-#include "OptionDialog.h"
-#include "MaltinessWidget.h"
-#include "MashEditor.h"
-#include "MashStepEditor.h"
-#include "MashWizard.h"
-#include "BrewDayScrollWidget.h"
-#include "HtmlViewer.h"
-#include "ScaleRecipeTool.h"
-#include "RecipeFormatter.h"
-#include "OgAdjuster.h"
-#include "ConverterTool.h"
-#include "TimerListDialog.h"
-#include "MashComboBox.h"
-#include "PrimingDialog.h"
-#include "RecipeExtrasWidget.h"
-#include "RefractoDialog.h"
-#include "MashDesigner.h"
-#include "PitchDialog.h"
-#include "BrewNoteWidget.h"
 
-class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
+// Forward Declarations
+class FermentableDialog;
+class HopDialog;
+class MiscDialog;
+class YeastDialog;
+class AboutDialog;
+class Recipe;
+class BeerColorWidget;
+class FermentableEditor;
+class MiscEditor;
+class HopEditor;
+class YeastEditor;
+class EquipmentEditor;
+class StyleEditor;
+class OptionsDialog;
+class MaltinessWidget;
+class MashEditor;
+class MashStepEditor;
+class MashWizard;
+class BrewDayScrollWidget;
+class HtmlViewer;
+class ScaleRecipeTool;
+class RecipeFormatter;
+class OgAdjuster;
+class ConverterTool;
+class TimerListDialog;
+class MashComboBox;
+class PrimingDialog;
+class RecipeExtrasWidget;
+class RefractoDialog;
+class MashDesigner;
+class PitchDialog;
+class BrewNoteWidget;
+
+class MainWindow : public QMainWindow, public Ui::mainWindow
 {
    Q_OBJECT
 
@@ -85,8 +86,10 @@ public:
    void setBrewNote(BrewNote* bNote);
 
 public slots:
+   
+   void changed(QMetaProperty,QVariant);
+   
    void save();
-   void setRecipeByName(const QString& name);
    void setRecipeByIndex(const QModelIndex &index);
    void treeActivated(const QModelIndex &index);
    void clear();
@@ -170,7 +173,6 @@ private:
    StyleEditor* styleEditor;
    YeastDialog* yeastDialog;
    YeastEditor* yeastEditor;
-   Database* db;
    OptionDialog* optionDialog;
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
    MaltinessWidget* maltWidget;

@@ -42,7 +42,12 @@ public:
    virtual ~BeerXMLElement() {}
 
    Q_PROPERTY( bool deleted READ deleted )
+   Q_PROPERTY( int key READ key )
+   Q_PROPERTY( Database::DBTable table READ table )
+   
    bool deleted(){ return get("deleted").toBool(); }
+   int key(){ return _key; }
+   Database::DBTable table(){ return _table; }
    
    // There should be Database::createClone(BeerXMLElement&) that does this.
    //void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
@@ -68,9 +73,9 @@ signals:
 protected:
    
    //! The key of this ingredient in its table.
-   int key;
+   int _key;
    //! The table where this ingredient is stored.
-   Database::DBTable table;
+   Database::DBTable _table;
 
    /*!
     * \param prop_name - A meta-property name

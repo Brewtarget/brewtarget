@@ -309,27 +309,27 @@ int Database::insertNewRecord( DBTable table )
 Equipment* Database::newEquipment()
 {
    Equipment* tmp = new Equipment();
-   tmp->key = insertNewRecord(EQUIPTABLE);
-   tmp->table = EQUIPTABLE;
-   allEquipments.insert(key,tmp);
+   tmp->_key = insertNewRecord(EQUIPTABLE);
+   tmp->_table = EQUIPTABLE;
+   allEquipments.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Fermentable* Database::newFermentable()
 {
    Fermentable* tmp = new Fermentable();
-   tmp->key = insertNewRecord(FERMTABLE);
-   tmp->table = FERMTABLE;
-   allFermentables.insert(key,tmp);
+   tmp->_key = insertNewRecord(FERMTABLE);
+   tmp->_table = FERMTABLE;
+   allFermentables.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Hop* Database::newHop()
 {
    Hop* tmp = new Hop();
-   tmp->key = insertNewRecord(HOPTABLE);
-   tmp->table = HOPTABLE;
-   allHops.insert(key,tmp);
+   tmp->_key = insertNewRecord(HOPTABLE);
+   tmp->_table = HOPTABLE;
+   allHops.insert(tmp->_key,tmp);
    return tmp;
 }
 
@@ -337,76 +337,76 @@ Instruction* newInstruction(Recipe* rec)
 {
    // TODO: encapsulate in QUndoCommand.
    Instruction* tmp = new Instruction();
-   tmp->key = insertNewRecord(INSTRUCTIONTABLE);
-   tmp->table = INSTRUCTIONTABLE;
+   tmp->_key = insertNewRecord(INSTRUCTIONTABLE);
+   tmp->_table = INSTRUCTIONTABLE;
    QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(tmp->key),
                 sqldb );
    q.next();
    q.record().setValue( "recipe_id", rec->key );
-   allInstructions.insert(key,tmp);
+   allInstructions.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Mash* Database::newMash()
 {
    Mash* tmp = new Mash();
-   tmp->key = insertNewRecord(MASHTABLE);
-   tmp->table = MASHTABLE;
-   allMashs.insert(key,tmp);
+   tmp->_key = insertNewRecord(MASHTABLE);
+   tmp->_table = MASHTABLE;
+   allMashs.insert(tmp->_key,tmp);
    return tmp;
 }
 
 MashStep* Database::newMashStep()
 {
    MashStep* tmp = new MashStep();
-   tmp->key = insertNewRecord(MASHSTEPTABLE);
-   tmp->table = MASHSTEPTABLE;
-   allMashSteps.insert(key,tmp);
+   tmp->_key = insertNewRecord(MASHSTEPTABLE);
+   tmp->_table = MASHSTEPTABLE;
+   allMashSteps.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Misc* Database::newMisc()
 {
    Misc* tmp = new Misc();
-   tmp->key = insertNewRecord(MISCTABLE);
-   tmp->table = MISCTABLE;
-   allMiscs.insert(key,tmp);
+   tmp->_key = insertNewRecord(MISCTABLE);
+   tmp->_table = MISCTABLE;
+   allMiscs.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Recipe* Database::newRecipe()
 {
    Recipe* tmp = new Recipe();
-   tmp->key = insertNewRecord(RECTABLE);
-   tmp->table = RECTABLE;
-   allRecipes.insert(key,tmp);
+   tmp->_key = insertNewRecord(RECTABLE);
+   tmp->_table = RECTABLE;
+   allRecipes.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Style* Database::newStyle()
 {
    Style* tmp = new Style();
-   tmp->key = insertNewRecord(STYLETABLE);
-   tmp->table = STYLETABLE;
-   allStyles.insert(key,tmp);
+   tmp->_key = insertNewRecord(STYLETABLE);
+   tmp->_table = STYLETABLE;
+   allStyles.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Water* Database::newWater()
 {
    Water* tmp = new Water();
-   tmp->key = insertNewRecord(WATERTABLE);
-   tmp->table = WATERTABLE;
-   allWaters.insert(key,tmp);
+   tmp->_key = insertNewRecord(WATERTABLE);
+   tmp->_table = WATERTABLE;
+   allWaters.insert(tmp->_key,tmp);
    return tmp;
 }
 
 Yeast* Database::newYeast()
 {
    Yeast* tmp = new Yeast();
-   tmp->key = insertNewRecord(YEASTTABLE);
-   tmp->table = YEASTTABLE;
-   allYeasts.insert(key,tmp);
+   tmp->_key = insertNewRecord(YEASTTABLE);
+   tmp->_table = YEASTTABLE;
+   allYeasts.insert(tmp->_key,tmp);
    return tmp;
 }
 
