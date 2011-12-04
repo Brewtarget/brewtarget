@@ -16,9 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "instruction.h"
-#include "brewtarget.h"
-#include "BrewDayWidget.h"
 #include <QListWidgetItem>
 #include <QPrinter>
 #include <QPrintDialog>
@@ -27,11 +24,15 @@
 #include <QDir>
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
+#include "instruction.h"
+#include "brewtarget.h"
+#include "BrewDayWidget.h"
+#include "recipe.h"
 
-BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
+BrewDayWidget::BrewDayWidget(QWidget* parent) :
+   QWidget(parent), recObs(0), printer(new QPrinter()), doc(new QWebView())
 {
    setupUi(this);
-   recObs = 0;
 
    // HAVE to do this since apparently the stackedWidget NEEDS at least 1
    // widget at all times.
@@ -47,8 +48,6 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) : QWidget(parent), Observer()
 
 
    // Set up the printer stuff
-   doc = new QWebView();
-   printer = new QPrinter;
    printer->setPageSize(QPrinter::Letter);
 
    // populate the drop down list
@@ -126,7 +125,7 @@ QString BrewDayWidget::buildTitleTable()
    header += "</style></head>";
 
    body   = "<body>";
-   body += QString("<h1>%1</h1>").arg(recObs->getName());
+   body += QString("<h1>%1</h1>").arg(recObs->name());
    body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
 
    // Build the top table
@@ -134,34 +133,34 @@ QString BrewDayWidget::buildTitleTable()
    body += "<table id=\"title\">";
    body += QString("<tr><td class=\"left\">%1</td>").arg(tr("Style"));
    body += QString("<td class=\"value\">%1</td>")
-           .arg(recObs->getStyle()->getName());
+           .arg(recObs->style()->name());
    body += QString("<td class=\"right\">%1</td>").arg(tr("Date"));
    body += QString("<td class=\"value\">%1</td></tr>")
            .arg(QDate::currentDate().toString());
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Boil Volume"))
-           .arg(Brewtarget::displayAmount(recObs->getBoilSize_l(),Units::liters,2))
+           .arg(Brewtarget::displayAmount(recObs->boilSize_l(),Units::liters,2))
            .arg(tr("Preboil Gravity"))
-           .arg(Brewtarget::displayOG(recObs->getBoilGrav()));
+           .arg(Brewtarget::displayOG(recObs->boilGrav()));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Final Volume"))
-           .arg(Brewtarget::displayAmount(recObs->getBatchSize_l(), Units::liters,2))
+           .arg(Brewtarget::displayAmount(recObs->batchSize_l(), Units::liters,2))
            .arg(tr("Starting Gravity"))
-           .arg(Brewtarget::displayOG(recObs->getOg()));
+           .arg(Brewtarget::displayOG(recObs->og()));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
            .arg(tr("Boil Time"))
-           .arg(Brewtarget::displayAmount(recObs->getBoilTime_min(),Units::minutes))
+           .arg(Brewtarget::displayAmount(recObs->boilTime_min(),Units::minutes))
            .arg(tr("IBU"))
-           .arg(recObs->getIBU(),0,'f',1);
+           .arg(recObs->IBU(),0,'f',1);
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
            .arg(tr("Predicted Efficiency"))
-           .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0))
+           .arg(Brewtarget::displayAmount(recObs->efficiency_pct(),0,0))
            .arg(tr("Estimated calories (per 12 oz)"))
-           .arg(Brewtarget::displayAmount(recObs->estimateCalories(),0,0));
+           .arg(Brewtarget::displayAmount(recObs->calories(),0,0));
 
    body += "</table>";
 
@@ -181,19 +180,20 @@ QString BrewDayWidget::buildInstructionTable()
              .arg(tr("Time"))
              .arg(tr("Step"));
 
-   size = recObs->getNumInstructions();
+   QList<Instruction*> instructions = recObs->instructions();
+   size = instructions.size();
    for( i = 0; i < size; ++i )
    {
       QString stepTime, tmp;
       QVector<QString> reagents;
 
-      if (recObs->getInstruction(i)->getInterval())
-         stepTime = Brewtarget::displayAmount(recObs->getInstruction(i)->getInterval(), Units::minutes, 0);
+      if(instructions[i]->interval())
+         stepTime = Brewtarget::displayAmount(instructions[i]->interval(), Units::minutes, 0);
       else
          stepTime = "--";
 
       tmp = "";
-      reagents = recObs->getInstruction(i)->getReagents();
+      reagents = instructions[i]->reagents();
       if ( reagents.size() > 1 ) {
          tmp = "<ul>";
          for ( j = 0; j < reagents.size(); j++ ) 
@@ -212,7 +212,7 @@ QString BrewDayWidget::buildInstructionTable()
       middle += QString("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
                .arg(altTag)
                .arg(stepTime)
-               .arg(recObs->getInstruction(i)->getName())
+               .arg(instructions[i]->name())
                .arg(tmp);
    }
    middle += "</table>";
@@ -294,8 +294,13 @@ void BrewDayWidget::pushInstructionPreview()
 
 void BrewDayWidget::setRecipe(Recipe* rec)
 {
+   if( recObs )
+      disconnect( recObs, 0, this, 0 );
+   
    recObs = rec;
-   setObserved(recObs);
+   if( recObs )
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   
    showChanges();
 }
 
@@ -305,24 +310,21 @@ void BrewDayWidget::insertInstruction()
       return;
 
    int pos = lineEdit_step->text().toInt();
-   Instruction* ins = new Instruction();
+   int size = recObs->instructions().size();
+   if( pos < 0 || pos > size )
+      pos = size;
 
-   if( pos < 0 || pos > recObs->getNumInstructions() )
-      pos = recObs->getNumInstructions();
-
+   Instruction* ins = Database::instance().newInstruction();
    ins->setName(lineEdit_name->text());
 
+   // TODO: figure out how to do ordering of ingredients.
    recObs->insertInstruction( ins, pos );
 }
 
-void BrewDayWidget::notify(Observable* notifier, QVariant info)
+void BrewDayWidget::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   /*
-   if( notifier != recObs || info.toInt() != Recipe::INSTRUCTION )
-      return;
-   */
-
-   if( notifier == recObs && info.toInt() == Recipe::INSTRUCTION )
+   if( sender() == recObs &&
+       QString(prop.name()) == "instructions")
       showChanges();
 }
 
@@ -344,14 +346,12 @@ void BrewDayWidget::showChanges()
 {
    clear();
    if( recObs == 0 )
-   {
-      //clear();
       return;
-   }
 
    int i, size;
    InstructionWidget* iw;
-   size = recObs->getNumInstructions();
+   QList<Instruction*> instructions = recObs->instructions();
+   size = instructions.size();
 
    for( i = 0; i < size; ++i )
    {
@@ -366,7 +366,7 @@ void BrewDayWidget::showChanges()
          iw->setVisible(true);
       }
 
-      iw->setInstruction(recObs->getInstruction(i));
+      iw->setInstruction(instructions[i]);
    }
 
    stackedWidget->update(); // Whatever, I give up.
@@ -381,11 +381,12 @@ void BrewDayWidget::repopulateListWidget()
       return;
 
    int i, size;
-   size = recObs->getNumInstructions();
+   QList<Instruction*> instructions = recObs->instructions();
+   size = instructions.size();
 
    for( i = 0; i < size; ++i )
    {
-      QString text = tr("Step %1: %2").arg(i).arg(recObs->getInstruction(i)->getName());
+      QString text = tr("Step %1: %2").arg(i).arg(instructions[i]->name());
       listWidget->addItem(new QListWidgetItem(text));
    }
 

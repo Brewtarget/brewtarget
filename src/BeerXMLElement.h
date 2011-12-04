@@ -30,7 +30,7 @@ class BeerXMLElement;
 #include <QVariant>
 #include "database.h"
 
-class BeerXMLElement : QObject
+class BeerXMLElement : public QObject
 {
    Q_OBJECT
    Q_CLASSINFO("version","1")
