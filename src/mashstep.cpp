@@ -36,67 +36,6 @@ bool operator==(MashStep &m1, MashStep &m2)
    return m1.name() == m2.name();
 }
 
-void MashStep::toXml(QDomDocument& doc, QDomNode& parent)
-{
-   QDomElement mashStepNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-   
-   mashStepNode = doc.createElement("MASH_STEP");
-   
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name);
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(text(version));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(getTypeString());
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("INFUSE_AMOUNT");
-   tmpText = doc.createTextNode(text(infuseAmount_l));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("STEP_TEMP");
-   tmpText = doc.createTextNode(text(stepTemp_c));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("STEP_TIME");
-   tmpText = doc.createTextNode(text(stepTime_min));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("RAMP_TIME");
-   tmpText = doc.createTextNode(text(rampTime_min));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("END_TEMP");
-   tmpText = doc.createTextNode(text(endTemp_c));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("INFUSE_TEMP");
-   tmpText = doc.createTextNode(text(infuseTemp_c));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("DECOCTION_AMOUNT");
-   tmpText = doc.createTextNode(text(decoctionAmount_l));
-   tmpNode.appendChild(tmpText);
-   mashStepNode.appendChild(tmpNode);
-   
-   parent.appendChild(mashStepNode);
-}
-
 //==============================CONSTRUCTORS====================================
 
 void MashStep::setDefaults()

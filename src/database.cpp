@@ -1020,3 +1020,1038 @@ void Database::importFromXML(const QString& filename)
       inFile.close();
    */
 }
+
+
+void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement equipNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   equipNode = doc.createElement("EQUIPMENT");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BOIL_SIZE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilSize_l()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BATCH_SIZE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->batchSize_l()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_VOLUME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunVolume_l()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_WEIGHT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunWeight_kg()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunSpecificHeat_calGC()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TOP_UP_WATER");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->topUpWater_l()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TRUB_CHILLER_LOSS");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->trubChillerLoss_l()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("EVAP_RATE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->evapRate_pctHr()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("REAL_EVAP_RATE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->evapRate_lHr()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("BOIL_TIME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilTime_min()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("CALC_BOIL_VOLUME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->calcBoilVolume()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("LAUTER_DEADSPACE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->lauterDeadspace_l()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TOP_UP_KETTLE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->topUpKettle_l()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HOP_UTILIZATION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->hopUtilization_pct()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+
+   // My extensions below
+   tmpNode = doc.createElement("ABSORPTION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->absorption_LKg()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BOILING_POINT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilingPoint_c()));
+   tmpNode.appendChild(tmpText);
+   equipNode.appendChild(tmpNode);
+   parent.appendChild(equipNode);
+}
+
+void Database::toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement fermNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   fermNode = doc.createElement("FERMENTABLE");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(Fermentable::types.at(a->type()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_kg()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("YIELD");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->yield_pct()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("COLOR");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->color_srm()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ADD_AFTER_BOIL");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->addAfterBoil()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ORIGIN");
+   tmpText = doc.createTextNode(a->origin());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SUPPLIER");
+   tmpText = doc.createTextNode(a->supplier());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("COARSE_FINE_DIFF");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->coarseFineDiff_pct()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MOISTURE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->moisture_pct()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("DIASTATIC_POWER");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->diastaticPower_lintner()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PROTEIN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->protein_pct()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MAX_IN_BATCH");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->maxInBatch_pct()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("RECOMMEND_MASH");
+   tmpText = doc.createTextNodeBeerXMLElement::(text(a->recommendMash()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("IS_MASHED");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->isMashed()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("IBU_GAL_PER_LB");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ibuGalPerLb()));
+   tmpNode.appendChild(tmpText);
+   fermNode.appendChild(tmpNode);
+   
+   parent.appendChild(fermNode);
+}
+
+void Database::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement hopNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   hopNode = doc.createElement("HOP");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ALPHA");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->alpha_pct()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_kg()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("USE");
+   tmpText = doc.createTextNode(a->getUseString());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TIME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->time_min()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(a->getTypeString());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FORM");
+   tmpText = doc.createTextNode(a->getFormString());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BETA");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->beta_pct()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HSI");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->hsi_pct()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("ORIGIN");
+   tmpText = doc.createTextNode(a->origin());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SUBSTITUTES");
+   tmpText = doc.createTextNode(a->substitutes());
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HUMULENE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->humulene_pct()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("CARYOPHYLLENE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->caryophyllene_pct()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("COHUMULONE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->cohumulone_pct()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MYRCENE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->myrcene_pct()));
+   tmpNode.appendChild(tmpText);
+   hopNode.appendChild(tmpNode);
+   
+   parent.appendChild(hopNode);
+}
+
+void Database::toXml( Instruction* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement insNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   insNode = doc.createElement("INSTRUCTION");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   insNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("DIRECTIONS");
+   tmpText = doc.createTextNode(a->directions());
+   tmpNode.appendChild(tmpText);
+   insNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HAS_TIMER");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->hasTimer()));
+   tmpNode.appendChild(tmpText);
+   insNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TIMER_VALUE");
+   tmpText = doc.createTextNode(a->timerValue());
+   tmpNode.appendChild(tmpText);
+   insNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("COMPLETED");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->completed()));
+   tmpNode.appendChild(tmpText);
+   insNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("INTERVAL");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->interval()));
+   tmpNode.appendChild(tmpText);
+   insNode.appendChild(tmpNode);
+
+   parent.appendChild(insNode);
+}
+
+void Database::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement mashNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   unsigned int i, size;
+   
+   mashNode = doc.createElement("MASH");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("GRAIN_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->grainTemp_c()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MASH_STEPS");
+   QList<MashStep*> mashSteps = a->mashSteps();
+   for( i = 0; i < a.size(); ++i )
+      toXml( mashSteps[i], doc, tmpNode);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunTemp_c()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SPARGE_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->spargeTemp_c()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PH");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ph()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_WEIGHT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunWeight_kg()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tunSpecificHeat_calGC()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("EQUIP_ADJUST");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->equipAdjust()));
+   tmpNode.appendChild(tmpText);
+   mashNode.appendChild(tmpNode);
+   
+   parent.appendChild(mashNode);
+}
+
+void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement mashStepNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   mashStepNode = doc.createElement("MASH_STEP");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(a->getTypeString());
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("INFUSE_AMOUNT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->infuseAmount_l()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("STEP_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->stepTemp_c()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("STEP_TIME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->stepTime_min()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("RAMP_TIME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->rampTime_min()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("END_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->endTemp_c()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("INFUSE_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->infuseTemp_c()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("DECOCTION_AMOUNT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->decoctionAmount_l()));
+   tmpNode.appendChild(tmpText);
+   mashStepNode.appendChild(tmpNode);
+   
+   parent.appendChild(mashStepNode);
+}
+
+void Database::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement miscNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   miscNode = doc.createElement("MISC");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(a->metaObject.classInfo(metaObject.indexOfClassInfo("version")).value());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(a->typeString());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("USE");
+   tmpText = doc.createTextNode(a->useString());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TIME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->time()));
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount()));
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AMOUNT_IS_WEIGHT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->amountIsWeight()));
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("USE_FOR");
+   tmpText = doc.createTextNode(a->useFor());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   miscNode.appendChild(tmpNode);
+   
+   parent.appendChild(miscNode);
+}
+
+void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement recipeNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+   
+   unsigned int i, size;
+   
+   recipeNode = doc.createElement("RECIPE");
+   
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(a->type());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   if( style != 0 )
+      style->toXml(doc, recipeNode);
+   
+   tmpNode = doc.createElement("BREWER");
+   tmpText = doc.createTextNode(a->brewer());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BATCH_SIZE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->batchSize_l()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BOIL_SIZE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilSize_l()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("BOIL_TIME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilTime_min()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("EFFICIENCY");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->efficiency_pct()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("HOPS");
+   QList<Hop*> hops = a->hops();
+   for( i = 0; i < hops.size(); ++i )
+      toXml( hops[i], doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("FERMENTABLES");
+   QList<Fermentable*> ferms = a->fermentables();
+   for( i = 0; i < ferms.size(); ++i )
+      toXml( ferms[i], doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("MISCS");
+   QList<Misc*> miscs = a->miscs();
+   for( i = 0; i < miscs.size(); ++i )
+      toXml( miscs[i], doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("YEASTS");
+   QList<Yeast*> yeasts = a->yeasts();
+   for( i = 0; i < yeasts.size(); ++i )
+      toXml( yeasts[i], doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("WATERS");
+   QList<Water*> waters = a->waters();
+   for( i = 0; i < size; ++i )
+      toXml( waters[i], doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+   
+   Mash* mash = a->mash();
+   if( mash != 0 )
+      toXml( mash, doc, recipeNode);
+   
+   tmpNode = doc.createElement("INSTRUCTIONS");
+   QList<Instruction*> instructions = a->instructions();
+   for( i = 0; i < instructions.size(); ++i )
+      toXml( instructions[i], doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("BREWNOTES");
+   QList<BrewNote*> brewNotes = a->brewNotes();
+   for(i=0; i < brewNotes.size(); ++i)
+      toXml(brewNotes[i], doc, tmpNode);
+   recipeNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("ASST_BREWER");
+   tmpText = doc.createTextNode(a->asstBrewer());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   Equipment* equip;
+   if( equip )
+      toXml( equip, doc, recipeNode);
+   
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TASTE_NOTES");
+   tmpText = doc.createTextNode(a->tasteNotes());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TASTE_RATING");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tasteRating()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("OG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->og()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->fg()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FERMENTATION_STAGES");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->fermentationStages()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMARY_AGE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->primaryAge_days()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMARY_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->primaryTemp_c()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SECONDARY_AGE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->secondaryAge_days()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("SECONDARY_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->secondaryTemp_c()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TERTIARY_AGE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tertiaryAge_days()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("TERTIARY_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->tertiaryTemp_c()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AGE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->age_days()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("AGE_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ageTemp_c()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("DATE");
+   tmpText = doc.createTextNode(a->date());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("CARBONATION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbonation_vols()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("FORCED_CARBONATION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->forcedCarbonation()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMING_SUGAR_NAME");
+   tmpText = doc.createTextNode(a->primingSugarName());
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("CARBONATION_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbonationTemp_c()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("PRIMING_SUGAR_EQUIV");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->primingSugarEquiv()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   tmpNode = doc.createElement("KEG_PRIMING_FACTOR");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->kegPrimingFactor()));
+   tmpNode.appendChild(tmpText);
+   recipeNode.appendChild(tmpNode);
+   
+   parent.appendChild(recipeNode);
+}
+
+void Database::toXml( Style* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement styleNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+
+   styleNode = doc.createElement("STYLE");
+
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CATEGORY");
+   tmpText = doc.createTextNode(a->category());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CATEGORY_NUMBER");
+   tmpText = doc.createTextNode(a->categoryNumber());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("STYLE_LETTER");
+   tmpText = doc.createTextNode(a->styleLetter());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("STYLE_GUIDE");
+   tmpText = doc.createTextNode(a->styleGuide());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(a->typeString());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("OG_MIN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ogMin()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("OG_MAX");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ogMax()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("FG_MIN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->fgMin()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("FG_MAX");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->fgMax()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("IBU_MIN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ibuMin()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("IBU_MAX");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ibuMax()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("COLOR_MIN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->colorMin_srm()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("COLOR_MAX");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->colorMax_srm()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("ABV_MIN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->abvMin_pct()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("ABV_MAX");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->abvMax_pct()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CARB_MIN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbMin_vol()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CARB_MAX");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->carbMax_vol()));
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("PROFILE");
+   tmpText = doc.createTextNode(a->profile());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("INGREDIENTS");
+   tmpText = doc.createTextNode(a->ingredients());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("EXAMPLES");
+   tmpText = doc.createTextNode(a->examples());
+   tmpNode.appendChild(tmpText);
+   styleNode.appendChild(tmpNode);
+
+   parent.appendChild(styleNode);
+}
+
+void Database::toXml( Water* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement waterNode;
+   QDomElement tmpNode;
+   QDomText tmpText;
+
+   waterNode = doc.createElement("WATER");
+
+   tmpNode = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount_l()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CALCIUM");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->calcium_ppm()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("BICARBONATE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->bicarbonate_ppm()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("SULFATE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->sulfate_ppm()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("CHLORIDE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->chloride_ppm()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("SODIUM");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->sodium_ppm()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("MAGNESIUM");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->magnesium_ppm()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("PH");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->ph()));
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   tmpNode = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpNode.appendChild(tmpText);
+   waterNode.appendChild(tmpNode);
+
+   parent.appendChild(waterNode);
+}
+
+void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
+{
+   QDomElement yeastNode;
+   QDomElement tmpElement;
+   QDomText tmpText;
+
+   yeastNode = doc.createElement("YEAST");
+   
+   tmpElement = doc.createElement("NAME");
+   tmpText = doc.createTextNode(a->name());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+   
+   tmpElement = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("TYPE");
+   tmpText = doc.createTextNode(Yeast::types.at(a->type()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("FORM");
+   tmpText = doc.createTextNode(Yeast::forms.at(a->form()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("AMOUNT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->amount()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("AMOUNT_IS_WEIGHT");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->amountIsWeight()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("LABORATORY");
+   tmpText = doc.createTextNode(a->laboratory());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PRODUCT_ID");
+   tmpText = doc.createTextNode(a->productID());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("MIN_TEMPERATURE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->minTemperature_c()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("MAX_TEMPERATURE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->maxTemperature_c()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("FLOCCULATION");
+   tmpText = doc.createTextNode(flocculations.at(a->flocculation()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("ATTENUATION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->attenuation_pct()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(a->notes());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("BEST_FOR");
+   tmpText = doc.createTextNode(a->bestFor());
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("TIMES_CULTURED");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->timesCultured()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("MAX_REUSE");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->maxReuse()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("ADD_TO_SECONDARY");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->addToSecondary()));
+   tmpElement.appendChild(tmpText);
+   yeastNode.appendChild(tmpElement);
+
+   parent.appendChild(yeastNode);
+}

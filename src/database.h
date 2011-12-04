@@ -382,6 +382,19 @@ private:
     * \returns a record to the new copy.
     */
    QSqlRecord copy( BeerXMLElement* object );
+   
+   // Export to BeerXML.
+   void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Hop* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Instruction* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Mash* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( MashStep* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Misc* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Recipe* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Style* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Water* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
 };
 
 #endif   /* _DATABASE_H */

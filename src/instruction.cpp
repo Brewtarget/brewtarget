@@ -33,47 +33,6 @@ void Instruction::setDefaults()
    interval  = 0.0;
 }
 
-void Instruction::toXml(QDomDocument& doc, QDomNode& parent)
-{
-   QDomElement insNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-   
-   insNode = doc.createElement("INSTRUCTION");
-   
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name);
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("DIRECTIONS");
-   tmpText = doc.createTextNode(directions);
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("HAS_TIMER");
-   tmpText = doc.createTextNode(text(hasTimer));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TIMER_VALUE");
-   tmpText = doc.createTextNode(timerValue);
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("COMPLETED");
-   tmpText = doc.createTextNode(text(completed));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("INTERVAL");
-   tmpText = doc.createTextNode(text(interval));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   parent.appendChild(insNode);
-}
-
 Instruction::Instruction() : Observable()
 {
    setDefaults();

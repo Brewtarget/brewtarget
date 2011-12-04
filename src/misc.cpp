@@ -29,62 +29,6 @@
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
 
-void Misc::toXml(QDomDocument& doc, QDomNode& parent)
-{
-   QDomElement miscNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-   
-   miscNode = doc.createElement("MISC");
-   
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(metaObject.classInfo(metaObject.indexOfClassInfo("version")).value());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(typeString());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(useString());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TIME");
-   tmpText = doc.createTextNode(text(time()));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(text(amount()));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("AMOUNT_IS_WEIGHT");
-   tmpText = doc.createTextNode(text(amountIsWeight()));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("USE_FOR");
-   tmpText = doc.createTextNode(useFor());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   parent.appendChild(miscNode);
-}
-
 //============================CONSTRUCTORS======================================
 Misc::Misc() : BeerXMLElement()
 {
