@@ -1510,7 +1510,7 @@ void Database::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
    miscNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(a->metaObject.classInfo(metaObject.indexOfClassInfo("version")).value());
+   tmpText = doc.createTextNode(a->version());
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
    

@@ -314,7 +314,7 @@ void BrewDayWidget::insertInstruction()
    if( pos < 0 || pos > size )
       pos = size;
 
-   Instruction* ins = Database::instance().newInstruction();
+   Instruction* ins = Database::instance().newInstruction(recObs);
    ins->setName(lineEdit_name->text());
 
    // TODO: figure out how to do ordering of ingredients.

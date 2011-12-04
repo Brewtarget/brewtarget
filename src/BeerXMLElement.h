@@ -48,6 +48,7 @@ public:
    bool deleted(){ return get("deleted").toBool(); }
    int key(){ return _key; }
    Database::DBTable table(){ return _table; }
+   int version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
    
    // There should be Database::createClone(BeerXMLElement&) that does this.
    //void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
