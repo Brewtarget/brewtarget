@@ -51,6 +51,8 @@ public:
    Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ NOTIFY changed /*changedTotalMashWater_l*/ STORED false )
    Q_PROPERTY( double totalTime READ totalTime /*WRITE*/ NOTIFY changed /*changedTotalTime*/ STORED false )
    
+   Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ NOTIFY changed /*changedTotalTime*/ STORED false )
+   
    // Setters
    void setName( const QString &var );
    void setGrainTemp_c( double var );
@@ -79,9 +81,9 @@ public:
    double getTotalTime();
    
    // Relational getters
-   MashStep* mashStep( unsigned int i );
+   QList<MashStep*> mashSteps();
    
-   // QUESTION: is this the right place for these?
+   // TODO: is this the right place for these? Probably move to Database.
    void addMashStep(MashStep* step);
    void removeMashStep(MashStep* step);
    void removeAllMashSteps();

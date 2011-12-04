@@ -287,6 +287,7 @@ public:
    Style* style() const;
    
    // Other junk.
+   // TODO: move these Instruction* methods to Database.
    Instruction* getPostboilFermentables();
    Instruction* getPostboilSteps();
    Instruction* getMashFermentable() const;

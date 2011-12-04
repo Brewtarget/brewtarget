@@ -58,7 +58,7 @@ void BrewDayScrollWidget::showInstruction(int insNdx)
    if( insNdx < 0 || insNdx >= size )
       return;
 
-   plainTextEdit->setPlainText(recObs->instructions()[insNdx])->getDirections());
+   plainTextEdit->setPlainText((recObs->instructions()[insNdx])->directions());
 }
 
 void BrewDayScrollWidget::generateInstructions()
@@ -152,7 +152,7 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    header += "</style></head>";
 
    body   = "<body>";
-   body += QString("<h1>%1</h1>").arg(recObs->getName());
+   body += QString("<h1>%1</h1>").arg(recObs->name());
    if ( includeImage )
       body += QString("<img src=\"%1\" />").arg("qrc:/images/title.svg");
 
@@ -162,7 +162,7 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    body += QString("<tr><td class=\"left\">%1</td>")
          .arg(tr("Style"));
    body += QString("<td class=\"value\">%1</td>")
-           .arg(recObs->getStyle()->getName());
+           .arg(recObs->style()->name());
    body += QString("<td class=\"right\">%1</td>")
          .arg(tr("Date"));
    body += QString("<td class=\"value\">%1</td></tr>")
@@ -171,37 +171,37 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    // second row:  boil time and efficiency.  
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Time"))
-            .arg(Brewtarget::displayAmount(recObs->getEquipment()->getBoilTime_min(),Units::minutes))
+            .arg(Brewtarget::displayAmount(recObs->equipment()->boilTime_min(),Units::minutes))
             .arg(tr("Efficiency"))
-            .arg(Brewtarget::displayAmount(recObs->getEfficiency_pct(),0,0));
+            .arg(Brewtarget::displayAmount(recObs->efficiency_pct(),0,0));
 
    // third row: pre-Boil Volume and Preboil Gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Boil Volume"))
-            .arg(Brewtarget::displayAmount(recObs->estimateBoilVolume_l(),Units::liters,2))
+            .arg(Brewtarget::displayAmount(recObs->boilVolume_l(),Units::liters,2))
             .arg(tr("Preboil Gravity"))
-            .arg(Brewtarget::displayOG(recObs->getBoilGrav()));
+            .arg(Brewtarget::displayOG(recObs->boilGrav()));
 
    // fourth row: Final volume and starting gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
             .arg(tr("Final Volume"))
-            .arg(Brewtarget::displayAmount(recObs->estimateFinalVolume_l(), Units::liters,2))
+            .arg(Brewtarget::displayAmount(recObs->finalVolume_l(), Units::liters,2))
             .arg(tr("Starting Gravity"))
-            .arg(Brewtarget::displayOG(recObs->getOg(), true));
+            .arg(Brewtarget::displayOG(recObs->og(), true));
 
    // fifth row: IBU and Final gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
             .arg(tr("IBU"))
-            .arg( recObs->getIBU(),0,'f',1)
+            .arg( recObs->IBU(),0,'f',1)
             .arg(tr("Final Gravity"))
-            .arg(Brewtarget::displayFG(recObs->getFg(), recObs->getOg(), true));
+            .arg(Brewtarget::displayFG(recObs->fg(), recObs->og(), true));
 
    // sixth row: ABV and estimate calories
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
             .arg(tr("ABV"))
-            .arg( recObs->getABV_pct(), 0, 'f', 1)
+            .arg( recObs->ABV_pct(), 0, 'f', 1)
             .arg(tr("Estimated calories(per 12 oz)"))
-            .arg( recObs->estimateCalories(), 0, 'f', 0);
+            .arg( recObs->calories(), 0, 'f', 0);
    body += "</table>";
 
    return header + body;
@@ -220,31 +220,34 @@ QString BrewDayScrollWidget::buildInstructionTable()
          .arg(tr("Time"))
          .arg(tr("Step"));
 
-   size = recObs->getNumInstructions();
+   QList<Instruction*> instructions = recObs->instructions();
+   QList<MashStep*> mashSteps = recObs->mash()->mashSteps();
+   size = instructions.size();
    for( i = 0; i < size; ++i )
    {
       QString stepTime, tmp;
       QVector<QString> reagents;
-      Instruction* ins = recObs->getInstruction(i);
+      
+      Instruction* ins = instructions[i];
 
-      if (ins->getInterval())
-         stepTime = Brewtarget::displayAmount(ins->getInterval(), Units::minutes, 0);
+      if (ins->interval())
+         stepTime = Brewtarget::displayAmount(ins->interval(), Units::minutes, 0);
       else
          stepTime = "--";
 
       tmp = "";
-      reagents = ins->getReagents();
+      reagents = ins->reagents();
 
-      if ( ins->getName() == "Add grains")
+      if ( ins->name() == "Add grains")
       {
-          Instruction* temp = recObs->getMashFermentable();
-          reagents = temp->getReagents();
+          Instruction* temp = recObs->mashFermentable();
+          reagents = temp->reagents();
       }
-      else if ( ins->getName() == "Heat water")
+      else if ( ins->name() == "Heat water")
       {
-         int mashSize = recObs->getMash()->getNumMashSteps();
+         int mashSize = mashSteps.size();
          Instruction* temp = recObs->getMashWater(mashSize);
-         reagents = temp->getReagents();
+         reagents = temp->reagents();
 
       }
 
@@ -268,7 +271,7 @@ QString BrewDayScrollWidget::buildInstructionTable()
       middle += QString("<tr class=\"%1\"><td class=\"check\"></td><td class=\"time\">%2</td><td align=\"step\">%3 : %4</td></tr>")
                .arg(altTag)
                .arg(stepTime)
-               .arg(ins->getName())
+               .arg(ins->name())
                .arg(tmp);
    }
    middle += "</table>";
@@ -330,8 +333,8 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
    pDoc += buildFooterTable();
 
    pDoc += tr("<h2>Notes</h2>");
-   if ( recObs->getNotes() != "" )
-      pDoc += QString("%1").arg(recObs->getNotes());
+   if ( recObs->notes() != "" )
+      pDoc += QString("%1").arg(recObs->notes());
 
    pDoc += "</body></html>";
 
@@ -350,10 +353,10 @@ void BrewDayScrollWidget::setRecipe(Recipe* rec)
 {
    // Disconnect old notifier.
    if( recObs )
-      disconnect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant) );
+      disconnect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
    
    recObs = rec;
-   connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant) );
+   connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
    showChanges();
 }
 
@@ -378,7 +381,7 @@ void BrewDayScrollWidget::insertInstruction()
 
 void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/)
 {
-   if( recObs && prop.propertyIndex() == recObs->indexOfProperty("instructions") )
+   if( recObs && QString(prop.name()) == "instructions" )
       showChanges();
 }
 
@@ -409,7 +412,7 @@ void BrewDayScrollWidget::repopulateListWidget()
 
    for( i = 0; i < size; ++i )
    {
-      QString text = tr("Step %1: %2").arg(i).arg(instructions[i]->getName());
+      QString text = tr("Step %1: %2").arg(i).arg(instructions[i]->name());
       listWidget->addItem(new QListWidgetItem(text));
    }
 
