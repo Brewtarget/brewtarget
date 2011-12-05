@@ -25,10 +25,15 @@
 #include <QObject>
 
 #include "brewtarget.h"
-#include "recipe.h"
 #include "BrewTargetTreeItem.h"
 #include "BrewTargetTreeModel.h"
 #include "BrewTargetTreeView.h"
+#include "equipment.h"
+#include "fermentable.h"
+#include "hop.h"
+#include "misc.h"
+#include "recipe.h"
+#include "yeast.h"
 
 BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks type)
    : QAbstractItemModel(parent)
@@ -76,6 +81,7 @@ BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks t
 
    treeMask = type;
    parentTree = parent;
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 }
 
 BrewTargetTreeModel::~BrewTargetTreeModel()
@@ -123,6 +129,8 @@ int BrewTargetTreeModel::columnCount( const QModelIndex &parent) const
       return BrewTargetTreeItem::YEASTNUMCOLS;
    case ALLMASK:
       return BrewTargetTreeItem::RECIPENUMCOLS;
+   default:
+      return 0;
    }
    // Backwards compatibility. This MUST be fixed before the code goes live.
    return BrewTargetTreeItem::RECIPENUMCOLS;
@@ -517,20 +525,12 @@ QModelIndex BrewTargetTreeModel::findBrewNote(BrewNote* bNote)
    if (! bNote )
       return QModelIndex();
 
-   for (int i=0; static_cast<unsigned int>(i) < parent->getNumBrewNotes();++i)
-   {
-      if ( parent->getBrewNote(i) == bNote )
-         return createIndex(i,0,pItem->child(i));
-   }
-   return QModelIndex();
-}
-
-void BrewTargetTreeModel::startObservingDB()
-{
-   dbObs = Database::getDatabase();
-   setObserved(dbObs);
-
-   loadTreeModel(DBALL);
+   QList<BrewNote*> notes = parent->brewNotes();
+   int i = notes.indexOf(bNote);
+   if( i > 0 )
+      return createIndex(i,0,pItem->child(i));
+   else
+      return QModelIndex();
 }
 
 
@@ -544,18 +544,18 @@ void BrewTargetTreeModel::removeObserved( BeerXMLElement* element )
    disconnect( element, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 }
 
-void BrewTargetTreeModel::loadTreeModel(int reload)
+void BrewTargetTreeModel::loadTreeModel(QString propName)
 {
    int i;
    int rows;
 
    if ( (treeMask & RECIPEMASK ) &&
-        (reload == DBALL || reload == DBRECIPE))
-   {
-      recTable->select();
-      
+        propName == "recipes" )
+   {  
       BrewTargetTreeItem* local = rootItem->child(trees.value(RECIPEMASK));
-      rows = recTable->rowCount();
+      Database::instance().getRecipes( recipes );
+      
+      rows = recipes.size();
 
       // Insert all the rows
       insertRows(0,rows, createIndex(trees.value(RECIPEMASK),0,local));
@@ -563,125 +563,141 @@ void BrewTargetTreeModel::loadTreeModel(int reload)
        // And set the data
       for( i = 0; i < rows; ++i )
       {
-         // TODO: rewrite this loop.
          BrewTargetTreeItem* temp = local->child(i);
-         Recipe* foo = *it;
+         Recipe* foo = recipes[i];
 
          // Watch the recipe for updates.
          addObserved(foo);
 
-         temp->setData(BrewTargetTreeItem::RECIPE,foo);
+         temp->setData(BrewTargetTreeItem::RECIPE, foo);
 
          // If we have brewnotes, set them up here.
          // Ouch.  My head hurts.
-         if ( foo->getNumBrewNotes() > 0 ) {
-            insertRows(0,foo->getNumBrewNotes(), createIndex(i,0,temp));
-            for (unsigned int j=0; j < foo->getNumBrewNotes(); ++j)
+         QList<BrewNote*> notes = foo->brewNotes();
+         if ( notes.size() > 0 )
+         {
+            insertRows(0,notes.size(), createIndex(i,0,temp));
+            for (int j=0; j < notes.size(); ++j)
             {
                BrewTargetTreeItem* bar = temp->child(j);
-               bar->setData(BrewTargetTreeItem::BREWNOTE,foo->getBrewNote(j));
+               bar->setData(BrewTargetTreeItem::BREWNOTE, notes[j]);
             }
          }
       }
    }
 
    if ( (treeMask & EQUIPMASK) &&
-        ( reload == DBALL || reload == DBEQUIP))
+        propName == "equipments" )
    {
       BrewTargetTreeItem* local = rootItem->child(trees.value(EQUIPMASK));
-      QList<Equipment*>::iterator it;
+      QList<Equipment*> equipments;
+      Database::instance().getEquipments(equipments);
 
-      rows = dbObs->getNumEquipments();
+      rows = equipments.size();
       insertRows(0, rows, createIndex(trees.value(EQUIPMASK),0,local));
 
-      for( i = 0, it = dbObs->getEquipmentBegin(); it != dbObs->getEquipmentEnd(); ++it, ++i )
+      for( i = 0; i < rows; ++i )
       {
          BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::EQUIPMENT,*it);
+         temp->setData(BrewTargetTreeItem::EQUIPMENT, equipments[i]);
       }
    }
 
    if ( (treeMask & FERMENTMASK) &&
-        (reload == DBALL || reload == DBFERM))
+        propName == "fermentables" )
    {
       BrewTargetTreeItem* local = rootItem->child(trees.value(FERMENTMASK));
-      QList<Fermentable*>::iterator it;
+      QList<Fermentable*> ferms;
+      Database::instance().getFermentables(ferms);
 
-      rows = dbObs->getNumFermentables();
+      rows = ferms.size();
       insertRows(0,rows,createIndex(trees.value(FERMENTMASK),0,local));
 
-      for( i = 0, it = dbObs->getFermentableBegin(); it != dbObs->getFermentableEnd(); ++it, ++i )
+      for( i = 0; i < rows; ++i )
       {
          BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::FERMENTABLE,*it);
+         temp->setData(BrewTargetTreeItem::FERMENTABLE, ferms[i]);
       }
    }
 
    if ( (treeMask & HOPMASK) &&
-        (reload == DBALL || reload == DBHOP))
+        propName == "hops" )
    {
       BrewTargetTreeItem* local = rootItem->child(trees.value(HOPMASK));
-      QList<Hop*>::iterator it;
+      QList<Hop*> hops;
+      Database::instance().getHops(hops);
 
-      rows = dbObs->getNumHops();
+      rows = hops.size();
       insertRows(0,rows,createIndex(trees.value(HOPMASK),0,local));
 
-      for( i = 0, it = dbObs->getHopBegin(); it != dbObs->getHopEnd(); ++it, ++i )
+      for( i = 0; i < rows; ++i )
       {
          BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::HOP,*it);
+         temp->setData(BrewTargetTreeItem::HOP, hops[i]);
       }
    }
 
    if ( (treeMask & MISCMASK) &&
-        (reload == DBALL || reload == DBMISC))
+        propName == "miscs" )
    {
       BrewTargetTreeItem* local = rootItem->child(trees.value(MISCMASK));
-      QList<Misc*>::iterator it;
+      QList<Misc*> miscs;
+      Database::instance().getMiscs(miscs);
 
-      rows = dbObs->getNumMiscs();
+      rows = miscs.size();
       insertRows(0,rows,createIndex(trees.value(MISCMASK),0,local));
 
-      for( i = 0, it = dbObs->getMiscBegin(); it != dbObs->getMiscEnd(); ++it, ++i )
+      for( i = 0; i < rows; ++i )
       {
          BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::MISC,*it);
+         temp->setData(BrewTargetTreeItem::MISC, miscs[i]);
       }
    }
 
    if ( (treeMask & YEASTMASK) &&
-        (reload == DBALL || reload == DBYEAST))
+        propName == "yeasts" )
    {
       BrewTargetTreeItem* local = rootItem->child(trees.value(YEASTMASK));
-      QList<Yeast*>::iterator it;
+      QList<Yeast*> yeasts;
+      Database::instance().getYeasts(yeasts);
 
-      rows = dbObs->getNumYeasts();
+      rows = yeasts.size();
       insertRows(0,rows,createIndex(trees.value(YEASTMASK),0,local));
 
-      for( i = 0, it = dbObs->getYeastBegin(); it != dbObs->getYeastEnd(); ++it, ++i )
+      for( i = 0; i < rows; ++i )
       {
         BrewTargetTreeItem* temp = local->child(i);
-        temp->setData(BrewTargetTreeItem::YEAST,*it);
+        temp->setData(BrewTargetTreeItem::YEAST, yeasts[i]);
       }
    }
 }
 
-void BrewTargetTreeModel::unloadTreeModel(int unload)
+void BrewTargetTreeModel::unobserve( QList<Recipe*>& objects )
+{
+   int i, size;
+   size = objects.size();
+   for( i = 0; i < size; ++i )
+      removeObserved(objects[i]);
+}
+
+void BrewTargetTreeModel::unloadTreeModel(QString propName)
 {
    int breadth;
    QModelIndex parent;
 
    if ( (treeMask & RECIPEMASK) &&
-        (unload == DBALL || unload == DBRECIPE))
+        propName == "recipes")
    {
-      removeAllObserved();
+      unobserve(recipes);
+      recipes.clear();
+      
       parent = createIndex(BrewTargetTreeItem::RECIPE,0,rootItem->child(trees.value(RECIPEMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
 
    if ((treeMask & EQUIPMASK) &&
-       (unload == DBALL || unload == DBEQUIP))
+      propName == "equipments")
    {
       parent = createIndex(BrewTargetTreeItem::EQUIPMENT,0,rootItem->child(trees.value(EQUIPMASK)));
       breadth = rowCount(parent);
@@ -689,7 +705,7 @@ void BrewTargetTreeModel::unloadTreeModel(int unload)
    }
 
    if ((treeMask & FERMENTMASK) &&
-       (unload == DBALL || unload == DBFERM))
+      propName == "fermentables")
    {
       parent = createIndex(BrewTargetTreeItem::FERMENTABLE,0,rootItem->child(trees.value(FERMENTMASK)));
       breadth = rowCount(parent);
@@ -697,21 +713,21 @@ void BrewTargetTreeModel::unloadTreeModel(int unload)
    }
 
    if ((treeMask & HOPMASK) &&
-       (unload == DBALL || unload == DBHOP))
+      propName == "hops")
    {
       parent = createIndex(BrewTargetTreeItem::HOP,0,rootItem->child(trees.value(HOPMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
    if ((treeMask & MISCMASK) &&
-       (unload == DBALL || unload == DBMISC))
+      propName == "miscs")
    {
       parent = createIndex(BrewTargetTreeItem::MISC,0,rootItem->child(trees.value(MISCMASK)));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
    if ((treeMask & YEASTMASK) &&
-       (unload == DBALL || unload == DBYEAST))
+      propName == "yeasts")
    {
       parent = createIndex(BrewTargetTreeItem::YEAST,0,rootItem->child(trees.value(YEASTMASK)));
       breadth = rowCount(parent);
@@ -724,8 +740,8 @@ void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant /*value*/)
    // Notifier could be the database. 
    if( sender() == &(Database::instance()) )
    {
-     unloadTreeModel(info.toInt());
-     loadTreeModel(info.toInt());
+      unloadTreeModel(prop.name());
+      loadTreeModel(prop.name());
    }
    else // Otherwise, we know that one of the recipes changed.
    {
@@ -754,7 +770,7 @@ void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant /*value*/)
 
          // Put back how many ever rows are left
          insertRows(0,brewNotes.size(),changed);
-         for (unsigned int j=0; j < brewNotes.size(); ++j)
+         for (int j=0; j < brewNotes.size(); ++j)
          {
             // And populate them.
             BrewTargetTreeItem* bar = temp->child(j);

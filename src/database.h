@@ -353,6 +353,12 @@ private:
    //! Destructor hidden.
    ~Database(){} // DONE
    
+   //! Helper to more easily get QMetaProperties.
+   QMetaProperty property(const char* name)
+   {
+      return metaObject()->property(metaObject()->indexOfProperty(name));
+   }
+   
    //! Load database from file.
    void load(); // DONE
    

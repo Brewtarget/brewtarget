@@ -26,9 +26,15 @@
 #include <QObject>
 #include <QVector>
 
-#include "brewtarget.h"
-#include "recipe.h"
 #include "BrewTargetTreeItem.h"
+#include "brewnote.h"
+#include "brewtarget.h"
+#include "equipment.h"
+#include "fermentable.h"
+#include "hop.h"
+#include "recipe.h"
+#include "misc.h"
+#include "yeast.h"
 
 bool operator==(BrewTargetTreeItem& lhs, BrewTargetTreeItem& rhs)
 {
@@ -40,10 +46,9 @@ bool operator==(BrewTargetTreeItem& lhs, BrewTargetTreeItem& rhs)
 }
 
 BrewTargetTreeItem::BrewTargetTreeItem(int type, BrewTargetTreeItem *parent)
+   : parentItem(parent), thing(0)
 {
-   parentItem = parent;
    setType(type);
-   thing = 0;
 }
 
 BrewTargetTreeItem::~BrewTargetTreeItem()
@@ -131,7 +136,7 @@ int BrewTargetTreeItem::childNumber() const
    return 0;
 }
 
-void BrewTargetTreeItem::setData(int t, void* d)
+void BrewTargetTreeItem::setData(int t, QObject* d)
 {
    thing = d;
    type  = t;
@@ -170,22 +175,22 @@ bool BrewTargetTreeItem::removeChildren(int position, int count)
 
 QVariant BrewTargetTreeItem::dataRecipe( int column ) 
 {
-   Recipe* recipe = static_cast<Recipe*>(thing);
+   Recipe* recipe = qobject_cast<Recipe*>(thing);
    switch(column)
    {
         case RECIPENAMECOL:
          if (! thing)
             return QVariant(QObject::tr("Recipes"));
         else
-            return QVariant(recipe->getName());
+            return QVariant(recipe->name());
          break;
         case RECIPEBREWDATECOL:
          if ( recipe )
-            return QVariant(recipe->getDate());
+            return QVariant(recipe->date());
          break;
         case RECIPESTYLECOL:
          if ( recipe )
-            return QVariant(recipe->getStyle()->getName());
+            return QVariant(recipe->style()->name());
          break;
       default :
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataRecipe Bad column: %1").arg(column));
@@ -195,17 +200,17 @@ QVariant BrewTargetTreeItem::dataRecipe( int column )
 
 QVariant BrewTargetTreeItem::dataEquipment(int column) 
 {
-    Equipment* kit = static_cast<Equipment*>(thing);
+   Equipment* kit = qobject_cast<Equipment*>(thing);
    switch(column)
    {
         case EQUIPMENTNAMECOL:
          if ( ! kit )
             return QVariant(QObject::tr("Equipment"));
          else
-            return QVariant(kit->getName());
+            return QVariant(kit->name());
         case EQUIPMENTBOILTIMECOL:
          if ( kit )
-            return QVariant(kit->getBoilTime_min());
+            return QVariant(kit->boilTime_min());
          break;
       default :
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataEquipment Bad column: %1").arg(column));
@@ -215,21 +220,21 @@ QVariant BrewTargetTreeItem::dataEquipment(int column)
 
 QVariant BrewTargetTreeItem::dataFermentable(int column)
 {
-    Fermentable* ferm = static_cast<Fermentable*>(thing);
+    Fermentable* ferm = qobject_cast<Fermentable*>(thing);
    switch(column)
    {
         case FERMENTABLENAMECOL:
          if ( ferm )
-            return QVariant(ferm->getName());
+            return QVariant(ferm->name());
          else
             return QVariant(QObject::tr("Fermentables"));
         case FERMENTABLETYPECOL:
          if ( ferm )
-            return QVariant(ferm->getTypeStringTr());
+            return QVariant(ferm->typeStringTr());
          break;
         case FERMENTABLECOLORCOL:
          if ( ferm )
-            return QVariant(ferm->getColor_srm());
+            return QVariant(ferm->color_srm());
          break;
       default :
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataFermentable Bad column: %1").arg(column));
@@ -239,21 +244,21 @@ QVariant BrewTargetTreeItem::dataFermentable(int column)
 
 QVariant BrewTargetTreeItem::dataHop(int column)
 {
-    Hop* hop = static_cast<Hop*>(thing);
+    Hop* hop = qobject_cast<Hop*>(thing);
    switch(column)
    {
       case HOPNAMECOL:
          if ( ! hop )
             return QVariant(QObject::tr("Hops"));
          else
-            return QVariant(hop->getName());
+            return QVariant(hop->name());
       case HOPFORMCOL:
          if ( hop )
-            return QVariant(hop->getFormStringTr());
+            return QVariant(hop->formStringTr());
          break;
       case HOPUSECOL:
          if ( hop )
-            return QVariant(hop->getUseStringTr());
+            return QVariant(hop->useStringTr());
          break;
       default :
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataHop Bad column: %1").arg(column));
@@ -263,21 +268,21 @@ QVariant BrewTargetTreeItem::dataHop(int column)
 
 QVariant BrewTargetTreeItem::dataMisc(int column)
 {
-    Misc* misc = static_cast<Misc*>(thing);
+    Misc* misc = qobject_cast<Misc*>(thing);
    switch(column)
    {
       case MISCNAMECOL:
          if ( ! misc )
             return QVariant(QObject::tr("Miscellaneous"));
          else
-            return QVariant(misc->getName());
+            return QVariant(misc->name());
       case MISCTYPECOL:
          if ( misc )
-            return QVariant(misc->getTypeStringTr());
+            return QVariant(misc->typeStringTr());
          break;
       case MISCUSECOL:
          if ( misc )
-            return QVariant(misc->getUseStringTr());
+            return QVariant(misc->useStringTr());
          break;
       default :
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataMisc Bad column: %1").arg(column));
@@ -287,21 +292,21 @@ QVariant BrewTargetTreeItem::dataMisc(int column)
 
 QVariant BrewTargetTreeItem::dataYeast(int column)
 {
-   Yeast* yeast = static_cast<Yeast*>(thing);
+   Yeast* yeast = qobject_cast<Yeast*>(thing);
    switch(column)
    {
       case YEASTNAMECOL:
          if ( ! yeast )
             return QVariant(QObject::tr("Yeast"));
          else
-            return QVariant(yeast->getName());
+            return QVariant(yeast->name());
       case YEASTTYPECOL:
          if ( yeast )
-            return QVariant(yeast->getTypeStringTr());
+            return QVariant(yeast->typeStringTr());
          break;
       case YEASTFORMCOL:
          if ( yeast )
-            return QVariant(yeast->getFormStringTr());
+            return QVariant(yeast->formStringTr());
          break;
       default :
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("BrewTargetTreeItem::dataYeast Bad column: %1").arg(column));
@@ -314,7 +319,7 @@ QVariant BrewTargetTreeItem::dataBrewNote(int column)
    if ( ! thing )
       return QVariant();
 
-   BrewNote* bNote = static_cast<BrewNote*>(thing);
+   BrewNote* bNote = qobject_cast<BrewNote*>(thing);
 
    return bNote->getBrewDate_short();
 }
@@ -327,7 +332,7 @@ void BrewTargetTreeItem::setType(int t)
 Recipe* BrewTargetTreeItem::getRecipe()
 {
     if ( type == RECIPE && thing )
-        return static_cast<Recipe*>(thing);
+        return qobject_cast<Recipe*>(thing);
 
     return 0;
 }
@@ -335,42 +340,42 @@ Recipe* BrewTargetTreeItem::getRecipe()
 Equipment* BrewTargetTreeItem::getEquipment()
 {
     if ( type == EQUIPMENT )
-        return static_cast<Equipment*>(thing);
+       return qobject_cast<Equipment*>(thing);
     return 0;
 }
 
 Fermentable* BrewTargetTreeItem::getFermentable()
 {
     if ( type == FERMENTABLE )
-        return static_cast<Fermentable*>(thing);
+       return qobject_cast<Fermentable*>(thing);
     return 0;
 }
 
 Hop* BrewTargetTreeItem::getHop()
 {
     if ( type == HOP ) 
-        return static_cast<Hop*>(thing);
+       return qobject_cast<Hop*>(thing);
     return 0;
 }
 
 Misc* BrewTargetTreeItem::getMisc()
 {
     if ( type == MISC ) 
-        return static_cast<Misc*>(thing);
+       return qobject_cast<Misc*>(thing);
     return 0;
 }
 
 Yeast* BrewTargetTreeItem::getYeast()
 {
     if ( type == YEAST ) 
-        return static_cast<Yeast*>(thing);
+       return qobject_cast<Yeast*>(thing);
     return 0;
 }
 
 BrewNote* BrewTargetTreeItem::getBrewNote()
 {
     if ( type == BREWNOTE && thing ) 
-       return static_cast<BrewNote*>(thing);
+       return qobject_cast<BrewNote*>(thing);
 
     return 0;
 }

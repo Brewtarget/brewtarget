@@ -326,6 +326,7 @@ Equipment* Database::newEquipment()
    tmp->_key = insertNewRecord(EQUIPTABLE);
    tmp->_table = EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
+   emit changed( property("equipments"), allEquipments );
    return tmp;
 }
 
@@ -335,6 +336,7 @@ Fermentable* Database::newFermentable()
    tmp->_key = insertNewRecord(FERMTABLE);
    tmp->_table = FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
+   emit changed( property("fermentables"), allFermentables );
    return tmp;
 }
 
@@ -344,6 +346,7 @@ Hop* Database::newHop()
    tmp->_key = insertNewRecord(HOPTABLE);
    tmp->_table = HOPTABLE;
    allHops.insert(tmp->_key,tmp);
+   emit changed( property("hops"), allHops );
    return tmp;
 }
 
@@ -358,6 +361,7 @@ Instruction* newInstruction(Recipe* rec)
    q.next();
    q.record().setValue( "recipe_id", rec->key );
    allInstructions.insert(tmp->_key,tmp);
+   emit changed( property("instructions"), allInstructions );
    return tmp;
 }
 
@@ -367,6 +371,7 @@ Mash* Database::newMash()
    tmp->_key = insertNewRecord(MASHTABLE);
    tmp->_table = MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
+   emit changed( property("mashs"), allMashs );
    return tmp;
 }
 
@@ -376,6 +381,7 @@ MashStep* Database::newMashStep()
    tmp->_key = insertNewRecord(MASHSTEPTABLE);
    tmp->_table = MASHSTEPTABLE;
    allMashSteps.insert(tmp->_key,tmp);
+   emit changed( property("mashSteps"), allMashSteps );
    return tmp;
 }
 
@@ -385,6 +391,7 @@ Misc* Database::newMisc()
    tmp->_key = insertNewRecord(MISCTABLE);
    tmp->_table = MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
+   emit changed( property("miscs"), allMiscs );
    return tmp;
 }
 
@@ -394,6 +401,7 @@ Recipe* Database::newRecipe()
    tmp->_key = insertNewRecord(RECTABLE);
    tmp->_table = RECTABLE;
    allRecipes.insert(tmp->_key,tmp);
+   emit changed( property("recipes"), allRecipes );
    return tmp;
 }
 
@@ -403,6 +411,7 @@ Style* Database::newStyle()
    tmp->_key = insertNewRecord(STYLETABLE);
    tmp->_table = STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
+   emit changed( property("styles"), allStyles );
    return tmp;
 }
 
@@ -412,6 +421,7 @@ Water* Database::newWater()
    tmp->_key = insertNewRecord(WATERTABLE);
    tmp->_table = WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
+   emit changed( property("waters"), allWaters );
    return tmp;
 }
 
@@ -421,6 +431,7 @@ Yeast* Database::newYeast()
    tmp->_key = insertNewRecord(YEASTTABLE);
    tmp->_table = YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
+   emit changed( property("yeasts"), allYeasts );
    return tmp;
 }
 

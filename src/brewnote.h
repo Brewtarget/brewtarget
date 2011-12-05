@@ -31,9 +31,10 @@
 class Recipe;
 class BrewNote;
 
-
 class BrewNote : public BeerXMLElement
 {
+   Q_OBJECT
+   
 public:
    enum {DONOTUSE, RECIPE};
 

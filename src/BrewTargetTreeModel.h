@@ -31,6 +31,7 @@ class BrewTargetTreeModel;
 #include <QSqlRelationalTableModel>
 
 // Forward declarations
+class BeerXMLElement;
 class Recipe;
 class BrewTargetTreeItem;
 class BrewTargetTreeView;
@@ -117,9 +118,13 @@ private slots:
    
 private:
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
-   void loadTreeModel(int reload);
-   void unloadTreeModel(int unload);
-
+   void loadTreeModel(QString propName);
+   void unloadTreeModel(QString propName);
+   //! Disconnect all the \b objects' signals from us. \b T must be BeerXMLElement.
+   void unobserve( QList<Recipe*>& objects );
+   
+   QList<Recipe*> recipes;
+   
    // Helper methods for recipe headers
    QVariant getRecipeHeader(int section) const;
    QVariant getEquipmentHeader(int section) const;
