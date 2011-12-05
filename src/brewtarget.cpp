@@ -535,9 +535,9 @@ int Brewtarget::run()
    loadTranslations(); // Do internationalization.
 
    app->processEvents();
-   
    splashScreen.showMessage("Loading...");
-   Database::initialize();
+   app->processEvents();
+   Database::instance();
    
    mainWindow = new MainWindow();
    mainWindow->setVisible(true);

@@ -32,8 +32,11 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlIndex>
 
 #include "Algorithms.h"
+#include "brewnote.h"
 #include "equipment.h"
 #include "fermentable.h"
 #include "hop.h"
@@ -47,31 +50,29 @@
 
 #include "config.h"
 #include "brewtarget.h"
+#include "SetterCommand.h"
 
 // Static members.
 QFile Database::dbFile;
 QString Database::dbFileName;
-QHash<DBTable,QString> Database::tableNames = Database::tableNamesHash();
-QHash<QString,DBTable> Database::classNameToTable = Database::classNameToTableHash();
+QHash<Database::DBTable,QString> Database::tableNames = Database::tableNamesHash();
+QHash<QString,Database::DBTable> Database::classNameToTable = Database::classNameToTableHash();
 
 Database::Database()
 {
-   QFile dataDbFile;
-   QString dataDbFileName;
-   bool dbIsOpen;
-
    commandStack.setUndoLimit(100);
-   
    load();
 }
 
 void Database::load()
 {
+   bool dbIsOpen;
+   
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
-   dbFile.setFilename(dbFileName);
+   dbFile.setFileName(dbFileName);
    dataDbFileName = (Brewtarget::getDataDir() + "database.sqlite");
-   dataDbFile.setFilename(dataDbFileName);
+   dataDbFile.setFileName(dataDbFileName);
    
    // Open SQLite db.
    // http://www.developer.nokia.com/Community/Wiki/CS001504_-_Creating_an_SQLite_database_in_Qt
@@ -108,52 +109,52 @@ void Database::load()
    }
    
    // Set up the tables.
-   tableModel = QSqlTableModel( 0, sqldb );
+   tableModel = new QSqlRelationalTableModel( 0, sqldb );
    tables.clear();
    
-   equipments_tm = tableModel;
-   equipments_tm.setTable(tableNames[EQUIPTABLE]);
-   tables[EQUIPTABLE] = &equipments_tm;
+   equipments_tm = new QSqlRelationalTableModel( 0, sqldb );
+   equipments_tm->setTable(tableNames[EQUIPTABLE]);
+   tables[EQUIPTABLE] = equipments_tm;
    
-   fermentables_tm = tableModel;
-   fermentables_tm.setTable(tableNames[FERMTABLE]);
-   tables[FERMTABLE] = &fermentables_tm;
+   fermentables_tm = new QSqlRelationalTableModel( 0, sqldb );
+   fermentables_tm->setTable(tableNames[FERMTABLE]);
+   tables[FERMTABLE] = fermentables_tm;
    
-   hops_tm = tableModel;
-   hops_tm.setTable(tableNames[HOPTABLE]);
-   tables[HOPTABLE] = &hops_tm;
+   hops_tm = new QSqlRelationalTableModel( 0, sqldb );
+   hops_tm->setTable(tableNames[HOPTABLE]);
+   tables[HOPTABLE] = hops_tm;
    
-   instructions_tm = tableModel;
-   instructions_tm.setTable(tableNames[INSTRUCTIONTABLE]);
-   tables[INSTRUCTIONTABLE] = &instructions_tm;
+   instructions_tm = new QSqlRelationalTableModel( 0, sqldb );
+   instructions_tm->setTable(tableNames[INSTRUCTIONTABLE]);
+   tables[INSTRUCTIONTABLE] = instructions_tm;
    
-   mashs_tm = tableModel;
-   mashs_tm.setTable(tableNames[MASHTABLE]);
-   tables[MASHTABLE] = &mashs_tm;
+   mashs_tm = new QSqlRelationalTableModel( 0, sqldb );
+   mashs_tm->setTable(tableNames[MASHTABLE]);
+   tables[MASHTABLE] = mashs_tm;
    
-   mashSteps_tm = tableModel;
-   mashSteps_tm.setTable(tableNames[MASHSTEPTABLE]);
-   tables[MASHSTEPTABLE] = &mashSteps_tm;
+   mashSteps_tm = new QSqlRelationalTableModel( 0, sqldb );
+   mashSteps_tm->setTable(tableNames[MASHSTEPTABLE]);
+   tables[MASHSTEPTABLE] = mashSteps_tm;
    
-   miscs_tm = tableModel;
-   miscs_tm.setTable(tableNames[MISCTABLE]);
-   tables[MISCTABLE] = &miscs_tm;
+   miscs_tm = new QSqlRelationalTableModel( 0, sqldb );
+   miscs_tm->setTable(tableNames[MISCTABLE]);
+   tables[MISCTABLE] = miscs_tm;
    
-   recipes_tm = tableModel;
-   recipes_tm.setTable(tableNames[RECTABLE]);
-   tables[RECTABLE] = &recipes_tm;
+   recipes_tm = new QSqlRelationalTableModel( 0, sqldb );
+   recipes_tm->setTable(tableNames[RECTABLE]);
+   tables[RECTABLE] = recipes_tm;
    
-   styles_tm = tableModel;
-   styles_tm.setTable(tableNames[STYLETABLE]);
-   tables[STYLETABLE] = &styles_tm;
+   styles_tm = new QSqlRelationalTableModel( 0, sqldb );
+   styles_tm->setTable(tableNames[STYLETABLE]);
+   tables[STYLETABLE] = styles_tm;
    
-   waters_tm = tableModel;
-   waters_tm.setTable(tableNames[WATERTABLE]);
-   tables[WATERTABLE] = &waters_tm;
+   waters_tm = new QSqlRelationalTableModel( 0, sqldb );
+   waters_tm->setTable(tableNames[WATERTABLE]);
+   tables[WATERTABLE] = waters_tm;
    
-   yeasts_tm = tableModel;
-   yeasts_tm.setTable(tableNames[YEASTTABLE]);
-   tables[YEASTTABLE] = &yeasts_tm;
+   yeasts_tm = new QSqlRelationalTableModel( 0, sqldb );
+   yeasts_tm->setTable(tableNames[YEASTTABLE]);
+   tables[YEASTTABLE] = yeasts_tm;
    
    // TODO: set relations?
    
@@ -275,36 +276,36 @@ Yeast* Database::yeast(int key)
 }
 */
 
-void removeFromRecipe( Recipe* rec, Hop* hop )
+void Database::removeFromRecipe( Recipe* rec, Hop* hop )
 {
    removeIngredientFromRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
 }
 
-void removeFromRecipe( Recipe* rec, Fermentable* ferm )
+void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
 {
    removeIngredientFromRecipe( rec, ferm, "fermentables", "fermentable_in_recipe", "fermentable_id" );
 }
 
-void removeFromRecipe( Recipe* rec, Misc* m )
+void Database::removeFromRecipe( Recipe* rec, Misc* m )
 {
    removeIngredientFromRecipe( rec, m, "miscs", "misc_in_recipe", "misc_id" );
 }
 
-void removeFromRecipe( Recipe* rec, Yeast* y )
+void Database::removeFromRecipe( Recipe* rec, Yeast* y )
 {
    removeIngredientFromRecipe( rec, y, "yeasts", "yeast_in_recipe", "yeast_id" );
 }
 
-void removeFromRecipe( Recipe* rec, Water* w )
+void Database::removeFromRecipe( Recipe* rec, Water* w )
 {
    removeIngredientFromRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
 }
 
-void removeFromRecipe( Recipe* rec, Instruction* ins )
+void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
    // TODO: encapsulate in QUndoCommand.
    // NOTE: is this the right thing to do?
-   QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(ins->key),
+   QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(ins->_key),
                 sqldb );
    if( q.next() )
       q.record().setValue( "deleted", true );
@@ -315,9 +316,9 @@ int Database::insertNewRecord( DBTable table )
 {
    // TODO: encapsulate this in a QUndoCommand so we can undo it.
    // TODO: implement default values with QSqlQuery::prepare().
-   tableModel.setTable(tableNames[table]);
-   tableModel.insertRow(-1,tableModel.record());
-   return tableModel.query().lastInsertId().toInt();
+   tableModel->setTable(tableNames[table]);
+   tableModel->insertRecord(-1,tableModel->record());
+   return tableModel->query().lastInsertId().toInt();
 }
 
 Equipment* Database::newEquipment()
@@ -326,7 +327,8 @@ Equipment* Database::newEquipment()
    tmp->_key = insertNewRecord(EQUIPTABLE);
    tmp->_table = EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
-   emit changed( property("equipments"), allEquipments );
+   //emit changed( property("equipments"), allEquipments );
+   emit changed( property("equipments"), QVariant() );
    return tmp;
 }
 
@@ -336,7 +338,7 @@ Fermentable* Database::newFermentable()
    tmp->_key = insertNewRecord(FERMTABLE);
    tmp->_table = FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
-   emit changed( property("fermentables"), allFermentables );
+   emit changed( property("fermentables"), QVariant() );
    return tmp;
 }
 
@@ -346,22 +348,22 @@ Hop* Database::newHop()
    tmp->_key = insertNewRecord(HOPTABLE);
    tmp->_table = HOPTABLE;
    allHops.insert(tmp->_key,tmp);
-   emit changed( property("hops"), allHops );
+   emit changed( property("hops"), QVariant() );
    return tmp;
 }
 
-Instruction* newInstruction(Recipe* rec)
+Instruction* Database::newInstruction(Recipe* rec)
 {
    // TODO: encapsulate in QUndoCommand.
    Instruction* tmp = new Instruction();
    tmp->_key = insertNewRecord(INSTRUCTIONTABLE);
    tmp->_table = INSTRUCTIONTABLE;
-   QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(tmp->key),
+   QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(tmp->_key),
                 sqldb );
    q.next();
-   q.record().setValue( "recipe_id", rec->key );
+   q.record().setValue( "recipe_id", rec->_key );
    allInstructions.insert(tmp->_key,tmp);
-   emit changed( property("instructions"), allInstructions );
+   emit changed( property("instructions"), QVariant() );
    return tmp;
 }
 
@@ -371,7 +373,7 @@ Mash* Database::newMash()
    tmp->_key = insertNewRecord(MASHTABLE);
    tmp->_table = MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
-   emit changed( property("mashs"), allMashs );
+   emit changed( property("mashs"), QVariant() );
    return tmp;
 }
 
@@ -381,7 +383,7 @@ MashStep* Database::newMashStep()
    tmp->_key = insertNewRecord(MASHSTEPTABLE);
    tmp->_table = MASHSTEPTABLE;
    allMashSteps.insert(tmp->_key,tmp);
-   emit changed( property("mashSteps"), allMashSteps );
+   emit changed( property("mashSteps"), QVariant() );
    return tmp;
 }
 
@@ -391,7 +393,7 @@ Misc* Database::newMisc()
    tmp->_key = insertNewRecord(MISCTABLE);
    tmp->_table = MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
-   emit changed( property("miscs"), allMiscs );
+   emit changed( property("miscs"), QVariant() );
    return tmp;
 }
 
@@ -401,7 +403,7 @@ Recipe* Database::newRecipe()
    tmp->_key = insertNewRecord(RECTABLE);
    tmp->_table = RECTABLE;
    allRecipes.insert(tmp->_key,tmp);
-   emit changed( property("recipes"), allRecipes );
+   emit changed( property("recipes"), QVariant() );
    return tmp;
 }
 
@@ -411,7 +413,7 @@ Style* Database::newStyle()
    tmp->_key = insertNewRecord(STYLETABLE);
    tmp->_table = STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
-   emit changed( property("styles"), allStyles );
+   emit changed( property("styles"), QVariant() );
    return tmp;
 }
 
@@ -421,7 +423,7 @@ Water* Database::newWater()
    tmp->_key = insertNewRecord(WATERTABLE);
    tmp->_table = WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
-   emit changed( property("waters"), allWaters );
+   emit changed( property("waters"), QVariant() );
    return tmp;
 }
 
@@ -431,16 +433,24 @@ Yeast* Database::newYeast()
    tmp->_key = insertNewRecord(YEASTTABLE);
    tmp->_table = YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
-   emit changed( property("yeasts"), allYeasts );
+   emit changed( property("yeasts"), QVariant() );
    return tmp;
 }
 
-int Database::deleteRecord( DBTable table, BeerXMLElement* object )
+void Database::deleteRecord( DBTable table, BeerXMLElement* object )
 {
    // Assumes the table has a column called 'deleted'.
-   SetterCommand command(tables[table], keyName(table), key, "deleted", true, object->property("deleted"), object);
+   SetterCommand* command;
+   command = new SetterCommand (tables[table],
+                         keyName(table).toStdString().c_str(),
+                         object->_key,
+                         "deleted",
+                         QVariant(true),
+                         object->metaProperty("deleted"),
+                         object,
+                         true);
    // For now, immediately execute the command.
-   command.redo();
+   command->redo();
    // Push the command on the undo stack.
    commandStack.push(command);
 }
@@ -605,9 +615,17 @@ QString Database::getDbFileName()
 
 void Database::updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify )
 {
-   SetterCommand command(tables[table], keyName(table), key, col_name, value, prop, object, notify);
+   SetterCommand* command;
+   command = new SetterCommand(tables[table],
+                               keyName(table).toStdString().c_str(),
+                               key,
+                               col_name,
+                               value,
+                               prop,
+                               object,
+                               notify);
    // For now, immediately execute the command.
-   command.redo();
+   command->redo();
    
    // Push the command on the undo stack.
    //commandStack.beginMacro("Change an entry");
@@ -617,35 +635,35 @@ void Database::updateEntry( DBTable table, int key, const char* col_name, QVaria
 
 QString Database::keyName( DBTable table )
 {
-   return tables[table].primaryKey().name();
+   return tables[table]->primaryKey().name();
 }
 
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
 {
    // TODO: encapsulate this in a QUndoCommand.
    
-   tableModel.setTable(relTableName);
-   QString filter = tableModel.filter();
+   tableModel->setTable(relTableName);
+   QString filter = tableModel->filter();
    
    // Find the row in the relational db that connects the ingredient to the recipe.
-   tableModel.setFilter( QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->key).arg(rec->key) );
-   tableModel.select();
-   if( tableModel.rowCount() > 0 )
-      tableModel.removeRows(0,1);
+   tableModel->setFilter( QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
+   tableModel->select();
+   if( tableModel->rowCount() > 0 )
+      tableModel->removeRows(0,1);
    
    // Restore the old filter.
-   tableModel.setFilter(filter);
-   tableModel.select();
+   tableModel->setFilter(filter);
+   tableModel->select();
    
-   emit rec->changed( rec->property(propName) );
+   emit rec->changed( rec->metaProperty(propName), QVariant() );
 }
 
-int Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString propName, QString relTableName, QString ingKeyName )
+int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
 {
    // TODO: encapsulate this in a QUndoCommand.
    int newKey;
    QSqlRecord r;
-   tableModel.setTable(relTableName);
+   tableModel->setTable(relTableName);
    
    // Ensure this ingredient is not already in the recipe.
    /*
@@ -659,15 +677,15 @@ int Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString p
    }
    */
    
-   QString filter = tableModel.filter();
+   QString filter = tableModel->filter();
    
    // Ensure this ingredient is not already in the recipe.
-   tableModel.setFilter(QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->key).arg(rec->key));
-   tableModel.select();
-   if( tableModel.rowCount() > 0 )
+   tableModel->setFilter(QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->_key).arg(rec->_key));
+   tableModel->select();
+   if( tableModel->rowCount() > 0 )
    {
       Brewtarget::logW( "Ingredient already exists in recipe." );
-      return;
+      return -1;
    }
    
    // Create a copy of the ingredient.
@@ -675,19 +693,20 @@ int Database::addIngredientToRecipe( BeerXMLElement* ing, Recipe* rec, QString p
    newKey = r.value(ingKeyName).toInt();
    
    // Reset the original filter.
-   tableModel.setFilter(filter);
-   tableModel.select();
+   tableModel->setFilter(filter);
+   tableModel->select();
    
    // Put this (rec,ing) pair in the <ing_type>_in_recipe table.
-   r = tableModel.record(); // Should create a new record in that table.
+   r = tableModel->record(); // Should create a new record in that table.
    r.setValue(ingKeyName, newKey);
    r.setValue("recipe_id", rec->_key);
-   tableModel.insert(-1,r);
+   tableModel->insertRecord(-1,r);
    
-   emit rec->changed( rec->property(propName) );
+   emit rec->changed( rec->metaProperty(propName) );
+   return newKey;
 }
 
-int Database::copy( BeerXMLElement* object )
+QSqlRecord Database::copy( BeerXMLElement* object )
 {
    int newKey;
    int i;
@@ -699,16 +718,16 @@ int Database::copy( BeerXMLElement* object )
               );
    
    if( !q.next() )
-      return -1;
+      return QSqlRecord();
    
    QSqlRecord oldRecord = q.record();
    
    // Create a new row.
    newKey = insertNewRecord(t);
-   QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
-               .arg(tName).arg(keyName(t)).arg(object->_key),
-               sqldb
-              );
+   q = QSqlQuery (QString("SELECT * FROM %1 WHERE %2 = %3")
+                  .arg(tName).arg(keyName(t)).arg(object->_key),
+                  sqldb
+                 );
    q.next();
    QSqlRecord newRecord = q.record();
    
@@ -718,12 +737,12 @@ int Database::copy( BeerXMLElement* object )
    for( i = 0; i < oldRecord.count() - 1; ++i )
    {
       if( oldRecord.fieldName(i) != "parent" )
-         newValString += QString("%1 = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i));
+         newValString += QString("%1 = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
       else
          newValString += QString("%1 = '%2',").arg(oldRecord.fieldName(i)).arg(object->_key);
    }
    if( oldRecord.fieldName(i) != "parent" )
-      newValString += QString("%1 = %2").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i));
+      newValString += QString("%1 = %2").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
    else
       newValString += QString("%1 = '%2'").arg(oldRecord.fieldName(i)).arg(object->_key);
    
@@ -736,30 +755,30 @@ int Database::copy( BeerXMLElement* object )
    q.prepare(updateString);
    q.exec();
    
-   return newKey;
+   return newRecord;
 }
 
-void addToRecipe( Recipe* rec, Hop* hop )
+void Database::addToRecipe( Recipe* rec, Hop* hop )
 {
    addIngredientToRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
 }
 
-void addToRecipe( Recipe* rec, Fermentable* ferm )
+void Database::addToRecipe( Recipe* rec, Fermentable* ferm )
 {
    addIngredientToRecipe( rec, ferm, "ferms", "fermentable_in_recipe", "fermentable_id" );
 }
 
-void addToRecipe( Recipe* rec, Misc* m )
+void Database::addToRecipe( Recipe* rec, Misc* m )
 {
    addIngredientToRecipe( rec, m, "miscs", "misc_in_recipe", "misc_id" );
 }
 
-void addToRecipe( Recipe* rec, Yeast* y )
+void Database::addToRecipe( Recipe* rec, Yeast* y )
 {
    addIngredientToRecipe( rec, y, "yeasts", "yeast_in_recipe", "yeast_id" );
 }
 
-void addToRecipe( Recipe* rec, Water* w )
+void Database::addToRecipe( Recipe* rec, Water* w )
 {
    addIngredientToRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
 }
@@ -786,7 +805,7 @@ void Database::getMashs( QList<Mash*>& list, QString filter )
 
 void Database::getMashSteps( QList<MashStep*>& list, QString filter )
 {
-   getElements( list, filter, mashsteps_tm, MASHSTEPTABLE, allMashSteps );
+   getElements( list, filter, mashSteps_tm, MASHSTEPTABLE, allMashSteps );
 }
 
 void Database::getMiscs( QList<Misc*>& list, QString filter )
@@ -814,11 +833,11 @@ void Database::getYeasts( QList<Yeast*>& list, QString filter )
    getElements( list, filter, yeasts_tm, YEASTTABLE, allYeasts );
 }
 
-QHash<DBTable,QString> Database::tableNamesHash()
+QHash<Database::DBTable,QString> Database::tableNamesHash()
 {
    QHash<DBTable,QString> tmp;
    
-   tmp[ BREWNOTETABLE ] = "brewnote"
+   tmp[ BREWNOTETABLE ] = "brewnote";
    tmp[ EQUIPTABLE ] = "equipment";
    tmp[ FERMTABLE ] = "fermentable";
    tmp[ HOPTABLE ] = "hop";
@@ -834,7 +853,7 @@ QHash<DBTable,QString> Database::tableNamesHash()
    return tmp;
 }
 
-QHash<QString,DBTable> Database::classNameToTableHash()
+QHash<QString,Database::DBTable> Database::classNameToTableHash()
 {
    QHash<QString,DBTable> tmp;
    
@@ -842,7 +861,7 @@ QHash<QString,DBTable> Database::classNameToTableHash()
    tmp["Equipment"] = EQUIPTABLE;
    tmp["Fermentable"] = FERMTABLE;
    tmp["Hop"] = HOPTABLE;
-   tmp["Instruction"] = INSTRUCTTABLE;
+   tmp["Instruction"] = INSTRUCTIONTABLE;
    tmp["MashStep"] = MASHSTEPTABLE;
    tmp["Mash"] = MASHTABLE;
    tmp["Misc"] = MISCTABLE;
@@ -854,9 +873,9 @@ QHash<QString,DBTable> Database::classNameToTableHash()
    return tmp;
 }
 
-const Database::QSqlRelationalTableModel getModel( DBTable table )
+const QSqlRelationalTableModel* Database::getModel( DBTable table )
 {
-   return *(tables[table]);
+   return tables[table];
 }
 
 // Do this to pacify the READ in Q_PROPERTY.
@@ -1032,6 +1051,10 @@ void Database::importFromXML(const QString& filename)
    */
 }
 
+void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
+{
+   // TODO: implement
+}
 
 void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
 {
@@ -1128,7 +1151,7 @@ void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
 
    // My extensions below
    tmpNode = doc.createElement("ABSORPTION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->absorption_LKg()));
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->grainAbsorption_LKg()));
    tmpNode.appendChild(tmpText);
    equipNode.appendChild(tmpNode);
    
@@ -1223,7 +1246,7 @@ void Database::toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent )
    fermNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("RECOMMEND_MASH");
-   tmpText = doc.createTextNodeBeerXMLElement::(text(a->recommendMash()));
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->recommendMash()));
    tmpNode.appendChild(tmpText);
    fermNode.appendChild(tmpNode);
    
@@ -1269,7 +1292,7 @@ void Database::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(a->getUseString());
+   tmpText = doc.createTextNode(a->useString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
@@ -1284,12 +1307,12 @@ void Database::toXml( Hop* a, QDomDocument& doc, QDomNode& parent )
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->getTypeString());
+   tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("FORM");
-   tmpText = doc.createTextNode(a->getFormString());
+   tmpText = doc.createTextNode(a->formString());
    tmpNode.appendChild(tmpText);
    hopNode.appendChild(tmpNode);
    
@@ -1383,7 +1406,7 @@ void Database::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
    QDomElement tmpNode;
    QDomText tmpText;
    
-   unsigned int i, size;
+   int i, size;
    
    mashNode = doc.createElement("MASH");
    
@@ -1404,7 +1427,8 @@ void Database::toXml( Mash* a, QDomDocument& doc, QDomNode& parent )
    
    tmpNode = doc.createElement("MASH_STEPS");
    QList<MashStep*> mashSteps = a->mashSteps();
-   for( i = 0; i < a.size(); ++i )
+   size = mashSteps.size();
+   for( i = 0; i < size; ++i )
       toXml( mashSteps[i], doc, tmpNode);
    mashNode.appendChild(tmpNode);
    
@@ -1465,7 +1489,7 @@ void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    mashStepNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->getTypeString());
+   tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
    
@@ -1521,7 +1545,7 @@ void Database::toXml( Misc* a, QDomDocument& doc, QDomNode& parent )
    miscNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(a->version());
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    miscNode.appendChild(tmpNode);
    
@@ -1569,7 +1593,7 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    QDomElement tmpNode;
    QDomText tmpText;
    
-   unsigned int i, size;
+   int i, size;
    
    recipeNode = doc.createElement("RECIPE");
    
@@ -1588,8 +1612,9 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
+   Style* style = a->style();
    if( style != 0 )
-      style->toXml(doc, recipeNode);
+      toXml( style, doc, recipeNode);
    
    tmpNode = doc.createElement("BREWER");
    tmpText = doc.createTextNode(a->brewer());
@@ -1742,7 +1767,7 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    recipeNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("DATE");
-   tmpText = doc.createTextNode(a->date());
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->date()));
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
@@ -1793,7 +1818,7 @@ void Database::toXml( Style* a, QDomDocument& doc, QDomNode& parent )
    styleNode.appendChild(tmpNode);
 
    tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(BeerXMLElement::text(a->version));
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
    tmpNode.appendChild(tmpText);
    styleNode.appendChild(tmpNode);
 
@@ -2030,7 +2055,7 @@ void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
    yeastNode.appendChild(tmpElement);
 
    tmpElement = doc.createElement("FLOCCULATION");
-   tmpText = doc.createTextNode(flocculations.at(a->flocculation()));
+   tmpText = doc.createTextNode(Yeast::flocculations.at(a->flocculation()));
    tmpElement.appendChild(tmpText);
    yeastNode.appendChild(tmpElement);
 

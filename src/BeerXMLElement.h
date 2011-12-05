@@ -49,6 +49,16 @@ public:
    int key(){ return _key; }
    Database::DBTable table(){ return _table; }
    int version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
+   //! Convenience method to get a meta property by name.
+   QMetaProperty metaProperty(const char* name)
+   {
+      return metaObject()->property(metaObject()->indexOfProperty(name));
+   }
+   //! Convenience method to get a meta property by name.
+   QMetaProperty metaProperty(QString const& name)
+   {
+      return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
+   }
    
    // There should be Database::createClone(BeerXMLElement&) that does this.
    //void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
@@ -66,6 +76,7 @@ public:
    static QString text(bool val);
    static QString text(double val);
    static QString text(int val);
+   static QString text(const QDate& val);
    
 signals:
    //! Passes the meta property that has changed about this object.

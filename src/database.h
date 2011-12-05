@@ -21,6 +21,8 @@
 
 class Database;
 
+#include <QDomDocument>
+#include <QDomNode>
 #include <QList>
 #include <QHash>
 #include <iostream>
@@ -46,6 +48,7 @@ class Database;
 #include "water.h"
 #include "yeast.h"
 */
+class BrewNote;
 class BeerXMLElement;
 class Equipment;
 class Fermentable;
@@ -216,6 +219,17 @@ public:
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
    
+   QList<Equipment*>& equipments();
+   QList<Fermentable*>& fermentables();
+   QList<Hop*>& hops();
+   QList<Mash*>& mashs();
+   QList<MashStep*>& mashSteps();
+   QList<Misc*>& miscs();
+   QList<Recipe*>& recipes();
+   QList<Style*>& styles();
+   QList<Water*>& waters();
+   QList<Yeast*>& yeasts();
+   
    // NOTICE: Necessary?
    /*
    unsigned int getNumEquipments();
@@ -248,7 +262,7 @@ public:
    static QString getDbFileName(); // DONE
    
    //! Get a const copy of a particular table model. Const so that no editing can take place outside the db.
-   const QSqlRelationalTableModel getModel( DBTable table );
+   const QSqlRelationalTableModel* getModel( DBTable table );
    
 signals:
    void changed(QMetaProperty prop, QVariant value);
@@ -256,6 +270,8 @@ signals:
 private:
    static QFile dbFile;
    static QString dbFileName;
+   static QFile dataDbFile;
+   static QString dataDbFileName;
    static QHash<DBTable,QString> tableNames;
    static QHash<DBTable,QString> tableNamesHash(); // DONE
    static QHash<QString,DBTable> classNameToTable;
@@ -275,71 +291,71 @@ private:
    QHash< int, Yeast* > allYeasts;
    
    // Helper to populate all* hashes. T should be a BeerXMLElement subclass.
-   template <class T> void populateElements( QHash<int,T*> hash, QSqlRelationalTableModel& tm, DBTable table )
+   template <class T> void populateElements( QHash<int,T*> hash, QSqlRelationalTableModel* tm, DBTable table )
    {
       int i, size, key;
       BeerXMLElement* e;
       T* et;
-      QString filter = tm.filter();
+      QString filter = tm->filter();
       
-      tm.setFilter("");
-      tm.select();
+      tm->setFilter("");
+      tm->select();
       
-      size = tm.rowCount();
+      size = tm->rowCount();
       for( i = 0; i < size; ++i )
       {
-         key = tm.record(i).value(keyName(table)).toInt();
+         key = tm->record(i).value(keyName(table)).toInt();
          
          e = new T();
-         et = e; // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
-         et->key = key;
-         et->table = table;
+         et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
+         et->_key = key;
+         et->_table = table;
          
          if( ! hash.contains(key) )
-            hash.insert(key,e);
+            hash.insert(key,et);
       }
       
-      tm.setFilter(filter);
-      tm.select();
+      tm->setFilter(filter);
+      tm->select();
    }
    
    // Helper to populate the list using the given filter.
-   template <class T> void getElements( QList<T*>& list, QString filter, QSqlRelationalTableModel& tm, DBTable table, QHash<int,T*> allElements )
+   template <class T> void getElements( QList<T*>& list, QString filter, QSqlRelationalTableModel* tm, DBTable table, QHash<int,T*> allElements )
    {
       int i, size, key;
-      QString oldFilter = tm.filter();
+      QString oldFilter = tm->filter();
       
-      tm.setFilter(filter);
-      tm.select();
+      tm->setFilter(filter);
+      tm->select();
       
       list.clear();
-      size = tm.rowCount();
+      size = tm->rowCount();
       for( i = 0; i < size; ++i )
       {
-         key = tm.record(i).value(keyName(table));
+         key = tm->record(i).value(keyName(table)).toInt();
          list.append( allElements[key] );
       }
       
-      tm.setFilter(oldFilter);
-      tm.select();
+      tm->setFilter(oldFilter);
+      tm->select();
    }
    
    // The connection to the SQLite database.
    QSqlDatabase sqldb;
    // Model for all the tables in the db.
-   QSqlRelationalTableModel tableModel;
+   QSqlRelationalTableModel* tableModel;
    // Models set to specific tables in the db.
-   QSqlRelationalTableModel equipments_tm;
-   QSqlRelationalTableModel fermentables_tm;
-   QSqlRelationalTableModel hops_tm;
-   QSqlRelationalTableModel instructions_tm;
-   QSqlRelationalTableModel mashs_tm;
-   QSqlRelationalTableModel mashSteps_tm;
-   QSqlRelationalTableModel miscs_tm;
-   QSqlRelationalTableModel recipes_tm;
-   QSqlRelationalTableModel styles_tm;
-   QSqlRelationalTableModel waters_tm;
-   QSqlRelationalTableModel yeasts_tm;
+   QSqlRelationalTableModel* equipments_tm;
+   QSqlRelationalTableModel* fermentables_tm;
+   QSqlRelationalTableModel* hops_tm;
+   QSqlRelationalTableModel* instructions_tm;
+   QSqlRelationalTableModel* mashs_tm;
+   QSqlRelationalTableModel* mashSteps_tm;
+   QSqlRelationalTableModel* miscs_tm;
+   QSqlRelationalTableModel* recipes_tm;
+   QSqlRelationalTableModel* styles_tm;
+   QSqlRelationalTableModel* waters_tm;
+   QSqlRelationalTableModel* yeasts_tm;
    QHash<DBTable,QSqlRelationalTableModel*> tables;
    
    QUndoStack commandStack;
@@ -390,6 +406,7 @@ private:
    QSqlRecord copy( BeerXMLElement* object );
    
    // Export to BeerXML.
+   void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Hop* a, QDomDocument& doc, QDomNode& parent );

@@ -33,7 +33,7 @@ void Instruction::setDefaults()
    interval  = 0.0;
 }
 
-Instruction::Instruction() : Observable()
+Instruction::Instruction()
 {
    setDefaults();
 }

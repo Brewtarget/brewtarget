@@ -225,7 +225,7 @@ double Fermentable::getDiastaticPower_lintner() const { return diastaticPower_li
 double Fermentable::getProtein_pct() const { return protein_pct; }
 double Fermentable::getMaxInBatch_pct() const { return maxInBatch_pct; }
 bool Fermentable::getRecommendMash() const { return recommendMash; }
-bool Fermentable::getIsMashed() const { return isMashed; }
+bool Fermentable::isMashed() const { return isMashed; }
 double Fermentable::getIbuGalPerLb() const { return ibuGalPerLb; }
 
 double Fermentable::getEquivSucrose_kg() const

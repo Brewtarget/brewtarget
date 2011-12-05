@@ -89,6 +89,11 @@ QString BeerXMLElement::text(int val)
    return QString("%1").arg(val);
 }
 
+QString text(const QDate& val)
+{
+   return val.toString("dd-MM-yyyy");
+}
+
 void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant const& value, bool notify )
 {
    // Get the meta property.

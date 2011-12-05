@@ -114,7 +114,7 @@ public:
    void setIbuGalPerLb( double num );
    
    /*** My extensions ***/
-   bool getIsMashed() const;
+   bool isMashed() const;
    void setIsMashed(bool var);
    /*** END my extensions ***/
    
