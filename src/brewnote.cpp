@@ -108,7 +108,7 @@ void BrewNote::fromNode(const QDomNode& bNoteNode)
       else if ( tags.contains(property) ) // make sure we have that property defined.
          setInfo( tags.value(property), value.toDouble());
    }
-   hasChanged();
+   //hasChanged();
 }
 
 void BrewNote::setDefaults(Recipe* parent)
@@ -117,80 +117,82 @@ void BrewNote::setDefaults(Recipe* parent)
    MashStep* temp = 0;
    Yeast *yeast = 0;
    Equipment* equip = 0;
-   int numYeast = parent->getNumYeasts();
    double atten_pct = -1.0;
+   int numYeast;
+   QList<Yeast*> yeasts;
 
    int i;
 
    brewDate = QDateTime::currentDateTime();
    fermentDate = brewDate.addDays(7);
  
-   setInfo("SG",parent->getBoilGrav());
-   setInfo("projBoilGrav",parent->getBoilGrav());
+   setInfo("SG",parent->boilGrav());
+   setInfo("projBoilGrav",parent->boilGrav());
 
-   setInfo("volumeIntoBK",parent->getBoilSize_l());
-   setInfo("projVolIntoBK",parent->getBoilSize_l());
+   setInfo("volumeIntoBK",parent->boilSize_l());
+   setInfo("projVolIntoBK",parent->boilSize_l());
 
-   mash = parent->getMash();
+   mash = parent->mash();
 
-   if ( mash ) 
-      temp = mash->getMashStep(0);
-
-   if ( temp ) 
+   if ( mash )
    {
-      setInfo("strikeTemp",temp->getEndTemp_c());
-      setInfo("projStrikeTemp",temp->getEndTemp_c());
+      QList<MashStep*> mashSteps = mash->mashSteps();
+      int size = mashSteps.size();
 
-      setInfo("mashFinTemp",temp->getEndTemp_c());
-      setInfo("projMashFinTemp",temp->getEndTemp_c());
-   }
-
-   i = mash->getNumMashSteps();
-   if ( i - 2 >= 0 )
-   {
-      if ( mash )
-         temp = mash->getMashStep(i-2);
-      if ( temp )
+      if ( size > 0 ) 
       {
-         setInfo("mashFinTemp",temp->getEndTemp_c());
-         setInfo("projMashFinTemp",temp->getEndTemp_c());
+         temp = mashSteps[0];
+         setInfo("strikeTemp",temp->endTemp_c());
+         setInfo("projStrikeTemp",temp->endTemp_c());
+
+         setInfo("mashFinTemp",temp->endTemp_c());
+         setInfo("projMashFinTemp",temp->endTemp_c());
+      }
+
+      if ( size - 2 >= 0 )
+      {
+         temp = mashSteps[size-2];
+         setInfo("mashFinTemp",temp->endTemp_c());
+         setInfo("projMashFinTemp",temp->endTemp_c());
       }
    }
 
-   setInfo("OG",parent->getOg());
-   setInfo("projOG",parent->getOg());
+   setInfo("OG",parent->og());
+   setInfo("projOG",parent->og());
 
-   setInfo("postBoilVolume",parent->estimatePostBoilVolume_l());
-   setInfo("volumeIntoFerm",parent->estimateFinalVolume_l());
-   setInfo("projVolIntoFerm",parent->estimateFinalVolume_l());
+   setInfo("postBoilVolume",parent->postBoilVolume_l());
+   setInfo("volumeIntoFerm",parent->finalVolume_l());
+   setInfo("projVolIntoFerm",parent->finalVolume_l());
 
-   setInfo("pitchTemp",parent->getPrimaryTemp_c());
+   setInfo("pitchTemp",parent->primaryTemp_c());
 
-   setInfo("FG",parent->getFg());
-   setInfo("projFG",parent->getFg());
+   setInfo("FG",parent->fg());
+   setInfo("projFG",parent->fg());
 
-   setInfo("finalVolume",parent->estimateFinalVolume_l());
+   setInfo("finalVolume",parent->finalVolume_l());
 
-   setInfo("projEff",parent->getEfficiency_pct());
-   setInfo("projPoints",parent->getPoints(parent->getBoilSize_l()));
-   setInfo("projABV", parent->getABV_pct());
+   setInfo("projEff",parent->efficiency_pct());
+   setInfo("projPoints",parent->points(parent->boilSize_l()));
+   setInfo("projABV", parent->ABV_pct());
 
+   yeasts = parent->yeasts();
+   numYeast = yeasts.size();
    for( i = 0; i < numYeast; ++i )
    {
-      yeast = parent->getYeast(i);
-      if ( yeast->getAttenuation_pct() > atten_pct )
-         atten_pct = yeast->getAttenuation_pct();
+      yeast = yeasts[i];
+      if ( yeast->attenuation_pct() > atten_pct )
+         atten_pct = yeast->attenuation_pct();
    }
 
    if ( numYeast == 0 || atten_pct < 0.0 )
       atten_pct = 75;
    setInfo("projAtten", atten_pct);
 
-   equip = parent->getEquipment();
+   equip = parent->equipment();
    if ( equip ) 
    {
-      double boiloff_hr = equip->getEvapRate_lHr();
-      double boil_time  = equip->getBoilTime_min();
+      double boiloff_hr = equip->evapRate_lHr();
+      double boil_time  = equip->boilTime_min();
 
       setInfo("boilOff", boiloff_hr * (boil_time/60));
    }
@@ -210,7 +212,7 @@ BrewNote::BrewNote(Recipe* parent)
 }
 
 BrewNote::BrewNote(BrewNote& other)
-   : Observable()
+   : BeerXMLElement()
 {
    rec         = other.rec;
 
@@ -276,20 +278,20 @@ void BrewNote::setBrewDate(QString date)
    else
       brewDate = QDateTime::currentDateTime();
 
-   hasChanged();
+   //hasChanged();
 }
 
 void BrewNote::setFermentDate(QString date)
 {
 
    fermentDate = QDateTime::fromString(date, Qt::ISODate);
-   hasChanged();
+   //hasChanged();
 }
 
 void BrewNote::setNotes(const QString& var)
 {
    notes = QString(var);
-   hasChanged();
+   //hasChanged();
 }
 
 void BrewNote::setInfo(QString label, double var)
@@ -302,7 +304,7 @@ void BrewNote::setInfo(QString label, double var)
    else 
       info.insert(label,var);
 
-   hasChanged();
+   //hasChanged();
 }
 /*
    there is no UnitSystem for gravity, so we need to translate here.  
