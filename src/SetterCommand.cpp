@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object)
+SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
    : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value)),
-     table(table), key_name(key_name), key(key), prop(prop), col_name(col_name), value(value), object(object)
+     table(table), key_name(key_name), key(key), prop(prop), col_name(col_name), value(value), object(object), notify(notify)
 {
 }
 
@@ -47,7 +47,8 @@ void SetterCommand::redo()
    
    // Emit the notifier.
    //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
-   emit object->changed(prop,value);
+   if( notify )
+      emit object->changed(prop,value);
 }
 
 void SetterCommand::undo()
@@ -68,5 +69,6 @@ void SetterCommand::undo()
    
    // Emit the notifier.
    //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
-   emit object->changed(prop,value);
+   if( notify )
+      emit object->changed(prop,value);
 }

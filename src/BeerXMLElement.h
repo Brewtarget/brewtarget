@@ -83,9 +83,9 @@ protected:
     * \param col_name - The appropriate column in the table.
     * Should do the following:
     * 1) Set the appropriate value in the appropriate table row.
-    * 2) Call the NOTIFY method associated with \b prop_name.
+    * 2) Call the NOTIFY method associated with \b prop_name if \b notify == true.
     */
-   void set( const char* prop_name, const char* col_name, QVariant const& value );
+   void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    
    /*!
     * \param col_name - The database column of the attribute we want to get.

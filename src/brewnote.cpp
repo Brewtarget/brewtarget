@@ -288,10 +288,11 @@ void BrewNote::setFermentDate(QString date)
    //hasChanged();
 }
 
-void BrewNote::setNotes(const QString& var)
+void BrewNote::setNotes(const QString& var, bool notify)
 {
    notes = QString(var);
-   //hasChanged();
+   //if(notify)
+   //   hasChanged();
 }
 
 void BrewNote::setInfo(QString label, double var)

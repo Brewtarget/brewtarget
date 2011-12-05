@@ -53,7 +53,7 @@ public:
    void setParent(Recipe* parent);
    void setBrewDate(QString date = "");
    void setFermentDate(QString date);
-   void setNotes(const QString& var);
+   void setNotes(const QString& var, bool notify = true);
 
    void setSG(QString var);
    void setVolumeIntoBK_l(double var);

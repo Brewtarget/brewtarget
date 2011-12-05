@@ -4,7 +4,6 @@
 #include "BrewNoteWidget.h"
 #include "brewnote.h"
 #include "brewtarget.h"
-#include "observable.h"
 
 BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent)
 {
@@ -33,10 +32,13 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
    double low = 0.95;
    double high = 1.05;
 
-   if ( bNote && bNote != bNoteObs )
+   if( bNoteObs != 0 )
+      disconnect( bNoteObs, 0, this, 0 );
+   
+   if ( bNote )
    {
       bNoteObs = bNote;
-      setObserved(bNoteObs);
+      connect( bNoteObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
       // Set the highs and the lows for the lcds
       lcdnumber_effBK->setLowLim(bNoteObs->getProjEff_pct() * low);
@@ -167,14 +169,12 @@ void BrewNoteWidget::updateNotes()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->disableNotification();
-   bNoteObs->setNotes(plainTextEdit_brewNotes->toPlainText());
-   bNoteObs->reenableNotification();
+   bNoteObs->setNotes(plainTextEdit_brewNotes->toPlainText(), false);
 }
 
-void BrewNoteWidget::notify(Observable* notifier, QVariant /*info*/)
+void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
 {
-   if ( notifier != bNoteObs )
+   if ( sender() != bNoteObs )
       return;
 
    showChanges();
@@ -185,7 +185,7 @@ void BrewNoteWidget::saveAll()
    if ( ! bNoteObs )
       return;
    
-   bNoteObs->disableNotification();
+   //bNoteObs->disableNotification();
 
    updateSG();
    updateVolumeIntoBK_l();
@@ -200,8 +200,8 @@ void BrewNoteWidget::saveAll()
    updateFermentDate();
    updateNotes();
 
-   bNoteObs->reenableNotification();
-   bNoteObs->forceNotify();
+   //bNoteObs->reenableNotification();
+   //bNoteObs->forceNotify();
 
    hide();
 }

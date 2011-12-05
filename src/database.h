@@ -81,7 +81,7 @@ public:
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
-   void updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object ); // DONE
+   void updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true ); // DONE
    
    // Hey, kate highlights all these words...
    // FIXME

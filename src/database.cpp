@@ -592,9 +592,9 @@ QString Database::getDbFileName()
    return dbFileName;
 }
 
-void Database::updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object )
+void Database::updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify )
 {
-   SetterCommand command(tables[table], keyName(table), key, col_name, value, prop, object);
+   SetterCommand command(tables[table], keyName(table), key, col_name, value, prop, object, notify);
    // For now, immediately execute the command.
    command.redo();
    
