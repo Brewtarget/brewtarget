@@ -22,6 +22,13 @@
 #include <QMenu>
 #include "BrewTargetTreeView.h"
 #include "BrewTargetTreeModel.h"
+#include "recipe.h"
+#include "equipment.h"
+#include "fermentable.h"
+#include "hop.h"
+#include "misc.h"
+#include "yeast.h"
+#include "brewnote.h"
 
 BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    QTreeView(parent)
@@ -31,8 +38,6 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    setRootIsDecorated(false);
    resizeColumnToContents(0);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-
 }
 
 BrewTargetTreeView::~BrewTargetTreeView()
@@ -207,19 +212,19 @@ QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes)
          switch(type)
          {
             case BrewTargetTreeItem::EQUIPMENT:
-               name = model->getEquipment(index)->getName();
+               name = model->getEquipment(index)->name();
                break;
             case BrewTargetTreeItem::FERMENTABLE:
-               name = model->getFermentable(index)->getName();
+               name = model->getFermentable(index)->name();
                break;
             case BrewTargetTreeItem::HOP:
-               name = model->getHop(index)->getName();
+               name = model->getHop(index)->name();
                break;
             case BrewTargetTreeItem::MISC:
-               name = model->getMisc(index)->getName();
+               name = model->getMisc(index)->name();
                break;
             case BrewTargetTreeItem::YEAST:
-               name = model->getYeast(index)->getName();
+               name = model->getYeast(index)->name();
                break;
             default:
                name = "";
@@ -319,7 +324,6 @@ QMenu* BrewTargetTreeView::getContextMenu(QModelIndex selected)
 RecipeTreeView::RecipeTreeView(QWidget *parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::RECIPEMASK);
-   model->startObservingDB();
 
    setModel(model);
    setExpanded(findRecipe(0), true);
@@ -333,7 +337,6 @@ RecipeTreeView::~RecipeTreeView()
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::EQUIPMASK);
-   model->startObservingDB();
 
    setModel(model);
    setExpanded(findEquipment(0), true);
@@ -349,7 +352,6 @@ EquipmentTreeView::~EquipmentTreeView()
 FermentableTreeView::FermentableTreeView(QWidget *parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::FERMENTMASK);
-   model->startObservingDB();
 
    setModel(model);
    setExpanded(findFermentable(0), true);
@@ -365,7 +367,6 @@ FermentableTreeView::~FermentableTreeView()
 HopTreeView::HopTreeView(QWidget *parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::HOPMASK);
-   model->startObservingDB();
 
    setModel(model);
    setExpanded(findHop(0), true);
@@ -381,7 +382,6 @@ HopTreeView::~HopTreeView()
 MiscTreeView::MiscTreeView(QWidget *parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::MISCMASK);
-   model->startObservingDB();
 
    setModel(model);
    setExpanded(findMisc(0), true);
@@ -397,7 +397,6 @@ MiscTreeView::~MiscTreeView()
 YeastTreeView::YeastTreeView(QWidget *parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::YEASTMASK);
-   model->startObservingDB();
 
    setModel(model);
    setExpanded(findYeast(0), true);

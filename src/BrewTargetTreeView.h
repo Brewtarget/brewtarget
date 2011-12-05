@@ -30,6 +30,13 @@ class BrewTargetTreeView;
 
 // Forward declarations.
 class BrewTargetTreeModel;
+class Recipe;
+class Equipment;
+class Fermentable;
+class Hop;
+class Misc;
+class Yeast;
+class BrewNote;
 
 class BrewTargetTreeView : public QTreeView
 {
