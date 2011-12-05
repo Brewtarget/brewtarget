@@ -238,17 +238,20 @@ QString BrewDayScrollWidget::buildInstructionTable()
       tmp = "";
       reagents = ins->reagents();
 
+      // TODO: comparing ins->name() with these untranslated strings means this
+      // doesn't work in other languages. Find a better way.
       if ( ins->name() == "Add grains")
       {
-          Instruction* temp = recObs->mashFermentable();
-          reagents = temp->reagents();
+         // TODO: rewrite this somehow.
+         //Instruction* temp = recObs->mashFermentableIns();
+         //reagents = temp->reagents();
       }
       else if ( ins->name() == "Heat water")
       {
-         int mashSize = mashSteps.size();
-         Instruction* temp = recObs->getMashWater(mashSize);
-         reagents = temp->reagents();
-
+         // TODO: rewrite this somehow.
+         //int mashSize = mashSteps.size();
+         //Instruction* temp = recObs->getMashWater(mashSize);
+         //reagents = temp->reagents();
       }
 
       if ( reagents.size() > 1 )

@@ -287,18 +287,11 @@ public:
    Style* style() const;
    
    // Other junk.
-   // TODO: move these Instruction* methods to Database.
-   Instruction* getPostboilFermentables();
-   Instruction* getPostboilSteps();
-   Instruction* getMashFermentable() const;
-   Instruction* getMashWater(unsigned int size) const;
-   Instruction* getFirstWortHops() const;
-   Instruction* getTopOff() const;
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) const;
    QVector<PreInstruction> mashSteps() const;
    QVector<PreInstruction> hopSteps(Hop::Use type = Hop::USEBOIL) const;
    QVector<PreInstruction> miscSteps(Misc::Use type = Misc::USEBOIL) const;
-   PreInstruction boilFermentables(double timeRemaining) const;
+   PreInstruction boilFermentablesPre(double timeRemaining) const;
    bool hasBoilFermentable();
 
 signals:
@@ -403,6 +396,14 @@ private:
    
    // Helper
    double ibuFromHop(Hop const* hop);
+   
+   // Adds instructions to the recipe.
+   Instruction* postboilFermentablesIns();
+   Instruction* postboilIns();
+   Instruction* mashFermentableIns() const;
+   Instruction* mashWaterIns(unsigned int size) const;
+   Instruction* firstWortHopsIns() const;
+   Instruction* topOffIns() const;
    
    void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );
