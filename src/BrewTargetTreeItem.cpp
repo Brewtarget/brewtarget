@@ -321,7 +321,7 @@ QVariant BrewTargetTreeItem::dataBrewNote(int column)
 
    BrewNote* bNote = qobject_cast<BrewNote*>(thing);
 
-   return bNote->getBrewDate_short();
+   return bNote->brewDate_short();
 }
 
 void BrewTargetTreeItem::setType(int t)

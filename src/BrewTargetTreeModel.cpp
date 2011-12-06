@@ -516,7 +516,7 @@ QModelIndex BrewTargetTreeModel::findYeast(Yeast* yeast)
 QModelIndex BrewTargetTreeModel::findBrewNote(BrewNote* bNote)
 {
    // Get the brewnote's parent
-   Recipe *parent = bNote->getParent();
+   Recipe *parent = Database::instance().getParentRecipe(bNote);
    // Find that recipe in the list
    QModelIndex pInd = findRecipe(parent);
    // and get the associated treeItem

@@ -405,6 +405,17 @@ MashStep* Database::newMashStep(Mash* mash)
    return tmp;
 }
 
+Recipe* Database::getParentRecipe( BrewNote const* note )
+{
+   int key;
+   QSqlQuery q( QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key),
+                sqldb );
+   q.next();
+   key = q.record().value("recipe_id").toInt();
+   
+   return allRecipes[key];
+}
+
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
    // TODO: encapsulate in QUndoCommand.

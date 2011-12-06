@@ -211,6 +211,9 @@ public:
    void getWaters( QList<Water*>&, QString filter="" );
    void getYeasts( QList<Yeast*>&, QString filter="" );
    
+   //! Get the recipe that this \b note is part of.
+   Recipe* getParentRecipe( BrewNote const* note );
+   
    //! Interchange the step orders of the two steps. Must be in same mash.
    void swapMashStepOrder(MashStep* m1, MashStep* m2);
    //! Interchange the instruction orders. Must be in same recipe.
