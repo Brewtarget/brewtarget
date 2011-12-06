@@ -41,26 +41,26 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
       connect( bNoteObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
       // Set the highs and the lows for the lcds
-      lcdnumber_effBK->setLowLim(bNoteObs->getProjEff_pct() * low);
-      lcdnumber_effBK->setHighLim(bNoteObs->getProjEff_pct() * high);
+      lcdnumber_effBK->setLowLim(bNoteObs->projEff_pct() * low);
+      lcdnumber_effBK->setHighLim(bNoteObs->projEff_pct() * high);
 
-      lcdnumber_projectedOG->setLowLim( bNoteObs->getProjOG() * low);
-      lcdnumber_projectedOG->setHighLim( bNoteObs->getProjOG() * high);
+      lcdnumber_projectedOG->setLowLim( bNoteObs->projOg() * low);
+      lcdnumber_projectedOG->setHighLim( bNoteObs->projOg() * high);
 
-      lcdnumber_brewhouseEff->setLowLim(bNoteObs->getProjEff_pct() * low);
-      lcdnumber_brewhouseEff->setHighLim(bNoteObs->getProjEff_pct() * high);
+      lcdnumber_brewhouseEff->setLowLim(bNoteObs->projEff_pct() * low);
+      lcdnumber_brewhouseEff->setHighLim(bNoteObs->projEff_pct() * high);
 
-      lcdnumber_projABV->setLowLim( bNoteObs->getProjABV_pct() * low);
-      lcdnumber_projABV->setHighLim( bNoteObs->getProjABV_pct() * high);
+      lcdnumber_projABV->setLowLim( bNoteObs->projABV_pct() * low);
+      lcdnumber_projABV->setHighLim( bNoteObs->projABV_pct() * high);
 
-      lcdnumber_abv->setLowLim( bNoteObs->getProjABV_pct() * low);
-      lcdnumber_abv->setHighLim( bNoteObs->getProjABV_pct() * high);
+      lcdnumber_abv->setLowLim( bNoteObs->projABV_pct() * low);
+      lcdnumber_abv->setHighLim( bNoteObs->projABV_pct() * high);
 
       showChanges();
    }
 }
 
-// TBD
+// TODO: what's this?
 void BrewNoteWidget::updateBrewDate()
 {
 }
@@ -70,7 +70,7 @@ void BrewNoteWidget::updateSG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setSG(lineEdit_SG->text());
+   bNoteObs->setSg(BrewNote::translateSG(lineEdit_SG->text()));
    showChanges();
 }
 
@@ -106,7 +106,7 @@ void BrewNoteWidget::updateOG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setOG(lineEdit_OG->text());
+   bNoteObs->setOg(BrewNote::translateSG(lineEdit_OG->text()));
    showChanges();
 }
 
@@ -142,7 +142,7 @@ void BrewNoteWidget::updateFG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setFG(lineEdit_FG->text());
+   bNoteObs->setFg(BrewNote::translateSG(lineEdit_FG->text()));
    showChanges();
 }
 
@@ -160,7 +160,7 @@ void BrewNoteWidget::updateFermentDate()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setFermentDate(lineEdit_fermentDate->text());
+   bNoteObs->setFermentDate( BeerXMLElement::getDateTime(lineEdit_fermentDate->text()) );
    showChanges();
 }
 
@@ -211,25 +211,25 @@ void BrewNoteWidget::showChanges()
    if (bNoteObs == 0)
       return;
 
-   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs->getSG(),true));
-   lineEdit_volIntoBK->setText(Brewtarget::displayAmount(bNoteObs->getVolumeIntoBK_l(),Units::liters));
-   lineEdit_strikeTemp->setText(Brewtarget::displayAmount(bNoteObs->getStrikeTemp_c(),Units::celsius));
-   lineEdit_mashFinTemp->setText(Brewtarget::displayAmount(bNoteObs->getMashFinTemp_c(),Units::celsius));
-   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs->getOG(),true));
-   lineEdit_postBoilVol->setText(Brewtarget::displayAmount(bNoteObs->getPostBoilVolume_l(),Units::liters));
-   lineEdit_volIntoFerm->setText(Brewtarget::displayAmount(bNoteObs->getVolumeIntoFerm_l(),Units::liters));
-   lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs->getPitchTemp_c(),Units::celsius));
-   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->getFG(),true));
-   lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs->getFinalVolume_l(),Units::liters));
-   lineEdit_fermentDate->setText(bNoteObs->getFermentDate_short());
-   plainTextEdit_brewNotes->setPlainText(bNoteObs->getNotes());
+   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs->sg(),true));
+   lineEdit_volIntoBK->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoBK_l(),Units::liters));
+   lineEdit_strikeTemp->setText(Brewtarget::displayAmount(bNoteObs->strikeTemp_c(),Units::celsius));
+   lineEdit_mashFinTemp->setText(Brewtarget::displayAmount(bNoteObs->mashFinTemp_c(),Units::celsius));
+   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs->og(),true));
+   lineEdit_postBoilVol->setText(Brewtarget::displayAmount(bNoteObs->postBoilVolume_l(),Units::liters));
+   lineEdit_volIntoFerm->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoFerm_l(),Units::liters));
+   lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs->pitchTemp_c(),Units::celsius));
+   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->fg(),true));
+   lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs->finalVolume_l(),Units::liters));
+   lineEdit_fermentDate->setText(bNoteObs->fermentDate_short());
+   plainTextEdit_brewNotes->setPlainText(bNoteObs->notes());
 
    // Now with the calculated stuff
    lcdnumber_effBK->display(bNoteObs->calculateEffIntoBK_pct(),2);
-   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs->calculateOG()));
+   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs->calculateOg()));
    lcdnumber_brewhouseEff->display(bNoteObs->calculateBrewHouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->calculateABV_pct(),2);
-   lcdnumber_abv->display(bNoteObs->actualABV_pct(),2);
+   lcdnumber_abv->display(bNoteObs->calculateActualABV_pct(),2);
    
 }
 

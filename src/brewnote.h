@@ -152,16 +152,6 @@ public:
    double projPoints() const;
    double projAtten() const;
    
-private:
-   BrewNote();
-   BrewNote(BrewNote const& other);
-   
-   Recipe* rec;
-
-   QHash<QString,double> info;
-   QHash<QString,QString> XMLTagToName();
-   QHash<QString,QString> NameToXMLTag();
-
    /*! Convert a string that may be either "1.040" or "10 P" for example.
     * If the user has appended a "P" (case insensitive, with or without a space),
     * the gravity reading will be assumed to be in plato/brix.
@@ -171,6 +161,16 @@ private:
     * to be a plato/brix
     */
    static double translateSG(QString qstr);
+   
+private:
+   BrewNote();
+   BrewNote(BrewNote const& other);
+   
+   Recipe* rec;
+
+   QHash<QString,double> info;
+   QHash<QString,QString> XMLTagToName();
+   QHash<QString,QString> NameToXMLTag();
 };
 
 inline bool BrewNotePtrLt( BrewNote* lhs, BrewNote* rhs)
