@@ -28,6 +28,7 @@ class BeerXMLElement;
 #include <QObject>
 #include <QMetaProperty>
 #include <QVariant>
+#include <QDateTime>
 #include "database.h"
 
 class BeerXMLElement : public QObject
@@ -73,6 +74,8 @@ public:
    static double getDouble( const QDomText& textNode );
    static bool getBool( const QDomText& textNode );
    static int getInt( const QDomText& textNode );
+   //! Convert the string to a QDateTime according to Qt::ISODate.
+   static QDateTime getDateTime(QString const& str = "");
    static QString text(bool val);
    static QString text(double val);
    static QString text(int val);

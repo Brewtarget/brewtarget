@@ -102,14 +102,16 @@ public:
    QTableView* createView( DBTable table );
    
    // Named constructors for new BeerXML stuff.
+   //! Create new brew note attached to \b parent.
+   BrewNote* newBrewNote(Recipe* parent);
    Equipment* newEquipment(); // DONE
    Fermentable* newFermentable(); // DONE
    Hop* newHop(); // DONE
-   //! Create new instruction attached to \b rec.
-   Instruction* newInstruction(Recipe* rec); // DONE
+   //! Create new instruction attached to \b parent.
+   Instruction* newInstruction(Recipe* parent); // DONE
    Mash* newMash(); // DONE
-   //! Create new mash step attached to \b mash.
-   MashStep* newMashStep(Mash* mash); // DONE
+   //! Create new mash step attached to \b parent.
+   MashStep* newMashStep(Mash* parent); // DONE
    Misc* newMisc(); // DONE
    Recipe* newRecipe(); // DONE
    Style* newStyle(); // DONE

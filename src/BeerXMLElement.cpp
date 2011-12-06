@@ -71,6 +71,16 @@ int BeerXMLElement::getInt(const QDomText& textNode)
    return ret;
 }
 
+QDateTime getDateTime(QString const& str = "")
+{
+   QDateTime temp;
+   
+   if ( str != "" && (temp = QDateTime::fromString(str, Qt::ISODate)).isValid() ) 
+      return temp;
+   else
+      return QDateTime::currentDateTime();
+}
+
 QString BeerXMLElement::text(bool val)
 {
    if( val )

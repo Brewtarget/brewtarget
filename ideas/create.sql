@@ -204,7 +204,7 @@ create table brewnote(
    pitch_temp real,
    fg real,
    eff_into_bk real,
-   actual_abv real,
+   abv real,
    predicted_og real,
    brewhouse_eff real,
    predicted_abv real,

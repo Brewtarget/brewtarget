@@ -55,7 +55,7 @@ void EquipmentComboBox::removeEquipment(Equipment* equipment)
 //void EquipmentComboBox::notify(Observable *notifier, QVariant info)
 void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
 {
-   unsigned int i, size;
+   int i;
 
    // Notifier could be the database.
    if( sender() == &(Database::instance()) &&
