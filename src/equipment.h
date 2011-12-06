@@ -149,7 +149,6 @@ private:
    double boilingPoint_c;
    */
    
-   void setDefaults();
    void doCalculations();
 };
 

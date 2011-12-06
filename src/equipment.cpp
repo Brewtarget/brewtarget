@@ -36,6 +36,7 @@ bool operator==(Equipment &e1, Equipment &e2)
 
 //=============================CONSTRUCTORS=====================================
 
+/*
 void Equipment::setDefaults()
 {
    name = "";
@@ -57,34 +58,19 @@ void Equipment::setDefaults()
    absorption_LKg = HeatCalculations::absorption_LKg;
    boilingPoint_c = 100.0;
 }
+*/
 
 Equipment::Equipment()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-Equipment::Equipment(const QDomNode& equipmentNode)
+Equipment::Equipment( Equipment const& other )
+   : BeerXMLElement(other)
 {
-   fromNode(equipmentNode);
 }
 
-Equipment::Equipment( Equipment* other )
-{
-   if( other == 0 )
-   {
-      setDefaults();
-      return;
-   }
-
-   QDomDocument doc;
-   QDomElement root = doc.createElement("root");
-   QDomNodeList list;
-
-   other->toXml(doc, root);
-
-   fromNode(root.firstChild());
-}
-
+/*
 void Equipment::fromNode(const QDomNode& equipmentNode)
 {
    QDomNode node, child;
@@ -196,6 +182,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
    if( ! hasRealEvapRate )
       setEvapRate_lHr( evapRate_pctHr/(double)100 * boilSize_l );
 }
+*/
 
 //============================"SET" METHODS=====================================
 

@@ -1593,7 +1593,7 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    QDomElement tmpNode;
    QDomText tmpText;
    
-   int i, size;
+   int i;
    
    recipeNode = doc.createElement("RECIPE");
    
@@ -1667,7 +1667,7 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    
    tmpNode = doc.createElement("WATERS");
    QList<Water*> waters = a->waters();
-   for( i = 0; i < size; ++i )
+   for( i = 0; i < waters.size(); ++i )
       toXml( waters[i], doc, tmpNode);
    recipeNode.appendChild(tmpNode);
    
@@ -1692,7 +1692,7 @@ void Database::toXml( Recipe* a, QDomDocument& doc, QDomNode& parent )
    tmpNode.appendChild(tmpText);
    recipeNode.appendChild(tmpNode);
    
-   Equipment* equip;
+   Equipment* equip = a->equipment();
    if( equip )
       toXml( equip, doc, recipeNode);
    
