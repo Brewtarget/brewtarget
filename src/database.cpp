@@ -328,7 +328,7 @@ Equipment* Database::newEquipment()
    tmp->_table = EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
    //emit changed( property("equipments"), allEquipments );
-   emit changed( property("equipments"), QVariant() );
+   emit changed( metaProperty("equipments"), QVariant() );
    return tmp;
 }
 
@@ -338,7 +338,7 @@ Fermentable* Database::newFermentable()
    tmp->_key = insertNewRecord(FERMTABLE);
    tmp->_table = FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
-   emit changed( property("fermentables"), QVariant() );
+   emit changed( metaProperty("fermentables"), QVariant() );
    return tmp;
 }
 
@@ -348,7 +348,7 @@ Hop* Database::newHop()
    tmp->_key = insertNewRecord(HOPTABLE);
    tmp->_table = HOPTABLE;
    allHops.insert(tmp->_key,tmp);
-   emit changed( property("hops"), QVariant() );
+   emit changed( metaProperty("hops"), QVariant() );
    return tmp;
 }
 
@@ -367,7 +367,7 @@ Instruction* Database::newInstruction(Recipe* rec)
    allInstructions.insert(tmp->_key,tmp);
    
    // Database's instructions have changed.
-   emit changed( property("instructions"), QVariant() );
+   emit changed( metaProperty("instructions"), QVariant() );
    // Recipe's instructions have changed.
    emit rec->changed( rec->metaProperty("instructions") );
    return tmp;
@@ -379,7 +379,7 @@ Mash* Database::newMash()
    tmp->_key = insertNewRecord(MASHTABLE);
    tmp->_table = MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
-   emit changed( property("mashs"), QVariant() );
+   emit changed( metaProperty("mashs"), QVariant() );
    return tmp;
 }
 
@@ -399,7 +399,7 @@ MashStep* Database::newMashStep(Mash* mash)
    
    allMashSteps.insert(tmp->_key,tmp);
    // Database's steps have changed.
-   emit changed( property("mashSteps"), QVariant() );
+   emit changed( metaProperty("mashSteps"), QVariant() );
    // Mash's steps have changed.
    emit mash->changed( mash->metaProperty("mashSteps") );
    return tmp;
@@ -433,7 +433,7 @@ Misc* Database::newMisc()
    tmp->_key = insertNewRecord(MISCTABLE);
    tmp->_table = MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
-   emit changed( property("miscs"), QVariant() );
+   emit changed( metaProperty("miscs"), QVariant() );
    return tmp;
 }
 
@@ -443,7 +443,7 @@ Recipe* Database::newRecipe()
    tmp->_key = insertNewRecord(RECTABLE);
    tmp->_table = RECTABLE;
    allRecipes.insert(tmp->_key,tmp);
-   emit changed( property("recipes"), QVariant() );
+   emit changed( metaProperty("recipes"), QVariant() );
    return tmp;
 }
 
@@ -453,7 +453,7 @@ Style* Database::newStyle()
    tmp->_key = insertNewRecord(STYLETABLE);
    tmp->_table = STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
-   emit changed( property("styles"), QVariant() );
+   emit changed( metaProperty("styles"), QVariant() );
    return tmp;
 }
 
@@ -463,7 +463,7 @@ Water* Database::newWater()
    tmp->_key = insertNewRecord(WATERTABLE);
    tmp->_table = WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
-   emit changed( property("waters"), QVariant() );
+   emit changed( metaProperty("waters"), QVariant() );
    return tmp;
 }
 
@@ -473,7 +473,7 @@ Yeast* Database::newYeast()
    tmp->_key = insertNewRecord(YEASTTABLE);
    tmp->_table = YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
-   emit changed( property("yeasts"), QVariant() );
+   emit changed( metaProperty("yeasts"), QVariant() );
    return tmp;
 }
 

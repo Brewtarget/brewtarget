@@ -18,12 +18,16 @@
 
 #include "EquipmentComboBox.h"
 #include <QList>
+#include <QString>
+#include "database.h"
+#include "equipment.h"
+#include "recipe.h"
 
 EquipmentComboBox::EquipmentComboBox(QWidget* parent)
         : QComboBox(parent), recipe(0)
 {
    setCurrentIndex(-1);
-   connect( Database::instance(), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    repopulateList();
 }
 
@@ -55,7 +59,7 @@ void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
 
    // Notifier could be the database.
    if( sender() == &(Database::instance()) &&
-       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("equipments") )
+       QString(prop.name()) == "equipments" )
    {
       Equipment* previousSelection = getSelected();
       
@@ -73,12 +77,12 @@ void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
    else if( sender() == recipe )
    {
       // Only respond if the equipment changed.
-      if( prop.propertyIndex() != recipe->metaObject().indexOfProperty("equipment") )
+      if( QString(prop.name()) == "equipment" )
          return;
       
       // All we care about is the equipment in the recipe.
-      if( recipe->getEquipment() )
-         setIndexByEquipment( recipeObs->equipment() );
+      if( recipe->equipment() )
+         setIndexByEquipment( recipe->equipment() );
       else
          setCurrentIndex(-1); // Or just give up.
    }

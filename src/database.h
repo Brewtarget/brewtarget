@@ -376,7 +376,7 @@ private:
    ~Database(){} // DONE
    
    //! Helper to more easily get QMetaProperties.
-   QMetaProperty property(const char* name)
+   QMetaProperty metaProperty(const char* name)
    {
       return metaObject()->property(metaObject()->indexOfProperty(name));
    }
