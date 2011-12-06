@@ -39,8 +39,6 @@ public:
    enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
 
    virtual ~Fermentable() {}
-   
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
 
    // Obsolete
    /*

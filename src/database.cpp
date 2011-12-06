@@ -355,6 +355,8 @@ Hop* Database::newHop()
 Instruction* Database::newInstruction(Recipe* rec)
 {
    // TODO: encapsulate in QUndoCommand.
+   // NOTE: we have unique(recipe_id,instruction_number) constraints on this table,
+   // so may have to pay special attention when creating the new record.
    Instruction* tmp = new Instruction();
    tmp->_key = insertNewRecord(INSTRUCTIONTABLE);
    tmp->_table = INSTRUCTIONTABLE;
@@ -363,7 +365,11 @@ Instruction* Database::newInstruction(Recipe* rec)
    q.next();
    q.record().setValue( "recipe_id", rec->_key );
    allInstructions.insert(tmp->_key,tmp);
+   
+   // Database's instructions have changed.
    emit changed( property("instructions"), QVariant() );
+   // Recipe's instructions have changed.
+   emit rec->changed( rec->metaProperty("instructions") );
    return tmp;
 }
 
@@ -377,14 +383,48 @@ Mash* Database::newMash()
    return tmp;
 }
 
-MashStep* Database::newMashStep()
+MashStep* Database::newMashStep(Mash* mash)
 {
+   // TODO: encapsulate in QUndoCommand.
+   // NOTE: we have unique(mash_id,step_number) constraints on this table,
+   // so may have to pay special attention when creating the new record.
    MashStep* tmp = new MashStep();
    tmp->_key = insertNewRecord(MASHSTEPTABLE);
    tmp->_table = MASHSTEPTABLE;
+   
+   QSqlQuery q( QString("SELECT * FROM mashstep WHERE msid = %1").arg(tmp->_key),
+                sqldb );
+   q.next();
+   q.record().setValue( "mash_id", mash->_key );
+   
    allMashSteps.insert(tmp->_key,tmp);
+   // Database's steps have changed.
    emit changed( property("mashSteps"), QVariant() );
+   // Mash's steps have changed.
+   emit mash->changed( mash->metaProperty("mashSteps") );
    return tmp;
+}
+
+void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
+{
+   // TODO: encapsulate in QUndoCommand.
+   QSqlQuery q( QString("UPDATE mashstep SET step_number = CASE msid WHEN %1 then %2 when %3 then %4 END WHERE msid IN (%5,%6)")
+                .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key),
+                sqldb );
+                
+   emit m1->changed( m1->metaProperty("stepNumber") );
+   emit m2->changed( m2->metaProperty("stepNumber") );
+}
+
+void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
+{
+   // TODO: encapsulate in QUndoCommand.
+   QSqlQuery q( QString("UPDATE instruction SET instruction_number = CASE iid WHEN %1 then %2 when %3 then %4 END WHERE iid IN (%5,%6)")
+                .arg(in1->_key).arg(in2->_key).arg(in2->_key).arg(in1->_key).arg(in1->_key).arg(in2->_key),
+                sqldb );
+                
+   emit in1->changed( in1->metaProperty("instructionNumber") );
+   emit in2->changed( in2->metaProperty("instructionNumber") );
 }
 
 Misc* Database::newMisc()

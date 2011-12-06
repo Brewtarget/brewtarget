@@ -108,7 +108,8 @@ public:
    //! Create new instruction attached to \b rec.
    Instruction* newInstruction(Recipe* rec); // DONE
    Mash* newMash(); // DONE
-   MashStep* newMashStep(); // DONE
+   //! Create new mash step attached to \b mash.
+   MashStep* newMashStep(Mash* mash); // DONE
    Misc* newMisc(); // DONE
    Recipe* newRecipe(); // DONE
    Style* newStyle(); // DONE
@@ -207,6 +208,11 @@ public:
    void getStyles( QList<Style*>&, QString filter="" );
    void getWaters( QList<Water*>&, QString filter="" );
    void getYeasts( QList<Yeast*>&, QString filter="" );
+   
+   //! Interchange the step orders of the two steps. Must be in same mash.
+   void swapMashStepOrder(MashStep* m1, MashStep* m2);
+   //! Interchange the instruction orders. Must be in same recipe.
+   void swapInstructionOrder(Instruction* in1, Instruction* in2);
    
    Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );

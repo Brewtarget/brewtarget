@@ -16,15 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <string>
 #include <QVector>
 #include "mashstep.h"
 #include "brewtarget.h"
-#include <QDomElement>
-#include <QDomText>
 
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction";
+QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
 
 bool operator<(MashStep &m1, MashStep &m2)
 {
@@ -38,6 +35,7 @@ bool operator==(MashStep &m1, MashStep &m2)
 
 //==============================CONSTRUCTORS====================================
 
+/*
 void MashStep::setDefaults()
 {
    name = "";
@@ -50,17 +48,14 @@ void MashStep::setDefaults()
    endTemp_c = 0.0;
    decoctionAmount_l = 0.0;
 }
+*/
 
 MashStep::MashStep()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-MashStep::MashStep(const QDomNode& mashStepNode)
-{
-   fromNode(mashStepNode);
-}
-
+/*
 void MashStep::fromNode(const QDomNode& mashStepNode)
 {
    QDomNode node, child;
@@ -134,24 +129,22 @@ void MashStep::fromNode(const QDomNode& mashStepNode)
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported MASHSTEP property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
+*/
 
 //================================"SET" METHODS=================================
 void MashStep::setName( const QString &var )
 {
-   name = QString(var);
-   hasChanged();
+   set("name", "name", var);
 }
 
 void MashStep::setInfuseTemp_c(double var)
 {
-   infuseTemp_c = var;
-   hasChanged();
+   set("infuseTemp_c", "infuse_temp", var);
 }
 
 void MashStep::setType( Type t )
 {
-   type = t;
-   hasChanged();
+   set("type", "mstype", types.at(t));
 }
 
 void MashStep::setInfuseAmount_l( double var )
@@ -159,13 +152,11 @@ void MashStep::setInfuseAmount_l( double var )
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Mashstep: number cannot be negative: %1").arg(var) );
-      infuseAmount_l = 0;
-      hasChanged();
+      return;
    }
    else
    {
-      infuseAmount_l = var;
-      hasChanged();
+      set("infuseAmount_l", "infuse_amount", var);
    }
 }
 
@@ -174,13 +165,11 @@ void MashStep::setStepTemp_c( double var )
    if( var < -273.15 )
    {
       Brewtarget::logW( QString("Mashstep: temp below absolute zero: %1").arg(var) );
-      stepTemp_c = 0;
-      hasChanged();
+      return;
    }
    else
    {
-      stepTemp_c = var;
-      hasChanged();
+      set("stepTemp_c", "step_temp", var);
    }
 }
 
@@ -189,13 +178,11 @@ void MashStep::setStepTime_min( double var )
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Mashstep: step time cannot be negative: %1").arg(var) );
-      stepTime_min = 0;
-      hasChanged();
+      return;
    }
    else
    {
-      stepTime_min = var;
-      hasChanged();
+      set("stepTime_min", "step_time", var);
    }
 }
 
@@ -204,13 +191,11 @@ void MashStep::setRampTime_min( double var )
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Mashstep: ramp time cannot be negative: %1").arg(var) );
-      rampTime_min = 0;
-      hasChanged();
+      return;
    }
    else
    {
-      rampTime_min = var;
-      hasChanged();
+      set("rampTime_min", "ramp_time", var);
    }
 }
 
@@ -219,77 +204,78 @@ void MashStep::setEndTemp_c( double var )
    if( var < -273.15 )
    {
       Brewtarget::logW( QString("Mashstep: temp below absolute zero: %1").arg(var) );
-      endTemp_c = 0;
-      hasChanged();
+      return;
    }
    else
    {
-      endTemp_c = var;
-      hasChanged();
+      set("endTemp_c", "end_temp", var);
    }
 }
 
 void MashStep::setDecoctionAmount_l(double var)
 {
-   decoctionAmount_l = var;
-   hasChanged();
+   set("decoctionAmount_l", "decoction_amount", var);
 }
 
 //============================="GET" METHODS====================================
-QString MashStep::getName() const
+QString MashStep::name() const
 {
-   return name;
+   return get("name").toString();
 }
 
-double MashStep::getInfuseTemp_c() const
+double MashStep::infuseTemp_c() const
 {
-   return infuseTemp_c;
+   return get("infuse_temp").toDouble();
 }
 
-MashStep::Type MashStep::getType() const
+MashStep::Type MashStep::type() const
 {
-   return type;
+   return types.indexOf(get("mstype").toString());
 }
 
-const QString& MashStep::getTypeString() const
+const QString& MashStep::typeString() const
 {
-   return types.at(type);
+   return get("mstype").toString();
 }
 
-const QString MashStep::getTypeStringTr() const
+const QString MashStep::typeStringTr() const
 {
-   QStringList typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
-   return typesTr.at(type);
+   return typesTr.at(type());
 }
 
-double MashStep::getInfuseAmount_l() const
+double MashStep::infuseAmount_l() const
 {
-   return infuseAmount_l;
+   return get("infuse_amount").toDouble();
 }
 
-double MashStep::getStepTemp_c() const
+double MashStep::stepTemp_c() const
 {
-   return stepTemp_c;
+   return get("step_temp").toDouble();
 }
 
-double MashStep::getStepTime_min() const
+double MashStep::stepTime_min() const
 {
-   return stepTime_min;
+   return get("step_time").toDouble();
 }
 
-double MashStep::getRampTime_min() const
+double MashStep::rampTime_min() const
 {
-   return rampTime_min;
+   return get("ramp_time").toDouble();
 }
 
-double MashStep::getEndTemp_c() const
+double MashStep::endTemp_c() const
 {
-   return endTemp_c;
+   return get("end_temp").toDouble();
 }
 
-double MashStep::getDecoctionAmount_l() const
+double MashStep::decoctionAmount_l() const
 {
-   return decoctionAmount_l;
+   return get("decoction_amount").toDouble();
+}
+
+int MashStep::stepNumber() const
+{
+   return get("step_number").toInt();
 }
 
 bool MashStep::isValidType( const QString &str ) const

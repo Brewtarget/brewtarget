@@ -89,7 +89,7 @@ QString BeerXMLElement::text(int val)
    return QString("%1").arg(val);
 }
 
-QString text(const QDate& val)
+QString text(QDate const& val)
 {
    return val.toString("dd-MM-yyyy");
 }
@@ -104,7 +104,7 @@ void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant 
    Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this, notify );
 }
 
-QVariant BeerXMLElement::get( const char* col_name )
+QVariant BeerXMLElement::get( const char* col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
 }

@@ -198,3 +198,8 @@ double Instruction::getInterval()
 {
    return interval;
 }
+
+int Instruction::instructionNumber() const
+{
+   return get("instruction_number").toInt();
+}

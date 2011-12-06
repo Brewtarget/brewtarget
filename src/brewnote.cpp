@@ -27,6 +27,7 @@
 #include "brewnote.h"
 #include "brewtarget.h"
 #include "Algorithms.h"
+#include "mashstep.h"
 
 // operators for sorts and things
 bool operator<(BrewNote& lhs, BrewNote& rhs)

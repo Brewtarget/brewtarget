@@ -87,7 +87,7 @@ const QString Yeast::typeString() const
 
 const QString Yeast::typeStringTr() const
 {
-   QStringList typesTr = QStringList() << QObject::tr("Ale")
+   static QStringList typesTr = QStringList() << QObject::tr("Ale")
                                        << QObject::tr("Lager")
                                        << QObject::tr("Wheat")
                                        << QObject::tr("Wine")
@@ -107,7 +107,7 @@ const QString Yeast::formString() const
 
 const QString Yeast::formStringTr() const
 {
-   QStringList formsTr = QStringList() << QObject::tr("Liquid")
+   static QStringList formsTr = QStringList() << QObject::tr("Liquid")
                                        << QObject::tr("Dry")
                                        << QObject::tr("Slant")
                                        << QObject::tr("Culture");
@@ -156,7 +156,7 @@ const QString Yeast::flocculationString() const
 
 const QString Yeast::flocculationStringTr() const
 {
-   QStringList flocculationsTr = QStringList() << QObject::tr("Low")
+   static QStringList flocculationsTr = QStringList() << QObject::tr("Low")
                                                << QObject::tr("Medium")
                                                << QObject::tr("High")
                                                << QObject::tr("Very High");

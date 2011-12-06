@@ -45,9 +45,13 @@ public:
    Q_PROPERTY( int key READ key )
    Q_PROPERTY( Database::DBTable table READ table )
    
+   //! Convenience method to determine if we are deleted.
    bool deleted(){ return get("deleted").toBool(); }
+   //! \returns our key in the table we are stored in.
    int key(){ return _key; }
+   //! \returns the table we are stored in.
    Database::DBTable table(){ return _table; }
+   //! \returns the BeerXML version of this element.
    int version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
    //! Convenience method to get a meta property by name.
    QMetaProperty metaProperty(const char* name)
@@ -60,14 +64,10 @@ public:
       return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
    }
    
-   // There should be Database::createClone(BeerXMLElement&) that does this.
-   //void deepCopy( BeerXMLElement* other ); // Constructs a deep copy of this element.
-   
    // Move this to Database to convert to/from XML from/to SQLite tables.
    /*
    virtual void fromNode(const QDomNode& node) = 0; // Should initialize this element from the node.
    */
-   virtual void toXml(QDomDocument& doc, QDomNode& parent) = 0;
    
    // Some static helpers to convert to/from text.
    static double getDouble( const QDomText& textNode );
@@ -76,7 +76,7 @@ public:
    static QString text(bool val);
    static QString text(double val);
    static QString text(int val);
-   static QString text(const QDate& val);
+   static QString text(QDate const& val);
    
 signals:
    //! Passes the meta property that has changed about this object.
@@ -102,7 +102,7 @@ protected:
     * \param col_name - The database column of the attribute we want to get.
     * Returns the value of the attribute specified by key/table/col_name.
     */
-   QVariant get( const char* col_name );
+   QVariant get( const char* col_name ) const;
    
 private:
    

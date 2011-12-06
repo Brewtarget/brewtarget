@@ -20,9 +20,9 @@
 #define _HOP_H
 
 #include <QDomNode>
-#include "BeerXMLElement.h"
 #include <QString>
 #include <QStringList>
+#include "BeerXMLElement.h"
 
 // Forward declarations.
 class Hop;
@@ -92,12 +92,12 @@ public:
    void setName( const QString& str );
    void setAlpha_pct( double num );
    void setAmount_kg( double num );
-   bool setUse( Use u );
+   void setUse( Use u );
    void setTime_min( double num );
    
    void setNotes( const QString& str );
-   bool setType( Type t );
-   bool setForm( Form f );
+   void setType( Type t );
+   void setForm( Form f );
    void setBeta_pct( double num );
    void setHsi_pct( double num );
    void setOrigin( const QString& str );

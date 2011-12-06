@@ -40,8 +40,6 @@ public:
 
    virtual ~MashStep() {}
 
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
    Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )
    Q_PROPERTY( double infuseAmount_l READ infuseAmount_l WRITE setInfuseAmount_l NOTIFY changed /*changedInfuseAmount_l*/ )
@@ -51,6 +49,8 @@ public:
    Q_PROPERTY( double endTemp_c READ endTemp_c WRITE setEndTemp_c NOTIFY changed /*changedEndTemp_c*/ )
    Q_PROPERTY( double infuseTemp_c READ infuseTemp_c WRITE setInfuseTemp_c NOTIFY changed /*changedInfuseTemp_c*/ )
    Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l NOTIFY changed /*changedDecoctionAmount_l*/ )
+   
+   Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ NOTIFY changed STORED false )
    
    void setName( const QString &var );
    void setType( Type t );
@@ -74,6 +74,9 @@ public:
    double endTemp_c() const;
    double infuseTemp_c() const;
    double decoctionAmount_l() const;
+   
+   //! What number this step is in the mash.
+   int stepNumber() const;
 
 signals:
    /*
@@ -94,6 +97,7 @@ private:
    
    bool isValidType( const QString &str ) const;
    static QStringList types;
+   static QStringList typesTr;
 };
 
 inline bool MashStepPtrLt( MashStep* lhs, MashStep* rhs)

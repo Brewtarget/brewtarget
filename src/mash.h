@@ -19,12 +19,12 @@
 #ifndef _MASH_H
 #define _MASH_H
 
-#include "mashstep.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
 // Forward declarations.
 class Mash;
+class MashStep;
 bool operator<(Mash &m1, Mash &m2);
 bool operator==(Mash &m1, Mash &m2);
 
@@ -36,8 +36,6 @@ class Mash : public BeerXMLElement
 public:
 
    virtual ~Mash() {}
-
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
    Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c NOTIFY changed /*changedGrainTemp_c*/ )

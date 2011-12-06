@@ -158,7 +158,15 @@ create table mashstep(
    infuse_temp real,
    decoction_amount real,
    deleted boolean,
-   display boolean
+   display boolean,
+
+   -- Every mash step must belong to a mash, right?
+   mash_id integer,
+   foreign key(mash_id) references mash(maid),
+
+   -- The order of this step in the mash.
+   step_number integer,
+   unique(mash_id,step_number)
 );
 
 -- unlike some of the other tables, you can have a mash with no name.
@@ -183,7 +191,8 @@ create table mash(
 -- I am putting the recipes key in here as a foreign key, instead of
 -- using another table
 create table brewnote(
-   brewDate varchar(32) PRIMARY KEY,
+   id integer PRIMARY KEY autoincrement,
+   brewDate varchar(32),
    fermentDate varchar(32),
    sg real,
    volume_into_bk real,
@@ -250,8 +259,13 @@ create table instruction(
    interval real,
    deleted boolean,
    display boolean,
+
    recipe_id integer,
-   foreign key(recipe_id) references recipe(rid)
+   foreign key(recipe_id) references recipe(rid),
+
+   -- The order of this instruction in the recipe.
+   instruction_number integer,
+   unique(recipe_id,instruction_number)
 );
 
 -- The relationship of styles to recipe is one to many, as is the mash and
@@ -297,13 +311,13 @@ create table recipe(
    foreign key(equipment_id) references equipment(eid)
 );
 
-create table mash_to_mashstep(
-   mmid integer PRIMARY KEY autoincrement,
-   mash_id integer,
-   mashstep_id integer,
-   foreign key(mash_id) references mash(maid),
-   foreign key(mashstep_id) references mashstep(msid)
-);
+--create table mash_to_mashstep(
+--   mmid integer PRIMARY KEY autoincrement,
+--   mash_id integer,
+--   mashstep_id integer,
+--   foreign key(mash_id) references mash(maid),
+--   foreign key(mashstep_id) references mashstep(msid)
+--);
 
 create table fermentable_in_recipe(
    hrid integer primary key autoincrement,

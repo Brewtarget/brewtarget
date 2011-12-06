@@ -45,6 +45,8 @@ public:
    Q_PROPERTY( double interval READ interval WRITE setInterval NOTIFY changed /*changedInterval*/ )
    Q_PROPERTY( QVector<QString> reagents READ reagents WRITE addReagent NOTIFY changed /*changedReagents*/ )
    
+   Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ NOTIFY changed STORED false )
+   
    // "set" methods.
    void setName(const QString& n);
    void setDirections(const QString& dir);
@@ -64,6 +66,7 @@ public:
    QVector<QString> reagents();
    double interval();
 
+   int instructionNumber() const;
 signals:
    /*
    void changedName(QString);

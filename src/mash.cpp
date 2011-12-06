@@ -37,6 +37,7 @@ bool operator==(Mash &m1, Mash &m2)
    return m1.name() == m2.name();
 }
 
+/*
 void Mash::setDefaults()
 {
    name = "";
@@ -50,17 +51,14 @@ void Mash::setDefaults()
    tunSpecificHeat_calGC = 0.0;
    equipAdjust = true;
 }
+*/
 
 Mash::Mash()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-Mash::Mash(const QDomNode& mashNode)
-{
-   fromNode(mashNode);
-}
-
+/*
 void Mash::fromNode(const QDomNode& mashNode)
 {
    QDomNode node, child;
@@ -140,35 +138,31 @@ void Mash::fromNode(const QDomNode& mashNode)
       }
    }
 }
+*/
 
 void Mash::setName( const QString& var )
 {
-   name = QString(var);
-   hasChanged();
+   set("name", "name", var);
 }
 
 void Mash::setGrainTemp_c( double var )
 {
-   grainTemp_c = var;
-   hasChanged();
+   set("grainTemp_c", "grain_temp", var);
 }
 
 void Mash::setNotes( const QString& var )
 {
-   notes = QString(var);
-   hasChanged();
+   set("notes", "notes", var);
 }
 
 void Mash::setTunTemp_c( double var )
 {
-   tunTemp_c = var;
-   hasChanged();
+   set("tunTemp_c", "tun_temp", var);
 }
 
 void Mash::setSpargeTemp_c( double var )
 {
-   spargeTemp_c = var;
-   hasChanged();
+   set("spargeTemp_c", sparge_temp, var);
 }
 
 void Mash::setPh( double var )
@@ -176,14 +170,12 @@ void Mash::setPh( double var )
    if( var < 0.0 || var > 14.0 )
    {
       Brewtarget::logW( QString("Mash: 0 < pH < 14: %1").arg(var) );
-      ph = 7;
+      return;
    }
    else
    {
-      ph = var;
+      set("ph", "ph", var);
    }
-
-   hasChanged();
 }
 
 void Mash::setTunWeight_kg( double var )
@@ -191,14 +183,12 @@ void Mash::setTunWeight_kg( double var )
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Mash: tun weight < 0: %1").arg(var) );
-      tunWeight_kg = 0;
+      return;
    }
    else
    {
-      tunWeight_kg = var;
+      set("tunWeight_kg", "tun_weight", var);
    }
-
-   hasChanged();
 }
 
 void Mash::setTunSpecificHeat_calGC( double var )
@@ -206,19 +196,17 @@ void Mash::setTunSpecificHeat_calGC( double var )
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Mash: sp heat < 0: %1").arg(var) );
-      tunSpecificHeat_calGC = 0;
+      return;
    }
    else
    {
-      tunSpecificHeat_calGC = var;
-      hasChanged();
+      set("tunSpecificHeat_calGC", "tun_specific_heat", var);
    }
 }
 
 void Mash::setEquipAdjust( bool var )
 {
-   equipAdjust = var;
-   hasChanged();
+   set("equipAdjust", "equip_adjust", var);
 }
 
 void Mash::addMashStep(MashStep* step)
