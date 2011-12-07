@@ -36,15 +36,13 @@
 #include <QVector>
 #include <QString>
 #include <QVector>
-#include <iostream>
-#include "observable.h"
 #include "fermentable.h"
 #include "FermentableTableModel.h"
 #include "unit.h"
 
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
-: QAbstractTableModel(parent), MultipleObserver()
+: QAbstractTableModel(parent)
 {
    fermObs.clear();
    parentTableWidget = parent;

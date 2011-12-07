@@ -21,7 +21,6 @@
 #include <QString>
 #include <QInputDialog>
 #include <QList>
-#include <string>
 #include "FermentableDialog.h"
 #include "FermentableTableModel.h"
 #include "database.h"

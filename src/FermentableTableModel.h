@@ -33,11 +33,10 @@ class FermentableItemDelegate;
 #include <QVector>
 #include "fermentable.h"
 #include "FermentableTableWidget.h"
-#include "observable.h"
 
 enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMISMASHEDCOL, FERMAFTERBOIL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
-class FermentableTableModel : public QAbstractTableModel, public MultipleObserver
+class FermentableTableModel : public QAbstractTableModel
 {
    Q_OBJECT
            
@@ -49,7 +48,6 @@ public:
    void removeAll();
    Fermentable* getFermentable(unsigned int i);
    void setDisplayPercentages( bool var );
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
    
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
