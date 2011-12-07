@@ -19,11 +19,13 @@
 #ifndef _MISCEDITOR_H
 #define   _MISCEDITOR_H
 
+#include <QDialog>
 #include "ui_miscEditor.h"
-#include "misc.h"
-#include "observable.h"
 
-class MiscEditor : public QDialog, private Ui::miscEditor, Observer
+// Forward declarations.
+class Misc;
+
+class MiscEditor : public QDialog, private Ui::miscEditor
 {
    Q_OBJECT
 
@@ -35,12 +37,15 @@ public:
 public slots:
    void save();
    void clearAndClose();
+   void changed(QMetaProperty,QVariant);
    
 private:
    Misc* obsMisc;
-   
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
-   void showChanges();
+   /*! Updates the UI elements effected by the \b metaProp of
+    *  the misc we are watching. If \b metaProp is null,
+    *  then update all the UI elements at once.
+    */
+   void showChanges(MetaProperty* metaProp = 0);
 };
 
 #endif   /* _MISCEDITOR_H */

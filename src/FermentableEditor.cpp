@@ -38,10 +38,10 @@ void FermentableEditor::setFermentable( Fermentable* f )
    if( obsFerm )
       disconnect( obsFerm, 0, this, 0 );
    
-   if( f )
+   obsFerm = f;
+   if( obsFerm )
    {
-      obsFerm = f;
-      connect( f, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( obsFerm, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
 }

@@ -16,43 +16,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "misc.h"
-
 #include <QtGui>
-#include <iostream>
-#include <string>
 #include <QIcon>
 #include "MiscEditor.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "misc.h"
 
-MiscEditor::MiscEditor( QWidget* /*parent*/ )
+MiscEditor::MiscEditor( QWidget* parent )
+   : QDialog(parent), obsMisc(0)
 {
    setupUi(this);
-
-   setWindowIcon(QIcon(SMALLQUESTION));
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
-   
-   obsMisc = 0;
 }
 
 void MiscEditor::setMisc( Misc* m )
 {
-   if( m && m != obsMisc )
+   if( obsMisc )
+      disconnect( obsMisc, 0, this, 0 );
+   
+   obsMisc = m;
+   if( obsMisc )
    {
-      obsMisc = m;
-      setObserved(m);
+      connect( obsMisc, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
 }
 
 void MiscEditor::save()
 {
-   Misc *m = obsMisc;
+   Misc* m = obsMisc;
    
    if( m == 0 )
    {
@@ -60,9 +57,10 @@ void MiscEditor::save()
       return;
    }
    
+   // TODO: check this out with 1.2.5.
    // Need to disable notification since every "set" method will cause a "showChanges" that
    // will revert any changes made.
-   m->disableNotification();
+   //m->disableNotification();
 
    m->setName(lineEdit_name->text());
    m->setType( static_cast<Misc::Type>(comboBox_type->currentIndex()) );
@@ -74,42 +72,57 @@ void MiscEditor::save()
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
 
-   m->reenableNotification();
-   m->forceNotify();
-
-   Database::getDatabase()->resortMiscs(); // If the name changed, need to resort.
+   //m->reenableNotification();
+   //m->forceNotify();
 
    setVisible(false);
 }
 
 void MiscEditor::clearAndClose()
 {
-   if( obsMisc )
-   {
-      obsMisc->removeObserver(this);
-      obsMisc = 0;
-   }
+   setMisc(0);
    setVisible(false); // Hide the window.
 }
 
-void MiscEditor::notify(Observable* notifier, QVariant info)
+void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( notifier == obsMisc ) 
-      showChanges();
+   if( sender() == obsMisc ) 
+      showChanges(&prop);
 }
 
-void MiscEditor::showChanges()
+void MiscEditor::showChanges(MetaProperty* metaProp)
 {
    if( obsMisc == 0 )
       return;
    
-   lineEdit_name->setText(obsMisc->getName());
-   lineEdit_name->setCursorPosition(0);
-   comboBox_type->setCurrentIndex(obsMisc->getType());
-   comboBox_use->setCurrentIndex(obsMisc->getUse());
-   lineEdit_time->setText(Brewtarget::displayAmount(obsMisc->getTime(), Units::minutes));
-   lineEdit_amount->setText(Brewtarget::displayAmount(obsMisc->getAmount(), (obsMisc->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
-   checkBox_isWeight->setCheckState( obsMisc->getAmountIsWeight()? Qt::Checked : Qt::Unchecked );
-   textEdit_useFor->setPlainText( obsMisc->getUseFor() );
-   textEdit_notes->setPlainText( obsMisc->getNotes() );
+   QString propName;
+   QVariant value;
+   bool updateAll = false;
+   if( metaProp == 0 )
+      updateAll = true;
+   else
+   {
+      propName = metaProp->name();
+      value = metaProp->read(obsFerm);
+   }
+   
+   if( propName == "name" || updateAll )
+   {
+      lineEdit_name->setText(obsMisc->name());
+      lineEdit_name->setCursorPosition(0);
+   }
+   else if( propName == "type" || updateAll )
+      comboBox_type->setCurrentIndex(obsMisc->type());
+   else if( propName == "use" || updateAll )
+      comboBox_use->setCurrentIndex(obsMisc->use());
+   else if( propName == "time" || updateAll )
+      lineEdit_time->setText(Brewtarget::displayAmount(obsMisc->time(), Units::minutes));
+   else if( propName == "amount" || updateAll )
+      lineEdit_amount->setText(Brewtarget::displayAmount(obsMisc->amount(), (obsMisc->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
+   else if( propName == "amountIsWeight" || updateAll )
+      checkBox_isWeight->setCheckState( obsMisc->amountIsWeight()? Qt::Checked : Qt::Unchecked );
+   else if( propName == "useFor" || updateAll )
+      textEdit_useFor->setPlainText( obsMisc->useFor() );
+   else if( propName == "notes" || updateAll )
+      textEdit_notes->setPlainText( obsMisc->notes() );
 }

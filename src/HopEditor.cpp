@@ -115,42 +115,42 @@ void HopEditor::showChanges(QMetaProperty* prop)
       val = prop->read(h);
    }
    
-   if( propName == "name" )
+   if( propName == "name" || updateAll )
    {
       lineEdit_name->setText(val.toString());
       lineEdit_name->setCursorPosition(0);
    }
-   else if( propName == "alpha_pct" )
+   else if( propName == "alpha_pct" || updateAll )
       lineEdit_alpha->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "amount_kg" )
+   else if( propName == "amount_kg" || updateAll )
       lineEdit_amount->setText(Brewtarget::displayAmount(val.toDouble(), Units::kilograms));
-   else if( propName == "use" )
+   else if( propName == "use" || updateAll )
       comboBox_use->setCurrentIndex(val.toInt());
-   else if( propName == "time_min" )
+   else if( propName == "time_min" || updateAll )
       lineEdit_time->setText(Brewtarget::displayAmount(val.toDouble(), Units::minutes));
-   else if( propName == "type" )
+   else if( propName == "type" || updateAll )
       comboBox_type->setCurrentIndex(val.toInt());
-   else if( propName == "form" )
+   else if( propName == "form" || updateAll )
       comboBox_form->setCurrentIndex(val.toInt());
-   else if( propName == "beta_pct" )
+   else if( propName == "beta_pct" || updateAll )
       lineEdit_beta->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "hsi_pct" )
+   else if( propName == "hsi_pct" || updateAll )
       lineEdit_HSI->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "origin" )
+   else if( propName == "origin" || updateAll )
    {
       lineEdit_origin->setText(val.toString());
       lineEdit_origin->setCursorPosition(0);
    }
-   else if( propName == "humulene_pct" )
+   else if( propName == "humulene_pct" || updateAll )
       lineEdit_humulene->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "caryophyllene_pct" )
+   else if( propName == "caryophyllene_pct" || updateAll )
       lineEdit_caryophyllene->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "cohumulone_pct" )
+   else if( propName == "cohumulone_pct" || updateAll )
       lineEdit_cohumulone->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "myrcene_pct" )
+   else if( propName == "myrcene_pct" || updateAll )
       lineEdit_myrcene->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "substitutes" )
+   else if( propName == "substitutes" || updateAll )
       textEdit_substitutes->setPlainText(val.toString());
-   else if( propName == "notes" )
+   else if( propName == "notes" || updateAll )
       textEdit_notes->setPlainText(val.toString());
 }
