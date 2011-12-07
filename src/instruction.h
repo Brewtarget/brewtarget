@@ -35,8 +35,6 @@ public:
    
    virtual ~Instruction() {}
 
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
    Q_PROPERTY( QString directions READ directions WRITE setDirections NOTIFY changed /*changedDirections*/ )
    Q_PROPERTY( bool hasTimer READ hasTimer WRITE setHasTimer NOTIFY changed /*changedHasTimer*/ )
@@ -82,10 +80,12 @@ private:
    //! Only database gets to construct instances.
    Instruction();
    Instruction( Instruction const& other );
+   /*
    Instruction( const QString& name,
                 const QString& directions,
                 bool hasTimer = false,
                 const QString& timerVal = "0" );
+   */
 };
 
 #endif   /* _INSTRUCTION_H */

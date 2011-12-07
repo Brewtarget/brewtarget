@@ -254,7 +254,7 @@ create table instruction(
    version integer,
    directions text,
    has_timer boolean,
-   timer_value real,
+   timer_value varchar(16),
    completed boolean,
    interval real,
    deleted boolean,

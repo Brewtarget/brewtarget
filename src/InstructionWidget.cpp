@@ -103,9 +103,9 @@ void InstructionWidget::setHasTimer()
 
    insObs->setHasTimer( (checkBox_showTimer->checkState() == Qt::Checked)? true : false );
 
-   if( insObs->getHasTimer() )
+   if( insObs->hasTimer() )
    {
-      timer->setTimer(insObs->getTimerValue());
+      timer->setTimer(insObs->timerValue());
       verticalLayout->insertWidget(1,timer);
       timer->setVisible(true);
       verticalLayout->update(); // Shouldn't have to do this, but if I don't,

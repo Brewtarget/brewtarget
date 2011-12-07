@@ -17,12 +17,9 @@
  */
 
 #include "instruction.h"
-#include <QVector>
 #include "brewtarget.h"
-#include <QDomElement>
-#include <QDomText>
-#include <QObject>
 
+/*
 void Instruction::setDefaults()
 {
    name = QString("");
@@ -32,12 +29,14 @@ void Instruction::setDefaults()
    completed = false;
    interval  = 0.0;
 }
+*/
 
 Instruction::Instruction()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
+/*
 Instruction::Instruction(
              const QString& n,
              const QString& dir,
@@ -108,73 +107,76 @@ void Instruction::fromNode(const QDomNode& instructionNode)
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported INSTRUCTION property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
+*/
 
-// "set" methods.
+// Setters ====================================================================
 void Instruction::setName(const QString& n)
 {
-   name = QString(n);
-   hasChanged();
+   set("name", "name", n);
 }
 
 void Instruction::setDirections(const QString& dir)
 {
-   directions = QString(dir);
-   hasChanged();
+   set("directions", "directions", dir);
 }
 
 void Instruction::setHasTimer(bool has)
 {
-   hasTimer = has;
-   hasChanged();
+   set("hasTimer", "has_timer", has);
 }
 
 void Instruction::setTimerValue(const QString& timerVal)
 {
-   timerValue = QString(timerVal);
-   hasChanged();
+   set("timerValue", "timer_val", timerVal);
 }
 
 void Instruction::setCompleted(bool comp)
 {
-   completed = comp;
-   hasChanged();
+   set("completed", "completed", comp);
 }
 
+// TODO: figure out.
+/*
 void Instruction::setReagent(const QString& reagent)
 {
    reagents.push_back(QString(reagent));
 }
+*/
 
 void Instruction::setInterval(double time) 
 {
-   interval = time;
+   set("interval", "interval", time);
 }
 
-QString Instruction::getName()
+// Accessors ==================================================================
+
+QString Instruction::name()
 {
-   return name;
+   return get("name").toString();
 }
 
-QString Instruction::getDirections()
+QString Instruction::directions()
 {
-   return directions;
+   return get("directions").toString();
 }
 
-bool Instruction::getHasTimer()
+bool Instruction::hasTimer()
 {
-   return hasTimer;
+   return get("has_timer").toBool();
 }
 
-QString Instruction::getTimerValue()
+QString Instruction::timerValue()
 {
-   return timerValue;
+   return get("timer_value").toString();
 }
 
-bool Instruction::getCompleted()
+bool Instruction::completed()
 {
-   return completed;
+   return get("completed").toBool();
 }
 
+/*
+// TODO: figure out.
 QString Instruction::getReagent(int i)
 {
    if ( i < reagents.size() )
@@ -183,6 +185,7 @@ QString Instruction::getReagent(int i)
       return QString("");
 }
 
+// TODO: figure out.
 QVector<QString> Instruction::getReagents()
 {
    QVector<QString> tmp;
@@ -193,10 +196,11 @@ QVector<QString> Instruction::getReagents()
 
    return tmp;
 }
+*/
 
-double Instruction::getInterval() 
+double Instruction::interval() 
 {
-   return interval;
+   return get("interval").toDouble();
 }
 
 int Instruction::instructionNumber() const
