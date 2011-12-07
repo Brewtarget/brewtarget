@@ -21,6 +21,7 @@
 #include <QString>
 #include <QInputDialog>
 #include <QList>
+#include "FermentableEditor.h"
 #include "FermentableDialog.h"
 #include "FermentableTableModel.h"
 #include "database.h"
@@ -29,7 +30,7 @@
 #include "fermentable.h"
 
 FermentableDialog::FermentableDialog(MainWindow* parent)
-        : QDialog(parent), mainWindow(parent), numFerms(0), fermEdit(new FermentableEditor(this))
+        : QDialog(parent), mainWindow(parent), fermEdit(new FermentableEditor(this)), numFerms(0)
 {
    setupUi(this);
 
@@ -95,7 +96,7 @@ void FermentableDialog::changed(QMetaProperty prop, QVariant val)
 {
    // Notifier should only be the database.
    if( sender() == &(Database::instance()) &&
-       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("fermentables") )
+       QString(prop.name()) == "fermentables" )
    {
       fermentableTableWidget->getModel()->removeAll();
       populateTable();
@@ -107,7 +108,7 @@ void FermentableDialog::populateTable()
    QList<Fermentable*> ferms;
    Database::instance().getFermentables(ferms);
 
-   numFerms = ferms.length();
+   numFerms = ferms.size();
    int i;
    for( i = 0; i < numFerms; ++i )
       fermentableTableWidget->getModel()->addFermentable(ferms[i]);
@@ -150,8 +151,7 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
    
    Fermentable *ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
    
-   // TODO: how should we restructure this call?
-   mainWindow->addFermentableToRecipe(new Fermentable(*ferm) ); // Need to add a copy so we don't change the database.
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), ferm );
 }
 
 void FermentableDialog::newFermentable()

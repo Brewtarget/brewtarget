@@ -438,6 +438,106 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
    emit in2->changed( in2->metaProperty("instructionNumber") );
 }
 
+QList<Fermentable*> Database::fermentables(Recipe* parent)
+{
+   QList<Fermentable*> ret;
+   QString queryString = QString("SELECT fermentable_id FROM fermentable_in_recipe WHERE recipe_id = %1").arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allFermentables[q.record().value("fermentable_id").toInt()]);
+   return ret;
+}
+
+QList<Hop*> Database::hops(Recipe* parent)
+{
+   QList<Hop*> ret;
+   QString queryString = QString("SELECT hop_id FROM hop_in_recipe WHERE recipe_id = %1").arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allHops[q.record().value("hop_id").toInt()]);
+   return ret;
+}
+
+QList<Misc*> Database::miscs(Recipe* parent)
+{
+   QList<Misc*> ret;
+   QString queryString = QString("SELECT misc_id FROM misc_in_recipe WHERE recipe_id = %1").arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allMiscs[q.record().value("misc_id").toInt()]);
+   return ret;
+}
+
+QList<MashStep*> Database::mashSteps(Mash* parent)
+{
+   QList<MashStep*> ret;
+   QString queryString = QString("SELECT %1 FROM %2 WHERE mash_id = %3")
+                            .arg(keyName(MASHSTEPTABLE))
+                            .arg(tableNames[MASHSTEPTABLE])
+                            .arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allMashSteps[q.record().value(keyName(MASHSTEPTABLE).toStdString().c_str()).toInt()]);
+   return ret;
+}
+
+QList<Instruction*> Database::instructions( Recipe* parent )
+{
+   QList<Instruction*> ret;
+   QString queryString = QString("SELECT %1 FROM %2 WHERE recipe_id = %3 ORDER BY instruction_number ASC")
+                            .arg(keyName(INSTRUCTIONTABLE))
+                            .arg(tableNames[INSTRUCTIONTABLE])
+                            .arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allInstructions[q.record().value(keyName(INSTRUCTIONTABLE).toStdString().c_str()).toInt()]);
+   return ret;
+}
+
+// TODO: implement all the rest of the BrewNote stuff.
+/*
+QList<BrewNote*> Database::brewNotes( Recipe* parent )
+{
+   QList<BrewNote*> ret;
+   QString queryString = QString("SELECT %1 FROM %2 WHERE recipe_id = %3 ORDER BY brewDate ASC")
+                            .arg(keyName(BREWNOTETABLE))
+                            .arg(tableNames[BREWNOTETABLE])
+                            .arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allBrewNotes[q.record().value(keyName(BREWNOTETABLE).toStdString().c_str()).toInt()]);
+   return ret;
+}
+*/
+
+QList<Water*> Database::waters(Recipe* parent)
+{
+   QList<Water*> ret;
+   QString queryString = QString("SELECT water_id FROM water_in_recipe WHERE recipe_id = %1").arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allWaters[q.record().value("water_id").toInt()]);
+   return ret;
+}
+
+QList<Yeast*> Database::yeasts(Recipe* parent)
+{
+   QList<Yeast*> ret;
+   QString queryString = QString("SELECT yeast_id FROM yeast_in_recipe WHERE recipe_id = %1").arg(parent->_key);
+   QSqlQuery q( queryString, sqldb );
+   
+   while( q.next() )
+      ret.append(allYeasts[q.record().value("yeast_id").toInt()]);
+   return ret;
+}
+
 Misc* Database::newMisc()
 {
    Misc* tmp = new Misc();

@@ -75,6 +75,7 @@ public:
    MainWindow(QWidget* parent=0);
    virtual ~MainWindow() {}
    void setRecipe(Recipe* recipe);
+   Recipe* currentRecipe(); // TODO: implement.
    void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
    QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 

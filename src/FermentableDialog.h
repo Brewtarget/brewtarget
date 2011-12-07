@@ -38,7 +38,6 @@ public:
    FermentableDialog(MainWindow* parent);
    virtual ~FermentableDialog() {}
    void startObservingDB();
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    /*! If \b index is the default, will add the selected fermentable to list.
@@ -51,10 +50,9 @@ public slots:
    void changed(QMetaProperty,QVariant);
 
 private:
-   Database* dbObs;
    MainWindow* mainWindow;
    FermentableEditor* fermEdit;
-   unsigned int numFerms;
+   int numFerms;
 
    void populateTable();
 };
