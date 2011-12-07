@@ -21,11 +21,13 @@
 
 class FermentableEditor;
 
+#include <QDialog>
 #include "ui_fermentableEditor.h"
-#include "fermentable.h"
-#include "observable.h"
 
-class FermentableEditor : public QDialog, private Ui::fermentableEditor, Observer
+// Forward declarations.
+class Fermentable;
+
+class FermentableEditor : public QDialog, private Ui::fermentableEditor
 {
    Q_OBJECT
 
@@ -37,12 +39,11 @@ public:
 public slots:
    void save();
    void clearAndClose();
+   void changed(QMetaProperty,QVariant);
 
 private:
    Fermentable* obsFerm;
-
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
-   void showChanges();
+   void showChanges(QMetaProperty* metaProp = 0);
 };
 
 #endif   /* _FERMENTABLEEDITOR_H */
