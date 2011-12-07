@@ -23,10 +23,11 @@ class EquipmentEditor;
 
 #include <QDialog>
 #include "ui_equipmentEditor.h"
-#include "equipment.h"
-#include "observable.h"
 
-class EquipmentEditor : public QDialog, public Ui::equipmentEditor, public Observer
+// Forward declarations
+class Equipment;
+
+class EquipmentEditor : public QDialog, public Ui::equipmentEditor
 {
    Q_OBJECT
 
@@ -34,7 +35,6 @@ public:
    EquipmentEditor( QWidget *parent=0 );
    virtual ~EquipmentEditor() {}
    void setEquipment( Equipment* e );
-   void resetEquipment();
 
 public slots:
    void save();
@@ -48,14 +48,13 @@ public slots:
    void updateRecord();
    void updateCheckboxRecord(int state);
    void changedText();
+   
+   void changed(QMetaProperty,QVariant);
 
 private:
    Equipment* obsEquip;
-   Equipment* copyEquip;
 
    bool changeText;
-
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    bool eventFilter(QObject *object, QEvent* event);
    void showChanges();
 };
