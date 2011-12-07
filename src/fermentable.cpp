@@ -179,7 +179,7 @@ void Fermentable::setDefaults()
 
 // Get
 const QString Fermentable::name() const { return get("name").toString(); }
-const Fermentable::Type Fermentable::type() const { return types.indexOf(get("ftype").toString()); }
+const Fermentable::Type Fermentable::type() const { return static_cast<Fermentable::Type>(types.indexOf(get("ftype").toString())); }
 const QString Fermentable::typeString() const
 {
    return types.at(type());
