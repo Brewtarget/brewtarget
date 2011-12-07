@@ -32,18 +32,14 @@
 #include <QVector>
 #include <iostream>
 #include "hop.h"
-#include "observable.h"
 #include "HopTableModel.h"
 #include "unit.h"
 #include "brewtarget.h"
 
 HopTableModel::HopTableModel(HopTableWidget* parent)
-: QAbstractTableModel(parent), MultipleObserver()
+   : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent), showIBUs(false)
 {
    hopObs.clear();
-   parentTableWidget = parent;
-   showIBUs = false;
-   recObs = 0;
 }
 
 HopTableModel::~HopTableModel()
@@ -51,17 +47,44 @@ HopTableModel::~HopTableModel()
    hopObs.clear();
 }
 
+void HopTableModel::observeRecipe(Recipe* rec)
+{
+   if( recObs )
+   {
+      disconnect( recObs, 0, this, 0 );
+      removeAll();
+   }
+   
+   recObs = rec;
+   if( recObs )
+   {
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addHops( recObs->hops() );
+   }
+}
+
+void HopTableModel::observeDatabase(bool val)
+{
+   if( val )
+   {
+      removeAll();
+      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addHops( Database::instance().hops() );
+   }
+   else
+   {
+      removeAll();
+      disconnect( &(Database::instance()), 0, this, 0 );
+   }
+}
+
 void HopTableModel::addHop(Hop* hop)
 {
-   QVector<Hop*>::iterator iter;
+   if( hopObs.contains(hop) )
+      return;
    
-   //Check to see if it's already in the list
-   for( iter=hopObs.begin(); iter != hopObs.end(); iter++ )
-      if( *iter == hop )
-         return;
-   
-   hopObs.push_back(hop);
-   addObserved(hop);
+   hopObs.append(hop);
+   connect( hop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    reset(); // Tell everybody that the table has changed.
 
    if( parentTableWidget )
@@ -71,44 +94,40 @@ void HopTableModel::addHop(Hop* hop)
    }
 }
 
-void HopTableModel::setShowIBUs( bool var )
+void HopTableModel::addHops(QList<Hop*> hops)
 {
-   showIBUs = var;
-}
-
-void HopTableModel::setRecipe( Recipe* rec )
-{
-   if( recObs )
-      removeObserved(recObs);
+   QList<Hop*>::iterator i;
    
-   if( rec )
-   {
-      addObserved(rec);
-      recObs = rec;
-   }
+   for( i = hopObs.begin(); i != hopObs.end(); i++ )
+      addHop(*i);
 }
 
 bool HopTableModel::removeHop(Hop* hop)
 {
-   QVector<Hop*>::iterator iter;
+   int i;
    
-   for( iter=hopObs.begin(); iter != hopObs.end(); iter++ )
-      if( *iter == hop )
+   i = hopObs.indexOf(hop);
+   if( i >= 0 )
+   {
+      disconnect( hop, 0, this, 0 );
+      hopObs.removeAt(i);
+      reset(); // Tell everybody the table has changed.
+         
+      if(parentTableWidget)
       {
-         hopObs.erase(iter);
-         removeObserved(hop);
-         reset(); // Tell everybody the table has changed.
-         
-         if( parentTableWidget )
-         {
-            parentTableWidget->resizeColumnsToContents();
-            parentTableWidget->resizeRowsToContents();
-         }
-         
-         return true;
+         parentTableWidget->resizeColumnsToContents();
+         parentTableWidget->resizeRowsToContents();
       }
-   
+         
+      return true;
+   }
+      
    return false;
+}
+
+void HopTableModel::setShowIBUs( bool var )
+{
+   showIBUs = var;
 }
 
 void HopTableModel::removeAll()
@@ -116,25 +135,47 @@ void HopTableModel::removeAll()
    int i;
 
    for( i = 0; i < hopObs.size(); ++i )
-      removeObserved(hopObs[i]);
-
-   hopObs.clear();
-   reset();
+      removeHop(hopObs[i]);
 }
 
-void HopTableModel::notify(Observable* notifier, QVariant info)
+void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
    
-   if( notifier == recObs )
-      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
-   
    // Find the notifier in the list
-   for( i = 0; i < (int)hopObs.size(); ++i )
+   Hop* hopSender = qobject_cast<Hop*>(sender());
+   if( hopSender )
    {
-      if( notifier == hopObs[i] )
-         emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                           QAbstractItemModel::createIndex(i, HOPNUMCOLS));
+      i = hopObs.indexOf(hopSender);
+      if( i < 0 )
+         return;
+      
+      emit dataChanged( QAbstractItemModel::createIndex(i, 0),
+                        QAbstractItemModel::createIndex(i, HOPNUMCOLS));
+                        
+      return;
+   }
+   
+   // See if sender is our recipe.
+   Recipe* recSender = qobject_cast<Recipe*>(sender());
+   if( recSender && recSender == recObs )
+   {
+      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      
+      if( QString(prop.name()) == "hops" )
+      {
+         removeAll();
+         addHops( recObs->hops() );
+      }
+      return;
+   }
+   
+   // See if sender is the database.
+   if( sender() == &(Database::instance()) && QString(prop.name()) == "fermentables" )
+   {
+      removeAll();
+      addHops( Database::instance().hops() );
+      return;
    }
 }
 
@@ -165,36 +206,36 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    {
       case HOPNAMECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getName());
+            return QVariant(row->name());
          else
             return QVariant();
       case HOPALPHACOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->getAlpha_pct(), 0) );
+            return QVariant( Brewtarget::displayAmount(row->alpha_pct(), 0) );
          else
             return QVariant();
       case HOPAMOUNTCOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
+            return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms) );
          else
             return QVariant();
       case HOPUSECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getUseStringTr());
+            return QVariant(row->useStringTr());
          else if( role == Qt::UserRole )
-            return QVariant(row->getUse());
+            return QVariant(row->use());
          else
             return QVariant();
       case HOPTIMECOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->getTime_min(), Units::minutes) );
+            return QVariant( Brewtarget::displayAmount(row->time_min(), Units::minutes) );
          else
             return QVariant();
       case HOPFORMCOL:
         if ( role == Qt::DisplayRole )
-          return QVariant( row->getFormStringTr() );
+          return QVariant( row->formStringTr() );
         else if ( role == Qt::UserRole )
-           return QVariant( row->getForm());
+           return QVariant( row->form());
         else
            return QVariant();
       default :
@@ -228,7 +269,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
    }
    else if( showIBUs && recObs && orientation == Qt::Vertical && role == Qt::DisplayRole )
    {
-      double ibus = recObs->getIBUFromHop( section );
+      double ibus = recObs->IBUs()[ section ];
       return QVariant( QString("%1 IBU").arg( ibus, 0, 'f', 1 ) );
    }
    else

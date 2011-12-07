@@ -17,40 +17,39 @@
  */
 
 #include <QtGui>
-#include <iostream>
-#include <string>
 #include <QIcon>
+#include "hop.h"
 #include "HopEditor.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
 
-HopEditor::HopEditor( QWidget* /*parent*/ )
+HopEditor::HopEditor( QWidget* parent )
+   : QDialog(parent), obsHop(0)
 {
    setupUi(this);
-
-   setWindowIcon(QIcon(SMALLHOP));
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
-
-   obsHop = 0;
 }
 
 void HopEditor::setHop( Hop* h )
 {
-   if( h && h != obsHop )
+   if( obsHop )
+      disconnect( obsHop, 0, this, 0 );
+   
+   obsHop = h;
+   if( obsHop )
    {
-      obsHop = h;
-      setObserved(h);
+      connect( obsHop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
 }
 
 void HopEditor::save()
 {
-   Hop *h = obsHop;
+   Hop* h = obsHop;
 
    if( h == 0 )
    {
@@ -58,9 +57,10 @@ void HopEditor::save()
       return;
    }
 
+   // TODO: check this out with 1.2.5.
    // Need to disable notification since every "set" method will cause a "showChanges" that
    // will revert any changes made.
-   h->disableNotification();
+   //h->disableNotification();
 
    h->setName(lineEdit_name->text());
    h->setAlpha_pct(lineEdit_alpha->text().toDouble());
@@ -80,52 +80,77 @@ void HopEditor::save()
    h->setSubstitutes(textEdit_substitutes->toPlainText());
    h->setNotes(textEdit_notes->toPlainText());
 
-   h->reenableNotification();
-   h->forceNotify();
-
-   Database::getDatabase()->resortHops(); // If the name changed, need to resort.
+   //h->reenableNotification();
+   //h->forceNotify();
 
    setVisible(false);
 }
 
 void HopEditor::clearAndClose()
 {
-   if( obsHop )
-   {
-      obsHop->removeObserver(this);
-      obsHop = 0;
-   }
+   setHop(0);
    setVisible(false); // Hide the window.
 }
 
-void HopEditor::notify(Observable* notifier, QVariant info)
+void HopEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( notifier == obsHop )
-      showChanges();
+   if( sender() == obsHop )
+      showChanges(&prop);
 }
 
-void HopEditor::showChanges()
+void HopEditor::showChanges(QMetaProperty* prop)
 {
+   bool updateAll = false;
+   QString propName;
+   QVariant val;
    Hop* h = obsHop;
    if( h == 0 )
       return;
 
-   lineEdit_name->setText(h->getName());
-   lineEdit_name->setCursorPosition(0);
-   lineEdit_alpha->setText(Brewtarget::displayAmount(h->getAlpha_pct(), 0));
-   lineEdit_amount->setText(Brewtarget::displayAmount(h->getAmount_kg(), Units::kilograms));
-   comboBox_use->setCurrentIndex(obsHop->getUse());
-   lineEdit_time->setText(Brewtarget::displayAmount(h->getTime_min(), Units::minutes));
-   comboBox_type->setCurrentIndex(obsHop->getType());
-   comboBox_form->setCurrentIndex(obsHop->getForm());
-   lineEdit_beta->setText(Brewtarget::displayAmount(h->getBeta_pct(), 0));
-   lineEdit_HSI->setText(Brewtarget::displayAmount(h->getHsi_pct(), 0));
-   lineEdit_origin->setText(h->getOrigin());
-   lineEdit_origin->setCursorPosition(0);
-   lineEdit_humulene->setText(Brewtarget::displayAmount(h->getHumulene_pct(), 0));
-   lineEdit_caryophyllene->setText(Brewtarget::displayAmount(h->getCaryophyllene_pct(), 0));
-   lineEdit_cohumulone->setText(Brewtarget::displayAmount(h->getCohumulone_pct(), 0));
-   lineEdit_myrcene->setText(Brewtarget::displayAmount(h->getMyrcene_pct(), 0));
-   textEdit_substitutes->setPlainText(h->getSubstitutes());
-   textEdit_notes->setPlainText(h->getNotes());
+   if( prop == 0 )
+      updateAll = true;
+   else
+   {
+      propName = prop->name();
+      val = prop->read(h);
+   }
+   
+   if( propName == "name" )
+   {
+      lineEdit_name->setText(val.toString());
+      lineEdit_name->setCursorPosition(0);
+   }
+   else if( propName == "alpha_pct" )
+      lineEdit_alpha->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "amount_kg" )
+      lineEdit_amount->setText(Brewtarget::displayAmount(val.toDouble(), Units::kilograms));
+   else if( propName == "use" )
+      comboBox_use->setCurrentIndex(val.toInt());
+   else if( propName == "time_min" )
+      lineEdit_time->setText(Brewtarget::displayAmount(val.toDouble(), Units::minutes));
+   else if( propName == "type" )
+      comboBox_type->setCurrentIndex(val.toInt());
+   else if( propName == "form" )
+      comboBox_form->setCurrentIndex(val.toInt());
+   else if( propName == "beta_pct" )
+      lineEdit_beta->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "hsi_pct" )
+      lineEdit_HSI->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "origin" )
+   {
+      lineEdit_origin->setText(val.toString());
+      lineEdit_origin->setCursorPosition(0);
+   }
+   else if( propName == "humulene_pct" )
+      lineEdit_humulene->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "caryophyllene_pct" )
+      lineEdit_caryophyllene->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "cohumulone_pct" )
+      lineEdit_cohumulone->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "myrcene_pct" )
+      lineEdit_myrcene->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "substitutes" )
+      textEdit_substitutes->setPlainText(val.toString());
+   else if( propName == "notes" )
+      textEdit_notes->setPlainText(val.toString());
 }

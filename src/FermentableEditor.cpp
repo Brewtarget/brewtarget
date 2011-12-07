@@ -86,7 +86,6 @@ void FermentableEditor::save()
    //obsFerm->forceNotify();
 
    setVisible(false);
-   return;
 }
 
 void FermentableEditor::clearAndClose()

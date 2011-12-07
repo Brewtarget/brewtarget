@@ -20,7 +20,6 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QString>
-#include <string>
 #include <QList>
 #include "HopDialog.h"
 #include "database.h"
@@ -31,14 +30,10 @@
 #include "HopTableModel.h"
 
 HopDialog::HopDialog(MainWindow* parent)
-        : QDialog(parent)
+        : QDialog(parent), mainWindow(parent), hopEditor(new HopEditor(this)), numHops(0)
 {
    setupUi(this);
-   mainWindow = parent;
-   dbObs = 0;
-   numHops = 0;
-   hopEditor = new HopEditor(this);
-
+   
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
@@ -84,7 +79,7 @@ void HopDialog::removeHop()
 void HopDialog::changed(QMetaProperty prop, QVariant val)
 {
    if( sender() == &(Database::instance()) &&
-       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("hops") )
+       QString(prop.name()) == "hops" )
    {
       hopTableWidget->getModel()->removeAll();
       populateTable();
@@ -137,8 +132,7 @@ void HopDialog::addHop(const QModelIndex& index)
    
    Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
    
-   // TODO: how should we restructure this call?
-   mainWindow->addHopToRecipe(new Hop(*hop) ); // Need to add a copy so we don't change the database.
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), hop );
 }
 
 void HopDialog::editSelected()

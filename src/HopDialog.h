@@ -49,10 +49,9 @@ public slots:
    void changed(QMetaProperty,QVariant);
 
 private:
-   Database* dbObs;
    MainWindow* mainWindow;
    HopEditor* hopEditor;
-   unsigned int numHops;
+   int numHops;
 
    void populateTable();
 };
