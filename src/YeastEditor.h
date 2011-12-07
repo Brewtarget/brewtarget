@@ -21,11 +21,13 @@
 
 class YeastEditor;
 
+#include <QDialog>
 #include "ui_yeastEditor.h"
-#include "yeast.h"
-#include "observable.h"
 
-class YeastEditor : public QDialog, private Ui::yeastEditor, Observer
+// Forward declarations.
+class Yeast;
+
+class YeastEditor : public QDialog, private Ui::yeastEditor
 {
    Q_OBJECT
 
@@ -37,12 +39,12 @@ public:
 public slots:
    void save();
    void clearAndClose();
-
+   void changed(QMetaProperty,QVariant);
+   
 private:
    Yeast* obsYeast;
 
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
-   void showChanges();
+   void showChanges(QMetaProperty* prop = 0);
 };
 
 #endif   /* _YEASTEDITOR_H */

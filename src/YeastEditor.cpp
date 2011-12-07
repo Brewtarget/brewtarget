@@ -16,40 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtGui>
-#include <string>
-#include <QIcon>
 #include "YeastEditor.h"
 #include "database.h"
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "yeast.h"
 
-YeastEditor::YeastEditor( QWidget* /*parent*/ )
+YeastEditor::YeastEditor( QWidget* parent )
+   : QDialog(parent), obsYeast(0)
 {
    setupUi(this);
-
-   setWindowIcon(QIcon(SMALLYEAST));
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
-
-   obsYeast = 0;
 }
 
 void YeastEditor::setYeast( Yeast* y )
 {
-   if( y && y != obsYeast )
+   if( obsYeast )
+      disconnect( obsYeast, 0, this, 0 );
+   
+   obsYeast = y;
+   if( obsYeast )
    {
-      obsYeast = y;
-      setObserved(y);
+      connect( obsYeast, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
 }
 
 void YeastEditor::save()
 {
-   Yeast *y = obsYeast;
+   Yeast* y = obsYeast;
 
    if( y == 0 )
    {
@@ -57,9 +55,10 @@ void YeastEditor::save()
       return;
    }
 
+   // TODO: check this out with 1.2.5
    // Need to disable notification since every "set" method will cause a "showChanges" that
    // will revert any changes made.
-   y->disableNotification();
+   //y->disableNotification();
 
    y->setName(lineEdit_name->text());
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
@@ -79,54 +78,80 @@ void YeastEditor::save()
    y->setBestFor(textEdit_bestFor->toPlainText());
    y->setNotes(textEdit_notes->toPlainText()); 
 
-   y->reenableNotification();
-   y->forceNotify();
-
-   Database::getDatabase()->resortYeasts(); // If the name changed, need to resort.
+   //y->reenableNotification();
+   //y->forceNotify();
 
    setVisible(false);
 }
 
 void YeastEditor::clearAndClose()
 {
-   if( obsYeast )
-   {
-      obsYeast->removeObserver(this);
-      obsYeast = 0;
-   }
+   setYeast(0);
    setVisible(false); // Hide the window.
 }
 
-void YeastEditor::notify(Observable* notifier, QVariant info)
+void YeastEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( notifier == obsYeast )
-      showChanges();
+   if( sender() == obsYeast )
+      showChanges(&prop);
 }
 
-void YeastEditor::showChanges()
+void YeastEditor::showChanges(QMetaProperty* metaProp)
 {
    Yeast* y = obsYeast;
    if( y == 0 )
       return;
 
-   lineEdit_name->setText(y->getName());
-   lineEdit_name->setCursorPosition(0);
-   comboBox_type->setCurrentIndex(y->getType());
-   comboBox_form->setCurrentIndex(y->getForm());
-   lineEdit_amount->setText( Brewtarget::displayAmount(y->getAmount(), (y->getAmountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
-   checkBox_amountIsWeight->setCheckState( (y->getAmountIsWeight())? Qt::Checked : Qt::Unchecked );
-   lineEdit_laboratory->setText(y->getLaboratory());
-   lineEdit_laboratory->setCursorPosition(0);
-   lineEdit_productID->setText(y->getProductID());
-   lineEdit_productID->setCursorPosition(0);
-   lineEdit_minTemperature->setText(Brewtarget::displayAmount(y->getMinTemperature_c(), Units::celsius));
-   lineEdit_maxTemperature->setText(Brewtarget::displayAmount(y->getMaxTemperature_c(), Units::celsius));
-   comboBox_flocculation->setCurrentIndex( y->getFlocculation() );
-   lineEdit_attenuation->setText( Brewtarget::displayAmount(y->getAttenuation_pct(), 0));
-   lineEdit_timesCultured->setText(QString::number(y->getTimesCultured()));
-   lineEdit_maxReuse->setText(QString::number(y->getMaxReuse()));
-   checkBox_addToSecondary->setCheckState( (y->getAddToSecondary())? Qt::Checked : Qt::Unchecked );
-
-   textEdit_bestFor->setPlainText(y->getBestFor());
-   textEdit_notes->setPlainText(y->getNotes());
+   QString propName;
+   QVariant value;
+   bool updateAll = false;
+   if( metaProp == 0 )
+      updateAll = true;
+   else
+   {
+      propName = metaProp->name();
+      value = metaProp->read(y);
+   }
+   
+   if( propName == "name" || updateAll )
+   {
+      lineEdit_name->setText(value.toString());
+      lineEdit_name->setCursorPosition(0);
+   }
+   else if( propName == "type" || updateAll )
+      comboBox_type->setCurrentIndex(value.toInt());
+   else if( propName == "form" || updateAll )
+      comboBox_form->setCurrentIndex(value.toInt());
+   else if( propName == "amount" || updateAll )
+      lineEdit_amount->setText( Brewtarget::displayAmount(value.toString(), (y->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+   else if( propName == "amountIsWeight" || updateAll )
+      checkBox_amountIsWeight->setCheckState( (value.toBool())? Qt::Checked : Qt::Unchecked );
+   else if( propName == "laboratory" || updateAll )
+   {
+      lineEdit_laboratory->setText(value.toString());
+      lineEdit_laboratory->setCursorPosition(0);
+   }
+   else if( propName == "productID" || updateAll )
+   {
+      lineEdit_productID->setText(value.toString());
+      lineEdit_productID->setCursorPosition(0);
+   }
+   else if( propName == "minTemperature_c" || updateAll )
+      lineEdit_minTemperature->setText(Brewtarget::displayAmount(value.toDouble(), Units::celsius));
+   else if( propName == "maxTemperature_c" || updateAll )
+      lineEdit_maxTemperature->setText(Brewtarget::displayAmount(value.toDouble(), Units::celsius));
+   else if( propName == "flocculation" || updateAll )
+      comboBox_flocculation->setCurrentIndex( value.toInt() );
+   else if( propName == "attenutation_pc" || updateAll )
+      lineEdit_attenuation->setText( Brewtarget::displayAmount(value.toDouble(), 0));
+   else if( propName == "timesCultured" || updateAll )
+      lineEdit_timesCultured->setText(QString::number(value.toInt()));
+   else if( propName == "maxReuse" || updateAll )
+      lineEdit_maxReuse->setText(QString::number(value.toInt()));
+   else if( propName == "addToSecondary" || updateAll )
+      checkBox_addToSecondary->setCheckState( (value.toBool())? Qt::Checked : Qt::Unchecked );
+   else if( propName == "bestFor" || updateAll )
+      textEdit_bestFor->setPlainText(value.toString());
+   else if( propName == "notes" || updateAll )
+      textEdit_notes->setPlainText(value.toString());
 }
