@@ -62,6 +62,14 @@ void MashStepTableModel::setMash( Mash* m )
    }
 }
 
+MashStep* MashStepTableModel::getMashStep(unsigned int i)
+{
+   if( i < mashObs->size() )
+      return mashObs[i];
+   else
+      return 0;
+}
+
 void MashStepTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;

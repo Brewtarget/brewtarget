@@ -257,11 +257,16 @@ public:
    double boilGrav();
    double IBU();
    QColor SRMColor();
-   double wortFromMash_l() const; // Estimate amount of wort collected immediately after the mash.
-   double boilVolume_l() const; // Estimate boil volume based on user inputs.
-   double postBoilVolume_l() const; // How much wort immediately post boil.
-   double finalVolume_l() const; // Estimate final volume based on user inputs.
-   double calories() const;    // Estimate final calories of the beer
+   //! Estimate amount of wort collected immediately after the mash.
+   double wortFromMash_l() const;
+   //! Estimate boil volume based on user inputs.
+   double boilVolume_l() const;
+   //! Estimate how much wort immediately post boil.
+   double postBoilVolume_l() const;
+   //! Estimate final volume based on user inputs.
+   double finalVolume_l() const;
+   //! Estimate final calories of the beer
+   double calories() const;
    double grainsInMash_kg() const;
    double grains_kg() const;
    //! Get a list of IBU contributions from each hop.

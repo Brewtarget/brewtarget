@@ -76,7 +76,6 @@ public:
    virtual ~MainWindow() {}
    void setRecipe(Recipe* recipe);
    Recipe* currentRecipe(); // TODO: implement.
-   void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
    QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 
    bool verifyImport(QString tag, QString name);
@@ -121,7 +120,7 @@ public slots:
    void addMashStep();
    void removeSelectedMashStep();
    void editSelectedMashStep();
-   void setMashByName(const QString& name);
+   void setMashToCurrentlySelected();
    void saveMash();
    void removeMash();
 
@@ -209,7 +208,7 @@ private:
    void setupShortCuts();
    void setupContextMenu();
 
-   void showChanges(const QVariant& info = QVariant());
+   void showChanges(QMetaProperty* prop = 0);
 
    // Copy methods used by copySelected()
    void copyThis(Recipe *rec);

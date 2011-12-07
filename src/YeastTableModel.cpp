@@ -57,6 +57,37 @@ void YeastTableModel::addYeast(Yeast* yeast)
    }
 }
 
+void YeastTableModel::observeRecipe(Recipe* rec)
+{
+   if( recObs )
+   {
+      disconnect( recObs, 0, this, 0 );
+      removeAll();
+   }
+   
+   recObs = rec;
+   if( recObs )
+   {
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addYeasts( recObs->yeasts() );
+   }
+}
+
+void YeastTableModel::observeDatabase(bool val)
+{
+   if( val )
+   {
+      removeAll();
+      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addYeasts( Database::instance().yeasts() );
+   }
+   else
+   {
+      removeAll();
+      disconnect( &(Database::instance()), 0, this, 0 );
+   }
+}
+
 void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
 {
    QList<Hop*>::iterator i;
@@ -109,6 +140,28 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, YEASTNUMCOLS));
+      return;
+   }
+   
+   // See if sender is our recipe.
+   Recipe* recSender = qobject_cast<Recipe*>(sender());
+   if( recSender && recSender == recObs )
+   {
+      if( QString(prop.name()) == "yeasts" )
+      {
+         removeAll();
+         addYeasts( recObs->yeasts() );
+      }
+      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      return;
+   }
+   
+   // See if sender is the database.
+   if( sender() == &(Database::instance()) && QString(prop.name()) == "yeasts" )
+   {
+      removeAll();
+      addHops( Database::instance().yeasts() );
+      return;
    }
 }
 

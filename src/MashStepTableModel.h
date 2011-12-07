@@ -46,7 +46,8 @@ public:
    //void addMashStep(MashStep* step);
    //bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.
    //void removeAll();
-   //MashStep* getMashStep(unsigned int i);
+   //! \returns the mash step at model index \b i.
+   MashStep* getMashStep(unsigned int i);
 
    //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;

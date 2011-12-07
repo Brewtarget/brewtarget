@@ -303,13 +303,12 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    Recipe* recSender = qobject_cast<Recipe*>(sender());
    if( recSender && recSender == recObs )
    {
-      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
-      
       if( QString(prop.name()) == "miscs" )
       {
          removeAll();
          addMiscs( recObs->miscs() );
       }
+      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
       return;
    }
    

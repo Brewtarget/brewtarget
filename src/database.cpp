@@ -159,6 +159,7 @@ void Database::load()
    // TODO: set relations?
    
    // Create and store all pointers.
+   populateElements( allBrewNotes, brewnotes_tm, BREWNOTETABLE );
    populateElements( allEquipments, equipments_tm, EQUIPTABLE );
    populateElements( allFermentables, fermentables_tm, FERMTABLE );
    populateElements( allHops, hops_tm, HOPTABLE );
@@ -588,6 +589,14 @@ Yeast* Database::newYeast()
    return tmp;
 }
 
+BrewNote* Database::newBrewNote(BrewNote* other)
+{
+   int newKey;
+   QSqlRecord r = copy(other);
+   newKey = r.value(keyName(BREWNOTETABLE)).toInt();
+   return allBrewNotes[newKey];
+}
+
 void Database::deleteRecord( DBTable table, BeerXMLElement* object )
 {
    // Assumes the table has a column called 'deleted'.
@@ -934,6 +943,11 @@ void Database::addToRecipe( Recipe* rec, Water* w )
    addIngredientToRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
 }
 
+void Database::getBrewNotes( QList<BrewNote*>& list, QString filter )
+{
+   getElements( list, filter, brewnotes_tm, BREWNOTETABLE, allBrewNotes );
+}
+
 void Database::getEquipments( QList<Equipment*>& list, QString filter )
 {
    getElements( list, filter, equipments_tm, EQUIPTABLE, allEquipments );
@@ -1029,7 +1043,13 @@ const QSqlRelationalTableModel* Database::getModel( DBTable table )
    return tables[table];
 }
 
-// Do this to pacify the READ in Q_PROPERTY.
+QList<BrewNote*>& Database::brewNotes()
+{
+   QList<BrewNote*>* tmp = new QList<BrewNote*>;
+   getBrewNotes( *tmp );
+   return *tmp;
+}
+
 QList<Equipment*>& Database::equipments()
 {
    QList<Equipment*>* tmp = new QList<Equipment*>;

@@ -42,6 +42,10 @@ class YeastTableModel : public QAbstractTableModel
 public:
    YeastTableModel(YeastTableWidget* parent=0);
    virtual ~YeastTableModel() {}
+   //! Observe a recipe's list of fermentables.
+   void observeRecipe(Recipe* rec);
+   //! Whether or not we should be looking at the database.
+   void observeDatabase(bool val);
    void addYeast(Yeast* yeast);
    void addYeasts(QList<Yeast*> yeasts);
    Yeast* getYeast(unsigned int i);

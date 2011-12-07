@@ -76,7 +76,7 @@ public:
 
    // Setters
    void setABV(double var);
-   void setBrewDate(QDateTime const& date);
+   void setBrewDate(QDateTime const& date = QDateTime::currentDateTime());
    void setFermentDate(QDateTime const& date);
    void setNotes(const QString& var, bool notify = true);
    void setSg(double var);
@@ -165,8 +165,6 @@ public:
 private:
    BrewNote();
    BrewNote(BrewNote const& other);
-   
-   Recipe* rec;
 
    QHash<QString,double> info;
    QHash<QString,QString> XMLTagToName();

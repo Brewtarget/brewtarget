@@ -162,10 +162,9 @@ void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       if( i < 0 )
          return;
       
+      updateTotalGrains();
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, FERMNUMCOLS));
-
-      updateTotalGrains();
       //reset();
       return;
    }

@@ -160,13 +160,12 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    Recipe* recSender = qobject_cast<Recipe*>(sender());
    if( recSender && recSender == recObs )
    {
-      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
-      
       if( QString(prop.name()) == "hops" )
       {
          removeAll();
          addHops( recObs->hops() );
       }
+      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
       return;
    }
    

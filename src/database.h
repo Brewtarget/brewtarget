@@ -110,6 +110,8 @@ public:
    //! Create new instruction attached to \b parent.
    Instruction* newInstruction(Recipe* parent);
    Mash* newMash();
+   //! Create new mash attached to \b parent.
+   Mash* newMash(Recipe* parent); // TODO: implement.
    //! Create new mash step attached to \b parent.
    MashStep* newMashStep(Mash* parent);
    Misc* newMisc();
@@ -117,6 +119,21 @@ public:
    Style* newStyle();
    Water* newWater();
    Yeast* newYeast();
+   
+   // Named copy constructors.
+   //! \returns a copy of the given note.
+   BrewNote* newBrewNote(BrewNote* other);
+   Equipment* newEquipment(Equipment* other);
+   //! \returns a copy of the given recipe.
+   Recipe* newRecipe(Recipe* other); // TODO: implement.
+   /*! \returns a copy of the given mash. Displaces the mash currently in the
+    * parent recipe unless \b displace is false.
+    */
+   Mash* newMash(Mash* other, bool displace = true); // TODO: implement.
+   Fermentable* newFermentable(Fermentable* other); // TODO: implement.
+   Hop* newHop(Hop* other); // TODO: implement.
+   Misc* newMisc(Misc* other); // TODO: implement.
+   Yeast* newYeast(Yeast* other); // TODO: implement.
    
    //! Import ingredients from BeerXML documents.
    void importFromXML(const QString& filename);
@@ -160,6 +177,9 @@ public:
    void removeFromRecipe( Recipe* rec, Water* w );
    void removeFromRecipe( Recipe* rec, Instruction* ins );
    
+   //! Remove \b step from \b mash.
+   void removeFrom( Mash* mash, MashStep* step );
+   
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QVector
    // of ingredients in rec.
@@ -200,6 +220,7 @@ public:
    void removeYeast(QList<Yeast*> yeast);
 
    // Return a list of elements according to the given filter.
+   void getBrewNotes( QList<BrewNote*>& list, QString filter="" );
    void getEquipments( QList<Equipment*>&, QString filter="" );
    void getFermentables( QList<Fermentable*>&, QString filter="" );
    void getHops( QList<Hop*>&, QString filter="" );
@@ -219,6 +240,7 @@ public:
    //! Interchange the instruction orders. Must be in same recipe.
    void swapInstructionOrder(Instruction* in1, Instruction* in2);
    
+   Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Hop*> hops READ hops /*WRITE*/ NOTIFY changed STORED false );
@@ -230,6 +252,7 @@ public:
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
    
+   QList<BrewNote*>& brewNotes();
    QList<Equipment*>& equipments();
    QList<Fermentable*>& fermentables();
    QList<Hop*>& hops();
@@ -289,6 +312,7 @@ private:
    static QHash<QString,DBTable> classNameToTableHash();
    
    // Keeps all pointers to the elements referenced by key.
+   QHash< int, BrewNote* > allBrewNotes;
    QHash< int, Equipment* > allEquipments;
    QHash< int, Fermentable* > allFermentables;
    QHash< int, Hop* > allHops;
@@ -357,6 +381,7 @@ private:
    // Model for all the tables in the db.
    QSqlRelationalTableModel* tableModel;
    // Models set to specific tables in the db.
+   QSqlRelationalTableModel* brewnotes_tm;
    QSqlRelationalTableModel* equipments_tm;
    QSqlRelationalTableModel* fermentables_tm;
    QSqlRelationalTableModel* hops_tm;
