@@ -26,24 +26,33 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QVector>
-#include <iostream>
 #include "mashstep.h"
-#include "observable.h"
 #include "MashStepTableModel.h"
 #include "unit.h"
 #include "brewtarget.h"
 
 MashStepTableModel::MashStepTableModel(MashStepTableWidget* parent)
-: QAbstractTableModel(parent), Observer()
+   : QAbstractTableModel(parent), parentTableWidget(parent), mashObs(0)
 {
-   parentTableWidget = parent;
-   mashObs = 0;
 }
 
 void MashStepTableModel::setMash( Mash* m )
 {
+   if( mashObs )
+   {
+      disconnect( mashObs, 0, this, 0 );
+      for( i = 0; i < steps.size(); ++i )
+         disconnect( steps[i], 0, this, 0 );
+   }
+   
    mashObs = m;
-   setObserved(mashObs);
+   if( mashObs )
+   {
+      connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      steps = mashObs->mashSteps();
+      for( i = 0; i < steps.size(); ++i )
+         connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   }
    reset(); // Tell everybody that the table has changed.
    
    if( parentTableWidget )
@@ -53,81 +62,29 @@ void MashStepTableModel::setMash( Mash* m )
    }
 }
 
-/***************************************************
-void MashStepTableModel::addMashStep(MashStep* step)
-{
-   QVector<MashStep*>::iterator iter;
-
-   //Check to see if it's already in the list
-   for( iter=stepObs.begin(); iter != stepObs.end(); iter++ )
-      if( *iter == step )
-         return;
-
-   stepObs.push_back(step);
-   addObserved(step);
-   reset(); // Tell everybody that the table has changed.
-
-   if( parentTableWidget )
-   {
-      parentTableWidget->resizeColumnsToContents();
-      parentTableWidget->resizeRowsToContents();
-   }
-}
-
-bool MashStepTableModel::removeMashStep(MashStep* step)
-{
-   QVector<MashStep*>::iterator iter;
-
-   for( iter=stepObs.begin(); iter != stepObs.end(); iter++ )
-      if( *iter == step )
-      {
-         stepObs.erase(iter);
-         removeObserved(step);
-         reset(); // Tell everybody the table has changed.
-         
-         if( parentTableWidget )
-         {
-            parentTableWidget->resizeColumnsToContents();
-            parentTableWidget->resizeRowsToContents();
-         }
-         
-         return true;
-      }
-
-   return false;
-}
-
-void MashStepTableModel::removeAll()
-{
-   unsigned int i;
-
-   for( i = 0; i < stepObs.size(); ++i )
-      removeObserved(stepObs[i]);
-
-   stepObs.clear();
-   reset();
-}
-
-MashStep* MashStepTableModel::getMashStep(unsigned int i)
-{
-   return stepObs[i];
-}
-*************************************************************/
-
-void MashStepTableModel::notify(Observable* notifier, QVariant info)
+void MashStepTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
    bool ok = false;
    
-   if( notifier != mashObs )
+   Mash* mashSender = qobject_cast<Mash*>(sender())
+   if( mashSender && mashSender == mashObs )
+   {
+      for( i = 0; i < steps.size(); ++i )
+         disconnect( steps[i], 0, this, 0 );
+      steps = mashObs->mashSteps();
+      for( i = 0; i < steps.size(); ++i )
+         connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      
       return;
+   }
    
-   i = info.toInt(&ok); // mashObs' info says which MashStep changed.
    
-   if( ok )
+   MashStep* stepSender = qobject_cast<MashStep*>(sender());
+   if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
    {
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS));
+                        QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS));
    }
    else
       reset();
@@ -141,10 +98,7 @@ void MashStepTableModel::notify(Observable* notifier, QVariant info)
 
 int MashStepTableModel::rowCount(const QModelIndex& /*parent*/) const
 {
-   if( mashObs != 0 )
-      return mashObs->getNumMashSteps();
-   else
-      return 0;
+   return steps.size();
 }
 
 int MashStepTableModel::columnCount(const QModelIndex& /*parent*/) const
@@ -166,7 +120,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       return QVariant();
    }
    else
-      row = mashObs->getMashStep(index.row());
+      row = steps[index.row()];
 
    // Make sure we only respond to the DisplayRole role.
    if( role != Qt::DisplayRole )
@@ -175,21 +129,21 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
    switch( index.column() )
    {
       case MASHSTEPNAMECOL:
-         return QVariant(row->getName());
+         return QVariant(row->name());
       case MASHSTEPTYPECOL:
-         return QVariant(row->getTypeStringTr());
+         return QVariant(row->typeStringTr());
       case MASHSTEPAMOUNTCOL:
          return (row->getType() == MashStep::TYPEDECOCTION)
-                ? QVariant( Brewtarget::displayAmount(row->getDecoctionAmount_l(), Units::liters ) )
-                : QVariant( Brewtarget::displayAmount(row->getInfuseAmount_l(), Units::liters) );
+                ? QVariant( Brewtarget::displayAmount(row->decoctionAmount_l(), Units::liters ) )
+                : QVariant( Brewtarget::displayAmount(row->infuseAmount_l(), Units::liters) );
       case MASHSTEPTEMPCOL:
-         return (row->getType() == MashStep::TYPEDECOCTION)
+         return (row->type() == MashStep::TYPEDECOCTION)
                 ? QVariant("---")
-                : QVariant( Brewtarget::displayAmount(row->getInfuseTemp_c(), Units::celsius) );
+                : QVariant( Brewtarget::displayAmount(row->infuseTemp_c(), Units::celsius) );
       case MASHSTEPTARGETTEMPCOL:
-         return QVariant( Brewtarget::displayAmount(row->getStepTemp_c(), Units::celsius) );
+         return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), Units::celsius) );
       case MASHSTEPTIMECOL:
-         return QVariant( Brewtarget::displayAmount(row->getStepTime_min(), Units::minutes) );
+         return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes) );
       default :
          Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -245,7 +199,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
    if( index.row() >= (int)(mashObs->getNumMashSteps()) || role != Qt::EditRole )
       return false;
    else
-      row = mashObs->getMashStep(index.row());
+      row = steps[index.row()];
 
    switch( index.column() )
    {
@@ -311,7 +265,7 @@ void MashStepTableModel::moveStepUp(unsigned int i)
    if( mashObs == 0 || i == 0 || i >= mashObs->getNumMashSteps() )
       return;
 
-   mashObs->swapSteps(i, i-1);
+   Database::instance().swapMashStepOrder( step[i], step[i-1] );
 }
 
 void MashStepTableModel::moveStepDown(unsigned int i)
@@ -320,7 +274,7 @@ void MashStepTableModel::moveStepDown(unsigned int i)
    if( mashObs == 0 || i < 0 || i+1 >= mashObs->getNumMashSteps() )
       return;
 
-   mashObs->swapSteps(i, i+1);
+   Database::instance().swapMashStepOrder( step[i], step[i+1] );
 }
 
 //==========================CLASS MashStepItemDelegate===============================

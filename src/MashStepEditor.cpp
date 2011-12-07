@@ -20,10 +20,10 @@
 #include "brewtarget.h"
 #include "MashStepEditor.h"
 
-MashStepEditor::MashStepEditor(QWidget* parent) : QDialog(parent)
+MashStepEditor::MashStepEditor(QWidget* parent)
+   : QDialog(parent), obs(0)
 {
    setupUi(this);
-   obs = 0;
 
    comboBox_type->setCurrentIndex(-1);
 
@@ -32,7 +32,7 @@ MashStepEditor::MashStepEditor(QWidget* parent) : QDialog(parent)
    connect( comboBox_type, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(grayOutStuff(const QString &)) );
 }
 
-void MashStepEditor::showChanges()
+void MashStepEditor::showChanges(QMetaProperty* metaProp)
 {
    if( obs == 0 )
    {
@@ -40,15 +40,35 @@ void MashStepEditor::showChanges()
       return;
    }
 
-   lineEdit_name->setText(obs->getName());
-   comboBox_type->setCurrentIndex(obs->getType());
-   lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->getInfuseAmount_l(), Units::liters));
-   lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->getInfuseTemp_c(), Units::celsius));
-   lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->getDecoctionAmount_l(), Units::liters));
-   lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->getStepTemp_c(), Units::celsius));
-   lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->getStepTime_min(), Units::minutes));
-   lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->getRampTime_min(), Units::minutes));
-   lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->getEndTemp_c(), Units::celsius));
+   QString propName;
+   QVariant value;
+   bool updateAll = false;
+   if( metaProp == 0 )
+      updateAll = true;
+   else
+   {
+      propName = metaProp->name();
+      value = metaProp->read(obs);
+   }
+
+   if( propName == "name" )
+      lineEdit_name->setText(obs->getName());
+   else if( propName == "type" )
+      comboBox_type->setCurrentIndex(obs->getType());
+   else if( propName == "infuseAmount_l" )
+      lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->getInfuseAmount_l(), Units::liters));
+   else if( propName == "infuseTemp_c" )
+      lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->getInfuseTemp_c(), Units::celsius));
+   else if( propName == "decoctionAmount_l" )
+      lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->getDecoctionAmount_l(), Units::liters));
+   else if( propName == "stepTemp_c" )
+      lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->getStepTemp_c(), Units::celsius));
+   else if( propName == "stepTime_min" )
+      lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->getStepTime_min(), Units::minutes));
+   else if( propName == "rampTime_min" )
+      lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->getRampTime_min(), Units::minutes));
+   else if( propName == "endTemp_c" )
+      lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->getEndTemp_c(), Units::celsius));
 }
 
 void MashStepEditor::clear()
@@ -69,24 +89,33 @@ void MashStepEditor::close()
    setVisible(false);
 }
 
-void MashStepEditor::notify(Observable* notifier, QVariant /*info*/)
+void MashStepEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( notifier != obs )
+   if( sender() != obs )
       return;
 
-   showChanges();
+   showChanges(&prop);
 }
 
 void MashStepEditor::setMashStep(MashStep* step)
 {
-   setObserved(step);
-   obs = step;
-   showChanges();
+   if( obs )
+      disconnect( obs, 0, this, 0 );
+   
+   if( step )
+   {
+      obs = step;
+      connect( obs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      showChanges();
+   }
 }
 
 void MashStepEditor::saveAndClose()
 {
-   obs->disableNotification();
+   // TODO: check this out with 1.2.5.
+   // Need to disable notification since every "set" method will cause a "showChanges" that
+   // will revert any changes made.
+   //obs->disableNotification();
 
    obs->setName(lineEdit_name->text());
    obs->setType(static_cast<MashStep::Type>(comboBox_type->currentIndex()));
@@ -98,8 +127,8 @@ void MashStepEditor::saveAndClose()
    obs->setRampTime_min(Brewtarget::timeQStringToSI(lineEdit_rampTime->text()));
    obs->setEndTemp_c(Brewtarget::tempQStringToSI(lineEdit_endTemp->text()));
 
-   obs->reenableNotification();
-   obs->forceNotify();
+   //obs->reenableNotification();
+   //obs->forceNotify();
 
    setVisible(false);
 }

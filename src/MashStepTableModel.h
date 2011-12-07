@@ -31,12 +31,11 @@ class MashStepItemDelegate;
 #include <QVector>
 #include "mashstep.h"
 #include "mash.h"
-#include "observable.h"
 #include "MashStepTableWidget.h"
 
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTARGETTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 
-class MashStepTableModel : public QAbstractTableModel, public Observer
+class MashStepTableModel : public QAbstractTableModel
 {
    Q_OBJECT
 
@@ -48,22 +47,29 @@ public:
    //bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.
    //void removeAll();
    //MashStep* getMashStep(unsigned int i);
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
 
-   void moveStepUp(unsigned int i);
-   void moveStepDown(unsigned int i);
-
-   // Inherit the following from QAbstractItemModel via QAbstractTableModel
+   //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
+public slots:
+   void moveStepUp(unsigned int i);
+   void moveStepDown(unsigned int i);
+   void changed(QMetaProperty,QVariant);
+   
 private:
    Mash* mashObs;
    MashStepTableWidget* parentTableWidget;
+   QList<MashStep*> steps;
 };
 
 class MashStepItemDelegate : public QItemDelegate

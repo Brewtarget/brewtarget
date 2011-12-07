@@ -25,14 +25,12 @@
 #include "brewtarget.h"
 
 FermentableEditor::FermentableEditor( QWidget* parent )
-        : QDialog(parent)
+        : QDialog(parent), obsFerm(0)
 {
    setupUi(this);
 
    connect( this, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( this, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
-
-   obsFerm = 0;
 }
 
 void FermentableEditor::setFermentable( Fermentable* f )
