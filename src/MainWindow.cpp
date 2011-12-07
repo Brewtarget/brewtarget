@@ -70,6 +70,24 @@
 #include "BtDigitWidget.h"
 #include "FermentableTableModel.h"
 #include "BrewNoteWidget.h"
+#include "EquipmentEditor.h"
+#include "FermentableDialog.h"
+#include "HopDialog.h"
+#include "MashWizard.h"
+#include "MiscDialog.h"
+#include "StyleEditor.h"
+#include "OptionDialog.h"
+#include "HtmlViewer.h"
+#include "OgAdjuster.h"
+#include "ConverterTool.h"
+#include "TimerListDialog.h"
+#include "RecipeFormatter.h"
+#include "MashComboBox.h"
+#include "PrimingDialog.h"
+#include "RefractoDialog.h"
+#include "MashDesigner.h"
+#include "PitchDialog.h"
+#include "MaltinessWidget.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -79,13 +97,8 @@ MainWindow::MainWindow(QWidget* parent)
 
    QDesktopWidget *desktop = QApplication::desktop();
 
-   if( Database::isInitialized() )
-      db = Database::getDatabase();
-   else
-   {
-      Database::initialize();
-      db = Database::getDatabase();
-   }
+   // Ensure database initializes.
+   Database::instance();
 
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );

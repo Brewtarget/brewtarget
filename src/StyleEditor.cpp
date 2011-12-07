@@ -16,27 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QInputDialog>
-#include <QIcon>
-#include <string>
-#include <iostream>
-
 #include "style.h"
 #include "StyleEditor.h"
 #include "StyleComboBox.h"
-#include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
 
 StyleEditor::StyleEditor(QWidget* parent)
-        : QDialog(parent)
+   : QDialog(parent), obsStyle(0)
 {
    setupUi(this);
-
-   setWindowIcon(QIcon(SMALLSTYLE));
-
-   styleComboBox->startObservingDB();
-   obsStyle = 0;
 
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
@@ -47,24 +36,25 @@ StyleEditor::StyleEditor(QWidget* parent)
 
 void StyleEditor::setStyle( Style* s )
 {
-   if( s && s != obsStyle )
+   if( obsStyle )
+      disconnect( obsStye, 0, this, 0 );
+   
+   obsStyle = s;
+   if( obsStyle )
    {
-      obsStyle = s;
-      setObserved(obsStyle);
+      connect( obsStyle, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
+   
+   styleComboBox->setIndexByStyle(obsStyle);
 }
 
 void StyleEditor::removeStyle()
 {
    if( obsStyle )
-      Database::getDatabase()->removeStyle(obsStyle);
+      Database::instance().removeStyle(obsStyle);
 
-   obsStyle = 0;
-   setObserved(obsStyle);
-   
-   styleComboBox->setIndexByStyleName("");
-   showChanges();
+   setStyle(0)
 }
 
 void StyleEditor::styleSelected( const QString& /*text*/ )
@@ -81,7 +71,7 @@ void StyleEditor::save()
       return;
    }
 
-   s->disableNotification();
+   //s->disableNotification();
 
    s->setName( lineEdit_name->text() );
    s->setCategory( lineEdit_category->text() );
@@ -106,13 +96,10 @@ void StyleEditor::save()
    s->setExamples( textEdit_examples->toPlainText() );
    s->setNotes( textEdit_notes->toPlainText() );
    
-   s->reenableNotification();
-   s->forceNotify();
-
-   Database::getDatabase()->resortStyles(); // If the name changed, need to resort.
+   //s->reenableNotification();
+   //s->forceNotify();
 
    setVisible(false);
-   return;
 }
 
 void StyleEditor::newStyle()
@@ -122,10 +109,8 @@ void StyleEditor::newStyle()
    if( name.isEmpty() )
       return;
 
-   Style *s = new Style();
+   Style *s = Database::instance().newStyle();
    s->setName( name );
-
-   Database::getDatabase()->addStyle(s);
 
    setStyle(s);
 }
@@ -135,9 +120,10 @@ void StyleEditor::clearAndClose()
    setVisible(false);
 }
 
-void StyleEditor::notify(Observable* /*notifier*/, QVariant /*info*/)
+void StyleEditor::changed(QMetaProperty prop, QVariant /*val*/);
 {
-   showChanges();
+   if( sender() == styleObs )
+      showChanges(&prop);
 }
 
 void StyleEditor::clear()
@@ -165,8 +151,11 @@ void StyleEditor::clear()
    textEdit_notes->setText(QString(""));
 }
 
-void StyleEditor::showChanges()
+void StyleEditor::showChanges(QMetaProperty* metaProp)
 {
+   bool updateAll = false;
+   QString propName;
+   QVariant val;
    Style *s = obsStyle;
    if( s == 0 )
    {
@@ -174,28 +163,58 @@ void StyleEditor::showChanges()
       return;
    }
 
-   styleComboBox->setIndexByStyleName(s->getName());
+   if( metaProp == 0 )
+      updateAll = true;
+   else
+   {
+      propName = prop->name();
+      val = prop->read(s);
+   }
 
-   lineEdit_name->setText(s->getName());
-   lineEdit_category->setText(s->getCategory());
-   lineEdit_categoryNumber->setText(s->getCategoryNumber());
-   lineEdit_styleLetter->setText(s->getStyleLetter());
-   lineEdit_styleGuide->setText(s->getStyleGuide());
-   comboBox_type->setCurrentIndex(s->getType());
-   lineEdit_ogMin->setText(Brewtarget::displayAmount(s->getOgMin(), 0));
-   lineEdit_ogMax->setText(Brewtarget::displayAmount(s->getOgMax(), 0));
-   lineEdit_fgMin->setText(Brewtarget::displayAmount(s->getFgMin(), 0));
-   lineEdit_fgMax->setText(Brewtarget::displayAmount(s->getFgMax(), 0));
-   lineEdit_ibuMin->setText(Brewtarget::displayAmount(s->getIbuMin(), 0));
-   lineEdit_ibuMax->setText(Brewtarget::displayAmount(s->getIbuMax(), 0));
-   lineEdit_colorMin->setText(Brewtarget::displayAmount(s->getColorMin_srm(), 0));
-   lineEdit_colorMax->setText(Brewtarget::displayAmount(s->getColorMax_srm(), 0));
-   lineEdit_carbMin->setText(Brewtarget::displayAmount(s->getCarbMin_vol(), 0));
-   lineEdit_carbMax->setText(Brewtarget::displayAmount(s->getCarbMax_vol(), 0));
-   lineEdit_abvMin->setText(Brewtarget::displayAmount(s->getAbvMin_pct(), 0));
-   lineEdit_abvMax->setText(Brewtarget::displayAmount(s->getAbvMax_pct(), 0));
-   textEdit_profile->setText(s->getProfile());
-   textEdit_ingredients->setText(s->getIngredients());
-   textEdit_examples->setText(s->getExamples());
-   textEdit_notes->setText(s->getNotes());
+   styleComboBox->setIndexByStyle(s);
+
+   if( propName == "name" || updateAll )
+      lineEdit_name->setText(val.toString());
+   else if( propName == "category" || updateAll )
+      lineEdit_category->setText(val.toString());
+   else if( propName == "categoryNumber" || updateAll )
+      lineEdit_categoryNumber->setText(val.toString());
+   else if( propName == "styleLetter" || updateAll )
+      lineEdit_styleLetter->setText(val.toString());
+   else if( propName == "styleGuide" || updateAll )
+      lineEdit_styleGuide->setText(val.toString());
+   else if( propName == "type" || updateAll )
+      comboBox_type->setCurrentIndex(val.toInt());
+   else if( propName == "ogMin" || updateAll )
+      lineEdit_ogMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "ogMax" || updateAll )
+      lineEdit_ogMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "fgMin" || updateAll )
+      lineEdit_fgMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "fgMax" || updateAll )
+      lineEdit_fgMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "ibuMin" || updateAll )
+      lineEdit_ibuMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "ibuMax" || updateAll )
+      lineEdit_ibuMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "colorMin_srm" || updateAll )
+      lineEdit_colorMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "colorMax_srm" || updateAll )
+      lineEdit_colorMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "carbMin_vol" || updateAll )
+      lineEdit_carbMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "carbMax_vol" || updateAll )
+      lineEdit_carbMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "abvMin_pct" || updateAll )
+      lineEdit_abvMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "abvMax_pct" || updateAll )
+      lineEdit_abvMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+   else if( propName == "profile" || updateAll )
+      textEdit_profile->setText(val.toString());
+   else if( propName == "ingredients" || updateAll )
+      textEdit_ingredients->setText(val.toString());
+   else if( propName == "examples" || updateAll )
+      textEdit_examples->setText(val.toString());
+   else if( propName == "notes" || updateAll )
+      textEdit_notes->setText(val.toString());
 }

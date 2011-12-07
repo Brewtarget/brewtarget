@@ -23,20 +23,20 @@ class MashComboBox;
 
 #include <QComboBox>
 #include <QWidget>
-#include <string>
-#include <QVector>
-#include "mash.h"
-#include "database.h"
-#include "observable.h"
+#include <QList>
+#include <QMetaProperty>
+#include <QVariant>
 
-class MashComboBox : public QComboBox, public MultipleObserver
+// Forward declaration.
+class Mash;
+
+class MashComboBox : public QComboBox
 {
   Q_OBJECT
   
    public:
       MashComboBox(QWidget* parent=0);
       virtual ~MashComboBox() {}
-      void startObservingDB();
       void addMash(Mash* m);
       void setIndexByMashName(QString name);
       void setIndex(int ndx);
@@ -45,11 +45,10 @@ class MashComboBox : public QComboBox, public MultipleObserver
       
       Mash* getSelectedMash();
       
-      virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
-      
+   public slots:
+      void changed(QMetaProperty, QVariant);
    private:
-      QVector<Mash*> mashObs;
-      Database* dbObs;
+      QList<Mash*> mashObs;
 };
 
 #endif

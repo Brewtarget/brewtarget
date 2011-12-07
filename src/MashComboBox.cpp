@@ -20,82 +20,76 @@
 #include <QList>
 
 MashComboBox::MashComboBox(QWidget* parent)
-: QComboBox(parent)
+   : QComboBox(parent)
 {
    setCurrentIndex(-1);
-}
-
-void MashComboBox::startObservingDB()
-{
-   if( Database::isInitialized() )
-   {
-      dbObs = Database::getDatabase();
-      addObserved(dbObs);
-      
-      QList<Mash*>::iterator it, end;
-      
-      end = dbObs->getMashEnd();
-      
-      for( it = dbObs->getMashBegin(); it != end; ++it )
-         addMash(*it);
-      repopulateList();
-   }
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   repopulateList();
 }
 
 void MashComboBox::addMash(Mash* m)
 {
-   mashObs.push_back(m);
-   addObserved(m);
+   if( m && !mashObs.contains(m) )
+   {
+      mashObs.append(m);
+      connect( m, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   }
    
-   addItem( m->getName() );
+   addItem( m->name() );
+}
+
+void MashComboBox::removeMash(Mash* m)
+{
+   if( m )
+      disconnect( m, 0, this, 0 );
+   int ndx = mashObs.indexOf(m);
+   if( ndx >= 0 )
+   {
+      mashObs.removeAt(ndx);
+      removeItem(ndx);
+   }
 }
 
 void MashComboBox::removeAllMashs()
 {
-   unsigned int i, size;
-   size = mashObs.size();
-   for( i = 0; i < size; ++i )
-      removeObserved(mashObs[i]);
-   mashObs.clear(); // Clear internal list.
-   clear(); // Clear the combo box's visible list.
+   QList<Mash*> tmpMashs(mashObs);
+   int i;
+   
+   for( i = 0; i < tmpMashs.size(); ++i )
+      removeMash(tmpMashs[i]);
 }
 
-void MashComboBox::notify(Observable *notifier, QVariant info)
+void MashComboBox::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   unsigned int i, size;
+   int i;
+   
+   QString propName(prop.name());
    
    // Notifier could be the database. Only pay attention if the number of
    // mashs has changed.
-   if( notifier == dbObs && (info.toInt() == DBMASH || info.toInt() == DBALL) )
+   if( sender == &(Database::instance()) &&
+      propName == "mashs" )
    {
       removeAllMashs();
-      QList<Mash*>::iterator it, end;
-      
-      end = dbObs->getMashEnd();
-      
-      for( it = dbObs->getMashBegin(); it != end; ++it )
-         addMash(*it);
       repopulateList();
    }
    else // Otherwise, we know that one of the mashs changed.
    {
-      size = mashObs.size();
-      for( i = 0; i < size; ++i )
-         if( notifier == mashObs[i] )
-         {
-            // Notice we assume 'i' is an index into both 'mashObs' and also
-            // to the text list in this combo box...
-            setItemText( i, mashObs[i]->getName() );
-         }
+      i = mashObs.indexOf( qobject_cast<Mash*>(sender()) );
+      if( i >= 0 )
+      {
+         // Notice we assume 'i' is an index into both 'mashObs' and also
+         // to the text list in this combo box...
+         setItemText( i, mashObs[i]->name() );
+      }
    }
 }
 
-void MashComboBox::setIndexByMashName(QString name)
+void MashComboBox::setIndexByMash(Mash* mash)
 {
    int ndx;
    
-   ndx = findText( name, Qt::MatchExactly );
-   
+   ndx = mashObs.indexOf(mash);
    setCurrentIndex(ndx);
 }
 
@@ -109,9 +103,17 @@ void MashComboBox::repopulateList()
    unsigned int i, size;
    clear();
    
-   size = mashObs.size();
+   QList<Mash*> tmpMashs(mashObs);
+   size = tmpMashs.size();
    for( i = 0; i < size; ++i )
-      addItem( mashObs[i]->getName() );
+      removeMash( tmpMashs[i] );
+   
+   tmpMashs.clear();
+   tmpMashs = Database::instance().mashs();
+   
+   size = tmpMashs.size();
+   for( i = 0; i < size; ++i )
+      addMash(tmpMashs[i]);
    
    setCurrentIndex(-1);
 }

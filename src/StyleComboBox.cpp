@@ -29,18 +29,21 @@ StyleComboBox::StyleComboBox(QWidget* parent)
 
 void StyleComboBox::addStyle(Style* style)
 {
-   if( !styles.contains(style) )
+   if( style && !styles.contains(style) )
+   {
       styles.append(style);
-   connect( style, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( style, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   }
    
    addItem( style->name() );
 }
 
 void StyleComboBox::removeStyle(Style* style)
 {
-   disconnect( style, 0, this, 0 );
+   if( style )
+      disconnect( style, 0, this, 0 );
    int ndx = styles.indexOf(style);
-   if( ndx > 0 )
+   if( ndx >= 0 )
    {
       styles.removeAt(ndx);
       removeItem(ndx);
@@ -101,19 +104,21 @@ void StyleComboBox::repopulateList()
 {
    int i, size;
    clear(); // Remove all items in the visible list.
-
+   QList<Style*> tmpStyles(styles);
+   
    // Disconnect all  current styles.
-   size = styles.size();
+   size = tmpStyles.size();
    for( i = 0; i < size; ++i )
-      removeStyle(styles[i]);
+      removeStyle(tmpStyles[i]);
    
    // Get new list of styles.
-   Database::instance().getStyle( styles );
+   tmpStyles.clear();
+   Database::instance().getStyle( tmpStyles );
    
    // Connect and add all new styles.
-   size = styles.size();
+   size = tmpStyles.size();
    for( i = 0; i < size; ++i )
-      addStyle(styles[i]);
+      addStyle(tmpStyles[i]);
 }
 
 Style* StyleComboBox::getSelected()

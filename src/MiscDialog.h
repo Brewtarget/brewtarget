@@ -31,7 +31,7 @@ class MiscDialog;
 class MainWindow;
 class MiscEditor;
 
-class MiscDialog : public QDialog, public Ui::miscDialog, public Observer
+class MiscDialog : public QDialog, public Ui::miscDialog
 {
    Q_OBJECT
 
