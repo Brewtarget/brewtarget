@@ -365,15 +365,15 @@ double Hop::amount_kg() const
 
 Hop::Use Hop::use() const
 {
-   return uses.indexOf(get("use").toString());
+   return static_cast<Hop::Use>(uses.indexOf(get("use").toString()));
 }
 
-const QString Hop::getUseString() const
+const QString Hop::useString() const
 {
-   return get("use").toString()
+   return get("use").toString();
 }
 
-const QString Hop::getUseStringTr() const
+const QString Hop::useStringTr() const
 {
    static QStringList usesTr = QStringList() << tr("Boil") << tr("Dry Hop") << tr("Mash") << tr("First Wort") << tr("Aroma");
    return usesTr.at(use());
@@ -391,12 +391,12 @@ const QString Hop::notes() const
 
 Hop::Type Hop::type() const
 {
-   return types.indexOf(get("htype").toString());
+   return static_cast<Hop::Type>(types.indexOf(get("htype").toString()));
 }
 
 const QString Hop::typeString() const
 {
-   return get("htype").toString()
+   return get("htype").toString();
 }
 
 const QString Hop::typeStringTr() const
@@ -407,7 +407,7 @@ const QString Hop::typeStringTr() const
 
 Hop::Form Hop::form() const
 {
-   return forms.indexOf(get("form").toString());
+   return static_cast<Hop::Form>(forms.indexOf(get("form").toString()));
 }
 
 const QString Hop::formString() const
@@ -415,7 +415,7 @@ const QString Hop::formString() const
    return get("form").toString();
 }
 
-const QString Hop::getFormStringTr() const
+const QString Hop::formStringTr() const
 {
    static QStringList formsTr = QStringList() << tr("Leaf") << tr("Pellet") << tr("Plug");
    return formsTr.at(form());
