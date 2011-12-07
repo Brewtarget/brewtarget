@@ -98,7 +98,7 @@ void HopTableModel::addHops(QList<Hop*> hops)
 {
    QList<Hop*>::iterator i;
    
-   for( i = hopObs.begin(); i != hopObs.end(); i++ )
+   for( i = hops.begin(); i != hops.end(); i++ )
       addHop(*i);
 }
 
@@ -171,7 +171,7 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    }
    
    // See if sender is the database.
-   if( sender() == &(Database::instance()) && QString(prop.name()) == "fermentables" )
+   if( sender() == &(Database::instance()) && QString(prop.name()) == "hops" )
    {
       removeAll();
       addHops( Database::instance().hops() );

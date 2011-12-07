@@ -31,7 +31,7 @@ class YeastDialog;
 class MainWindow;
 class YeastEditor;
 
-class YeastDialog : public QDialog, public Ui::yeastDialog, public Observer
+class YeastDialog : public QDialog, public Ui::yeastDialog
 {
    Q_OBJECT
 

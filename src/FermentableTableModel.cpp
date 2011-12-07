@@ -97,7 +97,7 @@ void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 {
    QList<Fermentable*>::iterator i;
    
-   for( i = fermObs.begin(); i != fermObs.end(); i++ )
+   for( i = ferms.begin(); i != ferms.end(); i++ )
       addFermentable(*i);
 }
 

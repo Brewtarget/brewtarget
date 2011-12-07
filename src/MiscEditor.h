@@ -45,7 +45,7 @@ private:
     *  the misc we are watching. If \b metaProp is null,
     *  then update all the UI elements at once.
     */
-   void showChanges(MetaProperty* metaProp = 0);
+   void showChanges(QMetaProperty* metaProp = 0);
 };
 
 #endif   /* _MISCEDITOR_H */
