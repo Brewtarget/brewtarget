@@ -132,7 +132,7 @@ QString Misc::name() const
 
 Misc::Type Misc::type() const
 {
-   return get( "mtype" ).toInt();
+   return static_cast<Misc::Type>(get( "mtype" ).toInt());
 }
 
 const QString Misc::typeString() const
@@ -148,7 +148,7 @@ const QString Misc::typeStringTr() const
 
 Misc::Use Misc::use() const
 {
-   return get( "use" ).toInt();
+   return static_cast<Misc::Use>(get( "use" ).toInt());
 }
 
 const QString Misc::useString() const

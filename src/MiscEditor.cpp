@@ -68,7 +68,7 @@ void MiscEditor::save()
    // TODO: fill in the rest of the "set" methods.
    m->setTime(Brewtarget::timeQStringToSI(lineEdit_time->text()));
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
-   m->setAmount( m->getAmountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()));
+   m->setAmount( m->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()));
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
 
@@ -90,7 +90,7 @@ void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/)
       showChanges(&prop);
 }
 
-void MiscEditor::showChanges(MetaProperty* metaProp)
+void MiscEditor::showChanges(QMetaProperty* metaProp)
 {
    if( obsMisc == 0 )
       return;
@@ -103,7 +103,7 @@ void MiscEditor::showChanges(MetaProperty* metaProp)
    else
    {
       propName = metaProp->name();
-      value = metaProp->read(obsFerm);
+      value = metaProp->read(obsMisc);
    }
    
    if( propName == "name" || updateAll )
