@@ -22,7 +22,7 @@
 #include "brewtarget.h"
 
 MiscTableModel::MiscTableModel(MiscTableWidget* parent)
-   : QAbstractTableModel(parent), parentTableWidget(parent)
+   : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent)
 {
    miscObs.clear();
 }
@@ -173,7 +173,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    else if( index.column() == MISCAMOUNTCOL )
    {
       if( role == Qt::DisplayRole )
-         return QVariant( Brewtarget::displayAmount(row->amount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
       else
          return QVariant();
    }
@@ -272,7 +272,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    else if( col == MISCAMOUNTCOL )
    {
       if( value.canConvert(QVariant::String) )
-         row->setAmount( row->getAmountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
+         row->setAmount( row->amountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
       else
          return false;
    }

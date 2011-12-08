@@ -31,7 +31,7 @@
 #include "MiscTableModel.h"
 
 MiscDialog::MiscDialog(MainWindow* parent)
-        : QDialog(parent), mainWindow(parent), numMiscs(0), miscEdit(newMiscEditor(this))
+        : QDialog(parent), mainWindow(parent), numMiscs(0), miscEdit(new MiscEditor(this))
 {
    setupUi(this);
 
@@ -69,7 +69,7 @@ void MiscDialog::removeMisc()
 void MiscDialog::changed(QMetaProperty prop, QVariant /*value*/)
 {
    if( sender() == &(Database::instance()) &&
-       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("miscs") )
+       QString(prop.name()) == "miscs" )
    {
       miscTableWidget->getModel()->removeAll();
       populateTable();
@@ -79,7 +79,7 @@ void MiscDialog::changed(QMetaProperty prop, QVariant /*value*/)
 void MiscDialog::populateTable()
 {
    QList<Misc*> miscs;
-   Database::instance().getFermentables(ferms);
+   Database::instance().getMiscs(miscs);
 
    numMiscs = miscs.size();
    int i;
@@ -124,7 +124,8 @@ void MiscDialog::addMisc(const QModelIndex& index)
    Misc *misc = miscTableWidget->getModel()->getMisc(translated.row());
    
    // TODO: how should we restructure this call?
-   mainWindow->addMiscToRecipe(new Misc(*misc) ); // Need to add a copy so we don't change the database.
+   //mainWindow->addMiscToRecipe(new Misc(*misc) ); // Need to add a copy so we don't change the database.
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), Database::instance().newMisc(misc) );
 }
 
 void MiscDialog::editSelected()

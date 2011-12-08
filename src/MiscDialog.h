@@ -49,7 +49,7 @@ public slots:
    
 private:
    MainWindow* mainWindow;
-   unsigned int numMiscs;
+   int numMiscs;
    MiscEditor* miscEdit;
 
    void populateTable();

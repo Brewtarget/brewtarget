@@ -35,6 +35,7 @@ class MiscItemDelegate;
 // Forward declarations.
 class Misc;
 class MiscTableWidget;
+class Recipe;
 
 enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCOLS /*This one MUST be last*/};
 
@@ -74,6 +75,7 @@ public slots:
    
 private:
    QList<Misc*> miscObs;
+   Recipe* recObs;
    MiscTableWidget* parentTableWidget;
 };
 
