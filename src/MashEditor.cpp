@@ -22,11 +22,11 @@
 #include "brewtarget.h"
 #include "unit.h"
 #include "equipment.h"
+#include "recipe.h"
 
-MashEditor::MashEditor(QWidget* parent) : QDialog(parent)
+MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(0)
 {
    setupUi(this);
-   rec = 0;
 
    connect(pushButton_fromEquipment, SIGNAL(clicked()), this, SLOT(fromEquipment()) );
    connect(this, SIGNAL(accepted()), this, SLOT(saveAndClose()) );
@@ -46,76 +46,87 @@ void MashEditor::closeEditor()
 
 void MashEditor::saveAndClose()
 {
-   Mash* mash;
-
-   // Create a new mash if the recipe has none.
-   if( rec == 0 )
+   if( mashObs == 0 )
       return;
-   else if( rec->getMash() == 0 )
-   {
-      mash = new Mash();
-      rec->setMash(mash);
-   }
-   else
-   {
-      mash = rec->getMash();
-   }
    
-   mash->disableNotification(); // If we don't do this, the notification will propagate to a showChanges() and we'll lose any info we want saved.
-   mash->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
+   //mash->disableNotification(); // If we don't do this, the notification will propagate to a showChanges() and we'll lose any info we want saved.
+   mashObs->setEquipAdjust( true ); // BeerXML won't like me, but it's just stupid not to adjust for the equipment when you're able.
 
-   mash->setName( lineEdit_name->text() );
-   mash->setGrainTemp_c(Brewtarget::tempQStringToSI(lineEdit_grainTemp->text()));
-   mash->setSpargeTemp_c(Brewtarget::tempQStringToSI(lineEdit_spargeTemp->text()));
-   mash->setPh(lineEdit_spargePh->text().toDouble());
-   mash->setTunTemp_c(Brewtarget::tempQStringToSI(lineEdit_tunTemp->text()));
-   mash->setTunWeight_kg(Brewtarget::weightQStringToSI(lineEdit_tunMass->text()));
-   mash->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->text().toDouble() );
+   mashObs->setName( lineEdit_name->text() );
+   mashObs->setGrainTemp_c(Brewtarget::tempQStringToSI(lineEdit_grainTemp->text()));
+   mashObs->setSpargeTemp_c(Brewtarget::tempQStringToSI(lineEdit_spargeTemp->text()));
+   mashObs->setPh(lineEdit_spargePh->text().toDouble());
+   mashObs->setTunTemp_c(Brewtarget::tempQStringToSI(lineEdit_tunTemp->text()));
+   mashObs->setTunWeight_kg(Brewtarget::weightQStringToSI(lineEdit_tunMass->text()));
+   mashObs->setTunSpecificHeat_calGC(lineEdit_tunSpHeat->text().toDouble() );
 
-   mash->setNotes( textEdit_notes->toPlainText() );
+   mashObs->setNotes( textEdit_notes->toPlainText() );
    
-   mash->reenableNotification();
-   mash->forceNotify();
+   //mash->reenableNotification();
+   //mash->forceNotify();
 }
 
-void MashEditor::fromEquipment()
+void MashEditor::fromEquipment(Equipment* equip)
 {
-   if( rec == 0 || rec->getEquipment() == 0 )
-   {
+   if( mashObs == 0 )
       return;
+
+   lineEdit_tunMass->setText(Brewtarget::displayAmount(equip->tunWeight_kg(), Units::kilograms));
+   lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(equip->tunSpecificHeat_calGC()));
+}
+
+void MashEditor::setMash(Mash* mash)
+{
+   if( mashObs )
+      disconnect( mashObs, 0, this, 0 );
+   
+   mashObs = mash;
+   if( mashObs )
+   {
+      connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      showChanges();
    }
-
-   Equipment* equip = rec->getEquipment();
-
-   lineEdit_tunMass->setText(Brewtarget::displayAmount(equip->getTunWeight_kg(), Units::kilograms));
-   lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(equip->getTunSpecificHeat_calGC()));
 }
 
-void MashEditor::setRecipe(Recipe* recipe)
+void MashEditor::showChanges(QMetaProperty* prop)
 {
-   rec = recipe;
-   showChanges();
-}
-
-void MashEditor::showChanges()
-{
-   if( rec == 0 || rec->getMash() == 0 )
+   bool updateAll = false;
+   QString propName;
+   QVariant val;
+   
+   if( sender() != mashObs )
+      return;
+   
+   if( mashObs == 0 )
    {
       clear();
       return;
    }
 
-   Mash* mash = rec->getMash();
+   if( prop == 0 )
+      updateAll = true;
+   else
+   {
+      propName = prop->name();
+      val = prop->read(mashObs);
+   }
    
-   lineEdit_name->setText(mash->getName());
-   lineEdit_grainTemp->setText(Brewtarget::displayAmount(mash->getGrainTemp_c(), Units::celsius));
-   lineEdit_spargeTemp->setText(Brewtarget::displayAmount(mash->getSpargeTemp_c(), Units::celsius));
-   lineEdit_spargePh->setText(Brewtarget::displayAmount(mash->getPh()));
-   lineEdit_tunTemp->setText(Brewtarget::displayAmount(mash->getTunTemp_c(), Units::celsius));
-   lineEdit_tunMass->setText(Brewtarget::displayAmount(mash->getTunWeight_kg(), Units::kilograms));
-   lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(mash->getTunSpecificHeat_calGC()));
-
-   textEdit_notes->setPlainText(mash->getNotes());
+   if( propName == "name" || updateAll )
+      lineEdit_name->setText(val.toString());
+   else if( propName == "grainTemp_c" || updateAll )
+      lineEdit_grainTemp->setText(Brewtarget::displayAmount(val.toDouble(), Units::celsius));
+   else if( propName == "spargeTemp_c" || updateAll )
+      lineEdit_spargeTemp->setText(Brewtarget::displayAmount(val.toDouble(), Units::celsius));
+   else if( propName == "ph" || updateAll )
+      lineEdit_spargePh->setText(Brewtarget::displayAmount(val.toDouble()));
+   else if( propName == "tunTemp_c" || updateAll )
+      lineEdit_tunTemp->setText(Brewtarget::displayAmount(val.toDouble(), Units::celsius));
+   else if( propName == "tunMass_kg" || updateAll )
+      lineEdit_tunMass->setText(Brewtarget::displayAmount(val.toDouble(), Units::kilograms));
+   else if( propName == "tunSpecificHeat_calGC" || updateAll )
+      lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(val.toDouble()));
+   else if( propName == "notes" || updateAll )
+      textEdit_notes->setPlainText(val.toString());
 }
 
 void MashEditor::clear()

@@ -230,10 +230,10 @@ double MashStep::infuseTemp_c() const
 
 MashStep::Type MashStep::type() const
 {
-   return types.indexOf(get("mstype").toString());
+   return static_cast<MashStep::Type>(types.indexOf(get("mstype").toString()));
 }
 
-const QString& MashStep::typeString() const
+const QString MashStep::typeString() const
 {
    return get("mstype").toString();
 }

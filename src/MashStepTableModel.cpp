@@ -32,17 +32,20 @@
 #include "brewtarget.h"
 
 MashStepTableModel::MashStepTableModel(MashStepTableWidget* parent)
-   : QAbstractTableModel(parent), parentTableWidget(parent), mashObs(0)
+   : QAbstractTableModel(parent), mashObs(0), parentTableWidget(parent)
 {
 }
 
 void MashStepTableModel::setMash( Mash* m )
 {
+   int i;
    if( mashObs )
    {
+      // Remove mashObs and all steps.
       disconnect( mashObs, 0, this, 0 );
       for( i = 0; i < steps.size(); ++i )
          disconnect( steps[i], 0, this, 0 );
+      steps.clear();
    }
    
    mashObs = m;
@@ -64,8 +67,8 @@ void MashStepTableModel::setMash( Mash* m )
 
 MashStep* MashStepTableModel::getMashStep(unsigned int i)
 {
-   if( i < mashObs->size() )
-      return mashObs[i];
+   if( i < static_cast<unsigned int>(steps.size()) )
+      return steps[i];
    else
       return 0;
 }
@@ -73,9 +76,8 @@ MashStep* MashStepTableModel::getMashStep(unsigned int i)
 void MashStepTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
-   bool ok = false;
    
-   Mash* mashSender = qobject_cast<Mash*>(sender())
+   Mash* mashSender = qobject_cast<Mash*>(sender());
    if( mashSender && mashSender == mashObs )
    {
       for( i = 0; i < steps.size(); ++i )
@@ -122,7 +124,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       return QVariant();
    
    // Ensure the row is ok.
-   if( index.row() >= (int)(mashObs->getNumMashSteps()) )
+   if( index.row() >= (int)(steps.size()) )
    {
       Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
@@ -141,7 +143,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       case MASHSTEPTYPECOL:
          return QVariant(row->typeStringTr());
       case MASHSTEPAMOUNTCOL:
-         return (row->getType() == MashStep::TYPEDECOCTION)
+         return (row->type() == MashStep::TYPEDECOCTION)
                 ? QVariant( Brewtarget::displayAmount(row->decoctionAmount_l(), Units::liters ) )
                 : QVariant( Brewtarget::displayAmount(row->infuseAmount_l(), Units::liters) );
       case MASHSTEPTEMPCOL:
@@ -204,7 +206,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
    if( mashObs == 0 )
       return false;
    
-   if( index.row() >= (int)(mashObs->getNumMashSteps()) || role != Qt::EditRole )
+   if( index.row() >= (int)(steps.size()) || role != Qt::EditRole )
       return false;
    else
       row = steps[index.row()];
@@ -230,7 +232,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            if( row->getType() == MashStep::TYPEDECOCTION )
+            if( row->type() == MashStep::TYPEDECOCTION )
                row->setDecoctionAmount_l( Brewtarget::volQStringToSI(value.toString()) );
             else
                row->setInfuseAmount_l( Brewtarget::volQStringToSI(value.toString()) );
@@ -239,7 +241,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
          else
             return false;
       case MASHSTEPTEMPCOL:
-         if( value.canConvert(QVariant::String) && row->getType() != MashStep::TYPEDECOCTION )
+         if( value.canConvert(QVariant::String) && row->type() != MashStep::TYPEDECOCTION )
          {
             row->setInfuseTemp_c( Brewtarget::tempQStringToSI(value.toString()) );
             return true;
@@ -270,19 +272,18 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
 
 void MashStepTableModel::moveStepUp(unsigned int i)
 {
-   if( mashObs == 0 || i == 0 || i >= mashObs->getNumMashSteps() )
+   if( mashObs == 0 || i == 0 || i >= steps.size() )
       return;
 
-   Database::instance().swapMashStepOrder( step[i], step[i-1] );
+   Database::instance().swapMashStepOrder( steps[i], steps[i-1] );
 }
 
 void MashStepTableModel::moveStepDown(unsigned int i)
 {
-   // i is an unsigned int. How can i be less than 0?
-   if( mashObs == 0 || i < 0 || i+1 >= mashObs->getNumMashSteps() )
+   if( mashObs == 0 ||  i+1 >= steps.size() )
       return;
 
-   Database::instance().swapMashStepOrder( step[i], step[i+1] );
+   Database::instance().swapMashStepOrder( steps[i], steps[i+1] );
 }
 
 //==========================CLASS MashStepItemDelegate===============================

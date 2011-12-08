@@ -18,6 +18,8 @@
 
 #include "MashComboBox.h"
 #include <QList>
+#include "database.h"
+#include "mash.h"
 
 MashComboBox::MashComboBox(QWidget* parent)
    : QComboBox(parent)
@@ -67,7 +69,7 @@ void MashComboBox::changed(QMetaProperty prop, QVariant /*val*/)
    
    // Notifier could be the database. Only pay attention if the number of
    // mashs has changed.
-   if( sender == &(Database::instance()) &&
+   if( sender() == &(Database::instance()) &&
       propName == "mashs" )
    {
       removeAllMashs();

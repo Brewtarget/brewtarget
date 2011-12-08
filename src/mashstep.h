@@ -64,7 +64,7 @@ public:
    
    QString name() const;
    Type type() const;
-   const QString& typeString() const;
+   const QString typeString() const;
    //! Returns a translated type string.
    const QString typeStringTr() const;
    double infuseAmount_l() const;

@@ -19,6 +19,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "MashStepEditor.h"
+#include "mashstep.h"
 
 MashStepEditor::MashStepEditor(QWidget* parent)
    : QDialog(parent), obs(0)
@@ -52,23 +53,23 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    }
 
    if( propName == "name" || updateAll )
-      lineEdit_name->setText(obs->getName());
+      lineEdit_name->setText(obs->name());
    else if( propName == "type" || updateAll )
-      comboBox_type->setCurrentIndex(obs->getType());
+      comboBox_type->setCurrentIndex(obs->type());
    else if( propName == "infuseAmount_l" || updateAll )
-      lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->getInfuseAmount_l(), Units::liters));
+      lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->infuseAmount_l(), Units::liters));
    else if( propName == "infuseTemp_c" || updateAll )
-      lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->getInfuseTemp_c(), Units::celsius));
+      lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->infuseTemp_c(), Units::celsius));
    else if( propName == "decoctionAmount_l" || updateAll )
-      lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->getDecoctionAmount_l(), Units::liters));
+      lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->decoctionAmount_l(), Units::liters));
    else if( propName == "stepTemp_c" || updateAll )
-      lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->getStepTemp_c(), Units::celsius));
+      lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->stepTemp_c(), Units::celsius));
    else if( propName == "stepTime_min" || updateAll )
-      lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->getStepTime_min(), Units::minutes));
+      lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->stepTime_min(), Units::minutes));
    else if( propName == "rampTime_min" || updateAll )
-      lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->getRampTime_min(), Units::minutes));
+      lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->rampTime_min(), Units::minutes));
    else if( propName == "endTemp_c" || updateAll )
-      lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->getEndTemp_c(), Units::celsius));
+      lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->endTemp_c(), Units::celsius));
 }
 
 void MashStepEditor::clear()

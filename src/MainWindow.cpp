@@ -616,7 +616,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    recipeExtrasWidget->setRecipe(recipe);
    mashDesigner->setRecipe(recipe);
 
-   mashEditor->setRecipe(recipeObs);
+   mashEditor->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
    showChanges();

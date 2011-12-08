@@ -38,6 +38,7 @@ class MashComboBox : public QComboBox
       MashComboBox(QWidget* parent=0);
       virtual ~MashComboBox() {}
       void addMash(Mash* m);
+      void removeMash(Mash* m);
       void setIndexByMash(Mash* m);
       void setIndex(int ndx);
       void removeAllMashs();
