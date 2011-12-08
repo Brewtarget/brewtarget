@@ -272,7 +272,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
 
 void MashStepTableModel::moveStepUp(unsigned int i)
 {
-   if( mashObs == 0 || i == 0 || i >= steps.size() )
+   if( mashObs == 0 || i == 0 || i >= static_cast<unsigned int>(steps.size()) )
       return;
 
    Database::instance().swapMashStepOrder( steps[i], steps[i-1] );
