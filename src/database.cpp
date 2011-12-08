@@ -40,6 +40,7 @@
 #include "equipment.h"
 #include "fermentable.h"
 #include "hop.h"
+#include "instruction.h"
 #include "mash.h"
 #include "mashstep.h"
 #include "misc.h"

@@ -28,6 +28,7 @@
 #include "brewtarget.h"
 #include "BrewDayWidget.h"
 #include "recipe.h"
+#include "style.h"
 
 BrewDayWidget::BrewDayWidget(QWidget* parent) :
    QWidget(parent), recObs(0), printer(new QPrinter()), doc(new QWebView())

@@ -18,11 +18,15 @@
 
 #include "instruction.h"
 #include "brewtarget.h"
-#include <string>
+
+//#include <algorithm>
+//#include <ctime>
+
 #include <QList>
-#include <iostream>
-#include <cmath>
-#include <algorithm>
+#include <QDate>
+#include <QInputDialog>
+#include <QObject>
+
 #include "recipe.h"
 #include "style.h"
 #include "misc.h"
@@ -33,25 +37,20 @@
 #include "yeast.h"
 #include "water.h"
 #include "PreInstruction.h"
-#include <QDomElement>
-#include <QDomText>
-#include <QInputDialog>
-#include <QObject>
 #include "Algorithms.h"
 #include "IbuMethods.h"
 #include "ColorMethods.h"
-#include <QDate>
+
 #include "HeatCalculations.h"
-#include <ctime>
 
 bool operator<(Recipe &r1, Recipe &r2 )
 {
-   return r1.name < r2.name;
+   return r1.name() < r2.name();
 }
 
 bool operator==(Recipe &r1, Recipe &r2 )
 {
-   return r1.name == r2.name;
+   return r1.name() == r2.name();
 }
 
 void Recipe::clear()

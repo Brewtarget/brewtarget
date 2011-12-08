@@ -34,6 +34,7 @@
 #include "misc.h"
 #include "recipe.h"
 #include "yeast.h"
+#include "brewnote.h"
 
 BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks type)
    : QAbstractItemModel(parent)
@@ -580,7 +581,7 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
             for (int j=0; j < notes.size(); ++j)
             {
                BrewTargetTreeItem* bar = temp->child(j);
-               bar->setData(BrewTargetTreeItem::BREWNOTE, notes[j]);
+               bar->setData(static_cast<int>(BrewTargetTreeItem::BREWNOTE), notes[j]);
             }
          }
       }

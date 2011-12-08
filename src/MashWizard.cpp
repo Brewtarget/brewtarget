@@ -24,6 +24,7 @@
 #include <QMessageBox>
 #include "HeatCalculations.h"
 #include "brewtarget.h"
+#include "equipment.h"
 
 MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 {

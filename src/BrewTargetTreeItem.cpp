@@ -35,6 +35,7 @@
 #include "recipe.h"
 #include "misc.h"
 #include "yeast.h"
+#include "style.h"
 
 bool operator==(BrewTargetTreeItem& lhs, BrewTargetTreeItem& rhs)
 {

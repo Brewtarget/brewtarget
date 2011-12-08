@@ -27,6 +27,9 @@
 #include <QDir>
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
+#include "style.h"
+#include "equipment.h"
+#include "mash.h"
 
 BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent)
 {

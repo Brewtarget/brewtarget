@@ -28,17 +28,19 @@ class Recipe;
 #include <QString>
 #include <QDate>
 #include "BeerXMLElement.h"
-#include "style.h"
-#include "misc.h"
-#include "mash.h"
 #include "hop.h"
-#include "fermentable.h"
-#include "equipment.h"
-#include "yeast.h"
-#include "water.h"
-#include "instruction.h"
-#include "PreInstruction.h"
-#include "brewnote.h"
+#include "misc.h"
+
+// Forward declarations.
+class Style;
+class Mash;
+class Fermentable;
+class Equipment;
+class Yeast;
+class Water;
+class Instruction;
+class PreInstruction;
+class BrewNote;
 
 class Recipe : public BeerXMLElement
 {

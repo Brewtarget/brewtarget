@@ -88,6 +88,10 @@
 #include "MashDesigner.h"
 #include "PitchDialog.h"
 #include "MaltinessWidget.h"
+#include "fermentable.h"
+#include "yeast.h"
+#include "brewnote.h"
+#include "equipment.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
