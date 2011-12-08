@@ -162,7 +162,7 @@ void Mash::setTunTemp_c( double var )
 
 void Mash::setSpargeTemp_c( double var )
 {
-   set("spargeTemp_c", sparge_temp, var);
+   set("spargeTemp_c", "sparge_temp", var);
 }
 
 void Mash::setPh( double var )
@@ -209,12 +209,14 @@ void Mash::setEquipAdjust( bool var )
    set("equipAdjust", "equip_adjust", var);
 }
 
+// NOTE: this is not necessary due to Database::newMashStep(Mash* mash). Right?
+/*
 void Mash::addMashStep(MashStep* step)
 {
    if( step == 0 )
       return;
    
-   mashSteps.push_back(step);
+   mashSteps.append(step);
    addObserved(step);
    hasChanged();
 }
@@ -236,136 +238,113 @@ void Mash::removeMashStep(MashStep* step)
       }
    }
 }
+*/
 
 void Mash::removeAllMashSteps()
 {
-   MashStep* step;
-
-   while( mashSteps.size() > 0 )
-   {
-      step = mashSteps.back();
-      mashSteps.pop_back(); // Remove last element.
-      delete step; // Delete storage.
-   }
-
-   hasChanged();
+   int i, size;
+   QList<MashStep*> tmpSteps = mashSteps();
+   size = tmpSteps.size();
+   for( i = 0; i < size; ++i )
+      Database::instance().removeFrom(this, tmpSteps[i]);
 }
 
 //============================="GET" METHODS====================================
-QString Mash::getName() const
+QString Mash::name() const
 {
-   return name;
+   return get("name").toString();
 }
 
-double Mash::getGrainTemp_c() const
+double Mash::grainTemp_c() const
 {
-   return grainTemp_c;
+   return get("grain_temp").toDouble();
 }
 
-unsigned int Mash::getNumMashSteps() const
+QString Mash::notes() const
 {
-   return mashSteps.size();
+   return get("notes").toString();
 }
 
-MashStep* Mash::getMashStep( unsigned int i )
+double Mash::tunTemp_c() const
 {
-  if( i >= static_cast<unsigned int>(mashSteps.size()) )
-      return 0;
-   else
-      return mashSteps[i];
+   return get("tun_temp").toDouble();
 }
 
-QString Mash::getNotes() const
+double Mash::spargeTemp_c() const
 {
-   return notes;
+   return get("sparge_temp").toDouble();
 }
 
-double Mash::getTunTemp_c() const
+double Mash::ph() const
 {
-   return tunTemp_c;
+   return get("ph").toDouble();
 }
 
-double Mash::getSpargeTemp_c() const
+double Mash::tunWeight_kg() const
 {
-   return spargeTemp_c;
+   return get("tun_weight").toDouble();
 }
 
-double Mash::getPh() const
+double Mash::tunSpecificHeat_calGC() const
 {
-   return ph;;
+   return get("tun_specific_heat").toDouble();
 }
 
-double Mash::getTunWeight_kg() const
+bool Mash::equipAdjust() const
 {
-   return tunWeight_kg;
-}
-
-double Mash::getTunSpecificHeat_calGC() const
-{
-   return tunSpecificHeat_calGC;
-}
-
-bool Mash::getEquipAdjust() const
-{
-   return equipAdjust;
+   return get("equip_adjust").toBool();
 }
 
 // === other methods ===
-double Mash::totalMashWater_l() const
+double Mash::totalMashWater_l()
 {
-   unsigned int i, size;
+   int i, size;
    double waterAdded_l = 0.0;
+   QList<MashStep*> steps = mashSteps();
    MashStep* step;
    
-   size = mashSteps.size();
+   size = steps.size();
    for( i = 0; i < size; ++i )
    {
-      step = mashSteps[i];
+      step = steps[i];
       
-      if( step->getType() == MashStep::TYPEINFUSION )
-      waterAdded_l += step->getInfuseAmount_l();
+      if( step->type() == MashStep::TYPEINFUSION )
+      waterAdded_l += step->infuseAmount_l();
    }
    
    return waterAdded_l;
 }
 
-double Mash::getTotalTime()
+double Mash::totalTime()
 {
-   unsigned int i;
+   int i, size;
    double totalTime = 0.0;
+   QList<MashStep*> steps = mashSteps();
    MashStep* mstep;
 
-   for( i = 0; i < getNumMashSteps(); ++i )
+   size = steps.size();
+   for( i = 0; i < size; ++i )
    {
-      mstep = getMashStep(i);
-      totalTime += mstep->getStepTime_min();
+      mstep = steps[i];
+      totalTime += mstep->stepTime_min();
    }
    return totalTime;
 }
 
-void Mash::notify(Observable *notifier, QVariant info)
+// TODO: ensure database is connecting mashstep signals to us.
+void Mash::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   unsigned int i, size;
-   size = mashSteps.size();
+   int i;
+   MashStep* stepSender = qobject_cast<MashStep*>(sender());
+   if( stepSender == 0 )
+      return;
    
-   for( i = 0; i < size; ++i )
+   // If one of our mash steps changed, our calculated properties
+   // may also change, so we need to emit some signals.
+   i = mashSteps().indexOf(stepSender);
+   if( i >= 0 )
    {
-      if( mashSteps[i] == notifier )
-      {
-         hasChanged(QVariant(i)); // Mash notifies its observers of which mashStep changed.
-         return;
-      }
+      emit changed(metaProperty("totalMashWater_l"), QVariant());
+      emit changed(metaProperty("totalTime"), QVariant());
    }
-}
-
-void Mash::swapSteps( unsigned int i, unsigned int j )
-{
-   if( i < 0 || j < 0 || static_cast<int>(i) >= mashSteps.size() || static_cast<int>(j) >= mashSteps.size() )
-      return; // Bad indices.
-
-   MashStep* tmp = mashSteps[i];
-   mashSteps[i] = mashSteps[j];
-   mashSteps[j] = tmp;
-
-   hasChanged();
 }

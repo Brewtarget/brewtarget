@@ -75,18 +75,23 @@ public:
    bool equipAdjust() const;
    
    // Calculated getters
-   double totalMashWater_l() const; // Total amount of water that went INTO the mash.
-   double getTotalTime();
+   double totalMashWater_l(); // Total amount of water that went INTO the mash.
+   double totalTime();
    
    // Relational getters
    QList<MashStep*> mashSteps();
    
-   // TODO: is this the right place for these? Probably move to Database.
-   void addMashStep(MashStep* step);
-   void removeMashStep(MashStep* step);
+   // NOTE: this is not necessary due to Database::newMashStep(Mash* mash). Right?
+   //void addMashStep(MashStep* step);
+   //void removeMashStep(MashStep* step);
+   //void swapSteps( unsigned int i, unsigned int j );
+   
+   // NOTE: should this be completely in Database?
    void removeAllMashSteps();
-   void swapSteps( unsigned int i, unsigned int j );
 
+public slots:
+   void changed(QMetaProperty, QVariant);
+   
 signals:
    /*
    void changedName(QString);

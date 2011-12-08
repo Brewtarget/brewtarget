@@ -402,7 +402,7 @@ MashStep* Database::newMashStep(Mash* mash)
    // Database's steps have changed.
    emit changed( metaProperty("mashSteps"), QVariant() );
    // Mash's steps have changed.
-   emit mash->changed( mash->metaProperty("mashSteps") );
+   emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
    return tmp;
 }
 
