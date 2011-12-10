@@ -43,10 +43,11 @@ Yeast::Yeast()
    setDefaults();
 }
 
-Yeast::Yeast(Yeast& other) : BeerXMLElement(other)
+Yeast::Yeast(Yeast const& other) : BeerXMLElement(other)
 {
 }
 
+/*
 void Yeast::setDefaults()
 {
    // Required fields.
@@ -69,6 +70,7 @@ void Yeast::setDefaults()
    maxReuse = 0;
    addToSecondary = false;
 }
+*/
 
 //============================="GET" METHODS====================================
 QString Yeast::name() const
@@ -76,8 +78,9 @@ QString Yeast::name() const
    return get("name").toString();
 }
 
-Yeast::Type Yeast::type() const {
-   return get("name").toInt();
+Yeast::Type Yeast::type() const
+{
+   return static_cast<Yeast::Type>(get("ytype").toInt());
 }
 
 const QString Yeast::typeString() const
@@ -97,7 +100,7 @@ const QString Yeast::typeStringTr() const
 
 Yeast::Form Yeast::form() const
 {
-   return get("form").toInt();
+   return static_cast<Yeast::Form>(get("form").toInt());
 }
 
 const QString Yeast::formString() const
@@ -146,7 +149,7 @@ double Yeast::maxTemperature_c() const
 
 Yeast::Flocculation Yeast::flocculation() const
 {
-   return get("flocculation").toInt();
+   return static_cast<Yeast::Flocculation>(get("flocculation").toInt());
 }
 
 const QString Yeast::flocculationString() const
