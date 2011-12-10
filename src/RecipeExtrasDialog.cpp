@@ -17,15 +17,15 @@
 */
 
 #include "RecipeExtrasDialog.h"
+#include <QDate>
 #include "unit.h"
 #include "brewtarget.h"
-#include <QDate>
+#include "recipe.h"
 
-RecipeExtrasDialog::RecipeExtrasDialog(QWidget* parent) : QDialog(parent)
+RecipeExtrasDialog::RecipeExtrasDialog(QWidget* parent)
+   : QDialog(parent), recObs(0)
 {
    setupUi(this);
-
-   recObs = 0;
 
    /*
    connect( lineEdit_age, SIGNAL(editingFinished()), this, SLOT(updateAge()));
@@ -53,10 +53,13 @@ RecipeExtrasDialog::RecipeExtrasDialog(QWidget* parent) : QDialog(parent)
 
 void RecipeExtrasDialog::setRecipe(Recipe* rec)
 {
-   if( rec && rec != recObs )
+   if( recObs )
+      disconnect( recObs, 0, this, 0 );
+   
+   recObs = rec;
+   if( recObs )
    {
-      recObs = rec;
-      setObserved(recObs);
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
 }
@@ -154,7 +157,7 @@ void RecipeExtrasDialog::updateDate()
    if( recObs == 0 )
       return;
 
-   recObs->setDate( dateEdit_date->date().toString("MM/dd/yyyy") );
+   recObs->setDate( dateEdit_date->date() );
 }
 
 void RecipeExtrasDialog::updateCarbonation()
@@ -181,17 +184,17 @@ void RecipeExtrasDialog::updateNotes()
    recObs->setNotes( plainTextEdit_notes->toPlainText() );
 }
 
-void RecipeExtrasDialog::notify(Observable* notifier, QVariant /*info*/)
+void RecipeExtrasDialog::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( notifier != recObs )
+   if( sender() != recObs )
       return;
 
-   showChanges();
+   showChanges(&prop);
 }
 
 void RecipeExtrasDialog::saveAndQuit()
 {
-   recObs->disableNotification();
+   //recObs->disableNotification();
 
    updateBrewer();
    updateBrewerAsst();
@@ -209,29 +212,51 @@ void RecipeExtrasDialog::saveAndQuit()
    updateTasteNotes();
    updateNotes();
 
-   recObs->reenableNotification();
-   recObs->forceNotify();
+   //recObs->reenableNotification();
+   //recObs->forceNotify();
 
    hide();
 }
 
-void RecipeExtrasDialog::showChanges()
+void RecipeExtrasDialog::showChanges(QMetaProperty* prop)
 {
-   lineEdit_age->setText( Brewtarget::displayAmount(recObs->getAge_days()) );
-   lineEdit_ageTemp->setText( Brewtarget::displayAmount(recObs->getAgeTemp_c(), Units::celsius) );
-   lineEdit_asstBrewer->setText( recObs->getAsstBrewer() );
-   lineEdit_brewer->setText( recObs->getBrewer() );
-   lineEdit_carbVols->setText( Brewtarget::displayAmount(recObs->getCarbonation_vols()) );
-   lineEdit_primaryAge->setText( Brewtarget::displayAmount(recObs->getPrimaryAge_days()) );
-   lineEdit_primaryTemp->setText( Brewtarget::displayAmount(recObs->getPrimaryTemp_c(), Units::celsius) );
-   lineEdit_secAge->setText( Brewtarget::displayAmount(recObs->getSecondaryAge_days()) );
-   lineEdit_secTemp->setText( Brewtarget::displayAmount(recObs->getSecondaryTemp_c(), Units::celsius) );
-   lineEdit_tertAge->setText( Brewtarget::displayAmount(recObs->getTertiaryAge_days()) );
-   lineEdit_tertTemp->setText( Brewtarget::displayAmount(recObs->getTertiaryTemp_c(), Units::celsius) );
-   spinBox_tasteRating->setValue( (int)(recObs->getTasteRating()) );
-
-   dateEdit_date->setDate( QDate::fromString(recObs->getDate(), "MM/dd/yyyy") );
-
-   plainTextEdit_notes->setPlainText( recObs->getNotes() );
-   plainTextEdit_tasteNotes->setPlainText( recObs->getTasteNotes() );
+   bool updateAll = (prop == 0);
+   QString propName;
+   QVariant val;
+   if( prop )
+   {
+      propName = prop->name();
+      val = prop->read(recObs);
+   }
+   
+   if( propName == "age_days" || updateAll )
+      lineEdit_age->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "ageTemp_c" || updateAll )
+      lineEdit_ageTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "asstBrewer" || updateAll )
+      lineEdit_asstBrewer->setText( val.toString() );
+   else if( propName == "brewer" || updateAll )
+      lineEdit_brewer->setText( val.toString() );
+   else if( propName == "carbonation_vols" || updateAll )
+      lineEdit_carbVols->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "primaryAge_days" || updateAll )
+      lineEdit_primaryAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "primaryTemp_c" || updateAll )
+      lineEdit_primaryTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "secondaryAge_days" || updateAll )
+      lineEdit_secAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "secondaryTemp_c" || updateAll )
+      lineEdit_secTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "tertiaryAge_days" || updateAll )
+      lineEdit_tertAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "tertiaryTemp_c" || updateAll )
+      lineEdit_tertTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "tasteRating" || updateAll )
+      spinBox_tasteRating->setValue( (int)(val.toDouble()) );
+   else if( propName == "date" || updateAll )
+      dateEdit_date->setDate( val.toDate() );
+   else if( propName == "notes" || updateAll )
+      plainTextEdit_notes->setPlainText( val.toString() );
+   else if( propName == "tasteNotes" || updateAll )
+      plainTextEdit_tasteNotes->setPlainText( val.toString() );
 }
