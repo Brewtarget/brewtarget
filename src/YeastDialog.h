@@ -30,6 +30,7 @@ class YeastDialog;
 // Forward declarations.
 class MainWindow;
 class YeastEditor;
+class YeastEditor;
 
 class YeastDialog : public QDialog, public Ui::yeastDialog
 {
@@ -48,7 +49,8 @@ public slots:
    void changed(QMetaProperty, QVariant);
 private:
    MainWindow* mainWindow;
-   unsigned int numYeasts;
+   YeastEditor* yeastEditor;
+   int numYeasts;
 
    void populateTable();
 };

@@ -30,7 +30,7 @@
 #include "YeastTableModel.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
-        : QDialog(parent), mainWindow(parent), yeastEditor(new YeastEditor(this)), numYeast(0)
+        : QDialog(parent), mainWindow(parent), yeastEditor(new YeastEditor(this)), numYeasts(0)
 {
    setupUi(this);
 
@@ -71,9 +71,11 @@ void YeastDialog::removeYeast()
 
 void YeastDialog::changed(QMetaProperty prop, QVariant val)
 {
+   QString propName(prop.name());
+   
    // Notifier should only be the database.
    if( sender() == &(Database::instance()) &&
-       prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("yeasts") )
+       propName == "yeasts" )
    {
       yeastTableWidget->getModel()->removeAll();
       populateTable();
@@ -126,10 +128,10 @@ void YeastDialog::addYeast(const QModelIndex& index)
          return;
    }
    
-   Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
+   Yeast* yeast = yeastTableWidget->getModel()->getYeast(translated.row());
    
-   // TODO: how should we restructure this call?
-   mainWindow->addYeastToRecipe(new Yeast(*yeast) ); // Need to add a copy so we don't change the database.
+   // Adds a copy of yeast.
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), yeast );
 }
 
 void YeastDialog::editSelected()
