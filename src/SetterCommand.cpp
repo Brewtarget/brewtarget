@@ -16,8 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QString>
+#include <QVariant>
+#include "SetterCommand.h"
+
 SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
-   : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value)),
+   : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value.toString())),
      table(table), key_name(key_name), key(key), prop(prop), col_name(col_name), value(value), object(object), notify(notify)
 {
 }

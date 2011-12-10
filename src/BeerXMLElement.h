@@ -37,6 +37,7 @@ class BeerXMLElement : public QObject
    Q_CLASSINFO("version","1")
    
    friend class Database;
+   friend class SetterCommand;
 public:
    BeerXMLElement();
    BeerXMLElement( BeerXMLElement const& other );
