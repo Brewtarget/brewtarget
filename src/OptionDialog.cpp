@@ -31,6 +31,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QFileDialog>
+#include "MainWindow.h"
 
 OptionDialog::OptionDialog(QWidget* parent)
 {

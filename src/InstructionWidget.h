@@ -24,6 +24,8 @@ class InstructionWidget;
 #include "ui_instructionWidget.h"
 #include <QWidget>
 #include <QSize>
+#include <QMetaProperty>
+#include <QVariant>
 
 // Forward declarations.
 class TimerWidget;

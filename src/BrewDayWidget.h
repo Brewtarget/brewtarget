@@ -25,6 +25,8 @@ class BrewDayWidget;
 #include <QWidget>
 #include <QSize>
 #include <QWebView>
+#include <QMetaProperty>
+#include <QVariant>
 
 // Forward declarations.
 class Recipe;

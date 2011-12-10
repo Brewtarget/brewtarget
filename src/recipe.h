@@ -107,7 +107,6 @@ public:
    Q_PROPERTY( double carbonationTemp_c READ carbonationTemp_c WRITE setCarbonationTemp_c NOTIFY changed /*changedCarbonationTemp_c*/ )
    Q_PROPERTY( double primingSugarEquiv READ primingSugarEquiv WRITE setPrimingSugarEquiv NOTIFY changed /*changedPrimingSugarEquiv*/ )
    Q_PROPERTY( double kegPrimingFactor READ kegPrimingFactor WRITE setKegPrimingFactor NOTIFY changed /*changedKegPrimingFactor*/ )
-   Q_PROPERTY( double estimatedCalories READ estimatedCalories WRITE setEstimatedCalories NOTIFY changed /*changedEstimatedCalories*/ )
    
    // Calculated stored properties.
    // Do we need to be able to set og and fg rather than let them be calculated?
@@ -126,7 +125,7 @@ public:
    Q_PROPERTY( double boilVolume_l READ boilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateBoilVolume_l*/ STORED false)
    Q_PROPERTY( double postBoilVolume_l READ postBoilVolume_l /*WRITE*/ NOTIFY changed /*changedEstimatePostBoilVolume_l*/ STORED false)
    Q_PROPERTY( double finalVolume_l READ finalVolume_l /*WRITE*/ NOTIFY changed /*changedEstimateFinalVolume_l*/ STORED false)
-   Q_PROPERTY( double calories READ estimateCalories /*WRITE*/ NOTIFY changed /*changedEstimateCalories*/ STORED false)
+   Q_PROPERTY( double calories READ calories /*WRITE*/ NOTIFY changed /*changedEstimateCalories*/ STORED false)
    Q_PROPERTY( double grainsInMash_kg READ grainsInMash_kg /*WRITE*/ NOTIFY changed /*changedGrainsInMash_kg*/ STORED false)
    Q_PROPERTY( double grains_kg READ grains_kg /*WRITE*/ NOTIFY changed /*changedGrains_kg*/ STORED false)
    Q_PROPERTY( QColor SRMColor READ SRMColor /*WRITE*/ NOTIFY changed STORED false )
@@ -253,6 +252,9 @@ public:
    double kegPrimingFactor() const;
    
    // Calculated getters.
+   //! Gets points from og().
+   double points();
+   //! Gets points if the final \b volume is given.
    double points(double volume);
    double ABV_pct();
    double color_srm();

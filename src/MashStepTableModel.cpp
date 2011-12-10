@@ -270,15 +270,15 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
    }
 }
 
-void MashStepTableModel::moveStepUp(unsigned int i)
+void MashStepTableModel::moveStepUp(int i)
 {
-   if( mashObs == 0 || i == 0 || i >= static_cast<unsigned int>(steps.size()) )
+   if( mashObs == 0 || i == 0 || i >= steps.size() )
       return;
 
    Database::instance().swapMashStepOrder( steps[i], steps[i-1] );
 }
 
-void MashStepTableModel::moveStepDown(unsigned int i)
+void MashStepTableModel::moveStepDown(int i)
 {
    if( mashObs == 0 ||  i+1 >= steps.size() )
       return;

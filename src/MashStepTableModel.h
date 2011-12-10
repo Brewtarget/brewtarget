@@ -26,7 +26,8 @@ class MashStepItemDelegate;
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
+#include <QMetaProperty>
+#include <QVariant>
 #include <QItemDelegate>
 #include <QVector>
 #include "mashstep.h"
@@ -63,8 +64,8 @@ public:
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
 public slots:
-   void moveStepUp(unsigned int i);
-   void moveStepDown(unsigned int i);
+   void moveStepUp(int i);
+   void moveStepDown(int i);
    void changed(QMetaProperty,QVariant);
    
 private:

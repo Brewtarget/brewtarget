@@ -21,6 +21,8 @@
 
 #include <QDialog>
 #include "ui_miscEditor.h"
+#include <QMetaProperty>
+#include <QVariant>
 
 // Forward declarations.
 class Misc;

@@ -36,6 +36,7 @@
 #include "fermentable.h"
 #include "FermentableTableModel.h"
 #include "unit.h"
+#include "recipe.h"
 
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)

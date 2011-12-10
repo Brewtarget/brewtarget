@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
 #include "BeerXMLElement.h"
 #include <QDomElement>
 #include <QDomNode>
@@ -28,6 +29,28 @@ BeerXMLElement::BeerXMLElement() : _key(-1), _table(Database::NOTABLE)
 
 BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : _key(other._key), _table(other._table)
 {
+}
+
+BeerXMLElement::~BeerXMLElement()
+{
+}
+
+bool BeerXMLElement::deleted(){ return get("deleted").toBool(); }
+
+int BeerXMLElement::key(){ return _key; }
+
+Database::DBTable BeerXMLElement::table(){ return _table; }
+
+int BeerXMLElement::version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
+
+QMetaProperty BeerXMLElement::metaProperty(const char* name)
+{
+   return metaObject()->property(metaObject()->indexOfProperty(name));
+}
+
+QMetaProperty BeerXMLElement::metaProperty(QString const& name)
+{
+   return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
 }
 
 double BeerXMLElement::getDouble(const QDomText& textNode)
@@ -118,3 +141,4 @@ QVariant BeerXMLElement::get( const char* col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
 }
+*/

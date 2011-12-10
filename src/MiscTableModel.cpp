@@ -16,10 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QComboBox>
+#include <QLineEdit>
 #include "misc.h"
 #include "MiscTableModel.h"
+#include "MiscTableWidget.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "recipe.h"
 
 MiscTableModel::MiscTableModel(MiscTableWidget* parent)
    : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent)

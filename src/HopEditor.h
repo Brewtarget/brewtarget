@@ -22,6 +22,8 @@
 class HopEditor;
 
 #include "ui_hopEditor.h"
+#include <QMetaProperty>
+#include <QVariant>
 
 // Forward declarations.
 class Hop;

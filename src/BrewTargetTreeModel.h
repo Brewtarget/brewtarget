@@ -26,7 +26,8 @@ class BrewTargetTreeModel;
 #include <QVariant>
 #include <QList>
 #include <QAbstractItemModel>
-#include <Qt>
+#include <QMetaProperty>
+#include <QVariant>
 #include <QObject>
 #include <QSqlRelationalTableModel>
 
@@ -36,6 +37,11 @@ class Recipe;
 class BrewTargetTreeItem;
 class BrewTargetTreeView;
 class BrewNote;
+class Equipment;
+class Fermentable;
+class Hop;
+class Misc;
+class Yeast;
 
 class BrewTargetTreeModel : public QAbstractItemModel
 {

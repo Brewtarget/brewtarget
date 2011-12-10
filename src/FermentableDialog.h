@@ -23,6 +23,7 @@ class FermentableDialog;
 
 #include <QWidget>
 #include <QDialog>
+#include <QMetaProperty>
 #include <QVariant>
 #include "ui_fermentableDialog.h"
 

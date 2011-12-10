@@ -20,6 +20,8 @@
 #define WATEREDITOR_H
 
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_waterEditor.h"
 
 // Forward declarations.

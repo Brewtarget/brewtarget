@@ -22,6 +22,8 @@
 class YeastEditor;
 
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_yeastEditor.h"
 
 // Forward declarations.

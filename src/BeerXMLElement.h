@@ -19,8 +19,6 @@
 #ifndef _BEERXMLELEMENT_H
 #define   _BEERXMLELEMENT_H
 
-class BeerXMLElement;
-
 #include <QDomText>
 #include <QDomNode>
 #include <QDomDocument>
@@ -30,6 +28,7 @@ class BeerXMLElement;
 #include <QVariant>
 #include <QDateTime>
 #include "database.h"
+#include "brewtarget.h"
 
 class BeerXMLElement : public QObject
 {
@@ -39,9 +38,9 @@ class BeerXMLElement : public QObject
    friend class Database;
    friend class SetterCommand;
 public:
-   BeerXMLElement();
-   BeerXMLElement( BeerXMLElement const& other );
-   virtual ~BeerXMLElement() {}
+   BeerXMLElement() : _key(-1), _table(Database::NOTABLE) {};
+   BeerXMLElement( BeerXMLElement const& other ) : _key(other._key), _table(other._table){};
+   virtual ~BeerXMLElement(){};
 
    Q_PROPERTY( bool deleted READ deleted )
    Q_PROPERTY( int key READ key )
@@ -56,15 +55,9 @@ public:
    //! \returns the BeerXML version of this element.
    int version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
    //! Convenience method to get a meta property by name.
-   QMetaProperty metaProperty(const char* name)
-   {
-      return metaObject()->property(metaObject()->indexOfProperty(name));
-   }
+   QMetaProperty metaProperty(const char* name){return metaObject()->property(metaObject()->indexOfProperty(name));}
    //! Convenience method to get a meta property by name.
-   QMetaProperty metaProperty(QString const& name)
-   {
-      return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
-   }
+   QMetaProperty metaProperty(QString const& name){return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));}
    
    // Move this to Database to convert to/from XML from/to SQLite tables.
    /*
@@ -72,15 +65,64 @@ public:
    */
    
    // Some static helpers to convert to/from text.
-   static double getDouble( const QDomText& textNode );
-   static bool getBool( const QDomText& textNode );
-   static int getInt( const QDomText& textNode );
+   static double getDouble( const QDomText& textNode )
+   {
+      bool ok;
+      double ret;
+
+      QString text = textNode.nodeValue();
+
+      ret = text.toDouble(&ok);
+      if( !ok )
+         Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a number. Line %2").arg(text).arg(textNode.lineNumber()) );
+
+      return ret;
+   }
+   static bool getBool( const QDomText& textNode )
+   {
+      QString text = textNode.nodeValue();
+
+      if( text == "TRUE" )
+         return true;
+      else if( text == "FALSE" )
+         return false;
+      else
+         Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber()) );
+
+      return false;
+   }
+   static int getInt( const QDomText& textNode )
+   {
+      bool ok;
+      int ret;
+      QString text = textNode.nodeValue();
+
+      ret = text.toInt(&ok);
+      if( !ok )
+         Brewtarget::log(Brewtarget::ERROR, QString("%1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber()) );
+
+      return ret;
+   }
    //! Convert the string to a QDateTime according to Qt::ISODate.
-   static QDateTime getDateTime(QString const& str = "");
-   static QString text(bool val);
-   static QString text(double val);
-   static QString text(int val);
-   static QString text(QDate const& val);
+   static QDateTime getDateTime(QString const& str = "")
+   {
+      QDateTime temp;
+   
+      if ( str != "" && (temp = QDateTime::fromString(str, Qt::ISODate)).isValid() ) 
+         return temp;
+      else
+         return QDateTime::currentDateTime();
+   }
+   static QString text(bool val)
+   {
+      if( val )
+         return QString("TRUE");
+      else
+         return QString("FALSE");
+   }
+   static QString text(double val){return QString("%1").arg(val, 0, 'e', 5);}
+   static QString text(int val){return QString("%1").arg(val);}
+   static QString text(QDate const& val){return val.toString("dd-MM-yyyy");}
    
 signals:
    //! Passes the meta property that has changed about this object.
@@ -100,13 +142,21 @@ protected:
     * 1) Set the appropriate value in the appropriate table row.
     * 2) Call the NOTIFY method associated with \b prop_name if \b notify == true.
     */
-   void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
+   void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true )
+   {
+      // Get the meta property.
+      int ndx = metaObject()->indexOfProperty(prop_name);
+   
+      // Should schedule an update of the appropriate entry in table,
+      // then use prop to emit its notification signal.
+      Database::instance().updateEntry( _table, _key, col_name, value, metaObject()->property(ndx), this, notify );
+   }
    
    /*!
     * \param col_name - The database column of the attribute we want to get.
     * Returns the value of the attribute specified by key/table/col_name.
     */
-   QVariant get( const char* col_name ) const;
+   QVariant get( const char* col_name ) const{return Database::instance().get( _table, _key, col_name );}
    
 private:
    

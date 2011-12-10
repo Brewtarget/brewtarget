@@ -5,6 +5,8 @@ class BrewNoteWidget;
 
 #include <QWidget>
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_brewNoteWidget.h"
 
 // Forward declarations.

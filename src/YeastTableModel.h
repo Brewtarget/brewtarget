@@ -25,6 +25,7 @@ class YeastItemDelegate;
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
+#include <QMetaProperty>
 #include <QVariant>
 #include <QItemDelegate>
 #include <QList>

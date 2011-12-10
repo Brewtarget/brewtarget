@@ -23,14 +23,17 @@ class Brewtarget;
 
 #include <QApplication>
 #include <QString>
-#include <string>
+#include <QFile>
+#include <QDir>
 #include <QDomDocument>
 #include <QTranslator>
-#include "MainWindow.h"
-#include "unit.h"
-#include "UnitSystem.h"
 #include <QTextStream>
 #include <QDateTime>
+#include "UnitSystem.h"
+
+// Forward declarations.
+class MainWindow;
+class Unit;
 
 class Brewtarget
 {

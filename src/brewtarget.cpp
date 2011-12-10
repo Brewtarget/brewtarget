@@ -56,6 +56,7 @@
 #include "CelsiusTempUnitSystem.h"
 #include "ImperialVolumeUnitSystem.h"
 #include "BtSplashScreen.h"
+#include "MainWindow.h"
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;

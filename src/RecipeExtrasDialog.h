@@ -23,6 +23,8 @@ class RecipeExtrasDialog;
 
 #include <QDialog>
 #include <QWidget>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_recipeExtrasDialog.h"
 
 // Forward declarations.

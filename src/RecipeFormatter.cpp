@@ -29,6 +29,7 @@
 #include "mashstep.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "MainWindow.h"
 #include <QClipboard>
 #include <QObject>
 #include <QPrinter>

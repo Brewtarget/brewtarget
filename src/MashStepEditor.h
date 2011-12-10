@@ -23,6 +23,7 @@ class MashStepEditor;
 
 #include <QDialog>
 #include <QWidget>
+#include <QMetaProperty>
 #include <QVariant>
 #include "ui_mashStepEditor.h"
 

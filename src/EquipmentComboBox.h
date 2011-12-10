@@ -25,7 +25,8 @@ class EquipmentComboBox;
 #include <QWidget>
 #include <QVariant>
 #include <QVector>
-#include <string>
+#include <QMetaProperty>
+#include <QVariant>
 
 // Forward declarations
 class Equipment;

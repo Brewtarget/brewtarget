@@ -22,6 +22,8 @@
 class FermentableEditor;
 
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_fermentableEditor.h"
 
 // Forward declarations.

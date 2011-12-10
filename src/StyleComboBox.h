@@ -23,6 +23,7 @@ class StyleComboBox;
 
 #include <QComboBox>
 #include <QWidget>
+#include <QMetaProperty>
 #include <QVariant>
 #include <QList>
 
