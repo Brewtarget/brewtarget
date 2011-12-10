@@ -65,8 +65,9 @@ public slots:
    void changed(QMetaProperty,QVariant);
    
 private:
-   QVector<Yeast*> yeastObs;
+   QList<Yeast*> yeastObs;
    YeastTableWidget* parentTableWidget;
+   Recipe* recObs;
 };
 
 class YeastItemDelegate : public QItemDelegate

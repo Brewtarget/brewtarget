@@ -29,14 +29,13 @@
 
 #include <QVector>
 #include "yeast.h"
-#include "observable.h"
 #include "YeastTableModel.h"
-#include "YeastTableWidget;
+#include "YeastTableWidget.h"
 #include "unit.h"
 #include "brewtarget.h"
 
 YeastTableModel::YeastTableModel(YeastTableWidget* parent)
-: QAbstractTableModel(parent), parentTableWidget(parent)
+: QAbstractTableModel(parent), parentTableWidget(parent), recObs(0)
 {
    yeastObs.clear();
 }
@@ -90,7 +89,7 @@ void YeastTableModel::observeDatabase(bool val)
 
 void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
 {
-   QList<Hop*>::iterator i;
+   QList<Yeast*>::iterator i;
    
    for( i = yeasts.begin(); i != yeasts.end(); i++ )
       addYeast(*i);
@@ -160,7 +159,7 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    if( sender() == &(Database::instance()) && QString(prop.name()) == "yeasts" )
    {
       removeAll();
-      addHops( Database::instance().yeasts() );
+      addYeasts( Database::instance().yeasts() );
       return;
    }
 }
@@ -324,7 +323,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount( row->getAmountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
+            row->setAmount( row->amountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
             return true;
          }
          else
