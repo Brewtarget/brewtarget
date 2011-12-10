@@ -63,7 +63,7 @@ public slots:
 private:
    Recipe* recipe;
 
-   void showChanges();
+   void showChanges(QMetaProperty* prop = 0);
 };
 
 #endif // RECIPEEXTRASWIDGET_H

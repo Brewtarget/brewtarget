@@ -22,12 +22,10 @@
 #include "brewtarget.h"
 #include "recipe.h"
 
-RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent) : QWidget(parent)
+RecipeExtrasWidget::RecipeExtrasWidget(QWidget* parent)
+   : QWidget(parent), recipe(0)
 {
    setupUi(this);
-
-   recObs = 0;
-
    connect( lineEdit_age, SIGNAL(editingFinished()), this, SLOT(updateAge()));
    connect( lineEdit_ageTemp, SIGNAL(editingFinished()), this, SLOT(updateAgeTemp()));
    connect( lineEdit_asstBrewer, SIGNAL(editingFinished()), this, SLOT(updateBrewerAsst()) );
@@ -154,7 +152,7 @@ void RecipeExtrasWidget::updateDate()
    if( recipe == 0 )
       return;
 
-   recipe->setDate( dateEdit_date->date().toString("MM/dd/yyyy") );
+   recipe->setDate( dateEdit_date->date() );
 }
 
 void RecipeExtrasWidget::updateCarbonation()
@@ -189,12 +187,12 @@ void RecipeExtrasWidget::updateNotes()
    //recObs->reenableNotification();
 }
 
-void RecipeExtrasWidget::notify(Observable* notifier, QVariant /*info*/)
+void RecipeExtrasWidget::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() != recipe )
       return;
 
-   showChanges();
+   showChanges(&prop);
 }
 
 void RecipeExtrasWidget::saveAll()
@@ -223,29 +221,52 @@ void RecipeExtrasWidget::saveAll()
    hide();
 }
 
-void RecipeExtrasWidget::showChanges()
+void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
 {
-   lineEdit_age->setText( Brewtarget::displayAmount(recObs->getAge_days()) );
-   lineEdit_ageTemp->setText( Brewtarget::displayAmount(recObs->getAgeTemp_c(), Units::celsius) );
-   lineEdit_asstBrewer->setText( recObs->getAsstBrewer() );
-   lineEdit_brewer->setText( recObs->getBrewer() );
-   lineEdit_carbVols->setText( Brewtarget::displayAmount(recObs->getCarbonation_vols()) );
-   lineEdit_primaryAge->setText( Brewtarget::displayAmount(recObs->getPrimaryAge_days()) );
-   lineEdit_primaryTemp->setText( Brewtarget::displayAmount(recObs->getPrimaryTemp_c(), Units::celsius) );
-   lineEdit_secAge->setText( Brewtarget::displayAmount(recObs->getSecondaryAge_days()) );
-   lineEdit_secTemp->setText( Brewtarget::displayAmount(recObs->getSecondaryTemp_c(), Units::celsius) );
-   lineEdit_tertAge->setText( Brewtarget::displayAmount(recObs->getTertiaryAge_days()) );
-   lineEdit_tertTemp->setText( Brewtarget::displayAmount(recObs->getTertiaryTemp_c(), Units::celsius) );
-   spinBox_tasteRating->setValue( (int)(recObs->getTasteRating()) );
-
-   dateEdit_date->setDate( QDate::fromString(recObs->getDate(), "MM/dd/yyyy") );
+   bool updateAll = (prop == 0);
+   QString propName;
+   QVariant val;
+   if( prop )
+   {
+      propName == prop->name();
+      val = prop->read(recipe);
+   }
+   
+   if( propName == "age_days" || updateAll )
+      lineEdit_age->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "ageTemp_c" || updateAll )
+      lineEdit_ageTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "asstBrewer" || updateAll )
+      lineEdit_asstBrewer->setText( val.toString() );
+   else if( propName == "brewer" || updateAll )
+      lineEdit_brewer->setText( val.toString() );
+   else if( propName == "carbonation_vols" || updateAll )
+      lineEdit_carbVols->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "primaryAge_days" || updateAll )
+      lineEdit_primaryAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "primaryTemp_c" || updateAll )
+      lineEdit_primaryTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "secondaryAge_days" || updateAll )
+      lineEdit_secAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "secondaryTemp_c" || updateAll )
+      lineEdit_secTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "tertiaryAge_days" || updateAll )
+      lineEdit_tertAge->setText( Brewtarget::displayAmount(val.toDouble()) );
+   else if( propName == "tertiaryTemp_c" || updateAll )
+      lineEdit_tertTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
+   else if( propName == "tasteRating" || updateAll )
+      spinBox_tasteRating->setValue( (int)(val.toDouble()) );
+   else if( propName == "date" || updateAll )
+      dateEdit_date->setDate( val.toDate() );
 
    // Prevent signals from being sent when we update the notes.
    // This prevents an infinite loop of changing and updating the notes.
-   plainTextEdit_notes->blockSignals(true);
-   plainTextEdit_notes->setPlainText( recObs->getNotes() );
-   plainTextEdit_notes->blockSignals(false);
-   plainTextEdit_tasteNotes->blockSignals(true);
-   plainTextEdit_tasteNotes->setPlainText( recObs->getTasteNotes() );
-   plainTextEdit_tasteNotes->blockSignals(false);
+   //plainTextEdit_notes->blockSignals(true);
+   else if( propName == "notes" || updateAll )
+      plainTextEdit_notes->setPlainText( val.toString() );
+   //plainTextEdit_notes->blockSignals(false);
+   //plainTextEdit_tasteNotes->blockSignals(true);
+   else if( propName == "tasteNotes" || updateAll )
+      plainTextEdit_tasteNotes->setPlainText( val.toString() );
+   //plainTextEdit_tasteNotes->blockSignals(false);
 }
