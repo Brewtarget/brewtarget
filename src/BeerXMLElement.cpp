@@ -117,9 +117,9 @@ QString BeerXMLElement::text(int val)
    return QString("%1").arg(val);
 }
 
-QString text(QDate const& val)
+QString BeerXMLElement::text(QDate const& val)
 {
-   return val.toString("dd-MM-yyyy");
+   return val.toString(Qt::ISODate);
 }
 
 void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant const& value, bool notify )

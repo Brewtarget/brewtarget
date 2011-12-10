@@ -56,6 +56,8 @@
 // Static members.
 QFile Database::dbFile;
 QString Database::dbFileName;
+QFile Database::dataDbFile;
+QString Database::dataDbFileName;
 QHash<Database::DBTable,QString> Database::tableNames = Database::tableNamesHash();
 QHash<QString,Database::DBTable> Database::classNameToTable = Database::classNameToTableHash();
 

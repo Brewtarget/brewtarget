@@ -203,6 +203,7 @@ public:
    static QString text(bool val);
    static QString text(double val);
    static QString text(int val);
+   //! Convert the date to string in Qt::ISODate format for storage NOT display.
    static QString text(QDate const& val);
    
 signals:
