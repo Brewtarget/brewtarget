@@ -22,35 +22,35 @@
 #include <QComboBox>
 #include <QWidget>
 #include <QVariant>
-#include <QVector>
-#include <string>
-#include "observable.h"
-#include "recipe.h"
-#include "database.h"
+#include <QList>
 
-class RecipeComboBox;
+// Forward declarations.
+class Recipe;
 
-class RecipeComboBox : public QComboBox, public MultipleObserver
+class RecipeComboBox : public QComboBox
 {
    Q_OBJECT
 
 public:
    RecipeComboBox(QWidget* parent=0);
    virtual ~RecipeComboBox() {}
-   void startObservingDB();
+   //! Get populated with all the database recipes.
+   void observeDatabase(bool val);
    void addRecipe(Recipe* recipe);
-   void setIndexByRecipeName(QString name);
-   void setIndex(int ndx);
+   void removeRecipe(Recipe* recipe);
+   void setIndexByRecipe(Recipe* recipe);
+   //void setIndex(int ndx);
    void removeAllRecipes();
+   //! Repopulate our list from the database.
    void repopulateList();
 
    Recipe* getSelectedRecipe();
 
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
+public slots:
+   void changed(QMetaProperty, QVariant);
 
 private:
-   QVector<Recipe*> recipeObs;
-   Database* dbObs;
+   QList<Recipe*> recipeObs;
 };
 
 #endif   /* _RECIPECOMBOBOX_H */
