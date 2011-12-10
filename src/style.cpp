@@ -17,26 +17,23 @@
  */
 
 #include "brewtarget.h"
-#include <QVector>
 #include "style.h"
-#include <QDomElement>
-#include <QDomText>
-#include <QObject>
 
 QStringList Style::types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 
 bool operator<(Style &s1, Style &s2)
 {
-   return s1.name < s2.name;
+   return s1.name() < s2.name();
 }
 
 bool operator==(Style &s1, Style &s2)
 {
-   return s1.name == s2.name;
+   return s1.name() == s2.name();
 }
 
 //===========================CONSTRUCTORS=======================================
 
+/*
 void Style::setDefaults()
 {
    name = "";
@@ -64,17 +61,14 @@ void Style::setDefaults()
    ingredients = "";
    examples = "";
 }
+*/
 
 Style::Style()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-Style::Style(const QDomNode& styleNode)
-{
-   fromNode(styleNode);
-}
-
+/*
 void Style::fromNode(const QDomNode& styleNode)
 {
    QDomNode node, child;
@@ -202,45 +196,37 @@ void Style::fromNode(const QDomNode& styleNode)
       }
    }
 }
+*/
 
 //==============================="SET" METHODS==================================
 void Style::setName( const QString& var )
 {
-   name = QString(var);
-   hasChanged();
+   set( "name", "name", var );
 }
 
 void Style::setCategory( const QString& var )
 {
-   category = QString(var);
-   hasChanged();
+   set( "category", "category", var );
 }
 
 void Style::setCategoryNumber( const QString& var )
 {
-   categoryNumber = QString(var);
-   hasChanged();
+   set( "categoryNumber", "category_number", var );
 }
 
 void Style::setStyleLetter( const QString& var )
 {
-   styleLetter= QString(var);
-   hasChanged();
+   set( "styleLetter", "style_letter", var );
 }
 
 void Style::setStyleGuide( const QString& var )
 {
-   styleGuide = QString(var);
-   hasChanged();
+   set( "styleGuide", "style_guide", var );
 }
 
 void Style::setType( Type t )
 {
-   if( static_cast<int>(t) >= 0 && t < NUMTYPES )
-   {
-      type = t;
-      hasChanged();
-   }
+   set( "type", "s_type", static_cast<int>(t) );
 }
 
 void Style::setOgMin( double var )
@@ -249,8 +235,7 @@ void Style::setOgMin( double var )
       return;
    else
    {
-      ogMin = var;
-      hasChanged();
+      set("ogMin", "og_min", var);
    }
 }
 
@@ -260,8 +245,7 @@ void Style::setOgMax( double var )
       return;
    else
    {
-      ogMax = var;
-      hasChanged();
+      set("ogMax", "og_max", var);
    }
 }
 
@@ -271,8 +255,7 @@ void Style::setFgMin( double var )
       return;
    else
    {
-      fgMin = var;
-      hasChanged();
+      set("fgMin", "fg_min", var);
    }
 }
 
@@ -282,8 +265,7 @@ void Style::setFgMax( double var )
       return;
    else
    {
-      fgMax = var;
-      hasChanged();
+      set("fgMax", "fg_max", var);
    }
 }
 
@@ -293,8 +275,7 @@ void Style::setIbuMin( double var )
       return;
    else
    {
-      ibuMin = var;
-      hasChanged();
+      set("ibuMin", "ibu_min", var);
    }
 }
 
@@ -304,8 +285,7 @@ void Style::setIbuMax( double var )
       return;
    else
    {
-      ibuMax = var;
-      hasChanged();
+      set("ibuMax", "ibu_max", var);
    }
 }
 
@@ -315,8 +295,7 @@ void Style::setColorMin_srm( double var )
       return;
    else
    {
-      colorMin_srm = var;
-      hasChanged();
+      set("colorMin_srm", "color_min", var);
    }
 }
 
@@ -326,8 +305,7 @@ void Style::setColorMax_srm( double var )
       return;
    else
    {
-      colorMax_srm = var;
-      hasChanged();
+      set("colorMax_srm", "color_max", var);
    }
 }
 
@@ -337,8 +315,7 @@ void Style::setCarbMin_vol( double var )
       return;
    else
    {
-      carbMin_vol = var;
-      hasChanged();
+      set("carbMin_vol", "carb_min", var);
    }
 }
 
@@ -348,8 +325,7 @@ void Style::setCarbMax_vol( double var )
       return;
    else
    {
-      carbMax_vol = var;
-      hasChanged();
+      set("carbMax_vol", "carb_max", var);
    }
 }
 
@@ -359,8 +335,7 @@ void Style::setAbvMin_pct( double var )
       return;
    else
    {
-      abvMin_pct = var;
-      hasChanged();
+      set("abvMin_pct", "abv_min", var);
    }
 }
 
@@ -370,153 +345,148 @@ void Style::setAbvMax_pct( double var )
       return;
    else
    {
-      abvMax_pct = var;
-      hasChanged();
+      set("abvMax_pct", "abv_max", var);
    }
 }
 
 void Style::setNotes( const QString& var )
 {
-   notes = QString(var);
-   hasChanged();
+   set("notes", "notes", var);
 }
 
 void Style::setProfile( const QString& var )
 {
-   profile = QString(var);
-   hasChanged();
+   set("profile", "profile", var);
 }
 
 void Style::setIngredients( const QString& var )
 {
-   ingredients = QString(var);
-   hasChanged();
+   set("ingredients", "ingredients", var);
 }
 
 void Style::setExamples( const QString& var )
 {
-   examples = QString(var);
-   hasChanged();
+   set("examples", "examples", var);
 }
 
 //============================="GET" METHODS====================================
-QString Style::getName() const
+QString Style::name() const
 {
-   return name;
+   return get("name").toString();
 }
 
-QString Style::getCategory() const
+QString Style::category() const
 {
-   return category;
+   return get("category").toString();
 }
 
-QString Style::getCategoryNumber() const
+QString Style::categoryNumber() const
 {
-   return categoryNumber;
+   return get("category_number").toString();
 }
 
-QString Style::getStyleLetter() const
+QString Style::styleLetter() const
 {
-   return styleLetter;
+   return get("style_letter").toString();
 }
 
-QString Style::getStyleGuide() const
+QString Style::styleGuide() const
 {
-   return styleGuide;
+   return get("style_guide").toString();
 }
 
-const Style::Type Style::getType() const
+const Style::Type Style::type() const
 {
-   return type;
+   return static_cast<Style::Type>(get("s_type").toInt());
 }
 
-const QString Style::getTypeString() const
+const QString Style::typeString() const
 {
-   return types.at(type);
+   return types.at(type());
 }
 
-double Style::getOgMin() const
+double Style::ogMin() const
 {
-   return ogMin;
+   return get("og_min").toDouble();
 }
 
-double Style::getOgMax() const
+double Style::ogMax() const
 {
-   return ogMax;
+   return get("og_max").toDouble();
 }
 
-double Style::getFgMin() const
+double Style::fgMin() const
 {
-   return fgMin;
+   return get("fg_min").toDouble();
 }
 
-double Style::getFgMax() const
+double Style::fgMax() const
 {
-   return fgMax;
+   return get("fg_max").toDouble();
 }
 
-double Style::getIbuMin() const
+double Style::ibuMin() const
 {
-   return ibuMin;
+   return get("ibu_min").toDouble();
 }
 
-double Style::getIbuMax() const
+double Style::ibuMax() const
 {
-   return ibuMax;
+   return get("ibu_max").toDouble();
 }
 
-double Style::getColorMin_srm() const
+double Style::colorMin_srm() const
 {
-   return colorMin_srm;
+   return get("color_min").toDouble();
 }
 
-double Style::getColorMax_srm() const
+double Style::colorMax_srm() const
 {
-   return colorMax_srm;
+   return get("color_max").toDouble();
 }
 
-double Style::getCarbMin_vol() const
+double Style::carbMin_vol() const
 {
-   return carbMin_vol;
+   return get("carb_min").toDouble();
 }
 
-double Style::getCarbMax_vol() const
+double Style::carbMax_vol() const
 {
-   return carbMax_vol;
+   return get("carb_max").toDouble();
 }
 
-double Style::getAbvMin_pct() const
+double Style::abvMin_pct() const
 {
-   return abvMin_pct;
+   return get("abv_min").toDouble();
 }
 
-double Style::getAbvMax_pct() const
+double Style::abvMax_pct() const
 {
-   return abvMax_pct;
+   return get("abv_max").toDouble();
 }
 
-QString Style::getNotes() const
+QString Style::notes() const
 {
-   return notes;
+   return get("notes").toString();
 }
 
-QString Style::getProfile() const
+QString Style::profile() const
 {
-   return profile;
+   return get("profile").toString();
 }
 
-QString Style::getIngredients() const
+QString Style::ingredients() const
 {
-   return ingredients;
+   return get("ingredients").toString();
 }
 
-QString Style::getExamples() const
+QString Style::examples() const
 {
-   return examples;
+   return get("examples").toString();
 }
 
 bool Style::isValidType( const QString &str )
 {
-   return types.contains( str, Qt::CaseSensitive );
+   return types.contains( str );
 }
 

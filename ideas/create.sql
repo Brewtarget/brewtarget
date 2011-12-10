@@ -95,7 +95,7 @@ create table style(
    version integer,
    s_type varchar(64),
    category varchar(256),
-   category_number integer,
+   category_number varchar(16),
    style_letter varchar(1),
    style_guide varchar(1024),
    stype varchar(32),
