@@ -17,7 +17,9 @@
  */
 
 #include "WaterEditor.h"
+#include "water.h"
 #include "brewtarget.h"
+
 WaterEditor::WaterEditor(QWidget *parent) : QDialog(parent)
 {
     setupUi(this);
@@ -26,32 +28,55 @@ WaterEditor::WaterEditor(QWidget *parent) : QDialog(parent)
 
 void WaterEditor::setWater(Water *water)
 {
+   if( obs )
+      disconnect( obs, 0, this, 0 );
+   
    obs = water;
-   setObserved(water);
-
-   showChanges();
+   if( obs )
+   {
+      connect( obs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      showChanges();
+   }
 }
 
-void WaterEditor::showChanges()
+void WaterEditor::showChanges(QMetaProperty* prop)
 {
    if( obs == 0 )
       return;
 
-   lineEdit_ca->setText(Brewtarget::displayAmount(obs->getCalcium_ppm(),0,0));
-   lineEdit_mg->setText(Brewtarget::displayAmount(obs->getMagnesium_ppm(),0,0));
-   lineEdit_so4->setText(Brewtarget::displayAmount(obs->getSulfate_ppm(),0,0));
-   lineEdit_na->setText(Brewtarget::displayAmount(obs->getSodium_ppm(),0,0));
-   lineEdit_cl->setText(Brewtarget::displayAmount(obs->getChloride_ppm(),0,0));
-   lineEdit_alk->setText(Brewtarget::displayAmount(obs->getBicarbonate_ppm(),0,0));
-   lineEdit_ph->setText(Brewtarget::displayAmount(obs->getPh(),0,1));
+   QString propName;
+   QVariant val;
+   
+   bool updateAll = (prop == 0);
+   if( prop )
+   {
+      propName = prop->name();
+      val = prop->read(obs);
+   }
+   
+   if( propName == "calcium_ppm" || updateAll )
+      lineEdit_ca->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+   else if( propName == "magnesium_ppm" || updateAll )
+      lineEdit_mg->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+   else if( propName == "sulfate_ppm" || updateAll )
+      lineEdit_so4->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+   else if( propName == "sodium_ppm" || updateAll )
+      lineEdit_na->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+   else if( propName == "chloride_ppm" || updateAll )
+      lineEdit_cl->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+   else if( propName == "bicarbonate_ppm" || updateAll )
+      lineEdit_alk->setText(Brewtarget::displayAmount(val.toDouble(),0,0));
+   else if( propName == "ph" || updateAll )
+      lineEdit_ph->setText(Brewtarget::displayAmount(val.toDouble(),0,1));
 
    // Make sure the combo box is showing bicarbonate.
    comboBox_alk->setCurrentIndex( comboBox_alk->findText("HCO3") );
 }
 
-void WaterEditor::notify(Observable *notifier, QVariant info)
+void WaterEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   // Do nothing.
+   if( sender() == obs )
+      showChanges(&prop);
 }
 
 void WaterEditor::saveAndClose()

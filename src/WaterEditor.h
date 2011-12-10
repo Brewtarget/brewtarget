@@ -21,10 +21,11 @@
 
 #include <QDialog>
 #include "ui_waterEditor.h"
-#include "observable.h"
-#include "water.h"
 
-class WaterEditor : public QDialog, public Ui::waterEditor, public Observer
+// Forward declarations.
+class Water;
+
+class WaterEditor : public QDialog, public Ui::waterEditor
 {
     Q_OBJECT
 public:
@@ -36,11 +37,10 @@ public:
      */
     void setWater(Water* water);
 
-    virtual void notify(Observable *notifier, QVariant info); // From Observer.
-
  public slots:
-    void showChanges();
+    void showChanges(QMetaProperty* prop = 0);
     void saveAndClose();
+    void changed(QMetaProperty,QVariant);
 
 private:
     Water* obs; // Observed water.
