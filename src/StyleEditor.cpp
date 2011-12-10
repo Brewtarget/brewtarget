@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "style.h"
 #include "StyleEditor.h"
+#include <QInputDialog>
+#include "style.h"
 #include "StyleComboBox.h"
 #include "unit.h"
 #include "brewtarget.h"
@@ -37,7 +38,7 @@ StyleEditor::StyleEditor(QWidget* parent)
 void StyleEditor::setStyle( Style* s )
 {
    if( obsStyle )
-      disconnect( obsStye, 0, this, 0 );
+      disconnect( obsStyle, 0, this, 0 );
    
    obsStyle = s;
    if( obsStyle )
@@ -54,7 +55,7 @@ void StyleEditor::removeStyle()
    if( obsStyle )
       Database::instance().removeStyle(obsStyle);
 
-   setStyle(0)
+   setStyle(0);
 }
 
 void StyleEditor::styleSelected( const QString& /*text*/ )
@@ -120,9 +121,9 @@ void StyleEditor::clearAndClose()
    setVisible(false);
 }
 
-void StyleEditor::changed(QMetaProperty prop, QVariant /*val*/);
+void StyleEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( sender() == styleObs )
+   if( sender() == obsStyle )
       showChanges(&prop);
 }
 
@@ -167,8 +168,8 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       updateAll = true;
    else
    {
-      propName = prop->name();
-      val = prop->read(s);
+      propName = metaProp->name();
+      val = metaProp->read(s);
    }
 
    styleComboBox->setIndexByStyle(s);

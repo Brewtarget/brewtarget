@@ -50,7 +50,7 @@ public slots:
 private:
    Style* obsStyle;
 
-   void showChanges();
+   void showChanges(QMetaProperty* prop = 0);
 };
 
 #endif   /* _STYLEEDITOR_H */
