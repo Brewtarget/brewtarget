@@ -64,7 +64,7 @@ void YeastEditor::save()
    y->setType(static_cast<Yeast::Type>(comboBox_type->currentIndex()));
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
-   y->setAmount( y->getAmountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()) );
+   y->setAmount( y->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()) );
 
    y->setLaboratory( lineEdit_laboratory->text() );
    y->setProductID( lineEdit_productID->text() );
@@ -123,7 +123,7 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
    else if( propName == "form" || updateAll )
       comboBox_form->setCurrentIndex(value.toInt());
    else if( propName == "amount" || updateAll )
-      lineEdit_amount->setText( Brewtarget::displayAmount(value.toString(), (y->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+      lineEdit_amount->setText( Brewtarget::displayAmount(value.toDouble(), (y->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
    else if( propName == "amountIsWeight" || updateAll )
       checkBox_amountIsWeight->setCheckState( (value.toBool())? Qt::Checked : Qt::Unchecked );
    else if( propName == "laboratory" || updateAll )
