@@ -32,6 +32,8 @@ class Recipe;
 #include "misc.h"
 
 // Forward declarations.
+//class Hop;
+//class Misc;
 class Style;
 class Mash;
 class Fermentable;
@@ -41,6 +43,14 @@ class Water;
 class Instruction;
 class PreInstruction;
 class BrewNote;
+/*!
+ * Compares recipes based on name.
+ */
+bool operator<(Recipe &r1, Recipe &r2 );
+/*!
+ * Compares recipes based on name.
+ */
+bool operator==(Recipe &r1, Recipe &r2 );
 
 class Recipe : public BeerXMLElement
 {
@@ -51,13 +61,7 @@ public:
 
    virtual ~Recipe() {}
 
-   /*!
-    * Compares recipes based on name.
-    */
    friend bool operator<(Recipe &r1, Recipe &r2 );
-   /*!
-    * Compares recipes based on name.
-    */
    friend bool operator==(Recipe &r1, Recipe &r2 );
    friend class RecipeFormatter;
 
@@ -70,6 +74,7 @@ public:
     */
    virtual void toXml(QDomDocument& doc, QDomNode& parent);
    
+   // NOTE: move to database?
    /*!
     * Retains only the name, but sets everything else to defaults.
     */
@@ -109,7 +114,9 @@ public:
    Q_PROPERTY( double og READ og WRITE setOg NOTIFY changed /*changedOg*/ )
    Q_PROPERTY( double fg READ fg WRITE setFg NOTIFY changed /*changedFg*/ )
    
-   // Calculated unstored properties.
+   // Calculated unstored properties. These need to listen for changes to
+   // the uncalculated properties they depend on, and re-emit changed()
+   // when appropriate.
    Q_PROPERTY( double points READ points /*WRITE*/ NOTIFY changed /*changedPoints*/ STORED false)
    Q_PROPERTY( double ABV_pct READ ABV_pct /*WRITE*/ NOTIFY changed /*changedABV*/ STORED false)
    Q_PROPERTY( double color_srm READ color_srm /*WRITE*/ NOTIFY changed /*changedColor_srm*/ STORED false)
@@ -125,13 +132,9 @@ public:
    Q_PROPERTY( QColor SRMColor READ SRMColor /*WRITE*/ NOTIFY changed STORED false )
    
    // Relational properties.
-   // These num* methods are redundant. Just use hops().size() for example.
-   //Q_PROPERTY( unsigned int numHops READ numHops /*WRITE*/ NOTIFY changed STORED false);
-   //Q_PROPERTY( unsigned int numFermentables READ numFermentables /*WRITE*/ NOTIFY changed STORED false);
-   //Q_PROPERTY( unsigned int numMiscs READ numMiscs /*WRITE*/ NOTIFY changed STORED false);
-   //Q_PROPERTY( unsigned int numYeasts READ numYeasts /*WRITE*/ NOTIFY changed STORED false);
-   //Q_PROPERTY( unsigned int numWaters READ numWaters /*WRITE*/ NOTIFY changed STORED false);
-   //Q_PROPERTY( unsigned int numBrewNotes READ numBrewNotes /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( Mash* mash READ mash /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ NOTIFY changed STORED false);
+   Q_PROPERTY( Style* style READ style /*WRITE*/ NOTIFY changed STORED false);
    // These QList properties should only emit changed() when their size changes, or when
    // one of their elements is replaced by another with a different key.
    Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false );
@@ -141,22 +144,19 @@ public:
    Q_PROPERTY( QList<Misc*> miscs READ miscs /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
-   Q_PROPERTY( Mash* mash READ mash /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( Equipment* equipment READ equipment /*WRITE*/ NOTIFY changed STORED false);
-   Q_PROPERTY( Style* style READ style /*WRITE*/ NOTIFY changed STORED false);
    
    // Setters
    void setName( const QString &var );
    void setType( const QString &var );
    void setBrewer( const QString &var );
-   void setStyle( Style *var );
+   //void setStyle( Style *var );
    void setBatchSize_l( double var );
    void setBoilSize_l( double var );
    void setBoilTime_min( double var );
    void setEfficiency_pct( double var );
-   void setMash( Mash *var );
+   //void setMash( Mash *var );
    void setAsstBrewer( const QString &var );
-   void setEquipment( Equipment *var );
+   //void setEquipment( Equipment *var );
    void setNotes( const QString &var );
    void setTasteNotes( const QString &var );
    void setTasteRating( double var );
@@ -181,7 +181,8 @@ public:
    //! Set multiplication factor to convert mass of glucose reqd. to bottle prime to that required to keg prime.
    void setKegPrimingFactor( double var );
 
-   // Relational setters
+   // Relational setters.
+   // NOTE: do these add/remove methods belong here? Should they only exist in Database?
    void addHop( Hop *var );
    void removeHop( Hop *var );
    void addFermentable( Fermentable* var );
@@ -192,17 +193,16 @@ public:
    void removeYeast( Yeast* var );
    void addWater( Water* var );
    void removeWater( Water* var );
-   void addBrewNote(BrewNote* var);
+   //void addBrewNote(BrewNote* var);
    void removeBrewNote(BrewNote* var);
-   void removeBrewNote(QList<BrewNote*> var);
-   void addInstruction( Instruction* ins );
+   //void addInstruction( Instruction* ins );
    void removeInstruction( Instruction* ins );
    /*!
     * Swap instructions j and k.
     * \param j some integer less than getNumInstructions()
     * \param k some integer less than getNumInstructions()
     */
-   void swapInstructions( unsigned int j, unsigned int k );
+   void swapInstructions( Instruction* ins1, Instruction* ins2 );
    //! Remove all instructions.
    void clearInstructions();
    //! Insert instruction ins into slot pos.
@@ -294,11 +294,11 @@ public:
    Style* style() const;
    
    // Other junk.
-   QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) const;
-   QVector<PreInstruction> mashSteps() const;
-   QVector<PreInstruction> hopSteps(Hop::Use type = Hop::USEBOIL) const;
-   QVector<PreInstruction> miscSteps(Misc::Use type = Misc::USEBOIL) const;
-   PreInstruction boilFermentablesPre(double timeRemaining) const;
+   QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
+   QVector<PreInstruction> mashSteps();
+   QVector<PreInstruction> hopSteps(Hop::Use type = Hop::USEBOIL);
+   QVector<PreInstruction> miscSteps(Misc::Use type = Misc::USEBOIL);
+   PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
 
 signals:
@@ -348,7 +348,7 @@ signals:
    */
 
 public slots:
-   void parseChanges(QMetaProperty prop, QVariant val);
+   void changed(QMetaProperty prop, QVariant val);
    
 private:
    
@@ -389,16 +389,29 @@ private:
    double _fg;
    
    // Some recalculators for calculated properties.
+   /*! The theoretical maximum yield without any non-mashed anything. This
+    * will need to be communicated somewhere. Emits changed(points).
+    */
    void recalcPoints(double volume);
+   //! Emits changed(ABV_pct)
    void recalcABV_pct();
+   //! Emits changed(color_srm)
    void recalcColor_srm();
+   //! Emits changed(boilGrav)
    void recalcBoilGrav();
+   //! Emits changed(IBU)
    void recalcIBU();
+   //! Emits changed(wortFromMash_l), changed(boilVolume_l), changed(finalVolume_l), changed(postBoilVolume_l).
    void recalcVolumeEstimates();
+   //! Emits changed(grainsInMash_kg)
    void recalcGrainsInMash_kg();
+   //! Emits changed(grains_kg)
    void recalcGrains_kg();
+   //! Emits changed(SRMColor)
    void recalcSRMColor();
+   //! Emits changed(calories)
    void recalcCalories();
+   //! Emits changed(og), changed(fg)
    void recalcOgFg();
    
    // Helper
@@ -407,15 +420,14 @@ private:
    // Adds instructions to the recipe.
    Instruction* postboilFermentablesIns();
    Instruction* postboilIns();
-   Instruction* mashFermentableIns() const;
-   Instruction* mashWaterIns(unsigned int size) const;
-   Instruction* firstWortHopsIns() const;
-   Instruction* topOffIns() const;
+   Instruction* mashFermentableIns();
+   Instruction* mashWaterIns(unsigned int size);
+   Instruction* firstWortHopsIns();
+   Instruction* topOffIns();
    
-   void setDefaults();
+   //void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );
    bool isValidType( const QString &str );
-   void recalculate(); // Calculates some parameters.
 };
 
 inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)

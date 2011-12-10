@@ -103,7 +103,7 @@ public:
    
    // Named constructors for new BeerXML stuff.
    //! Create new brew note attached to \b parent.
-   BrewNote* newBrewNote(Recipe* parent);
+   BrewNote* newBrewNote(Recipe* parent); // TODO: implement.
    Equipment* newEquipment();
    Fermentable* newFermentable();
    Hop* newHop();
@@ -142,16 +142,16 @@ public:
    QList<BeerXMLElement*> listByFilter( DBTable table, QString filter = "" );
    
    // NOTICE: Necessary?
-   // Get ingredients by key value.
+   //! Get recipe by key value.
    Recipe* recipe(int key);
-   /*
    Equipment* equipment(int key);
+   Mash* mash(int key);
+   Style* style(int key);
+   /*
    Fermentable* fermentable(int key);
    Hop* hop(int key);
-   Mash* mash(int key);
    MashStep* mashStep(int key);
    Misc* misc(int key);
-   Style* style(int key);
    Water* water(int key);
    Yeast* yeast(int key);
    */
@@ -164,6 +164,9 @@ public:
    void addToRecipe( Recipe* rec, Misc* m );
    void addToRecipe( Recipe* rec, Yeast* y );
    void addToRecipe( Recipe* rec, Water* w );
+   void addToRecipe( Recipe* rec, Mash* m ); // TODO: implement
+   void addToRecipe( Recipe* rec, Equipment* e ); // TODO: implement
+   void addToRecipe( Recipe* rec, Style* s ); // TODO: implement
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    
@@ -176,6 +179,7 @@ public:
    void removeFromRecipe( Recipe* rec, Yeast* y );
    void removeFromRecipe( Recipe* rec, Water* w );
    void removeFromRecipe( Recipe* rec, Instruction* ins );
+   void removeFromRecipe( Recipe* rec, BrewNote* b ); // TODO: implement
    
    //! Remove \b step from \b mash.
    void removeFrom( Mash* mash, MashStep* step );
@@ -239,6 +243,8 @@ public:
    void swapMashStepOrder(MashStep* m1, MashStep* m2);
    //! Interchange the instruction orders. Must be in same recipe.
    void swapInstructionOrder(Instruction* in1, Instruction* in2);
+   //! Insert an instruction (already in a recipe) into position \b pos.
+   void insertInstruction(Instruction* in, int pos); // TODO: implement.
    
    Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false );

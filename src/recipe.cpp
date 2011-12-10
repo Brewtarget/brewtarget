@@ -21,6 +21,7 @@
 
 //#include <algorithm>
 //#include <ctime>
+#include <cmath> // For pow/log
 
 #include <QList>
 #include <QDate>
@@ -31,6 +32,7 @@
 #include "style.h"
 #include "misc.h"
 #include "mash.h"
+#include "mashstep.h"
 #include "hop.h"
 #include "fermentable.h"
 #include "equipment.h"
@@ -55,13 +57,17 @@ bool operator==(Recipe &r1, Recipe &r2 )
 
 void Recipe::clear()
 {
+   // TODO: implement.
+   /*
    QString name = getName();
    setDefaults();
    setName(name);
    hasChanged();
+   */
 }
 
 //=================================CONSTRUCTORS=================================
+/*
 void Recipe::setDefaults()
 {
    name = "";
@@ -107,20 +113,24 @@ void Recipe::setDefaults()
    
    hops.clear();
 }
+*/
 
 Recipe::Recipe() : BeerXMLElement()
 {
 }
 
+/*
 Recipe::Recipe(const QDomNode& recipeNode)
 {
    fromNode(recipeNode);
 }
+*/
 
 Recipe::Recipe( Recipe const& other ) : BeerXMLElement(other)
 {
 }
 
+/*
 void Recipe::fromNode(const QDomNode& recipeNode)
 {
    QDomNode node, child;
@@ -454,7 +464,9 @@ void Recipe::fromNode(const QDomNode& recipeNode)
          Brewtarget::log(Brewtarget::WARNING, tr("Unsupported RECIPE property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
+*/
 
+/*
 void Recipe::addInstruction(Instruction* ins)
 {
    if( ins == 0 )
@@ -462,114 +474,111 @@ void Recipe::addInstruction(Instruction* ins)
    
    Database::instance().addToRecipe( this, ins );
 }
+*/
 
 void Recipe::removeInstruction(Instruction* ins)
 {
    Database::instance().removeFromRecipe( this, ins );
 }
 
-void Recipe::swapInstructions(unsigned int j, unsigned int k)
+void Recipe::swapInstructions( Instruction* ins1, Instruction* ins2 )
 {
-   if( j == k || static_cast<int>(j) >= instructions().size() || static_cast<int>(k) >= instructions().size() )
+   QList<Instruction*> ins = instructions();
+   if( !(ins.contains(ins1) && ins.contains(ins2)) )
       return;
    
-   instructions()[j]->setNumber(k);
-   instructions()[k]->setNumber(j);
+   Database::instance().swapInstructionOrder(ins1, ins2);
 }
 
 void Recipe::clearInstructions()
 {
-   instructions.clear();
-   hasChanged(QVariant(Recipe::INSTRUCTION));
+   QList<Instruction*> ins = instructions();
+   int i, size;
+   size = ins.size();
+   for( i = 0; i < size; ++i )
+      removeInstruction(ins[i]);
 }
 
 void Recipe::insertInstruction(Instruction* ins, int pos)
 {
-   int i;
-
-   if( ins == 0 )
+   if( ins == 0 || !(instructions().contains(ins)) )
       return;
 
-   for( i = pos; i < instructions().size(); ++i )
-   {
-      instructions()[i]->setNumber(i+1);
-   }
-
-   ins->setNumber(pos);
-   Database::instance().addToRecipe( this, ins );
+   Database::instance().insertInstruction(ins,pos);
 }
 
-int Recipe::numInstructions()
-{
-   return instructions().size();
-}
-
-Instruction* Recipe::getMashFermentable() const
+Instruction* Recipe::mashFermentableIns()
 {
    Instruction* ins;
    QString str,tmp;
    unsigned int i;
 
-    /*** Add grains ***/
-     ins = Database::instance().newInstruction(this);
-     ins->setName(tr("Add grains"));
-     str = tr("Add ");
-     QList<Fermentable*> ferms = fermentables();
-     for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
-     {
-        if( ferms[i]->isMashed() )
-          tmp = QString("%1 %2, ")
-            .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), Units::kilograms))
-            .arg(ferms[i]->name());
-           str += tmp;
-           ins->setReagent(tmp);
-     }
-     str += tr("to the mash tun.");
-     ins->setDirections(str);
+   /*** Add grains ***/
+   ins = Database::instance().newInstruction(this);
+   ins->setName(tr("Add grains"));
+   str = tr("Add ");
+   QList<Fermentable*> ferms = fermentables();
+   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
+   {
+      if( ferms[i]->isMashed() )
+      {
+         tmp = QString("%1 %2, ")
+               .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), Units::kilograms))
+               .arg(ferms[i]->name());
+         str += tmp;
+         ins->addReagent(tmp);
+      }
+   }
+   str += tr("to the mash tun.");
+   ins->setDirections(str);
 
-     return ins;
+   return ins;
 
 }
 
-Instruction* Recipe::mashWaterIns(unsigned int size) const
+Instruction* Recipe::mashWaterIns(unsigned int size)
 {
    Instruction* ins;
    MashStep* mstep;
    QString str, tmp;
    unsigned int i;
 
-    ins = Database::instance().newInstruction(this);
-    ins->setName(tr("Heat water"));
-    str = tr("Bring ");
-    QList<MashStep*> msteps = mashSteps();
-    for( i = 0; i < size; ++i )
-    {
-       mstep = msteps[i];
-       if( mstep->getType() != MashStep::TYPEINFUSION )
-          continue;
+   if( mash() == 0 )
+      return 0;
+   
+   ins = Database::instance().newInstruction(this);
+   ins->setName(tr("Heat water"));
+   str = tr("Bring ");
+   QList<MashStep*> msteps = mash()->mashSteps();
+   for( i = 0; i < size; ++i )
+   {
+      mstep = msteps[i];
+      if( mstep->type() != MashStep::TYPEINFUSION )
+         continue;
 
-       tmp = tr("%1 water to %2, ")
-              .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), Units::liters))
-              .arg(Brewtarget::displayAmount(mstep->infuseTemp_c(), Units::celsius));
-       str += tmp;
-       ins->setReagent(tmp);
-    }
-    str += tr("for upcoming infusions.");
-    ins->setDirections(str);
+      tmp = tr("%1 water to %2, ")
+             .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), Units::liters))
+             .arg(Brewtarget::displayAmount(mstep->infuseTemp_c(), Units::celsius));
+      str += tmp;
+      ins->addReagent(tmp);
+   }
+   str += tr("for upcoming infusions.");
+   ins->setDirections(str);
 
-    return ins;
+   return ins;
 }
 
-QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size) const
+QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size)
 {
    QVector<PreInstruction> preins;
    MashStep* mstep;
    QString str;
-
    unsigned int i;
 
-   preins.clear();
-   QList<MashStep*> msteps = mashSteps();
+   if( mash() == 0 )
+      return preins;
+   
+   QList<MashStep*> msteps = mash()->mashSteps();
    for( i = 0; i < size; ++i )
    {
       mstep = msteps[i];
@@ -602,7 +611,7 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
    return preins;
 }
 
-QVector<PreInstruction> Recipe::hopSteps(Hop::Use type) const
+QVector<PreInstruction> Recipe::hopSteps(Hop::Use type)
 {
    QVector<PreInstruction> preins;
    QString str;
@@ -634,7 +643,7 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type) const
          }
 
          str = str.arg(Brewtarget::displayAmount(hop->amount_kg(), Units::kilograms))
-                  .arg(hop->getName())
+                  .arg(hop->name())
                   .arg(Brewtarget::displayAmount(hop->time_min(), Units::minutes));
 
          preins.push_back(PreInstruction(str, tr("Hop addition"), hop->time_min()));
@@ -643,7 +652,7 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type) const
    return preins;
 }
 
-QVector<PreInstruction> Recipe::miscSteps(Misc::Use type) const
+QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
 {
    QVector<PreInstruction> preins;
    QString str;
@@ -674,16 +683,16 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type) const
          }
 
          str = str .arg(Brewtarget::displayAmount(misc->amount(), ((misc->amountIsWeight()) ? (Unit*)(Units::kilograms) : (Unit*)(Units::liters) )))
-                   .arg(misc->getName())
+                   .arg(misc->name())
                    .arg(Brewtarget::displayAmount(misc->time(), Units::minutes));
 
-         preins.push_back(PreInstruction(str, tr("Misc addition"), misc->getTime()));
+         preins.push_back(PreInstruction(str, tr("Misc addition"), misc->time()));
       }
    }
    return preins;
 }
 
-Instruction* Recipe::firstWortHopsIns() const
+Instruction* Recipe::firstWortHopsIns()
 {
    Instruction* ins;
    QString str,tmp;
@@ -712,13 +721,13 @@ Instruction* Recipe::firstWortHopsIns() const
      ins = Database::instance().newInstruction(this);
      ins->setName(tr("First wort hopping"));
      ins->setDirections(str);
-     ins->setReagent(tmp);
+     ins->addReagent(tmp);
      return ins;
    }
    return 0;
 }
 
-Instruction* Recipe::topOffIns() const
+Instruction* Recipe::topOffIns()
 {
    double wortInBoil_l = 0.0;
    QString str,tmp;
@@ -742,7 +751,7 @@ Instruction* Recipe::topOffIns() const
          ins = Database::instance().newInstruction(this);
          ins->setName(tr("Pre-boil"));
          ins->setDirections(str);
-         ins->setReagent(tmp);
+         ins->addReagent(tmp);
          return ins;
       }
    }
@@ -763,7 +772,7 @@ bool Recipe::hasBoilFermentable()
    return false;
 }
 
-PreInstruction Recipe::boilFermentablesPre(double timeRemaining) const
+PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
 {
    bool hasFerms = false;
    QString str;
@@ -819,7 +828,7 @@ Instruction* Recipe::postboilFermentablesIns()
       ins = Database::instance().newInstruction(this);
       ins->setName(tr("Knockout additions"));
       ins->setDirections(str);
-      ins->setReagent(tmp);
+      ins->addReagent(tmp);
       return ins;
    }
    else
@@ -851,7 +860,7 @@ Instruction* Recipe::postboilIns()
       if( e->topUpWater_l() > 0.0 )
           str += tr("\nAdd %1 top up water into primary.")
                .arg(Brewtarget::displayAmount( e->topUpWater_l(), Units::liters));
-      wort_l += e->opUpWater_l();
+      wort_l += e->topUpWater_l();
       str += tr("\nThe final volume in the primary is %1.")
              .arg(Brewtarget::displayAmount(wort_l, Units::liters));
 
@@ -886,7 +895,6 @@ void Recipe::addPreinstructions( QVector<PreInstruction> preins )
 void Recipe::generateInstructions()
 {
    Instruction* ins;
-   instructions.clear();
    QString str, tmp;
    unsigned int i, size;
    double timeRemaining;
@@ -896,26 +904,25 @@ void Recipe::generateInstructions()
 
    // Mash instructions
 
-   if( mash != 0 && mash->getNumMashSteps() > 0 )
+   size = (mash() == 0) ? 0 : mash()->mashSteps().size();
+   if( size > 0 )
    {
-     size = mash->getNumMashSteps();
-
      /*** prepare mashed fermentables ***/
-     instructions += getMashFermentable();
+     mashFermentableIns();
 
      /*** Prepare water additions ***/
-     instructions += getMashWater(size);
+     mashWaterIns(size);
 
-     timeRemaining = mash->getTotalTime();
+     timeRemaining = mash()->totalTime();
 
      /*** Generate the mash instructions ***/
-     preinstructions = getMashInstructions(timeRemaining, totalWaterAdded_l, size);
+     preinstructions = mashInstructions(timeRemaining, totalWaterAdded_l, size);
 
       /*** Hops mash additions ***/
-     preinstructions += getHopSteps(Hop::USEMASH);
+     preinstructions += hopSteps(Hop::USEMASH);
 
       /*** Misc mash additions ***/
-     preinstructions += getMiscSteps(Misc::USEMASH);
+     preinstructions += miscSteps(Misc::USEMASH);
 
      /*** Add the preinstructions into the instructions ***/
      addPreinstructions(preinstructions);
@@ -933,7 +940,7 @@ void Recipe::generateInstructions()
    
    // Find boil time.
    if( equipment() != 0 )
-      timeRemaining = equipment()->getBoilTime_min();
+      timeRemaining = equipment()->boilTime_min();
    else
    {
       timeRemaining = Brewtarget::timeQStringToSI(QInputDialog::getText(0,
@@ -952,10 +959,10 @@ void Recipe::generateInstructions()
       preinstructions.push_back(boilFermentablesPre(timeRemaining));
    
    /*** Boiled hops ***/
-   preinstructions += getHopSteps(Hop::USEBOIL);
+   preinstructions += hopSteps(Hop::USEBOIL);
 
    /*** Boiled miscs ***/
-   preinstructions += getMiscSteps(Misc::USEBOIL);
+   preinstructions += miscSteps(Misc::USEBOIL);
 
    // END boil instructions.
 
@@ -976,7 +983,7 @@ void Recipe::generateInstructions()
    preinstructions.clear();
 
    /*** Fermentables added after boil ***/
-   postboilFermentablesIns()
+   postboilFermentablesIns();
 
    /*** post boil ***/
    postboilIns();
@@ -1017,7 +1024,7 @@ void Recipe::generateInstructions()
    addPreinstructions(hopSteps(Hop::USEDRY_HOP));
 
    // END fermentation instructions
-   emit changed(metaObject()->property(metaObject->indexOfProperty("instructions")), instructions());
+   //emit changed(metaObject()->property(metaObject->indexOfProperty("instructions")), instructions());
 }
 
 QString Recipe::nextAddToBoil(double& time)
@@ -1026,46 +1033,48 @@ QString Recipe::nextAddToBoil(double& time)
    double max = 0;
    bool foundSomething = false;
    Hop* h;
+   QList<Hop*> hhops = hops();
    Misc* m;
+   QList<Misc*> mmiscs = miscs();
    QString ret;
 
    // Search hops
-   size = hops.size();
+   size = hhops.size();
    for( i = 0; i < size; ++i )
    {
-      h = hops[i];
-      if( h->getUse() != Hop::USEBOIL )
+      h = hhops[i];
+      if( h->use() != Hop::USEBOIL )
          continue;
-      if( h->getTime_min() < time && h->getTime_min() > max )
+      if( h->time_min() < time && h->time_min() > max )
       {
          ret = tr("Add %1 %2 to boil at %3.")
-               .arg(Brewtarget::displayAmount(h->getAmount_kg(), Units::kilograms))
-               .arg(h->getName())
-               .arg(Brewtarget::displayAmount(h->getTime_min(), Units::minutes));
+               .arg(Brewtarget::displayAmount(h->amount_kg(), Units::kilograms))
+               .arg(h->name())
+               .arg(Brewtarget::displayAmount(h->time_min(), Units::minutes));
 
-         max = h->getTime_min();
+         max = h->time_min();
          foundSomething = true;
       }
    }
 
    // Search miscs
-   size = miscs.size();
+   size = mmiscs.size();
    for( i = 0; i < size; ++i )
    {
-      m = miscs[i];
-      if( m->getUse() != Misc::USEBOIL )
+      m = mmiscs[i];
+      if( m->use() != Misc::USEBOIL )
          continue;
-      if( m->getTime() < time && m->getTime() > max )
+      if( m->time() < time && m->time() > max )
       {
          ret = tr("Add %1 %2 to boil at %3.");
-         if( m->getAmountIsWeight() )
-            ret = ret.arg(Brewtarget::displayAmount(m->getAmount(), Units::kilograms));
+         if( m->amountIsWeight() )
+            ret = ret.arg(Brewtarget::displayAmount(m->amount(), Units::kilograms));
          else
-            ret = ret.arg(Brewtarget::displayAmount(m->getAmount(), Units::liters));
+            ret = ret.arg(Brewtarget::displayAmount(m->amount(), Units::liters));
 
-         ret = ret.arg(m->getName());
-         ret = ret.arg(Brewtarget::displayAmount(m->getTime(), Units::minutes));
-         max = m->getTime();
+         ret = ret.arg(m->name());
+         ret = ret.arg(Brewtarget::displayAmount(m->time(), Units::minutes));
+         max = m->time();
          foundSomething = true;
       }
    }
@@ -1099,42 +1108,6 @@ void Recipe::addYeast( Yeast* var )
 void Recipe::addWater( Water* var )
 {
    Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::addBrewNote(BrewNote* var)
-{
-   Database::instance().addToRecipe( this, var );
-}
-
-void Recipe::setMash( Mash *var )
-{
-   if( var == NULL )
-      return;
-
-   mash = var;
-   addObserved(mash);
-   hasChanged(QVariant(MASH));
-   
-   if( var )
-   {
-      if( mash() )
-         disconnect( mash(), SIGNAL(changed(QMetaProperty,QVariant)), this, 0 );
-      
-      connect( var, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(parseChanges(QMetaProperty,QVariant)) );
-      set( "mash", "mash", var->key );
-   }
-}
-
-void Recipe::setEquipment( Equipment *var )
-{
-   if( var )
-      set( "equipment", "equipment", var->key );
-}
-
-void Recipe::setStyle( Style *var )
-{
-   if( var )
-      set( "style", "style", var->key );
 }
 
 //==============================="SET" METHODS=================================
@@ -1346,8 +1319,7 @@ void Recipe::setSecondaryAge_days( double var )
 
 void Recipe::setSecondaryTemp_c( double var )
 {
-   secondaryTemp_c = var;
-   hasChanged();
+   set( "secondaryTemp_c", "secondary_temp", var );
 }
 
 void Recipe::setTertiaryAge_days( double var )
@@ -1463,12 +1435,12 @@ void Recipe::setKegPrimingFactor( double var )
 
 //==========================Calculated Getters============================
 
-double Recipe::getOg() const
+double Recipe::og() const
 {
    return _og;
 }
 
-double Recipe::getFg() const
+double Recipe::fg() const
 {
    return _fg;
 }
@@ -1489,50 +1461,19 @@ double Recipe::IBU()
 }
 //=========================Relational Getters=============================
 
-Style* Recipe::getStyle() const
+Style* Recipe::style() const
 {
    return Database::instance().style( get("style").toInt() );
 }
 
-Mash* Recipe::getMash() const
+Mash* Recipe::mash() const
 {
    return Database::instance().mash( get("mash").toInt() );
 }
 
-Equipment* Recipe::getEquipment() const
+Equipment* Recipe::equipment() const
 {
    return Database::instance().equipment( get("equipment").toInt() );
-}
-
-// Should these "num" methods exist?
-unsigned int Recipe::numHops() const
-{
-   return hops().size();
-}
-
-unsigned int Recipe::numFermentables() const
-{
-   return fermentables().size();
-}
-
-unsigned int Recipe::numMiscs() const
-{
-   return miscs().size();
-}
-
-unsigned int Recipe::numYeasts() const
-{
-   return yeasts().size();
-}
-
-unsigned int Recipe::numWaters() const
-{
-   return waters().size();
-}
-
-unsigned int Recipe::numBrewNotes() const
-{
-   return brewNotes().size();
 }
 
 //==============================Getters===================================
@@ -1704,15 +1645,8 @@ void Recipe::removeBrewNote(BrewNote* var)
    Database::instance().removeFromRecipe( this, var );
 }
 
-void Recipe::removeBrewNote(QList<BrewNote*> var)
-{
-   Database::instance().removeFromRecipe( this, var );
-}
-
 //==============================Recalculators==================================
 
-// The theoretical maximum yield without any non-mashed anything.  This
-// will need to be communicated somewhere.
 void Recipe::recalcPoints(double volume)
 {
    unsigned int i;
@@ -1739,7 +1673,7 @@ void Recipe::recalcPoints(double volume)
 
    _points = 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("points") ), _points );
+   emit changed( metaProperty("points"), _points );
 }
 
 void Recipe::recalcABV_pct()
@@ -1761,7 +1695,7 @@ void Recipe::recalcABV_pct()
     // multiplicative factor is higher.
     // return 132.9*(og - fg)/fg;
     
-    emit changed( metaObject().property( metaObject().indexOfProperty("ABV_pct") ), _ABV_pct );
+    emit changed( metaProperty("ABV_pct"), _ABV_pct );
 }
 
 void Recipe::recalcColor_srm()
@@ -1780,7 +1714,7 @@ void Recipe::recalcColor_srm()
 
    _color_srm = ColorMethods::mcuToSrm(mcu);
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("color_srm") ), _color_srm );
+   emit changed( metaProperty("color_srm"), _color_srm );
 }
 
 void Recipe::recalcBoilGrav()
@@ -1814,11 +1748,11 @@ void Recipe::recalcBoilGrav()
    // we need to adjust for that here.
    sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
    if( equipment() )
-      sugar_kg = sugar_kg / (1 - equipment()->getTrubChillerLoss_l()/estimatePostBoilVolume_l());
+      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/postBoilVolume_l());
 
-   _boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, estimateBoilVolume_l()) );
+   _boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, boilVolume_l()) );
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("boilGrav") ), _boilGrav );
+   emit changed( metaProperty("boilGrav"), _boilGrav );
 }
 
 void Recipe::recalcIBU()
@@ -1827,9 +1761,9 @@ void Recipe::recalcIBU()
    double ibus = 0.0;
    
    // Bitterness due to hops...
-   QList<Hop*> hops = hops();
-   for( i = 0; static_cast<int>(i) < hops.size(); ++i )
-      ibus += ibuFromHop(hops[i]);
+   QList<Hop*> hhops = hops();
+   for( i = 0; static_cast<int>(i) < hhops.size(); ++i )
+      ibus += ibuFromHop(hhops[i]);
 
    // Bitterness due to hopped extracts...
    QList<Fermentable*> ferms = fermentables();
@@ -1837,13 +1771,13 @@ void Recipe::recalcIBU()
    {
       // Conversion factor for lb/gal to kg/l = 8.34538.
       ibus +=
-              fermentables[i]->ibuGalPerLb() *
-              (fermentables[i]->amount_kg() / batchSize_l()) / 8.34538;
+              ferms[i]->ibuGalPerLb() *
+              (ferms[i]->amount_kg() / batchSize_l()) / 8.34538;
    }
 
    _IBU = ibus;
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("IBU") ), _IBU );
+   emit changed( metaProperty("IBU"), _IBU );
 }
 
 void Recipe::recalcVolumeEstimates()
@@ -1852,14 +1786,14 @@ void Recipe::recalcVolumeEstimates()
    double waterAdded_l;
    double absorption_lKg;
    
-   if( mash == 0 )
+   if( mash() == 0 )
       _wortFromMash_l = 0.0;
    else
    {
    
-       waterAdded_l = mash->totalMashWater_l();
-       if( equipment != 0 )
-          absorption_lKg = equipment->grainAbsorption_LKg();
+       waterAdded_l = mash()->totalMashWater_l();
+       if( equipment() != 0 )
+          absorption_lKg = equipment()->grainAbsorption_LKg();
        else
           absorption_lKg = HeatCalculations::absorption_LKg;
 
@@ -1867,7 +1801,7 @@ void Recipe::recalcVolumeEstimates()
    }
    
    // boilVolume_l ==============================
-   double mashVol_l;
+   //double mashVol_l;
    double tmp = 0.0;
    
    //if( mashVol_l <= 0.0 ) // Give up.
@@ -1886,22 +1820,22 @@ void Recipe::recalcVolumeEstimates()
    // finalVolume_l ==============================
    
    if( equipment() != 0 )
-      _finalVolume_l = equipment()->wortEndOfBoil_l(_boilVolume_l) - equipment->trubChillerLoss_l() + equipment->topUpWater_l();
+      _finalVolume_l = equipment()->wortEndOfBoil_l(_boilVolume_l) - equipment()->trubChillerLoss_l() + equipment()->topUpWater_l();
    else
       _finalVolume_l = _boilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
    
    // postBoilVolume_l ===========================
 
    if( equipment() != 0 )
-      _postBoilVolume_l = equipment->wortEndOfBoil_l( _boilVolume_l );
+      _postBoilVolume_l = equipment()->wortEndOfBoil_l( _boilVolume_l );
    else
       _postBoilVolume_l = batchSize_l(); // Give up.
       
    // Emit changes.
-   emit changed( metaObject().property( metaObject().indexOfProperty("wortFromMash_l") ), _wortFromMash_l );
-   emit changed( metaObject().property( metaObject().indexOfProperty("boilVolume_l") ), _boilVolume_l );
-   emit changed( metaObject().property( metaObject().indexOfProperty("finalVolume_l") ), _finalVolume_l );
-   emit changed( metaObject().property( metaObject().indexOfProperty("postBoilVolume_l") ), _postBoilVolume_l );
+   emit changed( metaProperty("wortFromMash_l"), _wortFromMash_l );
+   emit changed( metaProperty("boilVolume_l"), _boilVolume_l );
+   emit changed( metaProperty("finalVolume_l"), _finalVolume_l );
+   emit changed( metaProperty("postBoilVolume_l"), _postBoilVolume_l );
 }
 
 void Recipe::recalcGrainsInMash_kg()
@@ -1922,7 +1856,7 @@ void Recipe::recalcGrainsInMash_kg()
    
    _grainsInMash_kg = ret;
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("grainsInMash_kg") ), _grainsInMash_kg );
+   emit changed( metaProperty("grainsInMash_kg"), _grainsInMash_kg );
 }
 
 void Recipe::recalcGrains_kg()
@@ -1937,7 +1871,7 @@ void Recipe::recalcGrains_kg()
 
    _grains_kg = ret;
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("grains_kg") ), _grains_kg );
+   emit changed( metaProperty("grains_kg"), _grains_kg );
 }
 
 void Recipe::recalcSRMColor()
@@ -1984,20 +1918,20 @@ void Recipe::recalcSRMColor()
 
    _SRMColor.setRgb( r, g, b );
 
-   emit changed( metaObject().property( metaObject().indexOfProperty("SRMColor") ), _SRMColor );
+   emit changed( metaProperty("SRMColor"), _SRMColor );
 }
 
 // the formula in here are taken from http://hbd.org/ensmingr/
 void Recipe::recalcCalories()
 {
-    double startPlato, finishPlato, RE, abw, og, fg;
+    double startPlato, finishPlato, RE, abw, oog, ffg;
 
-    og = og();
-    fg = fg();
+    oog = og();
+    ffg = fg();
 
     // Need to translate OG and FG into plato
-    startPlato  = -463.37 + ( 668.72 * og ) - (205.35 * og * og);
-    finishPlato = -463.37 + ( 668.72 * fg ) - (205.35 * fg * fg);
+    startPlato  = -463.37 + ( 668.72 * oog ) - (205.35 * oog * oog);
+    finishPlato = -463.37 + ( 668.72 * ffg ) - (205.35 * ffg * ffg);
 
     // RE (real extract)
     RE = (0.1808 * startPlato) + (0.8192 * finishPlato);
@@ -2005,9 +1939,9 @@ void Recipe::recalcCalories()
     // Alcohol by weight?
     abw = (startPlato-RE)/(2.0665 - (0.010665 * startPlato));
 
-    _calories = ((6.9*abw) + 4.0 * (RE-0.1)) * fg * 3.55;
+    _calories = ((6.9*abw) + 4.0 * (RE-0.1)) * ffg * 3.55;
 
-    emit changed( metaObject().property( metaObject().indexOfProperty("calories") ), _calories );
+    emit changed( metaProperty("calories"), _calories );
 }
 
 void Recipe::recalcOgFg()
@@ -2060,7 +1994,7 @@ void Recipe::recalcOgFg()
       
       // Next, trub/chiller loss.
       kettleWort_l = (_wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
-      postBoilWort_l = equipment->wortEndOfBoil_l(kettleWort_l);
+      postBoilWort_l = equipment()->wortEndOfBoil_l(kettleWort_l);
       ratio = (postBoilWort_l - equipment()->trubChillerLoss_l()) / postBoilWort_l;
       if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
          ratio = 1.0;
@@ -2074,28 +2008,28 @@ void Recipe::recalcOgFg()
    }
 
    // Combine the two sugars.
-   sugar_kg = sugar_kg * getEfficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
-   plato = Algorithms::Instance().getPlato( sugar_kg, estimateFinalVolume_l());
+   sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
+   plato = Algorithms::Instance().getPlato( sugar_kg, finalVolume_l());
 
    _og = Algorithms::Instance().PlatoToSG_20C20C( plato );
-   _points = (og-1)*1000.0;
+   _points = (_og-1)*1000.0;
 
    // Calculage FG
-   for( i = 0; static_cast<int>(i) < yeasts.size(); ++i )
+   for( i = 0; static_cast<int>(i) < yeasts().size(); ++i )
    {
-      yeast = yeasts[i];
+      yeast = yeasts()[i];
       // Get the yeast with the greatest attenuation.
-      if( yeast->getAttenuation_pct() > attenuation_pct )
-         attenuation_pct = yeast->getAttenuation_pct();
+      if( yeast->attenuation_pct() > attenuation_pct )
+         attenuation_pct = yeast->attenuation_pct();
    }
-   if( yeasts.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
+   if( yeasts().size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
 
    _points = _points*(1.0 - attenuation_pct/100.0);
    _fg =  1 + _points/1000.0;
    
-   emit changed( metaObject().property( metaObject().indexOfProperty("og") ), og );
-   emit changed( metaObject().property( metaObject().indexOfProperty("fg") ), fg );
+   emit changed( metaProperty("og"), _og );
+   emit changed( metaProperty("fg"), _fg );
 }
 
 //====================================Helpers===========================================
@@ -2116,20 +2050,20 @@ double Recipe::ibuFromHop(Hop const* hop)
    double boilGrav_final = _boilGrav; 
    double avgBoilGrav;
    
-   if( equipment )
-      boilGrav_final = _boilVolume_l / equipment->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
+   if( equipment() )
+      boilGrav_final = _boilVolume_l / equipment()->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
    
    avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
    
-   if( hops[i]->getUse() == Hop::USEBOIL)
+   if( hop->use() == Hop::USEBOIL)
       ibus = IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, minutes );
-   else if( hops[i]->getUse() == Hop::USEFIRST_WORT )
+   else if( hop->use() == Hop::USEFIRST_WORT )
       ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
 
    // Adjust for hop form.
-   if( hops[i]->getForm() == Hop::FORMLEAF )
+   if( hop->form() == Hop::FORMLEAF )
       ibus *= 0.90;
-   else if( hops[i]->getForm() == Hop::FORMPLUG )
+   else if( hop->form() == Hop::FORMPLUG )
       ibus *= 0.92;
    
    return ibus;
@@ -2148,12 +2082,12 @@ bool Recipe::isValidType( const QString &str )
    return false;
 }
 
-void Recipe::parseChanges(QMetaProperty prop, QVariant val)
+void Recipe::changed(QMetaProperty prop, QVariant val)
 {
-   QObject sender = sender();
-   QString senderClass(sender.className());
+   QObject* senderObj = sender();
+   QString senderClass(senderObj->metaObject()->className());
    
-   // Pass along the signal if it's one of our ingredients.
+   // Pass along the signal if it's one of our ingredients?
    // I don't know really what to emit here...
    /*
    if( senderClass == "Hop" )

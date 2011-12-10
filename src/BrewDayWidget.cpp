@@ -76,11 +76,12 @@ void BrewDayWidget::pushInstructionUp()
    if( recObs == 0 )
       return;
    
+   QList<Instruction*> ins = recObs->instructions();
    int row = listWidget->currentRow();
    if( row <= 0 )
       return;
    
-   recObs->swapInstructions(row, row-1);
+   recObs->swapInstructions(ins[row], ins[row-1]);
    listWidget->setCurrentRow(row-1);
 }
 
@@ -89,11 +90,12 @@ void BrewDayWidget::pushInstructionDown()
    if( recObs == 0 )
       return;
    
+   QList<Instruction*> ins = recObs->instructions();
    int row = listWidget->currentRow();
    if( row >= listWidget->count() )
       return;
    
-   recObs->swapInstructions(row, row+1);
+   recObs->swapInstructions(ins[row], ins[row+1]);
    listWidget->setCurrentRow(row+1);
 }
 

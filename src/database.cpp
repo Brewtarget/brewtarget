@@ -236,48 +236,6 @@ QVariant Database::get( DBTable table, int key, const char* col_name )
       return QVariant();
 }
 
-/*
-Equipment* Database::equipment(int key)
-{
-}
-
-Fermentable* Database::fermentable(int key)
-{
-}
-
-Hop* Database::hop(int key)
-{
-}
-
-Mash* Database::mash(int key)
-{
-}
-
-MashStep* Database::mashStep(int key)
-{
-}
-
-Misc* Database::misc(int key)
-{
-}
-
-Recipe* Database::recipe(int key)
-{
-}
-
-Style* Database::style(int key)
-{
-}
-
-Water* Database::water(int key)
-{
-}
-
-Yeast* Database::yeast(int key)
-{
-}
-*/
-
 void Database::removeFromRecipe( Recipe* rec, Hop* hop )
 {
    removeIngredientFromRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
@@ -371,7 +329,7 @@ Instruction* Database::newInstruction(Recipe* rec)
    // Database's instructions have changed.
    emit changed( metaProperty("instructions"), QVariant() );
    // Recipe's instructions have changed.
-   emit rec->changed( rec->metaProperty("instructions") );
+   emit rec->changed( rec->metaProperty("instructions"), QVariant() );
    return tmp;
 }
 
@@ -863,7 +821,7 @@ int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString p
    r.setValue("recipe_id", rec->_key);
    tableModel->insertRecord(-1,r);
    
-   emit rec->changed( rec->metaProperty(propName) );
+   emit rec->changed( rec->metaProperty(propName), QVariant() );
    return newKey;
 }
 

@@ -757,9 +757,8 @@ void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
    if( equip == 0 )
       return;
 
-   // Notice that we are using a reference from the database, not a copy.
-   // So, if the equip in the database is changed, this one will change also.
-   recipeObs->setEquipment(equip);
+   // Notice that we are using a copy from the database.
+   Database::instance().addToRecipe(recipeObs,equip);
 
    if( QMessageBox::question(this,
                              tr("Equipment request"),
@@ -787,9 +786,8 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    if( kit == 0 )
       return;
 
-   // Notice that we are using a reference from the database, not a copy.
-   // So, if the equip in the database is changed, this one will change also.
-   recipeObs->setEquipment(kit);
+   // Notice that we are using a copy from the database.
+   Database::instance().addToRecipe(recipeObs,kit);
 
    if( QMessageBox::question(this,
                              tr("Equipment request"),
@@ -817,9 +815,8 @@ void MainWindow::updateRecipeStyle(const QString& /*styleName*/)
    if( style == 0 )
       return;
 
-   // Notice that we are using a reference from the database, not a copy.
-   // So, if the style in the database is changed, this one will change also.
-   recipeObs->setStyle(style);
+   // Notice that we are using a copy from the database.
+   Database::instance().addToRecipe(recipeObs,style);
 }
 
 void MainWindow::updateRecipeBatchSize()
@@ -1143,7 +1140,6 @@ void MainWindow::newBrewNote()
       if( rec != recipeObs )
          setRecipe(rec);
 
-      recipeObs->addBrewNote(bNote);
       setBrewNote(bNote);
 
       bIndex = treeView_recipe->findBrewNote(bNote);
