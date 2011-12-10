@@ -899,6 +899,11 @@ void MainWindow::exportRecipe()
    outFile->close();
 }
 
+Recipe* MainWindow::currentRecipe()
+{
+   return recipeObs;
+}
+
 Fermentable* MainWindow::selectedFermentable()
 {
    QModelIndexList selected = fermentableTable->selectedIndexes();
