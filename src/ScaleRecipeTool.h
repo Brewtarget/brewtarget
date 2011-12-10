@@ -24,9 +24,11 @@ class ScaleRecipeTool;
 #include "ui_scaleRecipeTool.h"
 #include <QDialog>
 #include <QWidget>
-#include "recipe.h"
 #include <QAbstractButton>
 #include <QButtonGroup>
+
+// Forward declarations
+class Recipe;
 
 class ScaleRecipeTool : public QDialog, public Ui::scaleRecipeTool
 {
