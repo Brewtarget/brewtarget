@@ -33,6 +33,7 @@
 #include "YeastTableWidget.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "recipe.h"
 
 YeastTableModel::YeastTableModel(YeastTableWidget* parent)
 : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0)

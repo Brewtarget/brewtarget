@@ -32,6 +32,7 @@ class YeastItemDelegate;
 // Forward declarations.
 class Yeast;
 class YeastTableWidget;
+class Recipe;
 
 enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTNUMCOLS /*This one MUST be last*/};
 
