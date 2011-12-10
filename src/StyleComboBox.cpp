@@ -18,6 +18,9 @@
 
 #include "StyleComboBox.h"
 #include <QList>
+#include "database.h"
+#include "style.h"
+#include "recipe.h"
 
 StyleComboBox::StyleComboBox(QWidget* parent)
         : QComboBox(parent), recipe(0)
@@ -52,17 +55,19 @@ void StyleComboBox::removeStyle(Style* style)
 
 void StyleComboBox::changed(QMetaProperty prop, QVariant val)
 {
-   unsigned int i, size;
+   int i;
+   QString propName(prop.name());
    
    // Notifier could be the database.
    if( sender() == &(Database::instance()) &&
-      prop.propertyIndex() == Database::instance().metaObject().indexOfProperty("styles") )
+      propName == "styles" )
    {
       Style* previousSelection = getSelected();
          
       repopulateList();
          
       // Need to reset the selected entry if we observe a recipe.
+      // NOTE: I don't think this will work since we copy styles that we add to the recipe.
       if( recipe && recipe->style() )
          setIndexByStyle( recipe->style() );
       // Or, try to select the same thing we had selected last.
@@ -74,19 +79,20 @@ void StyleComboBox::changed(QMetaProperty prop, QVariant val)
    else if( sender() == recipe )
    {
       // Only respond if the style changed.
-      if( prop.propertyIndex() != recipe->metaObject().indexOfProperty("style") )
+      if( propName == "style" )
          return;
          
       // All we care about is the style in the recipe.
+      // NOTE: I don't think this will work since we copy styles that we add to the recipe.
       if( recipe->style() )
-         setIndexByStyle( recipeObs->getStyle() );
+         setIndexByStyle( recipe->style() );
       else
          setCurrentIndex(-1); // Or just give up.
    }
    else // Otherwise, we know that one of the styles changed.
    {
       Style* s = qobject_cast<Style*>(sender());
-      i = equipments.indexOf(s);
+      i = styles.indexOf(s);
       if( i > 0 )
          setItemText(i, styles[i]->name());
    }
@@ -113,7 +119,7 @@ void StyleComboBox::repopulateList()
    
    // Get new list of styles.
    tmpStyles.clear();
-   Database::instance().getStyle( tmpStyles );
+   Database::instance().getStyles( tmpStyles );
    
    // Connect and add all new styles.
    size = tmpStyles.size();
