@@ -124,7 +124,9 @@ public:
    double calculateEffIntoBK_pct();
    double calculateOg();
    double calculateBrewHouseEff_pct();
+   //! Projected ABV after fermentation.
    double calculateABV_pct();
+   //! Actual ABV after we have measured og/fg.
    double calculateActualABV_pct();
 
    // Projected values
