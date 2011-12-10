@@ -21,38 +21,62 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
 #include <QItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QLineEdit>
 #include <QString>
 
-#include <QVector>
-#include <iostream>
-#include "observable.h"
+#include <QList>
 #include "WaterTableModel.h"
+#include "WaterTableWidget.h"
 #include "water.h"
 #include "unit.h"
+#include "recipe.h"
 #include "brewtarget.h"
 
 WaterTableModel::WaterTableModel(WaterTableWidget* parent)
-: QAbstractTableModel(parent), MultipleObserver()
+   : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent)
 {
-   waterObs.clear();
-   parentTableWidget = parent;
+}
+
+void WaterTableModel::observeRecipe(Recipe* rec)
+{
+   if( recObs )
+   {
+      disconnect( recObs, 0, this, 0 );
+      removeAll();
+   }
+   
+   recObs = rec;
+   if( recObs )
+   {
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addWaters( recObs->waters() );
+   }
+}
+
+void WaterTableModel::observeDatabase(bool val)
+{
+   if( val )
+   {
+      removeAll();
+      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addWaters( Database::instance().waters() );
+   }
+   else
+   {
+      removeAll();
+      disconnect( &(Database::instance()), 0, this, 0 );
+   }
 }
 
 void WaterTableModel::addWater(Water* water)
 {
-   QVector<Water*>::iterator iter;
-
-   //Check to see if it's already in the list
-   for( iter=waterObs.begin(); iter != waterObs.end(); iter++ )
-      if( *iter == water )
-         return;
-
-   waterObs.push_back(water);
-   addObserved(water);
+   if( waterObs.contains(water) )
+      return;
+   
+   waterObs.append(water);
+   connect( water, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    reset(); // Tell everybody that the table has changed.
    
    if(parentTableWidget)
@@ -62,26 +86,34 @@ void WaterTableModel::addWater(Water* water)
    }
 }
 
+void WaterTableModel::addWaters(QList<Water*> waters)
+{
+   QList<Water*>::iterator i;
+   
+   for( i = waters.begin(); i != waters.end(); i++ )
+      addWater(*i);
+}
+
 bool WaterTableModel::removeWater(Water* water)
 {
-   QVector<Water*>::iterator iter;
-
-   for( iter=waterObs.begin(); iter != waterObs.end(); iter++ )
-      if( *iter == water )
+   int i;
+   
+   i = waterObs.indexOf(water);
+   if( i >= 0 )
+   {
+      disconnect( water, 0, this, 0 );
+      waterObs.removeAt(i);
+      reset(); // Tell everybody the table has changed.
+         
+      if(parentTableWidget)
       {
-         waterObs.erase(iter);
-         removeObserved(water);
-         reset(); // Tell everybody the table has changed.
-         
-         if(parentTableWidget)
-         {
-            parentTableWidget->resizeColumnsToContents();
-            parentTableWidget->resizeRowsToContents();
-         }
-         
-         return true;
+         parentTableWidget->resizeColumnsToContents();
+         parentTableWidget->resizeRowsToContents();
       }
-
+         
+      return true;
+   }
+      
    return false;
 }
 
@@ -90,22 +122,30 @@ void WaterTableModel::removeAll()
    int i;
 
    for( i = 0; i < waterObs.size(); ++i )
-      removeObserved(waterObs[i]);
-
-   waterObs.clear();
-   reset();
+      removeWater(waterObs[i]);
 }
 
-void WaterTableModel::notify(Observable* notifier, QVariant info)
+void WaterTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
 
    // Find the notifier in the list
-   for( i = 0; i < (int)waterObs.size(); ++i )
+   Water* waterSender = qobject_cast<Water*>(sender());
+   if( waterSender )
    {
-      if( notifier == waterObs[i] )
+      i = waterObs.indexOf(waterSender);
+      if( i >= 0 )
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                            QAbstractItemModel::createIndex(i, WATERNUMCOLS));
+      return;
+   }
+   
+   // See if sender is the database.
+   if( sender() == &(Database::instance()) && QString(prop.name()) == "waters" )
+   {
+      removeAll();
+      addWaters( Database::instance().waters() );
+      return;
    }
 }
 
@@ -139,21 +179,21 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
    switch( index.column() )
    {
       case WATERNAMECOL:
-         return QVariant(row->getName());
+         return QVariant(row->name());
       case WATERAMOUNTCOL:
-         return QVariant( Brewtarget::displayAmount(row->getAmount_l(), Units::liters) );
+         return QVariant( Brewtarget::displayAmount(row->amount_l(), Units::liters) );
       case WATERCALCIUMCOL:
-         return QVariant( Brewtarget::displayAmount(row->getCalcium_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->calcium_ppm(), 0) );
       case WATERBICARBONATECOL:
-         return QVariant( Brewtarget::displayAmount(row->getBicarbonate_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->bicarbonate_ppm(), 0) );
       case WATERSULFATECOL:
-         return QVariant( Brewtarget::displayAmount(row->getSulfate_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->sulfate_ppm(), 0) );
       case WATERCHLORIDECOL:
-         return QVariant( Brewtarget::displayAmount(row->getChloride_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->chloride_ppm(), 0) );
       case WATERSODIUMCOL:
-         return QVariant( Brewtarget::displayAmount(row->getSodium_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->sodium_ppm(), 0) );
       case WATERMAGNESIUMCOL:
-         return QVariant( Brewtarget::displayAmount(row->getMagnesium_ppm(), 0) );
+         return QVariant( Brewtarget::displayAmount(row->magnesium_ppm(), 0) );
       default :
          Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
