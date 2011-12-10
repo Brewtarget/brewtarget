@@ -35,6 +35,7 @@ bool operator==(Water &w1, Water &w2)
    return w1.name() == w2.name();
 }
 
+/*
 void Water::setDefaults()
 {
    name = "";
@@ -47,17 +48,14 @@ void Water::setDefaults()
    ph = 7.0;
    notes = "";
 }
+*/
 
 Water::Water()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-Water::Water(const QDomNode& waterNode)
-{
-   fromNode(waterNode);
-}
-
+/*
 void Water::fromNode(const QDomNode& waterNode)
 {
    QDomNode node, child;
@@ -131,155 +129,106 @@ void Water::fromNode(const QDomNode& waterNode)
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported WATER property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
+*/
 
 //================================"SET" METHODS=================================
 void Water::setName( const QString &var )
 {
-   name = var;
-   hasChanged();
+   set("name", "name", var);
 }
 
 void Water::setAmount_l( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("amount cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      amount_l = var;
-      hasChanged();
-   }
+   set("amount_l", "amount", var);
 }
 
 void Water::setCalcium_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("calcium cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      calcium_ppm = var;
-      hasChanged();
-   }
+   set("calcium_ppm", "calcium", var);
 }
 
 void Water::setBicarbonate_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("bicarbonate cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      bicarbonate_ppm = var;
-      hasChanged();
-   }
+   set("bicarbonate_ppm", "bicarbonate", var);
 }
 
 void Water::setChloride_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("chloride cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      chloride_ppm = var;
-      hasChanged();
-   }
+   set("chloride_ppm", "chloride", var);
 }
 
 void Water::setSodium_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("sodium cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      sodium_ppm = var;
-      hasChanged();
-   }
+   set("sodium_ppm", "sodium", var);
 }
 
 void Water::setMagnesium_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("magnesium cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      magnesium_ppm = var;
-      hasChanged();
-   }
+   set("magnesium_ppm", "magnesium", var);
 }
 
 void Water::setPh( double var )
 {
-   //if( var < 0.0 || var > 14.0 )
-   //   throw WaterException("pH was not in [0,14]: " + doubleToString(var) );
-   //else
-   {
-      ph = var;
-      hasChanged();
-   }
+   set("ph", "ph", var);
 }
 
 void Water::setSulfate_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("sulfate cannot be negative: " + doubleToString(var));
-   //else
-   {
-      sulfate_ppm = var;
-      hasChanged();
-   }
+   set("sulfate_ppm", "sulfate", var);
 }
 
 void Water::setNotes( const QString &var )
 {
-   notes = var;
-   hasChanged();
+   set("notes", "notes", var);
 }
 
 //=========================="GET" METHODS=======================================
-QString Water::getName() const
+QString Water::name() const
 {
-   return name;
+   return get("name").toString();
 }
 
-double Water::getSulfate_ppm() const
+double Water::sulfate_ppm() const
 {
-   return sulfate_ppm;
+   return get("sulfate").toDouble();
 }
 
-double Water::getAmount_l() const
+double Water::amount_l() const
 {
-   return amount_l;
+   return get("amount").toDouble();
 }
 
-double Water::getCalcium_ppm() const
+double Water::calcium_ppm() const
 {
-   return calcium_ppm;
+   return get("calcium").toDouble();
 }
 
-double Water::getBicarbonate_ppm() const
+double Water::bicarbonate_ppm() const
 {
-   return bicarbonate_ppm;
+   return get("bicarbonate").toDouble();
 }
 
-double Water::getChloride_ppm() const
+double Water::chloride_ppm() const
 {
-   return chloride_ppm;
+   return get("chloride").toDouble();
 }
 
-double Water::getSodium_ppm() const
+double Water::sodium_ppm() const
 {
-   return sodium_ppm;
+   return get("sodium").toDouble();
 }
 
-double Water::getMagnesium_ppm() const
+double Water::magnesium_ppm() const
 {
-   return magnesium_ppm;
+   return get("magnesium").toDouble();
 }
 
-double Water::getPh() const
+double Water::ph() const
 {
-   return ph;
+   return get("ph").toDouble();
 }
 
-QString Water::getNotes() const
+QString Water::notes() const
 {
-   return notes;
+   return get("notes").toString();
 }
