@@ -60,7 +60,7 @@ public:
    bool hasTimer();
    QString timerValue();
    bool completed();
-   QString reagent(int i);
+   //! This is a non-stored temporary in-memory set.
    QVector<QString> reagents();
    double interval();
 
@@ -86,6 +86,7 @@ private:
                 bool hasTimer = false,
                 const QString& timerVal = "0" );
    */
+   QVector<QString> _reagents;
 };
 
 #endif   /* _INSTRUCTION_H */

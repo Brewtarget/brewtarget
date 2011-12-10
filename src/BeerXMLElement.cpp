@@ -16,7 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
 #include "BeerXMLElement.h"
 #include <QDomElement>
 #include <QDomNode>
@@ -28,10 +27,6 @@ BeerXMLElement::BeerXMLElement() : _key(-1), _table(Database::NOTABLE)
 }
 
 BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : _key(other._key), _table(other._table)
-{
-}
-
-BeerXMLElement::~BeerXMLElement()
 {
 }
 
@@ -94,7 +89,7 @@ int BeerXMLElement::getInt(const QDomText& textNode)
    return ret;
 }
 
-QDateTime getDateTime(QString const& str = "")
+QDateTime BeerXMLElement::getDateTime(QString const& str)
 {
    QDateTime temp;
    
@@ -141,4 +136,3 @@ QVariant BeerXMLElement::get( const char* col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
 }
-*/

@@ -1445,20 +1445,76 @@ double Recipe::fg() const
    return _fg;
 }
 
-double Recipe::color_srm()
+double Recipe::color_srm() const
 {
    return _color_srm;
 }
 
-double Recipe::ABV_pct()
+double Recipe::ABV_pct() const
 {
    return _ABV_pct;
 }
 
-double Recipe::IBU()
+double Recipe::IBU() const
 {
    return _IBU;
 }
+
+QList<double> Recipe::IBUs() const
+{
+   return _ibus;
+}
+
+double Recipe::boilGrav() const
+{
+   return _boilGrav;
+}
+
+double Recipe::calories() const
+{
+   return _calories;
+}
+
+double Recipe::wortFromMash_l() const
+{
+   return _wortFromMash_l;
+}
+
+double Recipe::boilVolume_l() const
+{
+   return _boilVolume_l;
+}
+
+double Recipe::postBoilVolume_l() const
+{
+   return _postBoilVolume_l;
+}
+
+double Recipe::finalVolume_l() const
+{
+   return _finalVolume_l;
+}
+
+QColor Recipe::SRMColor() const
+{
+   return _SRMColor;
+}
+
+double Recipe::grainsInMash_kg() const
+{
+   return _grainsInMash_kg;
+}
+
+double Recipe::grains_kg() const
+{
+   return _grains_kg;
+}
+
+double Recipe::points() const
+{
+   return _points;
+}
+
 //=========================Relational Getters=============================
 
 Style* Recipe::style() const
@@ -1474,6 +1530,41 @@ Mash* Recipe::mash() const
 Equipment* Recipe::equipment() const
 {
    return Database::instance().equipment( get("equipment").toInt() );
+}
+
+QList<Instruction*> Recipe::instructions() const
+{
+   return Database::instance().instructions(this);
+}
+
+QList<BrewNote*> Recipe::brewNotes() const
+{
+   return Database::instance().brewNotes(this);
+}
+
+QList<Hop*> Recipe::hops() const
+{
+   return Database::instance().hops(this);
+}
+
+QList<Fermentable*> Recipe::fermentables() const
+{
+   return Database::instance().fermentables(this);
+}
+
+QList<Misc*> Recipe::miscs() const
+{
+   return Database::instance().miscs(this);
+}
+
+QList<Yeast*> Recipe::yeasts() const
+{
+   return Database::instance().yeasts(this);
+}
+
+QList<Water*> Recipe::waters() const
+{
+   return Database::instance().waters(this);
 }
 
 //==============================Getters===================================
@@ -1759,11 +1850,17 @@ void Recipe::recalcIBU()
 {
    unsigned int i;
    double ibus = 0.0;
+   double tmp;
    
    // Bitterness due to hops...
+   _ibus.clear();
    QList<Hop*> hhops = hops();
    for( i = 0; static_cast<int>(i) < hhops.size(); ++i )
-      ibus += ibuFromHop(hhops[i]);
+   {
+      tmp = ibuFromHop(hhops[i]);
+      _ibus.append(tmp);
+      ibus += tmp;
+   }
 
    // Bitterness due to hopped extracts...
    QList<Fermentable*> ferms = fermentables();

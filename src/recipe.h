@@ -206,10 +206,6 @@ public:
    void clearInstructions();
    //! Insert instruction ins into slot pos.
    void insertInstruction( Instruction* ins, int pos );
-   //! Get the total number of instructions.
-   int getNumInstructions();
-   //! Get instruction i.
-   Instruction* getInstruction(unsigned int i);
    //! Automagically generate a list of instructions.
    void generateInstructions();
    /*!
@@ -253,14 +249,14 @@ public:
    
    // Calculated getters.
    //! Gets points from og().
-   double points();
+   double points() const;
    //! Gets points if the final \b volume is given.
    double points(double volume);
-   double ABV_pct();
-   double color_srm();
-   double boilGrav();
-   double IBU();
-   QColor SRMColor();
+   double ABV_pct() const;
+   double color_srm() const;
+   double boilGrav() const;
+   double IBU() const;
+   QColor SRMColor() const;
    //! Estimate amount of wort collected immediately after the mash.
    double wortFromMash_l() const;
    //! Estimate boil volume based on user inputs.
@@ -277,19 +273,13 @@ public:
    QList<double> IBUs() const;
    
    // Relational getters
-   unsigned int numHops() const;
-   QList<Hop*> hops();
+   QList<Hop*> hops() const;
    QList<Instruction*> instructions() const;
-   unsigned int numFermentables() const;
-   QList<Fermentable*> fermentables();
-   unsigned int numMiscs() const;
-   QList<Misc*> miscs();
-   unsigned int numYeasts() const;
-   QList<Yeast*> yeasts();
-   unsigned int numWaters() const;
-   QList<Water*> waters();
-   unsigned int numBrewNotes() const;
-   QList<BrewNote*> brewNotes();
+   QList<Fermentable*> fermentables() const;
+   QList<Misc*> miscs() const;
+   QList<Yeast*> yeasts() const;
+   QList<Water*> waters() const;
+   QList<BrewNote*> brewNotes() const;
    
    Mash* mash() const;
    Equipment* equipment() const;
@@ -377,6 +367,7 @@ private:
    double _color_srm;
    double _boilGrav;
    double _IBU;
+   QList<double> _ibus;
    double _wortFromMash_l;
    double _boilVolume_l;
    double _postBoilVolume_l;

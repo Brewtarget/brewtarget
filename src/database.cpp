@@ -398,7 +398,7 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
    emit in2->changed( in2->metaProperty("instructionNumber") );
 }
 
-QList<Fermentable*> Database::fermentables(Recipe* parent)
+QList<Fermentable*> Database::fermentables(Recipe const* parent)
 {
    QList<Fermentable*> ret;
    QString queryString = QString("SELECT fermentable_id FROM fermentable_in_recipe WHERE recipe_id = %1").arg(parent->_key);
@@ -409,7 +409,7 @@ QList<Fermentable*> Database::fermentables(Recipe* parent)
    return ret;
 }
 
-QList<Hop*> Database::hops(Recipe* parent)
+QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;
    QString queryString = QString("SELECT hop_id FROM hop_in_recipe WHERE recipe_id = %1").arg(parent->_key);
@@ -420,7 +420,7 @@ QList<Hop*> Database::hops(Recipe* parent)
    return ret;
 }
 
-QList<Misc*> Database::miscs(Recipe* parent)
+QList<Misc*> Database::miscs(Recipe const* parent)
 {
    QList<Misc*> ret;
    QString queryString = QString("SELECT misc_id FROM misc_in_recipe WHERE recipe_id = %1").arg(parent->_key);
@@ -431,7 +431,7 @@ QList<Misc*> Database::miscs(Recipe* parent)
    return ret;
 }
 
-QList<MashStep*> Database::mashSteps(Mash* parent)
+QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
    QString queryString = QString("SELECT %1 FROM %2 WHERE mash_id = %3")
@@ -445,7 +445,7 @@ QList<MashStep*> Database::mashSteps(Mash* parent)
    return ret;
 }
 
-QList<Instruction*> Database::instructions( Recipe* parent )
+QList<Instruction*> Database::instructions( Recipe const* parent )
 {
    QList<Instruction*> ret;
    QString queryString = QString("SELECT %1 FROM %2 WHERE recipe_id = %3 ORDER BY instruction_number ASC")
@@ -476,7 +476,7 @@ QList<BrewNote*> Database::brewNotes( Recipe* parent )
 }
 */
 
-QList<Water*> Database::waters(Recipe* parent)
+QList<Water*> Database::waters(Recipe const* parent)
 {
    QList<Water*> ret;
    QString queryString = QString("SELECT water_id FROM water_in_recipe WHERE recipe_id = %1").arg(parent->_key);
@@ -487,7 +487,7 @@ QList<Water*> Database::waters(Recipe* parent)
    return ret;
 }
 
-QList<Yeast*> Database::yeasts(Recipe* parent)
+QList<Yeast*> Database::yeasts(Recipe const* parent)
 {
    QList<Yeast*> ret;
    QString queryString = QString("SELECT yeast_id FROM yeast_in_recipe WHERE recipe_id = %1").arg(parent->_key);

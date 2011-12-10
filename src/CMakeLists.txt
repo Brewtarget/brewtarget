@@ -149,6 +149,7 @@ SET( brewtarget_UIS
 # In other words, classes that have Q_OBJECT declarations and stuff.
 SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
+    ${SRCDIR}/BeerXMLElement.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/brewnote.h

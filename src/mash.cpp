@@ -331,6 +331,11 @@ double Mash::totalTime()
    return totalTime;
 }
 
+QList<MashStep*> Mash::mashSteps() const
+{
+   return Database::instance().mashSteps(this);
+}
+
 // TODO: ensure database is connecting mashstep signals to us.
 void Mash::changed(QMetaProperty prop, QVariant /*val*/)
 {

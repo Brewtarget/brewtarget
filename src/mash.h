@@ -79,7 +79,7 @@ public:
    double totalTime();
    
    // Relational getters
-   QList<MashStep*> mashSteps();
+   QList<MashStep*> mashSteps() const;
    
    // NOTE: this is not necessary due to Database::newMashStep(Mash* mash). Right?
    //void addMashStep(MashStep* step);

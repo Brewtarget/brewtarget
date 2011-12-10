@@ -270,6 +270,23 @@ public:
    QList<Water*>& waters();
    QList<Yeast*>& yeasts();
    
+   //! \b returns a list of the brew notes in a recipe.
+   QList<BrewNote*> brewNotes(Recipe const* parent);
+   //! Return a list of all the fermentables in a recipe.
+   QList<Fermentable*> fermentables(Recipe const* parent);
+   //! Return a list of all the hops in a recipe.
+   QList<Hop*> hops( Recipe const* parent );
+   //! Return a list of all the instructions in a recipe.
+   QList<Instruction*> instructions( Recipe const* parent );
+   //! Return a list of all the miscs in a recipe.
+   QList<Misc*> miscs( Recipe const* parent );
+   //! Return a list of all the waters in a recipe.
+   QList<Water*> waters( Recipe const* parent );
+   //! Return a list of all the yeasts in a recipe.
+   QList<Yeast*> yeasts( Recipe const* parent );
+   //! Return a list of all the steps in a mash.
+   QList<MashStep*> mashSteps(Mash const* parent);
+   
    // NOTICE: Necessary?
    /*
    unsigned int getNumEquipments();
@@ -447,21 +464,6 @@ private:
     * \returns a record to the new copy.
     */
    QSqlRecord copy( BeerXMLElement* object );
-   
-   //! Return a list of all the fermentables in a recipe.
-   QList<Fermentable*> fermentables(Recipe* parent);
-   //! Return a list of all the hops in a recipe.
-   QList<Hop*> hops( Recipe* parent );
-   //! Return a list of all the instructions in a recipe.
-   QList<Instruction*> instructions( Recipe* parent );
-   //! Return a list of all the miscs in a recipe.
-   QList<Misc*> miscs( Recipe* parent );
-   //! Return a list of all the waters in a recipe.
-   QList<Water*> waters( Recipe* parent );
-   //! Return a list of all the yeasts in a recipe.
-   QList<Yeast*> yeasts( Recipe* parent );
-   //! Return a list of all the steps in a mash.
-   QList<MashStep*> mashSteps(Mash* parent);
    
    // Export to BeerXML.
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );

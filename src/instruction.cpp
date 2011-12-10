@@ -175,28 +175,10 @@ bool Instruction::completed()
    return get("completed").toBool();
 }
 
-/*
-// TODO: figure out.
-QString Instruction::getReagent(int i)
+QVector<QString> Instruction::reagents()
 {
-   if ( i < reagents.size() )
-      return reagents[i];
-   else
-      return QString("");
+   return _reagents;
 }
-
-// TODO: figure out.
-QVector<QString> Instruction::getReagents()
-{
-   QVector<QString> tmp;
-   if ( reagents.size() > 0 )
-      tmp = reagents;
-   else 
-      tmp.push_back(directions);
-
-   return tmp;
-}
-*/
 
 double Instruction::interval() 
 {

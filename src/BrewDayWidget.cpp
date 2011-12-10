@@ -68,7 +68,7 @@ void BrewDayWidget::removeSelectedInstruction()
    int row = listWidget->currentRow();
    if( row < 0 )
       return;
-   recObs->removeInstruction(recObs->getInstruction(row));
+   Database::instance().removeFromRecipe(recObs,recObs->instructions()[row]);
 }
 
 void BrewDayWidget::pushInstructionUp()
