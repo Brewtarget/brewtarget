@@ -164,9 +164,12 @@ public:
    void addToRecipe( Recipe* rec, Misc* m );
    void addToRecipe( Recipe* rec, Yeast* y );
    void addToRecipe( Recipe* rec, Water* w );
-   void addToRecipe( Recipe* rec, Mash* m ); // TODO: implement
-   void addToRecipe( Recipe* rec, Equipment* e ); // TODO: implement
-   void addToRecipe( Recipe* rec, Style* s ); // TODO: implement
+   //! Add a mash, displacing any current mash.
+   void addToRecipe( Recipe* rec, Mash* m );
+   //! Add an equipment, displacing any current equipment.
+   void addToRecipe( Recipe* rec, Equipment* e );
+   //! Add a style, displacing any current style.
+   void addToRecipe( Recipe* rec, Style* s );
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    
@@ -464,6 +467,9 @@ private:
     * \returns a record to the new copy.
     */
    QSqlRecord copy( BeerXMLElement* object );
+   
+   //! Do an sql update.
+   void sqlUpdate( QString tableName, QString setClause, QString whereClause );
    
    // Export to BeerXML.
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );

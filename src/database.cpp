@@ -378,6 +378,38 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
    return allRecipes[key];
 }
 
+Recipe* Database::recipe(int key)
+{
+   if( allRecipes.contains(key) )
+      return allRecipes[key];
+   else
+      return 0;
+}
+
+Equipment* Database::equipment(int key)
+{
+   if( allEquipments.contains(key) )
+      return allEquipments[key];
+   else
+      return 0;
+}
+
+Mash* Database::mash(int key)
+{
+   if( allMashs.contains(key) )
+      return allMashs[key];
+   else
+      return 0;
+}
+
+Style* Database::style(int key)
+{
+   if( allStyles.contains(key) )
+      return allStyles[key];
+   else
+      return 0;
+}
+
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
    // TODO: encapsulate in QUndoCommand.
@@ -879,6 +911,7 @@ QSqlRecord Database::copy( BeerXMLElement* object )
    return newRecord;
 }
 
+// Add to recipe ==============================================================
 void Database::addToRecipe( Recipe* rec, Hop* hop )
 {
    addIngredientToRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
@@ -902,6 +935,65 @@ void Database::addToRecipe( Recipe* rec, Yeast* y )
 void Database::addToRecipe( Recipe* rec, Water* w )
 {
    addIngredientToRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
+}
+
+void Database::addToRecipe( Recipe* rec, Mash* m )
+{
+   // Make a copy of mash.
+   QSqlRecord c = copy(m);
+   
+   // Update mash_id
+   sqlUpdate(tableNames[RECTABLE],
+             QString("mash_id=%1").arg(c.value(keyName(MASHTABLE)).toInt()),
+             QString("%1=%2").arg(keyName(RECTABLE)).arg(rec->_key));
+   /*
+   QSqlQuery q( QString("UPDATE %1 SET %2=%3 WHERE %4=%5")
+                .arg(tableNames[RECTABLE])
+                .arg("mash_id")
+                .arg(c.value("maid").toInt())
+                .arg("rid")
+                .arg(rec->_key),
+                sqldb );
+   */
+   
+   // Emit a changed signal.
+   emit rec->changed( rec->metaProperty("mash"), QVariant() );
+}
+
+void Database::addToRecipe( Recipe* rec, Equipment* e )
+{
+   // Make a copy of equipment.
+   QSqlRecord c = copy(e);
+   
+   // Update equipment_id
+   sqlUpdate(tableNames[RECTABLE],
+             QString("equipment_id=%1").arg(c.value(keyName(EQUIPTABLE)).toInt()),
+             QString("%1=%2").arg(keyName(RECTABLE)).arg(rec->_key));
+
+   // Emit a changed signal.
+   emit rec->changed( rec->metaProperty("equipment"), QVariant() );
+}
+
+void Database::addToRecipe( Recipe* rec, Style* s )
+{
+   // Make a copy of style.
+   QSqlRecord c = copy(s);
+   
+   // Update style_id
+   sqlUpdate(tableNames[RECTABLE],
+             QString("style_id=%1").arg(c.value(keyName(STYLETABLE)).toInt()),
+             QString("%1=%2").arg(keyName(RECTABLE)).arg(rec->_key));
+
+   // Emit a changed signal.
+   emit rec->changed( rec->metaProperty("style"), QVariant() );
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+void Database::sqlUpdate( QString tableName, QString setClause, QString whereClause )
+{
+   QSqlQuery q( QString("UPDATE %1 SET %2 WHERE %3")
+                .arg(setClause)
+                .arg(whereClause),
+                sqldb );
 }
 
 void Database::getBrewNotes( QList<BrewNote*>& list, QString filter )
