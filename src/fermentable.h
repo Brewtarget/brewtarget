@@ -37,15 +37,9 @@ class Fermentable : public BeerXMLElement
 public:
 
    enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
-
-   virtual ~Fermentable() {}
-
-   // Obsolete
-   /*
-   enum{ DONOTUSE, NAME, TYPE, AMOUNT, YIELD, COLOR, AFTERBOIL, ORIGIN, SUPPLIER, NOTES, COARSEFINEDIFF, MOISTURE,
-         DIASTATICPOWER, PROTEIN, MAXINBATCH, ISMASHED };
-   */
+   Q_ENUMS( TYPE )
    
+   virtual ~Fermentable() {}
    
    // New Q_PROPERTIES
    Q_PROPERTY( QString name                  READ name                   WRITE setName                   NOTIFY changed /*changedName*/ )

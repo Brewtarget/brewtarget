@@ -37,7 +37,8 @@ class MashStep : public BeerXMLElement
 public:
 
    enum Type {TYPEINFUSION, TYPETEMPERATURE, TYPEDECOCTION};
-
+   Q_ENUMS( Type )
+   
    virtual ~MashStep() {}
 
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )

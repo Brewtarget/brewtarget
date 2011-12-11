@@ -36,7 +36,8 @@ public:
   
    enum Type{ TYPESPICE, TYPEFINING, TYPEWATER_AGENT, TYPEHERB, TYPEFLAVOR, TYPEOTHER };
    enum Use{ USEBOIL, USEMASH, USEPRIMARY, USESECONDARY, USEBOTTLING };
-
+   Q_ENUMS( Type Use )
+   
    virtual ~Misc() {}
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )

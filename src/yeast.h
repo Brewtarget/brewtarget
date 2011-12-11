@@ -38,7 +38,8 @@ public:
    enum Type {TYPEALE, TYPELAGER, TYPEWHEAT, TYPEWINE, TYPECHAMPAGNE};
    enum Form {FORMLIQUID, FORMDRY, FORMSLANT, FORMCULTURE};
    enum Flocculation {FLOCLOW, FLOCMEDIUM, FLOCHIGH, FLOCVERY_HIGH};
-
+   Q_ENUMS( Type Form Flocculation )
+   
    virtual ~Yeast() {}
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ );

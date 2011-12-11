@@ -198,6 +198,8 @@ public:
    static double getDouble( const QDomText& textNode );
    static bool getBool( const QDomText& textNode );
    static int getInt( const QDomText& textNode );
+   static QString getString( QDomText const& textNode );
+   static QDateTime getDateTime( QDomText const& textNode );
    //! Convert the string to a QDateTime according to Qt::ISODate.
    static QDateTime getDateTime(QString const& str = "");
    static QString text(bool val);

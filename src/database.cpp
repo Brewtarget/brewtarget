@@ -2499,3 +2499,454 @@ void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
 
    parent.appendChild(yeastNode);
 }
+
+// fromXml ====================================================================
+void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode, bool showWarnings )
+{
+   QDomNode node, child;
+   QDomText textNode;
+   QString xmlTag;
+   int intVal;
+   double doubleVal;
+   bool boolVal;
+   QString stringVal;
+   QDateTime dateTimeVal;
+   
+   for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
+   {
+      if( ! node.isElement() )
+      {
+         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         continue;
+      }
+      
+      child = node.firstChild();
+      if( child.isNull() || ! child.isText() )
+         continue;
+      
+      xmlTag = node.nodeName();
+      textNode = child.toText();
+      
+      if( xmlTagsToProperties.contains(xmlTag) )
+      {
+         switch( element->metaProperty(xmlTagsToProperties[xmlTag]).type() )
+         {
+            case QVariant::Bool:
+               boolVal = BeerXMLElement::getBool(textNode);
+               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), boolVal);
+               break;
+            case QVariant::Double:
+               doubleVal = BeerXMLElement::getDouble(textNode);
+               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), doubleVal);
+               break;
+            case QVariant::Int:
+               intVal = BeerXMLElement::getInt(textNode);
+               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), intVal);
+               break;
+            case QVariant::DateTime:
+               dateTimeVal = BeerXMLElement::getDateTime(textNode);
+               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), dateTimeVal);
+               break;
+            // NOTE: I believe that enum types like Fermentable::Type will go
+            // here since Q_ENUMS() converts enums to strings. So, need to make
+            // sure that the enums match exactly what we expect in the XML.
+            case QVariant::String:
+               stringVal = BeerXMLElement::getString(textNode);
+               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), stringVal);
+               break;
+            default:
+               Brewtarget::logW("Database::fromXML: don't understand property type.");
+               break;
+         }
+      }
+      else
+      {
+         if( showWarnings )
+            Brewtarget::logW(QString("Database::fromXML: Unsupported property: %1. Line %2").arg(xmlTag).arg(node.lineNumber()) );
+      }
+   }
+}
+
+BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   BrewNote* ret = newBrewNote(parent);
+   
+   propHash["BREWDATE"] = "brewDate" ;
+   propHash["DATE_FERMENTED_OUT"] = "fermentDate" ;
+   propHash["SG"] = "sg" ;
+   propHash["VOLUME_INTO_BK"] = "volumeIntoBK_l" ;
+   propHash["STRIKE_TEMP"] = "strikeTemp_c" ;
+   propHash["MASH_FINAL_TEMP"] = "mashFinTemp_c" ;
+   propHash["OG"] = "og" ;
+   propHash["POST_BOIL_VOLUME"] = "postBoilVolume_l" ;
+   propHash["VOLUME_INTO_FERMENTER"] = "volumeIntoFerm_l" ;
+   propHash["PITCH_TEMP"] = "pitchTemp_c" ;
+   propHash["FG"] = "fg" ;
+   propHash["EFF_INTO_BK"] = "effIntoBK_pct" ;
+   propHash["PREDICTED_OG"] = "projOg" ;
+   propHash["BREWHOUSE_EFF"] = "brewhouseEff_pct" ;
+   //propHash["PREDICTED_ABV"] = "projABV_pct" ;
+   propHash["ACTUAL_ABV"] = "abv" ;
+   propHash["PROJECTED_BOIL_GRAV"] = "projBoilGrav" ;
+   propHash["PROJECTED_STRIKE_TEMP"] = "projStrikeTemp_c" ;
+   propHash["PROJECTED_MASH_FIN_TEMP"] = "projMashFinTemp_c" ;
+   propHash["PROJECTED_VOL_INTO_BK"] = "projVolIntoBK_l" ;
+   propHash["PROJECTED_OG"] = "projOg" ;
+   propHash["PROJECTED_VOL_INTO_FERM"] = "projVolIntoFerm_l" ;
+   propHash["PROJECTED_FG"] = "projFg" ;
+   propHash["PROJECTED_EFF"] = "projEff_pct" ;
+   propHash["PROJECTED_ABV"] = "projABV_pct" ;
+   propHash["PROJECTED_POINTS"] = "projPoints" ;
+   propHash["PROJECTED_ATTEN"] = "projAtten" ;
+   propHash["BOIL_OFF"] = "boilOff_l" ;
+   propHash["FINAL_VOLUME"] = "finalVolume_l" ;
+   propHash["NOTES"] = "notes" ;
+   
+   fromXml( ret, propHash, node );
+   return ret;
+}
+
+Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Equipment* ret = newEquipment();
+   
+   propHash["NAME"] = "name";
+   propHash["BOIL_SIZE"] = "boilSize_l";
+   propHash["BATCH_SIZE"] = "batchSize_l";
+   propHash["TUN_VOLUME"] = "tunVolume_l";
+   propHash["TUN_WEIGHT"] = "tunWeight_kg";
+   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
+   propHash["TOP_UP_WATER"] = "topUpWater_l";
+   propHash["TRUB_CHILLER_LOSS"] = "trubChillerLoss_l";
+   propHash["EVAP_RATE"] = "evapRate_pctHr";
+   propHash["REAL_EVAP_RATE"] = "evapRate_lHr";
+   propHash["BOIL_TIME"] = "boilTime_min";
+   propHash["CALC_BOIL_VOLUME"] = "calcBoilVolume";
+   propHash["LAUTER_DEADSPACE"] = "lauterDeadspace_l";
+   propHash["TOP_UP_KETTLE"] = "topUpKettle_l";
+   propHash["HOP_UTILIZATION"] = "hopUtilization_pct";
+   propHash["NOTES"] = "notes";
+   propHash["ABSORPTION"] = "grainAbsorption_LKg";
+   propHash["BOILING_POINT"] = "boilingPoint_c";
+   
+   fromXml( ret, propHash, node );
+   if( parent )
+      addToRecipe( parent, ret );
+   return ret;
+}
+
+Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Fermentable* ret = newFermentable();
+   
+   propHash["NAME"] = "name";
+   propHash["TYPE"] = "type";
+   propHash["AMOUNT"] = "amount_kg";
+   propHash["YIELD"] = "yield_pct";
+   propHash["COLOR"] = "color_srm";
+   propHash["ADD_AFTER_BOIL"] = "addAfterBoil";
+   propHash["ORIGIN"] = "origin";
+   propHash["SUPPLIER"] = "supplier";
+   propHash["NOTES"] = "notes";
+   propHash["COARSE_FINE_DIFF"] = "coarseFineDiff_pct";
+   propHash["MOISTURE"] = "moisture_pct";
+   propHash["DIASTATIC_POWER"] = "diastaticPower_lintner";
+   propHash["PROTEIN"] = "protein_pct";
+   propHash["MAX_IN_BATCH"] = "maxInBatch_pct";
+   propHash["RECOMMEND_MASH"] = "recommendMash";
+   propHash["IS_MASHED"] = "isMashed";
+   propHash["IBU_GAL_PER_LB"] = "ibuGalPerLb";
+   
+   fromXml( ret, propHash, node );
+   if( parent )
+      addToRecipe( parent, ret );
+   return ret;
+}
+
+Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Hop* ret = newHop();
+   
+   propHash["NAME"] = "name";
+   propHash["ALPHA"] = "alpha_pct";
+   propHash["AMOUNT"] = "amount_kg";
+   propHash["USE"] = "use";
+   propHash["TIME"] = "time_min";
+   propHash["NOTES"] = "notes";
+   propHash["TYPE"] = "type";
+   propHash["FORM"] = "form";
+   propHash["BETA"] = "beta_pct";
+   propHash["HSI"] = "hsi_pct";
+   propHash["ORIGIN"] = "origin";
+   propHash["SUBSTITUTES"] = "substitutes";
+   propHash["HUMULENE"] = "humulene_pct";
+   propHash["CARYOPHYLLENE"] = "caryophyllene_pct";
+   propHash["COHUMULONE"] = "cohumulone_pct";
+   propHash["MYRCENE"] = "myrcene_pct";
+   
+   fromXml( ret, propHash, node );
+   if( parent )
+      addToRecipe( parent, ret );
+   return ret;
+}
+
+Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Instruction* ret = newInstruction(parent);
+   
+   propHash["NAME"] = "name";
+   propHash["DIRECTIONS"] = "directions";
+   propHash["HAS_TIMER"] = "hasTimer";
+   propHash["TIMER_VALUE"] = "timerValue";
+   propHash["COMPLETED"] = "completed";
+   propHash["INTERVAL"] = "interval";
+   
+   fromXml( ret, propHash, node );
+   return ret;
+}
+
+Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
+{
+   QDomNode n;
+   QHash<QString,QString> propHash;
+   Mash* ret;
+   if( parent )
+      ret = newMash(parent);
+   else
+      ret = newMash();
+   
+   // First, get all the standard properties.
+   propHash["NAME"] = "name";
+   propHash["GRAIN_TEMP"] = "grainTemp_c";
+   propHash["NOTES"] = "notes";
+   propHash["TUN_TEMP"] = "tunTemp_c";
+   propHash["SPARGE_TEMP"] = "spargeTemp_c";
+   propHash["PH"] = "ph";
+   propHash["TUN_WEIGHT"] = "tunWeight_kg";
+   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
+   propHash["EQUIP_ADJUST"] = "equipAdjust";
+   fromXml( ret, propHash, node );
+   
+   // Now, get the individual mash steps.
+   n = node.firstChildElement("MASH_STEPS");
+   if( n.isNull() )
+      return ret;
+   // Iterate through all the mash steps.
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      mashStepFromXml( n, ret );
+   
+   return ret;
+}
+
+MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
+{
+   QHash<QString,QString> propHash;
+   MashStep* ret = newMashStep(parent);
+   
+   propHash["NAME"] = "name";
+   propHash["TYPE"] = "type";
+   propHash["INFUSE_AMOUNT"] = "infuseAmount_l";
+   propHash["STEP_TEMP"] = "stepTemp_c";
+   propHash["STEP_TIME"] = "stepTime_min";
+   propHash["RAMP_TIME"] = "rampTime_min";
+   propHash["END_TEMP"] = "endTemp_c";
+   propHash["INFUSE_TEMP"] = "infuseTemp_c";
+   propHash["DECOCTION_AMOUNT"] = "decoctionAmount_l";
+   
+   fromXml( ret, propHash, node );
+   return ret;
+}
+
+Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Misc* ret = newMisc();
+   
+   propHash["NAME"] = "name";
+   propHash["TYPE"] = "type";
+   propHash["USE"] = "use";
+   propHash["TIME"] = "time";
+   propHash["AMOUNT"] = "amount";
+   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
+   propHash["USE_FOR"] = "useFor";
+   propHash["NOTES"] = "notes";
+   
+   fromXml( ret, propHash, node );
+   if( parent )
+      addToRecipe( parent, ret );
+   return ret;
+}
+
+Recipe* Database::recipeFromXml( QDomNode const& node )
+{
+   QDomNode n;
+   QHash<QString,QString> propHash;
+   Recipe* ret = newRecipe();
+   
+   // First, get standard properties.
+   propHash["NAME"] = "name";
+   propHash["TYPE"] = "type";
+   propHash["BREWER"] = "brewer";
+   propHash["BATCH_SIZE"] = "batchSize_l";
+   propHash["BOIL_SIZE"] = "boilSize_l";
+   propHash["BOIL_TIME"] = "boilTime_min";
+   propHash["EFFICIENCY"] = "efficiency_pct";
+   propHash["ASST_BREWER"] = "asstBrewer";
+   propHash["NOTES"] = "notes";
+   propHash["TASTE_NOTES"] = "tasteNotes";
+   propHash["TASTE_RATING"] = "tasteRating";
+   propHash["OG"] = "og";
+   propHash["FG"] = "fg";
+   propHash["FERMENTATION_STAGES"] = "fermentationStages";
+   propHash["PRIMARY_AGE"] = "primaryAge_days";
+   propHash["PRIMARY_TEMP"] = "primaryTemp_c";
+   propHash["SECONDARY_AGE"] = "secondaryAge_days";
+   propHash["SECONDARY_TEMP"] = "secondaryTemp_c";
+   propHash["TERTIARY_AGE"] = "tertiaryAge_days";
+   propHash["TERTIARY_TEMP"] = "tertiaryTemp_c";
+   propHash["AGE"] = "age_days";
+   propHash["AGE_TEMP"] = "ageTemp_c";
+   propHash["DATE"] = "date";
+   propHash["CARBONATION"] = "carbonation_vols";
+   propHash["FORCED_CARBONATION"] = "forcedCarbonation";
+   propHash["PRIMING_SUGAR_NAME"] = "primingSugarName";
+   propHash["CARBONATION_TEMP"] = "carbonationTemp_c";
+   propHash["PRIMING_SUGAR_EQUIV"] = "primingSugarEquiv";
+   propHash["KEG_PRIMING_FACTOR"] = "kegPrimingFactor";
+   fromXml( ret, propHash, node );
+   
+   // Get style.
+   n = node.firstChildElement("STYLE");
+   styleFromXml(n.firstChild(), ret);
+   
+   // Get equipment.
+   n = node.firstChildElement("EQUIPMENT");
+   equipmentFromXml(n.firstChild(), ret);
+   
+   // Get hops.
+   n = node.firstChildElement("HOPS");
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      hopFromXml(n, ret);
+   
+   // Get ferms.
+   n = node.firstChildElement("FERMENTABLES");
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      fermentableFromXml(n, ret);
+   
+   // Get miscs.
+   n = node.firstChildElement("MISCS");
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      miscFromXml(n, ret);
+   
+   // Get yeasts.
+   n = node.firstChildElement("YEASTS");
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      yeastFromXml(n, ret);
+   
+   // Get waters.
+   n = node.firstChildElement("WATERS");
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      waterFromXml(n, ret);
+   
+   // Get instructions.
+   n = node.firstChildElement("INSTRUCTIONS");
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      instructionFromXml(n, ret);
+   
+   // Get brew notes
+   n = node.firstChildElement("BREWNOTES");
+   for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
+      brewNoteFromXml(n, ret);
+   
+   return ret;
+}
+
+Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Style* ret = newStyle();
+   
+   propHash["NAME"] = "name";
+   propHash["CATEGORY"] = "category";
+   propHash["CATEGORY_NUMBER"] = "categoryNumber";
+   propHash["STYLE_LETTER"] = "styleLetter";
+   propHash["STYLE_GUIDE"] = "styleGuide";
+   propHash["TYPE"] = "type";
+   propHash["OG_MIN"] = "ogMin";
+   propHash["OG_MAX"] = "ogMax";
+   propHash["FG_MIN"] = "fgMin";
+   propHash["FG_MAX"] = "fgMax";
+   propHash["IBU_MIN"] = "ibuMin";
+   propHash["IBU_MAX"] = "ibuMax";
+   propHash["COLOR_MIN"] = "colorMin_srm";
+   propHash["COLOR_MAX"] = "colorMax_srm";
+   propHash["CARB_MIN"] = "carbMin_vol";
+   propHash["CARB_MAX"] = "carbMax_vol";
+   propHash["ABV_MIN"] = "abvMin_pct";
+   propHash["ABV_MAX"] = "abvMax_pct";
+   propHash["NOTES"] = "notes";
+   propHash["PROFILE"] = "profile";
+   propHash["INGREDIENTS"] = "ingredients";
+   propHash["EXAMPLES"] = "examples";
+   
+   fromXml( ret, propHash, node );
+   if( parent )
+      addToRecipe( parent, ret );
+   return ret;
+}
+
+Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Water* ret = newWater();
+   
+   propHash["NAME"] = "name";
+   propHash["AMOUNT"] = "amount_l";
+   propHash["CALCIUM"] = "calcium_ppm";
+   propHash["BICARBONATE"] = "bicarbonate_ppm";
+   propHash["SULFATE"] = "sulfate_ppm";
+   propHash["CHLORIDE"] = "chloride_ppm";
+   propHash["SODIUM"] = "sodium_ppm";
+   propHash["MAGNESIUM"] = "magnesium_ppm";
+   propHash["PH"] = "ph";
+   propHash["NOTES"] = "notes";
+   
+   fromXml( ret, propHash, node );
+   if( parent )
+      addToRecipe( parent, ret );
+   return ret;
+}
+
+Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
+{
+   QHash<QString,QString> propHash;
+   Yeast* ret = newYeast();
+   
+   propHash["NAME"] = "name";
+   propHash["TYPE"] = "type";
+   propHash["FORM"] = "form";
+   propHash["AMOUNT"] = "amount";
+   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
+   propHash["LABORATORY"] = "laboratory";
+   propHash["PRODUCT_ID"] = "productID";
+   propHash["MIN_TEMPERATURE"] = "minTemperature_c";
+   propHash["MAX_TEMPERATURE"] = "maxTemperature_c";
+   propHash["FLOCCULATION"] = "flocculation";
+   propHash["ATTENUATION"] = "attenuation_pct";
+   propHash["NOTES"] = "notes";
+   propHash["BEST_FOR"] = "bestFor";
+   propHash["TIMES_CULTURED"] = "timesCultured";
+   propHash["MAX_REUSE"] = "maxReuse";
+   propHash["ADD_TO_SECONDARY"] = "addToSecondary";
+   
+   fromXml( ret, propHash, node );
+   if( parent )
+      addToRecipe( parent, ret );
+   return ret;
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

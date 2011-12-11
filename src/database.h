@@ -293,6 +293,22 @@ public:
    //! Return a list of all the steps in a mash.
    QList<MashStep*> mashSteps(Mash const* parent);
    
+   // Import from BeerXML =====================================================
+   // TODO: make all these private.
+   BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
+   Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Hop* hopFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Instruction* instructionFromXml( QDomNode const& node, Recipe* parent );
+   Mash* mashFromXml( QDomNode const& node, Recipe* parent = 0 );
+   MashStep* mashStepFromXml( QDomNode const& node, Mash* parent );
+   Misc* miscFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Recipe* recipeFromXml( QDomNode const& node );
+   Style* styleFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Water* waterFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = 0 );
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   
    // Export to BeerXML =======================================================
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
    void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
@@ -341,7 +357,7 @@ private:
    QHash< int, Water* > allWaters;
    QHash< int, Yeast* > allYeasts;
    
-   // Helper to populate all* hashes. T should be a BeerXMLElement subclass.
+   //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*> hash, QSqlRelationalTableModel* tm, DBTable table )
    {
       int i, size, key;
@@ -370,7 +386,7 @@ private:
       tm->select();
    }
    
-   // Helper to populate the list using the given filter.
+   //! Helper to populate the list using the given filter.
    template <class T> void getElements( QList<T*>& list, QString filter, QSqlRelationalTableModel* tm, DBTable table, QHash<int,T*> allElements )
    {
       int i, size, key;
@@ -391,9 +407,16 @@ private:
       tm->select();
    }
    
+   /*! Populates the \b element with properties. This must be a class that
+    *  simple properties only (no subelements).
+    * \param element is the element you want to populate.
+    * \param xmlTagsToProperties is a hash from xml tags to meta property names.
+    * \param elementNode is the root node of the element we are reading from.
+    */
+   void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode, bool showWarnings = true );
+   
    // The connection to the SQLite database.
    QSqlDatabase sqldb;
-   
    // Model for all the tables in the db.
    QSqlRelationalTableModel* tableModel;
    // Models set to specific tables in the db.

@@ -48,6 +48,7 @@ QMetaProperty BeerXMLElement::metaProperty(QString const& name) const
    return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
 }
 
+// getVal =====================================================================
 double BeerXMLElement::getDouble(const QDomText& textNode)
 {
    bool ok;
@@ -88,6 +89,27 @@ int BeerXMLElement::getInt(const QDomText& textNode)
 
    return ret;
 }
+
+QString BeerXMLElement::getString( QDomText const& textNode )
+{
+   return textNode.nodeValue();
+}
+
+QDateTime BeerXMLElement::getDateTime( QDomText const& textNode )
+{
+   bool ok = true;
+   QDateTime ret;
+   QString text = textNode.nodeValue();
+
+   ret = QDateTime::fromString(text, Qt::ISODate);
+   ok = ret.isValid();
+   if( !ok )
+      Brewtarget::log(Brewtarget::ERROR, QString("%1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
+
+   return ret;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 QDateTime BeerXMLElement::getDateTime(QString const& str)
 {

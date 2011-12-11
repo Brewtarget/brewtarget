@@ -40,7 +40,8 @@ public:
    enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
    enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
    enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
-
+   Q_ENUMS( Type Form Use )
+   
    virtual ~Hop() {}
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
