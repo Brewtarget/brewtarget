@@ -869,8 +869,6 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
 
 void MainWindow::exportRecipe()
 {
-   // TODO: put XML-exporting junk in Database and call it here.
-   /*
    QFile* outFile;
    QDomDocument doc;
 
@@ -894,12 +892,11 @@ void MainWindow::exportRecipe()
 
    QDomElement recipes = doc.createElement("RECIPES"); // The root element.
    doc.appendChild(recipes);
-   recipeObs->toXml(doc, recipes);
+   Database::instance().toXml( recipeObs, doc, recipes );
    
    out << doc.toString();
    
    outFile->close();
-   */
 }
 
 Recipe* MainWindow::currentRecipe()
@@ -1729,8 +1726,6 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 
 void MainWindow::exportSelected()
 {
-   // TODO: implement XML-exporting shit in Database and call it here.
-   /*
    BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
    QModelIndexList selected;
    QDomDocument doc;
@@ -1774,20 +1769,20 @@ void MainWindow::exportSelected()
       switch(type)
       {
          case BrewTargetTreeItem::RECIPE:
-            treeView_recipe->getRecipe(selection)->toXml(doc,recipe);
+            Database::instance().toXml( treeView_recipe->getRecipe(selection), doc, recipe);
             didRecipe = true;
             break;
          case BrewTargetTreeItem::EQUIPMENT:
-            treeView_recipe->getEquipment(selection)->toXml(doc,dbase);
+            Database::instance().toXml( treeView_recipe->getEquipment(selection), doc, recipe);
             break;
          case BrewTargetTreeItem::HOP:
-            treeView_recipe->getHop(selection)->toXml(doc,dbase);
+            Database::instance().toXml( treeView_recipe->getHop(selection), doc, recipe);
             break;
          case BrewTargetTreeItem::MISC:
-            treeView_recipe->getMisc(selection)->toXml(doc,dbase);
+            Database::instance().toXml( treeView_recipe->getMisc(selection), doc, recipe);
             break;
          case BrewTargetTreeItem::YEAST:
-            treeView_recipe->getYeast(selection)->toXml(doc,dbase);
+            Database::instance().toXml( treeView_recipe->getYeast(selection), doc, recipe);
             break;
       }
    }
@@ -1800,7 +1795,6 @@ void MainWindow::exportSelected()
    out << doc.toString();
    
    outFile->close();
-   */
 }
 
 void MainWindow::mergeDatabases()

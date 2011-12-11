@@ -293,33 +293,20 @@ public:
    //! Return a list of all the steps in a mash.
    QList<MashStep*> mashSteps(Mash const* parent);
    
-   // NOTICE: Necessary?
-   /*
-   unsigned int getNumEquipments();
-   unsigned int getNumFermentables();
-   unsigned int getNumHops();
-   unsigned int getNumMashs();
-   unsigned int getNumMashSteps();
-   unsigned int getNumMiscs();
-   unsigned int getNumRecipes();
-   unsigned int getNumStyles();
-   unsigned int getNumWaters();
-   unsigned int getNumYeasts();
-   */
-
-   // NOTICE: obsolete?.
-   /*
-   Equipment* findEquipmentByName(QString name);
-   Fermentable* findFermentableByName(QString name);
-   Hop* findHopByName(QString name);
-   Mash* findMashByName(QString name);
-   MashStep* findMashStepByName(QString name);
-   Misc* findMiscByName(QString name);
-   Recipe* findRecipeByName(QString name);
-   Style* findStyleByName(QString name);
-   Water* findWaterByName(QString name);
-   Yeast* findYeastByName(QString name);
-   */
+   // Export to BeerXML =======================================================
+   void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Hop* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Instruction* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Mash* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( MashStep* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Misc* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Recipe* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Style* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Water* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
    //! Get the file where this database was loaded from.
    static QString getDbFileName();
@@ -479,20 +466,6 @@ private:
    
    //! Do an sql delete.
    void sqlDelete( QString const& tableName, QString const& whereClause );
-   
-   // Export to BeerXML.
-   void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Hop* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Instruction* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Mash* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( MashStep* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Misc* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Recipe* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Style* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Water* a, QDomDocument& doc, QDomNode& parent );
-   void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
 };
 
 #endif   /* _DATABASE_H */
