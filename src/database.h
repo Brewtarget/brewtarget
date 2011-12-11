@@ -101,9 +101,9 @@ public:
    //! Get a table view.
    QTableView* createView( DBTable table );
    
-   // Named constructors for new BeerXML stuff.
+   // Named constructors ======================================================
    //! Create new brew note attached to \b parent.
-   BrewNote* newBrewNote(Recipe* parent); // TODO: implement.
+   BrewNote* newBrewNote(Recipe* parent);
    Equipment* newEquipment();
    Fermentable* newFermentable();
    Hop* newHop();
@@ -111,7 +111,7 @@ public:
    Instruction* newInstruction(Recipe* parent);
    Mash* newMash();
    //! Create new mash attached to \b parent.
-   Mash* newMash(Recipe* parent); // TODO: implement.
+   Mash* newMash(Recipe* parent);
    //! Create new mash step attached to \b parent.
    MashStep* newMashStep(Mash* parent);
    Misc* newMisc();
@@ -119,21 +119,23 @@ public:
    Style* newStyle();
    Water* newWater();
    Yeast* newYeast();
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
-   // Named copy constructors.
+   // Named copy constructors==================================================
    //! \returns a copy of the given note.
    BrewNote* newBrewNote(BrewNote* other);
    Equipment* newEquipment(Equipment* other);
    //! \returns a copy of the given recipe.
-   Recipe* newRecipe(Recipe* other); // TODO: implement.
+   Recipe* newRecipe(Recipe* other);
    /*! \returns a copy of the given mash. Displaces the mash currently in the
     * parent recipe unless \b displace is false.
     */
-   Mash* newMash(Mash* other, bool displace = true); // TODO: implement.
-   Fermentable* newFermentable(Fermentable* other); // TODO: implement.
-   Hop* newHop(Hop* other); // TODO: implement.
-   Misc* newMisc(Misc* other); // TODO: implement.
-   Yeast* newYeast(Yeast* other); // TODO: implement.
+   Mash* newMash(Mash* other, bool displace = true);
+   Fermentable* newFermentable(Fermentable* other);
+   Hop* newHop(Hop* other);
+   Misc* newMisc(Misc* other);
+   Yeast* newYeast(Yeast* other);
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
    //! Import ingredients from BeerXML documents.
    void importFromXML(const QString& filename);
@@ -182,7 +184,7 @@ public:
    void removeFromRecipe( Recipe* rec, Yeast* y );
    void removeFromRecipe( Recipe* rec, Water* w );
    void removeFromRecipe( Recipe* rec, Instruction* ins );
-   void removeFromRecipe( Recipe* rec, BrewNote* b ); // TODO: implement
+   void removeFromRecipe( Recipe* rec, BrewNote* b );
    
    //! Remove \b step from \b mash.
    void removeFrom( Mash* mash, MashStep* step );
@@ -247,7 +249,7 @@ public:
    //! Interchange the instruction orders. Must be in same recipe.
    void swapInstructionOrder(Instruction* in1, Instruction* in2);
    //! Insert an instruction (already in a recipe) into position \b pos.
-   void insertInstruction(Instruction* in, int pos); // TODO: implement.
+   void insertInstruction(Instruction* in, int pos);
    
    Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false );
@@ -261,6 +263,7 @@ public:
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
    
+   // Returns non-deleted BeerXMLElements.
    QList<BrewNote*>& brewNotes();
    QList<Equipment*>& equipments();
    QList<Fermentable*>& fermentables();
@@ -464,12 +467,18 @@ private:
    
    /*!
     * Create a deep copy of the \b object.
-    * \returns a record to the new copy.
+    * \returns a record to the new copy. You must manually emit the changed()
+    * signal after a copy() call. Also, does not insert things magically into
+    * allHop or allInstructions etc. hashes. This just simply duplicates a
+    * row in a table.
     */
-   QSqlRecord copy( BeerXMLElement* object );
+   QSqlRecord copy( BeerXMLElement const* object );
    
    //! Do an sql update.
-   void sqlUpdate( QString tableName, QString setClause, QString whereClause );
+   void sqlUpdate( QString const& tableName, QString const& setClause, QString const& whereClause );
+   
+   //! Do an sql delete.
+   void sqlDelete( QString const& tableName, QString const& whereClause );
    
    // Export to BeerXML.
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );

@@ -185,9 +185,9 @@ public:
    //! \returns the BeerXML version of this element.
    int version();
    //! Convenience method to get a meta property by name.
-   QMetaProperty metaProperty(const char* name);
+   QMetaProperty metaProperty(const char* name) const;
    //! Convenience method to get a meta property by name.
-   QMetaProperty metaProperty(QString const& name);
+   QMetaProperty metaProperty(QString const& name) const;
    
    // Move this to Database to convert to/from XML from/to SQLite tables.
    /*

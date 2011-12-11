@@ -38,12 +38,12 @@ Database::DBTable BeerXMLElement::table(){ return _table; }
 
 int BeerXMLElement::version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
 
-QMetaProperty BeerXMLElement::metaProperty(const char* name)
+QMetaProperty BeerXMLElement::metaProperty(const char* name) const
 {
    return metaObject()->property(metaObject()->indexOfProperty(name));
 }
 
-QMetaProperty BeerXMLElement::metaProperty(QString const& name)
+QMetaProperty BeerXMLElement::metaProperty(QString const& name) const
 {
    return metaObject()->property(metaObject()->indexOfProperty(name.toStdString().c_str()));
 }
