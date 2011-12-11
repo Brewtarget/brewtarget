@@ -36,8 +36,6 @@ class Water : public BeerXMLElement
 public:
 
    virtual ~Water() {}
-
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ );
    Q_PROPERTY( double amount_l READ amount_l WRITE setAmount_l NOTIFY changed /*changedAmount_l*/ );

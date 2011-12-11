@@ -869,6 +869,8 @@ void MainWindow::addYeastToRecipe(Yeast* yeast)
 
 void MainWindow::exportRecipe()
 {
+   // TODO: put XML-exporting junk in Database and call it here.
+   /*
    QFile* outFile;
    QDomDocument doc;
 
@@ -897,6 +899,7 @@ void MainWindow::exportRecipe()
    out << doc.toString();
    
    outFile->close();
+   */
 }
 
 Recipe* MainWindow::currentRecipe()
@@ -1726,6 +1729,8 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 
 void MainWindow::exportSelected()
 {
+   // TODO: implement XML-exporting shit in Database and call it here.
+   /*
    BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
    QModelIndexList selected;
    QDomDocument doc;
@@ -1795,6 +1800,7 @@ void MainWindow::exportSelected()
    out << doc.toString();
    
    outFile->close();
+   */
 }
 
 void MainWindow::mergeDatabases()

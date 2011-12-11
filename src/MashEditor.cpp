@@ -88,6 +88,12 @@ void MashEditor::setMash(Mash* mash)
    }
 }
 
+void MashEditor::changed(QMetaProperty prop, QVariant /*val*/)
+{
+   if( sender() == mashObs )
+      showChanges(&prop);
+}
+
 void MashEditor::showChanges(QMetaProperty* prop)
 {
    bool updateAll = false;

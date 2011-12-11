@@ -37,9 +37,6 @@ public:
 
    virtual ~Equipment() {}
    
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   
    Q_PROPERTY( QString name                 READ name                  WRITE setName                  NOTIFY changedName )
    Q_PROPERTY( double boilSize_l            READ boilSize_l            WRITE setBoilSize_l            NOTIFY changedBoilSize_l )
    Q_PROPERTY( double batchSize_l           READ batchSize_l           WRITE setBatchSize_l           NOTIFY changedBatchSize_l )

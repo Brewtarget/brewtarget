@@ -1070,3 +1070,9 @@ QString Brewtarget::displayColor( double srm, bool showUnits )
 
    return ret;
 }
+
+QString Brewtarget::displayDate( QDate const& date )
+{
+   QLocale loc(QLocale::system().name());
+   return date.toString(loc.dateFormat(QLocale::ShortFormat));
+}

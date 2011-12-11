@@ -38,8 +38,6 @@ public:
    enum Use{ USEBOIL, USEMASH, USEPRIMARY, USESECONDARY, USEBOTTLING };
 
    virtual ~Misc() {}
-
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
    Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )

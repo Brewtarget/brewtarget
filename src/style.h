@@ -39,8 +39,6 @@ public:
    virtual ~Style() {}
 
    enum Type { TYPELAGER=0, TYPEALE, TYPEMEAD, TYPEWHEAT, TYPEMIXED, TYPECIDER, NUMTYPES };
-
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
    Q_PROPERTY( QString category READ category WRITE setCategory NOTIFY changed /*changedCategory*/ )

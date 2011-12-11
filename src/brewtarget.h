@@ -69,7 +69,7 @@ public:
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3 );
    //! Display date correctly depending on locale.
-   static QString displayDate( QDate const& date ); // TODO: implement.
+   static QString displayDate( QDate const& date );
    //! Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg, bool showUnits=true );
    //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.

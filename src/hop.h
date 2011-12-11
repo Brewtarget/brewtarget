@@ -42,8 +42,6 @@ public:
    enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
 
    virtual ~Hop() {}
-
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
    Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct NOTIFY changed /*changedAlpha_pct*/ )

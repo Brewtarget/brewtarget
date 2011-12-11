@@ -148,6 +148,11 @@ void Instruction::setInterval(double time)
    set("interval", "interval", time);
 }
 
+void Instruction::addReagent(const QString& reagent)
+{
+   _reagents.append(reagent);
+}
+
 // Accessors ==================================================================
 
 QString Instruction::name()

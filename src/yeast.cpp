@@ -39,8 +39,8 @@ bool operator==(Yeast &y1, Yeast &y2)
 
 //============================CONSTRUCTORS======================================
 Yeast::Yeast()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
 Yeast::Yeast(Yeast const& other) : BeerXMLElement(other)

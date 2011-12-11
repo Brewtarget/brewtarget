@@ -40,8 +40,6 @@ public:
    enum Flocculation {FLOCLOW, FLOCMEDIUM, FLOCHIGH, FLOCVERY_HIGH};
 
    virtual ~Yeast() {}
-
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ );
    Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ );
@@ -137,7 +135,7 @@ private:
    bool isValidType(const QString& str) const;
    bool isValidForm(const QString& str) const;
    bool isValidFlocculation(const QString& str) const;
-   void setDefaults();
+   //void setDefaults();
 };
 
 inline bool YeastPtrLt( Yeast* lhs, Yeast* rhs)
