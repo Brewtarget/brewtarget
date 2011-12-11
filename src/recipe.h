@@ -279,8 +279,8 @@ public:
    // Other junk.
    QVector<PreInstruction> mashInstructions(double timeRemaining, double totalWaterAdded_l, unsigned int size);
    QVector<PreInstruction> mashSteps();
-   QVector<PreInstruction> hopSteps(Hop::Use type = Hop::USEBOIL);
-   QVector<PreInstruction> miscSteps(Misc::Use type = Misc::USEBOIL);
+   QVector<PreInstruction> hopSteps(Hop::Use type = Hop::Boil);
+   QVector<PreInstruction> miscSteps(Misc::Use type = Misc::Boil);
    PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
 

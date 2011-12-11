@@ -35,9 +35,12 @@ class Yeast : public BeerXMLElement
    
    friend class Database;
 public:
-   enum Type {TYPEALE, TYPELAGER, TYPEWHEAT, TYPEWINE, TYPECHAMPAGNE};
-   enum Form {FORMLIQUID, FORMDRY, FORMSLANT, FORMCULTURE};
-   enum Flocculation {FLOCLOW, FLOCMEDIUM, FLOCHIGH, FLOCVERY_HIGH};
+   //enum Type {TYPEALE, TYPELAGER, TYPEWHEAT, TYPEWINE, TYPECHAMPAGNE};
+   enum Type {Ale, Lager, Wheat, Wine, Champagne};
+   //enum Form {FORMLIQUID, FORMDRY, FORMSLANT, FORMCULTURE};
+   enum Form {Liquid, Dry, Slant, Culture};
+   //enum Flocculation {FLOCLOW, FLOCMEDIUM, FLOCHIGH, FLOCVERY_HIGH};
+   enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
    Q_ENUMS( Type Form Flocculation )
    
    virtual ~Yeast() {}

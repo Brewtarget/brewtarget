@@ -37,9 +37,12 @@ class Hop : public BeerXMLElement
    friend class Database;
 public:
 
-   enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
-   enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
-   enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
+   //enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
+   enum Type {Bittering, Aroma, Both};
+   //enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
+   enum Form {Leaf, Pellet, Plug};
+   //enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
+   enum Use {Boil, Dry_Hop, Mash, First_Wort, UseAroma}; // NOTE: way bad. We have a duplicate enum (Aroma), and BeerXML expects a space for "Dry Hop" and "First Wort". Damn. Damn damn.
    Q_ENUMS( Type Form Use )
    
    virtual ~Hop() {}

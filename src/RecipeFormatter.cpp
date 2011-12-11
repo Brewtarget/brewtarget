@@ -310,12 +310,12 @@ QString RecipeFormatter::getTextFormat()
          MashStep* s = mashSteps[i];
          names.append(s->name());
          types.append(s->typeStringTr());
-         if( s->type() == MashStep::TYPEINFUSION )
+         if( s->type() == MashStep::Infusion )
          {
             amounts.append( Brewtarget::displayAmount( s->infuseAmount_l(), Units::liters ) );
             temps.append( Brewtarget::displayAmount( s->infuseTemp_c(), Units::celsius ) );
          }
-         else if( s->type() == MashStep::TYPEDECOCTION )
+         else if( s->type() == MashStep::Decoction )
          {
             amounts.append( Brewtarget::displayAmount( s->decoctionAmount_l(), Units::liters ) );
             temps.append("---");
@@ -762,12 +762,12 @@ QString RecipeFormatter::buildMashTable()
              .arg(ms->name())
              .arg(ms->typeStringTr());
 
-      if( ms->type() == MashStep::TYPEINFUSION )
+      if( ms->type() == MashStep::Infusion )
       {
          tmp = tmp.arg(Brewtarget::displayAmount(ms->infuseAmount_l(), Units::liters))
                .arg(Brewtarget::displayAmount(ms->infuseTemp_c(), Units::celsius));
       }
-      else if( ms->type() == MashStep::TYPEDECOCTION )
+      else if( ms->type() == MashStep::Decoction )
       {
          tmp = tmp.arg( Brewtarget::displayAmount( ms->decoctionAmount_l(), Units::liters ) )
                .arg("---");

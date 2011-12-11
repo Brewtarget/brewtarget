@@ -236,7 +236,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
             return QVariant( row->isMashed() ? Qt::Checked : Qt::Unchecked);
          else if( role == Qt::DisplayRole )
          {
-            if( row->type() == Fermentable::TYPEGRAIN )
+            if( row->type() == Fermentable::Grain)
                return row->isMashed() ? tr("Mashed") : tr("Steeped");
             else
                return row->isMashed() ? tr("Mashed") : tr("Not mashed");

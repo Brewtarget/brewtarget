@@ -36,7 +36,8 @@ class Fermentable : public BeerXMLElement
    friend class Database;
 public:
 
-   enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
+   //enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
+   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
    Q_ENUMS( TYPE )
    
    virtual ~Fermentable() {}

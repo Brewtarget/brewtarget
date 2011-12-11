@@ -145,7 +145,7 @@ void MashDesigner::saveStep()
    mashStep->setStepTemp_c( Brewtarget::tempQStringToSI(lineEdit_temp->text()) );
    mashStep->setStepTime_min( Brewtarget::timeQStringToSI(lineEdit_time->text()) );
 
-   if( type == MashStep::TYPEINFUSION )
+   if( type == MashStep::Infusion)
    {
       mashStep->setInfuseAmount_l( getSelectedAmount_l() );
       mashStep->setInfuseTemp_c( getSelectedTemp_c() );
@@ -330,7 +330,7 @@ void MashDesigner::updateFullness()
 
    double vol_l;
    if( ! isBatchSparge() )
-      vol_l = mashVolume_l() + ( (type==MashStep::TYPEINFUSION) ? getSelectedAmount_l() : 0);
+      vol_l = mashVolume_l() + ( (type==MashStep::Infusion) ? getSelectedAmount_l() : 0);
    else
       vol_l = grainVolume_l() + getSelectedAmount_l();
    double ratio = vol_l / equip->tunVolume_l();
@@ -341,7 +341,7 @@ void MashDesigner::updateFullness()
 
    progressBar_fullness->setValue(ratio*progressBar_fullness->maximum());
    label_mashVol->setText(Brewtarget::displayAmount(vol_l, Units::liters));
-   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + ((type==MashStep::TYPEINFUSION) ? getSelectedAmount_l() : 0) )/grain_kg ));
+   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + ((type==MashStep::Infusion) ? getSelectedAmount_l() : 0) )/grain_kg ));
 }
 
 void MashDesigner::updateCollectedWort()
@@ -405,7 +405,7 @@ void MashDesigner::updateTempSlider()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->type() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double temp = tempFromVolume_c( getSelectedAmount_l() );
 
@@ -415,7 +415,7 @@ void MashDesigner::updateTempSlider()
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( mashStep->type() == MashStep::TYPEDECOCTION )
+   else if( mashStep->type() == MashStep::Decoction )
    {
       horizontalSlider_temp->setValue(horizontalSlider_temp->maximum());
    }
@@ -428,7 +428,7 @@ void MashDesigner::updateAmtSlider()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->type() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double vol = volFromTemp_l( getSelectedTemp_c() );
       double ratio = (vol - minAmt_l()) / (maxAmt_l() - minAmt_l());
@@ -446,7 +446,7 @@ void MashDesigner::updateAmt()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->type() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double vol = horizontalSlider_amount->value() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
 
@@ -455,7 +455,7 @@ void MashDesigner::updateAmt()
       if( mashStep != 0 )
          mashStep->setInfuseAmount_l( vol );
    }
-   else if( mashStep->type() == MashStep::TYPEDECOCTION )
+   else if( mashStep->type() == MashStep::Decoction )
       label_amt->setText(Brewtarget::displayAmount(mashStep->decoctionAmount_l(), Units::liters));
    else
       label_amt->setText(Brewtarget::displayAmount(0, Units::liters));
@@ -466,7 +466,7 @@ void MashDesigner::updateTemp()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->type() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double temp = horizontalSlider_temp->value() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
 
@@ -475,7 +475,7 @@ void MashDesigner::updateTemp()
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( mashStep->type() == MashStep::TYPEDECOCTION )
+   else if( mashStep->type() == MashStep::Decoction )
       label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
    else
       label_temp->setText(Brewtarget::displayAmount( mashStep->stepTemp_c(), Units::celsius));
@@ -552,12 +552,12 @@ void MashDesigner::typeChanged(int t)
    if( mashStep != 0 )
       mashStep->setType(type);
 
-   if( type == MashStep::TYPEINFUSION )
+   if( type == MashStep::Infusion )
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
    }
-   else if( type == MashStep::TYPEDECOCTION )
+   else if( type == MashStep::Decoction )
    {
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);
@@ -570,7 +570,7 @@ void MashDesigner::typeChanged(int t)
       updateTempSlider();
       updateTemp();
    }
-   else if( type == MashStep::TYPETEMPERATURE )
+   else if( type == MashStep::Temperature )
    {
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);

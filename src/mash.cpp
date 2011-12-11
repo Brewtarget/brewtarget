@@ -308,7 +308,7 @@ double Mash::totalMashWater_l()
    {
       step = steps[i];
       
-      if( step->type() == MashStep::TYPEINFUSION )
+      if( step->type() == MashStep::Infusion )
       waterAdded_l += step->infuseAmount_l();
    }
    

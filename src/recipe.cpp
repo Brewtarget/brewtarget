@@ -553,7 +553,7 @@ Instruction* Recipe::mashWaterIns(unsigned int size)
    for( i = 0; i < size; ++i )
    {
       mstep = msteps[i];
-      if( mstep->type() != MashStep::TYPEINFUSION )
+      if( mstep->type() != MashStep::Infusion )
          continue;
 
       tmp = tr("%1 water to %2, ")
@@ -583,7 +583,7 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
    {
       mstep = msteps[i];
 
-      if( mstep->type() == MashStep::TYPEINFUSION)
+      if( mstep->type() == MashStep::Infusion )
       {
          str = tr("Add %1 water at %2 to mash to bring it to %3.")
                .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), Units::liters))
@@ -591,11 +591,11 @@ QVector<PreInstruction> Recipe::mashInstructions(double timeRemaining, double to
                .arg(Brewtarget::displayAmount(mstep->stepTemp_c(), Units::celsius));
          totalWaterAdded_l += mstep->infuseAmount_l();
       }
-      else if( mstep->type() == MashStep::TYPETEMPERATURE )
+      else if( mstep->type() == MashStep::Temperature )
       {
          str = tr("Heat mash to %1.").arg(Brewtarget::displayAmount(mstep->stepTemp_c(), Units::celsius));
       }
-      else if( mstep->type() == MashStep::TYPEDECOCTION )
+      else if( mstep->type() == MashStep::Decoction )
       {
          str = tr("Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.")
                .arg(Brewtarget::displayAmount(mstep->decoctionAmount_l(), Units::liters))
@@ -626,15 +626,15 @@ QVector<PreInstruction> Recipe::hopSteps(Hop::Use type)
       Hop* hop = hlist[i];
       if( hop->use() == type )
       {
-         if( type == Hop::USEBOIL )
+         if( type == Hop::Boil )
             str = tr("Put %1 %2 into boil for %3.");
-         else if( type == Hop::USEDRY_HOP )
+         else if( type == Hop::Dry_Hop )
             str = tr("Put %1 %2 into fermenter for %3.");
-         else if( type == Hop::USEFIRST_WORT )
+         else if( type == Hop::First_Wort )
             str = tr("Put %1 %2 into first wort for %3.");
-         else if( type == Hop::USEMASH )
+         else if( type == Hop::Mash )
             str = tr("Put %1 %2 into mash for %3.");
-         else if( type == Hop::USEAROMA )
+         else if( type == Hop::UseAroma )
             str = tr("Steep %1 %2 in wort for %3.");
          else
          {
@@ -666,15 +666,15 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
       Misc* misc = mlist[i];
       if( misc->use() == type )
       {
-         if( type == Misc::USEBOIL )
+         if( type == Misc::Boil )
             str = tr("Put %1 %2 into boil for %3.");
-         else if( type == Misc::USEBOTTLING )
+         else if( type == Misc::Bottling )
             str = tr("Use %1 %2 at bottling for %3.");
-         else if( type == Misc::USEMASH )
+         else if( type == Misc::Mash )
             str = tr("Put %1 %2 into mash for %3.");
-         else if( type == Misc::USEPRIMARY )
+         else if( type == Misc::Primary )
             str = tr("Put %1 %2 into primary for %3.");
-         else if( type == Misc::USESECONDARY )
+         else if( type == Misc::Secondary )
             str = tr("Put %1 %2 into secondary for %3.");
          else
          {
@@ -706,7 +706,7 @@ Instruction* Recipe::firstWortHopsIns()
    for( i = 0; static_cast<int>(i) < size; ++i )
    {
      Hop* hop = hlist[i];
-     if( hop->use() == Hop::USEFIRST_WORT )
+     if( hop->use() == Hop::First_Wort )
      {
        tmp = QString("%1 %2,")
             .arg(Brewtarget::displayAmount(hop->amount_kg(), Units::kilograms))
@@ -919,10 +919,10 @@ void Recipe::generateInstructions()
      preinstructions = mashInstructions(timeRemaining, totalWaterAdded_l, size);
 
       /*** Hops mash additions ***/
-     preinstructions += hopSteps(Hop::USEMASH);
+     preinstructions += hopSteps(Hop::Mash);
 
       /*** Misc mash additions ***/
-     preinstructions += miscSteps(Misc::USEMASH);
+     preinstructions += miscSteps(Misc::Mash);
 
      /*** Add the preinstructions into the instructions ***/
      addPreinstructions(preinstructions);
@@ -959,10 +959,10 @@ void Recipe::generateInstructions()
       preinstructions.push_back(boilFermentablesPre(timeRemaining));
    
    /*** Boiled hops ***/
-   preinstructions += hopSteps(Hop::USEBOIL);
+   preinstructions += hopSteps(Hop::Boil);
 
    /*** Boiled miscs ***/
-   preinstructions += miscSteps(Misc::USEBOIL);
+   preinstructions += miscSteps(Misc::Boil);
 
    // END boil instructions.
 
@@ -976,7 +976,7 @@ void Recipe::generateInstructions()
 
    // Steeped aroma hops
    preinstructions.clear();
-   preinstructions += hopSteps(Hop::USEAROMA);
+   preinstructions += hopSteps(Hop::UseAroma);
    addPreinstructions(preinstructions);
    
    // Fermentation instructions
@@ -1004,7 +1004,7 @@ void Recipe::generateInstructions()
    /*** End primary yeast ***/
 
    /*** Primary misc ***/
-   addPreinstructions(miscSteps(Misc::USEPRIMARY));
+   addPreinstructions(miscSteps(Misc::Primary));
 
    str = tr("Let ferment until FG is %1.")
          .arg(Brewtarget::displayAmount(fg()));
@@ -1018,10 +1018,10 @@ void Recipe::generateInstructions()
    ins->setDirections(str);
 
    /*** Secondary misc ***/
-   addPreinstructions(miscSteps(Misc::USESECONDARY));
+   addPreinstructions(miscSteps(Misc::Secondary));
 
    /*** Dry hopping ***/
-   addPreinstructions(hopSteps(Hop::USEDRY_HOP));
+   addPreinstructions(hopSteps(Hop::Dry_Hop));
 
    // END fermentation instructions
    //emit changed(metaObject()->property(metaObject->indexOfProperty("instructions")), instructions());
@@ -1043,7 +1043,7 @@ QString Recipe::nextAddToBoil(double& time)
    for( i = 0; i < size; ++i )
    {
       h = hhops[i];
-      if( h->use() != Hop::USEBOIL )
+      if( h->use() != Hop::Boil )
          continue;
       if( h->time_min() < time && h->time_min() > max )
       {
@@ -1062,7 +1062,7 @@ QString Recipe::nextAddToBoil(double& time)
    for( i = 0; i < size; ++i )
    {
       m = mmiscs[i];
-      if( m->use() != Misc::USEBOIL )
+      if( m->use() != Misc::Boil )
          continue;
       if( m->time() < time && m->time() > max )
       {
@@ -1756,7 +1756,7 @@ void Recipe::recalcPoints(double volume)
 
       // If we have some sort of non-grain, we have to ignore efficiency.
       type = ferm->type();
-      if( type==Fermentable::TYPESUGAR || type==Fermentable::TYPEEXTRACT || type==Fermentable::TYPEDRY_EXTRACT )
+      if( type==Fermentable::Sugar|| type==Fermentable::Extract || type==Fermentable::Dry_Extract )
          sugar_kg_ignoreEfficiency += (ferm->yield_pct()/100.0)*ferm->amount_kg();
       else
          sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
@@ -1826,7 +1826,7 @@ void Recipe::recalcBoilGrav()
 
       // If we have some sort of non-grain, we have to ignore efficiency.
       type = ferm->type();
-      if( type==Fermentable::TYPESUGAR || type==Fermentable::TYPEEXTRACT || type==Fermentable::TYPEDRY_EXTRACT )
+      if( type==Fermentable::Sugar || type==Fermentable::Extract || type==Fermentable::Dry_Extract )
          sugar_kg_ignoreEfficiency += (ferm->yield_pct()/100.0)*ferm->amount_kg();
       else
          sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
@@ -1947,7 +1947,7 @@ void Recipe::recalcGrainsInMash_kg()
    {
       ferm = ferms[i];
       
-      if( ferm->type() == Fermentable::TYPEGRAIN && ferm->isMashed() )
+      if( ferm->type() == Fermentable::Grain && ferm->isMashed() )
          ret += ferm->amount_kg();
    }
    
@@ -2065,7 +2065,7 @@ void Recipe::recalcOgFg()
 
       // If we have some sort of non-grain, we have to ignore efficiency.
       fermtype = ferm->type();
-      if( fermtype==Fermentable::TYPESUGAR || fermtype==Fermentable::TYPEEXTRACT || fermtype==Fermentable::TYPEDRY_EXTRACT )
+      if( fermtype==Fermentable::Sugar|| fermtype==Fermentable::Extract || fermtype==Fermentable::Dry_Extract )
          sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
       else
          sugar_kg += ferm->equivSucrose_kg();
@@ -2152,15 +2152,15 @@ double Recipe::ibuFromHop(Hop const* hop)
    
    avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
    
-   if( hop->use() == Hop::USEBOIL)
+   if( hop->use() == Hop::Boil)
       ibus = IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, minutes );
-   else if( hop->use() == Hop::USEFIRST_WORT )
+   else if( hop->use() == Hop::First_Wort )
       ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
 
    // Adjust for hop form.
-   if( hop->form() == Hop::FORMLEAF )
+   if( hop->form() == Hop::Leaf )
       ibus *= 0.90;
-   else if( hop->form() == Hop::FORMPLUG )
+   else if( hop->form() == Hop::Plug )
       ibus *= 0.92;
    
    return ibus;

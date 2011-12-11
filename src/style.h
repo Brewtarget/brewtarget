@@ -38,7 +38,8 @@ public:
 
    virtual ~Style() {}
 
-   enum Type { TYPELAGER=0, TYPEALE, TYPEMEAD, TYPEWHEAT, TYPEMIXED, TYPECIDER, NUMTYPES };
+   //enum Type { TYPELAGER=0, TYPEALE, TYPEMEAD, TYPEWHEAT, TYPEMIXED, TYPECIDER, NUMTYPES };
+   enum Type {Lager, Ale, Mead, Wheat, Mixed, Cider};
    Q_ENUMS( Type )
    
    Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )

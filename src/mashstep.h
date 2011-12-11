@@ -36,7 +36,8 @@ class MashStep : public BeerXMLElement
    friend class Database;
 public:
 
-   enum Type {TYPEINFUSION, TYPETEMPERATURE, TYPEDECOCTION};
+   //enum Type {TYPEINFUSION, TYPETEMPERATURE, TYPEDECOCTION};
+   enum Type { Infusion, Temperature, Decoction };
    Q_ENUMS( Type )
    
    virtual ~MashStep() {}

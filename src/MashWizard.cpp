@@ -131,7 +131,7 @@ void MashWizard::wizardry()
    }
    
    // Ensure first mash step is an infusion.
-   if( mashStep->type() != MashStep::TYPEINFUSION )
+   if( mashStep->type() != MashStep::Infusion )
    {
       QMessageBox::information(this, tr("First step"), tr("Your first mash step must be an infusion."));
       return;
@@ -183,9 +183,9 @@ void MashWizard::wizardry()
    {
       mashStep = steps[i];
 
-      if( mashStep->type() == MashStep::TYPETEMPERATURE)
+      if( mashStep->type() == MashStep::Temperature )
          continue;
-      else if( mashStep->type() == MashStep::TYPEDECOCTION )
+      else if( mashStep->type() == MashStep::Decoction )
       {
          //QMessageBox::warning(this, tr("Decoction"), tr("Haven't tested decoction calculations yet.\nUse at own risk."));
          double m_w, m_g, m_e, r;
@@ -280,7 +280,7 @@ void MashWizard::wizardry()
                                   tr("In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water."));
 
       mashStep->setName("Final Batch Sparge");
-      mashStep->setType(MashStep::TYPEINFUSION);
+      mashStep->setType(MashStep::Infusion);
       mashStep->setInfuseAmount_l(spargeWater_l);
       mashStep->setInfuseTemp_c(tw);
       mashStep->setEndTemp_c(tw);
