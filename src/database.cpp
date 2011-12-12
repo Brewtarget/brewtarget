@@ -68,12 +68,30 @@ Database::Database()
 void Database::load()
 {
    bool dbIsOpen;
+   bool createFromScratch = false;
    
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
    dbFile.setFileName(dbFileName);
    dataDbFileName = (Brewtarget::getDataDir() + "database.sqlite");
    dataDbFile.setFileName(dataDbFileName);
+   
+   // If there's no dbFile, try to copy from dataDbFile.
+   if( !dbFile.exists() )
+   {
+      // If there's no dataDbFile, create dbFile from scratch.
+      if( !dataDbFile.exists() )
+      {
+         createFromScratch = true;
+         // Right now, just create the file.
+         dbFile.open( QIODevice::ReadWrite );
+         dbFile.close();
+      }
+      else
+      {
+         dataDbFile.copy(dbFileName);
+      }
+   }
    
    // Open SQLite db.
    // http://www.developer.nokia.com/Community/Wiki/CS001504_-_Creating_an_SQLite_database_in_Qt
@@ -86,6 +104,18 @@ void Database::load()
       Brewtarget::logE(QString("Could not open %1 for reading.").arg(dbFileName));
       // TODO: if we can't open the database, what should we do?
       return;
+   }
+   
+   // If we need to create from scratch, execute all the SQL commands necessary to do so.
+   if( createFromScratch )
+   {
+      QFile createDbFile;
+      createDbFile.setFileName(":/create_db.sql");
+      createDbFile.open( QIODevice::ReadOnly );
+      QString commands(createDbFile.readAll());
+      createDbFile.close();
+      
+      QSqlQuery( commands, sqldb );
    }
    
    // See if there are new ingredients that we need to merge from the data-space db.
@@ -1357,104 +1387,75 @@ QList<Yeast*>& Database::yeasts()
 
 void Database::importFromXML(const QString& filename)
 {
-   // TODO: implement.
-   // NOTE: grab code from the old fromXML() methods and put it into this class.
-   // NOTE: code from MainWindow follows.
-   /*
-      unsigned int count;
-      int line, col;
-      QDomDocument xmlDoc;
-      QDomElement root;
-      QDomNodeList list;
-      QString err;
-      QFile inFile;
-      QStringList tags << "EQUIPMENT" << "HOP" << "MISC" << "YEAST";
-      inFile.setFileName(filename);
-      if( ! inFile.open(QIODevice::ReadOnly) )
+   unsigned int count;
+   int line, col;
+   QDomDocument xmlDoc;
+   QDomElement root;
+   QDomNodeList list;
+   QString err;
+   QFile inFile;
+   QStringList tags = QStringList() << "EQUIPMENT" << "HOP" << "MISC" << "YEAST";
+   inFile.setFileName(filename);
+   
+   if( ! inFile.open(QIODevice::ReadOnly) )
+   {
+      Brewtarget::logW(QString("Database::importFromXML: Could not open %1 for reading.").arg(filename));
+      return;
+   }
+
+   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
+      Brewtarget::logW(QString("Database::importFromXML: Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
+
+   list = xmlDoc.elementsByTagName("RECIPE");
+   if ( list.count() )
+   {
+      for(int i = 0; i < list.count(); ++i )
       {
-         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::importFiles Could not open %1 for reading.").arg(filename));
-         return;
+         recipeFromXml( list.at(i) );
+         //Recipe* newRec = new Recipe(list.at(i));
+         //
+         //if(verifyImport("recipe",newRec->getName()))
+         //   db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
       }
-
-      if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::importFiles Bad document formatting in %1 %2:%3. %4").arg(filename).arg(line).arg(col).arg(err) );
-
-      list = xmlDoc.elementsByTagName("RECIPE");
-      if ( list.count() )
+   }
+   else
+   {
+      foreach (QString tag, tags)
       {
-         for(int i = 0; i < list.count(); ++i )
-         {
-            // TODO: figure out best way to deep-copy recipes.
-            Recipe* newRec = new Recipe(list.at(i));
+         list = xmlDoc.elementsByTagName(tag);
+         count = list.size();
 
-            if(verifyImport("recipe",newRec->getName()))
-               db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
-         }
-      }
-      else
-      {
-         foreach (QString tag, tags)
+         if ( count > 0 ) 
          {
-            list = xmlDoc.elementsByTagName(tag);
-            count = list.size();
+            // Tell how many there were in the status bar.
+            //statusBar()->showMessage( tr("Found %1 %2.").arg(count).arg(tag.toLower()), 5000 );
 
-            if ( count > 0 ) 
+            if (tag == "RECIPE")
             {
-               // Tell how many there were in the status bar.
-               statusBar()->showMessage( tr("Found %1 %2.").arg(count).arg(tag.toLower()), 5000 );
-
-               if (tag == "RECIPE")
-               {
-               }
-               else if ( tag == "EQUIPMENT" )
-               {
-                  for(int i = 0; i < list.count(); ++i )
-                  {
-                     // TODO: figure out best way to deep-copy ingredients.
-                     Equipment* newEquip = new Equipment(list.at(i));
-
-                     if(verifyImport(tag.toLower(),newEquip->getName()))
-                        db->addEquipment( newEquip, true ); // Copy all subelements of the recipe into the db also.
-                  }
-               }
-               else if (tag == "HOP")
-               {
-                  for(int i = 0; i < list.count(); ++i )
-                  {
-                     // TODO: figure out best way to deep-copy ingredients.
-                     Hop* newHop = new Hop(list.at(i));
-
-                     if(verifyImport(tag.toLower(),newHop->getName()))
-                        db->addHop( newHop, true ); // Copy all subelements of the recipe into the db also.
-                  }
-               }
-               else if (tag == "MISC")
-               {
-                  for(int i = 0; i < list.count(); ++i )
-                  {
-                     // TODO: figure out best way to deep-copy ingredients.
-                     Misc* newMisc = new Misc(list.at(i));
-
-                     if(verifyImport(tag.toLower(),newMisc->getName()))
-                        db->addMisc( newMisc, true ); // Copy all subelements of the recipe into the db also.
-                  }
-               }
-               else if (tag == "YEAST")
-               {
-                  for(int i = 0; i < list.count(); ++i )
-                  {
-                     // TODO: figure out best way to deep-copy ingredients.
-                     Yeast* newYeast = new Yeast(list.at(i));
-
-                     if(verifyImport(tag.toLower(),newYeast->getName()))
-                        db->addYeast( newYeast, true ); // Copy all subelements of the recipe into the db also.
-                  }
-               }
+            }
+            else if ( tag == "EQUIPMENT" )
+            {
+               for(int i = 0; i < list.count(); ++i )
+                  equipmentFromXml( list.at(i) );
+            }
+            else if (tag == "HOP")
+            {
+               for(int i = 0; i < list.count(); ++i )
+                  hopFromXml( list.at(i) );
+            }
+            else if (tag == "MISC")
+            {
+               for(int i = 0; i < list.count(); ++i )
+                  miscFromXml( list.at(i) );
+            }
+            else if (tag == "YEAST")
+            {
+               for(int i = 0; i < list.count(); ++i )
+                  yeastFromXml( list.at(i) );
             }
          }
       }
-      inFile.close();
-   */
+   }
 }
 
 void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )

@@ -22,8 +22,6 @@
 #include "config.h"
 #include "database.h"
 
-void importXml(QString const& xmlFileName);
-
 int main(int argc, char **argv)
 {
    QApplication app(argc, argv);
@@ -37,13 +35,9 @@ int main(int argc, char **argv)
    int i = args.indexOf("--from-xml");
    if( i >= 0 )
    {
-      importXml(args.at(i+1));
+      Database::instance().importFromXML(args.at(i+1));
       return 0;
    }
    
    return Brewtarget::run();
-}
-
-void importXml(QString const& xmlFileName)
-{
 }

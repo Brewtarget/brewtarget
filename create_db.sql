@@ -124,8 +124,8 @@ create table yeast(
    laboratory varchar(32) DEFAULT '',
    product_id varchar(32) DEFAULT '',
    min_temperature real DEFAULT 0.0,
-   max_temperature real 32.0,
-   flocculation varchar(32) 'Medium',
+   max_temperature real DEFAULT 32.0,
+   flocculation varchar(32) DEFAULT 'Medium',
    attenuation real DEFAULT 75.0,
    notes text,
    best_for varchar(256),
@@ -166,25 +166,22 @@ create table mashstep(
    end_temp real DEFAULT 67.0,
    infuse_temp real DEFAULT 67.0,
    decoction_amount real DEFAULT 0.0,
+
+   -- Meta data
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE,
 
-   -- Every mash step must belong to a mash, right?
+   -- Our step number is unique within our parent mash.
    mash_id integer,
-   foreign key(mash_id) references mash(maid),
-
-   -- The order of this step in the mash.
    step_number integer,
-   unique(mash_id,step_number)
+   foreign key(mash_id) references mash(maid),
+   unique( mash_id, step_number )
 );
 
--- since the relationship of recipes to brewnotes is at most one-to-many
--- I am putting the recipes key in here as a foreign key, instead of
--- using another table
 create table brewnote(
    id integer PRIMARY KEY autoincrement,
-   brewDate datetime DEFAULT GETDATE(),
-   fermentDate datetime DEFAULT GETDATE(),
+   brewDate datetime DEFAULT CURRENT_DATETIME,
+   fermentDate datetime DEFAULT CURRENT_DATETIME,
    sg real DEFAULT 1.0,
    volume_into_bk real DEFAULT 0.0,
    strike_temp real DEFAULT 70.0,
@@ -246,14 +243,14 @@ create table instruction(
    timer_value varchar(16) DEFAULT '00:00:00',
    completed boolean DEFAULT FALSE,
    interval real DEFAULT 0.0,
+
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE,
 
    recipe_id integer,
-   foreign key(recipe_id) references recipe(rid),
-
    -- The order of this instruction in the recipe.
    instruction_number integer,
+   foreign key(recipe_id) references recipe(rid),
    unique(recipe_id,instruction_number)
 );
 
@@ -280,7 +277,7 @@ create table recipe(
    tertiary_temp real DEFAULT 20.0,
    age real DEFAULT 0.0,
    age_temp real DEFAULT 20.0,
-   brewdate date  DEFAULT GETDATE(),
+   brewdate date  DEFAULT CURRENT_DATE,
    carb_volume real DEFAULT 0.0,
    forced_carb boolean DEFAULT FALSE,
    priming_sugar_name varchar(128) DEFAULT '',
