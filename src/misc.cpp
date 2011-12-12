@@ -132,7 +132,7 @@ QString Misc::name() const
 
 Misc::Type Misc::type() const
 {
-   return static_cast<Misc::Type>(get( "mtype" ).toInt());
+   return static_cast<Misc::Type>(types.indexOf(get("mtype").toString()));
 }
 
 const QString Misc::typeString() const
@@ -148,7 +148,7 @@ const QString Misc::typeStringTr() const
 
 Misc::Use Misc::use() const
 {
-   return static_cast<Misc::Use>(get( "use" ).toInt());
+   return static_cast<Misc::Use>(uses.indexOf(get("use").toString()));
 }
 
 const QString Misc::useString() const
@@ -195,12 +195,12 @@ void Misc::setName( const QString& var )
 
 void Misc::setType( Type t )
 {
-   set( "type", "mtype", static_cast<int>(t) );
+   set( "type", "mtype", types.at(t) );
 }
 
 void Misc::setUse( Use u )
 {
-   set( "use", "use", static_cast<int>(u) );
+   set( "use", "use", uses.at(u) );
 }
 
 void Misc::setAmount( double var )

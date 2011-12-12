@@ -226,7 +226,7 @@ void Style::setStyleGuide( const QString& var )
 
 void Style::setType( Type t )
 {
-   set( "type", "s_type", static_cast<int>(t) );
+   set( "type", "s_type", types.at(t) );
 }
 
 void Style::setOgMin( double var )
@@ -397,7 +397,7 @@ QString Style::styleGuide() const
 
 const Style::Type Style::type() const
 {
-   return static_cast<Style::Type>(get("s_type").toInt());
+   return static_cast<Style::Type>(types.indexOf(get("s_type").toString()));
 }
 
 const QString Style::typeString() const

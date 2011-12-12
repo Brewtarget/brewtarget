@@ -19,8 +19,6 @@
 #include "database.h"
 
 #include <QList>
-#include <iostream>
-#include <fstream>
 #include <QDomDocument>
 #include <QIODevice>
 #include <QDomNodeList>

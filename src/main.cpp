@@ -16,10 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <QApplication>
+#include <QStringList>
 #include "brewtarget.h"
 #include "config.h"
+#include "database.h"
+
+void importXml(QString const& xmlFileName);
 
 int main(int argc, char **argv)
 {
@@ -29,6 +32,18 @@ int main(int argc, char **argv)
    app.setOrganizationName("Philip G. Lee");
    Brewtarget::setApp(app);
 
+   // TODO: make a command-line parser class.
+   QStringList args(app.arguments());
+   int i = args.indexOf("--from-xml");
+   if( i >= 0 )
+   {
+      importXml(args.at(i+1));
+      return 0;
+   }
+   
    return Brewtarget::run();
 }
 
+void importXml(QString const& xmlFileName)
+{
+}

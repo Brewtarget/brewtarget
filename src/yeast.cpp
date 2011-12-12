@@ -80,7 +80,7 @@ QString Yeast::name() const
 
 Yeast::Type Yeast::type() const
 {
-   return static_cast<Yeast::Type>(get("ytype").toInt());
+   return static_cast<Yeast::Type>( types.indexOf(get("ytype").toString()));
 }
 
 const QString Yeast::typeString() const
@@ -100,7 +100,7 @@ const QString Yeast::typeStringTr() const
 
 Yeast::Form Yeast::form() const
 {
-   return static_cast<Yeast::Form>(get("form").toInt());
+   return static_cast<Yeast::Form>( forms.indexOf(get("form").toString()));
 }
 
 const QString Yeast::formString() const
@@ -149,7 +149,7 @@ double Yeast::maxTemperature_c() const
 
 Yeast::Flocculation Yeast::flocculation() const
 {
-   return static_cast<Yeast::Flocculation>(get("flocculation").toInt());
+   return static_cast<Yeast::Flocculation>( flocculations.indexOf(get("flocculation").toString()));
 }
 
 const QString Yeast::flocculationString() const
@@ -204,12 +204,12 @@ void Yeast::setName( const QString& var )
 
 void Yeast::setType( Yeast::Type t )
 {
-   set("type", "ytype", static_cast<int>(t));
+   set("type", "ytype", types.at(t));
 }
 
 void Yeast::setForm( Yeast::Form f )
 {
-   set("form", "form", static_cast<int>(f));
+   set("form", "form", forms.at(f));
 }
 
 void Yeast::setAmount( double var )
@@ -253,7 +253,7 @@ void Yeast::setMaxTemperature_c( double var )
 
 void Yeast::setFlocculation( Yeast::Flocculation f )
 {
-   set("flocculation", "flocculation", static_cast<int>(f));
+   set("flocculation", "flocculation", flocculations.at(f));
 }
 
 void Yeast::setAttenuation_pct( double var )

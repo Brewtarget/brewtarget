@@ -1670,7 +1670,7 @@ double Recipe::ageTemp_c() const
 
 QDate Recipe::date() const
 {
-   return QDate::fromString( get("brew_date").toString(), "yyyy-MM-dd" );
+   return QDate::fromString( get("brew_date").toString(), Qt::ISODate );
 }
 
 double Recipe::carbonation_vols() const
