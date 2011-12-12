@@ -143,6 +143,10 @@ void Database::load()
    tableModel = new QSqlRelationalTableModel( 0, sqldb );
    tables.clear();
    
+   brewnotes_tm = new QSqlRelationalTableModel( 0, sqldb );
+   brewnotes_tm->setTable(tableNames[BREWNOTETABLE]);
+   tables[BREWNOTETABLE] = brewnotes_tm;
+   
    equipments_tm = new QSqlRelationalTableModel( 0, sqldb );
    equipments_tm->setTable(tableNames[EQUIPTABLE]);
    tables[EQUIPTABLE] = equipments_tm;
@@ -2500,7 +2504,7 @@ void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
 }
 
 // fromXml ====================================================================
-void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode, bool showWarnings )
+void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode )
 {
    QDomNode node, child;
    QDomText textNode;
@@ -2560,8 +2564,8 @@ void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& x
       }
       else
       {
-         if( showWarnings )
-            Brewtarget::logW(QString("Database::fromXML: Unsupported property: %1. Line %2").arg(xmlTag).arg(node.lineNumber()) );
+         //if( showWarnings )
+         //   Brewtarget::logW(QString("Database::fromXML: Unsupported property: %1. Line %2").arg(xmlTag).arg(node.lineNumber()) );
       }
    }
 }
@@ -2638,11 +2642,13 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 
 Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent )
 {
+   QDomNode n;
    QHash<QString,QString> propHash;
    Fermentable* ret = newFermentable();
    
    propHash["NAME"] = "name";
-   propHash["TYPE"] = "type";
+   // NOTE: since type is actually stored as a string (not integer), have to handle separately.
+   //propHash["TYPE"] = "type";
    propHash["AMOUNT"] = "amount_kg";
    propHash["YIELD"] = "yield_pct";
    propHash["COLOR"] = "color_srm";
@@ -2658,8 +2664,16 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    propHash["RECOMMEND_MASH"] = "recommendMash";
    propHash["IS_MASHED"] = "isMashed";
    propHash["IBU_GAL_PER_LB"] = "ibuGalPerLb";
-   
    fromXml( ret, propHash, node );
+   
+   // Handle enums separately.
+   n = node.firstChildElement("TYPE");
+   ret->setType( static_cast<Fermentable::Type>(
+                    Fermentable::types.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -2667,17 +2681,18 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
 
 Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 {
+   QDomNode n;
    QHash<QString,QString> propHash;
    Hop* ret = newHop();
    
    propHash["NAME"] = "name";
    propHash["ALPHA"] = "alpha_pct";
    propHash["AMOUNT"] = "amount_kg";
-   propHash["USE"] = "use";
+   //propHash["USE"] = "use";
    propHash["TIME"] = "time_min";
    propHash["NOTES"] = "notes";
-   propHash["TYPE"] = "type";
-   propHash["FORM"] = "form";
+   //propHash["TYPE"] = "type";
+   //propHash["FORM"] = "form";
    propHash["BETA"] = "beta_pct";
    propHash["HSI"] = "hsi_pct";
    propHash["ORIGIN"] = "origin";
@@ -2686,8 +2701,28 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
    propHash["CARYOPHYLLENE"] = "caryophyllene_pct";
    propHash["COHUMULONE"] = "cohumulone_pct";
    propHash["MYRCENE"] = "myrcene_pct";
-   
    fromXml( ret, propHash, node );
+   
+   // Handle enums separately.
+   n = node.firstChildElement("USE");
+   ret->setUse( static_cast<Hop::Use>(
+                   Hop::uses.indexOf(
+                      n.firstChild().toText().nodeValue()
+                   )
+                ) );
+   n = node.firstChildElement("TYPE");
+   ret->setType( static_cast<Hop::Type>(
+                    Hop::types.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   n = node.firstChildElement("FORM");
+   ret->setForm( static_cast<Hop::Form>(
+                    Hop::forms.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -2744,11 +2779,12 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 
 MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 {
+   QDomNode n;
    QHash<QString,QString> propHash;
    MashStep* ret = newMashStep(parent);
    
    propHash["NAME"] = "name";
-   propHash["TYPE"] = "type";
+   //propHash["TYPE"] = "type";
    propHash["INFUSE_AMOUNT"] = "infuseAmount_l";
    propHash["STEP_TEMP"] = "stepTemp_c";
    propHash["STEP_TIME"] = "stepTime_min";
@@ -2756,26 +2792,49 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    propHash["END_TEMP"] = "endTemp_c";
    propHash["INFUSE_TEMP"] = "infuseTemp_c";
    propHash["DECOCTION_AMOUNT"] = "decoctionAmount_l";
-   
    fromXml( ret, propHash, node );
+   
+   // Handle enums separately.
+   n = node.firstChildElement("TYPE");
+   ret->setType( static_cast<MashStep::Type>(
+                    MashStep::types.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   
    return ret;
 }
 
 Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 {
+   QDomNode n;
    QHash<QString,QString> propHash;
    Misc* ret = newMisc();
    
    propHash["NAME"] = "name";
-   propHash["TYPE"] = "type";
-   propHash["USE"] = "use";
+   //propHash["TYPE"] = "type";
+   //propHash["USE"] = "use";
    propHash["TIME"] = "time";
    propHash["AMOUNT"] = "amount";
    propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
    propHash["USE_FOR"] = "useFor";
    propHash["NOTES"] = "notes";
-   
    fromXml( ret, propHash, node );
+   
+   // Handle enums separately.
+   n = node.firstChildElement("TYPE");
+   ret->setType( static_cast<Misc::Type>(
+                    Misc::types.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   n = node.firstChildElement("USE");
+   ret->setUse( static_cast<Misc::Use>(
+                   Misc::uses.indexOf(
+                      n.firstChild().toText().nodeValue()
+                   )
+                ) );
+   
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -2867,6 +2926,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 {
+   QDomNode n;
    QHash<QString,QString> propHash;
    Style* ret = newStyle();
    
@@ -2875,7 +2935,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    propHash["CATEGORY_NUMBER"] = "categoryNumber";
    propHash["STYLE_LETTER"] = "styleLetter";
    propHash["STYLE_GUIDE"] = "styleGuide";
-   propHash["TYPE"] = "type";
+   //propHash["TYPE"] = "type";
    propHash["OG_MIN"] = "ogMin";
    propHash["OG_MAX"] = "ogMax";
    propHash["FG_MIN"] = "fgMin";
@@ -2892,8 +2952,16 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    propHash["PROFILE"] = "profile";
    propHash["INGREDIENTS"] = "ingredients";
    propHash["EXAMPLES"] = "examples";
-   
    fromXml( ret, propHash, node );
+   
+   // Handle enums separately.
+   n = node.firstChildElement("TYPE");
+   ret->setType( static_cast<Style::Type>(
+                    Style::types.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -2923,27 +2991,50 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 
 Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 {
+   QDomNode n;
    QHash<QString,QString> propHash;
    Yeast* ret = newYeast();
    
    propHash["NAME"] = "name";
-   propHash["TYPE"] = "type";
-   propHash["FORM"] = "form";
+   //propHash["TYPE"] = "type";
+   //propHash["FORM"] = "form";
    propHash["AMOUNT"] = "amount";
    propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
    propHash["LABORATORY"] = "laboratory";
    propHash["PRODUCT_ID"] = "productID";
    propHash["MIN_TEMPERATURE"] = "minTemperature_c";
    propHash["MAX_TEMPERATURE"] = "maxTemperature_c";
-   propHash["FLOCCULATION"] = "flocculation";
+   //propHash["FLOCCULATION"] = "flocculation";
    propHash["ATTENUATION"] = "attenuation_pct";
    propHash["NOTES"] = "notes";
    propHash["BEST_FOR"] = "bestFor";
    propHash["TIMES_CULTURED"] = "timesCultured";
    propHash["MAX_REUSE"] = "maxReuse";
    propHash["ADD_TO_SECONDARY"] = "addToSecondary";
-   
    fromXml( ret, propHash, node );
+   
+   // Handle enums separately.
+   n = node.firstChildElement("TYPE");
+   ret->setType( static_cast<Yeast::Type>(
+                    Yeast::types.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   // Handle enums separately.
+   n = node.firstChildElement("FORM");
+   ret->setForm( static_cast<Yeast::Form>(
+                    Yeast::forms.indexOf(
+                       n.firstChild().toText().nodeValue()
+                    )
+                 ) );
+   // Handle enums separately.
+   n = node.firstChildElement("FLOCCULATION");
+   ret->setFlocculation( static_cast<Yeast::Flocculation>(
+                            Yeast::flocculations.indexOf(
+                               n.firstChild().toText().nodeValue()
+                            )
+                         ) );
+   
    if( parent )
       addToRecipe( parent, ret );
    return ret;

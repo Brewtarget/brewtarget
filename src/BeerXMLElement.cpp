@@ -58,7 +58,7 @@ double BeerXMLElement::getDouble(const QDomText& textNode)
 
    ret = text.toDouble(&ok);
    if( !ok )
-      Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a number. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("BeerXMLElement::getDouble: %1 is not a number. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }
@@ -72,7 +72,7 @@ bool BeerXMLElement::getBool(const QDomText& textNode)
    else if( text == "FALSE" )
       return false;
    else
-      Brewtarget::log(Brewtarget::ERROR, QString("%1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("BeerXMLElement::getBool: %1 is not a boolean value. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return false;
 }
@@ -85,7 +85,7 @@ int BeerXMLElement::getInt(const QDomText& textNode)
 
    ret = text.toInt(&ok);
    if( !ok )
-      Brewtarget::log(Brewtarget::ERROR, QString("%1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("BeerXMLElement::getInt: %1 is not an integer. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }
@@ -104,7 +104,7 @@ QDateTime BeerXMLElement::getDateTime( QDomText const& textNode )
    ret = QDateTime::fromString(text, Qt::ISODate);
    ok = ret.isValid();
    if( !ok )
-      Brewtarget::log(Brewtarget::ERROR, QString("%1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("BeerXMLElement::getDateTime: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }

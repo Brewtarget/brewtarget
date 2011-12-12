@@ -413,7 +413,7 @@ private:
     * \param xmlTagsToProperties is a hash from xml tags to meta property names.
     * \param elementNode is the root node of the element we are reading from.
     */
-   void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode, bool showWarnings = true );
+   void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode );
    
    // The connection to the SQLite database.
    QSqlDatabase sqldb;
