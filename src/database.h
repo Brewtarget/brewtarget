@@ -342,6 +342,8 @@ private:
    static QHash<DBTable,QString> tableNamesHash();
    static QHash<QString,DBTable> classNameToTable;
    static QHash<QString,DBTable> classNameToTableHash();
+   static QHash<DBTable,QString> keyNames;
+   static QHash<DBTable,QString> keyNamesHash();
    
    // Keeps all pointers to the elements referenced by key.
    QHash< int, BrewNote* > allBrewNotes;
@@ -371,7 +373,7 @@ private:
       size = tm->rowCount();
       for( i = 0; i < size; ++i )
       {
-         key = tm->record(i).value(keyName(table)).toInt();
+         key = tm->record(i).value(keyNames[table]).toInt();
          
          e = new T();
          et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
@@ -399,7 +401,7 @@ private:
       size = tm->rowCount();
       for( i = 0; i < size; ++i )
       {
-         key = tm->record(i).value(keyName(table)).toInt();
+         key = tm->record(i).value(keyNames[table]).toInt();
          list.append( allElements[key] );
       }
       
@@ -456,9 +458,6 @@ private:
    
    //! Should be called when we are about to close down.
    void unload();
-   
-   //! Return primary key name of \b table.
-   QString keyName( DBTable table );
    
    //! Make a new row in the \b table. Return key of new row.
    int insertNewRecord( DBTable table );
