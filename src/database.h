@@ -71,7 +71,7 @@ class Yeast;
 class Database : public QObject
 {
    Q_OBJECT
-   
+
 public:
    enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
                  MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
@@ -443,7 +443,7 @@ private:
    //! Assignment operator hidden.
    Database& operator=(Database const&){ return *this; }
    //! Destructor hidden.
-   ~Database(){}
+   ~Database();
    
    //! Helper to more easily get QMetaProperties.
    QMetaProperty metaProperty(const char* name)
@@ -453,6 +453,9 @@ private:
    
    //! Load database from file.
    void load();
+   
+   //! Should be called when we are about to close down.
+   void unload();
    
    //! Return primary key name of \b table.
    QString keyName( DBTable table );

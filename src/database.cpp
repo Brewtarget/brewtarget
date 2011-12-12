@@ -65,6 +65,11 @@ Database::Database()
    load();
 }
 
+Database::~Database()
+{
+   unload();
+}
+
 void Database::load()
 {
    bool dbIsOpen;
@@ -115,7 +120,8 @@ void Database::load()
       QString commands(createDbFile.readAll());
       createDbFile.close();
       
-      QSqlQuery( commands, sqldb );
+      foreach( QString command, commands.split(";") )
+         QSqlQuery( command+";", sqldb );
    }
    
    // See if there are new ingredients that we need to merge from the data-space db.
@@ -145,50 +151,62 @@ void Database::load()
    
    brewnotes_tm = new QSqlRelationalTableModel( 0, sqldb );
    brewnotes_tm->setTable(tableNames[BREWNOTETABLE]);
+   brewnotes_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[BREWNOTETABLE] = brewnotes_tm;
    
    equipments_tm = new QSqlRelationalTableModel( 0, sqldb );
    equipments_tm->setTable(tableNames[EQUIPTABLE]);
+   equipments_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[EQUIPTABLE] = equipments_tm;
    
    fermentables_tm = new QSqlRelationalTableModel( 0, sqldb );
    fermentables_tm->setTable(tableNames[FERMTABLE]);
+   fermentables_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[FERMTABLE] = fermentables_tm;
    
    hops_tm = new QSqlRelationalTableModel( 0, sqldb );
    hops_tm->setTable(tableNames[HOPTABLE]);
+   hops_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[HOPTABLE] = hops_tm;
    
    instructions_tm = new QSqlRelationalTableModel( 0, sqldb );
    instructions_tm->setTable(tableNames[INSTRUCTIONTABLE]);
+   instructions_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[INSTRUCTIONTABLE] = instructions_tm;
    
    mashs_tm = new QSqlRelationalTableModel( 0, sqldb );
    mashs_tm->setTable(tableNames[MASHTABLE]);
+   mashs_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[MASHTABLE] = mashs_tm;
    
    mashSteps_tm = new QSqlRelationalTableModel( 0, sqldb );
    mashSteps_tm->setTable(tableNames[MASHSTEPTABLE]);
+   mashSteps_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[MASHSTEPTABLE] = mashSteps_tm;
    
    miscs_tm = new QSqlRelationalTableModel( 0, sqldb );
    miscs_tm->setTable(tableNames[MISCTABLE]);
+   miscs_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[MISCTABLE] = miscs_tm;
    
    recipes_tm = new QSqlRelationalTableModel( 0, sqldb );
    recipes_tm->setTable(tableNames[RECTABLE]);
+   recipes_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[RECTABLE] = recipes_tm;
    
    styles_tm = new QSqlRelationalTableModel( 0, sqldb );
    styles_tm->setTable(tableNames[STYLETABLE]);
+   styles_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[STYLETABLE] = styles_tm;
    
    waters_tm = new QSqlRelationalTableModel( 0, sqldb );
    waters_tm->setTable(tableNames[WATERTABLE]);
+   waters_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[WATERTABLE] = waters_tm;
    
    yeasts_tm = new QSqlRelationalTableModel( 0, sqldb );
    yeasts_tm->setTable(tableNames[YEASTTABLE]);
+   yeasts_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[YEASTTABLE] = yeasts_tm;
    
    // TODO: set relations?
@@ -208,10 +226,15 @@ void Database::load()
    populateElements( allYeasts, yeasts_tm, YEASTTABLE );
 }
 
+void Database::unload()
+{
+   sqldb.close();
+}
+
 Database& Database::instance()
 {
    static Database dbSingleton;
-      return dbSingleton;
+   return dbSingleton;
 }
 
 bool Database::backupToDir(QString dir)

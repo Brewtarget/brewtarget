@@ -44,6 +44,7 @@ void SetterCommand::redo()
    
    // Change the data.
    table->record(0).setValue( col_name, value );
+   table->submitAll();
    
    // Unset the filter.
    table->setFilter(filter);
@@ -66,6 +67,7 @@ void SetterCommand::undo()
    
    // Change the data back
    table->record(0).setValue( col_name, oldValue );
+   table->submitAll();
    
    // Unset the filter.
    table->setFilter(filter);

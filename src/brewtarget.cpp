@@ -548,10 +548,13 @@ int Brewtarget::run()
    checkForNewVersion();
 
    ret = app->exec();
+   
    savePersistentOptions();
+   
    // Close log file.
    if( logFile != 0 && logFile->isOpen() )
       logFile->close();
+   
    return ret;
 }
 
