@@ -32,6 +32,7 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlIndex>
+#include <QSqlError>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -574,10 +575,21 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 int Database::insertNewRecord( DBTable table )
 {
    // TODO: encapsulate this in a QUndoCommand so we can undo it.
-   // TODO: implement default values with QSqlQuery::prepare().
+   /*
    tableModel->setTable(tableNames[table]);
    tableModel->insertRecord(-1,tableModel->record());
    return tableModel->query().lastInsertId().toInt();
+   */
+   
+   QSqlQuery q( QString("INSERT INTO `%1` DEFAULT VALUES")
+                   .arg(tableNames[table]),
+                sqldb );
+   if( q.lastError().isValid() )
+   {
+      Brewtarget::logE( QString("Database::insertNewRecord: %1").arg(q.lastError().text()) );
+   }
+   int key = q.record().value(keyName(table)).toInt();
+   return key;
 }
 
 BrewNote* Database::newBrewNote(BrewNote* other)

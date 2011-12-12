@@ -1,6 +1,6 @@
 create table equipment(
    eid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    boil_size real DEFAULT 0.0,
    batch_size real DEFAULT 0.0,
    tun_volume real DEFAULT 0.0,
@@ -17,7 +17,7 @@ create table equipment(
    hop_utilization real DEFAULT 0.0,
    boiling_point real DEFAULT 0.0,
    absorption real DEFAULT 0.0,
-   notes text,
+   notes text DEFAULT '',
    -- it's metadata all the way down
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE
@@ -25,15 +25,15 @@ create table equipment(
 
 create table fermentable(
    fid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    ftype varchar(32) DEFAULT 'Grain',
    amount real DEFAULT 0.0,
    yield real DEFAULT 0.0,
    color real DEFAULT 0.0,
    add_after_boil boolean DEFAULT FALSE,
-   origin varchar(32),
-   supplier varchar(256),
-   notes text,
+   origin varchar(32) DEFAULT '',
+   supplier varchar(256) DEFAULT '',
+   notes text DEFAULT '',
    coarse_fine_diff real DEFAULT 0.0,
    moisture real DEFAULT 0.0,
    diastatic_power real DEFAULT 0.0,
@@ -49,18 +49,18 @@ create table fermentable(
 
 create table hop(
    hid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    alpha real DEFAULT 0.0,
    amount real DEFAULT 0.0,
    use varchar(32) DEFAULT 'Boil',
    time real DEFAULT 0.0,
-   notes text,
+   notes text DEFAULT '',
    htype varchar(32) DEFAULT 'Both',
    form  varchar(32) DEFAULT 'Pellet',
    beta real DEFAULT 0.0,
    hsi real DEFAULT 0.0,
    origin varchar(32),
-   substitutes text,
+   substitutes text DEFAULT '',
    humulene real DEFAULT 0.0,
    caryophyllene real DEFAULT 0.0,
    cohumulone real DEFAULT 0.0,
@@ -72,14 +72,14 @@ create table hop(
 
 create table misc(
    mid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    mtype varchar(32) DEFAULT 'Other',
    use varchar(32) DEFAULT 'Boil',
    time real DEFAULT 0.0,
    amount real DEFAULT 0.0,
    amount_is_weight boolean DEFAULT TRUE,
-   use_for text,
-   notes text,
+   use_for text DEFAULT '',
+   notes text DEFAULT '',
    -- meta data
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE
@@ -87,7 +87,7 @@ create table misc(
 
 create table style(
    sid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    s_type varchar(64) DEFAULT 'Ale',
    category varchar(256) DEFAULT '',
    category_number varchar(16) DEFAULT '',
@@ -105,10 +105,10 @@ create table style(
    abv_max real DEFAULT 100.0,
    carb_min real DEFAULT 0.0,
    carb_max real DEFAULT 100.0,
-   notes text,
-   profile text,
-   ingredients text,
-   examples text,
+   notes text DEFAULT '',
+   profile text DEFAULT '',
+   ingredients text DEFAULT '',
+   examples text DEFAULT '',
    -- meta data
    deleted boolean DEFAULT FALSE,
    display boolean  DEFAULT TRUE
@@ -116,7 +116,7 @@ create table style(
 
 create table yeast(
    yid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    ytype varchar(32) DEFAULT 'Ale',
    form varchar(32) DEFAULT 'Liquid',
    amount real DEFAULT 0.0,
@@ -127,8 +127,8 @@ create table yeast(
    max_temperature real DEFAULT 32.0,
    flocculation varchar(32) DEFAULT 'Medium',
    attenuation real DEFAULT 75.0,
-   notes text,
-   best_for varchar(256),
+   notes text DEFAULT '',
+   best_for varchar(256) DEFAULT '',
    times_cultured integer DEFAULT 0,
    max_reuse integer DEFAULT 10,
    add_to_secondary boolean DEFAULT FALSE,
@@ -142,9 +142,9 @@ create table yeast(
 -- which is gonna mess my nice primary key ideas up
 create table mash(
    maid integer PRIMARY KEY autoincrement,
-   name varchar(256),
+   name varchar(256) DEFAULT '',
    grain_temp real DEFAULT 20.0,
-   notes text,
+   notes text DEFAULT '',
    tun_temp real DEFAULT 20.0,
    sparge_temp real DEFAULT 74.0,
    ph real DEFAULT 7.0,
@@ -157,7 +157,7 @@ create table mash(
 
 create table mashstep(
    msid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    mstype varchar(32) DEFAULT 'Infusion',
    infuse_amount real DEFAULT 0.0,
    step_temp real DEFAULT 67.0,
@@ -173,7 +173,7 @@ create table mashstep(
 
    -- Our step number is unique within our parent mash.
    mash_id integer,
-   step_number integer,
+   step_number integer autoincrement,
    foreign key(mash_id) references mash(maid),
    unique( mash_id, step_number )
 );
@@ -210,7 +210,7 @@ create table brewnote(
    projected_points real DEFAULT 0.0,
    boil_off real DEFAULT 0.0,
    final_volume real DEFAULT 0.0,
-   notes text,
+   notes text DEFAULT '',
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE,
    recipe_id integer,
@@ -219,7 +219,7 @@ create table brewnote(
 
 create table water(
    wid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    amount real DEFAULT 0.0,
    calcium real DEFAULT 0.0,
    bicarbonate real DEFAULT 0.0,
@@ -228,7 +228,7 @@ create table water(
    sodium real DEFAULT 0.0,
    magnesium real DEFAULT 0.0,
    ph real DEFAULT 7.0,
-   notes text,
+   notes text DEFAULT '',
    -- metadata
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE
@@ -237,8 +237,8 @@ create table water(
 -- instructions are many-to-one for recipes. 
 create table instruction(
    iid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
-   directions text,
+   name varchar(256) not null DEFAULT '',
+   directions text DEFAULT '',
    has_timer boolean DEFAULT FALSE,
    timer_value varchar(16) DEFAULT '00:00:00',
    completed boolean DEFAULT FALSE,
@@ -249,7 +249,7 @@ create table instruction(
 
    recipe_id integer,
    -- The order of this instruction in the recipe.
-   instruction_number integer,
+   instruction_number integer autoincrement,
    foreign key(recipe_id) references recipe(rid),
    unique(recipe_id,instruction_number)
 );
@@ -259,7 +259,7 @@ create table instruction(
 -- instead of using another table
 create table recipe(
    rid integer PRIMARY KEY autoincrement,
-   name varchar(256) not null,
+   name varchar(256) not null DEFAULT '',
    rtype varchar(32) DEFAULT 'All Grain',
    brewer varchar(1024) DEFAULT '',
    assistant_brewer varchar(1024) DEFAULT 'Brewtarget: free beer software',
@@ -284,7 +284,7 @@ create table recipe(
    carb_temp real DEFAULT 20.0,
    priming_sugar_equiv real DEFAULT 1.0,
    keg_priming_factor real DEFAULT 1.0,
-   taste_notes text,
+   taste_notes text DEFAULT '',
    taste_rating real DEFAULT 0.0,
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE,

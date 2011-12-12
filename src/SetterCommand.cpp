@@ -18,6 +18,8 @@
 
 #include <QString>
 #include <QVariant>
+#include <QSqlQuery>
+#include <QSqlError>
 #include "SetterCommand.h"
 
 SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
@@ -32,6 +34,7 @@ SetterCommand::~SetterCommand()
 
 void SetterCommand::redo()
 {
+   /*
    // Get the current filter.
    QString filter = table->filter();
    
@@ -49,6 +52,32 @@ void SetterCommand::redo()
    // Unset the filter.
    table->setFilter(filter);
    table->select();
+   */
+   
+   QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
+                .arg(col_name)
+                .arg(table->tableName())
+                .arg(key_name)
+                .arg(key),
+                table->database() );
+   if( q.next() )
+      oldValue = q.record().value(col_name);
+   if( q.lastError().isValid() )
+   {
+      Brewtarget::logE( QString("SetterCommand::redo: %1").arg(q.lastError().text()) );
+   }
+   
+   q = QSqlQuery( QString("UPDATE `%1` SET `%2`='%3' WHERE `%4`='%5'")
+                   .arg(table->tableName())
+                   .arg(col_name)
+                   .arg(value.toString()) // NOTE: does this always work no matter the underlying type of "value"?
+                   .arg(key_name)
+                   .arg(key),
+                table->database() );
+   if( q.lastError().isValid() )
+   {
+      Brewtarget::logE( QString("SetterCommand::redo: %1").arg(q.lastError().text()) );
+   }
    
    // Emit the notifier.
    //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
@@ -58,6 +87,7 @@ void SetterCommand::redo()
 
 void SetterCommand::undo()
 {
+   /*
    // Get the current filter.
    QString filter = table->filter();
    
@@ -72,6 +102,19 @@ void SetterCommand::undo()
    // Unset the filter.
    table->setFilter(filter);
    table->select();
+   */
+   
+   QSqlQuery q( QString("UPDATE `%1` SET `%2`='%3' WHERE `%4`='%5'")
+                   .arg(table->tableName())
+                   .arg(col_name)
+                   .arg(oldValue.toString()) // NOTE: does this always work no matter the underlying type of "oldValue"?
+                   .arg(key_name)
+                   .arg(key),
+                table->database() );
+   if( q.lastError().isValid() )
+   {
+      Brewtarget::logE( QString("SetterCommand::redo: %1").arg(q.lastError().text()) );
+   }
    
    // Emit the notifier.
    //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
