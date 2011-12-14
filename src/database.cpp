@@ -631,8 +631,6 @@ int Database::insertNewMashStepRecord( Mash* parent )
 {
    int key;
    
-   sqldb.transaction();
-   
    QSqlQuery q( sqldb );
    q.setForwardOnly(true);
    q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
