@@ -45,6 +45,43 @@
 
 #include "HeatCalculations.h"
 
+QHash<QString,QString> Recipe::tagToProp = Recipe::tagToPropHash();
+
+QHash<QString,QString> Recipe::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   propHash["TYPE"] = "type";
+   propHash["BREWER"] = "brewer";
+   propHash["BATCH_SIZE"] = "batchSize_l";
+   propHash["BOIL_SIZE"] = "boilSize_l";
+   propHash["BOIL_TIME"] = "boilTime_min";
+   propHash["EFFICIENCY"] = "efficiency_pct";
+   propHash["ASST_BREWER"] = "asstBrewer";
+   propHash["NOTES"] = "notes";
+   propHash["TASTE_NOTES"] = "tasteNotes";
+   propHash["TASTE_RATING"] = "tasteRating";
+   propHash["OG"] = "og";
+   propHash["FG"] = "fg";
+   propHash["FERMENTATION_STAGES"] = "fermentationStages";
+   propHash["PRIMARY_AGE"] = "primaryAge_days";
+   propHash["PRIMARY_TEMP"] = "primaryTemp_c";
+   propHash["SECONDARY_AGE"] = "secondaryAge_days";
+   propHash["SECONDARY_TEMP"] = "secondaryTemp_c";
+   propHash["TERTIARY_AGE"] = "tertiaryAge_days";
+   propHash["TERTIARY_TEMP"] = "tertiaryTemp_c";
+   propHash["AGE"] = "age_days";
+   propHash["AGE_TEMP"] = "ageTemp_c";
+   propHash["DATE"] = "date";
+   propHash["CARBONATION"] = "carbonation_vols";
+   propHash["FORCED_CARBONATION"] = "forcedCarbonation";
+   propHash["PRIMING_SUGAR_NAME"] = "primingSugarName";
+   propHash["CARBONATION_TEMP"] = "carbonationTemp_c";
+   propHash["PRIMING_SUGAR_EQUIV"] = "primingSugarEquiv";
+   propHash["KEG_PRIMING_FACTOR"] = "kegPrimingFactor";
+   return propHash;
+}
+
 bool operator<(Recipe &r1, Recipe &r2 )
 {
    return r1.name() < r2.name();

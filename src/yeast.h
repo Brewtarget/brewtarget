@@ -140,6 +140,9 @@ private:
    bool isValidForm(const QString& str) const;
    bool isValidFlocculation(const QString& str) const;
    //void setDefaults();
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool YeastPtrLt( Yeast* lhs, Yeast* rhs)

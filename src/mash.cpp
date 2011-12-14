@@ -27,6 +27,23 @@
 #include <QDomText>
 #include <QObject>
 
+QHash<QString,QString> Mash::tagToProp = Mash::tagToPropHash();
+
+QHash<QString,QString> Mash::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   propHash["GRAIN_TEMP"] = "grainTemp_c";
+   propHash["NOTES"] = "notes";
+   propHash["TUN_TEMP"] = "tunTemp_c";
+   propHash["SPARGE_TEMP"] = "spargeTemp_c";
+   propHash["PH"] = "ph";
+   propHash["TUN_WEIGHT"] = "tunWeight_kg";
+   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
+   propHash["EQUIP_ADJUST"] = "equipAdjust";
+   return propHash;
+}
+
 bool operator<(Mash &m1, Mash &m2)
 {
    return m1.name() < m2.name();

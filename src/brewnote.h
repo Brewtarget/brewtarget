@@ -171,6 +171,8 @@ private:
    QHash<QString,double> info;
    QHash<QString,QString> XMLTagToName();
    QHash<QString,QString> NameToXMLTag();
+   static QHash<QString,QString> tagToPropHash();
+   static QHash<QString,QString> tagToProp;
 };
 
 inline bool BrewNotePtrLt( BrewNote* lhs, BrewNote* rhs)

@@ -26,6 +26,29 @@
 QStringList Yeast::types = QStringList() << "Ale" << "Lager" << "Wheat" << "Wine" << "Champagne";
 QStringList Yeast::forms = QStringList() << "Liquid" << "Dry" << "Slant" << "Culture";
 QStringList Yeast::flocculations = QStringList() << "Low" << "Medium" << "High" << "Very High";
+QHash<QString,QString> Yeast::tagToProp = Yeast::tagToPropHash();
+
+QHash<QString,QString> Yeast::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   //propHash["TYPE"] = "type";
+   //propHash["FORM"] = "form";
+   propHash["AMOUNT"] = "amount";
+   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
+   propHash["LABORATORY"] = "laboratory";
+   propHash["PRODUCT_ID"] = "productID";
+   propHash["MIN_TEMPERATURE"] = "minTemperature_c";
+   propHash["MAX_TEMPERATURE"] = "maxTemperature_c";
+   //propHash["FLOCCULATION"] = "flocculation";
+   propHash["ATTENUATION"] = "attenuation_pct";
+   propHash["NOTES"] = "notes";
+   propHash["BEST_FOR"] = "bestFor";
+   propHash["TIMES_CULTURED"] = "timesCultured";
+   propHash["MAX_REUSE"] = "maxReuse";
+   propHash["ADD_TO_SECONDARY"] = "addToSecondary";
+   return propHash;
+}
 
 bool operator<(Yeast &y1, Yeast &y2)
 {

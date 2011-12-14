@@ -87,6 +87,9 @@ signals:
 private:
    Water();
    Water( Water const& other );
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool WaterPtrLt( Water* lhs, Water* rhs)

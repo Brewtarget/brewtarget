@@ -24,6 +24,32 @@
 #include "brewtarget.h"
 
 QStringList Fermentable::types = QStringList() << "Grain" << "Sugar" << "Extract" << "Dry Extract" << "Adjunct";
+QHash<QString,QString> Fermentable::tagToProp = Fermentable::tagToPropHash();
+
+QHash<QString,QString> Fermentable::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   
+   propHash["NAME"] = "name";
+   // NOTE: since type is actually stored as a string (not integer), have to handle separately.
+   //propHash["TYPE"] = "type";
+   propHash["AMOUNT"] = "amount_kg";
+   propHash["YIELD"] = "yield_pct";
+   propHash["COLOR"] = "color_srm";
+   propHash["ADD_AFTER_BOIL"] = "addAfterBoil";
+   propHash["ORIGIN"] = "origin";
+   propHash["SUPPLIER"] = "supplier";
+   propHash["NOTES"] = "notes";
+   propHash["COARSE_FINE_DIFF"] = "coarseFineDiff_pct";
+   propHash["MOISTURE"] = "moisture_pct";
+   propHash["DIASTATIC_POWER"] = "diastaticPower_lintner";
+   propHash["PROTEIN"] = "protein_pct";
+   propHash["MAX_IN_BATCH"] = "maxInBatch_pct";
+   propHash["RECOMMEND_MASH"] = "recommendMash";
+   propHash["IS_MASHED"] = "isMashed";
+   propHash["IBU_GAL_PER_LB"] = "ibuGalPerLb";
+   return propHash;
+}
 
 bool operator<(Fermentable &f1, Fermentable &f2)
 {

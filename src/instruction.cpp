@@ -19,6 +19,22 @@
 #include "instruction.h"
 #include "brewtarget.h"
 
+QHash<QString,QString> Instruction::tagToProp = Instruction::tagToPropHash();
+
+QHash<QString,QString> Instruction::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   
+   propHash["NAME"] = "name";
+   propHash["DIRECTIONS"] = "directions";
+   propHash["HAS_TIMER"] = "hasTimer";
+   propHash["TIMER_VALUE"] = "timerValue";
+   propHash["COMPLETED"] = "completed";
+   propHash["INTERVAL"] = "interval";
+   
+   return propHash;
+}
+
 /*
 void Instruction::setDefaults()
 {

@@ -141,7 +141,8 @@ private:
    static bool isValidType( const QString& str );
    static QStringList types;
    
-   void setDefaults();
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)

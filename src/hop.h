@@ -142,6 +142,9 @@ private:
    static QStringList uses;
    static QStringList types;
    static QStringList forms;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool HopPtrLt( Hop* lhs, Hop* rhs)

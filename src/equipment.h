@@ -147,6 +147,9 @@ private:
    */
    
    void doCalculations();
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool EquipmentPtrLt( Equipment* lhs, Equipment* rhs)

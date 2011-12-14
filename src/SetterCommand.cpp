@@ -20,6 +20,8 @@
 #include <QVariant>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDebug>
+#include <QModelIndexList>
 #include "SetterCommand.h"
 
 SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
@@ -35,48 +37,74 @@ SetterCommand::~SetterCommand()
 void SetterCommand::redo()
 {
    /*
+   int columnIndex = table->fieldIndex(col_name);
+   int keyColumnIndex = table->fieldIndex(key_name);
+   
+   int rows = table->rowCount();
+   //qDebug() << table->data(table->index(0,0)).toString();
+   //qDebug() << table->data(table->index(0,1)).toString();
+   
    // Get the current filter.
-   QString filter = table->filter();
+   //QString filter = table->filter();
    
    // Makes the only visible row the one that has our key.
-   table->setFilter( QString("%1=%2").arg(key_name).arg(key) );
+   //table->setFilter( QString("`%1`='%2'").arg(key_name).arg(key) );
+   //table->setFilter( QString("`%1`='%2'").arg(key_name).arg(1) );
    table->select();
    
+   for( int i = 0; i < rows; ++i )
+      qDebug() << "i: " << i << " key: " << table->data(table->index(i,keyColumnIndex)).toInt();
+   
+   QModelIndexList indices = table->match( table->index(0,keyColumnIndex), Qt::DisplayRole, QVariant(key) );
+   if( indices.size() <= 0 )
+      return;
+   
+   int rowIndex = indices[0].row();
+   
+   rows = table->rowCount();
    // Record the old data for undo.
-   oldValue = table->record(0).value( col_name );
+   //oldValue = table->record(0).value( col_name );
+   oldValue = table->data( table->index(rowIndex,columnIndex) );
    
    // Change the data.
-   table->record(0).setValue( col_name, value );
+   
+   //table->record(0).setValue( col_name, value );
+   table->setData( table->index(rowIndex,columnIndex), value );
    table->submitAll();
    
    // Unset the filter.
-   table->setFilter(filter);
-   table->select();
+   //table->setFilter(filter);
+   //table->select();
    */
    
-   QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
+   QSqlQuery q( table->database() );
+   q.setForwardOnly(true);
+   q.exec( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
                 .arg(col_name)
                 .arg(table->tableName())
                 .arg(key_name)
-                .arg(key),
-                table->database() );
+                .arg(key)
+         );
    if( q.next() )
       oldValue = q.record().value(col_name);
    if( q.lastError().isValid() )
    {
-      Brewtarget::logE( QString("SetterCommand::redo: %1").arg(q.lastError().text()) );
+      Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
    
-   q = QSqlQuery( QString("UPDATE `%1` SET `%2`='%3' WHERE `%4`='%5'")
-                   .arg(table->tableName())
-                   .arg(col_name)
-                   .arg(value.toString()) // NOTE: does this always work no matter the underlying type of "value"?
-                   .arg(key_name)
-                   .arg(key),
-                table->database() );
+   q = QSqlQuery( table->database() );
+   q.setForwardOnly(true);
+   q.prepare(QString("UPDATE `%1` SET `%2` = :value WHERE `%3`='%4'")
+                .arg(table->tableName())
+                .arg(col_name)
+                .arg(key_name)
+                .arg(key)
+            );
+   q.bindValue(":value",value);
+   q.exec();
    if( q.lastError().isValid() )
    {
-      Brewtarget::logE( QString("SetterCommand::redo: %1").arg(q.lastError().text()) );
+      Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
    
    // Emit the notifier.
@@ -87,33 +115,19 @@ void SetterCommand::redo()
 
 void SetterCommand::undo()
 {
-   /*
-   // Get the current filter.
-   QString filter = table->filter();
-   
-   // Makes the only visible row the one that has our key.
-   table->setFilter( QString("%1=%2").arg(key_name).arg(key) );
-   table->select();
-   
-   // Change the data back
-   table->record(0).setValue( col_name, oldValue );
-   table->submitAll();
-   
-   // Unset the filter.
-   table->setFilter(filter);
-   table->select();
-   */
-   
-   QSqlQuery q( QString("UPDATE `%1` SET `%2`='%3' WHERE `%4`='%5'")
+   QSqlQuery q( table->database() );
+   q.setForwardOnly(true);
+   q.prepare( QString("UPDATE `%1` SET `%2`= :value WHERE `%3`='%4'")
                    .arg(table->tableName())
                    .arg(col_name)
-                   .arg(oldValue.toString()) // NOTE: does this always work no matter the underlying type of "oldValue"?
                    .arg(key_name)
-                   .arg(key),
-                table->database() );
+                   .arg(key)
+            );
+   q.bindValue( ":value", oldValue );
+   q.exec();
    if( q.lastError().isValid() )
    {
-      Brewtarget::logE( QString("SetterCommand::redo: %1").arg(q.lastError().text()) );
+      Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
    
    // Emit the notifier.

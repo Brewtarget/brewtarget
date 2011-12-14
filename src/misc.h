@@ -102,6 +102,9 @@ private:
    
    static QStringList types;
    static QStringList uses;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool MiscPtrLt( Misc* lhs, Misc* rhs)

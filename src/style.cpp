@@ -20,6 +20,35 @@
 #include "style.h"
 
 QStringList Style::types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
+QHash<QString,QString> Style::tagToProp = Style::tagToPropHash();
+
+QHash<QString,QString> Style::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   propHash["CATEGORY"] = "category";
+   propHash["CATEGORY_NUMBER"] = "categoryNumber";
+   propHash["STYLE_LETTER"] = "styleLetter";
+   propHash["STYLE_GUIDE"] = "styleGuide";
+   //propHash["TYPE"] = "type";
+   propHash["OG_MIN"] = "ogMin";
+   propHash["OG_MAX"] = "ogMax";
+   propHash["FG_MIN"] = "fgMin";
+   propHash["FG_MAX"] = "fgMax";
+   propHash["IBU_MIN"] = "ibuMin";
+   propHash["IBU_MAX"] = "ibuMax";
+   propHash["COLOR_MIN"] = "colorMin_srm";
+   propHash["COLOR_MAX"] = "colorMax_srm";
+   propHash["CARB_MIN"] = "carbMin_vol";
+   propHash["CARB_MAX"] = "carbMax_vol";
+   propHash["ABV_MIN"] = "abvMin_pct";
+   propHash["ABV_MAX"] = "abvMax_pct";
+   propHash["NOTES"] = "notes";
+   propHash["PROFILE"] = "profile";
+   propHash["INGREDIENTS"] = "ingredients";
+   propHash["EXAMPLES"] = "examples";
+   return propHash;
+}
 
 bool operator<(Style &s1, Style &s2)
 {

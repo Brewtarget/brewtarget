@@ -29,6 +29,45 @@
 #include "Algorithms.h"
 #include "mashstep.h"
 
+
+QHash<QString,QString> BrewNote::tagToProp = BrewNote::tagToPropHash();
+
+QHash<QString,QString> BrewNote::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["BREWDATE"] = "brewDate" ;
+   propHash["DATE_FERMENTED_OUT"] = "fermentDate" ;
+   propHash["SG"] = "sg" ;
+   propHash["VOLUME_INTO_BK"] = "volumeIntoBK_l" ;
+   propHash["STRIKE_TEMP"] = "strikeTemp_c" ;
+   propHash["MASH_FINAL_TEMP"] = "mashFinTemp_c" ;
+   propHash["OG"] = "og" ;
+   propHash["POST_BOIL_VOLUME"] = "postBoilVolume_l" ;
+   propHash["VOLUME_INTO_FERMENTER"] = "volumeIntoFerm_l" ;
+   propHash["PITCH_TEMP"] = "pitchTemp_c" ;
+   propHash["FG"] = "fg" ;
+   propHash["EFF_INTO_BK"] = "effIntoBK_pct" ;
+   propHash["PREDICTED_OG"] = "projOg" ;
+   propHash["BREWHOUSE_EFF"] = "brewhouseEff_pct" ;
+   //propHash["PREDICTED_ABV"] = "projABV_pct" ;
+   propHash["ACTUAL_ABV"] = "abv" ;
+   propHash["PROJECTED_BOIL_GRAV"] = "projBoilGrav" ;
+   propHash["PROJECTED_STRIKE_TEMP"] = "projStrikeTemp_c" ;
+   propHash["PROJECTED_MASH_FIN_TEMP"] = "projMashFinTemp_c" ;
+   propHash["PROJECTED_VOL_INTO_BK"] = "projVolIntoBK_l" ;
+   propHash["PROJECTED_OG"] = "projOg" ;
+   propHash["PROJECTED_VOL_INTO_FERM"] = "projVolIntoFerm_l" ;
+   propHash["PROJECTED_FG"] = "projFg" ;
+   propHash["PROJECTED_EFF"] = "projEff_pct" ;
+   propHash["PROJECTED_ABV"] = "projABV_pct" ;
+   propHash["PROJECTED_POINTS"] = "projPoints" ;
+   propHash["PROJECTED_ATTEN"] = "projAtten" ;
+   propHash["BOIL_OFF"] = "boilOff_l" ;
+   propHash["FINAL_VOLUME"] = "finalVolume_l" ;
+   propHash["NOTES"] = "notes" ;
+   return propHash;
+}
+
 // operators for sorts and things
 bool operator<(BrewNote const& lhs, BrewNote const& rhs)
 {

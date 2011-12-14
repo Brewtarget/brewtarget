@@ -412,6 +412,9 @@ private:
    //void setDefaults();
    void addPreinstructions( QVector<PreInstruction> preins );
    bool isValidType( const QString &str );
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)

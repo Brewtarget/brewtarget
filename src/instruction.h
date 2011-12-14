@@ -87,6 +87,9 @@ private:
                 const QString& timerVal = "0" );
    */
    QVector<QString> _reagents;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 #endif   /* _INSTRUCTION_H */

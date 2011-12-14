@@ -112,6 +112,9 @@ private:
    
    // Get via the relational relationship.
    //QVector<MashStep *> mashSteps;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 
 };
 

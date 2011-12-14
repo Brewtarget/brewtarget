@@ -100,6 +100,9 @@ private:
    bool isValidType( const QString &str ) const;
    static QStringList types;
    static QStringList typesTr;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool MashStepPtrLt( MashStep* lhs, MashStep* rhs)

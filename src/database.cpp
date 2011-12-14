@@ -33,6 +33,7 @@
 #include <QSqlQuery>
 #include <QSqlIndex>
 #include <QSqlError>
+#include <QDebug>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -125,6 +126,12 @@ void Database::load()
       foreach( QString command, commands.split(";") )
          QSqlQuery( command+";", sqldb );
    }
+   
+   // NOTE: these two pragmas reduce --from-xml from 7min:15s to 1m:55s.
+   // Turn off database journaling for better speed.
+   QSqlQuery( "PRAGMA journal_mode = off", sqldb );
+   // Store temporary tables in memory.
+   QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb );
    
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
@@ -573,23 +580,50 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 }
 
 // Named constructors =========================================================
+
 int Database::insertNewRecord( DBTable table )
 {
    // TODO: encapsulate this in a QUndoCommand so we can undo it.
    /*
    tableModel->setTable(tableNames[table]);
    tableModel->insertRecord(-1,tableModel->record());
-   return tableModel->query().lastInsertId().toInt();
+   int key = tableModel->query().lastInsertId().toInt();
    */
    
-   QSqlQuery q( QString("INSERT INTO `%1` DEFAULT VALUES")
-                   .arg(tableNames[table]),
-                sqldb );
-   if( q.lastError().isValid() )
+   int key;
+   QSqlQuery q( sqldb );
+   q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
+              .arg(tableNames[table])
+         );
+   if( q.numRowsAffected() < 1 )
    {
-      Brewtarget::logE( QString("Database::insertNewRecord: %1").arg(q.lastError().text()) );
+      Brewtarget::logE( QString("Database::insertNewRecord: could not insert a record into %1.").arg(tableNames[table]) );
+      key = -1;
    }
-   int key = q.record().value(keyNames[table]).toInt();
+   else
+      key = q.lastInsertId().toInt();
+   
+   //if( q.lastError().isValid() )
+   //   Brewtarget::logE( QString("Database::insertNewRecord: %1").arg(q.lastError().text()) );
+   
+   /*
+   QSqlRelationalTableModel* t = tables[table];
+   qDebug() << "Rows: " << t->rowCount() << "\n";
+   QSqlRecord r = t->record();
+   bool success = t->insertRecord(0,r);
+   if( !success )
+      qDebug() << "Couldn't insert a row.";
+   //int key = t->query().lastInsertId().toInt();
+   int key = -1;
+   int keyField = r.indexOf(keyNames[table]);
+   qDebug() << r.value(0).toString();
+   if( r.value(keyField).isValid() )
+      key = r.value(keyField).toInt();
+   else
+      qDebug() << "Invalid key.";
+   qDebug() << "Rows: " << t->rowCount() << "\n";
+   */
+   
    return key;
 }
 
@@ -1054,28 +1088,14 @@ int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString p
    // TODO: encapsulate this in a QUndoCommand.
    int newKey;
    QSqlRecord r;
-   tableModel->setTable(relTableName);
    
    // Ensure this ingredient is not already in the recipe.
-   /*
    QSqlQuery q(
-      QString("SELECT * from %1 WHERE %2 = %3 AND recipe_id = %4")
-        .arg(relTableName).arg(ingKeyName).arg(ing->key).arg(rec->key), sqldb);
+      QString("SELECT recipe_id from `%1` WHERE `%2`='%3' AND recipe_id='%4'")
+        .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key), sqldb);
    if( q.next() )
    {
-      Brewtarget::logW( "Ingredient already exists in recipe." );
-      return;
-   }
-   */
-   
-   QString filter = tableModel->filter();
-   
-   // Ensure this ingredient is not already in the recipe.
-   tableModel->setFilter(QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->_key).arg(rec->_key));
-   tableModel->select();
-   if( tableModel->rowCount() > 0 )
-   {
-      Brewtarget::logW( "Ingredient already exists in recipe." );
+      Brewtarget::logW( "Database::addIngredientToRecipe: Ingredient already exists in recipe." );
       return -1;
    }
    
@@ -1083,17 +1103,22 @@ int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString p
    r = copy(ing);
    newKey = r.value(ingKeyName).toInt();
    
-   // Reset the original filter.
-   tableModel->setFilter(filter);
-   tableModel->select();
+   // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
+   q = QSqlQuery( sqldb );
+   q.setForwardOnly(true);
+   q.prepare( QString("INSERT INTO `%1` (`%2`, `recipe_id`) VALUES (:ingredient, :recipe)")
+                 .arg(relTableName)
+                 .arg(ingKeyName)
+            );
+   q.bindValue(":ingredient", ing->_key);
+   q.bindValue(":recipe", rec->_key);
+   if( q.exec() )
+      emit rec->changed( rec->metaProperty(propName), QVariant() );
+   else
+   {
+      Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
+   }
    
-   // Put this (rec,ing) pair in the <ing_type>_in_recipe table.
-   r = tableModel->record(); // Should create a new record in that table.
-   r.setValue(ingKeyName, newKey);
-   r.setValue("recipe_id", rec->_key);
-   tableModel->insertRecord(-1,r);
-   
-   emit rec->changed( rec->metaProperty(propName), QVariant() );
    return newKey;
 }
 
@@ -2623,69 +2648,15 @@ void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& x
 
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
-   QHash<QString,QString> propHash;
-   BrewNote* ret = newBrewNote(parent);
-   
-   propHash["BREWDATE"] = "brewDate" ;
-   propHash["DATE_FERMENTED_OUT"] = "fermentDate" ;
-   propHash["SG"] = "sg" ;
-   propHash["VOLUME_INTO_BK"] = "volumeIntoBK_l" ;
-   propHash["STRIKE_TEMP"] = "strikeTemp_c" ;
-   propHash["MASH_FINAL_TEMP"] = "mashFinTemp_c" ;
-   propHash["OG"] = "og" ;
-   propHash["POST_BOIL_VOLUME"] = "postBoilVolume_l" ;
-   propHash["VOLUME_INTO_FERMENTER"] = "volumeIntoFerm_l" ;
-   propHash["PITCH_TEMP"] = "pitchTemp_c" ;
-   propHash["FG"] = "fg" ;
-   propHash["EFF_INTO_BK"] = "effIntoBK_pct" ;
-   propHash["PREDICTED_OG"] = "projOg" ;
-   propHash["BREWHOUSE_EFF"] = "brewhouseEff_pct" ;
-   //propHash["PREDICTED_ABV"] = "projABV_pct" ;
-   propHash["ACTUAL_ABV"] = "abv" ;
-   propHash["PROJECTED_BOIL_GRAV"] = "projBoilGrav" ;
-   propHash["PROJECTED_STRIKE_TEMP"] = "projStrikeTemp_c" ;
-   propHash["PROJECTED_MASH_FIN_TEMP"] = "projMashFinTemp_c" ;
-   propHash["PROJECTED_VOL_INTO_BK"] = "projVolIntoBK_l" ;
-   propHash["PROJECTED_OG"] = "projOg" ;
-   propHash["PROJECTED_VOL_INTO_FERM"] = "projVolIntoFerm_l" ;
-   propHash["PROJECTED_FG"] = "projFg" ;
-   propHash["PROJECTED_EFF"] = "projEff_pct" ;
-   propHash["PROJECTED_ABV"] = "projABV_pct" ;
-   propHash["PROJECTED_POINTS"] = "projPoints" ;
-   propHash["PROJECTED_ATTEN"] = "projAtten" ;
-   propHash["BOIL_OFF"] = "boilOff_l" ;
-   propHash["FINAL_VOLUME"] = "finalVolume_l" ;
-   propHash["NOTES"] = "notes" ;
-   
-   fromXml( ret, propHash, node );
+   BrewNote* ret = newBrewNote(parent);  
+   fromXml( ret, BrewNote::tagToProp, node );
    return ret;
 }
 
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
-   QHash<QString,QString> propHash;
    Equipment* ret = newEquipment();
-   
-   propHash["NAME"] = "name";
-   propHash["BOIL_SIZE"] = "boilSize_l";
-   propHash["BATCH_SIZE"] = "batchSize_l";
-   propHash["TUN_VOLUME"] = "tunVolume_l";
-   propHash["TUN_WEIGHT"] = "tunWeight_kg";
-   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
-   propHash["TOP_UP_WATER"] = "topUpWater_l";
-   propHash["TRUB_CHILLER_LOSS"] = "trubChillerLoss_l";
-   propHash["EVAP_RATE"] = "evapRate_pctHr";
-   propHash["REAL_EVAP_RATE"] = "evapRate_lHr";
-   propHash["BOIL_TIME"] = "boilTime_min";
-   propHash["CALC_BOIL_VOLUME"] = "calcBoilVolume";
-   propHash["LAUTER_DEADSPACE"] = "lauterDeadspace_l";
-   propHash["TOP_UP_KETTLE"] = "topUpKettle_l";
-   propHash["HOP_UTILIZATION"] = "hopUtilization_pct";
-   propHash["NOTES"] = "notes";
-   propHash["ABSORPTION"] = "grainAbsorption_LKg";
-   propHash["BOILING_POINT"] = "boilingPoint_c";
-   
-   fromXml( ret, propHash, node );
+   fromXml( ret, Equipment::tagToProp, node );
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -2694,28 +2665,8 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    Fermentable* ret = newFermentable();
-   
-   propHash["NAME"] = "name";
-   // NOTE: since type is actually stored as a string (not integer), have to handle separately.
-   //propHash["TYPE"] = "type";
-   propHash["AMOUNT"] = "amount_kg";
-   propHash["YIELD"] = "yield_pct";
-   propHash["COLOR"] = "color_srm";
-   propHash["ADD_AFTER_BOIL"] = "addAfterBoil";
-   propHash["ORIGIN"] = "origin";
-   propHash["SUPPLIER"] = "supplier";
-   propHash["NOTES"] = "notes";
-   propHash["COARSE_FINE_DIFF"] = "coarseFineDiff_pct";
-   propHash["MOISTURE"] = "moisture_pct";
-   propHash["DIASTATIC_POWER"] = "diastaticPower_lintner";
-   propHash["PROTEIN"] = "protein_pct";
-   propHash["MAX_IN_BATCH"] = "maxInBatch_pct";
-   propHash["RECOMMEND_MASH"] = "recommendMash";
-   propHash["IS_MASHED"] = "isMashed";
-   propHash["IBU_GAL_PER_LB"] = "ibuGalPerLb";
-   fromXml( ret, propHash, node );
+   fromXml( ret, Fermentable::tagToProp, node );
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2733,26 +2684,8 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
 Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    Hop* ret = newHop();
-   
-   propHash["NAME"] = "name";
-   propHash["ALPHA"] = "alpha_pct";
-   propHash["AMOUNT"] = "amount_kg";
-   //propHash["USE"] = "use";
-   propHash["TIME"] = "time_min";
-   propHash["NOTES"] = "notes";
-   //propHash["TYPE"] = "type";
-   //propHash["FORM"] = "form";
-   propHash["BETA"] = "beta_pct";
-   propHash["HSI"] = "hsi_pct";
-   propHash["ORIGIN"] = "origin";
-   propHash["SUBSTITUTES"] = "substitutes";
-   propHash["HUMULENE"] = "humulene_pct";
-   propHash["CARYOPHYLLENE"] = "caryophyllene_pct";
-   propHash["COHUMULONE"] = "cohumulone_pct";
-   propHash["MYRCENE"] = "myrcene_pct";
-   fromXml( ret, propHash, node );
+   fromXml( ret, Hop::tagToProp, node );
    
    // Handle enums separately.
    n = node.firstChildElement("USE");
@@ -2781,24 +2714,15 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 
 Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent )
 {
-   QHash<QString,QString> propHash;
    Instruction* ret = newInstruction(parent);
    
-   propHash["NAME"] = "name";
-   propHash["DIRECTIONS"] = "directions";
-   propHash["HAS_TIMER"] = "hasTimer";
-   propHash["TIMER_VALUE"] = "timerValue";
-   propHash["COMPLETED"] = "completed";
-   propHash["INTERVAL"] = "interval";
-   
-   fromXml( ret, propHash, node );
+   fromXml( ret, Instruction::tagToProp, node );
    return ret;
 }
 
 Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    Mash* ret;
    if( parent )
       ret = newMash(parent);
@@ -2806,16 +2730,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
       ret = newMash();
    
    // First, get all the standard properties.
-   propHash["NAME"] = "name";
-   propHash["GRAIN_TEMP"] = "grainTemp_c";
-   propHash["NOTES"] = "notes";
-   propHash["TUN_TEMP"] = "tunTemp_c";
-   propHash["SPARGE_TEMP"] = "spargeTemp_c";
-   propHash["PH"] = "ph";
-   propHash["TUN_WEIGHT"] = "tunWeight_kg";
-   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
-   propHash["EQUIP_ADJUST"] = "equipAdjust";
-   fromXml( ret, propHash, node );
+   fromXml( ret, Mash::tagToProp, node );
    
    // Now, get the individual mash steps.
    n = node.firstChildElement("MASH_STEPS");
@@ -2831,19 +2746,9 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    MashStep* ret = newMashStep(parent);
    
-   propHash["NAME"] = "name";
-   //propHash["TYPE"] = "type";
-   propHash["INFUSE_AMOUNT"] = "infuseAmount_l";
-   propHash["STEP_TEMP"] = "stepTemp_c";
-   propHash["STEP_TIME"] = "stepTime_min";
-   propHash["RAMP_TIME"] = "rampTime_min";
-   propHash["END_TEMP"] = "endTemp_c";
-   propHash["INFUSE_TEMP"] = "infuseTemp_c";
-   propHash["DECOCTION_AMOUNT"] = "decoctionAmount_l";
-   fromXml( ret, propHash, node );
+   fromXml( ret, MashStep::tagToProp, node );
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2859,18 +2764,9 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    Misc* ret = newMisc();
    
-   propHash["NAME"] = "name";
-   //propHash["TYPE"] = "type";
-   //propHash["USE"] = "use";
-   propHash["TIME"] = "time";
-   propHash["AMOUNT"] = "amount";
-   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
-   propHash["USE_FOR"] = "useFor";
-   propHash["NOTES"] = "notes";
-   fromXml( ret, propHash, node );
+   fromXml( ret, Misc::tagToProp, node );
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2898,35 +2794,6 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    Recipe* ret = newRecipe();
    
    // First, get standard properties.
-   propHash["NAME"] = "name";
-   propHash["TYPE"] = "type";
-   propHash["BREWER"] = "brewer";
-   propHash["BATCH_SIZE"] = "batchSize_l";
-   propHash["BOIL_SIZE"] = "boilSize_l";
-   propHash["BOIL_TIME"] = "boilTime_min";
-   propHash["EFFICIENCY"] = "efficiency_pct";
-   propHash["ASST_BREWER"] = "asstBrewer";
-   propHash["NOTES"] = "notes";
-   propHash["TASTE_NOTES"] = "tasteNotes";
-   propHash["TASTE_RATING"] = "tasteRating";
-   propHash["OG"] = "og";
-   propHash["FG"] = "fg";
-   propHash["FERMENTATION_STAGES"] = "fermentationStages";
-   propHash["PRIMARY_AGE"] = "primaryAge_days";
-   propHash["PRIMARY_TEMP"] = "primaryTemp_c";
-   propHash["SECONDARY_AGE"] = "secondaryAge_days";
-   propHash["SECONDARY_TEMP"] = "secondaryTemp_c";
-   propHash["TERTIARY_AGE"] = "tertiaryAge_days";
-   propHash["TERTIARY_TEMP"] = "tertiaryTemp_c";
-   propHash["AGE"] = "age_days";
-   propHash["AGE_TEMP"] = "ageTemp_c";
-   propHash["DATE"] = "date";
-   propHash["CARBONATION"] = "carbonation_vols";
-   propHash["FORCED_CARBONATION"] = "forcedCarbonation";
-   propHash["PRIMING_SUGAR_NAME"] = "primingSugarName";
-   propHash["CARBONATION_TEMP"] = "carbonationTemp_c";
-   propHash["PRIMING_SUGAR_EQUIV"] = "primingSugarEquiv";
-   propHash["KEG_PRIMING_FACTOR"] = "kegPrimingFactor";
    fromXml( ret, propHash, node );
    
    // Get style.
@@ -2978,32 +2845,8 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    Style* ret = newStyle();
-   
-   propHash["NAME"] = "name";
-   propHash["CATEGORY"] = "category";
-   propHash["CATEGORY_NUMBER"] = "categoryNumber";
-   propHash["STYLE_LETTER"] = "styleLetter";
-   propHash["STYLE_GUIDE"] = "styleGuide";
-   //propHash["TYPE"] = "type";
-   propHash["OG_MIN"] = "ogMin";
-   propHash["OG_MAX"] = "ogMax";
-   propHash["FG_MIN"] = "fgMin";
-   propHash["FG_MAX"] = "fgMax";
-   propHash["IBU_MIN"] = "ibuMin";
-   propHash["IBU_MAX"] = "ibuMax";
-   propHash["COLOR_MIN"] = "colorMin_srm";
-   propHash["COLOR_MAX"] = "colorMax_srm";
-   propHash["CARB_MIN"] = "carbMin_vol";
-   propHash["CARB_MAX"] = "carbMax_vol";
-   propHash["ABV_MIN"] = "abvMin_pct";
-   propHash["ABV_MAX"] = "abvMax_pct";
-   propHash["NOTES"] = "notes";
-   propHash["PROFILE"] = "profile";
-   propHash["INGREDIENTS"] = "ingredients";
-   propHash["EXAMPLES"] = "examples";
-   fromXml( ret, propHash, node );
+   fromXml( ret, Style::tagToProp, node );
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -3020,21 +2863,8 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
 Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 {
-   QHash<QString,QString> propHash;
    Water* ret = newWater();
-   
-   propHash["NAME"] = "name";
-   propHash["AMOUNT"] = "amount_l";
-   propHash["CALCIUM"] = "calcium_ppm";
-   propHash["BICARBONATE"] = "bicarbonate_ppm";
-   propHash["SULFATE"] = "sulfate_ppm";
-   propHash["CHLORIDE"] = "chloride_ppm";
-   propHash["SODIUM"] = "sodium_ppm";
-   propHash["MAGNESIUM"] = "magnesium_ppm";
-   propHash["PH"] = "ph";
-   propHash["NOTES"] = "notes";
-   
-   fromXml( ret, propHash, node );
+   fromXml( ret, Water::tagToProp, node );
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -3043,26 +2873,8 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    Yeast* ret = newYeast();
-   
-   propHash["NAME"] = "name";
-   //propHash["TYPE"] = "type";
-   //propHash["FORM"] = "form";
-   propHash["AMOUNT"] = "amount";
-   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
-   propHash["LABORATORY"] = "laboratory";
-   propHash["PRODUCT_ID"] = "productID";
-   propHash["MIN_TEMPERATURE"] = "minTemperature_c";
-   propHash["MAX_TEMPERATURE"] = "maxTemperature_c";
-   //propHash["FLOCCULATION"] = "flocculation";
-   propHash["ATTENUATION"] = "attenuation_pct";
-   propHash["NOTES"] = "notes";
-   propHash["BEST_FOR"] = "bestFor";
-   propHash["TIMES_CULTURED"] = "timesCultured";
-   propHash["MAX_REUSE"] = "maxReuse";
-   propHash["ADD_TO_SECONDARY"] = "addToSecondary";
-   fromXml( ret, propHash, node );
+   fromXml( ret, Yeast::tagToProp, node );
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");

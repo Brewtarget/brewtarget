@@ -23,6 +23,23 @@
 QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction";
 QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
 
+QHash<QString,QString> MashStep::tagToProp = MashStep::tagToPropHash();
+
+QHash<QString,QString> MashStep::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   //propHash["TYPE"] = "type";
+   propHash["INFUSE_AMOUNT"] = "infuseAmount_l";
+   propHash["STEP_TEMP"] = "stepTemp_c";
+   propHash["STEP_TIME"] = "stepTime_min";
+   propHash["RAMP_TIME"] = "rampTime_min";
+   propHash["END_TEMP"] = "endTemp_c";
+   propHash["INFUSE_TEMP"] = "infuseTemp_c";
+   propHash["DECOCTION_AMOUNT"] = "decoctionAmount_l";
+   return propHash;
+}
+
 bool operator<(MashStep &m1, MashStep &m2)
 {
    return m1.name() < m2.name();

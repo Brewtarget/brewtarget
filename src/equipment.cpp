@@ -24,6 +24,34 @@
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 
+QHash<QString,QString> Equipment::tagToProp = Equipment::tagToPropHash();
+
+QHash<QString,QString> Equipment::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   
+   propHash["NAME"] = "name";
+   propHash["BOIL_SIZE"] = "boilSize_l";
+   propHash["BATCH_SIZE"] = "batchSize_l";
+   propHash["TUN_VOLUME"] = "tunVolume_l";
+   propHash["TUN_WEIGHT"] = "tunWeight_kg";
+   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
+   propHash["TOP_UP_WATER"] = "topUpWater_l";
+   propHash["TRUB_CHILLER_LOSS"] = "trubChillerLoss_l";
+   propHash["EVAP_RATE"] = "evapRate_pctHr";
+   propHash["REAL_EVAP_RATE"] = "evapRate_lHr";
+   propHash["BOIL_TIME"] = "boilTime_min";
+   propHash["CALC_BOIL_VOLUME"] = "calcBoilVolume";
+   propHash["LAUTER_DEADSPACE"] = "lauterDeadspace_l";
+   propHash["TOP_UP_KETTLE"] = "topUpKettle_l";
+   propHash["HOP_UTILIZATION"] = "hopUtilization_pct";
+   propHash["NOTES"] = "notes";
+   propHash["ABSORPTION"] = "grainAbsorption_LKg";
+   propHash["BOILING_POINT"] = "boilingPoint_c";
+   
+   return propHash;
+}
+
 bool operator<(Equipment &e1, Equipment &e2)
 {
    return e1.name() < e2.name();

@@ -25,6 +25,24 @@
 #include "water.h"
 #include "brewtarget.h"
 
+QHash<QString,QString> Water::tagToProp = Water::tagToPropHash();
+
+QHash<QString,QString> Water::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   propHash["AMOUNT"] = "amount_l";
+   propHash["CALCIUM"] = "calcium_ppm";
+   propHash["BICARBONATE"] = "bicarbonate_ppm";
+   propHash["SULFATE"] = "sulfate_ppm";
+   propHash["CHLORIDE"] = "chloride_ppm";
+   propHash["SODIUM"] = "sodium_ppm";
+   propHash["MAGNESIUM"] = "magnesium_ppm";
+   propHash["PH"] = "ph";
+   propHash["NOTES"] = "notes";
+   return propHash;
+}
+
 bool operator<(Water &w1, Water &w2)
 {
    return w1.name() < w2.name();

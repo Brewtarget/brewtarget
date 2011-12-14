@@ -28,7 +28,21 @@
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
+QHash<QString,QString> Misc::tagToProp = Misc::tagToPropHash();
 
+QHash<QString,QString> Misc::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   //propHash["TYPE"] = "type";
+   //propHash["USE"] = "use";
+   propHash["TIME"] = "time";
+   propHash["AMOUNT"] = "amount";
+   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
+   propHash["USE_FOR"] = "useFor";
+   propHash["NOTES"] = "notes";
+   return propHash;
+}
 //============================CONSTRUCTORS======================================
 Misc::Misc() : BeerXMLElement()
 {

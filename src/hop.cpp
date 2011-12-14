@@ -26,6 +26,30 @@
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
 QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First Wort" << "Aroma";
+QHash<QString,QString> Hop::tagToProp = Hop::tagToPropHash();
+
+QHash<QString,QString> Hop::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   
+   propHash["NAME"] = "name";
+   propHash["ALPHA"] = "alpha_pct";
+   propHash["AMOUNT"] = "amount_kg";
+   //propHash["USE"] = "use";
+   propHash["TIME"] = "time_min";
+   propHash["NOTES"] = "notes";
+   //propHash["TYPE"] = "type";
+   //propHash["FORM"] = "form";
+   propHash["BETA"] = "beta_pct";
+   propHash["HSI"] = "hsi_pct";
+   propHash["ORIGIN"] = "origin";
+   propHash["SUBSTITUTES"] = "substitutes";
+   propHash["HUMULENE"] = "humulene_pct";
+   propHash["CARYOPHYLLENE"] = "caryophyllene_pct";
+   propHash["COHUMULONE"] = "cohumulone_pct";
+   propHash["MYRCENE"] = "myrcene_pct";
+   return propHash;
+}
 
 bool operator<( Hop &h1, Hop &h2 )
 {

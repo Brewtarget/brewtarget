@@ -144,6 +144,9 @@ private:
    
    bool isValidType( const QString &str );
    static QStringList types;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool StylePtrLt( Style* lhs, Style* rhs)
