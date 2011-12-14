@@ -158,7 +158,7 @@ int SetterCommand::id() const
    // If there are two commands in a stack with same id,
    // they they may be merged with mergeWith() by the stack.
    
-   return -1;
+   return 0;
 }
 
 int SetterCommand::size() const
@@ -195,44 +195,7 @@ bool SetterCommand::mergeWith( const QUndoCommand* command )
 }
 
 void SetterCommand::redo()
-{
-   /*
-   QSqlQuery q( table->database() );
-   q.setForwardOnly(true);
-   q.exec( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
-                .arg(col_name)
-                .arg(table->tableName())
-                .arg(key_name)
-                .arg(key)
-         );
-   if( q.next() )
-      oldValue = q.record().value(col_name);
-   if( q.lastError().isValid() )
-   {
-      Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
-   }
-   
-   q = QSqlQuery( table->database() );
-   q.setForwardOnly(true);
-   q.prepare(QString("UPDATE `%1` SET `%2` = :value WHERE `%3`='%4'")
-                .arg(table->tableName())
-                .arg(col_name)
-                .arg(key_name)
-                .arg(key)
-            );
-   q.bindValue(":value",value);
-   q.exec();
-   if( q.lastError().isValid() )
-   {
-      Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
-   }
-   
-   // Emit the notifier.
-   //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
-   if( notify )
-      emit object->changed(prop,value);
-   */
-   
+{   
    int i, size;
    size = tables.size();
    if( size <= 0 )
@@ -262,27 +225,6 @@ void SetterCommand::redo()
 
 void SetterCommand::undo()
 {
-   /*
-   QSqlQuery q( table->database() );
-   q.setForwardOnly(true);
-   q.prepare( QString("UPDATE `%1` SET `%2`= :value WHERE `%3`='%4'")
-                   .arg(table->tableName())
-                   .arg(col_name)
-                   .arg(key_name)
-                   .arg(key)
-            );
-   q.bindValue( ":value", oldValue );
-   q.exec();
-   if( q.lastError().isValid() )
-   {
-      Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
-   }
-   
-   // Emit the notifier.
-   //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
-   if( notify )
-      emit object->changed(prop,oldValue);
-   */
    
    int i, size;
    size = tables.size();
