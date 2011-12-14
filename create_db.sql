@@ -173,7 +173,7 @@ create table mashstep(
 
    -- Our step number is unique within our parent mash.
    mash_id integer,
-   step_number integer autoincrement,
+   step_number integer,
    foreign key(mash_id) references mash(maid),
    unique( mash_id, step_number )
 );

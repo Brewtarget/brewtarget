@@ -581,7 +581,7 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 
 // Named constructors =========================================================
 
-int Database::insertNewRecord( DBTable table )
+int Database::insertNewDefaultRecord( DBTable table )
 {
    // TODO: encapsulate this in a QUndoCommand so we can undo it.
    /*
@@ -597,14 +597,14 @@ int Database::insertNewRecord( DBTable table )
          );
    if( q.numRowsAffected() < 1 )
    {
-      Brewtarget::logE( QString("Database::insertNewRecord: could not insert a record into %1.").arg(tableNames[table]) );
+      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[table]) );
       key = -1;
    }
    else
       key = q.lastInsertId().toInt();
    
    //if( q.lastError().isValid() )
-   //   Brewtarget::logE( QString("Database::insertNewRecord: %1").arg(q.lastError().text()) );
+   //   Brewtarget::logE( QString("Database::insertNewDefaultRecord: %1").arg(q.lastError().text()) );
    
    /*
    QSqlRelationalTableModel* t = tables[table];
@@ -627,6 +627,38 @@ int Database::insertNewRecord( DBTable table )
    return key;
 }
 
+int Database::insertNewMashStepRecord( Mash* parent )
+{
+   int key;
+   
+   sqldb.transaction();
+   
+   QSqlQuery q( sqldb );
+   q.setForwardOnly(true);
+   q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
+              .arg(tableNames[MASHSTEPTABLE])
+         );
+   if( q.numRowsAffected() < 1 )
+   {
+      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[MASHSTEPTABLE]) );
+      key = -1;
+   }
+   else
+      key = q.lastInsertId().toInt();
+   
+   sqlUpdate( tableNames[MASHSTEPTABLE],
+              QString("`mash_id`='%1' "
+                      "`step_number` = (SELECT MAX(`step_number`)+1 FROM `%2` WHERE `%3`='%4' )")
+                      .arg(parent->_key)
+                      .arg(tableNames[MASHTABLE])
+                      .arg(keyNames[MASHTABLE])
+                      .arg(parent->_key),
+              QString("`%1`='%2'").arg(keyNames[MASHSTEPTABLE]).arg(key)
+            );
+   
+   return key;
+}
+
 BrewNote* Database::newBrewNote(BrewNote* other)
 {
    int newKey;
@@ -645,7 +677,7 @@ BrewNote* Database::newBrewNote(BrewNote* other)
 BrewNote* Database::newBrewNote(Recipe* parent)
 {
    BrewNote* tmp = new BrewNote();
-   tmp->_key = insertNewRecord(BREWNOTETABLE);
+   tmp->_key = insertNewDefaultRecord(BREWNOTETABLE);
    tmp->_table = YEASTTABLE;
    allBrewNotes.insert(tmp->_key,tmp);
    sqlUpdate( tableNames[BREWNOTETABLE],
@@ -658,7 +690,7 @@ BrewNote* Database::newBrewNote(Recipe* parent)
 Equipment* Database::newEquipment()
 {
    Equipment* tmp = new Equipment();
-   tmp->_key = insertNewRecord(EQUIPTABLE);
+   tmp->_key = insertNewDefaultRecord(EQUIPTABLE);
    tmp->_table = EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
    //emit changed( property("equipments"), allEquipments );
@@ -680,7 +712,7 @@ Equipment* Database::newEquipment(Equipment* other)
 Fermentable* Database::newFermentable()
 {
    Fermentable* tmp = new Fermentable();
-   tmp->_key = insertNewRecord(FERMTABLE);
+   tmp->_key = insertNewDefaultRecord(FERMTABLE);
    tmp->_table = FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
    emit changed( metaProperty("fermentables"), QVariant() );
@@ -700,7 +732,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
 Hop* Database::newHop()
 {
    Hop* tmp = new Hop();
-   tmp->_key = insertNewRecord(HOPTABLE);
+   tmp->_key = insertNewDefaultRecord(HOPTABLE);
    tmp->_table = HOPTABLE;
    allHops.insert(tmp->_key,tmp);
    emit changed( metaProperty("hops"), QVariant() );
@@ -723,7 +755,7 @@ Instruction* Database::newInstruction(Recipe* rec)
    // NOTE: we have unique(recipe_id,instruction_number) constraints on this table,
    // so may have to pay special attention when creating the new record.
    Instruction* tmp = new Instruction();
-   tmp->_key = insertNewRecord(INSTRUCTIONTABLE);
+   tmp->_key = insertNewDefaultRecord(INSTRUCTIONTABLE);
    tmp->_table = INSTRUCTIONTABLE;
    /*
    QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(tmp->_key),
@@ -746,7 +778,7 @@ Instruction* Database::newInstruction(Recipe* rec)
 Mash* Database::newMash()
 {
    Mash* tmp = new Mash();
-   tmp->_key = insertNewRecord(MASHTABLE);
+   tmp->_key = insertNewDefaultRecord(MASHTABLE);
    tmp->_table = MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
    emit changed( metaProperty("mashs"), QVariant() );
@@ -756,7 +788,7 @@ Mash* Database::newMash()
 Mash* Database::newMash(Recipe* parent)
 {
    Mash* tmp = new Mash();
-   tmp->_key = insertNewRecord(MASHTABLE);
+   tmp->_key = insertNewDefaultRecord(MASHTABLE);
    tmp->_table = MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
    
@@ -794,17 +826,8 @@ MashStep* Database::newMashStep(Mash* mash)
    // NOTE: we have unique(mash_id,step_number) constraints on this table,
    // so may have to pay special attention when creating the new record.
    MashStep* tmp = new MashStep();
-   tmp->_key = insertNewRecord(MASHSTEPTABLE);
+   tmp->_key = insertNewMashStepRecord(mash);
    tmp->_table = MASHSTEPTABLE;
-   /*
-   QSqlQuery q( QString("SELECT * FROM mashstep WHERE msid = %1").arg(tmp->_key),
-                sqldb );
-   q.next();
-   q.record().setValue( "mash_id", mash->_key );
-   */
-   sqlUpdate( tableNames[MASHSTEPTABLE],
-              QString("`mash_id`='%1'").arg(mash->_key),
-              QString("`msid`='%1'").arg(tmp->_key) );
 
    allMashSteps.insert(tmp->_key,tmp);
    // Database's steps have changed.
@@ -817,7 +840,7 @@ MashStep* Database::newMashStep(Mash* mash)
 Misc* Database::newMisc()
 {
    Misc* tmp = new Misc();
-   tmp->_key = insertNewRecord(MISCTABLE);
+   tmp->_key = insertNewDefaultRecord(MISCTABLE);
    tmp->_table = MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
    emit changed( metaProperty("miscs"), QVariant() );
@@ -837,7 +860,7 @@ Misc* Database::newMisc(Misc* other)
 Recipe* Database::newRecipe()
 {
    Recipe* tmp = new Recipe();
-   tmp->_key = insertNewRecord(RECTABLE);
+   tmp->_key = insertNewDefaultRecord(RECTABLE);
    tmp->_table = RECTABLE;
    allRecipes.insert(tmp->_key,tmp);
    emit changed( metaProperty("recipes"), QVariant() );
@@ -857,7 +880,7 @@ Recipe* Database::newRecipe(Recipe* other)
 Style* Database::newStyle()
 {
    Style* tmp = new Style();
-   tmp->_key = insertNewRecord(STYLETABLE);
+   tmp->_key = insertNewDefaultRecord(STYLETABLE);
    tmp->_table = STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
    emit changed( metaProperty("styles"), QVariant() );
@@ -867,7 +890,7 @@ Style* Database::newStyle()
 Water* Database::newWater()
 {
    Water* tmp = new Water();
-   tmp->_key = insertNewRecord(WATERTABLE);
+   tmp->_key = insertNewDefaultRecord(WATERTABLE);
    tmp->_table = WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
    emit changed( metaProperty("waters"), QVariant() );
@@ -877,7 +900,7 @@ Water* Database::newWater()
 Yeast* Database::newYeast()
 {
    Yeast* tmp = new Yeast();
-   tmp->_key = insertNewRecord(YEASTTABLE);
+   tmp->_key = insertNewDefaultRecord(YEASTTABLE);
    tmp->_table = YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
    emit changed( metaProperty("yeasts"), QVariant() );
@@ -1148,7 +1171,7 @@ QSqlRecord Database::copy( BeerXMLElement const* object )
    QSqlRecord oldRecord = q.record();
    
    // Create a new row.
-   newKey = insertNewRecord(t);
+   newKey = insertNewDefaultRecord(t);
    q = QSqlQuery (QString("SELECT * FROM %1 WHERE %2 = %3")
                   .arg(tName).arg(keyNames[t]).arg(object->_key),
                   sqldb

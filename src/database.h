@@ -459,8 +459,15 @@ private:
    //! Should be called when we are about to close down.
    void unload();
    
-   //! Make a new row in the \b table. Return key of new row.
-   int insertNewRecord( DBTable table );
+   /*! Make a new row in the \b table.
+    *  \returns key of new row.
+    *  Only works if all the fields in the table have default values.
+    */
+   int insertNewDefaultRecord( DBTable table );
+   
+   /*! Insert a new row in \b mashstep, where \b parent is the parent mash.
+    */
+   int insertNewMashStepRecord( Mash* parent );
    
    //! Mark the \b object in \b table as deleted.
    void deleteRecord( DBTable table, BeerXMLElement* object );
