@@ -25,58 +25,178 @@
 #include "SetterCommand.h"
 
 SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
-   : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value.toString())),
-     table(table), key_name(key_name), key(key), prop(prop), col_name(col_name), value(value), object(object), notify(notify)
+   : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value.toString()))
 {
+   appendCommand( table, key_name, key, col_name, value, prop, object, notify );
 }
 
 SetterCommand::~SetterCommand()
 {
 }
 
+void SetterCommand::appendCommand( QSqlRelationalTableModel* table,
+                  QString const& key_name,
+                  int key,
+                  QString const& col_name,
+                  QVariant value,
+                  QMetaProperty prop,
+                  BeerXMLElement* object,
+                  bool n,
+                  QVariant oldValue)
+{
+   tables.append(table);
+   key_names.append(key_name);
+   keys.append(key);
+   col_names.append(col_name);
+   values.append(value);
+   props.append(prop);
+   objects.append(object);
+   notify.append(n);
+   
+   oldValues.append(oldValue);
+}
+
+QList<QSqlQuery> SetterCommand::setterStatements()
+{
+   QList<QSqlQuery> ret;
+   QString str;
+   
+   int i, size;
+   size = tables.size();
+   if( size <= 0 )
+      return ret;
+   
+   // Construct the statements.
+   for( i = 0; i < size; ++i )
+   {
+      QSqlQuery q( tables[i]->database() );
+      str = QString("UPDATE `%1` SET `%2`=:value WHERE `%3`='%4';")
+                .arg(tables.at(i)->tableName())
+                .arg(col_names.at(i))
+                .arg(key_names.at(i))
+                .arg(keys.at(i));
+      q.setForwardOnly(true); // Helps with speed/memory.
+      q.prepare(str);
+      q.bindValue(":value",values[i]);
+      ret.append(q);
+      
+      //qDebug() << "Value: " << values[i].toString();
+      //QVariant check = q.boundValues()[0];
+      //qDebug() << "Bound Value: " << check.toString();
+   }
+   
+   return ret;
+}
+
+QList<QSqlQuery> SetterCommand::undoStatements()
+{
+   QList<QSqlQuery> ret;
+   QString str;
+   int i, size;
+   
+   size = tables.size();
+   if( size <= 0 )
+      return ret;
+   
+   // Construct the transaction string.
+   for( i = 0; i < size; ++i )
+   {
+      QSqlQuery q( tables[i]->database() );
+      str = QString("UPDATE `%1` SET `%2` = :oldValue WHERE `%3`='%4';\n")
+                .arg(tables.at(i)->tableName())
+                .arg(col_names.at(i))
+                .arg(key_names.at(i))
+                .arg(keys.at(i));
+      q.setForwardOnly(true);
+      q.prepare(str);
+      q.bindValue(":oldValue",oldValues[i]);
+      ret.append(q);
+   }
+   
+   return ret;
+}
+
+void SetterCommand::oldValueTransaction()
+{
+   QList<QSqlQuery> queries;
+   QString str;
+   
+   int i, size;
+   size = tables.size();
+   if( size <= 0 )
+      return;
+   
+   tables[0]->database().transaction();
+   for( i = 0; i < size; ++i )
+   {
+      QSqlQuery q( tables[i]->database() );
+      str = QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
+                .arg(col_names.at(i))
+                .arg(tables.at(i)->tableName())
+                .arg(key_names.at(i))
+                .arg(keys.at(i));
+      q.setForwardOnly(true);
+      q.prepare(str);
+      queries.append(q);
+      q.exec();
+   }
+   tables[0]->database().commit();
+   
+   for( i = 0; i < size; ++i )
+   {
+      QSqlQuery q = queries[i];
+      if( q.next() )
+         oldValues[i] = q.record().value(0);
+      else
+         Brewtarget::logE( QString("SetterCommand::oldValueTransaction: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
+   }
+}
+
+int SetterCommand::id() const
+{
+   // NOTE: should return an id unique to this class.
+   // If there are two commands in a stack with same id,
+   // they they may be merged with mergeWith() by the stack.
+   
+   return -1;
+}
+
+int SetterCommand::size() const
+{
+   return tables.size();
+}
+
+bool SetterCommand::mergeWith( const QUndoCommand* command )
+{
+   //SetterCommand* other = qobject_cast<SetterCommand*>(command);
+   // NOTE: just gotta pray that you can do this cast?
+   const SetterCommand* other = reinterpret_cast<const SetterCommand*>(command);
+   if( other == 0 )
+      return false;
+   
+   int i, size;
+   size = other->size();
+   for( i = 0; i < size; ++i )
+   {
+      appendCommand(
+         other->tables[i],
+         other->key_names[i],
+         other->keys[i],
+         other->col_names[i],
+         other->values[i],
+         other->props[i],
+         other->objects[i],
+         other->notify[i],
+         other->oldValues[i]
+      );
+   }
+   
+   return true;
+}
+
 void SetterCommand::redo()
 {
    /*
-   int columnIndex = table->fieldIndex(col_name);
-   int keyColumnIndex = table->fieldIndex(key_name);
-   
-   int rows = table->rowCount();
-   //qDebug() << table->data(table->index(0,0)).toString();
-   //qDebug() << table->data(table->index(0,1)).toString();
-   
-   // Get the current filter.
-   //QString filter = table->filter();
-   
-   // Makes the only visible row the one that has our key.
-   //table->setFilter( QString("`%1`='%2'").arg(key_name).arg(key) );
-   //table->setFilter( QString("`%1`='%2'").arg(key_name).arg(1) );
-   table->select();
-   
-   for( int i = 0; i < rows; ++i )
-      qDebug() << "i: " << i << " key: " << table->data(table->index(i,keyColumnIndex)).toInt();
-   
-   QModelIndexList indices = table->match( table->index(0,keyColumnIndex), Qt::DisplayRole, QVariant(key) );
-   if( indices.size() <= 0 )
-      return;
-   
-   int rowIndex = indices[0].row();
-   
-   rows = table->rowCount();
-   // Record the old data for undo.
-   //oldValue = table->record(0).value( col_name );
-   oldValue = table->data( table->index(rowIndex,columnIndex) );
-   
-   // Change the data.
-   
-   //table->record(0).setValue( col_name, value );
-   table->setData( table->index(rowIndex,columnIndex), value );
-   table->submitAll();
-   
-   // Unset the filter.
-   //table->setFilter(filter);
-   //table->select();
-   */
-   
    QSqlQuery q( table->database() );
    q.setForwardOnly(true);
    q.exec( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
@@ -111,10 +231,38 @@ void SetterCommand::redo()
    //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
    if( notify )
       emit object->changed(prop,value);
+   */
+   
+   int i, size;
+   size = tables.size();
+   if( size <= 0 )
+      return;
+   
+   // Get the old values.
+   oldValueTransaction();
+   
+   // Set the new values.
+   tables[0]->database().transaction();
+   QList<QSqlQuery> queries = setterStatements();
+   size = queries.size();
+   for( i = 0; i < size; ++i )
+   {
+      if( ! queries[i].exec() )
+         Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(queries[i].lastError().text()).arg(queries[i].lastQuery()) );
+   }
+   tables[0]->database().commit();
+
+   // Emit signals.
+   for( i = 0; i < size; ++i )
+   {
+      if( notify.at(i) )
+         emit objects[i]->changed(props[i],values[i]);
+   }
 }
 
 void SetterCommand::undo()
 {
+   /*
    QSqlQuery q( table->database() );
    q.setForwardOnly(true);
    q.prepare( QString("UPDATE `%1` SET `%2`= :value WHERE `%3`='%4'")
@@ -133,5 +281,27 @@ void SetterCommand::undo()
    // Emit the notifier.
    //prop.notifySignal().invoke( object, Q_ARG(QMetaProperty, prop), Q_ARG(QVariant, value) );
    if( notify )
-      emit object->changed(prop,value);
+      emit object->changed(prop,oldValue);
+   */
+   
+   int i, size;
+   size = tables.size();
+   
+   // Set back the old values.
+   tables[0]->database().transaction();
+   QList<QSqlQuery> queries = undoStatements();
+   size = queries.size();
+   for( i = 0; i < size; ++i )
+   {
+      if( ! queries[i].exec() )
+         Brewtarget::logE( QString("SetterCommand::undo: %1.\n   \"%2\"").arg(queries[i].lastError().text()).arg(queries[i].lastQuery()) );
+   }
+   tables[0]->database().commit();
+   
+   // Emit signals.
+   for( i = 0; i < size; ++i )
+   {
+      if( notify.at(i) )
+         emit objects[i]->changed(props[i],oldValues[i]);
+   }
 }

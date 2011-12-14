@@ -900,7 +900,7 @@ void Database::deleteRecord( DBTable table, BeerXMLElement* object )
                          object,
                          true);
    // For now, immediately execute the command.
-   command->redo();
+   //command->redo();
    // Push the command on the undo stack.
    commandStack.push(command);
 }
@@ -1075,7 +1075,7 @@ void Database::updateEntry( DBTable table, int key, const char* col_name, QVaria
                                object,
                                notify);
    // For now, immediately execute the command.
-   command->redo();
+   //command->redo();
    
    // Push the command on the undo stack.
    //commandStack.beginMacro("Change an entry");

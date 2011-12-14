@@ -18,6 +18,8 @@
 
 class SetterCommand;
 
+#include <QList>
+#include <QVariant>
 #include <QUndoCommand>
 #include <QMetaProperty>
 #include <QSqlRelationalTableModel>
@@ -39,20 +41,45 @@ public:
                   bool notify=true);
    virtual ~SetterCommand();
    
-   //virtual int id() const;
-   //virtual bool mergeWith( const QUndoCommand* command );
+   //! Reimplemented from QUndoCommand.
+   virtual int id() const;
+   //! Reimplemented from QUndoCommand.
+   virtual bool mergeWith( const QUndoCommand* command );
    
-   virtual void redo(); // Executes the command.
-   virtual void undo(); // Undoes the command.
+   //! Reimplemented from QUndoCommand. Executes the command.
+   virtual void redo();
+   //! Reimplemented from QUndoCommand. Undoes the command.
+   virtual void undo();
    
 private:
-   QSqlRelationalTableModel* table;
-   QString key_name;
-   int key;
-   QMetaProperty prop;
-   QString col_name;
-   QVariant value;
-   QVariant oldValue;
-   BeerXMLElement* object;
-   bool notify;
+   QList<QSqlRelationalTableModel*> tables;
+   QList<QString> key_names;
+   QList<int> keys;
+   QList<QMetaProperty> props;
+   QList<QString> col_names;
+   QList<QVariant> values;
+   QList<QVariant> oldValues;
+   QList<BeerXMLElement*> objects;
+   QList<bool> notify;
+   
+   //! Append a command to us.
+   void appendCommand( QSqlRelationalTableModel* table,
+                  QString const& key_name,
+                  int key,
+                  QString const& col_name,
+                  QVariant value,
+                  QMetaProperty prop,
+                  BeerXMLElement* object,
+                  bool notify,
+                  QVariant oldValue = QVariant());
+
+   //! \returns query statements for setting the values.
+   QList<QSqlQuery> setterStatements();
+   //! After execution, oldValues[] should be populated.
+   void oldValueTransaction();
+   //! \returns an unexecuted query for the transaction to rollback the values.
+   QList<QSqlQuery> undoStatements();
+   
+   //! \returns how many commands we have.
+   int size() const;
 };
