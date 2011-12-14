@@ -292,7 +292,7 @@ bool Database::restoreFromDir(QString dirStr)
 
 QVariant Database::get( DBTable table, int key, const char* col_name )
 {
-   QSqlQuery q( QString("SELECT %1 FROM %2 WHERE %3 = %4")
+   QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
                 .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
                 sqldb );
    
@@ -725,10 +725,15 @@ Instruction* Database::newInstruction(Recipe* rec)
    Instruction* tmp = new Instruction();
    tmp->_key = insertNewRecord(INSTRUCTIONTABLE);
    tmp->_table = INSTRUCTIONTABLE;
+   /*
    QSqlQuery q( QString("SELECT * FROM instruction WHERE iid = %1").arg(tmp->_key),
                 sqldb );
    q.next();
    q.record().setValue( "recipe_id", rec->_key );
+   */
+   sqlUpdate( tableNames[INSTRUCTIONTABLE],
+              QString("`recipe_id`='%1'").arg(rec->_key),
+              QString("`iid`='%1'").arg(tmp->_key) );
    allInstructions.insert(tmp->_key,tmp);
    
    // Database's instructions have changed.
@@ -791,12 +796,16 @@ MashStep* Database::newMashStep(Mash* mash)
    MashStep* tmp = new MashStep();
    tmp->_key = insertNewRecord(MASHSTEPTABLE);
    tmp->_table = MASHSTEPTABLE;
-   
+   /*
    QSqlQuery q( QString("SELECT * FROM mashstep WHERE msid = %1").arg(tmp->_key),
                 sqldb );
    q.next();
    q.record().setValue( "mash_id", mash->_key );
-   
+   */
+   sqlUpdate( tableNames[MASHSTEPTABLE],
+              QString("`mash_id`='%1'").arg(mash->_key),
+              QString("`msid`='%1'").arg(tmp->_key) );
+
    allMashSteps.insert(tmp->_key,tmp);
    // Database's steps have changed.
    emit changed( metaProperty("mashSteps"), QVariant() );
@@ -1153,16 +1162,16 @@ QSqlRecord Database::copy( BeerXMLElement const* object )
    for( i = 0; i < oldRecord.count() - 1; ++i )
    {
       if( oldRecord.fieldName(i) != "parent" )
-         newValString += QString("%1 = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
+         newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
       else
-         newValString += QString("%1 = '%2',").arg(oldRecord.fieldName(i)).arg(object->_key);
+         newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(object->_key);
    }
    if( oldRecord.fieldName(i) != "parent" )
-      newValString += QString("%1 = %2").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
+      newValString += QString("`%1` = '%2'").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
    else
-      newValString += QString("%1 = '%2'").arg(oldRecord.fieldName(i)).arg(object->_key);
+      newValString += QString("`%1` = '%2'").arg(oldRecord.fieldName(i)).arg(object->_key);
    
-   QString updateString = QString("UPDATE %1 SET %2 WHERE %3 = %4")
+   QString updateString = QString("UPDATE `%1` SET %2 WHERE `%3` = '%4'")
                           .arg(tName)
                           .arg(newValString)
                           .arg(keyNames[t])
@@ -1207,8 +1216,8 @@ void Database::addToRecipe( Recipe* rec, Mash* m )
    
    // Update mash_id
    sqlUpdate(tableNames[RECTABLE],
-             QString("mash_id=%1").arg(c.value(keyNames[MASHTABLE]).toInt()),
-             QString("%1=%2").arg(keyNames[RECTABLE]).arg(rec->_key));
+             QString("`mash_id`='%1'").arg(c.value(keyNames[MASHTABLE]).toInt()),
+             QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
    /*
    QSqlQuery q( QString("UPDATE %1 SET %2=%3 WHERE %4=%5")
                 .arg(tableNames[RECTABLE])
@@ -1230,8 +1239,8 @@ void Database::addToRecipe( Recipe* rec, Equipment* e )
    
    // Update equipment_id
    sqlUpdate(tableNames[RECTABLE],
-             QString("equipment_id=%1").arg(c.value(keyNames[EQUIPTABLE]).toInt()),
-             QString("%1=%2").arg(keyNames[RECTABLE]).arg(rec->_key));
+             QString("`equipment_id`='%1'").arg(c.value(keyNames[EQUIPTABLE]).toInt()),
+             QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
 
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), QVariant() );
@@ -1244,8 +1253,8 @@ void Database::addToRecipe( Recipe* rec, Style* s )
    
    // Update style_id
    sqlUpdate(tableNames[RECTABLE],
-             QString("style_id=%1").arg(c.value(keyNames[STYLETABLE]).toInt()),
-             QString("%1=%2").arg(keyNames[RECTABLE]).arg(rec->_key));
+             QString("`style_id`='%1'").arg(c.value(keyNames[STYLETABLE]).toInt()),
+             QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
 
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("style"), QVariant() );
@@ -1253,7 +1262,7 @@ void Database::addToRecipe( Recipe* rec, Style* s )
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( QString const& tableName, QString const& setClause, QString const& whereClause )
 {
-   QSqlQuery q( QString("UPDATE %1 SET %2 WHERE %3")
+   QSqlQuery q( QString("UPDATE `%1` SET %2 WHERE %3")
                 .arg(tableName)
                 .arg(setClause)
                 .arg(whereClause),
@@ -1262,7 +1271,7 @@ void Database::sqlUpdate( QString const& tableName, QString const& setClause, QS
 
 void Database::sqlDelete( QString const& tableName, QString const& whereClause )
 {
-   QSqlQuery q( QString("DELETE FROM %1 WHERE %2")
+   QSqlQuery q( QString("DELETE FROM `%1` WHERE %2")
                 .arg(tableName)
                 .arg(whereClause),
                 sqldb );
@@ -2790,11 +2799,10 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 Recipe* Database::recipeFromXml( QDomNode const& node )
 {
    QDomNode n;
-   QHash<QString,QString> propHash;
    Recipe* ret = newRecipe();
    
    // First, get standard properties.
-   fromXml( ret, propHash, node );
+   fromXml( ret, Recipe::tagToProp, node );
    
    // Get style.
    n = node.firstChildElement("STYLE");
