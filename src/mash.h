@@ -37,19 +37,19 @@ public:
 
    virtual ~Mash() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
-   Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c NOTIFY changed /*changedGrainTemp_c*/ )
-   Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
-   Q_PROPERTY( double tunTemp_c READ tunTemp_c WRITE setTunTemp_c NOTIFY changed /*changedTunTemp_c*/ )
-   Q_PROPERTY( double spargeTemp_c READ spargeTemp_c WRITE setSpargeTemp_c NOTIFY changed /*changedSpargeTemp_c*/ )
-   Q_PROPERTY( double ph READ ph WRITE setPh NOTIFY changed /*changedPh*/ )
-   Q_PROPERTY( double tunWeight_kg READ tunWeight_kg WRITE setTunWeight_kg NOTIFY changed /*changedTunWeight_kg*/ )
-   Q_PROPERTY( double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC NOTIFY changed /*changedTunSpecificHeat_calGC*/ )
-   Q_PROPERTY( bool equipAdjust READ equipAdjust WRITE setEquipAdjust NOTIFY changed /*changedEquipAdjust*/ )
-   Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ NOTIFY changed /*changedTotalMashWater_l*/ STORED false )
-   Q_PROPERTY( double totalTime READ totalTime /*WRITE*/ NOTIFY changed /*changedTotalTime*/ STORED false )
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY( double tunTemp_c READ tunTemp_c WRITE setTunTemp_c /*NOTIFY changed*/ /*changedTunTemp_c*/ )
+   Q_PROPERTY( double spargeTemp_c READ spargeTemp_c WRITE setSpargeTemp_c /*NOTIFY changed*/ /*changedSpargeTemp_c*/ )
+   Q_PROPERTY( double ph READ ph WRITE setPh /*NOTIFY changed*/ /*changedPh*/ )
+   Q_PROPERTY( double tunWeight_kg READ tunWeight_kg WRITE setTunWeight_kg /*NOTIFY changed*/ /*changedTunWeight_kg*/ )
+   Q_PROPERTY( double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC /*NOTIFY changed*/ /*changedTunSpecificHeat_calGC*/ )
+   Q_PROPERTY( bool equipAdjust READ equipAdjust WRITE setEquipAdjust /*NOTIFY changed*/ /*changedEquipAdjust*/ )
+   Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ /*NOTIFY changed*/ /*changedTotalMashWater_l*/ STORED false )
+   Q_PROPERTY( double totalTime READ totalTime /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
    
-   Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ NOTIFY changed /*changedTotalTime*/ STORED false )
+   Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
    
    // Setters
    void setName( const QString &var );

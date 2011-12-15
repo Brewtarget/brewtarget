@@ -35,15 +35,15 @@ public:
    
    virtual ~Instruction() {}
 
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
-   Q_PROPERTY( QString directions READ directions WRITE setDirections NOTIFY changed /*changedDirections*/ )
-   Q_PROPERTY( bool hasTimer READ hasTimer WRITE setHasTimer NOTIFY changed /*changedHasTimer*/ )
-   Q_PROPERTY( QString timerValue READ timerValue WRITE setTimerValue NOTIFY changed /*changedTimerValue*/ )
-   Q_PROPERTY( bool completed READ completed WRITE setCompleted NOTIFY changed /*changedCompleted*/ )
-   Q_PROPERTY( double interval READ interval WRITE setInterval NOTIFY changed /*changedInterval*/ )
-   Q_PROPERTY( QVector<QString> reagents READ reagents /*WRITE*/ NOTIFY changed /*changedReagents*/ )
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( QString directions READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
+   Q_PROPERTY( bool hasTimer READ hasTimer WRITE setHasTimer /*NOTIFY changed*/ /*changedHasTimer*/ )
+   Q_PROPERTY( QString timerValue READ timerValue WRITE setTimerValue /*NOTIFY changed*/ /*changedTimerValue*/ )
+   Q_PROPERTY( bool completed READ completed WRITE setCompleted /*NOTIFY changed*/ /*changedCompleted*/ )
+   Q_PROPERTY( double interval READ interval WRITE setInterval /*NOTIFY changed*/ /*changedInterval*/ )
+   Q_PROPERTY( QVector<QString> reagents READ reagents /*WRITE*/ /*NOTIFY changed*/ /*changedReagents*/ )
    
-   Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ NOTIFY changed STORED false )
+   Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
    // "set" methods.
    void setName(const QString& n);

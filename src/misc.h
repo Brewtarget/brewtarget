@@ -42,18 +42,18 @@ public:
    
    virtual ~Misc() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
-   Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )
-   Q_PROPERTY( QString typeString READ typeString NOTIFY changed STORED false )
-   Q_PROPERTY( QString typeStringTr READ typeStringTr NOTIFY changed STORED false )
-   Q_PROPERTY( Use use READ use WRITE setUse NOTIFY changed /*changedUse*/ )
-   Q_PROPERTY( QString useString READ useString NOTIFY changed /*changedUse*/ STORED false )
-   Q_PROPERTY( QString useStringTr READ useStringTr NOTIFY changed /*changedUse*/ STORED false )
-   Q_PROPERTY( double time READ time WRITE setTime NOTIFY changed /*changedTime*/ )
-   Q_PROPERTY( double amount READ amount WRITE setAmount NOTIFY changed /*changedAmount*/ )
-   Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight NOTIFY changed /*changedAmountIsWeight*/ )
-   Q_PROPERTY( QString useFor READ useFor WRITE setUseFor NOTIFY changed /*changedUseFor*/ )
-   Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   Q_PROPERTY( QString typeString READ typeString /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( QString typeStringTr READ typeStringTr /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
+   Q_PROPERTY( QString useString READ useString /*NOTIFY changed*/ /*changedUse*/ STORED false )
+   Q_PROPERTY( QString useStringTr READ useStringTr /*NOTIFY changed*/ /*changedUse*/ STORED false )
+   Q_PROPERTY( double time READ time WRITE setTime /*NOTIFY changed*/ /*changedTime*/ )
+   Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
+   Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
+   Q_PROPERTY( QString useFor READ useFor WRITE setUseFor /*NOTIFY changed*/ /*changedUseFor*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    
    // Set
    void setName( const QString &var );

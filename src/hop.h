@@ -47,22 +47,22 @@ public:
    
    virtual ~Hop() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
-   Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct NOTIFY changed /*changedAlpha_pct*/ )
-   Q_PROPERTY( double amount_kg READ amount_kg WRITE setAmount_kg NOTIFY changed /*changedAmount_kg*/ )
-   Q_PROPERTY( Use use READ use WRITE setUse NOTIFY changed /*changedUse*/ )
-   Q_PROPERTY( double time_min READ time_min WRITE setTime_min NOTIFY changed /*changedTime_min*/ )
-   Q_PROPERTY( QString notes READ notes WRITE setNotes NOTIFY changed /*changedNotes*/ )
-   Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )
-   Q_PROPERTY( Form form READ form WRITE setForm NOTIFY changed /*changedForm*/ )
-   Q_PROPERTY( double beta_pct READ beta_pct WRITE setBeta_pct NOTIFY changed /*changedBeta_pct*/ )
-   Q_PROPERTY( double hsi_pct READ hsi_pct WRITE setHsi_pct NOTIFY changed /*changedHsi_pct*/ )
-   Q_PROPERTY( QString origin READ origin WRITE setOrigin NOTIFY changed /*changedOrigin*/ )
-   Q_PROPERTY( QString substitutes READ substitutes WRITE setSubstitutes NOTIFY changed /*changedSubstitutes*/ )
-   Q_PROPERTY( double humulene_pct READ humulene_pct WRITE setHumulene_pct NOTIFY changed /*changedHumulene_pct*/ )
-   Q_PROPERTY( double caryophyllene_pct READ caryophyllene_pct WRITE setCaryophyllene_pct NOTIFY changed /*changedCaryophyllene_pct*/ )
-   Q_PROPERTY( double cohumulone_pct READ cohumulone_pct WRITE setCohumulone_pct NOTIFY changed /*changedCohumulone_pct*/ )
-   Q_PROPERTY( double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct NOTIFY changed /*changedMyrcene_pct*/ )
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )
+   Q_PROPERTY( double amount_kg READ amount_kg WRITE setAmount_kg /*NOTIFY changed*/ /*changedAmount_kg*/ )
+   Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
+   Q_PROPERTY( double time_min READ time_min WRITE setTime_min /*NOTIFY changed*/ /*changedTime_min*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   Q_PROPERTY( Form form READ form WRITE setForm /*NOTIFY changed*/ /*changedForm*/ )
+   Q_PROPERTY( double beta_pct READ beta_pct WRITE setBeta_pct /*NOTIFY changed*/ /*changedBeta_pct*/ )
+   Q_PROPERTY( double hsi_pct READ hsi_pct WRITE setHsi_pct /*NOTIFY changed*/ /*changedHsi_pct*/ )
+   Q_PROPERTY( QString origin READ origin WRITE setOrigin /*NOTIFY changed*/ /*changedOrigin*/ )
+   Q_PROPERTY( QString substitutes READ substitutes WRITE setSubstitutes /*NOTIFY changed*/ /*changedSubstitutes*/ )
+   Q_PROPERTY( double humulene_pct READ humulene_pct WRITE setHumulene_pct /*NOTIFY changed*/ /*changedHumulene_pct*/ )
+   Q_PROPERTY( double caryophyllene_pct READ caryophyllene_pct WRITE setCaryophyllene_pct /*NOTIFY changed*/ /*changedCaryophyllene_pct*/ )
+   Q_PROPERTY( double cohumulone_pct READ cohumulone_pct WRITE setCohumulone_pct /*NOTIFY changed*/ /*changedCohumulone_pct*/ )
+   Q_PROPERTY( double myrcene_pct READ myrcene_pct WRITE setMyrcene_pct /*NOTIFY changed*/ /*changedMyrcene_pct*/ )
    
    const QString name() const;
    double alpha_pct() const;

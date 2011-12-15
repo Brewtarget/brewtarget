@@ -42,17 +42,17 @@ public:
    
    virtual ~MashStep() {}
 
-   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changed /*changedName*/ )
-   Q_PROPERTY( Type type READ type WRITE setType NOTIFY changed /*changedType*/ )
-   Q_PROPERTY( double infuseAmount_l READ infuseAmount_l WRITE setInfuseAmount_l NOTIFY changed /*changedInfuseAmount_l*/ )
-   Q_PROPERTY( double stepTemp_c READ stepTemp_c WRITE setStepTemp_c NOTIFY changed /*changedStepTemp_c*/ )
-   Q_PROPERTY( double stepTime_min READ stepTime_min WRITE setStepTime_min NOTIFY changed /*changedStepTime_min*/ )
-   Q_PROPERTY( double rampTime_min READ rampTime_min WRITE setRampTime_min NOTIFY changed /*changedRampTime_min*/ )
-   Q_PROPERTY( double endTemp_c READ endTemp_c WRITE setEndTemp_c NOTIFY changed /*changedEndTemp_c*/ )
-   Q_PROPERTY( double infuseTemp_c READ infuseTemp_c WRITE setInfuseTemp_c NOTIFY changed /*changedInfuseTemp_c*/ )
-   Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l NOTIFY changed /*changedDecoctionAmount_l*/ )
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   Q_PROPERTY( double infuseAmount_l READ infuseAmount_l WRITE setInfuseAmount_l /*NOTIFY changed*/ /*changedInfuseAmount_l*/ )
+   Q_PROPERTY( double stepTemp_c READ stepTemp_c WRITE setStepTemp_c /*NOTIFY changed*/ /*changedStepTemp_c*/ )
+   Q_PROPERTY( double stepTime_min READ stepTime_min WRITE setStepTime_min /*NOTIFY changed*/ /*changedStepTime_min*/ )
+   Q_PROPERTY( double rampTime_min READ rampTime_min WRITE setRampTime_min /*NOTIFY changed*/ /*changedRampTime_min*/ )
+   Q_PROPERTY( double endTemp_c READ endTemp_c WRITE setEndTemp_c /*NOTIFY changed*/ /*changedEndTemp_c*/ )
+   Q_PROPERTY( double infuseTemp_c READ infuseTemp_c WRITE setInfuseTemp_c /*NOTIFY changed*/ /*changedInfuseTemp_c*/ )
+   Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l /*NOTIFY changed*/ /*changedDecoctionAmount_l*/ )
    
-   Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ NOTIFY changed STORED false )
+   Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
    void setName( const QString &var );
    void setType( Type t );
