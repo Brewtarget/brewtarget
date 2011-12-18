@@ -240,7 +240,11 @@ MainWindow::MainWindow(QWidget* parent)
       setSelection(treeView_recipe->findRecipe(recipeObs));
    }     
    else
-      setRecipe( Database::instance().recipes()[0] );
+   {
+      QList<Recipe*> recs = Database::instance().recipes();
+      if( recs.size() > 0 )
+         setRecipe( recs[0] );
+   }
 
    // Connect signals.
    // actions

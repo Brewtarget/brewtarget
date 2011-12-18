@@ -33,6 +33,9 @@ EquipmentComboBox::EquipmentComboBox(QWidget* parent)
 
 void EquipmentComboBox::addEquipment(Equipment* equipment)
 {
+   if( ! equipment )
+      return;
+   
    if( !equipments.contains(equipment) )
       equipments.append(equipment);
    connect( equipment, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );

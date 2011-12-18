@@ -360,7 +360,7 @@ private:
    QHash< int, Yeast* > allYeasts;
    
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
-   template <class T> void populateElements( QHash<int,T*> hash, QSqlRelationalTableModel* tm, DBTable table )
+   template <class T> void populateElements( QHash<int,T*>& hash, QSqlRelationalTableModel* tm, DBTable table )
    {
       int i, size, key;
       BeerXMLElement* e;
@@ -402,7 +402,8 @@ private:
       for( i = 0; i < size; ++i )
       {
          key = tm->record(i).value(keyNames[table]).toInt();
-         list.append( allElements[key] );
+         if( allElements.contains(key) )
+            list.append( allElements[key] );
       }
       
       tm->setFilter(oldFilter);
