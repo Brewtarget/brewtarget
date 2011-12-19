@@ -39,7 +39,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
          <widget class="QLabel" name="label_12">
@@ -71,12 +71,24 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
           <widget class="QWidget" name="tabTree_recipe">
+           <property name="toolTip">
+            <string>Recipes</string>
+           </property>
            <attribute name="icon">
             <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/brewtarget_icon.svg</normaloff>:/images/brewtarget_icon.svg</iconset>
            </attribute>
            <attribute name="title">
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
             <string>Recipes</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -91,7 +103,7 @@
              <normaloff>:/images/smallKettle.svg</normaloff>:/images/smallKettle.svg</iconset>
            </attribute>
            <attribute name="title">
-            <string>Equipment</string>
+            <string/>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_9">
             <item>
@@ -105,6 +117,9 @@
              <normaloff>:/images/smallBarley.svg</normaloff>:/images/smallBarley.svg</iconset>
            </attribute>
            <attribute name="title">
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
             <string>Fermentables</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -119,6 +134,9 @@
              <normaloff>:/images/smallHop.svg</normaloff>:/images/smallHop.svg</iconset>
            </attribute>
            <attribute name="title">
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
             <string>Hops</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -133,7 +151,10 @@
              <normaloff>:/images/smallQuestion.svg</normaloff>:/images/smallQuestion.svg</iconset>
            </attribute>
            <attribute name="title">
-            <string>Misc</string>
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Miscs</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
@@ -147,7 +168,10 @@
              <normaloff>:/images/smallYeast.svg</normaloff>:/images/smallYeast.svg</iconset>
            </attribute>
            <attribute name="title">
-            <string>Yeast</string>
+            <string/>
+           </attribute>
+           <attribute name="toolTip">
+            <string>Yeasts</string>
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
@@ -175,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>402</height>
+           <width>657</width>
+           <height>411</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1139,8 +1163,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>333</height>
+           <width>657</width>
+           <height>321</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1184,6 +1208,12 @@
                  <bool>false</bool>
                 </attribute>
                 <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderCascadingSectionResizes">
                  <bool>false</bool>
                 </attribute>
                </widget>
@@ -1663,7 +1693,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">

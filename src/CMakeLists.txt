@@ -6,6 +6,43 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 # Put all the required Qt dirs in the includes.
 INCLUDE(${QT_USE_FILE})
 
+# (ADD_PCH_RULE  _header_filename _src_list)
+# Version 7/26/2010
+#
+# use this macro before "add_executable"
+#
+# _header_filename
+#  header to make a .gch
+#
+# _src_list 
+#   the variable name (do not use ${..}) which contains a
+#     a list of sources (a.cpp b.cpp c.cpp ...)
+#  This macro will append a header file to it, then this src_list can be used in
+#  "add_executable..."
+#
+#
+# Now a .gch file should be generated and gcc should use it. 
+#        (add -Winvalid-pch to the cpp flags to verify)
+#
+# make clean should delete the pch file
+#
+# example : ADD_PCH_RULE(headers.h myprog_SRCS)
+MACRO (ADD_PCH_RULE  _header_filename _src_list)
+   SET(_gch_filename "${_header_filename}.gch")
+   LIST(APPEND ${_src_list} ${_gch_filename})
+   SET (_args ${CMAKE_CXX_FLAGS})
+   LIST(APPEND _args -c ${_header_filename} -o ${_gch_filename})
+   GET_DIRECTORY_PROPERTY(DIRINC INCLUDE_DIRECTORIES)
+   FOREACH(_inc ${DIRINC})
+      LIST(APPEND _args "-I" ${_inc})
+   ENDFOREACH(_inc ${DIRINC})
+   SEPARATE_ARGUMENTS(_args)
+   ADD_CUSTOM_COMMAND(OUTPUT ${_gch_filename}
+                      COMMAND rm -f ${_gch_filename}
+                      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_args}
+                      DEPENDS ${_header_filename})
+ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
+
 # Variable that contains all the .cpp files in this project.
 SET( brewtarget_SRCS
     ${SRCDIR}/Algorithms.cpp
@@ -226,6 +263,14 @@ SET( FILES_TO_TRANSLATE
      ${brewtarget_SRCS}
      ${brewtarget_UIS}
 )
+
+#======Speed up compilation by using precompiled headers for development======
+#IF( UNIX AND NOT APPLE )
+#   SET( precompiled_h "equipment.h" "fermentable.h" "hop.h" "instruction.h" "mash.h" "mashstep.h" "misc.h" "recipe.h" "style.h" "water.h" "yeast.h" "database.h" "brewtarget.h" )
+#   FOREACH( header ${precompiled_h} )
+#      ADD_PCH_RULE( "${CMAKE_CURRENT_SOURCE_DIR}/${header}" brewtarget_SRCS )
+#   ENDFOREACH()
+#ENDIF()
 
 #==============================Setup the config.h==============================
 
