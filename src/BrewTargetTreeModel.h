@@ -124,8 +124,10 @@ private slots:
    
 private:
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
-   void loadTreeModel(QString propName);
-   void unloadTreeModel(QString propName);
+   //! Loads the data. Empty \b propname means load all trees.
+   void loadTreeModel(QString propName = "");
+   //! Unloads the data. Empty \b propname means unload all trees.
+   void unloadTreeModel(QString propName = "");
    //! Disconnect all the \b objects' signals from us. \b T must be BeerXMLElement.
    void unobserve( QList<Recipe*>& objects );
    
