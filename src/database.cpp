@@ -1507,7 +1507,7 @@ void Database::importFromXML(const QString& filename)
    QDomNodeList list;
    QString err;
    QFile inFile;
-   QStringList tags = QStringList() << "EQUIPMENT" << "HOP" << "MISC" << "YEAST";
+   QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER";
    inFile.setFileName(filename);
    
    if( ! inFile.open(QIODevice::ReadOnly) )
@@ -1551,6 +1551,11 @@ void Database::importFromXML(const QString& filename)
                for(int i = 0; i < list.count(); ++i )
                   equipmentFromXml( list.at(i) );
             }
+            else if( tag == "FERMENTABLE" )
+            {
+               for( int i = 0; i < list.count(); ++i )
+                  fermentableFromXml( list.at(i) );
+            }
             else if (tag == "HOP")
             {
                for(int i = 0; i < list.count(); ++i )
@@ -1561,10 +1566,20 @@ void Database::importFromXML(const QString& filename)
                for(int i = 0; i < list.count(); ++i )
                   miscFromXml( list.at(i) );
             }
+            else if( tag == "STYLE" )
+            {
+               for( int i = 0; i < list.count(); ++i )
+                  styleFromXml( list.at(i) );
+            }
             else if (tag == "YEAST")
             {
                for(int i = 0; i < list.count(); ++i )
                   yeastFromXml( list.at(i) );
+            }
+            else if( tag == "WATER" )
+            {
+               for( int i = 0; i < list.count(); ++i )
+                  waterFromXml( list.at(i) );
             }
          }
       }
