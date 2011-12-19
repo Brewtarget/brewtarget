@@ -272,7 +272,7 @@ SET( FILES_TO_TRANSLATE
 
 #======Speed up compilation by using precompiled headers for development======
 #IF( UNIX AND NOT APPLE )
-#   SET( precompiled_h "equipment.h" "fermentable.h" "hop.h" "instruction.h" "mash.h" "mashstep.h" "misc.h" "recipe.h" "style.h" "water.h" "yeast.h" "database.h" "brewtarget.h" )
+#   SET( precompiled_h "equipment.h" "fermentable.h" "hop.h" "instruction.h" "mash.h" "mashstep.h" "misc.h" "recipe.h" "style.h" "unit.h" "water.h" "yeast.h" "database.h" "brewtarget.h" )
 #   FOREACH( header ${precompiled_h} )
 #      ADD_PCH_RULE( ${header} brewtarget_SRCS )
 #   ENDFOREACH()

@@ -2219,6 +2219,10 @@ bool Recipe::isValidType( const QString &str )
 void Recipe::changed(QMetaProperty prop, QVariant val)
 {
    QObject* senderObj = sender();
+   // Sender can be null if the sender is from another thread.
+   if( senderObj == 0 )
+      return;
+   
    QString senderClass(senderObj->metaObject()->className());
    
    // Pass along the signal if it's one of our ingredients?

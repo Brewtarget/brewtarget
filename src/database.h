@@ -25,12 +25,13 @@ class Database;
 #include <QDomNode>
 #include <QList>
 #include <QHash>
-#include <iostream>
 #include <QFile>
 #include <QString>
 #include <QSqlDatabase>
 #include <QSqlRelationalTableModel>
 #include <QSqlRecord>
+#include <QSqlQuery>
+#include <QVariant>
 #include <QMetaProperty>
 #include <QUndoStack>
 #include <QObject>
@@ -96,7 +97,17 @@ public:
    // ###
    
    //! Get the contents of the cell specified by table/key/col_name. Mostly for BeerXMLElement.
-   QVariant get( DBTable table, int key, const char* col_name );
+   inline QVariant get( DBTable table, int key, const char* col_name ) __attribute__((always_inline))
+   {
+      QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
+                   .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
+                   sqldb );
+                   
+      if( q.next() )
+         return q.value(0);
+      else
+         return QVariant();
+   }
       
    //! Get a table view.
    QTableView* createView( DBTable table );

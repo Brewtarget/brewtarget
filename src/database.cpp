@@ -290,18 +290,6 @@ bool Database::restoreFromDir(QString dirStr)
    return success;
 }
 
-QVariant Database::get( DBTable table, int key, const char* col_name )
-{
-   QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
-                .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
-                sqldb );
-   
-   if( q.next() )
-      return q.value(0);
-   else
-      return QVariant();
-}
-
 // removeFromRecipe ===========================================================
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
 {

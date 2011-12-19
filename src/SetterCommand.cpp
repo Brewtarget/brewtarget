@@ -70,7 +70,7 @@ QList<QSqlQuery> SetterCommand::setterStatements()
    for( i = 0; i < size; ++i )
    {
       QSqlQuery q( tables[i]->database() );
-      str = QString("UPDATE `%1` SET `%2`=:value WHERE `%3`='%4';")
+      str = QString("UPDATE `%1` SET `%2`= :value WHERE `%3`='%4'")
                 .arg(tables.at(i)->tableName())
                 .arg(col_names.at(i))
                 .arg(key_names.at(i))
@@ -102,7 +102,7 @@ QList<QSqlQuery> SetterCommand::undoStatements()
    for( i = 0; i < size; ++i )
    {
       QSqlQuery q( tables[i]->database() );
-      str = QString("UPDATE `%1` SET `%2` = :oldValue WHERE `%3`='%4';\n")
+      str = QString("UPDATE `%1` SET `%2` = :oldValue WHERE `%3`='%4'")
                 .arg(tables.at(i)->tableName())
                 .arg(col_names.at(i))
                 .arg(key_names.at(i))
