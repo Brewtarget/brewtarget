@@ -646,6 +646,14 @@ void MainWindow::showChanges(QMetaProperty* prop)
    if( recipeObs == 0 )
       return;
 
+   bool updateAll = (prop == 0);
+   QString propName;
+   //QVariant propVal;
+   if( prop )
+   {
+      propName = prop->name();
+      //propVal = prop->read( /*What here?*/ );
+   }
    //recipeObs->recalculate();
 
    lineEdit_name->setText(recipeObs->name());
@@ -711,8 +719,9 @@ void MainWindow::showChanges(QMetaProperty* prop)
    }
 
    // See if we need to change the mash in the table.
-   if( QString(prop->name()) == "mash" &&
-       recipeObs->mash() )
+   if( (updateAll && recipeObs->mash()) ||
+       (propName == "mash" &&
+       recipeObs->mash()) )
    {
       mashStepTableWidget->getModel()->setMash(recipeObs->mash());
    }

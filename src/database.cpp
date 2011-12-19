@@ -1118,6 +1118,9 @@ int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString p
    // TODO: encapsulate this in a QUndoCommand.
    int newKey;
    QSqlRecord r;
+ 
+   if( rec == 0 || ing == 0 )
+      return -1;
    
    // Ensure this ingredient is not already in the recipe.
    QSqlQuery q(

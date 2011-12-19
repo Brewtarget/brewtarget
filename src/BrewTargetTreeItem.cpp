@@ -190,7 +190,7 @@ QVariant BrewTargetTreeItem::dataRecipe( int column )
             return QVariant(recipe->date());
          break;
         case RECIPESTYLECOL:
-         if ( recipe )
+         if ( recipe && recipe->style() )
             return QVariant(recipe->style()->name());
          break;
       default :

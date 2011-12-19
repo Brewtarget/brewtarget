@@ -110,19 +110,49 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
    {
       lineEdit_name->setText(obsMisc->name());
       lineEdit_name->setCursorPosition(0);
+      if( ! updateAll )
+         return;
    }
-   else if( propName == "type" || updateAll )
+   if( propName == "type" || updateAll )
+   {
       comboBox_type->setCurrentIndex(obsMisc->type());
-   else if( propName == "use" || updateAll )
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "use" || updateAll )
+   {
       comboBox_use->setCurrentIndex(obsMisc->use());
-   else if( propName == "time" || updateAll )
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "time" || updateAll )
+   {
       lineEdit_time->setText(Brewtarget::displayAmount(obsMisc->time(), Units::minutes));
-   else if( propName == "amount" || updateAll )
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "amount" || updateAll )
+   {
       lineEdit_amount->setText(Brewtarget::displayAmount(obsMisc->amount(), (obsMisc->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
-   else if( propName == "amountIsWeight" || updateAll )
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "amountIsWeight" || updateAll )
+   {
       checkBox_isWeight->setCheckState( obsMisc->amountIsWeight()? Qt::Checked : Qt::Unchecked );
-   else if( propName == "useFor" || updateAll )
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "useFor" || updateAll )
+   {
       textEdit_useFor->setPlainText( obsMisc->useFor() );
-   else if( propName == "notes" || updateAll )
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "notes" || updateAll )
+   {
       textEdit_notes->setPlainText( obsMisc->notes() );
+      if( ! updateAll )
+         return;
+   }
 }
