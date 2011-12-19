@@ -1188,7 +1188,7 @@ QSqlRecord Database::copy( BeerXMLElement const* object )
                           .arg(newValString)
                           .arg(keyNames[t])
                           .arg(newKey);
-   q = QSqlQuery();
+   q = QSqlQuery( sqldb );
    q.prepare(updateString);
    q.exec();
    

@@ -265,6 +265,7 @@ create table recipe(
    assistant_brewer varchar(1024) DEFAULT 'Brewtarget: free beer software',
    batch_size real DEFAULT 0.0,
    boil_size real DEFAULT 0.0,
+   boil_time real DEFAULT 0.0,
    efficiency real DEFAULT 70.0,
    og real DEFAULT 1.0,
    fg real DEFAULT 1.0,

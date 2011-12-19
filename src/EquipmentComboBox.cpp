@@ -59,9 +59,14 @@ void EquipmentComboBox::removeEquipment(Equipment* equipment)
 void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
 {
    int i;
-
+   QObject* sendr = sender();
+   
+   // NOTE: What should we do if sender is outside our thread (and therefore null)?
+   if( sendr == 0 )
+      return;
+   
    // Notifier could be the database.
-   if( sender() == &(Database::instance()) &&
+   if( sendr == &(Database::instance()) &&
        QString(prop.name()) == "equipments" )
    {
       Equipment* previousSelection = getSelected();
@@ -77,7 +82,7 @@ void EquipmentComboBox::changed(QMetaProperty prop, QVariant val)
       else
          setCurrentIndex(-1); // Or just give up.
    }
-   else if( sender() == recipe )
+   else if( sendr == recipe )
    {
       // Only respond if the equipment changed.
       if( QString(prop.name()) == "equipment" )
