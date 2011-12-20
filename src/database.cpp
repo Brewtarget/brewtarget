@@ -1143,7 +1143,7 @@ int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString p
    return newKey;
 }
 
-QSqlRecord Database::copy( BeerXMLElement const* object )
+QSqlRecord Database::copy( BeerXMLElement const* object, bool displayed )
 {
    int newKey;
    int i;
@@ -1161,27 +1161,28 @@ QSqlRecord Database::copy( BeerXMLElement const* object )
    
    // Create a new row.
    newKey = insertNewDefaultRecord(t);
-   q = QSqlQuery (QString("SELECT * FROM %1 WHERE %2 = %3")
+   q = QSqlQuery( QString("SELECT * FROM %1 WHERE %2 = %3")
                   .arg(tName).arg(keyNames[t]).arg(object->_key),
                   sqldb
-                 );
+                );
    q.next();
    QSqlRecord newRecord = q.record();
    
    // Set the new row's columns equal to the old one's, except for any "parent"
    // field, which should be set to the oldRecord's key.
    QString newValString;
-   for( i = 0; i < oldRecord.count() - 1; ++i )
+   for( i = 0; i < oldRecord.count(); ++i )
    {
-      if( oldRecord.fieldName(i) != "parent" )
-         newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
+      if( oldRecord.fieldName(i) == "parent" )
+         newValString += QString("`parent` = '%2',").arg(object->_key);      
+      else if( oldRecord.fieldName(i) == "displayed" )
+         newValString += QString("`displayed` = '%2',").arg( displayed ? "true" : "false" );
       else
-         newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(object->_key);
+         newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
    }
-   if( oldRecord.fieldName(i) != "parent" )
-      newValString += QString("`%1` = '%2'").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
-   else
-      newValString += QString("`%1` = '%2'").arg(oldRecord.fieldName(i)).arg(object->_key);
+   
+   // Remove last comma.
+   newValString.chop(1);
    
    QString updateString = QString("UPDATE `%1` SET %2 WHERE `%3` = '%4'")
                           .arg(tName)
@@ -1260,12 +1261,19 @@ void Database::addToRecipe( Recipe* rec, Equipment* e )
 
 void Database::addToRecipe( Recipe* rec, Style* s )
 {
+   /*
    // Make a copy of style.
    QSqlRecord c = copy(s);
    
    // Update style_id
    sqlUpdate(tableNames[RECTABLE],
              QString("`style_id`='%1'").arg(c.value(keyNames[STYLETABLE]).toInt()),
+             QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
+   */
+   
+   // Just add the style directly. No need to copy I think.
+   sqlUpdate(tableNames[RECTABLE],
+             QString("`style_id`='%1'").arg(s->_key),
              QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
 
    // Emit a changed signal.

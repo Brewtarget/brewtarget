@@ -181,6 +181,20 @@ ENDIF()
 
 CONFIGURE_FILE( brewtarget.desktop.in brewtarget.desktop )
 
+#==============================Setup the config.h==============================
+
+# "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
+# by the below corresponding value in ${CONFIGDATADIR} below when
+# CONFIGURE_FILE() is called.
+SET( CONFIGDATADIR "${DATAPATH}/" )
+SET( CONFIGDOCDIR "${DOCPATH}/" )
+
+# Tell cmake where the configure file is and where
+# to put the output. All variables in config.in written as "${VAR}$
+# will be replaced by VAR as determined by cmake in config.h.
+# Outputs only in the build directory.
+CONFIGURE_FILE( src/config.in src/config.h )
+
 #================================Files=========================================
 
 # List of documentation files to be installed.
@@ -408,39 +422,42 @@ ENDIF()
 
 #================================Installs======================================
 
-# Install the data.
-INSTALL( FILES ${brewtarget_DATA}
-         DESTINATION ${DATAPATH} )
+IF( NOT ${BUILD_DESIGNER_PLUGINS} )
 
-# Install the documentation.
-INSTALL( FILES ${brewtarget_DOCS}
-         DESTINATION ${DOCPATH} )
+   # Install the data.
+   INSTALL( FILES ${brewtarget_DATA}
+            DESTINATION ${DATAPATH} )
 
-# Install sounds.
-INSTALL( FILES ${brewtarget_SOUNDS}
-         DESTINATION "${DATAPATH}/sounds" )
+   # Install the documentation.
+   INSTALL( FILES ${brewtarget_DOCS}
+            DESTINATION ${DOCPATH} )
 
-#-----------Unix-----------
-IF( UNIX AND NOT APPLE )
-   # Install the icons.
-   INSTALL( FILES ${brewtarget_ICONS}
-            DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+   # Install sounds.
+   INSTALL( FILES ${brewtarget_SOUNDS}
+            DESTINATION "${DATAPATH}/sounds" )
 
-   # Install the .desktop file.
-   INSTALL( FILES ${brewtarget_DESKTOP}
-            DESTINATION "${DATAROOTDIR}/applications" )
-ENDIF()
+   #-----------Unix-----------
+   IF( UNIX AND NOT APPLE )
+      # Install the icons.
+      INSTALL( FILES ${brewtarget_ICONS}
+               DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
 
-#--------Windows--------
-IF( WIN32 )
-   INSTALL( FILES ${Qt_DLLs}
-            DESTINATION "bin" )
-   INSTALL( FILES ${Phonon_Backend_DLLs}
-            DESTINATION "bin/phonon_backend" )
-   INSTALL( FILES ${Image_Formats_DLLs}
-            DESTINATION "bin/imageformats" )
-   INSTALL( FILES ${Icon_Engines_DLLs}
-            DESTINATION "bin/iconengines" )
+      # Install the .desktop file.
+      INSTALL( FILES ${brewtarget_DESKTOP}
+               DESTINATION "${DATAROOTDIR}/applications" )
+   ENDIF()
+
+   #--------Windows--------
+   IF( WIN32 )
+      INSTALL( FILES ${Qt_DLLs}
+               DESTINATION "bin" )
+      INSTALL( FILES ${Phonon_Backend_DLLs}
+               DESTINATION "bin/phonon_backend" )
+      INSTALL( FILES ${Image_Formats_DLLs}
+               DESTINATION "bin/imageformats" )
+      INSTALL( FILES ${Icon_Engines_DLLs}
+               DESTINATION "bin/iconengines" )
+   ENDIF()
 ENDIF()
 
 #---------Mac--------

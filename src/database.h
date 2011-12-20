@@ -181,7 +181,7 @@ public:
    void addToRecipe( Recipe* rec, Mash* m );
    //! Add an equipment, displacing any current equipment.
    void addToRecipe( Recipe* rec, Equipment* e );
-   //! Add a style, displacing any current style.
+   //! Add a style, displacing any current style. Does not add a copy, adds the actual style \b s.
    void addToRecipe( Recipe* rec, Style* s );
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
@@ -502,8 +502,9 @@ private:
     * signal after a copy() call. Also, does not insert things magically into
     * allHop or allInstructions etc. hashes. This just simply duplicates a
     * row in a table.
+    * \param displayed is true if you want the \em displayed column set to true.
     */
-   QSqlRecord copy( BeerXMLElement const* object );
+   QSqlRecord copy( BeerXMLElement const* object, bool displayed = true );
    
    //! Do an sql update.
    void sqlUpdate( QString const& tableName, QString const& setClause, QString const& whereClause );

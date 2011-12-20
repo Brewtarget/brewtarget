@@ -99,7 +99,6 @@ public slots:
    void updateRecipeBatchSize();
    void updateRecipeBoilSize();
    void updateRecipeEfficiency();
-   void updateRecipeStyle(const QString&);
 
    void addFermentableToRecipe(Fermentable* ferm);
    void removeSelectedFermentable();

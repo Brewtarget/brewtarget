@@ -33,7 +33,7 @@
     <normaloff>:/images/brewtarget_icon.svg</normaloff>:/images/brewtarget_icon.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_13">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>657</width>
-           <height>411</height>
+           <width>671</width>
+           <height>393</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -213,26 +213,11 @@
              <attribute name="title">
               <string>Recipe</string>
              </attribute>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <property name="topMargin">
-               <number>16</number>
-              </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_2">
-                <property name="spacing">
-                 <number>1</number>
-                </property>
                 <item>
-                 <layout class="QFormLayout" name="formLayout">
-                  <property name="sizeConstraint">
-                   <enum>QLayout::SetDefaultConstraint</enum>
-                  </property>
-                  <property name="horizontalSpacing">
-                   <number>5</number>
-                  </property>
-                  <property name="verticalSpacing">
-                   <number>4</number>
-                  </property>
+                 <layout class="QGridLayout" name="gridLayout_2">
                   <item row="0" column="0">
                    <widget class="QLabel" name="label">
                     <property name="sizePolicy">
@@ -278,54 +263,10 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="StyleComboBox" name="styleComboBox">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                      <horstretch>100</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>160</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Style of this recipe</string>
-                    </property>
-                    <property name="sizeAdjustPolicy">
-                     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="2" column="0">
                    <widget class="QLabel" name="equipmentLabel">
                     <property name="text">
                      <string>Equipment</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="EquipmentComboBox" name="equipmentComboBox">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                      <horstretch>100</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>160</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="toolTip">
-                     <string>Equipment to brew this with</string>
-                    </property>
-                    <property name="sizeAdjustPolicy">
-                     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
                     </property>
                    </widget>
                   </item>
@@ -453,7 +394,42 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="2" column="1">
+                   <widget class="EquipmentComboBox" name="equipmentComboBox">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                      <horstretch>100</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>160</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>Equipment to brew this with</string>
+                    </property>
+                    <property name="sizeAdjustPolicy">
+                     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -1104,7 +1080,7 @@
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_9">
                    <item>
-                    <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
+                    <widget class="BeerColorWidget" name="beerColorWidget"/>
                    </item>
                   </layout>
                  </widget>
@@ -1135,7 +1111,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
               </item>
              </layout>
             </widget>
@@ -1145,7 +1121,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
               </item>
              </layout>
             </widget>
@@ -2228,11 +2204,6 @@
    <class>EquipmentComboBox</class>
    <extends>QComboBox</extends>
    <header>EquipmentComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>StyleComboBox</class>
-   <extends>QComboBox</extends>
-   <header>StyleComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeTreeView</class>

@@ -278,20 +278,6 @@ SET( FILES_TO_TRANSLATE
 #   ENDFOREACH()
 #ENDIF()
 
-#==============================Setup the config.h==============================
-
-# "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
-# by the below corresponding value in ${CONFIGDATADIR} below when
-# CONFIGURE_FILE() is called.
-SET( CONFIGDATADIR "${DATAPATH}/" )
-SET( CONFIGDOCDIR "${DOCPATH}/" )
-
-# Tell cmake where the configure file is and where
-# to put the output. All variables in config.in written as "${VAR}$
-# will be replaced by VAR as determined by cmake in config.h.
-# Outputs only in the build directory.
-CONFIGURE_FILE( config.in config.h )
-
 #==================================Qt Junk=====================================
 
 # Create the moc sources from the headers.

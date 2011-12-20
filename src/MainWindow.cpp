@@ -308,7 +308,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
-   connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
+   //connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -615,7 +615,8 @@ void MainWindow::setRecipe(Recipe* recipe)
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
-   styleComboBox->observeRecipe(recipe);
+   //styleComboBox->observeRecipe(recipe);
+   //recipeStyleNameButton->setRecipe(recipe);
    equipmentComboBox->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
    beerColorWidget->setRecipe(recipe);
@@ -816,20 +817,6 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
          recipeObs->setBoilSize_l( kit->boilSize_l() );
       }
    }
-}
-
-void MainWindow::updateRecipeStyle(const QString& /*styleName*/)
-{
-   if( recipeObs == 0 )
-      return;
-
-   // style may be null.
-   Style* style = styleComboBox->getSelected();
-   if( style == 0 )
-      return;
-
-   // Notice that we are using a copy from the database.
-   Database::instance().addToRecipe(recipeObs,style);
 }
 
 void MainWindow::updateRecipeBatchSize()
