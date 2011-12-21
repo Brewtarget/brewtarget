@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="MiscTableWidget" name="miscTableWidget"/>
+    <widget class="QTableView" name="miscTableWidget"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -105,13 +105,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>MiscTableWidget</class>
-   <extends>QTableView</extends>
-   <header>MiscTableWidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>

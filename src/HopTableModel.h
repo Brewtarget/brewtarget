@@ -26,11 +26,10 @@ class HopItemDelegate;
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
+#include <QTableView>
 #include <QItemDelegate>
 #include <QVector>
 #include "hop.h"
-#include "HopTableWidget.h"
 #include "recipe.h"
 
 enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
@@ -40,7 +39,7 @@ class HopTableModel : public QAbstractTableModel
    Q_OBJECT
            
 public:
-   HopTableModel(HopTableWidget* parent=0);
+   HopTableModel(QTableView* parent=0);
    virtual ~HopTableModel();
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -74,7 +73,7 @@ public slots:
 private:
    QList<Hop*> hopObs;
    Recipe* recObs;
-   HopTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.
 };
 

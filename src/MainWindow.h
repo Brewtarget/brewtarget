@@ -65,6 +65,15 @@ class RefractoDialog;
 class MashDesigner;
 class PitchDialog;
 class BrewNoteWidget;
+class FermentableTableModel;
+class FermentableSortFilterProxyModel;
+class HopTableModel;
+class HopSortFilterProxyModel;
+class MiscTableModel;
+class MiscSortFilterProxyModel;
+class YeastTableModel;
+class YeastSortFilterProxyModel;
+class MashStepTableModel;
 
 class MainWindow : public QMainWindow, public Ui::mainWindow
 {
@@ -117,6 +126,8 @@ public slots:
    void editSelectedYeast();
 
    void addMashStep();
+   void moveSelectedMashStepUp();
+   void moveSelectedMashStepDown();
    void removeSelectedMashStep();
    void editSelectedMashStep();
    void setMashToCurrentlySelected();
@@ -188,6 +199,16 @@ private:
    PitchDialog* pitchDialog;
    QPrinter *printer;
 
+   FermentableTableModel* fermTableModel;
+   FermentableSortFilterProxyModel* fermTableProxy;
+   HopTableModel* hopTableModel;
+   HopSortFilterProxyModel* hopTableProxy;
+   MiscTableModel* miscTableModel;
+   MiscSortFilterProxyModel* miscTableProxy;
+   YeastTableModel* yeastTableModel;
+   YeastSortFilterProxyModel* yeastTableProxy;
+   MashStepTableModel* mashStepTableModel;
+   
    QMultiHash<QString, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 

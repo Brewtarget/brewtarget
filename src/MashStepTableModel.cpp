@@ -20,7 +20,7 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
+#include <QTableView>
 #include <QItemDelegate>
 #include <QObject>
 #include <QComboBox>
@@ -31,7 +31,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 
-MashStepTableModel::MashStepTableModel(MashStepTableWidget* parent)
+MashStepTableModel::MashStepTableModel(QTableView* parent)
    : QAbstractTableModel(parent), mashObs(0), parentTableWidget(parent)
 {
 }
@@ -41,22 +41,27 @@ void MashStepTableModel::setMash( Mash* m )
    int i;
    if( mashObs )
    {
+      beginRemoveRows( QModelIndex(), 0, steps.size()-1 );
       // Remove mashObs and all steps.
       disconnect( mashObs, 0, this, 0 );
       for( i = 0; i < steps.size(); ++i )
          disconnect( steps[i], 0, this, 0 );
       steps.clear();
+      endRemoveRows();
    }
    
    mashObs = m;
    if( mashObs )
    {
+      QList<MashStep*> tmpSteps = mashObs->mashSteps();
+      beginInsertRows( QModelIndex(), 0, tmpSteps.size()-1 );
       connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-      steps = mashObs->mashSteps();
+      steps = tmpSteps;
       for( i = 0; i < steps.size(); ++i )
          connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      endInsertRows();
    }
-   reset(); // Tell everybody that the table has changed.
+   //reset(); // Tell everybody that the table has changed.
    
    if( parentTableWidget )
    {
@@ -80,12 +85,8 @@ void MashStepTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    Mash* mashSender = qobject_cast<Mash*>(sender());
    if( mashSender && mashSender == mashObs )
    {
-      for( i = 0; i < steps.size(); ++i )
-         disconnect( steps[i], 0, this, 0 );
-      steps = mashObs->mashSteps();
-      for( i = 0; i < steps.size(); ++i )
-         connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-      
+      // Remove and re-add all steps.
+      setMash( mashObs );
       return;
    }
    

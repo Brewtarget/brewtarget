@@ -30,6 +30,8 @@ class MiscDialog;
 // Forward declarations.
 class MainWindow;
 class MiscEditor;
+class MiscTableModel;
+class MiscSortFilterProxyModel;
 
 class MiscDialog : public QDialog, public Ui::miscDialog
 {
@@ -49,6 +51,8 @@ public slots:
    
 private:
    MainWindow* mainWindow;
+   MiscTableModel* miscTableModel;
+   MiscSortFilterProxyModel* miscTableProxy;
    int numMiscs;
    MiscEditor* miscEdit;
 

@@ -23,6 +23,7 @@ class FermentableTableModel;
 class FermentableItemDelegate;
 
 #include <QAbstractTableModel>
+#include <QTableView>
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
@@ -30,7 +31,6 @@ class FermentableItemDelegate;
 #include <QStyledItemDelegate>
 #include <QAbstractItemDelegate>
 #include <QList>
-#include "FermentableTableWidget.h"
 
 // Forward declarations.
 class Fermentable;
@@ -43,7 +43,7 @@ class FermentableTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   FermentableTableModel(FermentableTableWidget* parent=0);
+   FermentableTableModel(QTableView* parent=0);
    virtual ~FermentableTableModel() {}
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -74,7 +74,7 @@ public:
    //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
-   FermentableTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
    
 public slots:
    void changed(QMetaProperty, QVariant);

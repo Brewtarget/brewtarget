@@ -30,7 +30,8 @@ class FermentableDialog;
 // Forward declarations.
 class MainWindow;
 class FermentableEditor;
-
+class FermentableTableModel;
+class FermentableSortFilterProxyModel;
 class FermentableDialog : public QDialog, public Ui::fermentableDialog
 {
    Q_OBJECT
@@ -52,6 +53,8 @@ public slots:
 
 private:
    MainWindow* mainWindow;
+   FermentableTableModel* fermTableModel;
+   FermentableSortFilterProxyModel* fermTableProxy;
    FermentableEditor* fermEdit;
    int numFerms;
 

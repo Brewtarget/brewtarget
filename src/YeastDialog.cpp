@@ -28,12 +28,20 @@
 #include "yeast.h"
 #include "YeastEditor.h"
 #include "YeastTableModel.h"
+#include "YeastSortFilterProxyModel.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
         : QDialog(parent), mainWindow(parent), yeastEditor(new YeastEditor(this)), numYeasts(0)
 {
    setupUi(this);
 
+   yeastTableModel = new YeastTableModel(yeastTableWidget);
+   yeastTableProxy = new YeastSortFilterProxyModel(yeastTableWidget);
+   yeastTableProxy->setSourceModel(yeastTableModel);
+   yeastTableWidget->setModel(yeastTableProxy);
+   yeastTableWidget->setSortingEnabled(true);
+   yeastTableWidget->sortByColumn( YEASTNAMECOL, Qt::AscendingOrder );
+   
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
@@ -46,7 +54,7 @@ YeastDialog::YeastDialog(MainWindow* parent)
 
 void YeastDialog::removeYeast()
 {
-   QModelIndexList selected = yeastTableWidget->selectedIndexes();
+   QModelIndexList selected = yeastTableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated;
    int row, size, i;
 
@@ -64,8 +72,8 @@ void YeastDialog::removeYeast()
 
    // We need to translate from the view's index to the model's index.  The
    // proxy model does the heavy lifting, as long as we do the call.
-   translated = yeastTableWidget->getProxy()->mapToSource(selected[0]);
-   Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
+   translated = yeastTableProxy->mapToSource(selected[0]);
+   Yeast *yeast = yeastTableModel->getYeast(translated.row());
    Database::instance().removeYeast(yeast);
 }
 
@@ -77,10 +85,9 @@ void YeastDialog::changed(QMetaProperty prop, QVariant val)
    if( sender() == &(Database::instance()) &&
        propName == "yeasts" )
    {
-      yeastTableWidget->getModel()->removeAll();
+      yeastTableModel->removeAll();
       populateTable();
    }
-
 }
 
 void YeastDialog::populateTable()
@@ -91,7 +98,7 @@ void YeastDialog::populateTable()
    numYeasts = yeasts.size();
    int i;
    for( i = 0; i < numYeasts; ++i )
-      yeastTableWidget->getModel()->addYeast(yeasts[i]);
+      yeastTableModel->addYeast(yeasts[i]);
 }
 
 void YeastDialog::addYeast(const QModelIndex& index)
@@ -100,7 +107,7 @@ void YeastDialog::addYeast(const QModelIndex& index)
    
    if( !index.isValid() )
    {
-      QModelIndexList selected = yeastTableWidget->selectedIndexes();
+      QModelIndexList selected = yeastTableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -115,7 +122,7 @@ void YeastDialog::addYeast(const QModelIndex& index)
             return;
       }
 
-      translated = yeastTableWidget->getProxy()->mapToSource(selected[0]);
+      translated = yeastTableProxy->mapToSource(selected[0]);
    }
    else
    {
@@ -123,12 +130,12 @@ void YeastDialog::addYeast(const QModelIndex& index)
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other columns.
       if( index.column() == YEASTNAMECOL )
-         translated = yeastTableWidget->getProxy()->mapToSource(index);
+         translated = yeastTableProxy->mapToSource(index);
       else
          return;
    }
    
-   Yeast* yeast = yeastTableWidget->getModel()->getYeast(translated.row());
+   Yeast* yeast = yeastTableModel->getYeast(translated.row());
    
    // Adds a copy of yeast.
    Database::instance().addToRecipe( mainWindow->currentRecipe(), yeast );
@@ -136,7 +143,7 @@ void YeastDialog::addYeast(const QModelIndex& index)
 
 void YeastDialog::editSelected()
 {
-   QModelIndexList selected   = yeastTableWidget->selectedIndexes();
+   QModelIndexList selected = yeastTableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated; 
 
    int row, size, i;
@@ -153,8 +160,8 @@ void YeastDialog::editSelected()
       if( selected[i].row() != row )
          return;
    }
-   translated = yeastTableWidget->getProxy()->mapToSource(selected[0]);
-   Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
+   translated = yeastTableProxy->mapToSource(selected[0]);
+   Yeast *yeast = yeastTableModel->getYeast(translated.row());
    yeastEditor->setYeast(yeast);
    yeastEditor->show();
 }

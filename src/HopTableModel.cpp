@@ -21,7 +21,6 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
 #include <QItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QComboBox>
@@ -30,13 +29,12 @@
 #include "hop.h"
 #include <QString>
 #include <QVector>
-#include <iostream>
 #include "hop.h"
 #include "HopTableModel.h"
 #include "unit.h"
 #include "brewtarget.h"
 
-HopTableModel::HopTableModel(HopTableWidget* parent)
+HopTableModel::HopTableModel(QTableView* parent)
    : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent), showIBUs(false)
 {
    hopObs.clear();
@@ -80,13 +78,16 @@ void HopTableModel::observeDatabase(bool val)
 
 void HopTableModel::addHop(Hop* hop)
 {
-   if( hopObs.contains(hop) )
+   if( hop == 0 || hopObs.contains(hop) )
       return;
    
+   int size = hopObs.size();
+   beginInsertRows( QModelIndex(), size, size );
    hopObs.append(hop);
    connect( hop, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   reset(); // Tell everybody that the table has changed.
-
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
+   
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
@@ -109,16 +110,18 @@ bool HopTableModel::removeHop(Hop* hop)
    i = hopObs.indexOf(hop);
    if( i >= 0 )
    {
+      beginRemoveRows( QModelIndex(), i, i );
       disconnect( hop, 0, this, 0 );
       hopObs.removeAt(i);
-      reset(); // Tell everybody the table has changed.
-         
+      //reset(); // Tell everybody the table has changed.
+      endRemoveRows();
+
       if(parentTableWidget)
       {
          parentTableWidget->resizeColumnsToContents();
          parentTableWidget->resizeRowsToContents();
       }
-         
+
       return true;
    }
       
@@ -195,7 +198,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)hopObs.size() )
    {
-      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
+      Brewtarget::log(Brewtarget::WARNING, QString("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -238,7 +241,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
         else
            return QVariant();
       default :
-         Brewtarget::log(Brewtarget::WARNING, tr("HopTableModel::data Bad column: %1").arg(index.column()));
+         Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::data Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -262,7 +265,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
          case HOPFORMCOL:
            return QVariant(tr("Form"));
          default:
-            Brewtarget::log(Brewtarget::WARNING, tr("HopTableModel::headerdata Bad column: %1").arg(section));
+            Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::headerdata Bad column: %1").arg(section));
             return QVariant();
       }
    }

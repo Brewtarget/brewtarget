@@ -29,6 +29,7 @@ class YeastItemDelegate;
 #include <QVariant>
 #include <QItemDelegate>
 #include <QList>
+#include <QTableView>
 
 // Forward declarations.
 class Yeast;
@@ -42,7 +43,7 @@ class YeastTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   YeastTableModel(YeastTableWidget* parent=0);
+   YeastTableModel(QTableView* parent=0);
    virtual ~YeastTableModel() {}
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -68,7 +69,7 @@ public slots:
    
 private:
    QList<Yeast*> yeastObs;
-   YeastTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
    Recipe* recObs;
 };
 

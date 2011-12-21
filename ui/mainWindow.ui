@@ -1167,32 +1167,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_19">
               <item>
-               <widget class="FermentableTableWidget" name="fermentableTable">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <attribute name="horizontalHeaderCascadingSectionResizes">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderCascadingSectionResizes">
-                 <bool>false</bool>
-                </attribute>
-               </widget>
+               <widget class="QTableView" name="fermentableTable"/>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1264,7 +1239,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_20">
               <item>
-               <widget class="HopTableWidget" name="hopTable"/>
+               <widget class="QTableView" name="hopTable"/>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1336,7 +1311,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_21">
               <item>
-               <widget class="MiscTableWidget" name="miscTable"/>
+               <widget class="QTableView" name="miscTable"/>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1408,7 +1383,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
-               <widget class="YeastTableWidget" name="yeastTable"/>
+               <widget class="QTableView" name="yeastTable"/>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1482,7 +1457,7 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
-                 <widget class="MashStepTableWidget" name="mashStepTableWidget"/>
+                 <widget class="QTableView" name="mashStepTableWidget"/>
                 </item>
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout">
@@ -2166,34 +2141,9 @@
    <header>BrewDayScrollWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>FermentableTableWidget</class>
-   <extends>QTableView</extends>
-   <header>FermentableTableWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>HopTableWidget</class>
-   <extends>QTableView</extends>
-   <header>HopTableWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MashStepTableWidget</class>
-   <extends>QTableView</extends>
-   <header>MashStepTableWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MiscTableWidget</class>
-   <extends>QTableView</extends>
-   <header>MiscTableWidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>RecipeExtrasWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>YeastTableWidget</class>
-   <extends>QTableView</extends>
-   <header>YeastTableWidget.h</header>
   </customwidget>
   <customwidget>
    <class>BtDigitWidget</class>

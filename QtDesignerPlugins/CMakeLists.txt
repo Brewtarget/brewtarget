@@ -232,24 +232,14 @@ SET( PLUGIN_MOCS
    BrewtargetPlugins.h
    BeerColorWidgetPlugin.h
    BrewDayScrollWidgetPlugin.h
-   FermentableTableWidgetPlugin.h
-   HopTableWidgetPlugin.h
-   MashStepTableWidgetPlugin.h
-   MiscTableWidgetPlugin.h
    RecipeExtrasWidgetPlugin.h
-   YeastTableWidgetPlugin.h
 )
 
 SET( PLUGIN_SRCS
    BrewtargetPlugins.cpp
    BeerColorWidgetPlugin.cpp
    BrewDayScrollWidgetPlugin.cpp
-   FermentableTableWidgetPlugin.cpp
-   HopTableWidgetPlugin.cpp
-   MashStepTableWidgetPlugin.cpp
-   MiscTableWidgetPlugin.cpp
    RecipeExtrasWidgetPlugin.cpp
-   YeastTableWidgetPlugin.cpp
 )
 
 QT4_WRAP_CPP( GEN_MOC_FILES ${MOC_FILES} ${PLUGIN_MOCS} )

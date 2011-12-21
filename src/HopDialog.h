@@ -31,6 +31,8 @@ class HopDialog;
 // Forward declarations.
 class MainWindow;
 class HopEditor;
+class HopTableModel;
+class HopSortFilterProxyModel;
 
 class HopDialog : public QDialog, public Ui::hopDialog
 {
@@ -51,11 +53,11 @@ public slots:
 private:
    MainWindow* mainWindow;
    HopEditor* hopEditor;
+   HopTableModel* hopTableModel;
+   HopSortFilterProxyModel* hopTableProxy;
    int numHops;
 
    void populateTable();
 };
 
-
 #endif   /* _HOPDIALOG_H */
-

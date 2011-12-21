@@ -76,7 +76,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/FermentableDialog.cpp
     ${SRCDIR}/FermentableSortFilterProxyModel.cpp
     ${SRCDIR}/FermentableTableModel.cpp
-    ${SRCDIR}/FermentableTableWidget.cpp
     ${SRCDIR}/main.cpp
     ${SRCDIR}/HeatCalculations.cpp
     ${SRCDIR}/hop.cpp
@@ -84,7 +83,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HopEditor.cpp
     ${SRCDIR}/HopSortFilterProxyModel.cpp
     ${SRCDIR}/HopTableModel.cpp
-    ${SRCDIR}/HopTableWidget.cpp
     ${SRCDIR}/HtmlViewer.cpp
     ${SRCDIR}/instruction.cpp
     ${SRCDIR}/IbuMethods.cpp
@@ -106,7 +104,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MiscDialog.cpp
     ${SRCDIR}/MiscSortFilterProxyModel.cpp
     ${SRCDIR}/MiscTableModel.cpp
-    ${SRCDIR}/MiscTableWidget.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
@@ -138,7 +135,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/YeastDialog.cpp
     ${SRCDIR}/YeastEditor.cpp
     ${SRCDIR}/YeastTableModel.cpp
-    ${SRCDIR}/YeastTableWidget.cpp
     ${SRCDIR}/YeastSortFilterProxyModel.cpp
     ${SRCDIR}/RecipeExtrasDialog.cpp
     ${SRCDIR}/MashDesigner.cpp
@@ -209,12 +205,10 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/FermentableDialog.h
     ${SRCDIR}/FermentableSortFilterProxyModel.h
     ${SRCDIR}/FermentableTableModel.h
-    ${SRCDIR}/FermentableTableWidget.h
     ${SRCDIR}/HopDialog.h
     ${SRCDIR}/HopEditor.h
     ${SRCDIR}/HopSortFilterProxyModel.h
     ${SRCDIR}/HopTableModel.h
-    ${SRCDIR}/HopTableWidget.h
     ${SRCDIR}/InstructionWidget.h
     ${SRCDIR}/MainWindow.h
     ${SRCDIR}/MaltinessWidget.h
@@ -229,7 +223,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/MiscEditor.h
     ${SRCDIR}/MiscSortFilterProxyModel.h
     ${SRCDIR}/MiscTableModel.h
-    ${SRCDIR}/MiscTableWidget.h
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
@@ -251,7 +244,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
-    ${SRCDIR}/YeastTableWidget.h
     ${SRCDIR}/equipment.h
     ${SRCDIR}/fermentable.h
     ${SRCDIR}/hop.h

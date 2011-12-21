@@ -20,23 +20,13 @@
 #include "BrewtargetPlugins.h"
 #include "BeerColorWidgetPlugin.h"
 #include "BrewDayScrollWidgetPlugin.h"
-#include "FermentableTableWidgetPlugin.h"
-#include "HopTableWidgetPlugin.h"
-#include "MashStepTableWidgetPlugin.h"
-#include "MiscTableWidgetPlugin.h"
 #include "RecipeExtrasWidgetPlugin.h"
-#include "YeastTableWidgetPlugin.h"
 
 BrewtargetPlugins::BrewtargetPlugins(QObject* parent) : QObject(parent)
 {
    plugins.append(new BeerColorWidgetPlugin(this));
    plugins.append(new BrewDayScrollWidgetPlugin(this));
-   plugins.append(new FermentableTableWidgetPlugin(this));
-   plugins.append(new HopTableWidgetPlugin(this));
-   plugins.append(new MashStepTableWidgetPlugin(this));
-   plugins.append(new MiscTableWidgetPlugin(this));
    plugins.append(new RecipeExtrasWidgetPlugin(this));
-   plugins.append(new YeastTableWidgetPlugin(this));
 }
 
 QList<QDesignerCustomWidgetInterface*> BrewtargetPlugins::customWidgets() const

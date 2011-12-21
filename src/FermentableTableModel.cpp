@@ -39,7 +39,7 @@
 #include "recipe.h"
 
 //=====================CLASS FermentableTableModel==============================
-FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
+FermentableTableModel::FermentableTableModel(QTableView* parent)
    : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0), displayPercentages(false), totalFermMass_kg(0)
 {
    fermObs.clear();
@@ -81,11 +81,14 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
    //Check to see if it's already in the list
    if( fermObs.contains(ferm) )
       return;
-   
+ 
+   int size = fermObs.size();
+   beginInsertRows( QModelIndex(), size, size );
    fermObs.append(ferm);
    connect( ferm, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    totalFermMass_kg += ferm->amount_kg();
-   reset(); // Tell everybody that the table has changed.
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
    
    if(parentTableWidget)
    {
@@ -109,12 +112,14 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
    i = fermObs.indexOf(ferm);
    if( i >= 0 )
    {
+      beginRemoveRows( QModelIndex(), i, i );
       disconnect( ferm, 0, this, 0 );
       fermObs.removeAt(i);
       
       totalFermMass_kg -= ferm->amount_kg();
-      reset(); // Tell everybody the table has changed.
-         
+      //reset(); // Tell everybody the table has changed.
+      endRemoveRows();
+      
       if(parentTableWidget)
       {
          parentTableWidget->resizeColumnsToContents();

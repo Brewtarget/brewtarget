@@ -20,12 +20,11 @@
 #include <QLineEdit>
 #include "misc.h"
 #include "MiscTableModel.h"
-#include "MiscTableWidget.h"
 #include "unit.h"
 #include "brewtarget.h"
 #include "recipe.h"
 
-MiscTableModel::MiscTableModel(MiscTableWidget* parent)
+MiscTableModel::MiscTableModel(QTableView* parent)
    : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent)
 {
    miscObs.clear();
@@ -67,10 +66,13 @@ void MiscTableModel::addMisc(Misc* misc)
    if( miscObs.contains(misc) )
       return;
    
+   int size = miscObs.size();
+   beginInsertRows( QModelIndex(), size, size );
    miscObs.append(misc);
    connect( misc, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   reset(); // Tell everybody that the table has changed.
-
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
+   
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
@@ -94,10 +96,12 @@ bool MiscTableModel::removeMisc(Misc* misc)
    i = miscObs.indexOf(misc);
    if( i >= 0 )
    {
+      beginRemoveRows( QModelIndex(), i, i );
       disconnect( misc, 0, this, 0 );
       miscObs.removeAt(i);
-      reset(); // Tell everybody the table has changed.
-         
+      //reset(); // Tell everybody the table has changed.
+      endInsertRows();
+      
       if(parentTableWidget)
       {
          parentTableWidget->resizeColumnsToContents();

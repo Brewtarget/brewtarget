@@ -31,6 +31,7 @@ class MiscItemDelegate;
 #include <QStyleOptionViewItem>
 #include <QList>
 #include <QMetaProperty>
+#include <QTableView>
 
 // Forward declarations.
 class Misc;
@@ -44,7 +45,7 @@ class MiscTableModel : public QAbstractTableModel
    Q_OBJECT
    
 public:
-   MiscTableModel(MiscTableWidget* parent=0);
+   MiscTableModel(QTableView* parent=0);
    virtual ~MiscTableModel() {}
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -76,7 +77,7 @@ public slots:
 private:
    QList<Misc*> miscObs;
    Recipe* recObs;
-   MiscTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
 };
 
 class MiscItemDelegate : public QItemDelegate

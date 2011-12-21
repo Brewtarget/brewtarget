@@ -30,9 +30,9 @@ class MashStepItemDelegate;
 #include <QVariant>
 #include <QItemDelegate>
 #include <QVector>
+#include <QTableView>
 #include "mashstep.h"
 #include "mash.h"
-#include "MashStepTableWidget.h"
 
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTARGETTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 
@@ -41,7 +41,7 @@ class MashStepTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   MashStepTableModel(MashStepTableWidget* parent=0);
+   MashStepTableModel(QTableView* parent=0);
    virtual ~MashStepTableModel() {}
    void setMash( Mash* m );
    //void addMashStep(MashStep* step);
@@ -70,7 +70,7 @@ public slots:
    
 private:
    Mash* mashObs;
-   MashStepTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
    QList<MashStep*> steps;
 };
 

@@ -37,18 +37,7 @@ class Database;
 #include <QObject>
 #include <QPair>
 #include <QTableView>
-/* Replace with forward declarations
-#include "equipment.h"
-#include "fermentable.h"
-#include "hop.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "misc.h"
-#include "recipe.h"
-#include "style.h"
-#include "water.h"
-#include "yeast.h"
-*/
+// Forward declarations
 class BrewNote;
 class BeerXMLElement;
 class Equipment;

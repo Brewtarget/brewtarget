@@ -24,16 +24,25 @@
 #include "FermentableEditor.h"
 #include "FermentableDialog.h"
 #include "FermentableTableModel.h"
+#include "FermentableSortFilterProxyModel.h"
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
 #include "fermentable.h"
 
 FermentableDialog::FermentableDialog(MainWindow* parent)
-        : QDialog(parent), mainWindow(parent), fermEdit(new FermentableEditor(this)), numFerms(0)
+        : QDialog(parent), mainWindow(parent),
+          fermEdit(new FermentableEditor(this)), numFerms(0)
 {
    setupUi(this);
 
+   fermTableModel = new FermentableTableModel(fermentableTableWidget);
+   fermTableProxy = new FermentableSortFilterProxyModel(fermentableTableWidget);
+   fermTableProxy->setSourceModel(fermTableModel);
+   fermentableTableWidget->setModel(fermTableProxy);
+   fermentableTableWidget->setSortingEnabled(true);
+   fermentableTableWidget->sortByColumn( FERMNAMECOL, Qt::AscendingOrder );
+   
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addFermentable() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeFermentable() ) );
@@ -47,7 +56,7 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
 
 void FermentableDialog::removeFermentable()
 {
-   QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+   QModelIndexList selected = fermentableTableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated;
    int row, size, i;
 
@@ -63,14 +72,14 @@ void FermentableDialog::removeFermentable()
          return;
    }
 
-   translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
-   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
+   translated = fermTableProxy->mapToSource(selected[0]);
+   Fermentable* ferm = fermTableModel->getFermentable(translated.row());
    Database::instance().removeFermentable(ferm);
 }
 
 void FermentableDialog::editSelected()
 {
-   QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+   QModelIndexList selected = fermentableTableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated;
    int row, size, i;
 
@@ -86,8 +95,8 @@ void FermentableDialog::editSelected()
          return;
    }
 
-   translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
-   Fermentable* ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
+   translated = fermTableProxy->mapToSource(selected[0]);
+   Fermentable* ferm = fermTableModel->getFermentable(translated.row());
    fermEdit->setFermentable(ferm);
    fermEdit->show();
 }
@@ -98,7 +107,7 @@ void FermentableDialog::changed(QMetaProperty prop, QVariant val)
    if( sender() == &(Database::instance()) &&
        QString(prop.name()) == "fermentables" )
    {
-      fermentableTableWidget->getModel()->removeAll();
+      fermTableModel->removeAll();
       populateTable();
    }
 }
@@ -111,7 +120,7 @@ void FermentableDialog::populateTable()
    numFerms = ferms.size();
    int i;
    for( i = 0; i < numFerms; ++i )
-      fermentableTableWidget->getModel()->addFermentable(ferms[i]);
+      fermTableModel->addFermentable(ferms[i]);
 }
 
 void FermentableDialog::addFermentable(const QModelIndex& index)
@@ -121,7 +130,7 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
    // If there is no provided index, get the selected index.
    if( !index.isValid() )
    {
-      QModelIndexList selected = fermentableTableWidget->selectedIndexes();
+      QModelIndexList selected = fermentableTableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -136,7 +145,7 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
             return;
       }
       
-      translated = fermentableTableWidget->getProxy()->mapToSource(selected[0]);
+      translated = fermTableProxy->mapToSource(selected[0]);
    }
    else
    {
@@ -144,12 +153,12 @@ void FermentableDialog::addFermentable(const QModelIndex& index)
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other fermentable fields.
       if( index.column() == FERMNAMECOL )
-         translated = fermentableTableWidget->getProxy()->mapToSource(index);
+         translated = fermTableProxy->mapToSource(index);
       else
          return;
    }
    
-   Fermentable *ferm = fermentableTableWidget->getModel()->getFermentable(translated.row());
+   Fermentable *ferm = fermTableModel->getFermentable(translated.row());
    
    Database::instance().addToRecipe( mainWindow->currentRecipe(), ferm );
 }

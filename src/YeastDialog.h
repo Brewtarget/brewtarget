@@ -31,6 +31,8 @@ class YeastDialog;
 class MainWindow;
 class YeastEditor;
 class YeastEditor;
+class YeastTableModel;
+class YeastSortFilterProxyModel;
 
 class YeastDialog : public QDialog, public Ui::yeastDialog
 {
@@ -49,6 +51,8 @@ public slots:
    void changed(QMetaProperty, QVariant);
 private:
    MainWindow* mainWindow;
+   YeastTableModel* yeastTableModel;
+   YeastSortFilterProxyModel* yeastTableProxy;
    YeastEditor* yeastEditor;
    int numYeasts;
 

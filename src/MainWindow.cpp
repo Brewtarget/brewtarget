@@ -26,8 +26,6 @@
 #include <QFileDialog>
 #include <QIcon>
 #include <QPixmap>
-#include <iostream>
-#include <fstream>
 #include <QList>
 #include <QVector>
 #include <QVBoxLayout>
@@ -59,8 +57,6 @@
 #include "MainWindow.h"
 #include "AboutDialog.h"
 #include "database.h"
-#include "MiscTableWidget.h"
-#include "YeastTableWidget.h"
 #include "YeastDialog.h"
 #include "BeerColorWidget.h"
 #include "config.h"
@@ -92,6 +88,13 @@
 #include "yeast.h"
 #include "brewnote.h"
 #include "equipment.h"
+#include "FermentableTableModel.h"
+#include "FermentableSortFilterProxyModel.h"
+#include "HopTableModel.h"
+#include "HopSortFilterProxyModel.h"
+#include "MiscTableModel.h"
+#include "MiscSortFilterProxyModel.h"
+#include "YeastSortFilterProxyModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -133,11 +136,6 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Null out the recipe
    recipeObs = 0;
-
-   // Make the fermentable table show grain percentages in row headers.
-   fermentableTable->getModel()->setDisplayPercentages(true);
-   // Hop table show IBUs in row headers.
-   hopTable->getModel()->setShowIBUs(true);
    
    dialog_about = new AboutDialog(this);
    equipEditor = new EquipmentEditor(this);
@@ -166,6 +164,28 @@ MainWindow::MainWindow(QWidget* parent)
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
 
+   // Set table models.
+   fermTableModel = new FermentableTableModel(fermentableTable);
+   fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable);
+   fermTableProxy->setSourceModel(fermTableModel);
+   fermentableTable->setModel(fermTableProxy);
+   // Make the fermentable table show grain percentages in row headers.
+   fermTableModel->setDisplayPercentages(true);
+   hopTableModel = new HopTableModel(hopTable);
+   hopTableProxy = new HopSortFilterProxyModel(hopTable);
+   hopTableProxy->setSourceModel(hopTableModel);
+   hopTable->setModel(hopTableProxy);
+   // Hop table show IBUs in row headers.
+   hopTableModel->setShowIBUs(true);
+   miscTableModel = new MiscTableModel(miscTable);
+   miscTableProxy = new MiscSortFilterProxyModel(miscTable);
+   miscTableProxy->setSourceModel(miscTableModel);
+   miscTable->setModel(miscTableProxy);
+   yeastTableModel = new YeastTableModel(yeastTable);
+   yeastTableProxy = new YeastSortFilterProxyModel(yeastTable);
+   mashStepTableModel = new MashStepTableModel(mashStepTableWidget);
+   mashStepTableWidget->setModel(mashStepTableModel);
+   
    // Enable sorting in the main tables.
    fermentableTable->setSortingEnabled(true);
    fermentableTable->sortByColumn( FERMAMOUNTCOL, Qt::DescendingOrder );
@@ -175,7 +195,7 @@ MainWindow::MainWindow(QWidget* parent)
    miscTable->sortByColumn( MISCUSECOL, Qt::DescendingOrder );
    yeastTable->setSortingEnabled(true);
    yeastTable->sortByColumn( YEASTNAMECOL, Qt::DescendingOrder );
-
+   
    // Create the keyboard shortcuts
    setupShortCuts();
 
@@ -332,8 +352,8 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashWizard, SIGNAL( clicked() ), mashWizard, SLOT( show() ) );
    connect( pushButton_saveMash, SIGNAL( clicked() ), this, SLOT( saveMash() ) );
    connect( pushButton_mashDes, SIGNAL( clicked() ), mashDesigner, SLOT( show() ) );
-   connect( pushButton_mashUp, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepUp() ) );
-   connect( pushButton_mashDown, SIGNAL( clicked() ), mashStepTableWidget, SLOT( moveSelectedStepDown() ) );
+   connect( pushButton_mashUp, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepUp() ) );
+   connect( pushButton_mashDown, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepDown() ) );
    connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
 
 }
@@ -594,12 +614,12 @@ void MainWindow::setRecipe(Recipe* recipe)
    equip = recipe->equipment();
 
    // Reset all previous recipe shit.
-   fermentableTable->getModel()->observeRecipe(recipe);
-   hopTable->getModel()->observeRecipe(recipe);
-   miscTable->getModel()->observeRecipe(recipe);
-   yeastTable->getModel()->observeRecipe(recipe);
+   fermTableModel->observeRecipe(recipe);
+   hopTableModel->observeRecipe(recipe);
+   miscTableModel->observeRecipe(recipe);
+   yeastTableModel->observeRecipe(recipe);
    if( recipeObs->mash() != 0 )
-      mashStepTableWidget->getModel()->setMash(recipeObs->mash());
+      mashStepTableModel->setMash(recipeObs->mash());
 
    // Clean out any brew notes
    tabWidget_recipeView->setCurrentIndex(0);
@@ -724,7 +744,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
        (propName == "mash" &&
        recipeObs->mash()) )
    {
-      mashStepTableWidget->getModel()->setMash(recipeObs->mash());
+      mashStepTableModel->setMash(recipeObs->mash());
    }
 }
 
@@ -846,25 +866,25 @@ void MainWindow::updateRecipeEfficiency()
 void MainWindow::addFermentableToRecipe(Fermentable* ferm)
 {
    recipeObs->addFermentable(ferm);
-   fermentableTable->getModel()->addFermentable(ferm);
+   fermTableModel->addFermentable(ferm);
 }
 
 void MainWindow::addHopToRecipe(Hop *hop)
 {
    recipeObs->addHop(hop);
-   hopTable->getModel()->addHop(hop);
+   hopTableModel->addHop(hop);
 }
 
 void MainWindow::addMiscToRecipe(Misc* misc)
 {
    recipeObs->addMisc(misc);
-   miscTable->getModel()->addMisc(misc);
+   miscTableModel->addMisc(misc);
 }
 
 void MainWindow::addYeastToRecipe(Yeast* yeast)
 {
    recipeObs->addYeast(yeast);
-   yeastTable->getModel()->addYeast(yeast);
+   yeastTableModel->addYeast(yeast);
 }
 
 void MainWindow::exportRecipe()
@@ -907,7 +927,7 @@ Recipe* MainWindow::currentRecipe()
 
 Fermentable* MainWindow::selectedFermentable()
 {
-   QModelIndexList selected = fermentableTable->selectedIndexes();
+   QModelIndexList selected = fermentableTable->selectionModel()->selectedIndexes();
    QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
@@ -924,16 +944,15 @@ Fermentable* MainWindow::selectedFermentable()
          return 0;
    }
 
-   modelIndex = fermentableTable->getProxy()->mapToSource(viewIndex);
-
-   Fermentable* ferm = fermentableTable->getModel()->getFermentable(modelIndex.row());
+   modelIndex = fermTableProxy->mapToSource(viewIndex);
+   Fermentable* ferm = fermTableModel->getFermentable(modelIndex.row());
 
    return ferm;
 }
 
 Hop* MainWindow::selectedHop()
 {
-   QModelIndexList selected = hopTable->selectedIndexes();
+   QModelIndexList selected = hopTable->selectionModel()->selectedIndexes();
    QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
@@ -950,16 +969,16 @@ Hop* MainWindow::selectedHop()
          return 0;
    }
 
-   modelIndex = hopTable->getProxy()->mapToSource(viewIndex);
+   modelIndex = hopTableProxy->mapToSource(viewIndex);
 
-   Hop* h = hopTable->getModel()->getHop(modelIndex.row());
+   Hop* h = hopTableModel->getHop(modelIndex.row());
 
    return h;
 }
 
 Misc* MainWindow::selectedMisc()
 {
-   QModelIndexList selected = miscTable->selectedIndexes();
+   QModelIndexList selected = miscTable->selectionModel()->selectedIndexes();
    QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
@@ -976,16 +995,16 @@ Misc* MainWindow::selectedMisc()
          return 0;
    }
 
-   modelIndex = miscTable->getProxy()->mapToSource(viewIndex);
+   modelIndex = miscTableProxy->mapToSource(viewIndex);
 
-   Misc* m = miscTable->getModel()->getMisc(modelIndex.row());
+   Misc* m = miscTableModel->getMisc(modelIndex.row());
 
    return m;
 }
 
 Yeast* MainWindow::selectedYeast()
 {
-   QModelIndexList selected = yeastTable->selectedIndexes();
+   QModelIndexList selected = yeastTable->selectionModel()->selectedIndexes();
    QModelIndex modelIndex, viewIndex;
    int row, size, i;
 
@@ -1002,9 +1021,9 @@ Yeast* MainWindow::selectedYeast()
          return 0;
    }
 
-   modelIndex = yeastTable->getProxy()->mapToSource(viewIndex);
+   modelIndex = yeastTableProxy->mapToSource(viewIndex);
 
-   Yeast* y = yeastTable->getModel()->getYeast(modelIndex.row());
+   Yeast* y = yeastTableModel->getYeast(modelIndex.row());
 
    return y;
 }
@@ -1015,7 +1034,7 @@ void MainWindow::removeSelectedFermentable()
    if( f == 0 )
       return;
 
-   fermentableTable->getModel()->removeFermentable(f);
+   fermTableModel->removeFermentable(f);
    recipeObs->removeFermentable(f);
 }
 
@@ -1065,7 +1084,7 @@ void MainWindow::removeSelectedHop()
    if( hop == 0 )
       return;
 
-   hopTable->getModel()->removeHop(hop);
+   hopTableModel->removeHop(hop);
    recipeObs->removeHop(hop);
 }
 
@@ -1075,7 +1094,7 @@ void MainWindow::removeSelectedMisc()
    if( misc == 0 )
       return;
 
-   miscTable->getModel()->removeMisc(misc);
+   miscTableModel->removeMisc(misc);
    recipeObs->removeMisc(misc);
 }
 
@@ -1085,7 +1104,7 @@ void MainWindow::removeSelectedYeast()
    if( yeast == 0 )
       return;
 
-   yeastTable->getModel()->removeYeast(yeast);
+   yeastTableModel->removeYeast(yeast);
    recipeObs->removeYeast(yeast);
 }
 
@@ -1253,17 +1272,11 @@ void MainWindow::addMashStep()
 
 void MainWindow::removeSelectedMashStep()
 {
-   Mash* mash;
-   if( recipeObs && recipeObs->mash() )
-   {
-      mash = recipeObs->mash();
-   }
-   else
-   {
+   Mash* mash = recipeObs == 0 ? 0 : recipeObs->mash();
+   if( mash == 0 )
       return;
-   }
    
-   QModelIndexList selected = mashStepTableWidget->selectedIndexes();
+   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -1278,8 +1291,60 @@ void MainWindow::removeSelectedMashStep()
          return;
    }
 
-   MashStep* step = mashStepTableWidget->getModel()->getMashStep(row);
+   MashStep* step = mashStepTableModel->getMashStep(row);
    Database::instance().removeFrom(mash,step);
+}
+
+void MainWindow::moveSelectedMashStepUp()
+{
+   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
+   int row, size, i;
+   
+   size = selected.size();
+   if( size == 0 )
+      return;
+   
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+   
+   // Make sure we can actually move it up.
+   if( row < 1 )
+      return;
+   
+   MashStep* m1 = mashStepTableModel->getMashStep(row);
+   MashStep* m2 = mashStepTableModel->getMashStep(row-1);
+   Database::instance().swapMashStepOrder(m1,m2);
+}
+
+void MainWindow::moveSelectedMashStepDown()
+{
+   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
+   int row, size, i;
+   
+   size = selected.size();
+   if( size == 0 )
+      return;
+   
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for( i = 1; i < size; ++i )
+   {
+      if( selected[i].row() != row )
+         return;
+   }
+   
+   // Make sure it's not the last row so we can move it down.
+   if( row >= mashStepTableModel->rowCount() - 1 )
+      return;
+   
+   MashStep* m1 = mashStepTableModel->getMashStep(row);
+   MashStep* m2 = mashStepTableModel->getMashStep(row+1);
+   Database::instance().swapMashStepOrder(m1,m2);
 }
 
 void MainWindow::editSelectedMashStep()
@@ -1294,7 +1359,7 @@ void MainWindow::editSelectedMashStep()
       return;
    }
 
-   QModelIndexList selected = mashStepTableWidget->selectedIndexes();
+   QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -1309,7 +1374,7 @@ void MainWindow::editSelectedMashStep()
          return;
    }
 
-   MashStep* step = mashStepTableWidget->getModel()->getMashStep(row);
+   MashStep* step = mashStepTableModel->getMashStep(row);
    mashStepEditor->setMashStep(step);
    mashStepEditor->setVisible(true);
 }
@@ -1328,7 +1393,7 @@ void MainWindow::removeMash()
    Database::instance().removeMash(m);
    
    Mash* defaultMash = Database::instance().newMash(recipeObs);
-   mashStepTableWidget->getModel()->setMash(defaultMash);
+   mashStepTableModel->setMash(defaultMash);
    
    //remove from combobox handled automatically by qt
    mashComboBox->setIndex( -1 );

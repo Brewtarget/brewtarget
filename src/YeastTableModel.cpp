@@ -30,12 +30,11 @@
 #include <QVector>
 #include "yeast.h"
 #include "YeastTableModel.h"
-#include "YeastTableWidget.h"
 #include "unit.h"
 #include "brewtarget.h"
 #include "recipe.h"
 
-YeastTableModel::YeastTableModel(YeastTableWidget* parent)
+YeastTableModel::YeastTableModel(QTableView* parent)
 : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0)
 {
    yeastObs.clear();
@@ -46,9 +45,12 @@ void YeastTableModel::addYeast(Yeast* yeast)
    if( yeastObs.contains(yeast) )
       return;
 
+   int size = yeastObs.size();
+   beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
    connect( yeast, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   reset(); // Tell everybody that the table has changed.
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
    
    if(parentTableWidget)
    {
@@ -102,9 +104,11 @@ bool YeastTableModel::removeYeast(Yeast* yeast)
 
    if( i >= 0 )
    {
+      beginRemoveRows( QModelIndex(), i, i );
       disconnect( yeast, 0, this, 0 );
       yeastObs.removeAt(i);
-      reset(); // Tell everybody the table has changed.
+      //reset(); // Tell everybody the table has changed.
+      endRemoveRows();
       
       if(parentTableWidget)
       {

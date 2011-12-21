@@ -20,7 +20,6 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QString>
-#include <string>
 #include <QList>
 #include "MiscDialog.h"
 #include "database.h"
@@ -29,12 +28,20 @@
 #include "misc.h"
 #include "MiscEditor.h"
 #include "MiscTableModel.h"
+#include "MiscSortFilterProxyModel.h"
 
 MiscDialog::MiscDialog(MainWindow* parent)
         : QDialog(parent), mainWindow(parent), numMiscs(0), miscEdit(new MiscEditor(this))
 {
    setupUi(this);
 
+   miscTableModel = new MiscTableModel(miscTableWidget);
+   miscTableProxy = new MiscSortFilterProxyModel(miscTableWidget);
+   miscTableProxy->setSourceModel(miscTableModel);
+   miscTableWidget->setModel(miscTableProxy);
+   miscTableWidget->setSortingEnabled(true);
+   miscTableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
+   
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
@@ -47,7 +54,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
 
 void MiscDialog::removeMisc()
 {
-   QModelIndexList selected = miscTableWidget->selectedIndexes();
+   QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -62,7 +69,7 @@ void MiscDialog::removeMisc()
          return;
    }
 
-   Misc* m = miscTableWidget->getModel()->getMisc(row);
+   Misc* m = miscTableModel->getMisc(row);
    Database::instance().removeMisc(m);
 }
 
@@ -71,7 +78,7 @@ void MiscDialog::changed(QMetaProperty prop, QVariant /*value*/)
    if( sender() == &(Database::instance()) &&
        QString(prop.name()) == "miscs" )
    {
-      miscTableWidget->getModel()->removeAll();
+      miscTableModel->removeAll();
       populateTable();
    }
 }
@@ -84,7 +91,7 @@ void MiscDialog::populateTable()
    numMiscs = miscs.size();
    int i;
    for( i = 0; i < numMiscs; ++i )
-      miscTableWidget->getModel()->addMisc(miscs[i]);
+      miscTableModel->addMisc(miscs[i]);
 }
 
 void MiscDialog::addMisc(const QModelIndex& index)
@@ -93,7 +100,7 @@ void MiscDialog::addMisc(const QModelIndex& index)
    
    if( !index.isValid() )
    {
-      QModelIndexList selected = miscTableWidget->selectedIndexes();
+      QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -116,21 +123,19 @@ void MiscDialog::addMisc(const QModelIndex& index)
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other columns.
       if( index.column() == MISCNAMECOL )
-         translated = miscTableWidget->getProxy()->mapToSource(index);
+         translated = miscTableProxy->mapToSource(index);
       else
          return;
    }
    
-   Misc *misc = miscTableWidget->getModel()->getMisc(translated.row());
+   Misc *misc = miscTableModel->getMisc(translated.row());
    
-   // TODO: how should we restructure this call?
-   //mainWindow->addMiscToRecipe(new Misc(*misc) ); // Need to add a copy so we don't change the database.
    Database::instance().addToRecipe( mainWindow->currentRecipe(), Database::instance().newMisc(misc) );
 }
 
 void MiscDialog::editSelected()
 {
-   QModelIndexList selected = miscTableWidget->selectedIndexes();
+   QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -145,7 +150,7 @@ void MiscDialog::editSelected()
          return;
    }
 
-   Misc* m = miscTableWidget->getModel()->getMisc(row);
+   Misc* m = miscTableModel->getMisc(row);
    miscEdit->setMisc(m);
    miscEdit->show();
 }
