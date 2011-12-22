@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>671</width>
-           <height>393</height>
+           <width>657</width>
+           <height>404</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -395,24 +395,21 @@
                    </widget>
                   </item>
                   <item row="2" column="1">
-                   <widget class="EquipmentComboBox" name="equipmentComboBox">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                      <horstretch>100</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
+                   <widget class="QComboBox" name="equipmentComboBox">
                     <property name="minimumSize">
                      <size>
-                      <width>160</width>
+                      <width>140</width>
                       <height>0</height>
                      </size>
                     </property>
-                    <property name="toolTip">
-                     <string>Equipment to brew this with</string>
+                    <property name="maximumSize">
+                     <size>
+                      <width>200</width>
+                      <height>16777215</height>
+                     </size>
                     </property>
                     <property name="sizeAdjustPolicy">
-                     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                     <enum>QComboBox::AdjustToContents</enum>
                     </property>
                    </widget>
                   </item>
@@ -1080,7 +1077,7 @@
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_9">
                    <item>
-                    <widget class="BeerColorWidget" name="beerColorWidget"/>
+                    <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
                    </item>
                   </layout>
                  </widget>
@@ -1111,7 +1108,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1121,7 +1118,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1140,7 +1137,7 @@
            <x>0</x>
            <y>0</y>
            <width>657</width>
-           <height>321</height>
+           <height>328</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -2149,11 +2146,6 @@
    <class>BtDigitWidget</class>
    <extends>QLabel</extends>
    <header>BtDigitWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>EquipmentComboBox</class>
-   <extends>QComboBox</extends>
-   <header>EquipmentComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeTreeView</class>

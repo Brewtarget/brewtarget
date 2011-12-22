@@ -1247,6 +1247,9 @@ void Database::addToRecipe( Recipe* rec, Mash* m )
 
 void Database::addToRecipe( Recipe* rec, Equipment* e )
 {
+   if( e == 0 )
+      return;
+   
    // Make a copy of equipment.
    QSqlRecord c = copy(e);
    
@@ -1255,8 +1258,13 @@ void Database::addToRecipe( Recipe* rec, Equipment* e )
              QString("`equipment_id`='%1'").arg(c.value(keyNames[EQUIPTABLE]).toInt()),
              QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
 
+   int key = c.value(keyNames[EQUIPTABLE]).toInt();
+   Equipment* newEquip = allEquipments[key];
+   
    // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("equipment"), QVariant() );
+   // NOTE: seriously need to find out if this works on all systems as expected.
+   unsigned int newEquipAddress = *(reinterpret_cast<unsigned int*>(&newEquip));
+   emit rec->changed( rec->metaProperty("equipment"), QVariant(newEquipAddress) );
 }
 
 void Database::addToRecipe( Recipe* rec, Style* s )

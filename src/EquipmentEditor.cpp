@@ -22,14 +22,14 @@
 
 #include "equipment.h"
 #include "EquipmentEditor.h"
-#include "EquipmentComboBox.h"
+#include "EquipmentListModel.h"
 #include "config.h"
 #include "unit.h"
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent)
-        : QDialog(parent)
+   : QDialog(parent)
 {
    setupUi(this);
 
@@ -38,6 +38,9 @@ EquipmentEditor::EquipmentEditor(QWidget* parent)
    Unit* volumeUnit = 0;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
+   
+   equipmentListModel = new EquipmentListModel(equipmentComboBox);
+   equipmentComboBox->setModel(equipmentListModel);
    
    obsEquip = 0;
    changeText = false;
@@ -94,7 +97,7 @@ void EquipmentEditor::removeEquipment()
    if( obsEquip )
       Database::instance().removeEquipment(obsEquip);
 
-   equipmentComboBox->setIndexByEquipment(0);
+   equipmentComboBox->setCurrentIndex(-1);
    setEquipment(0);
 }
 
@@ -125,7 +128,7 @@ void EquipmentEditor::clear()
 
 void EquipmentEditor::equipmentSelected( const QString& /*text*/ )
 {
-   setEquipment( equipmentComboBox->getSelected() );
+   setEquipment( equipmentListModel->at(equipmentComboBox->currentIndex()) );
 }
 
 void EquipmentEditor::save()
@@ -202,7 +205,7 @@ void EquipmentEditor::showChanges()
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
 
-   equipmentComboBox->setIndexByEquipment(e);
+   //equipmentComboBox->setIndexByEquipment(e);
 
    lineEdit_name->setText(e->name());
    lineEdit_name->setCursorPosition(0);

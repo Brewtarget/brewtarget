@@ -21,7 +21,6 @@
 #include <QVector>
 #include "mash.h"
 #include "mashstep.h"
-#include "ui_mainWindow.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>

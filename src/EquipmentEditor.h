@@ -22,10 +22,13 @@
 class EquipmentEditor;
 
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_equipmentEditor.h"
 
 // Forward declarations
 class Equipment;
+class EquipmentListModel;
 
 class EquipmentEditor : public QDialog, public Ui::equipmentEditor
 {
@@ -53,7 +56,8 @@ public slots:
 
 private:
    Equipment* obsEquip;
-
+   EquipmentListModel* equipmentListModel;
+   
    bool changeText;
    bool eventFilter(QObject *object, QEvent* event);
    void showChanges();

@@ -95,6 +95,7 @@
 #include "MiscTableModel.h"
 #include "MiscSortFilterProxyModel.h"
 #include "YeastSortFilterProxyModel.h"
+#include "EquipmentListModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -164,6 +165,10 @@ MainWindow::MainWindow(QWidget* parent)
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
 
+   // Set equipment combo box model.
+   equipmentListModel = new EquipmentListModel(equipmentComboBox);
+   equipmentComboBox->setModel(equipmentListModel);
+   
    // Set table models.
    fermTableModel = new FermentableTableModel(fermentableTable);
    fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable);
@@ -637,7 +642,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    brewDayScrollWidget->setRecipe(recipe);
    //styleComboBox->observeRecipe(recipe);
    //recipeStyleNameButton->setRecipe(recipe);
-   equipmentComboBox->observeRecipe(recipe);
+   equipmentListModel->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
    beerColorWidget->setRecipe(recipe);
    recipeFormatter->setRecipe(recipe);
@@ -787,7 +792,7 @@ void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
       return;
 
    // equip may be null.
-   Equipment* equip = equipmentComboBox->getSelected();
+   Equipment* equip = equipmentListModel->at(equipmentComboBox->currentIndex());
    if( equip == 0 )
       return;
 
@@ -1537,7 +1542,7 @@ void MainWindow::dropEvent(QDropEvent *event)
                setRecipeByIndex(index);
                break;
             case BrewTargetTreeItem::EQUIPMENT:
-               equipmentComboBox->setIndexByEquipment(active->getEquipment(index));
+               equipmentComboBox->setCurrentIndex(equipmentListModel->indexOf(active->getEquipment(index)));
                droppedRecipeEquipment(active->getEquipment(index));
                break;
             case BrewTargetTreeItem::FERMENTABLE:

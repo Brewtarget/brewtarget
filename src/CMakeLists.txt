@@ -68,7 +68,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/database.cpp
     ${SRCDIR}/equipment.cpp
-    ${SRCDIR}/EquipmentComboBox.cpp
+    ${SRCDIR}/EquipmentListModel.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/FahrenheitTempUnitSystem.cpp
     ${SRCDIR}/fermentable.cpp
@@ -199,7 +199,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/database.h
-    ${SRCDIR}/EquipmentComboBox.h
+    ${SRCDIR}/EquipmentListModel.h
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/FermentableEditor.h
     ${SRCDIR}/FermentableDialog.h

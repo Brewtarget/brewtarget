@@ -21,7 +21,6 @@
 #include <QSizePolicy>
 #include <QFrame>
 #include "MaltinessWidget.h"
-#include "brewtarget.h"
 #include "recipe.h"
 
 MaltinessWidget::MaltinessWidget(QWidget* parent) : QLabel(parent), recObs(0)
@@ -138,9 +137,6 @@ int MaltinessWidget::region()
 
 void MaltinessWidget::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( sender() != recObs )
-      return;
-
    QString propName(prop.name());
    if( propName == "IBU" || propName == "og" )
    {
