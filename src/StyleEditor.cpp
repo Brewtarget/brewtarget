@@ -19,7 +19,7 @@
 #include "StyleEditor.h"
 #include <QInputDialog>
 #include "style.h"
-#include "StyleComboBox.h"
+#include "StyleListModel.h"
 #include "unit.h"
 #include "brewtarget.h"
 
@@ -28,6 +28,9 @@ StyleEditor::StyleEditor(QWidget* parent)
 {
    setupUi(this);
 
+   styleListModel = new StyleListModel(styleComboBox);
+   styleComboBox->setModel(styleListModel);
+   
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
@@ -47,7 +50,7 @@ void StyleEditor::setStyle( Style* s )
       showChanges();
    }
    
-   styleComboBox->setIndexByStyle(obsStyle);
+   styleComboBox->setCurrentIndex(styleListModel->indexOf(obsStyle));
 }
 
 void StyleEditor::removeStyle()
@@ -60,7 +63,7 @@ void StyleEditor::removeStyle()
 
 void StyleEditor::styleSelected( const QString& /*text*/ )
 {
-   setStyle( styleComboBox->getSelected() );
+   setStyle( styleListModel->at(styleComboBox->currentIndex()) );
 }
 
 void StyleEditor::save()
@@ -123,8 +126,7 @@ void StyleEditor::clearAndClose()
 
 void StyleEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( sender() == obsStyle )
-      showChanges(&prop);
+   showChanges(&prop);
 }
 
 void StyleEditor::clear()
@@ -172,50 +174,77 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       val = metaProp->read(s);
    }
 
-   styleComboBox->setIndexByStyle(s);
+   //styleComboBox->setIndexByStyle(s);
 
-   if( propName == "name" || updateAll )
+   if( updateAll )
+   {
+      lineEdit_name->setText(s->name());
+      lineEdit_category->setText(s->category());
+      lineEdit_categoryNumber->setText(s->categoryNumber());
+      lineEdit_styleLetter->setText(s->styleLetter());
+      comboBox_type->setCurrentIndex(s->type());
+      lineEdit_ogMin->setText(Brewtarget::displayAmount(s->ogMin(), 0));
+      lineEdit_ogMax->setText(Brewtarget::displayAmount(s->ogMax(), 0));
+      lineEdit_fgMin->setText(Brewtarget::displayAmount(s->fgMin(), 0));
+      lineEdit_fgMax->setText(Brewtarget::displayAmount(s->fgMax(), 0));
+      lineEdit_ibuMin->setText(Brewtarget::displayAmount(s->ibuMin(), 0));
+      lineEdit_ibuMax->setText(Brewtarget::displayAmount(s->ibuMax(), 0));
+      lineEdit_colorMin->setText(Brewtarget::displayAmount(s->colorMax_srm(), 0));
+      lineEdit_colorMax->setText(Brewtarget::displayAmount(s->colorMin_srm(), 0));
+      lineEdit_carbMin->setText(Brewtarget::displayAmount(s->carbMin_vol(), 0));
+      lineEdit_carbMax->setText(Brewtarget::displayAmount(s->carbMax_vol(), 0));
+      lineEdit_abvMin->setText(Brewtarget::displayAmount(s->abvMin_pct(), 0));
+      lineEdit_abvMax->setText(Brewtarget::displayAmount(s->abvMax_pct(), 0));
+      textEdit_profile->setText(s->profile());
+      textEdit_ingredients->setText(s->ingredients());
+      textEdit_examples->setText(s->examples());
+      textEdit_notes->setText(s->notes());
+      
+      return;
+   }
+   
+   if( propName == "name" )
       lineEdit_name->setText(val.toString());
-   else if( propName == "category" || updateAll )
+   else if( propName == "category" )
       lineEdit_category->setText(val.toString());
-   else if( propName == "categoryNumber" || updateAll )
+   else if( propName == "categoryNumber" )
       lineEdit_categoryNumber->setText(val.toString());
-   else if( propName == "styleLetter" || updateAll )
+   else if( propName == "styleLetter" )
       lineEdit_styleLetter->setText(val.toString());
-   else if( propName == "styleGuide" || updateAll )
+   else if( propName == "styleGuide" )
       lineEdit_styleGuide->setText(val.toString());
-   else if( propName == "type" || updateAll )
+   else if( propName == "type" )
       comboBox_type->setCurrentIndex(val.toInt());
-   else if( propName == "ogMin" || updateAll )
+   else if( propName == "ogMin" )
       lineEdit_ogMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "ogMax" || updateAll )
+   else if( propName == "ogMax" )
       lineEdit_ogMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "fgMin" || updateAll )
+   else if( propName == "fgMin" )
       lineEdit_fgMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "fgMax" || updateAll )
+   else if( propName == "fgMax" )
       lineEdit_fgMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "ibuMin" || updateAll )
+   else if( propName == "ibuMin" )
       lineEdit_ibuMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "ibuMax" || updateAll )
+   else if( propName == "ibuMax" )
       lineEdit_ibuMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "colorMin_srm" || updateAll )
+   else if( propName == "colorMin_srm" )
       lineEdit_colorMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "colorMax_srm" || updateAll )
+   else if( propName == "colorMax_srm" )
       lineEdit_colorMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "carbMin_vol" || updateAll )
+   else if( propName == "carbMin_vol" )
       lineEdit_carbMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "carbMax_vol" || updateAll )
+   else if( propName == "carbMax_vol" )
       lineEdit_carbMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "abvMin_pct" || updateAll )
+   else if( propName == "abvMin_pct" )
       lineEdit_abvMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "abvMax_pct" || updateAll )
+   else if( propName == "abvMax_pct" )
       lineEdit_abvMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
-   else if( propName == "profile" || updateAll )
+   else if( propName == "profile" )
       textEdit_profile->setText(val.toString());
-   else if( propName == "ingredients" || updateAll )
+   else if( propName == "ingredients" )
       textEdit_ingredients->setText(val.toString());
-   else if( propName == "examples" || updateAll )
+   else if( propName == "examples" )
       textEdit_examples->setText(val.toString());
-   else if( propName == "notes" || updateAll )
+   else if( propName == "notes" )
       textEdit_notes->setText(val.toString());
 }

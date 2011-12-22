@@ -1262,9 +1262,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e )
    Equipment* newEquip = allEquipments[key];
    
    // Emit a changed signal.
-   // NOTE: seriously need to find out if this works on all systems as expected.
-   unsigned int newEquipAddress = *(reinterpret_cast<unsigned int*>(&newEquip));
-   emit rec->changed( rec->metaProperty("equipment"), QVariant(newEquipAddress) );
+   emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
 }
 
 void Database::addToRecipe( Recipe* rec, Style* s )
@@ -1285,7 +1283,7 @@ void Database::addToRecipe( Recipe* rec, Style* s )
              QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
 
    // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("style"), QVariant() );
+   emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(s) );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( QString const& tableName, QString const& setClause, QString const& whereClause )

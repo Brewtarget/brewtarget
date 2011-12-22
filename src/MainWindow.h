@@ -75,6 +75,7 @@ class YeastTableModel;
 class YeastSortFilterProxyModel;
 class MashStepTableModel;
 class EquipmentListModel;
+class StyleListModel;
 
 class MainWindow : public QMainWindow, public Ui::mainWindow
 {
@@ -210,6 +211,7 @@ private:
    YeastSortFilterProxyModel* yeastTableProxy;
    MashStepTableModel* mashStepTableModel;
    EquipmentListModel* equipmentListModel;
+   StyleListModel* styleListModel;
    
    QMultiHash<QString, BrewNoteWidget*> brewNotes;
    int confirmDelete;

@@ -29,6 +29,12 @@
 #include <QDateTime>
 #include "database.h"
 #include "brewtarget.h"
+// For uintptr_t.
+#if HAVE_STDINT_H
+#   include <stdint.h>
+#else
+#   include "pstdint.h"
+#endif
 
 //class BeerXMLElement : public QObject
 //{
@@ -160,6 +166,8 @@
 //   
 //};
 
+class BeerXMLElement;
+
 class BeerXMLElement : public QObject
 {
    Q_OBJECT
@@ -207,6 +215,21 @@ public:
    static QString text(int val);
    //! Convert the date to string in Qt::ISODate format for storage NOT display.
    static QString text(QDate const& val);
+   
+   //! Use this to pass pointers around in QVariants.
+   static inline QVariant qVariantFromPtr( BeerXMLElement* ptr )
+   {
+      // NOTE: weird way to cast ptr to a uintptr_t, but this is the only
+      // way I can get it to work.
+      uintptr_t addr = *(reinterpret_cast<uintptr_t*>(&ptr));
+      return QVariant::fromValue<uintptr_t>(addr);
+   }
+   
+   static inline BeerXMLElement* extractPtr( QVariant ptrVal )
+   {
+      uintptr_t addr = ptrVal.value<uintptr_t>();
+      return reinterpret_cast<BeerXMLElement*>(addr);
+   }
    
 signals:
    //! Passes the meta property that has changed about this object.

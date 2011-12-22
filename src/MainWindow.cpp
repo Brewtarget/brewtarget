@@ -96,6 +96,7 @@
 #include "MiscSortFilterProxyModel.h"
 #include "YeastSortFilterProxyModel.h"
 #include "EquipmentListModel.h"
+#include "StyleListModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -168,6 +169,8 @@ MainWindow::MainWindow(QWidget* parent)
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
    equipmentComboBox->setModel(equipmentListModel);
+   styleListModel = new StyleListModel(styleComboBox);
+   styleComboBox->setModel(styleListModel);
    
    // Set table models.
    fermTableModel = new FermentableTableModel(fermentableTable);
@@ -333,7 +336,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
-   //connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
+   connect( styleComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeStyle(const QString&)) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -640,7 +643,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
-   //styleComboBox->observeRecipe(recipe);
+   styleListModel->observeRecipe(recipe);
    //recipeStyleNameButton->setRecipe(recipe);
    equipmentListModel->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
@@ -784,6 +787,10 @@ void MainWindow::updateRecipeStyle()
 {
    if( recipeObs == 0 )
       return;
+   
+   Style* selected = styleListModel->at(styleComboBox->currentIndex());
+   if( selected )
+      Database::instance().addToRecipe( recipeObs, selected );
 }
 
 void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)

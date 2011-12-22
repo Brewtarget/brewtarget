@@ -28,6 +28,7 @@ class StyleEditor;
 
 // Forward declarations.
 class Style;
+class StyleListModel;
 
 class StyleEditor : public QDialog, public Ui::styleEditor
 {
@@ -49,7 +50,8 @@ public slots:
    void changed(QMetaProperty,QVariant);
 private:
    Style* obsStyle;
-
+   StyleListModel* styleListModel;
+   
    void showChanges(QMetaProperty* prop = 0);
 };
 
