@@ -110,6 +110,8 @@ public:
     */
    static const QString& getSystemLanguage();
 
+   static MainWindow* getMainWindow();
+   
 private:
    static QApplication* app;
    static MainWindow* mainWindow;

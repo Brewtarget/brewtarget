@@ -36,6 +36,9 @@
 #   include "pstdint.h"
 #endif
 
+// Make uintptr_t available in QVariant.
+Q_DECLARE_METATYPE( uintptr_t )
+
 //class BeerXMLElement : public QObject
 //{
 //   Q_OBJECT

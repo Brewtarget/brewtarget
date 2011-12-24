@@ -66,6 +66,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
+    ${SRCDIR}/CustomComboBox.cpp
     ${SRCDIR}/database.cpp
     ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EquipmentListModel.cpp
@@ -198,6 +199,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/ConverterTool.h
+    ${SRCDIR}/CustomComboBox.h
     ${SRCDIR}/database.h
     ${SRCDIR}/EquipmentListModel.h
     ${SRCDIR}/EquipmentEditor.h

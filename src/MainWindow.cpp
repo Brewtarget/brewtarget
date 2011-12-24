@@ -1549,7 +1549,9 @@ void MainWindow::dropEvent(QDropEvent *event)
                setRecipeByIndex(index);
                break;
             case BrewTargetTreeItem::EQUIPMENT:
-               equipmentComboBox->setCurrentIndex(equipmentListModel->indexOf(active->getEquipment(index)));
+               //equipmentComboBox->setCurrentIndex(equipmentListModel->indexOf(active->getEquipment(index)));
+               //NOTE: is the following right?
+               //equipmentComboBox->setText(active->getEquipment(index)->name());
                droppedRecipeEquipment(active->getEquipment(index));
                break;
             case BrewTargetTreeItem::FERMENTABLE:

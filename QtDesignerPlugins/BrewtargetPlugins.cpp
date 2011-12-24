@@ -20,12 +20,14 @@
 #include "BrewtargetPlugins.h"
 #include "BeerColorWidgetPlugin.h"
 #include "BrewDayScrollWidgetPlugin.h"
+#include "CustomComboBoxPlugin.h"
 #include "RecipeExtrasWidgetPlugin.h"
 
 BrewtargetPlugins::BrewtargetPlugins(QObject* parent) : QObject(parent)
 {
    plugins.append(new BeerColorWidgetPlugin(this));
    plugins.append(new BrewDayScrollWidgetPlugin(this));
+   plugins.append(new CustomComboBoxPlugin(this));
    plugins.append(new RecipeExtrasWidgetPlugin(this));
 }
 

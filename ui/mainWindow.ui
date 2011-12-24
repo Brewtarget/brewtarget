@@ -200,7 +200,7 @@
            <x>0</x>
            <y>0</y>
            <width>657</width>
-           <height>404</height>
+           <height>411</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -394,25 +394,6 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1">
-                   <widget class="QComboBox" name="equipmentComboBox">
-                    <property name="minimumSize">
-                     <size>
-                      <width>140</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>200</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="sizeAdjustPolicy">
-                     <enum>QComboBox::AdjustToContents</enum>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="1" column="1">
                    <widget class="QComboBox" name="styleComboBox">
                     <property name="minimumSize">
@@ -428,6 +409,42 @@
                      </size>
                     </property>
                    </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_editEquip">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="CustomComboBox" name="equipmentComboBox">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>30</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </item>
                  </layout>
                 </item>
@@ -1093,7 +1110,7 @@
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_9">
                    <item>
-                    <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
+                    <widget class="BeerColorWidget" name="beerColorWidget"/>
                    </item>
                   </layout>
                  </widget>
@@ -1124,7 +1141,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
               </item>
              </layout>
             </widget>
@@ -1134,7 +1151,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
               </item>
              </layout>
             </widget>
@@ -1153,7 +1170,7 @@
            <x>0</x>
            <y>0</y>
            <width>657</width>
-           <height>328</height>
+           <height>321</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -2152,6 +2169,11 @@
    <class>BrewDayScrollWidget</class>
    <extends>QWidget</extends>
    <header>BrewDayScrollWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CustomComboBox</class>
+   <extends>QComboBox</extends>
+   <header>CustomComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeExtrasWidget</class>
