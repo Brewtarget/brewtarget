@@ -69,6 +69,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/CustomComboBox.cpp
     ${SRCDIR}/database.cpp
     ${SRCDIR}/equipment.cpp
+    ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentListModel.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/FahrenheitTempUnitSystem.cpp
@@ -201,6 +202,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/CustomComboBox.h
     ${SRCDIR}/database.h
+    ${SRCDIR}/EquipmentButton.h
     ${SRCDIR}/EquipmentListModel.h
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/FermentableEditor.h

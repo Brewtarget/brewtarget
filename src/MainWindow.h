@@ -86,7 +86,7 @@ public:
    MainWindow(QWidget* parent=0);
    virtual ~MainWindow() {}
    void setRecipe(Recipe* recipe);
-   Recipe* currentRecipe(); // TODO: implement.
+   Recipe* currentRecipe();
    QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 
    bool verifyImport(QString tag, QString name);

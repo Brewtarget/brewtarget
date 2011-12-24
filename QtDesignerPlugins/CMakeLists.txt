@@ -20,6 +20,7 @@ SET( SRC_FILES
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/CustomComboBox.cpp
+    ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/MaltinessWidget.cpp
     ${SRCDIR}/RecipeExtrasWidget.cpp
 
@@ -56,6 +57,7 @@ SET( MOC_FILES
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/CustomComboBox.h
+    ${SRCDIR}/EquipmentButton.h
     ${SRCDIR}/MaltinessWidget.h
     ${SRCDIR}/RecipeExtrasWidget.h
 
@@ -89,6 +91,7 @@ SET( PLUGIN_MOCS
    BeerColorWidgetPlugin.h
    BrewDayScrollWidgetPlugin.h
    CustomComboBoxPlugin.h
+   EquipmentButtonPlugin.h
    MaltinessWidgetPlugin.h
    RecipeExtrasWidgetPlugin.h
 )
@@ -98,6 +101,7 @@ SET( PLUGIN_SRCS
    BeerColorWidgetPlugin.cpp
    BrewDayScrollWidgetPlugin.cpp
    CustomComboBoxPlugin.cpp
+   EquipmentButtonPlugin.cpp
    MaltinessWidgetPlugin.cpp
    RecipeExtrasWidgetPlugin.cpp
 )

@@ -652,7 +652,8 @@ void MainWindow::setRecipe(Recipe* recipe)
    ogAdjuster->setRecipe(recipe);
    recipeExtrasWidget->setRecipe(recipe);
    mashDesigner->setRecipe(recipe);
-
+   equipmentButton->setRecipe(recipe);
+   
    mashEditor->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 

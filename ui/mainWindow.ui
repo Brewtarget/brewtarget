@@ -416,17 +416,7 @@
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QPushButton" name="pushButton_editEquip">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="text">
-                       <string/>
-                      </property>
-                     </widget>
+                     <widget class="EquipmentButton" name="equipmentButton"/>
                     </item>
                     <item>
                      <widget class="CustomComboBox" name="equipmentComboBox">
@@ -2174,6 +2164,11 @@
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
    <header>CustomComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EquipmentButton</class>
+   <extends>QPushButton</extends>
+   <header>EquipmentButton.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeExtrasWidget</class>
