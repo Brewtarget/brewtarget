@@ -668,12 +668,13 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    
    if( propName == "equipment" )
    {
-      recEquip = recipeObs->equipment();
+      //recEquip = recipeObs->equipment();
+      recEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(value));
       singleEquipEditor->setEquipment(recEquip);
    }
    else if( propName == "style" )
    {
-      recStyle = recipeObs->style();
+      //recStyle = recipeObs->style();
       recStyle = qobject_cast<Style*>(BeerXMLElement::extractPtr(value));
       styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
    }
