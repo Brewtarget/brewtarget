@@ -334,9 +334,9 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
 
-   connect( equipmentComboBox, SIGNAL( activated(const QString&) ), this, SLOT(updateRecipeEquipment(const QString&)) );
+   connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
-   connect( styleComboBox, SIGNAL( activated() ), this, SLOT(updateRecipeStyle()) );
+   connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -608,8 +608,6 @@ void MainWindow::setRecipe(Recipe* recipe)
       return;
 
    int startTab;
-   Style* style;
-   Equipment* equip;
    QHashIterator<QString,BrewNoteWidget*> b(brewNotes);
 
    // Make sure this MainWindow is paying attention...
@@ -618,16 +616,15 @@ void MainWindow::setRecipe(Recipe* recipe)
    recipeObs = recipe;
    connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    
-   style = recipe->style();
-   equip = recipe->equipment();
+   recStyle = recipe->style();
+   recEquip = recipe->equipment();
 
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
    hopTableModel->observeRecipe(recipe);
    miscTableModel->observeRecipe(recipe);
    yeastTableModel->observeRecipe(recipe);
-   if( recipeObs->mash() != 0 )
-      mashStepTableModel->setMash(recipeObs->mash());
+   mashStepTableModel->setMash(recipeObs->mash());
 
    // Clean out any brew notes
    tabWidget_recipeView->setCurrentIndex(0);
@@ -643,7 +640,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
-   styleListModel->observeRecipe(recipe);
    //recipeStyleNameButton->setRecipe(recipe);
    equipmentListModel->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
@@ -657,15 +653,28 @@ void MainWindow::setRecipe(Recipe* recipe)
    mashEditor->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
+   // Update combobox indices.
+   styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
+   
    showChanges();
 }
 
-void MainWindow::changed(QMetaProperty prop, QVariant /*value*/)
+void MainWindow::changed(QMetaProperty prop, QVariant value)
 {
-   // Make sure the notifier is our observed recipe
-   if( sender() != recipeObs )
-      return;
-
+   QString propName(prop.name());
+   
+   if( propName == "equipment" )
+   {
+      recEquip = recipeObs->equipment();
+      if( recEquip )
+         equipmentButton->setText( recEquip->name() );
+   }
+   else if( propName == "style" )
+   {
+      recStyle = recipeObs->style();
+      recStyle = qobject_cast<Style*>(BeerXMLElement::extractPtr(value));
+      styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
+   }
    showChanges(&prop);
 }
 
@@ -719,33 +728,32 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lcdNumber_calories->display( recipeObs->calories(), 0);
 
    // Want to do some manipulation based on selected style.
-   Style* recipeStyle = recipeObs->style();
-   if( recipeStyle != 0 )
+   if( recStyle != 0 )
    {
-      lcdNumber_ogLow->display(Brewtarget::displayOG(recipeStyle->ogMin()));
-      lcdNumber_ogHigh->display(Brewtarget::displayOG(recipeStyle->ogMax()));
-      lcdNumber_og->setLowLim(Brewtarget::displayOG(recipeStyle->ogMin()).toDouble());
-      lcdNumber_og->setHighLim(Brewtarget::displayOG(recipeStyle->ogMax()).toDouble());
+      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle->ogMin()));
+      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle->ogMax()));
+      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle->ogMin()).toDouble());
+      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle->ogMax()).toDouble());
 
-      lcdNumber_fgLow->display(Brewtarget::displayFG(recipeStyle->fgMin(), recipeObs->og()));
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(recipeStyle->fgMax(), recipeObs->og()));
-      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recipeStyle->fgMin(), recipeObs->og()).toDouble());
-      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recipeStyle->fgMax(), recipeObs->og()).toDouble());
+      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og()));
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og()));
+      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og()).toDouble());
+      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og()).toDouble());
 
-      lcdNumber_abvLow->display(recipeStyle->abvMin_pct(), 1);
-      lcdNumber_abvHigh->display(recipeStyle->abvMax_pct(), 1);
-      lcdNumber_abv->setLowLim(recipeStyle->abvMin_pct());
-      lcdNumber_abv->setHighLim(recipeStyle->abvMax_pct());
+      lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
+      lcdNumber_abvHigh->display(recStyle->abvMax_pct(), 1);
+      lcdNumber_abv->setLowLim(recStyle->abvMin_pct());
+      lcdNumber_abv->setHighLim(recStyle->abvMax_pct());
 
-      lcdNumber_ibuLow->display(recipeStyle->ibuMin(), 1);
-      lcdNumber_ibuHigh->display(recipeStyle->ibuMax(), 1);
-      lcdNumber_ibu->setLowLim(recipeStyle->ibuMin());
-      lcdNumber_ibu->setHighLim(recipeStyle->ibuMax());
+      lcdNumber_ibuLow->display(recStyle->ibuMin(), 1);
+      lcdNumber_ibuHigh->display(recStyle->ibuMax(), 1);
+      lcdNumber_ibu->setLowLim(recStyle->ibuMin());
+      lcdNumber_ibu->setHighLim(recStyle->ibuMax());
 
-      lcdNumber_srmLow->display(Brewtarget::displayColor(recipeStyle->colorMin_srm(), false));
-      lcdNumber_srmHigh->display(Brewtarget::displayColor(recipeStyle->colorMax_srm(), false));
-      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recipeStyle->colorMin_srm(), false).toDouble());
-      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recipeStyle->colorMax_srm(), false).toDouble());
+      lcdNumber_srmLow->display(Brewtarget::displayColor(recStyle->colorMin_srm(), false));
+      lcdNumber_srmHigh->display(Brewtarget::displayColor(recStyle->colorMax_srm(), false));
+      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle->colorMin_srm(), false).toDouble());
+      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle->colorMax_srm(), false).toDouble());
    }
 
    // See if we need to change the mash in the table.
@@ -794,7 +802,7 @@ void MainWindow::updateRecipeStyle()
       Database::instance().addToRecipe( recipeObs, selected );
 }
 
-void MainWindow::updateRecipeEquipment(const QString& /*equipmentName*/)
+void MainWindow::updateRecipeEquipment()
 {
    if( recipeObs == 0 )
       return;

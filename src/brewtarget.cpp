@@ -599,6 +599,10 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
    int fieldWidth = 0;
    char format = 'f';
 
+   // Check for insane values.
+   if( Algorithms::Instance().isnan(amount) || Algorithms::Instance().isinf(amount) )
+      return "?";
+   
    // Special case.
    if( units == 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);

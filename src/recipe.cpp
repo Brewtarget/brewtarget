@@ -2228,6 +2228,7 @@ bool Recipe::isValidType( const QString &str )
    return false;
 }
 
+/*
 void Recipe::changed(QMetaProperty prop, QVariant val)
 {
    QObject* senderObj = sender();
@@ -2239,20 +2240,20 @@ void Recipe::changed(QMetaProperty prop, QVariant val)
    
    // Pass along the signal if it's one of our ingredients?
    // I don't know really what to emit here...
-   /*
-   if( senderClass == "Hop" )
-      emit changed(...);
-   else if( senderClass == "Fermentable" )
-      emit changed(...);
-   else if( senderClass == "Misc" )
-      emit changed(...);
-   else if( senderClass == "Yeast" )
-      emit changed(...);
-   else if( senderClass == "Water" )
-      emit changed(...);
-   else if( senderClass == "BrewNote" )
-      emit changed(...);
-   else if( senderClass == "Instruction" )
-      emit changed(...);
-   */
+   //if( senderClass == "Hop" )
+   //   emit changed(...);
+   //else if( senderClass == "Fermentable" )
+   //   emit changed(...);
+   //else if( senderClass == "Misc" )
+   //   emit changed(...);
+   //else if( senderClass == "Yeast" )
+   //   emit changed(...);
+   //else if( senderClass == "Water" )
+   //   emit changed(...);
+   //else if( senderClass == "BrewNote" )
+   //   emit changed(...);
+   //else if( senderClass == "Instruction" )
+   //   emit changed(...);
+   
 }
+*/

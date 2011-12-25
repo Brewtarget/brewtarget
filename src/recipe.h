@@ -331,7 +331,7 @@ signals:
    */
 
 public slots:
-   void changed(QMetaProperty prop, QVariant val);
+   //void changed(QMetaProperty prop, QVariant val);
    
 private:
    

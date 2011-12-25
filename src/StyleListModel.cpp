@@ -107,16 +107,6 @@ void StyleListModel::styleChanged(QMetaProperty prop, QVariant val)
    }
 }
 
-void StyleListModel::recChanged(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-   if( propName == "style" )
-   {
-      Style* newStyle = qobject_cast<Style*>(BeerXMLElement::extractPtr(val));
-      // Now do something with the style.
-   }
-}
-
 void StyleListModel::repopulateList()
 {
    removeAll();
@@ -134,18 +124,6 @@ Style* StyleListModel::at(int ndx)
 int StyleListModel::indexOf(Style* s)
 {
    return styles.indexOf(s);
-}
-
-void StyleListModel::observeRecipe(Recipe* rec)
-{
-   if( recipe )
-      disconnect( recipe, 0, this, 0 );
-   recipe = rec;
-   
-   if( recipe )
-   {
-      connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(recChanged(QMetaProperty,QVariant)) );
-   }
 }
 
 int StyleListModel::rowCount( QModelIndex const& parent ) const

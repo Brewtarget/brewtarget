@@ -22,6 +22,7 @@
 #define ROOT_PRECISION 0.0000001
 
 #include <QList>
+#include <limits> // For std::numeric_limits
 
 class Algorithms
 {
@@ -31,8 +32,24 @@ public:
      return algorithmsSingleton;
    }
 
-   // Need the following to be cross-platform compatible.
-   bool isnan(double d);
+   //! Cross-platform compatible NaN checker.
+   inline bool isnan(double d)
+   {
+      // If using IEEE floating points, all comparisons with a NaN
+      // are false, so the following should be true only if we have
+      // a NaN.
+      return (d != d);
+   }
+   //! Cross-platform compatible Inf checker.
+   template<typename T> inline bool isinf(T var)
+   {
+      return
+      (
+         std::numeric_limits<T>::has_infinity &&
+         var == std::numeric_limits<T>::infinity()
+      );
+   }
+   //! Cross-platform rounding.
    double round(double d);
 
    /**
@@ -43,7 +60,7 @@ public:
     * Why isn't this already a member of QList?
     */
    template<class T> void unDup( QList<T>& list, bool (*equals)(T,T) )
-   { // Must be implemented in this header file apparently :(
+   {
       int i = 0;
 
       while( i < list.size() - 1 )

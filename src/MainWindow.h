@@ -106,7 +106,7 @@ public slots:
 
    void updateRecipeName();
    void updateRecipeStyle();
-   void updateRecipeEquipment(const QString&);
+   void updateRecipeEquipment();
    void updateRecipeBatchSize();
    void updateRecipeBoilSize();
    void updateRecipeEfficiency();
@@ -167,6 +167,9 @@ protected:
 
 private:
    Recipe* recipeObs;
+   Style* recStyle;
+   Equipment* recEquip;
+   
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
    QFileDialog* fileSaver;

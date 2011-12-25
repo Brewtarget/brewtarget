@@ -1281,6 +1281,7 @@ void Database::addToRecipe( Recipe* rec, Style* s )
              QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
 
    // Emit a changed signal.
+   // TODO: this is calling the SLOT, not the SIGNAL...erm...What do we do?
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(s) );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

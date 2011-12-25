@@ -40,7 +40,6 @@ class StyleListModel : public QAbstractListModel
       //! Reimplemented from QAbstractListModel.
       virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
       
-      void observeRecipe(Recipe* rec);
       void addStyle(Style* equipment);
       void addStyles(QList<Style*> s);
       void removeStyle(Style* equipment);
@@ -48,10 +47,9 @@ class StyleListModel : public QAbstractListModel
       
       Style* at(int ndx);
       int indexOf(Style* s);
-      
+
    public slots:
       void dbChanged(QMetaProperty,QVariant);
-      void recChanged(QMetaProperty,QVariant);
       void styleChanged(QMetaProperty,QVariant);
       
    private:
