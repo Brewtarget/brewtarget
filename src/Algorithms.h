@@ -46,7 +46,8 @@ public:
       return
       (
          std::numeric_limits<T>::has_infinity &&
-         var == std::numeric_limits<T>::infinity()
+         //var == std::numeric_limits<T>::infinity()
+         (var < std::numeric_limits<T>::min() || var > std::numeric_limits<T>::max())
       );
    }
    //! Cross-platform rounding.
