@@ -218,21 +218,19 @@ void Database::load()
    yeasts_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[YEASTTABLE] = yeasts_tm;
    
-   // TODO: set relations?
-   
    // Create and store all pointers.
-   populateElements( allBrewNotes, brewnotes_tm, BREWNOTETABLE );
-   populateElements( allEquipments, equipments_tm, EQUIPTABLE );
-   populateElements( allFermentables, fermentables_tm, FERMTABLE );
-   populateElements( allHops, hops_tm, HOPTABLE );
-   populateElements( allInstructions, instructions_tm, INSTRUCTIONTABLE );
-   populateElements( allMashs, mashs_tm, MASHTABLE );
-   populateElements( allMashSteps, mashSteps_tm, MASHSTEPTABLE );
-   populateElements( allMiscs, miscs_tm, MISCTABLE );
-   populateElements( allRecipes, recipes_tm, RECTABLE );
-   populateElements( allStyles, styles_tm, STYLETABLE );
-   populateElements( allWaters, waters_tm, WATERTABLE );
-   populateElements( allYeasts, yeasts_tm, YEASTTABLE );
+   populateElements( allBrewNotes, BREWNOTETABLE );
+   populateElements( allEquipments, EQUIPTABLE );
+   populateElements( allFermentables, FERMTABLE );
+   populateElements( allHops, HOPTABLE );
+   populateElements( allInstructions, INSTRUCTIONTABLE );
+   populateElements( allMashs, MASHTABLE );
+   populateElements( allMashSteps, MASHSTEPTABLE );
+   populateElements( allMiscs, MISCTABLE );
+   populateElements( allRecipes, RECTABLE );
+   populateElements( allStyles, STYLETABLE );
+   populateElements( allWaters, WATERTABLE );
+   populateElements( allYeasts, YEASTTABLE );
 }
 
 void Database::unload()
@@ -1305,57 +1303,57 @@ void Database::sqlDelete( QString const& tableName, QString const& whereClause )
 
 void Database::getBrewNotes( QList<BrewNote*>& list, QString filter )
 {
-   getElements( list, filter, brewnotes_tm, BREWNOTETABLE, allBrewNotes );
+   getElements( list, filter, BREWNOTETABLE, allBrewNotes );
 }
 
 void Database::getEquipments( QList<Equipment*>& list, QString filter )
 {
-   getElements( list, filter, equipments_tm, EQUIPTABLE, allEquipments );
+   getElements( list, filter, EQUIPTABLE, allEquipments );
 }
 
 void Database::getFermentables( QList<Fermentable*>& list, QString filter )
 {
-   getElements( list, filter, fermentables_tm, FERMTABLE, allFermentables );
+   getElements( list, filter, FERMTABLE, allFermentables );
 }
 
 void Database::getHops( QList<Hop*>& list, QString filter )
 {
-   getElements( list, filter, hops_tm, HOPTABLE, allHops );
+   getElements( list, filter, HOPTABLE, allHops );
 }
 
 void Database::getMashs( QList<Mash*>& list, QString filter )
 {
-   getElements( list, filter, mashs_tm, MASHTABLE, allMashs );
+   getElements( list, filter, MASHTABLE, allMashs );
 }
 
 void Database::getMashSteps( QList<MashStep*>& list, QString filter )
 {
-   getElements( list, filter, mashSteps_tm, MASHSTEPTABLE, allMashSteps );
+   getElements( list, filter, MASHSTEPTABLE, allMashSteps );
 }
 
 void Database::getMiscs( QList<Misc*>& list, QString filter )
 {
-   getElements( list, filter, miscs_tm, MISCTABLE, allMiscs );
+   getElements( list, filter, MISCTABLE, allMiscs );
 }
 
 void Database::getRecipes( QList<Recipe*>& list, QString filter )
 {
-   getElements( list, filter, recipes_tm, RECTABLE, allRecipes );
+   getElements( list, filter, RECTABLE, allRecipes );
 }
 
 void Database::getStyles( QList<Style*>& list, QString filter )
 {
-   getElements( list, filter, styles_tm, STYLETABLE, allStyles );
+   getElements( list, filter, STYLETABLE, allStyles );
 }
 
 void Database::getWaters( QList<Water*>& list, QString filter )
 {
-   getElements( list, filter, waters_tm, WATERTABLE, allWaters );
+   getElements( list, filter, WATERTABLE, allWaters );
 }
 
 void Database::getYeasts( QList<Yeast*>& list, QString filter )
 {
-   getElements( list, filter, yeasts_tm, YEASTTABLE, allYeasts );
+   getElements( list, filter, YEASTTABLE, allYeasts );
 }
 
 QHash<Database::DBTable,QString> Database::tableNamesHash()

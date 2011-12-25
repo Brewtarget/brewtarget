@@ -360,20 +360,21 @@ private:
    QHash< int, Yeast* > allYeasts;
    
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
-   template <class T> void populateElements( QHash<int,T*>& hash, QSqlRelationalTableModel* tm, DBTable table )
+   template <class T> void populateElements( QHash<int,T*>& hash, DBTable table )
    {
       int i, size, key;
       BeerXMLElement* e;
       T* et;
-      QString filter = tm->filter();
       
-      tm->setFilter("");
-      tm->select();
+      QSqlRelationalTableModel tm(0, sqldb);
+      tm.setTable(tableNames[table]);
+      tm.setFilter("");
+      tm.select();
       
-      size = tm->rowCount();
+      size = tm.rowCount();
       for( i = 0; i < size; ++i )
       {
-         key = tm->record(i).value(keyNames[table]).toInt();
+         key = tm.record(i).value(keyNames[table]).toInt();
          
          e = new T();
          et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
@@ -383,31 +384,26 @@ private:
          if( ! hash.contains(key) )
             hash.insert(key,et);
       }
-      
-      tm->setFilter(filter);
-      tm->select();
    }
    
    //! Helper to populate the list using the given filter.
-   template <class T> void getElements( QList<T*>& list, QString filter, QSqlRelationalTableModel* tm, DBTable table, QHash<int,T*> allElements )
+   template <class T> void getElements( QList<T*>& list, QString filter, DBTable table, QHash<int,T*> allElements )
    {
       int i, size, key;
-      QString oldFilter = tm->filter();
       
-      tm->setFilter(filter);
-      tm->select();
+      QSqlRelationalTableModel tm(0, sqldb);
+      tm.setTable(tableNames[table]);
+      tm.setFilter(filter);
+      tm.select();
       
       list.clear();
-      size = tm->rowCount();
+      size = tm.rowCount();
       for( i = 0; i < size; ++i )
       {
-         key = tm->record(i).value(keyNames[table]).toInt();
+         key = tm.record(i).value(keyNames[table]).toInt();
          if( allElements.contains(key) )
             list.append( allElements[key] );
       }
-      
-      tm->setFilter(oldFilter);
-      tm->select();
    }
    
    /*! Populates the \b element with properties. This must be a class that
