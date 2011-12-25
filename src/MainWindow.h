@@ -175,6 +175,7 @@ private:
    QFileDialog* fileSaver;
    QList<QMenu*> contextMenus;
    EquipmentEditor* equipEditor;
+   EquipmentEditor* singleEquipEditor;
    FermentableDialog* fermDialog;
    FermentableEditor* fermEditor;
    HopDialog* hopDialog;

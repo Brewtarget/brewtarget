@@ -141,6 +141,7 @@ MainWindow::MainWindow(QWidget* parent)
    
    dialog_about = new AboutDialog(this);
    equipEditor = new EquipmentEditor(this);
+   singleEquipEditor = new EquipmentEditor(this, true);
    fermDialog = new FermentableDialog(this);
    fermEditor = new FermentableEditor(this);
    hopDialog = new HopDialog(this);
@@ -335,6 +336,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
 
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
+   connect( equipmentButton, SIGNAL( clicked() ), singleEquipEditor, SLOT(show()) );
    connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
    connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
@@ -649,6 +651,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    recipeExtrasWidget->setRecipe(recipe);
    mashDesigner->setRecipe(recipe);
    equipmentButton->setRecipe(recipe);
+   singleEquipEditor->setEquipment(recEquip);
    
    mashEditor->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
@@ -666,6 +669,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    if( propName == "equipment" )
    {
       recEquip = recipeObs->equipment();
+      singleEquipEditor->setEquipment(recEquip);
    }
    else if( propName == "style" )
    {

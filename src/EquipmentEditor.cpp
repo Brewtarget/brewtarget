@@ -28,11 +28,24 @@
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 
-EquipmentEditor::EquipmentEditor(QWidget* parent)
+EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    : QDialog(parent)
 {
    setupUi(this);
 
+   if( singleEquipEditor )
+   {
+      //horizontalLayout_equipments->setVisible(false);
+      for(int i = 0; i < horizontalLayout_equipments->count(); ++i)
+      {
+         QWidget* w = horizontalLayout_equipments->itemAt(i)->widget();
+         if(w)
+            w->setVisible(false);
+      }
+      
+      pushButton_new->setVisible(false);
+   }
+   
    // Set grain absorption label based on units.
    Unit* weightUnit = 0;
    Unit* volumeUnit = 0;

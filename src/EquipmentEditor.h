@@ -35,7 +35,8 @@ class EquipmentEditor : public QDialog, public Ui::equipmentEditor
    Q_OBJECT
 
 public:
-   EquipmentEditor( QWidget *parent=0 );
+   //! \param singleEquipEditor true if you do not want the necessary elements for viewing all the database elements.
+   EquipmentEditor( QWidget *parent=0, bool singleEquipEditor=false );
    virtual ~EquipmentEditor() {}
    void setEquipment( Equipment* e );
 
