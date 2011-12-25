@@ -22,7 +22,9 @@
 #include <QWidget>
 
 EquipmentButton::EquipmentButton(QWidget* parent)
-   : QPushButton(parent)
+   : QPushButton(parent),
+     _rec(0),
+     _equip(0)
 {
 }
 

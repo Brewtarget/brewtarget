@@ -1556,17 +1556,29 @@ double Recipe::points() const
 
 Style* Recipe::style() const
 {
-   return Database::instance().style( get("style").toInt() );
+   QVariant key = get("style");
+   if( key.isValid() )
+      return Database::instance().style( key.toInt() );
+   else
+      return 0;
 }
 
 Mash* Recipe::mash() const
 {
-   return Database::instance().mash( get("mash").toInt() );
+   QVariant key = get("mash");
+   if( key.isValid() )
+      return Database::instance().mash( key.toInt() );
+   else
+      return 0;
 }
 
 Equipment* Recipe::equipment() const
 {
-   return Database::instance().equipment( get("equipment").toInt() );
+   QVariant key = get("equipment");
+   if( key.isValid() )
+      return Database::instance().equipment( key.toInt() );
+   else
+      return 0;
 }
 
 QList<Instruction*> Recipe::instructions() const
