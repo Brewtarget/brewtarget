@@ -1558,7 +1558,7 @@ double Recipe::points() const
 
 Style* Recipe::style() const
 {
-   QVariant key = get("style");
+   QVariant key = get("style_id");
    if( key.isValid() )
       return Database::instance().style( key.toInt() );
    else
@@ -1567,7 +1567,7 @@ Style* Recipe::style() const
 
 Mash* Recipe::mash() const
 {
-   QVariant key = get("mash");
+   QVariant key = get("mash_id");
    if( key.isValid() )
       return Database::instance().mash( key.toInt() );
    else
@@ -1576,7 +1576,7 @@ Mash* Recipe::mash() const
 
 Equipment* Recipe::equipment() const
 {
-   QVariant key = get("equipment");
+   QVariant key = get("equipment_id");
    if( key.isValid() )
       return Database::instance().equipment( key.toInt() );
    else

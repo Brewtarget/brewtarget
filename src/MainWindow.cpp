@@ -666,8 +666,6 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    if( propName == "equipment" )
    {
       recEquip = recipeObs->equipment();
-      if( recEquip )
-         equipmentButton->setText( recEquip->name() );
    }
    else if( propName == "style" )
    {
