@@ -152,7 +152,9 @@ void Recipe::setDefaults()
 }
 */
 
-Recipe::Recipe() : BeerXMLElement()
+Recipe::Recipe()
+   : BeerXMLElement(),
+     _uninitializedCalcs(true)
 {
 }
 
@@ -1787,6 +1789,23 @@ void Recipe::removeBrewNote(BrewNote* var)
 
 //==============================Recalculators==================================
 
+void Recipe::recalcAll()
+{
+   // NOTE: Order is VERY important here since they may depend on each other.
+   recalcGrainsInMash_kg();
+   recalcGrains_kg();
+   recalcVolumeEstimates();
+   recalcABV_pct();
+   recalcColor_srm();
+   recalcSRMColor();
+   recalcOgFg();
+   recalcBoilGrav();
+   recalcSRMColor();
+   recalcIBU();
+
+   _uninitializedCalcs = false;
+}
+
 void Recipe::recalcPoints(double volume)
 {
    unsigned int i;
@@ -1888,9 +1907,9 @@ void Recipe::recalcBoilGrav()
    // we need to adjust for that here.
    sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
    if( equipment() )
-      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/postBoilVolume_l());
+      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/_postBoilVolume_l);
 
-   _boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, boilVolume_l()) );
+   _boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, _boilVolume_l) );
    
    emit changed( metaProperty("boilGrav"), _boilGrav );
 }
@@ -2155,7 +2174,7 @@ void Recipe::recalcOgFg()
 
    // Combine the two sugars.
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
-   plato = Algorithms::Instance().getPlato( sugar_kg, finalVolume_l());
+   plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolume_l);
 
    _og = Algorithms::Instance().PlatoToSG_20C20C( plato );
    _points = (_og-1)*1000.0;

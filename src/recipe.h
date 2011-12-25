@@ -372,30 +372,37 @@ private:
    double _og;
    double _fg;
    
+   // False when constructed, indicates whether recalcAll has been called.
+   bool _uninitializedCalcs;
+   
    // Some recalculators for calculated properties.
+   //! Recalculates all the calculated properties.
+   void recalcAll();
+   
    /*! The theoretical maximum yield without any non-mashed anything. This
     * will need to be communicated somewhere. Emits changed(points).
+    * Depends on: --.
     */
    void recalcPoints(double volume);
-   //! Emits changed(ABV_pct)
+   //! Emits changed(ABV_pct). Depends on: _og, _fg
    void recalcABV_pct();
-   //! Emits changed(color_srm)
+   //! Emits changed(color_srm). Depends on: _finalVolume_l
    void recalcColor_srm();
-   //! Emits changed(boilGrav)
+   //! Emits changed(boilGrav). Depends on: _postBoilVolume_l, _boilVolume_l
    void recalcBoilGrav();
-   //! Emits changed(IBU)
+   //! Emits changed(IBU). Depends on: _batchSize_l, _boilGrav, _boilVolume_l, _finalVolume_l
    void recalcIBU();
-   //! Emits changed(wortFromMash_l), changed(boilVolume_l), changed(finalVolume_l), changed(postBoilVolume_l).
+   //! Emits changed(wortFromMash_l), changed(boilVolume_l), changed(finalVolume_l), changed(postBoilVolume_l). Depends on: _grainsInMash_kg
    void recalcVolumeEstimates();
-   //! Emits changed(grainsInMash_kg)
+   //! Emits changed(grainsInMash_kg). Depends on: --.
    void recalcGrainsInMash_kg();
-   //! Emits changed(grains_kg)
+   //! Emits changed(grains_kg). Depends on: --.
    void recalcGrains_kg();
-   //! Emits changed(SRMColor)
+   //! Emits changed(SRMColor). Depends on: _color_srm.
    void recalcSRMColor();
-   //! Emits changed(calories)
+   //! Emits changed(calories). Depends on: _og, _fg.
    void recalcCalories();
-   //! Emits changed(og), changed(fg)
+   //! Emits changed(og), changed(fg). Depends on: _wortFromMash_l, _finalVolume_l
    void recalcOgFg();
    
    // Helper

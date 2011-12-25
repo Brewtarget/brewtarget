@@ -227,10 +227,11 @@ void Database::load()
    populateElements( allMashs, MASHTABLE );
    populateElements( allMashSteps, MASHSTEPTABLE );
    populateElements( allMiscs, MISCTABLE );
-   populateElements( allRecipes, RECTABLE );
    populateElements( allStyles, STYLETABLE );
    populateElements( allWaters, WATERTABLE );
    populateElements( allYeasts, YEASTTABLE );
+   
+   populateElements( allRecipes, RECTABLE );
 }
 
 void Database::unload()
@@ -373,8 +374,14 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
 
 Recipe* Database::recipe(int key)
 {
+   Recipe* ret;
    if( allRecipes.contains(key) )
-      return allRecipes[key];
+   {
+      ret = allRecipes[key];
+      if( ret->_uninitializedCalcs )
+         ret->recalcAll();
+      return ret;
+   }
    else
       return 0;
 }
@@ -1475,6 +1482,12 @@ QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
    getRecipes( tmp, "`deleted`='FALSE'" );
+   QList<Recipe*>::iterator i;
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+   {
+      if( (*i)->_uninitializedCalcs )
+         (*i)->recalcAll();
+   }
    return tmp;
 }
 
