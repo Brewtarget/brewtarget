@@ -93,9 +93,28 @@ void YeastTableModel::observeDatabase(bool val)
 void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
 {
    QList<Yeast*>::iterator i;
+   QList<Yeast*> tmp;
    
    for( i = yeasts.begin(); i != yeasts.end(); i++ )
-      addYeast(*i);
+   {
+      if( !yeastObs.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = yeastObs.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   yeastObs.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+   
+   endInsertRows();
 }
 
 bool YeastTableModel::removeYeast(Yeast* yeast)
@@ -124,10 +143,12 @@ bool YeastTableModel::removeYeast(Yeast* yeast)
 
 void YeastTableModel::removeAll()
 {
-   int i;
-
-   for( i = 0; i < yeastObs.size(); ++i )
-      removeYeast(yeastObs[i]);
+   beginRemoveRows( QModelIndex(), 0, yeastObs.size()-1 );
+   while( !yeastObs.isEmpty() )
+   {
+      disconnect( yeastObs.takeLast(), 0, this, 0 );
+   }
+   endRemoveRows();
 }
 
 void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)

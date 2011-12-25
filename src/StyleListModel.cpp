@@ -43,6 +43,27 @@ void StyleListModel::addStyle(Style* s)
    }
 }
 
+void StyleListModel::addStyles(QList<Style*> s)
+{
+   QList<Style*>::iterator i;
+   QList<Style*> tmp;
+   
+   for( i = s.begin(); i != s.end(); i++ )
+   {
+      if( !styles.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = styles.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   styles.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(styleChanged(QMetaProperty,QVariant)) );
+   
+   endInsertRows();
+}
+
 void StyleListModel::removeStyle(Style* style)
 {
    int ndx = styles.indexOf(style);
@@ -53,6 +74,14 @@ void StyleListModel::removeStyle(Style* style)
       styles.removeAt(ndx);
       endRemoveRows();
    }
+}
+
+void StyleListModel::removeAll()
+{
+   beginRemoveRows( QModelIndex(), 0, styles.size()-1 );
+   while( !styles.isEmpty() )
+      disconnect( styles.takeLast(), 0, this, 0 );
+   endRemoveRows();
 }
 
 void StyleListModel::dbChanged(QMetaProperty prop, QVariant val)
@@ -90,20 +119,8 @@ void StyleListModel::recChanged(QMetaProperty prop, QVariant val)
 
 void StyleListModel::repopulateList()
 {
-   int i, size;
-   
-   // Remove all current styles.
-   size = styles.size();
-   for( i = 0; i < size; ++i )
-      removeStyle(styles[i]);
-   
-   // Get the new list of styles.
-   Database::instance().getStyles( styles );
-   
-   // Connect and add all new styles.
-   size = styles.size();
-   for( i = 0; i < size; ++i )
-      addStyle(styles[i]);
+   removeAll();
+   addStyles( Database::instance().styles() );
 }
 
 Style* StyleListModel::at(int ndx)

@@ -49,9 +49,9 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
    connect( fermentableTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT(addFermentable(const QModelIndex&)) );
    
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   //connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    
-   populateTable();
+   fermTableModel->observeDatabase(true);
 }
 
 void FermentableDialog::removeFermentable()
@@ -101,6 +101,7 @@ void FermentableDialog::editSelected()
    fermEdit->show();
 }
 
+/*
 void FermentableDialog::changed(QMetaProperty prop, QVariant val)
 {
    // Notifier should only be the database.
@@ -122,6 +123,7 @@ void FermentableDialog::populateTable()
    for( i = 0; i < numFerms; ++i )
       fermTableModel->addFermentable(ferms[i]);
 }
+*/
 
 void FermentableDialog::addFermentable(const QModelIndex& index)
 {

@@ -83,9 +83,28 @@ void MiscTableModel::addMisc(Misc* misc)
 void MiscTableModel::addMiscs(QList<Misc*> miscs)
 {
    QList<Misc*>::iterator i;
+   QList<Misc*> tmp;
    
    for( i = miscs.begin(); i != miscs.end(); i++ )
-      addMisc(*i);
+   {
+      if( !miscObs.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = miscObs.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   miscObs.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+   
+   endInsertRows();
 }
 
 // Returns true when misc is successfully found and removed.
@@ -116,10 +135,12 @@ bool MiscTableModel::removeMisc(Misc* misc)
 
 void MiscTableModel::removeAll()
 {
-   int i;
-
-   for( i = 0; i < miscObs.size(); ++i )
-      removeMisc(miscObs[i]);
+   beginRemoveRows( QModelIndex(), 0, miscObs.size()-1 );
+   while( !miscObs.isEmpty() )
+   {
+      disconnect( miscObs.takeLast(), 0, this, 0 );
+   }
+   endRemoveRows();
 }
 
 int MiscTableModel::rowCount(const QModelIndex& /*parent*/) const

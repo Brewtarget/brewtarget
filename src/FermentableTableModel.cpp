@@ -100,9 +100,31 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
 void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
 {
    QList<Fermentable*>::iterator i;
+   QList<Fermentable*> tmp;
    
    for( i = ferms.begin(); i != ferms.end(); i++ )
-      addFermentable(*i);
+   {
+      if( !fermObs.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = fermObs.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   fermObs.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+   {
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      totalFermMass_kg += (*i)->amount_kg();
+   }
+   
+   endInsertRows();
+   
+   if(parentTableWidget)
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
 }
 
 bool FermentableTableModel::removeFermentable(Fermentable* ferm)
@@ -134,10 +156,12 @@ bool FermentableTableModel::removeFermentable(Fermentable* ferm)
 
 void FermentableTableModel::removeAll()
 {
-   int i;
-
-   for( i = 0; i < fermObs.size(); ++i )
-      removeFermentable(fermObs[i]);
+   beginRemoveRows( QModelIndex(), 0, fermObs.size()-1 );
+   while( !fermObs.isEmpty() )
+   {
+      disconnect( fermObs.takeLast(), 0, this, 0 );
+   }
+   endRemoveRows();
 }
 
 void FermentableTableModel::updateTotalGrains()

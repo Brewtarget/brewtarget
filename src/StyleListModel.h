@@ -42,7 +42,9 @@ class StyleListModel : public QAbstractListModel
       
       void observeRecipe(Recipe* rec);
       void addStyle(Style* equipment);
+      void addStyles(QList<Style*> s);
       void removeStyle(Style* equipment);
+      void removeAll();
       
       Style* at(int ndx);
       int indexOf(Style* s);

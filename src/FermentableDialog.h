@@ -39,7 +39,6 @@ class FermentableDialog : public QDialog, public Ui::fermentableDialog
 public:
    FermentableDialog(MainWindow* parent);
    virtual ~FermentableDialog() {}
-   void startObservingDB();
 
 public slots:
    /*! If \b index is the default, will add the selected fermentable to list.
@@ -49,7 +48,7 @@ public slots:
    void removeFermentable();
    void editSelected();
    void newFermentable();
-   void changed(QMetaProperty,QVariant);
+   //void changed(QMetaProperty,QVariant);
 
 private:
    MainWindow* mainWindow;
@@ -58,7 +57,7 @@ private:
    FermentableEditor* fermEdit;
    int numFerms;
 
-   void populateTable();
+   //void populateTable();
 };
 
 #endif   /* _FERMENTABLEDIALOG_H */

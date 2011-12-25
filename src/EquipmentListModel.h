@@ -42,7 +42,9 @@ public:
 
    void observeRecipe(Recipe* rec);
    void addEquipment(Equipment* equipment);
+   void addEquipments(QList<Equipment*> equips);
    void removeEquipment(Equipment* equipment);
+   void removeAll();
    
    Equipment* at(int ndx);
    int indexOf(Equipment* e);

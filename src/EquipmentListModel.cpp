@@ -43,6 +43,27 @@ void EquipmentListModel::addEquipment(Equipment* equipment)
    }
 }
 
+void EquipmentListModel::addEquipments(QList<Equipment*> equips)
+{
+   QList<Equipment*>::iterator i;
+   QList<Equipment*> tmp;
+   
+   for( i = equips.begin(); i != equips.end(); i++ )
+   {
+      if( !equipments.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = equipments.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   equipments.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
+   
+   endInsertRows();
+}
+
 void EquipmentListModel::removeEquipment(Equipment* equipment)
 {
    int ndx = equipments.indexOf(equipment);
@@ -53,6 +74,16 @@ void EquipmentListModel::removeEquipment(Equipment* equipment)
       equipments.removeAt(ndx);
       endRemoveRows();
    }
+}
+
+void EquipmentListModel::removeAll()
+{
+   beginRemoveRows( QModelIndex(), 0, equipments.size()-1 );
+   while( !equipments.isEmpty() )
+   {
+      disconnect( equipments.takeLast(), 0, this, 0 );
+   }
+   endRemoveRows();
 }
 
 void EquipmentListModel::dbChanged(QMetaProperty prop, QVariant val)
@@ -83,29 +114,15 @@ void EquipmentListModel::recChanged(QMetaProperty prop, QVariant val)
    QString propName(prop.name());
    if( propName == "equipment" )
    {
-      // TODO: need to figure out if this is doing the right thing on all systems.
-      unsigned int equipAddr = val.toUInt();
-      Equipment* newEquip = reinterpret_cast<Equipment*>(equipAddr);
+      Equipment* newEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(val));
       // Now do something with the equipment.
    }
 }
 
 void EquipmentListModel::repopulateList()
 {
-   int i, size;
-   
-   // Remove all current equipments.
-   size = equipments.size();
-   for( i = 0; i < size; ++i )
-      removeEquipment(equipments[i]);
-   
-   // Get the new list of equipments.
-   Database::instance().getEquipments( equipments );
-   
-   // Connect and add all new equipments.
-   size = equipments.size();
-   for( i = 0; i < size; ++i )
-      addEquipment(equipments[i]);
+   removeAll();
+   addEquipments( Database::instance().equipments() );
 }
 
 Equipment* EquipmentListModel::at(int ndx)

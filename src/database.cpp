@@ -1423,81 +1423,81 @@ const QSqlRelationalTableModel* Database::getModel( DBTable table )
    return tables[table];
 }
 
-QList<BrewNote*>& Database::brewNotes()
+QList<BrewNote*> Database::brewNotes()
 {
-   QList<BrewNote*>* tmp = new QList<BrewNote*>;
-   getBrewNotes( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<BrewNote*> tmp;
+   getBrewNotes( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Equipment*>& Database::equipments()
+QList<Equipment*> Database::equipments()
 {
-   QList<Equipment*>* tmp = new QList<Equipment*>;
-   getEquipments( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Equipment*> tmp;
+   getEquipments( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Fermentable*>& Database::fermentables()
+QList<Fermentable*> Database::fermentables()
 {
-   QList<Fermentable*>* tmp = new QList<Fermentable*>;
-   getFermentables( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Fermentable*> tmp;
+   getFermentables( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Hop*>& Database::hops()
+QList<Hop*> Database::hops()
 {
-   QList<Hop*>* tmp = new QList<Hop*>;
-   getHops( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Hop*> tmp;
+   getHops( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Mash*>& Database::mashs()
+QList<Mash*> Database::mashs()
 {
-   QList<Mash*>* tmp = new QList<Mash*>;
-   getMashs( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Mash*> tmp;
+   getMashs( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<MashStep*>& Database::mashSteps()
+QList<MashStep*> Database::mashSteps()
 {
-   QList<MashStep*>* tmp = new QList<MashStep*>;
-   getMashSteps( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<MashStep*> tmp;
+   getMashSteps( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Misc*>& Database::miscs()
+QList<Misc*> Database::miscs()
 {
-   QList<Misc*>* tmp = new QList<Misc*>;
-   getMiscs( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Misc*> tmp;
+   getMiscs( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Recipe*>& Database::recipes()
+QList<Recipe*> Database::recipes()
 {
-   QList<Recipe*>* tmp = new QList<Recipe*>;
-   getRecipes( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Recipe*> tmp;
+   getRecipes( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Style*>& Database::styles()
+QList<Style*> Database::styles()
 {
-   QList<Style*>* tmp = new QList<Style*>;
-   getStyles( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Style*> tmp;
+   getStyles( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Water*>& Database::waters()
+QList<Water*> Database::waters()
 {
-   QList<Water*>* tmp = new QList<Water*>;
-   getWaters( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Water*> tmp;
+   getWaters( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
-QList<Yeast*>& Database::yeasts()
+QList<Yeast*> Database::yeasts()
 {
-   QList<Yeast*>* tmp = new QList<Yeast*>;
-   getYeasts( *tmp, "deleted=FALSE" );
-   return *tmp;
+   QList<Yeast*> tmp;
+   getYeasts( tmp, "`deleted`='FALSE'" );
+   return tmp;
 }
 
 void Database::importFromXML(const QString& filename)

@@ -264,17 +264,17 @@ public:
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
    
    // Returns non-deleted BeerXMLElements.
-   QList<BrewNote*>& brewNotes();
-   QList<Equipment*>& equipments();
-   QList<Fermentable*>& fermentables();
-   QList<Hop*>& hops();
-   QList<Mash*>& mashs();
-   QList<MashStep*>& mashSteps();
-   QList<Misc*>& miscs();
-   QList<Recipe*>& recipes();
-   QList<Style*>& styles();
-   QList<Water*>& waters();
-   QList<Yeast*>& yeasts();
+   QList<BrewNote*> brewNotes();
+   QList<Equipment*> equipments();
+   QList<Fermentable*> fermentables();
+   QList<Hop*> hops();
+   QList<Mash*> mashs();
+   QList<MashStep*> mashSteps();
+   QList<Misc*> miscs();
+   QList<Recipe*> recipes();
+   QList<Style*> styles();
+   QList<Water*> waters();
+   QList<Yeast*> yeasts();
    
    //! \b returns a list of the brew notes in a recipe.
    QList<BrewNote*> brewNotes(Recipe const* parent);

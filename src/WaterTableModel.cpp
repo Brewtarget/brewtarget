@@ -89,9 +89,28 @@ void WaterTableModel::addWater(Water* water)
 void WaterTableModel::addWaters(QList<Water*> waters)
 {
    QList<Water*>::iterator i;
+   QList<Water*> tmp;
    
    for( i = waters.begin(); i != waters.end(); i++ )
-      addWater(*i);
+   {
+      if( !waterObs.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = waterObs.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   waterObs.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+   
+   endInsertRows();
 }
 
 bool WaterTableModel::removeWater(Water* water)
@@ -119,10 +138,12 @@ bool WaterTableModel::removeWater(Water* water)
 
 void WaterTableModel::removeAll()
 {
-   int i;
-
-   for( i = 0; i < waterObs.size(); ++i )
-      removeWater(waterObs[i]);
+   beginRemoveRows( QModelIndex(), 0, waterObs.size()-1 );
+   while( !waterObs.isEmpty() )
+   {
+      disconnect( waterObs.takeLast(), 0, this, 0 );
+   }
+   endRemoveRows();
 }
 
 void WaterTableModel::changed(QMetaProperty prop, QVariant /*val*/)
