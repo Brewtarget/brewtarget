@@ -235,7 +235,11 @@ public:
    }
    
 signals:
-   //! Passes the meta property that has changed about this object.
+   /*!
+    * Passes the meta property that has changed about this object.
+    * NOTE: when subclassing, be \em extra careful not to create a method with
+    * the same signature. Otherwise, everything will silently break.
+    */
    void changed(QMetaProperty, QVariant value = QVariant());
    
 protected:

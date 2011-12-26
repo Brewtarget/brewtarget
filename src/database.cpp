@@ -51,6 +51,7 @@
 
 #include "config.h"
 #include "brewtarget.h"
+#include "QueuedMethod.h"
 #include "SetterCommand.h"
 
 // Static members.
@@ -232,6 +233,16 @@ void Database::load()
    populateElements( allYeasts, YEASTTABLE );
    
    populateElements( allRecipes, RECTABLE );
+   
+   // Connect fermentable changed signals to their parent recipe.
+   QHash<int,Recipe*>::iterator i;
+   QList<Fermentable*>::iterator j;
+   for( i = allRecipes.begin(); i != allRecipes.end(); i++ )
+   {
+      QList<Fermentable*> tmp = fermentables(*i);
+      for( j = tmp.begin(); j != tmp.end(); j++ )
+         connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+   }
 }
 
 void Database::unload()
@@ -326,6 +337,8 @@ void Database::removeFromRecipe( Recipe* rec, Hop* hop )
 void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
 {
    removeIngredientFromRecipe( rec, ferm, "fermentables", "fermentable_in_recipe", "fermentable_id" );
+   disconnect( ferm, 0, rec, 0 );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Misc* m )
@@ -1209,7 +1222,9 @@ void Database::addToRecipe( Recipe* rec, Hop* hop )
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm )
 {
-   addIngredientToRecipe( rec, ferm, "ferms", "fermentable_in_recipe", "fermentable_id" );
+   int key = addIngredientToRecipe( rec, ferm, "ferms", "fermentable_in_recipe", "fermentable_id" );
+   connect( allFermentables[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Misc* m )

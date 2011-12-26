@@ -44,6 +44,7 @@
 #include "ColorMethods.h"
 
 #include "HeatCalculations.h"
+#include "QueuedMethod.h"
 
 QHash<QString,QString> Recipe::tagToProp = Recipe::tagToPropHash();
 
@@ -1792,16 +1793,25 @@ void Recipe::removeBrewNote(BrewNote* var)
 void Recipe::recalcAll()
 {
    // NOTE: Order is VERY important here since they may depend on each other.
-   recalcGrainsInMash_kg();
-   recalcGrains_kg();
-   recalcVolumeEstimates();
-   recalcABV_pct();
-   recalcColor_srm();
-   recalcSRMColor();
-   recalcOgFg();
-   recalcBoilGrav();
-   recalcSRMColor();
-   recalcIBU();
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcGrainsInMash_kg") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcGrains_kg") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcVolumeEstimates") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcABV_pct") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcColor_srm") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcSRMColor") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcOgFg") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcBoilGrav") );
+   QueuedMethod::enqueue( new QueuedMethod(this,"recalcIBU") );
+   
+   //recalcGrainsInMash_kg();
+   //recalcGrains_kg();
+   //recalcVolumeEstimates();
+   //recalcABV_pct();
+   //recalcColor_srm();
+   //recalcSRMColor();
+   //recalcOgFg();
+   //recalcBoilGrav();
+   //recalcIBU();
 
    _uninitializedCalcs = false;
 }
@@ -2247,8 +2257,10 @@ bool Recipe::isValidType( const QString &str )
    return false;
 }
 
+//==========================Accept changes from ingredients====================
+
 /*
-void Recipe::changed(QMetaProperty prop, QVariant val)
+void Recipe::acceptChanges(QMetaProperty prop, QVariant val)
 {
    QObject* senderObj = sender();
    // Sender can be null if the sender is from another thread.
@@ -2276,3 +2288,8 @@ void Recipe::changed(QMetaProperty prop, QVariant val)
    
 }
 */
+
+void Recipe::acceptFermChange(QMetaProperty /*prop*/, QVariant /*val*/)
+{
+   recalcAll();
+}

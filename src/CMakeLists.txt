@@ -110,6 +110,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrimingDialog.cpp
+    ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeComboBox.cpp
     ${SRCDIR}/RecipeFormatter.cpp
@@ -231,6 +232,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrimingDialog.h
+    ${SRCDIR}/QueuedMethod.h
     ${SRCDIR}/RecipeComboBox.h
     ${SRCDIR}/RecipeExtrasDialog.h
     ${SRCDIR}/RecipeExtrasWidget.h
