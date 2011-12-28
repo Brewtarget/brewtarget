@@ -1793,15 +1793,30 @@ void Recipe::removeBrewNote(BrewNote* var)
 void Recipe::recalcAll()
 {
    // NOTE: Order is VERY important here since they may depend on each other.
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcGrainsInMash_kg") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcGrains_kg") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcVolumeEstimates") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcABV_pct") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcColor_srm") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcSRMColor") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcOgFg") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcBoilGrav") );
-   QueuedMethod::enqueue( new QueuedMethod(this,"recalcIBU") );
+   QueuedMethod* q0 =  new QueuedMethod(this,"recalcGrainsInMash_kg", false);
+   QueuedMethod* q1 =  new QueuedMethod(this,"recalcGrains_kg", false);
+   QueuedMethod* q2 =  new QueuedMethod(this,"recalcVolumeEstimates", false);
+   QueuedMethod* q3 =  new QueuedMethod(this,"recalcABV_pct", false);
+   QueuedMethod* q4 =  new QueuedMethod(this,"recalcColor_srm", false);
+   QueuedMethod* q5 =  new QueuedMethod(this,"recalcSRMColor", false);
+   QueuedMethod* q6 =  new QueuedMethod(this,"recalcOgFg", false);
+   QueuedMethod* q7 =  new QueuedMethod(this,"recalcBoilGrav", false);
+   QueuedMethod* q8 =  new QueuedMethod(this,"recalcIBU", false);
+   
+   QueuedMethod::enqueue( q0 );
+   QueuedMethod::enqueue( q1 );
+   QueuedMethod::enqueue( q2 );
+   QueuedMethod::enqueue( q3 );
+   QueuedMethod::enqueue( q4 );
+   QueuedMethod::enqueue( q5 );
+   QueuedMethod::enqueue( q6 );
+   QueuedMethod::enqueue( q7 );
+   QueuedMethod::enqueue( q8 );
+   
+   // Order matters, so chain the execution.
+   q0->chainWith(q1)->chainWith(q2)->chainWith(q3)->chainWith(q4)->chainWith(q5)
+      ->chainWith(q6)->chainWith(q7)->chainWith(q8);
+   q0->start(); // Start the dominoes :)
    
    //recalcGrainsInMash_kg();
    //recalcGrains_kg();

@@ -19,11 +19,11 @@
 #ifndef _QUEUEDMETHOD_H
 #define _QUEUEDMETHOD_H
 
-#include <QThread>
 #include <QString>
 #include <QGenericArgument>
 #include <QGenericReturnArgument>
 #include <QList>
+#include <QThread>
 
 /*!
  * This class allows you to queue any \em invokable function call that would
@@ -47,34 +47,52 @@ public:
                 //QGenericReturnArgument ret,
                 bool startImmediately = true,
                 QGenericArgument arg0 = QGenericArgument(0) );
-   virtual ~QueuedMethod(){}
+   virtual ~QueuedMethod();
+
+   /*!
+    * Chain the method call with \b other. I.e. when \b this finishes,
+    * \b other will be started.
+    * \returns \b other so you can do a->chainWith(b)->chainWith(c) which
+    * executes a, then b, then c.
+    */
+   QueuedMethod* chainWith( QueuedMethod* other );
 
    /*!
     * Push a method onto the queue. When \b qm->done() is emitted, \b qm
     * will be destructed and dequeued. Only use this when qm is allocated
-    * via the \b new operator.
+    * via the \b new operator. Maybe it's a bad name, but please note that
+    * the order of enqueuing is not necessarily the order of execution. For
+    * order control, see \b chainWith().
     */
    static void enqueue( QueuedMethod* qm );
-   
-protected:
-   
-   //! Reimplemented from QThread
-   void run();
 
+protected:
+   //! Reimplemented from QThread.
+   void run();
+   
 signals:
-   //! Emitted when the encapsulated function has completed.
+   /*!
+    * Emitted when the encapsulated function has completed.
+    * \param success is return value of QMetaObject::invokeMethod().
+    */
    void done(bool success);
 
+public slots:
+   
 private slots:
    void executeFunction();
-
+   void dequeueMyself();
+   void startChained();
+   
 private:
+   QueuedMethod* _chainedMethod;
    QObject* _obj;
    QString _methodName;
    //const char* _retName;
    //void* _retData;
    const char* _arg0Name;
    void* _arg0Data;
+   bool success;
    
    static QList<QueuedMethod*> _queue;
    static void dequeue( QueuedMethod* qm );

@@ -19,6 +19,8 @@
 #include "QueuedMethod.h"
 #include <QTimer>
 #include <QMetaObject>
+#include <QDebug>
+#include <QThread>
 
 QList<QueuedMethod*> QueuedMethod::_queue;
 
@@ -29,6 +31,7 @@ QueuedMethod::QueuedMethod(
    QGenericArgument arg0
 )
    : QThread(),
+     _chainedMethod(0),
      _obj(obj),
      _methodName(methodName),
      //_retName(ret.name()),
@@ -36,34 +39,43 @@ QueuedMethod::QueuedMethod(
      _arg0Name(arg0.name()),
      _arg0Data(arg0.data())
 {
-   // Sets the right affinity.
-   moveToThread(this);
-   
    if( startImmediately )
       start();
 }
 
+QueuedMethod::~QueuedMethod()
+{
+}
+
 void QueuedMethod::run()
 {
-   // Schedule the function execution to start when our event loop gets created.
-   QTimer::singleShot( 0, this, SLOT(executeFunction()) );
+   // This will call executeFunction() once the event loop starts.
+   QTimer::singleShot(0, this, SLOT(executeFunction()));
    
-   // Exec blocks until the event loop stops.
+   // This call starts the event loop and blocks until it is stopped.
    exec();
 }
 
 void QueuedMethod::executeFunction()
 {
    // Do the function call.
-   bool success = QMetaObject::invokeMethod(
-                     _obj, 
-                     _methodName.toStdString().c_str(),
-                     Qt::QueuedConnection,
-                     //QGenericReturnArgument(_retName, _retData),
-                     QGenericArgument(_arg0Name, _arg0Data)
-                  );
+   success = QMetaObject::invokeMethod(
+                _obj, 
+                _methodName.toStdString().c_str(),
+                Qt::QueuedConnection,
+                //QGenericReturnArgument(_retName, _retData),
+                QGenericArgument(_arg0Name, _arg0Data)
+             );
+   //qDebug() << _methodName << ": " << success;
+   
    emit done(success);
-   dequeue( this );
+   
+   // If there is no chained method, we are done.
+   if( !_chainedMethod )
+   {
+      quit(); // Should cause event loop to stop, and run() to return.
+      dequeueMyself();
+   }
 }
 
 void QueuedMethod::enqueue( QueuedMethod* qm )
@@ -77,6 +89,33 @@ void QueuedMethod::dequeue( QueuedMethod* qm )
    if( _queue.contains(qm) )
    {
       _queue.removeAll(qm);
-      delete qm;
+      //delete qm;
+      qm->deleteLater();
    }
+}
+
+void QueuedMethod::dequeueMyself()
+{
+   //qDebug() << "Dequeueing: " << this;
+   dequeue(this);
+}
+
+QueuedMethod* QueuedMethod::chainWith( QueuedMethod* other )
+{
+   _chainedMethod = other;
+   // NOTE: the following line seems much simpler, but does not work... :/
+   //connect( this, SIGNAL(done(bool)), other, SLOT(start()) );
+   connect( this, SIGNAL(done(bool)), this, SLOT(startChained()) );
+   return other;
+}
+
+void QueuedMethod::startChained()
+{
+   //qDebug() << "startChained(): " << this << _chainedMethod;
+   if( _chainedMethod )
+      _chainedMethod->start();
+   
+   // Since this is the last thing we should do, safe to exit the thread.
+   quit(); // Stops the event loop.
+   dequeueMyself();
 }
