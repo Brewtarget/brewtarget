@@ -34,6 +34,7 @@
 #include <QSqlIndex>
 #include <QSqlError>
 #include <QDebug>
+#include <QThread>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -53,6 +54,7 @@
 #include "brewtarget.h"
 #include "QueuedMethod.h"
 #include "SetterCommand.h"
+#include "SetterCommandStack.h"
 
 // Static members.
 QFile Database::dbFile;
@@ -64,7 +66,14 @@ QHash<QString,Database::DBTable> Database::classNameToTable = Database::classNam
 QHash<Database::DBTable,QString> Database::keyNames = Database::keyNamesHash();
 
 Database::Database()
+   : _thread( new QThread() ),
+     _setterCommandStack( new SetterCommandStack(_thread) )
 {
+   // All the functions and signals/slots should execute in _thread.
+   // NOTE: it is EXTREMELY important that all the sql operations use this thread.
+   moveToThread( _thread );
+   _thread->start();
+   
    commandStack.setUndoLimit(100);
    load();
 }
@@ -1110,13 +1119,12 @@ void Database::updateEntry( DBTable table, int key, const char* col_name, QVaria
                                prop,
                                object,
                                notify);
-   // For now, immediately execute the command.
-   //command->redo();
    
-   // Push the command on the undo stack.
-   //commandStack.beginMacro("Change an entry");
-   commandStack.push(command);
-   //commandStack.endMacro();
+   // Push the command on the undo stack for immediate execution.
+   //commandStack.push(command);
+   
+   // Push onto custom stack.
+   _setterCommandStack->push(command);
 }
 
 int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )

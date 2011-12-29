@@ -26,12 +26,13 @@
 #include <QThread>
 
 /*!
+ * \class QueuedMethod
+ *
  * This class allows you to queue any \em invokable function call that would
  * normally block so that it executes in the background.
  *
  * \author Philip G. Lee (rocketman768@gmail.com)
  */
-
 class QueuedMethod : public QThread
 {
    Q_OBJECT

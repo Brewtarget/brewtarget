@@ -51,6 +51,8 @@ class Recipe;
 class Style;
 class Water;
 class Yeast;
+class QThread;
+class SetterCommandStack;
 
 /*!
  * \class Database
@@ -334,6 +336,8 @@ signals:
    void changed(QMetaProperty prop, QVariant value);
    
 private:
+   QThread* _thread;
+   SetterCommandStack* _setterCommandStack;
    static QFile dbFile;
    static QString dbFileName;
    static QFile dataDbFile;

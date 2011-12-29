@@ -116,6 +116,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/SetterCommand.cpp
+    ${SRCDIR}/SetterCommandStack.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
@@ -239,6 +240,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
+    ${SRCDIR}/SetterCommandStack.h
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleEditor.h
     ${SRCDIR}/TimerListDialog.h

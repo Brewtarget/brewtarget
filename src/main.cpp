@@ -22,6 +22,11 @@
 #include "config.h"
 #include "database.h"
 
+#include <QMetaProperty>
+
+// Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
+Q_DECLARE_METATYPE( QMetaProperty )
+
 int main(int argc, char **argv)
 {
    QApplication app(argc, argv);
@@ -30,6 +35,9 @@ int main(int argc, char **argv)
    app.setOrganizationName("Philip G. Lee");
    Brewtarget::setApp(app);
 
+   // Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
+   qRegisterMetaType<QMetaProperty>();
+   
    // TODO: make a command-line parser class.
    QStringList args(app.arguments());
    int i = args.indexOf("--from-xml");
