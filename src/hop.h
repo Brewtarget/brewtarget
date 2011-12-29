@@ -42,7 +42,9 @@ public:
    //enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
    enum Form {Leaf, Pellet, Plug};
    //enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
-   enum Use {Boil, Dry_Hop, Mash, First_Wort, UseAroma}; // NOTE: way bad. We have a duplicate enum (Aroma), and BeerXML expects a space for "Dry Hop" and "First Wort". Damn. Damn damn.
+   // maf -- I need these in the order they are used to make sorting games
+   //        work later
+   enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma), and BeerXML expects a space for "Dry Hop" and "First Wort". Damn. Damn damn.
    Q_ENUMS( Type Form Use )
    
    virtual ~Hop() {}

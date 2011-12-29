@@ -284,6 +284,15 @@ public:
    PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
 
+   // Methods used for sorting and pretty printing of recipes.
+   // double 
+   QList<Hop*> sortHopsByTime();
+   QList<Fermentable*> sortFermentablesByWeight();
+
+   // Helper
+   double ibuFromHop(Hop const* hop);
+   
+
 signals:
    /*
    void changedName(QString);
@@ -406,9 +415,6 @@ private:
    //! Emits changed(og), changed(fg). Depends on: _wortFromMash_l, _finalVolume_l
    Q_INVOKABLE void recalcOgFg();
    
-   // Helper
-   double ibuFromHop(Hop const* hop);
-   
    // Adds instructions to the recipe.
    Instruction* postboilFermentablesIns();
    Instruction* postboilIns();
@@ -423,6 +429,10 @@ private:
    
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
+
+   // Helper functions for sorting things
+   static bool fermentablesLessThanByWeight( const Fermentable* lhs, const Fermentable* rhs);
+   static bool hopLessThanByTime(const Hop* lhs, const Hop* rhs);
 };
 
 inline bool RecipePtrLt( Recipe* lhs, Recipe* rhs)

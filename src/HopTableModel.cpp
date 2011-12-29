@@ -409,11 +409,11 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("Boil"));
       box->addItem(tr("Dry Hop"));
       box->addItem(tr("Mash"));
-      box->addItem(tr("First Wort"));
+      box->addItem(tr("Boil"));
       box->addItem(tr("Aroma"));
+      box->addItem(tr("First Wort"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;

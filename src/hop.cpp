@@ -25,7 +25,7 @@
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
-QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First Wort" << "Aroma";
+QStringList Hop::uses = QStringList() << "Mash" << "First Wort" << "Boil" << "Aroma" << "Dry Hop";
 QHash<QString,QString> Hop::tagToProp = Hop::tagToPropHash();
 
 QHash<QString,QString> Hop::tagToPropHash()
@@ -399,7 +399,7 @@ const QString Hop::useString() const
 
 const QString Hop::useStringTr() const
 {
-   static QStringList usesTr = QStringList() << tr("Boil") << tr("Dry Hop") << tr("Mash") << tr("First Wort") << tr("Aroma");
+   static QStringList usesTr = QStringList() << tr("Mash") << tr("First Wort") << tr("Boil") << tr("Aroma") << tr("Dry Hop") ;
    return usesTr.at(use());
 }
 

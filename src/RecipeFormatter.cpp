@@ -573,8 +573,9 @@ QString RecipeFormatter::buildFermentableTable()
       return "";
    
    QString ftable;
+   QList<Fermentable*> ferms = rec->sortFermentablesByWeight();
    int i, size;
-   QList<Fermentable*> ferms = rec->fermentables();
+
    size = ferms.size();
    if ( size < 1 )
       return "";
@@ -618,9 +619,9 @@ QString RecipeFormatter::buildHopsTable()
       return "";
    
    QString hTable;
+   QList<Hop*> hops = rec->sortHopsByTime();
    int i, size;
-   QList<Hop*> hops = rec->hops();
-   QList<double> ibus = rec->IBUs();
+
    size = hops.size();
    if ( size < 1 )
       return "";
@@ -646,7 +647,7 @@ QString RecipeFormatter::buildHopsTable()
             .arg( hop->useStringTr())
             .arg( Brewtarget::displayAmount(hop->time_min(), Units::minutes) )
             .arg( hop->formStringTr())
-            .arg( ibus[i], 0, 'f', 1);
+            .arg( rec->ibuFromHop(hop), 0, 'f', 1);
       hTable += "</tr>";
    }
    hTable += "</table>";
