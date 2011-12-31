@@ -2272,45 +2272,6 @@ bool Recipe::isValidType( const QString &str )
    return false;
 }
 
-QList<Hop*> Recipe::sortHopsByTime()
-{
-   QList<Hop*> sorted = hops();
-
-   qSort(sorted.begin(), sorted.end(), hopLessThanByTime);
-   return sorted;
-}
-
-QList<Fermentable*> Recipe::sortFermentablesByWeight()
-{
-   QList<Fermentable*> sorted = fermentables();
-
-   qSort(sorted.begin(), sorted.end(), fermentablesLessThanByWeight);
-   return sorted;
-}
-
-bool Recipe::fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentable* rhs)
-{
-   // Sort by name if the two fermentables are of equal weight
-   if ( lhs->amount_kg() == rhs->amount_kg() )
-      return lhs->name() < rhs->name();
-
-   // Yes. I know. This seems silly, but I want the returned list in
-   // descending not ascending order.
-   return lhs->amount_kg() > rhs->amount_kg();
-}
-
-bool Recipe::hopLessThanByTime(const Hop* lhs, const Hop* rhs)
-{
-   if ( lhs->use() == rhs->use() ) 
-   {
-      if ( lhs->time_min() == rhs->time_min() )
-         return lhs->name() < rhs->name();
-
-      return lhs->time_min() > rhs->time_min();
-   }
-   return lhs->use() < rhs->use();
-}
-
 //==========================Accept changes from ingredients====================
 
 /*

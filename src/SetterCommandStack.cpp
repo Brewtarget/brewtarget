@@ -32,7 +32,11 @@ SetterCommandStack::SetterCommandStack(QThread* thread, int interval_ms)
    // NOTE: Is moveToThread() correct? I want many threads to call
    // push() without executeCommand() blocking it.
    moveToThread(thread);
-   QTimer::singleShot( _executionInterval_ms, this, SLOT(executeNext()) );
+   
+   connect( &_timer, SIGNAL(timeout()), this, SLOT(executeNext()) );
+   _timer.setSingleShot(true);
+   _timer.setInterval(_executionInterval_ms);
+   _timer.start();
 }
 
 void SetterCommandStack::push( SetterCommand* command )
@@ -84,5 +88,5 @@ void SetterCommandStack::executeNext()
    }
    
    // Reset the timer.
-   QTimer::singleShot( _executionInterval_ms, this, SLOT(executeNext()) );
+   _timer.start();
 }

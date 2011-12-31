@@ -67,6 +67,9 @@ private:
    QString buildBrewNotes();
    QString getCSS();
 
+   QList<Hop*> sortHopsByTime(Recipe* rec);
+   QList<Fermentable*> sortFermentablesByWeight(Recipe* rec);
+   
    QString* textSeparator;
    Recipe* rec;
 

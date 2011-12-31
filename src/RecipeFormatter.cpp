@@ -573,7 +573,7 @@ QString RecipeFormatter::buildFermentableTable()
       return "";
    
    QString ftable;
-   QList<Fermentable*> ferms = rec->sortFermentablesByWeight();
+   QList<Fermentable*> ferms = sortFermentablesByWeight(rec);
    int i, size;
 
    size = ferms.size();
@@ -619,7 +619,7 @@ QString RecipeFormatter::buildHopsTable()
       return "";
    
    QString hTable;
-   QList<Hop*> hops = rec->sortHopsByTime();
+   QList<Hop*> hops = sortHopsByTime(rec);
    int i, size;
 
    size = hops.size();
@@ -943,3 +943,18 @@ void RecipeFormatter::print(QPrinter* mainPrinter, QPrintDialog *dialog,
       docDialog->show();
 }
 
+QList<Hop*> RecipeFormatter::sortHopsByTime(Recipe* rec)
+{
+   QList<Hop*> sorted = rec->hops();
+   
+   qSort(sorted.begin(), sorted.end(), hopLessThanByTime);
+   return sorted;
+}
+
+QList<Fermentable*> RecipeFormatter::sortFermentablesByWeight(Recipe* rec)
+{
+   QList<Fermentable*> sorted = rec->fermentables();
+   
+   qSort(sorted.begin(), sorted.end(), fermentablesLessThanByWeight);
+   return sorted;
+}

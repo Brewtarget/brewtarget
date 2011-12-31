@@ -159,6 +159,18 @@ inline bool HopPtrEq( Hop* lhs, Hop* rhs)
    return *lhs == *rhs;
 }
 
+inline bool hopLessThanByTime(const Hop* lhs, const Hop* rhs)
+{
+   if ( lhs->use() == rhs->use() ) 
+   {
+      if ( lhs->time_min() == rhs->time_min() )
+         return lhs->name() < rhs->name();
+      
+      return lhs->time_min() > rhs->time_min();
+   }
+   return lhs->use() < rhs->use();
+}
+
 struct Hop_ptr_cmp
 {
    bool operator()( Hop* lhs, Hop* rhs)

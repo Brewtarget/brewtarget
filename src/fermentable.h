@@ -155,6 +155,17 @@ inline bool FermentablePtrEq( Fermentable* lhs, Fermentable* rhs)
    return *lhs == *rhs;
 }
 
+inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentable* rhs)
+{
+   // Sort by name if the two fermentables are of equal weight
+   if ( lhs->amount_kg() == rhs->amount_kg() )
+      return lhs->name() < rhs->name();
+   
+   // Yes. I know. This seems silly, but I want the returned list in
+   // descending not ascending order.
+   return lhs->amount_kg() > rhs->amount_kg();
+}
+
 struct Fermentable_ptr_cmp
 {
    bool operator()( Fermentable* lhs, Fermentable* rhs)
