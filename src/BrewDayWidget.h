@@ -25,10 +25,13 @@ class BrewDayWidget;
 #include <QWidget>
 #include <QSize>
 #include <QWebView>
-#include "observable.h"
-#include "recipe.h"
+#include <QMetaProperty>
+#include <QVariant>
 
-class BrewDayWidget : public QWidget, public Ui::brewDayWidget, public Observer
+// Forward declarations.
+class Recipe;
+
+class BrewDayWidget : public QWidget, public Ui::brewDayWidget
 {
    Q_OBJECT
 public:
@@ -37,7 +40,6 @@ public:
    void setRecipe(Recipe* rec);
 
    virtual QSize sizeHint() const; // From QWidget
-   virtual void notify(Observable *notifier, QVariant info); // From Observer.
 
 public slots:
    void insertInstruction();
@@ -46,6 +48,7 @@ public slots:
    void pushInstructionDown();
    void pushInstructionPrint();
    void pushInstructionPreview();
+   void changed(QMetaProperty, QVariant);
 
 private:
    void showChanges();

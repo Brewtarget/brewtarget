@@ -15,11 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="YeastTableWidget" name="yeastTableWidget">
-     <property name="sortingEnabled">
-      <bool>true</bool>
-     </property>
-    </widget>
+    <widget class="QTableView" name="yeastTableWidget"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -103,13 +99,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>YeastTableWidget</class>
-   <extends>QTableView</extends>
-   <header>YeastTableWidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>

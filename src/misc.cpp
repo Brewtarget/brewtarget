@@ -28,106 +28,32 @@
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
+QHash<QString,QString> Misc::tagToProp = Misc::tagToPropHash();
 
-bool operator<(Misc &m1, Misc &m2)
+QHash<QString,QString> Misc::tagToPropHash()
 {
-   return m1.name < m2.name;
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   //propHash["TYPE"] = "type";
+   //propHash["USE"] = "use";
+   propHash["TIME"] = "time";
+   propHash["AMOUNT"] = "amount";
+   propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
+   propHash["USE_FOR"] = "useFor";
+   propHash["NOTES"] = "notes";
+   return propHash;
 }
-
-bool operator==(Misc &m1, Misc &m2)
-{
-   return m1.name == m2.name;
-}
-
-void Misc::toXml(QDomDocument& doc, QDomNode& parent)
-{
-   QDomElement miscNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-   
-   miscNode = doc.createElement("MISC");
-   
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name);
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(text(version));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(getTypeString());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(getUseString());
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TIME");
-   tmpText = doc.createTextNode(text(time));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(text(amount));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("AMOUNT_IS_WEIGHT");
-   tmpText = doc.createTextNode(text(amountIsWeight));
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("USE_FOR");
-   tmpText = doc.createTextNode(useFor);
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes);
-   tmpNode.appendChild(tmpText);
-   miscNode.appendChild(tmpNode);
-   
-   parent.appendChild(miscNode);
-}
-
 //============================CONSTRUCTORS======================================
-void Misc::setDefaults()
+Misc::Misc() : BeerXMLElement()
 {
-   name = "";
-   type = TYPEOTHER;
-   use = USEBOIL;
-   amount = 0.0;
-   time = 0.0;
-   
-   amountIsWeight=false;
-   useFor = "";
-   notes = "";
 }
 
-Misc::Misc() : Observable()
+Misc::Misc(Misc const& other) : BeerXMLElement(other)
 {
-   setDefaults();
 }
 
-Misc::Misc(Misc& other)
-        : Observable()
-{
-   name = other.name;
-   type = other.type;
-   use = other.use;
-   time = other.time;
-   amount = other.amount;
-
-   amountIsWeight = other.amountIsWeight;
-   useFor = other.useFor;
-   notes = other.notes;
-}
-
+// Move all of this to Database to convert XML to SQLite tables.
+/*
 Misc::Misc(const QDomNode& miscNode)
 {
    fromNode(miscNode);
@@ -210,136 +136,116 @@ void Misc::fromNode(const QDomNode& miscNode)
    
    hasChanged();
 }
+*/
 
 //============================"GET" METHODS=====================================
-QString Misc::getName() const
+QString Misc::name() const
 {
-   return name;
+   return get( "name" ).toString();
 }
 
-Misc::Type Misc::getType() const
+Misc::Type Misc::type() const
 {
-   return type;
+   return static_cast<Misc::Type>(types.indexOf(get("mtype").toString()));
 }
 
-const QString Misc::getTypeString() const
+const QString Misc::typeString() const
 {
-   return types.at(type);
+   return types.at(type());
 }
 
-const QString Misc::getTypeStringTr() const
+const QString Misc::typeStringTr() const
 {
    QStringList typesTr = QStringList() << QObject::tr("Spice") << QObject::tr("Fining") << QObject::tr("Water Agent") << QObject::tr("Herb") << QObject::tr("Flavor") << QObject::tr("Other");
-   return typesTr.at(type);
+   return typesTr.at(type());
 }
 
-Misc::Use Misc::getUse() const
+Misc::Use Misc::use() const
 {
-   return use;
+   return static_cast<Misc::Use>(uses.indexOf(get("use").toString()));
 }
 
-const QString Misc::getUseString() const
+const QString Misc::useString() const
 {
-   return uses.at(use);
+   return uses.at(use());
 }
 
-const QString Misc::getUseStringTr() const
+const QString Misc::useStringTr() const
 {
    QStringList usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Mash") << QObject::tr("Primary") << QObject::tr("Secondary") << QObject::tr("Bottling");
-   return usesTr.at(use);
+   return usesTr.at(use());
 }
 
-double Misc::getAmount() const
+double Misc::amount() const
 {
-   return amount;
+   return get("amount").toDouble();
 }
 
-double Misc::getTime() const
+double Misc::time() const
 {
-   return time;
+   return get("time").toDouble();
 }
 
-bool Misc::getAmountIsWeight() const
+bool Misc::amountIsWeight() const
 {
-   return amountIsWeight;
+   return get("amount_is_weight").toBool();
 }
 
-QString Misc::getUseFor() const
+QString Misc::useFor() const
 {
-   return useFor;
+   return get("use_for").toString();
 }
 
-QString Misc::getNotes() const
+QString Misc::notes() const
 {
-   return notes;
+   return get("notes").toString();
 }
 
 //============================"SET" METHODS=====================================
 void Misc::setName( const QString& var )
 {
-   name = QString(var);
-   hasChanged();
+   set( "name", "name", var );
 }
 
 void Misc::setType( Type t )
 {
-   type = t;
-   
-   hasChanged();
+   set( "type", "mtype", types.at(t) );
 }
 
 void Misc::setUse( Use u )
 {
-   use = u;
-   hasChanged();
+   set( "use", "use", uses.at(u) );
 }
 
 void Misc::setAmount( double var )
 {
    if( var < 0.0 )
-   {
       Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
-      amount = 0;
-   }
    else
-   {
-      amount = var;
-   }
-
-   hasChanged();
+      set( "amount", "amount", var );
 }
 
 void Misc::setTime( double var )
 {
    if( var < 0.0 )
-   {
       Brewtarget::logW( QString("Misc: time < 0: %1").arg(var) );
-      time = 0;
-   }
    else
-   {
-      time = var;
-   }
-
-   hasChanged();
+      set( "time", "time", var );
 }
 
 void Misc::setAmountIsWeight( bool var )
 {
-   amountIsWeight = var;
-   hasChanged();
+   set( "amountIsWeight", "amount_is_weight", var );
 }
 
 void Misc::setUseFor( const QString& var )
 {
-   useFor = QString(var);
-   hasChanged();
+   set( "useFor", "use_for", var );
 }
 
 void Misc::setNotes( const QString& var )
 {
-   notes = QString(var);
-   hasChanged();
+   set( "notes", "notes", var );
 }
 
 //========================OTHER METHODS=========================================

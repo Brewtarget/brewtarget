@@ -5,11 +5,14 @@ class BrewNoteWidget;
 
 #include <QWidget>
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_brewNoteWidget.h"
-#include "observable.h"
-#include "brewnote.h"
 
-class BrewNoteWidget : public QWidget, public Ui::brewNoteWidget, public Observer
+// Forward declarations.
+class BrewNote;
+
+class BrewNoteWidget : public QWidget, public Ui::brewNoteWidget
 {
     Q_OBJECT
 
@@ -38,11 +41,11 @@ public slots:
    void updateNotes();
    void saveAll();
 
+   void changed(QMetaProperty,QVariant);
 private:
    BrewNote* bNoteObs;
 
    void showChanges();
-   virtual void notify(Observable* notifier, QVariant info = QVariant());
 
 };
 

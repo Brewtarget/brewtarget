@@ -19,72 +19,76 @@
 #ifndef _FERMENTABLE_H
 #define _FERMENTABLE_H
 
-#include <string>
-#include <exception>
-#include "observable.h"
 #include <QDomNode>
-#include "BeerXMLElement.h"
 #include <QStringList>
 #include <QString>
+#include "BeerXMLElement.h"
 
+// Forward declarations.
 class Fermentable;
+bool operator<(Fermentable &f1, Fermentable &f2);
+bool operator==(Fermentable &f1, Fermentable &f2);
 
-class Fermentable : public Observable, public BeerXMLElement
+class Fermentable : public BeerXMLElement
 {
+   Q_OBJECT
    friend class Brewtarget;
+   friend class Database;
 public:
 
-   //! These should exactly correspond to \b types.
-   enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
-
-   Fermentable();
-   Fermentable( Fermentable& other );
-   Fermentable(const QDomNode& fermentableNode);
-
+   //enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
+   enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
+   Q_ENUMS( TYPE )
+   
    virtual ~Fermentable() {}
    
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-
-   // Operators
-   friend bool operator<(Fermentable &f1, Fermentable &f2);
-   friend bool operator==(Fermentable &f1, Fermentable &f2);
-
-   //! Info for hasChanged(). Never use the \b DONOTUSE ok?
-   enum{ DONOTUSE, NAME, TYPE, AMOUNT, YIELD, COLOR, AFTERBOIL, ORIGIN, SUPPLIER, NOTES, COARSEFINEDIFF, MOISTURE,
-         DIASTATICPOWER, PROTEIN, MAXINBATCH, ISMASHED };
+   // New Q_PROPERTIES
+   Q_PROPERTY( QString name                  READ name                   WRITE setName                   /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )
+   Q_PROPERTY( QString typeString            READ typeString             /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeString*/             STORED false )
+   Q_PROPERTY( QString typeStringTr          READ typeStringTr           /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeStringTr*/           STORED false )
+   Q_PROPERTY( double amount_kg              READ amount_kg              WRITE setAmount_kg              /*NOTIFY changed*/ /*changedAmount_kg*/ )
+   Q_PROPERTY( double yield_pct              READ yield_pct              WRITE setYield_pct              /*NOTIFY changed*/ /*changedYield_pct*/ )
+   Q_PROPERTY( double color_srm              READ color_srm              WRITE setColor_srm              /*NOTIFY changed*/ /*changedColor_srm*/ )
+   Q_PROPERTY( bool addAfterBoil             READ addAfterBoil           WRITE setAddAfterBoil           /*NOTIFY changed*/ /*changedAddAfterBoil*/ )
+   Q_PROPERTY( QString origin                READ origin                 WRITE setOrigin                 /*NOTIFY changed*/ /*changedOrigin*/ )
+   Q_PROPERTY( QString supplier              READ supplier               WRITE setSupplier               /*NOTIFY changed*/ /*changedSupplier*/ )
+   Q_PROPERTY( QString notes                 READ notes                  WRITE setNotes                  /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY( double coarseFineDiff_pct     READ coarseFineDiff_pct     WRITE setCoarseFineDiff_pct     /*NOTIFY changed*/ /*changedCoarseFineDiff_pct*/ )
+   Q_PROPERTY( double moisture_pct           READ moisture_pct           WRITE setMoisture_pct           /*NOTIFY changed*/ /*changedMoisture_pct*/ )
+   Q_PROPERTY( double diastaticPower_lintner READ diastaticPower_lintner WRITE setDiastaticPower_lintner /*NOTIFY changed*/ /*changedDiastaticPower_lintner*/ )
+   Q_PROPERTY( double protein_pct            READ protein_pct            WRITE setProtein_pct            /*NOTIFY changed*/ /*changedProtein_pct*/ )
+   Q_PROPERTY( double maxInBatch_pct         READ maxInBatch_pct         WRITE setMaxInBatch_pct         /*NOTIFY changed*/ /*changedMaxInBatch_pct*/ )
+   Q_PROPERTY( bool recommendMash            READ recommendMash          WRITE setRecommendMash          /*NOTIFY changed*/ /*changedRecommendMash*/ )
+   Q_PROPERTY( double ibuGalPerLb            READ ibuGalPerLb            WRITE setIbuGalPerLb            /*NOTIFY changed*/ /*changedIbuGalPerLb*/ )
+   Q_PROPERTY( double equivSucrose_kg        READ equivSucrose_kg        /*WRITE*/                       /*NOTIFY changed*/ /*changedEquivSucrose_kg*/        STORED false )
+   Q_PROPERTY( bool isMashed                 READ isMashed               WRITE setIsMashed               /*NOTIFY changed*/ /*changedIsMashed*/ )
    
-   // Get
-   const QString getName() const;
-   int getVersion() const;
-   const Type getType() const;
-   const QString getTypeString() const;
+   const QString name() const;
+   const Type type() const;
+   const QString typeString() const;
    //! Returns a translated type string.
-   const QString getTypeStringTr() const;
-   double getAmount_kg() const;
-   double getYield_pct() const;
-   double getColor_srm() const;
-   
-   bool getAddAfterBoil() const;
-   const QString getOrigin() const;
-   const QString getSupplier() const;
-   const QString getNotes() const;
-   double getCoarseFineDiff_pct() const;
-   double getMoisture_pct() const;
-   double getDiastaticPower_lintner() const;
-   double getProtein_pct() const;
-   double getMaxInBatch_pct() const;
-   bool getRecommendMash() const;
-   double getIbuGalPerLb() const;
+   const QString typeStringTr() const;
+   double amount_kg() const;
+   double yield_pct() const;
+   double color_srm() const;
+   bool addAfterBoil() const;
+   const QString origin() const;
+   const QString supplier() const;
+   const QString notes() const;
+   double coarseFineDiff_pct() const;
+   double moisture_pct() const;
+   double diastaticPower_lintner() const;
+   double protein_pct() const;
+   double maxInBatch_pct() const;
+   bool recommendMash() const;
+   double ibuGalPerLb() const;
 
-   // Derived getters...
+   // Calculated getters.
+   //! Get the maximum kg of equivalent sucrose that will come out of this ferm.
+   double equivSucrose_kg() const;
 
-   // Get the maximum kg of equivalent sucrose that will come out of this ferm.
-   double getEquivSucrose_kg() const;
-
-   // Set
    void setName( const QString& str );
-   void setVersion( int num );
    void setType( Type t );
    void setAmount_kg( double num );
    void setYield_pct( double num );
@@ -103,37 +107,42 @@ public:
    void setIbuGalPerLb( double num );
    
    /*** My extensions ***/
-   bool getIsMashed() const;
+   bool isMashed() const;
    void setIsMashed(bool var);
    /*** END my extensions ***/
    
+signals:
+   
+   /*
+   void changedName( QString newName );
+   void changedType( Type newType );
+   void changedTypeString( QString newTypeString );
+   void changedTypeStringTr( QString newTypeStringTr );
+   void changedAmount_kg( double newAmount_kg );
+   void changedYield_pct( double newYield_pct );
+   void changedColor_srm( double newColor_srm );
+   void changedAddAfterBoil( bool newAddAfterBoil );
+   void changedOrigin( QString newOrigin );
+   void changedSupplier( QString newSupplier );
+   void changedNotes( QString newNotes );
+   void changedCoarseFineDiff_pct( double newCoarseFineDiff_pct );
+   void changedMoisture_pct( double newMoisture_pct );
+   void changedDiastaticPower_lintner( double newDiastaticPower_lintner );
+   void changedProtein_pct( double newProtein_pct );
+   void changedMaxInBatch_pct( double newMaxInBatch_pct );
+   void changedRecommendMash( bool newRecommendMash );
+   void changedIbuGalPerLb( double newIbuGalPerLb );
+   void changedIsMashed( bool newIsMashed );
+   */
+   
 private:
-   QString name;
-   static const int version = 1;
-   Type type;
-   double amount_kg;
-   double yield_pct;
-   double color_srm;
-
-   bool addAfterBoil;
-   QString origin;
-   QString supplier;
-   QString notes;
-   double coarseFineDiff_pct;
-   double moisture_pct;
-   double diastaticPower_lintner;
-   double protein_pct;
-   double maxInBatch_pct;
-   bool recommendMash;
-   double ibuGalPerLb;
-   /*** My extensions ***/
-   bool isMashed;
-   /*** END my extensions ***/
-
+   Fermentable();
+   Fermentable( Fermentable const& other );
    static bool isValidType( const QString& str );
-   void setDefaults();
-
    static QStringList types;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)
@@ -144,6 +153,17 @@ inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)
 inline bool FermentablePtrEq( Fermentable* lhs, Fermentable* rhs)
 {
    return *lhs == *rhs;
+}
+
+inline bool fermentablesLessThanByWeight(const Fermentable* lhs, const Fermentable* rhs)
+{
+   // Sort by name if the two fermentables are of equal weight
+   if ( lhs->amount_kg() == rhs->amount_kg() )
+      return lhs->name() < rhs->name();
+   
+   // Yes. I know. This seems silly, but I want the returned list in
+   // descending not ascending order.
+   return lhs->amount_kg() > rhs->amount_kg();
 }
 
 struct Fermentable_ptr_cmp

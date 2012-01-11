@@ -25,20 +25,21 @@ class MiscDialog;
 #include <QDialog>
 #include <QVariant>
 #include "ui_miscDialog.h"
-#include "observable.h"
 #include "database.h"
-class MainWindow;
-#include "MiscEditor.h"
 
-class MiscDialog : public QDialog, public Ui::miscDialog, public Observer
+// Forward declarations.
+class MainWindow;
+class MiscEditor;
+class MiscTableModel;
+class MiscSortFilterProxyModel;
+
+class MiscDialog : public QDialog, public Ui::miscDialog
 {
    Q_OBJECT
 
 public:
    MiscDialog(MainWindow* parent);
    virtual ~MiscDialog() {}
-   void startObservingDB();
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    void addMisc(const QModelIndex& = QModelIndex());
@@ -46,10 +47,13 @@ public slots:
    void editSelected();
    void newMisc();
 
+   void changed(QMetaProperty prop, QVariant val);
+   
 private:
-   Database* dbObs;
    MainWindow* mainWindow;
-   unsigned int numMiscs;
+   MiscTableModel* miscTableModel;
+   MiscSortFilterProxyModel* miscTableProxy;
+   int numMiscs;
    MiscEditor* miscEdit;
 
    void populateTable();

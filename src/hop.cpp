@@ -16,162 +16,67 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "hop.h"
-#include "brewtarget.h"
+
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include "hop.h"
+#include "brewtarget.h"
 
 QStringList Hop::types = QStringList() << "Bittering" << "Aroma" << "Both";
 QStringList Hop::forms = QStringList() << "Leaf" << "Pellet" << "Plug";
-QStringList Hop::uses = QStringList() << "Boil" << "Dry Hop" << "Mash" << "First Wort" << "Aroma";
+QStringList Hop::uses = QStringList() << "Mash" << "First Wort" << "Boil" << "Aroma" << "Dry Hop";
+QHash<QString,QString> Hop::tagToProp = Hop::tagToPropHash();
+
+QHash<QString,QString> Hop::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   
+   propHash["NAME"] = "name";
+   propHash["ALPHA"] = "alpha_pct";
+   propHash["AMOUNT"] = "amount_kg";
+   //propHash["USE"] = "use";
+   propHash["TIME"] = "time_min";
+   propHash["NOTES"] = "notes";
+   //propHash["TYPE"] = "type";
+   //propHash["FORM"] = "form";
+   propHash["BETA"] = "beta_pct";
+   propHash["HSI"] = "hsi_pct";
+   propHash["ORIGIN"] = "origin";
+   propHash["SUBSTITUTES"] = "substitutes";
+   propHash["HUMULENE"] = "humulene_pct";
+   propHash["CARYOPHYLLENE"] = "caryophyllene_pct";
+   propHash["COHUMULONE"] = "cohumulone_pct";
+   propHash["MYRCENE"] = "myrcene_pct";
+   return propHash;
+}
 
 bool operator<( Hop &h1, Hop &h2 )
 {
-   return h1.name < h2.name;
+   return h1.name() < h2.name();
 }
 
 bool operator==( Hop &h1, Hop &h2 )
 {
-   return h1.name == h2.name;
+   return h1.name() == h2.name();
 }
 
 bool Hop::isValidUse(const QString& str)
 {
-   static const QString uses[] = {"Boil", "Dry Hop", "Mash", "First Wort", "Aroma"};
-   static const int length = 5;
-   
-   int i;
-   for( i = 0; i < length; ++i )
-      if( str == uses[i] )
-         return true;
-         
-   return false;
+   return (uses.indexOf(str) >= 0);
 }
 
 bool Hop::isValidType(const QString& str)
 {
-   static const QString types[] = {"Bittering", "Aroma", "Both"};
-   static const int length = 3;
-   
-   int i;
-   for( i = 0; i < length; ++i )
-      if( str == types[i] )
-         return true;
-         
-   return false;
+   return (types.indexOf(str) >= 0);
 }
 
 bool Hop::isValidForm(const QString& str)
 {
-   static const QString forms[] = {"Pellet", "Plug", "Leaf", ""};
-   static const int length = 4;
-   
-   int i;
-   for( i = 0; i < length; ++i )
-      if( str == forms[i] )
-         return true;
-         
-   return false;
+   return (forms.indexOf(str) >= 0);
 }
 
-void Hop::toXml(QDomDocument& doc, QDomNode& parent)
-{
-   QDomElement hopNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-   
-   hopNode = doc.createElement("HOP");
-   
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name);
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(text(version));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("ALPHA");
-   tmpText = doc.createTextNode(text(alpha_pct));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(text(amount_kg));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("USE");
-   tmpText = doc.createTextNode(getUseString());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TIME");
-   tmpText = doc.createTextNode(text(time_min));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes);
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(getTypeString());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("FORM");
-   tmpText = doc.createTextNode(getFormString());
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("BETA");
-   tmpText = doc.createTextNode(text(beta_pct));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("HSI");
-   tmpText = doc.createTextNode(text(hsi_pct));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("ORIGIN");
-   tmpText = doc.createTextNode(origin);
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("SUBSTITUTES");
-   tmpText = doc.createTextNode(substitutes);
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("HUMULENE");
-   tmpText = doc.createTextNode(text(humulene_pct));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("CARYOPHYLLENE");
-   tmpText = doc.createTextNode(text(caryophyllene_pct));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("COHUMULONE");
-   tmpText = doc.createTextNode(text(cohumulone_pct));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("MYRCENE");
-   tmpText = doc.createTextNode(text(myrcene_pct));
-   tmpNode.appendChild(tmpText);
-   hopNode.appendChild(tmpNode);
-   
-   parent.appendChild(hopNode);
-}
-
+/*
 void Hop::setDefaults()
 {
    name = "";
@@ -192,39 +97,19 @@ void Hop::setDefaults()
    cohumulone_pct = 0.0;
    myrcene_pct = 0.0;
 }
+*/
 
 Hop::Hop()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-Hop::Hop( Hop& other )
-        : Observable()
+Hop::Hop( Hop const& other )
+   : BeerXMLElement(other)
 {
-   name = other.name;
-   alpha_pct = other.alpha_pct;
-   amount_kg = other.amount_kg;
-   use = other.use;
-   time_min = other.time_min;
-
-   notes = other.notes;
-   type = other.type;
-   form = other.form;
-   beta_pct = other.beta_pct;
-   hsi_pct = other.hsi_pct;
-   origin = other.origin;
-   substitutes = other.substitutes;
-   humulene_pct = other.humulene_pct;
-   caryophyllene_pct = other.caryophyllene_pct;
-   cohumulone_pct = other.cohumulone_pct;
-   myrcene_pct = other.myrcene_pct;
 }
 
-Hop::Hop(const QDomNode& hopNode)
-{
-   fromNode(hopNode);
-}
-
+/*
 void Hop::fromNode(const QDomNode& hopNode)
 {
    QDomNode node, child;
@@ -334,12 +219,12 @@ void Hop::fromNode(const QDomNode& hopNode)
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported HOP property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
+*/
 
 //============================="SET" METHODS====================================
 void Hop::setName( const QString& str )
 {
-   name = QString(str);
-   hasChanged();
+   set("name","name",str);
 }
 
 void Hop::setAlpha_pct( double num )
@@ -347,14 +232,8 @@ void Hop::setAlpha_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < alpha < 100: %1").arg(num) );
-      alpha_pct = 0;
+      set("alpha_pct", "alpha", num);
    }
-   else
-   {
-      alpha_pct = num;
-   }
-
-   hasChanged();
 }
 
 void Hop::setAmount_kg( double num )
@@ -362,21 +241,17 @@ void Hop::setAmount_kg( double num )
    if( num < 0.0 )
    {
       Brewtarget::logW( QString("Hop: amount < 0: %1").arg(num) );
-      amount_kg = 0;
+      return;
    }
    else
    {
-      amount_kg = num;
+      set("amount_kg", "amount", num);
    }
-
-   hasChanged();
 }
 
-bool Hop::setUse(Use u)
+void Hop::setUse(Use u)
 {
-   use = u;
-   hasChanged();
-   return true;
+   set("use", "use", uses.at(u));
 }
 
 void Hop::setTime_min( double num )
@@ -384,34 +259,27 @@ void Hop::setTime_min( double num )
    if( num < 0.0 )
    {
       Brewtarget::logW( QString("Hop: time < 0: %1").arg(num) );
-      time_min = 0;
+      return;
    }
    else
    {
-      time_min = num;
+      set("time_min", "time", num);
    }
-
-   hasChanged();
 }
       
 void Hop::setNotes( const QString& str )
 {
-   notes = QString(str);
-   hasChanged();
+   set("notes", "notes", str);
 }
 
-bool Hop::setType(Type t)
+void Hop::setType(Type t)
 {
-   type = t;
-   hasChanged();
-   return true;
+   set("type", "htype", types.at(t));
 }
 
-bool Hop::setForm( Form f )
+void Hop::setForm( Form f )
 {
-   form = f;
-   hasChanged();
-   return true;
+   set("form", "form", forms.at(f));
 }
 
 void Hop::setBeta_pct( double num )
@@ -419,14 +287,12 @@ void Hop::setBeta_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < beta < 100: %1").arg(num) );
-      beta_pct = 0;
+      return;
    }
    else
    {
-      beta_pct = num;
+      set("beta_pct", "beta", num);
    }
-
-   hasChanged();
 }
 
 void Hop::setHsi_pct( double num )
@@ -434,26 +300,22 @@ void Hop::setHsi_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < hsi < 100: %1").arg(num) );
-      hsi_pct = 100;
+      return;
    }
    else
    {
-      hsi_pct = num;
+      set("hsi_pct", "hsi", num);
    }
-
-   hasChanged();
 }
 
 void Hop::setOrigin( const QString& str )
 {
-   origin = QString(str);
-   hasChanged();
+   set("origin", "origin", str);
 }
 
 void Hop::setSubstitutes( const QString& str )
 {
-   substitutes = QString(str);
-   hasChanged();
+   set("substitutes", "substitutes", str);
 }
 
 void Hop::setHumulene_pct( double num )
@@ -461,14 +323,12 @@ void Hop::setHumulene_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < humulene < 100: %1").arg(num) );
-      humulene_pct = 0;
+      return;
    }
    else
    {
-      humulene_pct = num;
+      set("humulene_pct", "humulene", num);
    }
-
-   hasChanged();
 }
 
 void Hop::setCaryophyllene_pct( double num )
@@ -476,14 +336,12 @@ void Hop::setCaryophyllene_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < cary < 100: %1").arg(num) );
-      caryophyllene_pct = 0;
+      return;
    }
    else
    {
-      caryophyllene_pct = num;
+      set("caryophyllene_pct", "caryophyllene", num);
    }
-
-   hasChanged();
 }
 
 void Hop::setCohumulone_pct( double num )
@@ -491,14 +349,12 @@ void Hop::setCohumulone_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < cohumulone < 100: %1").arg(num) );
-      cohumulone_pct = 0;
+      return;
    }
    else
    {
-      cohumulone_pct = num;
+      set("cohumulone_pct", "cohumulone", num);
    }
-
-   hasChanged();
 }
 
 void Hop::setMyrcene_pct( double num )
@@ -506,132 +362,125 @@ void Hop::setMyrcene_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < myrcene < 100: %1").arg(num) );
-      myrcene_pct = 0;
+      return;
    }
    else
    {
-      myrcene_pct = num;
+      set("myrcene_pct", "myrcene", num);
    }
-
-   hasChanged();
 }
 
 //============================="GET" METHODS====================================
 
-const QString Hop::getName() const
+const QString Hop::name() const
 {
-   return name;
+   return get("name").toString();
 }
 
-int Hop::getVersion() const
+double Hop::alpha_pct() const
 {
-   return version;
+   return get("alpha").toDouble();
 }
 
-double Hop::getAlpha_pct() const
+double Hop::amount_kg() const
 {
-   return alpha_pct;
+   return get("amount").toDouble();
 }
 
-double Hop::getAmount_kg() const
+Hop::Use Hop::use() const
 {
-   return amount_kg;
+   return static_cast<Hop::Use>(uses.indexOf(get("use").toString()));
 }
 
-Hop::Use Hop::getUse() const
+const QString Hop::useString() const
 {
-   return use;
+   return get("use").toString();
 }
 
-const QString Hop::getUseString() const
+const QString Hop::useStringTr() const
 {
-   return uses.at(use);
+   static QStringList usesTr = QStringList() << tr("Mash") << tr("First Wort") << tr("Boil") << tr("Aroma") << tr("Dry Hop") ;
+   return usesTr.at(use());
 }
 
-const QString Hop::getUseStringTr() const
+double Hop::time_min() const
 {
-   QStringList usesTr = QStringList() << QObject::tr("Boil") << QObject::tr("Dry Hop") << QObject::tr("Mash") << QObject::tr("First Wort") << QObject::tr("Aroma");
-   return usesTr.at(use);
+   return get("time").toDouble();
 }
 
-double Hop::getTime_min() const
+const QString Hop::notes() const
 {
-   return time_min;
+   return get("notes").toString();
 }
 
-const QString Hop::getNotes() const
+Hop::Type Hop::type() const
 {
-   return notes;
+   return static_cast<Hop::Type>(types.indexOf(get("htype").toString()));
 }
 
-Hop::Type Hop::getType() const
+const QString Hop::typeString() const
 {
-   return type;
+   return get("htype").toString();
 }
 
-const QString Hop::getTypeString() const
+const QString Hop::typeStringTr() const
 {
-   return types.at(type);
+   static QStringList typesTr = QStringList() << tr("Bittering") << tr("Aroma") << tr("Both");
+   return typesTr.at(type());
 }
 
-const QString Hop::getTypeStringTr() const
+Hop::Form Hop::form() const
 {
-   QStringList typesTr = QStringList() << QObject::tr("Bittering") << QObject::tr("Aroma") << QObject::tr("Both");
-   return typesTr.at(type);
+   return static_cast<Hop::Form>(forms.indexOf(get("form").toString()));
 }
 
-Hop::Form Hop::getForm() const
+const QString Hop::formString() const
 {
-   return form;
+   return get("form").toString();
 }
 
-const QString Hop::getFormString() const
+const QString Hop::formStringTr() const
 {
-   return forms.at(form);
+   static QStringList formsTr = QStringList() << tr("Leaf") << tr("Pellet") << tr("Plug");
+   return formsTr.at(form());
 }
 
-const QString Hop::getFormStringTr() const
+double Hop::beta_pct() const
 {
-   QStringList formsTr = QStringList() << QObject::tr("Leaf") << QObject::tr("Pellet") << QObject::tr("Plug");
-   return formsTr.at(form);
+   return get("beta").toDouble();
 }
 
-double Hop::getBeta_pct() const
+double Hop::hsi_pct() const
 {
-   return beta_pct;
+   return get("hsi").toDouble();
 }
 
-double Hop::getHsi_pct() const
+const QString Hop::origin() const
 {
-   return hsi_pct;
+   return get("origin").toString();
 }
 
-const QString Hop::getOrigin() const
+const QString Hop::substitutes() const
 {
-   return origin;
+   return get("substitutes").toString();
 }
 
-const QString Hop::getSubstitutes() const
+double Hop::humulene_pct() const
 {
-   return substitutes;
+   return get("humulene").toDouble();
 }
 
-double Hop::getHumulene_pct() const
+double Hop::caryophyllene_pct() const
 {
-   return humulene_pct;
+   return get("caryophyllene").toDouble();
 }
 
-double Hop::getCaryophyllene_pct() const
+double Hop::cohumulone_pct() const
 {
-   return caryophyllene_pct;
+   return get("cohumulone").toDouble();
 }
 
-double Hop::getCohumulone_pct() const
+double Hop::myrcene_pct() const
 {
-   return cohumulone_pct;
-}
-
-double Hop::getMyrcene_pct() const
-{
-   return myrcene_pct;
+   return get("myrcene").toDouble();
 }

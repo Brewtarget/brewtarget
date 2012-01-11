@@ -23,14 +23,17 @@ class Brewtarget;
 
 #include <QApplication>
 #include <QString>
-#include <string>
+#include <QFile>
+#include <QDir>
 #include <QDomDocument>
 #include <QTranslator>
-#include "MainWindow.h"
-#include "unit.h"
-#include "UnitSystem.h"
 #include <QTextStream>
 #include <QDateTime>
+#include "UnitSystem.h"
+
+// Forward declarations.
+class MainWindow;
+class Unit;
 
 class Brewtarget
 {
@@ -65,6 +68,8 @@ public:
     * Variable 'precision' controls how many decimal places.
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3 );
+   //! Display date correctly depending on locale.
+   static QString displayDate( QDate const& date );
    //! Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg, bool showUnits=true );
    //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.
@@ -105,6 +110,8 @@ public:
     */
    static const QString& getSystemLanguage();
 
+   static MainWindow* getMainWindow();
+   
 private:
    static QApplication* app;
    static MainWindow* mainWindow;

@@ -20,31 +20,37 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QString>
-#include <string>
 #include <QList>
 #include "HopDialog.h"
-#include "observable.h"
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
 #include "hop.h"
 #include "HopEditor.h"
 #include "HopTableModel.h"
+#include "HopTableModel.h"
+#include "HopSortFilterProxyModel.h"
 
 HopDialog::HopDialog(MainWindow* parent)
-        : QDialog(parent)
+        : QDialog(parent), mainWindow(parent), hopEditor(new HopEditor(this)), numHops(0)
 {
    setupUi(this);
-   mainWindow = parent;
-   dbObs = 0;
-   numHops = 0;
-   hopEditor = new HopEditor(this);
 
+   hopTableModel = new HopTableModel(hopTableWidget);
+   hopTableProxy = new HopSortFilterProxyModel(hopTableWidget);
+   hopTableProxy->setSourceModel(hopTableModel);
+   hopTableWidget->setModel(hopTableProxy);
+   hopTableWidget->setSortingEnabled(true);
+   hopTableWidget->sortByColumn( HOPNAMECOL, Qt::AscendingOrder );
+   
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newHop() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
    connect( hopTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
+   
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   populateTable();
 }
 
 void HopDialog::removeHop()
@@ -54,7 +60,7 @@ void HopDialog::removeHop()
 
    // ---------------Artificial block-------------------
    {
-      QModelIndexList selected = hopTableWidget->selectedIndexes();
+      QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
       size = selected.size();
       if( size == 0 )
          return;
@@ -71,42 +77,33 @@ void HopDialog::removeHop()
    } // If we blow up here, it's because something is wrong with selected's destructor.
    //----------------END Artificial block---------------
 
-   modelIndex = hopTableWidget->getProxy()->mapToSource(viewIndex);
+   modelIndex = hopTableProxy->mapToSource(viewIndex);
 
    //std::cerr << "Model: " << modelIndex.row() << " View: " << viewIndex.row() << std::endl;
 
-   Hop *hop = hopTableWidget->getModel()->getHop(modelIndex.row());
-   dbObs->removeHop(hop);
+   Hop *hop = hopTableModel->getHop(modelIndex.row());
+   Database::instance().removeHop(hop);
 }
 
-void HopDialog::notify(Observable *notifier, QVariant info)
+void HopDialog::changed(QMetaProperty prop, QVariant val)
 {
-   if( notifier != dbObs || (info.toInt() != DBHOP && info.toInt() != DBALL) )
-      return;
-
-   hopTableWidget->getModel()->removeAll();
-   populateTable();
-}
-
-void HopDialog::startObservingDB()
-{
-   dbObs = Database::getDatabase();
-   setObserved(dbObs);
-   populateTable();
+   if( sender() == &(Database::instance()) &&
+       QString(prop.name()) == "hops" )
+   {
+      hopTableModel->removeAll();
+      populateTable();
+   }
 }
 
 void HopDialog::populateTable()
 {
-   QList<Hop*>::iterator it, end;
+   QList<Hop*> hops;
+   Database::instance().getHops(hops);
 
-
-   if( ! Database::isInitialized() )
-      return;
-
-   numHops = dbObs->getNumHops();
-   end = dbObs->getHopEnd();
-   for( it = dbObs->getHopBegin(); it != end; ++it )
-      hopTableWidget->getModel()->addHop(*it);
+   numHops = hops.length();
+   int i;
+   for( i = 0; i < numHops; ++i )
+      hopTableModel->addHop(hops[i]);
 }
 
 void HopDialog::addHop(const QModelIndex& index)
@@ -114,7 +111,7 @@ void HopDialog::addHop(const QModelIndex& index)
    QModelIndex translated;
    if( !index.isValid() )
    {
-      QModelIndexList selected = hopTableWidget->selectedIndexes();
+      QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -129,7 +126,7 @@ void HopDialog::addHop(const QModelIndex& index)
             return;
       }
 
-      translated = hopTableWidget->getProxy()->mapToSource(selected.value(0));
+      translated = hopTableProxy->mapToSource(selected.value(0));
    }
    else
    {
@@ -137,18 +134,19 @@ void HopDialog::addHop(const QModelIndex& index)
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other columns.
       if( index.column() == HOPNAMECOL )
-         translated = hopTableWidget->getProxy()->mapToSource(index);
+         translated = hopTableProxy->mapToSource(index);
       else
          return;
    }
    
-   Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
-   mainWindow->addHopToRecipe(new Hop(*hop) ); // Need to add a copy so we don't change the database.
+   Hop *hop = hopTableModel->getHop(translated.row());
+   
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), hop );
 }
 
 void HopDialog::editSelected()
 {
-   QModelIndexList selected = hopTableWidget->selectedIndexes();
+   QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated;
    int row, size, i;
 
@@ -164,8 +162,8 @@ void HopDialog::editSelected()
          return;
    }
 
-   translated = hopTableWidget->getProxy()->mapToSource(selected.value(0));
-   Hop *hop = hopTableWidget->getModel()->getHop(translated.row());
+   translated = hopTableProxy->mapToSource(selected.value(0));
+   Hop *hop = hopTableModel->getHop(translated.row());
    hopEditor->setHop(hop);
    hopEditor->show();
 }
@@ -177,11 +175,8 @@ void HopDialog::newHop()
    if( name.isEmpty() )
       return;
 
-   Hop* hop = new Hop();
-   QString stdname = name;
-   hop->setName(stdname);
-
-   dbObs->addHop(hop);
+   Hop* hop = Database::instance().newHop();
+   hop->setName(name);
    hopEditor->setHop(hop);
    hopEditor->show();
 }

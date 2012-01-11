@@ -23,27 +23,33 @@ class MashStepEditor;
 
 #include <QDialog>
 #include <QWidget>
+#include <QMetaProperty>
 #include <QVariant>
-#include "observable.h"
-#include "mashstep.h"
 #include "ui_mashStepEditor.h"
 
-class MashStepEditor : public QDialog, public Ui::mashStepEditor, public Observer
+// Forward declarations.
+class MashStep;
+
+class MashStepEditor : public QDialog, public Ui::mashStepEditor
 {
    Q_OBJECT
 public:
    MashStepEditor(QWidget* parent=0);
    virtual ~MashStepEditor() {}
-   virtual void notify(Observable *notifier, QVariant info=QVariant());
 
 public slots:
    void saveAndClose();
    void setMashStep(MashStep* step);
    void close();
    void grayOutStuff(const QString& text);
+   void changed(QMetaProperty, QVariant);
 
 private:
-   void showChanges();
+   /*! Updates the UI elements effected by the \b metaProp of
+    *  the step we are watching. If \b metaProp is null,
+    *  then update all the UI elements at once.
+    */
+   void showChanges(QMetaProperty* metaProp = 0);
    void clear();
    MashStep* obs;
 };

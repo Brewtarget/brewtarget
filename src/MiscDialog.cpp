@@ -20,36 +20,41 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QString>
-#include <string>
 #include <QList>
 #include "MiscDialog.h"
-#include "observable.h"
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
 #include "misc.h"
 #include "MiscEditor.h"
 #include "MiscTableModel.h"
+#include "MiscSortFilterProxyModel.h"
 
 MiscDialog::MiscDialog(MainWindow* parent)
-        : QDialog(parent)
+        : QDialog(parent), mainWindow(parent), numMiscs(0), miscEdit(new MiscEditor(this))
 {
    setupUi(this);
-   mainWindow = parent;
-   dbObs = 0;
-   numMiscs = 0;
-   miscEdit = new MiscEditor(this);
 
+   miscTableModel = new MiscTableModel(miscTableWidget);
+   miscTableProxy = new MiscSortFilterProxyModel(miscTableWidget);
+   miscTableProxy->setSourceModel(miscTableModel);
+   miscTableWidget->setModel(miscTableProxy);
+   miscTableWidget->setSortingEnabled(true);
+   miscTableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
+   
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
    connect( pushButton_edit, SIGNAL(clicked()), this, SLOT(editSelected()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
    connect( miscTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
+   
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   populateTable();
 }
 
 void MiscDialog::removeMisc()
 {
-   QModelIndexList selected = miscTableWidget->selectedIndexes();
+   QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -64,37 +69,29 @@ void MiscDialog::removeMisc()
          return;
    }
 
-   Misc* m = miscTableWidget->getModel()->getMisc(row);
-   dbObs->removeMisc(m);
+   Misc* m = miscTableModel->getMisc(row);
+   Database::instance().removeMisc(m);
 }
 
-void MiscDialog::notify(Observable *notifier, QVariant info)
+void MiscDialog::changed(QMetaProperty prop, QVariant /*value*/)
 {
-   if( notifier != dbObs || (info.toInt() != DBMISC && info.toInt() != DBALL) )
-      return;
-
-   miscTableWidget->getModel()->removeAll();
-   populateTable();
-}
-
-void MiscDialog::startObservingDB()
-{
-   dbObs = Database::getDatabase();
-   setObserved(dbObs);
-   populateTable();
+   if( sender() == &(Database::instance()) &&
+       QString(prop.name()) == "miscs" )
+   {
+      miscTableModel->removeAll();
+      populateTable();
+   }
 }
 
 void MiscDialog::populateTable()
 {
-   QList<Misc*>::iterator it, end;
+   QList<Misc*> miscs;
+   Database::instance().getMiscs(miscs);
 
-   if( ! Database::isInitialized() )
-      return;
-
-   numMiscs = dbObs->getNumMiscs();
-   end = dbObs->getMiscEnd();
-   for( it = dbObs->getMiscBegin(); it != end; ++it )
-      miscTableWidget->getModel()->addMisc(*it);
+   numMiscs = miscs.size();
+   int i;
+   for( i = 0; i < numMiscs; ++i )
+      miscTableModel->addMisc(miscs[i]);
 }
 
 void MiscDialog::addMisc(const QModelIndex& index)
@@ -103,7 +100,7 @@ void MiscDialog::addMisc(const QModelIndex& index)
    
    if( !index.isValid() )
    {
-      QModelIndexList selected = miscTableWidget->selectedIndexes();
+      QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -126,18 +123,19 @@ void MiscDialog::addMisc(const QModelIndex& index)
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other columns.
       if( index.column() == MISCNAMECOL )
-         translated = miscTableWidget->getProxy()->mapToSource(index);
+         translated = miscTableProxy->mapToSource(index);
       else
          return;
    }
    
-   Misc *misc = miscTableWidget->getModel()->getMisc(translated.row());
-   mainWindow->addMiscToRecipe(new Misc(*misc) ); // Need to add a copy so we don't change the database.
+   Misc *misc = miscTableModel->getMisc(translated.row());
+   
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), Database::instance().newMisc(misc) );
 }
 
 void MiscDialog::editSelected()
 {
-   QModelIndexList selected = miscTableWidget->selectedIndexes();
+   QModelIndexList selected = miscTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
 
    size = selected.size();
@@ -152,7 +150,7 @@ void MiscDialog::editSelected()
          return;
    }
 
-   Misc* m = miscTableWidget->getModel()->getMisc(row);
+   Misc* m = miscTableModel->getMisc(row);
    miscEdit->setMisc(m);
    miscEdit->show();
 }
@@ -164,11 +162,8 @@ void MiscDialog::newMisc()
    if(name.isEmpty())
       return;
 
-   Misc *m = new Misc();
-   QString stdname = name;
-   m->setName(stdname);
-
-   dbObs->addMisc(m);
+   Misc* m = Database::instance().newMisc();
+   m->setName(name);
    miscEdit->setMisc(m);
    miscEdit->show();
 }

@@ -16,91 +16,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <string>
 #include <QVector>
 #include "water.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include "water.h"
+#include "brewtarget.h"
+
+QHash<QString,QString> Water::tagToProp = Water::tagToPropHash();
+
+QHash<QString,QString> Water::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   propHash["AMOUNT"] = "amount_l";
+   propHash["CALCIUM"] = "calcium_ppm";
+   propHash["BICARBONATE"] = "bicarbonate_ppm";
+   propHash["SULFATE"] = "sulfate_ppm";
+   propHash["CHLORIDE"] = "chloride_ppm";
+   propHash["SODIUM"] = "sodium_ppm";
+   propHash["MAGNESIUM"] = "magnesium_ppm";
+   propHash["PH"] = "ph";
+   propHash["NOTES"] = "notes";
+   return propHash;
+}
 
 bool operator<(Water &w1, Water &w2)
 {
-   return w1.name < w2.name;
+   return w1.name() < w2.name();
 }
 
 bool operator==(Water &w1, Water &w2)
 {
-   return w1.name == w2.name;
+   return w1.name() == w2.name();
 }
 
-void Water::toXml(QDomDocument& doc, QDomNode& parent)
-{
-   QDomElement waterNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-
-   waterNode = doc.createElement("WATER");
-
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name);
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(text(version));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("AMOUNT");
-   tmpText = doc.createTextNode(text(amount_l));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CALCIUM");
-   tmpText = doc.createTextNode(text(calcium_ppm));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("BICARBONATE");
-   tmpText = doc.createTextNode(text(bicarbonate_ppm));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SULFATE");
-   tmpText = doc.createTextNode(text(sulfate_ppm));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("CHLORIDE");
-   tmpText = doc.createTextNode(text(chloride_ppm));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("SODIUM");
-   tmpText = doc.createTextNode(text(sodium_ppm));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("MAGNESIUM");
-   tmpText = doc.createTextNode(text(magnesium_ppm));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("PH");
-   tmpText = doc.createTextNode(text(ph));
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes);
-   tmpNode.appendChild(tmpText);
-   waterNode.appendChild(tmpNode);
-
-   parent.appendChild(waterNode);
-}
-
+/*
 void Water::setDefaults()
 {
    name = "";
@@ -113,17 +66,14 @@ void Water::setDefaults()
    ph = 7.0;
    notes = "";
 }
+*/
 
 Water::Water()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-Water::Water(const QDomNode& waterNode)
-{
-   fromNode(waterNode);
-}
-
+/*
 void Water::fromNode(const QDomNode& waterNode)
 {
    QDomNode node, child;
@@ -197,155 +147,106 @@ void Water::fromNode(const QDomNode& waterNode)
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported WATER property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
+*/
 
 //================================"SET" METHODS=================================
 void Water::setName( const QString &var )
 {
-   name = var;
-   hasChanged();
+   set("name", "name", var);
 }
 
 void Water::setAmount_l( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("amount cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      amount_l = var;
-      hasChanged();
-   }
+   set("amount_l", "amount", var);
 }
 
 void Water::setCalcium_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("calcium cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      calcium_ppm = var;
-      hasChanged();
-   }
+   set("calcium_ppm", "calcium", var);
 }
 
 void Water::setBicarbonate_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("bicarbonate cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      bicarbonate_ppm = var;
-      hasChanged();
-   }
+   set("bicarbonate_ppm", "bicarbonate", var);
 }
 
 void Water::setChloride_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("chloride cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      chloride_ppm = var;
-      hasChanged();
-   }
+   set("chloride_ppm", "chloride", var);
 }
 
 void Water::setSodium_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("sodium cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      sodium_ppm = var;
-      hasChanged();
-   }
+   set("sodium_ppm", "sodium", var);
 }
 
 void Water::setMagnesium_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("magnesium cannot be negative: " + doubleToString(var) );
-   //else
-   {
-      magnesium_ppm = var;
-      hasChanged();
-   }
+   set("magnesium_ppm", "magnesium", var);
 }
 
 void Water::setPh( double var )
 {
-   //if( var < 0.0 || var > 14.0 )
-   //   throw WaterException("pH was not in [0,14]: " + doubleToString(var) );
-   //else
-   {
-      ph = var;
-      hasChanged();
-   }
+   set("ph", "ph", var);
 }
 
 void Water::setSulfate_ppm( double var )
 {
-   //if( var < 0.0 )
-   //   throw WaterException("sulfate cannot be negative: " + doubleToString(var));
-   //else
-   {
-      sulfate_ppm = var;
-      hasChanged();
-   }
+   set("sulfate_ppm", "sulfate", var);
 }
 
 void Water::setNotes( const QString &var )
 {
-   notes = var;
-   hasChanged();
+   set("notes", "notes", var);
 }
 
 //=========================="GET" METHODS=======================================
-QString Water::getName() const
+QString Water::name() const
 {
-   return name;
+   return get("name").toString();
 }
 
-double Water::getSulfate_ppm() const
+double Water::sulfate_ppm() const
 {
-   return sulfate_ppm;
+   return get("sulfate").toDouble();
 }
 
-double Water::getAmount_l() const
+double Water::amount_l() const
 {
-   return amount_l;
+   return get("amount").toDouble();
 }
 
-double Water::getCalcium_ppm() const
+double Water::calcium_ppm() const
 {
-   return calcium_ppm;
+   return get("calcium").toDouble();
 }
 
-double Water::getBicarbonate_ppm() const
+double Water::bicarbonate_ppm() const
 {
-   return bicarbonate_ppm;
+   return get("bicarbonate").toDouble();
 }
 
-double Water::getChloride_ppm() const
+double Water::chloride_ppm() const
 {
-   return chloride_ppm;
+   return get("chloride").toDouble();
 }
 
-double Water::getSodium_ppm() const
+double Water::sodium_ppm() const
 {
-   return sodium_ppm;
+   return get("sodium").toDouble();
 }
 
-double Water::getMagnesium_ppm() const
+double Water::magnesium_ppm() const
 {
-   return magnesium_ppm;
+   return get("magnesium").toDouble();
 }
 
-double Water::getPh() const
+double Water::ph() const
 {
-   return ph;
+   return get("ph").toDouble();
 }
 
-QString Water::getNotes() const
+QString Water::notes() const
 {
-   return notes;
+   return get("notes").toString();
 }

@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_8">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <layout class="QHBoxLayout" name="horizontalLayout_equipments">
      <item>
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
@@ -33,12 +33,15 @@
       </widget>
      </item>
      <item>
-      <widget class="EquipmentComboBox" name="equipmentComboBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QComboBox" name="equipmentComboBox">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
        </property>
       </widget>
      </item>
@@ -782,13 +785,6 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>EquipmentComboBox</class>
-   <extends>QComboBox</extends>
-   <header>EquipmentComboBox.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../brewtarget.qrc"/>
  </resources>

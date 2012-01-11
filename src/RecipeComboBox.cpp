@@ -18,12 +18,10 @@
 
 #include <QComboBox>
 #include <QWidget>
-#include <Qt>
 #include <QList>
-#include <string>
-
-#include "database.h"
 #include <QString>
+#include "database.h"
+#include "recipe.h"
 #include "RecipeComboBox.h"
 
 RecipeComboBox::RecipeComboBox(QWidget* parent)
@@ -31,92 +29,89 @@ RecipeComboBox::RecipeComboBox(QWidget* parent)
 {
 }
 
-void RecipeComboBox::startObservingDB()
+void RecipeComboBox::observeDatabase(bool val)
 {
-   if( Database::isInitialized() )
-   {
-      dbObs = Database::getDatabase();
-      addObserved(dbObs);
-
-      QList<Recipe*>::iterator it, end;
-
-      end = dbObs->getRecipeEnd();
-
-      for( it = dbObs->getRecipeBegin(); it != end; ++it )
-         addRecipe(*it);
-      repopulateList();
-   }
+   if( val )
+      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   else
+      disconnect( &(Database::instance()), 0, this, 0 );
 }
 
 void RecipeComboBox::addRecipe(Recipe* recipe)
 {
-   recipeObs.push_back(recipe);
-   addObserved(recipe);
+   if( !recipeObs.contains(recipe) )
+   {
+      recipeObs.push_back(recipe);
+      connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addItem( recipe->name() );
+   }
+}
 
-   addItem( recipe->getName() );
+void RecipeComboBox::removeRecipe(Recipe* recipe)
+{
+   int i = recipeObs.indexOf(recipe);
+   if( i >= 0 )
+   {
+      recipeObs.removeAt(i);
+      disconnect( recipe, 0, this, 0 );
+      removeItem( i );
+   }
 }
 
 void RecipeComboBox::removeAllRecipes()
 {
    int i;
    for( i = 0; i < recipeObs.size(); ++i )
-      removeObserved(recipeObs[i]);
-   recipeObs.clear(); // Clear internal list.
-   clear(); // Clear the combo box's visible list.
+      removeRecipe(recipeObs[i]);
 }
 
-void RecipeComboBox::notify(Observable *notifier, QVariant info)
+void RecipeComboBox::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   unsigned int i, size;
+   int i;
 
-   // Notifier could be the database. Only pay attention if the number of
-   // recipes has changed.
-   if( notifier == dbObs && (info.toInt() == DBRECIPE || info.toInt() == DBALL) )
+   QString propName(prop.name());
+   
+   // Notifier could be the database.
+   if( sender() == &(Database::instance()) && propName == "recipes" )
    {
       removeAllRecipes();
-      QList<Recipe*>::iterator it, end;
-
-      end = dbObs->getRecipeEnd();
-
-      for( it = dbObs->getRecipeBegin(); it != end; ++it )
-         addRecipe(*it);
       repopulateList();
    }
    else // Otherwise, we know that one of the recipes changed.
    {
-      size = recipeObs.size();
-      for( i = 0; i < size; ++i )
-         if( notifier == recipeObs[i] )
-         {
-            // Notice we assume 'i' is an index into both 'recipeObs' and also
-            // to the text list in this combo box...
-            setItemText(i, recipeObs[i]->getName() );
-         }
+      Recipe* recSender = qobject_cast<Recipe*>(sender());
+      i = recipeObs.indexOf(recSender);
+      if( i >= 0 )
+      {
+         // Notice we assume 'i' is an index into both 'recipeObs' and also
+         // to the text list in this combo box...
+         setItemText(i, recipeObs[i]->name() );
+      }
    }
 }
 
-void RecipeComboBox::setIndexByRecipeName(QString name)
+void RecipeComboBox::setIndexByRecipe(Recipe* rec)
 {
-   int ndx;
-
-   ndx = findText( name, Qt::MatchExactly );
-
+   int ndx = recipeObs.indexOf(rec);
    setCurrentIndex(ndx);
 }
 
+/*
 void RecipeComboBox::setIndex(int ndx)
 {
    setCurrentIndex(ndx);
 }
+*/
 
 void RecipeComboBox::repopulateList()
 {
-   unsigned int i, size;
+   int i, size;
    clear();
 
-   size = recipeObs.size();
+   QList<Recipe*> tmp = Database::instance().recipes();
+   size = tmp.size();
    for( i = 0; i < size; ++i )
-      addItem( recipeObs[i]->getName() );
+      addRecipe(tmp[i]);
 }
 
 Recipe* RecipeComboBox::getSelectedRecipe()

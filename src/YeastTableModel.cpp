@@ -21,7 +21,6 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
 #include <QItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QComboBox>
@@ -29,32 +28,29 @@
 #include <QString>
 
 #include <QVector>
-#include <iostream>
 #include "yeast.h"
-#include "observable.h"
 #include "YeastTableModel.h"
 #include "unit.h"
 #include "brewtarget.h"
+#include "recipe.h"
 
-YeastTableModel::YeastTableModel(YeastTableWidget* parent)
-: QAbstractTableModel(parent), MultipleObserver()
+YeastTableModel::YeastTableModel(QTableView* parent)
+: QAbstractTableModel(parent), parentTableWidget(parent), recObs(0)
 {
    yeastObs.clear();
-   parentTableWidget = parent;
 }
 
 void YeastTableModel::addYeast(Yeast* yeast)
 {
-   QVector<Yeast*>::iterator iter;
+   if( yeastObs.contains(yeast) )
+      return;
 
-   //Check to see if it's already in the list
-   for( iter=yeastObs.begin(); iter != yeastObs.end(); iter++ )
-      if( *iter == yeast )
-         return;
-
-   yeastObs.push_back(yeast);
-   addObserved(yeast);
-   reset(); // Tell everybody that the table has changed.
+   int size = yeastObs.size();
+   beginInsertRows( QModelIndex(), size, size );
+   yeastObs.append(yeast);
+   connect( yeast, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
    
    if(parentTableWidget)
    {
@@ -63,50 +59,134 @@ void YeastTableModel::addYeast(Yeast* yeast)
    }
 }
 
+void YeastTableModel::observeRecipe(Recipe* rec)
+{
+   if( recObs )
+   {
+      disconnect( recObs, 0, this, 0 );
+      removeAll();
+   }
+   
+   recObs = rec;
+   if( recObs )
+   {
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addYeasts( recObs->yeasts() );
+   }
+}
+
+void YeastTableModel::observeDatabase(bool val)
+{
+   if( val )
+   {
+      removeAll();
+      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addYeasts( Database::instance().yeasts() );
+   }
+   else
+   {
+      removeAll();
+      disconnect( &(Database::instance()), 0, this, 0 );
+   }
+}
+
+void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
+{
+   QList<Yeast*>::iterator i;
+   QList<Yeast*> tmp;
+   
+   for( i = yeasts.begin(); i != yeasts.end(); i++ )
+   {
+      if( !yeastObs.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = yeastObs.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   yeastObs.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   
+   if( parentTableWidget )
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+   
+   endInsertRows();
+}
+
 bool YeastTableModel::removeYeast(Yeast* yeast)
 {
-   QVector<Yeast*>::iterator iter;
+   int i = yeastObs.indexOf(yeast);
 
-   for( iter=yeastObs.begin(); iter != yeastObs.end(); iter++ )
-      if( *iter == yeast )
+   if( i >= 0 )
+   {
+      beginRemoveRows( QModelIndex(), i, i );
+      disconnect( yeast, 0, this, 0 );
+      yeastObs.removeAt(i);
+      //reset(); // Tell everybody the table has changed.
+      endRemoveRows();
+      
+      if(parentTableWidget)
       {
-         yeastObs.erase(iter);
-         removeObserved(yeast);
-         reset(); // Tell everybody the table has changed.
-
-         if(parentTableWidget)
-         {
-            parentTableWidget->resizeColumnsToContents();
-            parentTableWidget->resizeRowsToContents();
-         }
-         
-         return true;
+         parentTableWidget->resizeColumnsToContents();
+         parentTableWidget->resizeRowsToContents();
       }
+      
+      return true;
+   }
 
    return false;
 }
 
 void YeastTableModel::removeAll()
 {
-   int i;
-
-   for( i = 0; i < yeastObs.size(); ++i )
-      removeObserved(yeastObs[i]);
-
-   yeastObs.clear();
-   reset();
+   beginRemoveRows( QModelIndex(), 0, yeastObs.size()-1 );
+   while( !yeastObs.isEmpty() )
+   {
+      disconnect( yeastObs.takeLast(), 0, this, 0 );
+   }
+   endRemoveRows();
 }
 
-void YeastTableModel::notify(Observable* notifier, QVariant info)
+void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
 
    // Find the notifier in the list
-   for( i = 0; i < (int)yeastObs.size(); ++i )
+   Yeast* yeastSender = qobject_cast<Yeast*>(sender());
+   if( yeastSender )
    {
-      if( notifier == yeastObs[i] )
-         emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                           QAbstractItemModel::createIndex(i, YEASTNUMCOLS));
+      i = yeastObs.indexOf(yeastSender);
+      if( i < 0 )
+         return;
+      
+      emit dataChanged( QAbstractItemModel::createIndex(i, 0),
+                        QAbstractItemModel::createIndex(i, YEASTNUMCOLS));
+      return;
+   }
+   
+   // See if sender is our recipe.
+   Recipe* recSender = qobject_cast<Recipe*>(sender());
+   if( recSender && recSender == recObs )
+   {
+      if( QString(prop.name()) == "yeasts" )
+      {
+         removeAll();
+         addYeasts( recObs->yeasts() );
+      }
+      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      return;
+   }
+   
+   // See if sender is the database.
+   if( sender() == &(Database::instance()) && QString(prop.name()) == "yeasts" )
+   {
+      removeAll();
+      addYeasts( Database::instance().yeasts() );
+      return;
    }
 }
 
@@ -137,36 +217,36 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
    {
       case YEASTNAMECOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getName());
+         return QVariant(row->name());
       else
          return QVariant();
       case YEASTTYPECOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getTypeStringTr());
+         return QVariant(row->typeStringTr());
       else if( role == Qt::UserRole )
-         return QVariant(row->getType());
+         return QVariant(row->type());
       else
          return QVariant();
       case YEASTLABCOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getLaboratory());
+         return QVariant(row->laboratory());
       else
          return QVariant();
       case YEASTPRODIDCOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getProductID());
+         return QVariant(row->productID());
       else
          return QVariant();
       case YEASTFORMCOL:
       if( role == Qt::DisplayRole )
-         return QVariant(row->getFormStringTr());
+         return QVariant(row->formStringTr());
       else if( role == Qt::UserRole )
-         return QVariant(row->getForm());
+         return QVariant(row->form());
       else
          return QVariant();
       case YEASTAMOUNTCOL:
       if( role == Qt::DisplayRole )
-         return QVariant( Brewtarget::displayAmount(row->getAmount(), row->getAmountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
       else
          return QVariant();
       default :
@@ -269,7 +349,7 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount( row->getAmountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
+            row->setAmount( row->amountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
             return true;
          }
          else

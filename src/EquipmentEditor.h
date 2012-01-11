@@ -22,19 +22,23 @@
 class EquipmentEditor;
 
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_equipmentEditor.h"
-#include "equipment.h"
-#include "observable.h"
 
-class EquipmentEditor : public QDialog, public Ui::equipmentEditor, public Observer
+// Forward declarations
+class Equipment;
+class EquipmentListModel;
+
+class EquipmentEditor : public QDialog, public Ui::equipmentEditor
 {
    Q_OBJECT
 
 public:
-   EquipmentEditor( QWidget *parent=0 );
+   //! \param singleEquipEditor true if you do not want the necessary elements for viewing all the database elements.
+   EquipmentEditor( QWidget *parent=0, bool singleEquipEditor=false );
    virtual ~EquipmentEditor() {}
    void setEquipment( Equipment* e );
-   void resetEquipment();
 
 public slots:
    void save();
@@ -48,14 +52,14 @@ public slots:
    void updateRecord();
    void updateCheckboxRecord(int state);
    void changedText();
+   
+   void changed(QMetaProperty,QVariant);
 
 private:
    Equipment* obsEquip;
-   Equipment* copyEquip;
-
+   EquipmentListModel* equipmentListModel;
+   
    bool changeText;
-
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
    bool eventFilter(QObject *object, QEvent* event);
    void showChanges();
 };

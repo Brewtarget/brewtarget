@@ -20,37 +20,41 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QString>
-#include <string>
 #include <QList>
 #include "YeastDialog.h"
-#include "observable.h"
 #include "database.h"
 #include "recipe.h"
 #include "MainWindow.h"
 #include "yeast.h"
 #include "YeastEditor.h"
-#include <iostream>
 #include "YeastTableModel.h"
+#include "YeastSortFilterProxyModel.h"
 
 YeastDialog::YeastDialog(MainWindow* parent)
-        : QDialog(parent)
+        : QDialog(parent), mainWindow(parent), yeastEditor(new YeastEditor(this)), numYeasts(0)
 {
    setupUi(this);
-   mainWindow = parent;
-   yeastEditor = new YeastEditor(this);
-   dbObs = 0;
-   numYeasts = 0;
 
+   yeastTableModel = new YeastTableModel(yeastTableWidget);
+   yeastTableProxy = new YeastSortFilterProxyModel(yeastTableWidget);
+   yeastTableProxy->setSourceModel(yeastTableModel);
+   yeastTableWidget->setModel(yeastTableProxy);
+   yeastTableWidget->setSortingEnabled(true);
+   yeastTableWidget->sortByColumn( YEASTNAMECOL, Qt::AscendingOrder );
+   
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT( removeYeast() ) );
    connect( yeastTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addYeast(const QModelIndex&) ) );
+   
+   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   populateTable();
 }
 
 void YeastDialog::removeYeast()
 {
-   QModelIndexList selected = yeastTableWidget->selectedIndexes();
+   QModelIndexList selected = yeastTableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated;
    int row, size, i;
 
@@ -68,39 +72,33 @@ void YeastDialog::removeYeast()
 
    // We need to translate from the view's index to the model's index.  The
    // proxy model does the heavy lifting, as long as we do the call.
-   translated = yeastTableWidget->getProxy()->mapToSource(selected[0]);
-   Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
-   dbObs->removeYeast(yeast);
+   translated = yeastTableProxy->mapToSource(selected[0]);
+   Yeast *yeast = yeastTableModel->getYeast(translated.row());
+   Database::instance().removeYeast(yeast);
 }
 
-void YeastDialog::notify(Observable *notifier, QVariant info)
+void YeastDialog::changed(QMetaProperty prop, QVariant val)
 {
-   if( notifier != dbObs || (info.toInt() != DBYEAST && info.toInt() != DBALL) )
-      return;
-
-   yeastTableWidget->getModel()->removeAll();
-   populateTable();
-
-}
-
-void YeastDialog::startObservingDB()
-{
-   dbObs = Database::getDatabase();
-   setObserved(dbObs);
-   populateTable();
+   QString propName(prop.name());
+   
+   // Notifier should only be the database.
+   if( sender() == &(Database::instance()) &&
+       propName == "yeasts" )
+   {
+      yeastTableModel->removeAll();
+      populateTable();
+   }
 }
 
 void YeastDialog::populateTable()
 {
-   QList<Yeast*>::iterator it, end;
-
-   if( ! Database::isInitialized() )
-      return;
-
-   numYeasts = dbObs->getNumYeasts();
-   end = dbObs->getYeastEnd();
-   for( it = dbObs->getYeastBegin(); it != end; ++it )
-      yeastTableWidget->getModel()->addYeast(*it);
+   QList<Yeast*> yeasts;
+   Database::instance().getYeasts(yeasts);
+   
+   numYeasts = yeasts.size();
+   int i;
+   for( i = 0; i < numYeasts; ++i )
+      yeastTableModel->addYeast(yeasts[i]);
 }
 
 void YeastDialog::addYeast(const QModelIndex& index)
@@ -109,7 +107,7 @@ void YeastDialog::addYeast(const QModelIndex& index)
    
    if( !index.isValid() )
    {
-      QModelIndexList selected = yeastTableWidget->selectedIndexes();
+      QModelIndexList selected = yeastTableWidget->selectionModel()->selectedIndexes();
       int row, size, i;
 
       size = selected.size();
@@ -124,7 +122,7 @@ void YeastDialog::addYeast(const QModelIndex& index)
             return;
       }
 
-      translated = yeastTableWidget->getProxy()->mapToSource(selected[0]);
+      translated = yeastTableProxy->mapToSource(selected[0]);
    }
    else
    {
@@ -132,18 +130,20 @@ void YeastDialog::addYeast(const QModelIndex& index)
       // this keeps us from adding something to the recipe when we just want to edit
       // one of the other columns.
       if( index.column() == YEASTNAMECOL )
-         translated = yeastTableWidget->getProxy()->mapToSource(index);
+         translated = yeastTableProxy->mapToSource(index);
       else
          return;
    }
    
-   Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
-   mainWindow->addYeastToRecipe(new Yeast(*yeast) ); // Need to add a copy so we don't change the database.
+   Yeast* yeast = yeastTableModel->getYeast(translated.row());
+   
+   // Adds a copy of yeast.
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), yeast );
 }
 
 void YeastDialog::editSelected()
 {
-   QModelIndexList selected   = yeastTableWidget->selectedIndexes();
+   QModelIndexList selected = yeastTableWidget->selectionModel()->selectedIndexes();
    QModelIndex translated; 
 
    int row, size, i;
@@ -160,8 +160,8 @@ void YeastDialog::editSelected()
       if( selected[i].row() != row )
          return;
    }
-   translated = yeastTableWidget->getProxy()->mapToSource(selected[0]);
-   Yeast *yeast = yeastTableWidget->getModel()->getYeast(translated.row());
+   translated = yeastTableProxy->mapToSource(selected[0]);
+   Yeast *yeast = yeastTableModel->getYeast(translated.row());
    yeastEditor->setYeast(yeast);
    yeastEditor->show();
 }
@@ -173,11 +173,8 @@ void YeastDialog::newYeast()
    if( name.isEmpty() )
       return;
 
-   Yeast* y = new Yeast();
-   QString stdname = name;
-   y->setName(stdname);
-
-   dbObs->addYeast(y);
+   Yeast* y = Database::instance().newYeast();
+   y->setName(name);
    yeastEditor->setYeast(y);
    yeastEditor->show();
 }

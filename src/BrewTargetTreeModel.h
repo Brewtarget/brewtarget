@@ -26,23 +26,40 @@ class BrewTargetTreeModel;
 #include <QVariant>
 #include <QList>
 #include <QAbstractItemModel>
-#include <Qt>
+#include <QMetaProperty>
+#include <QVariant>
 #include <QObject>
+#include <QSqlRelationalTableModel>
 
-#include "recipe.h"
-#include "BrewTargetTreeItem.h"
-class BrewTargetTreeView; // Avoids a circular include. This class will be defined in a later include.
-//#include "BrewTargetTreeView.h"
-#include "database.h"
-#include "observable.h"
-#include "brewnote.h"
+// Forward declarations
+class BeerXMLElement;
+class Recipe;
+class BrewTargetTreeItem;
+class BrewTargetTreeView;
+class BrewNote;
+class Equipment;
+class Fermentable;
+class Hop;
+class Misc;
+class Yeast;
 
-class BrewTargetTreeModel : public QAbstractItemModel, public MultipleObserver
+class BrewTargetTreeModel : public QAbstractItemModel
 {
    Q_OBJECT
 
 public:
-   BrewTargetTreeModel(BrewTargetTreeView *parent = 0);
+   enum TypeMasks
+   {
+      RECIPEMASK        = 1,
+      EQUIPMASK         = 2,
+      FERMENTMASK       = 4,
+      HOPMASK           = 8,
+      MISCMASK          = 16,
+      YEASTMASK         = 32,
+      BREWNOTEMASK      = 64,
+      ALLMASK           = 127
+   };
+   BrewTargetTreeModel(BrewTargetTreeView *parent = 0, TypeMasks type = ALLMASK);
    virtual ~BrewTargetTreeModel();
 
    // Methods required for read-only stuff
@@ -74,10 +91,16 @@ public:
    bool isBrewNote(const QModelIndex &index);
 
    int getType(const QModelIndex &index);
+   int getMask();
 
+   //! Connect the element's changed signal to our slot.
+   void addObserved( BeerXMLElement* element );
+   //! Disconnect the element's changed signal from our slot.
+   void removeObserved( BeerXMLElement* element );
+   
    // Methods required for observable
-   virtual void notify(Observable *notifier, QVariant info = QVariant());
-   void startObservingDB();
+   //virtual void notify(Observable *notifier, QVariant info = QVariant());
+   //void startObservingDB();
 
    // Convenience functions to make the rest of the software play nice
    Recipe* getRecipe(const QModelIndex &index) const;
@@ -96,15 +119,34 @@ public:
    QModelIndex findYeast(Yeast* yeast);
    QModelIndex findBrewNote(BrewNote* bNote);
 
+private slots:
+   void changed( QMetaProperty, QVariant );
+   
 private:
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
-   void loadTreeModel(int reload);
-   void unloadTreeModel(int unload);
-
+   //! Loads the data. Empty \b propname means load all trees.
+   void loadTreeModel(QString propName = "");
+   //! Unloads the data. Empty \b propname means unload all trees.
+   void unloadTreeModel(QString propName = "");
+   //! Disconnect all the \b objects' signals from us. \b T must be BeerXMLElement.
+   void unobserve( QList<Recipe*>& objects );
+   
+   QList<Recipe*> recipes;
+   
+   // Helper methods for recipe headers
+   QVariant getRecipeHeader(int section) const;
+   QVariant getEquipmentHeader(int section) const;
+   QVariant getFermentableHeader(int section) const;
+   QVariant getHopHeader(int section) const;
+   QVariant getMiscHeader(int section) const;
+   QVariant getYeastHeader(int section) const;
+   
    BrewTargetTreeItem* rootItem;
+   QHash<TypeMasks, int> trees;
    BrewTargetTreeView *parentTree;
-   Database* dbObs;
    Recipe* recObs;
+   TypeMasks treeMask;
+
 };
 
 #endif /* RECEIPTREEMODEL_H_ */

@@ -18,14 +18,12 @@
 
 #include "instruction.h"
 #include "InstructionWidget.h"
-#include <iostream>
+#include "TimerWidget.h"
 
-InstructionWidget::InstructionWidget(QWidget* parent) : QWidget(parent)
+InstructionWidget::InstructionWidget(QWidget* parent) :
+   QWidget(parent), insObs(0), timer(new TimerWidget(this))
 {
    setupUi(this);
-
-   insObs = 0;
-   timer = new TimerWidget(this);
    timer->setVisible(false);
 
    connect( checkBox_showTimer, SIGNAL(stateChanged(int)), this, SLOT(setHasTimer()) );
@@ -36,7 +34,6 @@ InstructionWidget::InstructionWidget(QWidget* parent) : QWidget(parent)
 
 InstructionWidget::~InstructionWidget()
 {
-   setObserved(0);
    delete timer;
 }
 
@@ -47,8 +44,13 @@ QSize InstructionWidget::sizeHint() const
 
 void InstructionWidget::setInstruction(Instruction* ins)
 {
+   if( insObs )
+      disconnect( insObs, 0, this, 0 );
+   
    insObs = ins;
-   setObserved(insObs);
+   if( insObs )
+      connect( insObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+
    showChanges();
 }
 
@@ -57,14 +59,17 @@ void InstructionWidget::showChanges()
    if( insObs == 0 )
       return;
 
-   textEdit->setPlainText(insObs->getDirections());
-   checkBox_showTimer->setCheckState( insObs->getHasTimer() ? Qt::Checked : Qt::Unchecked );
-   checkBox_completed->setCheckState( insObs->getCompleted() ? Qt::Checked : Qt::Unchecked );
+   textEdit->setPlainText(insObs->directions());
+   checkBox_showTimer->setCheckState( insObs->hasTimer() ? Qt::Checked : Qt::Unchecked );
+   checkBox_completed->setCheckState( insObs->completed() ? Qt::Checked : Qt::Unchecked );
 }
 
-void InstructionWidget::notify(Observable* /*notifier*/, QVariant /*info*/)
+void InstructionWidget::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   // Do nothing since we should be the only ones changing the observed.
+   if( sender() != insObs )
+      return;
+   
+   showChanges();
 }
 
 void InstructionWidget::setCompleted()
@@ -98,9 +103,9 @@ void InstructionWidget::setHasTimer()
 
    insObs->setHasTimer( (checkBox_showTimer->checkState() == Qt::Checked)? true : false );
 
-   if( insObs->getHasTimer() )
+   if( insObs->hasTimer() )
    {
-      timer->setTimer(insObs->getTimerValue());
+      timer->setTimer(insObs->timerValue());
       verticalLayout->insertWidget(1,timer);
       timer->setVisible(true);
       verticalLayout->update(); // Shouldn't have to do this, but if I don't,

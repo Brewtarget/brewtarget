@@ -28,44 +28,97 @@
 #include <QRect>
 
 #include "brewtarget.h"
-#include <Qt>
 #include <QSize>
 #include <QComboBox>
 #include <QLineEdit>
-
-#include <QVector>
 #include <QString>
 #include <QVector>
-#include <iostream>
-#include "observable.h"
 #include "fermentable.h"
 #include "FermentableTableModel.h"
 #include "unit.h"
+#include "recipe.h"
 
 //=====================CLASS FermentableTableModel==============================
-FermentableTableModel::FermentableTableModel(FermentableTableWidget* parent)
-: QAbstractTableModel(parent), MultipleObserver()
+FermentableTableModel::FermentableTableModel(QTableView* parent)
+   : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0), displayPercentages(false), totalFermMass_kg(0)
 {
    fermObs.clear();
-   parentTableWidget = parent;
+}
+
+void FermentableTableModel::observeRecipe(Recipe* rec)
+{
+   if( recObs )
+   {
+      disconnect( recObs, 0, this, 0 );
+      removeAll();
+   }
    
-   totalFermMass_kg = 0;
-   displayPercentages = false;
+   recObs = rec;
+   if( recObs )
+   {
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addFermentables( recObs->fermentables() );
+   }
+}
+
+void FermentableTableModel::observeDatabase(bool val)
+{
+   if( val )
+   {
+      removeAll();
+      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      addFermentables( Database::instance().fermentables() );
+   }
+   else
+   {
+      removeAll();
+      disconnect( &(Database::instance()), 0, this, 0 );
+   }
 }
 
 void FermentableTableModel::addFermentable(Fermentable* ferm)
 {
-   QVector<Fermentable*>::iterator iter;
-   
    //Check to see if it's already in the list
-   for( iter=fermObs.begin(); iter != fermObs.end(); iter++ )
-      if( *iter == ferm )
-         return;
+   if( fermObs.contains(ferm) )
+      return;
+ 
+   int size = fermObs.size();
+   beginInsertRows( QModelIndex(), size, size );
+   fermObs.append(ferm);
+   connect( ferm, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   totalFermMass_kg += ferm->amount_kg();
+   //reset(); // Tell everybody that the table has changed.
+   endInsertRows();
    
-   fermObs.push_back(ferm);
-   addObserved(ferm);
-   totalFermMass_kg += ferm->getAmount_kg();
-   reset(); // Tell everybody that the table has changed.
+   if(parentTableWidget)
+   {
+      parentTableWidget->resizeColumnsToContents();
+      parentTableWidget->resizeRowsToContents();
+   }
+}
+
+void FermentableTableModel::addFermentables(QList<Fermentable*> ferms)
+{
+   QList<Fermentable*>::iterator i;
+   QList<Fermentable*> tmp;
+   
+   for( i = ferms.begin(); i != ferms.end(); i++ )
+   {
+      if( !fermObs.contains(*i) )
+         tmp.append(*i);
+   }
+   
+   int size = fermObs.size();
+   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+   fermObs.append(tmp);
+   
+   for( i = tmp.begin(); i != tmp.end(); i++ )
+   {
+      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      totalFermMass_kg += (*i)->amount_kg();
+   }
+   
+   endInsertRows();
    
    if(parentTableWidget)
    {
@@ -76,49 +129,50 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
 
 bool FermentableTableModel::removeFermentable(Fermentable* ferm)
 {
-   QVector<Fermentable*>::iterator iter;
+   int i;
    
-   for( iter=fermObs.begin(); iter != fermObs.end(); iter++ )
-      if( *iter == ferm )
+   i = fermObs.indexOf(ferm);
+   if( i >= 0 )
+   {
+      beginRemoveRows( QModelIndex(), i, i );
+      disconnect( ferm, 0, this, 0 );
+      fermObs.removeAt(i);
+      
+      totalFermMass_kg -= ferm->amount_kg();
+      //reset(); // Tell everybody the table has changed.
+      endRemoveRows();
+      
+      if(parentTableWidget)
       {
-         fermObs.erase(iter);
-         removeObserved(ferm);
-    totalFermMass_kg -= ferm->getAmount_kg();
-         reset(); // Tell everybody the table has changed.
-         
-         if(parentTableWidget)
-         {
-            parentTableWidget->resizeColumnsToContents();
-            parentTableWidget->resizeRowsToContents();
-         }
-         
-         return true;
+         parentTableWidget->resizeColumnsToContents();
+         parentTableWidget->resizeRowsToContents();
       }
-   
+         
+      return true;
+   }
+      
    return false;
 }
 
 void FermentableTableModel::removeAll()
 {
-   int i;
-
-   for( i = 0; i < fermObs.size(); ++i )
-      removeObserved(fermObs[i]);
-
-   fermObs.clear();
-   totalFermMass_kg = 0;
-   reset();
+   beginRemoveRows( QModelIndex(), 0, fermObs.size()-1 );
+   while( !fermObs.isEmpty() )
+   {
+      disconnect( fermObs.takeLast(), 0, this, 0 );
+   }
+   endRemoveRows();
 }
 
 void FermentableTableModel::updateTotalGrains()
 {
-   unsigned int i, size;
+   int i, size;
    
    totalFermMass_kg = 0;
    
    size = fermObs.size();
    for( i = 0; i < size; ++i )
-      totalFermMass_kg += fermObs[i]->getAmount_kg();
+      totalFermMass_kg += fermObs[i]->amount_kg();
 }
 
 void FermentableTableModel::setDisplayPercentages(bool var)
@@ -126,22 +180,40 @@ void FermentableTableModel::setDisplayPercentages(bool var)
    displayPercentages = var;
 }
 
-void FermentableTableModel::notify(Observable* notifier, QVariant info)
+void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
    
-   // Find the notifier in the list
-   for( i = 0; i < (int)fermObs.size(); ++i )
+   // Is sender one of our fermentables?
+   Fermentable* fermSender = qobject_cast<Fermentable*>(sender());
+   if( fermSender )
    {
-      if( notifier == fermObs[i] )
-      {
-         emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                           QAbstractItemModel::createIndex(i, FERMNUMCOLS));
-
-         updateTotalGrains();
-         //reset();
-         break;
-      }
+      i = fermObs.indexOf(fermSender);
+      if( i < 0 )
+         return;
+      
+      updateTotalGrains();
+      emit dataChanged( QAbstractItemModel::createIndex(i, 0),
+                        QAbstractItemModel::createIndex(i, FERMNUMCOLS));
+      //reset();
+      return;
+   }
+   
+   // See if our recipe gained or lost fermentables.
+   Recipe* recSender = qobject_cast<Recipe*>(sender());
+   if( recSender == recObs && QString(prop.name()) == "fermentables" )
+   {
+      removeAll();
+      addFermentables( recObs->fermentables() );
+      return;
+   }
+   
+   // See if the database gained or lost fermentables.
+   if( sender() == &(Database::instance()) && QString(prop.name()) == "fermentables" )
+   {
+      removeAll();
+      addFermentables( Database::instance().fermentables() );
+      return;
    }
 }
 
@@ -173,48 +245,48 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
    {
       case FERMNAMECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getName());
+            return QVariant(row->name());
          else
             return QVariant();
       case FERMTYPECOL:
          if( role == Qt::DisplayRole )
-            return QVariant(row->getTypeStringTr());
+            return QVariant(row->typeStringTr());
          else if( role == Qt::UserRole )
-            return QVariant(row->getType());
+            return QVariant(row->type());
          else
             return QVariant();
       case FERMAMOUNTCOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->getAmount_kg(), Units::kilograms) );
+            return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms) );
          else
             return QVariant();
       case FERMISMASHEDCOL:
          if( role == Qt::CheckStateRole )
-            return QVariant( row->getIsMashed() ? Qt::Checked : Qt::Unchecked);
+            return QVariant( row->isMashed() ? Qt::Checked : Qt::Unchecked);
          else if( role == Qt::DisplayRole )
          {
-            if( row->getType() == Fermentable::TYPEGRAIN )
-               return row->getIsMashed() ? tr("Mashed") : tr("Steeped");
+            if( row->type() == Fermentable::Grain)
+               return row->isMashed() ? tr("Mashed") : tr("Steeped");
             else
-               return row->getIsMashed() ? tr("Mashed") : tr("Not mashed");
+               return row->isMashed() ? tr("Mashed") : tr("Not mashed");
          }
          else
             return QVariant();
       case FERMAFTERBOIL:
          if( role == Qt::CheckStateRole )
-            return QVariant( row->getAddAfterBoil() ? Qt::Checked : Qt::Unchecked );
+            return QVariant( row->addAfterBoil() ? Qt::Checked : Qt::Unchecked );
          else if( role == Qt::DisplayRole )
-            return row->getAddAfterBoil()? tr("Late") : tr("Normal");
+            return row->addAfterBoil()? tr("Late") : tr("Normal");
          else
             return QVariant();
       case FERMYIELDCOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->getYield_pct(), 0) );
+            return QVariant( Brewtarget::displayAmount(row->yield_pct(), 0) );
          else
             return QVariant();
       case FERMCOLORCOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayColor(row->getColor_srm(), 0) );
+            return QVariant( Brewtarget::displayColor(row->color_srm(), 0) );
          else
             return QVariant();
       default :
@@ -255,7 +327,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
    {
       double perMass = 0.0;
       if ( totalFermMass_kg > 0.0 )
-         perMass = fermObs[section]->getAmount_kg()/totalFermMass_kg;
+         perMass = fermObs[section]->amount_kg()/totalFermMass_kg;
       return QVariant( QString("%1%").arg( (double)100.0 * perMass, 0, 'f', 0 ) );
    }
    else
@@ -355,7 +427,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
 
 Fermentable* FermentableTableModel::getFermentable(unsigned int i)
 {
-   return fermObs[i];
+   return fermObs.at(i);
 }
 
 //======================CLASS FermentableItemDelegate===========================
@@ -448,21 +520,21 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
    
    if( col == FERMTYPECOL )
    {
-      QComboBox* box = (QComboBox*)editor;
+      QComboBox* box = qobject_cast<QComboBox*>(editor);
       int value = box->currentIndex();
       
       model->setData(index, value, Qt::EditRole);
    }
    else if( col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {
-      QCheckBox* checkBox = (QCheckBox*)editor;
+      QCheckBox* checkBox = qobject_cast<QCheckBox*>(editor);
       bool checked = (checkBox->checkState() == Qt::Checked);
       
       model->setData(index, checked, Qt::EditRole);
    }
    else
    {
-      QLineEdit* line = (QLineEdit*)editor;
+      QLineEdit* line = qobject_cast<QLineEdit*>(editor);
       
       model->setData(index, line->text(), Qt::EditRole);
    }

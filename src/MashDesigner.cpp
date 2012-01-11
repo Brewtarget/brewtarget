@@ -76,10 +76,10 @@ void MashDesigner::setRecipe(Recipe* rec)
 void MashDesigner::show()
 {
    // No point to run unless we have fermentables.
-   if( recObs && recObs->getNumFermentables() == 0 )
+   if( recObs && recObs->fermentables().size() == 0 )
    {
       QMessageBox::information(
-			   this,
+         this,
          tr("No Fermentables"),
          tr("Your recipe must have fermentables to design a mash.")
       );
@@ -111,19 +111,18 @@ bool MashDesigner::nextStep(int step)
    if( mashStep != 0 )
    {
       // NOTE: This needs to be changed. Assumes 1L of water is 1 kg.
-      MC += mashStep->getInfuseAmount_l() * HeatCalculations::Cw_calGC;
-      addedWater_l += mashStep->getInfuseAmount_l();
+      MC += mashStep->infuseAmount_l() * HeatCalculations::Cw_calGC;
+      addedWater_l += mashStep->infuseAmount_l();
 
       if( prevStep == 0 ) // If the last step is null, we need to add the influence of the tun.
-         MC += mash->getTunSpecificHeat_calGC() * mash->getTunWeight_kg();
+         MC += mash->tunSpecificHeat_calGC() * mash->tunWeight_kg();
    }
 
    prevStep = mashStep;
-   mashStep = mash->getMashStep(step);
+   mashStep = mash->mashSteps()[step];
    if( mashStep == 0 )
    {
-      mashStep = new MashStep();
-      mash->addMashStep(mashStep); // Come back to check on this later. Really need this new step to be inserted in right place.
+      mashStep = Database::instance().newMashStep( mash ); // TODO: Come back to check on this later. Really need this new step to be inserted in right place.
    }
 
    // Clear out some of the fields.
@@ -140,27 +139,27 @@ void MashDesigner::saveStep()
 {
    MashStep::Type type = static_cast<MashStep::Type>(comboBox_type->currentIndex());
 
-   mashStep->disableNotification();
+   //mashStep->disableNotification();
    mashStep->setName( lineEdit_name->text() );
    mashStep->setType( type );
    mashStep->setStepTemp_c( Brewtarget::tempQStringToSI(lineEdit_temp->text()) );
    mashStep->setStepTime_min( Brewtarget::timeQStringToSI(lineEdit_time->text()) );
 
-   if( type == MashStep::TYPEINFUSION )
+   if( type == MashStep::Infusion)
    {
       mashStep->setInfuseAmount_l( getSelectedAmount_l() );
       mashStep->setInfuseTemp_c( getSelectedTemp_c() );
    }
 
-   mashStep->reenableNotification();
-   mashStep->forceNotify();
+   //mashStep->reenableNotification();
+   //mashStep->forceNotify();
 }
 
 double MashDesigner::maxTemp_c()
 {
-   if ( recObs && recObs->getEquipment())
+   if ( recObs && recObs->equipment())
    {
-      return recObs->getEquipment()->getBoilingPoint_c();
+      return recObs->equipment()->boilingPoint_c();
    }
    else
       return 100;
@@ -189,9 +188,9 @@ double MashDesigner::maxAmt_l()
 {
    // However much more we can fit in the tun.
    if( ! isBatchSparge() )
-      return (equip==0)? 0 : equip->getTunVolume_l() - mashVolume_l();
+      return (equip==0)? 0 : equip->tunVolume_l() - mashVolume_l();
    else
-      return (equip == 0)? 0 : equip->getTunVolume_l() - grainVolume_l();
+      return (equip == 0)? 0 : equip->tunVolume_l() - grainVolume_l();
 }
 
 // Returns the required volume of water to infuse if the strike water is
@@ -203,13 +202,13 @@ double MashDesigner::volFromTemp_l( double temp_c )
 
    double tw = temp_c;
    // Final temp is target temp.
-   double tf = mashStep->getStepTemp_c();
+   double tf = mashStep->stepTemp_c();
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
-   double t1 = (prevStep==0)? mash->getGrainTemp_c() : prevStep->getStepTemp_c();
-   double mt = mash->getTunSpecificHeat_calGC();
-   double ct = mash->getTunWeight_kg();
+   double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
+   double mt = mash->tunSpecificHeat_calGC();
+   double ct = mash->tunWeight_kg();
 
-   double mw = 1/(HeatCalculations::Cw_calGC * (tw-tf)) * (MC*(tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->getTunTemp_c()) : 0) );
+   double mw = 1/(HeatCalculations::Cw_calGC * (tw-tf)) * (MC*(tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->tunTemp_c()) : 0) );
 
    // NOTE: This needs to be changed. Assumes 1L of water is 1 kg.
    return mw;
@@ -224,29 +223,29 @@ double MashDesigner::tempFromVolume_c( double vol_l )
 
    double absorption_LKg;
    if( equip != 0 )
-      absorption_LKg = equip->getGrainAbsorption_LKg();
+      absorption_LKg = equip->grainAbsorption_LKg();
    else
       absorption_LKg = HeatCalculations::absorption_LKg;
 
-   double tf = mashStep->getStepTemp_c();
+   double tf = mashStep->stepTemp_c();
    // NOTE: This needs to be changed. Assumes 1L = 1 kg.
    double mw = vol_l;
    if( mw <= 0 )
       return 0.0;
    double cw = HeatCalculations::Cw_calGC;
    // Initial temp is the last step's temp if the last step exists, otherwise the grain temp.
-   double t1 = (prevStep==0)? mash->getGrainTemp_c() : prevStep->getStepTemp_c();
+   double t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c();
    // When batch sparging, you lose about 10C from previous step.
    if( isBatchSparge() )
-      t1 = (prevStep==0)? mash->getGrainTemp_c() : prevStep->getStepTemp_c() - 10;
-   double mt = mash->getTunSpecificHeat_calGC();
-   double ct = mash->getTunWeight_kg();
+      t1 = (prevStep==0)? mash->grainTemp_c() : prevStep->stepTemp_c() - 10;
+   double mt = mash->tunSpecificHeat_calGC();
+   double ct = mash->tunWeight_kg();
 
    double batchMC = grain_kg * HeatCalculations::Cgrain_calGC
                     + absorption_LKg * grain_kg * HeatCalculations::Cw_calGC
-                    + mash->getTunWeight_kg() * mash->getTunSpecificHeat_calGC();
+                    + mash->tunWeight_kg() * mash->tunSpecificHeat_calGC();
 
-   double tw = 1/(mw*cw) * ( (isBatchSparge()? batchMC : MC) * (tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->getTunTemp_c()) : 0) ) + tf;
+   double tw = 1/(mw*cw) * ( (isBatchSparge()? batchMC : MC) * (tf-t1) + ((prevStep==0)? mt*ct*(tf-mash->tunTemp_c()) : 0) ) + tf;
 
    return tw;
 }
@@ -263,22 +262,19 @@ bool MashDesigner::initializeMash()
    if(recObs == 0)
       return false;
 
-   mash = recObs->getMash();
+   mash = recObs->mash();
    if( mash == 0 )
-   {
-      mash = new Mash();
-      recObs->setMash(mash);
-   }
+      mash = Database::instance().newMash( recObs );
 
-   equip = recObs->getEquipment();
+   equip = recObs->equipment();
    if( equip == 0 )
    {
       QMessageBox::warning(this, tr("No Equipment"), tr("You have not set an equipment for this recipe. We really cannot continue without one."));
       return false;
    }
 
-   mash->setTunSpecificHeat_calGC( equip->getTunSpecificHeat_calGC() );
-   mash->setTunWeight_kg( equip->getTunWeight_kg() );
+   mash->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
+   mash->setTunWeight_kg( equip->tunWeight_kg() );
    
    bool ok;
    QString dialogText = QInputDialog::getText(
@@ -301,14 +297,14 @@ bool MashDesigner::initializeMash()
 
    mash->removeAllMashSteps();
    curStep = 0;
-   MC = recObs->getGrainsInMash_kg() * HeatCalculations::Cgrain_calGC;
+   MC = recObs->grainsInMash_kg() * HeatCalculations::Cgrain_calGC;
    addedWater_l = 0;
    mashStep = 0;
    prevStep = 0;
-   grain_kg = recObs->getGrainsInMash_kg();
+   grain_kg = recObs->grainsInMash_kg();
 
-   label_tunVol->setText(Brewtarget::displayAmount(equip->getTunVolume_l(), Units::liters));
-   label_wortMax->setText(Brewtarget::displayAmount(recObs->getBoilSize_l(), Units::liters));
+   label_tunVol->setText(Brewtarget::displayAmount(equip->tunVolume_l(), Units::liters));
+   label_wortMax->setText(Brewtarget::displayAmount(recObs->boilSize_l(), Units::liters));
    updateMinAmt();
    updateMaxAmt();
    updateMinTemp();
@@ -324,7 +320,7 @@ void MashDesigner::updateFullness()
    if( mashStep == 0 )
       return;
 
-   MashStep::Type type = mashStep->getType();
+   MashStep::Type type = mashStep->type();
 
    if( equip == 0 )
    {
@@ -334,10 +330,10 @@ void MashDesigner::updateFullness()
 
    double vol_l;
    if( ! isBatchSparge() )
-      vol_l = mashVolume_l() + ( (type==MashStep::TYPEINFUSION) ? getSelectedAmount_l() : 0);
+      vol_l = mashVolume_l() + ( (type==MashStep::Infusion) ? getSelectedAmount_l() : 0);
    else
       vol_l = grainVolume_l() + getSelectedAmount_l();
-   double ratio = vol_l / equip->getTunVolume_l();
+   double ratio = vol_l / equip->tunVolume_l();
    if( ratio < 0 )
      ratio = 0;
    if( ratio > 1 )
@@ -345,7 +341,7 @@ void MashDesigner::updateFullness()
 
    progressBar_fullness->setValue(ratio*progressBar_fullness->maximum());
    label_mashVol->setText(Brewtarget::displayAmount(vol_l, Units::liters));
-   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + ((type==MashStep::TYPEINFUSION) ? getSelectedAmount_l() : 0) )/grain_kg ));
+   label_thickness->setText(Brewtarget::displayThickness( (addedWater_l + ((type==MashStep::Infusion) ? getSelectedAmount_l() : 0) )/grain_kg ));
 }
 
 void MashDesigner::updateCollectedWort()
@@ -353,8 +349,8 @@ void MashDesigner::updateCollectedWort()
    if( recObs == 0 )
       return;
 
-   double wort_l = recObs->estimateWortFromMash_l();
-   double ratio = wort_l / recObs->getBoilSize_l();
+   double wort_l = recObs->wortFromMash_l();
+   double ratio = wort_l / recObs->boilSize_l();
    if( ratio < 0 )
      ratio = 0;
    if( ratio > 1 )
@@ -409,7 +405,7 @@ void MashDesigner::updateTempSlider()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double temp = tempFromVolume_c( getSelectedAmount_l() );
 
@@ -419,7 +415,7 @@ void MashDesigner::updateTempSlider()
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( mashStep->getType() == MashStep::TYPEDECOCTION )
+   else if( mashStep->type() == MashStep::Decoction )
    {
       horizontalSlider_temp->setValue(horizontalSlider_temp->maximum());
    }
@@ -432,7 +428,7 @@ void MashDesigner::updateAmtSlider()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double vol = volFromTemp_l( getSelectedTemp_c() );
       double ratio = (vol - minAmt_l()) / (maxAmt_l() - minAmt_l());
@@ -450,7 +446,7 @@ void MashDesigner::updateAmt()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double vol = horizontalSlider_amount->value() / (double)(horizontalSlider_amount->maximum())* (maxAmt_l() - minAmt_l()) + minAmt_l();
 
@@ -459,8 +455,8 @@ void MashDesigner::updateAmt()
       if( mashStep != 0 )
          mashStep->setInfuseAmount_l( vol );
    }
-   else if( mashStep->getType() == MashStep::TYPEDECOCTION )
-      label_amt->setText(Brewtarget::displayAmount(mashStep->getDecoctionAmount_l(), Units::liters));
+   else if( mashStep->type() == MashStep::Decoction )
+      label_amt->setText(Brewtarget::displayAmount(mashStep->decoctionAmount_l(), Units::liters));
    else
       label_amt->setText(Brewtarget::displayAmount(0, Units::liters));
 }
@@ -470,7 +466,7 @@ void MashDesigner::updateTemp()
    if( mashStep == 0 )
       return;
 
-   if( mashStep->getType() == MashStep::TYPEINFUSION )
+   if( mashStep->type() == MashStep::Infusion )
    {
       double temp = horizontalSlider_temp->value() / (double)(horizontalSlider_temp->maximum()) * (maxTemp_c() - minTemp_c()) + minTemp_c();
 
@@ -479,10 +475,10 @@ void MashDesigner::updateTemp()
       if( mashStep != 0 )
          mashStep->setInfuseTemp_c( temp );
    }
-   else if( mashStep->getType() == MashStep::TYPEDECOCTION )
+   else if( mashStep->type() == MashStep::Decoction )
       label_temp->setText(Brewtarget::displayAmount( maxTemp_c(), Units::celsius));
    else
-      label_temp->setText(Brewtarget::displayAmount( mashStep->getStepTemp_c(), Units::celsius));
+      label_temp->setText(Brewtarget::displayAmount( mashStep->stepTemp_c(), Units::celsius));
 }
 
 void MashDesigner::saveTargetTemp()
@@ -517,14 +513,14 @@ double MashDesigner::getDecoctionAmount_l()
    double c_w, c_g;
    double tf, t1;
 
-   tf = mashStep->getStepTemp_c();
+   tf = mashStep->stepTemp_c();
    if( prevStep == 0 )
    {
       QMessageBox::critical(this, tr("Decoction error"), tr("The first mash step cannot be a decoction."));
       Brewtarget::log(Brewtarget::ERROR, QString("MashDesigner: First step not a decoction."));
       return 0;
    }
-   t1 = prevStep->getStepTemp_c();
+   t1 = prevStep->stepTemp_c();
 
    m_w = addedWater_l; // NOTE: this is bad. Assumes 1L = 1 kg.
    m_g = grain_kg;
@@ -556,12 +552,12 @@ void MashDesigner::typeChanged(int t)
    if( mashStep != 0 )
       mashStep->setType(type);
 
-   if( type == MashStep::TYPEINFUSION )
+   if( type == MashStep::Infusion )
    {
       horizontalSlider_amount->setEnabled(true);
       horizontalSlider_temp->setEnabled(true);
    }
-   else if( type == MashStep::TYPEDECOCTION )
+   else if( type == MashStep::Decoction )
    {
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);
@@ -574,7 +570,7 @@ void MashDesigner::typeChanged(int t)
       updateTempSlider();
       updateTemp();
    }
-   else if( type == MashStep::TYPETEMPERATURE )
+   else if( type == MashStep::Temperature )
    {
       horizontalSlider_amount->setEnabled(false);
       horizontalSlider_temp->setEnabled(false);

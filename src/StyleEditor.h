@@ -22,11 +22,15 @@
 class StyleEditor;
 
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_styleEditor.h"
-#include "style.h"
-#include "observable.h"
 
-class StyleEditor : public QDialog, public Ui::styleEditor, public Observer
+// Forward declarations.
+class Style;
+class StyleListModel;
+
+class StyleEditor : public QDialog, public Ui::styleEditor
 {
    Q_OBJECT
 
@@ -43,12 +47,12 @@ public slots:
    void clearAndClose();
 
    void styleSelected( const QString& text );
-
+   void changed(QMetaProperty,QVariant);
 private:
    Style* obsStyle;
-
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
-   void showChanges();
+   StyleListModel* styleListModel;
+   
+   void showChanges(QMetaProperty* prop = 0);
 };
 
 #endif   /* _STYLEEDITOR_H */

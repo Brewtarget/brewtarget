@@ -22,10 +22,13 @@
 class HopEditor;
 
 #include "ui_hopEditor.h"
-#include "hop.h"
-#include "observable.h"
+#include <QMetaProperty>
+#include <QVariant>
 
-class HopEditor : public QDialog, private Ui::hopEditor, Observer
+// Forward declarations.
+class Hop;
+
+class HopEditor : public QDialog, private Ui::hopEditor
 {
    Q_OBJECT
 
@@ -37,12 +40,15 @@ public:
 public slots:
    void save();
    void clearAndClose();
+   void changed(QMetaProperty,QVariant);
 
 private:
    Hop* obsHop;
 
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
-   void showChanges();
+   /*! Updates the UI elements based on \b prop.
+    *  If null, updates all UI elements.
+    */
+   void showChanges(QMetaProperty* prop = 0);
 };
 
 #endif   /* _HOPEDITOR_H */

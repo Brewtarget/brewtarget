@@ -56,6 +56,7 @@
 #include "CelsiusTempUnitSystem.h"
 #include "ImperialVolumeUnitSystem.h"
 #include "BtSplashScreen.h"
+#include "MainWindow.h"
 
 QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
@@ -535,9 +536,9 @@ int Brewtarget::run()
    loadTranslations(); // Do internationalization.
 
    app->processEvents();
-   
    splashScreen.showMessage("Loading...");
-   Database::initialize();
+   app->processEvents();
+   Database::instance();
    
    mainWindow = new MainWindow();
    mainWindow->setVisible(true);
@@ -547,10 +548,13 @@ int Brewtarget::run()
    checkForNewVersion();
 
    ret = app->exec();
+   
    savePersistentOptions();
+   
    // Close log file.
    if( logFile != 0 && logFile->isOpen() )
       logFile->close();
+   
    return ret;
 }
 
@@ -595,6 +599,10 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
    int fieldWidth = 0;
    char format = 'f';
 
+   // Check for insane values.
+   if( Algorithms::Instance().isnan(amount) || Algorithms::Instance().isinf(amount) )
+      return "?";
+   
    // Special case.
    if( units == 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
@@ -1068,4 +1076,15 @@ QString Brewtarget::displayColor( double srm, bool showUnits )
    }
 
    return ret;
+}
+
+QString Brewtarget::displayDate( QDate const& date )
+{
+   QLocale loc(QLocale::system().name());
+   return date.toString(loc.dateFormat(QLocale::ShortFormat));
+}
+
+MainWindow* Brewtarget::getMainWindow()
+{
+   return mainWindow;
 }

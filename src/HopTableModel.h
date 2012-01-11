@@ -26,43 +26,54 @@ class HopItemDelegate;
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
+#include <QTableView>
 #include <QItemDelegate>
 #include <QVector>
 #include "hop.h"
-#include "observable.h"
-#include "HopTableWidget.h"
 #include "recipe.h"
 
 enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
-class HopTableModel : public QAbstractTableModel, public MultipleObserver
+class HopTableModel : public QAbstractTableModel
 {
    Q_OBJECT
            
 public:
-   HopTableModel(HopTableWidget* parent=0);
+   HopTableModel(QTableView* parent=0);
    virtual ~HopTableModel();
-   void setRecipe( Recipe* rec ); // You need to set a recipe if you want to show IBUs.
+   //! Observe a recipe's list of fermentables.
+   void observeRecipe(Recipe* rec);
+   //! Whether or not we should be looking at the database.
+   void observeDatabase(bool val);
    void setShowIBUs( bool var ); // If you want to show IBUs.
    void addHop(Hop* hop);
+   //! Watch all the \b ferms for changes.
+   void addHops(QList<Hop*> hops);
    Hop* getHop(unsigned int i);
-   bool removeHop(Hop* hop); // Returns true if "hop" is successfully found and removed.
+   //! \returns true if "hop" is successfully found and removed.
+   bool removeHop(Hop* hop);
    void removeAll();
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
    
-   // Inherit the following from QAbstractItemModel via QAbstractTableModel
+   //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
+public slots:
+   void changed(QMetaProperty, QVariant);
+   
 private:
-   QVector<Hop*> hopObs;
+   QList<Hop*> hopObs;
    Recipe* recObs;
-   HopTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.
 };
 

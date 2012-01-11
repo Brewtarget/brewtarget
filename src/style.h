@@ -18,31 +18,52 @@
 
 #ifndef _STYLE_H
 #define _STYLE_H
-#include <exception>
+
 #include <QString>
 #include <QStringList>
-#include "observable.h"
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
+// Forward declarations.
 class Style;
+bool operator<(Style &s1, Style &s2);
+bool operator==(Style &s1, Style &s2);
 
-class Style : public Observable, public BeerXMLElement
+class Style : public BeerXMLElement
 {
+   Q_OBJECT
+   
+   friend class Database;
 public:
-
-   Style();
-   Style(const QDomNode& styleNode);
 
    virtual ~Style() {}
 
-   friend bool operator<(Style &s1, Style &s2);
-   friend bool operator==(Style &s1, Style &s2);
-
-   enum Type { TYPELAGER=0, TYPEALE, TYPEMEAD, TYPEWHEAT, TYPEMIXED, TYPECIDER, NUMTYPES };
-
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
+   //enum Type { TYPELAGER=0, TYPEALE, TYPEMEAD, TYPEWHEAT, TYPEMIXED, TYPECIDER, NUMTYPES };
+   enum Type {Lager, Ale, Mead, Wheat, Mixed, Cider};
+   Q_ENUMS( Type )
+   
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( QString category READ category WRITE setCategory /*NOTIFY changed*/ /*changedCategory*/ )
+   Q_PROPERTY( QString categoryNumber READ categoryNumber WRITE setCategoryNumber /*NOTIFY changed*/ /*changedCategoryNumber*/ )
+   Q_PROPERTY( QString styleLetter READ styleLetter WRITE setStyleLetter /*NOTIFY changed*/ /*changedStyleLetter*/ )
+   Q_PROPERTY( QString styleGuide READ styleGuide WRITE setStyleGuide /*NOTIFY changed*/ /*changedStyleGuide*/ )
+   Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   Q_PROPERTY( double ogMin READ ogMin WRITE setOgMin /*NOTIFY changed*/ /*changedOgMin*/ )
+   Q_PROPERTY( double ogMax READ ogMax WRITE setOgMax /*NOTIFY changed*/ /*changedOgMax*/ )
+   Q_PROPERTY( double fgMin READ fgMin WRITE setFgMin /*NOTIFY changed*/ /*changedFgMin*/ )
+   Q_PROPERTY( double fgMax READ fgMax WRITE setFgMax /*NOTIFY changed*/ /*changedFgMax*/ )
+   Q_PROPERTY( double ibuMin READ ibuMin WRITE setIbuMin /*NOTIFY changed*/ /*changedIbuMin*/ )
+   Q_PROPERTY( double ibuMax READ ibuMax WRITE setIbuMax /*NOTIFY changed*/ /*changedIbuMax*/ )
+   Q_PROPERTY( double colorMin_srm READ colorMin_srm WRITE setColorMin_srm /*NOTIFY changed*/ /*changedColorMin_srm*/ )
+   Q_PROPERTY( double colorMax_srm READ colorMax_srm WRITE setColorMax_srm /*NOTIFY changed*/ /*changedColorMax_srm*/ )
+   Q_PROPERTY( double carbMin_vol READ carbMin_vol WRITE setCarbMin_vol /*NOTIFY changed*/ /*changedCarbMin_vol*/ )
+   Q_PROPERTY( double carbMax_vol READ carbMax_vol WRITE setCarbMax_vol /*NOTIFY changed*/ /*changedCarbMax_vol*/ )
+   Q_PROPERTY( double abvMin_pct READ abvMin_pct WRITE setAbvMin_pct /*NOTIFY changed*/ /*changedAbvMin_pct*/ )
+   Q_PROPERTY( double abvMax_pct READ abvMax_pct WRITE setAbvMax_pct /*NOTIFY changed*/ /*changedAbvMax_pct*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY( QString profile READ profile WRITE setProfile /*NOTIFY changed*/ /*changedProfile*/ )
+   Q_PROPERTY( QString ingredients READ ingredients WRITE setIngredients /*NOTIFY changed*/ /*changedIngredients*/ )
+   Q_PROPERTY( QString examples READ examples WRITE setExamples /*NOTIFY changed*/ /*changedExamples*/ )
    
    void setName( const QString& var );
    void setCategory( const QString& var );
@@ -67,62 +88,65 @@ public:
    void setIngredients( const QString& var );
    void setExamples( const QString& var );
 
-   QString getName() const;
-   QString getCategory() const;
-   QString getCategoryNumber() const;
-   QString getStyleLetter() const;
-   QString getStyleGuide() const;
-   const Type getType() const;
-   const QString getTypeString() const;
-   double getOgMin() const;
-   double getOgMax() const;
-   double getFgMin() const;
-   double getFgMax() const;
-   double getIbuMin() const;
-   double getIbuMax() const;
-   double getColorMin_srm() const;
-   double getColorMax_srm() const;
-   double getCarbMin_vol() const;
-   double getCarbMax_vol() const;
-   double getAbvMin_pct() const;
-   double getAbvMax_pct() const;
-   QString getNotes() const;
-   QString getProfile() const;
-   QString getIngredients() const;
-   QString getExamples() const;
+   QString name() const;
+   QString category() const;
+   QString categoryNumber() const;
+   QString styleLetter() const;
+   QString styleGuide() const;
+   const Type type() const;
+   const QString typeString() const;
+   double ogMin() const;
+   double ogMax() const;
+   double fgMin() const;
+   double fgMax() const;
+   double ibuMin() const;
+   double ibuMax() const;
+   double colorMin_srm() const;
+   double colorMax_srm() const;
+   double carbMin_vol() const;
+   double carbMax_vol() const;
+   double abvMin_pct() const;
+   double abvMax_pct() const;
+   QString notes() const;
+   QString profile() const;
+   QString ingredients() const;
+   QString examples() const;
+
+signals:
+   /*
+   void changedName(QString);
+   void changedCategory(QString);
+   void changedCategoryNumber(QString);
+   void changedStyleLetter(QString);
+   void changedStyleGuide(QString);
+   void changedType(Type);
+   void changedOgMin(double);
+   void changedOgMax(double);
+   void changedFgMin(double);
+   void changedFgMax(double);
+   void changedIbuMin(double);
+   void changedIbuMax(double);
+   void changedColorMin_srm(double);
+   void changedColorMax_srm(double);
+   void changedCarbMin_vol(double);
+   void changedCarbMax_vol(double);
+   void changedAbvMin_pct(double);
+   void changedAbvMax_pct(double);
+   void changedNotes(QString);
+   void changedProfile(QString);
+   void changedIngredients(QString);
+   void changedExamples(QString);
+   */
 
 private:
-
-   // Mandatory fields.
-   QString name;
-   static const int version = 1;
-   QString category;
-   QString categoryNumber;
-   QString styleLetter;
-   QString styleGuide;
-   Type type;
-   double ogMin;
-   double ogMax;
-   double fgMin;
-   double fgMax;
-   double ibuMin;
-   double ibuMax;
-   double colorMin_srm;
-   double colorMax_srm;
+   Style();
+   Style( Style const& other );
    
-   // Optional fields
-   double carbMin_vol;
-   double carbMax_vol;
-   double abvMin_pct;
-   double abvMax_pct;
-   QString notes;
-   QString profile;
-   QString ingredients;
-   QString examples;
-
-   void setDefaults();
    bool isValidType( const QString &str );
    static QStringList types;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 inline bool StylePtrLt( Style* lhs, Style* rhs)

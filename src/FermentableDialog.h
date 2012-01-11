@@ -23,23 +23,22 @@ class FermentableDialog;
 
 #include <QWidget>
 #include <QDialog>
+#include <QMetaProperty>
 #include <QVariant>
 #include "ui_fermentableDialog.h"
-#include "observable.h"
-#include "database.h"
-//#include "MainWindow.h"
-class MainWindow;
-#include "FermentableEditor.h"
 
-class FermentableDialog : public QDialog, public Ui::fermentableDialog, public Observer
+// Forward declarations.
+class MainWindow;
+class FermentableEditor;
+class FermentableTableModel;
+class FermentableSortFilterProxyModel;
+class FermentableDialog : public QDialog, public Ui::fermentableDialog
 {
    Q_OBJECT
 
 public:
    FermentableDialog(MainWindow* parent);
    virtual ~FermentableDialog() {}
-   void startObservingDB();
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    /*! If \b index is the default, will add the selected fermentable to list.
@@ -49,14 +48,16 @@ public slots:
    void removeFermentable();
    void editSelected();
    void newFermentable();
+   //void changed(QMetaProperty,QVariant);
 
 private:
-   Database* dbObs;
    MainWindow* mainWindow;
-   FermentableEditor *fermEdit;
-   unsigned int numFerms;
+   FermentableTableModel* fermTableModel;
+   FermentableSortFilterProxyModel* fermTableProxy;
+   FermentableEditor* fermEdit;
+   int numFerms;
 
-   void populateTable();
+   //void populateTable();
 };
 
 #endif   /* _FERMENTABLEDIALOG_H */

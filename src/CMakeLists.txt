@@ -6,10 +6,52 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 # Put all the required Qt dirs in the includes.
 INCLUDE(${QT_USE_FILE})
 
+# (ADD_PCH_RULE  _header_filename _src_list)
+# Version 7/26/2010
+#
+# use this macro before "add_executable"
+#
+# _header_filename
+#  header to make a .gch
+#
+# _src_list 
+#   the variable name (do not use ${..}) which contains a
+#     a list of sources (a.cpp b.cpp c.cpp ...)
+#  This macro will append a header file to it, then this src_list can be used in
+#  "add_executable..."
+#
+#
+# Now a .gch file should be generated and gcc should use it. 
+#        (add -Winvalid-pch to the cpp flags to verify)
+#
+# make clean should delete the pch file
+#
+# example : ADD_PCH_RULE(headers.h myprog_SRCS)
+MACRO (ADD_PCH_RULE  _header_filename _src_list)
+   SET(_gch_filename "${CMAKE_CURRENT_BINARY_DIR}/${_header_filename}.gch")
+   SET(_header "${CMAKE_CURRENT_SOURCE_DIR}/${_header_filename}")
+
+   LIST(APPEND ${_src_list} ${_gch_filename})
+
+   SET (_args ${CMAKE_CXX_FLAGS})
+   LIST(APPEND _args -c ${_header} -o ${_gch_filename})
+
+   GET_DIRECTORY_PROPERTY(DIRINC INCLUDE_DIRECTORIES)
+   FOREACH(_inc ${DIRINC})
+      LIST(APPEND _args "-I" ${_inc})
+   ENDFOREACH(_inc ${DIRINC})
+
+   SEPARATE_ARGUMENTS(_args)
+
+   ADD_CUSTOM_COMMAND(OUTPUT ${_gch_filename}
+                      COMMAND rm -f ${_gch_filename}
+                      COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} ${_args}
+                      DEPENDS ${_header})
+ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
+
 # Variable that contains all the .cpp files in this project.
 SET( brewtarget_SRCS
     ${SRCDIR}/Algorithms.cpp
-    ${SRCDIR}/database.cpp
     ${SRCDIR}/BeerXMLElement.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
@@ -24,8 +66,11 @@ SET( brewtarget_SRCS
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
+    ${SRCDIR}/CustomComboBox.cpp
+    ${SRCDIR}/database.cpp
     ${SRCDIR}/equipment.cpp
-    ${SRCDIR}/EquipmentComboBox.cpp
+    ${SRCDIR}/EquipmentButton.cpp
+    ${SRCDIR}/EquipmentListModel.cpp
     ${SRCDIR}/EquipmentEditor.cpp
     ${SRCDIR}/FahrenheitTempUnitSystem.cpp
     ${SRCDIR}/fermentable.cpp
@@ -33,7 +78,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/FermentableDialog.cpp
     ${SRCDIR}/FermentableSortFilterProxyModel.cpp
     ${SRCDIR}/FermentableTableModel.cpp
-    ${SRCDIR}/FermentableTableWidget.cpp
     ${SRCDIR}/main.cpp
     ${SRCDIR}/HeatCalculations.cpp
     ${SRCDIR}/hop.cpp
@@ -41,7 +85,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HopEditor.cpp
     ${SRCDIR}/HopSortFilterProxyModel.cpp
     ${SRCDIR}/HopTableModel.cpp
-    ${SRCDIR}/HopTableWidget.cpp
     ${SRCDIR}/HtmlViewer.cpp
     ${SRCDIR}/instruction.cpp
     ${SRCDIR}/IbuMethods.cpp
@@ -63,22 +106,22 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MiscDialog.cpp
     ${SRCDIR}/MiscSortFilterProxyModel.cpp
     ${SRCDIR}/MiscTableModel.cpp
-    ${SRCDIR}/MiscTableWidget.cpp
-    ${SRCDIR}/observable.cpp
-    ${SRCDIR}/observer.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrimingDialog.cpp
+    ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeComboBox.cpp
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RefractoDialog.cpp
+    ${SRCDIR}/SetterCommand.cpp
+    ${SRCDIR}/SetterCommandStack.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
     ${SRCDIR}/style.cpp
-    ${SRCDIR}/StyleComboBox.cpp
+    ${SRCDIR}/StyleListModel.cpp
     ${SRCDIR}/StyleEditor.cpp
     ${SRCDIR}/TimerListDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
@@ -96,7 +139,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/YeastDialog.cpp
     ${SRCDIR}/YeastEditor.cpp
     ${SRCDIR}/YeastTableModel.cpp
-    ${SRCDIR}/YeastTableWidget.cpp
     ${SRCDIR}/YeastSortFilterProxyModel.cpp
     ${SRCDIR}/RecipeExtrasDialog.cpp
     ${SRCDIR}/MashDesigner.cpp
@@ -150,26 +192,29 @@ SET( brewtarget_UIS
 # In other words, classes that have Q_OBJECT declarations and stuff.
 SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
+    ${SRCDIR}/BeerXMLElement.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
+    ${SRCDIR}/brewnote.h
     ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/BrewTargetTreeModel.h
     ${SRCDIR}/BrewTargetTreeView.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtSplashScreen.h
     ${SRCDIR}/ConverterTool.h
-    ${SRCDIR}/EquipmentComboBox.h
+    ${SRCDIR}/CustomComboBox.h
+    ${SRCDIR}/database.h
+    ${SRCDIR}/EquipmentButton.h
+    ${SRCDIR}/EquipmentListModel.h
     ${SRCDIR}/EquipmentEditor.h
     ${SRCDIR}/FermentableEditor.h
     ${SRCDIR}/FermentableDialog.h
     ${SRCDIR}/FermentableSortFilterProxyModel.h
     ${SRCDIR}/FermentableTableModel.h
-    ${SRCDIR}/FermentableTableWidget.h
     ${SRCDIR}/HopDialog.h
     ${SRCDIR}/HopEditor.h
     ${SRCDIR}/HopSortFilterProxyModel.h
     ${SRCDIR}/HopTableModel.h
-    ${SRCDIR}/HopTableWidget.h
     ${SRCDIR}/InstructionWidget.h
     ${SRCDIR}/MainWindow.h
     ${SRCDIR}/MaltinessWidget.h
@@ -184,18 +229,19 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/MiscEditor.h
     ${SRCDIR}/MiscSortFilterProxyModel.h
     ${SRCDIR}/MiscTableModel.h
-    ${SRCDIR}/MiscTableWidget.h
     ${SRCDIR}/OgAdjuster.h
     ${SRCDIR}/OptionDialog.h
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrimingDialog.h
+    ${SRCDIR}/QueuedMethod.h
     ${SRCDIR}/RecipeComboBox.h
     ${SRCDIR}/RecipeExtrasDialog.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
-    ${SRCDIR}/StyleComboBox.h
+    ${SRCDIR}/SetterCommandStack.h
+    ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleEditor.h
     ${SRCDIR}/TimerListDialog.h
     ${SRCDIR}/TimerWidget.h
@@ -206,7 +252,17 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/YeastEditor.h
     ${SRCDIR}/YeastSortFilterProxyModel.h
     ${SRCDIR}/YeastTableModel.h
-    ${SRCDIR}/YeastTableWidget.h
+    ${SRCDIR}/equipment.h
+    ${SRCDIR}/fermentable.h
+    ${SRCDIR}/hop.h
+    ${SRCDIR}/instruction.h
+    ${SRCDIR}/mash.h
+    ${SRCDIR}/mashstep.h
+    ${SRCDIR}/misc.h
+    ${SRCDIR}/recipe.h
+    ${SRCDIR}/style.h
+    ${SRCDIR}/water.h
+    ${SRCDIR}/yeast.h
 )
 
 SET( FILES_TO_TRANSLATE
@@ -214,28 +270,13 @@ SET( FILES_TO_TRANSLATE
      ${brewtarget_UIS}
 )
 
-#==============================Setup the config.h==============================
-
-# "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
-# by the below corresponding value in ${CONFIGDATADIR} below when
-# CONFIGURE_FILE() is called.
-IF( IS_ABSOLUTE ${DATAPATH} )
-   SET( CONFIGDATADIR "${DATAPATH}/" )
-ELSE()
-   SET( CONFIGDATADIR "/${DATAPATH}/" )
-ENDIF()
-
-IF( IS_ABSOLUTE ${DOCPATH} )
-   SET( CONFIGDOCDIR "${DOCPATH}/" )
-ELSE()
-   SET( CONFIGDOCDIR "/${DOCPATH}/" )
-ENDIF()
-
-# Tell cmake where the configure file is and where
-# to put the output. All variables in config.in written as "${VAR}$
-# will be replaced by VAR as determined by cmake in config.h.
-# Outputs only in the build directory.
-CONFIGURE_FILE( config.in config.h )
+#======Speed up compilation by using precompiled headers for development======
+#IF( UNIX AND NOT APPLE )
+#   SET( precompiled_h "equipment.h" "fermentable.h" "hop.h" "instruction.h" "mash.h" "mashstep.h" "misc.h" "recipe.h" "style.h" "unit.h" "water.h" "yeast.h" "database.h" "brewtarget.h" )
+#   FOREACH( header ${precompiled_h} )
+#      ADD_PCH_RULE( ${header} brewtarget_SRCS )
+#   ENDFOREACH()
+#ENDIF()
 
 #==================================Qt Junk=====================================
 

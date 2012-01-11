@@ -25,19 +25,21 @@ class WaterItemDelegate;
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
+#include <QMetaProperty>
 #include <QVariant>
-#include <Qt>
 #include <QItemDelegate>
-#include <QVector>
-#include "water.h"
-#include "observable.h"
-#include "WaterTableWidget.h"
+#include <QList>
+
+// Forward declarations.
+class Water;
+class WaterTableWidget;
+class Recipe;
 
 enum{ WATERNAMECOL, WATERAMOUNTCOL, WATERCALCIUMCOL, WATERBICARBONATECOL,
       WATERSULFATECOL, WATERCHLORIDECOL, WATERSODIUMCOL, WATERMAGNESIUMCOL,
       WATERNUMCOLS /*This one MUST be last*/};
 
-class WaterTableModel : public QAbstractTableModel, public MultipleObserver
+class WaterTableModel : public QAbstractTableModel
 {
    Q_OBJECT
 
@@ -45,20 +47,31 @@ public:
    WaterTableModel(WaterTableWidget* parent=0);
    virtual ~WaterTableModel() {}
    void addWater(Water* water);
+   void addWaters(QList<Water*> waters);
+   void observeRecipe(Recipe* rec);
+   void observeDatabase(bool val);
    bool removeWater(Water* water); // Returns true if "water" is successfully found and removed.
    void removeAll();
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
 
-   // Inherit the following from QAbstractItemModel via QAbstractTableModel
+   //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
+public slots:
+   void changed(QMetaProperty,QVariant);
+   
 private:
-   QVector<Water*> waterObs;
+   QList<Water*> waterObs;
+   Recipe* recObs;
    WaterTableWidget* parentTableWidget;
 };
 

@@ -17,12 +17,25 @@
  */
 
 #include "instruction.h"
-#include <QVector>
 #include "brewtarget.h"
-#include <QDomElement>
-#include <QDomText>
-#include <QObject>
 
+QHash<QString,QString> Instruction::tagToProp = Instruction::tagToPropHash();
+
+QHash<QString,QString> Instruction::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   
+   propHash["NAME"] = "name";
+   propHash["DIRECTIONS"] = "directions";
+   propHash["HAS_TIMER"] = "hasTimer";
+   propHash["TIMER_VALUE"] = "timerValue";
+   propHash["COMPLETED"] = "completed";
+   propHash["INTERVAL"] = "interval";
+   
+   return propHash;
+}
+
+/*
 void Instruction::setDefaults()
 {
    name = QString("");
@@ -32,53 +45,14 @@ void Instruction::setDefaults()
    completed = false;
    interval  = 0.0;
 }
+*/
 
-void Instruction::toXml(QDomDocument& doc, QDomNode& parent)
+Instruction::Instruction()
+   : BeerXMLElement()
 {
-   QDomElement insNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-   
-   insNode = doc.createElement("INSTRUCTION");
-   
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name);
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("DIRECTIONS");
-   tmpText = doc.createTextNode(directions);
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("HAS_TIMER");
-   tmpText = doc.createTextNode(text(hasTimer));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TIMER_VALUE");
-   tmpText = doc.createTextNode(timerValue);
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("COMPLETED");
-   tmpText = doc.createTextNode(text(completed));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   tmpNode = doc.createElement("INTERVAL");
-   tmpText = doc.createTextNode(text(interval));
-   tmpNode.appendChild(tmpText);
-   insNode.appendChild(tmpNode);
-
-   parent.appendChild(insNode);
 }
 
-Instruction::Instruction() : Observable()
-{
-   setDefaults();
-}
-
+/*
 Instruction::Instruction(
              const QString& n,
              const QString& dir,
@@ -149,93 +123,90 @@ void Instruction::fromNode(const QDomNode& instructionNode)
          Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported INSTRUCTION property: %1. Line %2").arg(property).arg(node.lineNumber()) );
    }
 }
+*/
 
-// "set" methods.
+// Setters ====================================================================
 void Instruction::setName(const QString& n)
 {
-   name = QString(n);
-   hasChanged();
+   set("name", "name", n);
 }
 
 void Instruction::setDirections(const QString& dir)
 {
-   directions = QString(dir);
-   hasChanged();
+   set("directions", "directions", dir);
 }
 
 void Instruction::setHasTimer(bool has)
 {
-   hasTimer = has;
-   hasChanged();
+   set("hasTimer", "has_timer", has);
 }
 
 void Instruction::setTimerValue(const QString& timerVal)
 {
-   timerValue = QString(timerVal);
-   hasChanged();
+   set("timerValue", "timer_val", timerVal);
 }
 
 void Instruction::setCompleted(bool comp)
 {
-   completed = comp;
-   hasChanged();
+   set("completed", "completed", comp);
 }
 
+// TODO: figure out.
+/*
 void Instruction::setReagent(const QString& reagent)
 {
    reagents.push_back(QString(reagent));
 }
+*/
 
 void Instruction::setInterval(double time) 
 {
-   interval = time;
+   set("interval", "interval", time);
 }
 
-QString Instruction::getName()
+void Instruction::addReagent(const QString& reagent)
 {
-   return name;
+   _reagents.append(reagent);
 }
 
-QString Instruction::getDirections()
+// Accessors ==================================================================
+
+QString Instruction::name()
 {
-   return directions;
+   return get("name").toString();
 }
 
-bool Instruction::getHasTimer()
+QString Instruction::directions()
 {
-   return hasTimer;
+   return get("directions").toString();
 }
 
-QString Instruction::getTimerValue()
+bool Instruction::hasTimer()
 {
-   return timerValue;
+   return get("has_timer").toBool();
 }
 
-bool Instruction::getCompleted()
+QString Instruction::timerValue()
 {
-   return completed;
+   return get("timer_value").toString();
 }
 
-QString Instruction::getReagent(int i)
+bool Instruction::completed()
 {
-   if ( i < reagents.size() )
-      return reagents[i];
-   else
-      return QString("");
+   return get("completed").toBool();
 }
 
-QVector<QString> Instruction::getReagents()
+QVector<QString> Instruction::reagents()
 {
-   QVector<QString> tmp;
-   if ( reagents.size() > 0 )
-      tmp = reagents;
-   else 
-      tmp.push_back(directions);
-
-   return tmp;
+   return _reagents;
 }
 
-double Instruction::getInterval() 
+double Instruction::interval() 
 {
-   return interval;
+   return get("interval").toDouble();
+}
+
+int Instruction::instructionNumber() const
+{
+   return get("instruction_number").toInt();
 }

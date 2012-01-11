@@ -24,21 +24,23 @@ class YeastDialog;
 #include <QWidget>
 #include <QDialog>
 #include <QVariant>
+#include <QMetaProperty>
 #include "ui_yeastDialog.h"
-#include "observable.h"
-#include "database.h"
-class MainWindow;
-#include "YeastEditor.h"
 
-class YeastDialog : public QDialog, public Ui::yeastDialog, public Observer
+// Forward declarations.
+class MainWindow;
+class YeastEditor;
+class YeastEditor;
+class YeastTableModel;
+class YeastSortFilterProxyModel;
+
+class YeastDialog : public QDialog, public Ui::yeastDialog
 {
    Q_OBJECT
 
 public:
    YeastDialog(MainWindow* parent);
    virtual ~YeastDialog() {}
-   void startObservingDB();
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    void addYeast(const QModelIndex& = QModelIndex());
@@ -46,11 +48,13 @@ public slots:
    void editSelected();
    void newYeast();
 
+   void changed(QMetaProperty, QVariant);
 private:
-   Database* dbObs;
    MainWindow* mainWindow;
+   YeastTableModel* yeastTableModel;
+   YeastSortFilterProxyModel* yeastTableProxy;
    YeastEditor* yeastEditor;
-   unsigned int numYeasts;
+   int numYeasts;
 
    void populateTable();
 };

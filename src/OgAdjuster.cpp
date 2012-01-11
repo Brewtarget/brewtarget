@@ -80,11 +80,11 @@ void OgAdjuster::calculate()
    if( ! gotSG && plato == 0 )
       return;
 
-   if( recObs == 0 || recObs->getEquipment() == 0 )
+   if( recObs == 0 || recObs->equipment() == 0 )
       return;
 
-   equip = recObs->getEquipment();
-   evapRate_lHr = equip->getEvapRate_lHr();
+   equip = recObs->equipment();
+   evapRate_lHr = equip->evapRate_lHr();
 
    // Calculate missing input parameters.
    if( gotSG )
@@ -108,7 +108,7 @@ void OgAdjuster::calculate()
 
    // Calculate OG w/o correction.
    finalVolume_l = equip->wortEndOfBoil_l(wort_l);
-   finalWater_kg = water_kg - equip->getBoilTime_min()/(double)60 * evapRate_lHr * Algorithms::Instance().getWaterDensity_kgL(20);
+   finalWater_kg = water_kg - equip->boilTime_min()/(double)60 * evapRate_lHr * Algorithms::Instance().getWaterDensity_kgL(20);
    //std::cerr << "finalWater_kg = " << finalWater_kg << std::endl;
    //std::cerr << "boilTime = " << equip->getBoilTime_min() << std::endl;
    //std::cerr << "evapRate_lHr = " << evapRate_lHr << std::endl;
@@ -118,7 +118,7 @@ void OgAdjuster::calculate()
    finalUncorrectedSg_20C = Algorithms::Instance().PlatoToSG_20C20C( finalPlato );
 
    // Calculate volume to add to boil
-   finalPlato = Algorithms::Instance().SG_20C20C_toPlato( recObs->getOg() ); // This is bad. This assumes the post-boil gravity = og. Need account for post-boil water additions.
+   finalPlato = Algorithms::Instance().SG_20C20C_toPlato( recObs->og() ); // This is bad. This assumes the post-boil gravity = og. Need account for post-boil water additions.
    // postBoilWater_kg = batchSize - topUpWater;
    // postBoilSugar_kg = Algorithms::Instance().SG_20C20C_toPlato( recObs->getOG() ) / 100.0 * batchSize * recObs->getOG() * Algorithms::Instance().getWaterDensity_kgL(20);
    // finalPlato = 100 * postBoilSugar_kg / ( postBoilSugar_kg + postBoilWater_kg );

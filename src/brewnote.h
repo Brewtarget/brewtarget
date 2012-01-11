@@ -20,126 +20,159 @@
 #ifndef _BREWNOTE_H
 #define _BREWNOTE_H
 
-class BrewNote;
-
-#include <string>
-#include <exception>
-#include "BeerXMLElement.h"
 #include <QDomNode>
 #include <QDomDocument>
 #include <QString>
 #include <QStringList>
 #include <QDate>
-#include "recipe.h"
+#include "BeerXMLElement.h"
 
-class BrewNote : public Observable, public BeerXMLElement
+// Forward declarations;
+class Recipe;
+class BrewNote;
+bool operator<(BrewNote const& lhs, BrewNote const& rhs);
+bool operator==(BrewNote const& lhs, BrewNote const& rhs);
+
+class BrewNote : public BeerXMLElement
 {
+   Q_OBJECT
+   friend class Database;
+   friend bool operator<(BrewNote &lhs, BrewNote &rhs);
+   friend bool operator==(BrewNote &lhs, BrewNote &rhs);
+   
 public:
    enum {DONOTUSE, RECIPE};
 
-   BrewNote(Recipe* parent);
-   BrewNote(BrewNote& other);
-   BrewNote(Recipe* parent, const QDomNode& bnoteNode);
-
    virtual ~BrewNote() {}
 
-   friend bool operator<(BrewNote &lhs, BrewNote &rhs);
-   friend bool operator==(BrewNote &lhs, BrewNote &rhs);
+   Q_PROPERTY( QDateTime brewDate READ brewDate WRITE setBrewDate /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( QDateTime fermentDate READ fermentDate  WRITE setFermentDate /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double sg READ sg WRITE setSg /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double abv READ abv WRITE setABV /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double effIntoBK_pct READ effIntoBK_pct WRITE setEffIntoBK_pct STORED false )
+   Q_PROPERTY( double brewhouseEff_pct READ brewhouseEff_pct WRITE setBrewhouseEff_pct STORED false )
+   Q_PROPERTY( double volumeIntoBK_l READ volumeIntoBK_l WRITE setVolumeIntoBK_l /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double strikeTemp_c READ strikeTemp_c WRITE setStrikeTemp_c /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double mashFinTemp_c READ mashFinTemp_c WRITE setMashFinTemp_c /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double og READ og WRITE setOg /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double postBoilVolume_l READ postBoilVolume_l WRITE setPostBoilVolume_l /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double volumeIntoFerm_l READ volumeIntoFerm_l WRITE setVolumeIntoFerm_l /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double pitchTemp_c READ pitchTemp_c WRITE setPitchTemp_c /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double fg READ fg WRITE setFg /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double finalVolume_l READ finalVolume_l WRITE setFinalVolume_l /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double boilOff_l READ boilOff_l WRITE setBoilOff_l /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projBoilGrav READ projBoilGrav WRITE setProjBoilGrav /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projVolIntoBK_l READ projVolIntoBK_l WRITE setProjVolIntoBK_l /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projStrikeTemp_c READ projStrikeTemp_c WRITE setProjStrikeTemp_c /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projMashFinTemp_c READ projMashFinTemp_c WRITE setProjMashFinTemp_c /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projOg READ projOg WRITE setProjOg /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projVolIntoFerm_l READ projVolIntoFerm_l WRITE setProjVolIntoFerm_l /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projFg READ projFg WRITE setProjFg /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projEff_pct READ projEff_pct WRITE setProjEff_pct /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projABV_pct READ projABV_pct WRITE setProjABV_pct /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projPoints READ projPoints WRITE setProjPoints /*NOTIFY changed*/ STORED false )
+   Q_PROPERTY( double projAtten READ projAtten WRITE setProjAtten /*NOTIFY changed*/ STORED false )
 
-   virtual void fromNode(const QDomNode& node);
-   virtual void toXml(QDomDocument& doc, QDomNode& parent);
-
-   // Sets
-   void setParent(Recipe* parent);
-   void setBrewDate(QString date = "");
-   void setFermentDate(QString date);
-   void setNotes(const QString& var);
-
-   void setSG(QString var);
+   // Setters
+   void setABV(double var);
+   void setBrewDate(QDateTime const& date = QDateTime::currentDateTime());
+   void setFermentDate(QDateTime const& date);
+   void setNotes(const QString& var, bool notify = true);
+   void setSg(double var);
    void setVolumeIntoBK_l(double var);
+   void setBrewhouseEff_pct(double var);
+   void setEffIntoBK_pct(double var);
    void setStrikeTemp_c(double var);
    void setMashFinTemp_c(double var);
-   void setOG(QString var);
+   void setOg(double var);
    void setPostBoilVolume_l(double var);
    void setVolumeIntoFerm_l(double var);
    void setPitchTemp_c(double var);
-   void setFG(QString var);
+   void setFg(double var);
    void setFinalVolume_l(double var);  
    void setBoilOff_l(double var);  
 
-   // Gets
-   Recipe*   getParent() const;
-   QDateTime getBrewDate() const;
-   QString   getBrewDate_str() const;
-   QString   getBrewDate_short() const;
-   QDateTime getFermentDate() const;
-   QString   getFermentDate_str() const;
-   QString   getFermentDate_short() const;
-
-   double getSG() const;
-   double getVolumeIntoBK_l() const;
-   double getStrikeTemp_c() const;
-   double getMashFinTemp_c() const;
-   double getOG() const;
-   double getPostBoilVolume_l() const;
-   double getVolumeIntoFerm_l() const;
-   double getPitchTemp_c() const;
-   double getFG() const;
-   double getFinalVolume_l() const;  
-   double getBoilOff_l() const;  
-
-   QString getNotes() const;
+   // Getters
+   QDateTime brewDate() const;
+   //! Convenience method.
+   QString   brewDate_str() const;
+   //! Convenience method.
+   QString   brewDate_short() const;
+   QDateTime fermentDate() const;
+   //! Convenience method.
+   QString   fermentDate_str() const;
+   //! Convenience method.
+   QString   fermentDate_short() const;
+   double sg() const;
+   double abv() const;
+   double volumeIntoBK_l() const;
+   double effIntoBK_pct() const;
+   double brewhouseEff_pct() const;
+   double strikeTemp_c() const;
+   double mashFinTemp_c() const;
+   double og() const;
+   double postBoilVolume_l() const;
+   double volumeIntoFerm_l() const;
+   double pitchTemp_c() const;
+   double fg() const;
+   double finalVolume_l() const;  
+   double boilOff_l() const;  
+   QString notes() const;
 
    // Calculations
    double calculateEffIntoBK_pct();
-   double calculateOG();
+   double calculateOg();
    double calculateBrewHouseEff_pct();
+   //! Projected ABV after fermentation.
    double calculateABV_pct();
-   double actualABV_pct();
+   //! Actual ABV after we have measured og/fg.
+   double calculateActualABV_pct();
 
    // Projected values
    void setProjBoilGrav(double var);
    void setProjVolIntoBK_l(double var);
    void setProjStrikeTemp_c(double var);
    void setProjMashFinTemp_c(double var);
-   void setProjOG(double var);
+   void setProjOg(double var);
    void setProjVolIntoFerm_l(double var);
-   void setProjFG(double var);
+   void setProjFg(double var);
    void setProjEff_pct(double var);
    void setProjABV_pct(double var);
    void setProjPoints(double var);
    void setProjAtten(double var);
 
-   double getProjBoilGrav() const;
-   double getProjVolIntoBK_l() const;
-   double getProjStrikeTemp_c() const;
-   double getProjMashFinTemp_c() const;
-   double getProjOG() const;
-   double getProjVolIntoFerm_l() const;
-   double getProjFG() const;
-   double getProjEff_pct() const;
-   double getProjABV_pct() const;
-   double getProjPoints() const;
-   double getProjAtten() const;
-
+   double projBoilGrav() const;
+   double projVolIntoBK_l() const;
+   double projStrikeTemp_c() const;
+   double projMashFinTemp_c() const;
+   double projOg() const;
+   double projVolIntoFerm_l() const;
+   double projFg() const;
+   double projEff_pct() const;
+   double projABV_pct() const;
+   double projPoints() const;
+   double projAtten() const;
+   
+   /*! Convert a string that may be either "1.040" or "10 P" for example.
+    * If the user has appended a "P" (case insensitive, with or without a space),
+    * the gravity reading will be assumed to be in plato/brix.
+    * If there is no unit, and the value is < 2.0, it will be assumed to be a
+    * specific gravity.
+    * If there is no unit and the value is greater than 2.0, it will be assumed
+    * to be a plato/brix
+    */
+   static double translateSG(QString qstr);
+   
 private:
-   static const int version = 1;
-   Recipe* rec;
-
-   QDateTime brewDate;
-   QDateTime fermentDate;
-   QString notes;
+   BrewNote();
+   BrewNote(BrewNote const& other);
 
    QHash<QString,double> info;
-
    QHash<QString,QString> XMLTagToName();
    QHash<QString,QString> NameToXMLTag();
-
-
-   void setInfo(QString label, double var);
-   void setDefaults(Recipe* parent);
-
-   double translateSG(QString qstr);
+   static QHash<QString,QString> tagToPropHash();
+   static QHash<QString,QString> tagToProp;
 };
 
 inline bool BrewNotePtrLt( BrewNote* lhs, BrewNote* rhs)

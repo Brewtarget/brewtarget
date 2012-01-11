@@ -19,94 +19,192 @@
 #ifndef _DATABASE_H
 #define   _DATABASE_H
 
-#include <QList>
-#include <iostream>
-#include <QFile>
-#include <QString>
-#include "equipment.h"
-#include "fermentable.h"
-#include "hop.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "misc.h"
-#include "recipe.h"
-#include "style.h"
-#include "water.h"
-#include "yeast.h"
-#include "observable.h"
-
 class Database;
 
-//! Used in the hasChanged() function. Never use \b DONOTUSE ok?
-enum {DONOTUSE, DBEQUIP, DBFERM, DBHOP, DBMASH, DBMASHSTEP, DBMISC, DBRECIPE,
-      DBSTYLE, DBWATER, DBYEAST, DBALL};
+#include <QDomDocument>
+#include <QDomNode>
+#include <QList>
+#include <QHash>
+#include <QFile>
+#include <QString>
+#include <QSqlDatabase>
+#include <QSqlRelationalTableModel>
+#include <QSqlRecord>
+#include <QSqlQuery>
+#include <QVariant>
+#include <QMetaProperty>
+#include <QUndoStack>
+#include <QObject>
+#include <QPair>
+#include <QTableView>
+// Forward declarations
+class BrewNote;
+class BeerXMLElement;
+class Equipment;
+class Fermentable;
+class Hop;
+class Instruction;
+class Mash;
+class MashStep;
+class Misc;
+class Recipe;
+class Style;
+class Water;
+class Yeast;
+class QThread;
+class SetterCommandStack;
 
 /*!
  * \class Database
  * This class is a singleton, meaning that there should only ever be one
- * instance of this in the whole damn program.
- *
- * It only calls hasChanged() when a new ingredient or whatever gets added,
- * not when any of them actually changed.
+ * instance of this floating around. The Database should be the only way
+ * we ever get pointers to BeerXML ingredients and the like.
  */
-
-class Database : public Observable
+class Database : public QObject
 {
+   Q_OBJECT
+
 public:
-   //! Don't EVER use this method to get the database!!!
-   Database();
-   //! This should be the ONLY way you get an instance!!!
-   static Database* getDatabase();
-   static void initialize();
-   static bool isInitialized();
-   //! Save to the persistent medium.
-   static void savePersistent();
+   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
+                 MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
+
+   //! This should be the ONLY way you get an instance.
+   static Database& instance();
 
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
-   
-   /*! Adds a new Equipment. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addEquipment(Equipment* equip, bool disableNotify = false);
-   /*! Adds a new Fermentable. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addFermentable(Fermentable* ferm, bool disableNotify = false);
-   /*! Adds a new Hop. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addHop(Hop* hop, bool disableNotify = false);
-   /*! Adds a new Mash. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addMash(Mash* mash, bool disableNotify = false);
-   /*! Adds a new MashStep. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addMashStep(MashStep* mashStep, bool disableNotify = false);
-   /*! Adds a new Misc. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addMisc(Misc* misc, bool disableNotify = false);
-   /*! Adds a new Recipe. If \b copySubelements == \b true,
-    *  also inserts the recipe's ingredients into the database.
-    */
-   void addRecipe(Recipe* rec, bool copySubelements);
-   /*! Adds a new Style. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addStyle(Style* style, bool disableNotify = false);
-   /*! Adds a new Water. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addWater(Water* water, bool disableNotify = false);
-   /*! Adds a new Yeast. If \b disableNotify == \b true,
-    *  does not notify any database observers of the change.
-    */
-   void addYeast(Yeast* yeast, bool disableNotify = false);
 
-   // You can remove one
+   /*! Schedule an update of the entry, and call the notification when complete.
+    */
+   void updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
+   
+   // Hey, kate highlights all these words...
+   // FIXME
+   // HACK
+   // NOTE
+   // NOTICE
+   // TASK
+   // TODO
+   // ###
+   
+   //! Get the contents of the cell specified by table/key/col_name. Mostly for BeerXMLElement.
+   inline QVariant get( DBTable table, int key, const char* col_name ) __attribute__((always_inline))
+   {
+      QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
+                   .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
+                   sqldb );
+                   
+      if( q.next() )
+         return q.value(0);
+      else
+         return QVariant();
+   }
+      
+   //! Get a table view.
+   QTableView* createView( DBTable table );
+   
+   // Named constructors ======================================================
+   //! Create new brew note attached to \b parent.
+   BrewNote* newBrewNote(Recipe* parent);
+   Equipment* newEquipment();
+   Fermentable* newFermentable();
+   Hop* newHop();
+   //! Create new instruction attached to \b parent.
+   Instruction* newInstruction(Recipe* parent);
+   Mash* newMash();
+   //! Create new mash attached to \b parent.
+   Mash* newMash(Recipe* parent);
+   //! Create new mash step attached to \b parent.
+   MashStep* newMashStep(Mash* parent);
+   Misc* newMisc();
+   Recipe* newRecipe();
+   Style* newStyle();
+   Water* newWater();
+   Yeast* newYeast();
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   
+   // Named copy constructors==================================================
+   //! \returns a copy of the given note.
+   BrewNote* newBrewNote(BrewNote* other);
+   Equipment* newEquipment(Equipment* other);
+   //! \returns a copy of the given recipe.
+   Recipe* newRecipe(Recipe* other);
+   /*! \returns a copy of the given mash. Displaces the mash currently in the
+    * parent recipe unless \b displace is false.
+    */
+   Mash* newMash(Mash* other, bool displace = true);
+   Fermentable* newFermentable(Fermentable* other);
+   Hop* newHop(Hop* other);
+   Misc* newMisc(Misc* other);
+   Yeast* newYeast(Yeast* other);
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   
+   //! Import ingredients from BeerXML documents.
+   void importFromXML(const QString& filename);
+   
+   //! Retrieve a list of elements with given \b filter.
+   QList<BeerXMLElement*> listByFilter( DBTable table, QString filter = "" );
+   
+   // NOTICE: Necessary?
+   //! Get recipe by key value.
+   Recipe* recipe(int key);
+   Equipment* equipment(int key);
+   Mash* mash(int key);
+   Style* style(int key);
+   /*
+   Fermentable* fermentable(int key);
+   Hop* hop(int key);
+   MashStep* mashStep(int key);
+   Misc* misc(int key);
+   Water* water(int key);
+   Yeast* yeast(int key);
+   */
+   
+   // Add a COPY of these ingredients to a recipe, then call the changed()
+   // signal corresponding to the appropriate QList
+   // of ingredients in rec.
+   void addToRecipe( Recipe* rec, Hop* hop );
+   void addToRecipe( Recipe* rec, Fermentable* ferm );
+   void addToRecipe( Recipe* rec, Misc* m );
+   void addToRecipe( Recipe* rec, Yeast* y );
+   void addToRecipe( Recipe* rec, Water* w );
+   //! Add a mash, displacing any current mash.
+   void addToRecipe( Recipe* rec, Mash* m );
+   //! Add an equipment, displacing any current equipment.
+   void addToRecipe( Recipe* rec, Equipment* e );
+   //! Add a style, displacing any current style. Does not add a copy, adds the actual style \b s.
+   void addToRecipe( Recipe* rec, Style* s );
+   // NOTE: not possible in this format.
+   //void addToRecipe( Recipe* rec, Instruction* ins );
+   
+   // Remove these from a recipe, then call the changed()
+   // signal corresponding to the appropriate QList
+   // of ingredients in rec.
+   void removeFromRecipe( Recipe* rec, Hop* hop );
+   void removeFromRecipe( Recipe* rec, Fermentable* ferm );
+   void removeFromRecipe( Recipe* rec, Misc* m );
+   void removeFromRecipe( Recipe* rec, Yeast* y );
+   void removeFromRecipe( Recipe* rec, Water* w );
+   void removeFromRecipe( Recipe* rec, Instruction* ins );
+   void removeFromRecipe( Recipe* rec, BrewNote* b );
+   
+   //! Remove \b step from \b mash.
+   void removeFrom( Mash* mash, MashStep* step );
+   
+   // Remove these from a recipe, then call the changed()
+   // signal corresponding to the appropriate QVector
+   // of ingredients in rec.
+   /*
+   void removeFromRecipe( Recipe* rec, QList<Hop*> hop );
+   void removeFromRecipe( Recipe* rec, QList<Fermentable*> ferm );
+   void removeFromRecipe( Recipe* rec, QList<Misc*> m );
+   void removeFromRecipe( Recipe* rec, QList<Yeast*> y );
+   void removeFromRecipe( Recipe* rec, QList<Water*> w );
+   void removeFromRecipe( Recipe* rec, QList<Instruction*> ins );
+   */
+   
+   // Mark an item as deleted.
+   // NOTE: should these also remove all references to the ingredients?
    void removeEquipment(Equipment* equip);
    void removeFermentable(Fermentable* ferm);
    void removeHop(Hop* hop);
@@ -118,7 +216,9 @@ public:
    void removeWater(Water* water);
    void removeYeast(Yeast* yeast);
 
-   // Or you can remove lists
+   // Or you can mark whole lists as deleted.
+   // NOTE: should these also remove all references to the ingredients?
+   // TODO: convert from a sequence of single removes to one single operation?
    void removeEquipment(QList<Equipment*> equip);
    void removeFermentable(QList<Fermentable*> ferm);
    void removeHop(QList<Hop*> hop);
@@ -130,100 +230,276 @@ public:
    void removeWater(QList<Water*> water);
    void removeYeast(QList<Yeast*> yeast);
 
-   //! Sorts all the lists by their compare methods.
-   void resortAll();
-   void resortFermentables();
-   void resortEquipments();
-   void resortHops();
-   void resortMiscs();
-   void resortStyles();
-   void resortYeasts();
-
-   unsigned int getNumEquipments();
-   unsigned int getNumFermentables();
-   unsigned int getNumHops();
-   unsigned int getNumMashs();
-   unsigned int getNumMashSteps();
-   unsigned int getNumMiscs();
-   unsigned int getNumRecipes();
-   unsigned int getNumStyles();
-   unsigned int getNumWaters();
-   unsigned int getNumYeasts();
-
-   // These all return null on failure.
-   Equipment* findEquipmentByName(QString name);
-   Fermentable* findFermentableByName(QString name);
-   Hop* findHopByName(QString name);
-   Mash* findMashByName(QString name);
-   MashStep* findMashStepByName(QString name);
-   Misc* findMiscByName(QString name);
-   Recipe* findRecipeByName(QString name);
-   Style* findStyleByName(QString name);
-   Water* findWaterByName(QString name);
-   Yeast* findYeastByName(QString name);
-
-   QList<Equipment*>::iterator getEquipmentBegin();
-   QList<Equipment*>::iterator getEquipmentEnd();
-   QList<Fermentable*>::iterator getFermentableBegin();
-   QList<Fermentable*>::iterator getFermentableEnd();
-   QList<Hop*>::iterator getHopBegin();
-   QList<Hop*>::iterator getHopEnd();
-   QList<Mash*>::iterator getMashBegin();
-   QList<Mash*>::iterator getMashEnd();
-   QList<MashStep*>::iterator getMashStepBegin();
-   QList<MashStep*>::iterator getMashStepEnd();
-   QList<Misc*>::iterator getMiscBegin();
-   QList<Misc*>::iterator getMiscEnd();
-   QList<Recipe*>::iterator getRecipeBegin();
-   QList<Recipe*>::iterator getRecipeEnd();
-   QList<Style*>::iterator getStyleBegin();
-   QList<Style*>::iterator getStyleEnd();
-   QList<Water*>::iterator getWaterBegin();
-   QList<Water*>::iterator getWaterEnd();
-   QList<Yeast*>::iterator getYeastBegin();
-   QList<Yeast*>::iterator getYeastEnd();
-
-   /*! Merges \b last 's BeerXML elements to \b first.
-   *  Neither document should have recipes in them. If
-   *  \b undup is true, removes duplicate entries preferring to remove
-   *  items from \b last first.
-   */
-   static void mergeBeerXMLDBDocs( QDomDocument& first, const QDomDocument& last );
+   // Return a list of elements according to the given filter.
+   void getBrewNotes( QList<BrewNote*>& list, QString filter="" );
+   void getEquipments( QList<Equipment*>&, QString filter="" );
+   void getFermentables( QList<Fermentable*>&, QString filter="" );
+   void getHops( QList<Hop*>&, QString filter="" );
+   void getMashs( QList<Mash*>&, QString filter="" );
+   void getMashSteps( QList<MashStep*>&, QString filter="" );
+   void getMiscs( QList<Misc*>&, QString filter="" );
+   void getRecipes( QList<Recipe*>&, QString filter="" );
+   void getStyles( QList<Style*>&, QString filter="" );
+   void getWaters( QList<Water*>&, QString filter="" );
+   void getYeasts( QList<Yeast*>&, QString filter="" );
    
-   /*! Merges \b last 's BeerXML elements to \b first.
-   *  For documents that ONLY contain recipes. If
-   *  \b undup is true, removes duplicate entries preferring to remove
-   *  items from \b last first.
-   */
-   static void mergeBeerXMLRecDocs( QDomDocument& first, const QDomDocument& last );
+   //! Get the recipe that this \b note is part of.
+   Recipe* getParentRecipe( BrewNote const* note );
+   
+   //! Interchange the step orders of the two steps. Must be in same mash.
+   void swapMashStepOrder(MashStep* m1, MashStep* m2);
+   //! Interchange the instruction orders. Must be in same recipe.
+   void swapInstructionOrder(Instruction* in1, Instruction* in2);
+   //! Insert an instruction (already in a recipe) into position \b pos.
+   void insertInstruction(Instruction* in, int pos);
+   
+   Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Fermentable*> fermentables READ fermentables /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Hop*> hops READ hops /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Mash*> mashs READ mashs /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<MashStep*> mashSteps READ mashSteps /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Misc*> miscs READ miscs /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Recipe*> recipes READ recipes /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Style*> styles READ styles /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ NOTIFY changed STORED false );
+   Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ NOTIFY changed STORED false );
+   
+   // Returns non-deleted BeerXMLElements.
+   QList<BrewNote*> brewNotes();
+   QList<Equipment*> equipments();
+   QList<Fermentable*> fermentables();
+   QList<Hop*> hops();
+   QList<Mash*> mashs();
+   QList<MashStep*> mashSteps();
+   QList<Misc*> miscs();
+   QList<Recipe*> recipes();
+   QList<Style*> styles();
+   QList<Water*> waters();
+   QList<Yeast*> yeasts();
+   
+   //! \b returns a list of the brew notes in a recipe.
+   QList<BrewNote*> brewNotes(Recipe const* parent);
+   //! Return a list of all the fermentables in a recipe.
+   QList<Fermentable*> fermentables(Recipe const* parent);
+   //! Return a list of all the hops in a recipe.
+   QList<Hop*> hops( Recipe const* parent );
+   //! Return a list of all the instructions in a recipe.
+   QList<Instruction*> instructions( Recipe const* parent );
+   //! Return a list of all the miscs in a recipe.
+   QList<Misc*> miscs( Recipe const* parent );
+   //! Return a list of all the waters in a recipe.
+   QList<Water*> waters( Recipe const* parent );
+   //! Return a list of all the yeasts in a recipe.
+   QList<Yeast*> yeasts( Recipe const* parent );
+   //! Return a list of all the steps in a mash.
+   QList<MashStep*> mashSteps(Mash const* parent);
+   
+   // Import from BeerXML =====================================================
+   // TODO: make all these private.
+   BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
+   Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Hop* hopFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Instruction* instructionFromXml( QDomNode const& node, Recipe* parent );
+   Mash* mashFromXml( QDomNode const& node, Recipe* parent = 0 );
+   MashStep* mashStepFromXml( QDomNode const& node, Mash* parent );
+   Misc* miscFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Recipe* recipeFromXml( QDomNode const& node );
+   Style* styleFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Water* waterFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = 0 );
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   
+   // Export to BeerXML =======================================================
+   void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Equipment* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Fermentable* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Hop* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Instruction* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Mash* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( MashStep* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Misc* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Recipe* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Style* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Water* a, QDomDocument& doc, QDomNode& parent );
+   void toXml( Yeast* a, QDomDocument& doc, QDomNode& parent );
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
    //! Get the file where this database was loaded from.
    static QString getDbFileName();
    
-   //! Get the recipe file this database was loaded from.
-   static QString getRecipeFileName();
+   //! Get a const copy of a particular table model. Const so that no editing can take place outside the db.
+   const QSqlRelationalTableModel* getModel( DBTable table );
+   
+signals:
+   void changed(QMetaProperty prop, QVariant value);
    
 private:
-   static bool initialized;
-   static Database* internalDBInstance;
+   QThread* _thread;
+   SetterCommandStack* _setterCommandStack;
    static QFile dbFile;
    static QString dbFileName;
-   static QFile recipeFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static QString recipeFileName;
-   static QFile mashFile; // Why are these separate from the dbFile? To prevent duplicates.
-   static QString mashFileName;
-
-   // The stuff we care about...
-   static QList<Equipment*> equipments;
-   static QList<Fermentable*> fermentables;
-   static QList<Hop*> hops;
-   static QList<Mash*> mashs;
-   static QList<MashStep*> mashSteps;
-   static QList<Misc*> miscs;
-   static QList<Recipe*> recipes;
-   static QList<Style*> styles;
-   static QList<Water*> waters;
-   static QList<Yeast*> yeasts;
+   static QFile dataDbFile;
+   static QString dataDbFileName;
+   static QHash<DBTable,QString> tableNames;
+   static QHash<DBTable,QString> tableNamesHash();
+   static QHash<QString,DBTable> classNameToTable;
+   static QHash<QString,DBTable> classNameToTableHash();
+   static QHash<DBTable,QString> keyNames;
+   static QHash<DBTable,QString> keyNamesHash();
+   
+   // Keeps all pointers to the elements referenced by key.
+   QHash< int, BrewNote* > allBrewNotes;
+   QHash< int, Equipment* > allEquipments;
+   QHash< int, Fermentable* > allFermentables;
+   QHash< int, Hop* > allHops;
+   QHash< int, Instruction* > allInstructions;
+   QHash< int, Mash* > allMashs;
+   QHash< int, MashStep* > allMashSteps;
+   QHash< int, Misc* > allMiscs;
+   QHash< int, Recipe* > allRecipes;
+   QHash< int, Style* > allStyles;
+   QHash< int, Water* > allWaters;
+   QHash< int, Yeast* > allYeasts;
+   
+   //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
+   template <class T> void populateElements( QHash<int,T*>& hash, DBTable table )
+   {
+      int i, size, key;
+      BeerXMLElement* e;
+      T* et;
+      
+      QSqlRelationalTableModel tm(0, sqldb);
+      tm.setTable(tableNames[table]);
+      tm.setFilter("");
+      tm.select();
+      
+      size = tm.rowCount();
+      for( i = 0; i < size; ++i )
+      {
+         key = tm.record(i).value(keyNames[table]).toInt();
+         
+         e = new T();
+         et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
+         et->_key = key;
+         et->_table = table;
+         
+         if( ! hash.contains(key) )
+            hash.insert(key,et);
+      }
+   }
+   
+   //! Helper to populate the list using the given filter.
+   template <class T> void getElements( QList<T*>& list, QString filter, DBTable table, QHash<int,T*> allElements )
+   {
+      int i, size, key;
+      
+      QSqlRelationalTableModel tm(0, sqldb);
+      tm.setTable(tableNames[table]);
+      tm.setFilter(filter);
+      tm.select();
+      
+      list.clear();
+      size = tm.rowCount();
+      for( i = 0; i < size; ++i )
+      {
+         key = tm.record(i).value(keyNames[table]).toInt();
+         if( allElements.contains(key) )
+            list.append( allElements[key] );
+      }
+   }
+   
+   /*! Populates the \b element with properties. This must be a class that
+    *  simple properties only (no subelements).
+    * \param element is the element you want to populate.
+    * \param xmlTagsToProperties is a hash from xml tags to meta property names.
+    * \param elementNode is the root node of the element we are reading from.
+    */
+   void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode );
+   
+   // The connection to the SQLite database.
+   QSqlDatabase sqldb;
+   // Model for all the tables in the db.
+   QSqlRelationalTableModel* tableModel;
+   // Models set to specific tables in the db.
+   QSqlRelationalTableModel* brewnotes_tm;
+   QSqlRelationalTableModel* equipments_tm;
+   QSqlRelationalTableModel* fermentables_tm;
+   QSqlRelationalTableModel* hops_tm;
+   QSqlRelationalTableModel* instructions_tm;
+   QSqlRelationalTableModel* mashs_tm;
+   QSqlRelationalTableModel* mashSteps_tm;
+   QSqlRelationalTableModel* miscs_tm;
+   QSqlRelationalTableModel* recipes_tm;
+   QSqlRelationalTableModel* styles_tm;
+   QSqlRelationalTableModel* waters_tm;
+   QSqlRelationalTableModel* yeasts_tm;
+   QHash<DBTable,QSqlRelationalTableModel*> tables;
+   
+   QUndoStack commandStack;
+   
+   //! Hidden constructor.
+   Database();
+   //! Copy constructor hidden.
+   Database(Database const&){}
+   //! Assignment operator hidden.
+   Database& operator=(Database const&){ return *this; }
+   //! Destructor hidden.
+   ~Database();
+   
+   //! Helper to more easily get QMetaProperties.
+   QMetaProperty metaProperty(const char* name)
+   {
+      return metaObject()->property(metaObject()->indexOfProperty(name));
+   }
+   
+   //! Load database from file.
+   void load();
+   
+   //! Should be called when we are about to close down.
+   void unload();
+   
+   /*! Make a new row in the \b table.
+    *  \returns key of new row.
+    *  Only works if all the fields in the table have default values.
+    */
+   int insertNewDefaultRecord( DBTable table );
+   
+   /*! Insert a new row in \b mashstep, where \b parent is the parent mash.
+    */
+   int insertNewMashStepRecord( Mash* parent );
+   
+   //! Mark the \b object in \b table as deleted.
+   void deleteRecord( DBTable table, BeerXMLElement* object );
+   
+   // TODO: encapsulate this in a QUndoCommand.
+   /*!
+    * Create a \e copy of \b ing and add the copy to \b recipe where \b ing's
+    * key is \b ingKeyName and the relational table is \b relTableName.
+    * \returns the key of the new ingredient.
+    */
+   int addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName );
+   
+   // TODO: encapsulate in QUndoCommand
+   //! Remove ingredient from a recipe.
+   void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName );
+   
+   /*!
+    * Create a deep copy of the \b object.
+    * \returns a record to the new copy. You must manually emit the changed()
+    * signal after a copy() call. Also, does not insert things magically into
+    * allHop or allInstructions etc. hashes. This just simply duplicates a
+    * row in a table.
+    * \param displayed is true if you want the \em displayed column set to true.
+    */
+   QSqlRecord copy( BeerXMLElement const* object, bool displayed = true );
+   
+   //! Do an sql update.
+   void sqlUpdate( QString const& tableName, QString const& setClause, QString const& whereClause );
+   
+   //! Do an sql delete.
+   void sqlDelete( QString const& tableName, QString const& whereClause );
 };
 
 #endif   /* _DATABASE_H */

@@ -23,49 +23,67 @@ class FermentableTableModel;
 class FermentableItemDelegate;
 
 #include <QAbstractTableModel>
+#include <QTableView>
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
-#include <QStringList>
+#include <QMetaProperty>
 #include <QStyledItemDelegate>
 #include <QAbstractItemDelegate>
-#include <QVector>
-#include "fermentable.h"
-#include "FermentableTableWidget.h"
-#include "observable.h"
+#include <QList>
+
+// Forward declarations.
+class Fermentable;
+class Recipe;
 
 enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMISMASHEDCOL, FERMAFTERBOIL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
-class FermentableTableModel : public QAbstractTableModel, public MultipleObserver
+class FermentableTableModel : public QAbstractTableModel
 {
    Q_OBJECT
-           
+
 public:
-   FermentableTableModel(FermentableTableWidget* parent=0);
+   FermentableTableModel(QTableView* parent=0);
    virtual ~FermentableTableModel() {}
+   //! Observe a recipe's list of fermentables.
+   void observeRecipe(Recipe* rec);
+   //! Whether or not we should be looking at the database.
+   void observeDatabase(bool val);
+   //! Watch \b ferm for changes.
    void addFermentable(Fermentable* ferm);
-   bool removeFermentable(Fermentable* ferm); // Returns true if "ferm" is successfully found and removed.
+   //! Watch all the \b ferms for changes.
+   void addFermentables(QList<Fermentable*> ferms);
+   //! \returns true if "ferm" is successfully found and removed.
+   bool removeFermentable(Fermentable* ferm);
    void removeAll();
    Fermentable* getFermentable(unsigned int i);
+   //! True if you want to display percent of each grain in the row header.
    void setDisplayPercentages( bool var );
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
    
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
+   //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
+   //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
-   FermentableTableWidget* parentTableWidget;
+   QTableView* parentTableWidget;
    
+public slots:
+   void changed(QMetaProperty, QVariant);
 private:
    void updateTotalGrains();
    
-   QVector<Fermentable*> fermObs;
-   bool displayPercentages; // True if you want to display percent of each grain in the row header.
+   QList<Fermentable*> fermObs;
+   Recipe* recObs;
+   bool displayPercentages;
    double totalFermMass_kg;
 };
 
@@ -76,10 +94,13 @@ class FermentableItemDelegate : public QStyledItemDelegate
 public:
    FermentableItemDelegate(QObject* parent = 0);
    
-   // Inherited functions.
+   //! Reimplemented from QStyledItemDelegate.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+   //! Reimplemented from QStyledItemDelegate.
    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
+   //! Reimplemented from QStyledItemDelegate.
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+   //! Reimplemented from QStyledItemDelegate.
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    //virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
    

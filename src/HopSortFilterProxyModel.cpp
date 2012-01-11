@@ -30,6 +30,9 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
 {
     QVariant leftHop = sourceModel()->data(left);
     QVariant rightHop = sourceModel()->data(right);
+    QStringList uses = QStringList() << "Dry Hop" << "Aroma" << "Boil" << "First Wort" << "Mash";
+    QModelIndex lSibling, rSibling;
+    int lUse, rUse;
 
    switch( left.column() )
    {
@@ -37,7 +40,18 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
         return leftHop.toDouble() < rightHop.toDouble();
       case HOPAMOUNTCOL:
       case HOPTIMECOL:
-        return Unit::qstringToSI(leftHop.toString()) < Unit::qstringToSI(rightHop.toString());
+        // Get the indexes of the Use column
+        lSibling = left.sibling(left.row(), HOPUSECOL);
+        rSibling = right.sibling(right.row(), HOPUSECOL);
+        // We are talking to the model, so we get the strings associated with
+        // the names, not the Hop::Use enums. We need those translated into
+        // ints to make this work
+        lUse = uses.indexOf( (sourceModel()->data(lSibling)).toString() );
+        rUse = uses.indexOf( (sourceModel()->data(rSibling)).toString() );
+
+        if ( lUse == rUse )
+           return Unit::qstringToSI(leftHop.toString()) < Unit::qstringToSI(rightHop.toString());
+        return lUse < rUse;
     }
 
     return leftHop.toString() < rightHop.toString();

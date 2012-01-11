@@ -23,27 +23,28 @@
 class Instruction;
 
 #include <QString>
-#include "observable.h"
-#include <string>
 #include <QVector>
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
-class Instruction : public Observable, public BeerXMLElement
+class Instruction : public BeerXMLElement
 {
+   Q_OBJECT
+   friend class Database;
 public:
-   Instruction();
-   Instruction(const QDomNode& instructionNode);
-   Instruction( const QString& name,
-                const QString& directions,
-                bool hasTimer = false,
-                const QString& timerVal = "0" );
+   
    virtual ~Instruction() {}
 
-   virtual void fromNode(const QDomNode& node); // From BeerXMLElement
-   virtual void toXml(QDomDocument& doc, QDomNode& parent); // From BeerXMLElement
-   //QString toXml();
-
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( QString directions READ directions WRITE setDirections /*NOTIFY changed*/ /*changedDirections*/ )
+   Q_PROPERTY( bool hasTimer READ hasTimer WRITE setHasTimer /*NOTIFY changed*/ /*changedHasTimer*/ )
+   Q_PROPERTY( QString timerValue READ timerValue WRITE setTimerValue /*NOTIFY changed*/ /*changedTimerValue*/ )
+   Q_PROPERTY( bool completed READ completed WRITE setCompleted /*NOTIFY changed*/ /*changedCompleted*/ )
+   Q_PROPERTY( double interval READ interval WRITE setInterval /*NOTIFY changed*/ /*changedInterval*/ )
+   Q_PROPERTY( QVector<QString> reagents READ reagents /*WRITE*/ /*NOTIFY changed*/ /*changedReagents*/ )
+   
+   Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
+   
    // "set" methods.
    void setName(const QString& n);
    void setDirections(const QString& dir);
@@ -51,29 +52,44 @@ public:
    void setTimerValue(const QString& timerVal);
    void setCompleted(bool comp);
    void setInterval(double interval);
-   void setReagent(const QString& reagent);
-
+   void addReagent(const QString& reagent);
 
    // "get" methods.
-   QString getName();
-   QString getDirections();
-   bool getHasTimer();
-   QString getTimerValue();
-   bool getCompleted();
-   QString getReagent(int i);
-   QVector<QString> getReagents();
-   double getInterval();
+   QString name();
+   QString directions();
+   bool hasTimer();
+   QString timerValue();
+   bool completed();
+   //! This is a non-stored temporary in-memory set.
+   QVector<QString> reagents();
+   double interval();
+
+   int instructionNumber() const;
+signals:
+   /*
+   void changedName(QString);
+   void changedDirections(QString);
+   void changedHasTimer(bool);
+   void changedTimerValue(QString);
+   void changedCompleted(bool);
+   void changedInterval(double);
+   void changedReagents(QVector<QString>);
+   */
 
 private:
-   void setDefaults();
-
-   QString name;
-   QString directions;
-   bool hasTimer;
-   QString timerValue; // hh:mm:ss
-   bool completed;
-   double interval;     // when the action takes place
-   QVector<QString> reagents; // what the action works on
+   //! Only database gets to construct instances.
+   Instruction();
+   Instruction( Instruction const& other );
+   /*
+   Instruction( const QString& name,
+                const QString& directions,
+                bool hasTimer = false,
+                const QString& timerVal = "0" );
+   */
+   QVector<QString> _reagents;
+   
+   static QHash<QString,QString> tagToProp;
+   static QHash<QString,QString> tagToPropHash();
 };
 
 #endif   /* _INSTRUCTION_H */

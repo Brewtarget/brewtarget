@@ -27,40 +27,57 @@ class MiscItemDelegate;
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
-#include <Qt>
 #include <QItemDelegate>
 #include <QStyleOptionViewItem>
-#include <QVector>
-#include "misc.h"
-#include "observable.h"
-#include "MiscTableWidget.h"
+#include <QList>
+#include <QMetaProperty>
+#include <QTableView>
+
+// Forward declarations.
+class Misc;
+class MiscTableWidget;
+class Recipe;
 
 enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCOLS /*This one MUST be last*/};
 
-class MiscTableModel : public QAbstractTableModel, public MultipleObserver
+class MiscTableModel : public QAbstractTableModel
 {
    Q_OBJECT
    
 public:
-   MiscTableModel(MiscTableWidget* parent=0);
+   MiscTableModel(QTableView* parent=0);
    virtual ~MiscTableModel() {}
+   //! Observe a recipe's list of fermentables.
+   void observeRecipe(Recipe* rec);
+   //! Whether or not we should be looking at the database.
+   void observeDatabase(bool val);
    void addMisc(Misc* misc);
+   void addMiscs(QList<Misc*> miscs);
+   //! \returns the \b Misc at model index \b i.
    Misc* getMisc(unsigned int i);
    bool removeMisc(Misc* misc);
    void removeAll();
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver
    
-   // Inherit the following from QAbstractItemModel via QAbstractTableModel
+   //! Reimplemented from QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+   //! Reimplemented from QAbstractTableModel
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+   //! Reimplemented from QAbstractTableModel
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
+   //! Reimplemented from QAbstractTableModel
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+
+public slots:
+   void changed(QMetaProperty,QVariant);
    
 private:
-   QVector<Misc*> miscObs;
-   MiscTableWidget* parentTableWidget;
+   QList<Misc*> miscObs;
+   Recipe* recObs;
+   QTableView* parentTableWidget;
 };
 
 class MiscItemDelegate : public QItemDelegate
@@ -80,4 +97,3 @@ private:
 };
 
 #endif   /* _MISCTABLEMODEL_H */
-

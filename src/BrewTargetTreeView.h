@@ -26,8 +26,17 @@ class BrewTargetTreeView;
 #include <QWidget>
 #include <QPoint>
 #include <QMouseEvent>
-#include "database.h"
-#include "BrewTargetTreeModel.h"
+#include "BrewTargetTreeItem.h"
+
+// Forward declarations.
+class BrewTargetTreeModel;
+class Recipe;
+class Equipment;
+class Fermentable;
+class Hop;
+class Misc;
+class Yeast;
+class BrewNote;
 
 class BrewTargetTreeView : public QTreeView
 {
@@ -35,14 +44,14 @@ class BrewTargetTreeView : public QTreeView
 public:
    BrewTargetTreeView(QWidget *parent = 0);
    virtual ~BrewTargetTreeView();
-   void startObservingDB();
    BrewTargetTreeModel* getModel();
+   QMenu* getContextMenu(QModelIndex selected);
 
    bool removeRow(const QModelIndex &index);
    bool isParent(const QModelIndex& parent, const QModelIndex& child);
    QModelIndex getParent(const QModelIndex& child);
 
-   QModelIndex getFirst(int type);
+   QModelIndex getFirst(int type = BrewTargetTreeItem::NUMTYPES);
 
    // Ugh
    Recipe* getRecipe(const QModelIndex &index) const;
@@ -77,12 +86,77 @@ public:
    // Getting selections from the keyboard to work.
    void keyPressEvent(QKeyEvent* event);
 
+   // The abstraction kind of hurts
+   void setupContextMenu(QWidget* top, QWidget* editor, QMenu* sMenu,int type = BrewTargetTreeItem::RECIPE);
+
+   // Friend classes. For the most part, the children don't do much beyond
+   // contructors and context menus. So far :/
+   friend class RecipeTreeView;
+   friend class EquipmentTreeView;
+   friend class FermentableTreeView;
+   friend class HopTreeView;
+   friend class MiscTreeView;
+   friend class YeastTreeView;
+
 private:
    BrewTargetTreeModel* model;
+   QMenu* contextMenu, *subMenu;
    QPoint dragStart;
+
    bool doubleClick;
 
    QMimeData *mimeData(QModelIndexList indexes);
+};
+
+// RecipeTreeView subclasses BrewTargetTreeView to only show recipes.
+class RecipeTreeView : public BrewTargetTreeView
+{
+   Q_OBJECT
+public:
+   RecipeTreeView(QWidget *parent = 0);
+   virtual ~RecipeTreeView();
+
+};
+
+// EquipmentTreeView only shows equipment. I think you can see where this is headed?
+class EquipmentTreeView : public BrewTargetTreeView
+{
+   Q_OBJECT
+public:
+   EquipmentTreeView(QWidget *parent = 0);
+   virtual ~EquipmentTreeView();
+};
+
+class FermentableTreeView : public BrewTargetTreeView
+{
+   Q_OBJECT
+public:
+   FermentableTreeView(QWidget *parent = 0);
+   virtual ~FermentableTreeView();
+};
+
+class HopTreeView : public BrewTargetTreeView
+{
+   Q_OBJECT
+public:
+   HopTreeView(QWidget *parent = 0);
+   virtual ~HopTreeView();
+};
+
+class MiscTreeView : public BrewTargetTreeView
+{
+   Q_OBJECT
+public:
+   MiscTreeView(QWidget *parent = 0);
+   virtual ~MiscTreeView();
+};
+
+class YeastTreeView : public BrewTargetTreeView
+{
+   Q_OBJECT
+public:
+   YeastTreeView(QWidget *parent = 0);
+   virtual ~YeastTreeView();
 };
 
 #endif /* BREWTARGETTREEVIEW_H_ */

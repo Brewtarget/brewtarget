@@ -31,41 +31,53 @@ class MainWindow;
 #include <QPrinter>
 #include <QPrintDialog>
 #include "ui_mainWindow.h"
-#include "FermentableDialog.h"
-#include "HopDialog.h"
-#include "MiscDialog.h"
-#include "YeastDialog.h"
-#include "AboutDialog.h"
-#include "observable.h"
-#include "recipe.h"
-#include "BeerColorWidget.h"
-#include "FermentableEditor.h"
-#include "MiscEditor.h"
-#include "HopEditor.h"
-#include "YeastEditor.h"
-#include "EquipmentEditor.h"
-#include "StyleEditor.h"
-#include "OptionDialog.h"
-#include "MaltinessWidget.h"
-#include "MashEditor.h"
-#include "MashStepEditor.h"
-#include "MashWizard.h"
-#include "BrewDayScrollWidget.h"
-#include "HtmlViewer.h"
-#include "ScaleRecipeTool.h"
-#include "RecipeFormatter.h"
-#include "OgAdjuster.h"
-#include "ConverterTool.h"
-#include "TimerListDialog.h"
-#include "MashComboBox.h"
-#include "PrimingDialog.h"
-#include "RecipeExtrasWidget.h"
-#include "RefractoDialog.h"
-#include "MashDesigner.h"
-#include "PitchDialog.h"
-#include "BrewNoteWidget.h"
 
-class MainWindow : public QMainWindow, public Ui::mainWindow, public Observer
+// Forward Declarations
+class FermentableDialog;
+class HopDialog;
+class MiscDialog;
+class YeastDialog;
+class AboutDialog;
+class Recipe;
+class BeerColorWidget;
+class FermentableEditor;
+class MiscEditor;
+class HopEditor;
+class YeastEditor;
+class EquipmentEditor;
+class StyleEditor;
+class OptionDialog;
+class MaltinessWidget;
+class MashEditor;
+class MashStepEditor;
+class MashWizard;
+class BrewDayScrollWidget;
+class HtmlViewer;
+class ScaleRecipeTool;
+class RecipeFormatter;
+class OgAdjuster;
+class ConverterTool;
+class TimerListDialog;
+class MashComboBox;
+class PrimingDialog;
+class RecipeExtrasWidget;
+class RefractoDialog;
+class MashDesigner;
+class PitchDialog;
+class BrewNoteWidget;
+class FermentableTableModel;
+class FermentableSortFilterProxyModel;
+class HopTableModel;
+class HopSortFilterProxyModel;
+class MiscTableModel;
+class MiscSortFilterProxyModel;
+class YeastTableModel;
+class YeastSortFilterProxyModel;
+class MashStepTableModel;
+class EquipmentListModel;
+class StyleListModel;
+
+class MainWindow : public QMainWindow, public Ui::mainWindow
 {
    Q_OBJECT
 
@@ -74,8 +86,7 @@ public:
    MainWindow(QWidget* parent=0);
    virtual ~MainWindow() {}
    void setRecipe(Recipe* recipe);
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
-   void forceRecipeUpdate(); // Should make the recipe call its hasChanged().
+   Recipe* currentRecipe();
    QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 
    bool verifyImport(QString tag, QString name);
@@ -85,19 +96,20 @@ public:
    void setBrewNote(BrewNote* bNote);
 
 public slots:
+   
+   void changed(QMetaProperty,QVariant);
+   
    void save();
-   void setRecipeByName(const QString& name);
    void setRecipeByIndex(const QModelIndex &index);
    void treeActivated(const QModelIndex &index);
    void clear();
 
    void updateRecipeName();
    void updateRecipeStyle();
-   void updateRecipeEquipment(const QString&);
+   void updateRecipeEquipment();
    void updateRecipeBatchSize();
    void updateRecipeBoilSize();
    void updateRecipeEfficiency();
-   void updateRecipeStyle(const QString&);
 
    void addFermentableToRecipe(Fermentable* ferm);
    void removeSelectedFermentable();
@@ -116,9 +128,11 @@ public slots:
    void editSelectedYeast();
 
    void addMashStep();
+   void moveSelectedMashStepUp();
+   void moveSelectedMashStepDown();
    void removeSelectedMashStep();
    void editSelectedMashStep();
-   void setMashByName(const QString& name);
+   void setMashToCurrentlySelected();
    void saveMash();
    void removeMash();
 
@@ -143,21 +157,25 @@ public slots:
    void openDonateLink();
 
    //! Merges two database files.
-   void mergeDatabases();
+   void mergeDatabases(); // TODO: implement.
    
    void dragEnterEvent(QDragEnterEvent *event);
-   void dropEvent( QDropEvent *event);
+   void dropEvent(QDropEvent *event);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
 private:
    Recipe* recipeObs;
+   Style* recStyle;
+   Equipment* recEquip;
+   
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
    QFileDialog* fileSaver;
    QList<QMenu*> contextMenus;
    EquipmentEditor* equipEditor;
+   EquipmentEditor* singleEquipEditor;
    FermentableDialog* fermDialog;
    FermentableEditor* fermEditor;
    HopDialog* hopDialog;
@@ -170,7 +188,6 @@ private:
    StyleEditor* styleEditor;
    YeastDialog* yeastDialog;
    YeastEditor* yeastEditor;
-   Database* db;
    OptionDialog* optionDialog;
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
    MaltinessWidget* maltWidget;
@@ -188,6 +205,18 @@ private:
    PitchDialog* pitchDialog;
    QPrinter *printer;
 
+   FermentableTableModel* fermTableModel;
+   FermentableSortFilterProxyModel* fermTableProxy;
+   HopTableModel* hopTableModel;
+   HopSortFilterProxyModel* hopTableProxy;
+   MiscTableModel* miscTableModel;
+   MiscSortFilterProxyModel* miscTableProxy;
+   YeastTableModel* yeastTableModel;
+   YeastSortFilterProxyModel* yeastTableProxy;
+   MashStepTableModel* mashStepTableModel;
+   EquipmentListModel* equipmentListModel;
+   StyleListModel* styleListModel;
+   
    QMultiHash<QString, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 
@@ -207,7 +236,7 @@ private:
    void setupShortCuts();
    void setupContextMenu();
 
-   void showChanges(const QVariant& info = QVariant());
+   void showChanges(QMetaProperty* prop = 0);
 
    // Copy methods used by copySelected()
    void copyThis(Recipe *rec);

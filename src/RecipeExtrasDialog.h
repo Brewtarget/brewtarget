@@ -23,11 +23,14 @@ class RecipeExtrasDialog;
 
 #include <QDialog>
 #include <QWidget>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_recipeExtrasDialog.h"
-#include "observable.h"
-#include "recipe.h"
 
-class RecipeExtrasDialog : public QDialog, public Ui::recipeExtrasDialog, public Observer
+// Forward declarations.
+class Recipe;
+
+class RecipeExtrasDialog : public QDialog, public Ui::recipeExtrasDialog
 {
    Q_OBJECT
 
@@ -54,13 +57,12 @@ public slots:
    void updateNotes();
 
    void saveAndQuit();
+   void changed(QMetaProperty, QVariant);
 
 private:
    Recipe* recObs;
 
-   void showChanges();
-
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer
+   void showChanges(QMetaProperty* prop = 0);
 };
 
 #endif // RECIPEEXTRASDIALOG_H

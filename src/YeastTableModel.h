@@ -25,28 +25,36 @@ class YeastItemDelegate;
 #include <QAbstractTableModel>
 #include <QWidget>
 #include <QModelIndex>
+#include <QMetaProperty>
 #include <QVariant>
-#include <Qt>
 #include <QItemDelegate>
-#include <QVector>
-#include "yeast.h"
-#include "observable.h"
-#include "YeastTableWidget.h"
+#include <QList>
+#include <QTableView>
+
+// Forward declarations.
+class Yeast;
+class YeastTableWidget;
+class Recipe;
 
 enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTNUMCOLS /*This one MUST be last*/};
 
-class YeastTableModel : public QAbstractTableModel, public MultipleObserver
+class YeastTableModel : public QAbstractTableModel
 {
    Q_OBJECT
 
 public:
-   YeastTableModel(YeastTableWidget* parent=0);
+   YeastTableModel(QTableView* parent=0);
    virtual ~YeastTableModel() {}
+   //! Observe a recipe's list of fermentables.
+   void observeRecipe(Recipe* rec);
+   //! Whether or not we should be looking at the database.
+   void observeDatabase(bool val);
    void addYeast(Yeast* yeast);
+   void addYeasts(QList<Yeast*> yeasts);
    Yeast* getYeast(unsigned int i);
-   bool removeYeast(Yeast* yeast); // Returns true if "hop" is successfully found and removed.
+   //! \returns true if the \b yeast is found and removed.
+   bool removeYeast(Yeast* yeast);
    void removeAll();
-   virtual void notify(Observable* notifier, QVariant info = QVariant()); // Inherited from Observer via MultipleObserver.
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -56,9 +64,13 @@ public:
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
+public slots:
+   void changed(QMetaProperty,QVariant);
+   
 private:
-   QVector<Yeast*> yeastObs;
-   YeastTableWidget* parentTableWidget;
+   QList<Yeast*> yeastObs;
+   QTableView* parentTableWidget;
+   Recipe* recObs;
 };
 
 class YeastItemDelegate : public QItemDelegate

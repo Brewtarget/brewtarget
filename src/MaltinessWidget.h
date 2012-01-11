@@ -24,12 +24,15 @@ class MaltinessWidget;
 #include <QColor>
 #include <QPaintEvent>
 #include <QLabel>
-#include "observable.h"
-#include "recipe.h"
+#include <QMetaProperty>
+#include <QVariant>
+
+// Forward declarations.
+class Recipe;
 
 enum{ CLOYING, EXTRAMALTY, SLIGHTLYMALTY, BALANCED, SLIGHTLYHOPPY, EXTRAHOPPY, HARSH };
 
-class MaltinessWidget : public QLabel, public Observer
+class MaltinessWidget : public QLabel
 {
    Q_OBJECT
 
@@ -39,8 +42,9 @@ public:
 
    void observeRecipe(Recipe* recipe);
 
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // This will get called by observed whenever it changes.
-
+public slots:
+   void changed(QMetaProperty,QVariant);
+   
 private:
 
    void setup();

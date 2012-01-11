@@ -17,9 +17,17 @@
 */
 
 #include "ScaleRecipeTool.h"
-#include "brewtarget.h"
 #include <QMessageBox>
 #include <QButtonGroup>
+#include "brewtarget.h"
+#include "recipe.h"
+#include "fermentable.h"
+#include "mash.h"
+#include "mashstep.h"
+#include "hop.h"
+#include "misc.h"
+#include "yeast.h"
+#include "water.h"
 
 ScaleRecipeTool::ScaleRecipeTool(QWidget* parent) : QDialog(parent)
 {
@@ -64,7 +72,7 @@ void ScaleRecipeTool::show()
    // Set the batch size display to the current batch size.
    if( recObs != 0 )
    {
-      double batchSize = recObs->getBatchSize_l();
+      double batchSize = recObs->batchSize_l();
       lineEdit_newBatchSize->setText(Brewtarget::displayAmount(batchSize, Units::liters));
    }
    
@@ -86,33 +94,37 @@ void ScaleRecipeTool::scaleByEfficiency()
    if( recObs == 0 )
       return;
 
-   unsigned int i, size;
+   int i, size;
 
-   double oldEfficiency = recObs->getEfficiency_pct();
+   double oldEfficiency = recObs->efficiency_pct();
    double newEfficiency = (lineEdit_newEfficiency->text()).toDouble();
 
    double ratio = oldEfficiency / newEfficiency;
 
    recObs->setEfficiency_pct(newEfficiency);
 
-   size = recObs->getNumFermentables();
+   QList<Fermentable*> ferms = recObs->fermentables();
+   size = ferms.size();
    for( i = 0; i < size; ++i )
    {
-      Fermentable* ferm = recObs->getFermentable(i);
+      Fermentable* ferm = ferms[i];
+      // NOTE: why the hell do we need this?
       if( ferm == 0 )
          continue;
 
-      ferm->setAmount_kg(ferm->getAmount_kg() * ratio);
+      ferm->setAmount_kg(ferm->amount_kg() * ratio);
    }
 
-   Mash *mash = recObs->getMash();
+   Mash* mash = recObs->mash();
    if( mash == 0 )
       return;
 
-   size = mash->getNumMashSteps();
+   QList<MashStep*> mashSteps = mash->mashSteps();
+   size = mashSteps.size();
    for( i = 0; i < size; ++i )
    {
-      MashStep* step = mash->getMashStep(i);
+      MashStep* step = mashSteps[i];
+      // NOTE: why the hell do we need this?
       if( step == 0 )
          continue;
 
@@ -132,68 +144,78 @@ void ScaleRecipeTool::scaleByVolume()
    if( recObs == 0 )
       return;
    
-   unsigned int i, size;
+   int i, size;
    
-   double currentBatchSize_l = recObs->getBatchSize_l();
+   double currentBatchSize_l = recObs->batchSize_l();
    double newBatchSize_l = Brewtarget::volQStringToSI(lineEdit_newBatchSize->text());
    
    double ratio = newBatchSize_l / currentBatchSize_l;
    
    // I think you want the equipment to be clean.
-   recObs->setEquipment(new Equipment());
+   //recObs->setEquipment(new Equipment());
    recObs->setBatchSize_l(newBatchSize_l);
    recObs->setBoilSize_l(newBatchSize_l);
    
-   size = recObs->getNumFermentables();
+   QList<Fermentable*> ferms = recObs->fermentables();
+   size = ferms.size();
    for( i = 0; i < size; ++i )
    {
-      Fermentable* ferm = recObs->getFermentable(i);
+      Fermentable* ferm = ferms[i];
+      // NOTE: why the hell do we need this?
       if( ferm == 0 )
-    continue;
+         continue;
       
-      ferm->setAmount_kg(ferm->getAmount_kg() * ratio);
+      ferm->setAmount_kg(ferm->amount_kg() * ratio);
    }
    
-   size = recObs->getNumHops();
+   QList<Hop*> hops = recObs->hops();
+   size = hops.size();
    for( i = 0; i < size; ++i )
    {
-      Hop* hop = recObs->getHop(i);
+      Hop* hop = hops[i];
+      // NOTE: why the hell do we need this?
       if( hop == 0 )
-    continue;
+         continue;
       
-      hop->setAmount_kg(hop->getAmount_kg() * ratio);
+      hop->setAmount_kg(hop->amount_kg() * ratio);
    }
    
-   size = recObs->getNumMiscs();
+   QList<Misc*> miscs = recObs->miscs();
+   size = miscs.size();
    for( i = 0; i < size; ++i )
    {
-      Misc* misc = recObs->getMisc(i);
+      Misc* misc = miscs[i];
+      // NOTE: why the hell do we need this?
       if( misc == 0 )
-    continue;
+         continue;
       
-      misc->setAmount( misc->getAmount() * ratio );
+      misc->setAmount( misc->amount() * ratio );
    }
    
-   size = recObs->getNumWaters();
+   QList<Water*> waters = recObs->waters();
+   size = waters.size();
    for( i = 0; i < size; ++i )
    {
-      Water* water = recObs->getWater(i);
+      Water* water = waters[i];
+      // NOTE: why the hell do we need this?
       if( water == 0 )
-    continue;
+         continue;
       
-      water->setAmount_l(water->getAmount_l() * ratio);
+      water->setAmount_l(water->amount_l() * ratio);
    }
    
-   Mash *mash = recObs->getMash();
+   Mash* mash = recObs->mash();
    if( mash == 0 )
       return;
    
-   size = mash->getNumMashSteps();
+   QList<MashStep*> mashSteps = mash->mashSteps();
+   size = mashSteps.size();
    for( i = 0; i < size; ++i )
    {
-      MashStep* step = mash->getMashStep(i);
+      MashStep* step = mashSteps[i];
+      // NOTE: why the hell do we need this?
       if( step == 0 )
-    continue;
+         continue;
       
       // Reset all these to zero so that the user
       // will know to re-run the mash wizard.

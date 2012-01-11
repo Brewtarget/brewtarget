@@ -21,91 +21,39 @@
 #include <QVector>
 #include "mash.h"
 #include "mashstep.h"
-#include "ui_mainWindow.h"
 #include "brewtarget.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
 
+QHash<QString,QString> Mash::tagToProp = Mash::tagToPropHash();
+
+QHash<QString,QString> Mash::tagToPropHash()
+{
+   QHash<QString,QString> propHash;
+   propHash["NAME"] = "name";
+   propHash["GRAIN_TEMP"] = "grainTemp_c";
+   propHash["NOTES"] = "notes";
+   propHash["TUN_TEMP"] = "tunTemp_c";
+   propHash["SPARGE_TEMP"] = "spargeTemp_c";
+   propHash["PH"] = "ph";
+   propHash["TUN_WEIGHT"] = "tunWeight_kg";
+   propHash["TUN_SPECIFIC_HEAT"] = "tunSpecificHeat_calGC";
+   propHash["EQUIP_ADJUST"] = "equipAdjust";
+   return propHash;
+}
+
 bool operator<(Mash &m1, Mash &m2)
 {
-   return m1.name < m2.name;
+   return m1.name() < m2.name();
 }
 
 bool operator==(Mash &m1, Mash &m2)
 {
-   return m1.name == m2.name;
+   return m1.name() == m2.name();
 }
 
-void Mash::toXml(QDomDocument& doc, QDomNode& parent)
-{
-   QDomElement mashNode;
-   QDomElement tmpNode;
-   QDomText tmpText;
-   
-   unsigned int i, size;
-   
-   mashNode = doc.createElement("MASH");
-   
-   tmpNode = doc.createElement("NAME");
-   tmpText = doc.createTextNode(name);
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("VERSION");
-   tmpText = doc.createTextNode(text(version));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("GRAIN_TEMP");
-   tmpText = doc.createTextNode(text(grainTemp_c));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("MASH_STEPS");
-   size = mashSteps.size();
-   for( i = 0; i < size; ++i )
-      mashSteps[i]->toXml(doc, tmpNode);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("NOTES");
-   tmpText = doc.createTextNode(notes);
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TUN_TEMP");
-   tmpText = doc.createTextNode(text(tunTemp_c));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("SPARGE_TEMP");
-   tmpText = doc.createTextNode(text(spargeTemp_c));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("PH");
-   tmpText = doc.createTextNode(text(ph));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TUN_WEIGHT");
-   tmpText = doc.createTextNode(text(tunWeight_kg));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("TUN_SPECIFIC_HEAT");
-   tmpText = doc.createTextNode(text(tunSpecificHeat_calGC));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   tmpNode = doc.createElement("EQUIP_ADJUST");
-   tmpText = doc.createTextNode(text(equipAdjust));
-   tmpNode.appendChild(tmpText);
-   mashNode.appendChild(tmpNode);
-   
-   parent.appendChild(mashNode);
-}
-
+/*
 void Mash::setDefaults()
 {
    name = "";
@@ -119,17 +67,14 @@ void Mash::setDefaults()
    tunSpecificHeat_calGC = 0.0;
    equipAdjust = true;
 }
+*/
 
 Mash::Mash()
+   : BeerXMLElement()
 {
-   setDefaults();
 }
 
-Mash::Mash(const QDomNode& mashNode)
-{
-   fromNode(mashNode);
-}
-
+/*
 void Mash::fromNode(const QDomNode& mashNode)
 {
    QDomNode node, child;
@@ -209,35 +154,31 @@ void Mash::fromNode(const QDomNode& mashNode)
       }
    }
 }
+*/
 
 void Mash::setName( const QString& var )
 {
-   name = QString(var);
-   hasChanged();
+   set("name", "name", var);
 }
 
 void Mash::setGrainTemp_c( double var )
 {
-   grainTemp_c = var;
-   hasChanged();
+   set("grainTemp_c", "grain_temp", var);
 }
 
 void Mash::setNotes( const QString& var )
 {
-   notes = QString(var);
-   hasChanged();
+   set("notes", "notes", var);
 }
 
 void Mash::setTunTemp_c( double var )
 {
-   tunTemp_c = var;
-   hasChanged();
+   set("tunTemp_c", "tun_temp", var);
 }
 
 void Mash::setSpargeTemp_c( double var )
 {
-   spargeTemp_c = var;
-   hasChanged();
+   set("spargeTemp_c", "sparge_temp", var);
 }
 
 void Mash::setPh( double var )
@@ -245,14 +186,12 @@ void Mash::setPh( double var )
    if( var < 0.0 || var > 14.0 )
    {
       Brewtarget::logW( QString("Mash: 0 < pH < 14: %1").arg(var) );
-      ph = 7;
+      return;
    }
    else
    {
-      ph = var;
+      set("ph", "ph", var);
    }
-
-   hasChanged();
 }
 
 void Mash::setTunWeight_kg( double var )
@@ -260,14 +199,12 @@ void Mash::setTunWeight_kg( double var )
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Mash: tun weight < 0: %1").arg(var) );
-      tunWeight_kg = 0;
+      return;
    }
    else
    {
-      tunWeight_kg = var;
+      set("tunWeight_kg", "tun_weight", var);
    }
-
-   hasChanged();
 }
 
 void Mash::setTunSpecificHeat_calGC( double var )
@@ -275,27 +212,27 @@ void Mash::setTunSpecificHeat_calGC( double var )
    if( var < 0.0 )
    {
       Brewtarget::logW( QString("Mash: sp heat < 0: %1").arg(var) );
-      tunSpecificHeat_calGC = 0;
+      return;
    }
    else
    {
-      tunSpecificHeat_calGC = var;
-      hasChanged();
+      set("tunSpecificHeat_calGC", "tun_specific_heat", var);
    }
 }
 
 void Mash::setEquipAdjust( bool var )
 {
-   equipAdjust = var;
-   hasChanged();
+   set("equipAdjust", "equip_adjust", var);
 }
 
+// NOTE: this is not necessary due to Database::newMashStep(Mash* mash). Right?
+/*
 void Mash::addMashStep(MashStep* step)
 {
    if( step == 0 )
       return;
    
-   mashSteps.push_back(step);
+   mashSteps.append(step);
    addObserved(step);
    hasChanged();
 }
@@ -317,136 +254,118 @@ void Mash::removeMashStep(MashStep* step)
       }
    }
 }
+*/
 
 void Mash::removeAllMashSteps()
 {
-   MashStep* step;
-
-   while( mashSteps.size() > 0 )
-   {
-      step = mashSteps.back();
-      mashSteps.pop_back(); // Remove last element.
-      delete step; // Delete storage.
-   }
-
-   hasChanged();
+   int i, size;
+   QList<MashStep*> tmpSteps = mashSteps();
+   size = tmpSteps.size();
+   for( i = 0; i < size; ++i )
+      Database::instance().removeFrom(this, tmpSteps[i]);
 }
 
 //============================="GET" METHODS====================================
-QString Mash::getName() const
+QString Mash::name() const
 {
-   return name;
+   return get("name").toString();
 }
 
-double Mash::getGrainTemp_c() const
+double Mash::grainTemp_c() const
 {
-   return grainTemp_c;
+   return get("grain_temp").toDouble();
 }
 
-unsigned int Mash::getNumMashSteps() const
+QString Mash::notes() const
 {
-   return mashSteps.size();
+   return get("notes").toString();
 }
 
-MashStep* Mash::getMashStep( unsigned int i )
+double Mash::tunTemp_c() const
 {
-  if( i >= static_cast<unsigned int>(mashSteps.size()) )
-      return 0;
-   else
-      return mashSteps[i];
+   return get("tun_temp").toDouble();
 }
 
-QString Mash::getNotes() const
+double Mash::spargeTemp_c() const
 {
-   return notes;
+   return get("sparge_temp").toDouble();
 }
 
-double Mash::getTunTemp_c() const
+double Mash::ph() const
 {
-   return tunTemp_c;
+   return get("ph").toDouble();
 }
 
-double Mash::getSpargeTemp_c() const
+double Mash::tunWeight_kg() const
 {
-   return spargeTemp_c;
+   return get("tun_weight").toDouble();
 }
 
-double Mash::getPh() const
+double Mash::tunSpecificHeat_calGC() const
 {
-   return ph;;
+   return get("tun_specific_heat").toDouble();
 }
 
-double Mash::getTunWeight_kg() const
+bool Mash::equipAdjust() const
 {
-   return tunWeight_kg;
-}
-
-double Mash::getTunSpecificHeat_calGC() const
-{
-   return tunSpecificHeat_calGC;
-}
-
-bool Mash::getEquipAdjust() const
-{
-   return equipAdjust;
+   return get("equip_adjust").toBool();
 }
 
 // === other methods ===
-double Mash::totalMashWater_l() const
+double Mash::totalMashWater_l()
 {
-   unsigned int i, size;
+   int i, size;
    double waterAdded_l = 0.0;
+   QList<MashStep*> steps = mashSteps();
    MashStep* step;
    
-   size = mashSteps.size();
+   size = steps.size();
    for( i = 0; i < size; ++i )
    {
-      step = mashSteps[i];
+      step = steps[i];
       
-      if( step->getType() == MashStep::TYPEINFUSION )
-      waterAdded_l += step->getInfuseAmount_l();
+      if( step->type() == MashStep::Infusion )
+      waterAdded_l += step->infuseAmount_l();
    }
    
    return waterAdded_l;
 }
 
-double Mash::getTotalTime()
+double Mash::totalTime()
 {
-   unsigned int i;
+   int i, size;
    double totalTime = 0.0;
+   QList<MashStep*> steps = mashSteps();
    MashStep* mstep;
 
-   for( i = 0; i < getNumMashSteps(); ++i )
+   size = steps.size();
+   for( i = 0; i < size; ++i )
    {
-      mstep = getMashStep(i);
-      totalTime += mstep->getStepTime_min();
+      mstep = steps[i];
+      totalTime += mstep->stepTime_min();
    }
    return totalTime;
 }
 
-void Mash::notify(Observable *notifier, QVariant info)
+QList<MashStep*> Mash::mashSteps() const
 {
-   unsigned int i, size;
-   size = mashSteps.size();
-   
-   for( i = 0; i < size; ++i )
-   {
-      if( mashSteps[i] == notifier )
-      {
-         hasChanged(QVariant(i)); // Mash notifies its observers of which mashStep changed.
-         return;
-      }
-   }
+   return Database::instance().mashSteps(this);
 }
 
-void Mash::swapSteps( unsigned int i, unsigned int j )
+// TODO: ensure database is connecting mashstep signals to us.
+void Mash::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( i < 0 || j < 0 || static_cast<int>(i) >= mashSteps.size() || static_cast<int>(j) >= mashSteps.size() )
-      return; // Bad indices.
-
-   MashStep* tmp = mashSteps[i];
-   mashSteps[i] = mashSteps[j];
-   mashSteps[j] = tmp;
-
-   hasChanged();
+   int i;
+   MashStep* stepSender = qobject_cast<MashStep*>(sender());
+   if( stepSender == 0 )
+      return;
+   
+   // If one of our mash steps changed, our calculated properties
+   // may also change, so we need to emit some signals.
+   i = mashSteps().indexOf(stepSender);
+   if( i >= 0 )
+   {
+      emit changed(metaProperty("totalMashWater_l"), QVariant());
+      emit changed(metaProperty("totalTime"), QVariant());
+   }
 }

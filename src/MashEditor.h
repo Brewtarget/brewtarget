@@ -22,8 +22,14 @@
 class MashEditor;
 
 #include <QDialog>
+#include <QMetaProperty>
+#include <QVariant>
 #include "ui_mashEditor.h"
-#include "recipe.h"
+
+// Forward declarations.
+class Recipe;
+class Mash;
+class Equipment;
 
 class MashEditor : public QDialog, public Ui::mashEditor
 {
@@ -35,13 +41,14 @@ public slots:
    void showEditor();
    void closeEditor();
    void saveAndClose();
-   void fromEquipment();
-   void setRecipe(Recipe* recipe);
-
+   void fromEquipment(Equipment* equip);
+   void setMash(Mash* mash);
+   
+   void changed(QMetaProperty,QVariant);
 private:
-   void showChanges();
+   void showChanges(QMetaProperty* prop = 0);
    void clear();
-   Recipe* rec;
+   Mash* mashObs;
 
 };
 

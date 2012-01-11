@@ -19,10 +19,9 @@
 #include <QSize>
 #include <QPainter>
 #include <QSizePolicy>
-#include <Qt>
 #include <QFrame>
 #include "MaltinessWidget.h"
-#include "brewtarget.h"
+#include "recipe.h"
 
 MaltinessWidget::MaltinessWidget(QWidget* parent) : QLabel(parent), recObs(0)
 {
@@ -51,12 +50,16 @@ void MaltinessWidget::setup()
 
 void MaltinessWidget::observeRecipe(Recipe* recipe)
 {
+   if( recObs )
+      disconnect( recObs, 0, this, 0 );
+   
    recObs = recipe;
-   if( recipe != 0 )
-      setObserved(recipe);
-
-   updateInfo();
-   update();
+   if( recObs )
+   {
+      connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      updateInfo();
+      update();
+   }
 }
 
 QColor MaltinessWidget::bgColor()
@@ -113,8 +116,8 @@ int MaltinessWidget::region()
    if( recObs == 0 )
       return -1;
 
-   ibu = recObs->getIBU();
-   points = (recObs->getOg() - 1)*1000;
+   ibu = recObs->IBU();
+   points = (recObs->og() - 1)*1000;
 
    if( (11./3.)*ibu-5./3. < points )
       return CLOYING;
@@ -132,14 +135,14 @@ int MaltinessWidget::region()
       return HARSH;
 }
 
-void MaltinessWidget::notify(Observable *notifier, QVariant /*info*/)
+void MaltinessWidget::changed(QMetaProperty prop, QVariant /*val*/)
 {
-   if( notifier != recObs )
-      return;
-
-   updateInfo();
-
-   update();
+   QString propName(prop.name());
+   if( propName == "IBU" || propName == "og" )
+   {
+      updateInfo();
+      update();
+   }
 }
 
 // Changes the text/color based on recipe statistics.

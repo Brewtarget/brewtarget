@@ -24,37 +24,40 @@ class HopDialog;
 #include <QWidget>
 #include <QDialog>
 #include <QVariant>
+#include <QMetaProperty>
 #include "ui_hopDialog.h"
-#include "observable.h"
 #include "database.h"
-class MainWindow;
-#include "HopEditor.h"
 
-class HopDialog : public QDialog, public Ui::hopDialog, public Observer
+// Forward declarations.
+class MainWindow;
+class HopEditor;
+class HopTableModel;
+class HopSortFilterProxyModel;
+
+class HopDialog : public QDialog, public Ui::hopDialog
 {
    Q_OBJECT
 
 public:
    HopDialog(MainWindow* parent);
    virtual ~HopDialog() {}
-   void startObservingDB();
-   virtual void notify(Observable *notifier, QVariant info = QVariant()); // From Observer
 
 public slots:
    void addHop(const QModelIndex& = QModelIndex());
    void removeHop();
    void editSelected();
    void newHop();
+   
+   void changed(QMetaProperty,QVariant);
 
 private:
-   Database* dbObs;
    MainWindow* mainWindow;
    HopEditor* hopEditor;
-   unsigned int numHops;
+   HopTableModel* hopTableModel;
+   HopSortFilterProxyModel* hopTableProxy;
+   int numHops;
 
    void populateTable();
 };
 
-
 #endif   /* _HOPDIALOG_H */
-

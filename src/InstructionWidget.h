@@ -22,13 +22,16 @@
 class InstructionWidget;
 
 #include "ui_instructionWidget.h"
-#include "observable.h"
-#include "instruction.h"
 #include <QWidget>
 #include <QSize>
-#include "TimerWidget.h"
+#include <QMetaProperty>
+#include <QVariant>
 
-class InstructionWidget : public QWidget, public Ui::instructionWidget, public Observer
+// Forward declarations.
+class TimerWidget;
+class Instruction;
+
+class InstructionWidget : public QWidget, public Ui::instructionWidget
 {
    Q_OBJECT
 public:
@@ -37,7 +40,6 @@ public:
    void setInstruction(Instruction* ins);
 
    virtual QSize sizeHint() const; // From QWidget
-   virtual void notify(Observable *notifier, QVariant info); // From Observer
 
 public slots:
    void setDirections();
@@ -45,6 +47,7 @@ public slots:
    void setTimerValue(QString value);
    void setCompleted();
 
+   void changed(QMetaProperty,QVariant);
 private:
    void showChanges();
    void makeEverythingInactive();

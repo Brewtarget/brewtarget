@@ -43,5 +43,6 @@
         <file>images/document-print-preview.png</file>
         <file>images/document-export.png</file>
         <file>images/backup.png</file>
+        <file>create_db.sql</file>
     </qresource>
 </RCC>

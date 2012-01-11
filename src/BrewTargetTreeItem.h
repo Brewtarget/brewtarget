@@ -27,15 +27,17 @@ class BrewTargetTreeItem;
 #include <QVariant>
 #include <QModelIndex>
 #include <QWidget>
-#include <Qt>
 #include <QVector>
+#include <QObject>
 
-#include "equipment.h"
-#include "fermentable.h"
-#include "hop.h"
-#include "recipe.h"
-#include "misc.h"
-#include "yeast.h"
+// Forward declarations.
+class BrewNote;
+class Equipment;
+class Fermentable;
+class Hop;
+class Recipe;
+class Misc;
+class Yeast;
 
 class BrewTargetTreeItem
 {
@@ -71,7 +73,7 @@ public:
    // column data
     QVariant getData(int column);
 
-   void setData(int t, void *d);
+   void setData(int t, QObject *d);
 
    Recipe*      getRecipe();
    Equipment*   getEquipment();
@@ -90,7 +92,7 @@ private:
    QList<BrewTargetTreeItem*> childItems;
 
    int type;
-   void *thing;
+   QObject* thing;
 
    // With great abstraction comes great ... sorry, I was distracted.
    QVariant dataRecipe(int column);
