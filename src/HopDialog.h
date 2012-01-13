@@ -1,6 +1,6 @@
 /*
  * HopDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,13 @@ class HopEditor;
 class HopTableModel;
 class HopSortFilterProxyModel;
 
+/*!
+ * \class HopDialog
+ * \author Philip G. Lee
+ *
+ * View/controller class for showing/editing the list of hops in
+ * the database.
+ */
 class HopDialog : public QDialog, public Ui::hopDialog
 {
    Q_OBJECT
@@ -43,9 +50,13 @@ public:
    virtual ~HopDialog() {}
 
 public slots:
+   //! Add selected hop to current recipe.
    void addHop(const QModelIndex& = QModelIndex());
+   //! Delete the selected hop from the database.
    void removeHop();
+   //! Bring up the editor for the selected hop.
    void editSelected();
+   //! Create a new hop.
    void newHop();
    
    void changed(QMetaProperty,QVariant);

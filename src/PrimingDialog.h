@@ -1,6 +1,6 @@
 /*
 * PrimingDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2011.
+* (rocketman768@gmail.com), 2009-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,12 @@ class PrimingDialog;
 #include <QButtonGroup>
 #include "ui_primingDialog.h"
 
+/*!
+ * \class PrimingDialog
+ * \author Philip G. Lee
+ *
+ * Dialog to calculate priming sugar amounts.
+ */
 class PrimingDialog : public QDialog, public Ui::primingDialog
 {
    Q_OBJECT

@@ -1,6 +1,6 @@
 /*
  * OptionDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,12 @@ class OptionDialog;
 #include "ui_optionsDialog.h"
 #include "unit.h"
 
+/*!
+ * \class OptionDialog
+ * \author Philip G. Lee
+ *
+ * View/controller dialog to manage options.
+ */
 class OptionDialog : public QDialog, public Ui::optionsDialog
 {
    Q_OBJECT

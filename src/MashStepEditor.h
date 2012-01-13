@@ -1,6 +1,6 @@
 /*
  * MashStepEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ class MashStepEditor;
 // Forward declarations.
 class MashStep;
 
+/*!
+ * \class MashStepEditor
+ * \author Philip G. Lee
+ *
+ * View/controller dialog for editing mash steps.
+ */
 class MashStepEditor : public QDialog, public Ui::mashStepEditor
 {
    Q_OBJECT
@@ -39,8 +45,13 @@ public:
 
 public slots:
    void saveAndClose();
+   //! View/edit the given mash step.
    void setMashStep(MashStep* step);
    void close();
+   /*!
+    * Grays out irrelevant portions of the dialog.
+    * \param text - one of {"Infusion","Decoction","Temperature"} describing the mash step.
+    */
    void grayOutStuff(const QString& text);
    void changed(QMetaProperty, QVariant);
 

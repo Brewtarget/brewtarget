@@ -1,6 +1,6 @@
 /*
  * FermentableDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,13 @@ class MainWindow;
 class FermentableEditor;
 class FermentableTableModel;
 class FermentableSortFilterProxyModel;
+
+/*!
+ * \class FermentableDialog
+ * \author Philip G. Lee
+ *
+ * View/controller class that shows the list of fermentables in the database.
+ */
 class FermentableDialog : public QDialog, public Ui::fermentableDialog
 {
    Q_OBJECT

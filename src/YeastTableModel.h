@@ -1,6 +1,6 @@
 /*
  * YeastTableModel.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,12 @@ class Recipe;
 
 enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTNUMCOLS /*This one MUST be last*/};
 
+/*!
+ * \class YeastTableModel
+ * \author Philip G. Lee
+ *
+ * Table model for yeasts.
+ */
 class YeastTableModel : public QAbstractTableModel
 {
    Q_OBJECT
@@ -73,6 +79,12 @@ private:
    Recipe* recObs;
 };
 
+/*!
+ * \class YeastItemDelegate
+ * \author Philip G. Lee
+ *
+ * Item delegate for yeast tables.
+ */
 class YeastItemDelegate : public QItemDelegate
 {
    Q_OBJECT

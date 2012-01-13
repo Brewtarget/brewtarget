@@ -1,6 +1,6 @@
 /*
  * recipe.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ class Recipe;
 #include <QString>
 #include <QDate>
 #include "BeerXMLElement.h"
-#include "hop.h"
+#include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
 
 // Forward declarations.
@@ -52,6 +52,12 @@ bool operator<(Recipe &r1, Recipe &r2 );
  */
 bool operator==(Recipe &r1, Recipe &r2 );
 
+/*!
+ * \class Recipe
+ * \author Philip G. Lee
+ *
+ * Model class for recipe records in the database.
+ */
 class Recipe : public BeerXMLElement
 {
    Q_OBJECT

@@ -1,6 +1,6 @@
 /*
  * water.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,12 @@ class Water;
 bool operator<(Water &w1, Water &w2);
 bool operator==(Water &w1, Water &w2);
 
+/*!
+ * \class Water
+ * \author Philip G. Lee
+ *
+ * Model for water records in the database.
+ */
 class Water : public BeerXMLElement
 {
    Q_OBJECT

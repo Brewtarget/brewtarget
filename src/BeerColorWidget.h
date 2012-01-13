@@ -1,6 +1,6 @@
 /*
  * BeerColorWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,12 @@ class BeerColorWidget;
 #include <QVariant>
 #include "recipe.h"
 
+/*!
+ * \class BeerColorWidget
+ * \author Philip G. Lee
+ *
+ * Displays the approximate color of the beer on screen.
+ */
 class BeerColorWidget : public QWidget
 {
    Q_OBJECT
@@ -37,6 +43,7 @@ public:
    BeerColorWidget(QWidget* parent=0);
    virtual ~BeerColorWidget() {}
    void setColor( QColor newColor );
+   //! Observe \b rec for changes in color, and automatically update.
    void setRecipe( Recipe* rec );
    
 public slots:

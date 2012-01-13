@@ -1,6 +1,6 @@
 /*
  * RefractoDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,12 @@ class RefractoDialog;
 #include <QWidget>
 #include "ui_refractoDialog.h"
 
+/*!
+ * \class RefractoDialog
+ * \author Philip G. Lee
+ *
+ * Dialog for calculating refractometer stuff.
+ */
 class RefractoDialog : public QDialog, public Ui::refractoDialog
 {
    Q_OBJECT

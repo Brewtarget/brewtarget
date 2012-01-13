@@ -1,6 +1,6 @@
 /*
  * HeatCalculations.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,12 @@
 
 class HeatCalculations;
 
+/*!
+ * \class
+ * \author Philip G. Lee
+ *
+ * Algorithms and constants related to the thermodynamics of beer.
+ */
 class HeatCalculations
 {
 public:

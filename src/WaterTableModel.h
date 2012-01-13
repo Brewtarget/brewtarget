@@ -39,6 +39,12 @@ enum{ WATERNAMECOL, WATERAMOUNTCOL, WATERCALCIUMCOL, WATERBICARBONATECOL,
       WATERSULFATECOL, WATERCHLORIDECOL, WATERSODIUMCOL, WATERMAGNESIUMCOL,
       WATERNUMCOLS /*This one MUST be last*/};
 
+/*!
+ * \class WaterTableModel
+ * \author Philip G. Lee
+ *
+ * Table model for waters.
+ */
 class WaterTableModel : public QAbstractTableModel
 {
    Q_OBJECT
@@ -75,6 +81,12 @@ private:
    WaterTableWidget* parentTableWidget;
 };
 
+/*!
+ * \class WaterItemDelegate
+ * \author Philip G. Lee
+ *
+ * Item delegate for water tables.
+ */
 class WaterItemDelegate : public QItemDelegate
 {
    Q_OBJECT

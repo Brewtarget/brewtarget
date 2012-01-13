@@ -1,6 +1,6 @@
 /*
  * Algorithms.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com) and Eric Tamme,  2009-2011.
+ * (rocketman768@gmail.com) and Eric Tamme,  2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,14 @@
 #include <QList>
 #include <limits> // For std::numeric_limits
 
+/*!
+ * \class Algorithms
+ * \author Philip G. Lee
+ * \author Eric Tamme
+ *
+ * Singleton that holds some beer-related math functions as well as some
+ * arithmetic and CS algorithms.
+ */
 class Algorithms
 {
 public:
@@ -73,32 +81,54 @@ public:
       }
    }
 
-   // Polynomial evaluation
+   //! \returns base^pow
    double intPow( double base, unsigned int pow );
+   
+   /*!
+    * Evaluates a finite-order polynomial.
+    * \param x - where to evaluate f(x)
+    * \param order - the order of the polynomial
+    * \param poly - f(x) = poly[0]x^0 + poly[1]x^1 + ... + poly[order]x^order
+    */
    double polyEval( double* poly, unsigned int order, double x );
-   // Root finding by the secant method. Returns HUGE_VAL on failure.
+   
+   /*!
+    * Root-finding by the secant method.
+    * \param poly - see \b polyEval
+    * \param order - order of the polynomial
+    * \param x0 - one of two initial DISTINCT guesses at the root
+    * \param x1 - one of two initial DISTINCT guesses at the root
+    * \returns HUGE_VAL on failure, otherwise a root of the polynomial
+    */
    double rootFind( double* poly, unsigned int order, double x0, double x1 );
 
    //===================Beer-related stuff=====================
+   
+   //! \returns plato of \b sg
    double SG_20C20C_toPlato( double sg );
+   //! \returns sg of \b plato
    double PlatoToSG_20C20C( double plato );
+   //! \returns water density in kg/L at temperature \b celsius
    double getWaterDensity_kgL( double celsius );
+   //! \returns additive correction to the 15C hydrometer reading if read at \b celsius
    double hydrometer15CCorrection( double celsius );
 
-   // Estimates plato from kg of dissolved sucrose (sugar_kg) and
-   // the total wort volume wort_l.
+   /*!
+    * Estimates plato from kg of dissolved sucrose (sugar_kg) and
+    * the total wort volume wort_l.
+    */
    double getPlato( double sugar_kg, double wort_l );
-   // Converts FG to plato, given the OG.
+   //! Converts FG to plato, given the OG.
    double ogFgToPlato( double og, double fg );
-   // Gets ABV by using current gravity reading and brix reading.
+   //! Gets ABV by using current gravity reading and brix reading.
    double getABVBySGPlato( double sg, double plato );
-   // Gets ABW from current gravity and plato.
+   //! Gets ABW from current gravity and plato.
    double getABWBySGPlato( double sg, double plato );
-   // Gives you the SG from the starting plato and current plato.
+   //! Gives you the SG from the starting plato and current plato.
    double sgByStartingPlato( double startingPlato, double currentPlato );
-   // Returns the refractive index from plato.
+   //! Returns the refractive index from plato.
    double refractiveIndex( double plato );
-   // Corrects the apparent extract 'plato' to the real extract using current gravity 'sg'.
+   //! Corrects the apparent extract 'plato' to the real extract using current gravity 'sg'.
    double realExtract( double sg, double plato );
 
 private:

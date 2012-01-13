@@ -1,6 +1,6 @@
 /*
  * instruction.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,12 @@ class Instruction;
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
+/*!
+ * \class Instruction
+ * \author Philip G. Lee
+ *
+ * Model class for an instruction record in the database.
+ */
 class Instruction : public BeerXMLElement
 {
    Q_OBJECT

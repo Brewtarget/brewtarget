@@ -1,6 +1,6 @@
 /*
  * MiscTableModel.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,12 @@ class Recipe;
 
 enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCOLS /*This one MUST be last*/};
 
+/*!
+ * \class MiscTableModel
+ * \author Philip G. Lee
+ *
+ * Table model for a list of miscs.
+ */
 class MiscTableModel : public QAbstractTableModel
 {
    Q_OBJECT
@@ -51,11 +57,15 @@ public:
    void observeRecipe(Recipe* rec);
    //! Whether or not we should be looking at the database.
    void observeDatabase(bool val);
+   //! Add a misc to the model.
    void addMisc(Misc* misc);
+   //! Add miscs to the model.
    void addMiscs(QList<Misc*> miscs);
    //! \returns the \b Misc at model index \b i.
    Misc* getMisc(unsigned int i);
+   //! Remove a misc from the model.
    bool removeMisc(Misc* misc);
+   //! Remove all miscs from the model.
    void removeAll();
    
    //! Reimplemented from QAbstractTableModel
@@ -80,6 +90,12 @@ private:
    QTableView* parentTableWidget;
 };
 
+/*!
+ * \class MiscItemDelegate
+ * \author Philip G. Lee
+ *
+ * Item delegate for misc tables.
+ */
 class MiscItemDelegate : public QItemDelegate
 {
    Q_OBJECT

@@ -1,6 +1,6 @@
 /*
  * equipment.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,12 @@ class EquipmentException;
 bool operator<(Equipment &e1, Equipment &e2);
 bool operator==(Equipment &e1, Equipment &e2);
 
+/*!
+ * \class Equipment
+ * \author Philip G. Lee
+ *
+ * This is the equipment proxy model representing a single equipment record.
+ */
 class Equipment : public BeerXMLElement
 {
    Q_OBJECT

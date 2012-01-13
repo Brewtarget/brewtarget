@@ -1,6 +1,6 @@
 /*
  * AboutDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,12 @@
 
 class AboutDialog;
 
+/*!
+ * \class AboutDialog
+ * \author Philip G. Lee
+ *
+ * Simple "about" dialog for Brewtarget.
+ */
 class AboutDialog : public QDialog, public Ui::aboutDialog
 {
 public:

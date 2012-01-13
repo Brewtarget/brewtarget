@@ -1,6 +1,6 @@
 /*
  * MiscSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright
- * Philip G. Lee <rocketman768@gmail.com>, 2011.
+ * Philip G. Lee <rocketman768@gmail.com>, 2011-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,12 @@ class MiscSortFilterProxyModel;
 
 #include <QSortFilterProxyModel>
 
+/*!
+ * \class MiscSortFilterProxyModel
+ * \author Philip G. Lee
+ *
+ * Proxy model for sorting miscs.
+ */
 class MiscSortFilterProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT

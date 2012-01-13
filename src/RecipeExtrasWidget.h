@@ -1,6 +1,6 @@
 /*
 * RecipeExtrasWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2011.
+* (rocketman768@gmail.com), 2011-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ class RecipeExtrasWidget;
 // Forward declarations
 class Recipe;
 
+/*!
+ * \class RecipeExtrasWidget
+ * \author Philip G. Lee
+ *
+ * View/controller widget for modifying "extra" recipe fields.
+ */
 class RecipeExtrasWidget : public QWidget, public Ui::recipeExtrasWidget
 {
    Q_OBJECT
@@ -37,6 +43,7 @@ class RecipeExtrasWidget : public QWidget, public Ui::recipeExtrasWidget
 public:
    RecipeExtrasWidget(QWidget* parent=0);
    virtual ~RecipeExtrasWidget() {}
+   //! Set the recipe to view/edit.
    void setRecipe(Recipe* rec);
 
 public slots:

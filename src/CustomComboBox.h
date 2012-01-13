@@ -1,6 +1,6 @@
 /*
 * CustomComboBox.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2011.
+* (rocketman768@gmail.com), 2009-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,11 @@
 #include <QComboBox>
 
 /*!
-* This class is a more flexible combo box. Does not show any text.
-* \author Philip G. Lee (rocketman768@gmail.com).
-*/
+ * \class CustomComboBox
+ * \author Philip G. Lee (rocketman768@gmail.com)
+ *
+ * This class is a more flexible combo box. Does not show any text.
+ */
 class CustomComboBox : public QComboBox
 {
    Q_OBJECT

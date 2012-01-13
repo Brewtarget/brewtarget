@@ -56,9 +56,13 @@ class SetterCommandStack;
 
 /*!
  * \class Database
+ * \author Philip G. Lee
+ *
  * This class is a singleton, meaning that there should only ever be one
- * instance of this floating around. The Database should be the only way
- * we ever get pointers to BeerXML ingredients and the like.
+ * instance of this floating around, and its purpose is to manage all of
+ * the BeerXMLElements in the app. The Database should be the only way
+ * we ever get pointers to BeerXML ingredients and the like. This is our
+ * big model class.
  */
 class Database : public QObject
 {

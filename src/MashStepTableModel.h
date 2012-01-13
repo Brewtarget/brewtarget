@@ -1,6 +1,6 @@
 /*
  * MashStepTableModel.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,12 @@ class MashStepItemDelegate;
 
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTARGETTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 
+/*!
+ * \class MashStepTableModel
+ * \author Philip G. Lee
+ *
+ * Model for the list of mash steps in a mash.
+ */
 class MashStepTableModel : public QAbstractTableModel
 {
    Q_OBJECT
@@ -43,10 +49,8 @@ class MashStepTableModel : public QAbstractTableModel
 public:
    MashStepTableModel(QTableView* parent=0);
    virtual ~MashStepTableModel() {}
+   //! Set the mash whose mash steps we want to model.
    void setMash( Mash* m );
-   //void addMashStep(MashStep* step);
-   //bool removeMashStep(MashStep* step); // Returns true if "step" is successfully found and removed.
-   //void removeAll();
    //! \returns the mash step at model index \b i.
    MashStep* getMashStep(unsigned int i);
 
@@ -74,6 +78,12 @@ private:
    QList<MashStep*> steps;
 };
 
+/*!
+ * \class MashStepItemDelegate
+ * \author Philip G. Lee
+ *
+ * An item delegate for mash step tables.
+ */
 class MashStepItemDelegate : public QItemDelegate
 {
    Q_OBJECT

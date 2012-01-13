@@ -1,6 +1,6 @@
 /*
  * MiscEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,12 @@
 // Forward declarations.
 class Misc;
 
+/*!
+ * \class MiscEditor
+ * \author Philip G. Lee
+ *
+ * View/controller dialog for editing miscs.
+ */
 class MiscEditor : public QDialog, private Ui::miscEditor
 {
    Q_OBJECT
@@ -34,10 +40,13 @@ class MiscEditor : public QDialog, private Ui::miscEditor
 public:
    MiscEditor( QWidget *parent=0 );
    virtual ~MiscEditor() {}
+   //! Set the misc we wish to view/edit.
    void setMisc( Misc* m );
    
 public slots:
+   //! Save changes.
    void save();
+   //! Clear dialog and close.
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
    

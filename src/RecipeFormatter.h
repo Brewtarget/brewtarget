@@ -1,6 +1,6 @@
 /*
 * RecipeFormatter.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2011.
+* (rocketman768@gmail.com), 2009-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,12 @@ class RecipeFormatter;
 #include <QFile>
 #include "recipe.h"
 
+/*!
+ * \class RecipeFormatter
+ * \author Philip G. Lee
+ *
+ * View class that creates various text versions of a recipe.
+ */
 class RecipeFormatter : public QObject
 {
    Q_OBJECT
@@ -40,17 +46,26 @@ public:
    
    RecipeFormatter();
    ~RecipeFormatter();
+   //! Set the recipe to view.
    void setRecipe(Recipe* recipe);
+   //! Get a plaintext view.
    QString getTextFormat();
+   //! Get an html view.
    QString getHTMLFormat();
+   //! Get a BBCode view.
    QString getBBCodeFormat();
+   //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength( QStringList* list );
+   //! Prepend a string with spaces until its final length is the given length.
    QString padToLength( QString str, unsigned int length );
+   //! Same as \b padToLength but with multiple strings.
    void padAllToMaxLength( QStringList* list );
    
+   //! Send a printable version to the printer.
    void print(QPrinter *mainPrinter, QPrintDialog* dialog, int action = PRINT, QFile* outFile=0);
 
 public slots:
+   //! Put the plaintext view onto the clipboard.
    void toTextClipboard();
    
 private:

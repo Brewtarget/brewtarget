@@ -1,6 +1,6 @@
 /*
 * QueuedMethod.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2011.
+* (rocketman768@gmail.com), 2009-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -27,11 +27,11 @@
 
 /*!
  * \class QueuedMethod
+ * \author Philip G. Lee (rocketman768@gmail.com)
  *
  * This class allows you to queue any \em invokable function call that would
- * normally block so that it executes in the background.
- *
- * \author Philip G. Lee (rocketman768@gmail.com)
+ * normally block so that it executes in the background. Have I duplicated the
+ * functionality of QtConcurrent::run()?
  */
 class QueuedMethod : public QThread
 {

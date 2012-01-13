@@ -1,6 +1,6 @@
 /*
  * MashDesigner.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2010-2011.
+ * (rocketman768@gmail.com), 2010-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,11 +28,19 @@ class MashDesigner;
 #include <QDialog>
 #include <QWidget>
 
+/*!
+ * \class MashDesigner
+ * \author Philip G. Lee
+ *
+ * View/controller dialog that gives you more control over mash design than
+ * MashWizard does.
+ */
 class MashDesigner : public QDialog, public Ui::mashDesigner
 {
    Q_OBJECT
 public:
    MashDesigner(QWidget* parent = 0);
+   //! Set the recipe we want to design the mash for.
    void setRecipe(Recipe* rec);
 
 public slots:

@@ -1,6 +1,6 @@
 /*
  * fermentable.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,12 @@ class Fermentable;
 bool operator<(Fermentable &f1, Fermentable &f2);
 bool operator==(Fermentable &f1, Fermentable &f2);
 
+/*!
+ * \class Fermentable
+ * \author Philip G. Lee
+ *
+ * Model for a fermentable record in the database.
+ */
 class Fermentable : public BeerXMLElement
 {
    Q_OBJECT

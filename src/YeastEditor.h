@@ -1,6 +1,6 @@
 /*
  * YeastEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,12 @@ class YeastEditor;
 // Forward declarations.
 class Yeast;
 
+/*!
+ * \class YeastEditor
+ * \author Philip G. Lee
+ *
+ * View/controller dialog for modifying yeasts.
+ */
 class YeastEditor : public QDialog, private Ui::yeastEditor
 {
    Q_OBJECT
@@ -36,6 +42,7 @@ class YeastEditor : public QDialog, private Ui::yeastEditor
 public:
    YeastEditor( QWidget *parent=0 );
    virtual ~YeastEditor() {}
+   //! Set the yeast we want to modify.
    void setYeast( Yeast* y );
 
 public slots:

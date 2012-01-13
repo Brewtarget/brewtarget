@@ -1,6 +1,6 @@
 /*
  * SetterCommand.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,12 @@ class SetterCommand;
 #include <QSqlRelationalTableModel>
 #include "BeerXMLElement.h"
 
+/*!
+ * \class SetterCommand
+ * \author Philip G. Lee
+ *
+ * A command that updates entries in an SQL table pertaining to a BeerXMLElement.
+ */
 class SetterCommand : public QUndoCommand
 {
 public:

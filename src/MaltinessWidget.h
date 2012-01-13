@@ -1,6 +1,6 @@
 /*
  * MaltinessWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,13 @@ class Recipe;
 
 enum{ CLOYING, EXTRAMALTY, SLIGHTLYMALTY, BALANCED, SLIGHTLYHOPPY, EXTRAHOPPY, HARSH };
 
+/*!
+ * \class MaltinessWidget
+ * \author Philip G. Lee
+ *
+ * View class for the "maltiness" of a given recipe. Changes color and text
+ * depending on the calculated maltiness/hoppiness.
+ */
 class MaltinessWidget : public QLabel
 {
    Q_OBJECT
@@ -40,6 +47,7 @@ public:
    MaltinessWidget(QWidget* parent=0);
    virtual ~MaltinessWidget() {}
 
+   //! Set the recipe that we are to view.
    void observeRecipe(Recipe* recipe);
 
 public slots:

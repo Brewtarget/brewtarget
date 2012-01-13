@@ -1,6 +1,6 @@
 /*
  * IbuMethods.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,26 @@
 #ifndef _IBUMETHODS_H
 #define _IBUMETHODS_H
 
+/*!
+ * \class IbuMethods
+ * \author Philip G. Lee
+ *
+ * Make IBU calculations.
+ */
 class IbuMethods
 {
 public:
    IbuMethods();
    ~IbuMethods();
 
-   // AArating in [0,1], wort_grav in specific gravity at around 60F I guess.
+   /*!
+    * \return ibus according to selected algorithm.
+    * \param AArating in [0,1] (0.04 means 4% AA for example)
+    * \param hops_grams - mass of hops in grams
+    * \param finalVolume_liters - self explanatory
+    * \param wort_grav in specific gravity at around 60F I guess.
+    * \param minutes - minutes that the hops are in the boil
+    */
    static double getIbus(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);
 private:
    static double tinseth(double AArating, double hops_grams, double finalVolume_liters, double wort_grav, double minutes);

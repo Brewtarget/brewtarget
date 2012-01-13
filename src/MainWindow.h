@@ -1,6 +1,6 @@
 /*
  * MainWindow.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,6 +77,12 @@ class MashStepTableModel;
 class EquipmentListModel;
 class StyleListModel;
 
+/*!
+ * \class MainWindow
+ * \author Philip G. Lee
+ *
+ * Brewtarget's main window. This is a view/controller class.
+ */
 class MainWindow : public QMainWindow, public Ui::mainWindow
 {
    Q_OBJECT
@@ -85,8 +91,11 @@ class MainWindow : public QMainWindow, public Ui::mainWindow
 public:
    MainWindow(QWidget* parent=0);
    virtual ~MainWindow() {}
+   //! View the given recipe.
    void setRecipe(Recipe* recipe);
+   //! Get the currently observed recipe.
    Recipe* currentRecipe();
+   //! Display a file dialog for writing xml files.
    QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 
    bool verifyImport(QString tag, QString name);
@@ -136,6 +145,7 @@ public slots:
    void saveMash();
    void removeMash();
 
+   //! Create a new recipe in the database.
    void newRecipe();
    void exportRecipe();
    void importFiles();
@@ -147,13 +157,16 @@ public slots:
 
    void print();
 
-   void backup(); // Backup the database.
-   void restoreFromBackup(); // Restore the database.
+   //! Backup the database.
+   void backup();
+   //! Restore the database.
+   void restoreFromBackup();
 
    void contextMenu(const QPoint &point);
    void newBrewNote();
    void reBrewNote();
 
+   //! Open the default browser to Brewtarget's donation page.
    void openDonateLink();
 
    //! Merges two database files.

@@ -1,6 +1,6 @@
 /*
 * EquipmentListModel.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2011.
+* (rocketman768@gmail.com), 2009-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,12 @@
 class Equipment;
 class Recipe;
 
+/*!
+ * \class EquipmentListModel
+ * \author Philip G. Lee
+ *
+ * Model for a list of equipments.
+ */
 class EquipmentListModel : public QAbstractListModel
 {
    Q_OBJECT
@@ -41,12 +47,18 @@ public:
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
    void observeRecipe(Recipe* rec);
+   //! Add an equipment to the list.
    void addEquipment(Equipment* equipment);
+   //! Add many equipments to the list.
    void addEquipments(QList<Equipment*> equips);
+   //! Remove an equipment from the list.
    void removeEquipment(Equipment* equipment);
+   //! Remove all equipments from the list.
    void removeAll();
    
+   //! Return the equipment at the index in the list.
    Equipment* at(int ndx);
+   //! Return the index of a particular equipment.
    int indexOf(Equipment* e);
    
 public slots:

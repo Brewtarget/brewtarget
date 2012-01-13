@@ -1,6 +1,6 @@
 /*
  * RecipeComboBox.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,13 @@
 // Forward declarations.
 class Recipe;
 
+/*!
+ * \class RecipeComboBox
+ * \author Philip G. Lee
+ *
+ * View/model combobox for viewing the recipes in the database. Really need
+ * to separate the view from the model.
+ */
 class RecipeComboBox : public QComboBox
 {
    Q_OBJECT
@@ -37,10 +44,13 @@ public:
    virtual ~RecipeComboBox() {}
    //! Get populated with all the database recipes.
    void observeDatabase(bool val);
+   //! Add a recipe to the internal model.
    void addRecipe(Recipe* recipe);
+   //! Remove a recipe from the internal model.
    void removeRecipe(Recipe* recipe);
+   //! Set the current index to that of the given recipe.
    void setIndexByRecipe(Recipe* recipe);
-   //void setIndex(int ndx);
+   //! Remove all recipes from the internal model.
    void removeAllRecipes();
    //! Repopulate our list from the database.
    void repopulateList();

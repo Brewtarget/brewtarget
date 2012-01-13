@@ -1,6 +1,6 @@
 /*
  * MashWizard.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,18 @@ class MashWizard;
 #include "recipe.h"
 #include "unit.h"
 
+/*!
+ * \class MashWizard
+ * \author Philip G. Lee
+ *
+ * View/controller dialog that helps you design a mash.
+ */
 class MashWizard : public QDialog, public Ui::mashWizard
 {
    Q_OBJECT
 public:
    MashWizard(QWidget* parent=0);
+   //! Set the recipe to do mash wizardry on.
    void setRecipe(Recipe* rec);
 
 public slots:

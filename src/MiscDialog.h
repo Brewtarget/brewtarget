@@ -1,6 +1,6 @@
 /*
  * MiscDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,12 @@ class MiscEditor;
 class MiscTableModel;
 class MiscSortFilterProxyModel;
 
+/*!
+ * \class MiscDialog
+ * \author Philip G. Lee
+ *
+ * View/controller dialog for the miscs in the database.
+ */
 class MiscDialog : public QDialog, public Ui::miscDialog
 {
    Q_OBJECT
@@ -42,9 +48,13 @@ public:
    virtual ~MiscDialog() {}
 
 public slots:
+   //! Add the selected misc to the current recipe.
    void addMisc(const QModelIndex& = QModelIndex());
+   //! Delete selected misc from the database.
    void removeMisc();
+   //! Bring up the editor for the selected misc.
    void editSelected();
+   //! Add a new misc to the database.
    void newMisc();
 
    void changed(QMetaProperty prop, QVariant val);

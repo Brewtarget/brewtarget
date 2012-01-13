@@ -1,6 +1,6 @@
 /*
  * hop.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ class HopException;
 bool operator<( Hop &h1, Hop &h2 );
 bool operator==( Hop &h1, Hop &h2 );
 
+/*!
+ * \class Hop
+ * \author Philip G. Lee
+ *
+ * Model class for a hop record in the database.
+ */
 class Hop : public BeerXMLElement
 {
    Q_OBJECT

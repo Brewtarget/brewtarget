@@ -1,6 +1,6 @@
 /*
  * YeastDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,12 @@ class YeastEditor;
 class YeastTableModel;
 class YeastSortFilterProxyModel;
 
+/*!
+ * \class YeastDialog
+ * \author Philip G. Lee
+ *
+ * View/controller dialog for displaying all the yeasts in the database.
+ */
 class YeastDialog : public QDialog, public Ui::yeastDialog
 {
    Q_OBJECT

@@ -1,6 +1,6 @@
 /*
  * ColorMethods.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,19 @@
 
 class ColorMethods;
 
+/*!
+ * \class ColorMethods
+ * \author Philip G. Lee
+ *
+ * Converts malt color units to SRM.
+ */
 class ColorMethods
 {
 public:
    ColorMethods();
    ~ColorMethods();
 
+   //! Depending on selected algorithm, convert malt color units to SRM.
    static double mcuToSrm(double mcu);
 private:
    static double morey(double mcu);

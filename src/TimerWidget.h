@@ -1,6 +1,6 @@
 /*
  * TimerWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,19 @@ class TimerWidget;
 #include <QString>
 #include <QPalette>
 
-#if !defined(NO_PHONON) // I think Windows can't handle Phonon.
+#if !defined(NO_PHONON)
 
  #include <mediaobject.h>
  #include <audiooutput.h>
 
 #endif
 
+/*!
+ * \class TimerWidget
+ * \author Philip G. Lee
+ *
+ * Countdown timer that plays sounds and flashes when done.
+ */
 class TimerWidget : public QWidget, public Ui::timerWidget
 {
    Q_OBJECT
@@ -41,6 +47,7 @@ public:
    TimerWidget(QWidget* parent=0);
    ~TimerWidget();
 
+   //! \returns text version of the timer display.
    QString getTimerValue();
 
 public slots:

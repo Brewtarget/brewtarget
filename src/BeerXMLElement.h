@@ -1,6 +1,6 @@
 /*
  * BeerXMLElement.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -171,6 +171,12 @@ Q_DECLARE_METATYPE( uintptr_t )
 
 class BeerXMLElement;
 
+/*!
+ * \class BeerXMLElement
+ * \author Philip G. Lee
+ *
+ * This is the base class for our database items.
+ */
 class BeerXMLElement : public QObject
 {
    Q_OBJECT

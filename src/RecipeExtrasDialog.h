@@ -1,6 +1,6 @@
 /*
 * RecipeExtrasDialog.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2010-2011.
+* (rocketman768@gmail.com), 2010-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ class RecipeExtrasDialog;
 // Forward declarations.
 class Recipe;
 
+/*!
+ * \class RecipeExtrasDialog
+ * \author Philip G. Lee
+ *
+ * View/controller dialog for editing "extra" fields of the recipe.
+ */
 class RecipeExtrasDialog : public QDialog, public Ui::recipeExtrasDialog
 {
    Q_OBJECT
@@ -37,6 +43,7 @@ class RecipeExtrasDialog : public QDialog, public Ui::recipeExtrasDialog
 public:
    RecipeExtrasDialog(QWidget* parent=0);
    virtual ~RecipeExtrasDialog() {}
+   //! Set the recipe to view/edit.
    void setRecipe(Recipe* rec);
 
 public slots:

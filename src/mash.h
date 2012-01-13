@@ -1,6 +1,6 @@
 /*
  * mash.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,12 @@ class MashStep;
 bool operator<(Mash &m1, Mash &m2);
 bool operator==(Mash &m1, Mash &m2);
 
+/*!
+ * \class Mash
+ * \author Philip G. Lee
+ *
+ * Model class for a mash record in the database.
+ */
 class Mash : public BeerXMLElement
 {
    Q_OBJECT

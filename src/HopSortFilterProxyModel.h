@@ -1,6 +1,7 @@
 /*
  * HopSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
- * Firestone (mikfire@gmail.com), 2010-2011.
+ * Firestone (mikfire@gmail.com) and Philip G. Lee (rocketman768@gmail.com),
+ * 2010-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +24,13 @@ class HopSortFilterProxyModel;
 
 #include <QSortFilterProxyModel>
 
+/*!
+ * \class HopSortFilterProxyModel
+ * \author Mik Firestone
+ * \author Philip G. Lee
+ *
+ * Proxy model for sorting hops.
+ */
 class HopSortFilterProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT

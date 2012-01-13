@@ -1,6 +1,6 @@
 /*
  * OgAdjuster.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,14 +18,15 @@
 #ifndef OGADJUSTER_H
 #define OGADJUSTER_H
 
-class StyleEditor;
-
 #include <QDialog>
 #include "ui_ogAdjuster.h"
 #include "recipe.h"
 
 /*!
- *  @author Philip G. Lee <rocketman768@gmail.com>
+ * \class OgAdjuster
+ * \author Philip G. Lee
+ *
+ * View/controller dialog that helps you correct your OG on brew day.
  */
 class OgAdjuster : public QDialog, public Ui::ogAdjuster
 {
@@ -33,6 +34,7 @@ class OgAdjuster : public QDialog, public Ui::ogAdjuster
 
 public:
    OgAdjuster( QWidget* parent = 0 );
+   //! Set the recipe whose OG to correct.
    void setRecipe( Recipe* rec );
 
 public slots:

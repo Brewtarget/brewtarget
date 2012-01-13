@@ -1,6 +1,6 @@
 /*
  * BrewDayWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,13 @@ class BrewDayWidget;
 // Forward declarations.
 class Recipe;
 
+/*!
+* \class BrewDayWidget
+* \author Philip G. Lee
+*
+* Widget that displays the brewday info. I don't think this class
+* is being used anymore.
+*/
 class BrewDayWidget : public QWidget, public Ui::brewDayWidget
 {
    Q_OBJECT

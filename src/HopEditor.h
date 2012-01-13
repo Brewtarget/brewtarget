@@ -1,6 +1,6 @@
 /*
  * HopEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,12 @@ class HopEditor;
 // Forward declarations.
 class Hop;
 
+/*!
+ * \class HopEditor
+ * \author Philip G. Lee
+ *
+ * View/controller class for modifying hops.
+ */
 class HopEditor : public QDialog, private Ui::hopEditor
 {
    Q_OBJECT
@@ -35,10 +41,13 @@ class HopEditor : public QDialog, private Ui::hopEditor
 public:
    HopEditor( QWidget *parent=0 );
    virtual ~HopEditor() {}
+   //! Edit the given hop.
    void setHop( Hop* h );
 
 public slots:
+   //! Save the changes.
    void save();
+   //! Clear the dialog and close it.
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
 

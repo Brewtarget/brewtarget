@@ -1,6 +1,6 @@
 /*
  * BrewDayScrollWidget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ class BrewDayScrollWidget;
 #include <QFile>
 #include "recipe.h"
 
+/*!
+ * \class BrewDayScrollWidget
+ * \author Philip G. Lee
+ *
+ * Widget that displays the brewday info in a scrollable area.
+ */
 class BrewDayScrollWidget : public QWidget, public Ui::brewDayScrollWidget
 {
    Q_OBJECT

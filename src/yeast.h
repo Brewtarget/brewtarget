@@ -1,6 +1,6 @@
 /*
  * yeast.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,12 @@ class Yeast;
 bool operator<(Yeast &y1, Yeast &y2);
 bool operator==(Yeast &y1, Yeast &y2);
 
+/*!
+ * \class Yeast
+ * \author Philip G. Lee
+ *
+ * Model for yeast records in the database.
+ */
 class Yeast : public BeerXMLElement
 {
    Q_OBJECT

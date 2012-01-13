@@ -1,6 +1,6 @@
 /*
 * ScaleRecipeTool.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2011.
+* (rocketman768@gmail.com), 2009-2012.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ class ScaleRecipeTool;
 // Forward declarations
 class Recipe;
 
+/*!
+ * \class ScaleRecipeTool
+ * \author Philip G. Lee
+ *
+ * Controller class that scales a recipe's ingredients.
+ */
 class ScaleRecipeTool : public QDialog, public Ui::scaleRecipeTool
 {
    Q_OBJECT

@@ -1,6 +1,6 @@
 /*
  * HopTableModel.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,12 @@ class HopItemDelegate;
 
 enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
+/*!
+ * \class HopTableModel
+ * \author Philip G. Lee
+ *
+ * Model class for a list of hops.
+ */
 class HopTableModel : public QAbstractTableModel
 {
    Q_OBJECT
@@ -45,13 +51,16 @@ public:
    void observeRecipe(Recipe* rec);
    //! Whether or not we should be looking at the database.
    void observeDatabase(bool val);
-   void setShowIBUs( bool var ); // If you want to show IBUs.
+   //! If you want to show ibus in the vertical header.
+   void setShowIBUs( bool var );
+   //! Add a hop to the model list.
    void addHop(Hop* hop);
    //! Watch all the \b ferms for changes.
    void addHops(QList<Hop*> hops);
    Hop* getHop(unsigned int i);
    //! \returns true if "hop" is successfully found and removed.
    bool removeHop(Hop* hop);
+   //! Remove all hops from the list.
    void removeAll();
    
    //! Reimplemented from QAbstractTableModel.
@@ -77,6 +86,12 @@ private:
    bool showIBUs; // True if you want to show the IBU contributions in the table rows.
 };
 
+/*!
+ * \class HopItemDelegate
+ * \author Philip G. Lee
+ *
+ * An item delegate for hop tables.
+ */
 class HopItemDelegate : public QItemDelegate
 {
    Q_OBJECT

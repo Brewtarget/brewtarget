@@ -1,6 +1,6 @@
 /*
  * FermentableEditor.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,12 @@ class FermentableEditor;
 // Forward declarations.
 class Fermentable;
 
+/*!
+ * \class FermentableEditor
+ * \author Philip G. Lee
+ *
+ * Fermentable view/controller dialog that allows you to edit Fermentables.
+ */
 class FermentableEditor : public QDialog, private Ui::fermentableEditor
 {
    Q_OBJECT

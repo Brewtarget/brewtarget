@@ -1,6 +1,6 @@
 /*
  * ConverterTool.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,12 @@ class ConverterTool;
 #include <QWidget>
 #include "ui_converterTool.h"
 
+/*!
+ * \class ConverterTool
+ * \author Philip G. Lee
+ *
+ * Dialog to convert units.
+ */
 class ConverterTool : public QDialog, public Ui::converterTool
 {
    Q_OBJECT

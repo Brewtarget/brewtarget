@@ -1,6 +1,6 @@
 /*
  * brewtarget.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,13 @@ class Brewtarget;
 class MainWindow;
 class Unit;
 
+/*!
+ * \class Brewtarget
+ * \author Philip G. Lee
+ *
+ * The main class. Figures out stuff from the system, formats things
+ * appropriately, handles translation, etc.
+ */
 class Brewtarget
 {
    friend class OptionDialog;
@@ -51,17 +58,26 @@ public:
    enum ColorUnitType {SRM, EBC};
    enum IbuType {TINSETH, RAGER};
 
+   //! This method should be called before any of the others.
+   static void setApp(QApplication& a);
+   //! \return the application
    static QApplication* getApp();
-   static void setApp(QApplication& a); // This method should be called before any of the others.
+   //! \return the data directory
    static QString getDataDir();
+   //! \return the doc directory
    static QString getDocDir();
+   //! \return the config directory
    static QString getConfigDir(bool* success = 0);
-   //! Get user-specified directory where the .xml files reside.
+   //! \return user-specified directory where the database files reside.
    static QString getUserDataDir();
+   //! \return blocking call that starts the application.
    static int run();
+   //! Log a message.
    static void log( LogType lt, QString message );
-   static void logE( QString message ); // Error message.
-   static void logW( QString message ); // Warning message.
+   //! Log an error message.
+   static void logE( QString message );
+   //! Log a warning message.
+   static void logW( QString message );
 
    /*!
     * Produces the appropriate string for 'amount' which has units 'units'.
@@ -76,21 +92,34 @@ public:
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
    //! Display gravity appropriately.
    static QString displayOG( double og, bool showUnits=false );
+   //! Display gravity appropriately.
    static QString displayFG( double fg, double og, bool showUnits=false ); // Need OG if we're using plato.
+   //! Display color appropriately.
    static QString displayColor( double srm, bool showUnits );
+   //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
    static double weightQStringToSI( QString qstr );
+   //! \return SI amount for volume string.
    static double volQStringToSI( QString qstr );
+   //! \return SI amount for temperature string.
    static double tempQStringToSI( QString qstr );
+   //! \return SI amount for time string.
    static double timeQStringToSI( QString qstr );
+   //! \return SI amount for color string.
    static double colorQStringToSI(QString qstr);
 
    static bool hasUnits(QString qstr);
+   //! \return the weight system
    static iUnitSystem getWeightUnitSystem();
+   //! \return the volume system
    static iUnitSystem getVolumeUnitSystem();
+   //! \return the temperature scale
    static TempScale getTemperatureScale();
+   //! \return the color units
    static int getColorUnit();
    
+   //! Read options from file.
    static void readPersistentOptions();
+   //! Save options to file.
    static void savePersistentOptions();
 
    /*!
@@ -110,6 +139,7 @@ public:
     */
    static const QString& getSystemLanguage();
 
+   //! \return the main window.
    static MainWindow* getMainWindow();
    
 private:
