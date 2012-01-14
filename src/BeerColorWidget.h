@@ -33,7 +33,7 @@ class BeerColorWidget;
  * \class BeerColorWidget
  * \author Philip G. Lee
  *
- * Displays the approximate color of the beer on screen.
+ * \brief Displays the approximate color of the beer on screen.
  */
 class BeerColorWidget : public QWidget
 {

@@ -43,7 +43,7 @@ enum{ WATERNAMECOL, WATERAMOUNTCOL, WATERCALCIUMCOL, WATERBICARBONATECOL,
  * \class WaterTableModel
  * \author Philip G. Lee
  *
- * Table model for waters.
+ * \brief Table model for waters.
  */
 class WaterTableModel : public QAbstractTableModel
 {

@@ -29,7 +29,7 @@ class FermentableSortFilterProxyModel;
  * \author Mik Firestone
  * \author Philip G. Lee
  *
- * Proxy model that provides a sorting.
+ * \brief Proxy model for sorting Fermentables.
  */
 class FermentableSortFilterProxyModel : public QSortFilterProxyModel
 {

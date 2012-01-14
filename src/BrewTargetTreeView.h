@@ -1,7 +1,7 @@
 /*
  * BrewTargetTreeView.h is part of Brewtarget and was written by Mik Firestone
  * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,12 @@ class Misc;
 class Yeast;
 class BrewNote;
 
+/*!
+ * \class BrewTargetTreeItem
+ * \author Mik Firestone
+ *
+ * \brief View class for BrewTargetTreeModel.
+ */
 class BrewTargetTreeView : public QTreeView
 {
    Q_OBJECT

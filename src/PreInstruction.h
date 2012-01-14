@@ -27,7 +27,7 @@ class PreInstruction;
  * \class PreInstruction
  * \author Philip G. Lee
  *
- * Simple class to assist the creation of instructions.
+ * \brief Simple class to assist the creation of instructions.
  */
 class PreInstruction
 {

@@ -32,12 +32,11 @@ class BrewDayWidget;
 class Recipe;
 
 /*!
-* \class BrewDayWidget
-* \author Philip G. Lee
-*
-* Widget that displays the brewday info. I don't think this class
-* is being used anymore.
-*/
+ * \class BrewDayWidget
+ * \author Philip G. Lee
+ *
+ * \brief Widget that displays the brewday info. Deprecated I believe.
+ */
 class BrewDayWidget : public QWidget, public Ui::brewDayWidget
 {
    Q_OBJECT

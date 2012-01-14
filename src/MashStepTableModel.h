@@ -40,7 +40,7 @@ enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASH
  * \class MashStepTableModel
  * \author Philip G. Lee
  *
- * Model for the list of mash steps in a mash.
+ * \brief Model for the list of mash steps in a mash.
  */
 class MashStepTableModel : public QAbstractTableModel
 {

@@ -32,8 +32,7 @@ class MashDesigner;
  * \class MashDesigner
  * \author Philip G. Lee
  *
- * View/controller dialog that gives you more control over mash design than
- * MashWizard does.
+ * \brief View/controller dialog that gives you more control over mash design than MashWizard does.
  */
 class MashDesigner : public QDialog, public Ui::mashDesigner
 {

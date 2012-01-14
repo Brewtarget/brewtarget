@@ -28,7 +28,7 @@ class YeastSortFilterProxyModel;
  * \class YeastSortFilterProxyModel
  * \author Mik Firestone
  *
- * Proxy model for sorting yeasts.
+ * \brief Proxy model for sorting yeasts.
  */
 class YeastSortFilterProxyModel : public QSortFilterProxyModel
 {

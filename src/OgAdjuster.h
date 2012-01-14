@@ -26,7 +26,7 @@
  * \class OgAdjuster
  * \author Philip G. Lee
  *
- * View/controller dialog that helps you correct your OG on brew day.
+ * \brief View/controller dialog that helps you correct your OG on brew day.
  */
 class OgAdjuster : public QDialog, public Ui::ogAdjuster
 {

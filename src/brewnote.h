@@ -33,6 +33,12 @@ class BrewNote;
 bool operator<(BrewNote const& lhs, BrewNote const& rhs);
 bool operator==(BrewNote const& lhs, BrewNote const& rhs);
 
+/*!
+ * \class BrewNote
+ * \author Mik Firestone
+ *
+ * \brief Model for a brewnote record, which records what you did on brewday.
+ */
 class BrewNote : public BeerXMLElement
 {
    Q_OBJECT

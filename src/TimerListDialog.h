@@ -29,7 +29,7 @@ class TimerListDialog;
  * \class TimerListDialog
  * \author Philip G. Lee
  *
- * A whole panel of timers.
+ * \brief A whole panel of timers.
  */
 class TimerListDialog : public QDialog, public Ui::timerListDialog
 {

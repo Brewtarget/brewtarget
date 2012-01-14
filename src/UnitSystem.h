@@ -30,7 +30,7 @@ class UnitSystems;
  * \class UnitSystem
  * \author Philip G. Lee
  *
- * A unit system handles the display and format of physical quantities.
+ * \brief A unit system handles the display and format of physical quantities.
  */
 class UnitSystem
 {

@@ -81,7 +81,7 @@ class StyleListModel;
  * \class MainWindow
  * \author Philip G. Lee
  *
- * Brewtarget's main window. This is a view/controller class.
+ * \brief Brewtarget's main window. This is a view/controller class.
  */
 class MainWindow : public QMainWindow, public Ui::mainWindow
 {

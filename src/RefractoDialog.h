@@ -29,7 +29,7 @@ class RefractoDialog;
  * \class RefractoDialog
  * \author Philip G. Lee
  *
- * Dialog for calculating refractometer stuff.
+ * \brief Dialog for calculating refractometer stuff.
  */
 class RefractoDialog : public QDialog, public Ui::refractoDialog
 {

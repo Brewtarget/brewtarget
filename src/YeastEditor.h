@@ -33,7 +33,7 @@ class Yeast;
  * \class YeastEditor
  * \author Philip G. Lee
  *
- * View/controller dialog for modifying yeasts.
+ * \brief View/controller dialog for modifying yeasts.
  */
 class YeastEditor : public QDialog, private Ui::yeastEditor
 {

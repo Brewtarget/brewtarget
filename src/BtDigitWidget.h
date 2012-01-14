@@ -29,8 +29,7 @@ class BtDigitWidget;
  * \class BtDigitWidget
  * \author Philip G. Lee
  *
- * Widget that displays colored numbers, depending on if the number is ok,
- * too high, or too low.
+ * \brief Widget that displays colored numbers, depending on if the number is ok, high, or low.
  */
 class BtDigitWidget : public QLabel
 {

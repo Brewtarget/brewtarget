@@ -35,7 +35,7 @@ class Instruction;
  * \class InstructionWidget
  * \author Philip G. Lee
  *
- * View/controller widget that views/edits recipe instructions.
+ * \brief View/controller widget that views/edits recipe instructions.
  */
 class InstructionWidget : public QWidget, public Ui::instructionWidget
 {

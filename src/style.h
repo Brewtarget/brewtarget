@@ -33,7 +33,7 @@ bool operator==(Style &s1, Style &s2);
  * \class Style
  * \author Philip G. Lee
  *
- * Model for style records in the database.
+ * \brief Model for style records in the database.
  */
 class Style : public BeerXMLElement
 {

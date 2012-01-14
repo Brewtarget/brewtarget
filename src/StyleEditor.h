@@ -34,7 +34,7 @@ class StyleListModel;
  * \class StyleEditor
  * \author Philip G. Lee
  *
- * View/controller dialog to modify styles.
+ * \brief View/controller dialog to modify styles.
  */
 class StyleEditor : public QDialog, public Ui::styleEditor
 {

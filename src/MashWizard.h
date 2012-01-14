@@ -30,7 +30,7 @@ class MashWizard;
  * \class MashWizard
  * \author Philip G. Lee
  *
- * View/controller dialog that helps you design a mash.
+ * \brief View/controller dialog that helps you design a mash.
  */
 class MashWizard : public QDialog, public Ui::mashWizard
 {

@@ -34,7 +34,7 @@ class Recipe;
  * \class RecipeExtrasDialog
  * \author Philip G. Lee
  *
- * View/controller dialog for editing "extra" fields of the recipe.
+ * \brief View/controller dialog for editing "extra" fields of the recipe.
  */
 class RecipeExtrasDialog : public QDialog, public Ui::recipeExtrasDialog
 {

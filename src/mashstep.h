@@ -33,7 +33,7 @@ bool operator==(MashStep &m1, MashStep &m2);
  * \class MashStep
  * \author Philip G. Lee
  *
- * Model for a mash step record in the database.
+ * \brief Model for a mash step record in the database.
  */
 class MashStep : public BeerXMLElement
 {

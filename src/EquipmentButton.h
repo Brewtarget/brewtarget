@@ -29,8 +29,10 @@ class Recipe;
 class QWidget;
 
 /*!
- * This is a view class that displays the name of an equipment.
+ * \class EquipmentButton
  * \author Philip G. Lee (rocketman768@gmail.com)
+ *
+ * \brief This is a view class that displays the name of an equipment. 
  */
 class EquipmentButton : public QPushButton
 {

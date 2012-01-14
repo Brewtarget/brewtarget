@@ -36,8 +36,7 @@ enum{ CLOYING, EXTRAMALTY, SLIGHTLYMALTY, BALANCED, SLIGHTLYHOPPY, EXTRAHOPPY, H
  * \class MaltinessWidget
  * \author Philip G. Lee
  *
- * View class for the "maltiness" of a given recipe. Changes color and text
- * depending on the calculated maltiness/hoppiness.
+ * \brief Recipe view class that changes color and text depending on the calculated maltiness/hoppiness.
  */
 class MaltinessWidget : public QLabel
 {

@@ -175,7 +175,7 @@ class BeerXMLElement;
  * \class BeerXMLElement
  * \author Philip G. Lee
  *
- * This is the base class for our database items.
+ * \brief The base class for our database items.
  */
 class BeerXMLElement : public QObject
 {

@@ -29,7 +29,7 @@ class HopSortFilterProxyModel;
  * \author Mik Firestone
  * \author Philip G. Lee
  *
- * Proxy model for sorting hops.
+ * \brief Proxy model for sorting hops.
  */
 class HopSortFilterProxyModel : public QSortFilterProxyModel
 {

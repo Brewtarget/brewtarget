@@ -44,7 +44,7 @@ enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCO
  * \class MiscTableModel
  * \author Philip G. Lee
  *
- * Table model for a list of miscs.
+ * \brief Table model for a list of miscs.
  */
 class MiscTableModel : public QAbstractTableModel
 {

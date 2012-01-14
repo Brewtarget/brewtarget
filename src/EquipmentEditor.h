@@ -31,10 +31,10 @@ class Equipment;
 class EquipmentListModel;
 
 /*!
- * \class
+ * \class EquipmentEditor
  * \author Philip G. Lee
  *
- * This is a dialog that edits an equipment record.
+ * \brief This is a dialog that edits an equipment record.
  */
 class EquipmentEditor : public QDialog, public Ui::equipmentEditor
 {

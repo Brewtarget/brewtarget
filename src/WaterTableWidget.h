@@ -29,7 +29,7 @@ class WaterTableModel;
  * \class WaterTableWidget
  * \author Philip G. Lee
  *
- * Completely redundant class. Remove and just use QTableView.
+ * \brief Completely redundant class. Remove and just use QTableView.
  */
 class WaterTableWidget : public QTableView
 {

@@ -34,7 +34,7 @@ class Recipe;
  * \class ScaleRecipeTool
  * \author Philip G. Lee
  *
- * Controller class that scales a recipe's ingredients.
+ * \brief Controller class that scales a recipe's ingredients.
  */
 class ScaleRecipeTool : public QDialog, public Ui::scaleRecipeTool
 {

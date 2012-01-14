@@ -31,7 +31,7 @@ class Misc;
  * \class Misc
  * \author Philip G. Lee
  *
- * Model for a misc record in the database.
+ * \brief Model for a misc record in the database.
  */
 class Misc : public BeerXMLElement
 {

@@ -32,7 +32,7 @@ bool operator==(Water &w1, Water &w2);
  * \class Water
  * \author Philip G. Lee
  *
- * Model for water records in the database.
+ * \brief Model for water records in the database.
  */
 class Water : public BeerXMLElement
 {

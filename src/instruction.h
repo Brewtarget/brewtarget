@@ -31,7 +31,7 @@ class Instruction;
  * \class Instruction
  * \author Philip G. Lee
  *
- * Model class for an instruction record in the database.
+ * \brief Model class for an instruction record in the database.
  */
 class Instruction : public BeerXMLElement
 {

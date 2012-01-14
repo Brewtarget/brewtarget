@@ -30,7 +30,7 @@ class AboutDialog;
  * \class AboutDialog
  * \author Philip G. Lee
  *
- * Simple "about" dialog for Brewtarget.
+ * \brief Simple "about" dialog for Brewtarget.
  */
 class AboutDialog : public QDialog, public Ui::aboutDialog
 {

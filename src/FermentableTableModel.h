@@ -42,7 +42,7 @@ enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMISMASHEDCOL, FERMAFTERBOIL, FE
  * \class FermentableTableModel
  * \author Philip G. Lee
  *
- * A table model for a list of fermentables.
+ * \brief A table model for a list of fermentables.
  */
 class FermentableTableModel : public QAbstractTableModel
 {

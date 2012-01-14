@@ -29,7 +29,8 @@ class MashStepTableModel;
  * \class MashStepTableWidget
  * \author Philip G. Lee
  *
- * View class that displays a table of mash steps. This class seems completely
+ * \brief View class that displays a table of mash steps.
+ * NOTE: This class seems completely
  * irrelevant to me. We should remove it and replace it with QTableView.
  */
 class MashStepTableWidget : public QTableView

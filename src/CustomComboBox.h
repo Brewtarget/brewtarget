@@ -26,7 +26,7 @@
  * \class CustomComboBox
  * \author Philip G. Lee (rocketman768@gmail.com)
  *
- * This class is a more flexible combo box. Does not show any text.
+ * \brief This class is a more flexible combo box. Does not show any text.
  */
 class CustomComboBox : public QComboBox
 {

@@ -29,8 +29,7 @@
  * \author Philip G. Lee
  * \author Eric Tamme
  *
- * Singleton that holds some beer-related math functions as well as some
- * arithmetic and CS algorithms.
+ * \brief Singleton that holds some beer-related math functions as well as some arithmetic and CS algorithms.
  */
 class Algorithms
 {

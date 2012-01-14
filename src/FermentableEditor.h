@@ -33,7 +33,7 @@ class Fermentable;
  * \class FermentableEditor
  * \author Philip G. Lee
  *
- * Fermentable view/controller dialog that allows you to edit Fermentables.
+ * \brief Fermentable view/controller dialog that allows you to edit Fermentables.
  */
 class FermentableEditor : public QDialog, private Ui::fermentableEditor
 {

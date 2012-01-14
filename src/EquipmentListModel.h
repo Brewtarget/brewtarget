@@ -30,7 +30,7 @@ class Recipe;
  * \class EquipmentListModel
  * \author Philip G. Lee
  *
- * Model for a list of equipments.
+ * \brief Model for a list of equipments.
  */
 class EquipmentListModel : public QAbstractListModel
 {

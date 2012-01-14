@@ -34,7 +34,9 @@ class Mash;
  * \class MashComboBox
  * \author Philip G. Lee
  *
- * A combobox that is a view class for a list of mashes. Well, it's not exactly
+ * \brief A combobox that is a view class for a list of mashes.
+ *
+ * Well, it's not exactly
  * a strict view class, since it contains model-related methods, so we should
  * prune out the model methods at some point.
  */

@@ -23,7 +23,7 @@
  * \class IbuMethods
  * \author Philip G. Lee
  *
- * Make IBU calculations.
+ * \brief Make IBU calculations.
  */
 class IbuMethods
 {

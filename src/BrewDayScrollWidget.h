@@ -34,7 +34,7 @@ class BrewDayScrollWidget;
  * \class BrewDayScrollWidget
  * \author Philip G. Lee
  *
- * Widget that displays the brewday info in a scrollable area.
+ * \brief Widget that displays the brewday info in a scrollable area.
  */
 class BrewDayScrollWidget : public QWidget, public Ui::brewDayScrollWidget
 {

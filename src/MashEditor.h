@@ -35,7 +35,7 @@ class Equipment;
  * \class MashEditor
  * \author Philip G. Lee
  *
- * View/controller dialog for editing a mash.
+ * \brief View/controller dialog for editing a mash.
  */
 class MashEditor : public QDialog, public Ui::mashEditor
 {

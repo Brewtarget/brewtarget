@@ -30,7 +30,7 @@ class Recipe;
  * \class StyleListModel
  * \author Philip G. Lee
  *
- * Model for a list of styles.
+ * \brief Model for a list of styles.
  */
 class StyleListModel : public QAbstractListModel
 {

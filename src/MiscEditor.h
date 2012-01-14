@@ -31,7 +31,7 @@ class Misc;
  * \class MiscEditor
  * \author Philip G. Lee
  *
- * View/controller dialog for editing miscs.
+ * \brief View/controller dialog for editing miscs.
  */
 class MiscEditor : public QDialog, private Ui::miscEditor
 {

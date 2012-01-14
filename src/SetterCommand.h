@@ -29,7 +29,7 @@ class SetterCommand;
  * \class SetterCommand
  * \author Philip G. Lee
  *
- * A command that updates entries in an SQL table pertaining to a BeerXMLElement.
+ * \brief A command that updates entries in an SQL table pertaining to a BeerXMLElement.
  */
 class SetterCommand : public QUndoCommand
 {

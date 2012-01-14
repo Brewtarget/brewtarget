@@ -35,7 +35,7 @@ class RecipeFormatter;
  * \class RecipeFormatter
  * \author Philip G. Lee
  *
- * View class that creates various text versions of a recipe.
+ * \brief View class that creates various text versions of a recipe.
  */
 class RecipeFormatter : public QObject
 {

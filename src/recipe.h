@@ -56,7 +56,7 @@ bool operator==(Recipe &r1, Recipe &r2 );
  * \class Recipe
  * \author Philip G. Lee
  *
- * Model class for recipe records in the database.
+ * \brief Model class for recipe records in the database.
  */
 class Recipe : public BeerXMLElement
 {

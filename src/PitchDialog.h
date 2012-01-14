@@ -29,7 +29,7 @@ class PitchDialog;
  * \class PitchDialog
  * \author Philip G. Lee
  *
- * Dialog to calculate how much yeast to pitch.
+ * \brief Dialog to calculate how much yeast to pitch.
  */
 class PitchDialog : public QDialog, public Ui::pitchDialog
 {

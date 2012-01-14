@@ -34,7 +34,7 @@ bool operator==( Hop &h1, Hop &h2 );
  * \class Hop
  * \author Philip G. Lee
  *
- * Model class for a hop record in the database.
+ * \brief Model class for a hop record in the database.
  */
 class Hop : public BeerXMLElement
 {

@@ -33,7 +33,7 @@ bool operator==(Yeast &y1, Yeast &y2);
  * \class Yeast
  * \author Philip G. Lee
  *
- * Model for yeast records in the database.
+ * \brief Model for yeast records in the database.
  */
 class Yeast : public BeerXMLElement
 {

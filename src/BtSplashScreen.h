@@ -29,8 +29,9 @@ class BtSplashScreen;
 
 /*!
  * \class BtSplashScreen
- * A class for showing the brewtarget splash screen
- * on startup.
+ * \author Philip G. Lee
+ *
+ * \brief A class for showing the brewtarget splash screen on startup.
  */
 class BtSplashScreen : public QSplashScreen, public Ui::btSplashScreen
 {

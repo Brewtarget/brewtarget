@@ -58,6 +58,8 @@ class SetterCommandStack;
  * \class Database
  * \author Philip G. Lee
  *
+ * \brief Model for lists of all the BeerXMLElement items in the database.
+ *
  * This class is a singleton, meaning that there should only ever be one
  * instance of this floating around, and its purpose is to manage all of
  * the BeerXMLElements in the app. The Database should be the only way

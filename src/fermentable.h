@@ -33,7 +33,7 @@ bool operator==(Fermentable &f1, Fermentable &f2);
  * \class Fermentable
  * \author Philip G. Lee
  *
- * Model for a fermentable record in the database.
+ * \brief Model for a fermentable record in the database.
  */
 class Fermentable : public BeerXMLElement
 {

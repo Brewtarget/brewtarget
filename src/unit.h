@@ -95,6 +95,12 @@ inline QString tempScaleToString(TempScale ts)
 }
 // TODO: implement ppm, percent, diastatic power, ibuGalPerLb, gravity, srm, volumes.
 
+/*!
+ * \class Unit
+ * \author Philip G. Lee
+ *
+ * \brief Interface for arbitrary physical units and their formatting.
+ */
 class Unit
 {
    public:

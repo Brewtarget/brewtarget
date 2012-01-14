@@ -38,7 +38,7 @@ class TimerWidget;
  * \class TimerWidget
  * \author Philip G. Lee
  *
- * Countdown timer that plays sounds and flashes when done.
+ * \brief Countdown timer that plays sounds and flashes when done.
  */
 class TimerWidget : public QWidget, public Ui::timerWidget
 {

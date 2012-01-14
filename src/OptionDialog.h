@@ -33,7 +33,7 @@ class OptionDialog;
  * \class OptionDialog
  * \author Philip G. Lee
  *
- * View/controller dialog to manage options.
+ * \brief View/controller dialog to manage options.
  */
 class OptionDialog : public QDialog, public Ui::optionsDialog
 {

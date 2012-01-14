@@ -34,7 +34,7 @@ class Recipe;
  * \class RecipeExtrasWidget
  * \author Philip G. Lee
  *
- * View/controller widget for modifying "extra" recipe fields.
+ * \brief View/controller widget for modifying "extra" recipe fields.
  */
 class RecipeExtrasWidget : public QWidget, public Ui::recipeExtrasWidget
 {

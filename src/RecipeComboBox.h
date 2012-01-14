@@ -32,8 +32,8 @@ class Recipe;
  * \class RecipeComboBox
  * \author Philip G. Lee
  *
- * View/model combobox for viewing the recipes in the database. Really need
- * to separate the view from the model.
+ * \brief View/model combobox for viewing the recipes in the database.
+ * Really need to separate the view from the model.
  */
 class RecipeComboBox : public QComboBox
 {

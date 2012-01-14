@@ -38,8 +38,7 @@ class HopSortFilterProxyModel;
  * \class HopDialog
  * \author Philip G. Lee
  *
- * View/controller class for showing/editing the list of hops in
- * the database.
+ * \brief View/controller class for showing/editing the list of hops in the database.
  */
 class HopDialog : public QDialog, public Ui::hopDialog
 {

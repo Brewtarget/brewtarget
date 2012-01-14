@@ -37,7 +37,7 @@ class FermentableSortFilterProxyModel;
  * \class FermentableDialog
  * \author Philip G. Lee
  *
- * View/controller class that shows the list of fermentables in the database.
+ * \brief View/controller class that shows the list of fermentables in the database.
  */
 class FermentableDialog : public QDialog, public Ui::fermentableDialog
 {

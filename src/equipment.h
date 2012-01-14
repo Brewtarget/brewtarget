@@ -32,7 +32,7 @@ bool operator==(Equipment &e1, Equipment &e2);
  * \class Equipment
  * \author Philip G. Lee
  *
- * This is the equipment proxy model representing a single equipment record.
+ * \brief This is the equipment proxy model representing a single equipment record.
  */
 class Equipment : public BeerXMLElement
 {

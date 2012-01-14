@@ -30,7 +30,7 @@ class PrimingDialog;
  * \class PrimingDialog
  * \author Philip G. Lee
  *
- * Dialog to calculate priming sugar amounts.
+ * \brief Dialog to calculate priming sugar amounts.
  */
 class PrimingDialog : public QDialog, public Ui::primingDialog
 {

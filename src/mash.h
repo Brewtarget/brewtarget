@@ -32,7 +32,7 @@ bool operator==(Mash &m1, Mash &m2);
  * \class Mash
  * \author Philip G. Lee
  *
- * Model class for a mash record in the database.
+ * \brief Model class for a mash record in the database.
  */
 class Mash : public BeerXMLElement
 {

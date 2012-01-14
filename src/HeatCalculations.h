@@ -25,7 +25,7 @@ class HeatCalculations;
  * \class
  * \author Philip G. Lee
  *
- * Algorithms and constants related to the thermodynamics of beer.
+ * \brief Algorithms and constants related to the thermodynamics of beer.
  */
 class HeatCalculations
 {

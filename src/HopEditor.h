@@ -32,7 +32,7 @@ class Hop;
  * \class HopEditor
  * \author Philip G. Lee
  *
- * View/controller class for modifying hops.
+ * \brief View/controller class for modifying hops.
  */
 class HopEditor : public QDialog, private Ui::hopEditor
 {

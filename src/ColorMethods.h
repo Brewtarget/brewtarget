@@ -25,7 +25,7 @@ class ColorMethods;
  * \class ColorMethods
  * \author Philip G. Lee
  *
- * Converts malt color units to SRM.
+ * \brief Converts malt color units to SRM.
  */
 class ColorMethods
 {

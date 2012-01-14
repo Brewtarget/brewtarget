@@ -31,7 +31,7 @@ class Water;
  * \class WaterEditor
  * \author Philip G. Lee
  *
- * View/controller class for modifying water records.
+ * \brief View/controller class for modifying water records.
  */
 class WaterEditor : public QDialog, public Ui::waterEditor
 {

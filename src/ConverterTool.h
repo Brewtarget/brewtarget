@@ -29,7 +29,7 @@ class ConverterTool;
  * \class ConverterTool
  * \author Philip G. Lee
  *
- * Dialog to convert units.
+ * \brief Dialog to convert units.
  */
 class ConverterTool : public QDialog, public Ui::converterTool
 {

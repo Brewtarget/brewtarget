@@ -39,8 +39,7 @@ class Unit;
  * \class Brewtarget
  * \author Philip G. Lee
  *
- * The main class. Figures out stuff from the system, formats things
- * appropriately, handles translation, etc.
+ * \brief The main class. Figures out stuff from the system, formats things appropriately, handles translation, etc.
  */
 class Brewtarget
 {
@@ -203,6 +202,17 @@ private:
    static ColorUnitType colorUnit;
    static IbuType ibuFormula;
 };
+
+/*!
+ * \mainpage Brewtarget Source Code Documentation
+ *
+ * \section secIntro Introduction
+ *
+ * Brewtarget is a cross-platform open source beer recipe software suite.
+ * Our aim is to make "free as in beer" equal to "free as in speech" and
+ * also to make a damn fine piece of software.
+ *
+ */
 
 #endif   /* _BREWTARGET_H */
 

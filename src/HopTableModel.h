@@ -38,7 +38,7 @@ enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, H
  * \class HopTableModel
  * \author Philip G. Lee
  *
- * Model class for a list of hops.
+ * \brief Model class for a list of hops.
  */
 class HopTableModel : public QAbstractTableModel
 {

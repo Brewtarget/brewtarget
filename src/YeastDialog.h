@@ -38,7 +38,7 @@ class YeastSortFilterProxyModel;
  * \class YeastDialog
  * \author Philip G. Lee
  *
- * View/controller dialog for displaying all the yeasts in the database.
+ * \brief View/controller dialog for displaying all the yeasts in the database.
  */
 class YeastDialog : public QDialog, public Ui::yeastDialog
 {

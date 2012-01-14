@@ -42,7 +42,7 @@ enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEA
  * \class YeastTableModel
  * \author Philip G. Lee
  *
- * Table model for yeasts.
+ * \brief Table model for yeasts.
  */
 class YeastTableModel : public QAbstractTableModel
 {

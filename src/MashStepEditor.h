@@ -34,7 +34,7 @@ class MashStep;
  * \class MashStepEditor
  * \author Philip G. Lee
  *
- * View/controller dialog for editing mash steps.
+ * \brief View/controller dialog for editing mash steps.
  */
 class MashStepEditor : public QDialog, public Ui::mashStepEditor
 {

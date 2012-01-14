@@ -37,7 +37,7 @@ class MiscSortFilterProxyModel;
  * \class MiscDialog
  * \author Philip G. Lee
  *
- * View/controller dialog for the miscs in the database.
+ * \brief View/controller dialog for the miscs in the database.
  */
 class MiscDialog : public QDialog, public Ui::miscDialog
 {

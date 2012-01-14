@@ -27,7 +27,7 @@ class MiscSortFilterProxyModel;
  * \class MiscSortFilterProxyModel
  * \author Philip G. Lee
  *
- * Proxy model for sorting miscs.
+ * \brief Proxy model for sorting miscs.
  */
 class MiscSortFilterProxyModel : public QSortFilterProxyModel
 {

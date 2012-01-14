@@ -29,7 +29,7 @@ class HtmlEditor;
  * \class HtmlViewer
  * \author Philip G. Lee
  *
- * Simple class to display html.
+ * \brief Simple class to display html.
  */
 class HtmlViewer : public QDialog, public Ui::htmlViewer
 {
