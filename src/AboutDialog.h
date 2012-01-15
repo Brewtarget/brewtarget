@@ -39,8 +39,8 @@ public:
            : QDialog(parent)
    {
       setupUi(this);
-			// Replaces the "%1" from the .ui with version number.
-      textBrowser->setHtml( textBrowser->toHtml().arg(VERSIONSTRING) );
+      // Replaces the "%1" from the .ui with version number.
+      label->setText( label->text().arg(VERSIONSTRING) );
    }
 };
 

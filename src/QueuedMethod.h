@@ -30,6 +30,7 @@
  * \author Philip G. Lee (rocketman768@gmail.com)
  *
  * \brief Runs long methods in the background.
+ *
  * This class allows you to queue any \em invokable function call that would
  * normally block so that it executes in the background. Have I duplicated the
  * functionality of QtConcurrent::run()?
