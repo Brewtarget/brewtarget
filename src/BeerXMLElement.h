@@ -228,9 +228,7 @@ public:
    //! Use this to pass pointers around in QVariants.
    static inline QVariant qVariantFromPtr( BeerXMLElement* ptr )
    {
-      // NOTE: weird way to cast ptr to a uintptr_t, but this is the only
-      // way I can get it to work.
-      uintptr_t addr = *(reinterpret_cast<uintptr_t*>(&ptr));
+      uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
       return QVariant::fromValue<uintptr_t>(addr);
    }
    
