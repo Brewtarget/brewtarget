@@ -201,7 +201,7 @@ void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    
    // See if our recipe gained or lost fermentables.
    Recipe* recSender = qobject_cast<Recipe*>(sender());
-   if( recSender == recObs && QString(prop.name()) == "fermentables" )
+   if( recSender && recSender == recObs && QString(prop.name()) == "fermentables" )
    {
       removeAll();
       addFermentables( recObs->fermentables() );
