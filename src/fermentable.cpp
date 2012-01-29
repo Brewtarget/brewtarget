@@ -234,11 +234,13 @@ double Fermentable::ibuGalPerLb() const { return get("ibu_gal_per_lb").toDouble(
 
 double Fermentable::equivSucrose_kg() const
 {
+   double ret = amount_kg() * yield_pct() * (1.0-moisture_pct()/100.0) / 100.0;
+   
    // If this is a steeped grain...
    if( type() == Grain && !isMashed() )
-      return 0.60 * amount_kg() * yield_pct() / (double)100; // Reduce the yield by 60%.
+      return 0.60 * ret; // Reduce the yield by 60%.
    else
-      return amount_kg() * yield_pct() / (double)100;
+      return ret;
 }
 
 // Set

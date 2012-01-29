@@ -1920,9 +1920,9 @@ void Recipe::recalcBoilGrav()
       // If we have some sort of non-grain, we have to ignore efficiency.
       type = ferm->type();
       if( type==Fermentable::Sugar || type==Fermentable::Extract || type==Fermentable::Dry_Extract )
-         sugar_kg_ignoreEfficiency += (ferm->yield_pct()/100.0)*ferm->amount_kg();
+         sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
       else
-         sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
+         sugar_kg += ferm->equivSucrose_kg();
    }
 
    // We might lose some sugar in the form of lauter deadspace.
