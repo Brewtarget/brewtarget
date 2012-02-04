@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 
 # Put all the required Qt dirs in the includes.
 INCLUDE(${QT_USE_FILE})
+INCLUDE(${PHONON_INCLUDES})
 
 # (ADD_PCH_RULE  _header_filename _src_list)
 # Version 7/26/2010
@@ -338,8 +339,8 @@ IF( WIN32 AND MINGW )
 ENDIF()
 
 # Link brewtarget against Qt libraries defined by QT_LIBRARIES
-TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${EXT_LIBRARIES} )
-MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${EXT_LIBRARIES}" )
+TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${PHONON_LIBS} ${EXT_LIBRARIES} )
+MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${PHONON_LIBS} ${EXT_LIBRARIES}" )
 
 #=================================Installs=====================================
 

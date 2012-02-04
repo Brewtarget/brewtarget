@@ -29,8 +29,8 @@ class TimerWidget;
 
 #if !defined(NO_PHONON)
 
- #include <mediaobject.h>
- #include <audiooutput.h>
+ #include <phonon/mediaobject.h>
+ #include <phonon/audiooutput.h>
 
 #endif
 

@@ -71,34 +71,23 @@ INCLUDE_DIRECTORIES(${SRCDIR})
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/src") # In case of out-of-source build.
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
 
+# Custom cmake modules.
+SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules" )
+
 # ======================Find Qt4 (>= 4.6.0) for this project===================
 SET( EXT_LIBS "" )
 
 IF( ${BUILD_DESIGNER_PLUGINS} )
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebKit QtXml Phonon QtDesigner REQUIRED)
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebKit QtXml QtDesigner REQUIRED)
 ELSE()
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebkit QtXml Phonon REQUIRED)
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebkit QtXml REQUIRED)
 ENDIF()
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 
 # Some distros seem to treat Qt and Phonon as separate, so try to find Phonon.
-IF( NOT QT_PHONON_FOUND )
-   MESSAGE( STATUS "Phonon not found as a part of Qt; trying another approach." )
-
-   FIND_LIBRARY( EXT_PHONON_LIB phonon )
-   FIND_PATH( EXT_PHONON_PATH "mediaobject.h" )
-
-   IF( EXISTS ${EXT_PHONON_LIB} AND EXISTS ${EXT_PHONON_PATH} )
-      MESSAGE( STATUS "Hooray! Phonon found." )
-      MESSAGE( STATUS "Phonon dir: ${EXT_PHONON_PATH}")
-      MESSAGE( STATUS "Phonon lib: ${EXT_PHONON_LIB}")
-
-      SET( EXT_LIBS ${EXT_LIBS} ${EXT_PHONON_LIB} )
-      INCLUDE_DIRECTORIES( ${EXT_PHONON_PATH} )
-   ELSE()
-      MESSAGE( FATAL_ERROR "Phonon not found. Run cmake again with the option -DCMAKE_PREFIX_PATH=/path/to/phonon" )
-   ENDIF()
+IF( NOT ${NO_PHONON} )
+   FIND_PACKAGE( Phonon REQUIRED )
 ENDIF()
 
 # Some extra files for the "make clean" target.

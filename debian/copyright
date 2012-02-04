@@ -20,6 +20,10 @@ Files: *
 Copyright: 2009-2011, Philip G. Lee <rocketman768@gmail.com>
 License: GPL-3
 
+Files: cmake/modules/FindPhonon.cmake
+Copyright: 2008 Matthias Kretz <kretz@kde.org>, 2012 Philip G. Lee <rocketman768@gmail.com>
+License: BSD-2-clause
+
 Files: data/sounds/*
 Copyright: 2011, Jay Cummings <finalgravitypodcast@gmail.com>
 License: GPL-3
