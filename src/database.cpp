@@ -1618,6 +1618,7 @@ void Database::importFromXML(const QString& filename)
                for( int i = 0; i < list.count(); ++i )
                   waterFromXml( list.at(i) );
             }
+            _setterCommandStack->flush();
          }
       }
    }

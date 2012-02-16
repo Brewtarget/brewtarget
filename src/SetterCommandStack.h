@@ -63,6 +63,11 @@ public:
     */
    void push(SetterCommand* command);
 
+   /*!
+    * Force the command stack to flush
+    */
+   void flush();
+
 private slots:
    void executeNext();
    

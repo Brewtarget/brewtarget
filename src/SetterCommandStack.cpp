@@ -57,6 +57,22 @@ void SetterCommandStack::push( SetterCommand* command )
    _commandPtrSwitch.unlock();
 }
 
+void SetterCommandStack::flush()
+{
+   bool restart_timer = false;
+   // Don't want the normal process to fire in the middle of a forced flush
+   if ( _timer.isActive() )
+   {
+      _timer.stop();
+      restart_timer = true;
+   }
+   executeNext();
+
+   // Restart the timer.
+   if ( restart_timer )
+      _timer.start();
+}
+
 void SetterCommandStack::executeNext()
 {
    // Check to make sure there is actually something to run.
@@ -90,3 +106,4 @@ void SetterCommandStack::executeNext()
    // Reset the timer.
    _timer.start();
 }
+
