@@ -51,22 +51,22 @@ public:
    
    virtual ~Yeast() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ );
-   Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ );
-   Q_PROPERTY( Form form READ form WRITE setForm /*NOTIFY changed*/ /*changedForm*/ );
-   Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ );
-   Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ );
-   Q_PROPERTY( QString laboratory READ laboratory WRITE setLaboratory /*NOTIFY changed*/ /*changedLaboratory*/ );
-   Q_PROPERTY( QString productID READ productID WRITE setProductID /*NOTIFY changed*/ /*changedProductID*/ );
-   Q_PROPERTY( double minTemperature_c READ minTemperature_c WRITE setMinTemperature_c /*NOTIFY changed*/ /*changedMinTemperature_c*/ );
-   Q_PROPERTY( double maxTemperature_c READ maxTemperature_c WRITE setMaxTemperature_c /*NOTIFY changed*/ /*changedMaxTemperature_c*/ );
-   Q_PROPERTY( Flocculation flocculation READ flocculation WRITE setFlocculation /*NOTIFY changed*/ /*changedFlocculation*/ );
-   Q_PROPERTY( double attenuation_pct READ attenuation_pct WRITE setAttenuation_pct /*NOTIFY changed*/ /*changedAttenuation_pct*/ );
-   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ );
-   Q_PROPERTY( QString bestFor READ bestFor WRITE setBestFor /*NOTIFY changed*/ /*changedBestFor*/ );
-   Q_PROPERTY( int timesCultured READ timesCultured WRITE setTimesCultured /*NOTIFY changed*/ /*changedTimesCultured*/ );
-   Q_PROPERTY( int maxReuse READ maxReuse WRITE setMaxReuse /*NOTIFY changed*/ /*changedMaxReuse*/ );
-   Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ );
+   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   Q_PROPERTY( Form form READ form WRITE setForm /*NOTIFY changed*/ /*changedForm*/ )
+   Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
+   Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
+   Q_PROPERTY( QString laboratory READ laboratory WRITE setLaboratory /*NOTIFY changed*/ /*changedLaboratory*/ )
+   Q_PROPERTY( QString productID READ productID WRITE setProductID /*NOTIFY changed*/ /*changedProductID*/ )
+   Q_PROPERTY( double minTemperature_c READ minTemperature_c WRITE setMinTemperature_c /*NOTIFY changed*/ /*changedMinTemperature_c*/ )
+   Q_PROPERTY( double maxTemperature_c READ maxTemperature_c WRITE setMaxTemperature_c /*NOTIFY changed*/ /*changedMaxTemperature_c*/ )
+   Q_PROPERTY( Flocculation flocculation READ flocculation WRITE setFlocculation /*NOTIFY changed*/ /*changedFlocculation*/ )
+   Q_PROPERTY( double attenuation_pct READ attenuation_pct WRITE setAttenuation_pct /*NOTIFY changed*/ /*changedAttenuation_pct*/ )
+   Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   Q_PROPERTY( QString bestFor READ bestFor WRITE setBestFor /*NOTIFY changed*/ /*changedBestFor*/ )
+   Q_PROPERTY( int timesCultured READ timesCultured WRITE setTimesCultured /*NOTIFY changed*/ /*changedTimesCultured*/ )
+   Q_PROPERTY( int maxReuse READ maxReuse WRITE setMaxReuse /*NOTIFY changed*/ /*changedMaxReuse*/ )
+   Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ )
    
    // Setters
    void setName( const QString& var );
