@@ -35,6 +35,9 @@
 #include <QSqlError>
 #include <QDebug>
 #include <QThread>
+#include <QTextStream>
+#include <QFile>
+#include <QIODevice>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -2676,7 +2679,8 @@ void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& x
    bool boolVal;
    QString stringVal;
    QDateTime dateTimeVal;
-   
+   QDate dateVal;
+  
    for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -2711,6 +2715,10 @@ void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& x
             case QVariant::DateTime:
                dateTimeVal = BeerXMLElement::getDateTime(textNode);
                element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), dateTimeVal);
+               break;
+            case QVariant::Date:
+               dateVal = BeerXMLElement::getDate(textNode);
+               element->setProperty(xmlTagsToProperties[xmlTag].toStdString().c_str(), dateVal);
                break;
             // NOTE: I believe that enum types like Fermentable::Type will go
             // here since Q_ENUMS() converts enums to strings. So, need to make
@@ -2881,9 +2889,10 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    // First, get standard properties.
    fromXml( ret, Recipe::tagToProp, node );
    
-   // Get style.
+   // Get style. Note: styleFromXml requires the entire node, not just the
+   // firstchild of the node.
    n = node.firstChildElement("STYLE");
-   styleFromXml(n.firstChild(), ret);
+   styleFromXml(n, ret);
    
    // Get equipment.
    n = node.firstChildElement("EQUIPMENT");
@@ -2931,8 +2940,9 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
    Style* ret = newStyle();
+
    fromXml( ret, Style::tagToProp, node );
-   
+
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
    ret->setType( static_cast<Style::Type>(

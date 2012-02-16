@@ -217,8 +217,10 @@ public:
    static int getInt( const QDomText& textNode );
    static QString getString( QDomText const& textNode );
    static QDateTime getDateTime( QDomText const& textNode );
+   static QDate getDate( QDomText const& textNode );
    //! Convert the string to a QDateTime according to Qt::ISODate.
    static QDateTime getDateTime(QString const& str = "");
+   static QDate getDate(QString const& str = "");
    static QString text(bool val);
    static QString text(double val);
    static QString text(int val);

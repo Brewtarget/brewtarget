@@ -101,10 +101,24 @@ QDateTime BeerXMLElement::getDateTime( QDomText const& textNode )
    QDateTime ret;
    QString text = textNode.nodeValue();
 
-   ret = QDateTime::fromString(text, Qt::ISODate);
+   ret = QDateTime::fromString(text, "M/d/yyyy");
    ok = ret.isValid();
    if( !ok )
-      Brewtarget::logE(QString("BeerXMLElement::getDateTime: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
+      Brewtarget::logE(QString("BeerXMLElement::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber()) );
+
+   return ret;
+}
+
+QDate BeerXMLElement::getDate( QDomText const& textNode )
+{
+   bool ok = true;
+   QDate ret;
+   QString text = textNode.nodeValue();
+
+   ret = QDate::fromString(text, "M/d/yyyy");
+   ok = ret.isValid();
+   if( !ok )
+      Brewtarget::logE(QString("BeerXMLElement::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;
 }
