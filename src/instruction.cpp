@@ -138,12 +138,12 @@ void Instruction::setDirections(const QString& dir)
 
 void Instruction::setHasTimer(bool has)
 {
-   set("hasTimer", "has_timer", has);
+   set("hasTimer", "hasTimer", has);
 }
 
 void Instruction::setTimerValue(const QString& timerVal)
 {
-   set("timerValue", "timer_val", timerVal);
+   set("timerValue", "timerValue", timerVal);
 }
 
 void Instruction::setCompleted(bool comp)
@@ -183,12 +183,12 @@ QString Instruction::directions()
 
 bool Instruction::hasTimer()
 {
-   return get("has_timer").toBool();
+   return get("hasTimer").toBool();
 }
 
 QString Instruction::timerValue()
 {
-   return get("timer_value").toString();
+   return get("timerValue").toString();
 }
 
 bool Instruction::completed()

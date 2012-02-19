@@ -27,6 +27,7 @@
 #include <QDate>
 #include <QInputDialog>
 #include <QObject>
+#include <QDebug>
 
 #include "recipe.h"
 #include "style.h"
@@ -71,7 +72,7 @@ QHash<QString,QString> Recipe::tagToPropHash()
    propHash["SECONDARY_TEMP"] = "secondaryTemp_c";
    propHash["TERTIARY_AGE"] = "tertiaryAge_days";
    propHash["TERTIARY_TEMP"] = "tertiaryTemp_c";
-   propHash["AGE"] = "age_days";
+   propHash["AGE"] = "age";
    propHash["AGE_TEMP"] = "ageTemp_c";
    propHash["DATE"] = "date";
    propHash["CARBONATION"] = "carbonation_vols";
@@ -1396,7 +1397,7 @@ void Recipe::setAge_days( double var )
       tmp = var;
    }
 
-   set( "age_days", "age_days", tmp );
+   set( "age", "age", tmp );
 }
 
 void Recipe::setAgeTemp_c( double var )
@@ -1406,7 +1407,7 @@ void Recipe::setAgeTemp_c( double var )
 
 void Recipe::setDate( const QDate &var )
 {
-   set( "date", "brew_date", var.toString("yyyy-MM-dd") );
+   set( "date", "date", var.toString("d/M/yyyy") );
 }
 
 void Recipe::setCarbonation_vols( double var )
@@ -1437,7 +1438,7 @@ void Recipe::setPrimingSugarName( const QString &var )
 
 void Recipe::setCarbonationTemp_c( double var )
 {
-   set( "carbonationTemp", "carbonation_temp", var );
+   set( "carbonationTemp_c", "carbonationTemp_c", var );
 }
 
 void Recipe::setPrimingSugarEquiv( double var )
@@ -1722,7 +1723,7 @@ double Recipe::ageTemp_c() const
 
 QDate Recipe::date() const
 {
-   return QDate::fromString( get("brew_date").toString(), Qt::ISODate );
+   return QDate::fromString( get("date").toString(), "d/M/yyyy");
 }
 
 double Recipe::carbonation_vols() const
@@ -1742,7 +1743,7 @@ QString Recipe::primingSugarName() const
 
 double Recipe::carbonationTemp_c() const
 {
-   return get("carbonation_temp").toDouble();
+   return get("carbonationTemp_c").toDouble();
 }
 
 double Recipe::primingSugarEquiv() const

@@ -95,7 +95,7 @@ public:
    Q_PROPERTY( double secondaryTemp_c READ secondaryTemp_c WRITE setSecondaryTemp_c /*NOTIFY changed*/ /*changedSecondaryTemp_c*/ )
    Q_PROPERTY( double tertiaryAge_days READ tertiaryAge_days WRITE setTertiaryAge_days /*NOTIFY changed*/ /*changedTertiaryAge_days*/ )
    Q_PROPERTY( double tertiaryTemp_c READ tertiaryTemp_c WRITE setTertiaryTemp_c /*NOTIFY changed*/ /*changedTertiaryTemp_c*/ )
-   Q_PROPERTY( double age_days READ age_days WRITE setAge_days /*NOTIFY changed*/ /*changedAge_days*/ )
+   Q_PROPERTY( double age READ age_days WRITE setAge_days /*NOTIFY changed*/ /*changedAge_days*/ )
    Q_PROPERTY( double ageTemp_c READ ageTemp_c WRITE setAgeTemp_c /*NOTIFY changed*/ /*changedAgeTemp_c*/ )
    Q_PROPERTY( QDate date READ date WRITE setDate /*NOTIFY changed*/ /*changedDate*/ )
    Q_PROPERTY( double carbonation_vols READ carbonation_vols WRITE setCarbonation_vols /*NOTIFY changed*/ /*changedCarbonation_vols*/ )

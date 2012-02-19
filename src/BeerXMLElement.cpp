@@ -117,7 +117,14 @@ QDate BeerXMLElement::getDate( QDomText const& textNode )
 
    ret = QDate::fromString(text, "M/d/yyyy");
    ok = ret.isValid();
+   // Dates have some odd inconsistencies.
    if( !ok )
+   {
+      ret = QDate::fromString(text,"d/M/yyyy");
+      ok = ret.isValid();
+   }
+
+   if ( !ok ) 
       Brewtarget::logE(QString("BeerXMLElement::getDate: %1 is not an ISO date-time. Line %2").arg(text).arg(textNode.lineNumber()) );
 
    return ret;

@@ -166,11 +166,9 @@ create table mashstep(
    end_temp real DEFAULT 67.0,
    infuse_temp real DEFAULT 67.0,
    decoction_amount real DEFAULT 0.0,
-
    -- Meta data
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE,
-
    -- Our step number is unique within our parent mash.
    mash_id integer,
    step_number integer,
@@ -239,20 +237,27 @@ create table instruction(
    iid integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    directions text DEFAULT '',
-   has_timer boolean DEFAULT FALSE,
-   timer_value varchar(16) DEFAULT '00:00:00',
+   hasTimer boolean DEFAULT FALSE,
+   timerValue varchar(16) DEFAULT '00:00:00',
    completed boolean DEFAULT FALSE,
    interval real DEFAULT 0.0,
-
    deleted boolean DEFAULT FALSE,
    display boolean DEFAULT TRUE,
-
    recipe_id integer,
    -- The order of this instruction in the recipe.
-   instruction_number integer autoincrement,
+   instruction_number integer default 0,
    foreign key(recipe_id) references recipe(rid),
    unique(recipe_id,instruction_number)
 );
+
+-- unfortunately, autoincrement only works for primary keys.
+-- this trigger will get the same work done, I hope
+CREATE TRIGGER update_ins_num AFTER INSERT ON instruction
+BEGIN
+   UPDATE instruction SET instruction_number = 
+      (SELECT max(instruction_number) FROM instruction) + 1 
+      WHERE rowid = new.rowid;
+END;
 
 -- The relationship of styles to recipe is one to many, as is the mash and
 -- equipment. It just makes most sense for the recipe to carry that around
@@ -260,7 +265,7 @@ create table instruction(
 create table recipe(
    rid integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
-   rtype varchar(32) DEFAULT 'All Grain',
+   type varchar(32) DEFAULT 'All Grain',
    brewer varchar(1024) DEFAULT '',
    assistant_brewer varchar(1024) DEFAULT 'Brewtarget: free beer software',
    batch_size real DEFAULT 0.0,
@@ -278,13 +283,14 @@ create table recipe(
    tertiary_temp real DEFAULT 20.0,
    age real DEFAULT 0.0,
    age_temp real DEFAULT 20.0,
-   brewdate date  DEFAULT CURRENT_DATE,
+   date date  DEFAULT CURRENT_DATE,
    carb_volume real DEFAULT 0.0,
    forced_carb boolean DEFAULT FALSE,
    priming_sugar_name varchar(128) DEFAULT '',
-   carb_temp real DEFAULT 20.0,
+   carbonationTemp_c real DEFAULT 20.0,
    priming_sugar_equiv real DEFAULT 1.0,
    keg_priming_factor real DEFAULT 1.0,
+   notes text DEFAULT '',
    taste_notes text DEFAULT '',
    taste_rating real DEFAULT 0.0,
    deleted boolean DEFAULT FALSE,

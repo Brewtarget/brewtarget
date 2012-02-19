@@ -33,11 +33,7 @@
 #include <QSqlQuery>
 #include <QSqlIndex>
 #include <QSqlError>
-#include <QDebug>
 #include <QThread>
-#include <QTextStream>
-#include <QFile>
-#include <QIODevice>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -136,8 +132,10 @@ void Database::load()
       QString commands(createDbFile.readAll());
       createDbFile.close();
       
-      foreach( QString command, commands.split(";") )
-         QSqlQuery( command+";", sqldb );
+      foreach( QString command, commands.split("\n\n") )
+      {
+         QSqlQuery( command, sqldb );
+      }
    }
    
    // NOTE: these two pragmas reduce --from-xml from 7min:15s to 1m:55s.
@@ -1291,6 +1289,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e )
 
    int key = c.value(keyNames[EQUIPTABLE]).toInt();
    Equipment* newEquip = allEquipments[key];
+
    
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
@@ -2750,6 +2749,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
    Equipment* ret = newEquipment();
+
    fromXml( ret, Equipment::tagToProp, node );
    if( parent )
       addToRecipe( parent, ret );
@@ -2888,51 +2888,63 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    
    // First, get standard properties.
    fromXml( ret, Recipe::tagToProp, node );
+   _setterCommandStack->flush();
    
    // Get style. Note: styleFromXml requires the entire node, not just the
    // firstchild of the node.
    n = node.firstChildElement("STYLE");
    styleFromXml(n, ret);
+   _setterCommandStack->flush();
    
-   // Get equipment.
+   // Get equipment. equipmentFromXml requires the entire node, not just the
+   // first child
    n = node.firstChildElement("EQUIPMENT");
-   equipmentFromXml(n.firstChild(), ret);
+   equipmentFromXml(n, ret);
+   _setterCommandStack->flush();
    
    // Get hops.
    n = node.firstChildElement("HOPS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       hopFromXml(n, ret);
+   _setterCommandStack->flush();
    
    // Get ferms.
    n = node.firstChildElement("FERMENTABLES");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       fermentableFromXml(n, ret);
+   _setterCommandStack->flush();
    
    // Get miscs.
    n = node.firstChildElement("MISCS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       miscFromXml(n, ret);
+   _setterCommandStack->flush();
    
    // Get yeasts.
    n = node.firstChildElement("YEASTS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       yeastFromXml(n, ret);
+   _setterCommandStack->flush();
    
    // Get waters.
    n = node.firstChildElement("WATERS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       waterFromXml(n, ret);
+   _setterCommandStack->flush();
    
    // Get instructions.
    n = node.firstChildElement("INSTRUCTIONS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       instructionFromXml(n, ret);
-   
+   _setterCommandStack->flush();
+
    // Get brew notes
+/* Still ignoring these
    n = node.firstChildElement("BREWNOTES");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       brewNoteFromXml(n, ret);
-   
+   _setterCommandStack->flush();
+*/   
    return ret;
 }
 
