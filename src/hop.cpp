@@ -232,6 +232,10 @@ void Hop::setAlpha_pct( double num )
    if( num < 0.0 || num > 100.0 )
    {
       Brewtarget::logW( QString("Hop: 0 < alpha < 100: %1").arg(num) );
+      return;
+   }
+   else
+   {
       set("alpha_pct", "alpha", num);
    }
 }
