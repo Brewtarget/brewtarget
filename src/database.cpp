@@ -34,6 +34,7 @@
 #include <QSqlIndex>
 #include <QSqlError>
 #include <QThread>
+#include <QDebug>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -140,9 +141,11 @@ void Database::load()
    
    // NOTE: these two pragmas reduce --from-xml from 7min:15s to 1m:55s.
    // Turn off database journaling for better speed.
-   QSqlQuery( "PRAGMA journal_mode = off", sqldb );
+   QSqlQuery( "PRAGMA synchronous = off", sqldb );
+   QSqlQuery( "PRAGMA foreign_keys = on", sqldb );
+   QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqldb );
    // Store temporary tables in memory.
-   QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb );
+    QSqlQuery( "PRAGMA temp_store = MEMORY", sqldb );
    
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
@@ -607,10 +610,12 @@ int Database::insertNewDefaultRecord( DBTable table )
    */
    
    int key;
+
    QSqlQuery q( sqldb );
    q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
               .arg(tableNames[table])
          );
+
    if( q.numRowsAffected() < 1 )
    {
       Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[table]) );
@@ -618,27 +623,9 @@ int Database::insertNewDefaultRecord( DBTable table )
    }
    else
       key = q.lastInsertId().toInt();
-   
+
    //if( q.lastError().isValid() )
    //   Brewtarget::logE( QString("Database::insertNewDefaultRecord: %1").arg(q.lastError().text()) );
-   
-   /*
-   QSqlRelationalTableModel* t = tables[table];
-   qDebug() << "Rows: " << t->rowCount() << "\n";
-   QSqlRecord r = t->record();
-   bool success = t->insertRecord(0,r);
-   if( !success )
-      qDebug() << "Couldn't insert a row.";
-   //int key = t->query().lastInsertId().toInt();
-   int key = -1;
-   int keyField = r.indexOf(keyNames[table]);
-   qDebug() << r.value(0).toString();
-   if( r.value(keyField).isValid() )
-      key = r.value(keyField).toInt();
-   else
-      qDebug() << "Invalid key.";
-   qDebug() << "Rows: " << t->rowCount() << "\n";
-   */
    
    return key;
 }
@@ -692,7 +679,7 @@ BrewNote* Database::newBrewNote(Recipe* parent)
 {
    BrewNote* tmp = new BrewNote();
    tmp->_key = insertNewDefaultRecord(BREWNOTETABLE);
-   tmp->_table = YEASTTABLE;
+   tmp->_table = BREWNOTETABLE;
    allBrewNotes.insert(tmp->_key,tmp);
    sqlUpdate( tableNames[BREWNOTETABLE],
               QString("recipe_id=%1").arg(parent->_key),
@@ -1128,7 +1115,7 @@ void Database::updateEntry( DBTable table, int key, const char* col_name, QVaria
    _setterCommandStack->push(command);
 }
 
-int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
+int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName, bool initialLoad )
 {
    // TODO: encapsulate this in a QUndoCommand.
    int newKey;
@@ -1147,18 +1134,30 @@ int Database::addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString p
       return -1;
    }
    
-   // Create a copy of the ingredient.
-   r = copy(ing);
-   newKey = r.value(ingKeyName).toInt();
+   // Create a copy of the ingredient. We don't want to do this on the initial
+   // load of the recipe database, because the stuff is already a copy
+   if ( ! initialLoad ) 
+   {
+      r = copy(ing);
+      DBTable t = classNameToTable[ing->metaObject()->className()];
+      newKey = r.value(keyNames[t]).toInt();
+   }
+   else 
+   {
+      newKey = ing->_key;
+   }
+
    
    // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
    q = QSqlQuery( sqldb );
    q.setForwardOnly(true);
+
+
    q.prepare( QString("INSERT INTO `%1` (`%2`, `recipe_id`) VALUES (:ingredient, :recipe)")
                  .arg(relTableName)
                  .arg(ingKeyName)
             );
-   q.bindValue(":ingredient", ing->_key);
+   q.bindValue(":ingredient", newKey);
    q.bindValue(":recipe", rec->_key);
    if( q.exec() )
       emit rec->changed( rec->metaProperty(propName), QVariant() );
@@ -1174,18 +1173,22 @@ QSqlRecord Database::copy( BeerXMLElement const* object, bool displayed )
 {
    int newKey;
    int i;
+
    DBTable t = classNameToTable[object->metaObject()->className()];
    QString tName = tableNames[t];
+
    QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
                .arg(tName).arg(keyNames[t]).arg(object->_key),
                sqldb
               );
    
    if( !q.next() )
+   {
       return QSqlRecord();
+   }
    
    QSqlRecord oldRecord = q.record();
-   
+  
    // Create a new row.
    newKey = insertNewDefaultRecord(t);
    q = QSqlQuery( QString("SELECT * FROM %1 WHERE %2 = %3")
@@ -1204,7 +1207,7 @@ QSqlRecord Database::copy( BeerXMLElement const* object, bool displayed )
          newValString += QString("`parent` = '%2',").arg(object->_key);      
       else if( oldRecord.fieldName(i) == "displayed" )
          newValString += QString("`displayed` = '%2',").arg( displayed ? "true" : "false" );
-      else
+      else if ( oldRecord.fieldName(i) != keyNames[t] )
          newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
    }
    
@@ -1224,13 +1227,16 @@ QSqlRecord Database::copy( BeerXMLElement const* object, bool displayed )
 }
 
 // Add to recipe ==============================================================
-void Database::addToRecipe( Recipe* rec, Hop* hop )
+void Database::addToRecipe( Recipe* rec, Hop* hop, bool initialLoad )
 {
-   addIngredientToRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
+   addIngredientToRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id", initialLoad );
 }
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm )
 {
+   if ( ferm == 0 )
+      return;
+
    int key = addIngredientToRecipe( rec, ferm, "ferms", "fermentable_in_recipe", "fermentable_id" );
    connect( allFermentables[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    rec->recalcAll();
@@ -1278,7 +1284,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e )
 {
    if( e == 0 )
       return;
-   
+  
    // Make a copy of equipment.
    QSqlRecord c = copy(e);
    
@@ -1620,7 +1626,6 @@ void Database::importFromXML(const QString& filename)
                for( int i = 0; i < list.count(); ++i )
                   waterFromXml( list.at(i) );
             }
-            _setterCommandStack->flush();
          }
       }
    }
@@ -2743,6 +2748,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
    BrewNote* ret = newBrewNote(parent);  
    fromXml( ret, BrewNote::tagToProp, node );
+   _setterCommandStack->flush();
    return ret;
 }
 
@@ -2751,6 +2757,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    Equipment* ret = newEquipment();
 
    fromXml( ret, Equipment::tagToProp, node );
+   _setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -2761,6 +2768,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    QDomNode n;
    Fermentable* ret = newFermentable();
    fromXml( ret, Fermentable::tagToProp, node );
+   _setterCommandStack->flush();
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2778,8 +2786,10 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
 Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
+
    Hop* ret = newHop();
    fromXml( ret, Hop::tagToProp, node );
+   _setterCommandStack->flush();
    
    // Handle enums separately.
    n = node.firstChildElement("USE");
@@ -2802,7 +2812,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
                  ) );
    
    if( parent )
-      addToRecipe( parent, ret );
+      addToRecipe( parent, ret, true );
    return ret;
 }
 
@@ -2811,6 +2821,7 @@ Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent 
    Instruction* ret = newInstruction(parent);
    
    fromXml( ret, Instruction::tagToProp, node );
+   _setterCommandStack->flush();
    return ret;
 }
 
@@ -2825,6 +2836,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    
    // First, get all the standard properties.
    fromXml( ret, Mash::tagToProp, node );
+   _setterCommandStack->flush();
    
    // Now, get the individual mash steps.
    n = node.firstChildElement("MASH_STEPS");
@@ -2833,7 +2845,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    // Iterate through all the mash steps.
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       mashStepFromXml( n, ret );
-   
+
    return ret;
 }
 
@@ -2843,6 +2855,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    MashStep* ret = newMashStep(parent);
    
    fromXml( ret, MashStep::tagToProp, node );
+   _setterCommandStack->flush();
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2852,6 +2865,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
                     )
                  ) );
    
+   _setterCommandStack->flush();
    return ret;
 }
 
@@ -2861,6 +2875,7 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    Misc* ret = newMisc();
    
    fromXml( ret, Misc::tagToProp, node );
+   _setterCommandStack->flush();
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2885,8 +2900,8 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 {
    QDomNode n;
    Recipe* ret = newRecipe();
-   
-   // First, get standard properties.
+  
+   // Get standard properties.
    fromXml( ret, Recipe::tagToProp, node );
    _setterCommandStack->flush();
    
@@ -2894,57 +2909,48 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    // firstchild of the node.
    n = node.firstChildElement("STYLE");
    styleFromXml(n, ret);
-   _setterCommandStack->flush();
    
    // Get equipment. equipmentFromXml requires the entire node, not just the
    // first child
    n = node.firstChildElement("EQUIPMENT");
    equipmentFromXml(n, ret);
-   _setterCommandStack->flush();
    
    // Get hops.
    n = node.firstChildElement("HOPS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       hopFromXml(n, ret);
-   _setterCommandStack->flush();
    
    // Get ferms.
    n = node.firstChildElement("FERMENTABLES");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       fermentableFromXml(n, ret);
-   _setterCommandStack->flush();
    
    // Get miscs.
    n = node.firstChildElement("MISCS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       miscFromXml(n, ret);
-   _setterCommandStack->flush();
    
    // Get yeasts.
    n = node.firstChildElement("YEASTS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       yeastFromXml(n, ret);
-   _setterCommandStack->flush();
    
    // Get waters.
    n = node.firstChildElement("WATERS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       waterFromXml(n, ret);
-   _setterCommandStack->flush();
    
    // Get instructions.
    n = node.firstChildElement("INSTRUCTIONS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       instructionFromXml(n, ret);
-   _setterCommandStack->flush();
 
    // Get brew notes
-/* Still ignoring these
+
    n = node.firstChildElement("BREWNOTES");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       brewNoteFromXml(n, ret);
-   _setterCommandStack->flush();
-*/   
+
    return ret;
 }
 
@@ -2963,6 +2969,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
                     )
                  ) );
    
+   _setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret );
    return ret;

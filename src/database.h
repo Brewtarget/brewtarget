@@ -169,7 +169,7 @@ public:
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
-   void addToRecipe( Recipe* rec, Hop* hop );
+   void addToRecipe( Recipe* rec, Hop* hop, bool initialLoad = false );
    void addToRecipe( Recipe* rec, Fermentable* ferm );
    void addToRecipe( Recipe* rec, Misc* m );
    void addToRecipe( Recipe* rec, Yeast* y );
@@ -485,7 +485,7 @@ private:
     * key is \b ingKeyName and the relational table is \b relTableName.
     * \returns the key of the new ingredient.
     */
-   int addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName );
+   int addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName, bool initialLoad = false );
    
    // TODO: encapsulate in QUndoCommand
    //! Remove ingredient from a recipe.
