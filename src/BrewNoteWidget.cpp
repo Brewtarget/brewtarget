@@ -225,11 +225,11 @@ void BrewNoteWidget::showChanges()
    plainTextEdit_brewNotes->setPlainText(bNoteObs->notes());
 
    // Now with the calculated stuff
-   lcdnumber_effBK->display(bNoteObs->calculateEffIntoBK_pct(),2);
-   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs->calculateOg()));
-   lcdnumber_brewhouseEff->display(bNoteObs->calculateBrewHouseEff_pct(),2);
-   lcdnumber_projABV->display(bNoteObs->calculateABV_pct(),2);
-   lcdnumber_abv->display(bNoteObs->calculateActualABV_pct(),2);
+   lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
+   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs->og()));
+   lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
+   lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
+   lcdnumber_abv->display(bNoteObs->abv(),2);
    
 }
 
