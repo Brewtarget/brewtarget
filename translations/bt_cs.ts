@@ -293,65 +293,65 @@
 <context>
     <name>BrewTargetTreeView</name>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="272"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="286"/>
         <source>New Recipe</source>
         <translation type="unfinished">Nový recept</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="273"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="287"/>
         <source>Brew It!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="276"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="290"/>
         <source>Brew Again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uvařit znovu</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="277"/>
-        <location filename="../src/BrewTargetTreeView.cpp" line="306"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="291"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="320"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Odstranit</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="281"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="295"/>
         <source>New Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nové vybavení</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="285"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="299"/>
         <source>New Fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nová surovina</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="289"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="303"/>
         <source>New Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nový chmel</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="293"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="307"/>
         <source>New Misc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="297"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="311"/>
         <source>New Yeast</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nové kvasnice</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="304"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="318"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kopírovat</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="309"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="323"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Exportovat</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="310"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="324"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Importovat</translation>
     </message>
 </context>
 <context>
@@ -532,53 +532,53 @@
 <context>
     <name>Hop</name>
     <message>
-        <location filename="../src/hop.cpp" line="402"/>
+        <location filename="../src/hop.cpp" line="406"/>
         <source>Mash</source>
         <translation type="unfinished">Rmutování</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="402"/>
+        <location filename="../src/hop.cpp" line="406"/>
         <source>First Wort</source>
         <translation type="unfinished">Mladina</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="402"/>
+        <location filename="../src/hop.cpp" line="406"/>
         <source>Boil</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Chmelovar</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="402"/>
-        <location filename="../src/hop.cpp" line="428"/>
+        <location filename="../src/hop.cpp" line="406"/>
+        <location filename="../src/hop.cpp" line="432"/>
         <source>Aroma</source>
         <translation type="unfinished">Aromatický</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="402"/>
+        <location filename="../src/hop.cpp" line="406"/>
         <source>Dry Hop</source>
         <translation type="unfinished">Dry hopping</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="428"/>
+        <location filename="../src/hop.cpp" line="432"/>
         <source>Bittering</source>
         <translation type="unfinished">Hořký</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="428"/>
+        <location filename="../src/hop.cpp" line="432"/>
         <source>Both</source>
         <translation type="unfinished">Oboje</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="444"/>
+        <location filename="../src/hop.cpp" line="448"/>
         <source>Leaf</source>
         <translation type="unfinished">Hlávkový</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="444"/>
+        <location filename="../src/hop.cpp" line="448"/>
         <source>Pellet</source>
         <translation type="unfinished">Pelety</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="444"/>
+        <location filename="../src/hop.cpp" line="448"/>
         <source>Plug</source>
         <translation type="unfinished">Lisovaný</translation>
     </message>
@@ -747,49 +747,47 @@
         <translation type="obsolete">Časovače</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="494"/>
         <source>Unknown type %1.</source>
-        <translation>Neznýmý typ %1.</translation>
+        <translation type="obsolete">Neznýmý typ %1.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="785"/>
+        <location filename="../src/MainWindow.cpp" line="780"/>
         <source>Sure about that?</source>
         <translation>Jste si jistí?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="780"/>
+        <location filename="../src/MainWindow.cpp" line="781"/>
         <source>You are about to obliterate the recipe. Is that ok?</source>
         <translation>Chystáte se zlikvidovat recept. Je to v pořádku?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="822"/>
-        <location filename="../src/MainWindow.cpp" line="851"/>
+        <location filename="../src/MainWindow.cpp" line="823"/>
+        <location filename="../src/MainWindow.cpp" line="852"/>
         <source>Equipment request</source>
         <translation>Požadavek na vybavení</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="823"/>
-        <location filename="../src/MainWindow.cpp" line="852"/>
+        <location filename="../src/MainWindow.cpp" line="824"/>
+        <location filename="../src/MainWindow.cpp" line="853"/>
         <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
         <translation>Chcete nastavit cílový objem várky a počáteční objem várky dle požadavků vybavení?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1311"/>
         <source>Found %1 %2.</source>
-        <translation>Nalezeno %1 %2.</translation>
+        <translation type="obsolete">Nalezeno %1 %2.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1374"/>
+        <location filename="../src/MainWindow.cpp" line="1273"/>
         <source>Delete %1</source>
         <translation>Odebrat %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1272"/>
+        <location filename="../src/MainWindow.cpp" line="1273"/>
         <source>Delete %1 %2?</source>
         <translation>Odebrat %1 %2?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1520"/>
+        <location filename="../src/MainWindow.cpp" line="1521"/>
         <source>HTML files (*.html)</source>
         <translation>Soubory HTML (*.html)</translation>
     </message>
@@ -798,133 +796,121 @@
         <translation type="obsolete">Nový recept</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1708"/>
         <source>Brew it!</source>
-        <translation>Uvařit!</translation>
+        <translation type="obsolete">Uvařit!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1710"/>
         <source>New Equipment</source>
-        <translation>Nové vybavení</translation>
+        <translation type="obsolete">Nové vybavení</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1711"/>
         <source>New Fermentable</source>
-        <translation>Nová surovina</translation>
+        <translation type="obsolete">Nová surovina</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1712"/>
         <source>New Hop</source>
-        <translation>Nový chmel</translation>
+        <translation type="obsolete">Nový chmel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1713"/>
         <source>New miscellaneous</source>
-        <translation>Nový přípravek</translation>
+        <translation type="obsolete">Nový přípravek</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1714"/>
         <source>New Yeast</source>
-        <translation>Nové kvasnice</translation>
+        <translation type="obsolete">Nové kvasnice</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1717"/>
+        <location filename="../src/MainWindow.cpp" line="1633"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1633"/>
+        <location filename="../src/MainWindow.cpp" line="1634"/>
         <source>Recipe</source>
         <translation>Recept</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1634"/>
+        <location filename="../src/MainWindow.cpp" line="1635"/>
         <source>Equipment</source>
         <translation>Vybavení</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1635"/>
+        <location filename="../src/MainWindow.cpp" line="1636"/>
         <source>Fermentable</source>
         <translation>Surovina</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1636"/>
+        <location filename="../src/MainWindow.cpp" line="1637"/>
         <source>Hop</source>
         <translation>Chmel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1637"/>
+        <location filename="../src/MainWindow.cpp" line="1638"/>
         <source>Miscellaneous</source>
         <translation>Přípravky</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1638"/>
+        <location filename="../src/MainWindow.cpp" line="1639"/>
         <source>Yeast</source>
         <translation>Kvasnice</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1737"/>
         <source>Copy</source>
-        <translation>Kopírovat</translation>
+        <translation type="obsolete">Kopírovat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1739"/>
-        <location filename="../src/MainWindow.cpp" line="1750"/>
         <source>Delete</source>
-        <translation>Odstranit</translation>
+        <translation type="obsolete">Odstranit</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1742"/>
         <source>Export</source>
-        <translation>Exportovat</translation>
+        <translation type="obsolete">Exportovat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1745"/>
         <source>Import</source>
-        <translation>Importovat</translation>
+        <translation type="obsolete">Importovat</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1749"/>
         <source>Brew Again</source>
-        <translation>Uvařit znovu</translation>
+        <translation type="obsolete">Uvařit znovu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1755"/>
+        <location filename="../src/MainWindow.cpp" line="1653"/>
         <source>Copy %1</source>
         <translation>Kopírovat %1</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1652"/>
-        <location filename="../src/MainWindow.cpp" line="1663"/>
-        <location filename="../src/MainWindow.cpp" line="1674"/>
-        <location filename="../src/MainWindow.cpp" line="1685"/>
-        <location filename="../src/MainWindow.cpp" line="1696"/>
-        <location filename="../src/MainWindow.cpp" line="1707"/>
+        <location filename="../src/MainWindow.cpp" line="1653"/>
+        <location filename="../src/MainWindow.cpp" line="1664"/>
+        <location filename="../src/MainWindow.cpp" line="1675"/>
+        <location filename="../src/MainWindow.cpp" line="1686"/>
+        <location filename="../src/MainWindow.cpp" line="1697"/>
+        <location filename="../src/MainWindow.cpp" line="1708"/>
         <source>Enter a unique name for the copy of %1.</source>
         <translation>Zadejte jedinečný název kopie %1.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1663"/>
+        <location filename="../src/MainWindow.cpp" line="1664"/>
         <source>Copy Equipment</source>
         <translation>Kopírovat vybavení</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1674"/>
+        <location filename="../src/MainWindow.cpp" line="1675"/>
         <source>Copy Fermentable</source>
         <translation>Kopírovat surovinu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1685"/>
+        <location filename="../src/MainWindow.cpp" line="1686"/>
         <source>Copy Hop</source>
         <translation>Kopírovat chmel</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1696"/>
+        <location filename="../src/MainWindow.cpp" line="1697"/>
         <source>Copy Miscellaneous</source>
         <translation>Kopírovat přípravek</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1707"/>
+        <location filename="../src/MainWindow.cpp" line="1708"/>
         <source>Copy Yeast</source>
         <translation>Kopírovat kvasnice</translation>
     </message>
@@ -933,84 +919,79 @@
         <translation type="obsolete">Nelze otevřít %1 pro zápis.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="542"/>
+        <location filename="../src/MainWindow.cpp" line="543"/>
         <source>MainWindow::treeActivated Unknown type %1.</source>
         <translation>Spojení databází</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2003"/>
         <source>You are about to merge another database into the current one. Continue?</source>
-        <translation>Chystáte se spojit současnou databázi s jinou. Opravdu chcete pokračovat?</translation>
+        <translation type="obsolete">Chystáte se spojit současnou databázi s jinou. Opravdu chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2011"/>
         <source>Select Database File</source>
-        <translation>Vybrat databázový soubor</translation>
+        <translation type="obsolete">Vybrat databázový soubor</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2013"/>
         <source>BeerXML File (*.xml)</source>
-        <translation>Soubor BeerXML (*.xml)</translation>
+        <translation type="obsolete">Soubor BeerXML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2054"/>
         <source>Database Merged</source>
-        <translation>Databáze spojeny</translation>
+        <translation type="obsolete">Databáze spojeny</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="2055"/>
         <source>Database successfully merged. Please restart Brewtarget NOW and changes will appear.</source>
-        <translation>Databáze byly úspěšně spojeny. Aby se promítly změny, restartujte prosím nyní Brewtarget.</translation>
+        <translation type="obsolete">Databáze byly úspěšně spojeny. Aby se promítly změny, restartujte prosím nyní Brewtarget.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1151"/>
+        <location filename="../src/MainWindow.cpp" line="1138"/>
         <source>Recipe name</source>
         <translation>Název receptu</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1138"/>
+        <location filename="../src/MainWindow.cpp" line="1139"/>
         <source>Recipe name:</source>
         <translation>Název receptu:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1225"/>
+        <location filename="../src/MainWindow.cpp" line="1226"/>
         <source>Backup Database</source>
         <translation>Zálohovat databázi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1230"/>
-        <location filename="../src/MainWindow.cpp" line="1248"/>
-        <location filename="../src/MainWindow.cpp" line="1484"/>
+        <location filename="../src/MainWindow.cpp" line="1231"/>
+        <location filename="../src/MainWindow.cpp" line="1249"/>
+        <location filename="../src/MainWindow.cpp" line="1485"/>
         <source>Oops!</source>
         <translation>Chyba!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1230"/>
+        <location filename="../src/MainWindow.cpp" line="1231"/>
         <source>Could not copy the files for some reason.</source>
         <translation>Z nějakého důvodu nelze zkopírovat soubory.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1235"/>
+        <location filename="../src/MainWindow.cpp" line="1236"/>
         <source>A Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1236"/>
+        <location filename="../src/MainWindow.cpp" line="1237"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Toto vymaže aktuální recepty a ingredience. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1243"/>
+        <location filename="../src/MainWindow.cpp" line="1244"/>
         <source>Restore Database</source>
         <translation>Obnovit databázi</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1248"/>
+        <location filename="../src/MainWindow.cpp" line="1249"/>
         <source>For some reason, the operation failed.</source>
         <translation>Z nějakého důvodu operace selhala.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1809"/>
+        <location filename="../src/MainWindow.cpp" line="1810"/>
         <source>MainWindow::openForWrite Could not open %1 for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1031,17 +1012,17 @@
         <translation type="obsolete">Importovat recept?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1263"/>
+        <location filename="../src/MainWindow.cpp" line="1264"/>
         <source>Import %1?</source>
         <translation>Importovat %1?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1288"/>
+        <location filename="../src/MainWindow.cpp" line="1289"/>
         <source>No mash</source>
         <translation>Žádný rmut</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1288"/>
+        <location filename="../src/MainWindow.cpp" line="1289"/>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
         <translation>Snažíte se přidat rmutovací krok ber rmutu. Vytvořte nejdříve rmut.</translation>
     </message>
@@ -1054,17 +1035,17 @@
         <translation type="obsolete">Chcete uložit provedené změny? Všechny neuložené změny budou ztraceny.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1452"/>
+        <location filename="../src/MainWindow.cpp" line="1453"/>
         <source>Copy Recipe</source>
         <translation>Zkopírovat recept</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1452"/>
+        <location filename="../src/MainWindow.cpp" line="1453"/>
         <source>Enter a unique name for the copy.</source>
         <translation>Zadejte jedinečný název kopie.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1484"/>
+        <location filename="../src/MainWindow.cpp" line="1485"/>
         <source>Please give your mash a name before saving.</source>
         <translation>Prosím, před ukládáním svůj rmut pojmenujte.</translation>
     </message>
@@ -1246,7 +1227,7 @@
     </message>
     <message>
         <source>Decoction</source>
-        <translation>Dekokce</translation>
+        <translation type="obsolete">Dekokce</translation>
     </message>
     <message>
         <source>Haven&apos;t tested decoction calculations yet.
@@ -1685,12 +1666,12 @@ Používejte na vlastní nebezpečí.</translation>
         <translation>Nelze otevřít %1 pro zápis</translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="153"/>
+        <location filename="../src/database.cpp" line="157"/>
         <source>Merge Database</source>
         <translation>Spojit databáze</translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="154"/>
+        <location filename="../src/database.cpp" line="158"/>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
         <translation>Možná jsou k dispozici nové přísady a recepty. Chcete je přidat do své databáze?</translation>
     </message>
@@ -1913,7 +1894,7 @@ Používejte na vlastní nebezpečí.</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation>Přidání sladu</translation>
+        <translation type="obsolete">Přidání sladu</translation>
     </message>
     <message>
         <source>Add </source>
@@ -1929,7 +1910,7 @@ Používejte na vlastní nebezpečí.</translation>
     </message>
     <message>
         <source>Bring </source>
-        <translation>Ohřejte </translation>
+        <translation type="obsolete">Ohřejte </translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
@@ -1941,15 +1922,15 @@ Používejte na vlastní nebezpečí.</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation>Přidejte %1 vody o teplotě %2 do díla abyste jej ohřáli na %3.</translation>
+        <translation type="obsolete">Přidejte %1 vody o teplotě %2 do díla abyste jej ohřáli na %3.</translation>
     </message>
     <message>
         <source>Heat mash to %1.</source>
-        <translation>Ohřejte dílo na %1.</translation>
+        <translation type="obsolete">Ohřejte dílo na %1.</translation>
     </message>
     <message>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation>Přiveďte %1 díla k varu a vraťte jej do rmutovácí pánve abyste dílo ohřáli na %2.</translation>
+        <translation type="obsolete">Přiveďte %1 díla k varu a vraťte jej do rmutovácí pánve abyste dílo ohřáli na %2.</translation>
     </message>
     <message>
         <source> Hold for %1.</source>
@@ -1957,45 +1938,43 @@ Používejte na vlastní nebezpečí.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Nechte %1 %2 vařit %3.</translation>
+        <translation type="obsolete">Nechte %1 %2 vařit %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Přidejte %1 %2 do kvasné nádoby na %3.</translation>
+        <translation type="obsolete">Přidejte %1 %2 do kvasné nádoby na %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Přidejte %1 %2 při vyslazování na %3.</translation>
+        <translation type="obsolete">Přidejte %1 %2 při vyslazování na %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Přidejte %1 %2 do vystírky na %3.</translation>
+        <translation type="obsolete">Přidejte %1 %2 do vystírky na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="867"/>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Nechte máčet %1 %2 ve rmutu %3.</translation>
+        <translation type="obsolete">Nechte máčet %1 %2 ve rmutu %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="871"/>
         <source>Use %1 %2 for %3</source>
-        <translation>Použijte %1 %2 pro %3</translation>
+        <translation type="obsolete">Použijte %1 %2 pro %3</translation>
     </message>
     <message>
         <source>Hop addition</source>
-        <translation>Přidání chmele</translation>
+        <translation type="obsolete">Přidání chmele</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Použijte %1 %2 při stáčení na %3.</translation>
+        <translation type="obsolete">Použijte %1 %2 při stáčení na %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Přidejte %1 %2 do hlavního kvašení na %3.</translation>
+        <translation type="obsolete">Přidejte %1 %2 do hlavního kvašení na %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Přidejte %1 %2 do dokvašování na %3.</translation>
+        <translation type="obsolete">Přidejte %1 %2 do dokvašování na %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
@@ -2007,7 +1986,7 @@ Používejte na vlastní nebezpečí.</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
-        <translation>Nachmelte dílo při vyslazování </translation>
+        <translation type="obsolete">Nachmelte dílo při vyslazování </translation>
     </message>
     <message>
         <source>First wort hopping</source>
@@ -2019,19 +1998,19 @@ Používejte na vlastní nebezpečí.</translation>
     </message>
     <message>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation> Přidejte %1 vody do kádě a ohřejte množství před chmelovarem na %2.</translation>
+        <translation type="obsolete"> Přidejte %1 vody do kádě a ohřejte množství před chmelovarem na %2.</translation>
     </message>
     <message>
         <source>Pre-boil</source>
-        <translation>Před chmelovarem</translation>
+        <translation type="obsolete">Před chmelovarem</translation>
     </message>
     <message>
         <source>Boil or steep </source>
-        <translation>Povařte nebo nechte máčet </translation>
+        <translation type="obsolete">Povařte nebo nechte máčet </translation>
     </message>
     <message>
         <source>Boil/steep fermentables</source>
-        <translation>Chmelovar/máčení surovin</translation>
+        <translation type="obsolete">Chmelovar/máčení surovin</translation>
     </message>
     <message>
         <source>to the boil at knockout.</source>
@@ -2073,7 +2052,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation>Nenastavili jste vybavení (což byste opravdu měli), tudíž zadejte délku chmelovaru.</translation>
+        <translation type="obsolete">Nenastavili jste vybavení (což byste opravdu měli), tudíž zadejte délku chmelovaru.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
@@ -2081,26 +2060,23 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Start boil</source>
-        <translation>Začátek chmelovaru</translation>
+        <translation type="obsolete">Začátek chmelovaru</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1196"/>
         <source>Flameout</source>
-        <translation>Vypnutí plamene</translation>
+        <translation type="obsolete">Vypnutí plamene</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1197"/>
         <source>Stop boiling the wort.</source>
-        <translation>Ukončete chmelovar.</translation>
+        <translation type="obsolete">Ukončete chmelovar.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1218"/>
         <source>Cool wort and pitch </source>
         <translation type="obsolete">Schlaďte dílo a přidejte kvasnice </translation>
     </message>
     <message>
         <source>%1 %2 yeast, </source>
-        <translation>%1 (%2) </translation>
+        <translation type="obsolete">%1 (%2) </translation>
     </message>
     <message>
         <source>to the primary.</source>
@@ -2124,11 +2100,11 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Transfer to secondary</source>
-        <translation>Převedení do nádob(y) na dokvašování</translation>
+        <translation type="obsolete">Převedení do nádob(y) na dokvašování</translation>
     </message>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
-        <translation>Přidejte %1 %2 do chmelovaru ve %3.</translation>
+        <translation type="obsolete">Přidejte %1 %2 do chmelovaru ve %3.</translation>
     </message>
     <message>
         <source>Node at line is not an element. Line %1</source>
@@ -2229,7 +2205,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Chybný sloupec: %1</translation>
+        <translation type="obsolete">Chybný sloupec: %1</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="102"/>
@@ -2327,12 +2303,12 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="436"/>
+        <location filename="../src/MainWindow.cpp" line="437"/>
         <source>MainWindow::deleteSelected Unknown type: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1773"/>
+        <location filename="../src/MainWindow.cpp" line="1774"/>
         <source>MainWindow::copySelected Unknown type: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2340,272 +2316,272 @@ Celkový objem pro hlavní kvašení je %1.</translation>
 <context>
     <name>Recipe</name>
     <message>
-        <location filename="../src/recipe.cpp" line="558"/>
+        <location filename="../src/recipe.cpp" line="559"/>
         <source>Add grains</source>
         <translation type="unfinished">Přidejte slad</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="559"/>
-        <location filename="../src/recipe.cpp" line="849"/>
+        <location filename="../src/recipe.cpp" line="560"/>
+        <location filename="../src/recipe.cpp" line="850"/>
         <source>Add </source>
         <translation type="unfinished">Přidejte </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="572"/>
+        <location filename="../src/recipe.cpp" line="573"/>
         <source>to the mash tun.</source>
         <translation type="unfinished">do rmutovací pánve.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="590"/>
+        <location filename="../src/recipe.cpp" line="591"/>
         <source>Heat water</source>
         <translation type="unfinished">Ohřejte vodu</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="591"/>
+        <location filename="../src/recipe.cpp" line="592"/>
         <source>Bring </source>
         <translation type="unfinished">Přiveďte </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="599"/>
+        <location filename="../src/recipe.cpp" line="600"/>
         <source>%1 water to %2, </source>
         <translation type="unfinished">%1 vody na teplotu %2, </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="605"/>
+        <location filename="../src/recipe.cpp" line="606"/>
         <source>for upcoming infusions.</source>
         <translation type="unfinished">pro nadcházející infuze.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="628"/>
+        <location filename="../src/recipe.cpp" line="629"/>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
         <translation type="unfinished">Přidejte %1 vody o teplotě %2 do rmutu pro ohřátí na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="636"/>
+        <location filename="../src/recipe.cpp" line="637"/>
         <source>Heat mash to %1.</source>
         <translation type="unfinished">Ohřejte rmut na %1.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="640"/>
+        <location filename="../src/recipe.cpp" line="641"/>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
         <translation type="unfinished">Přiveďte %1 rmutu k varu a vraťte jej do rmutovácí pánve abyste dílo ohřáli na %2.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="645"/>
+        <location filename="../src/recipe.cpp" line="646"/>
         <source> Hold for %1.</source>
         <translation type="unfinished"> Počkejte %1.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="670"/>
-        <location filename="../src/recipe.cpp" line="710"/>
+        <location filename="../src/recipe.cpp" line="671"/>
+        <location filename="../src/recipe.cpp" line="711"/>
         <source>Put %1 %2 into boil for %3.</source>
         <translation type="unfinished">Dejte %1 %2 vařit na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="672"/>
+        <location filename="../src/recipe.cpp" line="673"/>
         <source>Put %1 %2 into fermenter for %3.</source>
         <translation type="unfinished">Dejte %1 %2 do kvasné nádoby na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="674"/>
+        <location filename="../src/recipe.cpp" line="675"/>
         <source>Put %1 %2 into first wort for %3.</source>
         <translation type="unfinished">Dejte %1 %2 do prvního díla na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="676"/>
-        <location filename="../src/recipe.cpp" line="714"/>
+        <location filename="../src/recipe.cpp" line="677"/>
+        <location filename="../src/recipe.cpp" line="715"/>
         <source>Put %1 %2 into mash for %3.</source>
         <translation type="unfinished">Dejte %1 %2 do rmutu na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="678"/>
+        <location filename="../src/recipe.cpp" line="679"/>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nechte máčet %1 %2 ve rmutu %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="682"/>
+        <location filename="../src/recipe.cpp" line="683"/>
         <source>Use %1 %2 for %3</source>
         <translation type="unfinished">Použijte %1 %2 na %3</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="689"/>
+        <location filename="../src/recipe.cpp" line="690"/>
         <source>Hop addition</source>
         <translation type="unfinished">Přidejte chmel</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="712"/>
+        <location filename="../src/recipe.cpp" line="713"/>
         <source>Use %1 %2 at bottling for %3.</source>
         <translation type="unfinished">Použijte %1 %2 ve varu na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="716"/>
+        <location filename="../src/recipe.cpp" line="717"/>
         <source>Put %1 %2 into primary for %3.</source>
         <translation type="unfinished">Dejte %1 %2 do hlavního kvašení na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="718"/>
+        <location filename="../src/recipe.cpp" line="719"/>
         <source>Put %1 %2 into secondary for %3.</source>
         <translation type="unfinished">Dejte %1 %2 do dokvašování na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="722"/>
+        <location filename="../src/recipe.cpp" line="723"/>
         <source>Use %1 %2 for %3.</source>
         <translation type="unfinished">Použijte %1 %2 na %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="729"/>
+        <location filename="../src/recipe.cpp" line="730"/>
         <source>Misc addition</source>
         <translation type="unfinished">Přídávání přípravků</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="743"/>
+        <location filename="../src/recipe.cpp" line="744"/>
         <source>Do first wort hopping with </source>
         <translation type="unfinished">Nachmelte sladinu </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="762"/>
+        <location filename="../src/recipe.cpp" line="763"/>
         <source>First wort hopping</source>
         <translation type="unfinished">Chmelení sladiny</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="780"/>
+        <location filename="../src/recipe.cpp" line="781"/>
         <source>You should now have %1 wort.</source>
         <translation type="unfinished">Nyní byste měli mít %1 díla.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="785"/>
+        <location filename="../src/recipe.cpp" line="786"/>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
         <translation type="unfinished"> Přidejte %1 vody do kádě a přiveďte je před var na %2.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="792"/>
+        <location filename="../src/recipe.cpp" line="793"/>
         <source>Pre-boil</source>
         <translation type="unfinished">Před varem</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="822"/>
+        <location filename="../src/recipe.cpp" line="823"/>
         <source>Boil or steep </source>
         <translation type="unfinished">Chmelovar nebo máčení</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="838"/>
+        <location filename="../src/recipe.cpp" line="839"/>
         <source>Boil/steep fermentables</source>
         <translation type="unfinished">Suroviny do chmelovaru nebo máčení</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="864"/>
+        <location filename="../src/recipe.cpp" line="865"/>
         <source>to the boil at knockout.</source>
         <translation type="unfinished">do díla při vypnutí plamene.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="869"/>
+        <location filename="../src/recipe.cpp" line="870"/>
         <source>Knockout additions</source>
         <translation type="unfinished">Přídavky po vypnutí plamene</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="895"/>
+        <location filename="../src/recipe.cpp" line="896"/>
         <source>You should have %1 wort post-boil.</source>
         <translation type="unfinished">Měli byste získat %1 převařené mladiny.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="897"/>
+        <location filename="../src/recipe.cpp" line="898"/>
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
         <translation type="unfinished">
 Očekávate ztrátu %1 do mláta a při chlazení.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="901"/>
+        <location filename="../src/recipe.cpp" line="902"/>
         <source>
 Add %1 top up water into primary.</source>
         <translation type="unfinished">
 Dolejte %1 vody do hlavního kvašení.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="904"/>
+        <location filename="../src/recipe.cpp" line="905"/>
         <source>
 The final volume in the primary is %1.</source>
         <translation type="unfinished">
 Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="908"/>
+        <location filename="../src/recipe.cpp" line="909"/>
         <source>Post boil</source>
         <translation type="unfinished">Po chmelovaru</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="987"/>
+        <location filename="../src/recipe.cpp" line="988"/>
         <source>Boil time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Délka chmelovaru</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="988"/>
+        <location filename="../src/recipe.cpp" line="989"/>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
         <translation type="unfinished">Nenastavili jste vybavení (což byste opravdu měli), tudíž zadejte délku vaření.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="991"/>
+        <location filename="../src/recipe.cpp" line="992"/>
         <source>Bring the wort to a boil and hold for %1.</source>
         <translation type="unfinished">Přiveďte dílo k varu a nechte jej %1 vařit.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="993"/>
+        <location filename="../src/recipe.cpp" line="994"/>
         <source>Start boil</source>
         <translation type="unfinished">Začátek vaření</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1014"/>
-        <source>Flameout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/recipe.cpp" line="1015"/>
-        <source>Stop boiling the wort.</source>
-        <translation type="unfinished"></translation>
+        <source>Flameout</source>
+        <translation type="unfinished">Vypnutí plamene</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1032"/>
+        <location filename="../src/recipe.cpp" line="1016"/>
+        <source>Stop boiling the wort.</source>
+        <translation type="unfinished">Ukončete chmelovar.</translation>
+    </message>
+    <message>
+        <location filename="../src/recipe.cpp" line="1033"/>
         <source>Cool wort and pitch </source>
         <translation type="unfinished">Schlaďte dílo a přidejte kvasnice </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1038"/>
+        <location filename="../src/recipe.cpp" line="1039"/>
         <source>%1 %2 yeast, </source>
         <translation type="unfinished">%1 %2 kvasnic</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1040"/>
+        <location filename="../src/recipe.cpp" line="1041"/>
         <source>to the primary.</source>
         <translation type="unfinished">do hlavního kvašení.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1042"/>
+        <location filename="../src/recipe.cpp" line="1043"/>
         <source>Pitch yeast</source>
         <translation type="unfinished">Přidejte kvasnice</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1049"/>
+        <location filename="../src/recipe.cpp" line="1050"/>
         <source>Let ferment until FG is %1.</source>
         <translation type="unfinished">Nechte kvasit dokud hustota nedosáhne %1.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1052"/>
+        <location filename="../src/recipe.cpp" line="1053"/>
         <source>Ferment</source>
         <translation type="unfinished">Kvašení</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1055"/>
+        <location filename="../src/recipe.cpp" line="1056"/>
         <source>Transfer beer to secondary.</source>
         <translation type="unfinished">Převeďte pivo do nádob(y) pro dokvašování.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1057"/>
+        <location filename="../src/recipe.cpp" line="1058"/>
         <source>Transfer to secondary</source>
         <translation type="unfinished">Převést do nádob(y) na dokvašování</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1090"/>
-        <location filename="../src/recipe.cpp" line="1109"/>
+        <location filename="../src/recipe.cpp" line="1091"/>
+        <location filename="../src/recipe.cpp" line="1110"/>
         <source>Add %1 %2 to boil at %3.</source>
         <translation type="unfinished">Přidejte %1 %2 do chmelovaru při %3.</translation>
     </message>
@@ -3163,6 +3139,60 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <location filename="../ui/aboutDialog.ui" line="14"/>
         <source>About Brewtarget</source>
         <translation>O aplikaci Brewtarget</translation>
+    </message>
+    <message>
+        <location filename="../ui/aboutDialog.ui" line="35"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2012 by the developers below.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Mik Firestone&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Dan Cavanagh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Eric Tamme&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jeff Bailey&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (Polish translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (Portuguese translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jan Grmela (Czech translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alpha tester)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;A68 - Freelance Graphics Design (flag images)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;restore image from Fatcow Web Hosting &amp;quot;Farm Fresh Icons&amp;quot; (CC license)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/aboutDialog.ui" line="108"/>
+        <source>Donate</source>
+        <translation type="unfinished">Zaslat dar</translation>
     </message>
 </context>
 <context>
@@ -4244,10 +4274,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="obsolete">Seznam receptů</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="147"/>
-        <location filename="../ui/mainWindow.ui" line="1961"/>
-        <location filename="../ui/mainWindow.ui" line="1971"/>
-        <location filename="../ui/mainWindow.ui" line="1981"/>
+        <location filename="../ui/mainWindow.ui" line="214"/>
+        <location filename="../ui/mainWindow.ui" line="1964"/>
+        <location filename="../ui/mainWindow.ui" line="1974"/>
+        <location filename="../ui/mainWindow.ui" line="1984"/>
         <source>Recipe</source>
         <translation>Recept</translation>
     </message>
@@ -4360,7 +4390,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="obsolete">Brewtarget - $VERSIONSTRING</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="914"/>
+        <location filename="../ui/mainWindow.ui" line="977"/>
         <source>IBU/GU</source>
         <translation>IBU/hustota</translation>
     </message>
@@ -4375,10 +4405,10 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>Podrobnosti</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1077"/>
-        <location filename="../ui/mainWindow.ui" line="1956"/>
-        <location filename="../ui/mainWindow.ui" line="1966"/>
-        <location filename="../ui/mainWindow.ui" line="1976"/>
+        <location filename="../ui/mainWindow.ui" line="1140"/>
+        <location filename="../ui/mainWindow.ui" line="1959"/>
+        <location filename="../ui/mainWindow.ui" line="1969"/>
+        <location filename="../ui/mainWindow.ui" line="1979"/>
         <source>Brewday</source>
         <translation>Varní list</translation>
     </message>
@@ -4570,241 +4600,241 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>&amp;Zobrazit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1735"/>
+        <location filename="../ui/mainWindow.ui" line="1738"/>
         <source>&amp;Tools</source>
         <translation>Nás&amp;troje</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1785"/>
+        <location filename="../ui/mainWindow.ui" line="1788"/>
         <source>About &amp;BrewTarget</source>
         <translation>&amp;O aplikaci Brewtarget</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1794"/>
+        <location filename="../ui/mainWindow.ui" line="1797"/>
         <source>&amp;Export Recipe</source>
         <translation>&amp;Exportovat recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1803"/>
+        <location filename="../ui/mainWindow.ui" line="1806"/>
         <source>&amp;Fermentables</source>
         <translation>&amp;Suroviny</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1806"/>
+        <location filename="../ui/mainWindow.ui" line="1809"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1815"/>
+        <location filename="../ui/mainWindow.ui" line="1818"/>
         <source>&amp;Hops</source>
         <translation>&amp;Chmele</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1818"/>
+        <location filename="../ui/mainWindow.ui" line="1821"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1827"/>
+        <location filename="../ui/mainWindow.ui" line="1830"/>
         <source>&amp;Miscs</source>
         <translation>&amp;Přípravky</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1830"/>
+        <location filename="../ui/mainWindow.ui" line="1833"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1839"/>
+        <location filename="../ui/mainWindow.ui" line="1842"/>
         <source>&amp;Yeasts</source>
         <translation>&amp;Kvasnice</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1842"/>
+        <location filename="../ui/mainWindow.ui" line="1845"/>
         <source>Ctrl+Y</source>
         <translation>Ctrl+Y</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1851"/>
+        <location filename="../ui/mainWindow.ui" line="1854"/>
         <source>&amp;Equipments</source>
         <translation>&amp;Vybavení</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1854"/>
+        <location filename="../ui/mainWindow.ui" line="1857"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1863"/>
+        <location filename="../ui/mainWindow.ui" line="1866"/>
         <source>&amp;Styles</source>
         <translation>S&amp;tyly</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1866"/>
+        <location filename="../ui/mainWindow.ui" line="1869"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1875"/>
+        <location filename="../ui/mainWindow.ui" line="1878"/>
         <source>&amp;Exit</source>
         <translation>&amp;Konec</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1878"/>
+        <location filename="../ui/mainWindow.ui" line="1881"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1887"/>
+        <location filename="../ui/mainWindow.ui" line="1890"/>
         <source>&amp;Import Recipes</source>
         <translation>&amp;Importovat recepty</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1892"/>
+        <location filename="../ui/mainWindow.ui" line="1895"/>
         <source>&amp;Options</source>
         <translation>&amp;Možnosti</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1897"/>
+        <location filename="../ui/mainWindow.ui" line="1900"/>
         <source>&amp;Manual</source>
         <translation>&amp;Návod</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1902"/>
+        <location filename="../ui/mainWindow.ui" line="1905"/>
         <source>&amp;Scale Recipe</source>
         <translation>&amp;Změnit množství</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1907"/>
+        <location filename="../ui/mainWindow.ui" line="1910"/>
         <source>Recipe to Clipboard as &amp;Text</source>
         <translation>&amp;Recept do schránky jako text</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1912"/>
+        <location filename="../ui/mainWindow.ui" line="1915"/>
         <source>&amp;OG Correction Help</source>
         <translation>Ú&amp;prava objemu pro dosažení hustoty</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1917"/>
+        <location filename="../ui/mainWindow.ui" line="1920"/>
         <source>&amp;Convert Units</source>
         <translation>&amp;Převody jednotek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1936"/>
+        <location filename="../ui/mainWindow.ui" line="1939"/>
         <source>&amp;Copy Recipe</source>
         <translation>&amp;Kopírovat recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1941"/>
+        <location filename="../ui/mainWindow.ui" line="1944"/>
         <source>Pr&amp;iming Calculator</source>
         <translation>&amp;Výpočet kvasných cukrů</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1946"/>
+        <location filename="../ui/mainWindow.ui" line="1949"/>
         <source>&amp;Refractometer Tools</source>
         <translation>&amp;Nástroje pro refraktometr</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1951"/>
+        <location filename="../ui/mainWindow.ui" line="1954"/>
         <source>&amp;Pitch Rate Calculator</source>
         <translation>Vý&amp;počet rozkvašení kvasnic</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1986"/>
+        <location filename="../ui/mainWindow.ui" line="1989"/>
         <source>Merge Databases</source>
         <translation>Spojit databáze</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1989"/>
+        <location filename="../ui/mainWindow.ui" line="1992"/>
         <source>Select another database to merge into the current one.</source>
         <translation>Vyberte jinou databázi pro spojení se současnou.</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1998"/>
-        <location filename="../ui/mainWindow.ui" line="2034"/>
+        <location filename="../ui/mainWindow.ui" line="2001"/>
+        <location filename="../ui/mainWindow.ui" line="2037"/>
         <source>&amp;Print</source>
         <translation>&amp;Tisk</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2007"/>
-        <location filename="../ui/mainWindow.ui" line="2025"/>
+        <location filename="../ui/mainWindow.ui" line="2010"/>
+        <location filename="../ui/mainWindow.ui" line="2028"/>
         <source>Print Pre&amp;view</source>
         <translation>T&amp;iskový náhled</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2016"/>
+        <location filename="../ui/mainWindow.ui" line="2019"/>
         <source>&amp;Export To HTML</source>
         <translation>&amp;Exportovat do HTML</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2043"/>
+        <location filename="../ui/mainWindow.ui" line="2046"/>
         <source>&amp;Export to HTML</source>
         <translation>&amp;Exportovat do HTML</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2052"/>
+        <location filename="../ui/mainWindow.ui" line="2055"/>
         <source>&amp;Backup</source>
         <translation>&amp;Zálohovat</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2055"/>
+        <location filename="../ui/mainWindow.ui" line="2058"/>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
         <translation>Uložit všechny recepty, přísady a další do adresáře záloh</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2064"/>
+        <location filename="../ui/mainWindow.ui" line="2067"/>
         <source>&amp;Restore</source>
         <translation>&amp;Obnovit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2067"/>
+        <location filename="../ui/mainWindow.ui" line="2070"/>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
         <translation>Obnovit recepty, přísady a další z předchozí zálohy</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2076"/>
+        <location filename="../ui/mainWindow.ui" line="2079"/>
         <source>&amp;Merge</source>
         <translation>&amp;Spojit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2079"/>
+        <location filename="../ui/mainWindow.ui" line="2082"/>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
         <translation>Spojit další sadu receptu, přísad a dalšího se současnou sadou</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2088"/>
+        <location filename="../ui/mainWindow.ui" line="2091"/>
         <source>&amp;New Recipe</source>
         <translation>&amp;Nový recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2097"/>
+        <location filename="../ui/mainWindow.ui" line="2100"/>
         <source>Timers</source>
         <translation>Časovače</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2100"/>
+        <location filename="../ui/mainWindow.ui" line="2103"/>
         <source>Show timers</source>
         <translation>Zobrazit časovač</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2109"/>
         <location filename="../ui/mainWindow.ui" line="2112"/>
+        <location filename="../ui/mainWindow.ui" line="2115"/>
         <source>Save</source>
         <translation>Uložit</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2121"/>
         <location filename="../ui/mainWindow.ui" line="2124"/>
+        <location filename="../ui/mainWindow.ui" line="2127"/>
         <source>Clear recipe</source>
         <translation>Vyprázdnit recept</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2133"/>
+        <location filename="../ui/mainWindow.ui" line="2136"/>
         <source>Delete selected</source>
         <translation>Odstranit vybraný</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="2136"/>
+        <location filename="../ui/mainWindow.ui" line="2139"/>
         <source>Delete recipe</source>
         <translation>Odebrat recept</translation>
     </message>
@@ -4833,7 +4863,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="obsolete">Tiskový náhled</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1756"/>
+        <location filename="../ui/mainWindow.ui" line="1759"/>
         <source>toolBar</source>
         <translation>nástrojováLišta</translation>
     </message>
@@ -4900,12 +4930,12 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation type="obsolete">Převody jednotek</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1922"/>
+        <location filename="../ui/mainWindow.ui" line="1925"/>
         <source>Backup Database</source>
         <translation>Zálohovat databázi</translation>
     </message>
     <message>
-        <location filename="../ui/mainWindow.ui" line="1927"/>
+        <location filename="../ui/mainWindow.ui" line="1930"/>
         <source>Restore Database</source>
         <translation>Obnovit databázi</translation>
     </message>
