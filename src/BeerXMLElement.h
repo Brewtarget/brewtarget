@@ -189,12 +189,20 @@ public:
    BeerXMLElement( BeerXMLElement const& other );
    virtual ~BeerXMLElement(){};
 
-   Q_PROPERTY( bool deleted READ deleted )
+   // Everything that inherits from BeerXML has a delete and a display
+   Q_PROPERTY( bool deleted READ deleted WRITE setDeleted )
+   Q_PROPERTY( bool display READ display WRITE setDisplay )
+
    Q_PROPERTY( int key READ key )
    Q_PROPERTY( Database::DBTable table READ table )
    
-   //! Convenience method to determine if we are deleted.
-   bool deleted();
+   //! Convenience method to determine if we are deleted or displayed
+   bool deleted() const;
+   bool display() const;
+   //! And ways to set those flags
+   void setDeleted(bool var);
+   void setDisplay(bool var);
+
    //! \returns our key in the table we are stored in.
    int key();
    //! \returns the table we are stored in.

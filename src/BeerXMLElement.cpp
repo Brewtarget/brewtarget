@@ -30,7 +30,10 @@ BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : _key(other._key), 
 {
 }
 
-bool BeerXMLElement::deleted(){ return get("deleted").toBool(); }
+bool BeerXMLElement::deleted() const { return get("deleted").toBool(); }
+bool BeerXMLElement::display() const { return get("display").toBool(); }
+void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var); }
+void BeerXMLElement::setDisplay(bool var) { set("display", "display", var); }
 
 int BeerXMLElement::key(){ return _key; }
 
@@ -101,7 +104,7 @@ QDateTime BeerXMLElement::getDateTime( QDomText const& textNode )
    QDateTime ret;
    QString text = textNode.nodeValue();
 
-   ret = QDateTime::fromString(text, "M/d/yyyy");
+   ret = QDateTime::fromString(text, Qt::ISODate);
    ok = ret.isValid();
    if( !ok )
       Brewtarget::logE(QString("BeerXMLElement::getDateTime: %1 is not a date. Line %2").arg(text).arg(textNode.lineNumber()) );
