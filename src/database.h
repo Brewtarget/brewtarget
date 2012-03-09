@@ -170,16 +170,16 @@ public:
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
    void addToRecipe( Recipe* rec, Hop* hop, bool initialLoad = false );
-   void addToRecipe( Recipe* rec, Fermentable* ferm );
-   void addToRecipe( Recipe* rec, Misc* m );
-   void addToRecipe( Recipe* rec, Yeast* y );
-   void addToRecipe( Recipe* rec, Water* w );
+   void addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad = false );
+   void addToRecipe( Recipe* rec, Misc* m, bool initialLoad = false );
+   void addToRecipe( Recipe* rec, Yeast* y, bool initialLoad = false );
+   void addToRecipe( Recipe* rec, Water* w, bool initialLoad = false );
    //! Add a mash, displacing any current mash.
-   void addToRecipe( Recipe* rec, Mash* m );
+   void addToRecipe( Recipe* rec, Mash* m, bool initialLoad = false );
    //! Add an equipment, displacing any current equipment.
-   void addToRecipe( Recipe* rec, Equipment* e );
+   void addToRecipe( Recipe* rec, Equipment* e, bool initialLoad = false );
    //! Add a style, displacing any current style. Does not add a copy, adds the actual style \b s.
-   void addToRecipe( Recipe* rec, Style* s );
+   void addToRecipe( Recipe* rec, Style* s);
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    
