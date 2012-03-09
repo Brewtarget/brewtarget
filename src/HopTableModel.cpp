@@ -292,11 +292,12 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
    }
    else if( showIBUs && recObs && orientation == Qt::Vertical && role == Qt::DisplayRole )
    {
-      double ibus = recObs->IBUs()[ section ];
-      return QVariant( QString("%1 IBU").arg( ibus, 0, 'f', 1 ) );
+      QList<double> ibus = recObs->IBUs();
+
+      if ( ibus.size() > section )
+         return QVariant( QString("%1 IBU").arg( ibus.at(section), 0, 'f', 1 ) );
    }
-   else
-      return QVariant();
+   return QVariant();
 }
 
 Qt::ItemFlags HopTableModel::flags(const QModelIndex& index ) const
