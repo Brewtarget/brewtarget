@@ -23,9 +23,15 @@
 #include "database.h"
 
 #include <QMetaProperty>
+class Equipment;
+class Mash;
+class Style;
 
 // Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
 Q_DECLARE_METATYPE( QMetaProperty )
+Q_DECLARE_METATYPE( Equipment* )
+Q_DECLARE_METATYPE( Mash* )
+Q_DECLARE_METATYPE( Style* )
 
 int main(int argc, char **argv)
 {
@@ -37,6 +43,9 @@ int main(int argc, char **argv)
 
    // Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
    qRegisterMetaType<QMetaProperty>();
+   qRegisterMetaType<Equipment*>();
+   qRegisterMetaType<Mash*>();
+   qRegisterMetaType<Style*>();
    
    // TODO: make a command-line parser class.
    QStringList args(app.arguments());
