@@ -1131,7 +1131,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
       return;
 
    int key = addIngredientToRecipe<Fermentable>( rec, ferm,
-                                                 "ferms",
+                                                 "fermentables",
                                                  "fermentable_in_recipe",
                                                  "fermentable_id",
                                                  initialLoad, &allFermentables );
