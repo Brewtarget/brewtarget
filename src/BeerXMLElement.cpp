@@ -21,8 +21,9 @@
 #include <QDomNode>
 #include <QMetaProperty>
 #include "brewtarget.h"
+#include "database.h"
 
-BeerXMLElement::BeerXMLElement() : _key(-1), _table(Database::NOTABLE)
+BeerXMLElement::BeerXMLElement() : _key(-1), _table(Brewtarget::NOTABLE)
 {
 }
 
@@ -37,7 +38,7 @@ void BeerXMLElement::setDisplay(bool var) { set("display", "display", var); }
 
 int BeerXMLElement::key(){ return _key; }
 
-Database::DBTable BeerXMLElement::table(){ return _table; }
+Brewtarget::DBTable BeerXMLElement::table(){ return _table; }
 
 int BeerXMLElement::version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
 

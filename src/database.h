@@ -37,9 +37,13 @@ class Database;
 #include <QObject>
 #include <QPair>
 #include <QTableView>
+#include <QSqlError>
+#include "BeerXMLElement.h"
+#include "brewtarget.h"
+#include "recipe.h"
 // Forward declarations
 class BrewNote;
-class BeerXMLElement;
+//class BeerXMLElement;
 class Equipment;
 class Fermentable;
 class Hop;
@@ -47,7 +51,7 @@ class Instruction;
 class Mash;
 class MashStep;
 class Misc;
-class Recipe;
+//class Recipe;
 class Style;
 class Water;
 class Yeast;
@@ -71,8 +75,6 @@ class Database : public QObject
    Q_OBJECT
 
 public:
-   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
-                 MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
 
    //! This should be the ONLY way you get an instance.
    static Database& instance();
@@ -82,7 +84,7 @@ public:
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
-   void updateEntry( DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
+   void updateEntry( Brewtarget::Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
    
    // Hey, kate highlights all these words...
    // FIXME
@@ -94,7 +96,7 @@ public:
    // ###
    
    //! Get the contents of the cell specified by table/key/col_name. Mostly for BeerXMLElement.
-   inline QVariant get( DBTable table, int key, const char* col_name ) __attribute__((always_inline))
+   inline QVariant get( Brewtarget::DBTable table, int key, const char* col_name ) __attribute__((always_inline))
    {
       QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
                    .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
@@ -107,7 +109,7 @@ public:
    }
       
    //! Get a table view.
-   QTableView* createView( DBTable table );
+   QTableView* createView( Brewtarget::DBTable table );
    
    // Named constructors ======================================================
    //! Create new brew note attached to \b parent.
@@ -149,7 +151,7 @@ public:
    void importFromXML(const QString& filename);
    
    //! Retrieve a list of elements with given \b filter.
-   QList<BeerXMLElement*> listByFilter( DBTable table, QString filter = "" );
+   QList<BeerXMLElement*> listByFilter( Brewtarget::DBTable table, QString filter = "" );
    
    // NOTICE: Necessary?
    //! Get recipe by key value.
@@ -336,7 +338,7 @@ public:
    static QString getDbFileName();
    
    //! Get a const copy of a particular table model. Const so that no editing can take place outside the db.
-   const QSqlRelationalTableModel* getModel( DBTable table );
+   const QSqlRelationalTableModel* getModel( Brewtarget::DBTable table );
    
 signals:
    void changed(QMetaProperty prop, QVariant value);
@@ -348,12 +350,12 @@ private:
    static QString dbFileName;
    static QFile dataDbFile;
    static QString dataDbFileName;
-   static QHash<DBTable,QString> tableNames;
-   static QHash<DBTable,QString> tableNamesHash();
-   static QHash<QString,DBTable> classNameToTable;
-   static QHash<QString,DBTable> classNameToTableHash();
-   static QHash<DBTable,QString> keyNames;
-   static QHash<DBTable,QString> keyNamesHash();
+   static QHash<Brewtarget::DBTable,QString> tableNames;
+   static QHash<Brewtarget::DBTable,QString> tableNamesHash();
+   static QHash<QString,Brewtarget::DBTable> classNameToTable;
+   static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
+   static QHash<Brewtarget::DBTable,QString> keyNames;
+   static QHash<Brewtarget::DBTable,QString> keyNamesHash();
    
    // Keeps all pointers to the elements referenced by key.
    QHash< int, BrewNote* > allBrewNotes;
@@ -370,7 +372,7 @@ private:
    QHash< int, Yeast* > allYeasts;
    
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
-   template <class T> void populateElements( QHash<int,T*>& hash, DBTable table )
+   template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
       int i, size, key;
       BeerXMLElement* e;
@@ -397,7 +399,7 @@ private:
    }
    
    //! Helper to populate the list using the given filter.
-   template <class T> void getElements( QList<T*>& list, QString filter, DBTable table, QHash<int,T*> allElements )
+   template <class T> void getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements )
    {
       int i, size, key;
       
@@ -441,7 +443,7 @@ private:
    QSqlRelationalTableModel* styles_tm;
    QSqlRelationalTableModel* waters_tm;
    QSqlRelationalTableModel* yeasts_tm;
-   QHash<DBTable,QSqlRelationalTableModel*> tables;
+   QHash<Brewtarget::DBTable,QSqlRelationalTableModel*> tables;
    
    QUndoStack commandStack;
    
@@ -470,14 +472,14 @@ private:
     *  \returns key of new row.
     *  Only works if all the fields in the table have default values.
     */
-   int insertNewDefaultRecord( DBTable table );
+   int insertNewDefaultRecord( Brewtarget::DBTable table );
    
    /*! Insert a new row in \b mashstep, where \b parent is the parent mash.
     */
    int insertNewMashStepRecord( Mash* parent );
    
    //! Mark the \b object in \b table as deleted.
-   void deleteRecord( DBTable table, BeerXMLElement* object );
+   void deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object );
    
    // TODO: encapsulate this in a QUndoCommand.
    /*!
@@ -485,21 +487,149 @@ private:
     * key is \b ingKeyName and the relational table is \b relTableName.
     * \returns the key of the new ingredient.
     */
-   int addIngredientToRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName, bool initialLoad = false );
+   template<class T> int addIngredientToRecipe( Recipe* rec,
+                                                BeerXMLElement* ing,
+                                                QString propName,
+                                                QString relTableName,
+                                                QString ingKeyName,
+                                                bool initialLoad = false,
+                                                QHash<int,T*>* keyHash = 0 )
+   {
+      // TODO: encapsulate this in a QUndoCommand.
+      int newKey;
+      QSqlRecord r;
+      
+      if( rec == 0 || ing == 0 )
+         return -1;
+      
+      // Ensure this ingredient is not already in the recipe.
+      QSqlQuery q(
+                   QString("SELECT recipe_id from `%1` WHERE `%2`='%3' AND recipe_id='%4'")
+                   .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
+                   sqldb
+                 );
+      if( q.next() )
+      {
+         Brewtarget::logW( "Database::addIngredientToRecipe: Ingredient already exists in recipe." );
+         return -1;
+      }
+      
+      // Create a copy of the ingredient. We don't want to do this on the initial
+      // load of the recipe database, because the stuff is already a copy
+      if ( ! initialLoad ) 
+      {
+         r = copy<T>(ing, false, keyHash);
+         Brewtarget::DBTable t = classNameToTable[ing->metaObject()->className()];
+         newKey = r.value(keyNames[t]).toInt();
+      }
+      else 
+      {
+         newKey = ing->_key;
+      }
+      
+      
+      // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
+      q = QSqlQuery( sqldb );
+      q.setForwardOnly(true);
+      
+      q.prepare( QString("INSERT INTO `%1` (`%2`, `recipe_id`) VALUES (:ingredient, :recipe)")
+                 .arg(relTableName)
+                 .arg(ingKeyName)
+               );
+      q.bindValue(":ingredient", newKey);
+      q.bindValue(":recipe", rec->_key);
+      if( q.exec() )
+         emit rec->changed( rec->metaProperty(propName), QVariant() );
+      else
+      {
+         Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
+      }
+      
+      return newKey;
+   }
    
    // TODO: encapsulate in QUndoCommand
    //! Remove ingredient from a recipe.
    void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName );
    
    /*!
-    * Create a deep copy of the \b object.
+    * \brief Create a deep copy of the \b object.
+    * \em T must be a subclass of \em BeerXMLElement.
     * \returns a record to the new copy. You must manually emit the changed()
     * signal after a copy() call. Also, does not insert things magically into
     * allHop or allInstructions etc. hashes. This just simply duplicates a
-    * row in a table.
+    * row in a table, unless you provide \em keyHash.
+    * \param object is the thing you want to copy.
     * \param displayed is true if you want the \em displayed column set to true.
+    * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   QSqlRecord copy( BeerXMLElement const* object, bool displayed = true );
+   template<class T> QSqlRecord copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0 )
+   {
+      int newKey;
+      int i;
+      
+      Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
+      QString tName = tableNames[t];
+      
+      QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
+                  .arg(tName).arg(keyNames[t]).arg(object->_key),
+                  sqldb
+                 );
+      
+      if( !q.next() )
+      {
+         return QSqlRecord();
+      }
+      
+      QSqlRecord oldRecord = q.record();
+      
+      // Create a new row.
+      newKey = insertNewDefaultRecord(t);
+      q = QSqlQuery( QString("SELECT * FROM %1 WHERE %2 = %3")
+                     .arg(tName).arg(keyNames[t]).arg(newKey),
+                     sqldb
+                   );
+      q.next();
+      QSqlRecord newRecord = q.record();
+      
+      // Set the new row's columns equal to the old one's, except for any "parent"
+      // field, which should be set to the oldRecord's key.
+      QString newValString;
+      for( i = 0; i < oldRecord.count(); ++i )
+      {
+         if( oldRecord.fieldName(i) == "parent" )
+            newValString += QString("`parent` = '%2',").arg(object->_key);      
+         else if( oldRecord.fieldName(i) == "display" )
+            newValString += QString("`display` = '%2',").arg( displayed ? "true" : "false" );
+         else if ( oldRecord.fieldName(i) != keyNames[t] )
+            newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
+      }
+      
+      // Remove last comma.
+      newValString.chop(1);
+      
+      QString updateString = QString("UPDATE `%1` SET %2 WHERE `%3` = '%4'")
+                                    .arg(tName)
+                                    .arg(newValString)
+                                    .arg(keyNames[t])
+                                    .arg(newKey);
+      q = QSqlQuery( sqldb );
+      q.prepare(updateString);
+      q.exec();
+      
+      // Update the hash if need be.
+      if( keyHash )
+      {
+         T* newOne = new T();
+         BeerXMLElement* newOneCast = qobject_cast<BeerXMLElement*>(newOne);
+         newOneCast->_key = newKey;
+         newOneCast->_table = t;
+         
+         keyHash->insert( newKey, newOne );
+      }
+      
+      return newRecord;
+   }
    
    //! Do an sql update.
    void sqlUpdate( QString const& tableName, QString const& setClause, QString const& whereClause );

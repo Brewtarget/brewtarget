@@ -20,6 +20,7 @@
 #include <QVariant>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QSqlRecord>
 #include <QDebug>
 #include <QModelIndexList>
 #include "SetterCommand.h"

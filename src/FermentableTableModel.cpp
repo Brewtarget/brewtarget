@@ -27,6 +27,7 @@
 #include <QStyle>
 #include <QRect>
 
+#include "database.h"
 #include "brewtarget.h"
 #include <QSize>
 #include <QComboBox>

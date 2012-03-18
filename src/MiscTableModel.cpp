@@ -18,6 +18,7 @@
 
 #include <QComboBox>
 #include <QLineEdit>
+#include "database.h"
 #include "misc.h"
 #include "MiscTableModel.h"
 #include "unit.h"

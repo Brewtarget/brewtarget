@@ -21,6 +21,7 @@
 
 class Brewtarget;
 
+#include <QObject>
 #include <QApplication>
 #include <QString>
 #include <QFile>
@@ -41,8 +42,10 @@ class Unit;
  *
  * \brief The main class. Figures out stuff from the system, formats things appropriately, handles translation, etc.
  */
-class Brewtarget
+class Brewtarget : public QObject
 {
+   Q_OBJECT
+   
    friend class OptionDialog;
    friend class IbuMethods;
    friend class ColorMethods;
@@ -56,7 +59,8 @@ public:
    enum ColorType {MOSHER, DANIEL, MOREY};
    enum ColorUnitType {SRM, EBC};
    enum IbuType {TINSETH, RAGER};
-
+   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
+                 MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
    //! This method should be called before any of the others.
    static void setApp(QApplication& a);
    //! \return the application

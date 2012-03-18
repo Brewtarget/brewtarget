@@ -295,50 +295,6 @@ public:
    
 
 signals:
-   /*
-   void changedName(QString);
-   void changedType(QString);
-   void changedBrewer(QString);
-   void changedBatchSize_l(double);
-   void changedBoilSize_l(double);
-   void changedBoilTime_min(double);
-   void changedEfficiency_pct(double);
-   void changedAsstBrewer(QString);
-   void changedNotes(QString);
-   void changedTasteNotes(QString);
-   void changedTasteRating(double);
-   void changedOg(double);
-   void changedFg(double);
-   void changedFermentationStages(int);
-   void changedPrimaryAge_days(double);
-   void changedPrimaryTemp_c(double);
-   void changedSecondaryAge_days(double);
-   void changedSecondaryTemp_c(double);
-   void changedTertiaryAge_days(double);
-   void changedTertiaryTemp_c(double);
-   void changedAge_days(double);
-   void changedAgeTemp_c(double);
-   void changedDate(QString);
-   void changedCarbonation_vols(double);
-   void changedForcedCarbonation(bool);
-   void changedPrimingSugarName(QString);
-   void changedCarbonationTemp_c(double);
-   void changedPrimingSugarEquiv(double);
-   void changedKegPrimingFactor(double);
-   void changedEstimatedCalories(double);
-   void changedPoints(double);
-   void changedABV(double);
-   void changedColor_srm(double);
-   void changedBoilGrav(double);
-   void changedIBU(double);
-   void changedEstimateWortFromMash_l(double);
-   void changedEstimateBoilVolume_l(double);
-   void changedEstimatePostBoilVolume_l(double);
-   void changedEstimateFinalVolume_l(double);
-   void changedEstimateCalories(double);
-   void changedGrainsInMash_kg(double);
-   void changedGrains_kg(double);
-   */
 
 public slots:
    //void changed(QMetaProperty prop, QVariant val);
@@ -348,20 +304,6 @@ private:
    
    Recipe();
    Recipe(Recipe const& other);
-   
-   // Relational members.
-   /*
-   Style* style;
-   QVector<Hop*> hops;
-   QVector<Fermentable*> fermentables;
-   QVector<Misc*> miscs;
-   QVector<Yeast*> yeasts;
-   QVector<Water*> waters;
-   Mash *mash;
-   QVector<Instruction*> instructions;
-   QVector<BrewNote*> brewNotes;
-   Equipment* equipment;
-   */
    
    // Calculated properties.
    double _points;

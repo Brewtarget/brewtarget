@@ -28,6 +28,7 @@
 #include "BrewTargetTreeItem.h"
 #include "BrewTargetTreeModel.h"
 #include "BrewTargetTreeView.h"
+#include "database.h"
 #include "equipment.h"
 #include "fermentable.h"
 #include "hop.h"

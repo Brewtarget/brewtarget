@@ -740,8 +740,15 @@ typedef uint_least32_t uint_fast32_t;
 #  ifndef UINTPTR_C
 #    define UINTPTR_C(x)                stdint_intptr_glue3(UINT,stdint_intptr_bits,_C)(x)
 #  endif
-  typedef stdint_intptr_glue3(uint,stdint_intptr_bits,_t) uintptr_t;
-  typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;
+// Philip <rocketman768@gmail.com>, need to check if [u]intprt_t is already defined...
+#  ifndef __uintptr_t_defined
+#    define __uintptr_t_defined
+     typedef stdint_intptr_glue3(uint,stdint_intptr_bits,_t) uintptr_t;
+#  endif /*uintptr_t*/
+#  ifndef __intptr_t_defined
+#    define __intptr_t_defined
+     typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;
+#  endif /*__intptr_t_defined*/
 # else
 /* TODO -- This following is likely wrong for some platforms, and does
    nothing for the definition of uintptr_t. */

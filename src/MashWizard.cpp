@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "database.h"
+#include "brewtarget.h"
 #include "unit.h"
 #include "MashWizard.h"
 #include "mash.h"

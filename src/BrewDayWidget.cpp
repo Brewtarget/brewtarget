@@ -22,6 +22,7 @@
 #include <QDate>
 #include <QVector>
 #include <QDir>
+#include "database.h"
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
 #include "instruction.h"

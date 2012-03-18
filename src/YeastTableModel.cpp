@@ -28,6 +28,7 @@
 #include <QString>
 
 #include <QVector>
+#include "database.h"
 #include "yeast.h"
 #include "YeastTableModel.h"
 #include "unit.h"

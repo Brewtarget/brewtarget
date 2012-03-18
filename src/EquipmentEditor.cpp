@@ -20,6 +20,7 @@
 #include <QIcon>
 #include <QMessageBox>
 
+#include "database.h"
 #include "equipment.h"
 #include "EquipmentEditor.h"
 #include "EquipmentListModel.h"

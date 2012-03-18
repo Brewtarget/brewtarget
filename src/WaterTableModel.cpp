@@ -27,6 +27,7 @@
 #include <QString>
 
 #include <QList>
+#include "database.h"
 #include "WaterTableModel.h"
 #include "WaterTableWidget.h"
 #include "water.h"

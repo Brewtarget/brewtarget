@@ -26,6 +26,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QVector>
+#include "database.h"
 #include "mashstep.h"
 #include "MashStepTableModel.h"
 #include "unit.h"

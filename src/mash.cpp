@@ -22,6 +22,7 @@
 #include "mash.h"
 #include "mashstep.h"
 #include "brewtarget.h"
+#include "database.h"
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>

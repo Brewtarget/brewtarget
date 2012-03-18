@@ -26,6 +26,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 
+#include "database.h"
 #include "hop.h"
 #include <QString>
 #include <QVector>

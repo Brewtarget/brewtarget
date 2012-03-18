@@ -18,6 +18,7 @@
 
 #include "instruction.h"
 #include "brewtarget.h"
+#include "database.h"
 
 //#include <algorithm>
 //#include <ctime>

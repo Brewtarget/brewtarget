@@ -19,6 +19,7 @@
 #include "instruction.h"
 #include "brewtarget.h"
 #include "BrewDayScrollWidget.h"
+#include "database.h"
 #include <QListWidgetItem>
 #include <QPrinter>
 #include <QPrintDialog>

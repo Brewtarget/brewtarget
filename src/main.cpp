@@ -32,6 +32,7 @@ Q_DECLARE_METATYPE( QMetaProperty )
 Q_DECLARE_METATYPE( Equipment* )
 Q_DECLARE_METATYPE( Mash* )
 Q_DECLARE_METATYPE( Style* )
+Q_DECLARE_METATYPE( Brewtarget::DBTable )
 
 int main(int argc, char **argv)
 {
@@ -46,6 +47,7 @@ int main(int argc, char **argv)
    qRegisterMetaType<Equipment*>();
    qRegisterMetaType<Mash*>();
    qRegisterMetaType<Style*>();
+   qRegisterMetaType<Brewtarget::DBTable>();
    
    // TODO: make a command-line parser class.
    QStringList args(app.arguments());
