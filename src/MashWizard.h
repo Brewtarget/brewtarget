@@ -17,7 +17,7 @@
  */
 
 #ifndef _MASHWIZARD_H
-#define   _MASHWIZARD_H
+#define _MASHWIZARD_H
 
 class MashWizard;
 
@@ -51,4 +51,3 @@ private:
 };
 
 #endif   /* _MASHWIZARD_H */
-

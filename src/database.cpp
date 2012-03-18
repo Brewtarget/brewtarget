@@ -1191,7 +1191,7 @@ QSqlRecord Database::copy( BeerXMLElement const* object, bool displayed )
    // Create a new row.
    newKey = insertNewDefaultRecord(t);
    q = QSqlQuery( QString("SELECT * FROM %1 WHERE %2 = %3")
-                  .arg(tName).arg(keyNames[t]).arg(object->_key),
+                  .arg(tName).arg(keyNames[t]).arg(newKey),
                   sqldb
                 );
    q.next();
@@ -1304,12 +1304,18 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
    if ( ! initialLoad )
    {
       c = copy(e,false);
-      DBTable t = classNameToTable["EQUIPTABLE"];
-      newKey = c.value(keyNames[t]).toInt();
+      newKey = c.value(keyNames[EQUIPTABLE]).toInt();
+      
+      newEquip = new Equipment();
+      newEquip->_key = newKey;
+      newEquip->_table = EQUIPTABLE;
+      
+      allEquipments[newKey] = newEquip;
    }
    else 
    {
       newKey = e->_key;
+      newEquip = e;
    }
 
    
@@ -1317,12 +1323,6 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
    sqlUpdate(tableNames[RECTABLE],
              QString("`equipment_id`='%1'").arg(newKey),
              QString("`%1`='%2'").arg(keyNames[RECTABLE]).arg(rec->_key));
-
-   if ( ! initialLoad )
-      newEquip = allEquipments[newKey];
-   else
-      newEquip = e;
-
 
    newEquip->setDisplay(false);
    // Emit a changed signal.

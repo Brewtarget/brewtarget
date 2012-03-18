@@ -93,8 +93,8 @@ void MashWizard::wizardry()
    int i, j;
    double thickness_LKg;
    double thickNum;
-   double MC, MCw;
-   double tw, tf, t1;
+   double MC, MCw; // Thermal mass of mash and water.
+   double tw, tf, t1; // Water, final, and initial temps.
    double grainMass = 0.0, massWater = 0.0;
    double grainDensity = HeatCalculations::rhoGrain_KgL;
    double absorption_LKg;
@@ -175,10 +175,10 @@ void MashWizard::wizardry()
    //================End of first step=====================
 
    // Do rest of steps.
-   // Add mass*specific heat constant of equipment to MC.
+   // Add thermal mass of equipment to MC.
    // I am specifically ignoring BeerXML's request to only do this if mash->getEquipAdjust() is set.
-   //if( mash->getEquipAdjust() )
-      MC += mash->tunSpecificHeat_calGC()*mash->tunWeight_kg();
+   MC += mash->tunSpecificHeat_calGC()*mash->tunWeight_kg();
+   
    for( i = 1; i < steps.size(); ++i )
    {
       mashStep = steps[i];
@@ -187,7 +187,6 @@ void MashWizard::wizardry()
          continue;
       else if( mashStep->type() == MashStep::Decoction )
       {
-         //QMessageBox::warning(this, tr("Decoction"), tr("Haven't tested decoction calculations yet.\nUse at own risk."));
          double m_w, m_g, m_e, r;
          double c_w, c_g, c_e;
 
@@ -220,7 +219,7 @@ void MashWizard::wizardry()
          tf = mashStep->stepTemp_c();
          t1 = steps[i-1]->stepTemp_c();
          tw = boilingPoint_c; // Assume adding boiling water to minimize final volume.
-         MC += massWater * HeatCalculations::Cw_calGC; // Add MC product of last addition.
+         MC += massWater * HeatCalculations::Cw_calGC; // Add thermal mass of last addition.
 
          massWater = (MC*(tf-t1))/(HeatCalculations::Cw_calGC * (tw-tf));
 
