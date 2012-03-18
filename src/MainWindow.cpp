@@ -174,24 +174,31 @@ MainWindow::MainWindow(QWidget* parent)
    styleComboBox->setModel(styleListModel);
    
    // Set table models.
+   // Fermentables
    fermTableModel = new FermentableTableModel(fermentableTable);
    fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable);
    fermTableProxy->setSourceModel(fermTableModel);
    fermentableTable->setModel(fermTableProxy);
    // Make the fermentable table show grain percentages in row headers.
    fermTableModel->setDisplayPercentages(true);
+   // Hops
    hopTableModel = new HopTableModel(hopTable);
    hopTableProxy = new HopSortFilterProxyModel(hopTable);
    hopTableProxy->setSourceModel(hopTableModel);
    hopTable->setModel(hopTableProxy);
    // Hop table show IBUs in row headers.
    hopTableModel->setShowIBUs(true);
+   // Misc
    miscTableModel = new MiscTableModel(miscTable);
    miscTableProxy = new MiscSortFilterProxyModel(miscTable);
    miscTableProxy->setSourceModel(miscTableModel);
    miscTable->setModel(miscTableProxy);
+   // Yeast
    yeastTableModel = new YeastTableModel(yeastTable);
    yeastTableProxy = new YeastSortFilterProxyModel(yeastTable);
+   yeastTableProxy->setSourceModel(yeastTableModel);
+   yeastTable->setModel(yeastTableProxy);
+   // Mashes
    mashStepTableModel = new MashStepTableModel(mashStepTableWidget);
    mashStepTableWidget->setModel(mashStepTableModel);
    
@@ -615,7 +622,9 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    // Make sure this MainWindow is paying attention...
    if( recipeObs )
+   {
       disconnect( recipeObs, 0, this, 0 );
+   }
    recipeObs = recipe;
    connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    
