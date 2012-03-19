@@ -196,16 +196,19 @@ MainWindow::MainWindow(QWidget* parent)
    miscTableModel = new MiscTableModel(miscTable);
    miscTableProxy = new MiscSortFilterProxyModel(miscTable);
    miscTableProxy->setSourceModel(miscTableModel);
+   miscTable->setItemDelegate(new MiscItemDelegate(miscTable));
    miscTable->setModel(miscTableProxy);
    
    // Yeast
    yeastTableModel = new YeastTableModel(yeastTable);
    yeastTableProxy = new YeastSortFilterProxyModel(yeastTable);
    yeastTableProxy->setSourceModel(yeastTableModel);
+   yeastTable->setItemDelegate(new YeastItemDelegate(yeastTable));
    yeastTable->setModel(yeastTableProxy);
    
    // Mashes
    mashStepTableModel = new MashStepTableModel(mashStepTableWidget);
+   mashStepTableWidget->setItemDelegate(new MashStepItemDelegate());
    mashStepTableWidget->setModel(mashStepTableModel);
    
    // Enable sorting in the main tables.
