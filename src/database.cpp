@@ -646,17 +646,19 @@ int Database::insertNewMashStepRecord( Mash* parent )
    }
    else
       key = q.lastInsertId().toInt();
-   
+
+   // I *think* we need to set the mash_id first
    sqlUpdate( tableNames[Brewtarget::MASHSTEPTABLE],
-              QString("`mash_id`='%1' "
-                      "`step_number` = (SELECT MAX(`step_number`)+1 FROM `%2` WHERE `%3`='%4' )")
-                      .arg(parent->_key)
-                      .arg(tableNames[Brewtarget::MASHTABLE])
-                      .arg(keyNames[Brewtarget::MASHTABLE])
+              QString("`mash_id`='%1' ").arg(parent->_key),
+              QString("`%1`='%2'").arg(keyNames[Brewtarget::MASHSTEPTABLE]).arg(key)
+            );
+   sqlUpdate( tableNames[Brewtarget::MASHSTEPTABLE],
+              QString( "`step_number` = (SELECT MAX(`step_number`)+1 FROM `%1` WHERE `%2`='%3' )")
+                      .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+                      .arg(keyNames[Brewtarget::MASHSTEPTABLE])
                       .arg(parent->_key),
               QString("`%1`='%2'").arg(keyNames[Brewtarget::MASHSTEPTABLE]).arg(key)
             );
-   
    return key;
 }
 
@@ -2780,7 +2782,6 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    MashStep* ret = newMashStep(parent);
    
    fromXml( ret, MashStep::tagToProp, node );
-   _setterCommandStack->flush();
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2850,6 +2851,11 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       fermentableFromXml(n, ret);
    
+   // get mashes. There is only one mash per recipe, so this needs the entire
+   // node.
+   n = node.firstChildElement("MASH");
+   mashFromXml(n, ret);
+
    // Get miscs.
    n = node.firstChildElement("MISCS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
