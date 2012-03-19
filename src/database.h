@@ -515,7 +515,7 @@ private:
       }
       
       // Create a copy of the ingredient. We don't want to do this on the initial
-      // load of the recipe database, because the stuff is already a copy
+      // load of the recipe database, because the stuff is already a copy.
       if ( ! initialLoad ) 
       {
          r = copy<T>(ing, false, keyHash);
@@ -524,7 +524,9 @@ private:
       }
       else 
       {
+
          newKey = ing->_key;
+         ing->setDisplay(false);
       }
       
       

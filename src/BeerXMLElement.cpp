@@ -33,8 +33,8 @@ BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : _key(other._key), 
 
 bool BeerXMLElement::deleted() const { return get("deleted").toBool(); }
 bool BeerXMLElement::display() const { return get("display").toBool(); }
-void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var); }
-void BeerXMLElement::setDisplay(bool var) { set("display", "display", var); }
+void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var ? 1 : 0); }
+void BeerXMLElement::setDisplay(bool var) { set("display", "display", var ? 1 : 0); }
 
 int BeerXMLElement::key(){ return _key; }
 

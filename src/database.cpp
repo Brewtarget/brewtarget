@@ -559,23 +559,6 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
    return ret;
 }
 
-// TODO: implement all the rest of the BrewNote stuff.
-/*
-QList<BrewNote*> Database::brewNotes( Recipe* parent )
-{
-   QList<BrewNote*> ret;
-   QString queryString = QString("SELECT %1 FROM %2 WHERE recipe_id = %3 ORDER BY brewDate ASC")
-                            .arg(keyNames[Brewtarget::BREWNOTETABLE])
-                            .arg(tableNames[Brewtarget::BREWNOTETABLE])
-                            .arg(parent->_key);
-   QSqlQuery q( queryString, sqldb );
-   
-   while( q.next() )
-      ret.append(allBrewNotes[q.record().value(keyNames[Brewtarget::BREWNOTETABLE].toStdString().c_str()).toInt()]);
-   return ret;
-}
-*/
-
 QList<Water*> Database::waters(Recipe const* parent)
 {
    QList<Water*> ret;
@@ -2684,6 +2667,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 
    fromXml( ret, Equipment::tagToProp, node );
    _setterCommandStack->flush();
+
    if( parent )
       addToRecipe( parent, ret, true );
 
@@ -2695,7 +2679,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    QDomNode n;
    Fermentable* ret = newFermentable();
    fromXml( ret, Fermentable::tagToProp, node );
-   _setterCommandStack->flush();
+
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2704,7 +2688,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
                        n.firstChild().toText().nodeValue()
                     )
                  ) );
-   
+   _setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret, true );
    return ret;
@@ -2716,7 +2700,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 
    Hop* ret = newHop();
    fromXml( ret, Hop::tagToProp, node );
-   _setterCommandStack->flush();
+
    
    // Handle enums separately.
    n = node.firstChildElement("USE");
@@ -2738,6 +2722,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
                     )
                  ) );
    
+   _setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret, true );
    return ret;

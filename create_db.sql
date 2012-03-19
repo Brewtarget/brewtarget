@@ -11,7 +11,7 @@ create table equipment(
    evap_rate real DEFAULT 0.0,
    real_evap_rate real DEFAULT 0.0,
    boil_time real DEFAULT 0.0,
-   calc_boil_volume boolean DEFAULT FALSE,
+   calc_boil_volume boolean DEFAULT 0,
    lauter_deadspace real DEFAULT 0.0,
    top_up_kettle real DEFAULT 0.0,
    hop_utilization real DEFAULT 0.0,
@@ -19,8 +19,8 @@ create table equipment(
    absorption real DEFAULT 0.0,
    notes text DEFAULT '',
    -- it's metadata all the way down
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
 );
 
 create table fermentable(
@@ -30,7 +30,7 @@ create table fermentable(
    amount real DEFAULT 0.0,
    yield real DEFAULT 0.0,
    color real DEFAULT 0.0,
-   add_after_boil boolean DEFAULT FALSE,
+   add_after_boil boolean DEFAULT 0,
    origin varchar(32) DEFAULT '',
    supplier varchar(256) DEFAULT '',
    notes text DEFAULT '',
@@ -39,12 +39,12 @@ create table fermentable(
    diastatic_power real DEFAULT 0.0,
    protein real DEFAULT 0.0,
    max_in_batch real DEFAULT 100.0,
-   recommend_mash boolean DEFAULT FALSE,
-   is_mashed boolean DEFAULT FALSE,
+   recommend_mash boolean DEFAULT 0,
+   is_mashed boolean DEFAULT 0,
    ibu_gal_per_lb real DEFAULT 0.0,
    -- meta data
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
 );
 
 create table hop(
@@ -66,8 +66,8 @@ create table hop(
    cohumulone real DEFAULT 0.0,
    myrcene real DEFAULT 0.0,
    -- meta data
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
 );
 
 create table misc(
@@ -77,12 +77,12 @@ create table misc(
    use varchar(32) DEFAULT 'Boil',
    time real DEFAULT 0.0,
    amount real DEFAULT 0.0,
-   amount_is_weight boolean DEFAULT TRUE,
+   amount_is_weight boolean DEFAULT 1,
    use_for text DEFAULT '',
    notes text DEFAULT '',
    -- meta data
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
 );
 
 create table style(
@@ -110,8 +110,8 @@ create table style(
    ingredients text DEFAULT '',
    examples text DEFAULT '',
    -- meta data
-   deleted boolean DEFAULT FALSE,
-   display boolean  DEFAULT TRUE
+   deleted boolean DEFAULT 0,
+   display boolean  DEFAULT 1
 );
 
 create table yeast(
@@ -120,7 +120,7 @@ create table yeast(
    ytype varchar(32) DEFAULT 'Ale',
    form varchar(32) DEFAULT 'Liquid',
    amount real DEFAULT 0.0,
-   amount_is_weight boolean DEFAULT FALSE,
+   amount_is_weight boolean DEFAULT 0,
    laboratory varchar(32) DEFAULT '',
    product_id varchar(32) DEFAULT '',
    min_temperature real DEFAULT 0.0,
@@ -131,11 +131,11 @@ create table yeast(
    best_for varchar(256) DEFAULT '',
    times_cultured integer DEFAULT 0,
    max_reuse integer DEFAULT 10,
-   add_to_secondary boolean DEFAULT FALSE,
+   add_to_secondary boolean DEFAULT 0,
    inventory real DEFAULT 0,
    -- meta data
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
 );
 
 -- unlike some of the other tables, you can have a mash with no name.
@@ -150,9 +150,9 @@ create table mash(
    ph real DEFAULT 7.0,
    tun_weight real DEFAULT 0.0,
    tun_specific_heat real DEFAULT 0.0,
-   equip_adjust boolean DEFAULT TRUE,
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE
+   equip_adjust boolean DEFAULT 1,
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
 );
 
 create table mashstep(
@@ -167,11 +167,11 @@ create table mashstep(
    infuse_temp real DEFAULT 67.0,
    decoction_amount real DEFAULT 0.0,
    -- Meta data
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE,
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1,
    -- Our step number is unique within our parent mash.
    mash_id integer,
-   step_number integer,
+   step_number integer DEFAULT 0,
    foreign key(mash_id) references mash(maid),
    unique( mash_id, step_number )
 );
@@ -209,8 +209,8 @@ create table brewnote(
    boil_off real DEFAULT 0.0,
    final_volume real DEFAULT 0.0,
    notes text DEFAULT '',
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE,
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1,
    recipe_id integer,
    foreign key(recipe_id) references recipe(rid)
 );
@@ -228,8 +228,8 @@ create table water(
    ph real DEFAULT 7.0,
    notes text DEFAULT '',
    -- metadata
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
 );
 
 -- instructions are many-to-one for recipes. 
@@ -237,12 +237,12 @@ create table instruction(
    iid integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    directions text DEFAULT '',
-   hasTimer boolean DEFAULT FALSE,
+   hasTimer boolean DEFAULT 0,
    timerValue varchar(16) DEFAULT '00:00:00',
-   completed boolean DEFAULT FALSE,
+   completed boolean DEFAULT 0,
    interval real DEFAULT 0.0,
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE,
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1,
    recipe_id integer,
    -- The order of this instruction in the recipe.
    instruction_number integer default 0,
@@ -285,7 +285,7 @@ create table recipe(
    age_temp real DEFAULT 20.0,
    date date  DEFAULT CURRENT_DATE,
    carb_volume real DEFAULT 0.0,
-   forced_carb boolean DEFAULT FALSE,
+   forced_carb boolean DEFAULT 0,
    priming_sugar_name varchar(128) DEFAULT '',
    carbonationTemp_c real DEFAULT 20.0,
    priming_sugar_equiv real DEFAULT 1.0,
@@ -293,8 +293,8 @@ create table recipe(
    notes text DEFAULT '',
    taste_notes text DEFAULT '',
    taste_rating real DEFAULT 0.0,
-   deleted boolean DEFAULT FALSE,
-   display boolean DEFAULT TRUE,
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1,
    style_id integer,
    mash_id integer,
    equipment_id integer,

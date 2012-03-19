@@ -547,10 +547,17 @@ void BrewTargetTreeModel::removeObserved( BeerXMLElement* element )
    disconnect( element, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 }
 
+// Under construction -- I haven't figured out quite how to pay attention
+// to the display and/or delete flag. The prototype here likely won't work, since there is now
+// a difference between the lists in the database and the lists being displayed. This will almost
+// always end up hurting me. Maybe I should do the filtering via the filterproxymodel instead?
+// I will use this until I find that it does sigsegv.
 void BrewTargetTreeModel::loadTreeModel(QString propName)
 {
    int i;
    int rows;
+   int inserted;
+   BrewTargetTreeItem* temp;
 
    bool loadAll = (propName == "");
    
@@ -561,31 +568,39 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
       Database::instance().getRecipes( recipes );
       
       rows = recipes.size();
-
-      // Insert all the rows
-      insertRows(0,rows, createIndex(trees.value(RECIPEMASK),0,local));
+      inserted = 0;
 
        // And set the data
       for( i = 0; i < rows; ++i )
       {
-         BrewTargetTreeItem* temp = local->child(i);
-         Recipe* foo = recipes[i];
-
-         // Watch the recipe for updates.
-         addObserved(foo);
-
-         temp->setData(BrewTargetTreeItem::RECIPE, foo);
-
-         // If we have brewnotes, set them up here.
-         // Ouch.  My head hurts.
-         QList<BrewNote*> notes = foo->brewNotes();
-         if ( notes.size() > 0 )
+         if ( recipes[i]->display() && ! recipes[i]->deleted() )
          {
-            insertRows(0,notes.size(), createIndex(i,0,temp));
-            for (int j=0; j < notes.size(); ++j)
+            insertRows(inserted,1, createIndex(trees.value(RECIPEMASK),0,local));
+
+            temp = local->child(inserted++);
+            Recipe* foo = recipes[i];
+
+            // Watch the recipe for updates.
+            addObserved(foo);
+
+            temp->setData(BrewTargetTreeItem::RECIPE, foo);
+
+            // If we have brewnotes, set them up here.
+            // Ouch.  My head hurts.
+            QList<BrewNote*> notes = foo->brewNotes();
+            if ( notes.size() > 0 )
             {
-               BrewTargetTreeItem* bar = temp->child(j);
-               bar->setData(static_cast<int>(BrewTargetTreeItem::BREWNOTE), notes[j]);
+               int bn_ins = 0;
+
+               for (int j=0; j < notes.size(); ++j)
+               {
+                  if ( notes[j]->display() && ! notes[j]->deleted() )
+                  {
+                     insertRows(bn_ins, 1, createIndex(inserted,0,temp));
+                     BrewTargetTreeItem* bar = temp->child(bn_ins++);
+                     bar->setData(static_cast<int>(BrewTargetTreeItem::BREWNOTE), notes[j]);
+                  }
+               }
             }
          }
       }
@@ -596,15 +611,19 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
    {
       BrewTargetTreeItem* local = rootItem->child(trees.value(EQUIPMASK));
       QList<Equipment*> equipments;
+
       Database::instance().getEquipments(equipments);
 
       rows = equipments.size();
-      insertRows(0, rows, createIndex(trees.value(EQUIPMASK),0,local));
-
+      inserted = 0;
       for( i = 0; i < rows; ++i )
       {
-         BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::EQUIPMENT, equipments[i]);
+         if ( equipments[i]->display() && ! equipments[i]->deleted() )
+         {
+             insertRows(inserted, 1, createIndex(trees.value(EQUIPMASK),0,local));
+             temp = local->child(inserted++);
+             temp->setData(BrewTargetTreeItem::EQUIPMENT, equipments[i]);
+         }
       }
    }
 
@@ -616,12 +635,16 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
       Database::instance().getFermentables(ferms);
 
       rows = ferms.size();
-      insertRows(0,rows,createIndex(trees.value(FERMENTMASK),0,local));
+      inserted = 0;
 
       for( i = 0; i < rows; ++i )
       {
-         BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::FERMENTABLE, ferms[i]);
+         if ( ferms[i]->display() && ! ferms[i]->deleted() )
+         {
+            insertRows(inserted,1,createIndex(trees.value(FERMENTMASK),0,local));
+            temp = local->child(inserted++);
+            temp->setData(BrewTargetTreeItem::FERMENTABLE, ferms[i]);
+         }
       }
    }
 
@@ -633,12 +656,16 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
       Database::instance().getHops(hops);
 
       rows = hops.size();
-      insertRows(0,rows,createIndex(trees.value(HOPMASK),0,local));
+      inserted = 0;
 
       for( i = 0; i < rows; ++i )
       {
-         BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::HOP, hops[i]);
+         if ( hops[i]->display() && ! hops[i]->deleted() )
+         {
+            insertRows(inserted,1,createIndex(trees.value(HOPMASK),0,local));
+            temp = local->child(inserted++);
+            temp->setData(BrewTargetTreeItem::HOP, hops[i]);
+         }
       }
    }
 
@@ -650,12 +677,16 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
       Database::instance().getMiscs(miscs);
 
       rows = miscs.size();
-      insertRows(0,rows,createIndex(trees.value(MISCMASK),0,local));
+      inserted = 0;
 
       for( i = 0; i < rows; ++i )
       {
-         BrewTargetTreeItem* temp = local->child(i);
-         temp->setData(BrewTargetTreeItem::MISC, miscs[i]);
+         if ( miscs[i]->display() && ! miscs[i]->deleted() )
+         {
+            insertRows(inserted,1,createIndex(trees.value(MISCMASK),0,local));
+            temp = local->child(inserted++);
+            temp->setData(BrewTargetTreeItem::MISC, miscs[i]);
+         }
       }
    }
 
@@ -667,12 +698,16 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
       Database::instance().getYeasts(yeasts);
 
       rows = yeasts.size();
-      insertRows(0,rows,createIndex(trees.value(YEASTMASK),0,local));
+      inserted = 0;
 
       for( i = 0; i < rows; ++i )
       {
-        BrewTargetTreeItem* temp = local->child(i);
-        temp->setData(BrewTargetTreeItem::YEAST, yeasts[i]);
+         if ( yeasts[i]->display() && ! yeasts[i]->deleted() )
+         {
+           insertRows(inserted,1,createIndex(trees.value(YEASTMASK),0,local));
+           temp = local->child(inserted++);
+           temp->setData(BrewTargetTreeItem::YEAST, yeasts[i]);
+         }
       }
    }
 }
