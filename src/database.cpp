@@ -1370,56 +1370,56 @@ const QSqlRelationalTableModel* Database::getModel( Brewtarget::DBTable table )
 QList<BrewNote*> Database::brewNotes()
 {
    QList<BrewNote*> tmp;
-   getBrewNotes( tmp, "`deleted`='FALSE'" );
+   getBrewNotes( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
-   getEquipments( tmp, "`deleted`='FALSE'" );
+   getEquipments( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
-   getFermentables( tmp, "`deleted`='FALSE'" );
+   getFermentables( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getHops( tmp, "`deleted`='FALSE'" );
+   getHops( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
-   getMashs( tmp, "`deleted`='FALSE'" );
+   getMashs( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getMashSteps( tmp, "`deleted`='FALSE'" );
+   getMashSteps( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
-   getMiscs( tmp, "`deleted`='FALSE'" );
+   getMiscs( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
-   getRecipes( tmp, "`deleted`='FALSE'" );
+   getRecipes( tmp, "`deleted`='0'" );
    QList<Recipe*>::iterator i;
    for( i = tmp.begin(); i != tmp.end(); i++ )
    {
@@ -1432,21 +1432,21 @@ QList<Recipe*> Database::recipes()
 QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
-   getStyles( tmp, "`deleted`='FALSE'" );
+   getStyles( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
-   getWaters( tmp, "`deleted`='FALSE'" );
+   getWaters( tmp, "`deleted`='0'" );
    return tmp;
 }
 
 QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
-   getYeasts( tmp, "`deleted`='FALSE'" );
+   getYeasts( tmp, "`deleted`='0'" );
    return tmp;
 }
 

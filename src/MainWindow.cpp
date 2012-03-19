@@ -178,26 +178,32 @@ MainWindow::MainWindow(QWidget* parent)
    fermTableModel = new FermentableTableModel(fermentableTable);
    fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable);
    fermTableProxy->setSourceModel(fermTableModel);
+   fermentableTable->setItemDelegate(new FermentableItemDelegate(fermentableTable));
    fermentableTable->setModel(fermTableProxy);
    // Make the fermentable table show grain percentages in row headers.
    fermTableModel->setDisplayPercentages(true);
+   
    // Hops
    hopTableModel = new HopTableModel(hopTable);
    hopTableProxy = new HopSortFilterProxyModel(hopTable);
    hopTableProxy->setSourceModel(hopTableModel);
+   hopTable->setItemDelegate(new HopItemDelegate(hopTable));
    hopTable->setModel(hopTableProxy);
    // Hop table show IBUs in row headers.
    hopTableModel->setShowIBUs(true);
+   
    // Misc
    miscTableModel = new MiscTableModel(miscTable);
    miscTableProxy = new MiscSortFilterProxyModel(miscTable);
    miscTableProxy->setSourceModel(miscTableModel);
    miscTable->setModel(miscTableProxy);
+   
    // Yeast
    yeastTableModel = new YeastTableModel(yeastTable);
    yeastTableProxy = new YeastSortFilterProxyModel(yeastTable);
    yeastTableProxy->setSourceModel(yeastTableModel);
    yeastTable->setModel(yeastTableProxy);
+   
    // Mashes
    mashStepTableModel = new MashStepTableModel(mashStepTableWidget);
    mashStepTableWidget->setModel(mashStepTableModel);
