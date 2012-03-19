@@ -158,7 +158,7 @@ void WaterTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       i = waterObs.indexOf(waterSender);
       if( i >= 0 )
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                           QAbstractItemModel::createIndex(i, WATERNUMCOLS));
+                           QAbstractItemModel::createIndex(i, WATERNUMCOLS-1));
       return;
    }
    

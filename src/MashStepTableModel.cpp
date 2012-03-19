@@ -96,7 +96,7 @@ void MashStepTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
    {
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                        QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS));
+                        QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS-1));
    }
    else
       reset();

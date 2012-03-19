@@ -83,11 +83,6 @@ public:
    //! Convenience method to get a meta property by name.
    QMetaProperty metaProperty(QString const& name) const;
    
-   // Move this to Database to convert to/from XML from/to SQLite tables.
-   /*
-   virtual void fromNode(const QDomNode& node) = 0; // Should initialize this element from the node.
-   */
-   
    // Some static helpers to convert to/from text.
    static double getDouble( const QDomText& textNode );
    static bool getBool( const QDomText& textNode );

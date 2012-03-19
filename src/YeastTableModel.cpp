@@ -165,7 +165,7 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
          return;
       
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                        QAbstractItemModel::createIndex(i, YEASTNUMCOLS));
+                        QAbstractItemModel::createIndex(i, YEASTNUMCOLS-1));
       return;
    }
    

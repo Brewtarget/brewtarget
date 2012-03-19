@@ -325,7 +325,7 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/)
          return;
       
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                        QAbstractItemModel::createIndex(i, MISCNUMCOLS) );
+                        QAbstractItemModel::createIndex(i, MISCNUMCOLS-1) );
       return;
    }
    

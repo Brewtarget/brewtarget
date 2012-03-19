@@ -176,8 +176,8 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
          return;
       
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
-                        QAbstractItemModel::createIndex(i, HOPNUMCOLS));
-                        
+                        QAbstractItemModel::createIndex(i, HOPNUMCOLS-1));
+      emit headerDataChanged( Qt::Vertical, i, i );
       return;
    }
    
@@ -373,7 +373,8 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
       case HOPTIMECOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setTime_min( Brewtarget::timeQStringToSI(value.toString()) );
+            double min = Brewtarget::timeQStringToSI(value.toString());
+            row->setTime_min( min );
             headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
             return true;
          }

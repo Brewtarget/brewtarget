@@ -76,10 +76,10 @@ void SetterCommandStack::flush()
 void SetterCommandStack::executeNext()
 {
    // Check to make sure there is actually something to run.
+   _commandPtrSwitch.lock();
    if( _nextCommand )
    {
       // First, exchange pointers.
-      _commandPtrSwitch.lock();
       SetterCommand* tmp = _nextCommand;
       _nextCommand = _nextCommandTmp;
       _nextCommandTmp = tmp;
@@ -102,6 +102,8 @@ void SetterCommandStack::executeNext()
       _nextCommandTmp->redo();
       _nextCommandTmp = 0;
    }
+   else
+      _commandPtrSwitch.unlock();
    
    // Reset the timer.
    _timer.start();
