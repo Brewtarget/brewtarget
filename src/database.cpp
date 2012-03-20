@@ -247,14 +247,18 @@ void Database::load()
    
    populateElements( allRecipes, Brewtarget::RECTABLE );
    
-   // Connect fermentable changed signals to their parent recipe.
+   // Connect fermentable,hop changed signals to their parent recipe.
    QHash<int,Recipe*>::iterator i;
    QList<Fermentable*>::iterator j;
+   QList<Hop*>::iterator k;
    for( i = allRecipes.begin(); i != allRecipes.end(); i++ )
    {
-      QList<Fermentable*> tmp = fermentables(*i);
-      for( j = tmp.begin(); j != tmp.end(); j++ )
+      QList<Fermentable*> tmpF = fermentables(*i);
+      for( j = tmpF.begin(); j != tmpF.end(); j++ )
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+      QList<Hop*> tmpH = hops(*i);
+      for( k = tmpH.begin(); k != tmpH.end(); ++k )
+         connect( *k, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptHopChange(QMetaProperty,QVariant)) );
    }
 }
 
@@ -345,6 +349,7 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
 void Database::removeFromRecipe( Recipe* rec, Hop* hop )
 {
    removeIngredientFromRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
+   disconnect( hop, 0, rec, 0 );
 }
 
 void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
@@ -1103,11 +1108,13 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 // Add to recipe ==============================================================
 void Database::addToRecipe( Recipe* rec, Hop* hop, bool initialLoad )
 {
-   addIngredientToRecipe<Hop>( rec, hop,
-                               "hops",
-                               "hop_in_recipe",
-                               "hop_id",
-                               initialLoad, &allHops );
+   int key = addIngredientToRecipe<Hop>( rec, hop,
+                                         "hops",
+                                         "hop_in_recipe",
+                                         "hop_id",
+                                         initialLoad, &allHops );
+   connect( allHops[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+   rec->recalcIBU();
 }
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )

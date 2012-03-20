@@ -300,6 +300,7 @@ public slots:
    //void changed(QMetaProperty prop, QVariant val);
    
    void acceptFermChange(QMetaProperty prop, QVariant val);
+   void acceptHopChange(QMetaProperty prop, QVariant val);
 private:
    
    Recipe();

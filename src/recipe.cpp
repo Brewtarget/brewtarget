@@ -2310,3 +2310,8 @@ void Recipe::acceptFermChange(QMetaProperty /*prop*/, QVariant /*val*/)
 {
    recalcAll();
 }
+
+void Recipe::acceptHopChange(QMetaProperty prop, QVariant val)
+{
+   recalcIBU();
+}
