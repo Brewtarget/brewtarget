@@ -38,6 +38,7 @@ class Database;
 #include <QPair>
 #include <QTableView>
 #include <QSqlError>
+#include <QDebug>
 #include "BeerXMLElement.h"
 #include "brewtarget.h"
 #include "recipe.h"
@@ -383,16 +384,20 @@ private:
       tm.setFilter("");
       tm.select();
       
+      while ( tm.canFetchMore() )
+         tm.fetchMore();
+
       size = tm.rowCount();
+
       for( i = 0; i < size; ++i )
       {
          key = tm.record(i).value(keyNames[table]).toInt();
-         
+
          e = new T();
          et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
          et->_key = key;
          et->_table = table;
-         
+
          if( ! hash.contains(key) )
             hash.insert(key,et);
       }
