@@ -301,6 +301,8 @@ public slots:
    
    void acceptFermChange(QMetaProperty prop, QVariant val);
    void acceptHopChange(QMetaProperty prop, QVariant val);
+   void acceptMashChange(QMetaProperty prop, QVariant val);
+
 private:
    
    Recipe();

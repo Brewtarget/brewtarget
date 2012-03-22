@@ -251,6 +251,10 @@ void Database::load()
    QHash<int,Recipe*>::iterator i;
    QList<Fermentable*>::iterator j;
    QList<Hop*>::iterator k;
+   QList<Mash*>::iterator l;
+   QList<MashStep*>::iterator m;
+
+
    for( i = allRecipes.begin(); i != allRecipes.end(); i++ )
    {
       QList<Fermentable*> tmpF = fermentables(*i);
@@ -259,6 +263,15 @@ void Database::load()
       QList<Hop*> tmpH = hops(*i);
       for( k = tmpH.begin(); k != tmpH.end(); ++k )
          connect( *k, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptHopChange(QMetaProperty,QVariant)) );
+      // DO we need to connect both Mash and MashSteps? I think we do, but I don't know.
+      QList<Mash*> tmpM = mashs();
+      for( l = tmpM.begin(); l != tmpM.end(); ++l)
+      {
+         QList<MashStep*> tmpMS = mashSteps(*l);
+         for( m=tmpMS.begin(); m != tmpMS.end(); ++m)
+            connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
+         connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
+      }
    }
 }
 

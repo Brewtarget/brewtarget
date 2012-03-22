@@ -2315,3 +2315,8 @@ void Recipe::acceptHopChange(QMetaProperty prop, QVariant val)
 {
    recalcIBU();
 }
+
+void Recipe::acceptMashChange(QMetaProperty /*prop*/, QVariant /*val*/)
+{
+   recalcAll();
+}
