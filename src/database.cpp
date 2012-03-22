@@ -2678,6 +2678,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
    BrewNote* ret = newBrewNote(parent);  
    fromXml( ret, BrewNote::tagToProp, node );
    _setterCommandStack->flush();
+
    return ret;
 }
 
@@ -2714,27 +2715,69 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    return ret;
 }
 
+int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
+{
+  if ( Hop::types.indexOf(type) < 0 )
+  {
+    // look for a valid hop type from our database to use
+    QSqlQuery q(QString("SELECT htype FROM hop WHERE name='%1' AND htype != ''").arg(hop->name()), sqldb);
+    q.first();
+    if ( q.isValid() )
+    {
+      QString htype = q.record().value(0).toString();
+      if ( htype != "" )
+      {
+	if ( Hop::types.indexOf(htype) >= 0 )
+	{
+	  return Hop::types.indexOf(htype);
+	}
+      }
+    }
+    // out of ideas at this point so default to Both
+    return Hop::types.indexOf(QString("Both"));
+  }
+  else
+  {
+    return Hop::types.indexOf(type);
+  }
+}
+
+int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
+{
+  if ( Hop::uses.indexOf(use) < 0 )
+  {
+    // look for a valid hop type from our database to use
+    QSqlQuery q(QString("SELECT use FROM hop WHERE name='%1' AND use != ''").arg(hop->name()), sqldb);
+    q.first();
+    if ( q.isValid() )
+    {
+      QString hUse = q.record().value(0).toString();
+      if ( hUse != "" )
+	if ( Hop::uses.indexOf(hUse) >= 0 )
+	  return Hop::uses.indexOf(hUse);
+    }
+    // out of ideas at this point so default to Flavor
+    return Hop::uses.indexOf(QString("Flavor"));
+  }
+  else
+  {
+    return Hop::uses.indexOf(use);
+  }
+}
+
 Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
 
    Hop* ret = newHop();
    fromXml( ret, Hop::tagToProp, node );
-
-   
+  _setterCommandStack->flush();
+  
    // Handle enums separately.
    n = node.firstChildElement("USE");
-   ret->setUse( static_cast<Hop::Use>(
-                   Hop::uses.indexOf(
-                      n.firstChild().toText().nodeValue()
-                   )
-                ) );
+   ret->setUse( static_cast<Hop::Use>(getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret)));
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<Hop::Type>(
-                    Hop::types.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
+   ret->setType( static_cast<Hop::Type>(getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret)));
    n = node.firstChildElement("FORM");
    ret->setForm( static_cast<Hop::Form>(
                     Hop::forms.indexOf(
@@ -2742,7 +2785,6 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
                     )
                  ) );
    
-   _setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret, true );
    return ret;
@@ -2800,6 +2842,56 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    return ret;
 }
 
+int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
+{
+  if ( Misc::types.indexOf(type) < 0 )
+  {
+    // look for a valid hop type from our database to use
+    QSqlQuery q(QString("SELECT mtype FROM misc WHERE name='%1' AND mtype != ''").arg(misc->name()), sqldb);
+    q.first();
+    if ( q.isValid() )
+    {
+      QString mtype = q.record().value(0).toString();
+      if ( mtype != "" )
+      {
+	if ( Misc::types.indexOf(mtype) >= 0 )
+	{
+	  return Misc::types.indexOf(mtype);
+	}
+      }
+    }
+    // out of ideas at this point so default to Flavor
+    return Misc::types.indexOf(QString("Flavor"));
+  }
+  else
+  {
+    return Misc::types.indexOf(type);
+  }
+}
+
+int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
+{
+  if ( Misc::uses.indexOf(use) < 0 )
+  {
+    // look for a valid hop type from our database to use
+    QSqlQuery q(QString("SELECT use FROM misc WHERE name='%1' AND use != ''").arg(misc->name()), sqldb);
+    q.first();
+    if ( q.isValid() )
+    {
+      QString mUse = q.record().value(0).toString();
+      if ( mUse != "" )
+	if ( Misc::uses.indexOf(mUse) >= 0 )
+	  return Misc::uses.indexOf(mUse);
+    }
+    // out of ideas at this point so default to Flavor
+    return Misc::uses.indexOf(QString("Flavor"));
+  }
+  else
+  {
+    return Misc::uses.indexOf(use);
+  }
+}
+
 Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
@@ -2810,17 +2902,9 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<Misc::Type>(
-                    Misc::types.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
+   ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
    n = node.firstChildElement("USE");
-   ret->setUse( static_cast<Misc::Use>(
-                   Misc::uses.indexOf(
-                      n.firstChild().toText().nodeValue()
-                   )
-                ) );
+   ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
    
    if( parent )
       addToRecipe( parent, ret, true );

@@ -643,6 +643,11 @@ private:
    
    //! Do an sql delete.
    void sqlDelete( QString const& tableName, QString const& whereClause );
+   
+   int getQualifiedHopTypeIndex(QString type, Hop* hop);
+   int getQualifiedMiscTypeIndex(QString type, Misc* misc);
+   int getQualifiedMiscUseIndex(QString use, Misc* misc);
+   int getQualifiedHopUseIndex(QString use, Hop* hop);
 };
 
 #endif   /* _DATABASE_H */

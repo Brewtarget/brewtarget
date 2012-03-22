@@ -255,7 +255,8 @@ void Hop::setAmount_kg( double num )
 
 void Hop::setUse(Use u)
 {
-   set("use", "use", uses.at(u));
+   if ( u >= 0 )
+      set("use", "use", uses.at(u));
 }
 
 void Hop::setTime_min( double num )
@@ -278,12 +279,14 @@ void Hop::setNotes( const QString& str )
 
 void Hop::setType(Type t)
 {
-   set("type", "htype", types.at(t));
+  if ( t >= 0 )
+     set("type", "htype", types.at(t));
 }
 
 void Hop::setForm( Form f )
 {
-   set("form", "form", forms.at(f));
+   if ( f >= 0 )
+     set("form", "form", forms.at(f));
 }
 
 void Hop::setBeta_pct( double num )
