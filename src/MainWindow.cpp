@@ -1585,20 +1585,21 @@ void MainWindow::dropEvent(QDropEvent *event)
                //equipmentComboBox->setText(active->getEquipment(index)->name());
                droppedRecipeEquipment(active->getEquipment(index));
                break;
+            // NOTE: addToRecipe() calls the appropriate new* under the covers. Calling it twice caused some odd problems
             case BrewTargetTreeItem::FERMENTABLE:
-               Database::instance().addToRecipe( recipeObs, Database::instance().newFermentable(active->getFermentable(index)) );
+               Database::instance().addToRecipe( recipeObs, active->getFermentable(index) );
                last = fermentableTab;
                break;
             case BrewTargetTreeItem::HOP:
-               Database::instance().addToRecipe( recipeObs, Database::instance().newHop(active->getHop(index)));
+               Database::instance().addToRecipe( recipeObs, active->getHop(index));
                last = hopsTab;
                break;
             case BrewTargetTreeItem::MISC:
-               Database::instance().addToRecipe( recipeObs, Database::instance().newMisc(active->getMisc(index)) );
+               Database::instance().addToRecipe( recipeObs, active->getMisc(index) );
                last = miscTab;
                break;
             case BrewTargetTreeItem::YEAST:
-               Database::instance().addToRecipe( recipeObs, Database::instance().newYeast(active->getYeast(index)) );
+               Database::instance().addToRecipe( recipeObs, active->getYeast(index) );
                last = yeastTab;
                break;
             case BrewTargetTreeItem::BREWNOTE:

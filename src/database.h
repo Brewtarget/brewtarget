@@ -529,12 +529,11 @@ private:
       }
       else 
       {
-
          newKey = ing->_key;
-         ing->setDisplay(false);
       }
       
-      
+      // Any ingredient added to a recipe should not be visible for the trees?
+      ing->setDisplay(false);
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
       q = QSqlQuery( sqldb );
       q.setForwardOnly(true);
@@ -607,7 +606,7 @@ private:
          if( oldRecord.fieldName(i) == "parent" )
             newValString += QString("`parent` = '%2',").arg(object->_key);      
          else if( oldRecord.fieldName(i) == "display" )
-            newValString += QString("`display` = '%2',").arg( displayed ? "true" : "false" );
+            newValString += QString("`display` = %2,").arg( displayed ? 1 : 0 );
          else if ( oldRecord.fieldName(i) != keyNames[t] )
             newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
       }
@@ -631,7 +630,6 @@ private:
          BeerXMLElement* newOneCast = qobject_cast<BeerXMLElement*>(newOne);
          newOneCast->_key = newKey;
          newOneCast->_table = t;
-         
          keyHash->insert( newKey, newOne );
       }
       
