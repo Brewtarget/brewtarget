@@ -40,6 +40,7 @@
 #include <QLineEdit>
 #include <QUrl>
 #include <QDesktopServices>
+#include <QNetworkReply>
 
 #include "MashStepEditor.h"
 #include "MashStepTableModel.h"
@@ -1982,4 +1983,52 @@ void MainWindow::mergeDatabases()
    dbFile.close();
    otherDbFile.close();
    */
+}
+
+void MainWindow::finishCheckingVersion()
+{
+   QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+   if( reply == 0 )
+      return;
+   
+   QString remoteVersion(reply->readAll());
+   
+   // If there is an error, just return.
+   if( reply->error() != QNetworkReply::NoError )
+      return;
+   
+   // If the remote version is newer...
+   if( !remoteVersion.startsWith(VERSIONSTRING) )
+   {
+      // ...and the user wants to download the new version...
+      if( QMessageBox::information(this,
+                                   QObject::tr("New Version"),
+                                   QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
+                                   QMessageBox::Yes | QMessageBox::No,
+                                   QMessageBox::Yes) == QMessageBox::Yes )
+      {
+         // ...take them to the website.
+         QDesktopServices::openUrl(QUrl("http://brewtarget.sourceforge.net"));
+      }
+      else // ... and the user does NOT want to download the new version...
+      {
+         // ... and they want us to stop bothering them...
+         if( QMessageBox::question(this,
+                                   QObject::tr("New Version"),
+                                   QObject::tr("Stop bothering you about new versions?"),
+                                   QMessageBox::Yes | QMessageBox::No,
+                                   QMessageBox::Yes) == QMessageBox::Yes)
+         {
+            // ... tell brewtarget to stop bothering the user about the new version.
+            Brewtarget::checkVersion = false;
+         }
+      }
+   }
+   else // The current version is newest so...
+   {
+      // ...tell brewtarget to bother users about future new versions.
+      // This means that when a user downloads the new version, this
+      // variable will always get reset to true.
+      Brewtarget::checkVersion = true;
+   }
 }

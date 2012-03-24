@@ -175,6 +175,7 @@ public slots:
    void dragEnterEvent(QDragEnterEvent *event);
    void dropEvent(QDropEvent *event);
 
+   void finishCheckingVersion();
 protected:
    virtual void closeEvent(QCloseEvent* event);
 

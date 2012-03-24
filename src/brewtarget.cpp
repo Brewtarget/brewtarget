@@ -128,7 +128,7 @@ bool Brewtarget::ensureDirectoriesExist()
    return true;
 }
 
-void Brewtarget::checkForNewVersion()
+void Brewtarget::checkForNewVersion(MainWindow* mw)
 {
 
    // Don't do anything if the checkVersion flag was set false
@@ -136,53 +136,9 @@ void Brewtarget::checkForNewVersion()
       return;
 
    QNetworkAccessManager manager;
-   QEventLoop loop;
    QUrl url("http://brewtarget.sourceforge.net/version");
-   QSharedPointer<QNetworkReply> reply = QSharedPointer<QNetworkReply>(manager.get( QNetworkRequest(url) ));
-   QObject::connect( reply.data(), SIGNAL(finished()), &loop, SLOT(quit()));
-
-   loop.exec(); // Waits until the reply comes back.
-
-   QString remoteVersion(reply->readAll());
-
-   // If there is an error, just return.
-   if( reply->error() != QNetworkReply::NoError )
-      return;
-
-   // If the remote version is newer...
-   if( !remoteVersion.startsWith(VERSIONSTRING) )
-   {
-      // ...and the user wants to download the new version...
-      if( QMessageBox::information(mainWindow,
-                               QObject::tr("New Version"),
-                               QObject::tr("Version %1 is now available. Download it?").arg(remoteVersion),
-                               QMessageBox::Yes | QMessageBox::No,
-                               QMessageBox::Yes) == QMessageBox::Yes )
-      {
-         // ...take them to the website.
-         QDesktopServices::openUrl(QUrl("http://brewtarget.sourceforge.net"));
-      }
-      else // ... and the user does NOT want to download the new version...
-      {
-         // ... and they want us to stop bothering them...
-         if( QMessageBox::question(mainWindow,
-                                  QObject::tr("New Version"),
-                                  QObject::tr("Stop bothering you about new versions?"),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  QMessageBox::Yes) == QMessageBox::Yes)
-         {
-            // ... tell brewtarget to stop bothering the user about the new version.
-            checkVersion = false;
-         }
-      }
-   }
-   else // The current version is newest so...
-   {
-      // ...tell brewtarget to bother users about future new versions.
-      // This means that when a user downloads the new version, this
-      // variable will always get reset to true.
-      checkVersion = true;
-   }
+   QNetworkReply* reply = manager.get( QNetworkRequest(url) );
+   QObject::connect( reply, SIGNAL(finished()), mw, SLOT(finishCheckingVersion()) );
 }
 
 bool Brewtarget::copyDataFiles(QString newPath)
@@ -545,7 +501,7 @@ int Brewtarget::run()
    
    splashScreen.finish(mainWindow);
 
-   checkForNewVersion();
+   checkForNewVersion(mainWindow);
 
    ret = app->exec();
    

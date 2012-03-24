@@ -52,6 +52,7 @@ class Brewtarget : public QObject
    friend class RecipeFormatter;
    friend class Unit;
    friend class Database;
+   friend class MainWindow;
 public:
    Brewtarget();
 
@@ -144,7 +145,7 @@ public:
 
    //! \return the main window.
    static MainWindow* getMainWindow();
-   
+
 private:
    static QApplication* app;
    static MainWindow* mainWindow;
@@ -177,7 +178,7 @@ private:
    //! Load translation files.
    static void loadTranslations();
    //! Checks for a newer version and prompts user to download.
-   static void checkForNewVersion();
+   static void checkForNewVersion(MainWindow* mw);
    
    //! If this option is false, do not bother the user about new versions.
    static bool checkVersion;
