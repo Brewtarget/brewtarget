@@ -72,7 +72,6 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
 
 TimerWidget::~TimerWidget()
 {
-   delete timer;
 }
 
 void TimerWidget::doReplay(qint32 /*msecToEnd*/)

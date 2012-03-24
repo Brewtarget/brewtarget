@@ -340,7 +340,7 @@ void BrewDayWidget::clear()
    {
       InstructionWidget* iw = (InstructionWidget*)stackedWidget->widget(0);
       stackedWidget->removeWidget(iw);
-      delete iw;
+			iw->deleteLater();
    }
 
    stackedWidget->setCurrentIndex(0);

@@ -42,7 +42,7 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
 
 BrewTargetTreeView::~BrewTargetTreeView()
 {
-   delete model;
+   model->deleteLater();
 }
 
 BrewTargetTreeModel* BrewTargetTreeView::getModel()
@@ -345,7 +345,7 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
 
 RecipeTreeView::~RecipeTreeView()
 {
-   delete model;
+   model->deleteLater();
 }
 
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
@@ -359,7 +359,7 @@ EquipmentTreeView::EquipmentTreeView(QWidget *parent)
 
 EquipmentTreeView::~EquipmentTreeView()
 {
-   delete model;
+   model->deleteLater();
 }
 
 // Icky ick ikcy
@@ -374,7 +374,7 @@ FermentableTreeView::FermentableTreeView(QWidget *parent)
 
 FermentableTreeView::~FermentableTreeView()
 {
-   delete model;
+   model->deleteLater();
 }
 
 // More Ick
@@ -389,7 +389,7 @@ HopTreeView::HopTreeView(QWidget *parent)
 
 HopTreeView::~HopTreeView()
 {
-   delete model;
+   model->deleteLater();
 }
 
 // Ick some more
@@ -404,7 +404,7 @@ MiscTreeView::MiscTreeView(QWidget *parent)
 
 MiscTreeView::~MiscTreeView()
 {
-   delete model;
+   model->deleteLater();
 }
 
 // Will this ick never end?
@@ -419,6 +419,6 @@ YeastTreeView::YeastTreeView(QWidget *parent)
 
 YeastTreeView::~YeastTreeView()
 {
-   delete model;
+   model->deleteLater();
 }
 

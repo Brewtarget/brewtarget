@@ -63,8 +63,8 @@ RecipeFormatter::RecipeFormatter()
 
 RecipeFormatter::~RecipeFormatter()
 {
-   delete doc;
-   delete docDialog; 
+   doc->deleteLater();
+   docDialog->deleteLater(); 
 }
 
 void RecipeFormatter::setRecipe(Recipe* recipe)

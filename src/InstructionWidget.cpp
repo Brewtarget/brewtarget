@@ -34,7 +34,7 @@ InstructionWidget::InstructionWidget(QWidget* parent) :
 
 InstructionWidget::~InstructionWidget()
 {
-   delete timer;
+   timer->deleteLater();
 }
 
 QSize InstructionWidget::sizeHint() const
