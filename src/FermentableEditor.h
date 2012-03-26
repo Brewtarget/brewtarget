@@ -59,4 +59,3 @@ private:
 };
 
 #endif   /* _FERMENTABLEEDITOR_H */
-

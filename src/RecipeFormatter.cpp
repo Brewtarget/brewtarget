@@ -38,7 +38,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-RecipeFormatter::RecipeFormatter()
+RecipeFormatter::RecipeFormatter(QObject* parent)
+   : QObject(parent)
 {
    textSeparator = 0;
    rec = 0;
@@ -63,8 +64,7 @@ RecipeFormatter::RecipeFormatter()
 
 RecipeFormatter::~RecipeFormatter()
 {
-   doc->deleteLater();
-   docDialog->deleteLater(); 
+   delete textSeparator;
 }
 
 void RecipeFormatter::setRecipe(Recipe* recipe)

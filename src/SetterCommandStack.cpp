@@ -39,6 +39,17 @@ SetterCommandStack::SetterCommandStack(QThread* thread, int interval_ms)
    _timer.start();
 }
 
+SetterCommandStack::~SetterCommandStack()
+{
+   // Keep other people from going through push(). We may miss a few if someone
+   // is still in executeNext(), adding things to _commands.
+   _commandPtrSwitch.lock();
+   qDeleteAll(_commands);
+   delete _nextCommand;
+   _nextCommand = 0;
+   _commandPtrSwitch.unlock();
+}
+
 void SetterCommandStack::push( SetterCommand* command )
 {
    // Yes, I know I said non-blocking, but since pointer swapping takes
@@ -108,4 +119,3 @@ void SetterCommandStack::executeNext()
    // Reset the timer.
    _timer.start();
 }
-

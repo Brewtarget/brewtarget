@@ -58,4 +58,3 @@ private:
 };
 
 #endif   /* _OPTIONDIALOG_H */
-

@@ -64,4 +64,3 @@ private:
 };
 
 #endif   /* _INGREDIENTWIDGET_H */
-

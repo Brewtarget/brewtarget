@@ -23,11 +23,13 @@
 #include "brewtarget.h"
 #include "database.h"
 
-BeerXMLElement::BeerXMLElement() : _key(-1), _table(Brewtarget::NOTABLE)
+BeerXMLElement::BeerXMLElement()
+   : QObject(0), _key(-1), _table(Brewtarget::NOTABLE)
 {
 }
 
-BeerXMLElement::BeerXMLElement(BeerXMLElement const& other) : _key(other._key), _table(other._table)
+BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
+   : QObject(0), _key(other._key), _table(other._table)
 {
 }
 

@@ -508,8 +508,25 @@ int Brewtarget::run()
    savePersistentOptions();
    
    // Close log file.
+   if( logStream )
+   {
+      delete logStream;
+      logStream = 0;
+   }
    if( logFile != 0 && logFile->isOpen() )
+   {
       logFile->close();
+      delete logFile;
+      logFile = 0;
+   }
+   
+   // Should I do app->removeTranslator() first?
+   delete defaultTrans;
+   delete btTrans;
+   
+   delete mainWindow;
+   
+   Database::dropInstance();
    
    return ret;
 }

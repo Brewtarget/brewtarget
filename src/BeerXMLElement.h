@@ -56,7 +56,6 @@ class BeerXMLElement : public QObject
 public:
    BeerXMLElement();
    BeerXMLElement( BeerXMLElement const& other );
-   virtual ~BeerXMLElement(){};
 
    // Everything that inherits from BeerXML has a delete and a display
    Q_PROPERTY( bool deleted READ deleted WRITE setDeleted )

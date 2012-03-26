@@ -361,13 +361,13 @@ QWidget* WaterItemDelegate::createEditor(QWidget *parent, const QStyleOptionView
 
 void WaterItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-   QLineEdit* line = (QLineEdit*)editor;
+   QLineEdit* line = qobject_cast<QLineEdit*>(editor);
    line->setText(index.model()->data(index, Qt::DisplayRole).toString());
 }
 
 void WaterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-   QLineEdit* line = (QLineEdit*)editor;
+   QLineEdit* line = qobject_cast<QLineEdit*>(editor);
    model->setData(index, line->text(), Qt::EditRole);
 }
 

@@ -56,7 +56,7 @@ public:
     * 100 ms is definitely too long; you can notice the lag visually.
     */
    SetterCommandStack( QThread* thread, int interval_ms=10 );
-   virtual ~SetterCommandStack(){}
+   virtual ~SetterCommandStack();
    
    /*!
     * Push a command onto the stack.
@@ -72,8 +72,11 @@ private slots:
    void executeNext();
    
 private:
+   // List of the old already-executed commands.
    QList<SetterCommand*> _commands;
+   // Max number of old commands to keep in _commands.
    int _commandLimit;
+   // Current length of _commands.
    int _numCommands;
    int _executionInterval_ms;
    SetterCommand* _nextCommand;

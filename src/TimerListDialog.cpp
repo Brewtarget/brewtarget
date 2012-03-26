@@ -34,7 +34,4 @@ TimerListDialog::TimerListDialog(QWidget* parent) : QDialog(parent)
 
 TimerListDialog::~TimerListDialog()
 {
-   timer1->deleteLater();
-   timer2->deleteLater();
-   timer3->deleteLater();
 }

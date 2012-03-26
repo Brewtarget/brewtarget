@@ -38,7 +38,6 @@ public:
    enum ColorType{ LOW, GOOD, HIGH, BLACK };
 
    BtDigitWidget(QWidget* parent = 0);
-   ~BtDigitWidget();
 
    //void display(const QString& str);
    //! Displays the given \b num with precision \b prec.

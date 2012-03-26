@@ -40,10 +40,6 @@ BtDigitWidget::BtDigitWidget(QWidget *parent) : QLabel(parent)
    constantColor = false;
 }
 
-BtDigitWidget::~BtDigitWidget()
-{
-}
-
 void BtDigitWidget::display(QString str)
 {
    lastNum = str.toDouble();

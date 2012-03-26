@@ -65,4 +65,3 @@ private:
 };
 
 #endif   /* _MALTINESSWIDGET_H */
-

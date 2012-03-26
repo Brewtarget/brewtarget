@@ -33,8 +33,8 @@ TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
    seconds = 0;
    start = true;
    oldColors = true;
-   timer = new QTimer();
-   flashTimer = new QTimer();
+   timer = new QTimer(this);
+   flashTimer = new QTimer(this);
    timer->setInterval(1000); // One second between timeouts.
    flashTimer->setInterval(500);
 

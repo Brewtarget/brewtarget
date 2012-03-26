@@ -467,20 +467,20 @@ void HopItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, c
    if ( index.column() == HOPUSECOL )
    {
       QComboBox* box = (QComboBox*)editor;
-       int value = box->currentIndex();
-       model->setData(index, value, Qt::EditRole);
+      int value = box->currentIndex();
+      model->setData(index, value, Qt::EditRole);
    }
    else if (index.column() == HOPFORMCOL )
    {
-       QComboBox* box = (QComboBox*)editor;
-       int value = box->currentIndex();
-       model->setData(index, value, Qt::EditRole);
+      QComboBox* box = (QComboBox*)editor;
+      int value = box->currentIndex();
+      model->setData(index, value, Qt::EditRole);
    }
    else
    {
-       QLineEdit* line = (QLineEdit*)editor;
+      QLineEdit* line = (QLineEdit*)editor;
       model->setData(index, line->text(), Qt::EditRole);
-    }
+   }
 }
 
 void HopItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const

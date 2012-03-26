@@ -40,11 +40,6 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
-BrewTargetTreeView::~BrewTargetTreeView()
-{
-   model->deleteLater();
-}
-
 BrewTargetTreeModel* BrewTargetTreeView::getModel()
 {
    return model;
@@ -276,8 +271,8 @@ bool BrewTargetTreeView::multiSelected()
 void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu,int type)
 {
 
-   contextMenu = new QMenu();
-   subMenu = new QMenu();
+   contextMenu = new QMenu(this);
+   subMenu = new QMenu(this);
 
    switch(type) 
    {
@@ -336,6 +331,7 @@ QMenu* BrewTargetTreeView::getContextMenu(QModelIndex selected)
 // Bad form likely
 
 RecipeTreeView::RecipeTreeView(QWidget *parent)
+   : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::RECIPEMASK);
 
@@ -343,12 +339,8 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
    setExpanded(findRecipe(0), true);
 }
 
-RecipeTreeView::~RecipeTreeView()
-{
-   model->deleteLater();
-}
-
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
+   : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::EQUIPMASK);
 
@@ -357,68 +349,42 @@ EquipmentTreeView::EquipmentTreeView(QWidget *parent)
 
 }
 
-EquipmentTreeView::~EquipmentTreeView()
-{
-   model->deleteLater();
-}
-
 // Icky ick ikcy
 FermentableTreeView::FermentableTreeView(QWidget *parent)
+   : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::FERMENTMASK);
 
    setModel(model);
    setExpanded(findFermentable(0), true);
-
-}
-
-FermentableTreeView::~FermentableTreeView()
-{
-   model->deleteLater();
 }
 
 // More Ick
 HopTreeView::HopTreeView(QWidget *parent)
+   : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::HOPMASK);
 
    setModel(model);
    setExpanded(findHop(0), true);
-
-}
-
-HopTreeView::~HopTreeView()
-{
-   model->deleteLater();
 }
 
 // Ick some more
 MiscTreeView::MiscTreeView(QWidget *parent)
+   : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::MISCMASK);
 
    setModel(model);
    setExpanded(findMisc(0), true);
-
-}
-
-MiscTreeView::~MiscTreeView()
-{
-   model->deleteLater();
 }
 
 // Will this ick never end?
 YeastTreeView::YeastTreeView(QWidget *parent)
+   : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::YEASTMASK);
 
    setModel(model);
    setExpanded(findYeast(0), true);
-
 }
-
-YeastTreeView::~YeastTreeView()
-{
-   model->deleteLater();
-}
-

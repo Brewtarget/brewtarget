@@ -50,4 +50,3 @@ public:
 };
 
 #endif   /* _HEATCALCULATIONS_H */
-

@@ -32,7 +32,8 @@
 #include "equipment.h"
 #include "mash.h"
 
-BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent)
+BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
+   : QWidget(parent), doc(new QWebView(this))
 {
    setupUi(this);
    recObs = 0;
@@ -44,8 +45,6 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent) : QWidget(parent)
    connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
    connect( pushButton_down, SIGNAL(clicked()), this, SLOT(pushInstructionDown()) );
    connect( pushButton_generateInstructions, SIGNAL(clicked()), this, SLOT(generateInstructions()) );
-
-   doc = new QWebView();
 }
 
 void BrewDayScrollWidget::saveInstruction()

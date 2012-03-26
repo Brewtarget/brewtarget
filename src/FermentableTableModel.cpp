@@ -436,17 +436,18 @@ Fermentable* FermentableTableModel::getFermentable(unsigned int i)
 //======================CLASS FermentableItemDelegate===========================
 
 FermentableItemDelegate::FermentableItemDelegate(QObject* parent)
-        : QStyledItemDelegate(parent)
+        : QItemDelegate(parent)
 {
    //connect( this, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)), this, SLOT(destroyWidget(QWidget*, QAbstractItemDelegate::EndEditHint)) );
 }
 
+/*
 void FermentableItemDelegate::destroyWidget(QWidget* widget, QAbstractItemDelegate::EndEditHint hint)
 {
    //delete widget;
    widget->deleteLater();
 }
-
+*/
 
 QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
@@ -515,7 +516,6 @@ void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
       
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }
-   
 }
 
 void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
@@ -543,21 +543,6 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
       model->setData(index, line->text(), Qt::EditRole);
    }
 }
-
-/*
-void FermentableItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-   if( index.column() == FERMISMASHEDCOL )
-   {
-      QItemDelegate::drawCheck(painter, option, option.rect, (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt() );
-   }
-   else
-   {
-      QString str = index.model()->data(index, Qt::DisplayRole).toString();
-      QItemDelegate::drawDisplay(painter, option, option.rect, str);
-   }
-}
-*/
 
 void FermentableItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {

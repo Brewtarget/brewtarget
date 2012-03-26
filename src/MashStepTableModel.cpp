@@ -316,7 +316,7 @@ void MashStepItemDelegate::setEditorData(QWidget *editor, const QModelIndex &ind
 {
    if( index.column() == MASHSTEPTYPECOL )
    {
-      QComboBox* box = (QComboBox*)editor;
+      QComboBox* box = qobject_cast<QComboBox*>(editor);
       QString text = index.model()->data(index, Qt::DisplayRole).toString();
 
       int index = box->findText(text);
@@ -324,7 +324,7 @@ void MashStepItemDelegate::setEditorData(QWidget *editor, const QModelIndex &ind
    }
    else
    {
-      QLineEdit* line = (QLineEdit*)editor;
+      QLineEdit* line = qobject_cast<QLineEdit*>(editor);
 
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }
@@ -335,14 +335,14 @@ void MashStepItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 {
    if( index.column() == MASHSTEPTYPECOL )
    {
-      QComboBox* box = (QComboBox*)editor;
+      QComboBox* box = qobject_cast<QComboBox*>(editor);
       QString value = box->currentText();
 
       model->setData(index, value, Qt::EditRole);
    }
    else
    {
-      QLineEdit* line = (QLineEdit*)editor;
+      QLineEdit* line = qobject_cast<QLineEdit*>(editor);
 
       model->setData(index, line->text(), Qt::EditRole);
    }
@@ -352,4 +352,3 @@ void MashStepItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpt
 {
    editor->setGeometry(option.rect);
 }
-

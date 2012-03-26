@@ -39,7 +39,6 @@ class BtSplashScreen : public QSplashScreen, public Ui::btSplashScreen
 
 public:
    BtSplashScreen(QWidget* parent=0);
-   virtual ~BtSplashScreen();
    
    //! Overloaded from \b QSplashScreen
    void showMessage( const QString& message,

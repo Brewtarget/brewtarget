@@ -79,6 +79,8 @@ public:
 
    //! This should be the ONLY way you get an instance.
    static Database& instance();
+   //! Call this to delete the internal instance.
+   static void dropInstance();
 
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
@@ -100,8 +102,8 @@ public:
    inline QVariant get( Brewtarget::DBTable table, int key, const char* col_name ) __attribute__((always_inline))
    {
       QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
-                   .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
-                   sqldb );
+                   .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key)
+                 );
                    
       if( q.next() )
          return q.value(0);
@@ -345,6 +347,7 @@ signals:
    void changed(QMetaProperty prop, QVariant value);
    
 private:
+   static Database* dbInstance; // The singleton object
    QThread* _thread;
    SetterCommandStack* _setterCommandStack;
    static QFile dbFile;
@@ -379,7 +382,7 @@ private:
       BeerXMLElement* e;
       T* et;
       
-      QSqlRelationalTableModel tm(0, sqldb);
+      QSqlRelationalTableModel tm(0);//, sqldb);
       tm.setTable(tableNames[table]);
       tm.setFilter("");
       tm.select();
@@ -397,7 +400,7 @@ private:
          et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
          et->_key = key;
          et->_table = table;
-
+         
          if( ! hash.contains(key) )
             hash.insert(key,et);
       }
@@ -408,7 +411,7 @@ private:
    {
       int i, size, key;
       
-      QSqlRelationalTableModel tm(0, sqldb);
+      QSqlRelationalTableModel tm(0);//, sqldb);
       tm.setTable(tableNames[table]);
       tm.setFilter(filter);
       tm.select();
@@ -431,8 +434,6 @@ private:
     */
    void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode );
    
-   // The connection to the SQLite database.
-   QSqlDatabase sqldb;
    // Model for all the tables in the db.
    QSqlRelationalTableModel* tableModel;
    // Models set to specific tables in the db.
@@ -510,8 +511,7 @@ private:
       // Ensure this ingredient is not already in the recipe.
       QSqlQuery q(
                    QString("SELECT recipe_id from `%1` WHERE `%2`='%3' AND recipe_id='%4'")
-                   .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
-                   sqldb
+                   .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(reinterpret_cast<BeerXMLElement*>(rec)->_key)
                  );
       if( q.next() )
       {
@@ -535,7 +535,7 @@ private:
       // Any ingredient added to a recipe should not be visible for the trees?
       ing->setDisplay(false);
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
-      q = QSqlQuery( sqldb );
+      q = QSqlQuery( );//sqldb );
       q.setForwardOnly(true);
       
       q.prepare( QString("INSERT INTO `%1` (`%2`, `recipe_id`) VALUES (:ingredient, :recipe)")
@@ -578,8 +578,7 @@ private:
       QString tName = tableNames[t];
       
       QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
-                  .arg(tName).arg(keyNames[t]).arg(object->_key),
-                  sqldb
+                  .arg(tName).arg(keyNames[t]).arg(object->_key)
                  );
       
       if( !q.next() )
@@ -592,8 +591,7 @@ private:
       // Create a new row.
       newKey = insertNewDefaultRecord(t);
       q = QSqlQuery( QString("SELECT * FROM %1 WHERE %2 = %3")
-                     .arg(tName).arg(keyNames[t]).arg(newKey),
-                     sqldb
+                     .arg(tName).arg(keyNames[t]).arg(newKey)
                    );
       q.next();
       QSqlRecord newRecord = q.record();
@@ -619,7 +617,7 @@ private:
                                     .arg(newValString)
                                     .arg(keyNames[t])
                                     .arg(newKey);
-      q = QSqlQuery( sqldb );
+      q = QSqlQuery( );//sqldb );
       q.prepare(updateString);
       q.exec();
       

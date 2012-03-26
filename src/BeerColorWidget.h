@@ -41,7 +41,7 @@ class BeerColorWidget : public QWidget
 
 public:
    BeerColorWidget(QWidget* parent=0);
-   virtual ~BeerColorWidget() {}
+
    void setColor( QColor newColor );
    //! Observe \b rec for changes in color, and automatically update.
    void setRecipe( Recipe* rec );

@@ -40,4 +40,3 @@ public:
 };
 
 #endif   /* _HTMLVIEWER_H */
-

@@ -318,4 +318,3 @@ bool EquipmentEditor::eventFilter(QObject *object, QEvent* event)
    }
    return false;
 }
-

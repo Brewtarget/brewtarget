@@ -35,95 +35,10 @@ QHash<QString,QString> Instruction::tagToPropHash()
    return propHash;
 }
 
-/*
-void Instruction::setDefaults()
-{
-   name = QString("");
-   directions = QString("");
-   hasTimer = false;
-   timerValue = QString("00:00:00"); // hh:mm:ss
-   completed = false;
-   interval  = 0.0;
-}
-*/
-
 Instruction::Instruction()
    : BeerXMLElement()
 {
 }
-
-/*
-Instruction::Instruction(
-             const QString& n,
-             const QString& dir,
-             bool hasT,
-             const QString& timerVal
-             ) :
-             name(n),
-             directions(dir),
-             hasTimer(hasT),
-             timerValue(timerVal)
-{
-}
-
-Instruction::Instruction(const QDomNode& instructionNode)
-{
-   fromNode(instructionNode);
-}
-
-void Instruction::fromNode(const QDomNode& instructionNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString property, value;
-   
-   setDefaults();
-   
-   for( node = instructionNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-      
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-      
-      property = node.nodeName();
-      textNode = child.toText();
-      value = textNode.nodeValue();
-      
-      if( property == "NAME" )
-      {
-         setName(value);
-      }
-      else if( property == "DIRECTIONS" )
-      {
-         setDirections(value);
-      }
-      else if( property == "HAS_TIMER" )
-      {
-         setHasTimer(getBool(textNode));
-      }
-      else if( property == "TIMER_VALUE" )
-      {
-         setTimerValue(value);
-      }
-      else if( property == "COMPLETED" )
-      {
-         setCompleted(getBool(textNode));
-      }
-      else if ( property == "INTERVAL" )
-      {
-          setInterval(getDouble(textNode));
-      }
-      else
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported INSTRUCTION property: %1. Line %2").arg(property).arg(node.lineNumber()) );
-   }
-}
-*/
 
 // Setters ====================================================================
 void Instruction::setName(const QString& n)

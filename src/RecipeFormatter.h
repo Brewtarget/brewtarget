@@ -44,7 +44,7 @@ public:
 
    enum { PRINT, PREVIEW, HTML, NUMACTIONS };
    
-   RecipeFormatter();
+   RecipeFormatter(QObject* parent=0);
    ~RecipeFormatter();
    //! Set the recipe to view.
    void setRecipe(Recipe* recipe);

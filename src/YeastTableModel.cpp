@@ -411,14 +411,14 @@ void YeastItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
 
    if( col == YEASTTYPECOL || col == YEASTFORMCOL )
    {
-      QComboBox* box = (QComboBox*)editor;
+      QComboBox* box = qobject_cast<QComboBox*>(editor);
       int ndx = index.model()->data(index, Qt::UserRole).toInt();
 
       box->setCurrentIndex(ndx);
    }
    else
    {
-      QLineEdit* line = (QLineEdit*)editor;
+      QLineEdit* line = qobject_cast<QLineEdit*>(editor);
 
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }

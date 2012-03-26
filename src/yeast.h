@@ -17,7 +17,7 @@
  */
 
 #ifndef _YEAST_H
-#define   _YEAST_H
+#define _YEAST_H
 
 #include "BeerXMLElement.h"
 #include <QDomNode>

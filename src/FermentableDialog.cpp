@@ -101,30 +101,6 @@ void FermentableDialog::editSelected()
    fermEdit->show();
 }
 
-/*
-void FermentableDialog::changed(QMetaProperty prop, QVariant val)
-{
-   // Notifier should only be the database.
-   if( sender() == &(Database::instance()) &&
-       QString(prop.name()) == "fermentables" )
-   {
-      fermTableModel->removeAll();
-      populateTable();
-   }
-}
-
-void FermentableDialog::populateTable()
-{
-   QList<Fermentable*> ferms;
-   Database::instance().getFermentables(ferms);
-
-   numFerms = ferms.size();
-   int i;
-   for( i = 0; i < numFerms; ++i )
-      fermTableModel->addFermentable(ferms[i]);
-}
-*/
-
 void FermentableDialog::addFermentable(const QModelIndex& index)
 {
    QModelIndex translated;

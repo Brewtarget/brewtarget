@@ -67,7 +67,7 @@ public:
    };
    BrewTargetTreeModel(BrewTargetTreeView *parent = 0, TypeMasks type = ALLMASK);
    virtual ~BrewTargetTreeModel();
-
+   
    // Methods required for read-only stuff
    QVariant data(const QModelIndex &index, int role) const;
    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;

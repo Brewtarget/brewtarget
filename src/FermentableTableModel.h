@@ -28,7 +28,7 @@ class FermentableItemDelegate;
 #include <QModelIndex>
 #include <QVariant>
 #include <QMetaProperty>
-#include <QStyledItemDelegate>
+#include <QItemDelegate>
 #include <QAbstractItemDelegate>
 #include <QList>
 
@@ -93,25 +93,26 @@ private:
    double totalFermMass_kg;
 };
 
-class FermentableItemDelegate : public QStyledItemDelegate
+//class FermentableItemDelegate : public QStyledItemDelegate
+class FermentableItemDelegate : public QItemDelegate
 {
    Q_OBJECT
            
 public:
    FermentableItemDelegate(QObject* parent = 0);
    
-   //! Reimplemented from QStyledItemDelegate.
+   //! Reimplemented from QItemDelegate.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   //! Reimplemented from QStyledItemDelegate.
+   //! Reimplemented from QItemDelegate.
    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-   //! Reimplemented from QStyledItemDelegate.
+   //! Reimplemented from QItemDelegate.
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-   //! Reimplemented from QStyledItemDelegate.
+   //! Reimplemented from QItemDelegate.
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    //virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
    
-public slots:
-   void destroyWidget(QWidget* widget, QAbstractItemDelegate::EndEditHint hint);
+//public slots:
+//   void destroyWidget(QWidget* widget, QAbstractItemDelegate::EndEditHint hint);
 private:
 };
 

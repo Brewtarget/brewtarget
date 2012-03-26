@@ -61,4 +61,3 @@ private:
 };
 
 #endif   /* _HOPEDITOR_H */
-

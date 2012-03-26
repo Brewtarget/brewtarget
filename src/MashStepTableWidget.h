@@ -50,4 +50,3 @@ private:
 };
 
 #endif   /* _MASHSTEPTABLEWIDGET_H */
-

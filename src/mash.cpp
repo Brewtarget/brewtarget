@@ -54,108 +54,10 @@ bool operator==(Mash &m1, Mash &m2)
    return m1.name() == m2.name();
 }
 
-/*
-void Mash::setDefaults()
-{
-   name = "";
-   grainTemp_c = 21.0;
-   mashSteps = QVector<MashStep *>();
-   notes = "";
-   tunTemp_c = 21.0;
-   spargeTemp_c = 74.0; // 74C is recommended in John Palmer's How to Brew.
-   ph = 7.0;
-   tunWeight_kg = 0.0;
-   tunSpecificHeat_calGC = 0.0;
-   equipAdjust = true;
-}
-*/
-
 Mash::Mash()
    : BeerXMLElement()
 {
 }
-
-/*
-void Mash::fromNode(const QDomNode& mashNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString property, value;
-   
-   setDefaults();
-   
-   for( node = mashNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-      
-      child = node.firstChild();
-      if( child.isNull() )
-         continue;
-      
-      property = node.nodeName();
-      if( child.isText() )
-         textNode = child.toText();
-      value = textNode.nodeValue();
-      
-      if( property == "NAME" )
-      {
-         name = value;
-      }
-      else if( property == "VERSION" )
-      {
-         if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("YEAST says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
-      }
-      else if( property == "GRAIN_TEMP" )
-      {
-         setGrainTemp_c(getDouble(textNode));
-      }
-      else if( property == "MASH_STEPS" )
-      {
-         QDomNode step;
-         
-         for( step = child; ! step.isNull(); step = step.nextSibling() )
-            addMashStep(new MashStep(step));
-      }
-      else if( property == "NOTES" )
-      {
-         setNotes(value);
-      }
-      else if( property == "TUN_TEMP" )
-      {
-         setTunTemp_c(getDouble(textNode));
-      }
-      else if( property == "SPARGE_TEMP" )
-      {
-         setSpargeTemp_c(getDouble(textNode));
-      }
-      else if( property == "PH" )
-      {
-         setPh(getDouble(textNode));
-      }
-      else if( property == "TUN_WEIGHT" )
-      {
-         setTunWeight_kg(getDouble(textNode));
-      }
-      else if( property == "TUN_SPECIFIC_HEAT" )
-      {
-         setTunSpecificHeat_calGC(getDouble(textNode));
-      }
-      else if( property == "EQUIP_ADJUST" )
-      {
-         setEquipAdjust(getBool(textNode));
-      }
-      else
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported MASH property: %1. Line %2").arg(property).arg(node.lineNumber()) );
-      }
-   }
-}
-*/
 
 void Mash::setName( const QString& var )
 {

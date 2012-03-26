@@ -42,39 +42,4 @@ public:
    virtual void paintEvent(QPaintEvent*);
 };
 
-/*
-class CustomComboBox : public QPushButton
-{
-   Q_OBJECT
-   
-public:
-   CustomComboBox(QWidget* parent = 0);
-   virtual ~CustomComboBox(){};
-   
-   void setModel( QAbstractItemModel* model );
-   int currentIndex();
-   
-   virtual void paintEvent(QPaintEvent*);
-signals:
-   //! Emitted when something is selected in the list.
-   void activated(int index);
-   //! Emitted when something is selected in the list.
-   void activated(QString const& currentText);
-   
-public slots:
-   
-private slots:
-   void handleToggle(bool);
-   void handleRowChanged(int);
-   void handleTextChanged(QString const&);
-
-private:
-   QListView* listView;
-   QFrame* listFrame;
-   QDesktopWidget* desktop;
-   
-   QRect computeListRect();
-};
-*/
-
 #endif /*_CUSTOMCOMBOBOX_H*/

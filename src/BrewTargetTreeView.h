@@ -49,7 +49,6 @@ class BrewTargetTreeView : public QTreeView
    Q_OBJECT
 public:
    BrewTargetTreeView(QWidget *parent = 0);
-   virtual ~BrewTargetTreeView();
    BrewTargetTreeModel* getModel();
    QMenu* getContextMenu(QModelIndex selected);
 
@@ -120,8 +119,6 @@ class RecipeTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    RecipeTreeView(QWidget *parent = 0);
-   virtual ~RecipeTreeView();
-
 };
 
 // EquipmentTreeView only shows equipment. I think you can see where this is headed?
@@ -130,7 +127,6 @@ class EquipmentTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    EquipmentTreeView(QWidget *parent = 0);
-   virtual ~EquipmentTreeView();
 };
 
 class FermentableTreeView : public BrewTargetTreeView
@@ -138,7 +134,6 @@ class FermentableTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    FermentableTreeView(QWidget *parent = 0);
-   virtual ~FermentableTreeView();
 };
 
 class HopTreeView : public BrewTargetTreeView
@@ -146,7 +141,6 @@ class HopTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    HopTreeView(QWidget *parent = 0);
-   virtual ~HopTreeView();
 };
 
 class MiscTreeView : public BrewTargetTreeView
@@ -154,7 +148,6 @@ class MiscTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    MiscTreeView(QWidget *parent = 0);
-   virtual ~MiscTreeView();
 };
 
 class YeastTreeView : public BrewTargetTreeView
@@ -162,7 +155,6 @@ class YeastTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    YeastTreeView(QWidget *parent = 0);
-   virtual ~YeastTreeView();
 };
 
 #endif /* BREWTARGETTREEVIEW_H_ */

@@ -23,10 +23,6 @@ BtSplashScreen::BtSplashScreen(QWidget* parent) : QSplashScreen(parent)
    setupUi(this);
 }
 
-BtSplashScreen::~BtSplashScreen()
-{
-}
-
 void BtSplashScreen::showMessage( const QString& message,
                   int alignment,
                   const QColor& color )

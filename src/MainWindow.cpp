@@ -158,9 +158,9 @@ MainWindow::MainWindow(QWidget* parent)
    optionDialog = new OptionDialog(this);
    htmlViewer = new HtmlViewer(this);
    recipeScaler = new ScaleRecipeTool(this);
-   recipeFormatter = new RecipeFormatter();
-   ogAdjuster = new OgAdjuster();
-   converterTool = new ConverterTool();
+   recipeFormatter = new RecipeFormatter(this);
+   ogAdjuster = new OgAdjuster(this);
+   converterTool = new ConverterTool(this);
    timerListDialog = new TimerListDialog(this);
    mashComboBox = new MashComboBox(this);
    primingDialog = new PrimingDialog(this);
@@ -962,6 +962,7 @@ void MainWindow::exportRecipe()
    out << doc.toString().toLatin1();
    
    outFile->close();
+   delete outFile;
 }
 
 Recipe* MainWindow::currentRecipe()
@@ -1543,6 +1544,7 @@ void MainWindow::print()
          return;
       selection == actionRecipeHTML ? recipeFormatter->print(printer, 0, RecipeFormatter::HTML, outfile) : 
                                       brewDayScrollWidget->print(printer, 0, BrewDayScrollWidget::HTML, outfile);
+      delete outfile;
    }
 }
 
@@ -1647,7 +1649,7 @@ void MainWindow::contextMenu(const QPoint &point)
 // tree-specific pieces into the treeview objects.
 void MainWindow::setupContextMenu()
 {
-   QMenu *sMenu = new QMenu();
+   QMenu *sMenu = new QMenu(this);
 
    // Set up the "new" submenu
    sMenu->setTitle(tr("New"));
@@ -1908,6 +1910,7 @@ void MainWindow::exportSelected()
    out << doc.toString();
    
    outFile->close();
+   delete outFile;
 }
 
 void MainWindow::mergeDatabases()
