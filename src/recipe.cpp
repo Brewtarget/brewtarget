@@ -1454,6 +1454,11 @@ void Recipe::recalcAll(bool asynch)
    }
    else
    {
+      // Prevent this recipe from emitting signals during this process to avoid
+      // infinite recursion, since these methods will emit changed(), causing
+      // other objects to call finalVolume_l() for example, which will cause
+      // another call to recalcAll() and so on.
+      blockSignals(true);
       recalcGrainsInMash_kg();
       recalcGrains_kg();
       recalcVolumeEstimates();
@@ -1465,6 +1470,7 @@ void Recipe::recalcAll(bool asynch)
       recalcIBU();
    }
    _uninitializedCalcs = false;
+   blockSignals(false);
 }
 
 void Recipe::recalcPoints(double volume)

@@ -127,113 +127,113 @@
 <context>
     <name>BrewDayWidget</name>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="137"/>
+        <location filename="../src/BrewDayWidget.cpp" line="139"/>
         <source>Style</source>
         <translation>Stijl</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="140"/>
+        <location filename="../src/BrewDayWidget.cpp" line="142"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="145"/>
+        <location filename="../src/BrewDayWidget.cpp" line="147"/>
         <source>Boil Volume</source>
         <translation>Kook Volume</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="147"/>
+        <location filename="../src/BrewDayWidget.cpp" line="149"/>
         <source>Preboil Gravity</source>
         <translation>SG voor het koken</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="151"/>
+        <location filename="../src/BrewDayWidget.cpp" line="153"/>
         <source>Final Volume</source>
         <translation>eind Volume</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="153"/>
+        <location filename="../src/BrewDayWidget.cpp" line="155"/>
         <source>Starting Gravity</source>
         <translation>begin SG</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="157"/>
+        <location filename="../src/BrewDayWidget.cpp" line="159"/>
         <source>Boil Time</source>
         <translation>Kook Tijd</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="159"/>
+        <location filename="../src/BrewDayWidget.cpp" line="161"/>
         <source>IBU</source>
         <translation>IBU</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="163"/>
+        <location filename="../src/BrewDayWidget.cpp" line="165"/>
         <source>Predicted Efficiency</source>
         <translation>Voorspeld rendement</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="165"/>
+        <location filename="../src/BrewDayWidget.cpp" line="167"/>
         <source>Estimated calories (per 12 oz)</source>
         <translation>Geschat aantal calorieën (per 340 g)</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="179"/>
+        <location filename="../src/BrewDayWidget.cpp" line="181"/>
         <source>Instructions</source>
         <translation>Instructies</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="182"/>
+        <location filename="../src/BrewDayWidget.cpp" line="184"/>
         <source>Completed</source>
         <translation>Gereed</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="183"/>
+        <location filename="../src/BrewDayWidget.cpp" line="185"/>
         <source>Time</source>
         <translation>Tijd</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="184"/>
+        <location filename="../src/BrewDayWidget.cpp" line="186"/>
         <source>Step</source>
         <translation>Stap</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="232"/>
+        <location filename="../src/BrewDayWidget.cpp" line="234"/>
         <source>Actual Pre-boil Volume:</source>
         <translation>Actueel Volume voor het koken:</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="233"/>
+        <location filename="../src/BrewDayWidget.cpp" line="235"/>
         <source>Actual Pre-boil Gravity:</source>
         <translation>Actueel SG voor het koken:</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="236"/>
+        <location filename="../src/BrewDayWidget.cpp" line="238"/>
         <source>Post-boil Volume:</source>
         <translation>Volume voor het koken:</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="237"/>
+        <location filename="../src/BrewDayWidget.cpp" line="239"/>
         <source>Post-boil Gravity:</source>
         <translation>SG voor het koken:</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="240"/>
+        <location filename="../src/BrewDayWidget.cpp" line="242"/>
         <source>Volume in fermenter:</source>
         <translation>Volume in het vergistingsvat:</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="261"/>
+        <location filename="../src/BrewDayWidget.cpp" line="263"/>
         <source>Print Document</source>
         <translation>Print Document</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="273"/>
-        <location filename="../src/BrewDayWidget.cpp" line="291"/>
+        <location filename="../src/BrewDayWidget.cpp" line="275"/>
+        <location filename="../src/BrewDayWidget.cpp" line="293"/>
         <source>Notes</source>
         <translation>Aantekeningen</translation>
     </message>
     <message>
-        <location filename="../src/BrewDayWidget.cpp" line="392"/>
+        <location filename="../src/BrewDayWidget.cpp" line="394"/>
         <source>Step %1: %2</source>
         <translation>Stap %1: %2</translation>
     </message>
@@ -241,51 +241,51 @@
 <context>
     <name>BrewTargetTreeModel</name>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="284"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="300"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="314"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="330"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="346"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="362"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="285"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="301"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="315"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="331"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="347"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="363"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="286"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="364"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="287"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="365"/>
         <source>Brew Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="288"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="289"/>
         <source>Style</source>
         <translation>Stijl</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="302"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="303"/>
         <source>Boil Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="316"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="317"/>
         <source>Color</source>
         <translation type="unfinished">Kleur</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="318"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="332"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="348"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="319"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="333"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="349"/>
         <source>Type</source>
         <translation type="unfinished">Type</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="334"/>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="350"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="335"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="351"/>
         <source>Use</source>
         <translation type="unfinished">Gebruik</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="366"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="367"/>
         <source>Form</source>
         <translation type="unfinished">Vorm</translation>
     </message>
@@ -293,63 +293,63 @@
 <context>
     <name>BrewTargetTreeView</name>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="286"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="281"/>
         <source>New Recipe</source>
         <translation type="unfinished">Nieuw Recept</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="287"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="282"/>
         <source>Brew It!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="290"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="285"/>
         <source>Brew Again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="291"/>
-        <location filename="../src/BrewTargetTreeView.cpp" line="320"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="286"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="315"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="295"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="290"/>
         <source>New Equipment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="299"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="294"/>
         <source>New Fermentable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="303"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="298"/>
         <source>New Hop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="307"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="302"/>
         <source>New Misc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="311"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="306"/>
         <source>New Yeast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="318"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="313"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="323"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="318"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeView.cpp" line="324"/>
+        <location filename="../src/BrewTargetTreeView.cpp" line="319"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
@@ -357,17 +357,17 @@
 <context>
     <name>BtDigitWidget</name>
     <message>
-        <location filename="../src/BtDigitWidget.cpp" line="65"/>
+        <location filename="../src/BtDigitWidget.cpp" line="61"/>
         <source>Too low for style.</source>
         <translation>Te laag voor deze stijl</translation>
     </message>
     <message>
-        <location filename="../src/BtDigitWidget.cpp" line="70"/>
+        <location filename="../src/BtDigitWidget.cpp" line="66"/>
         <source>In range for style.</source>
         <translation>Conform stijl</translation>
     </message>
     <message>
-        <location filename="../src/BtDigitWidget.cpp" line="79"/>
+        <location filename="../src/BtDigitWidget.cpp" line="75"/>
         <source>Too high for style.</source>
         <translation>Te hoog voor deze stijl</translation>
     </message>
@@ -375,38 +375,38 @@
 <context>
     <name>EquipmentEditor</name>
     <message>
-        <location filename="../src/EquipmentEditor.cpp" line="53"/>
-        <location filename="../src/EquipmentEditor.cpp" line="219"/>
+        <location filename="../src/EquipmentEditor.cpp" line="54"/>
+        <location filename="../src/EquipmentEditor.cpp" line="220"/>
         <source>Grain absorption (%1/%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/EquipmentEditor.cpp" line="158"/>
+        <location filename="../src/EquipmentEditor.cpp" line="159"/>
         <source>Tun Volume Warning</source>
         <translation>Vat Volume Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../src/EquipmentEditor.cpp" line="158"/>
+        <location filename="../src/EquipmentEditor.cpp" line="159"/>
         <source>The tun volume you entered is 0. This may cause problems.</source>
         <translation>Het ingevoerde vat volume is 0. Dit kan problemen veroorzaken.</translation>
     </message>
     <message>
-        <location filename="../src/EquipmentEditor.cpp" line="160"/>
+        <location filename="../src/EquipmentEditor.cpp" line="161"/>
         <source>Batch Size Warning</source>
         <translation>Batch Grootte Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../src/EquipmentEditor.cpp" line="160"/>
+        <location filename="../src/EquipmentEditor.cpp" line="161"/>
         <source>The batch size you entered is 0. This may cause problems.</source>
         <translation>De ingevoerde batch grootte is 0. Dit kan prolemen veroorzaken.</translation>
     </message>
     <message>
-        <location filename="../src/EquipmentEditor.cpp" line="168"/>
+        <location filename="../src/EquipmentEditor.cpp" line="169"/>
         <source>Equipment name</source>
         <translation>Apparatuur naam</translation>
     </message>
     <message>
-        <location filename="../src/EquipmentEditor.cpp" line="169"/>
+        <location filename="../src/EquipmentEditor.cpp" line="170"/>
         <source>Equipment name:</source>
         <translation>Apparatuur naam:</translation>
     </message>
@@ -414,12 +414,12 @@
 <context>
     <name>FermentableDialog</name>
     <message>
-        <location filename="../src/FermentableDialog.cpp" line="170"/>
+        <location filename="../src/FermentableDialog.cpp" line="146"/>
         <source>Fermentable name</source>
         <translation>naam vergistbare</translation>
     </message>
     <message>
-        <location filename="../src/FermentableDialog.cpp" line="171"/>
+        <location filename="../src/FermentableDialog.cpp" line="147"/>
         <source>Fermentable name:</source>
         <translation>naam vergistbare:</translation>
     </message>
@@ -427,27 +427,27 @@
 <context>
     <name>FermentableItemDelegate</name>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="453"/>
+        <location filename="../src/FermentableTableModel.cpp" line="458"/>
         <source>Grain</source>
         <translation>Graan</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="454"/>
+        <location filename="../src/FermentableTableModel.cpp" line="459"/>
         <source>Sugar</source>
         <translation>Suiker</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="455"/>
+        <location filename="../src/FermentableTableModel.cpp" line="460"/>
         <source>Extract</source>
         <translation>Extract</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="456"/>
+        <location filename="../src/FermentableTableModel.cpp" line="461"/>
         <source>Dry Extract</source>
         <translation>Droog Extract</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="457"/>
+        <location filename="../src/FermentableTableModel.cpp" line="462"/>
         <source>Adjunct</source>
         <translation>Aanvulling</translation>
     </message>
@@ -455,76 +455,76 @@
 <context>
     <name>FermentableTableModel</name>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="238"/>
+        <location filename="../src/FermentableTableModel.cpp" line="241"/>
         <source>Bad model index. row = %1</source>
         <translation>Bad model index. row = %1</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="269"/>
-        <location filename="../src/FermentableTableModel.cpp" line="271"/>
-        <location filename="../src/FermentableTableModel.cpp" line="311"/>
+        <location filename="../src/FermentableTableModel.cpp" line="272"/>
+        <location filename="../src/FermentableTableModel.cpp" line="274"/>
+        <location filename="../src/FermentableTableModel.cpp" line="314"/>
         <source>Mashed</source>
         <translation>Gemaischd</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="269"/>
+        <location filename="../src/FermentableTableModel.cpp" line="272"/>
         <source>Steeped</source>
         <translation>Geweekt</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="271"/>
+        <location filename="../src/FermentableTableModel.cpp" line="274"/>
         <source>Not mashed</source>
         <translation>Niet gemaischd</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="279"/>
+        <location filename="../src/FermentableTableModel.cpp" line="282"/>
         <source>Late</source>
         <translation>Laat</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="279"/>
+        <location filename="../src/FermentableTableModel.cpp" line="282"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="293"/>
-        <location filename="../src/FermentableTableModel.cpp" line="322"/>
-        <location filename="../src/FermentableTableModel.cpp" line="423"/>
+        <location filename="../src/FermentableTableModel.cpp" line="296"/>
+        <location filename="../src/FermentableTableModel.cpp" line="325"/>
+        <location filename="../src/FermentableTableModel.cpp" line="426"/>
         <source>Bad column: %1</source>
         <translation>Foute kolom: %1</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="305"/>
+        <location filename="../src/FermentableTableModel.cpp" line="308"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="307"/>
+        <location filename="../src/FermentableTableModel.cpp" line="310"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="309"/>
+        <location filename="../src/FermentableTableModel.cpp" line="312"/>
         <source>Amount</source>
         <translation>Hoeveelheid</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="313"/>
+        <location filename="../src/FermentableTableModel.cpp" line="316"/>
         <source>Late Addition</source>
         <translation>Late toevoeging</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="315"/>
+        <location filename="../src/FermentableTableModel.cpp" line="318"/>
         <source>Yield %</source>
         <translation>Rendement %</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="318"/>
+        <location filename="../src/FermentableTableModel.cpp" line="321"/>
         <source>Color (SRM)</source>
         <translation>Kleur (SRM)</translation>
     </message>
     <message>
-        <location filename="../src/FermentableTableModel.cpp" line="320"/>
+        <location filename="../src/FermentableTableModel.cpp" line="323"/>
         <source>Color (EBC)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -532,53 +532,53 @@
 <context>
     <name>Hop</name>
     <message>
-        <location filename="../src/hop.cpp" line="406"/>
+        <location filename="../src/hop.cpp" line="297"/>
         <source>Mash</source>
         <translation type="unfinished">Maisch</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="406"/>
+        <location filename="../src/hop.cpp" line="297"/>
         <source>First Wort</source>
         <translation type="unfinished">Eerste Wort</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="406"/>
+        <location filename="../src/hop.cpp" line="297"/>
         <source>Boil</source>
         <translation type="unfinished">Koken</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="406"/>
-        <location filename="../src/hop.cpp" line="432"/>
+        <location filename="../src/hop.cpp" line="297"/>
+        <location filename="../src/hop.cpp" line="323"/>
         <source>Aroma</source>
         <translation type="unfinished">Aroma</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="406"/>
+        <location filename="../src/hop.cpp" line="297"/>
         <source>Dry Hop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="432"/>
+        <location filename="../src/hop.cpp" line="323"/>
         <source>Bittering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="432"/>
+        <location filename="../src/hop.cpp" line="323"/>
         <source>Both</source>
         <translation type="unfinished">Beide</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="448"/>
+        <location filename="../src/hop.cpp" line="339"/>
         <source>Leaf</source>
         <translation type="unfinished">Blad</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="448"/>
+        <location filename="../src/hop.cpp" line="339"/>
         <source>Pellet</source>
         <translation type="unfinished">Pellet</translation>
     </message>
     <message>
-        <location filename="../src/hop.cpp" line="448"/>
+        <location filename="../src/hop.cpp" line="339"/>
         <source>Plug</source>
         <translation type="unfinished">Geperste hop</translation>
     </message>
@@ -599,42 +599,42 @@
 <context>
     <name>HopItemDelegate</name>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="414"/>
+        <location filename="../src/HopTableModel.cpp" line="417"/>
         <source>Boil</source>
         <translation>Koken</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="412"/>
+        <location filename="../src/HopTableModel.cpp" line="415"/>
         <source>Dry Hop</source>
         <translation>Dry Hop</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="413"/>
+        <location filename="../src/HopTableModel.cpp" line="416"/>
         <source>Mash</source>
         <translation>Maisch</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="416"/>
+        <location filename="../src/HopTableModel.cpp" line="419"/>
         <source>First Wort</source>
         <translation>Eerste Wort</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="415"/>
+        <location filename="../src/HopTableModel.cpp" line="418"/>
         <source>Aroma</source>
         <translation>Aroma</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="425"/>
+        <location filename="../src/HopTableModel.cpp" line="428"/>
         <source>Leaf</source>
         <translation>Blad</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="426"/>
+        <location filename="../src/HopTableModel.cpp" line="429"/>
         <source>Pellet</source>
         <translation>Pellet</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="427"/>
+        <location filename="../src/HopTableModel.cpp" line="430"/>
         <source>Plug</source>
         <translation>Geperste hop</translation>
     </message>
@@ -650,32 +650,32 @@
         <translation type="obsolete">HopTableModel::data Bad column: %1</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="277"/>
+        <location filename="../src/HopTableModel.cpp" line="278"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="279"/>
+        <location filename="../src/HopTableModel.cpp" line="280"/>
         <source>Alpha %</source>
         <translation>Alpha %</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="281"/>
+        <location filename="../src/HopTableModel.cpp" line="282"/>
         <source>Amount</source>
         <translation>Hoeveelheid</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="283"/>
+        <location filename="../src/HopTableModel.cpp" line="284"/>
         <source>Use</source>
         <translation>Gebruik</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="285"/>
+        <location filename="../src/HopTableModel.cpp" line="286"/>
         <source>Time</source>
         <translation>Tijd</translation>
     </message>
     <message>
-        <location filename="../src/HopTableModel.cpp" line="287"/>
+        <location filename="../src/HopTableModel.cpp" line="288"/>
         <source>Form</source>
         <translation>Vorm</translation>
     </message>
@@ -687,18 +687,18 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="216"/>
+        <location filename="../src/MainWindow.cpp" line="233"/>
         <source>Open</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="216"/>
-        <location filename="../src/MainWindow.cpp" line="222"/>
+        <location filename="../src/MainWindow.cpp" line="233"/>
+        <location filename="../src/MainWindow.cpp" line="239"/>
         <source>BeerXML files (*.xml)</source>
         <translation>BeerXML bestanden (*.xml)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="222"/>
+        <location filename="../src/MainWindow.cpp" line="239"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
@@ -747,29 +747,29 @@
         <translation type="obsolete">Timers</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="780"/>
+        <location filename="../src/MainWindow.cpp" line="799"/>
         <source>Sure about that?</source>
         <translation>Weet u het zeker?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="781"/>
+        <location filename="../src/MainWindow.cpp" line="800"/>
         <source>You are about to obliterate the recipe. Is that ok?</source>
         <translation>U staat op het punt om het recept te schonen. OK?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="823"/>
-        <location filename="../src/MainWindow.cpp" line="852"/>
+        <location filename="../src/MainWindow.cpp" line="842"/>
+        <location filename="../src/MainWindow.cpp" line="871"/>
         <source>Equipment request</source>
         <translation>Apparatuur verzoek</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="824"/>
-        <location filename="../src/MainWindow.cpp" line="853"/>
+        <location filename="../src/MainWindow.cpp" line="843"/>
+        <location filename="../src/MainWindow.cpp" line="872"/>
         <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
         <translation>Wilt u de batch grootte en het kook volume zetten op de waarde behorende bij de apparatuur?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1521"/>
+        <location filename="../src/MainWindow.cpp" line="1541"/>
         <source>HTML files (*.html)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -778,77 +778,77 @@
         <translation type="obsolete">Nieuw Recept</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1633"/>
+        <location filename="../src/MainWindow.cpp" line="1655"/>
         <source>New</source>
         <translation>Nieuw</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1634"/>
+        <location filename="../src/MainWindow.cpp" line="1656"/>
         <source>Recipe</source>
         <translation>Recept</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1635"/>
+        <location filename="../src/MainWindow.cpp" line="1657"/>
         <source>Equipment</source>
         <translation>Apparatuur</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1636"/>
+        <location filename="../src/MainWindow.cpp" line="1658"/>
         <source>Fermentable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1637"/>
+        <location filename="../src/MainWindow.cpp" line="1659"/>
         <source>Hop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1638"/>
+        <location filename="../src/MainWindow.cpp" line="1660"/>
         <source>Miscellaneous</source>
         <translation>Diversen</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1639"/>
+        <location filename="../src/MainWindow.cpp" line="1661"/>
         <source>Yeast</source>
         <translation>Gist</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1653"/>
+        <location filename="../src/MainWindow.cpp" line="1675"/>
         <source>Copy %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1653"/>
-        <location filename="../src/MainWindow.cpp" line="1664"/>
         <location filename="../src/MainWindow.cpp" line="1675"/>
         <location filename="../src/MainWindow.cpp" line="1686"/>
         <location filename="../src/MainWindow.cpp" line="1697"/>
         <location filename="../src/MainWindow.cpp" line="1708"/>
+        <location filename="../src/MainWindow.cpp" line="1719"/>
+        <location filename="../src/MainWindow.cpp" line="1730"/>
         <source>Enter a unique name for the copy of %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1664"/>
+        <location filename="../src/MainWindow.cpp" line="1686"/>
         <source>Copy Equipment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1675"/>
+        <location filename="../src/MainWindow.cpp" line="1697"/>
         <source>Copy Fermentable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1686"/>
+        <location filename="../src/MainWindow.cpp" line="1708"/>
         <source>Copy Hop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1697"/>
+        <location filename="../src/MainWindow.cpp" line="1719"/>
         <source>Copy Miscellaneous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1708"/>
+        <location filename="../src/MainWindow.cpp" line="1730"/>
         <source>Copy Yeast</source>
         <translation type="unfinished"></translation>
     </message>
@@ -857,59 +857,59 @@
         <translation type="obsolete">Kon %1 niet openen om te schrijven.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1138"/>
+        <location filename="../src/MainWindow.cpp" line="1158"/>
         <source>Recipe name</source>
         <translation>Recept naam</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="543"/>
+        <location filename="../src/MainWindow.cpp" line="560"/>
         <source>MainWindow::treeActivated Unknown type %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1139"/>
+        <location filename="../src/MainWindow.cpp" line="1159"/>
         <source>Recipe name:</source>
         <translation>Recept naam:</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1226"/>
+        <location filename="../src/MainWindow.cpp" line="1246"/>
         <source>Backup Database</source>
         <translation>Backup Database</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1231"/>
-        <location filename="../src/MainWindow.cpp" line="1249"/>
-        <location filename="../src/MainWindow.cpp" line="1485"/>
+        <location filename="../src/MainWindow.cpp" line="1251"/>
+        <location filename="../src/MainWindow.cpp" line="1269"/>
+        <location filename="../src/MainWindow.cpp" line="1505"/>
         <source>Oops!</source>
         <translation>Oeps!</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1231"/>
+        <location filename="../src/MainWindow.cpp" line="1251"/>
         <source>Could not copy the files for some reason.</source>
         <translation>Kon de bestanden om de een of andere reden niet copiërenKon de bestanden om de een of andere reden niet copiëren.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1236"/>
+        <location filename="../src/MainWindow.cpp" line="1256"/>
         <source>A Warning</source>
         <translation>Een waarschuwing</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1237"/>
+        <location filename="../src/MainWindow.cpp" line="1257"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Dit schoont uw huidige set recepten en ingrediënten. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1244"/>
+        <location filename="../src/MainWindow.cpp" line="1264"/>
         <source>Restore Database</source>
         <translation>Herstellen Database</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1249"/>
+        <location filename="../src/MainWindow.cpp" line="1269"/>
         <source>For some reason, the operation failed.</source>
         <translation>De opratie faalde om de een of andere reden.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1810"/>
+        <location filename="../src/MainWindow.cpp" line="1832"/>
         <source>MainWindow::openForWrite Could not open %1 for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -930,27 +930,27 @@
         <translation type="obsolete">Recept importeren?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1264"/>
+        <location filename="../src/MainWindow.cpp" line="1284"/>
         <source>Import %1?</source>
         <translation>%1 importeren?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1273"/>
+        <location filename="../src/MainWindow.cpp" line="1293"/>
         <source>Delete %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1273"/>
+        <location filename="../src/MainWindow.cpp" line="1293"/>
         <source>Delete %1 %2?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1289"/>
+        <location filename="../src/MainWindow.cpp" line="1309"/>
         <source>No mash</source>
         <translation>Geen maisch</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1289"/>
+        <location filename="../src/MainWindow.cpp" line="1309"/>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
         <translation>Poging om een maisch stap toe te voegen zonder maisch. Maak a.u.b. eerst een maisch aan.</translation>
     </message>
@@ -963,17 +963,17 @@
         <translation type="obsolete">Wilt u uw wijzigingen opslaan? Zo niet, verliest u alle wijzigingen in deze sessie.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1453"/>
+        <location filename="../src/MainWindow.cpp" line="1473"/>
         <source>Copy Recipe</source>
         <translation>Copiëer Recept</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1453"/>
+        <location filename="../src/MainWindow.cpp" line="1473"/>
         <source>Enter a unique name for the copy.</source>
         <translation>Geef een unieke naam voor de copie.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1485"/>
+        <location filename="../src/MainWindow.cpp" line="1505"/>
         <source>Please give your mash a name before saving.</source>
         <translation>Geef uw maisch een naam a.u.b. voor het opslaan.</translation>
     </message>
@@ -1019,42 +1019,42 @@
 <context>
     <name>MashDesigner</name>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="83"/>
+        <location filename="../src/MashDesigner.cpp" line="84"/>
         <source>No Fermentables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="84"/>
+        <location filename="../src/MashDesigner.cpp" line="85"/>
         <source>Your recipe must have fermentables to design a mash.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="272"/>
+        <location filename="../src/MashDesigner.cpp" line="273"/>
         <source>No Equipment</source>
         <translation>Geen apparatuur</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="272"/>
+        <location filename="../src/MashDesigner.cpp" line="273"/>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
         <translation>U hebt geen apparatuur opgegeven voor dit recept. Zonder apparatuur kunnen we niet doorgaan.</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="282"/>
+        <location filename="../src/MashDesigner.cpp" line="283"/>
         <source>Tun Temp</source>
         <translation>Vat Temperatuur</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="283"/>
+        <location filename="../src/MashDesigner.cpp" line="284"/>
         <source>Enter the temperature of the tun before your first infusion.</source>
         <translation>Voer de temperatuur van het vat in voorafgaande aan uw eerste infusie</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="519"/>
+        <location filename="../src/MashDesigner.cpp" line="520"/>
         <source>Decoction error</source>
         <translation>Decoctie fout</translation>
     </message>
     <message>
-        <location filename="../src/MashDesigner.cpp" line="519"/>
+        <location filename="../src/MashDesigner.cpp" line="520"/>
         <source>The first mash step cannot be a decoction.</source>
         <translation>De eerste maisch stap kan geen decoctie zijn.</translation>
     </message>
@@ -1062,42 +1062,42 @@
 <context>
     <name>MashStepTableModel</name>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="130"/>
+        <location filename="../src/MashStepTableModel.cpp" line="131"/>
         <source>Bad model index. row = %1</source>
         <translation>Bad model index. row = %1</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="159"/>
+        <location filename="../src/MashStepTableModel.cpp" line="160"/>
         <source>Bad column: %1</source>
         <translation>Bad column: %1</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="171"/>
+        <location filename="../src/MashStepTableModel.cpp" line="172"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="173"/>
+        <location filename="../src/MashStepTableModel.cpp" line="174"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="175"/>
+        <location filename="../src/MashStepTableModel.cpp" line="176"/>
         <source>Amount</source>
         <translation>Hoeveelheid</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="177"/>
+        <location filename="../src/MashStepTableModel.cpp" line="178"/>
         <source>Infusion Temp</source>
         <translation>Infusie Temperatuur</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="179"/>
+        <location filename="../src/MashStepTableModel.cpp" line="180"/>
         <source>Target Temp</source>
         <translation>Streef Temp</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="181"/>
+        <location filename="../src/MashStepTableModel.cpp" line="182"/>
         <source>Time</source>
         <translation>Tijd</translation>
     </message>
@@ -1105,22 +1105,22 @@
 <context>
     <name>MashWizard</name>
     <message>
-        <location filename="../src/MashWizard.cpp" line="81"/>
+        <location filename="../src/MashWizard.cpp" line="83"/>
         <source>Mash thickness (%1/%2)</source>
         <translation>Maisch dichtheid (%1/%2)</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="120"/>
+        <location filename="../src/MashWizard.cpp" line="122"/>
         <source>Bad thickness</source>
         <translation>Foute dichtheid</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="120"/>
+        <location filename="../src/MashWizard.cpp" line="122"/>
         <source>You must have a positive mash thickness.</source>
         <translation>U moet een positieve maisch dichtheid ingeven.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="51"/>
+        <location filename="../src/MashWizard.cpp" line="53"/>
         <source>No steps</source>
         <translation>Geen stappen</translation>
     </message>
@@ -1129,27 +1129,27 @@
         <translation type="obsolete">U moet ten minste éen maisch stap hebben om de wizard te draaien.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="51"/>
+        <location filename="../src/MashWizard.cpp" line="53"/>
         <source>There must be at least one mash step to run the wizard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="136"/>
+        <location filename="../src/MashWizard.cpp" line="138"/>
         <source>First step</source>
         <translation>Eerste stap</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="136"/>
+        <location filename="../src/MashWizard.cpp" line="138"/>
         <source>Your first mash step must be an infusion.</source>
         <translation>De eerste maisch stap moet een infusie zijn.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="168"/>
+        <location filename="../src/MashWizard.cpp" line="170"/>
         <source>Mash too thick</source>
         <translation>Maisch is te dik</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="169"/>
+        <location filename="../src/MashWizard.cpp" line="171"/>
         <source>Your mash is too thick for desired temp. at first step.</source>
         <translation>Uw maisch is te dik voor de gewenste temperatuur tijdens de eerste stap.</translation>
     </message>
@@ -1163,32 +1163,32 @@ Use at own risk.</source>
         <translation type="obsolete">Decoctie berekeningen zijn nog niet getest.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="211"/>
+        <location filename="../src/MashWizard.cpp" line="212"/>
         <source>Decoction error</source>
         <translation>Decoctie fout</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="211"/>
+        <location filename="../src/MashWizard.cpp" line="212"/>
         <source>Something went wrong in decoction calculation.</source>
         <translation>Er is een fout opgetreden in de decoctie berekeningen.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="279"/>
+        <location filename="../src/MashWizard.cpp" line="280"/>
         <source>Sparge temp.</source>
         <translation>Spoel temp.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="280"/>
+        <location filename="../src/MashWizard.cpp" line="281"/>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
         <translation>Om uw spoel temp te bereiken, moet het spoelwater boven hetkookpunt zijn. Verlaag de spoeltemperatuur of gebruik meer spoelwater.</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="293"/>
+        <location filename="../src/MashWizard.cpp" line="294"/>
         <source>Too much wort</source>
         <translation>Te veel wort</translation>
     </message>
     <message>
-        <location filename="../src/MashWizard.cpp" line="294"/>
+        <location filename="../src/MashWizard.cpp" line="295"/>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
         <translation>U heeft te veel wort van de maisch voor uw kook grootte. Ik stel voor om de kook grootte te vergroten door de kooktijd te vergroten, of om de maisch dikte te reduceren.</translation>
     </message>
@@ -1209,57 +1209,57 @@ Use at own risk.</source>
 <context>
     <name>MiscItemDelegate</name>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="370"/>
+        <location filename="../src/MiscTableModel.cpp" line="371"/>
         <source>Spice</source>
         <translation>Specerij</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="371"/>
+        <location filename="../src/MiscTableModel.cpp" line="372"/>
         <source>Fining</source>
         <translation>Fining</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="372"/>
+        <location filename="../src/MiscTableModel.cpp" line="373"/>
         <source>Water Agent</source>
         <translation>Waterbehandeling</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="373"/>
+        <location filename="../src/MiscTableModel.cpp" line="374"/>
         <source>Herb</source>
         <translation>Kruid</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="374"/>
+        <location filename="../src/MiscTableModel.cpp" line="375"/>
         <source>Flavor</source>
         <translation>Smaak</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="375"/>
+        <location filename="../src/MiscTableModel.cpp" line="376"/>
         <source>Other</source>
         <translation>Overig</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="383"/>
+        <location filename="../src/MiscTableModel.cpp" line="384"/>
         <source>Boil</source>
         <translation>Koken</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="384"/>
+        <location filename="../src/MiscTableModel.cpp" line="385"/>
         <source>Mash</source>
         <translation>Maisch</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="385"/>
+        <location filename="../src/MiscTableModel.cpp" line="386"/>
         <source>Primary</source>
         <translation>Hoofdvergisting</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="386"/>
+        <location filename="../src/MiscTableModel.cpp" line="387"/>
         <source>Secondary</source>
         <translation>Secundaire</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="387"/>
+        <location filename="../src/MiscTableModel.cpp" line="388"/>
         <source>Bottling</source>
         <translation>Bottelen</translation>
     </message>
@@ -1267,32 +1267,32 @@ Use at own risk.</source>
 <context>
     <name>MiscTableModel</name>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="163"/>
+        <location filename="../src/MiscTableModel.cpp" line="164"/>
         <source>Bad model index. row = %1</source>
         <translation>Bad model index. row = %1</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="223"/>
+        <location filename="../src/MiscTableModel.cpp" line="224"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="225"/>
+        <location filename="../src/MiscTableModel.cpp" line="226"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="227"/>
+        <location filename="../src/MiscTableModel.cpp" line="228"/>
         <source>Use</source>
         <translation>Gebruik</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="229"/>
+        <location filename="../src/MiscTableModel.cpp" line="230"/>
         <source>Time</source>
         <translation>Tijd</translation>
     </message>
     <message>
-        <location filename="../src/MiscTableModel.cpp" line="231"/>
+        <location filename="../src/MiscTableModel.cpp" line="232"/>
         <source>Amount</source>
         <translation>Hoeveelheid</translation>
     </message>
@@ -1573,33 +1573,33 @@ Use at own risk.</source>
         <translation>Configuratie directory &quot;%1&quot; kan niet gelezen worden.</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="157"/>
-        <location filename="../src/brewtarget.cpp" line="169"/>
+        <location filename="../src/MainWindow.cpp" line="2008"/>
+        <location filename="../src/MainWindow.cpp" line="2020"/>
         <source>New Version</source>
         <translation>Nieuwe Versie</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="158"/>
+        <location filename="../src/MainWindow.cpp" line="2009"/>
         <source>Version %1 is now available. Download it?</source>
         <translation>Versie %1 is nu verkrijgbaar. Downloaden?</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="170"/>
+        <location filename="../src/MainWindow.cpp" line="2021"/>
         <source>Stop bothering you about new versions?</source>
         <translation>Niet meer lastigvallen over nieuwe versies?</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="863"/>
+        <location filename="../src/brewtarget.cpp" line="836"/>
         <source>Could not open %1 for writing</source>
         <translation>Kon %1 niet openen om te schrijven</translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="157"/>
+        <location filename="../src/database.cpp" line="158"/>
         <source>Merge Database</source>
         <translation>Database Samenvoegen</translation>
     </message>
     <message>
-        <location filename="../src/database.cpp" line="158"/>
+        <location filename="../src/database.cpp" line="159"/>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
         <translation>Er zijn mogelijk nieuwe ingrediënten en recepten verkrijgbaar. Wilt u deze toevoegen aan uw database?</translation>
     </message>
@@ -2131,97 +2131,97 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="184"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="187"/>
         <source>Recipes</source>
         <translation type="unfinished">Recepten</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="197"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="200"/>
         <source>BrewTargetTreeItem::dataRecipe Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="209"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="212"/>
         <source>Equipment</source>
         <translation type="unfinished">Apparatuur</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="217"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="220"/>
         <source>BrewTargetTreeItem::dataEquipment Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="231"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="234"/>
         <source>Fermentables</source>
         <translation type="unfinished">Mout</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="241"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="244"/>
         <source>BrewTargetTreeItem::dataFermentable Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="253"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="256"/>
         <source>Hops</source>
         <translation type="unfinished">Hop</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="265"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="268"/>
         <source>BrewTargetTreeItem::dataHop Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="277"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="280"/>
         <source>Miscellaneous</source>
         <translation type="unfinished">Diversen</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="289"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="292"/>
         <source>BrewTargetTreeItem::dataMisc Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="301"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="304"/>
         <source>Yeast</source>
         <translation type="unfinished">Gist</translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeItem.cpp" line="313"/>
+        <location filename="../src/BrewTargetTreeItem.cpp" line="316"/>
         <source>BrewTargetTreeItem::dataYeast Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="291"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="292"/>
         <source>BrewTargetTreeModel::getRecipeHeader Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="305"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="306"/>
         <source>BrewTargetTreeModel::getEquipmentHeader Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="321"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="322"/>
         <source>BrewTargetTreeModel::getFermentableHeader Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="337"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="338"/>
         <source>BrewTargetTreeModel::getHopHeader Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/BrewTargetTreeModel.cpp" line="353"/>
+        <location filename="../src/BrewTargetTreeModel.cpp" line="354"/>
         <source>BrewTargetTreeModel::getMiscHeader Bad column: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="437"/>
+        <location filename="../src/MainWindow.cpp" line="454"/>
         <source>MainWindow::deleteSelected Unknown type: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="1774"/>
+        <location filename="../src/MainWindow.cpp" line="1796"/>
         <source>MainWindow::copySelected Unknown type: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2229,175 +2229,175 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 <context>
     <name>Recipe</name>
     <message>
-        <location filename="../src/recipe.cpp" line="559"/>
+        <location filename="../src/recipe.cpp" line="158"/>
         <source>Add grains</source>
         <translation type="unfinished">Graan toevoegen</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="560"/>
-        <location filename="../src/recipe.cpp" line="850"/>
+        <location filename="../src/recipe.cpp" line="159"/>
+        <location filename="../src/recipe.cpp" line="449"/>
         <source>Add </source>
         <translation type="unfinished">Toevoegen </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="573"/>
+        <location filename="../src/recipe.cpp" line="172"/>
         <source>to the mash tun.</source>
         <translation type="unfinished">aan het maisch vat.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="591"/>
+        <location filename="../src/recipe.cpp" line="190"/>
         <source>Heat water</source>
         <translation type="unfinished">Verhit water</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="592"/>
+        <location filename="../src/recipe.cpp" line="191"/>
         <source>Bring </source>
         <translation type="unfinished">Breng </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="600"/>
+        <location filename="../src/recipe.cpp" line="199"/>
         <source>%1 water to %2, </source>
         <translation type="unfinished">%1 water naar %2,</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="606"/>
+        <location filename="../src/recipe.cpp" line="205"/>
         <source>for upcoming infusions.</source>
         <translation type="unfinished">voor aanstaande infusies.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="629"/>
+        <location filename="../src/recipe.cpp" line="228"/>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
         <translation type="unfinished">Voeg %1 water van %2 toe aan de maisch om het op %3 te brengen.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="637"/>
+        <location filename="../src/recipe.cpp" line="236"/>
         <source>Heat mash to %1.</source>
         <translation type="unfinished">Verwarm maisch naar %1.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="641"/>
+        <location filename="../src/recipe.cpp" line="240"/>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
         <translation type="unfinished">Breng %1 van de maisch aan het koken en voeg het wwer terug aan het maisch vat om het naar %2 te brengen.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="646"/>
+        <location filename="../src/recipe.cpp" line="245"/>
         <source> Hold for %1.</source>
         <translation type="unfinished">%1 aanhouden.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="671"/>
-        <location filename="../src/recipe.cpp" line="711"/>
+        <location filename="../src/recipe.cpp" line="270"/>
+        <location filename="../src/recipe.cpp" line="310"/>
         <source>Put %1 %2 into boil for %3.</source>
         <translation type="unfinished">Stop %1 %2 in het kookvat voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="673"/>
+        <location filename="../src/recipe.cpp" line="272"/>
         <source>Put %1 %2 into fermenter for %3.</source>
         <translation type="unfinished">Stop %1 %2 in het vergistingsvat voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="675"/>
+        <location filename="../src/recipe.cpp" line="274"/>
         <source>Put %1 %2 into first wort for %3.</source>
         <translation type="unfinished">Stop %1 %2 in de eerste wort voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="677"/>
-        <location filename="../src/recipe.cpp" line="715"/>
+        <location filename="../src/recipe.cpp" line="276"/>
+        <location filename="../src/recipe.cpp" line="314"/>
         <source>Put %1 %2 into mash for %3.</source>
         <translation type="unfinished">Stop %1 %2 in de maisch voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="679"/>
+        <location filename="../src/recipe.cpp" line="278"/>
         <source>Steep %1 %2 in wort for %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="683"/>
+        <location filename="../src/recipe.cpp" line="282"/>
         <source>Use %1 %2 for %3</source>
         <translation type="unfinished">Gebruik %1 %2 voor %3</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="690"/>
+        <location filename="../src/recipe.cpp" line="289"/>
         <source>Hop addition</source>
         <translation type="unfinished">Hop gift</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="713"/>
+        <location filename="../src/recipe.cpp" line="312"/>
         <source>Use %1 %2 at bottling for %3.</source>
         <translation type="unfinished">Gebruik %1 %2 tijdens het bottelen voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="717"/>
+        <location filename="../src/recipe.cpp" line="316"/>
         <source>Put %1 %2 into primary for %3.</source>
         <translation type="unfinished">Stop %1 %2 in de hoofdvergisting voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="719"/>
+        <location filename="../src/recipe.cpp" line="318"/>
         <source>Put %1 %2 into secondary for %3.</source>
         <translation type="unfinished">Stop %1 %2 in het nagistingsvat voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="723"/>
+        <location filename="../src/recipe.cpp" line="322"/>
         <source>Use %1 %2 for %3.</source>
         <translation type="unfinished">Gebruik %1 %2 voor %3.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="730"/>
+        <location filename="../src/recipe.cpp" line="329"/>
         <source>Misc addition</source>
         <translation type="unfinished">Overige toevoegingen</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="744"/>
+        <location filename="../src/recipe.cpp" line="343"/>
         <source>Do first wort hopping with </source>
         <translation type="unfinished">Doe de eerste hopgift met </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="763"/>
+        <location filename="../src/recipe.cpp" line="362"/>
         <source>First wort hopping</source>
         <translation type="unfinished">Eerste hopgift</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="781"/>
+        <location filename="../src/recipe.cpp" line="380"/>
         <source>You should now have %1 wort.</source>
         <translation type="unfinished">U dient nu %1 wort te hebben.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="786"/>
+        <location filename="../src/recipe.cpp" line="385"/>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
         <translation type="unfinished"> Voeg %1 water toe aan de ketel om het volume voor het koken op %2 te brengen.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="793"/>
+        <location filename="../src/recipe.cpp" line="392"/>
         <source>Pre-boil</source>
         <translation type="unfinished">Voor het koken</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="823"/>
+        <location filename="../src/recipe.cpp" line="422"/>
         <source>Boil or steep </source>
         <translation type="unfinished">Koken of weken</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="839"/>
+        <location filename="../src/recipe.cpp" line="438"/>
         <source>Boil/steep fermentables</source>
         <translation type="unfinished">Koken/weken mout</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="865"/>
+        <location filename="../src/recipe.cpp" line="464"/>
         <source>to the boil at knockout.</source>
         <translation type="unfinished">aan het koken aan het eind.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="870"/>
+        <location filename="../src/recipe.cpp" line="469"/>
         <source>Knockout additions</source>
         <translation type="unfinished">Toevoegingen aan het eind</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="896"/>
+        <location filename="../src/recipe.cpp" line="495"/>
         <source>You should have %1 wort post-boil.</source>
         <translation type="unfinished">U zou %1 wort moeten hebben na het koken.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="898"/>
+        <location filename="../src/recipe.cpp" line="497"/>
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
         <translation type="unfinished">
@@ -2405,97 +2405,97 @@ U anticipeert om %1 te verliezen aan eiwitafscheiding en koeler verlies.
 	</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="902"/>
+        <location filename="../src/recipe.cpp" line="501"/>
         <source>
 Add %1 top up water into primary.</source>
         <translation type="unfinished">
 Voeg %1 top-up water toe aan hoofdvergisting.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="905"/>
+        <location filename="../src/recipe.cpp" line="504"/>
         <source>
 The final volume in the primary is %1.</source>
         <translation type="unfinished">
 Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="909"/>
+        <location filename="../src/recipe.cpp" line="508"/>
         <source>Post boil</source>
         <translation type="unfinished">Na het koken</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="988"/>
+        <location filename="../src/recipe.cpp" line="587"/>
         <source>Boil time</source>
         <translation type="unfinished">Kook tijd</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="989"/>
+        <location filename="../src/recipe.cpp" line="588"/>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
         <translation type="unfinished">U heeft geen apparatuur geconfigureerd (wat zou moeten), dus vertel mij de kooktijd.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="992"/>
+        <location filename="../src/recipe.cpp" line="591"/>
         <source>Bring the wort to a boil and hold for %1.</source>
         <translation type="unfinished">Breng de wort aan de kook en houd dit aan voor %1.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="994"/>
+        <location filename="../src/recipe.cpp" line="593"/>
         <source>Start boil</source>
         <translation type="unfinished">Start het koken</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1015"/>
+        <location filename="../src/recipe.cpp" line="614"/>
         <source>Flameout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1016"/>
+        <location filename="../src/recipe.cpp" line="615"/>
         <source>Stop boiling the wort.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1033"/>
+        <location filename="../src/recipe.cpp" line="632"/>
         <source>Cool wort and pitch </source>
         <translation type="unfinished">Koel de wort en voeg gist toe</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1039"/>
+        <location filename="../src/recipe.cpp" line="638"/>
         <source>%1 %2 yeast, </source>
         <translation type="unfinished">%1 %2 gist, </translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1041"/>
+        <location filename="../src/recipe.cpp" line="640"/>
         <source>to the primary.</source>
         <translation type="unfinished">aan de hoofdvergisting.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1043"/>
+        <location filename="../src/recipe.cpp" line="642"/>
         <source>Pitch yeast</source>
         <translation type="unfinished">Voeg gist toe</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1050"/>
+        <location filename="../src/recipe.cpp" line="649"/>
         <source>Let ferment until FG is %1.</source>
         <translation type="unfinished">Laat vergisten totdat het eind SG %1 is.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1053"/>
+        <location filename="../src/recipe.cpp" line="652"/>
         <source>Ferment</source>
         <translation type="unfinished">Vergisting</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1056"/>
+        <location filename="../src/recipe.cpp" line="655"/>
         <source>Transfer beer to secondary.</source>
         <translation type="unfinished">Hevel het bier naar het nagistingsvat.</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1058"/>
+        <location filename="../src/recipe.cpp" line="657"/>
         <source>Transfer to secondary</source>
         <translation type="unfinished">Hevel naar het nagistingsvat</translation>
     </message>
     <message>
-        <location filename="../src/recipe.cpp" line="1091"/>
-        <location filename="../src/recipe.cpp" line="1110"/>
+        <location filename="../src/recipe.cpp" line="690"/>
+        <location filename="../src/recipe.cpp" line="709"/>
         <source>Add %1 %2 to boil at %3.</source>
         <translation type="unfinished">Voeg %1 %2 toe aan het kookvat op %3.</translation>
     </message>
@@ -2849,12 +2849,12 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 <context>
     <name>StyleEditor</name>
     <message>
-        <location filename="../src/StyleEditor.cpp" line="111"/>
+        <location filename="../src/StyleEditor.cpp" line="112"/>
         <source>Style name</source>
         <translation>Stijl naam</translation>
     </message>
     <message>
-        <location filename="../src/StyleEditor.cpp" line="112"/>
+        <location filename="../src/StyleEditor.cpp" line="113"/>
         <source>Style name:</source>
         <translation>Stijl naam:</translation>
     </message>
@@ -2862,22 +2862,22 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 <context>
     <name>TimerWidget</name>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="90"/>
+        <location filename="../src/TimerWidget.cpp" line="89"/>
         <source>Open Sound</source>
         <translation>Open Geluid</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="90"/>
+        <location filename="../src/TimerWidget.cpp" line="89"/>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
         <translation>Audio Files (*.wav *.ogg *.mp3 *.aiff)</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="211"/>
+        <location filename="../src/TimerWidget.cpp" line="210"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../src/TimerWidget.cpp" line="219"/>
+        <location filename="../src/TimerWidget.cpp" line="218"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
@@ -2885,54 +2885,54 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 <context>
     <name>WaterTableModel</name>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="190"/>
+        <location filename="../src/WaterTableModel.cpp" line="191"/>
         <source>Bad model index. row = %1</source>
         <translation>Bad model index. row = %1</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="219"/>
-        <location filename="../src/WaterTableModel.cpp" line="247"/>
-        <location filename="../src/WaterTableModel.cpp" line="344"/>
+        <location filename="../src/WaterTableModel.cpp" line="220"/>
+        <location filename="../src/WaterTableModel.cpp" line="248"/>
+        <location filename="../src/WaterTableModel.cpp" line="345"/>
         <source>Bad column: %1</source>
         <translation>Bad column: %1</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="231"/>
+        <location filename="../src/WaterTableModel.cpp" line="232"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="233"/>
+        <location filename="../src/WaterTableModel.cpp" line="234"/>
         <source>Amount</source>
         <translation>Hoeveelheid</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="235"/>
+        <location filename="../src/WaterTableModel.cpp" line="236"/>
         <source>Calcium (ppm)</source>
         <translation>Calcium (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="237"/>
+        <location filename="../src/WaterTableModel.cpp" line="238"/>
         <source>Bicarbonate (ppm)</source>
         <translation>Bicarbonaat (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="239"/>
+        <location filename="../src/WaterTableModel.cpp" line="240"/>
         <source>Sulfate (ppm)</source>
         <translation>Sulfaat (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="241"/>
+        <location filename="../src/WaterTableModel.cpp" line="242"/>
         <source>Chloride (ppm)</source>
         <translation>Chloor (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="243"/>
+        <location filename="../src/WaterTableModel.cpp" line="244"/>
         <source>Sodium (ppm)</source>
         <translation>Soda (ppm)</translation>
     </message>
     <message>
-        <location filename="../src/WaterTableModel.cpp" line="245"/>
+        <location filename="../src/WaterTableModel.cpp" line="246"/>
         <source>Magnesium (ppm)</source>
         <translation>Magnesium (ppm)</translation>
     </message>
@@ -2953,47 +2953,47 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 <context>
     <name>YeastItemDelegate</name>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="383"/>
+        <location filename="../src/YeastTableModel.cpp" line="384"/>
         <source>Ale</source>
         <translation>Ale</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="384"/>
+        <location filename="../src/YeastTableModel.cpp" line="385"/>
         <source>Lager</source>
         <translation>Pils</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="385"/>
+        <location filename="../src/YeastTableModel.cpp" line="386"/>
         <source>Wheat</source>
         <translation>Tarwe</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="386"/>
+        <location filename="../src/YeastTableModel.cpp" line="387"/>
         <source>Wine</source>
         <translation>Wijn</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="387"/>
+        <location filename="../src/YeastTableModel.cpp" line="388"/>
         <source>Champagne</source>
         <translation>Champagne</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="396"/>
+        <location filename="../src/YeastTableModel.cpp" line="397"/>
         <source>Liquid</source>
         <translation>Vloeistof</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="397"/>
+        <location filename="../src/YeastTableModel.cpp" line="398"/>
         <source>Dry</source>
         <translation>Droog</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="398"/>
+        <location filename="../src/YeastTableModel.cpp" line="399"/>
         <source>Slant</source>
         <translation>Opgekweekt</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="399"/>
+        <location filename="../src/YeastTableModel.cpp" line="400"/>
         <source>Culture</source>
         <translation>Cultuur</translation>
     </message>
@@ -3001,44 +3001,44 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
 <context>
     <name>YeastTableModel</name>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="210"/>
+        <location filename="../src/YeastTableModel.cpp" line="211"/>
         <source>Bad model index. row = %1</source>
         <translation>Bad model index. row = %1</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="253"/>
-        <location filename="../src/YeastTableModel.cpp" line="277"/>
-        <location filename="../src/YeastTableModel.cpp" line="358"/>
+        <location filename="../src/YeastTableModel.cpp" line="254"/>
+        <location filename="../src/YeastTableModel.cpp" line="278"/>
+        <location filename="../src/YeastTableModel.cpp" line="359"/>
         <source>Bad column: %1</source>
         <translation>Bad column: %1</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="265"/>
+        <location filename="../src/YeastTableModel.cpp" line="266"/>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="267"/>
+        <location filename="../src/YeastTableModel.cpp" line="268"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="269"/>
+        <location filename="../src/YeastTableModel.cpp" line="270"/>
         <source>Form</source>
         <translation>Vorm</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="271"/>
+        <location filename="../src/YeastTableModel.cpp" line="272"/>
         <source>Amount</source>
         <translation>Hoeveelheid</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="273"/>
+        <location filename="../src/YeastTableModel.cpp" line="274"/>
         <source>Laboratory</source>
         <translation>Laboratorium</translation>
     </message>
     <message>
-        <location filename="../src/YeastTableModel.cpp" line="275"/>
+        <location filename="../src/YeastTableModel.cpp" line="276"/>
         <source>Product ID</source>
         <translation>Product ID</translation>
     </message>
