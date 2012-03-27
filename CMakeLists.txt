@@ -32,7 +32,7 @@ OPTION( UPDATE_TRANSLATIONS
         OFF)
 #==============================Compile flags===================================
 IF( CMAKE_COMPILER_IS_GNUCXX )
-   SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
+   SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -Wno-long-long -O2" )
    SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -g3" )
 ENDIF()
 
