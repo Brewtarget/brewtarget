@@ -169,7 +169,10 @@ bool BrewTargetTreeItem::removeChildren(int position, int count)
       return false;
 
    for (int row = 0; row < count; ++row)
-      delete childItems.takeAt(position);
+      //delete childItems.takeAt(position);
+      // FIXME: memory leak here. With delete, it's a concurrency/memory
+      // access error, due to the fact that these pointers are floating around.
+      childItems.takeAt(position);
 
    return true;
 }

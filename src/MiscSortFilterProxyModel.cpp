@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QAbstractItemModel>
 #include "unit.h"
 #include "MiscSortFilterProxyModel.h"
 #include "MiscTableModel.h"
@@ -28,8 +29,20 @@ MiscSortFilterProxyModel::MiscSortFilterProxyModel(QObject *parent)
 bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
                                         const QModelIndex &right) const
 {
-    QVariant leftMisc = sourceModel()->data(left);
-    QVariant rightMisc = sourceModel()->data(right);
+   QAbstractItemModel* source = sourceModel();
+   QVariant leftMisc, rightMisc;
+   if( source )
+   {
+      //if( left.isValid() )
+      leftMisc = source->data(left);
+      //else
+      //   return true;
+      
+      //if( right.isValid() )
+      rightMisc = source->data(right);
+      //else
+      //   return true;
+   }
 
    switch( left.column() )
    {

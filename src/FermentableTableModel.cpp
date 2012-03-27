@@ -196,7 +196,7 @@ void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       updateTotalGrains();
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, FERMNUMCOLS-1));
-      if( displayPercentages )
+      if( displayPercentages && rowCount() > 0 )
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
       //reset();
       return;
@@ -385,7 +385,8 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( value.canConvert(QVariant::String) )
          {
             row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
-            headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
+            if( rowCount() > 0 )
+               headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
             return true;
          }
          else

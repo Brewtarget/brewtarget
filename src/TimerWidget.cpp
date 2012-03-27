@@ -24,32 +24,37 @@
 #include <iostream>
 #include "brewtarget.h"
 
-TimerWidget::TimerWidget(QWidget* parent) : QWidget(parent)
+TimerWidget::TimerWidget(QWidget* parent)
+   : QWidget(parent),
+     hours(0),
+     minutes(0),
+     seconds(0),
+     start(true),
+     timer(new QTimer(this)),
+     flashTimer(new QTimer(this)),
+     paletteOld(),
+     paletteNew(),
+#if !defined(NO_PHONON)
+     mediaObject(new Phonon::MediaObject(this)),
+     audioOutput(new Phonon::AudioOutput(Phonon::MusicCategory, this)),
+#endif
+     oldColors(true)
 {
    setupUi(this);
 
-   hours = 0;
-   minutes = 0;
-   seconds = 0;
-   start = true;
-   oldColors = true;
-   timer = new QTimer(this);
-   flashTimer = new QTimer(this);
    timer->setInterval(1000); // One second between timeouts.
    flashTimer->setInterval(500);
 
    // PlaceholderText only exists in Qt 4.7 or greater.
    //lineEdit->setPlaceholderText( tr("HH:MM:SS") );
 
-   #if !defined(NO_PHONON)
+#if !defined(NO_PHONON)
+
+   mediaObject->setTransitionTime(0);
+   mediaObject->setPrefinishMark(10); // 10 ms.
+   Phonon::createPath(mediaObject, audioOutput);
    
-    mediaObject = new Phonon::MediaObject(this);
-    mediaObject->setTransitionTime(0);
-    mediaObject->setPrefinishMark(10); // 10 ms.
-    audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
-    Phonon::createPath(mediaObject, audioOutput);
-   
-   #endif
+#endif
 
    paletteOld = lcdNumber->palette();
    paletteNew = QPalette(paletteOld);

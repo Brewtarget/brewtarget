@@ -178,7 +178,8 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
          removeAll();
          addYeasts( recObs->yeasts() );
       }
-      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      if( rowCount() > 0 )
+         emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
       return;
    }
    

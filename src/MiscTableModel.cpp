@@ -338,7 +338,8 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/)
          removeAll();
          addMiscs( recObs->miscs() );
       }
-      emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
+      if( rowCount() > 0 )
+         emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
       return;
    }
    
