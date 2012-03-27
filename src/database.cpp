@@ -136,7 +136,7 @@ void Database::load()
       
       foreach( QString command, commands.split("\n\n") )
       {
-         QSqlQuery( command);//, sqldb );
+         QSqlQuery( command, sqldb );
       }
    }
    
