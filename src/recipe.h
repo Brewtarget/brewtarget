@@ -332,8 +332,8 @@ private:
    bool _uninitializedCalcs;
    
    // Some recalculators for calculated properties.
-   //! Recalculates all the calculated properties. This is a non-blocking call.
-   void recalcAll();
+   //! Recalculates all the calculated properties. This is a non-blocking call iff \em asynchronous is true.
+   void recalcAll(bool asynchronous = true);
    
    /*! The theoretical maximum yield without any non-mashed anything. This
     * will need to be communicated somewhere. Emits changed(points).

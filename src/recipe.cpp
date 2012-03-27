@@ -1078,112 +1078,112 @@ void Recipe::setKegPrimingFactor( double var )
 double Recipe::og()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _og;
 }
 
 double Recipe::fg()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _fg;
 }
 
 double Recipe::color_srm()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _color_srm;
 }
 
 double Recipe::ABV_pct()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _ABV_pct;
 }
 
 double Recipe::IBU()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _IBU;
 }
 
 QList<double> Recipe::IBUs()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _ibus;
 }
 
 double Recipe::boilGrav()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _boilGrav;
 }
 
 double Recipe::calories()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _calories;
 }
 
 double Recipe::wortFromMash_l()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _wortFromMash_l;
 }
 
 double Recipe::boilVolume_l()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _boilVolume_l;
 }
 
 double Recipe::postBoilVolume_l()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _postBoilVolume_l;
 }
 
 double Recipe::finalVolume_l()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _finalVolume_l;
 }
 
 QColor Recipe::SRMColor()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _SRMColor;
 }
 
 double Recipe::grainsInMash_kg()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _grainsInMash_kg;
 }
 
 double Recipe::grains_kg()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _grains_kg;
 }
 
 double Recipe::points()
 {
    if( _uninitializedCalcs )
-      recalcAll();
+      recalcAll(false);
    return _points;
 }
 
@@ -1422,44 +1422,48 @@ void Recipe::removeBrewNote(BrewNote* var)
 
 //==============================Recalculators==================================
 
-void Recipe::recalcAll()
+void Recipe::recalcAll(bool asynch)
 {
-   // NOTE: Order is VERY important here since they may depend on each other.
-   QueuedMethod* q0 =  new QueuedMethod(this,"recalcGrainsInMash_kg", false);
-   QueuedMethod* q1 =  new QueuedMethod(this,"recalcGrains_kg", false);
-   QueuedMethod* q2 =  new QueuedMethod(this,"recalcVolumeEstimates", false);
-   QueuedMethod* q3 =  new QueuedMethod(this,"recalcABV_pct", false);
-   QueuedMethod* q4 =  new QueuedMethod(this,"recalcColor_srm", false);
-   QueuedMethod* q5 =  new QueuedMethod(this,"recalcSRMColor", false);
-   QueuedMethod* q6 =  new QueuedMethod(this,"recalcOgFg", false);
-   QueuedMethod* q7 =  new QueuedMethod(this,"recalcBoilGrav", false);
-   QueuedMethod* q8 =  new QueuedMethod(this,"recalcIBU", false);
-   
-   QueuedMethod::enqueue( q0 );
-   QueuedMethod::enqueue( q1 );
-   QueuedMethod::enqueue( q2 );
-   QueuedMethod::enqueue( q3 );
-   QueuedMethod::enqueue( q4 );
-   QueuedMethod::enqueue( q5 );
-   QueuedMethod::enqueue( q6 );
-   QueuedMethod::enqueue( q7 );
-   QueuedMethod::enqueue( q8 );
-   
-   // Order matters, so chain the execution.
-   q0->chainWith(q1)->chainWith(q2)->chainWith(q3)->chainWith(q4)->chainWith(q5)
-      ->chainWith(q6)->chainWith(q7)->chainWith(q8);
-   q0->start(); // Start the dominoes :)
-   
-   //recalcGrainsInMash_kg();
-   //recalcGrains_kg();
-   //recalcVolumeEstimates();
-   //recalcABV_pct();
-   //recalcColor_srm();
-   //recalcSRMColor();
-   //recalcOgFg();
-   //recalcBoilGrav();
-   //recalcIBU();
-
+   if( asynch )
+   {
+      // NOTE: Order is VERY important here since they may depend on each other.
+      QueuedMethod* q0 =  new QueuedMethod(this,"recalcGrainsInMash_kg", false);
+      QueuedMethod* q1 =  new QueuedMethod(this,"recalcGrains_kg", false);
+      QueuedMethod* q2 =  new QueuedMethod(this,"recalcVolumeEstimates", false);
+      QueuedMethod* q3 =  new QueuedMethod(this,"recalcABV_pct", false);
+      QueuedMethod* q4 =  new QueuedMethod(this,"recalcColor_srm", false);
+      QueuedMethod* q5 =  new QueuedMethod(this,"recalcSRMColor", false);
+      QueuedMethod* q6 =  new QueuedMethod(this,"recalcOgFg", false);
+      QueuedMethod* q7 =  new QueuedMethod(this,"recalcBoilGrav", false);
+      QueuedMethod* q8 =  new QueuedMethod(this,"recalcIBU", false);
+      
+      QueuedMethod::enqueue( q0 );
+      QueuedMethod::enqueue( q1 );
+      QueuedMethod::enqueue( q2 );
+      QueuedMethod::enqueue( q3 );
+      QueuedMethod::enqueue( q4 );
+      QueuedMethod::enqueue( q5 );
+      QueuedMethod::enqueue( q6 );
+      QueuedMethod::enqueue( q7 );
+      QueuedMethod::enqueue( q8 );
+      
+      // Order matters, so chain the execution.
+      q0->chainWith(q1)->chainWith(q2)->chainWith(q3)->chainWith(q4)->chainWith(q5)
+         ->chainWith(q6)->chainWith(q7)->chainWith(q8);
+      q0->start(); // Start the dominoes :)
+   }
+   else
+   {
+      recalcGrainsInMash_kg();
+      recalcGrains_kg();
+      recalcVolumeEstimates();
+      recalcABV_pct();
+      recalcColor_srm();
+      recalcSRMColor();
+      recalcOgFg();
+      recalcBoilGrav();
+      recalcIBU();
+   }
    _uninitializedCalcs = false;
 }
 
@@ -1502,7 +1506,7 @@ void Recipe::recalcABV_pct()
     // George Fix: Brewing Science and Practice, page 686.
     // The multiplicative factor actually varies from
     // 125 for weak beers to 135 for strong beers.
-    _ABV_pct = 130*(og()-fg());
+    _ABV_pct = 130*(_og-_fg);
 
     // From http://en.wikipedia.org/w/index.php?title=Alcohol_by_volume&oldid=414661414
     // Has no citations, so I don't know how trustworthy it is.
@@ -1748,8 +1752,8 @@ void Recipe::recalcCalories()
 {
     double startPlato, finishPlato, RE, abw, oog, ffg;
 
-    oog = og();
-    ffg = fg();
+    oog = _og;
+    ffg = _fg;
 
     // Need to translate OG and FG into plato
     startPlato  = -463.37 + ( 668.72 * oog ) - (205.35 * oog * oog);

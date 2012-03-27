@@ -117,8 +117,12 @@ int MaltinessWidget::region()
       return -1;
 
    ibu = recObs->IBU();
+   if( ibu > 0 )
+      ; // NOTE: remove me. For testing only.
    points = (recObs->og() - 1)*1000;
-
+   if( points > 0 )
+      ; // NOTE: remove me. For testing only.
+   
    if( (11./3.)*ibu-5./3. < points )
       return CLOYING;
    else if( 3*ibu-5 < points && points <= (11./3.)*ibu-5./3. )

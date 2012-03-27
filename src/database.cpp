@@ -136,17 +136,17 @@ void Database::load()
       
       foreach( QString command, commands.split("\n\n") )
       {
-         QSqlQuery( command, sqldb );
+         QSqlQuery( command, QSqlDatabase::database() );
       }
    }
    
    // NOTE: these two pragmas reduce --from-xml from 7min:15s to 1m:55s.
    // Turn off database journaling for better speed.
-   QSqlQuery( "PRAGMA synchronous = off");//, sqldb );
-   QSqlQuery( "PRAGMA foreign_keys = on");//, sqldb );
-   QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE");//, sqldb );
+   QSqlQuery( "PRAGMA synchronous = off", QSqlDatabase::database());//, sqldb );
+   QSqlQuery( "PRAGMA foreign_keys = on", QSqlDatabase::database());//, sqldb );
+   QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", QSqlDatabase::database());//, sqldb );
    // Store temporary tables in memory.
-   QSqlQuery( "PRAGMA temp_store = MEMORY");//, sqldb );
+   QSqlQuery( "PRAGMA temp_store = MEMORY", QSqlDatabase::database());//, sqldb );
    
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
@@ -170,65 +170,65 @@ void Database::load()
    }
    
    // Set up the tables.
-   tableModel = new QSqlRelationalTableModel( 0 );//, sqldb );
+   tableModel = new QSqlRelationalTableModel( 0, QSqlDatabase::database());//, sqldb );
    tables.clear();
    
-   brewnotes_tm = new QSqlRelationalTableModel( 0 ); //, sqldb );
+   brewnotes_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() ); //, sqldb );
    brewnotes_tm->setTable(tableNames[Brewtarget::BREWNOTETABLE]);
    brewnotes_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::BREWNOTETABLE] = brewnotes_tm;
    
-   equipments_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   equipments_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    equipments_tm->setTable(tableNames[Brewtarget::EQUIPTABLE]);
    equipments_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::EQUIPTABLE] = equipments_tm;
    
-   fermentables_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   fermentables_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    fermentables_tm->setTable(tableNames[Brewtarget::FERMTABLE]);
    fermentables_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::FERMTABLE] = fermentables_tm;
    
-   hops_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   hops_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    hops_tm->setTable(tableNames[Brewtarget::HOPTABLE]);
    hops_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::HOPTABLE] = hops_tm;
    
-   instructions_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   instructions_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    instructions_tm->setTable(tableNames[Brewtarget::INSTRUCTIONTABLE]);
    instructions_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::INSTRUCTIONTABLE] = instructions_tm;
    
-   mashs_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   mashs_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    mashs_tm->setTable(tableNames[Brewtarget::MASHTABLE]);
    mashs_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::MASHTABLE] = mashs_tm;
    
-   mashSteps_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   mashSteps_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    mashSteps_tm->setTable(tableNames[Brewtarget::MASHSTEPTABLE]);
    mashSteps_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::MASHSTEPTABLE] = mashSteps_tm;
    
-   miscs_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   miscs_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    miscs_tm->setTable(tableNames[Brewtarget::MISCTABLE]);
    miscs_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::MISCTABLE] = miscs_tm;
    
-   recipes_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   recipes_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    recipes_tm->setTable(tableNames[Brewtarget::RECTABLE]);
    recipes_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::RECTABLE] = recipes_tm;
    
-   styles_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   styles_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    styles_tm->setTable(tableNames[Brewtarget::STYLETABLE]);
    styles_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::STYLETABLE] = styles_tm;
    
-   waters_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   waters_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    waters_tm->setTable(tableNames[Brewtarget::WATERTABLE]);
    waters_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::WATERTABLE] = waters_tm;
    
-   yeasts_tm = new QSqlRelationalTableModel( 0 );//, sqldb );
+   yeasts_tm = new QSqlRelationalTableModel( 0, QSqlDatabase::database() );//, sqldb );
    yeasts_tm->setTable(tableNames[Brewtarget::YEASTTABLE]);
    yeasts_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::YEASTTABLE] = yeasts_tm;
@@ -464,8 +464,8 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 Recipe* Database::getParentRecipe( BrewNote const* note )
 {
    int key;
-   QSqlQuery q( QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key));
-                //sqldb );
+   QSqlQuery q( QString("SELECT recipe_id FROM brewnote WHERE id = %1").arg(note->_key),
+                QSqlDatabase::database());//sqldb );
    q.next();
    key = q.record().value("recipe_id").toInt();
    
@@ -514,8 +514,8 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
    // TODO: encapsulate in QUndoCommand.
    QSqlQuery q( QString("UPDATE mashstep SET step_number = CASE msid WHEN %1 then %2 when %3 then %4 END WHERE msid IN (%5,%6)")
-                .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key));
-                //sqldb );
+                .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key),
+                QSqlDatabase::database());//sqldb );
                 
    emit m1->changed( m1->metaProperty("stepNumber") );
    emit m2->changed( m2->metaProperty("stepNumber") );
@@ -525,8 +525,8 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 {
    // TODO: encapsulate in QUndoCommand.
    QSqlQuery q( QString("UPDATE instruction SET instruction_number = CASE iid WHEN %1 then %2 when %3 then %4 END WHERE iid IN (%5,%6)")
-                .arg(in1->_key).arg(in2->_key).arg(in2->_key).arg(in1->_key).arg(in1->_key).arg(in2->_key));
-                //sqldb );
+                .arg(in1->_key).arg(in2->_key).arg(in2->_key).arg(in1->_key).arg(in1->_key).arg(in2->_key),
+                QSqlDatabase::database());//sqldb );
                 
    emit in1->changed( in1->metaProperty("instructionNumber") );
    emit in2->changed( in2->metaProperty("instructionNumber") );
@@ -538,8 +538,8 @@ void Database::insertInstruction(Instruction* in, int pos)
    QSqlQuery q( QString("SELECT recipe_id FROM %1 WHERE %2=%3")
                    .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
                    .arg(keyNames[Brewtarget::INSTRUCTIONTABLE])
-                   .arg(in->_key));
-                //sqldb);
+                   .arg(in->_key),
+                QSqlDatabase::database());//sqldb);
    q.next();
    parentRecipeKey = q.record().value("recipe_id").toInt();
    // Increment all instruction positions greater or equal to pos.
@@ -565,7 +565,7 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
                             .arg(keyNames[Brewtarget::BREWNOTETABLE])
                             .arg(tableNames[Brewtarget::BREWNOTETABLE])
                             .arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database());//, sqldb );
    
    while( q.next() )
       ret.append(allBrewNotes[q.record().value(keyNames[Brewtarget::BREWNOTETABLE]).toInt()]);
@@ -576,7 +576,7 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
 {
    QList<Fermentable*> ret;
    QString queryString = QString("SELECT fermentable_id FROM fermentable_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database() );//, sqldb );
    
    while( q.next() )
       ret.append(allFermentables[q.record().value("fermentable_id").toInt()]);
@@ -587,7 +587,7 @@ QList<Hop*> Database::hops(Recipe const* parent)
 {
    QList<Hop*> ret;
    QString queryString = QString("SELECT hop_id FROM hop_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database() );//, sqldb );
    
    while( q.next() )
       ret.append(allHops[q.record().value("hop_id").toInt()]);
@@ -598,7 +598,7 @@ QList<Misc*> Database::miscs(Recipe const* parent)
 {
    QList<Misc*> ret;
    QString queryString = QString("SELECT misc_id FROM misc_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database() );//, sqldb );
    
    while( q.next() )
       ret.append(allMiscs[q.record().value("misc_id").toInt()]);
@@ -612,7 +612,7 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
                             .arg(keyNames[Brewtarget::MASHSTEPTABLE])
                             .arg(tableNames[Brewtarget::MASHSTEPTABLE])
                             .arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database() );//, sqldb );
    
    while( q.next() )
       ret.append(allMashSteps[q.record().value(keyNames[Brewtarget::MASHSTEPTABLE].toStdString().c_str()).toInt()]);
@@ -626,7 +626,7 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
                             .arg(keyNames[Brewtarget::INSTRUCTIONTABLE])
                             .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
                             .arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database() );//, sqldb );
    
    while( q.next() )
       ret.append(allInstructions[q.record().value(keyNames[Brewtarget::INSTRUCTIONTABLE].toStdString().c_str()).toInt()]);
@@ -637,7 +637,7 @@ QList<Water*> Database::waters(Recipe const* parent)
 {
    QList<Water*> ret;
    QString queryString = QString("SELECT water_id FROM water_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database() );//, sqldb );
    
    while( q.next() )
       ret.append(allWaters[q.record().value("water_id").toInt()]);
@@ -648,7 +648,7 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 {
    QList<Yeast*> ret;
    QString queryString = QString("SELECT yeast_id FROM yeast_in_recipe WHERE recipe_id = %1").arg(parent->_key);
-   QSqlQuery q( queryString );//, sqldb );
+   QSqlQuery q( queryString, QSqlDatabase::database() );//, sqldb );
    
    while( q.next() )
       ret.append(allYeasts[q.record().value("yeast_id").toInt()]);
@@ -668,7 +668,7 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
    
    int key;
 
-   QSqlQuery q;//sqldb );
+   QSqlQuery q(QSqlDatabase::database());//sqldb );
    q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
               .arg(tableNames[table])
          );
@@ -691,7 +691,7 @@ int Database::insertNewMashStepRecord( Mash* parent )
 {
    int key;
    
-   QSqlQuery q;//sqldb );
+   QSqlQuery q(QSqlDatabase::database());//sqldb );
    q.setForwardOnly(true);
    q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
               .arg(tableNames[Brewtarget::MASHSTEPTABLE])
@@ -1311,7 +1311,8 @@ void Database::sqlUpdate( QString const& tableName, QString const& setClause, QS
    QSqlQuery q( QString("UPDATE `%1` SET %2 WHERE %3")
                 .arg(tableName)
                 .arg(setClause)
-                .arg(whereClause));
+                .arg(whereClause),
+                QSqlDatabase::database());
                 //sqldb );
 }
 
@@ -1319,7 +1320,8 @@ void Database::sqlDelete( QString const& tableName, QString const& whereClause )
 {
    QSqlQuery q( QString("DELETE FROM `%1` WHERE %2")
                 .arg(tableName)
-                .arg(whereClause));
+                .arg(whereClause),
+                QSqlDatabase::database());
                 //sqldb );
 }
 
@@ -2776,7 +2778,7 @@ int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
   if ( Hop::types.indexOf(type) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT htype FROM hop WHERE name='%1' AND htype != ''").arg(hop->name()));//, sqldb);
+    QSqlQuery q(QString("SELECT htype FROM hop WHERE name='%1' AND htype != ''").arg(hop->name()), QSqlDatabase::database());//, sqldb);
     q.first();
     if ( q.isValid() )
     {
@@ -2903,7 +2905,7 @@ int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
   if ( Misc::types.indexOf(type) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT mtype FROM misc WHERE name='%1' AND mtype != ''").arg(misc->name()));//, sqldb);
+    QSqlQuery q(QString("SELECT mtype FROM misc WHERE name='%1' AND mtype != ''").arg(misc->name()), QSqlDatabase::database());//, sqldb);
     q.first();
     if ( q.isValid() )
     {
@@ -2930,7 +2932,7 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
   if ( Misc::uses.indexOf(use) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT use FROM misc WHERE name='%1' AND use != ''").arg(misc->name()));//, sqldb);
+    QSqlQuery q(QString("SELECT use FROM misc WHERE name='%1' AND use != ''").arg(misc->name()), QSqlDatabase::database());//, sqldb);
     q.first();
     if ( q.isValid() )
     {

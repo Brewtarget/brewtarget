@@ -27,7 +27,6 @@ class Database;
 #include <QHash>
 #include <QFile>
 #include <QString>
-#include <QSqlDatabase>
 #include <QSqlRelationalTableModel>
 #include <QSqlRecord>
 #include <QSqlQuery>
@@ -382,7 +381,7 @@ private:
       BeerXMLElement* e;
       T* et;
       
-      QSqlRelationalTableModel tm(0);//, sqldb);
+      QSqlRelationalTableModel tm(0, QSqlDatabase::database());//, sqldb);
       tm.setTable(tableNames[table]);
       tm.setFilter("");
       tm.select();
@@ -411,7 +410,7 @@ private:
    {
       int i, size, key;
       
-      QSqlRelationalTableModel tm(0);//, sqldb);
+      QSqlRelationalTableModel tm(0, QSqlDatabase::database());//, sqldb);
       tm.setTable(tableNames[table]);
       tm.setFilter(filter);
       tm.select();
@@ -535,7 +534,7 @@ private:
       // Any ingredient added to a recipe should not be visible for the trees?
       ing->setDisplay(false);
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
-      q = QSqlQuery( );//sqldb );
+      q = QSqlQuery( QSqlDatabase::database() );//sqldb );
       q.setForwardOnly(true);
       
       q.prepare( QString("INSERT INTO `%1` (`%2`, `recipe_id`) VALUES (:ingredient, :recipe)")
@@ -617,7 +616,7 @@ private:
                                     .arg(newValString)
                                     .arg(keyNames[t])
                                     .arg(newKey);
-      q = QSqlQuery( );//sqldb );
+      q = QSqlQuery( QSqlDatabase::database() );//sqldb );
       q.prepare(updateString);
       q.exec();
       
