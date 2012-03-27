@@ -96,7 +96,7 @@ public:
    void removeAllMashSteps();
 
 public slots:
-   void changed(QMetaProperty, QVariant);
+   void acceptMashStepChange(QMetaProperty, QVariant);
    
 signals:
    /*

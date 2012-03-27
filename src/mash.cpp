@@ -128,37 +128,6 @@ void Mash::setEquipAdjust( bool var )
    set("equipAdjust", "equip_adjust", var);
 }
 
-// NOTE: this is not necessary due to Database::newMashStep(Mash* mash). Right?
-/*
-void Mash::addMashStep(MashStep* step)
-{
-   if( step == 0 )
-      return;
-   
-   mashSteps.append(step);
-   addObserved(step);
-   hasChanged();
-}
-
-void Mash::removeMashStep(MashStep* step)
-{
-   if( step == 0 )
-      return;
-
-   QVector<MashStep*>::iterator it;
-   for( it = mashSteps.begin(); it != mashSteps.end(); it++ )
-   {
-      if(*it == step )
-      {
-         mashSteps.erase(it);
-         removeObserved(*it);
-         hasChanged();
-         return;
-      }
-   }
-}
-*/
-
 void Mash::removeAllMashSteps()
 {
    int i, size;
@@ -255,8 +224,7 @@ QList<MashStep*> Mash::mashSteps() const
    return Database::instance().mashSteps(this);
 }
 
-// TODO: ensure database is connecting mashstep signals to us.
-void Mash::changed(QMetaProperty prop, QVariant /*val*/)
+void Mash::acceptMashStepChange(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
    MashStep* stepSender = qobject_cast<MashStep*>(sender());

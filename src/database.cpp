@@ -273,7 +273,7 @@ void Database::load()
       {
          QList<MashStep*> tmpMS = mashSteps(*l);
          for( m=tmpMS.begin(); m != tmpMS.end(); ++m)
-            connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
+            connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
          connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
       }
    }
