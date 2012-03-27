@@ -82,6 +82,9 @@ Database::Database()
 
 Database::~Database()
 {
+   // Tell the thread to stop. Destructing a running thread can result in a crash.
+   _thread->quit();
+   _thread->wait();
    unload();
 }
 
