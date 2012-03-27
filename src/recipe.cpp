@@ -1445,10 +1445,10 @@ void Recipe::recalcAll(bool asynch)
       QueuedMethod* q0 =  new QueuedMethod(this,"recalcGrainsInMash_kg", false);
       QueuedMethod* q1 =  new QueuedMethod(this,"recalcGrains_kg", false);
       QueuedMethod* q2 =  new QueuedMethod(this,"recalcVolumeEstimates", false);
-      QueuedMethod* q3 =  new QueuedMethod(this,"recalcABV_pct", false);
-      QueuedMethod* q4 =  new QueuedMethod(this,"recalcColor_srm", false);
-      QueuedMethod* q5 =  new QueuedMethod(this,"recalcSRMColor", false);
-      QueuedMethod* q6 =  new QueuedMethod(this,"recalcOgFg", false);
+      QueuedMethod* q3 =  new QueuedMethod(this,"recalcColor_srm", false);
+      QueuedMethod* q4 =  new QueuedMethod(this,"recalcSRMColor", false);
+      QueuedMethod* q5 =  new QueuedMethod(this,"recalcOgFg", false);
+      QueuedMethod* q6 =  new QueuedMethod(this,"recalcABV_pct", false);
       QueuedMethod* q7 =  new QueuedMethod(this,"recalcBoilGrav", false);
       QueuedMethod* q8 =  new QueuedMethod(this,"recalcIBU", false);
       
@@ -1474,18 +1474,20 @@ void Recipe::recalcAll(bool asynch)
       // other objects to call finalVolume_l() for example, which will cause
       // another call to recalcAll() and so on.
       blockSignals(true);
+      
       recalcGrainsInMash_kg();
       recalcGrains_kg();
       recalcVolumeEstimates();
-      recalcABV_pct();
       recalcColor_srm();
       recalcSRMColor();
       recalcOgFg();
+      recalcABV_pct();
       recalcBoilGrav();
       recalcIBU();
    }
    _uninitializedCalcs = false;
-   blockSignals(false);
+   
+   blockSignals(false); // Let this recipe emit signals again.
 }
 
 void Recipe::recalcPoints(double volume)
