@@ -62,9 +62,9 @@ public:
    double qstringToSI(QString qstr, Unit* defUnit);
 
 protected:
-   const static int fieldWidth = 0;
-   const static char format = 'f';
-   const static int precision = 3;
+   static const int fieldWidth;
+   static const char format;
+   static const int precision;
    static QMap<QString, Unit*> nameToUnit;
    QRegExp amtUnit;
 

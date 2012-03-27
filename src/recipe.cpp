@@ -108,6 +108,21 @@ void Recipe::clear()
 
 Recipe::Recipe()
    : BeerXMLElement(),
+     _points(0),
+     _ABV_pct(0),
+     _color_srm(0),
+     _boilGrav(1.000),
+     _IBU(0),
+     _wortFromMash_l(1.0),
+     _boilVolume_l(1.0),
+     _postBoilVolume_l(1.0),
+     _finalVolume_l(1.0),
+     _calories(0),
+     _grainsInMash_kg(0),
+     _grains_kg(0),
+     _SRMColor(255,255,0),
+     _og(1.000),
+     _fg(1.000),
      _uninitializedCalcs(true)
 {
 }

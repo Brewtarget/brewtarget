@@ -21,6 +21,9 @@
 #include <QRegExp>
 #include <QString>
 
+const int UnitSystem::fieldWidth = 0;
+const char UnitSystem::format = 'f';
+const int UnitSystem::precision = 3;
 QMap<QString, Unit*> UnitSystem::nameToUnit;
 
 UnitSystem::UnitSystem()
