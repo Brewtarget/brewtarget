@@ -113,14 +113,15 @@ void HopTableModel::addHops(QList<Hop*> hops)
    
    for( i = tmp.begin(); i != tmp.end(); i++ )
       connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   
+
+   endInsertRows();
+
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
    
-   endInsertRows();
 }
 
 bool HopTableModel::removeHop(Hop* hop)

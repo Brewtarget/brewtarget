@@ -109,13 +109,14 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
    for( i = tmp.begin(); i != tmp.end(); i++ )
       connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    
+   endInsertRows();
+
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
    
-   endInsertRows();
 }
 
 bool YeastTableModel::removeYeast(Yeast* yeast)

@@ -105,13 +105,14 @@ void WaterTableModel::addWaters(QList<Water*> waters)
    for( i = tmp.begin(); i != tmp.end(); i++ )
       connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    
+   endInsertRows();
+
    if( parentTableWidget )
    {
       parentTableWidget->resizeColumnsToContents();
       parentTableWidget->resizeRowsToContents();
    }
    
-   endInsertRows();
 }
 
 bool WaterTableModel::removeWater(Water* water)
