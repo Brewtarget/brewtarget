@@ -1075,83 +1075,115 @@ void Recipe::setKegPrimingFactor( double var )
 
 //==========================Calculated Getters============================
 
-double Recipe::og() const
+double Recipe::og()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _og;
 }
 
-double Recipe::fg() const
+double Recipe::fg()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _fg;
 }
 
-double Recipe::color_srm() const
+double Recipe::color_srm()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _color_srm;
 }
 
-double Recipe::ABV_pct() const
+double Recipe::ABV_pct()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _ABV_pct;
 }
 
-double Recipe::IBU() const
+double Recipe::IBU()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _IBU;
 }
 
-QList<double> Recipe::IBUs() const
+QList<double> Recipe::IBUs()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _ibus;
 }
 
-double Recipe::boilGrav() const
+double Recipe::boilGrav()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _boilGrav;
 }
 
-double Recipe::calories() const
+double Recipe::calories()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _calories;
 }
 
-double Recipe::wortFromMash_l() const
+double Recipe::wortFromMash_l()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _wortFromMash_l;
 }
 
-double Recipe::boilVolume_l() const
+double Recipe::boilVolume_l()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _boilVolume_l;
 }
 
-double Recipe::postBoilVolume_l() const
+double Recipe::postBoilVolume_l()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _postBoilVolume_l;
 }
 
-double Recipe::finalVolume_l() const
+double Recipe::finalVolume_l()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _finalVolume_l;
 }
 
-QColor Recipe::SRMColor() const
+QColor Recipe::SRMColor()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _SRMColor;
 }
 
-double Recipe::grainsInMash_kg() const
+double Recipe::grainsInMash_kg()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _grainsInMash_kg;
 }
 
-double Recipe::grains_kg() const
+double Recipe::grains_kg()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _grains_kg;
 }
 
-double Recipe::points() const
+double Recipe::points()
 {
+   if( _uninitializedCalcs )
+      recalcAll();
    return _points;
 }
 

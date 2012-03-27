@@ -225,8 +225,8 @@ public:
    QString notes() const;
    QString tasteNotes() const;
    double tasteRating() const;
-   double og() const;
-   double fg() const;
+   double og();
+   double fg();
    int fermentationStages() const;
    double primaryAge_days() const;
    double primaryTemp_c() const;
@@ -246,28 +246,28 @@ public:
    
    // Calculated getters.
    //! Gets points from og().
-   double points() const;
+   double points();
    //! Gets points if the final \b volume is given.
    double points(double volume);
-   double ABV_pct() const;
-   double color_srm() const;
-   double boilGrav() const;
-   double IBU() const;
-   QColor SRMColor() const;
+   double ABV_pct();
+   double color_srm();
+   double boilGrav();
+   double IBU();
+   QColor SRMColor();
    //! Estimate amount of wort collected immediately after the mash.
-   double wortFromMash_l() const;
+   double wortFromMash_l();
    //! Estimate boil volume based on user inputs.
-   double boilVolume_l() const;
+   double boilVolume_l();
    //! Estimate how much wort immediately post boil.
-   double postBoilVolume_l() const;
+   double postBoilVolume_l();
    //! Estimate final volume based on user inputs.
-   double finalVolume_l() const;
+   double finalVolume_l();
    //! Estimate final calories of the beer
-   double calories() const;
-   double grainsInMash_kg() const;
-   double grains_kg() const;
+   double calories();
+   double grainsInMash_kg();
+   double grains_kg();
    //! Get a list of IBU contributions from each hop.
-   QList<double> IBUs() const;
+   QList<double> IBUs();
    
    // Relational getters
    QList<Hop*> hops() const;
@@ -328,7 +328,7 @@ private:
    double _og;
    double _fg;
    
-   // False when constructed, indicates whether recalcAll has been called.
+   // True when constructed, indicates whether recalcAll has been called.
    bool _uninitializedCalcs;
    
    // Some recalculators for calculated properties.
