@@ -31,8 +31,10 @@ OPTION( UPDATE_TRANSLATIONS
         "Update source translation *.ts files (WARNING: 'make clean' will delete the source .ts files! Danger!)"
         OFF)
 #==============================Compile flags===================================
-SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
-SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -gstabs+" )
+IF( CMAKE_COMPILER_IS_GNUCXX )
+   SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -O2" )
+   SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -g3" )
+ENDIF()
 
 # Speed up compilation if using gcc.
 IF( UNIX AND NOT APPLE )
