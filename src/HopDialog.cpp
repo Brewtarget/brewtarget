@@ -49,8 +49,9 @@ HopDialog::HopDialog(MainWindow* parent)
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
    connect( hopTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
    
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   populateTable();
+   //connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   //populateTable();
+   hopTableModel->observeDatabase(true);
 }
 
 void HopDialog::removeHop()
@@ -83,27 +84,6 @@ void HopDialog::removeHop()
 
    Hop *hop = hopTableModel->getHop(modelIndex.row());
    Database::instance().removeHop(hop);
-}
-
-void HopDialog::changed(QMetaProperty prop, QVariant val)
-{
-   if( sender() == &(Database::instance()) &&
-       QString(prop.name()) == "hops" )
-   {
-      hopTableModel->removeAll();
-      populateTable();
-   }
-}
-
-void HopDialog::populateTable()
-{
-   QList<Hop*> hops;
-   Database::instance().getHops(hops);
-
-   numHops = hops.length();
-   int i;
-   for( i = 0; i < numHops; ++i )
-      hopTableModel->addHop(hops[i]);
 }
 
 void HopDialog::addHop(const QModelIndex& index)

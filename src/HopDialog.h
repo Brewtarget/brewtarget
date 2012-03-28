@@ -57,8 +57,6 @@ public slots:
    void editSelected();
    //! Create a new hop.
    void newHop();
-   
-   void changed(QMetaProperty,QVariant);
 
 private:
    MainWindow* mainWindow;
@@ -66,8 +64,6 @@ private:
    HopTableModel* hopTableModel;
    HopSortFilterProxyModel* hopTableProxy;
    int numHops;
-
-   void populateTable();
 };
 
 #endif   /* _HOPDIALOG_H */

@@ -414,7 +414,7 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
 {
    // Just mark the brew note as deleted.
    sqlUpdate( tableNames[Brewtarget::BREWNOTETABLE],
-              "deleted=TRUE",
+              "deleted=1",
               QString("%1=%2").arg(keyNames[Brewtarget::BREWNOTETABLE]).arg(b->_key) );
 }
 
@@ -451,7 +451,7 @@ void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
    // TODO: encapsulate in QUndoCommand.
    // NOTE: is this the right thing to do?
    sqlUpdate( tableNames[Brewtarget::INSTRUCTIONTABLE],
-              "deleted=TRUE",
+              "deleted=1",
               QString("%1=%2").arg(keyNames[Brewtarget::INSTRUCTIONTABLE]).arg(ins->_key) );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -460,7 +460,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
 {
    // Just mark the step as deleted.
    sqlUpdate( tableNames[Brewtarget::MASHSTEPTABLE],
-              "deleted=TRUE",
+              "deleted=1",
               QString("%1=%2").arg(keyNames[Brewtarget::MASHSTEPTABLE]).arg(step->_key) );
 }
 
@@ -990,7 +990,7 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
                          keyNames[table].toStdString().c_str(),
                          object->_key,
                          "deleted",
-                         QVariant(true),
+                         QVariant(1),
                          object->metaProperty("deleted"),
                          object,
                          true);
@@ -1033,6 +1033,9 @@ void Database::removeFermentable(QList<Fermentable*> ferm)
 void Database::removeHop(Hop* hop)
 {
    deleteRecord(Brewtarget::HOPTABLE,hop);
+   // Need to tell everyone our hops changed.
+   // NOTE: what to put for the QVariant?
+   emit changed( metaProperty("hops"), QVariant() );
 }
 
 void Database::removeHop(QList<Hop*> hop)
@@ -1472,7 +1475,7 @@ QList<Fermentable*> Database::fermentables()
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getHops( tmp, "`deleted`='0'" );
+   getHops( tmp, "`deleted`='0' AND `display`='1'" );
    return tmp;
 }
 
