@@ -224,7 +224,9 @@ void EquipmentEditor::showChanges()
    lineEdit_name->setText(e->name());
    lineEdit_name->setCursorPosition(0);
    lineEdit_boilSize->setText( Brewtarget::displayAmount(e->boilSize_l(), Units::liters) );
+   checkBox_calcBoilVolume->blockSignals(true); // Keep next line from emitting a signal and changing e.
    checkBox_calcBoilVolume->setCheckState( (e->calcBoilVolume())? Qt::Checked : Qt::Unchecked );
+   checkBox_calcBoilVolume->blockSignals(false);
    lineEdit_batchSize->setText( Brewtarget::displayAmount(e->batchSize_l(), Units::liters) );
 
    lineEdit_tunVolume->setText( Brewtarget::displayAmount(e->tunVolume_l(), Units::liters) );

@@ -353,6 +353,7 @@ private:
    static QString dbFileName;
    static QFile dataDbFile;
    static QString dataDbFileName;
+   static QString dbConName;
    static QHash<Brewtarget::DBTable,QString> tableNames;
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
    static QHash<QString,Brewtarget::DBTable> classNameToTable;

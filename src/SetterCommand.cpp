@@ -33,6 +33,8 @@ SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_n
 
 SetterCommand::~SetterCommand()
 {
+   qDebug() << "~SetterCommand()";
+   qDebug() << "   col_names=" << col_names;
 }
 
 void SetterCommand::appendCommand( QSqlRelationalTableModel* table,

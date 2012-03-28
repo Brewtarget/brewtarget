@@ -63,6 +63,7 @@ QFile Database::dbFile;
 QString Database::dbFileName;
 QFile Database::dataDbFile;
 QString Database::dataDbFileName;
+QString Database::dbConName;
 QHash<Brewtarget::DBTable,QString> Database::tableNames = Database::tableNamesHash();
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable = Database::classNameToTableHash();
 QHash<Brewtarget::DBTable,QString> Database::keyNames = Database::keyNamesHash();
@@ -85,6 +86,7 @@ Database::~Database()
    // Tell the thread to stop. Destructing a running thread can result in a crash.
    _thread->quit();
    _thread->wait();
+   delete _setterCommandStack;
    unload();
 }
 
@@ -121,6 +123,7 @@ void Database::load()
    QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE");
    sqldb.setDatabaseName(dbFileName);
    dbIsOpen = sqldb.open();
+   dbConName = sqldb.connectionName();
    if( ! dbIsOpen )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.").arg(dbFileName));
@@ -302,8 +305,8 @@ void Database::unload()
    qDeleteAll(allYeasts);
    qDeleteAll(allRecipes);
    
-   QSqlDatabase::database().close();
-   QSqlDatabase::removeDatabase( QSqlDatabase::defaultConnection );
+   QSqlDatabase::database( dbConName, false ).close();
+   QSqlDatabase::removeDatabase( dbConName );
 }
 
 Database& Database::instance()
@@ -2791,10 +2794,10 @@ int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
       QString htype = q.record().value(0).toString();
       if ( htype != "" )
       {
-	if ( Hop::types.indexOf(htype) >= 0 )
-	{
-	  return Hop::types.indexOf(htype);
-	}
+         if ( Hop::types.indexOf(htype) >= 0 )
+         {
+            return Hop::types.indexOf(htype);
+         }
       }
     }
     // out of ideas at this point so default to Both
@@ -2817,8 +2820,8 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
     {
       QString hUse = q.record().value(0).toString();
       if ( hUse != "" )
-	if ( Hop::uses.indexOf(hUse) >= 0 )
-	  return Hop::uses.indexOf(hUse);
+         if ( Hop::uses.indexOf(hUse) >= 0 )
+            return Hop::uses.indexOf(hUse);
     }
     // out of ideas at this point so default to Flavor
     return Hop::uses.indexOf(QString("Flavor"));
@@ -2918,10 +2921,10 @@ int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
       QString mtype = q.record().value(0).toString();
       if ( mtype != "" )
       {
-	if ( Misc::types.indexOf(mtype) >= 0 )
-	{
-	  return Misc::types.indexOf(mtype);
-	}
+         if ( Misc::types.indexOf(mtype) >= 0 )
+         {
+            return Misc::types.indexOf(mtype);
+         }
       }
     }
     // out of ideas at this point so default to Flavor
@@ -2944,8 +2947,8 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
     {
       QString mUse = q.record().value(0).toString();
       if ( mUse != "" )
-	if ( Misc::uses.indexOf(mUse) >= 0 )
-	  return Misc::uses.indexOf(mUse);
+         if ( Misc::uses.indexOf(mUse) >= 0 )
+            return Misc::uses.indexOf(mUse);
     }
     // out of ideas at this point so default to Flavor
     return Misc::uses.indexOf(QString("Flavor"));

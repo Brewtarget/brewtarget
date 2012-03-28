@@ -20,6 +20,7 @@
 #include "SetterCommand.h"
 #include <QThread>
 #include <QTimer>
+#include <QDebug>
 
 SetterCommandStack::SetterCommandStack(QThread* thread, int interval_ms)
    : QObject(),
@@ -48,9 +49,16 @@ SetterCommandStack::~SetterCommandStack()
    // Keep other people from going through push(). We may miss a few if someone
    // is still in executeNext(), adding things to _commands.
    _commandPtrSwitch.lock();
+   qDebug() << "~SetterCommandStack()";
+   qDebug() << "   _nextCommand=" << _nextCommand;
+   qDebug() << "   _nextCommandTmp=" << _nextCommandTmp;
+   qDebug() << "   _commands.size()=" << _commands.size();
+   
    qDeleteAll(_commands);
+   _commands.clear();
    delete _nextCommand;
    _nextCommand = 0;
+   
    _commandPtrSwitch.unlock();
 }
 
@@ -95,21 +103,24 @@ void SetterCommandStack::executeNext()
    if( _nextCommand )
    {
       // First, exchange pointers.
-      SetterCommand* tmp = _nextCommand;
-      _nextCommand = _nextCommandTmp;
-      _nextCommandTmp = tmp;
-      _commandPtrSwitch.unlock();
-   
-      // Now, people can keep calling push() without blocking as we execute.
-   
+      //SetterCommand* tmp = _nextCommand;
+      //_nextCommand = _nextCommandTmp;
+      //_nextCommandTmp = tmp;
+      
+      _nextCommandTmp = _nextCommand;
+      _nextCommand = 0;
       // Push _nextCommandTmp onto stack.
       _commands.append( _nextCommandTmp );
       _numCommands++;
+      _commandPtrSwitch.unlock();
+   
+      // Now, people can keep calling push() without blocking as we execute,
+      // creating a new _nextCommand while we work with the old one _nextCommandTmp.
+      // Since the timer is stopped, we are guaranteed no-one else is in this
+      // function.
       if( _numCommands > _commandLimit )
       {
-         tmp = _commands.takeFirst();
-         //tmp->deleteLater();
-         delete tmp;
+         delete _commands.takeFirst();;
          _numCommands--;
       }
    
