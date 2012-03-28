@@ -54,7 +54,6 @@ int main(int argc, char **argv)
    app.setApplicationName("brewtarget");
    app.setApplicationVersion(VERSIONSTRING);
    app.setOrganizationName("Philip G. Lee");
-   Brewtarget::setApp(app);
 
    // Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
    qRegisterMetaType<QMetaProperty>();

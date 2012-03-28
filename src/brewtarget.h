@@ -62,10 +62,6 @@ public:
    enum IbuType {TINSETH, RAGER};
    enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
                  MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
-   //! This method should be called before any of the others.
-   static void setApp(QApplication& a);
-   //! \return the application
-   static QApplication* getApp();
    //! \return the data directory
    static QString getDataDir();
    //! \return the doc directory
@@ -147,7 +143,6 @@ public:
    static MainWindow* getMainWindow();
 
 private:
-   static QApplication* app;
    static MainWindow* mainWindow;
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;

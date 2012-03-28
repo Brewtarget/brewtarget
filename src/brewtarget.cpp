@@ -58,7 +58,6 @@
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
 
-QApplication* Brewtarget::app;
 MainWindow* Brewtarget::mainWindow;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = new QTranslator();
@@ -87,11 +86,6 @@ Brewtarget::IbuType Brewtarget::ibuFormula = Brewtarget::TINSETH;
 Brewtarget::ColorUnitType Brewtarget::colorUnit = Brewtarget::SRM;
 
 bool Brewtarget::usePlato = false;
-
-void Brewtarget::setApp(QApplication& a)
-{
-   app = &a;
-}
 
 bool Brewtarget::ensureDirectoriesExist()
 {
@@ -260,7 +254,7 @@ const QString& Brewtarget::getSystemLanguage()
 
 void Brewtarget::loadTranslations()
 {
-   if( app == 0 )
+   if( qApp == 0 )
       return;
 
    // Load translators.
@@ -270,29 +264,24 @@ void Brewtarget::loadTranslations()
    //btTrans->load("bt_" + getSystemLanguage());
 
    // Install translators.
-   app->installTranslator(defaultTrans);
-   //app->installTranslator(btTrans);
+   qApp->installTranslator(defaultTrans);
+   //qApp->installTranslator(btTrans);
 }
 
 void Brewtarget::setLanguage(QString twoLetterLanguage)
 {
    currentLanguage = twoLetterLanguage;
-   app->removeTranslator(btTrans);
+   qApp->removeTranslator(btTrans);
 
    QString filename = QString("bt_%1").arg(twoLetterLanguage);
    QString dir = QString("%1translations_qm/").arg(getDataDir());
    if( btTrans->load( filename, dir ) )
-      app->installTranslator(btTrans);
+      qApp->installTranslator(btTrans);
 }
 
 const QString& Brewtarget::getCurrentLanguage()
 {
    return currentLanguage;
-}
-
-QApplication* Brewtarget::getApp()
-{
-   return app;
 }
 
 iUnitSystem Brewtarget::getWeightUnitSystem()
@@ -317,7 +306,7 @@ TempScale Brewtarget::getTemperatureScale()
 
 QString Brewtarget::getDataDir()
 {
-   QString dir = app->applicationDirPath();
+   QString dir = qApp->applicationDirPath();
 #if defined(Q_WS_X11) // Linux OS.
 
    dir = QString(CONFIGDATADIR);
@@ -341,7 +330,7 @@ QString Brewtarget::getDataDir()
 
 QString Brewtarget::getDocDir()
 {
-   QString dir = app->applicationDirPath();
+   QString dir = qApp->applicationDirPath();
 #if defined(Q_WS_X11) // Linux OS.
 
    dir = QString(CONFIGDOCDIR);
@@ -440,7 +429,7 @@ QString Brewtarget::getConfigDir(bool *success)
    if( app != 0 )
    {
       // This is the bin/ directory.
-      dir = QDir(app->applicationDirPath());
+      dir = QDir(qApp->applicationDirPath());
       dir.cdUp();
    }
    else
@@ -478,7 +467,7 @@ int Brewtarget::run()
    BtSplashScreen splashScreen;
    splashScreen.show();
    
-   app->processEvents(); // So we can process mouse clicks on splash window.
+   qApp->processEvents(); // So we can process mouse clicks on splash window.
    
    success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
    ensureOptionFileExists();
@@ -491,9 +480,9 @@ int Brewtarget::run()
 
    loadTranslations(); // Do internationalization.
 
-   app->processEvents();
+   qApp->processEvents();
    splashScreen.showMessage("Loading...");
-   app->processEvents();
+   qApp->processEvents();
    Database::instance();
    
    mainWindow = new MainWindow();
@@ -503,7 +492,7 @@ int Brewtarget::run()
 
    checkForNewVersion(mainWindow);
 
-   ret = app->exec();
+   ret = qApp->exec();
    
    savePersistentOptions();
    
@@ -520,7 +509,7 @@ int Brewtarget::run()
       logFile = 0;
    }
    
-   // Should I do app->removeTranslator() first?
+   // Should I do qApp->removeTranslator() first?
    delete defaultTrans;
    delete btTrans;
    

@@ -82,7 +82,7 @@ private:
    SetterCommand* _nextCommand;
    SetterCommand* _nextCommandTmp;
    QMutex _commandPtrSwitch;
-   QTimer _timer;
+   QTimer* _timer;
 };
 
 #endif /*_SETTERCOMMANDSTACK_H*/

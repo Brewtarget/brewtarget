@@ -184,8 +184,7 @@ QString Unit::convert(QString qstr, QString toUnit)
       Unit::setupMap();
 
    Unit* f;
-   Unit** ff = &f;
-   double si = qstringToSI( qstr, ff, false );
+   double si = qstringToSI( qstr, &f, false );
    Unit* u = getUnit(toUnit, false);
    
    if( u == 0 || f == 0 || u->getUnitType() != f->getUnitType() )

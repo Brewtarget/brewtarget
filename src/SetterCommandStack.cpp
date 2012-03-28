@@ -27,16 +27,18 @@ SetterCommandStack::SetterCommandStack(QThread* thread, int interval_ms)
      _numCommands(0),
      _executionInterval_ms(interval_ms),
      _nextCommand(0),
-     _nextCommandTmp(0)
+     _nextCommandTmp(0),
+     _timer(0)
 {
    // NOTE: Is moveToThread() correct? I want many threads to call
    // push() without executeCommand() blocking it.
    moveToThread(thread);
    
-   connect( &_timer, SIGNAL(timeout()), this, SLOT(executeNext()) );
-   _timer.setSingleShot(true);
-   _timer.setInterval(_executionInterval_ms);
-   _timer.start();
+   _timer = new QTimer(this);
+   connect( _timer, SIGNAL(timeout()), this, SLOT(executeNext()) );
+   _timer->setSingleShot(true);
+   _timer->setInterval(_executionInterval_ms);
+   _timer->start();
 }
 
 SetterCommandStack::~SetterCommandStack()
@@ -72,16 +74,16 @@ void SetterCommandStack::flush()
 {
    bool restart_timer = false;
    // Don't want the normal process to fire in the middle of a forced flush
-   if ( _timer.isActive() )
+   if ( _timer->isActive() )
    {
-      _timer.stop();
+      _timer->stop();
       restart_timer = true;
    }
    executeNext();
 
    // Restart the timer.
    if ( restart_timer )
-      _timer.start();
+      _timer->start();
 }
 
 void SetterCommandStack::executeNext()
@@ -117,5 +119,5 @@ void SetterCommandStack::executeNext()
       _commandPtrSwitch.unlock();
    
    // Reset the timer.
-   _timer.start();
+   _timer->start();
 }
