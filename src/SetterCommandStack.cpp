@@ -30,15 +30,17 @@ SetterCommandStack::SetterCommandStack(QThread* thread, int interval_ms)
      _nextCommandTmp(0),
      _timer(0)
 {
-   // NOTE: Is moveToThread() correct? I want many threads to call
-   // push() without executeCommand() blocking it.
-   moveToThread(thread);
-   
    _timer = new QTimer(this);
    connect( _timer, SIGNAL(timeout()), this, SLOT(executeNext()) );
    _timer->setSingleShot(true);
    _timer->setInterval(_executionInterval_ms);
    _timer->start();
+ 
+   // Save this til the end, because we need to wait until _timer is added
+   // as a child. Otherwise, this object will be in a new thread, but the
+   // timer will be attached in the calling thread, which is apparently an
+   // issue.
+   moveToThread(thread);
 }
 
 SetterCommandStack::~SetterCommandStack()
