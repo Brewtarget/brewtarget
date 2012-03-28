@@ -474,6 +474,7 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
                 QSqlDatabase::database());//sqldb );
    q.next();
    key = q.record().value("recipe_id").toInt();
+   q.finish();
    
    return allRecipes[key];
 }
@@ -522,7 +523,8 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
    QSqlQuery q( QString("UPDATE mashstep SET step_number = CASE msid WHEN %1 then %2 when %3 then %4 END WHERE msid IN (%5,%6)")
                 .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key),
                 QSqlDatabase::database());//sqldb );
-                
+   q.finish();
+   
    emit m1->changed( m1->metaProperty("stepNumber") );
    emit m2->changed( m2->metaProperty("stepNumber") );
 }
@@ -533,7 +535,8 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
    QSqlQuery q( QString("UPDATE instruction SET instruction_number = CASE iid WHEN %1 then %2 when %3 then %4 END WHERE iid IN (%5,%6)")
                 .arg(in1->_key).arg(in2->_key).arg(in2->_key).arg(in1->_key).arg(in1->_key).arg(in2->_key),
                 QSqlDatabase::database());//sqldb );
-                
+   q.finish();
+   
    emit in1->changed( in1->metaProperty("instructionNumber") );
    emit in2->changed( in2->metaProperty("instructionNumber") );
 }
@@ -548,6 +551,8 @@ void Database::insertInstruction(Instruction* in, int pos)
                 QSqlDatabase::database());//sqldb);
    q.next();
    parentRecipeKey = q.record().value("recipe_id").toInt();
+   q.finish();
+   
    // Increment all instruction positions greater or equal to pos.
    sqlUpdate( tableNames[Brewtarget::INSTRUCTIONTABLE],
               QString("instruction_number=instruction_number+1"),
@@ -575,6 +580,8 @@ QList<BrewNote*> Database::brewNotes(Recipe const* parent)
    
    while( q.next() )
       ret.append(allBrewNotes[q.record().value(keyNames[Brewtarget::BREWNOTETABLE]).toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -586,6 +593,8 @@ QList<Fermentable*> Database::fermentables(Recipe const* parent)
    
    while( q.next() )
       ret.append(allFermentables[q.record().value("fermentable_id").toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -597,6 +606,8 @@ QList<Hop*> Database::hops(Recipe const* parent)
    
    while( q.next() )
       ret.append(allHops[q.record().value("hop_id").toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -608,6 +619,8 @@ QList<Misc*> Database::miscs(Recipe const* parent)
    
    while( q.next() )
       ret.append(allMiscs[q.record().value("misc_id").toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -622,6 +635,8 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
    
    while( q.next() )
       ret.append(allMashSteps[q.record().value(keyNames[Brewtarget::MASHSTEPTABLE].toStdString().c_str()).toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -636,6 +651,8 @@ QList<Instruction*> Database::instructions( Recipe const* parent )
    
    while( q.next() )
       ret.append(allInstructions[q.record().value(keyNames[Brewtarget::INSTRUCTIONTABLE].toStdString().c_str()).toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -647,6 +664,8 @@ QList<Water*> Database::waters(Recipe const* parent)
    
    while( q.next() )
       ret.append(allWaters[q.record().value("water_id").toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -658,6 +677,8 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
    
    while( q.next() )
       ret.append(allYeasts[q.record().value("yeast_id").toInt()]);
+   q.finish();
+   
    return ret;
 }
 
@@ -686,7 +707,8 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
    }
    else
       key = q.lastInsertId().toInt();
-
+   q.finish();
+   
    //if( q.lastError().isValid() )
    //   Brewtarget::logE( QString("Database::insertNewDefaultRecord: %1").arg(q.lastError().text()) );
    
@@ -709,7 +731,8 @@ int Database::insertNewMashStepRecord( Mash* parent )
    }
    else
       key = q.lastInsertId().toInt();
-
+   q.finish();
+   
    // I *think* we need to set the mash_id first
    sqlUpdate( tableNames[Brewtarget::MASHSTEPTABLE],
               QString("`mash_id`='%1' ").arg(parent->_key),
@@ -1323,6 +1346,7 @@ void Database::sqlUpdate( QString const& tableName, QString const& setClause, QS
                 .arg(whereClause),
                 QSqlDatabase::database());
                 //sqldb );
+   q.finish();
 }
 
 void Database::sqlDelete( QString const& tableName, QString const& whereClause )
@@ -1332,6 +1356,7 @@ void Database::sqlDelete( QString const& tableName, QString const& whereClause )
                 .arg(whereClause),
                 QSqlDatabase::database());
                 //sqldb );
+   q.finish();
 }
 
 void Database::getBrewNotes( QList<BrewNote*>& list, QString filter )
@@ -2792,6 +2817,7 @@ int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
     if ( q.isValid() )
     {
       QString htype = q.record().value(0).toString();
+      q.finish();
       if ( htype != "" )
       {
          if ( Hop::types.indexOf(htype) >= 0 )
@@ -2805,7 +2831,7 @@ int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
   }
   else
   {
-    return Hop::types.indexOf(type);
+     return Hop::types.indexOf(type);
   }
 }
 
@@ -2819,6 +2845,7 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
     if ( q.isValid() )
     {
       QString hUse = q.record().value(0).toString();
+      q.finish();
       if ( hUse != "" )
          if ( Hop::uses.indexOf(hUse) >= 0 )
             return Hop::uses.indexOf(hUse);
@@ -2828,7 +2855,7 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
   }
   else
   {
-    return Hop::uses.indexOf(use);
+     return Hop::uses.indexOf(use);
   }
 }
 
@@ -2919,6 +2946,7 @@ int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
     if ( q.isValid() )
     {
       QString mtype = q.record().value(0).toString();
+      q.finish();
       if ( mtype != "" )
       {
          if ( Misc::types.indexOf(mtype) >= 0 )
@@ -2932,7 +2960,7 @@ int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
   }
   else
   {
-    return Misc::types.indexOf(type);
+     return Misc::types.indexOf(type);
   }
 }
 
@@ -2946,6 +2974,7 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
     if ( q.isValid() )
     {
       QString mUse = q.record().value(0).toString();
+      q.finish();
       if ( mUse != "" )
          if ( Misc::uses.indexOf(mUse) >= 0 )
             return Misc::uses.indexOf(mUse);
@@ -2955,7 +2984,7 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
   }
   else
   {
-    return Misc::uses.indexOf(use);
+     return Misc::uses.indexOf(use);
   }
 }
 

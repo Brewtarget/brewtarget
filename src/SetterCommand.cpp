@@ -221,6 +221,7 @@ void SetterCommand::redo()
    // Emit signals.
    for( i = 0; i < size; ++i )
    {
+      queries[i].finish();
       if( notify.at(i) )
          emit objects[i]->changed(props[i],values[i]);
    }
@@ -246,6 +247,7 @@ void SetterCommand::undo()
    // Emit signals.
    for( i = 0; i < size; ++i )
    {
+      queries[i].finish();
       if( notify.at(i) )
          emit objects[i]->changed(props[i],oldValues[i]);
    }

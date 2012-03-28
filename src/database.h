@@ -105,9 +105,16 @@ public:
                  );
                    
       if( q.next() )
-         return q.value(0);
+      {
+         QVariant ret(q.value(0));
+         q.finish();
+         return ret;
+      }
       else
+      {
+         q.finish();
          return QVariant();
+      }
    }
       
    //! Get a table view.
@@ -515,9 +522,12 @@ private:
                  );
       if( q.next() )
       {
+         q.finish();
          Brewtarget::logW( "Database::addIngredientToRecipe: Ingredient already exists in recipe." );
          return -1;
       }
+      else
+         q.finish();
       
       // Create a copy of the ingredient. We don't want to do this on the initial
       // load of the recipe database, because the stuff is already a copy.
@@ -545,9 +555,13 @@ private:
       q.bindValue(":ingredient", newKey);
       q.bindValue(":recipe", rec->_key);
       if( q.exec() )
+      {
+         q.finish();
          emit rec->changed( rec->metaProperty(propName), QVariant() );
+      }
       else
       {
+         q.finish();
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
       }
       
@@ -583,10 +597,12 @@ private:
       
       if( !q.next() )
       {
+         q.finish();
          return QSqlRecord();
       }
       
       QSqlRecord oldRecord = q.record();
+      q.finish(); // NOTE: Is this safe, since we will later use oldRecord?
       
       // Create a new row.
       newKey = insertNewDefaultRecord(t);
@@ -595,6 +611,7 @@ private:
                    );
       q.next();
       QSqlRecord newRecord = q.record();
+      q.finish(); // NOTE: Is this safe, since we will later use newRecord?
       
       // Set the new row's columns equal to the old one's, except for any "parent"
       // field, which should be set to the oldRecord's key.
@@ -620,6 +637,7 @@ private:
       q = QSqlQuery( QSqlDatabase::database() );//sqldb );
       q.prepare(updateString);
       q.exec();
+      q.finish();
       
       // Update the hash if need be.
       if( keyHash )
