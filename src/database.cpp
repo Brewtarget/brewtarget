@@ -286,10 +286,14 @@ void Database::unload()
 {
    // Delete all models that are stuck to the database.
    //delete tableModel;
+   delete tableModel;
+   qDeleteAll(tables);
+   /*
    tableModel->deleteLater();
    QHash<Brewtarget::DBTable,QSqlRelationalTableModel*>::iterator i;
    for( i = tables.begin(); i != tables.end(); i++ )
-      (*i)->deleteLater();//delete *i;
+      (*i)->deleteLater();
+   */
    
    // Delete all the ingredients floating around.
    qDeleteAll(allBrewNotes);
