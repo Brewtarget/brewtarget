@@ -18,6 +18,7 @@
 
 #include "MashEditor.h"
 #include <QWidget>
+#include <QDebug>
 #include "mash.h"
 #include "brewtarget.h"
 #include "unit.h"
@@ -66,11 +67,15 @@ void MashEditor::saveAndClose()
    //mash->forceNotify();
 }
 
-void MashEditor::fromEquipment(Equipment* equip)
+void MashEditor::fromEquipment()
 {
    if( mashObs == 0 )
       return;
 
+   if ( equip == 0 )
+      return;
+
+   qDebug() << "resetting mass " << equip->tunWeight_kg();
    lineEdit_tunMass->setText(Brewtarget::displayAmount(equip->tunWeight_kg(), Units::kilograms));
    lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(equip->tunSpecificHeat_calGC()));
 }
@@ -86,6 +91,14 @@ void MashEditor::setMash(Mash* mash)
       connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
+}
+
+void MashEditor::setEquipment(Equipment* e)
+{
+   if ( ! e )
+      return;
+
+   equip = e;
 }
 
 void MashEditor::changed(QMetaProperty prop, QVariant /*val*/)

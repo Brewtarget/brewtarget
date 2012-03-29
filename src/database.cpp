@@ -318,7 +318,7 @@ Database& Database::instance()
    */
    
    // This is not safe either. This is the double-check pattern that
-   // avoids aquiring the lock unless we need to make a new instance.
+   // avoids acquiring the lock unless we need to make a new instance.
    // The problem is that it's not safe. Should replace this lazy
    // initialization with eager initialization, or just do a single
    // check lock.

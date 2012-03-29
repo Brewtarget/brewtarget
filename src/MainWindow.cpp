@@ -137,6 +137,10 @@ MainWindow::MainWindow(QWidget* parent)
    lcdNumber_ibugu->setConstantColor(BtDigitWidget::BLACK);
    lcdNumber_calories->setConstantColor(BtDigitWidget::BLACK);
 
+   // experimental and currently disabled for checkin
+   //if ( lineEdit_batchSize->property("unit").isValid() )
+   //   qDebug() << "Found a valid property " <<lineEdit_batchSize->property("unit").toString();
+
    // Null out the recipe
    recipeObs = 0;
    
@@ -394,7 +398,6 @@ void MainWindow::setupShortCuts()
    actionDeleteSelected->setShortcut(QKeySequence::Delete);
 }
 
-
 void MainWindow::deleteSelected()
 {
    QModelIndexList selected; 
@@ -481,10 +484,12 @@ void MainWindow::deleteSelected()
    // be set to the top element of the active tree. I am just not sure how to
    // do it
    first = active->getFirst();
-   if ( active->getType(first) == BrewTargetTreeItem::RECIPE)
-      setRecipeByIndex(first);
-
-   setSelection(first);
+   if ( first.isValid() )
+   {
+      if (active->getType(first) == BrewTargetTreeItem::RECIPE)
+         setRecipeByIndex(first);
+      setSelection(first);
+   }
 }
 
 void MainWindow::treeActivated(const QModelIndex &index)
@@ -674,6 +679,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    singleEquipEditor->setEquipment(recEquip);
    
    mashEditor->setMash(recipeObs->mash());
+   mashEditor->setEquipment(recEquip);
    recipeScaler->setRecipe(recipeObs);
 
    // Update combobox indices.
@@ -851,6 +857,7 @@ void MainWindow::updateRecipeEquipment()
          recipeObs->setBatchSize_l( equip->batchSize_l() );
          recipeObs->setBoilSize_l( equip->boilSize_l() );
          recipeObs->setBoilTime_min( equip->boilTime_min() );
+         mashEditor->setEquipment(equip);
       }
    }
 }

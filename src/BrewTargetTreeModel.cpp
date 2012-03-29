@@ -209,7 +209,10 @@ QModelIndex BrewTargetTreeModel::getFirst(int type)
          index  = treeMask;
    }
    pItem = rootItem->child(trees.value(index));
-   return createIndex(0,0,pItem->child(0));
+   if ( pItem->childCount() > 0 )
+      return createIndex(0,0,pItem->child(0));
+
+   return QModelIndex();
 }
 
 QVariant BrewTargetTreeModel::data(const QModelIndex &index, int role) const

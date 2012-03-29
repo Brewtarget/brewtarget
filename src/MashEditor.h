@@ -48,15 +48,17 @@ public slots:
    void closeEditor();
    void saveAndClose();
    //! Get the tun mass and sp. heat from the equipment.
-   void fromEquipment(Equipment* equip);
+   void fromEquipment();
    //! Set the mash we wish to view/edit.
    void setMash(Mash* mash);
+   void setEquipment(Equipment* e);
    
    void changed(QMetaProperty,QVariant);
 private:
    void showChanges(QMetaProperty* prop = 0);
    void clear();
    Mash* mashObs;
+   Equipment* equip;
 
 };
 
