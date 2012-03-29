@@ -49,11 +49,7 @@ SetterCommandStack::~SetterCommandStack()
    // Keep other people from going through push(). We may miss a few if someone
    // is still in executeNext(), adding things to _commands.
    _commandPtrSwitch.lock();
-   qDebug() << "~SetterCommandStack()";
-   qDebug() << "   _nextCommand=" << _nextCommand;
-   qDebug() << "   _nextCommandTmp=" << _nextCommandTmp;
-   qDebug() << "   _commands.size()=" << _commands.size();
-   
+
    qDeleteAll(_commands);
    _commands.clear();
    delete _nextCommand;
