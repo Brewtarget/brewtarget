@@ -90,7 +90,16 @@ Database::Database()
 Database::~Database()
 {
    // Tell the thread to stop. Destructing a running thread can result in a crash.
-   _thread->quit();
+   
+   // The following can cause race conditions. Have to be more delicate.
+   //_thread->quit();
+   
+   // Set up a call to quit from the calling thread to _thread.
+   QTimer::singleShot( 0, _thread, SLOT(quit()) );
+   // Calling thread's event loop is probably stopped, so add an explicit call
+   // to execute the event.
+   QCoreApplication::processEvents();
+   // Wait for _thread to join us.
    _thread->wait();
    delete _setterCommandStack;
    unload();
