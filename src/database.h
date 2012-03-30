@@ -352,6 +352,10 @@ public:
 signals:
    void changed(QMetaProperty prop, QVariant value);
    
+private slots:
+   //! Load database from file.
+   void load();
+   
 private:
    static Database* dbInstance; // The singleton object
    QThread* _thread;
@@ -474,9 +478,6 @@ private:
    {
       return metaObject()->property(metaObject()->indexOfProperty(name));
    }
-   
-   //! Load database from file.
-   void load();
    
    //! Should be called when we are about to close down.
    void unload();

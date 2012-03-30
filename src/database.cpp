@@ -72,13 +72,18 @@ Database::Database()
    : _thread( new QThread() ),
      _setterCommandStack( new SetterCommandStack(_thread) )
 {
+   commandStack.setUndoLimit(100);
+   
    // All the functions and signals/slots should execute in _thread.
    // NOTE: it is EXTREMELY important that all the sql operations use this thread.
    moveToThread( _thread );
-   _thread->start();
    
-   commandStack.setUndoLimit(100);
-   load();
+   // Doing it this way instead of just calling load() here ensures
+   // that load() runs in _thread, and not the thread that is calling
+   // the constructor, which potentially creates concurrency issues.
+   connect( _thread, SIGNAL(started()), this, SLOT(load()) );
+   
+   _thread->start();
 }
 
 Database::~Database()
