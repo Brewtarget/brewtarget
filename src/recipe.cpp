@@ -1477,22 +1477,24 @@ void Recipe::recalcAll()
    // causing other objects to call finalVolume_l() for example, which may
    // cause another call to recalcAll() and so on.
    
-   if(_recalcMutex.tryLock())
-   {
-      recalcGrainsInMash_kg();
-      recalcGrains_kg();
-      recalcVolumeEstimates();
-      recalcColor_srm();
-      recalcSRMColor();
-      recalcOgFg();
-      recalcABV_pct();
-      recalcBoilGrav();
-      recalcIBU();
-
-      _uninitializedCalcs = false;
-
-      _recalcMutex.unlock();
-   }
+   bool wasLocked = _uninitializedCalcsMutex.tryLock();
+   _recalcMutex.lock();
+   
+   recalcGrainsInMash_kg();
+   recalcGrains_kg();
+   recalcVolumeEstimates();
+   recalcColor_srm();
+   recalcSRMColor();
+   recalcOgFg();
+   recalcABV_pct();
+   recalcBoilGrav();
+   recalcIBU();
+   
+   _uninitializedCalcs = false;
+   
+   _recalcMutex.unlock();
+   if( wasLocked )
+      _uninitializedCalcsMutex.unlock();
 }
 
 void Recipe::recalcPoints(double volume)
