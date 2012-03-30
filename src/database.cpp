@@ -36,6 +36,7 @@
 #include <QThread>
 #include <QDebug>
 #include <QMutex>
+#include <QtConcurrentRun>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -440,7 +441,7 @@ void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
 {
    removeIngredientFromRecipe( rec, ferm, "fermentables", "fermentable_in_recipe", "fermentable_id" );
    disconnect( ferm, 0, rec, 0 );
-   rec->recalcAll();
+   QtConcurrent::run(rec, &Recipe::recalcAll);
 }
 
 void Database::removeFromRecipe( Recipe* rec, Misc* m )
@@ -494,8 +495,8 @@ Recipe* Database::recipe(int key)
    if( allRecipes.contains(key) )
    {
       ret = allRecipes[key];
-      if( ret->_uninitializedCalcs )
-         ret->recalcAll();
+      //if( ret->_uninitializedCalcs )
+      //   ret->recalcAll();
       return ret;
    }
    else
@@ -1224,7 +1225,7 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool initialLoad )
                                          "hop_id",
                                          initialLoad, &allHops );
    connect( allHops[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
-   rec->recalcIBU();
+   QtConcurrent::run(rec, &Recipe::recalcIBU);
 }
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
@@ -1238,7 +1239,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
                                                  "fermentable_id",
                                                  initialLoad, &allFermentables );
    connect( allFermentables[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
-   rec->recalcAll();
+   QtConcurrent::run(rec, &Recipe::recalcAll);
 }
 
 void Database::addToRecipe( Recipe* rec, Misc* m, bool initialLoad )
@@ -1541,12 +1542,14 @@ QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
    getRecipes( tmp, "`deleted`='0'" );
+   /*
    QList<Recipe*>::iterator i;
    for( i = tmp.begin(); i != tmp.end(); i++ )
    {
       if( (*i)->_uninitializedCalcs )
          (*i)->recalcAll();
    }
+   */
    return tmp;
 }
 

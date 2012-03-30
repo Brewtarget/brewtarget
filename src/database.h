@@ -371,6 +371,7 @@ private:
    static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
    static QHash<Brewtarget::DBTable,QString> keyNames;
    static QHash<Brewtarget::DBTable,QString> keyNamesHash();
+   static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
    
    // Keeps all pointers to the elements referenced by key.
    QHash< int, BrewNote* > allBrewNotes;

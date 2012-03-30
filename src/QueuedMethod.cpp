@@ -22,7 +22,7 @@
 #include <QDebug>
 #include <QThread>
 
-QList<QueuedMethod*> QueuedMethod::_queue;
+QList< QSharedPointer<QueuedMethod> > QueuedMethod::_queue;
 
 QueuedMethod::QueuedMethod(
    QObject* obj, QString const& methodName,
@@ -31,7 +31,7 @@ QueuedMethod::QueuedMethod(
    QGenericArgument arg0
 )
    : QThread(),
-     _chainedMethod(0),
+     _chainedMethod(),
      _obj(obj),
      _methodName(methodName),
      //_retName(ret.name()),
@@ -45,6 +45,8 @@ QueuedMethod::QueuedMethod(
 
 QueuedMethod::~QueuedMethod()
 {
+   qDebug() << "~QueuedMethod()";
+   qDebug() << "   thread=" << QThread::currentThread();
 }
 
 void QueuedMethod::run()
@@ -78,33 +80,29 @@ void QueuedMethod::executeFunction()
    }
 }
 
-void QueuedMethod::enqueue( QueuedMethod* qm )
+void QueuedMethod::enqueue( QSharedPointer<QueuedMethod> qm )
 {
    if( !_queue.contains(qm) )
       _queue.append(qm);
 }
 
-void QueuedMethod::dequeue( QueuedMethod* qm )
-{
-   if( _queue.contains(qm) )
-   {
-      _queue.removeAll(qm);
-      //delete qm;
-      qm->deleteLater();
-   }
-}
-
 void QueuedMethod::dequeueMyself()
 {
    //qDebug() << "Dequeueing: " << this;
-   dequeue(this);
+   
+   // First, find a shared-pointer that has internal pointer equal to 'this'
+   QList< QSharedPointer<QueuedMethod> >::iterator i = _queue.begin();
+   while( i != _queue.end() && *i != this )
+      i++;
+   
+   // If we found a matching shared pointer, remove all of them from the queue.
+   if( *i == this )
+      _queue.removeAll(*i);
 }
 
-QueuedMethod* QueuedMethod::chainWith( QueuedMethod* other )
+QSharedPointer<QueuedMethod> QueuedMethod::chainWith( QSharedPointer<QueuedMethod> other )
 {
    _chainedMethod = other;
-   // NOTE: the following line seems much simpler, but does not work... :/
-   //connect( this, SIGNAL(done(bool)), other, SLOT(start()) );
    connect( this, SIGNAL(done(bool)), this, SLOT(startChained()) );
    return other;
 }

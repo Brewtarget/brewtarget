@@ -27,6 +27,7 @@ class Recipe;
 #include <QDomDocument>
 #include <QString>
 #include <QDate>
+#include <QMutex>
 #include "BeerXMLElement.h"
 #include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
@@ -330,10 +331,12 @@ private:
    
    // True when constructed, indicates whether recalcAll has been called.
    bool _uninitializedCalcs;
+   QMutex _uninitializedCalcsMutex;
+   QMutex _recalcMutex;
    
    // Some recalculators for calculated properties.
-   //! Recalculates all the calculated properties. This is a non-blocking call iff \em asynchronous is true.
-   void recalcAll(bool asynchronous = true);
+   //! Recalculates all the calculated properties. This is a BLOCKING call. Use QtConcurrent::run() for non-blocking behavior.
+   void recalcAll();
    
    /*! The theoretical maximum yield without any non-mashed anything. This
     * will need to be communicated somewhere. Emits changed(points).

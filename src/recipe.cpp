@@ -29,6 +29,7 @@
 #include <QInputDialog>
 #include <QObject>
 #include <QDebug>
+#include <QSharedPointer>
 
 #include "recipe.h"
 #include "style.h"
@@ -1092,113 +1093,145 @@ void Recipe::setKegPrimingFactor( double var )
 
 double Recipe::og()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _og;
 }
 
 double Recipe::fg()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _fg;
 }
 
 double Recipe::color_srm()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _color_srm;
 }
 
 double Recipe::ABV_pct()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _ABV_pct;
 }
 
 double Recipe::IBU()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _IBU;
 }
 
 QList<double> Recipe::IBUs()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _ibus;
 }
 
 double Recipe::boilGrav()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _boilGrav;
 }
 
 double Recipe::calories()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _calories;
 }
 
 double Recipe::wortFromMash_l()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _wortFromMash_l;
 }
 
 double Recipe::boilVolume_l()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _boilVolume_l;
 }
 
 double Recipe::postBoilVolume_l()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _postBoilVolume_l;
 }
 
 double Recipe::finalVolume_l()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _finalVolume_l;
 }
 
 QColor Recipe::SRMColor()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _SRMColor;
 }
 
 double Recipe::grainsInMash_kg()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _grainsInMash_kg;
 }
 
 double Recipe::grains_kg()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _grains_kg;
 }
 
 double Recipe::points()
 {
+   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
-      recalcAll(false);
+      recalcAll();
+   _uninitializedCalcsMutex.unlock();
    return _points;
 }
 
@@ -1437,44 +1470,15 @@ void Recipe::removeBrewNote(BrewNote* var)
 
 //==============================Recalculators==================================
 
-void Recipe::recalcAll(bool asynch)
+void Recipe::recalcAll()
 {
-   if( asynch )
+   // WARNING
+   // Infinite recursion possible, since these methods will emit changed(),
+   // causing other objects to call finalVolume_l() for example, which may
+   // cause another call to recalcAll() and so on.
+   
+   if(_recalcMutex.tryLock())
    {
-      // NOTE: Order is VERY important here since they may depend on each other.
-      QueuedMethod* q0 =  new QueuedMethod(this,"recalcGrainsInMash_kg", false);
-      QueuedMethod* q1 =  new QueuedMethod(this,"recalcGrains_kg", false);
-      QueuedMethod* q2 =  new QueuedMethod(this,"recalcVolumeEstimates", false);
-      QueuedMethod* q3 =  new QueuedMethod(this,"recalcColor_srm", false);
-      QueuedMethod* q4 =  new QueuedMethod(this,"recalcSRMColor", false);
-      QueuedMethod* q5 =  new QueuedMethod(this,"recalcOgFg", false);
-      QueuedMethod* q6 =  new QueuedMethod(this,"recalcABV_pct", false);
-      QueuedMethod* q7 =  new QueuedMethod(this,"recalcBoilGrav", false);
-      QueuedMethod* q8 =  new QueuedMethod(this,"recalcIBU", false);
-      
-      QueuedMethod::enqueue( q0 );
-      QueuedMethod::enqueue( q1 );
-      QueuedMethod::enqueue( q2 );
-      QueuedMethod::enqueue( q3 );
-      QueuedMethod::enqueue( q4 );
-      QueuedMethod::enqueue( q5 );
-      QueuedMethod::enqueue( q6 );
-      QueuedMethod::enqueue( q7 );
-      QueuedMethod::enqueue( q8 );
-      
-      // Order matters, so chain the execution.
-      q0->chainWith(q1)->chainWith(q2)->chainWith(q3)->chainWith(q4)->chainWith(q5)
-         ->chainWith(q6)->chainWith(q7)->chainWith(q8);
-      q0->start(); // Start the dominoes :)
-   }
-   else
-   {
-      // Prevent this recipe from emitting signals during this process to avoid
-      // infinite recursion, since these methods will emit changed(), causing
-      // other objects to call finalVolume_l() for example, which will cause
-      // another call to recalcAll() and so on.
-      blockSignals(true);
-      
       recalcGrainsInMash_kg();
       recalcGrains_kg();
       recalcVolumeEstimates();
@@ -1484,10 +1488,11 @@ void Recipe::recalcAll(bool asynch)
       recalcABV_pct();
       recalcBoilGrav();
       recalcIBU();
+
+      _uninitializedCalcs = false;
+
+      _recalcMutex.unlock();
    }
-   _uninitializedCalcs = false;
-   
-   blockSignals(false); // Let this recipe emit signals again.
 }
 
 void Recipe::recalcPoints(double volume)

@@ -24,6 +24,7 @@
 #include <QGenericReturnArgument>
 #include <QList>
 #include <QThread>
+#include <QSharedPointer>
 
 /*!
  * \class QueuedMethod
@@ -58,7 +59,7 @@ public:
     * \returns \b other so you can do a->chainWith(b)->chainWith(c) which
     * executes a, then b, then c.
     */
-   QueuedMethod* chainWith( QueuedMethod* other );
+   QSharedPointer<QueuedMethod> chainWith( QSharedPointer<QueuedMethod> other );
 
    /*!
     * Push a method onto the queue. When \b qm->done() is emitted, \b qm
@@ -67,7 +68,7 @@ public:
     * the order of enqueuing is not necessarily the order of execution. For
     * order control, see \b chainWith().
     */
-   static void enqueue( QueuedMethod* qm );
+   static void enqueue( QSharedPointer<QueuedMethod> qm );
 
 protected:
    //! Reimplemented from QThread.
@@ -88,7 +89,7 @@ private slots:
    void startChained();
    
 private:
-   QueuedMethod* _chainedMethod;
+   QSharedPointer<QueuedMethod> _chainedMethod;
    QObject* _obj;
    QString _methodName;
    //const char* _retName;
@@ -97,8 +98,7 @@ private:
    void* _arg0Data;
    bool success;
    
-   static QList<QueuedMethod*> _queue;
-   static void dequeue( QueuedMethod* qm );
+   static QList< QSharedPointer<QueuedMethod> > _queue;
 };
 
 
