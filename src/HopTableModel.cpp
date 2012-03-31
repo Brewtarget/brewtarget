@@ -127,7 +127,6 @@ void HopTableModel::addHops(QList<Hop*> hops)
 bool HopTableModel::removeHop(Hop* hop)
 {
    int i;
-   
    i = hopObs.indexOf(hop);
    if( i >= 0 )
    {
@@ -389,16 +388,15 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
 }
 
 // Returns null on failure.
-Hop* HopTableModel::getHop(unsigned int i)
-{
-   //std::cerr << "HopTableModel::getHop( " << i << "/" << hopObs.size()  << " )" << std::endl;
-   if( static_cast<int>(i) < hopObs.size() )
-      return hopObs[i];
-   else
-   {
-      Brewtarget::logW( QString("HopTableModel::getHop( %1/%2 )").arg(i).arg(hopObs.size()) );
-      return 0;
-   }
+Hop* HopTableModel::getHop(unsigned int i){
+    //std::cerr << "HopTableModel::getHop( " << i << "/" << hopObs.size()  << " )" << std::endl;
+    if(!(hopObs.isEmpty())){
+        if(static_cast<int>(i) < hopObs.size())
+            return hopObs[i];
+    }
+    else
+        Brewtarget::logW( QString("HopTableModel::getHop( %1/%2 )").arg(i).arg(hopObs.size()) );
+    return 0;
 }
 
 //==========================CLASS HopItemDelegate===============================
