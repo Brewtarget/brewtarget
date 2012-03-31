@@ -1063,6 +1063,7 @@ void Database::removeEquipment(QList<Equipment*> equip)
 void Database::removeFermentable(Fermentable* ferm)
 {
    deleteRecord(Brewtarget::FERMTABLE,ferm);
+   emit changed( metaProperty("fermentables"), QVariant());
 }
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
@@ -1126,6 +1127,7 @@ void Database::removeMashStep(QList<MashStep*> mashStep)
 void Database::removeMisc(Misc* misc)
 {
    deleteRecord(Brewtarget::MISCTABLE,misc);
+   emit changed( metaProperty("miscs"), QVariant());
 }
 
 void Database::removeMisc(QList<Misc*> misc)
@@ -1171,6 +1173,7 @@ void Database::removeStyle(QList<Style*> style)
 void Database::removeWater(Water* water)
 {
    deleteRecord(Brewtarget::WATERTABLE,water);
+   emit changed( metaProperty("waters"), QVariant());
 }
 
 void Database::removeWater(QList<Water*> water)
@@ -1186,6 +1189,7 @@ void Database::removeWater(QList<Water*> water)
 void Database::removeYeast(Yeast* yeast)
 {
    deleteRecord(Brewtarget::YEASTTABLE,yeast);
+   emit changed( metaProperty("yeasts"), QVariant());
 }
 
 void Database::removeYeast(QList<Yeast*> yeast)
