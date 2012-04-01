@@ -23,6 +23,7 @@
 #include <QSqlRecord>
 #include <QDebug>
 #include <QModelIndexList>
+#include <QThread>
 #include "SetterCommand.h"
 
 SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
@@ -215,7 +216,7 @@ void SetterCommand::redo()
          Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(queries[i].lastError().text()).arg(queries[i].lastQuery()) );
    }
    tables[0]->database().commit();
-
+   qDebug() << "SetterCommand::redo()" << QThread::currentThread();
    // Emit signals.
    for( i = 0; i < size; ++i )
    {

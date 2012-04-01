@@ -17,7 +17,7 @@
  */
 
 #ifndef _DATABASE_H
-#define   _DATABASE_H
+#define _DATABASE_H
 
 class Database;
 
@@ -74,6 +74,7 @@ class Database : public QObject
 {
    Q_OBJECT
 
+   friend class BtSqlQuery; // This class needs the _thread instance.
 public:
 
    //! This should be the ONLY way you get an instance.
@@ -115,8 +116,22 @@ public:
          q.finish();
          return QVariant();
       }
-   }
+      //======================
+      /*
+      BtSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
+                    .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key)
+                  );
+                  
+      QList<QSqlRecord> records;
+      q.exec(records); // Wait here for the results.
       
+      if( records.size() > 0 )
+         return records[0].value(0);
+      else
+         return QVariant();
+      */
+   }
+   
    //! Get a table view.
    QTableView* createView( Brewtarget::DBTable table );
    
@@ -387,6 +402,13 @@ private:
    QHash< int, Water* > allWaters;
    QHash< int, Yeast* > allYeasts;
    
+   // Each thread should have its own connection to QSqlDatabase.
+   static QHash< QThread*, QString > _threadToConnection;
+   static QMutex _threadToConnectionMutex;
+   
+   //! Get the right database connection for the calling thread.
+   static QSqlDatabase sqlDatabase();
+   
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
@@ -394,7 +416,7 @@ private:
       BeerXMLElement* e;
       T* et;
       
-      QSqlRelationalTableModel tm(0, QSqlDatabase::database());//, sqldb);
+      QSqlRelationalTableModel tm(0, sqlDatabase());//, sqldb);
       tm.setTable(tableNames[table]);
       tm.setFilter("");
       tm.select();
@@ -423,7 +445,7 @@ private:
    {
       int i, size, key;
       
-      QSqlRelationalTableModel tm(0, QSqlDatabase::database());//, sqldb);
+      QSqlRelationalTableModel tm(0, sqlDatabase());//, sqldb);
       tm.setTable(tableNames[table]);
       tm.setFilter(filter);
       tm.select();
@@ -547,7 +569,7 @@ private:
       // Any ingredient added to a recipe should not be visible for the trees?
       ing->setDisplay(false);
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
-      q = QSqlQuery( QSqlDatabase::database() );//sqldb );
+      q = QSqlQuery( sqlDatabase() );//sqldb );
       q.setForwardOnly(true);
       
       q.prepare( QString("INSERT INTO `%1` (`%2`, `recipe_id`) VALUES (:ingredient, :recipe)")
@@ -636,7 +658,7 @@ private:
                                     .arg(newValString)
                                     .arg(keyNames[t])
                                     .arg(newKey);
-      q = QSqlQuery( QSqlDatabase::database() );//sqldb );
+      q = QSqlQuery( sqlDatabase() );//sqldb );
       q.prepare(updateString);
       q.exec();
       q.finish();
