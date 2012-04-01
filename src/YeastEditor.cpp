@@ -115,43 +115,86 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
    
    if( propName == "name" || updateAll )
    {
-      lineEdit_name->setText(value.toString());
+      lineEdit_name->setText(obsYeast->name());
       lineEdit_name->setCursorPosition(0);
+      if( ! updateAll )
+         return;
    }
-   else if( propName == "type" || updateAll )
-      comboBox_type->setCurrentIndex(value.toInt());
-   else if( propName == "form" || updateAll )
-      comboBox_form->setCurrentIndex(value.toInt());
-   else if( propName == "amount" || updateAll )
-      lineEdit_amount->setText( Brewtarget::displayAmount(value.toDouble(), (y->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
-   else if( propName == "amountIsWeight" || updateAll )
-      checkBox_amountIsWeight->setCheckState( (value.toBool())? Qt::Checked : Qt::Unchecked );
-   else if( propName == "laboratory" || updateAll )
-   {
-      lineEdit_laboratory->setText(value.toString());
+   if( propName == "type" || updateAll ) {
+      comboBox_type->setCurrentIndex(obsYeast->type());
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "form" || updateAll ) {
+      comboBox_form->setCurrentIndex(obsYeast->form());
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "amount" || updateAll ) {
+      lineEdit_amount->setText( Brewtarget::displayAmount(obsYeast->amount(), (obsYeast->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "amountIsWeight" || updateAll ) {
+      checkBox_amountIsWeight->setCheckState( (obsYeast->amountIsWeight())? Qt::Checked : Qt::Unchecked );
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "laboratory" || updateAll ) {
+      lineEdit_laboratory->setText(obsYeast->laboratory());
       lineEdit_laboratory->setCursorPosition(0);
+      if( ! updateAll )
+         return;
    }
-   else if( propName == "productID" || updateAll )
-   {
-      lineEdit_productID->setText(value.toString());
+   if( propName == "productID" || updateAll ) {
+      lineEdit_productID->setText(obsYeast->productID());
       lineEdit_productID->setCursorPosition(0);
+      if( ! updateAll )
+         return;
    }
-   else if( propName == "minTemperature_c" || updateAll )
-      lineEdit_minTemperature->setText(Brewtarget::displayAmount(value.toDouble(), Units::celsius));
-   else if( propName == "maxTemperature_c" || updateAll )
-      lineEdit_maxTemperature->setText(Brewtarget::displayAmount(value.toDouble(), Units::celsius));
-   else if( propName == "flocculation" || updateAll )
-      comboBox_flocculation->setCurrentIndex( value.toInt() );
-   else if( propName == "attenutation_pc" || updateAll )
-      lineEdit_attenuation->setText( Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "timesCultured" || updateAll )
-      lineEdit_timesCultured->setText(QString::number(value.toInt()));
-   else if( propName == "maxReuse" || updateAll )
-      lineEdit_maxReuse->setText(QString::number(value.toInt()));
-   else if( propName == "addToSecondary" || updateAll )
-      checkBox_addToSecondary->setCheckState( (value.toBool())? Qt::Checked : Qt::Unchecked );
-   else if( propName == "bestFor" || updateAll )
-      textEdit_bestFor->setPlainText(value.toString());
-   else if( propName == "notes" || updateAll )
-      textEdit_notes->setPlainText(value.toString());
+   if( propName == "minTemperature_c" || updateAll ) {
+      lineEdit_minTemperature->setText(Brewtarget::displayAmount(obsYeast->minTemperature_c(), Units::celsius));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "maxTemperature_c" || updateAll ) {
+      lineEdit_maxTemperature->setText(Brewtarget::displayAmount(obsYeast->maxTemperature_c(), Units::celsius));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "flocculation" || updateAll ) {
+      comboBox_flocculation->setCurrentIndex( obsYeast->flocculation() );
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "attenutation_pc" || updateAll ) {
+      lineEdit_attenuation->setText( Brewtarget::displayAmount(obsYeast->attenuation_pct(), 0));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "timesCultured" || updateAll ) {
+      lineEdit_timesCultured->setText(QString::number(obsYeast->timesCultured()));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "maxReuse" || updateAll ) {
+      lineEdit_maxReuse->setText(QString::number(obsYeast->maxReuse()));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "addToSecondary" || updateAll ) {
+      checkBox_addToSecondary->setCheckState( (obsYeast->addToSecondary())? Qt::Checked : Qt::Unchecked );
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "bestFor" || updateAll ) {
+      textEdit_bestFor->setPlainText(obsYeast->bestFor());
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "notes" || updateAll ) {
+      textEdit_notes->setPlainText(obsYeast->notes());
+      if( ! updateAll )
+         return;
+   }
 }

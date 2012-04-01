@@ -53,7 +53,8 @@ public:
    Q_PROPERTY( double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC /*NOTIFY changed*/ /*changedTunSpecificHeat_calGC*/ )
    Q_PROPERTY( bool equipAdjust READ equipAdjust WRITE setEquipAdjust /*NOTIFY changed*/ /*changedEquipAdjust*/ )
    Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ /*NOTIFY changed*/ /*changedTotalMashWater_l*/ STORED false )
-   Q_PROPERTY( double totalTime READ totalTime /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
+   Q_PROPERTY( double totalTime READ totalTime /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
+  // Q_PROPERTY( double tunMass_kg READ tunMass_kg  WRITE setTunMass_kg /*NOTIFY changed*/ /*changedTotalTime*/ )
    
    Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
    

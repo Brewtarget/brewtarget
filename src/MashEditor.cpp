@@ -111,7 +111,6 @@ void MashEditor::showChanges(QMetaProperty* prop)
 {
    bool updateAll = false;
    QString propName;
-   QVariant val;
    
    if( sender() != mashObs )
       return;
@@ -127,25 +126,50 @@ void MashEditor::showChanges(QMetaProperty* prop)
    else
    {
       propName = prop->name();
-      val = prop->read(mashObs);
    }
    
-   if( propName == "name" || updateAll )
-      lineEdit_name->setText(val.toString());
-   else if( propName == "grainTemp_c" || updateAll )
-      lineEdit_grainTemp->setText(Brewtarget::displayAmount(val.toDouble(), Units::celsius));
-   else if( propName == "spargeTemp_c" || updateAll )
-      lineEdit_spargeTemp->setText(Brewtarget::displayAmount(val.toDouble(), Units::celsius));
-   else if( propName == "ph" || updateAll )
-      lineEdit_spargePh->setText(Brewtarget::displayAmount(val.toDouble()));
-   else if( propName == "tunTemp_c" || updateAll )
-      lineEdit_tunTemp->setText(Brewtarget::displayAmount(val.toDouble(), Units::celsius));
-   else if( propName == "tunMass_kg" || updateAll )
-      lineEdit_tunMass->setText(Brewtarget::displayAmount(val.toDouble(), Units::kilograms));
-   else if( propName == "tunSpecificHeat_calGC" || updateAll )
-      lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(val.toDouble()));
-   else if( propName == "notes" || updateAll )
-      textEdit_notes->setPlainText(val.toString());
+   if( propName == "name" || updateAll ) {
+      lineEdit_name->setText(mashObs->name());
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "grainTemp_c" || updateAll ) {
+      lineEdit_grainTemp->setText(Brewtarget::displayAmount(mashObs->grainTemp_c(), Units::celsius));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "spargeTemp_c" || updateAll ) {
+      lineEdit_spargeTemp->setText(Brewtarget::displayAmount(mashObs->spargeTemp_c(), Units::celsius));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "ph" || updateAll ) {
+      lineEdit_spargePh->setText(Brewtarget::displayAmount(mashObs->ph()));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "tunTemp_c" || updateAll ) {
+      lineEdit_tunTemp->setText(Brewtarget::displayAmount(mashObs->tunTemp_c(), Units::celsius));
+      if( ! updateAll )
+         return;
+   }
+   /*
+   if( propName == "tunMass_kg" || updateAll ) {
+      lineEdit_tunMass->setText(Brewtarget::displayAmount(mashObs->tunMass_kg(), Units::kilograms));
+      if( ! updateAll )
+         return;
+   }
+   */
+   if( propName == "tunSpecificHeat_calGC" || updateAll ) {
+      lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(mashObs->tunSpecificHeat_calGC()));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "notes" || updateAll ) {
+      textEdit_notes->setPlainText(mashObs->notes());
+      if( ! updateAll )
+         return;
+   }
 }
 
 void MashEditor::clear()

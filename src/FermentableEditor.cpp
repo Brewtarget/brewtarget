@@ -104,14 +104,12 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       return;
 
    QString propName;
-   QVariant value;
    bool updateAll = false;
    if( metaProp == 0 )
       updateAll = true;
    else
    {
       propName = metaProp->name();
-      value = metaProp->read(obsFerm);
    }
    
    // Update the color label text.
@@ -124,44 +122,92 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
    {
       lineEdit_name->setText(obsFerm->name());
       lineEdit_name->setCursorPosition(0);
+      if( ! updateAll )
+         return;
    }
-   else if( propName == "type" || updateAll)
+   if( propName == "type" || updateAll) {
       // NOTE: assumes the comboBox entries are in same order as Fermentable::Type
       comboBox_type->setCurrentIndex(obsFerm->type());
-   else if( propName == "amount_kg" || updateAll)
-      lineEdit_amount->setText(Brewtarget::displayAmount(value.toDouble(), Units::kilograms));
-   else if( propName == "yield_pct" || updateAll)
-      lineEdit_yield->setText(Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "color_srm" || updateAll)
-      lineEdit_color->setText(Brewtarget::displayColor(value.toDouble(), false));
-   else if( propName == "addAfterBoil" || updateAll)
-      checkBox_addAfterBoil->setCheckState( value.toBool() ? Qt::Checked : Qt::Unchecked );
-   else if( propName == "origin" || updateAll)
+       if( ! updateAll )
+         return;
+   }
+   if( propName == "amount_kg" || updateAll) {
+      lineEdit_amount->setText(Brewtarget::displayAmount(obsFerm->amount_kg(), Units::kilograms));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "yield_pct" || updateAll) {
+      lineEdit_yield->setText(Brewtarget::displayAmount(obsFerm->yield_pct(), 0));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "color_srm" || updateAll) {
+      lineEdit_color->setText(Brewtarget::displayColor(obsFerm->color_srm(), false));
+       if( ! updateAll )
+         return;
+   }
+   if( propName == "addAfterBoil" || updateAll) {
+      checkBox_addAfterBoil->setCheckState( obsFerm->addAfterBoil() ? Qt::Checked : Qt::Unchecked );
+       if( ! updateAll )
+         return;
+   }
+   if( propName == "origin" || updateAll)
    {
-      lineEdit_origin->setText(value.toString());
+      lineEdit_origin->setText(obsFerm->origin());
       lineEdit_origin->setCursorPosition(0);
+      if( ! updateAll )
+         return;
    }
-   else if( propName == "supplier" || updateAll)
+   if( propName == "supplier" || updateAll)
    {
-      lineEdit_supplier->setText(value.toString());
+      lineEdit_supplier->setText(obsFerm->supplier());
       lineEdit_supplier->setCursorPosition(0);
+       if( ! updateAll )
+         return;
    }
-   else if( propName == "coarseFineDiff_pct" || updateAll)
-      lineEdit_coarseFineDiff->setText(Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "moisture_pct" || updateAll)
-      lineEdit_moisture->setText(Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "diastaticPower_lintner" || updateAll)
-      lineEdit_diastaticPower->setText(Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "protein_pct" || updateAll)
-      lineEdit_protein->setText(Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "maxInBatch_pct" || updateAll)
-      lineEdit_maxInBatch->setText(Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "recommendMash" || updateAll)
-      checkBox_recommendMash->setCheckState( value.toBool()? Qt::Checked : Qt::Unchecked );
-   else if( propName == "isMashed" || updateAll)
-      checkBox_isMashed->setCheckState( value.toBool() ? Qt::Checked : Qt::Unchecked );
-   else if( propName == "ibuGalPerLb" || updateAll)
-      lineEdit_ibuGalPerLb->setText(Brewtarget::displayAmount(value.toDouble(), 0));
-   else if( propName == "notes" || updateAll)
-      textEdit_notes->setPlainText( value.toString() );
+   if( propName == "coarseFineDiff_pct" || updateAll) {
+      lineEdit_coarseFineDiff->setText(Brewtarget::displayAmount(obsFerm->coarseFineDiff_pct(), 0));
+      if( ! updateAll )
+         return;
+   }
+   else if( propName == "moisture_pct" || updateAll) {
+      lineEdit_moisture->setText(Brewtarget::displayAmount(obsFerm->moisture_pct(), 0));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "diastaticPower_lintner" || updateAll) {
+      lineEdit_diastaticPower->setText(Brewtarget::displayAmount(obsFerm->diastaticPower_lintner(), 0));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "protein_pct" || updateAll) {
+      lineEdit_protein->setText(Brewtarget::displayAmount(obsFerm->protein_pct(), 0));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "maxInBatch_pct" || updateAll) {
+      lineEdit_maxInBatch->setText(Brewtarget::displayAmount(obsFerm->maxInBatch_pct(), 0));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "recommendMash" || updateAll) {
+      checkBox_recommendMash->setCheckState( obsFerm->recommendMash() ? Qt::Checked : Qt::Unchecked );
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "isMashed" || updateAll) {
+      checkBox_isMashed->setCheckState( obsFerm->isMashed() ? Qt::Checked : Qt::Unchecked );
+       if( ! updateAll )
+         return;
+   }
+   if( propName == "ibuGalPerLb" || updateAll) {
+      lineEdit_ibuGalPerLb->setText(Brewtarget::displayAmount(obsFerm->ibuGalPerLb(), 0));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "notes" || updateAll) {
+      textEdit_notes->setPlainText( obsFerm->notes() );
+      if( ! updateAll )
+         return;
+   }
 }
