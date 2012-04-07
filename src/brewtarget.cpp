@@ -480,8 +480,9 @@ int Brewtarget::run()
 
    loadTranslations(); // Do internationalization.
 
+#if defined(Q_WS_MAC)
 	qt_set_sequence_auto_mnemonic(TRUE); // turns on Mac Keyboard shortcuts
-	
+#endif
    qApp->processEvents();
    splashScreen.showMessage("Loading...");
    qApp->processEvents();
