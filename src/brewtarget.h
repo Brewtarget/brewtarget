@@ -19,6 +19,9 @@
 #ifndef _BREWTARGET_H
 #define _BREWTARGET_H
 
+// need to use this to turn on mac keyboard shortcuts (see http://doc.qt.nokia.com/4.7-snapshot/qtglobal.html#qt_set_sequence_auto_mnemonic)
+extern void qt_set_sequence_auto_mnemonic(bool b);
+
 class Brewtarget;
 
 #include <QObject>
