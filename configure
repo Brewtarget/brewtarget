@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PREFIX=""
-CMAKEOPTIONS="-DDO_RELEASE_BUILD=OFF"
+CMAKEOPTIONS="-DDO_RELEASE_BUILD=ON"
 
 function printUsageAndExit {
    echo -e "Usage\n" \
