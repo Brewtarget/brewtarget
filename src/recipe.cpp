@@ -1093,145 +1093,120 @@ void Recipe::setKegPrimingFactor( double var )
 
 double Recipe::og()
 {
-   _uninitializedCalcsMutex.lock();
+   /*
+   if( _uninitializedCalcsMutex.tryLock() && _uninitializedCalcs )
+   {
+      _uninitializedCalcsMutex.unlock();
+      recalcAll();
+   }
+   */
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _og;
 }
 
 double Recipe::fg()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _fg;
 }
 
 double Recipe::color_srm()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _color_srm;
 }
 
 double Recipe::ABV_pct()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _ABV_pct;
 }
 
 double Recipe::IBU()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _IBU;
 }
 
 QList<double> Recipe::IBUs()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _ibus;
 }
 
 double Recipe::boilGrav()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _boilGrav;
 }
 
 double Recipe::calories()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _calories;
 }
 
 double Recipe::wortFromMash_l()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _wortFromMash_l;
 }
 
 double Recipe::boilVolume_l()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _boilVolume_l;
 }
 
 double Recipe::postBoilVolume_l()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _postBoilVolume_l;
 }
 
 double Recipe::finalVolume_l()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _finalVolume_l;
 }
 
 QColor Recipe::SRMColor()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _SRMColor;
 }
 
 double Recipe::grainsInMash_kg()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _grainsInMash_kg;
 }
 
 double Recipe::grains_kg()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _grains_kg;
 }
 
 double Recipe::points()
 {
-   _uninitializedCalcsMutex.lock();
    if( _uninitializedCalcs )
       recalcAll();
-   _uninitializedCalcsMutex.unlock();
    return _points;
 }
 
@@ -1476,9 +1451,17 @@ void Recipe::recalcAll()
    // Infinite recursion possible, since these methods will emit changed(),
    // causing other objects to call finalVolume_l() for example, which may
    // cause another call to recalcAll() and so on.
-   
-   bool wasLocked = _uninitializedCalcsMutex.tryLock();
-   _recalcMutex.lock();
+
+   // Someone has already called this function back in the call stack, so return to avoid recursion.
+   if( !_recalcMutex.tryLock() )
+      return;
+   /*
+   if( !_uninitializedCalcsMutex.tryLock() )
+   {
+      _recalcMutex.unlock();
+      return;
+   }
+   */
    
    recalcGrainsInMash_kg();
    recalcGrains_kg();
@@ -1492,9 +1475,8 @@ void Recipe::recalcAll()
    
    _uninitializedCalcs = false;
    
+   //_uninitializedCalcsMutex.unlock();
    _recalcMutex.unlock();
-   if( wasLocked )
-      _uninitializedCalcsMutex.unlock();
 }
 
 void Recipe::recalcPoints(double volume)

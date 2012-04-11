@@ -25,6 +25,7 @@
 #include <QModelIndexList>
 #include <QThread>
 #include "SetterCommand.h"
+#include "database.h"
 
 SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
    : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value.toString()))
@@ -71,7 +72,7 @@ QList<QSqlQuery> SetterCommand::setterStatements()
    // Construct the statements.
    for( i = 0; i < size; ++i )
    {
-      QSqlQuery q( tables[i]->database() );
+      QSqlQuery q( Database::sqlDatabase() );
       str = QString("UPDATE `%1` SET `%2`= :value WHERE `%3`='%4'")
                 .arg(tables.at(i)->tableName())
                 .arg(col_names.at(i))
@@ -103,7 +104,7 @@ QList<QSqlQuery> SetterCommand::undoStatements()
    // Construct the transaction string.
    for( i = 0; i < size; ++i )
    {
-      QSqlQuery q( tables[i]->database() );
+      QSqlQuery q( Database::sqlDatabase() );
       str = QString("UPDATE `%1` SET `%2` = :oldValue WHERE `%3`='%4'")
                 .arg(tables.at(i)->tableName())
                 .arg(col_names.at(i))
@@ -131,7 +132,7 @@ void SetterCommand::oldValueTransaction()
    tables[0]->database().transaction();
    for( i = 0; i < size; ++i )
    {
-      QSqlQuery q( tables[i]->database() );
+      QSqlQuery q( Database::sqlDatabase() );
       str = QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
                 .arg(col_names.at(i))
                 .arg(tables.at(i)->tableName())

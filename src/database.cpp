@@ -74,16 +74,18 @@ QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
 
 Database::Database()
-   : _thread( new QThread() ),
-     _setterCommandStack( new SetterCommandStack(_thread) )
+   : //_thread( new QThread() ),
+     //_setterCommandStack( new SetterCommandStack(_thread) )
+     _setterCommandStack( new SetterCommandStack() )
 {
    commandStack.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
    
-   qDebug() << "Database::_thread" << _thread;
+   //qDebug() << "Database::_thread" << _thread;
    qDebug() << "Main thread" << QThread::currentThread();
    
+   /*
    // All the functions and signals/slots should execute in _thread.
    // NOTE: it is EXTREMELY important that all the sql operations use this thread.
    moveToThread( _thread );
@@ -94,6 +96,9 @@ Database::Database()
    connect( _thread, SIGNAL(started()), this, SLOT(load()) );
    
    _thread->start();
+   */
+   
+   load();
 }
 
 Database::~Database()
@@ -104,12 +109,12 @@ Database::~Database()
    //_thread->quit();
    
    // Set up a call to quit from the calling thread to _thread.
-   QTimer::singleShot( 0, _thread, SLOT(quit()) );
+   //QTimer::singleShot( 0, _thread, SLOT(quit()) );
    // Calling thread's event loop is probably stopped, so add an explicit call
    // to execute the event.
-   QCoreApplication::processEvents();
+   //QCoreApplication::processEvents();
    // Wait for _thread to join us.
-   _thread->wait();
+   //_thread->wait();
    delete _setterCommandStack;
    unload();
 }
@@ -2911,7 +2916,7 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
   if ( Hop::uses.indexOf(use) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT use FROM hop WHERE name='%1' AND use != ''").arg(hop->name()));//, sqldb);
+    QSqlQuery q(QString("SELECT use FROM hop WHERE name='%1' AND use != ''").arg(hop->name()), sqlDatabase());//, sqldb);
     q.first();
     if ( q.isValid() )
     {

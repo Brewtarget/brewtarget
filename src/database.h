@@ -75,6 +75,7 @@ class Database : public QObject
    Q_OBJECT
 
    friend class BtSqlQuery; // This class needs the _thread instance.
+   friend class SetterCommand; // Needs sqlDatabase().
 public:
 
    //! This should be the ONLY way you get an instance.
@@ -102,7 +103,8 @@ public:
    inline QVariant get( Brewtarget::DBTable table, int key, const char* col_name ) __attribute__((always_inline))
    {
       QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
-                   .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key)
+                   .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
+                   sqlDatabase()
                  );
                    
       if( q.next() )
@@ -373,7 +375,7 @@ private slots:
    
 private:
    static Database* dbInstance; // The singleton object
-   QThread* _thread;
+   //QThread* _thread;
    SetterCommandStack* _setterCommandStack;
    static QFile dbFile;
    static QString dbFileName;
@@ -542,7 +544,8 @@ private:
       // Ensure this ingredient is not already in the recipe.
       QSqlQuery q(
                    QString("SELECT recipe_id from `%1` WHERE `%2`='%3' AND recipe_id='%4'")
-                   .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(reinterpret_cast<BeerXMLElement*>(rec)->_key)
+                   .arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(reinterpret_cast<BeerXMLElement*>(rec)->_key),
+                   sqlDatabase()
                  );
       if( q.next() )
       {
@@ -616,7 +619,8 @@ private:
       QString tName = tableNames[t];
       
       QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
-                  .arg(tName).arg(keyNames[t]).arg(object->_key)
+                  .arg(tName).arg(keyNames[t]).arg(object->_key),
+                  sqlDatabase()
                  );
       
       if( !q.next() )
@@ -631,7 +635,8 @@ private:
       // Create a new row.
       newKey = insertNewDefaultRecord(t);
       q = QSqlQuery( QString("SELECT * FROM %1 WHERE %2 = %3")
-                     .arg(tName).arg(keyNames[t]).arg(newKey)
+                     .arg(tName).arg(keyNames[t]).arg(newKey),
+                     sqlDatabase()
                    );
       q.next();
       QSqlRecord newRecord = q.record();
