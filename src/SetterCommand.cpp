@@ -217,7 +217,7 @@ void SetterCommand::redo()
          Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(queries[i].lastError().text()).arg(queries[i].lastQuery()) );
    }
    tables[0]->database().commit();
-   qDebug() << "SetterCommand::redo()" << QThread::currentThread();
+   //qDebug() << "SetterCommand::redo()" << QThread::currentThread();
    // Emit signals.
    for( i = 0; i < size; ++i )
    {

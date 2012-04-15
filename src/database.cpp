@@ -320,7 +320,7 @@ QSqlDatabase Database::sqlDatabase()
    //http://www.linuxjournal.com/article/9602
    
    QThread* t = QThread::currentThread();
-   qDebug() << "sqlDatabase() " << t;
+   //qDebug() << "sqlDatabase() " << t;
    
    _threadToConnectionMutex.lock();
    // If this thread already has a connection, return it.

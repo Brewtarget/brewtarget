@@ -120,7 +120,7 @@ bool MashDesigner::nextStep(int step)
    }
 
    prevStep = mashStep;
-   mashStep = mash->mashSteps()[step];
+   mashStep = (step>=0 && step<mash->mashSteps().size())? mash->mashSteps()[step] : 0;
    if( mashStep == 0 )
    {
       mashStep = Database::instance().newMashStep( mash ); // TODO: Come back to check on this later. Really need this new step to be inserted in right place.
