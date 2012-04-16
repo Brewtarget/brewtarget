@@ -697,11 +697,37 @@ QList<Misc*> Database::miscs(Recipe const* parent)
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QString queryString = QString("SELECT %1 FROM %2 WHERE mash_id = %3")
-                            .arg(keyNames[Brewtarget::MASHSTEPTABLE])
-                            .arg(tableNames[Brewtarget::MASHSTEPTABLE])
-                            .arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   QSqlQuery q( sqlDatabase() );
+   q.prepare( QString("SELECT %1 FROM %2 WHERE mash_id = %3")
+              .arg(keyNames[Brewtarget::MASHSTEPTABLE])
+              .arg(tableNames[Brewtarget::MASHSTEPTABLE])
+              .arg(parent->_key) );
+   /*
+   q.prepare( "SELECT :keyname FROM :tablename WHERE mash_id = :mashid");// AND `deleted`='0'" );
+   q.bindValue(":keyname", keyNames[Brewtarget::MASHSTEPTABLE]);
+   q.bindValue(":tablename", tableNames[Brewtarget::MASHSTEPTABLE]);
+   q.bindValue(":mashid", parent->_key);
+   */
+   /*
+   q.prepare( "SELECT ? FROM ? WHERE mash_id = ?");
+   q.bindValue(0, keyNames[Brewtarget::MASHSTEPTABLE]);
+   q.bindValue(1, tableNames[Brewtarget::MASHSTEPTABLE]);
+   q.bindValue(2, parent->_key);
+   */
+   q.exec();
+   
+   if( q.lastError().isValid() )
+   {
+      qDebug() << "Database::mashSteps(): " << q.lastError().text();
+      /*
+      QMapIterator<QString, QVariant> i(q.boundValues());
+      while( i.hasNext() )
+      {
+         qDebug() << i.key().toAscii().data();// << ": " << i.value().toString().toAscii().data();
+      }
+      */
+      //qDebug() << q.boundValue(":mashid").toString();
+   }
    
    while( q.next() )
       ret.append(allMashSteps[q.record().value(keyNames[Brewtarget::MASHSTEPTABLE].toStdString().c_str()).toInt()]);

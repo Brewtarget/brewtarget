@@ -72,8 +72,13 @@ void MashComboBox::changed(QMetaProperty prop, QVariant /*val*/)
    if( sender() == &(Database::instance()) &&
       propName == "mashs" )
    {
+      // Don't want to be emitting signals while we repopulate.
+      blockSignals(true);
+      
       removeAllMashs();
       repopulateList();
+      
+      blockSignals(false);
    }
    else // Otherwise, we know that one of the mashs changed.
    {
