@@ -163,6 +163,7 @@ public slots:
    void restoreFromBackup();
 
    void contextMenu(const QPoint &point);
+   void unitContextMenu(const QPoint &point);
    void newBrewNote();
    void reBrewNote();
 
@@ -176,6 +177,12 @@ public slots:
    void dropEvent(QDropEvent *event);
 
    void finishCheckingVersion();
+
+   //! playing with allowing each element to display in a different unit
+   void setMetricVolume();
+   void setUSVolume();
+   void setBritishVolume();
+
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
@@ -233,6 +240,9 @@ private:
    
    QMultiHash<QString, BrewNoteWidget*> brewNotes;
    int confirmDelete;
+
+   //! Me and my hashes. Does it show I code too much perl?
+   QHash<QString,QMenu*> unitMenus;
 
    //! Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();

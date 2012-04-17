@@ -39,6 +39,7 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QPixmap>
 #include <QSplashScreen>
+#include <QSettings>
 
 #include "brewtarget.h"
 #include "config.h"
@@ -559,7 +560,7 @@ void Brewtarget::logW( QString message )
 
 // Displays "amount" of units "units" in the proper format.
 // If "units" is null, just return the amount.
-QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
+QString Brewtarget::displayAmount( double amount, Unit* units, int precision, QString fieldName )
 {
    int fieldWidth = 0;
    char format = 'f';
@@ -581,7 +582,30 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
    if(SIUnitName.compare("kg") == 0) // Dealing with mass.
       ret = weightSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
-      ret = volumeSystem->displayAmount( amount, units );
+   {
+      UnitSystem* vSystem = volumeSystem;
+
+      if ( fieldName.length() > 0 )
+      {
+         QSettings settings("brewtarget");
+         if ( settings.contains(fieldName) )
+         {
+            switch(settings.value(fieldName).toInt())
+            {
+            case USCustomary:
+               vSystem = UnitSystems::usVolumeUnitSystem();
+               break;
+            case Imperial:
+               vSystem = UnitSystems::imperialVolumeUnitSystem();
+               break;
+            default:
+               vSystem = UnitSystems::siVolumeUnitSystem();
+               break;
+            }
+         }
+      }
+      ret = vSystem->displayAmount( amount, units );
+   }
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
       ret = tempSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("min") == 0 ) // Time

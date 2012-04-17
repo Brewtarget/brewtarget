@@ -41,6 +41,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QNetworkReply>
+#include <QAction>
 
 #include "MashStepEditor.h"
 #include "MashStepTableModel.h"
@@ -138,8 +139,12 @@ MainWindow::MainWindow(QWidget* parent)
    lcdNumber_calories->setConstantColor(BtDigitWidget::BLACK);
 
    // experimental and currently disabled for checkin
-   //if ( lineEdit_batchSize->property("unit").isValid() )
-   //   qDebug() << "Found a valid property " <<lineEdit_batchSize->property("unit").toString();
+   if ( targetBatchSizeLabel->property("unit").isValid() )
+   {
+      qDebug() << "Found a valid property " <<targetBatchSizeLabel->property("unit").toString();
+      connect( targetBatchSizeLabel, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(unitContextMenu(const QPoint &)));
+   }
+
 
    // Null out the recipe
    recipeObs = 0;
@@ -726,7 +731,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    lineEdit_name->setText(recipeObs->name());
    lineEdit_name->setCursorPosition(0);
-   lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), Units::liters) );
+   lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), Units::liters, 3, "lineEdit_batchSize") );
    lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), Units::liters) );
    lineEdit_efficiency->setText( Brewtarget::displayAmount(recipeObs->efficiency_pct(), 0) );
    
@@ -1652,11 +1657,56 @@ void MainWindow::contextMenu(const QPoint &point)
       tempMenu->exec(active->mapToGlobal(point));
 }
 
+void MainWindow::unitContextMenu(const QPoint &point )
+{
+   QObject* calledBy = sender(); // get who called us
+   QWidget* widgie;
+   QVariant unitType, editField;
+   QMenu* tempMenu;              // no clue how to do this right now
+   QAction* invoked;
+
+   if ( calledBy == 0 )
+      return;
+
+   widgie = qobject_cast<QWidget*>(calledBy);
+
+   // If the sender can't be made into a QWidget (eep!)
+   if ( widgie == 0 )
+      return;
+
+   unitType = calledBy->property("unit");
+   editField = calledBy->property("editField");
+
+   if ( ! ( unitType.isValid() && unitMenus.contains(unitType.toString()) ) )
+      return;
+
+   tempMenu = unitMenus.value(unitType.toString());
+   invoked = tempMenu->exec(widgie->mapToGlobal(point));
+
+   if ( invoked == 0 )
+      return;
+
+   qDebug() << "Action invoked = " << invoked->data();
+   QSettings settings("brewtarget");
+
+   settings.setValue(editField.toString(), invoked->data());
+   // We need to get things recalculated/redisplayed. Not sure this is the right way to do it.
+   showChanges();
+
+}
+
+// I need these just as place holders. All the hard work is done in unitContextMenu
+void MainWindow::setMetricVolume() {return;}
+void MainWindow::setUSVolume() {return;}
+void MainWindow::setBritishVolume() {return;}
+
+
 // Set up the context menus.  This is much prettier now that I moved the
-// tree-specific pieces into the treeview objects.
+// tree-specific pieces into the treeview objects. I may do the same for the unit menus
 void MainWindow::setupContextMenu()
 {
    QMenu *sMenu = new QMenu(this);
+//   QVariant units[] = { QVariant("volume"), QVariant("mass"), QVariant("gravity") };
 
    // Set up the "new" submenu
    sMenu->setTitle(tr("New"));
@@ -1675,7 +1725,30 @@ void MainWindow::setupContextMenu()
    treeView_misc->setupContextMenu(this,miscDialog,sMenu,BrewTargetTreeItem::MISC);
    treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,BrewTargetTreeItem::YEAST);
 
+   // unit menus. hard coded for now, just to figure out what I'm doing
+   // These will be a bit more complex, because I am actually passing data with them.
+   // This means I need to create an Action, then add it.
+   QMenu* menu = new QMenu(this);
+   QAction* action = new QAction(menu);
+   action->setText(tr("Metric"));
+   action->setData(SI);
+   menu->addAction(action);
+
+   action = new QAction(menu);
+   action->setText(tr("US Customary"));
+   action->setData(USCustomary);
+   menu->addAction(action);
+
+   action = new QAction(menu);
+   action->setText(tr("British Imperial"));
+   action->setData( Imperial );
+   menu->addAction(action);
+
+   menu->setTitle("Units");
+   unitMenus.insert(QString("volume"), menu);
+
 }
+
 
 void MainWindow::copyThis(Recipe *rec)
 {
