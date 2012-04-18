@@ -1103,6 +1103,7 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
 void Database::removeEquipment(Equipment* equip)
 {
    deleteRecord(Brewtarget::EQUIPTABLE,equip);
+   emit changed( metaProperty("equipments"), QVariant() );
 }
 
 void Database::removeEquipment(QList<Equipment*> equip)
@@ -1152,6 +1153,7 @@ void Database::removeHop(QList<Hop*> hop)
 void Database::removeMash(Mash* mash)
 {
    deleteRecord(Brewtarget::MASHTABLE,mash);
+   emit changed( metaProperty("mashs"), QVariant() );
 }
 
 void Database::removeMash(QList<Mash*> mash)
@@ -1167,6 +1169,8 @@ void Database::removeMash(QList<Mash*> mash)
 void Database::removeMashStep(MashStep* mashStep)
 {
    deleteRecord(Brewtarget::MASHSTEPTABLE,mashStep);
+   // Database's steps have changed.
+   emit changed( metaProperty("mashSteps"), QVariant() );
 }
 
 void Database::removeMashStep(QList<MashStep*> mashStep)
@@ -1198,6 +1202,7 @@ void Database::removeMisc(QList<Misc*> misc)
 void Database::removeRecipe(Recipe* rec)
 {
    deleteRecord(Brewtarget::RECTABLE,rec);
+   emit changed( metaProperty("recipes"), QVariant() );
 }
 
 void Database::removeRecipe(QList<Recipe*> rec)
@@ -1213,6 +1218,7 @@ void Database::removeRecipe(QList<Recipe*> rec)
 void Database::removeStyle(Style* style)
 {
    deleteRecord(Brewtarget::STYLETABLE,style);
+   emit changed( metaProperty("styles"), QVariant() );
 }
 
 void Database::removeStyle(QList<Style*> style)
@@ -2798,9 +2804,7 @@ void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& x
       
       xmlTag = node.nodeName();
       textNode = child.toText();
-   
-      if ( strcmp(element->metaObject()->className(), "Yeast") == 0 ) {
-      }
+         
       if( xmlTagsToProperties.contains(xmlTag) )
       {
          switch( element->metaProperty(xmlTagsToProperties[xmlTag]).type() )
