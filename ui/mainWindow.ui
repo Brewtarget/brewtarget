@@ -271,15 +271,12 @@
                    </widget>
                   </item>
                   <item row="3" column="0">
-                   <widget class="QLabel" name="targetBatchSizeLabel">
+                   <widget class="BtVolumeLabel" name="targetBatchSizeLabel">
                     <property name="contextMenuPolicy">
                      <enum>Qt::CustomContextMenu</enum>
                     </property>
                     <property name="text">
                      <string>Target Batch Size</string>
-                    </property>
-                    <property name="unit" stdset="0">
-                     <string notr="true">volume</string>
                     </property>
                     <property name="editField" stdset="0">
                      <string notr="true">lineEdit_batchSize</string>
@@ -312,9 +309,15 @@
                    </widget>
                   </item>
                   <item row="4" column="0">
-                   <widget class="QLabel" name="calculatedBatchSizeLabel">
+                   <widget class="BtVolumeLabel" name="calculatedBatchSizeLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Calculated Batch Size</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>calculatedBatchSize</string>
                     </property>
                    </widget>
                   </item>
@@ -370,9 +373,15 @@
                    </widget>
                   </item>
                   <item row="6" column="0">
-                   <widget class="QLabel" name="calculatedBoilSizeLabel">
+                   <widget class="BtVolumeLabel" name="calculatedBoilSizeLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Calculated Boil Size</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>calculatedBoilSizeLabel</string>
                     </property>
                    </widget>
                   </item>
@@ -501,9 +510,15 @@
                    <number>5</number>
                   </property>
                   <item row="0" column="0">
-                   <widget class="QLabel" name="oGLabel">
+                   <widget class="BtGravityLabel" name="oGLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>OG</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>oGLabel</string>
                     </property>
                    </widget>
                   </item>
@@ -578,9 +593,15 @@
                    </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="QLabel" name="label_3">
+                   <widget class="BtGravityLabel" name="boilSgLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Boil SG</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>boilSgLabel</string>
                     </property>
                    </widget>
                   </item>
@@ -615,9 +636,15 @@
                    </widget>
                   </item>
                   <item row="2" column="0">
-                   <widget class="QLabel" name="fGLabel">
+                   <widget class="BtGravityLabel" name="fGLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>FG</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>fGLabel</string>
                     </property>
                    </widget>
                   </item>
@@ -2248,6 +2275,11 @@
   </customwidget>
   <customwidget>
    <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtGravityLabel</class>
    <extends>QLabel</extends>
    <header location="global">BtLabel.h</header>
   </customwidget>

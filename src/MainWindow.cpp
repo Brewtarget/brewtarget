@@ -361,9 +361,14 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
 
-   // I have my doubts this will work, but if it does it will be the next step
-   // towards each field having its own units displayed.
+   // Connect up all the labels. I really need to find a better way.
+   connect(targetBatchSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(calculatedBatchSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
    connect(targetBoilSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(calculatedBoilSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(oGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(boilSgLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(fGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
@@ -737,10 +742,10 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lineEdit_name->setCursorPosition(0);
    lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), Units::liters, 3, "lineEdit_batchSize") );
    lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), Units::liters, 3, "lineEdit_boilSize" ));
-   lineEdit_efficiency->setText( Brewtarget::displayAmount(recipeObs->efficiency_pct(), 0) );
+   lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs->efficiency_pct(), 0));
    
-   label_calcBatchSize->setText( Brewtarget::displayAmount(recipeObs->finalVolume_l(), Units::liters) );
-   label_calcBoilSize->setText( Brewtarget::displayAmount(recipeObs->boilVolume_l(), Units::liters) );
+   label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs->finalVolume_l(), Units::liters, 3, "calculatedBatchSize"));
+   label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs->boilVolume_l(), Units::liters, 3, "calculatedBoilSizeLabel"));
    
    // Color manipulation
    if( 0.95*recipeObs->batchSize_l() <= recipeObs->finalVolume_l() && recipeObs->finalVolume_l() <= 1.05*recipeObs->batchSize_l() )
@@ -756,9 +761,10 @@ void MainWindow::showChanges(QMetaProperty* prop)
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
 
-   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->og()));
-   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->boilGrav()));
-   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->og(),true,"oGLabel"));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->boilGrav(),true,"boilSgLabel"));
+   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(),recipeObs->og(),true,"fGLabel"));
+
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
    lcdNumber_srm->display(Brewtarget::displayColor(recipeObs->color_srm(),false));
@@ -768,13 +774,13 @@ void MainWindow::showChanges(QMetaProperty* prop)
    // Want to do some manipulation based on selected style.
    if( recStyle != 0 )
    {
-      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle->ogMin()));
-      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle->ogMax()));
+      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle->ogMin(),false,"oGLabel"));
+      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle->ogMax(),false,"oGLabel"));
       lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle->ogMin()).toDouble());
       lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle->ogMax()).toDouble());
 
-      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og()));
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og()));
+      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og(), "fGlabel"));
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og(), "fGlabel"));
       lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og()).toDouble());
       lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og()).toDouble());
 
@@ -2122,6 +2128,5 @@ void MainWindow::finishCheckingVersion()
 
 void MainWindow::redisplayLabel(QString fieldname)
 {
-   qDebug() << "Caught the signal" << fieldname;
    showChanges();
 }

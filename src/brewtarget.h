@@ -94,9 +94,9 @@ public:
    //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
    //! Display gravity appropriately.
-   static QString displayOG( double og, bool showUnits=false );
+   static QString displayOG( double og, bool showUnits=false, QString fieldName = "" );
    //! Display gravity appropriately.
-   static QString displayFG( double fg, double og, bool showUnits=false ); // Need OG if we're using plato.
+   static QString displayFG( double fg, double og, bool showUnits=false, QString fieldName = "" ); // Need OG if we're using plato.
    //! Display color appropriately.
    static QString displayColor( double srm, bool showUnits );
    //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
@@ -204,6 +204,10 @@ private:
    static ColorType colorFormula;
    static ColorUnitType colorUnit;
    static IbuType ibuFormula;
+
+   // Does this make any sense any longer?
+   static UnitSystem* findVolumeUnitSystem(QVariant system);
+   static UnitSystem* findMassUnitSystem(QVariant system);
 };
 
 /*!

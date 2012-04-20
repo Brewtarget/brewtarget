@@ -576,35 +576,20 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, QS
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
    QString ret;
+   QSettings settings("brewtarget");
+   UnitSystem* tSystem; 
 
    // convert to the current unit system (s).
 
    if(SIUnitName.compare("kg") == 0) // Dealing with mass.
-      ret = weightSystem->displayAmount( amount, units );
+   {
+      tSystem = findMassUnitSystem(settings.value(fieldName));
+      ret = tSystem->displayAmount( amount, units );
+   }
    else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
    {
-      UnitSystem* vSystem = volumeSystem;
-
-      if ( fieldName.length() > 0 )
-      {
-         QSettings settings("brewtarget");
-         if ( settings.contains(fieldName) )
-         {
-            switch(settings.value(fieldName).toInt())
-            {
-            case USCustomary:
-               vSystem = UnitSystems::usVolumeUnitSystem();
-               break;
-            case Imperial:
-               vSystem = UnitSystems::imperialVolumeUnitSystem();
-               break;
-            default:
-               vSystem = UnitSystems::siVolumeUnitSystem();
-               break;
-            }
-         }
-      }
-      ret = vSystem->displayAmount( amount, units );
+      tSystem = findVolumeUnitSystem(settings.value(fieldName));
+      ret = tSystem->displayAmount( amount, units );
    }
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
       ret = tempSystem->displayAmount( amount, units );
@@ -616,6 +601,31 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, QS
    }
 
    return ret;
+}
+
+UnitSystem* Brewtarget::findVolumeUnitSystem( QVariant system )
+{
+   if ( ! system.isValid() ) 
+      return volumeSystem;
+
+   if ( system.toInt() == USCustomary )
+      return UnitSystems::usVolumeUnitSystem();
+   else if ( system.toInt() == Imperial )
+      return UnitSystems::imperialVolumeUnitSystem();
+   else 
+      return UnitSystems::siVolumeUnitSystem();
+}
+
+UnitSystem* Brewtarget::findMassUnitSystem( QVariant system )
+{
+   if ( ! system.isValid() ) 
+      return volumeSystem;
+
+   // Both imperial and US are the same. So I cheat.
+   if ( system.toInt() == SI )
+      return UnitSystems::siWeightUnitSystem();
+   else 
+      return UnitSystems::usWeightUnitSystem();
 }
 
 void Brewtarget::getThicknessUnits( Unit** volumeUnit, Unit** weightUnit )
@@ -1003,12 +1013,20 @@ bool Brewtarget::hasUnits(QString qstr)
    return amtUnit.cap(2).size() > 0;
 }
 
-QString Brewtarget::displayOG( double og, bool showUnits )
+QString Brewtarget::displayOG( double og, bool showUnits, QString fieldName )
 {
+   QSettings settings("brewtarget");
    QString tmp = (showUnits & usePlato) ? "%1 %2" : "%1";
+   bool fieldUnit = false;
    QString ret;
 
-   if( usePlato == false )
+   // Field settings override defaults
+   if ( settings.contains(fieldName) )
+      fieldUnit = settings.value(fieldName).toBool();
+   else
+      fieldUnit = usePlato;
+
+   if( fieldUnit == false )
       ret = tmp.arg(og, 0, 'f', 3);
    else // Using Plato...
    {
@@ -1019,15 +1037,23 @@ QString Brewtarget::displayOG( double og, bool showUnits )
    }
 
    if( showUnits )
-      ret = usePlato? ret.arg("P") : ret;
+      ret = fieldUnit ? ret.arg("P") : ret;
 
    return ret;
 }
 
-QString Brewtarget::displayFG( double fg, double og, bool showUnits )
+QString Brewtarget::displayFG( double fg, double og, bool showUnits, QString fieldName )
 {
+   QSettings settings("brewtarget");
    QString ret = (showUnits & usePlato) ? "%1 %2" : "%1";
-   if( usePlato == false )
+   bool fieldUnit = false;
+
+   if ( settings.contains(fieldName) ) 
+      fieldUnit = settings.value(fieldName).toBool();
+   else
+      fieldUnit = usePlato;
+
+   if( fieldUnit == false )
       ret = ret.arg(fg, 0, 'f', 3);
    else
    {
@@ -1047,7 +1073,7 @@ QString Brewtarget::displayFG( double fg, double og, bool showUnits )
    }
 
    if( showUnits )
-      ret = usePlato ? ret.arg("P") : ret;
+      ret = fieldUnit  ? ret.arg("P") : ret;
 
    return ret;
 }

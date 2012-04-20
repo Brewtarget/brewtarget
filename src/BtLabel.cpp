@@ -31,20 +31,11 @@
  
 BtLabel::BtLabel(QWidget *parent, LabelType lType)
 {
-//   QSettings settings("brewtarget");
-
    cachedMenu = 0;
    whatAmI = lType;
    btParent = parent;
 
    connect(this,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(popContextMenu(const QPoint&)));
-
-   if ( (property("editField")).isValid() )
-   {
-      qDebug() << "hmmm";
-   }
-//   if ( settings.contains(propertyName) )
-//      selected = LabelType.valueToKey(settings.value(propertyName).toInt());
 
 }
 
@@ -55,20 +46,13 @@ void BtLabel::popContextMenu(const QPoint& point)
    QAction *invoked;
 
    if ( calledBy == 0 )
-   {
-      qDebug() << "No caller";
       return;
-   }
 
    widgie = qobject_cast<QWidget*>(calledBy);
    if ( widgie == 0 )
-   {
-      qDebug() << "No widgie";
       return;
-   }
 
    propertyName = property("editField").toString();
-   qDebug() << "initializing" << propertyName;
 
    //! If this is the first time we are called, we need to build the menu. 
    if ( cachedMenu == 0 )
@@ -97,12 +81,12 @@ QMenu* BtLabel::setupGravityMenu()
 
    QAction* action = new QAction(menu);
    action->setText(tr("Plato"));
-   action->setData(SI);
+   action->setData(1);
    menu->addAction(action);
 
    action = new QAction(menu);
    action->setText(tr("Specific Gravity"));
-   action->setData(USCustomary);
+   action->setData(0);
    menu->addAction(action);
 
    return menu;
