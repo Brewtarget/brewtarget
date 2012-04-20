@@ -361,6 +361,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
 
+   // I have my doubts this will work, but if it does it will be the next step
+   // towards each field having its own units displayed.
+   connect(targetBoilSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
    connect( equipmentButton, SIGNAL( clicked() ), singleEquipEditor, SLOT(show()) );
@@ -732,7 +736,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lineEdit_name->setText(recipeObs->name());
    lineEdit_name->setCursorPosition(0);
    lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), Units::liters, 3, "lineEdit_batchSize") );
-   lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), Units::liters) );
+   lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), Units::liters, 3, "lineEdit_boilSize" ));
    lineEdit_efficiency->setText( Brewtarget::displayAmount(recipeObs->efficiency_pct(), 0) );
    
    label_calcBatchSize->setText( Brewtarget::displayAmount(recipeObs->finalVolume_l(), Units::liters) );
@@ -2114,4 +2118,10 @@ void MainWindow::finishCheckingVersion()
       // variable will always get reset to true.
       Brewtarget::checkVersion = true;
    }
+}
+
+void MainWindow::redisplayLabel(QString fieldname)
+{
+   qDebug() << "Caught the signal" << fieldname;
+   showChanges();
 }

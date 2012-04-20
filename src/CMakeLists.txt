@@ -62,6 +62,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BrewTargetTreeModel.cpp
     ${SRCDIR}/BrewTargetTreeView.cpp
     ${SRCDIR}/BeerColorWidget.cpp
+    ${SRCDIR}/BtLabel.cpp
     ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/BtSplashScreen.cpp
     #${SRCDIR}/BtSqlQuery.cpp
@@ -203,6 +204,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BrewTargetTreeModel.h
     ${SRCDIR}/BrewTargetTreeView.h
     ${SRCDIR}/BtDigitWidget.h
+    ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtSplashScreen.h
     #${SRCDIR}/BtSqlQuery.h
     ${SRCDIR}/ConverterTool.h

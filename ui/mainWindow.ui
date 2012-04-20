@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>384</height>
+           <width>644</width>
+           <height>403</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -329,9 +329,15 @@
                    </widget>
                   </item>
                   <item row="5" column="0">
-                   <widget class="QLabel" name="targetBoilSizeLabel">
+                   <widget class="BtVolumeLabel" name="targetBoilSizeLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Target Boil Size</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>lineEdit_boilSize</string>
                     </property>
                    </widget>
                   </item>
@@ -1189,8 +1195,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>636</width>
-           <height>343</height>
+           <width>644</width>
+           <height>334</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1694,7 +1700,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2239,6 +2245,11 @@
    <class>YeastTreeView</class>
    <extends>QTreeView</extends>
    <header>BrewTargetTreeView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">BtLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

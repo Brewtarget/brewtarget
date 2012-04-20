@@ -183,6 +183,8 @@ public slots:
    void setUSVolume();
    void setBritishVolume();
 
+   void redisplayLabel(QString field);
+
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
