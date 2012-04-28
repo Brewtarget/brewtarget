@@ -560,7 +560,7 @@ void Brewtarget::logW( QString message )
 
 // Displays "amount" of units "units" in the proper format.
 // If "units" is null, just return the amount.
-QString Brewtarget::displayAmount( double amount, Unit* units, int precision, QString fieldName )
+QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
 {
    int fieldWidth = 0;
    char format = 'f';
@@ -576,29 +576,52 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, QS
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
    QString ret;
-   QSettings settings("brewtarget");
-   UnitSystem* tSystem; 
 
    // convert to the current unit system (s).
 
    if(SIUnitName.compare("kg") == 0) // Dealing with mass.
-   {
-      tSystem = findMassUnitSystem(settings.value(fieldName));
-      ret = tSystem->displayAmount( amount, units );
-   }
+      ret = weightSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
-   {
-      tSystem = findVolumeUnitSystem(settings.value(fieldName));
-      ret = tSystem->displayAmount( amount, units );
-   }
+      ret = volumeSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
       ret = tempSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("min") == 0 ) // Time
       ret = timeSystem->displayAmount( amount, units );
    else // If we don't deal with it above, just use the SI amount.
-   {
       ret = QString("%1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
-   }
+
+   return ret;
+}
+
+QString Brewtarget::displayAmount( double amount, QString fieldName, Unit* units, int precision )
+{
+   int fieldWidth = 0;
+   char format = 'f';
+
+   // Check for insane values.
+   if( Algorithms::Instance().isnan(amount) || Algorithms::Instance().isinf(amount) )
+      return "?";
+   
+   // Special case.
+   if( units == 0 )
+      return QString("%1").arg(amount, fieldWidth, format, precision);
+
+   QString SIUnitName = units->getSIUnitName();
+   double SIAmount = units->toSI( amount );
+   QString ret;
+
+   // convert to the current unit system (s).
+
+   if(SIUnitName.compare("kg") == 0) // Dealing with mass.
+      ret = weightSystem->displayAmount( amount, units );
+   else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
+      ret = volumeSystem->displayAmount( amount, units );
+   else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
+      ret = tempSystem->displayAmount( amount, units );
+   else if( SIUnitName.compare("min") == 0 ) // Time
+      ret = timeSystem->displayAmount( amount, units );
+   else // If we don't deal with it above, just use the SI amount.
+      ret = QString("%1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
 
    return ret;
 }

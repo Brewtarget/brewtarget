@@ -740,12 +740,12 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    lineEdit_name->setText(recipeObs->name());
    lineEdit_name->setCursorPosition(0);
-   lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), Units::liters, 3, "lineEdit_batchSize") );
-   lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), Units::liters, 3, "lineEdit_boilSize" ));
+   lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), "lineEdit_batchSize", Units::liters));
+   lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), "lineEdit_boilSize" , Units::liters));
    lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs->efficiency_pct(), 0));
    
-   label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs->finalVolume_l(), Units::liters, 3, "calculatedBatchSize"));
-   label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs->boilVolume_l(), Units::liters, 3, "calculatedBoilSizeLabel"));
+   label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs->finalVolume_l(), "calculatedBatchSize", Units::liters));
+   label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs->boilVolume_l(), "calculatedBoilSizeLabel", Units::liters));
    
    // Color manipulation
    if( 0.95*recipeObs->batchSize_l() <= recipeObs->finalVolume_l() && recipeObs->finalVolume_l() <= 1.05*recipeObs->batchSize_l() )

@@ -84,9 +84,12 @@ public:
 
    /*!
     * Produces the appropriate string for 'amount' which has units 'units'.
-    * Variable 'precision' controls how many decimal places.
+    * Variable 'precision' controls how many decimal places. I've overloaded
+    * it to aid in the transition
     */
-   static QString displayAmount( double amount, Unit* units=0, int precision=3, QString fieldName = "" );
+   static QString displayAmount( double amount, Unit* units=0, int precision=3 );
+   static QString displayAmount( double amount, QString fieldName, Unit* units=0, int precision=3 );
+
    //! Display date correctly depending on locale.
    static QString displayDate( QDate const& date );
    //! Displays thickness in appropriate units from standard thickness in L/kg.
