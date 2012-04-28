@@ -609,13 +609,21 @@ QString Brewtarget::displayAmount( double amount, QString fieldName, Unit* units
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
    QString ret;
+   QSettings settings("brewtarget");
+   UnitSystem* tSystem; 
 
    // convert to the current unit system (s).
 
    if(SIUnitName.compare("kg") == 0) // Dealing with mass.
-      ret = weightSystem->displayAmount( amount, units );
+   {
+      tSystem = findMassUnitSystem(settings.value(fieldName));
+      ret = tSystem->displayAmount( amount, units );
+   }
    else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
-      ret = volumeSystem->displayAmount( amount, units );
+   {
+      tSystem = findVolumeUnitSystem(settings.value(fieldName));
+      ret = tSystem->displayAmount( amount, units );
+   }
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
       ret = tempSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("min") == 0 ) // Time
@@ -630,6 +638,7 @@ UnitSystem* Brewtarget::findVolumeUnitSystem( QVariant system )
 {
    if ( ! system.isValid() ) 
       return volumeSystem;
+
 
    if ( system.toInt() == USCustomary )
       return UnitSystems::usVolumeUnitSystem();
