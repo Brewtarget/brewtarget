@@ -138,14 +138,6 @@ MainWindow::MainWindow(QWidget* parent)
    lcdNumber_ibugu->setConstantColor(BtDigitWidget::BLACK);
    lcdNumber_calories->setConstantColor(BtDigitWidget::BLACK);
 
-   // experimental and currently disabled for checkin
-   if ( targetBatchSizeLabel->property("unit").isValid() )
-   {
-      qDebug() << "Found a valid property " <<targetBatchSizeLabel->property("unit").toString();
-      connect( targetBatchSizeLabel, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(unitContextMenu(const QPoint &)));
-   }
-
-
    // Null out the recipe
    recipeObs = 0;
    
@@ -369,6 +361,9 @@ MainWindow::MainWindow(QWidget* parent)
    connect(oGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
    connect(boilSgLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
    connect(fGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   // Those are the easy ones. Let's see what we can do with the labels in the
+   // tables.
+   connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(testSignal(const QPoint&)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
@@ -1667,56 +1662,11 @@ void MainWindow::contextMenu(const QPoint &point)
       tempMenu->exec(active->mapToGlobal(point));
 }
 
-void MainWindow::unitContextMenu(const QPoint &point )
-{
-   QObject* calledBy = sender(); // get who called us
-   QWidget* widgie;
-   QVariant unitType, editField;
-   QMenu* tempMenu;              // no clue how to do this right now
-   QAction* invoked;
-
-   if ( calledBy == 0 )
-      return;
-
-   widgie = qobject_cast<QWidget*>(calledBy);
-
-   // If the sender can't be made into a QWidget (eep!)
-   if ( widgie == 0 )
-      return;
-
-   unitType = calledBy->property("unit");
-   editField = calledBy->property("editField");
-
-   if ( ! ( unitType.isValid() && unitMenus.contains(unitType.toString()) ) )
-      return;
-
-   tempMenu = unitMenus.value(unitType.toString());
-   invoked = tempMenu->exec(widgie->mapToGlobal(point));
-
-   if ( invoked == 0 )
-      return;
-
-   qDebug() << "Action invoked = " << invoked->data();
-   QSettings settings("brewtarget");
-
-   settings.setValue(editField.toString(), invoked->data());
-   // We need to get things recalculated/redisplayed. Not sure this is the right way to do it.
-   showChanges();
-
-}
-
-// I need these just as place holders. All the hard work is done in unitContextMenu
-void MainWindow::setMetricVolume() {return;}
-void MainWindow::setUSVolume() {return;}
-void MainWindow::setBritishVolume() {return;}
-
-
 // Set up the context menus.  This is much prettier now that I moved the
 // tree-specific pieces into the treeview objects. I may do the same for the unit menus
 void MainWindow::setupContextMenu()
 {
    QMenu *sMenu = new QMenu(this);
-//   QVariant units[] = { QVariant("volume"), QVariant("mass"), QVariant("gravity") };
 
    // Set up the "new" submenu
    sMenu->setTitle(tr("New"));
@@ -1735,30 +1685,8 @@ void MainWindow::setupContextMenu()
    treeView_misc->setupContextMenu(this,miscDialog,sMenu,BrewTargetTreeItem::MISC);
    treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,BrewTargetTreeItem::YEAST);
 
-   // unit menus. hard coded for now, just to figure out what I'm doing
-   // These will be a bit more complex, because I am actually passing data with them.
-   // This means I need to create an Action, then add it.
-   QMenu* menu = new QMenu(this);
-   QAction* action = new QAction(menu);
-   action->setText(tr("Metric"));
-   action->setData(SI);
-   menu->addAction(action);
-
-   action = new QAction(menu);
-   action->setText(tr("US Customary"));
-   action->setData(USCustomary);
-   menu->addAction(action);
-
-   action = new QAction(menu);
-   action->setText(tr("British Imperial"));
-   action->setData( Imperial );
-   menu->addAction(action);
-
-   menu->setTitle("Units");
-   unitMenus.insert(QString("volume"), menu);
 
 }
-
 
 void MainWindow::copyThis(Recipe *rec)
 {
@@ -2130,3 +2058,80 @@ void MainWindow::redisplayLabel(QString fieldname)
 {
    showChanges();
 }
+
+// Only works for fermTables right now. Welcome to my POC
+void MainWindow::testSignal(const QPoint& point)
+{
+   QObject* calledBy = sender();
+   QTableView* widgie = qobject_cast<QTableView*>(calledBy);
+   QModelIndex selected = widgie->indexAt(point);
+   QModelIndex modelIndex = fermTableProxy->mapToSource(selected);
+
+   // first, make sure I right clicked on the proper column
+   if ( selected.column() != FERMAMOUNTCOL )
+      return;
+
+   QMenu* menu = new QMenu(this);
+   QMenu* sMenu;
+   QAction* invoked;
+   int currentUnit = fermTableModel->displayUnit(modelIndex);
+   int currentScale = fermTableModel->displayScale(modelIndex);
+
+   // I should have my table and my selected item. Time to create and pop a menu. No f'ing clue what I'm doing later, but I will get there
+   menu->setTitle("Units");
+   generateAction(menu, tr("Default"), -1, currentUnit);
+   generateAction(menu, tr("SI"), SI, currentUnit);
+   generateAction(menu, tr("US Customary"), USCustomary, currentUnit);
+   generateAction(menu, tr("British Imperial"), Imperial, currentUnit);
+   menu->addSeparator();
+
+   //! It only gets worse, doesn't it?
+   if ( currentUnit == -1 )
+      currentUnit = Brewtarget::getWeightUnitSystem();
+
+   sMenu = new QMenu(menu);
+   switch(currentUnit)
+   {
+      case SI:
+         generateAction(sMenu, tr("Default"), noscale, currentScale);
+         generateAction(sMenu, tr("Milligrams"), extrasmall, currentScale);
+         generateAction(sMenu, tr("Grams"), small, currentScale);
+         generateAction(sMenu, tr("Kilograms"), medium, currentScale);
+        break;
+        // I can cheat because Imperial and US use the same names
+      default:
+         generateAction(sMenu, tr("Default"), noscale, currentScale);
+         generateAction(sMenu, tr("Ounces"), extrasmall, currentScale);
+         generateAction(sMenu, tr("Pounds"), small, currentScale);
+         break;
+   }
+   sMenu->setTitle("Scale");
+   menu->addMenu(sMenu);
+
+   invoked = menu->exec( widgie->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+
+   // Now, I need to tell the model to do something.
+   if ( pMenu == sMenu )
+      fermTableModel->setDisplayScale(modelIndex, invoked->data().toInt());
+   else
+      fermTableModel->setDisplayUnit(modelIndex,invoked->data().toInt());
+
+}
+
+void MainWindow::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal)
+{
+   QAction* action = new QAction(menu);
+
+   action->setText(text);
+   action->setData(data);
+   action->setCheckable(true);
+   action->setChecked(currentVal == data);;
+
+  menu->addAction(action);
+}
+
+

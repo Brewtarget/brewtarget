@@ -65,6 +65,12 @@ public:
    Fermentable* getFermentable(unsigned int i);
    //! True if you want to display percent of each grain in the row header.
    void setDisplayPercentages( bool var );
+
+   //! Stuff for setting display units and scales
+   int displayUnit(const QModelIndex& index);
+   void setDisplayUnit(const QModelIndex& index, int displayUnit);
+   int displayScale(const QModelIndex& index);
+   void setDisplayScale(const QModelIndex& index, int displayScale);
    
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    //! Reimplemented from QAbstractTableModel.

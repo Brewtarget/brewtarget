@@ -25,6 +25,18 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent)
    connect(lineEdit_fermentDate,SIGNAL(editingFinished()),this,SLOT(updateFermentDate()));
 
    connect(plainTextEdit_brewNotes,SIGNAL(textChanged()), this, SLOT(updateNotes()));
+
+   // Labels
+   connect( btLabel_Sg, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_volIntoBk, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_strikeTemp, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_mashFinTemp, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_Og, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_volIntoFerm, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_pitchTemp, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_postFermentFg, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_finalVolume, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
+   connect( btLabel_projectedOg, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
 }
 
 void BrewNoteWidget::setBrewNote(BrewNote* bNote)
@@ -61,6 +73,8 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
 }
 
 // TODO: what's this?
+// TODO: In answer to the question, this is a place holder for when I figure
+// out how to allow people to reset the brewdate.
 void BrewNoteWidget::updateBrewDate()
 {
 }
@@ -206,27 +220,27 @@ void BrewNoteWidget::saveAll()
    hide();
 }
 
-void BrewNoteWidget::showChanges()
+void BrewNoteWidget::showChanges(QString field)
 {
    if (bNoteObs == 0)
       return;
 
-   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs->sg(),true));
-   lineEdit_volIntoBK->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoBK_l(),Units::liters));
-   lineEdit_strikeTemp->setText(Brewtarget::displayAmount(bNoteObs->strikeTemp_c(),Units::celsius));
-   lineEdit_mashFinTemp->setText(Brewtarget::displayAmount(bNoteObs->mashFinTemp_c(),Units::celsius));
-   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs->og(),true));
-   lineEdit_postBoilVol->setText(Brewtarget::displayAmount(bNoteObs->postBoilVolume_l(),Units::liters));
-   lineEdit_volIntoFerm->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoFerm_l(),Units::liters));
-   lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs->pitchTemp_c(),Units::celsius));
-   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->fg(),true));
-   lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs->finalVolume_l(),Units::liters));
+   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs->sg(),false,"btLabel_Sg"));
+   lineEdit_volIntoBK->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoBK_l(),"btLabel_volIntoBk",Units::liters));
+   lineEdit_strikeTemp->setText(Brewtarget::displayAmount(bNoteObs->strikeTemp_c(),"btLabel_strikeTemp", Units::celsius));
+   lineEdit_mashFinTemp->setText(Brewtarget::displayAmount(bNoteObs->mashFinTemp_c(),"btLabel_mashFinTemp", Units::celsius));
+   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs->og(),false,"btLabel_Og"));
+   lineEdit_postBoilVol->setText(Brewtarget::displayAmount(bNoteObs->postBoilVolume_l(),"btLabel_postBoilVolume", Units::liters));
+   lineEdit_volIntoFerm->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoFerm_l(),"btLabel_volumeIntoFerm", Units::liters));
+   lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs->pitchTemp_c(),"btLabel_pitchTemp",Units::celsius));
+   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->fg(),false,"btLabel_Fg"));
+   lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs->finalVolume_l(),"btLabel_finalVolume", Units::liters));
    lineEdit_fermentDate->setText(bNoteObs->fermentDate_short());
    plainTextEdit_brewNotes->setPlainText(bNoteObs->notes());
 
    // Now with the calculated stuff
    lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
-   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs->og()));
+   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs->og(),false,"btLabel_projectedOg"));
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
    lcdnumber_abv->display(bNoteObs->abv(),2);

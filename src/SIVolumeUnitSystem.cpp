@@ -27,7 +27,7 @@ SIVolumeUnitSystem::SIVolumeUnitSystem()
 {
 }
 
-QString SIVolumeUnitSystem::displayAmount( double amount, Unit* units )
+QString SIVolumeUnitSystem::displayAmount( double amount, Unit* units, int scale )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );

@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QString>
 #include "BeerXMLElement.h"
+#include "unit.h"
 
 // Forward declarations.
 class Fermentable;
@@ -44,6 +45,9 @@ public:
 
    //enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
    enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
+
+
+
    Q_ENUMS( TYPE )
    
    virtual ~Fermentable() {}
@@ -69,6 +73,9 @@ public:
    Q_PROPERTY( double ibuGalPerLb            READ ibuGalPerLb            WRITE setIbuGalPerLb            /*NOTIFY changed*/ /*changedIbuGalPerLb*/ )
    Q_PROPERTY( double equivSucrose_kg        READ equivSucrose_kg        /*WRITE*/                       /*NOTIFY changed*/ /*changedEquivSucrose_kg*/        STORED false )
    Q_PROPERTY( bool isMashed                 READ isMashed               WRITE setIsMashed               /*NOTIFY changed*/ /*changedIsMashed*/ )
+   // Playing with some deep magic for units and scale
+   Q_PROPERTY( int displayUnit       READ displayUnit            WRITE setDisplayUnit            /*NOTIFY changed*/ /*changedDisplayUnit*/)
+   Q_PROPERTY( int displayScale      READ displayScale           WRITE setDisplayScale           /*NOTIFY changed*/ /*changedDisplayScale*/)
    
    const QString name() const;
    const Type type() const;
@@ -89,6 +96,9 @@ public:
    double maxInBatch_pct() const;
    bool recommendMash() const;
    double ibuGalPerLb() const;
+
+   int displayUnit() const;
+   int displayScale() const;
 
    // Calculated getters.
    //! Get the maximum kg of equivalent sucrose that will come out of this ferm.
@@ -117,6 +127,9 @@ public:
    void setIsMashed(bool var);
    /*** END my extensions ***/
    
+   void setDisplayUnit( int unit );
+   void setDisplayScale( int scale);
+
 signals:
    
    /*

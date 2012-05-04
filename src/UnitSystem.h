@@ -43,7 +43,7 @@ public:
     * 'amount' of type 'units' in this UnitSystem. This string should also
     * be recognized by qstringToSI()
     */
-   virtual QString displayAmount( double amount, Unit* units = 0 ) = 0;
+   virtual QString displayAmount( double amount, Unit* units = 0, int scale = noscale ) = 0;
 
    /*!
     * qstringToSI() should convert 'qstr' (consisting of a decimal amount,

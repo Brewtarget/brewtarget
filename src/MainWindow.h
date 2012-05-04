@@ -163,7 +163,6 @@ public slots:
    void restoreFromBackup();
 
    void contextMenu(const QPoint &point);
-   void unitContextMenu(const QPoint &point);
    void newBrewNote();
    void reBrewNote();
 
@@ -178,12 +177,8 @@ public slots:
 
    void finishCheckingVersion();
 
-   //! playing with allowing each element to display in a different unit
-   void setMetricVolume();
-   void setUSVolume();
-   void setBritishVolume();
-
    void redisplayLabel(QString field);
+   void testSignal(const QPoint& point);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
@@ -271,6 +266,9 @@ private:
    void copyThis(Hop *hop);
    void copyThis(Misc *misc);
    void copyThis(Yeast *yeast);
+
+//   QAction* generateAction(QString text, QVariant data, QVariant currentVal);
+   void generateAction(QMenu* menu,QString text, QVariant data, QVariant currentVal);
 
 };
 

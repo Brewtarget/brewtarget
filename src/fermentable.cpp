@@ -20,6 +20,7 @@
 #include <QDomText>
 #include <QVariant>
 #include <QObject>
+#include <QDebug>
 #include "fermentable.h"
 #include "brewtarget.h"
 
@@ -243,6 +244,18 @@ double Fermentable::equivSucrose_kg() const
       return ret;
 }
 
+int Fermentable::displayUnit() const 
+{
+   int unit = get("display_unit").toInt();
+
+   if ( unit == -1 )
+      unit = Brewtarget::getWeightUnitSystem();
+
+   return unit;
+}
+
+int Fermentable::displayScale() const { return get("display_scale").toInt(); }
+
 // Set
 void Fermentable::setName( const QString& str )
 {
@@ -360,3 +373,7 @@ bool Fermentable::isValidType( const QString& str )
 {
    return (types.indexOf(str) >= 0);
 }
+
+void Fermentable::setDisplayUnit( int unit ) { set("displayUnit", "display_unit", unit); }
+void Fermentable::setDisplayScale( int scale ) { set("displayScale", "display_scale", scale); }
+

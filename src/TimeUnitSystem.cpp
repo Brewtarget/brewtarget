@@ -26,7 +26,7 @@ TimeUnitSystem::TimeUnitSystem()
 {
 }
 
-QString TimeUnitSystem::displayAmount( double amount, Unit* units )
+QString TimeUnitSystem::displayAmount( double amount, Unit* units, int scale )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );

@@ -28,7 +28,7 @@ class ImperialVolumeUnitSystem : public UnitSystem
 {
 public:
    ImperialVolumeUnitSystem();
-   QString displayAmount( double amount, Unit* units = 0 ); /* Inherited from UnitSystem */
+   QString displayAmount( double amount, Unit* units = 0, int scale = noscale ); /* Inherited from UnitSystem */
    double qstringToSI( QString qstr ); /* Inherited from UnitSystem */
    Unit* thicknessUnit(); /* Inherited from UnitSystem */
 

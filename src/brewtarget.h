@@ -87,7 +87,7 @@ public:
     * Variable 'precision' controls how many decimal places. I've overloaded
     * it to aid in the transition
     */
-   static QString displayAmount( double amount, Unit* units=0, int precision=3 );
+   static QString displayAmount( double amount, Unit* units=0, int precision=3, int displayUnit = -1, int displayScale = -1 );
    static QString displayAmount( double amount, QString fieldName, Unit* units=0, int precision=3 );
 
    //! Display date correctly depending on locale.
@@ -211,6 +211,7 @@ private:
    // Does this make any sense any longer?
    static UnitSystem* findVolumeUnitSystem(QVariant system);
    static UnitSystem* findMassUnitSystem(QVariant system);
+   static UnitSystem* findTemperatureSystem(QVariant system);
 };
 
 /*!

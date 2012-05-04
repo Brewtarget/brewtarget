@@ -42,8 +42,10 @@ BtLabel::BtLabel(QWidget *parent, LabelType lType)
 void BtLabel::popContextMenu(const QPoint& point)
 {
    QObject* calledBy = sender();
+   QSettings settings("brewtarget");
    QWidget* widgie;
    QAction *invoked;
+   QVariant unit;
 
    if ( calledBy == 0 )
       return;
@@ -53,72 +55,150 @@ void BtLabel::popContextMenu(const QPoint& point)
       return;
 
    propertyName = property("editField").toString();
+   unit = settings.value(propertyName);
+
 
    //! If this is the first time we are called, we need to build the menu. 
-   if ( cachedMenu == 0 )
+   switch( whatAmI )
    {
-      if ( (whatAmI == VOLUME) || (whatAmI == MASS) )
-         cachedMenu = setupMassVolumeMenu();
-      else if ( whatAmI == GRAVITY )
-         cachedMenu = setupGravityMenu();
-      else
+      case VOLUME:
+      case MASS:
+         cachedMenu = setupMassVolumeMenu(unit);
+         break;
+      case GRAVITY:
+         cachedMenu = setupGravityMenu(unit);
+         break;
+      case TEMPERATURE:
+         cachedMenu = setupTemperatureMenu(unit);
+         break;
+      default:
          return;
    }
+
    invoked = cachedMenu->exec(widgie->mapToGlobal(point));
    if ( invoked == 0 )
       return;
 
-   QSettings settings("brewtarget");
+
    settings.setValue(propertyName, invoked->data());
   
    emit labelChanged(propertyName);
 
 }
 
-QMenu* BtLabel::setupGravityMenu()
+QMenu* BtLabel::setupGravityMenu(QVariant unit)
 {
    QMenu* menu = new QMenu(btParent);
-
    QAction* action = new QAction(menu);
+   int tUnit;
+
+   if ( unit.isValid() )
+      tUnit = unit.toInt();
+   else
+      tUnit = -1;
+
+   action->setText(tr("Default"));
+   action->setData(-1);
+   action->setCheckable(true);
+   action->setChecked(tUnit == -1);
+   menu->addAction(action);
+
    action->setText(tr("Plato"));
    action->setData(1);
+   action->setCheckable(true);
+   action->setChecked(tUnit == 1);
    menu->addAction(action);
 
    action = new QAction(menu);
    action->setText(tr("Specific Gravity"));
    action->setData(0);
+   action->setCheckable(true);
+   action->setChecked(tUnit == 0);
+
    menu->addAction(action);
 
    return menu;
 }
 
-QMenu* BtLabel::setupMassVolumeMenu()
+QMenu* BtLabel::setupMassVolumeMenu(QVariant unit)
 {
    QMenu* menu = new QMenu(btParent);
-
    QAction* action = new QAction(menu);
+   int tUnit;
+
+   if ( unit.isValid() )
+      tUnit = unit.toInt();
+   else
+      tUnit = -1;
+
+   action->setText(tr("Default"));
+   action->setData(-1);
+   action->setCheckable(true);
+   action->setChecked(tUnit == -1);
+   menu->addAction(action);
+
    action->setText(tr("SI"));
    action->setData(SI);
+   action->setCheckable(true);
+   action->setChecked(tUnit == SI);
    menu->addAction(action);
 
    action = new QAction(menu);
    action->setText(tr("US Customary"));
    action->setData(USCustomary);
+   action->setCheckable(true);
+   action->setChecked(tUnit == USCustomary);
    menu->addAction(action);
 
    action = new QAction(menu);
    action->setText(tr("British Imperial"));
    action->setData(Imperial);
+   action->setCheckable(true);
+   action->setChecked(tUnit == Imperial);
    menu->addAction(action);
 
    return menu;
 }
 
-void BtLabel::setSI(){ return; }
-void BtLabel::setUsTraditional(){ return; }
-void BtLabel::setBritishImperial(){ return; }
-void BtLabel::setPlato(){ return; }
-void BtLabel::setSg(){ return; }
+QMenu* BtLabel::setupTemperatureMenu(QVariant unit)
+{
+   QMenu* menu = new QMenu(btParent);
+   QAction* action = new QAction(menu);
+   int tUnit;
+
+   if ( unit.isValid() )
+      tUnit = unit.toInt();
+   else
+      tUnit = -1;
+
+   action->setText(tr("Default"));
+   action->setData(-1);
+   action->setCheckable(true);
+   action->setChecked(tUnit == -1);
+   menu->addAction(action);
+
+   action->setText(tr("Celsius"));
+   action->setData(Celsius);
+   action->setCheckable(true);
+   action->setChecked(tUnit == Celsius);
+   menu->addAction(action);
+
+   action = new QAction(menu);
+   action->setText(tr("Fahrenheit"));
+   action->setData(Fahrenheit);
+   action->setCheckable(true);
+   action->setChecked(tUnit == Fahrenheit);
+   menu->addAction(action);
+
+   action = new QAction(menu);
+   action->setText(tr("Kelvin"));
+   action->setData(Kelvin);
+   action->setCheckable(true);
+   action->setChecked(tUnit == Kelvin);
+   menu->addAction(action);
+
+   return menu;
+}
 
 BtVolumeLabel::BtVolumeLabel(QWidget *parent)
    : BtLabel(parent,VOLUME)
@@ -132,5 +212,10 @@ BtMassLabel::BtMassLabel(QWidget *parent)
 
 BtGravityLabel::BtGravityLabel(QWidget *parent)
    : BtLabel(parent,GRAVITY)
+{
+}
+
+BtTemperatureLabel::BtTemperatureLabel(QWidget *parent)
+   : BtLabel(parent,TEMPERATURE)
 {
 }

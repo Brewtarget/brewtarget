@@ -27,7 +27,7 @@ ImperialVolumeUnitSystem::ImperialVolumeUnitSystem()
 {
 }
 
-QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units )
+QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units, int scale )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
@@ -39,16 +39,38 @@ QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("L") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( absSIAmount < Units::imperial_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
-      ret = QString("%1 %2").arg(Units::imperial_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_teaspoons->getUnitName());
-   else if( absSIAmount < Units::imperial_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
-      ret = QString("%1 %2").arg(Units::imperial_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_tablespoons->getUnitName());
-   else if( absSIAmount < Units::imperial_quarts->toSI(1.0) ) // If less than 1 qt, show imperial_cups
-      ret = QString("%1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
-   else if( absSIAmount < Units::imperial_gallons->toSI(1.0) ) // If less than 1 gallon, show imperial_quarts
-      ret = QString("%1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
-   else
-      ret = QString("%1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());
+   // The scale needs to override everything. If I select "imperial
+   // teaspoons", I don't care how big or small the value it. Display it in
+   // that scale
+   switch( scale ) 
+   {
+      case extrasmall:
+         ret = QString("%1 %2").arg(Units::imperial_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_teaspoons->getUnitName());
+         break;
+      case small:
+         ret = QString("%1 %2").arg(Units::imperial_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_tablespoons->getUnitName());
+         break;
+      case medium:
+         ret = QString("%1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
+         break;
+      case large:
+         ret = QString("%1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
+         break;
+      case extralarge:
+         ret = QString("%1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());
+         break;
+      default:
+         if( absSIAmount < Units::imperial_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
+            ret = QString("%1 %2").arg(Units::imperial_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_teaspoons->getUnitName());
+         else if( absSIAmount < Units::imperial_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
+            ret = QString("%1 %2").arg(Units::imperial_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_tablespoons->getUnitName());
+         else if( absSIAmount < Units::imperial_quarts->toSI(1.0) ) // If less than 1 qt, show imperial_cups
+            ret = QString("%1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
+         else if( absSIAmount < Units::imperial_gallons->toSI(1.0) ) // If less than 1 gallon, show imperial_quarts
+            ret = QString("%1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
+         else
+            ret = QString("%1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());
+   }
 
    return ret;
 }

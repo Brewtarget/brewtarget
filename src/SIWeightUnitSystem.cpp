@@ -27,7 +27,7 @@ SIWeightUnitSystem::SIWeightUnitSystem()
 {
 }
 
-QString SIWeightUnitSystem::displayAmount( double amount, Unit* units )
+QString SIWeightUnitSystem::displayAmount( double amount, Unit* units, int scale )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
@@ -39,12 +39,31 @@ QString SIWeightUnitSystem::displayAmount( double amount, Unit* units )
    if( units == 0 || SIUnitName.compare("kg") != 0 )
       return QString("%1").arg(amount, fieldWidth, format, precision);
 
-   if( absSIAmount < Units::grams->toSI(1.0) ) // If less than a gram, show mg.
-      ret = QString("%1 %2").arg(Units::milligrams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milligrams->getUnitName());
-   else if( absSIAmount < Units::kilograms->toSI(1.0) ) // If less than a kg, show g.
-      ret = QString("%1 %2").arg(Units::grams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::grams->getUnitName());
-   else // Otherwise, show kg.
-      ret = QString("%1 %2").arg(Units::kilograms->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::kilograms->getUnitName());
+   switch(scale)
+   {
+      case extrasmall:
+         ret = QString("%1 %2").arg(Units::milligrams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milligrams->getUnitName());
+         break;
+      case small:
+         ret = QString("%1 %2").arg(Units::grams->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::grams->getUnitName());
+         break;
+      case medium:
+         ret = QString("%1 %2").arg(Units::kilograms->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::kilograms->getUnitName());
+         break;
+      default:
+         if( absSIAmount < Units::grams->toSI(1.0) ) // If less than a gram, show mg.
+            ret = QString("%1 %2")
+                  .arg(Units::milligrams->fromSI(SIAmount), fieldWidth, format, precision)
+                  .arg(Units::milligrams->getUnitName());
+         else if( absSIAmount < Units::kilograms->toSI(1.0) ) // If less than a kg, show g.
+            ret = QString("%1 %2")
+                  .arg(Units::grams->fromSI(SIAmount), fieldWidth, format, precision)
+                  .arg(Units::grams->getUnitName());
+         else // Otherwise, show kg.
+            ret = QString("%1 %2")
+               .arg(Units::kilograms->fromSI(SIAmount), fieldWidth, format, precision)
+               .arg(Units::kilograms->getUnitName());
+   }
 
    return ret;
 }

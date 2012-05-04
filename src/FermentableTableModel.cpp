@@ -260,7 +260,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
             return QVariant();
       case FERMAMOUNTCOL:
          if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms) );
+            return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms, 3, row->displayUnit(), row->displayScale()) );
          else
             return QVariant();
       case FERMISMASHEDCOL:
@@ -350,6 +350,52 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
       return (defaults | Qt::ItemIsSelectable);
    else
       return (defaults | Qt::ItemIsSelectable | Qt::ItemIsEditable);
+}
+
+int FermentableTableModel::displayUnit(const QModelIndex& index)
+{
+   Fermentable* row;
+
+   if ( index.row() >= fermObs.size() )
+      return -1;
+
+   row = fermObs[index.row()];
+
+   return row->displayUnit();
+}
+
+void FermentableTableModel::setDisplayUnit(const QModelIndex& index, int displayUnit)
+{
+   Fermentable* row;
+
+   if ( index.row() >= fermObs.size() )
+      return;
+
+   row = fermObs[index.row()];
+   row->setDisplayUnit(displayUnit);
+}
+
+int FermentableTableModel::displayScale(const QModelIndex& index)
+{
+   Fermentable* row;
+
+   if ( index.row() >= fermObs.size() )
+      return -1;
+
+   row = fermObs[index.row()];
+
+   return row->displayScale();
+}
+
+void FermentableTableModel::setDisplayScale(const QModelIndex& index, int displayScale)
+{
+   Fermentable* row;
+
+   if ( index.row() >= fermObs.size() )
+      return;
+
+   row = fermObs[index.row()];
+   row->setDisplayScale(displayScale);
 }
 
 bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& value, int role )

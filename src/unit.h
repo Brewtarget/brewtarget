@@ -73,6 +73,18 @@ enum TempScale
     Kelvin
 };
 
+// DO NOT change noscale's value. Lots of assumptions are made based on this
+// value, both in the code and (more importantly) in the database.
+enum unitScale
+{
+   noscale = -1,
+   extrasmall = 0,
+   small = 1,
+   medium = 2,
+   large = 3,
+   extralarge = 4
+};
+
 inline QString unitSystemToString(iUnitSystem us)
 {
    switch (us)

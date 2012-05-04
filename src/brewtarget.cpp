@@ -560,10 +560,12 @@ void Brewtarget::logW( QString message )
 
 // Displays "amount" of units "units" in the proper format.
 // If "units" is null, just return the amount.
-QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
+QString Brewtarget::displayAmount( double amount, Unit* units, int precision,
+      int displayUnits, int displayScale)
 {
    int fieldWidth = 0;
    char format = 'f';
+   UnitSystem* temp;
 
    // Check for insane values.
    if( Algorithms::Instance().isnan(amount) || Algorithms::Instance().isinf(amount) )
@@ -580,7 +582,10 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
    // convert to the current unit system (s).
 
    if(SIUnitName.compare("kg") == 0) // Dealing with mass.
-      ret = weightSystem->displayAmount( amount, units );
+   {
+      temp = findMassUnitSystem(displayUnits);
+      ret = temp->displayAmount( amount, units, displayScale );
+   }
    else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
       ret = volumeSystem->displayAmount( amount, units );
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
@@ -593,6 +598,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision )
    return ret;
 }
 
+// Displays amounts for btLabels.
 QString Brewtarget::displayAmount( double amount, QString fieldName, Unit* units, int precision )
 {
    int fieldWidth = 0;
@@ -625,7 +631,13 @@ QString Brewtarget::displayAmount( double amount, QString fieldName, Unit* units
       ret = tSystem->displayAmount( amount, units );
    }
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
-      ret = tempSystem->displayAmount( amount, units );
+   {
+      tSystem = findTemperatureSystem(settings.value(fieldName));
+      ret = tSystem->displayAmount( amount, units );
+      if ( settings.value(fieldName).toInt() == Kelvin )
+         qDebug() << "Yeah. Do something about that";
+//         ret = QString( ret.toDouble() + 273 );
+   }
    else if( SIUnitName.compare("min") == 0 ) // Time
       ret = timeSystem->displayAmount( amount, units );
    else // If we don't deal with it above, just use the SI amount.
@@ -650,14 +662,26 @@ UnitSystem* Brewtarget::findVolumeUnitSystem( QVariant system )
 
 UnitSystem* Brewtarget::findMassUnitSystem( QVariant system )
 {
-   if ( ! system.isValid() ) 
-      return volumeSystem;
+   if ( ! system.isValid() || system.toInt() == -1 ) 
+      return weightSystem;
 
    // Both imperial and US are the same. So I cheat.
    if ( system.toInt() == SI )
       return UnitSystems::siWeightUnitSystem();
    else 
       return UnitSystems::usWeightUnitSystem();
+}
+
+UnitSystem* Brewtarget::findTemperatureSystem( QVariant system )
+{
+   if ( ! system.isValid() )
+      return tempSystem;
+
+   // Not sure how to handle Kelvin, but it will have to be upstream.
+   if ( system.toInt() == Fahrenheit )
+      return UnitSystems::fahrenheitTempUnitSystem();
+   else 
+      return UnitSystems::celsiusTempUnitSystem();
 }
 
 void Brewtarget::getThicknessUnits( Unit** volumeUnit, Unit** weightUnit )

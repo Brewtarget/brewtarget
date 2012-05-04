@@ -33,6 +33,7 @@ class BtLabel;
 class BtMassLabel;
 class BtVolumeLabel;
 class BtGravityLabel;
+class BtTemperatureLabel;
 
 /*!
  * \class BtLabel
@@ -48,24 +49,18 @@ class BtLabel : public QLabel
 
 public:
    //! What kinds of units are available for labels
-   enum LabelType{ NONE, GRAVITY, MASS, VOLUME };
+   enum LabelType{ NONE, GRAVITY, MASS, TEMPERATURE, VOLUME };
 
    BtLabel(QWidget* parent = 0, LabelType lType = NONE);
 
 public slots:
    void popContextMenu(const QPoint &point);
-   //! these work for mass and volume, but not so well for gravity
-   void setSI();
-   void setUsTraditional();
-   void setBritishImperial();
-   //! these work for gravity
-   void setPlato();
-   void setSg();
 
    //! I need to stop using this trick?
    friend class BtMassLabel;
    friend class BtVolumeLabel;
    friend class BtGravityLabel;
+   friend class BtTemperatureLabel;
 
 signals:
    void labelChanged(QString field);
@@ -73,13 +68,13 @@ signals:
 private:
    LabelType whatAmI;
    QMenu* cachedMenu;
-   iUnitSystem selected;
    QString propertyName;
    QWidget *btParent;
 
    //! Only need one for mass or volume. Gravity is odd
-   QMenu* setupGravityMenu();
-   QMenu* setupMassVolumeMenu();
+   QMenu* setupGravityMenu(QVariant unit);
+   QMenu* setupMassVolumeMenu(QVariant unit);
+   QMenu* setupTemperatureMenu(QVariant unit);
 };
 
 class BtMassLabel : public BtLabel
@@ -101,6 +96,13 @@ class BtGravityLabel : public BtLabel
    Q_OBJECT
 public:
    BtGravityLabel(QWidget* parent = 0);
+};
+
+class BtTemperatureLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtTemperatureLabel(QWidget* parent = 0);
 };
 
 #endif
