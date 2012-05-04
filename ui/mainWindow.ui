@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>403</height>
+           <width>661</width>
+           <height>406</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1222,8 +1222,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>334</height>
+           <width>661</width>
+           <height>329</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1241,6 +1241,9 @@
               <height>200</height>
              </size>
             </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="currentIndex">
              <number>0</number>
             </property>
@@ -1250,7 +1253,11 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_19">
               <item>
-               <widget class="QTableView" name="fermentableTable"/>
+               <widget class="QTableView" name="fermentableTable">
+                <property name="contextMenuPolicy">
+                 <enum>Qt::CustomContextMenu</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1394,7 +1401,11 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_21">
               <item>
-               <widget class="QTableView" name="miscTable"/>
+               <widget class="QTableView" name="miscTable">
+                <property name="contextMenuPolicy">
+                 <enum>Qt::CustomContextMenu</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1466,7 +1477,11 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
-               <widget class="QTableView" name="yeastTable"/>
+               <widget class="QTableView" name="yeastTable">
+                <property name="contextMenuPolicy">
+                 <enum>Qt::CustomContextMenu</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1540,7 +1555,11 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
-                 <widget class="QTableView" name="mashStepTableWidget"/>
+                 <widget class="QTableView" name="mashStepTableWidget">
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::CustomContextMenu</enum>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout">
@@ -1727,7 +1746,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">

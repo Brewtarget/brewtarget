@@ -55,7 +55,7 @@
             </size>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="page_preboil">
             <property name="geometry">
@@ -63,7 +63,7 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>328</height>
+              <height>340</height>
              </rect>
             </property>
             <attribute name="label">
@@ -71,12 +71,18 @@
             </attribute>
             <layout class="QFormLayout" name="formLayout_2">
              <item row="0" column="0">
-              <widget class="QLabel" name="label">
+              <widget class="BtGravityLabel" name="btLabel_Sg">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>SG</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_Sg</string>
                </property>
               </widget>
              </item>
@@ -109,12 +115,18 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_2">
+              <widget class="BtVolumeLabel" name="btLabel_volIntoBk">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>Volume</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_volIntoBk</string>
                </property>
               </widget>
              </item>
@@ -144,12 +156,18 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_3">
+              <widget class="BtTemperatureLabel" name="btLabel_strikeTemp">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>Strike Temp</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_strikeTemp</string>
                </property>
               </widget>
              </item>
@@ -179,12 +197,18 @@
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="label_4">
+              <widget class="BtTemperatureLabel" name="btLabel_mashFinTemp">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>Final Temp</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_mashFinTemp</string>
                </property>
               </widget>
              </item>
@@ -221,7 +245,7 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>328</height>
+              <height>340</height>
              </rect>
             </property>
             <attribute name="label">
@@ -229,12 +253,18 @@
             </attribute>
             <layout class="QFormLayout" name="formLayout">
              <item row="0" column="0">
-              <widget class="QLabel" name="label_6">
+              <widget class="BtGravityLabel" name="btLabel_Og">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>OG</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_Og</string>
                </property>
               </widget>
              </item>
@@ -264,7 +294,10 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_7">
+              <widget class="BtVolumeLabel" name="btLabel_postBoilVol">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>     Postboil Volume</string>
                </property>
@@ -276,6 +309,9 @@
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_postBoilVol</string>
                </property>
               </widget>
              </item>
@@ -305,7 +341,10 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_16">
+              <widget class="BtVolumeLabel" name="btLabel_volIntoFerm">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="toolTip">
                 <string>Volume of wort transferred to fermenter</string>
                </property>
@@ -317,6 +356,9 @@
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_volIntoFerm</string>
                </property>
               </widget>
              </item>
@@ -343,7 +385,10 @@
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="label_8">
+              <widget class="BtTemperatureLabel" name="btLabel_pitchTemp">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string> Pitch Temp</string>
                </property>
@@ -352,6 +397,9 @@
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_pitchTemp</string>
                </property>
               </widget>
              </item>
@@ -388,7 +436,7 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>328</height>
+              <height>340</height>
              </rect>
             </property>
             <attribute name="label">
@@ -396,9 +444,15 @@
             </attribute>
             <layout class="QFormLayout" name="formLayout_5">
              <item row="0" column="0">
-              <widget class="QLabel" name="label_9">
+              <widget class="BtGravityLabel" name="btLabel_postFermentFg">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>FG</string>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_postFermentFg</string>
                </property>
               </widget>
              </item>
@@ -428,9 +482,15 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_10">
+              <widget class="BtVolumeLabel" name="btLabel_finalVolume">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="text">
                 <string>Volume</string>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_finalVolume</string>
                </property>
               </widget>
              </item>
@@ -460,7 +520,7 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_11">
+              <widget class="QLabel" name="btLabel_fermentDate">
                <property name="text">
                 <string>          Date</string>
                </property>
@@ -503,7 +563,7 @@
               <enum>QFormLayout::ExpandingFieldsGrow</enum>
              </property>
              <item row="0" column="0">
-              <widget class="QLabel" name="label_5">
+              <widget class="QLabel" name="btLabel_effInfoBk">
                <property name="statusTip">
                 <string>percent efficiency into boil kettle</string>
                </property>
@@ -520,12 +580,18 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_13">
+              <widget class="BtGravityLabel" name="btLabel_projectedOg">
+               <property name="contextMenuPolicy">
+                <enum>Qt::CustomContextMenu</enum>
+               </property>
                <property name="statusTip">
                 <string>Expected OG, based on measure fg</string>
                </property>
                <property name="text">
                 <string>Projected OG</string>
+               </property>
+               <property name="editField" stdset="0">
+                <string>btLabel_projectedOg</string>
                </property>
               </widget>
              </item>
@@ -537,7 +603,7 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="label_12">
+              <widget class="QLabel" name="btLabel_brewHouseEff">
                <property name="statusTip">
                 <string>Brewhouse efficiency</string>
                </property>
@@ -554,7 +620,7 @@
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="label_14">
+              <widget class="QLabel" name="btLabel_projectedAbv">
                <property name="statusTip">
                 <string>Expected ABV based on OG</string>
                </property>
@@ -571,7 +637,7 @@
               </widget>
              </item>
              <item row="4" column="0">
-              <widget class="QLabel" name="label_15">
+              <widget class="QLabel" name="btlabel_Abv">
                <property name="statusTip">
                 <string>ABV based on FG</string>
                </property>
@@ -624,6 +690,21 @@
    <class>BtDigitWidget</class>
    <extends>QLabel</extends>
    <header>BtDigitWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtGravityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtTemperatureLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
