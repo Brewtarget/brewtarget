@@ -71,6 +71,9 @@ void BtLabel::popContextMenu(const QPoint& point)
       case TEMPERATURE:
          cachedMenu = setupTemperatureMenu(unit);
          break;
+      case COLOR:
+         cachedMenu = setupColorMenu(unit);
+         break;
       default:
          return;
    }
@@ -84,6 +87,40 @@ void BtLabel::popContextMenu(const QPoint& point)
   
    emit labelChanged(propertyName);
 
+}
+
+QMenu* BtLabel::setupColorMenu(QVariant unit)
+{
+   QMenu* menu = new QMenu(btParent);
+   QAction* action = new QAction(menu);
+   int tUnit;
+
+   if ( unit.isValid() )
+      tUnit = unit.toInt();
+   else
+      tUnit = -1;
+
+   action->setText(tr("Default"));
+   action->setData(-1);
+   action->setCheckable(true);
+   action->setChecked(tUnit == -1);
+   menu->addAction(action);
+
+   action->setText(tr("ECB"));
+   action->setData(1);
+   action->setCheckable(true);
+   action->setChecked(tUnit == 1);
+   menu->addAction(action);
+
+   action = new QAction(menu);
+   action->setText(tr("SRM"));
+   action->setData(0);
+   action->setCheckable(true);
+   action->setChecked(tUnit == 0);
+
+   menu->addAction(action);
+
+   return menu;
 }
 
 QMenu* BtLabel::setupGravityMenu(QVariant unit)
@@ -198,6 +235,11 @@ QMenu* BtLabel::setupTemperatureMenu(QVariant unit)
    menu->addAction(action);
 
    return menu;
+}
+
+BtColorLabel::BtColorLabel(QWidget *parent)
+   : BtLabel(parent,COLOR)
+{
 }
 
 BtVolumeLabel::BtVolumeLabel(QWidget *parent)

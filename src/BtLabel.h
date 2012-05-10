@@ -30,10 +30,11 @@
 #include "UnitSystem.h"
 
 class BtLabel;
-class BtMassLabel;
-class BtVolumeLabel;
+class BtColorLabel;
 class BtGravityLabel;
+class BtMassLabel;
 class BtTemperatureLabel;
+class BtVolumeLabel;
 
 /*!
  * \class BtLabel
@@ -49,7 +50,7 @@ class BtLabel : public QLabel
 
 public:
    //! What kinds of units are available for labels
-   enum LabelType{ NONE, GRAVITY, MASS, TEMPERATURE, VOLUME };
+   enum LabelType{ NONE, COLOR, GRAVITY, MASS, TEMPERATURE, VOLUME };
 
    BtLabel(QWidget* parent = 0, LabelType lType = NONE);
 
@@ -57,10 +58,11 @@ public slots:
    void popContextMenu(const QPoint &point);
 
    //! I need to stop using this trick?
-   friend class BtMassLabel;
-   friend class BtVolumeLabel;
+   friend class BtColorLabel;
    friend class BtGravityLabel;
+   friend class BtMassLabel;
    friend class BtTemperatureLabel;
+   friend class BtVolumeLabel;
 
 signals:
    void labelChanged(QString field);
@@ -72,23 +74,17 @@ private:
    QWidget *btParent;
 
    //! Only need one for mass or volume. Gravity is odd
+   QMenu* setupColorMenu(QVariant unit);
    QMenu* setupGravityMenu(QVariant unit);
    QMenu* setupMassVolumeMenu(QVariant unit);
    QMenu* setupTemperatureMenu(QVariant unit);
 };
 
-class BtMassLabel : public BtLabel
+class BtColorLabel : public BtLabel
 {
    Q_OBJECT
 public:
-   BtMassLabel(QWidget* parent = 0);
-};
-
-class BtVolumeLabel : public BtLabel
-{
-   Q_OBJECT
-public:
-   BtVolumeLabel(QWidget* parent = 0);
+   BtColorLabel(QWidget* parent = 0);
 };
 
 class BtGravityLabel : public BtLabel
@@ -98,11 +94,25 @@ public:
    BtGravityLabel(QWidget* parent = 0);
 };
 
+class BtMassLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtMassLabel(QWidget* parent = 0);
+};
+
 class BtTemperatureLabel : public BtLabel
 {
    Q_OBJECT
 public:
    BtTemperatureLabel(QWidget* parent = 0);
+};
+
+class BtVolumeLabel : public BtLabel
+{
+   Q_OBJECT
+public:
+   BtVolumeLabel(QWidget* parent = 0);
 };
 
 #endif
