@@ -65,11 +65,14 @@ QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
 QTextStream* Brewtarget::logStream = 0;
 QFile* Brewtarget::logFile = 0;
+QSettings Brewtarget::btSettings("brewtarget");
+
 bool Brewtarget::userDatabaseDidNotExist = false;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
 QString Brewtarget::userDataDir = getConfigDir();
+
 
 bool Brewtarget::checkVersion = true;
 
@@ -615,26 +618,26 @@ QString Brewtarget::displayAmount( double amount, QString fieldName, Unit* units
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
    QString ret;
-   QSettings settings("brewtarget");
+//   QSettings settings("brewtarget");
    UnitSystem* tSystem; 
 
    // convert to the current unit system (s).
 
    if(SIUnitName.compare("kg") == 0) // Dealing with mass.
    {
-      tSystem = findMassUnitSystem(settings.value(fieldName));
+      tSystem = findMassUnitSystem(btSettings.value(fieldName));
       ret = tSystem->displayAmount( amount, units );
    }
    else if( SIUnitName.compare("L") == 0 ) // Dealing with volume
    {
-      tSystem = findVolumeUnitSystem(settings.value(fieldName));
+      tSystem = findVolumeUnitSystem(btSettings.value(fieldName));
       ret = tSystem->displayAmount( amount, units );
    }
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
    {
-      tSystem = findTemperatureSystem(settings.value(fieldName));
+      tSystem = findTemperatureSystem(btSettings.value(fieldName));
       ret = tSystem->displayAmount( amount, units );
-      if ( settings.value(fieldName).toInt() == Kelvin )
+      if ( btSettings.value(fieldName).toInt() == Kelvin )
          qDebug() << "Yeah. Do something about that";
 //         ret = QString( ret.toDouble() + 273 );
    }
@@ -1071,14 +1074,14 @@ bool Brewtarget::hasUnits(QString qstr)
 
 QString Brewtarget::displayOG( double og, bool showUnits, QString fieldName )
 {
-   QSettings settings("brewtarget");
+//   QSettings settings("brewtarget");
    QString tmp = (showUnits & usePlato) ? "%1 %2" : "%1";
    bool fieldUnit = false;
    QString ret;
 
    // Field settings override defaults
-   if ( settings.contains(fieldName) )
-      fieldUnit = settings.value(fieldName).toBool();
+   if ( btSettings.contains(fieldName) )
+      fieldUnit = btSettings.value(fieldName).toBool();
    else
       fieldUnit = usePlato;
 
@@ -1100,12 +1103,12 @@ QString Brewtarget::displayOG( double og, bool showUnits, QString fieldName )
 
 QString Brewtarget::displayFG( double fg, double og, bool showUnits, QString fieldName )
 {
-   QSettings settings("brewtarget");
+//   QSettings settings("brewtarget");
    QString ret = (showUnits & usePlato) ? "%1 %2" : "%1";
    bool fieldUnit = false;
 
-   if ( settings.contains(fieldName) ) 
-      fieldUnit = settings.value(fieldName).toBool();
+   if ( ! fieldName.isEmpty() && btSettings.contains(fieldName) )
+      fieldUnit = btSettings.value(fieldName).toBool();
    else
       fieldUnit = usePlato;
 
@@ -1134,7 +1137,7 @@ QString Brewtarget::displayFG( double fg, double og, bool showUnits, QString fie
    return ret;
 }
 
-QString Brewtarget::displayColor( double srm, bool showUnits )
+QString Brewtarget::displayColor( double srm, bool showUnits, QString fieldName )
 {
    QString ret;
 
@@ -1153,6 +1156,16 @@ QString Brewtarget::displayDate( QDate const& date )
 {
    QLocale loc(QLocale::system().name());
    return date.toString(loc.dateFormat(QLocale::ShortFormat));
+}
+
+void Brewtarget::setOption(QString name, QVariant value)
+{
+   btSettings.setValue(name,value);
+}
+
+QVariant Brewtarget::option(QString name, QVariant default_value)
+{
+   return btSettings.value(name,default_value);
 }
 
 MainWindow* Brewtarget::getMainWindow()

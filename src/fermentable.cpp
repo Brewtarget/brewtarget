@@ -244,16 +244,7 @@ double Fermentable::equivSucrose_kg() const
       return ret;
 }
 
-int Fermentable::displayUnit() const 
-{
-   int unit = get("display_unit").toInt();
-
-   if ( unit == -1 )
-      unit = Brewtarget::getWeightUnitSystem();
-
-   return unit;
-}
-
+int Fermentable::displayUnit() const  { return get("display_unit").toInt(); }
 int Fermentable::displayScale() const { return get("display_scale").toInt(); }
 
 // Set
@@ -374,6 +365,12 @@ bool Fermentable::isValidType( const QString& str )
    return (types.indexOf(str) >= 0);
 }
 
-void Fermentable::setDisplayUnit( int unit ) { set("displayUnit", "display_unit", unit); }
+// Selecting a displayUnit should reset the scale to default
+void Fermentable::setDisplayUnit( int unit ) 
+{ 
+   set("displayUnit", "display_unit", unit); 
+   set("displayScale", "display_scale", noscale);
+}
+
 void Fermentable::setDisplayScale( int scale ) { set("displayScale", "display_scale", scale); }
 

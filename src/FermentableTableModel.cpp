@@ -44,6 +44,8 @@ FermentableTableModel::FermentableTableModel(QTableView* parent)
    : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0), displayPercentages(false), totalFermMass_kg(0)
 {
    fermObs.clear();
+   scaleName  = "fermentable/scale";
+   unitName   = "fermentable/unit";
 }
 
 void FermentableTableModel::observeRecipe(Recipe* rec)
@@ -234,6 +236,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
 {
    Fermentable* row;
    int col = index.column();
+   int unit,scale;
    
    // Ensure the row is ok.
    if( index.row() >= (int)fermObs.size() )
@@ -259,10 +262,16 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          else
             return QVariant();
       case FERMAMOUNTCOL:
-         if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms, 3, row->displayUnit(), row->displayScale()) );
-         else
+         if( role != Qt::DisplayRole )
             return QVariant();
+
+         // Figure out which unit to use. If the row has a displayUnit, use
+         // it. Otherwise, get the columns displayUnit. Since displayUnit()
+         // returns -1 if nothing is set, we use that.
+         unit = row->displayUnit() > noscale ? row->displayUnit() : this->displayUnit();
+         scale = row->displayScale() > noscale ?  row->displayScale() : displayScale(); 
+
+         return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms, 3, unit, scale) );
       case FERMISMASHEDCOL:
          if( role == Qt::CheckStateRole )
             return QVariant( row->isMashed() ? Qt::Checked : Qt::Unchecked);
@@ -396,6 +405,41 @@ void FermentableTableModel::setDisplayScale(const QModelIndex& index, int displa
 
    row = fermObs[index.row()];
    row->setDisplayScale(displayScale);
+}
+
+int FermentableTableModel::displayUnit() const { return Brewtarget::option(unitName, -1).toInt(); }
+int FermentableTableModel::displayScale() const { return Brewtarget::option(scaleName, -1).toInt(); }
+
+// We need to:
+//   o clear the custom scale if set
+//   o clear any custom unit from the rows
+//      o which should have the side effect of clearing any scale
+void FermentableTableModel::setDisplayUnit(int displayUnit) 
+{
+   Fermentable* row;
+
+   Brewtarget::setOption(unitName,displayUnit); 
+   Brewtarget::setOption(scaleName, noscale);
+
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getFermentable(i);
+      row->setDisplayUnit(-1);
+   }
+}
+
+// Setting the scale should clear any cell-level scaling options
+void FermentableTableModel::setDisplayScale(int displayScale) 
+{ 
+   Fermentable* row;
+
+   Brewtarget::setOption(scaleName,displayScale); 
+
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getFermentable(i);
+      row->setDisplayScale(noscale);
+   }
 }
 
 bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& value, int role )

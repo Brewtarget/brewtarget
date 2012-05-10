@@ -66,12 +66,18 @@ public:
    //! True if you want to display percent of each grain in the row header.
    void setDisplayPercentages( bool var );
 
-   //! Stuff for setting display units and scales
+   // Stuff for setting display units and scales -- per cell first, then by
+   // column
    int displayUnit(const QModelIndex& index);
    void setDisplayUnit(const QModelIndex& index, int displayUnit);
    int displayScale(const QModelIndex& index);
    void setDisplayScale(const QModelIndex& index, int displayScale);
-   
+
+   int displayUnit() const;
+   int displayScale() const;
+   void setDisplayUnit(int displayUnit);
+   void setDisplayScale(int displayScale);
+
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -97,6 +103,8 @@ private:
    Recipe* recObs;
    bool displayPercentages;
    double totalFermMass_kg;
+   QString scaleName;
+   QString unitName;
 };
 
 //class FermentableItemDelegate : public QStyledItemDelegate

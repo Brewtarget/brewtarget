@@ -262,11 +262,10 @@ MainWindow::MainWindow(QWidget* parent)
    brewNotes.clear();
 
    // If we saved a size the last time we ran, use it
-   QSettings settings("brewtarget");
-   if ( settings.contains("geometry"))
+   if ( Brewtarget::btSettings.contains("geometry"))
    {
-      restoreGeometry(settings.value("geometry").toByteArray());
-      restoreState(settings.value("windowState").toByteArray());
+      restoreGeometry(Brewtarget::btSettings.value("geometry").toByteArray());
+      restoreState(Brewtarget::btSettings.value("windowState").toByteArray());
    }
    else
    {
@@ -278,9 +277,9 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
-   if (settings.contains("recipeKey"))
+   if (Brewtarget::btSettings.contains("recipeKey"))
    {
-      int key = settings.value("recipeKey").toInt();
+      int key = Brewtarget::btSettings.value("recipeKey").toInt();
       recipeObs = Database::instance().recipe( key );
 
       setRecipe(recipeObs);
@@ -361,9 +360,12 @@ MainWindow::MainWindow(QWidget* parent)
    connect(oGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
    connect(boilSgLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
    connect(fGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
-   // Those are the easy ones. Let's see what we can do with the labels in the
-   // tables.
-   connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(testSignal(const QPoint&)));
+   connect(colorSRMLabel,SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   // Those are the easy ones. Let's see what we can do with the tables. First one wires the cells, second wires (I think) the header
+   connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableCellSignal(const QPoint&)));
+   QHeaderView* headerView = fermentableTable->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableHeaderSignal(const QPoint&)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
@@ -650,7 +652,6 @@ void MainWindow::setRecipe(Recipe* recipe)
       disconnect( recipeObs, 0, this, 0 );
    }
    recipeObs = recipe;
-   connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    
    recStyle = recipe->style();
    recEquip = recipe->equipment();
@@ -693,7 +694,13 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    // Update combobox indices.
    styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
-   
+  
+
+   // If you don't connect this late, every previous set of an attribute
+   // causes this signal to be slotted, which then causes showChanges() to be
+   // called.
+   connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+
    showChanges();
 }
 
@@ -713,6 +720,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
       recStyle = qobject_cast<Style*>(BeerXMLElement::extractPtr(value));
       styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
    }
+
    showChanges(&prop);
 }
 
@@ -756,9 +764,9 @@ void MainWindow::showChanges(QMetaProperty* prop)
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
 
-   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->og(),true,"oGLabel"));
-   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->boilGrav(),true,"boilSgLabel"));
-   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(),recipeObs->og(),true,"fGLabel"));
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->og(),false,"oGLabel"));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->boilGrav(),false,"boilSgLabel"));
+   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(),recipeObs->og(),false,"fGLabel"));
 
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
@@ -771,13 +779,14 @@ void MainWindow::showChanges(QMetaProperty* prop)
    {
       lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle->ogMin(),false,"oGLabel"));
       lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle->ogMax(),false,"oGLabel"));
-      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle->ogMin()).toDouble());
-      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle->ogMax()).toDouble());
+      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle->ogMin(),false,"oGLabel").toDouble());
+      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle->ogMax(),false,"oGLabel").toDouble());
 
-      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og(), "fGlabel"));
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og(), "fGlabel"));
-      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og()).toDouble());
-      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og()).toDouble());
+      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"fGlabel"));
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"fGlabel"));
+
+      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"oGLabel").toDouble());
+      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"oGLabel").toDouble());
 
       lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
       lcdNumber_abvHigh->display(recStyle->abvMax_pct(), 1);
@@ -1477,11 +1486,11 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    */
    
    Brewtarget::savePersistentOptions();
-   QSettings settings("brewtarget");
-   settings.setValue("geometry", saveGeometry());
-   settings.setValue("windowState", saveState());
+
+   Brewtarget::btSettings.setValue("geometry", saveGeometry());
+   Brewtarget::btSettings.setValue("windowState", saveState());
    if ( recipeObs )
-      settings.setValue("recipeKey", recipeObs->key());
+      Brewtarget::btSettings.setValue("recipeKey", recipeObs->key());
    setVisible(false);
 }
 
@@ -2054,40 +2063,93 @@ void MainWindow::finishCheckingVersion()
    }
 }
 
-void MainWindow::redisplayLabel(QString fieldname)
+void MainWindow::redisplayLabel(QString field)
 {
+   // There is a lot of magic going on in the showChanges(). I can either
+   // duplicate that magic or I can just call showChanges().
    showChanges();
 }
 
 // Only works for fermTables right now. Welcome to my POC
-void MainWindow::testSignal(const QPoint& point)
+void MainWindow::fermentableCellSignal(const QPoint& point)
 {
    QObject* calledBy = sender();
-   QTableView* widgie = qobject_cast<QTableView*>(calledBy);
-   QModelIndex selected = widgie->indexAt(point);
+   QTableView* tView = qobject_cast<QTableView*>(calledBy);
+   QModelIndex selected = tView->indexAt(point);
    QModelIndex modelIndex = fermTableProxy->mapToSource(selected);
 
    // first, make sure I right clicked on the proper column
    if ( selected.column() != FERMAMOUNTCOL )
       return;
 
-   QMenu* menu = new QMenu(this);
-   QMenu* sMenu;
-   QAction* invoked;
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
    int currentUnit = fermTableModel->displayUnit(modelIndex);
    int currentScale = fermTableModel->displayScale(modelIndex);
 
-   // I should have my table and my selected item. Time to create and pop a menu. No f'ing clue what I'm doing later, but I will get there
+   QMenu* menu = generateMassMenu(currentUnit, currentScale);
+   QAction* invoked;
+
+   invoked = menu->exec(tView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+
+   // Now, I need to tell the model to do something.
+   if ( pMenu == menu )
+      fermTableModel->setDisplayUnit(modelIndex,invoked->data().toInt());
+   else
+      fermTableModel->setDisplayScale(modelIndex, invoked->data().toInt());
+}
+
+void MainWindow::fermentableHeaderSignal(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+   int selected = hView->logicalIndexAt(point);
+
+   // first, make sure I right clicked on the proper column
+   if ( selected != FERMAMOUNTCOL )
+      return;
+
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+   int currentUnit  = fermTableModel->displayUnit();
+   int currentScale = fermTableModel->displayScale();
+
+   QMenu* menu = generateMassMenu(currentUnit, currentScale);
+   QAction* invoked;
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+   if ( pMenu == menu )
+      fermTableModel->setDisplayUnit(invoked->data().toInt());
+   else
+      fermTableModel->setDisplayScale(invoked->data().toInt());
+
+   showChanges();
+}
+
+QMenu* MainWindow::generateMassMenu(int currentUnit, int currentScale)
+{
+   QMenu* menu = new QMenu(this);
+   QMenu* sMenu;
+
    menu->setTitle("Units");
    generateAction(menu, tr("Default"), -1, currentUnit);
    generateAction(menu, tr("SI"), SI, currentUnit);
    generateAction(menu, tr("US Customary"), USCustomary, currentUnit);
-   generateAction(menu, tr("British Imperial"), Imperial, currentUnit);
    menu->addSeparator();
 
-   //! It only gets worse, doesn't it?
+   // If we are using the default unit, figure out what it is for the scale
+   // submenu
    if ( currentUnit == -1 )
-      currentUnit = Brewtarget::getWeightUnitSystem();
+       currentUnit = fermTableModel->displayUnit() == -1 ? 
+           Brewtarget::getWeightUnitSystem() : fermTableModel->displayUnit();
 
    sMenu = new QMenu(menu);
    switch(currentUnit)
@@ -2097,7 +2159,7 @@ void MainWindow::testSignal(const QPoint& point)
          generateAction(sMenu, tr("Milligrams"), extrasmall, currentScale);
          generateAction(sMenu, tr("Grams"), small, currentScale);
          generateAction(sMenu, tr("Kilograms"), medium, currentScale);
-        break;
+         break;
         // I can cheat because Imperial and US use the same names
       default:
          generateAction(sMenu, tr("Default"), noscale, currentScale);
@@ -2108,18 +2170,7 @@ void MainWindow::testSignal(const QPoint& point)
    sMenu->setTitle("Scale");
    menu->addMenu(sMenu);
 
-   invoked = menu->exec( widgie->mapToGlobal(point));
-   if ( invoked == 0 )
-      return;
-
-   QWidget* pMenu = invoked->parentWidget();
-
-   // Now, I need to tell the model to do something.
-   if ( pMenu == sMenu )
-      fermTableModel->setDisplayScale(modelIndex, invoked->data().toInt());
-   else
-      fermTableModel->setDisplayUnit(modelIndex,invoked->data().toInt());
-
+   return menu;
 }
 
 void MainWindow::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal)

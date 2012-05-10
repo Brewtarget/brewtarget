@@ -178,7 +178,9 @@ public slots:
    void finishCheckingVersion();
 
    void redisplayLabel(QString field);
-   void testSignal(const QPoint& point);
+   void fermentableCellSignal(const QPoint& point);
+   void fermentableHeaderSignal(const QPoint& point);
+
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
@@ -267,7 +269,7 @@ private:
    void copyThis(Misc *misc);
    void copyThis(Yeast *yeast);
 
-//   QAction* generateAction(QString text, QVariant data, QVariant currentVal);
+   QMenu* generateMassMenu(int currentUnit, int currentScale);
    void generateAction(QMenu* menu,QString text, QVariant data, QVariant currentVal);
 
 };

@@ -33,6 +33,7 @@ class Brewtarget;
 #include <QTranslator>
 #include <QTextStream>
 #include <QDateTime>
+#include <QSettings>
 #include "UnitSystem.h"
 
 // Forward declarations.
@@ -101,7 +102,7 @@ public:
    //! Display gravity appropriately.
    static QString displayFG( double fg, double og, bool showUnits=false, QString fieldName = "" ); // Need OG if we're using plato.
    //! Display color appropriately.
-   static QString displayColor( double srm, bool showUnits );
+   static QString displayColor( double srm, bool showUnits, QString fieldName = "" );
    //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
    static double weightQStringToSI( QString qstr );
    //! \return SI amount for volume string.
@@ -145,6 +146,9 @@ public:
     */
    static const QString& getSystemLanguage();
 
+   static void setOption(QString name, QVariant value);
+   static QVariant option(QString name, QVariant default_value);
+
    //! \return the main window.
    static MainWindow* getMainWindow();
 
@@ -156,6 +160,7 @@ private:
    static QFile* logFile;
    static QTextStream* logStream;
    static QString currentLanguage;
+   static QSettings btSettings;
    static bool userDatabaseDidNotExist;
 
    /*! Helper to get option values. If \b hasOption is not null,
