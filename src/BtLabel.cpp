@@ -61,19 +61,19 @@ void BtLabel::popContextMenu(const QPoint& point)
    switch( whatAmI )
    {
       case COLOR:
-         menu = setupColorMenu(unit);
+         menu = Brewtarget::setupColorMenu(btParent,unit);
          break;
       case GRAVITY:
-         menu = setupGravityMenu(unit);
+         menu = Brewtarget::setupGravityMenu(btParent,unit);
          break;
       case MASS:
-         menu = setupMassMenu(unit,scale);
+         menu = Brewtarget::setupMassMenu(btParent,unit,scale);
          break;
       case TEMPERATURE:
-         menu = setupTemperatureMenu(unit);
+         menu = Brewtarget::setupTemperatureMenu(btParent,unit);
          break;
       case VOLUME:
-         menu = setupVolumeMenu(unit,scale);
+         menu = Brewtarget::setupVolumeMenu(btParent,unit,scale);
          break;
       default:
          return;
@@ -99,132 +99,15 @@ void BtLabel::popContextMenu(const QPoint& point)
       Brewtarget::setOption("ogMin", invoked->data(),btParent, Brewtarget::UNIT);
       Brewtarget::setOption("ogMax", invoked->data(),btParent, Brewtarget::UNIT);
    }
+   else if ( propertyName == "color_srm" )
+   {
+      Brewtarget::setOption("colorMin_srm", invoked->data(),btParent, Brewtarget::UNIT);
+      Brewtarget::setOption("colorMax_srm", invoked->data(),btParent, Brewtarget::UNIT);
+   }
   
    emit labelChanged(propertyName);
 
 }
-
-QMenu* BtLabel::setupColorMenu(QVariant unit)
-{
-   QMenu* menu = new QMenu(btParent);
-
-   generateAction(menu, tr("Default"), -1, unit);
-   generateAction(menu, tr("ECB"), 1, unit);
-   generateAction(menu, tr("SRM"), 0, unit);
-
-   return menu;
-}
-
-QMenu* BtLabel::setupGravityMenu(QVariant unit)
-{
-   QMenu* menu = new QMenu(btParent);
-
-   generateAction(menu, tr("Default"), -1, unit);
-   generateAction(menu, tr("Plato"), 1, unit);
-   generateAction(menu, tr("Specific Gravity"), 0, unit);
-
-   return menu;
-}
-
-QMenu* BtLabel::setupMassMenu(QVariant unit, QVariant scale)
-{
-   QMenu* menu = new QMenu(btParent);
-   QMenu* sMenu;
-
-   int currentUnit = unit.toInt();
-   int currentScale = scale.toInt();
-
-   generateAction(menu, tr("Default"), -1, unit);
-   generateAction(menu, tr("SI"), SI, unit);
-   generateAction(menu, tr("US Customary"), USCustomary, unit);
-
-   if ( currentUnit == -1 )
-       currentUnit = Brewtarget::getWeightUnitSystem();
-
-   sMenu = new QMenu(menu);
-   switch(currentUnit)
-   {
-      case SI:
-         generateAction(sMenu, tr("Default"), noscale, currentScale);
-         generateAction(sMenu, tr("Milligrams"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Grams"), small, currentScale);
-         generateAction(sMenu, tr("Kilograms"), medium, currentScale);
-         break;
-      default:
-         generateAction(sMenu, tr("Default"), noscale, currentScale);
-         generateAction(sMenu, tr("Ounces"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Pounds"), small, currentScale);
-         break;
-   }
-   sMenu->setTitle("Scale");
-   menu->addMenu(sMenu);
-
-   return menu;
-}
-
-QMenu* BtLabel::setupTemperatureMenu(QVariant unit)
-{
-   QMenu* menu = new QMenu(btParent);
-
-   generateAction(menu, tr("Default"), -1, unit);
-   generateAction(menu, tr("Celsius"), Celsius, unit);
-   generateAction(menu, tr("Fahrenheit"), Fahrenheit, unit);
-   generateAction(menu, tr("Kelvin"), Kelvin, unit);
-
-   return menu;
-}
-
-QMenu* BtLabel::setupVolumeMenu(QVariant unit, QVariant scale)
-{
-   QMenu* menu = new QMenu(btParent);
-   QMenu* sMenu;
-   int currentUnit = unit.toInt();
-   int currentScale = scale.toInt();
-
-   generateAction(menu, tr("Default"), -1, unit);
-   generateAction(menu, tr("SI"), SI, unit);
-   generateAction(menu, tr("US Customary"), USCustomary, unit);
-   generateAction(menu, tr("British Imperial"), Imperial, unit);
-
-   if ( currentUnit == -1 )
-       currentUnit = Brewtarget::getVolumeUnitSystem();
-
-   sMenu = new QMenu(menu);
-   switch(currentUnit)
-   {
-      case SI:
-         generateAction(sMenu, tr("Default"), noscale, currentScale);
-         generateAction(sMenu, tr("MilliLiters"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Liters"), small, currentScale);
-         break;
-        // I can cheat because Imperial and US use the same names
-      default:
-         generateAction(sMenu, tr("Default"), noscale, currentScale);
-         generateAction(sMenu, tr("Teaspoons"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Tablespoons"), small, currentScale);
-         generateAction(sMenu, tr("Cups"), medium, currentScale);
-         generateAction(sMenu, tr("Quarts"), large, currentScale);
-         generateAction(sMenu, tr("Gallons"), extralarge, currentScale);
-         break;
-   }
-   sMenu->setTitle("Scale");
-   menu->addMenu(sMenu);
-
-   return menu;
-}
-
-void BtLabel::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal)
-{
-   QAction* action = new QAction(menu);
-
-   action->setText(text);
-   action->setData(data);
-   action->setCheckable(true);
-   action->setChecked(currentVal == data);;
-
-  menu->addAction(action);
-}
-
 
 BtColorLabel::BtColorLabel(QWidget *parent)
    : BtLabel(parent,COLOR)

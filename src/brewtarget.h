@@ -34,6 +34,7 @@ class Brewtarget;
 #include <QTextStream>
 #include <QDateTime>
 #include <QSettings>
+#include <QMenu>
 #include "UnitSystem.h"
 
 
@@ -97,7 +98,6 @@ public:
     * it to aid in the transition
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3, int displayUnit = -1, int displayScale = -1 );
-   static QString displayAmount( double amount, QString fieldName, Unit* units=0, int precision=3 );
    static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
 
    //! Display date correctly depending on locale.
@@ -115,7 +115,9 @@ public:
    static QString displayFG(QObject* object, QStringList attributes, bool showUnits=false); 
 
    //! Display color appropriately.
-   static QString displayColor( double srm, bool showUnits, QString fieldName = "" );
+   static QString displayColor( double srm, bool showUnits, int displayUnit = -1 );
+   static QString displayColor(  BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
+
    //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
    static double weightQStringToSI( QString qstr );
    //! \return SI amount for volume string.
@@ -159,11 +161,20 @@ public:
     */
    static const QString& getSystemLanguage();
 
-   static bool  hasOption(QString attribute, QObject* object = 0, iUnitOps ops = NOOP);
-   static void  setOption(QString attribute, QVariant value, QObject* object = 0, iUnitOps ops = NOOP);
-   static QVariant option(QString attribute, QVariant default_value, QObject* object = 0, iUnitOps = NOOP);
+   static bool  hasOption(QString attribute, const QObject* object = 0, iUnitOps ops = NOOP);
+   static void  setOption(QString attribute, QVariant value, const QObject* object = 0, iUnitOps ops = NOOP);
+   static QVariant option(QString attribute, QVariant default_value, const QObject* object = 0, iUnitOps = NOOP);
 
-   static QString generateName(QString attribute, QObject* object, iUnitOps ops);
+   static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
+
+   // Grr. Shortcuts never, ever pay  off
+   static QMenu* setupColorMenu(QWidget* parent, QVariant unit);
+   static QMenu* setupGravityMenu(QWidget* parent, QVariant unit);
+   static QMenu* setupMassMenu(QWidget* parent, QVariant unit, QVariant scale = -1);
+   static QMenu* setupTemperatureMenu(QWidget* parent, QVariant unit);
+   static QMenu* setupVolumeMenu(QWidget* parent, QVariant unit, QVariant scale = -1);
+   static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal);
+
    //! \return the main window.
    static MainWindow* getMainWindow();
 

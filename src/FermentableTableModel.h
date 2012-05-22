@@ -73,10 +73,10 @@ public:
    int displayScale(const QModelIndex& index);
    void setDisplayScale(const QModelIndex& index, int displayScale);
 
-   int displayUnit() const;
-   int displayScale() const;
-   void setDisplayUnit(int displayUnit);
-   void setDisplayScale(int displayScale);
+   int displayUnit(int column) const;
+   int displayScale(int column) const;
+   void setDisplayUnit(int column, int displayUnit);
+   void setDisplayScale(int column, int displayScale);
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    //! Reimplemented from QAbstractTableModel.
@@ -98,13 +98,13 @@ public slots:
    void changed(QMetaProperty, QVariant);
 private:
    void updateTotalGrains();
+   QString generateName(int column) const;
    
    QList<Fermentable*> fermObs;
    Recipe* recObs;
    bool displayPercentages;
    double totalFermMass_kg;
-   QString scaleName;
-   QString unitName;
+   
 };
 
 //class FermentableItemDelegate : public QStyledItemDelegate

@@ -770,7 +770,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
-   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs->color_srm(),false));
+   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
    lcdNumber_ibugu->display(recipeObs->IBU()/((recipeObs->og()-1)*1000), 2);
    lcdNumber_calories->display( recipeObs->calories(), 0);
 
@@ -799,8 +799,8 @@ void MainWindow::showChanges(QMetaProperty* prop)
       lcdNumber_ibu->setLowLim(recStyle->ibuMin());
       lcdNumber_ibu->setHighLim(recStyle->ibuMax());
 
-      lcdNumber_srmLow->display(Brewtarget::displayColor(recStyle->colorMin_srm(), false));
-      lcdNumber_srmHigh->display(Brewtarget::displayColor(recStyle->colorMax_srm(), false));
+      lcdNumber_srmLow->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false));
+      lcdNumber_srmHigh->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false));
       lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle->colorMin_srm(), false).toDouble());
       lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle->colorMax_srm(), false).toDouble());
    }
@@ -2088,7 +2088,7 @@ void MainWindow::fermentableCellSignal(const QPoint& point)
    int currentUnit = fermTableModel->displayUnit(modelIndex);
    int currentScale = fermTableModel->displayScale(modelIndex);
 
-   QMenu* menu = generateMassMenu(currentUnit, currentScale);
+   QMenu* menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale);
    QAction* invoked;
 
    invoked = menu->exec(tView->mapToGlobal(point));
@@ -2110,17 +2110,25 @@ void MainWindow::fermentableHeaderSignal(const QPoint &point)
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
    int selected = hView->logicalIndexAt(point);
 
-   // first, make sure I right clicked on the proper column
-   if ( selected != FERMAMOUNTCOL )
-      return;
-
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
-   int currentUnit  = fermTableModel->displayUnit();
-   int currentScale = fermTableModel->displayScale();
+   int currentUnit  = fermTableModel->displayUnit(selected);
+   int currentScale = fermTableModel->displayScale(selected);
 
-   QMenu* menu = generateMassMenu(currentUnit, currentScale);
+   QMenu* menu;
    QAction* invoked;
+
+   switch(selected)
+   {
+      case FERMAMOUNTCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
+         break;
+      case FERMCOLORCOL:
+         menu = Brewtarget::setupColorMenu(this,currentUnit); 
+         break;
+      default:
+         return;
+   }
 
    invoked = menu->exec(hView->mapToGlobal(point));
    if ( invoked == 0 )
@@ -2128,62 +2136,10 @@ void MainWindow::fermentableHeaderSignal(const QPoint &point)
 
    QWidget* pMenu = invoked->parentWidget();
    if ( pMenu == menu )
-      fermTableModel->setDisplayUnit(invoked->data().toInt());
+      fermTableModel->setDisplayUnit(selected,invoked->data().toInt());
    else
-      fermTableModel->setDisplayScale(invoked->data().toInt());
+      fermTableModel->setDisplayScale(selected,invoked->data().toInt());
 
    showChanges();
 }
-
-QMenu* MainWindow::generateMassMenu(int currentUnit, int currentScale)
-{
-   QMenu* menu = new QMenu(this);
-   QMenu* sMenu;
-
-   menu->setTitle("Units");
-   generateAction(menu, tr("Default"), -1, currentUnit);
-   generateAction(menu, tr("SI"), SI, currentUnit);
-   generateAction(menu, tr("US Customary"), USCustomary, currentUnit);
-   menu->addSeparator();
-
-   // If we are using the default unit, figure out what it is for the scale
-   // submenu
-   if ( currentUnit == -1 )
-       currentUnit = fermTableModel->displayUnit() == -1 ? 
-           Brewtarget::getWeightUnitSystem() : fermTableModel->displayUnit();
-
-   sMenu = new QMenu(menu);
-   switch(currentUnit)
-   {
-      case SI:
-         generateAction(sMenu, tr("Default"), noscale, currentScale);
-         generateAction(sMenu, tr("Milligrams"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Grams"), small, currentScale);
-         generateAction(sMenu, tr("Kilograms"), medium, currentScale);
-         break;
-        // I can cheat because Imperial and US use the same names
-      default:
-         generateAction(sMenu, tr("Default"), noscale, currentScale);
-         generateAction(sMenu, tr("Ounces"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Pounds"), small, currentScale);
-         break;
-   }
-   sMenu->setTitle("Scale");
-   menu->addMenu(sMenu);
-
-   return menu;
-}
-
-void MainWindow::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal)
-{
-   QAction* action = new QAction(menu);
-
-   action->setText(text);
-   action->setData(data);
-   action->setCheckable(true);
-   action->setChecked(currentVal == data);;
-
-  menu->addAction(action);
-}
-
 
