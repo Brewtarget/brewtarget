@@ -728,27 +728,26 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
 // to reflect the currently observed recipe.
 void MainWindow::showChanges(QMetaProperty* prop)
 {
+   QStringList attributes = QStringList() << "fg" << "og";
    if( recipeObs == 0 )
       return;
 
    bool updateAll = (prop == 0);
    QString propName;
-   //QVariant propVal;
+
    if( prop )
    {
       propName = prop->name();
-      //propVal = prop->read( /*What here?*/ );
    }
-   //recipeObs->recalculate();
 
    lineEdit_name->setText(recipeObs->name());
    lineEdit_name->setCursorPosition(0);
-   lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), "lineEdit_batchSize", Units::liters));
-   lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), "lineEdit_boilSize" , Units::liters));
-   lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs->efficiency_pct(), 0));
+   lineEdit_batchSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "batchSize_l", Units::liters));
+   lineEdit_boilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilSize_l", Units::liters));
+   lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "efficiency_pct", 0));
    
-   label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs->finalVolume_l(), "calculatedBatchSize", Units::liters));
-   label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs->boilVolume_l(), "calculatedBoilSizeLabel", Units::liters));
+   label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs,tab_recipe, "finalVolume_l", Units::liters));
+   label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilVolume_l", Units::liters));
    
    // Color manipulation
    if( 0.95*recipeObs->batchSize_l() <= recipeObs->finalVolume_l() && recipeObs->finalVolume_l() <= 1.05*recipeObs->batchSize_l() )
@@ -764,9 +763,10 @@ void MainWindow::showChanges(QMetaProperty* prop)
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
 
-   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->og(),false,"oGLabel"));
-   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->boilGrav(),false,"boilSgLabel"));
-   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(),recipeObs->og(),false,"fGLabel"));
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
+   // FG is outstanding
+   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs,attributes,false));
 
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
@@ -777,16 +777,17 @@ void MainWindow::showChanges(QMetaProperty* prop)
    // Want to do some manipulation based on selected style.
    if( recStyle != 0 )
    {
-      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle->ogMin(),false,"oGLabel"));
-      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle->ogMax(),false,"oGLabel"));
-      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle->ogMin(),false,"oGLabel").toDouble());
-      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle->ogMax(),false,"oGLabel").toDouble());
+      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false));
+      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false));
+      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle,  tab_recipe, "ogMin",false).toDouble());
+      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle, tab_recipe, "ogMax",false).toDouble());
 
-      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"fGlabel"));
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"fGlabel"));
+      // These cannot use the new methods because they use two QObjects
+      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"fg"));
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"fg"));
 
-      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"oGLabel").toDouble());
-      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"oGLabel").toDouble());
+      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"og").toDouble());
+      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"og").toDouble());
 
       lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
       lcdNumber_abvHigh->display(recStyle->abvMax_pct(), 1);

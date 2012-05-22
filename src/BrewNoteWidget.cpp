@@ -1,6 +1,7 @@
 
 #include <QWidget>
 #include <QDate>
+#include <QDebug>
 #include "BrewNoteWidget.h"
 #include "brewnote.h"
 #include "brewtarget.h"
@@ -225,22 +226,23 @@ void BrewNoteWidget::showChanges(QString field)
    if (bNoteObs == 0)
       return;
 
-   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs->sg(),false,"btLabel_Sg"));
-   lineEdit_volIntoBK->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoBK_l(),"btLabel_volIntoBk",Units::liters));
-   lineEdit_strikeTemp->setText(Brewtarget::displayAmount(bNoteObs->strikeTemp_c(),"btLabel_strikeTemp", Units::celsius));
-   lineEdit_mashFinTemp->setText(Brewtarget::displayAmount(bNoteObs->mashFinTemp_c(),"btLabel_mashFinTemp", Units::celsius));
-   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs->og(),false,"btLabel_Og"));
-   lineEdit_postBoilVol->setText(Brewtarget::displayAmount(bNoteObs->postBoilVolume_l(),"btLabel_postBoilVolume", Units::liters));
-   lineEdit_volIntoFerm->setText(Brewtarget::displayAmount(bNoteObs->volumeIntoFerm_l(),"btLabel_volumeIntoFerm", Units::liters));
-   lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs->pitchTemp_c(),"btLabel_pitchTemp",Units::celsius));
-   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs->fg(),false,"btLabel_Fg"));
-   lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs->finalVolume_l(),"btLabel_finalVolume", Units::liters));
+   lineEdit_SG->setText(Brewtarget::displayOG(bNoteObs, page_preboil, "sg",false));
+   lineEdit_volIntoBK->setText(Brewtarget::displayAmount(bNoteObs,page_preboil,"volumeIntoBK_l",Units::liters));
+   lineEdit_strikeTemp->setText(Brewtarget::displayAmount(bNoteObs, page_preboil, "strikeTemp_c", Units::celsius));
+   lineEdit_mashFinTemp->setText(Brewtarget::displayAmount(bNoteObs, page_preboil, "mashFinTemp_c", Units::celsius));
+   lineEdit_OG->setText(Brewtarget::displayOG(bNoteObs, page_postboil, "og",false));
+   lineEdit_postBoilVol->setText(Brewtarget::displayAmount(bNoteObs, page_postboil, "postBoilVolume_l", Units::liters));
+   lineEdit_volIntoFerm->setText(Brewtarget::displayAmount(bNoteObs, page_postboil, "volumeIntoFerm_l", Units::liters));
+   lineEdit_pitchTemp->setText(Brewtarget::displayAmount(bNoteObs, page_postboil, "pitchTemp_c",Units::celsius));
+
+   lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs, page_postferment, "fg",false));
+   lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs, page_postferment, "finalVolume_l", Units::liters));
    lineEdit_fermentDate->setText(bNoteObs->fermentDate_short());
    plainTextEdit_brewNotes->setPlainText(bNoteObs->notes());
 
    // Now with the calculated stuff
    lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
-   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs->og(),false,"btLabel_projectedOg"));
+   lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs, page_preboil, "projOg",false));
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
    lcdnumber_abv->display(bNoteObs->abv(),2);

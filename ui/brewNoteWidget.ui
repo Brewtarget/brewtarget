@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>626</width>
-        <height>438</height>
+        <width>616</width>
+        <height>428</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -55,15 +55,15 @@
             </size>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page_preboil">
             <property name="geometry">
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>242</width>
-              <height>340</height>
+              <width>252</width>
+              <height>321</height>
              </rect>
             </property>
             <attribute name="label">
@@ -82,7 +82,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_Sg</string>
+                <string>sg</string>
                </property>
               </widget>
              </item>
@@ -126,7 +126,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_volIntoBk</string>
+                <string>volumeIntoBK_l</string>
                </property>
               </widget>
              </item>
@@ -167,7 +167,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_strikeTemp</string>
+                <string>strikeTemp_c</string>
                </property>
               </widget>
              </item>
@@ -208,7 +208,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_mashFinTemp</string>
+                <string>mashFinTemp_c</string>
                </property>
               </widget>
              </item>
@@ -244,8 +244,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>242</width>
-              <height>340</height>
+              <width>252</width>
+              <height>321</height>
              </rect>
             </property>
             <attribute name="label">
@@ -264,7 +264,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_Og</string>
+                <string>og</string>
                </property>
               </widget>
              </item>
@@ -299,7 +299,7 @@
                 <enum>Qt::CustomContextMenu</enum>
                </property>
                <property name="text">
-                <string>     Postboil Volume</string>
+                <string>Postboil Volume</string>
                </property>
                <property name="scaledContents">
                 <bool>false</bool>
@@ -311,7 +311,7 @@
                 <bool>true</bool>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_postBoilVol</string>
+                <string>postBoilVolume_l</string>
                </property>
               </widget>
              </item>
@@ -358,7 +358,7 @@
                 <bool>true</bool>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_volIntoFerm</string>
+                <string>volumeIntoFerm_l</string>
                </property>
               </widget>
              </item>
@@ -399,7 +399,7 @@
                 <bool>true</bool>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_pitchTemp</string>
+                <string>pitchTemp_c</string>
                </property>
               </widget>
              </item>
@@ -435,8 +435,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>242</width>
-              <height>340</height>
+              <width>252</width>
+              <height>321</height>
              </rect>
             </property>
             <attribute name="label">
@@ -452,7 +452,7 @@
                 <string>FG</string>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_postFermentFg</string>
+                <string>fg</string>
                </property>
               </widget>
              </item>
@@ -490,7 +490,7 @@
                 <string>Volume</string>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_finalVolume</string>
+                <string>finalVolume_l</string>
                </property>
               </widget>
              </item>
@@ -522,7 +522,7 @@
              <item row="2" column="0">
               <widget class="QLabel" name="btLabel_fermentDate">
                <property name="text">
-                <string>          Date</string>
+                <string>Date</string>
                </property>
               </widget>
              </item>
@@ -591,7 +591,7 @@
                 <string>Projected OG</string>
                </property>
                <property name="editField" stdset="0">
-                <string>btLabel_projectedOg</string>
+                <string>projOg</string>
                </property>
               </widget>
              </item>
@@ -692,12 +692,12 @@
    <header>BtDigitWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>BtGravityLabel</class>
+   <class>BtVolumeLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>BtVolumeLabel</class>
+   <class>BtGravityLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
   </customwidget>

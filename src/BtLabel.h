@@ -69,15 +69,16 @@ signals:
 
 private:
    LabelType whatAmI;
-   QMenu* cachedMenu;
    QString propertyName;
    QWidget *btParent;
 
-   //! Only need one for mass or volume. Gravity is odd
+   // Grr. Shortcuts never, ever pay  off
    QMenu* setupColorMenu(QVariant unit);
    QMenu* setupGravityMenu(QVariant unit);
-   QMenu* setupMassVolumeMenu(QVariant unit);
+   QMenu* setupMassMenu(QVariant unit, QVariant scale = -1);
    QMenu* setupTemperatureMenu(QVariant unit);
+   QMenu* setupVolumeMenu(QVariant unit, QVariant scale = -1);
+   void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal);
 };
 
 class BtColorLabel : public BtLabel

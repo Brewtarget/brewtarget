@@ -18,6 +18,7 @@
  */
 
 #include "BtLabel.h"
+#include "brewtarget.h"
 #include <QSettings>
 #include <QDebug>
 
@@ -31,7 +32,6 @@
  
 BtLabel::BtLabel(QWidget *parent, LabelType lType)
 {
-   cachedMenu = 0;
    whatAmI = lType;
    btParent = parent;
 
@@ -42,10 +42,10 @@ BtLabel::BtLabel(QWidget *parent, LabelType lType)
 void BtLabel::popContextMenu(const QPoint& point)
 {
    QObject* calledBy = sender();
-   QSettings settings("brewtarget");
    QWidget* widgie;
    QAction *invoked;
-   QVariant unit;
+   QMenu* menu;
+   QVariant unit,scale;
 
    if ( calledBy == 0 )
       return;
@@ -55,35 +55,50 @@ void BtLabel::popContextMenu(const QPoint& point)
       return;
 
    propertyName = property("editField").toString();
-   unit = settings.value(propertyName);
+   unit = Brewtarget::option(propertyName, -1, btParent, Brewtarget::UNIT);
+   scale = Brewtarget::option(propertyName, -1, btParent, Brewtarget::SCALE);
 
-
-   //! If this is the first time we are called, we need to build the menu. 
    switch( whatAmI )
    {
-      case VOLUME:
-      case MASS:
-         cachedMenu = setupMassVolumeMenu(unit);
+      case COLOR:
+         menu = setupColorMenu(unit);
          break;
       case GRAVITY:
-         cachedMenu = setupGravityMenu(unit);
+         menu = setupGravityMenu(unit);
+         break;
+      case MASS:
+         menu = setupMassMenu(unit,scale);
          break;
       case TEMPERATURE:
-         cachedMenu = setupTemperatureMenu(unit);
+         menu = setupTemperatureMenu(unit);
          break;
-      case COLOR:
-         cachedMenu = setupColorMenu(unit);
+      case VOLUME:
+         menu = setupVolumeMenu(unit,scale);
          break;
       default:
          return;
    }
 
-   invoked = cachedMenu->exec(widgie->mapToGlobal(point));
+   invoked = menu->exec(widgie->mapToGlobal(point));
    if ( invoked == 0 )
       return;
 
+   QWidget* pMenu = invoked->parentWidget();
+   if ( pMenu == menu )
+   {
+      Brewtarget::setOption(propertyName, invoked->data(), btParent, Brewtarget::UNIT);
+      if ( Brewtarget::hasOption(propertyName, btParent, Brewtarget::SCALE) )
+         Brewtarget::setOption(propertyName, noscale, btParent, Brewtarget::SCALE);
+   }
+   else
+      Brewtarget::setOption(propertyName, invoked->data(), btParent, Brewtarget::SCALE);
 
-   settings.setValue(propertyName, invoked->data());
+   // To make this all work, I need to set ogMin and ogMax when og is set.
+   if ( propertyName == "og" )
+   {
+      Brewtarget::setOption("ogMin", invoked->data(),btParent, Brewtarget::UNIT);
+      Brewtarget::setOption("ogMax", invoked->data(),btParent, Brewtarget::UNIT);
+   }
   
    emit labelChanged(propertyName);
 
@@ -92,33 +107,10 @@ void BtLabel::popContextMenu(const QPoint& point)
 QMenu* BtLabel::setupColorMenu(QVariant unit)
 {
    QMenu* menu = new QMenu(btParent);
-   QAction* action = new QAction(menu);
-   int tUnit;
 
-   if ( unit.isValid() )
-      tUnit = unit.toInt();
-   else
-      tUnit = -1;
-
-   action->setText(tr("Default"));
-   action->setData(-1);
-   action->setCheckable(true);
-   action->setChecked(tUnit == -1);
-   menu->addAction(action);
-
-   action->setText(tr("ECB"));
-   action->setData(1);
-   action->setCheckable(true);
-   action->setChecked(tUnit == 1);
-   menu->addAction(action);
-
-   action = new QAction(menu);
-   action->setText(tr("SRM"));
-   action->setData(0);
-   action->setCheckable(true);
-   action->setChecked(tUnit == 0);
-
-   menu->addAction(action);
+   generateAction(menu, tr("Default"), -1, unit);
+   generateAction(menu, tr("ECB"), 1, unit);
+   generateAction(menu, tr("SRM"), 0, unit);
 
    return menu;
 }
@@ -126,73 +118,46 @@ QMenu* BtLabel::setupColorMenu(QVariant unit)
 QMenu* BtLabel::setupGravityMenu(QVariant unit)
 {
    QMenu* menu = new QMenu(btParent);
-   QAction* action = new QAction(menu);
-   int tUnit;
 
-   if ( unit.isValid() )
-      tUnit = unit.toInt();
-   else
-      tUnit = -1;
-
-   action->setText(tr("Default"));
-   action->setData(-1);
-   action->setCheckable(true);
-   action->setChecked(tUnit == -1);
-   menu->addAction(action);
-
-   action->setText(tr("Plato"));
-   action->setData(1);
-   action->setCheckable(true);
-   action->setChecked(tUnit == 1);
-   menu->addAction(action);
-
-   action = new QAction(menu);
-   action->setText(tr("Specific Gravity"));
-   action->setData(0);
-   action->setCheckable(true);
-   action->setChecked(tUnit == 0);
-
-   menu->addAction(action);
+   generateAction(menu, tr("Default"), -1, unit);
+   generateAction(menu, tr("Plato"), 1, unit);
+   generateAction(menu, tr("Specific Gravity"), 0, unit);
 
    return menu;
 }
 
-QMenu* BtLabel::setupMassVolumeMenu(QVariant unit)
+QMenu* BtLabel::setupMassMenu(QVariant unit, QVariant scale)
 {
    QMenu* menu = new QMenu(btParent);
-   QAction* action = new QAction(menu);
-   int tUnit;
+   QMenu* sMenu;
 
-   if ( unit.isValid() )
-      tUnit = unit.toInt();
-   else
-      tUnit = -1;
+   int currentUnit = unit.toInt();
+   int currentScale = scale.toInt();
 
-   action->setText(tr("Default"));
-   action->setData(-1);
-   action->setCheckable(true);
-   action->setChecked(tUnit == -1);
-   menu->addAction(action);
+   generateAction(menu, tr("Default"), -1, unit);
+   generateAction(menu, tr("SI"), SI, unit);
+   generateAction(menu, tr("US Customary"), USCustomary, unit);
 
-   action->setText(tr("SI"));
-   action->setData(SI);
-   action->setCheckable(true);
-   action->setChecked(tUnit == SI);
-   menu->addAction(action);
+   if ( currentUnit == -1 )
+       currentUnit = Brewtarget::getWeightUnitSystem();
 
-   action = new QAction(menu);
-   action->setText(tr("US Customary"));
-   action->setData(USCustomary);
-   action->setCheckable(true);
-   action->setChecked(tUnit == USCustomary);
-   menu->addAction(action);
-
-   action = new QAction(menu);
-   action->setText(tr("British Imperial"));
-   action->setData(Imperial);
-   action->setCheckable(true);
-   action->setChecked(tUnit == Imperial);
-   menu->addAction(action);
+   sMenu = new QMenu(menu);
+   switch(currentUnit)
+   {
+      case SI:
+         generateAction(sMenu, tr("Default"), noscale, currentScale);
+         generateAction(sMenu, tr("Milligrams"), extrasmall, currentScale);
+         generateAction(sMenu, tr("Grams"), small, currentScale);
+         generateAction(sMenu, tr("Kilograms"), medium, currentScale);
+         break;
+      default:
+         generateAction(sMenu, tr("Default"), noscale, currentScale);
+         generateAction(sMenu, tr("Ounces"), extrasmall, currentScale);
+         generateAction(sMenu, tr("Pounds"), small, currentScale);
+         break;
+   }
+   sMenu->setTitle("Scale");
+   menu->addMenu(sMenu);
 
    return menu;
 }
@@ -200,42 +165,66 @@ QMenu* BtLabel::setupMassVolumeMenu(QVariant unit)
 QMenu* BtLabel::setupTemperatureMenu(QVariant unit)
 {
    QMenu* menu = new QMenu(btParent);
-   QAction* action = new QAction(menu);
-   int tUnit;
 
-   if ( unit.isValid() )
-      tUnit = unit.toInt();
-   else
-      tUnit = -1;
-
-   action->setText(tr("Default"));
-   action->setData(-1);
-   action->setCheckable(true);
-   action->setChecked(tUnit == -1);
-   menu->addAction(action);
-
-   action->setText(tr("Celsius"));
-   action->setData(Celsius);
-   action->setCheckable(true);
-   action->setChecked(tUnit == Celsius);
-   menu->addAction(action);
-
-   action = new QAction(menu);
-   action->setText(tr("Fahrenheit"));
-   action->setData(Fahrenheit);
-   action->setCheckable(true);
-   action->setChecked(tUnit == Fahrenheit);
-   menu->addAction(action);
-
-   action = new QAction(menu);
-   action->setText(tr("Kelvin"));
-   action->setData(Kelvin);
-   action->setCheckable(true);
-   action->setChecked(tUnit == Kelvin);
-   menu->addAction(action);
+   generateAction(menu, tr("Default"), -1, unit);
+   generateAction(menu, tr("Celsius"), Celsius, unit);
+   generateAction(menu, tr("Fahrenheit"), Fahrenheit, unit);
+   generateAction(menu, tr("Kelvin"), Kelvin, unit);
 
    return menu;
 }
+
+QMenu* BtLabel::setupVolumeMenu(QVariant unit, QVariant scale)
+{
+   QMenu* menu = new QMenu(btParent);
+   QMenu* sMenu;
+   int currentUnit = unit.toInt();
+   int currentScale = scale.toInt();
+
+   generateAction(menu, tr("Default"), -1, unit);
+   generateAction(menu, tr("SI"), SI, unit);
+   generateAction(menu, tr("US Customary"), USCustomary, unit);
+   generateAction(menu, tr("British Imperial"), Imperial, unit);
+
+   if ( currentUnit == -1 )
+       currentUnit = Brewtarget::getVolumeUnitSystem();
+
+   sMenu = new QMenu(menu);
+   switch(currentUnit)
+   {
+      case SI:
+         generateAction(sMenu, tr("Default"), noscale, currentScale);
+         generateAction(sMenu, tr("MilliLiters"), extrasmall, currentScale);
+         generateAction(sMenu, tr("Liters"), small, currentScale);
+         break;
+        // I can cheat because Imperial and US use the same names
+      default:
+         generateAction(sMenu, tr("Default"), noscale, currentScale);
+         generateAction(sMenu, tr("Teaspoons"), extrasmall, currentScale);
+         generateAction(sMenu, tr("Tablespoons"), small, currentScale);
+         generateAction(sMenu, tr("Cups"), medium, currentScale);
+         generateAction(sMenu, tr("Quarts"), large, currentScale);
+         generateAction(sMenu, tr("Gallons"), extralarge, currentScale);
+         break;
+   }
+   sMenu->setTitle("Scale");
+   menu->addMenu(sMenu);
+
+   return menu;
+}
+
+void BtLabel::generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal)
+{
+   QAction* action = new QAction(menu);
+
+   action->setText(text);
+   action->setData(data);
+   action->setCheckable(true);
+   action->setChecked(currentVal == data);;
+
+  menu->addAction(action);
+}
+
 
 BtColorLabel::BtColorLabel(QWidget *parent)
    : BtLabel(parent,COLOR)

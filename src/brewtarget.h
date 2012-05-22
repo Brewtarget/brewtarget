@@ -36,9 +36,11 @@ class Brewtarget;
 #include <QSettings>
 #include "UnitSystem.h"
 
+
 // Forward declarations.
 class MainWindow;
 class Unit;
+class BeerXMLElement;
 
 /*!
  * \class Brewtarget
@@ -64,6 +66,12 @@ public:
    enum ColorType {MOSHER, DANIEL, MOREY};
    enum ColorUnitType {SRM, EBC};
    enum IbuType {TINSETH, RAGER};
+   enum iUnitOps {
+      NOOP = -1 ,
+      SCALE, 
+      UNIT
+   };
+
    enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
                  MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
    //! \return the data directory
@@ -90,6 +98,7 @@ public:
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3, int displayUnit = -1, int displayScale = -1 );
    static QString displayAmount( double amount, QString fieldName, Unit* units=0, int precision=3 );
+   static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
 
    //! Display date correctly depending on locale.
    static QString displayDate( QDate const& date );
@@ -98,9 +107,13 @@ public:
    //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
    //! Display gravity appropriately.
-   static QString displayOG( double og, bool showUnits=false, QString fieldName = "" );
+   static QString displayOG( double og, bool showUnits=false, int displayUnits = -1);
+//   static QString displayOG( QObject* object, QString attribute, bool showUnits=false);
+   static QString displayOG( BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
    //! Display gravity appropriately.
-   static QString displayFG( double fg, double og, bool showUnits=false, QString fieldName = "" ); // Need OG if we're using plato.
+   static QString displayFG(double fg, double og, bool showUnits=false, QString fieldName = "" ); // Need OG if we're using plato.
+   static QString displayFG(QObject* object, QStringList attributes, bool showUnits=false); 
+
    //! Display color appropriately.
    static QString displayColor( double srm, bool showUnits, QString fieldName = "" );
    //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
@@ -146,9 +159,11 @@ public:
     */
    static const QString& getSystemLanguage();
 
-   static void setOption(QString name, QVariant value);
-   static QVariant option(QString name, QVariant default_value);
+   static bool  hasOption(QString attribute, QObject* object = 0, iUnitOps ops = NOOP);
+   static void  setOption(QString attribute, QVariant value, QObject* object = 0, iUnitOps ops = NOOP);
+   static QVariant option(QString attribute, QVariant default_value, QObject* object = 0, iUnitOps = NOOP);
 
+   static QString generateName(QString attribute, QObject* object, iUnitOps ops);
    //! \return the main window.
    static MainWindow* getMainWindow();
 
@@ -217,6 +232,7 @@ private:
    static UnitSystem* findVolumeUnitSystem(QVariant system);
    static UnitSystem* findMassUnitSystem(QVariant system);
    static UnitSystem* findTemperatureSystem(QVariant system);
+
 };
 
 /*!

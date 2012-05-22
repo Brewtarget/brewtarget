@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>661</width>
-           <height>406</height>
+           <width>750</width>
+           <height>379</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -279,7 +279,7 @@
                      <string>Target Batch Size</string>
                     </property>
                     <property name="editField" stdset="0">
-                     <string notr="true">lineEdit_batchSize</string>
+                     <string notr="true">batchSize_l</string>
                     </property>
                    </widget>
                   </item>
@@ -317,7 +317,7 @@
                      <string>Calculated Batch Size</string>
                     </property>
                     <property name="editField" stdset="0">
-                     <string>calculatedBatchSize</string>
+                     <string>finalVolume_l</string>
                     </property>
                    </widget>
                   </item>
@@ -340,7 +340,7 @@
                      <string>Target Boil Size</string>
                     </property>
                     <property name="editField" stdset="0">
-                     <string>lineEdit_boilSize</string>
+                     <string>boilSize_l</string>
                     </property>
                    </widget>
                   </item>
@@ -367,9 +367,6 @@
                     <property name="toolTip">
                      <string>Target boil size</string>
                     </property>
-                    <property name="unit" stdset="0">
-                     <string>volume</string>
-                    </property>
                    </widget>
                   </item>
                   <item row="6" column="0">
@@ -381,7 +378,7 @@
                      <string>Calculated Boil Size</string>
                     </property>
                     <property name="editField" stdset="0">
-                     <string>calculatedBoilSizeLabel</string>
+                     <string>boilVolume_l</string>
                     </property>
                    </widget>
                   </item>
@@ -518,7 +515,7 @@
                      <string>OG</string>
                     </property>
                     <property name="editField" stdset="0">
-                     <string>oGLabel</string>
+                     <string>og</string>
                     </property>
                    </widget>
                   </item>
@@ -601,7 +598,7 @@
                      <string>Boil SG</string>
                     </property>
                     <property name="editField" stdset="0">
-                     <string>boilSgLabel</string>
+                     <string>boilGrav</string>
                     </property>
                    </widget>
                   </item>
@@ -644,7 +641,7 @@
                      <string>FG</string>
                     </property>
                     <property name="editField" stdset="0">
-                     <string>fGLabel</string>
+                     <string>fg</string>
                     </property>
                    </widget>
                   </item>
@@ -961,9 +958,15 @@
                    </widget>
                   </item>
                   <item row="5" column="0">
-                   <widget class="QLabel" name="colorSRMLabel">
+                   <widget class="BtColorLabel" name="colorSRMLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Color</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>color_srm</string>
                     </property>
                    </widget>
                   </item>
@@ -1222,8 +1225,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>661</width>
-           <height>329</height>
+           <width>750</width>
+           <height>328</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1746,7 +1749,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>21</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2300,7 +2303,12 @@
   <customwidget>
    <class>BtGravityLabel</class>
    <extends>QLabel</extends>
-   <header location="global">BtLabel.h</header>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtColorLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>
