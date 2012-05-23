@@ -269,11 +269,11 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
          // Figure out which unit to use. If the row has a displayUnit, use
          // it. Otherwise, get the columns displayUnit. Since displayUnit()
          // returns -1 if nothing is set, we use that.
-         // unit = row->displayUnit() > noscale ? row->displayUnit() : displayUnit(col);
-         // scale = row->displayScale() > noscale ?  row->displayScale() : displayScale(col); 
+         unit  = row->displayUnit()  == noscale ? displayUnit(col)  : row->displayUnit(); 
+         scale = row->displayScale() == noscale ? displayScale(col) : row->displayScale(); 
 
-         unit  = displayUnit(col);
-         scale = displayScale(col); 
+         // unit  = displayUnit(col);
+         // scale = displayScale(col); 
          return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms, 3, unit, scale) );
       case FERMISMASHEDCOL:
          if( role == Qt::CheckStateRole )
