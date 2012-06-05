@@ -21,6 +21,7 @@
 #include "brewtarget.h"
 #include "Algorithms.h"
 #include "unit.h"
+#include <math.h>
 
 PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
 {
@@ -56,7 +57,8 @@ void PitchDialog::calculate()
    double cells = (rate_MpermLP * 1e6) * (vol_l * 1e3) * plato;
    double vials = cells/100e9; // 100 billion cells per vial/pack.
    double dry_g = cells / 20e9; // 20 billion cells per dry gram.
-   double starterVol_l = (cells / (10e6 * plato)) / 1e3; // Starters produce 10e6 cells per mL per degree P.
+   double inoculationRate = pow(1251.94 / (cells / 1e9), 2.1793); // cell count = 1251.94 * inoculation^-.45887
+   double starterVol_l = 100.0 / inoculationRate; // Starter Volume = 100 / inoculation rate
 
    lineEdit_cells->setText(QString("%1").arg(cells/1e9, 1, 'f', 0, QChar('0')));
    lineEdit_starterVol->setText(Brewtarget::displayAmount(starterVol_l, Units::liters));
