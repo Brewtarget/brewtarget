@@ -69,10 +69,13 @@ public:
 
    // Stuff for setting display units and scales -- per cell first, then by
    // column
+
+   /* per-cell disabled
    unitDisplay displayUnit(const QModelIndex& index);
    void setDisplayUnit(const QModelIndex& index, unitDisplay displayUnit);
    unitScale displayScale(const QModelIndex& index);
    void setDisplayScale(const QModelIndex& index, unitScale displayScale);
+   */
 
    unitDisplay displayUnit(int column) const;
    unitScale displayScale(int column) const;

@@ -430,7 +430,6 @@ bool Recipe::hasBoilFermentable()
 
 PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
 {
-   bool hasFerms = false;
    QString str;
    unsigned int i;
    int size;
@@ -444,7 +443,6 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
      if( ferm->isMashed() || ferm->addAfterBoil() )
        continue;
 
-     hasFerms = true;
      str += QString("%1 %2, ")
           .arg(Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms))
           .arg(ferm->name());
@@ -885,7 +883,7 @@ void Recipe::setTasteRating( double var )
       tmp = var;
    }
 
-   set( "tasteRating", "taste_rating", var );
+   set( "tasteRating", "taste_rating", tmp );
 }
 
 void Recipe::setOg( double var )
@@ -1038,7 +1036,7 @@ void Recipe::setCarbonation_vols( double var )
       tmp = var;
    }
 
-   set( "carbonation_vols", "carb_volume", var );
+   set( "carbonation_vols", "carb_volume", tmp );
 }
 
 void Recipe::setForcedCarbonation( bool var )

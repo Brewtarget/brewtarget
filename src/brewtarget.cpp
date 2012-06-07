@@ -298,9 +298,12 @@ iUnitSystem Brewtarget::getVolumeUnitSystem()
    return volumeUnitSystem;
 }
 
-int Brewtarget::getColorUnit()
+unitDisplay Brewtarget::getColorUnit()
 {
-   return colorUnit;
+   if ( colorUnit == Brewtarget::SRM )
+      return displaySrm;
+
+   return displayEcb;
 }
 
 TempScale Brewtarget::getTemperatureScale()

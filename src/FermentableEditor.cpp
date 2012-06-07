@@ -113,7 +113,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
    }
    
    // Update the color label text.
-   if (Brewtarget::getColorUnit() == Brewtarget::SRM)
+   if (Brewtarget::getColorUnit() == displaySrm)
       label_5->setText(QString("Color (Lovibond)"));
    else
       label_5->setText(QString("Color (EBC)"));

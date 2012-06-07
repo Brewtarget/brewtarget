@@ -361,8 +361,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect(boilSgLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
    connect(fGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
    connect(colorSRMLabel,SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+
    // Those are the easy ones. Let's see what we can do with the tables. First one wires the cells, second wires (I think) the header
-   connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableCellSignal(const QPoint&)));
+   // per-cell has been disabled
+   // connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableCellSignal(const QPoint&)));
    QHeaderView* headerView = fermentableTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableHeaderSignal(const QPoint&)));
@@ -788,12 +790,13 @@ void MainWindow::showChanges(QMetaProperty* prop)
       fg.first = "fgMin";
       fg.second = recStyle;
       lcdNumber_fgLow->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
-      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"og").toDouble());
+      lcdNumber_fg->setLowLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
+      // lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"og").toDouble());
 
       fg.first = "fgMax";
       lcdNumber_fgHigh->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
-
-      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"og").toDouble());
+      // lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"og").toDouble());
+      lcdNumber_fg->setHighLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
 
       lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
       lcdNumber_abvHigh->display(recStyle->abvMax_pct(), 1);
@@ -807,8 +810,8 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
       lcdNumber_srmLow->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false));
       lcdNumber_srmHigh->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false));
-      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle->colorMin_srm(), false).toDouble());
-      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle->colorMax_srm(), false).toDouble());
+      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false).toDouble());
+      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false).toDouble());
    }
 
    // See if we need to change the mash in the table.
@@ -1427,15 +1430,8 @@ void MainWindow::moveSelectedMashStepDown()
 
 void MainWindow::editSelectedMashStep()
 {
-   Mash* mash;
-   if( recipeObs && recipeObs->mash() )
-   {
-      mash = recipeObs->mash();
-   }
-   else
-   {
+   if( ! ( recipeObs || recipeObs->mash() ) )
       return;
-   }
 
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
@@ -2077,7 +2073,8 @@ void MainWindow::redisplayLabel(QString field)
    showChanges();
 }
 
-// Only works for fermTables right now. Welcome to my POC
+// per-cell unit and scale has been disabled.
+/*
 void MainWindow::fermentableCellSignal(const QPoint& point)
 {
    QObject* calledBy = sender();
@@ -2121,19 +2118,18 @@ void MainWindow::fermentableCellSignal(const QPoint& point)
    else
       fermTableModel->setDisplayScale(modelIndex, invoked->data().toInt());
 }
+*/
 
 void MainWindow::fermentableHeaderSignal(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
    int selected = hView->logicalIndexAt(point);
-   QModelIndex wrong = fermTableModel->index(0,selected);
    unitDisplay currentUnit;
    unitScale  currentScale;
 
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
-   qDebug() << "wrong =" << wrong;
 
    currentUnit  = fermTableModel->displayUnit(selected);
    currentScale = fermTableModel->displayScale(selected);
@@ -2159,9 +2155,9 @@ void MainWindow::fermentableHeaderSignal(const QPoint &point)
 
    QWidget* pMenu = invoked->parentWidget();
    if ( pMenu == menu )
-      fermTableModel->setDisplayUnit(selected,invoked->data().toInt());
+      fermTableModel->setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
    else
-      fermTableModel->setDisplayScale(selected,invoked->data().toInt());
+      fermTableModel->setDisplayScale(selected,(unitScale)invoked->data().toInt());
 
    showChanges();
 }

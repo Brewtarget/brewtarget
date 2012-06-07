@@ -138,7 +138,7 @@ public:
    //! \return the temperature scale
    static TempScale getTemperatureScale();
    //! \return the color units
-   static int getColorUnit();
+   static unitDisplay getColorUnit();
    
    //! Read options from file.
    static void readPersistentOptions();

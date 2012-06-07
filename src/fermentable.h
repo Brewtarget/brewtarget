@@ -74,8 +74,10 @@ public:
    Q_PROPERTY( double equivSucrose_kg        READ equivSucrose_kg        /*WRITE*/                       /*NOTIFY changed*/ /*changedEquivSucrose_kg*/        STORED false )
    Q_PROPERTY( bool isMashed                 READ isMashed               WRITE setIsMashed               /*NOTIFY changed*/ /*changedIsMashed*/ )
    // Playing with some deep magic for units and scale
-   Q_PROPERTY( int displayUnit       READ displayUnit            WRITE setDisplayUnit            /*NOTIFY changed*/ /*changedDisplayUnit*/)
-   Q_PROPERTY( int displayScale      READ displayScale           WRITE setDisplayScale           /*NOTIFY changed*/ /*changedDisplayScale*/)
+   // and now disabled
+   // Q_PROPERTY( int displayUnit       READ displayUnit            WRITE setDisplayUnit            /*NOTIFY changed*/ /*changedDisplayUnit*/)
+   // Q_PROPERTY( int displayScale      READ displayScale           WRITE setDisplayScale           /*NOTIFY changed*/ /*changedDisplayScale*/)
+   
    
    const QString name() const;
    const Type type() const;
@@ -97,8 +99,10 @@ public:
    bool recommendMash() const;
    double ibuGalPerLb() const;
 
+   /* disabled per-cell
    unitDisplay displayUnit() const;
    unitScale displayScale() const;
+   */
 
    // Calculated getters.
    //! Get the maximum kg of equivalent sucrose that will come out of this ferm.
@@ -126,9 +130,11 @@ public:
    bool isMashed() const;
    void setIsMashed(bool var);
    /*** END my extensions ***/
-   
+  
+   /* disabled per-cell
    void setDisplayUnit( unitDisplay unit );
    void setDisplayScale( unitScale scale);
+   */
 
 signals:
    

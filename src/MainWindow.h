@@ -178,7 +178,8 @@ public slots:
    void finishCheckingVersion();
 
    void redisplayLabel(QString field);
-   void fermentableCellSignal(const QPoint& point);
+   // per-cell disabled code
+   // void fermentableCellSignal(const QPoint& point);
    void fermentableHeaderSignal(const QPoint& point);
 
 
