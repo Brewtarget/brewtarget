@@ -169,11 +169,11 @@ public:
    static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
 
    // Grr. Shortcuts never, ever pay  off
-   static QMenu* setupColorMenu(QWidget* parent, QVariant unit);
-   static QMenu* setupGravityMenu(QWidget* parent, QVariant unit);
-   static QMenu* setupMassMenu(QWidget* parent, QVariant unit, QVariant scale = -1);
-   static QMenu* setupTemperatureMenu(QWidget* parent, QVariant unit);
-   static QMenu* setupVolumeMenu(QWidget* parent, QVariant unit, QVariant scale = -1);
+   static QMenu* setupColorMenu(QWidget* parent, unitDisplay unit);
+   static QMenu* setupGravityMenu(QWidget* parent, unitDisplay unit);
+   static QMenu* setupMassMenu(QWidget* parent, unitDisplay unit, unitScale scale = noScale, bool generateScale = true);
+   static QMenu* setupTemperatureMenu(QWidget* parent, unitDisplay unit);
+   static QMenu* setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale scale = noScale, bool generateScale = true);
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal);
 
    //! \return the main window.

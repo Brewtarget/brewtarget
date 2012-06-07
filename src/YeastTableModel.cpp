@@ -206,6 +206,8 @@ int YeastTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
 {
    Yeast* row;
+   int col = index.column();
+   unitDisplay unit;
 
    // Ensure the row is ok.
    if( index.row() >= (int)yeastObs.size() )
@@ -248,10 +250,20 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
       else
          return QVariant();
       case YEASTAMOUNTCOL:
-      if( role == Qt::DisplayRole )
-         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
-      else
+      if( role != Qt::DisplayRole )
          return QVariant();
+
+      unit  = displayUnit(index.column());
+
+      return QVariant( 
+                        Brewtarget::displayAmount( row->amount(), 
+                                                   row->amountIsWeight() ? (Unit*)Units::kilograms : (Unit*)Units::liters, 
+                                                   3, 
+                                                   unit, 
+                                                   noScale 
+                                                 ) 
+                     );
+
       default :
          Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
          return QVariant();
@@ -366,6 +378,86 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
 Yeast* YeastTableModel::getYeast(unsigned int i)
 {
    return yeastObs[i];
+}
+
+unitDisplay YeastTableModel::displayUnit(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noUnit;
+
+   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::UNIT).toInt();
+}
+
+unitScale YeastTableModel::displayScale(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noScale;
+
+   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::SCALE).toInt();
+}
+
+// We need to:
+//   o clear the custom scale if set
+//   o clear any custom unit from the rows
+//      o which should have the side effect of clearing any scale
+void YeastTableModel::setDisplayUnit(int column, unitDisplay displayUnit) 
+{
+   // Yeast* row; // disabled per-cell magic
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayUnit,this,Brewtarget::UNIT); 
+   Brewtarget::setOption(attribute,noScale,this,Brewtarget::SCALE);
+
+   /* Disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getYeast(i);
+      row->setDisplayUnit(noUnit);
+   }
+   */
+}
+
+// Setting the scale should clear any cell-level scaling options
+void YeastTableModel::setDisplayScale(int column, unitScale displayScale) 
+{ 
+   // Yeast* row; //disabled per-cell magic
+
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayScale,this,Brewtarget::SCALE); 
+
+   /* disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getYeast(i);
+      row->setDisplayScale(noScale);
+   }
+   */
+}
+
+QString YeastTableModel::generateName(int column) const
+{
+   QString attribute;
+
+   switch(column)
+   {
+      case YEASTAMOUNTCOL:
+         attribute = "amount";
+         break;
+      default:
+         attribute = "";
+   }
+   return attribute;
 }
 
 //==========================CLASS YeastItemDelegate===============================

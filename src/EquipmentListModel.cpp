@@ -115,8 +115,8 @@ void EquipmentListModel::recChanged(QMetaProperty prop, QVariant val)
    if( propName == "equipment" )
    {
       Equipment* newEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(val));
-      Q_UNUSED(newEquip); // Remove this line once we do something 
       // Now do something with the equipment.
+      Q_UNUSED(newEquip); // Until then, this will keep the compiler happy
    }
 }
 

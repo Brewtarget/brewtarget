@@ -599,7 +599,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
    else if( SIUnitName.compare("C") == 0 ) // Dealing with temperature.
    {
       temp = findTemperatureSystem(displayUnits);
-      ret = tempSystem->displayAmount( amount, units );
+      ret = temp->displayAmount( amount, units );
    }
    else if( SIUnitName.compare("min") == 0 ) // Time
       ret = timeSystem->displayAmount( amount, units );
@@ -1240,7 +1240,7 @@ QString Brewtarget::generateName(QString attribute, const QObject* object, iUnit
 
 // These are used in at least two places. I hate cut'n'paste coding so I am
 // putting them here.
-QMenu* Brewtarget::setupColorMenu(QWidget* parent, QVariant unit)
+QMenu* Brewtarget::setupColorMenu(QWidget* parent, unitDisplay unit)
 {
    QMenu* menu = new QMenu(parent);
 
@@ -1251,7 +1251,7 @@ QMenu* Brewtarget::setupColorMenu(QWidget* parent, QVariant unit)
    return menu;
 }
 
-QMenu* Brewtarget::setupGravityMenu(QWidget* parent, QVariant unit)
+QMenu* Brewtarget::setupGravityMenu(QWidget* parent, unitDisplay unit)
 {
    QMenu* menu = new QMenu(parent);
 
@@ -1262,34 +1262,46 @@ QMenu* Brewtarget::setupGravityMenu(QWidget* parent, QVariant unit)
    return menu;
 }
 
-QMenu* Brewtarget::setupMassMenu(QWidget* parent, QVariant unit, QVariant scale)
+QMenu* Brewtarget::setupMassMenu(QWidget* parent, unitDisplay unit, unitScale scale, bool generateScale)
 {
    QMenu* menu = new QMenu(parent);
    QMenu* sMenu;
-
-   int currentUnit = unit.toInt();
-   int currentScale = scale.toInt();
 
    generateAction(menu, tr("Default"), noUnit, unit);
    generateAction(menu, tr("SI"), displaySI, unit);
    generateAction(menu, tr("US Customary"), displayUS, unit);
 
-   if ( currentUnit == -1 )
-       currentUnit = Brewtarget::getWeightUnitSystem();
+   // Some places can't do scale -- like yeast tables and misc tables because
+   // they can be mixed. It doesn't stop the unit selection from working, but
+   // the scale menus don't make sense
+   if ( generateScale == false )
+      return menu;
+
+   if ( unit == noUnit )
+   {
+      switch(Brewtarget::getWeightUnitSystem())
+      {
+         case USCustomary:
+            unit = displayUS;
+            break;
+         default:
+            unit = displaySI;
+      }
+   }
 
    sMenu = new QMenu(menu);
-   switch(currentUnit)
+   switch(unit)
    {
       case displaySI:
-         generateAction(sMenu, tr("Default"), noScale, currentScale);
-         generateAction(sMenu, tr("Milligrams"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Grams"), small, currentScale);
-         generateAction(sMenu, tr("Kilograms"), medium, currentScale);
+         generateAction(sMenu, tr("Default"), noScale, scale);
+         generateAction(sMenu, tr("Milligrams"), extrasmall, scale);
+         generateAction(sMenu, tr("Grams"), small, scale);
+         generateAction(sMenu, tr("Kilograms"), medium, scale);
          break;
       default:
-         generateAction(sMenu, tr("Default"), noScale, currentScale);
-         generateAction(sMenu, tr("Ounces"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Pounds"), small, currentScale);
+         generateAction(sMenu, tr("Default"), noScale, scale);
+         generateAction(sMenu, tr("Ounces"), extrasmall, scale);
+         generateAction(sMenu, tr("Pounds"), small, scale);
          break;
    }
    sMenu->setTitle("Scale");
@@ -1298,48 +1310,62 @@ QMenu* Brewtarget::setupMassMenu(QWidget* parent, QVariant unit, QVariant scale)
    return menu;
 }
 
-QMenu* Brewtarget::setupTemperatureMenu(QWidget* parent, QVariant unit)
+QMenu* Brewtarget::setupTemperatureMenu(QWidget* parent, unitDisplay unit)
 {
    QMenu* menu = new QMenu(parent);
 
-   generateAction(menu, tr("Default"), -1, unit);
+   generateAction(menu, tr("Default"), noUnit, unit);
    generateAction(menu, tr("Celsius"), displaySI, unit);
    generateAction(menu, tr("Fahrenheit"), displayUS, unit);
 
    return menu;
 }
 
-QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, QVariant unit, QVariant scale)
+QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale scale, bool generateScale)
 {
    QMenu* menu = new QMenu(parent);
    QMenu* sMenu;
-   int currentUnit = unit.toInt();
-   int currentScale = scale.toInt();
 
    generateAction(menu, tr("Default"), noUnit, unit);
    generateAction(menu, tr("SI"), displaySI, unit);
    generateAction(menu, tr("US Customary"), displayUS, unit);
    generateAction(menu, tr("British Imperial"), displayImp, unit);
 
-   if ( currentUnit == -1 )
-       currentUnit = Brewtarget::getVolumeUnitSystem();
+   if ( generateScale == false )
+      return menu;
+
+   if ( unit == noUnit )
+   {
+      switch(Brewtarget::getVolumeUnitSystem())
+      {
+         case USCustomary:
+            unit = displayUS;
+            break;
+         case Imperial:
+            unit = displayImp;
+            break;
+         default:
+            unit = displaySI;
+      }
+   }
+
 
    sMenu = new QMenu(menu);
-   switch(currentUnit)
+   switch(unit)
    {
       case displaySI:
-         generateAction(sMenu, tr("Default"), noScale, currentScale);
-         generateAction(sMenu, tr("MilliLiters"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Liters"), small, currentScale);
+         generateAction(sMenu, tr("Default"), noScale, scale);
+         generateAction(sMenu, tr("MilliLiters"), extrasmall, scale);
+         generateAction(sMenu, tr("Liters"), small, scale);
          break;
         // I can cheat because Imperial and US use the same names
       default:
-         generateAction(sMenu, tr("Default"), noScale, currentScale);
-         generateAction(sMenu, tr("Teaspoons"), extrasmall, currentScale);
-         generateAction(sMenu, tr("Tablespoons"), small, currentScale);
-         generateAction(sMenu, tr("Cups"), medium, currentScale);
-         generateAction(sMenu, tr("Quarts"), large, currentScale);
-         generateAction(sMenu, tr("Gallons"), extralarge, currentScale);
+         generateAction(sMenu, tr("Default"), noScale, scale);
+         generateAction(sMenu, tr("Teaspoons"), extrasmall, scale);
+         generateAction(sMenu, tr("Tablespoons"), small, scale);
+         generateAction(sMenu, tr("Cups"), medium, scale);
+         generateAction(sMenu, tr("Quarts"), large, scale);
+         generateAction(sMenu, tr("Gallons"), extralarge, scale);
          break;
    }
    sMenu->setTitle("Scale");

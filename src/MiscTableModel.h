@@ -33,6 +33,8 @@ class MiscItemDelegate;
 #include <QMetaProperty>
 #include <QTableView>
 
+#include "unit.h"
+
 // Forward declarations.
 class Misc;
 class MiscTableWidget;
@@ -80,6 +82,12 @@ public:
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    //! Reimplemented from QAbstractTableModel
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+
+   unitDisplay displayUnit(int column) const;
+   unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, unitDisplay displayUnit);
+   void setDisplayScale(int column, unitScale displayScale);
+   QString generateName(int column) const;
 
 public slots:
    void changed(QMetaProperty,QVariant);

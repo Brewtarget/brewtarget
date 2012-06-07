@@ -180,7 +180,12 @@ public slots:
    void redisplayLabel(QString field);
    // per-cell disabled code
    // void fermentableCellSignal(const QPoint& point);
+   // void hopCellSignal(const QPoint& point);
    void fermentableHeaderSignal(const QPoint& point);
+   void hopHeaderSignal(const QPoint& point);
+   void mashStepHeaderSignal(const QPoint& point);
+   void miscHeaderSignal(const QPoint& point);
+   void yeastHeaderSignal(const QPoint& point);
 
 
 protected:

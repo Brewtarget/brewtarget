@@ -31,6 +31,8 @@ class YeastItemDelegate;
 #include <QList>
 #include <QTableView>
 
+#include "unit.h"
+
 // Forward declarations.
 class Yeast;
 class YeastTableWidget;
@@ -69,6 +71,12 @@ public:
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+
+   unitDisplay displayUnit(int column) const;
+   unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, unitDisplay displayUnit);
+   void setDisplayScale(int column, unitScale displayScale);
+   QString generateName(int column) const;
 
 public slots:
    void changed(QMetaProperty,QVariant);

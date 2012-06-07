@@ -39,6 +39,7 @@ HopTableModel::HopTableModel(QTableView* parent)
    : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent), showIBUs(false)
 {
    hopObs.clear();
+   setObjectName("hopTable");
 }
 
 HopTableModel::~HopTableModel()
@@ -217,6 +218,9 @@ int HopTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant HopTableModel::data( const QModelIndex& index, int role ) const
 {
    Hop* row;
+   int col = index.column();
+   unitScale scale;
+   unitDisplay unit;
    
    // Ensure the row is ok.
    if( index.row() >= (int)hopObs.size() )
@@ -240,10 +244,13 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
          else
             return QVariant();
       case HOPAMOUNTCOL:
-         if( role == Qt::DisplayRole )
-            return QVariant( Brewtarget::displayAmount(row->amount_kg(), Units::kilograms) );
-         else
+         if( role != Qt::DisplayRole )
             return QVariant();
+         unit = displayUnit(col);
+         scale = displayScale(col);
+
+         return QVariant(Brewtarget::displayAmount(row->amount_kg(), Units::kilograms, 3, unit, scale));
+
       case HOPUSECOL:
          if( role == Qt::DisplayRole )
             return QVariant(row->useStringTr());
@@ -385,6 +392,86 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::setdata Bad column: %1").arg(index.column()));
          return false;
    }
+}
+
+unitDisplay HopTableModel::displayUnit(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noUnit;
+
+   return (unitDisplay)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::UNIT).toInt();
+}
+
+unitScale HopTableModel::displayScale(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noScale;
+
+   return (unitScale)Brewtarget::option(attribute, QVariant(-1), this, Brewtarget::SCALE).toInt();
+}
+
+// We need to:
+//   o clear the custom scale if set
+//   o clear any custom unit from the rows
+//      o which should have the side effect of clearing any scale
+void HopTableModel::setDisplayUnit(int column, unitDisplay displayUnit) 
+{
+   // Hop* row; // disabled per-cell magic
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayUnit,this,Brewtarget::UNIT); 
+   Brewtarget::setOption(attribute,noScale,this,Brewtarget::SCALE);
+
+   /* Disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getHop(i);
+      row->setDisplayUnit(noUnit);
+   }
+   */
+}
+
+// Setting the scale should clear any cell-level scaling options
+void HopTableModel::setDisplayScale(int column, unitScale displayScale) 
+{ 
+   // Fermentable* row; //disabled per-cell magic
+
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayScale,this,Brewtarget::SCALE); 
+
+   /* disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getHop(i);
+      row->setDisplayScale(noScale);
+   }
+   */
+}
+
+QString HopTableModel::generateName(int column) const
+{
+   QString attribute;
+
+   switch(column)
+   {
+      case HOPAMOUNTCOL:
+         attribute = "amount_kg";
+         break;
+      default:
+         attribute = "";
+   }
+   return attribute;
 }
 
 // Returns null on failure.
