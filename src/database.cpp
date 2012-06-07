@@ -83,7 +83,7 @@ Database::Database()
    _threadToConnectionMutex.lock();
    
    //qDebug() << "Database::_thread" << _thread;
-   qDebug() << "Main thread" << QThread::currentThread();
+   // qDebug() << "Main thread" << QThread::currentThread();
    
    /*
    // All the functions and signals/slots should execute in _thread.
@@ -146,6 +146,11 @@ void Database::load()
          dataDbFile.copy(dbFileName);
       }
    }
+
+   // Sometimes, the database file gets created but is empty. This fixes that
+   // problem
+   if ( dbFile.size() == 0 )
+      createFromScratch = true;
    
    // Open SQLite db.
    // http://www.developer.nokia.com/Community/Wiki/CS001504_-_Creating_an_SQLite_database_in_Qt
