@@ -766,7 +766,9 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
    lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
    // FG is outstanding
-   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs,attributes,false));
+   QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
+   QPair<QString, BeerXMLElement*> og("og", recipeObs);
+   lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
 
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
@@ -782,11 +784,15 @@ void MainWindow::showChanges(QMetaProperty* prop)
       lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle,  tab_recipe, "ogMin",false).toDouble());
       lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle, tab_recipe, "ogMax",false).toDouble());
 
-      // These cannot use the new methods because they use two QObjects
-      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"fg"));
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"fg"));
-
+      // 
+      fg.first = "fgMin";
+      fg.second = recStyle;
+      lcdNumber_fgLow->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
       lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"og").toDouble());
+
+      fg.first = "fgMax";
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
+
       lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"og").toDouble());
 
       lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
@@ -2078,15 +2084,27 @@ void MainWindow::fermentableCellSignal(const QPoint& point)
    QTableView* tView = qobject_cast<QTableView*>(calledBy);
    QModelIndex selected = tView->indexAt(point);
    QModelIndex modelIndex = fermTableProxy->mapToSource(selected);
+   unitDisplay currentUnit; 
+   unitScale  currentScale;
 
    // first, make sure I right clicked on the proper column
    if ( selected.column() != FERMAMOUNTCOL )
       return;
 
+   qDebug() << "calledBy =" << calledBy->objectName();
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
-   int currentUnit = fermTableModel->displayUnit(modelIndex);
-   int currentScale = fermTableModel->displayScale(modelIndex);
+   if ( calledBy->objectName() == "fermentableTable" )
+   {
+      currentUnit = fermTableModel->displayUnit(modelIndex);
+      if ( currentUnit == noUnit )
+         currentUnit = fermTableModel->displayUnit(modelIndex.column());
+
+      currentScale = fermTableModel->displayScale(modelIndex);
+      if ( currentScale == noScale )
+         currentScale = fermTableModel->displayScale(modelIndex.column());
+
+   }
 
    QMenu* menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale);
    QAction* invoked;
@@ -2109,11 +2127,16 @@ void MainWindow::fermentableHeaderSignal(const QPoint &point)
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
    int selected = hView->logicalIndexAt(point);
+   QModelIndex wrong = fermTableModel->index(0,selected);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
 
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
-   int currentUnit  = fermTableModel->displayUnit(selected);
-   int currentScale = fermTableModel->displayScale(selected);
+   qDebug() << "wrong =" << wrong;
+
+   currentUnit  = fermTableModel->displayUnit(selected);
+   currentScale = fermTableModel->displayScale(selected);
 
    QMenu* menu;
    QAction* invoked;

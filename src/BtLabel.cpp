@@ -45,7 +45,8 @@ void BtLabel::popContextMenu(const QPoint& point)
    QWidget* widgie;
    QAction *invoked;
    QMenu* menu;
-   QVariant unit,scale;
+   unitDisplay unit;
+   unitScale scale;
 
    if ( calledBy == 0 )
       return;
@@ -55,8 +56,8 @@ void BtLabel::popContextMenu(const QPoint& point)
       return;
 
    propertyName = property("editField").toString();
-   unit = Brewtarget::option(propertyName, -1, btParent, Brewtarget::UNIT);
-   scale = Brewtarget::option(propertyName, -1, btParent, Brewtarget::SCALE);
+   unit  = (unitDisplay)Brewtarget::option(propertyName, noUnit, btParent, Brewtarget::UNIT).toInt();
+   scale = (unitScale)Brewtarget::option(propertyName, noScale, btParent, Brewtarget::SCALE).toInt();
 
    switch( whatAmI )
    {
@@ -88,7 +89,7 @@ void BtLabel::popContextMenu(const QPoint& point)
    {
       Brewtarget::setOption(propertyName, invoked->data(), btParent, Brewtarget::UNIT);
       if ( Brewtarget::hasOption(propertyName, btParent, Brewtarget::SCALE) )
-         Brewtarget::setOption(propertyName, noscale, btParent, Brewtarget::SCALE);
+         Brewtarget::setOption(propertyName, noScale, btParent, Brewtarget::SCALE);
    }
    else
       Brewtarget::setOption(propertyName, invoked->data(), btParent, Brewtarget::SCALE);

@@ -97,8 +97,8 @@ public:
    bool recommendMash() const;
    double ibuGalPerLb() const;
 
-   int displayUnit() const;
-   int displayScale() const;
+   unitDisplay displayUnit() const;
+   unitScale displayScale() const;
 
    // Calculated getters.
    //! Get the maximum kg of equivalent sucrose that will come out of this ferm.
@@ -127,8 +127,8 @@ public:
    void setIsMashed(bool var);
    /*** END my extensions ***/
    
-   void setDisplayUnit( int unit );
-   void setDisplayScale( int scale);
+   void setDisplayUnit( unitDisplay unit );
+   void setDisplayScale( unitScale scale);
 
 signals:
    

@@ -27,7 +27,7 @@ SIWeightUnitSystem::SIWeightUnitSystem()
 {
 }
 
-QString SIWeightUnitSystem::displayAmount( double amount, Unit* units, int scale )
+QString SIWeightUnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );

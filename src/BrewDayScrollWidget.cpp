@@ -190,14 +190,14 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
             .arg(tr("Final Volume"))
             .arg(Brewtarget::displayAmount(recObs->finalVolume_l(), Units::liters,2))
             .arg(tr("Starting Gravity"))
-            .arg(Brewtarget::displayOG(recObs->og(), true));
+            .arg(Brewtarget::displayOG(recObs->og(), noUnit, true));
 
    // fifth row: IBU and Final gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
             .arg(tr("IBU"))
             .arg( recObs->IBU(),0,'f',1)
             .arg(tr("Final Gravity"))
-            .arg(Brewtarget::displayFG(recObs->fg(), recObs->og(), true));
+            .arg(Brewtarget::displayFG(recObs->fg(), recObs->og(), noUnit, true));
 
    // sixth row: ABV and estimate calories
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")

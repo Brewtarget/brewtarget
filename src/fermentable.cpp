@@ -244,8 +244,9 @@ double Fermentable::equivSucrose_kg() const
       return ret;
 }
 
-int Fermentable::displayUnit() const  { return get("display_unit").toInt(); }
-int Fermentable::displayScale() const { return get("display_scale").toInt(); }
+// Casting? Really? ::facepalm::
+unitDisplay Fermentable::displayUnit() const  { return (unitDisplay)get("display_unit").toInt(); }
+unitScale Fermentable::displayScale() const { return (unitScale)get("display_scale").toInt(); }
 
 // Set
 void Fermentable::setName( const QString& str )
@@ -366,11 +367,11 @@ bool Fermentable::isValidType( const QString& str )
 }
 
 // Selecting a displayUnit should reset the scale to default
-void Fermentable::setDisplayUnit( int unit ) 
+void Fermentable::setDisplayUnit( unitDisplay unit ) 
 { 
    set("displayUnit", "display_unit", unit); 
-   set("displayScale", "display_scale", noscale);
+   set("displayScale", "display_scale", noScale);
 }
 
-void Fermentable::setDisplayScale( int scale ) { set("displayScale", "display_scale", scale); }
+void Fermentable::setDisplayScale( unitScale scale ) { set("displayScale", "display_scale", scale); }
 

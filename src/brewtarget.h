@@ -97,7 +97,8 @@ public:
     * Variable 'precision' controls how many decimal places. I've overloaded
     * it to aid in the transition
     */
-   static QString displayAmount( double amount, Unit* units=0, int precision=3, int displayUnit = -1, int displayScale = -1 );
+   static QString displayAmount( double amount, Unit* units=0, int precision=3, 
+                                 unitDisplay displayUnit = noUnit, unitScale displayScale = noScale );
    static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
 
    //! Display date correctly depending on locale.
@@ -106,16 +107,16 @@ public:
    static QString displayThickness( double thick_lkg, bool showUnits=true );
    //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
-   //! Display gravity appropriately.
-   static QString displayOG( double og, bool showUnits=false, int displayUnits = -1);
-//   static QString displayOG( QObject* object, QString attribute, bool showUnits=false);
+   //! Display original gravity appropriately.
+   static QString displayOG( double og, unitDisplay displayUnit = noUnit, bool showUnits=false);
    static QString displayOG( BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
-   //! Display gravity appropriately.
-   static QString displayFG(double fg, double og, bool showUnits=false, QString fieldName = "" ); // Need OG if we're using plato.
-   static QString displayFG(QObject* object, QStringList attributes, bool showUnits=false); 
+
+   //! Display final gravity appropriately.
+   static QString displayFG( double fg, double og, unitDisplay displayUnit = noUnit, bool showUnits=false );
+   static QString displayFG(QPair<QString, BeerXMLElement*> fg, QPair<QString, BeerXMLElement*> og, QObject* object, bool showUnits = false);
 
    //! Display color appropriately.
-   static QString displayColor( double srm, bool showUnits, int displayUnit = -1 );
+   static QString displayColor( double srm, unitDisplay displayUnit = noUnit, bool showUnits=false);
    static QString displayColor(  BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
 
    //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
@@ -240,9 +241,9 @@ private:
    static IbuType ibuFormula;
 
    // Does this make any sense any longer?
-   static UnitSystem* findVolumeUnitSystem(QVariant system);
-   static UnitSystem* findMassUnitSystem(QVariant system);
-   static UnitSystem* findTemperatureSystem(QVariant system);
+   static UnitSystem* findVolumeUnitSystem(unitDisplay system);
+   static UnitSystem* findMassUnitSystem(unitDisplay system);
+   static UnitSystem* findTemperatureSystem(unitDisplay system);
 
 };
 

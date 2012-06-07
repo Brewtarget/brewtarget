@@ -27,7 +27,7 @@ ImperialVolumeUnitSystem::ImperialVolumeUnitSystem()
 {
 }
 
-QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units, int scale )
+QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );

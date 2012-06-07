@@ -251,6 +251,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/StyleEditor.h
     ${SRCDIR}/TimerListDialog.h
     ${SRCDIR}/TimerWidget.h
+    ${SRCDIR}/unit.h
     ${SRCDIR}/WaterTableModel.h
     ${SRCDIR}/WaterTableWidget.h
     ${SRCDIR}/WaterEditor.h

@@ -27,7 +27,7 @@ CelsiusTempUnitSystem::CelsiusTempUnitSystem()
 }
 
 //! scale is ignored, but must be here to satisfy the virtuals
-QString CelsiusTempUnitSystem::displayAmount( double amount, Unit* units, int scale)
+QString CelsiusTempUnitSystem::displayAmount( double amount, Unit* units, unitScale scale)
 {
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );

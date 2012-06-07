@@ -31,6 +31,7 @@ class FermentableItemDelegate;
 #include <QItemDelegate>
 #include <QAbstractItemDelegate>
 #include <QList>
+#include "unit.h"
 
 // Forward declarations.
 class Fermentable;
@@ -68,15 +69,15 @@ public:
 
    // Stuff for setting display units and scales -- per cell first, then by
    // column
-   int displayUnit(const QModelIndex& index);
-   void setDisplayUnit(const QModelIndex& index, int displayUnit);
-   int displayScale(const QModelIndex& index);
-   void setDisplayScale(const QModelIndex& index, int displayScale);
+   unitDisplay displayUnit(const QModelIndex& index);
+   void setDisplayUnit(const QModelIndex& index, unitDisplay displayUnit);
+   unitScale displayScale(const QModelIndex& index);
+   void setDisplayScale(const QModelIndex& index, unitScale displayScale);
 
-   int displayUnit(int column) const;
-   int displayScale(int column) const;
-   void setDisplayUnit(int column, int displayUnit);
-   void setDisplayScale(int column, int displayScale);
+   unitDisplay displayUnit(int column) const;
+   unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, unitDisplay displayUnit);
+   void setDisplayScale(int column, unitScale displayScale);
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    //! Reimplemented from QAbstractTableModel.

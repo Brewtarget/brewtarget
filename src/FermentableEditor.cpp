@@ -142,7 +142,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
          return;
    }
    if( propName == "color_srm" || updateAll) {
-      lineEdit_color->setText(Brewtarget::displayColor(obsFerm->color_srm(), false));
+      lineEdit_color->setText(Brewtarget::displayColor(obsFerm->color_srm(), noUnit, false));
        if( ! updateAll )
          return;
    }
