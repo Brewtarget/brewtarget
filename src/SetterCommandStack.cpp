@@ -74,6 +74,11 @@ void SetterCommandStack::push( SetterCommand* command )
    }
    
    _commandPtrSwitch.unlock();
+   
+   // If the timer is out, start it. We will aggregate commands together
+   // until it times out.
+   if( !_timer->isActive() )
+      _timer->start();
 }
 
 void SetterCommandStack::flush()
@@ -95,7 +100,7 @@ void SetterCommandStack::flush()
 void SetterCommandStack::executeNext()
 {
   // Prevent timers from stepping on each other.
-  _timer->stop();
+  //_timer->stop();
 
    // Check to make sure there is actually something to run.
    _commandPtrSwitch.lock();
@@ -131,5 +136,5 @@ void SetterCommandStack::executeNext()
       _commandPtrSwitch.unlock();
    
    // Reset the timer.
-   _timer->start();
+   //_timer->start();
 }
