@@ -44,5 +44,6 @@
         <file>images/document-export.png</file>
         <file>images/backup.png</file>
         <file>create_db.sql</file>
+        <file>blankdb.sqlite</file>
     </qresource>
 </RCC>

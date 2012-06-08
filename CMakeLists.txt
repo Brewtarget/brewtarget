@@ -110,6 +110,27 @@ IF( DOXYGEN_CMD )
                    )
 ENDIF()
 
+#=============================Database Custom Target===========================
+FIND_PROGRAM( SQLITE3_CMD sqlite3 )
+IF( SQLITE3_CMD )
+   IF( UNIX )
+      SET( RM_COMMAND "rm" )
+   ELSEIF( WIN32 )
+      SET( RM_COMMAND "del" )
+   ENDIF()
+   
+   ADD_CUSTOM_COMMAND( OUTPUT blankdb.sqlite
+                       COMMAND ${RM_COMMAND} ARGS "blankdb.sqlite" # Need to remove it if it exists first.
+                       COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "create_db.sql"
+                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+   )
+   
+   # Always create the database when building.
+   ADD_CUSTOM_TARGET( blank_database ALL DEPENDS blankdb.sqlite )
+ELSE()
+   MESSAGE( FATAL_ERROR "Did not find sqlite3 to make the database." )
+ENDIF()
+
 #=========================Detect Debian======================================== 
 IF( EXISTS "/etc/debian_version" )
   MESSAGE( STATUS "Debian detected..." )

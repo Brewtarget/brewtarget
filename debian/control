@@ -2,7 +2,7 @@ Source: brewtarget
 Section: misc
 Priority: optional
 Maintainer: Philip G. Lee <rocketman768@gmail.com>
-Build-Depends: cmake (>= 2.8), debhelper (>= 7.0.50), autotools-dev, libqt4-dev, libqtwebkit-dev, qt4-qmake, libphonon-dev
+Build-Depends: cmake (>= 2.8), debhelper (>= 7.0.50), autotools-dev, libqt4-dev, libqtwebkit-dev, qt4-qmake, libphonon-dev, sqlite3
 Standards-Version: 3.9.2
 Homepage: http://brewtarget.sourceforge.net
 

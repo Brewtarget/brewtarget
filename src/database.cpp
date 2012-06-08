@@ -135,22 +135,24 @@ void Database::load()
    {
       // If there's no dataDbFile, create dbFile from scratch.
       if( !dataDbFile.exists() )
-      {
          createFromScratch = true;
-         // Right now, just create the file.
-         dbFile.open( QIODevice::ReadWrite );
-         dbFile.close();
-      }
       else
-      {
          dataDbFile.copy(dbFileName);
-      }
    }
 
+   // NOTE: I don't think this will be necessary anymore, but leaving it
+   // commented just in case.
    // Sometimes, the database file gets created but is empty. This fixes that
    // problem
-   if ( dbFile.size() == 0 )
-      createFromScratch = true;
+   //if ( dbFile.size() == 0 )
+   //   createFromScratch = true;
+   
+   // If we need to create from scratch, do it.
+   if( createFromScratch )
+   {
+      QFile::copy( ":/blankdb.sqlite", dbFileName );
+      QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+   }
    
    // Open SQLite db.
    // http://www.developer.nokia.com/Community/Wiki/CS001504_-_Creating_an_SQLite_database_in_Qt
@@ -167,21 +169,6 @@ void Database::load()
    // Associate this db with the current thread.
    _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
    _threadToConnectionMutex.unlock();
-   
-   // If we need to create from scratch, execute all the SQL commands necessary to do so.
-   if( createFromScratch )
-   {
-      QFile createDbFile;
-      createDbFile.setFileName(":/create_db.sql");
-      createDbFile.open( QIODevice::ReadOnly );
-      QString commands(createDbFile.readAll());
-      createDbFile.close();
-      
-      foreach( QString command, commands.split("\n\n") )
-      {
-         QSqlQuery( command, sqlDatabase() );
-      }
-   }
    
    // NOTE: these two pragmas reduce --from-xml from 7min:15s to 1m:55s.
    // Turn off database journaling for better speed.
