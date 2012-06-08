@@ -94,6 +94,9 @@ void SetterCommandStack::flush()
 
 void SetterCommandStack::executeNext()
 {
+  // Prevent timers from stepping on each other.
+  _timer->stop();
+
    // Check to make sure there is actually something to run.
    _commandPtrSwitch.lock();
    if( _nextCommand )

@@ -55,7 +55,7 @@ public:
     * \param interval_ms is the amount of time between command executions.
     * 100 ms is definitely too long; you can notice the lag visually.
     */
-   SetterCommandStack( QThread* thread = QThread::currentThread(), int interval_ms=10 );
+   SetterCommandStack( QThread* thread = QThread::currentThread(), int interval_ms=75 );
    virtual ~SetterCommandStack();
    
    /*!
