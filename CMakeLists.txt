@@ -115,12 +115,14 @@ FIND_PROGRAM( SQLITE3_CMD sqlite3 )
 IF( SQLITE3_CMD )
    IF( UNIX )
       SET( RM_COMMAND "rm" )
+      SET( RM_ARGS "-f" )
    ELSEIF( WIN32 )
       SET( RM_COMMAND "del" )
+      SET( RM_ARGS "" )
    ENDIF()
    
    ADD_CUSTOM_COMMAND( OUTPUT blankdb.sqlite
-                       COMMAND ${RM_COMMAND} ARGS "blankdb.sqlite" # Need to remove it if it exists first.
+                       COMMAND ${RM_COMMAND} ARGS ${RM_ARGS} "blankdb.sqlite" # Need to remove it if it exists first.
                        COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "create_db.sql"
                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
    )
