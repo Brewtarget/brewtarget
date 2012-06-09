@@ -320,7 +320,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
-   connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), pitchDialog, SLOT(show()));
+   connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), this, SLOT(showPitchDialog()));
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(mergeDatabases()) );
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
@@ -2041,4 +2041,18 @@ void MainWindow::finishCheckingVersion()
       // variable will always get reset to true.
       Brewtarget::checkVersion = true;
    }
+}
+
+void MainWindow::showPitchDialog()
+{
+   // First, copy the current recipe og and volume.
+   if( recipeObs )
+   {
+      pitchDialog->lineEdit_vol->setText( QString("%1 L").arg( recipeObs->finalVolume_l(), 0, 'f', 3 ) );
+      pitchDialog->lineEdit_OG->setText( QString("%1").arg( recipeObs->og(), 0, 'f', 3 ) );
+   
+      pitchDialog->calculate();
+   }
+   
+   pitchDialog->show();
 }

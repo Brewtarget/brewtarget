@@ -124,6 +124,8 @@ public slots:
    void removeSelectedFermentable();
    void editSelectedFermentable();
 
+   void showPitchDialog();
+   
    void addHopToRecipe(Hop *hop);
    void removeSelectedHop();
    void editSelectedHop();
