@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>626</width>
-    <height>167</height>
+    <width>742</width>
+    <height>316</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,7 +59,21 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout_3">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <item row="0" column="0">
          <widget class="QLabel" name="label_3">
           <property name="toolTip">
            <string>For ales, 0.75-1. For lagers, 1.5-2.</string>
@@ -69,7 +83,102 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Aeration Method</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Yeast Production Date</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>Yeast Viability</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="comboBox_AerationMethod">
+          <property name="acceptDrops">
+           <bool>false</bool>
+          </property>
+          <property name="editable">
+           <bool>false</bool>
+          </property>
+          <item>
+           <property name="text">
+            <string>None</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>O2 At Start</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Stir Plate</string>
+           </property>
+          </item>
+         </widget>
+        </item>
         <item row="3" column="1">
+         <widget class="QDateEdit" name="dateEdit_ProductionDate">
+          <property name="currentSection">
+           <enum>QDateTimeEdit::MonthSection</enum>
+          </property>
+          <property name="displayFormat">
+           <string>MM/dd/yyyy</string>
+          </property>
+          <property name="calendarPopup">
+           <bool>true</bool>
+          </property>
+          <property name="currentSectionIndex">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QSpinBox" name="spinBox_Viability">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>%</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="1">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QSlider" name="slider_pitchRate">
@@ -96,20 +205,30 @@
           </item>
          </layout>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_4">
+        <item row="5" column="0" colspan="2">
+         <widget class="QCheckBox" name="checkBox_CalculateViability">
           <property name="text">
-           <string>Starter OG</string>
+           <string>Calculate Viability From Date</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit_starterOG">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string># Vials/Smack Packs Pitched</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="spinBox_VialsPitched">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>5</number>
           </property>
          </widget>
         </item>
@@ -126,24 +245,30 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QFormLayout" name="formLayout_2">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Billions of Yeast Cells Required</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit_cells">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_6">
           <property name="text">
-           <string># Vials/Smack Packs</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>Dry Yeast</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>Starter Volume</string>
+           <string># Vials/Smack Packs w/o Starter</string>
           </property>
          </widget>
         </item>
@@ -157,6 +282,13 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Dry Yeast</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="1">
          <widget class="QLineEdit" name="lineEdit_yeast">
           <property name="minimumSize">
@@ -167,25 +299,15 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>Starter Volume</string>
+          </property>
+         </widget>
+        </item>
         <item row="3" column="1">
          <widget class="QLineEdit" name="lineEdit_starterVol">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Billions of Yeast Cells Required</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_cells">
           <property name="minimumSize">
            <size>
             <width>100</width>

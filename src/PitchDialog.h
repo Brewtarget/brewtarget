@@ -42,6 +42,8 @@ public:
 public slots:
    void calculate();
    void updateShownPitchRate(int percent);
+   void toggleViabilityFromDate(int state);
+   void updateViabilityFromDate(QDate date);
 
 private:
 

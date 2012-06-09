@@ -27,12 +27,21 @@ PitchDialog::PitchDialog(QWidget* parent) : QDialog(parent)
 {
    setupUi(this);
 
+   // Set default dates
+   dateEdit_ProductionDate->setMaximumDate(QDate::currentDate());
+   dateEdit_ProductionDate->setDate(QDate::currentDate());
+   updateViabilityFromDate(QDate::currentDate());
+
    connect( lineEdit_vol, SIGNAL(editingFinished()), this, SLOT(calculate()));
    connect( lineEdit_OG, SIGNAL(editingFinished()), this, SLOT(calculate()));
-   connect( lineEdit_starterOG, SIGNAL(editingFinished()), this, SLOT(calculate()));
-   connect( slider_pitchRate, SIGNAL(sliderMoved(int)), this, SLOT(calculate()) );
-   connect( slider_pitchRate, SIGNAL(sliderMoved(int)), this, SLOT(updateShownPitchRate(int)) );
-
+   connect( slider_pitchRate, SIGNAL(valueChanged(int)), this, SLOT(calculate()) );
+   connect( slider_pitchRate, SIGNAL(valueChanged(int)), this, SLOT(updateShownPitchRate(int)) );
+   connect( spinBox_Viability, SIGNAL(valueChanged(int)), this, SLOT(calculate()));
+   connect( spinBox_VialsPitched, SIGNAL(valueChanged(int)), this, SLOT(calculate()));
+   connect( comboBox_AerationMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(calculate()));
+   connect( dateEdit_ProductionDate, SIGNAL(dateChanged(QDate)), this, SLOT(updateViabilityFromDate(QDate)));
+   connect( checkBox_CalculateViability, SIGNAL(stateChanged(int)), this, SLOT(toggleViabilityFromDate(int)));
+ 
    updateShownPitchRate(0);
 }
 
@@ -55,10 +64,33 @@ void PitchDialog::calculate()
       return;
 
    double cells = (rate_MpermLP * 1e6) * (vol_l * 1e3) * plato;
-   double vials = cells/100e9; // 100 billion cells per vial/pack.
+   double vials = cells / (spinBox_Viability->value() * 1e9); // ~100 billion cells per vial/pack, taking viability into account.
    double dry_g = cells / 20e9; // 20 billion cells per dry gram.
-   double inoculationRate = pow(1251.94 / (cells / 1e9), 2.1793); // cell count = 1251.94 * inoculation^-.45887
-   double starterVol_l = 100.0 / inoculationRate; // Starter Volume = 100 / inoculation rate
+
+   // Set the maximum number of vials pitched based on # of vials needed without a starter.
+   spinBox_VialsPitched->setMaximum(vials < 1 ? 1 : floor(vials));
+
+   // Set the aeration factor for the starter size
+   double aerationFactor;
+   switch (comboBox_AerationMethod->currentIndex())
+   {
+      case 1:   // O2 at the start
+         aerationFactor = 1.33; 
+         break;
+      case 2:   // Stir plate.
+         aerationFactor = 2.66;
+         break;
+      default:
+         aerationFactor = 1;
+   }
+
+   // Get the total # of cells pitched based on viability.
+   double totalCellsPitched = spinBox_VialsPitched->value() * spinBox_Viability->value();
+
+   // Starter in liters = Growth Rate / Inoculation Rate
+   double growthRate = (cells / 1e9) / totalCellsPitched;
+   double inoculationRate = pow((12.522 / growthRate), 2.18);
+   double starterVol_l = totalCellsPitched / (inoculationRate * aerationFactor);
 
    lineEdit_cells->setText(QString("%1").arg(cells/1e9, 1, 'f', 0, QChar('0')));
    lineEdit_starterVol->setText(Brewtarget::displayAmount(starterVol_l, Units::liters));
@@ -72,4 +104,38 @@ void PitchDialog::updateShownPitchRate(int percent)
    double rate_MpermLP = (2-0.75) * ((double)percent) / 100.0 + 0.75;
 
    label_pitchRate->setText( QString("%1").arg(rate_MpermLP, 1, 'f', 2, QChar('0')) );
+}
+
+/*
+ * Toggles whether or not the viability box and date edit
+ * is enabled or disabled.
+ */
+void PitchDialog::toggleViabilityFromDate(int state)
+{
+   if (state == Qt::Unchecked)
+   {
+      // If the box is not checked, disable the date and allow
+      // the user to manually set the viability.
+      spinBox_Viability->setEnabled(true);
+      dateEdit_ProductionDate->setEnabled(false);
+   }
+   else if (state == Qt::Checked)
+   {
+      // If the box is checked, prevent the user from manually setting
+      // the viability.  Use the date editor instead.
+      spinBox_Viability->setEnabled(false);
+      dateEdit_ProductionDate->setEnabled(true);
+      updateViabilityFromDate(dateEdit_ProductionDate->date());
+   }
+}
+
+/*
+ * Updates the current viability based on the date.
+ */
+void PitchDialog::updateViabilityFromDate(QDate date)
+{
+   // Set the viability based on the number of days since the yeast
+   // production date.
+   int daysDifference = date.daysTo(QDate::currentDate());
+   spinBox_Viability->setValue(97 - 0.7 * daysDifference);
 }
