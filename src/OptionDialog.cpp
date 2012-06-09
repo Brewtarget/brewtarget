@@ -255,13 +255,13 @@ void OptionDialog::saveAndClose()
    // Check the new userDataDir.
    newUserDataDir = lineEdit_dbDir->text();
 
-	 // Make sure the dir ends with a "/" or "\"
+   // Make sure the dir ends with a "/" or "\"
 #if defined(Q_WS_X11) || defined(Q_WS_MAC)
-	 if( !newUserDataDir.endsWith("/") )
-		 newUserDataDir += "/";
+   if( !newUserDataDir.endsWith("/") )
+      newUserDataDir += "/";
 #else
-	 if( !newUserDataDir.endsWith("\\") && !newUserDataDir.endsWith("/") )
-		 newUserDataDir += "\\";
+   if( !newUserDataDir.endsWith("\\") && !newUserDataDir.endsWith("/") )
+      newUserDataDir += "\\";
 #endif
 
    if( newUserDataDir != Brewtarget::getUserDataDir() )
