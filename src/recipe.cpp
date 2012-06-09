@@ -45,8 +45,8 @@
 #include "Algorithms.h"
 #include "IbuMethods.h"
 #include "ColorMethods.h"
-
 #include "HeatCalculations.h"
+#include "PhysicalConstants.h"
 #include "QueuedMethod.h"
 
 QHash<QString,QString> Recipe::tagToProp = Recipe::tagToPropHash();
@@ -1633,22 +1633,31 @@ void Recipe::recalcVolumeEstimates()
        if( equipment() != 0 )
           absorption_lKg = equipment()->grainAbsorption_LKg();
        else
-          absorption_lKg = HeatCalculations::absorption_LKg;
+          absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
 
        _wortFromMash_l = (waterAdded_l - absorption_lKg * _grainsInMash_kg);
    }
    
    // boilVolume_l ==============================
-   //double mashVol_l;
    double tmp = 0.0;
-   
-   //if( mashVol_l <= 0.0 ) // Give up.
-   //   return boilSize_l;
    
    if( equipment() != 0 )
       tmp = _wortFromMash_l - equipment()->lauterDeadspace_l() + equipment()->topUpKettle_l();
    else
       tmp = _wortFromMash_l;
+   
+   // Need to account for extract/sugar volume also.
+   QList<Fermentable*> ferms = fermentables();
+   foreach( Fermentable* f, ferms )
+   {
+      Fermentable::Type type = f->type();
+      if( type == Fermentable::Extract )
+         tmp += f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+      else if( type == Fermentable::Sugar )
+         tmp += f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+      else if( type == Fermentable::Dry_Extract )
+         tmp += f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+   }
    
    if( tmp <= 0.0 )
       tmp = boilSize_l(); // Give up.

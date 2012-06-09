@@ -27,6 +27,7 @@
 #include "HeatCalculations.h"
 #include "brewtarget.h"
 #include "equipment.h"
+#include "PhysicalConstants.h"
 
 MashWizard::MashWizard(QWidget* parent) : QDialog(parent)
 {
@@ -98,7 +99,7 @@ void MashWizard::wizardry()
    double MC, MCw; // Thermal mass of mash and water.
    double tw, tf, t1; // Water, final, and initial temps.
    double grainMass = 0.0, massWater = 0.0;
-   double grainDensity = HeatCalculations::rhoGrain_KgL;
+   double grainDensity = PhysicalConstants::grainDensity_kgL;
    double absorption_LKg;
    double boilingPoint_c; 
 
@@ -110,7 +111,7 @@ void MashWizard::wizardry()
    }
    else
    {
-      absorption_LKg = HeatCalculations::absorption_LKg;
+      absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
       boilingPoint_c = 100.0;
    }
 

@@ -142,7 +142,6 @@ private:
    int waterDensityPoly_C_order;
    double hydroCorrection15CPoly[4];
    int hydroCorrection15CPoly_order;
-   double sucroseDensity_kgL;
 
    Algorithms();                         // ctor hidden
    Algorithms(Algorithms const&);             // copy ctor hidden

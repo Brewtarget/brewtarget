@@ -41,12 +41,6 @@ public:
    static double Cw_JKgK;
    static double Cw_calGC;
    static double Cgrain_calGC;
-
-   /***Density***/
-   static double rhoGrain_KgL;
-   
-   /***Absorption***/
-   static double absorption_LKg;
 };
 
 #endif   /* _HEATCALCULATIONS_H */

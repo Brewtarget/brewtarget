@@ -23,6 +23,7 @@
 #include "mashstep.h"
 #include "brewtarget.h"
 #include "HeatCalculations.h"
+#include "PhysicalConstants.h"
 #include "unit.h"
 #include <QMessageBox>
 #include <QInputDialog>
@@ -175,7 +176,7 @@ double MashDesigner::minTemp_c()
 // The mash volume up to and not including the step currently being edited.
 double MashDesigner::mashVolume_l()
 {
-   return grain_kg/HeatCalculations::rhoGrain_KgL + addedWater_l;
+   return grain_kg/PhysicalConstants::grainDensity_kgL + addedWater_l;
 }
 
 double MashDesigner::minAmt_l()
@@ -226,7 +227,7 @@ double MashDesigner::tempFromVolume_c( double vol_l )
    if( equip != 0 )
       absorption_LKg = equip->grainAbsorption_LKg();
    else
-      absorption_LKg = HeatCalculations::absorption_LKg;
+      absorption_LKg = PhysicalConstants::grainAbsorption_Lkg;
 
    double tf = mashStep->stepTemp_c();
    // NOTE: This needs to be changed. Assumes 1L = 1 kg.
@@ -254,7 +255,7 @@ double MashDesigner::tempFromVolume_c( double vol_l )
 // How many liters of grain are in the tun.
 double MashDesigner::grainVolume_l()
 {
-   return grain_kg / HeatCalculations::rhoGrain_KgL;
+   return grain_kg / PhysicalConstants::grainDensity_kgL;
 }
 
 // After this, mash and equip are non-null iff we return true.

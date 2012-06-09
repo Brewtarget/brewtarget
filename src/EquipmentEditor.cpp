@@ -28,6 +28,7 @@
 #include "unit.h"
 #include "brewtarget.h"
 #include "HeatCalculations.h"
+#include "PhysicalConstants.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    : QDialog(parent)
@@ -192,9 +193,9 @@ void EquipmentEditor::resetAbsorption()
    Unit* weightUnit = 0;
    Unit* volumeUnit = 0;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
-   double gaCustomUnits = HeatCalculations::absorption_LKg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
+   double gaCustomUnits = PhysicalConstants::grainAbsorption_Lkg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
    
-   obsEquip->setGrainAbsorption_LKg( HeatCalculations::absorption_LKg );
+   obsEquip->setGrainAbsorption_LKg( PhysicalConstants::grainAbsorption_Lkg );
    lineEdit_grainAbsorption->setText(QString("%1").arg(gaCustomUnits, 0, 'f', 3));
 }
 

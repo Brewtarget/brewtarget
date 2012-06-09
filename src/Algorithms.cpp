@@ -18,6 +18,7 @@
 #include <cmath>
 #include <math.h>
 #include "Algorithms.h"
+#include "PhysicalConstants.h"
 
 // Called when Instance() is called, should only initialize once.
 Algorithms::Algorithms()
@@ -41,8 +42,6 @@ Algorithms::Algorithms()
    hydroCorrection15CPoly[1] = -16.2853e-3;
    hydroCorrection15CPoly[2] = 5.84346e-3;
    hydroCorrection15CPoly[3] = -15.3243e-6;
-
-   sucroseDensity_kgL = 1.587;
 }
 
 double Algorithms::round(double d)
@@ -127,7 +126,7 @@ double Algorithms::PlatoToSG_20C20C( double plato )
 
 double Algorithms::getPlato( double sugar_kg, double wort_l )
 {
-   double water_kg = wort_l - sugar_kg/sucroseDensity_kgL; // Assumes sucrose vol and water vol add to wort vol.
+   double water_kg = wort_l - sugar_kg/PhysicalConstants::sucroseDensity_kgL; // Assumes sucrose vol and water vol add to wort vol.
 
    return sugar_kg/(sugar_kg+water_kg) * 100.0;
 }
