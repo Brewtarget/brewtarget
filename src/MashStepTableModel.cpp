@@ -121,6 +121,9 @@ int MashStepTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
 {
    MashStep* row;
+   unitDisplay unit;
+   unitScale scale;
+   int col = index.column();
 
    if( mashObs == 0 )
       return QVariant();
@@ -138,22 +141,28 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
    if( role != Qt::DisplayRole )
       return QVariant();
 
-   switch( index.column() )
+   switch( col )
    {
       case MASHSTEPNAMECOL:
          return QVariant(row->name());
       case MASHSTEPTYPECOL:
          return QVariant(row->typeStringTr());
       case MASHSTEPAMOUNTCOL:
+
+         unit = displayUnit(col);
+         scale = displayScale(col);
+
          return (row->type() == MashStep::Decoction)
-                ? QVariant( Brewtarget::displayAmount(row->decoctionAmount_l(), Units::liters ) )
-                : QVariant( Brewtarget::displayAmount(row->infuseAmount_l(), Units::liters) );
+                ? QVariant( Brewtarget::displayAmount(row->decoctionAmount_l(), Units::liters, 3, unit, scale ) )
+                : QVariant( Brewtarget::displayAmount(row->infuseAmount_l(), Units::liters, 3, unit, scale) );
       case MASHSTEPTEMPCOL:
+         unit = displayUnit(col);
          return (row->type() == MashStep::Decoction)
                 ? QVariant("---")
-                : QVariant( Brewtarget::displayAmount(row->infuseTemp_c(), Units::celsius) );
+                : QVariant( Brewtarget::displayAmount(row->infuseTemp_c(), Units::celsius, 3, unit, noScale) );
       case MASHSTEPTARGETTEMPCOL:
-         return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), Units::celsius) );
+         unit = displayUnit(col);
+         return QVariant( Brewtarget::displayAmount(row->stepTemp_c(), Units::celsius,3, unit, noScale) );
       case MASHSTEPTIMECOL:
          return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes) );
       default :
@@ -286,6 +295,92 @@ void MashStepTableModel::moveStepDown(int i)
       return;
 
    Database::instance().swapMashStepOrder( steps[i], steps[i+1] );
+}
+
+unitDisplay MashStepTableModel::displayUnit(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noUnit;
+
+   return (unitDisplay)Brewtarget::option(attribute, noUnit, this, Brewtarget::UNIT).toInt();
+}
+
+unitScale MashStepTableModel::displayScale(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noScale;
+
+   return (unitScale)Brewtarget::option(attribute, noScale, this, Brewtarget::SCALE).toInt();
+}
+
+// We need to:
+//   o clear the custom scale if set
+//   o clear any custom unit from the rows
+//      o which should have the side effect of clearing any scale
+void MashStepTableModel::setDisplayUnit(int column, unitDisplay displayUnit) 
+{
+   // MashStep* row; // disabled per-cell magic
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayUnit,this,Brewtarget::UNIT); 
+   Brewtarget::setOption(attribute,noScale,this,Brewtarget::SCALE);
+
+   /* Disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getMashStep(i);
+      row->setDisplayUnit(noUnit);
+   }
+   */
+}
+
+// Setting the scale should clear any cell-level scaling options
+void MashStepTableModel::setDisplayScale(int column, unitScale displayScale) 
+{ 
+   // MashStep* row; //disabled per-cell magic
+
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayScale,this,Brewtarget::SCALE); 
+
+   /* disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getMashStep(i);
+      row->setDisplayScale(noScale);
+   }
+   */
+}
+
+QString MashStepTableModel::generateName(int column) const
+{
+   QString attribute;
+
+   switch(column)
+   {
+      case MASHSTEPAMOUNTCOL:
+         attribute = "amount";
+         break;
+      case MASHSTEPTEMPCOL:
+         attribute = "infuseTemp_c";
+         break;
+      case MASHSTEPTARGETTEMPCOL:
+         attribute = "stepTemp_c";
+         break;
+      default:
+         attribute = "";
+   }
+   return attribute;
 }
 
 //==========================CLASS MashStepItemDelegate===============================

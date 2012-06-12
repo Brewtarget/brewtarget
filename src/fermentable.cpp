@@ -20,6 +20,7 @@
 #include <QDomText>
 #include <QVariant>
 #include <QObject>
+#include <QDebug>
 #include "fermentable.h"
 #include "brewtarget.h"
 
@@ -243,6 +244,12 @@ double Fermentable::equivSucrose_kg() const
       return ret;
 }
 
+// disabled per-cell work
+/*
+unitDisplay Fermentable::displayUnit() const  { return (unitDisplay)get("display_unit").toInt(); }
+unitScale Fermentable::displayScale() const { return (unitScale)get("display_scale").toInt(); }
+*/
+
 // Set
 void Fermentable::setName( const QString& str )
 {
@@ -360,3 +367,14 @@ bool Fermentable::isValidType( const QString& str )
 {
    return (types.indexOf(str) >= 0);
 }
+
+// disabled per-cell work
+/*
+void Fermentable::setDisplayUnit( unitDisplay unit ) 
+{ 
+   set("displayUnit", "display_unit", unit); 
+   set("displayScale", "display_scale", noScale);
+}
+
+void Fermentable::setDisplayScale( unitScale scale ) { set("displayScale", "display_scale", scale); }
+*/

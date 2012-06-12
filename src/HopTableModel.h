@@ -76,6 +76,16 @@ public:
    //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
+   // Stuff for setting display units and scales -- per cell first, then by
+   // column
+
+   unitDisplay displayUnit(int column) const;
+   unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, unitDisplay displayUnit);
+   void setDisplayScale(int column, unitScale displayScale);
+
+
+   QString generateName(int column) const;
 public slots:
    void changed(QMetaProperty, QVariant);
    

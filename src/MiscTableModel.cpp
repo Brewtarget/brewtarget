@@ -158,6 +158,7 @@ int MiscTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
 {
    Misc* row;
+   unitDisplay unit;
    
    // Ensure the row is ok.
    if( index.row() >= (int)miscObs.size() )
@@ -169,50 +170,43 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
       row = miscObs[index.row()];
    
    // Deal with the column and return the right data.
-   if( index.column() == MISCNAMECOL )
+   switch( index.column() )
    {
-      if( role == Qt::DisplayRole )
-         return QVariant(row->name());
-      else
-         return QVariant();
+      case MISCNAMECOL:
+         if( role == Qt::DisplayRole )
+            return QVariant(row->name());
+         else
+            return QVariant();
+      case MISCTYPECOL:
+         if( role == Qt::DisplayRole )
+            return QVariant(row->typeStringTr());
+         else if( role == Qt::UserRole )
+            return QVariant(row->type());
+         else
+            return QVariant();
+      case MISCUSECOL:
+         if( role == Qt::DisplayRole )
+            return QVariant(row->useStringTr());
+         else if( role == Qt::UserRole )
+            return QVariant(row->use());
+         else
+            return QVariant();
+      case MISCTIMECOL:
+         if( role == Qt::DisplayRole )
+            return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes) );
+         else
+            return QVariant();
+      case MISCAMOUNTCOL:
+         if( role != Qt::DisplayRole )
+            return QVariant();
+
+         unit = displayUnit(index.column());
+         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, noScale ) );
+
+      default:
+         Brewtarget::log(Brewtarget::WARNING, QString("Bad model index. column = %1").arg(index.column()));
    }
-   else if( index.column() == MISCTYPECOL )
-   {
-      if( role == Qt::DisplayRole )
-         return QVariant(row->typeStringTr());
-      else if( role == Qt::UserRole )
-         return QVariant(row->type());
-      else
-         return QVariant();
-   }
-   else if( index.column() == MISCUSECOL )
-   {
-      if( role == Qt::DisplayRole )
-         return QVariant(row->useStringTr());
-      else if( role == Qt::UserRole )
-         return QVariant(row->use());
-      else
-         return QVariant();
-   }
-   else if( index.column() == MISCTIMECOL )
-   {
-      if( role == Qt::DisplayRole )
-         return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes) );
-      else
-         return QVariant();
-   }
-   else if( index.column() == MISCAMOUNTCOL )
-   {
-      if( role == Qt::DisplayRole )
-         return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
-      else
-         return QVariant();
-   }
-   else
-   {
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad model index. column = %1").arg(index.column()));
-      return QVariant();
-   }
+   return QVariant();
 }
 
 QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -356,6 +350,86 @@ void MiscTableModel::changed(QMetaProperty prop, QVariant /*val*/)
 Misc* MiscTableModel::getMisc(unsigned int i)
 {
    return miscObs[i];
+}
+
+unitDisplay MiscTableModel::displayUnit(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noUnit;
+
+   return (unitDisplay)Brewtarget::option(attribute, noUnit, this, Brewtarget::UNIT).toInt();
+}
+
+unitScale MiscTableModel::displayScale(int column) const
+{ 
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return noScale;
+
+   return (unitScale)Brewtarget::option(attribute, noScale, this, Brewtarget::SCALE).toInt();
+}
+
+// We need to:
+//   o clear the custom scale if set
+//   o clear any custom unit from the rows
+//      o which should have the side effect of clearing any scale
+void MiscTableModel::setDisplayUnit(int column, unitDisplay displayUnit) 
+{
+   // Misc* row; // disabled per-cell magic
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayUnit,this,Brewtarget::UNIT); 
+   Brewtarget::setOption(attribute,noScale,this,Brewtarget::SCALE);
+
+   /* Disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getMisc(i);
+      row->setDisplayUnit(noUnit);
+   }
+   */
+}
+
+// Setting the scale should clear any cell-level scaling options
+void MiscTableModel::setDisplayScale(int column, unitScale displayScale) 
+{ 
+   // Misc* row; //disabled per-cell magic
+
+   QString attribute = generateName(column);
+
+   if ( attribute.isEmpty() )
+      return;
+
+   Brewtarget::setOption(attribute,displayScale,this,Brewtarget::SCALE); 
+
+   /* disabled cell-specific code
+   for (int i = 0; i < rowCount(); ++i )
+   {
+      row = getMisc(i);
+      row->setDisplayScale(noScale);
+   }
+   */
+}
+
+QString MiscTableModel::generateName(int column) const
+{
+   QString attribute;
+
+   switch(column)
+   {
+      case MISCAMOUNTCOL:
+         attribute = "amount";
+         break;
+      default:
+         attribute = "";
+   }
+   return attribute;
 }
 
 //======================CLASS MiscItemDelegate===========================

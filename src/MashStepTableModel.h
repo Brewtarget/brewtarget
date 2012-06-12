@@ -31,8 +31,10 @@ class MashStepItemDelegate;
 #include <QItemDelegate>
 #include <QVector>
 #include <QTableView>
+
 #include "mashstep.h"
 #include "mash.h"
+#include "unit.h"
 
 enum{ MASHSTEPNAMECOL, MASHSTEPTYPECOL, MASHSTEPAMOUNTCOL, MASHSTEPTEMPCOL, MASHSTEPTARGETTEMPCOL, MASHSTEPTIMECOL, MASHSTEPNUMCOLS /*This one MUST be last*/};
 
@@ -66,6 +68,12 @@ public:
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
    //! Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+
+   unitDisplay displayUnit(int column) const;
+   unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, unitDisplay displayUnit);
+   void setDisplayScale(int column, unitScale displayScale);
+   QString generateName(int column) const;
 
 public slots:
    void moveStepUp(int i);

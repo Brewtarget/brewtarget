@@ -26,7 +26,7 @@ class USWeightUnitSystem : public UnitSystem
 {
 public:
    USWeightUnitSystem();
-   QString displayAmount( double amount, Unit* units = 0 ); /* Inherited from UnitSystem */
+   QString displayAmount( double amount, Unit* units = 0, unitScale scale = noScale ); /* Inherited from UnitSystem */
    double qstringToSI( QString qstr ); /* Inherited from UnitSystem */
    Unit* thicknessUnit(); /* Inherited from UnitSystem */
 

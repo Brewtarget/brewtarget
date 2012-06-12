@@ -627,7 +627,7 @@ double FahrenheitUnit::fromSI( double amt ) const
 KelvinUnit::KelvinUnit()
 {
    unitName = "K";
-   SIUnitName = "C";
+   SIUnitName = "K";
 }
 
 double KelvinUnit::toSI( double amt ) const

@@ -169,7 +169,7 @@ public:
     * to be a plato/brix
     */
    static double translateSG(QString qstr);
-   
+
 private:
    BrewNote();
    BrewNote(BrewNote const& other);

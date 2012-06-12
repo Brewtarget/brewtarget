@@ -41,6 +41,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QNetworkReply>
+#include <QAction>
 
 #include "MashStepEditor.h"
 #include "MashStepTableModel.h"
@@ -136,10 +137,6 @@ MainWindow::MainWindow(QWidget* parent)
    lcdNumber_boilSG->setConstantColor(BtDigitWidget::BLACK);
    lcdNumber_ibugu->setConstantColor(BtDigitWidget::BLACK);
    lcdNumber_calories->setConstantColor(BtDigitWidget::BLACK);
-
-   // experimental and currently disabled for checkin
-   //if ( lineEdit_batchSize->property("unit").isValid() )
-   //   qDebug() << "Found a valid property " <<lineEdit_batchSize->property("unit").toString();
 
    // Null out the recipe
    recipeObs = 0;
@@ -265,11 +262,10 @@ MainWindow::MainWindow(QWidget* parent)
    brewNotes.clear();
 
    // If we saved a size the last time we ran, use it
-   QSettings settings("brewtarget");
-   if ( settings.contains("geometry"))
+   if ( Brewtarget::btSettings.contains("geometry"))
    {
-      restoreGeometry(settings.value("geometry").toByteArray());
-      restoreState(settings.value("windowState").toByteArray());
+      restoreGeometry(Brewtarget::btSettings.value("geometry").toByteArray());
+      restoreState(Brewtarget::btSettings.value("windowState").toByteArray());
    }
    else
    {
@@ -281,9 +277,9 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
-   if (settings.contains("recipeKey"))
+   if (Brewtarget::btSettings.contains("recipeKey"))
    {
-      int key = settings.value("recipeKey").toInt();
+      int key = Brewtarget::btSettings.value("recipeKey").toInt();
       recipeObs = Database::instance().recipe( key );
 
       setRecipe(recipeObs);
@@ -355,6 +351,39 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionBrewdayPrint, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayPreview, SIGNAL(triggered()), this, SLOT(print()));
    connect( actionBrewdayHTML, SIGNAL(triggered()), this, SLOT(print()));
+
+   // Connect up all the labels. I really need to find a better way.
+   connect(targetBatchSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(calculatedBatchSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(targetBoilSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(calculatedBoilSizeLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(oGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(boilSgLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(fGLabel, SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+   connect(colorSRMLabel,SIGNAL(labelChanged(QString)), this, SLOT(redisplayLabel(QString)));
+
+   // Those are the easy ones. Let's see what we can do with the tables. First one wires the cells, second wires (I think) the header
+   // per-cell has been disabled
+   // connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableCellSignal(const QPoint&)));
+   QHeaderView* headerView = fermentableTable->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableHeaderSignal(const QPoint&)));
+
+   headerView = hopTable->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(hopHeaderSignal(const QPoint&)));
+
+   headerView = miscTable->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(miscHeaderSignal(const QPoint&)));
+
+   headerView = yeastTable->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(yeastHeaderSignal(const QPoint&)));
+
+   headerView = mashStepTableWidget->horizontalHeader();
+   headerView->setContextMenuPolicy(Qt::CustomContextMenu);
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(mashStepHeaderSignal(const QPoint&)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
@@ -641,7 +670,6 @@ void MainWindow::setRecipe(Recipe* recipe)
       disconnect( recipeObs, 0, this, 0 );
    }
    recipeObs = recipe;
-   connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    
    recStyle = recipe->style();
    recEquip = recipe->equipment();
@@ -684,7 +712,13 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    // Update combobox indices.
    styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
-   
+  
+
+   // If you don't connect this late, every previous set of an attribute
+   // causes this signal to be slotted, which then causes showChanges() to be
+   // called.
+   connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+
    showChanges();
 }
 
@@ -704,6 +738,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
       recStyle = qobject_cast<Style*>(BeerXMLElement::extractPtr(value));
       styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
    }
+
    showChanges(&prop);
 }
 
@@ -711,27 +746,26 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
 // to reflect the currently observed recipe.
 void MainWindow::showChanges(QMetaProperty* prop)
 {
+   QStringList attributes = QStringList() << "fg" << "og";
    if( recipeObs == 0 )
       return;
 
    bool updateAll = (prop == 0);
    QString propName;
-   //QVariant propVal;
+
    if( prop )
    {
       propName = prop->name();
-      //propVal = prop->read( /*What here?*/ );
    }
-   //recipeObs->recalculate();
 
    lineEdit_name->setText(recipeObs->name());
    lineEdit_name->setCursorPosition(0);
-   lineEdit_batchSize->setText( Brewtarget::displayAmount(recipeObs->batchSize_l(), Units::liters) );
-   lineEdit_boilSize->setText( Brewtarget::displayAmount(recipeObs->boilSize_l(), Units::liters) );
-   lineEdit_efficiency->setText( Brewtarget::displayAmount(recipeObs->efficiency_pct(), 0) );
+   lineEdit_batchSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "batchSize_l", Units::liters));
+   lineEdit_boilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilSize_l", Units::liters));
+   lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "efficiency_pct", 0));
    
-   label_calcBatchSize->setText( Brewtarget::displayAmount(recipeObs->finalVolume_l(), Units::liters) );
-   label_calcBoilSize->setText( Brewtarget::displayAmount(recipeObs->boilVolume_l(), Units::liters) );
+   label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs,tab_recipe, "finalVolume_l", Units::liters));
+   label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilVolume_l", Units::liters));
    
    // Color manipulation
    if( 0.95*recipeObs->batchSize_l() <= recipeObs->finalVolume_l() && recipeObs->finalVolume_l() <= 1.05*recipeObs->batchSize_l() )
@@ -747,27 +781,38 @@ void MainWindow::showChanges(QMetaProperty* prop)
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
 
-   lcdNumber_og->display(Brewtarget::displayOG(recipeObs->og()));
-   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs->boilGrav()));
-   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
+   // FG is outstanding
+   QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
+   QPair<QString, BeerXMLElement*> og("og", recipeObs);
+   lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
+
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
-   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs->color_srm(),false));
+   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
    lcdNumber_ibugu->display(recipeObs->IBU()/((recipeObs->og()-1)*1000), 2);
    lcdNumber_calories->display( recipeObs->calories(), 0);
 
    // Want to do some manipulation based on selected style.
    if( recStyle != 0 )
    {
-      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle->ogMin()));
-      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle->ogMax()));
-      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle->ogMin()).toDouble());
-      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle->ogMax()).toDouble());
+      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false));
+      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false));
+      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle,  tab_recipe, "ogMin",false).toDouble());
+      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle, tab_recipe, "ogMax",false).toDouble());
 
-      lcdNumber_fgLow->display(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og()));
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og()));
-      lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(), recipeObs->og()).toDouble());
-      lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(), recipeObs->og()).toDouble());
+      // 
+      fg.first = "fgMin";
+      fg.second = recStyle;
+      lcdNumber_fgLow->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
+      lcdNumber_fg->setLowLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
+      // lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"og").toDouble());
+
+      fg.first = "fgMax";
+      lcdNumber_fgHigh->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
+      // lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"og").toDouble());
+      lcdNumber_fg->setHighLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
 
       lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
       lcdNumber_abvHigh->display(recStyle->abvMax_pct(), 1);
@@ -779,10 +824,10 @@ void MainWindow::showChanges(QMetaProperty* prop)
       lcdNumber_ibu->setLowLim(recStyle->ibuMin());
       lcdNumber_ibu->setHighLim(recStyle->ibuMax());
 
-      lcdNumber_srmLow->display(Brewtarget::displayColor(recStyle->colorMin_srm(), false));
-      lcdNumber_srmHigh->display(Brewtarget::displayColor(recStyle->colorMax_srm(), false));
-      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle->colorMin_srm(), false).toDouble());
-      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle->colorMax_srm(), false).toDouble());
+      lcdNumber_srmLow->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false));
+      lcdNumber_srmHigh->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false));
+      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false).toDouble());
+      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false).toDouble());
    }
 
    // See if we need to change the mash in the table.
@@ -1401,15 +1446,8 @@ void MainWindow::moveSelectedMashStepDown()
 
 void MainWindow::editSelectedMashStep()
 {
-   Mash* mash;
-   if( recipeObs && recipeObs->mash() )
-   {
-      mash = recipeObs->mash();
-   }
-   else
-   {
+   if( ! ( recipeObs || recipeObs->mash() ) )
       return;
-   }
 
    QModelIndexList selected = mashStepTableWidget->selectionModel()->selectedIndexes();
    int row, size, i;
@@ -1467,11 +1505,11 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    */
    
    Brewtarget::savePersistentOptions();
-   QSettings settings("brewtarget");
-   settings.setValue("geometry", saveGeometry());
-   settings.setValue("windowState", saveState());
+
+   Brewtarget::btSettings.setValue("geometry", saveGeometry());
+   Brewtarget::btSettings.setValue("windowState", saveState());
    if ( recipeObs )
-      settings.setValue("recipeKey", recipeObs->key());
+      Brewtarget::btSettings.setValue("recipeKey", recipeObs->key());
    setVisible(false);
 }
 
@@ -1653,7 +1691,7 @@ void MainWindow::contextMenu(const QPoint &point)
 }
 
 // Set up the context menus.  This is much prettier now that I moved the
-// tree-specific pieces into the treeview objects.
+// tree-specific pieces into the treeview objects. I may do the same for the unit menus
 void MainWindow::setupContextMenu()
 {
    QMenu *sMenu = new QMenu(this);
@@ -1674,6 +1712,7 @@ void MainWindow::setupContextMenu()
    treeView_hops->setupContextMenu(this,hopDialog,sMenu,BrewTargetTreeItem::HOP);
    treeView_misc->setupContextMenu(this,miscDialog,sMenu,BrewTargetTreeItem::MISC);
    treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,BrewTargetTreeItem::YEAST);
+
 
 }
 

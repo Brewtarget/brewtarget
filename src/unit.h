@@ -44,6 +44,7 @@ class FahrenheitUnit;
 class KelvinUnit;
 
 #include <QString>
+#include <QObject>
 #include <string>
 #include <map>
 #include <QMultiMap>
@@ -59,11 +60,11 @@ enum UnitType
 
 enum iUnitSystem
 {
-    SI,
-    USCustomary,
-    Imperial,
-    ImperialAndUS,
-    Any
+    SI = 0,
+    USCustomary = 1,
+    Imperial = 2,
+    ImperialAndUS = 3,
+    Any = 4
 };
 
 enum TempScale
@@ -71,6 +72,30 @@ enum TempScale
     Celsius,
     Fahrenheit,
     Kelvin
+};
+
+// DO NOT change noscale's value. Lots of assumptions are made based on this
+// value, both in the code and (more importantly) in the database.
+enum unitScale
+{
+   noScale = -1,
+   extrasmall = 0,
+   small = 1,
+   medium = 2,
+   large = 3,
+   extralarge = 4
+};
+
+enum unitDisplay
+{
+   noUnit       = -1,
+   displaySI    = 0x100,
+   displayUS    = 0x101,
+   displayImp   = 0x102,
+   displaySrm   = 0x200,
+   displayEcb   = 0x201,
+   displaySg    = 0x300,
+   displayPlato = 0x301
 };
 
 inline QString unitSystemToString(iUnitSystem us)
@@ -101,8 +126,12 @@ inline QString tempScaleToString(TempScale ts)
  *
  * \brief Interface for arbitrary physical units and their formatting.
  */
-class Unit
+class Unit : public QObject
 {
+   Q_OBJECT
+   Q_ENUMS(unitDisplay)
+   Q_ENUMS(unitScale)
+
    public:
       virtual ~Unit() {}
       virtual double toSI( double amt ) const =0;// { return amt; }

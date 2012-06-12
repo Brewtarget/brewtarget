@@ -33,11 +33,15 @@ class Brewtarget;
 #include <QTranslator>
 #include <QTextStream>
 #include <QDateTime>
+#include <QSettings>
+#include <QMenu>
 #include "UnitSystem.h"
+
 
 // Forward declarations.
 class MainWindow;
 class Unit;
+class BeerXMLElement;
 
 /*!
  * \class Brewtarget
@@ -63,6 +67,12 @@ public:
    enum ColorType {MOSHER, DANIEL, MOREY};
    enum ColorUnitType {SRM, EBC};
    enum IbuType {TINSETH, RAGER};
+   enum iUnitOps {
+      NOOP = -1 ,
+      SCALE, 
+      UNIT
+   };
+
    enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
                  MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
    //! \return the data directory
@@ -84,21 +94,31 @@ public:
 
    /*!
     * Produces the appropriate string for 'amount' which has units 'units'.
-    * Variable 'precision' controls how many decimal places.
+    * Variable 'precision' controls how many decimal places. I've overloaded
+    * it to aid in the transition
     */
-   static QString displayAmount( double amount, Unit* units=0, int precision=3 );
+   static QString displayAmount( double amount, Unit* units=0, int precision=3, 
+                                 unitDisplay displayUnit = noUnit, unitScale displayScale = noScale );
+   static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
+
    //! Display date correctly depending on locale.
    static QString displayDate( QDate const& date );
    //! Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg, bool showUnits=true );
    //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
-   //! Display gravity appropriately.
-   static QString displayOG( double og, bool showUnits=false );
-   //! Display gravity appropriately.
-   static QString displayFG( double fg, double og, bool showUnits=false ); // Need OG if we're using plato.
+   //! Display original gravity appropriately.
+   static QString displayOG( double og, unitDisplay displayUnit = noUnit, bool showUnits=false);
+   static QString displayOG( BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
+
+   //! Display final gravity appropriately.
+   static QString displayFG( double fg, double og, unitDisplay displayUnit = noUnit, bool showUnits=false );
+   static QString displayFG(QPair<QString, BeerXMLElement*> fg, QPair<QString, BeerXMLElement*> og, QObject* object, bool showUnits = false);
+
    //! Display color appropriately.
-   static QString displayColor( double srm, bool showUnits );
+   static QString displayColor( double srm, unitDisplay displayUnit = noUnit, bool showUnits=false);
+   static QString displayColor(  BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
+
    //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
    static double weightQStringToSI( QString qstr );
    //! \return SI amount for volume string.
@@ -118,7 +138,7 @@ public:
    //! \return the temperature scale
    static TempScale getTemperatureScale();
    //! \return the color units
-   static int getColorUnit();
+   static unitDisplay getColorUnit();
    
    //! Read options from file.
    static void readPersistentOptions();
@@ -142,6 +162,20 @@ public:
     */
    static const QString& getSystemLanguage();
 
+   static bool  hasOption(QString attribute, const QObject* object = 0, iUnitOps ops = NOOP);
+   static void  setOption(QString attribute, QVariant value, const QObject* object = 0, iUnitOps ops = NOOP);
+   static QVariant option(QString attribute, QVariant default_value, const QObject* object = 0, iUnitOps = NOOP);
+
+   static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
+
+   // Grr. Shortcuts never, ever pay  off
+   static QMenu* setupColorMenu(QWidget* parent, unitDisplay unit);
+   static QMenu* setupGravityMenu(QWidget* parent, unitDisplay unit);
+   static QMenu* setupMassMenu(QWidget* parent, unitDisplay unit, unitScale scale = noScale, bool generateScale = true);
+   static QMenu* setupTemperatureMenu(QWidget* parent, unitDisplay unit);
+   static QMenu* setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale scale = noScale, bool generateScale = true);
+   static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal);
+
    //! \return the main window.
    static MainWindow* getMainWindow();
 
@@ -153,6 +187,7 @@ private:
    static QFile* logFile;
    static QTextStream* logStream;
    static QString currentLanguage;
+   static QSettings btSettings;
    static bool userDatabaseDidNotExist;
 
    /*! Helper to get option values. If \b hasOption is not null,
@@ -204,6 +239,12 @@ private:
    static ColorType colorFormula;
    static ColorUnitType colorUnit;
    static IbuType ibuFormula;
+
+   // Does this make any sense any longer?
+   static UnitSystem* findVolumeUnitSystem(unitDisplay system);
+   static UnitSystem* findMassUnitSystem(unitDisplay system);
+   static UnitSystem* findTemperatureSystem(unitDisplay system);
+
 };
 
 /*!

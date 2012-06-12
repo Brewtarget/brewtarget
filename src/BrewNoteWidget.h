@@ -66,10 +66,12 @@ public slots:
    void saveAll();
 
    void changed(QMetaProperty,QVariant);
+   void showChanges(QString field = "");
+
+
 private:
    BrewNote* bNoteObs;
 
-   void showChanges();
 
 };
 

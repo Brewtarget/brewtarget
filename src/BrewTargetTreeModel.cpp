@@ -365,7 +365,7 @@ QVariant BrewTargetTreeModel::getYeastHeader(int section) const
    case BrewTargetTreeItem::YEASTNAMECOL:
       return QVariant(tr("Name"));
    case BrewTargetTreeItem::YEASTTYPECOL:
-      return QVariant(tr("Brew Date"));
+      return QVariant(tr("Type"));
    case BrewTargetTreeItem::YEASTFORMCOL:
       return QVariant(tr("Form"));
    }

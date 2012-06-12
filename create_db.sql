@@ -42,6 +42,8 @@ create table fermentable(
    recommend_mash boolean DEFAULT 0,
    is_mashed boolean DEFAULT 0,
    ibu_gal_per_lb real DEFAULT 0.0,
+   display_unit integer DEFAULT -1,
+   display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1
@@ -65,6 +67,8 @@ create table hop(
    caryophyllene real DEFAULT 0.0,
    cohumulone real DEFAULT 0.0,
    myrcene real DEFAULT 0.0,
+   display_unit integer DEFAULT -1,
+   display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1
@@ -80,6 +84,9 @@ create table misc(
    amount_is_weight boolean DEFAULT 1,
    use_for text DEFAULT '',
    notes text DEFAULT '',
+   -- be careful. this will change meaning based on amount_is_weight
+   display_unit integer DEFAULT -1,
+   display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1
@@ -133,13 +140,15 @@ create table yeast(
    max_reuse integer DEFAULT 10,
    add_to_secondary boolean DEFAULT 0,
    inventory real DEFAULT 0,
+   -- be careful. this will change meaning based on amount_is_weight
+   display_unit integer DEFAULT -1,
+   display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1
 );
 
 -- unlike some of the other tables, you can have a mash with no name.
--- which is gonna mess my nice primary key ideas up
 create table mash(
    maid integer PRIMARY KEY autoincrement,
    name varchar(256) DEFAULT '',
@@ -166,6 +175,11 @@ create table mashstep(
    end_temp real DEFAULT 67.0,
    infuse_temp real DEFAULT 67.0,
    decoction_amount real DEFAULT 0.0,
+   -- we have three display fields in this table. I don't like my solution,
+   -- but really don't want to deal with another table and lookup
+   display_unit integer DEFAULT -1,
+   display_scale integer DEFAULT -1,
+   display_temp_unit integer DEFAULT -1,
    -- Meta data
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1,
@@ -302,14 +316,6 @@ create table recipe(
    foreign key(mash_id) references mash(maid),
    foreign key(equipment_id) references equipment(eid)
 );
-
---create table mash_to_mashstep(
---   mmid integer PRIMARY KEY autoincrement,
---   mash_id integer,
---   mashstep_id integer,
---   foreign key(mash_id) references mash(maid),
---   foreign key(mashstep_id) references mashstep(msid)
---);
 
 create table fermentable_in_recipe(
    hrid integer primary key autoincrement,

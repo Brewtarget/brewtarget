@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>657</width>
-           <height>411</height>
+           <width>750</width>
+           <height>379</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -271,9 +271,18 @@
                    </widget>
                   </item>
                   <item row="3" column="0">
-                   <widget class="QLabel" name="targetBatchSizeLabel">
+                   <widget class="BtVolumeLabel" name="targetBatchSizeLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Target Batch Size</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string notr="true">batchSize_l</string>
                     </property>
                    </widget>
                   </item>
@@ -303,9 +312,15 @@
                    </widget>
                   </item>
                   <item row="4" column="0">
-                   <widget class="QLabel" name="calculatedBatchSizeLabel">
+                   <widget class="BtVolumeLabel" name="calculatedBatchSizeLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Calculated Batch Size</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>finalVolume_l</string>
                     </property>
                    </widget>
                   </item>
@@ -314,12 +329,21 @@
                     <property name="text">
                      <string>5 gal</string>
                     </property>
+                    <property name="unit" stdset="0">
+                     <string>volume</string>
+                    </property>
                    </widget>
                   </item>
                   <item row="5" column="0">
-                   <widget class="QLabel" name="targetBoilSizeLabel">
+                   <widget class="BtVolumeLabel" name="targetBoilSizeLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Target Boil Size</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>boilSize_l</string>
                     </property>
                    </widget>
                   </item>
@@ -346,12 +370,21 @@
                     <property name="toolTip">
                      <string>Target boil size</string>
                     </property>
+                    <property name="unit" stdset="0">
+                     <string>volume</string>
+                    </property>
                    </widget>
                   </item>
                   <item row="6" column="0">
-                   <widget class="QLabel" name="calculatedBoilSizeLabel">
+                   <widget class="BtVolumeLabel" name="calculatedBoilSizeLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Calculated Boil Size</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>boilVolume_l</string>
                     </property>
                    </widget>
                   </item>
@@ -359,6 +392,9 @@
                    <widget class="QLabel" name="label_calcBoilSize">
                     <property name="text">
                      <string>5 gal</string>
+                    </property>
+                    <property name="unit" stdset="0">
+                     <string>volume</string>
                     </property>
                    </widget>
                   </item>
@@ -477,9 +513,15 @@
                    <number>5</number>
                   </property>
                   <item row="0" column="0">
-                   <widget class="QLabel" name="oGLabel">
+                   <widget class="BtGravityLabel" name="oGLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>OG</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>og</string>
                     </property>
                    </widget>
                   </item>
@@ -528,6 +570,9 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="unit" stdset="0">
+                     <string>gravity</string>
+                    </property>
                    </widget>
                   </item>
                   <item row="0" column="3">
@@ -551,9 +596,15 @@
                    </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="QLabel" name="label_3">
+                   <widget class="BtGravityLabel" name="boilSgLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Boil SG</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>boilGrav</string>
                     </property>
                    </widget>
                   </item>
@@ -582,12 +633,21 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="unit" stdset="0">
+                     <string>gravity</string>
+                    </property>
                    </widget>
                   </item>
                   <item row="2" column="0">
-                   <widget class="QLabel" name="fGLabel">
+                   <widget class="BtGravityLabel" name="fGLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>FG</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>fg</string>
                     </property>
                    </widget>
                   </item>
@@ -635,6 +695,9 @@
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="unit" stdset="0">
+                     <string>gravity</string>
                     </property>
                    </widget>
                   </item>
@@ -801,6 +864,9 @@
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
+                    <property name="unit" stdset="0">
+                     <string>alcohol</string>
+                    </property>
                    </widget>
                   </item>
                   <item row="3" column="3">
@@ -898,9 +964,15 @@
                    </widget>
                   </item>
                   <item row="5" column="0">
-                   <widget class="QLabel" name="colorSRMLabel">
+                   <widget class="BtColorLabel" name="colorSRMLabel">
+                    <property name="contextMenuPolicy">
+                     <enum>Qt::CustomContextMenu</enum>
+                    </property>
                     <property name="text">
                      <string>Color</string>
+                    </property>
+                    <property name="editField" stdset="0">
+                     <string>color_srm</string>
                     </property>
                    </widget>
                   </item>
@@ -1100,7 +1172,7 @@
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_9">
                    <item>
-                    <widget class="BeerColorWidget" name="beerColorWidget"/>
+                    <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
                    </item>
                   </layout>
                  </widget>
@@ -1131,7 +1203,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1141,7 +1213,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1159,8 +1231,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>657</width>
-           <height>321</height>
+           <width>750</width>
+           <height>328</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1178,6 +1250,9 @@
               <height>200</height>
              </size>
             </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
             <property name="currentIndex">
              <number>0</number>
             </property>
@@ -1187,7 +1262,11 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_19">
               <item>
-               <widget class="QTableView" name="fermentableTable"/>
+               <widget class="QTableView" name="fermentableTable">
+                <property name="contextMenuPolicy">
+                 <enum>Qt::CustomContextMenu</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1331,7 +1410,11 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_21">
               <item>
-               <widget class="QTableView" name="miscTable"/>
+               <widget class="QTableView" name="miscTable">
+                <property name="contextMenuPolicy">
+                 <enum>Qt::CustomContextMenu</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1403,7 +1486,11 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
-               <widget class="QTableView" name="yeastTable"/>
+               <widget class="QTableView" name="yeastTable">
+                <property name="contextMenuPolicy">
+                 <enum>Qt::CustomContextMenu</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1477,7 +1564,11 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
-                 <widget class="QTableView" name="mashStepTableWidget"/>
+                 <widget class="QTableView" name="mashStepTableWidget">
+                  <property name="contextMenuPolicy">
+                   <enum>Qt::CustomContextMenu</enum>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <layout class="QVBoxLayout" name="verticalLayout">
@@ -1664,7 +1755,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>21</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2209,6 +2300,21 @@
    <class>YeastTreeView</class>
    <extends>QTreeView</extends>
    <header>BrewTargetTreeView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtGravityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtColorLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
   </customwidget>
  </customwidgets>
  <resources>

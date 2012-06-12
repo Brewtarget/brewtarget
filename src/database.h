@@ -446,12 +446,16 @@ private:
    template <class T> void getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements )
    {
       int i, size, key;
+      bool worked;
       
       QSqlRelationalTableModel tm(0, sqlDatabase());//, sqldb);
       tm.setTable(tableNames[table]);
       tm.setFilter(filter);
-      tm.select();
-      
+      worked = tm.select();
+     
+      if ( !worked ) 
+         return;
+
       list.clear();
       size = tm.rowCount();
       for( i = 0; i < size; ++i )

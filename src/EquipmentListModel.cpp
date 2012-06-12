@@ -116,6 +116,7 @@ void EquipmentListModel::recChanged(QMetaProperty prop, QVariant val)
    {
       Equipment* newEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(val));
       // Now do something with the equipment.
+      Q_UNUSED(newEquip); // Until then, this will keep the compiler happy
    }
 }
 

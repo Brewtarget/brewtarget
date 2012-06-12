@@ -123,6 +123,7 @@ void Database::load()
 {
    bool dbIsOpen;
    bool createFromScratch = false;
+   QSqlQuery q;
    
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");

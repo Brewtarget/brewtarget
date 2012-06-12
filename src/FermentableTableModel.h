@@ -31,6 +31,7 @@ class FermentableItemDelegate;
 #include <QItemDelegate>
 #include <QAbstractItemDelegate>
 #include <QList>
+#include "unit.h"
 
 // Forward declarations.
 class Fermentable;
@@ -65,7 +66,22 @@ public:
    Fermentable* getFermentable(unsigned int i);
    //! True if you want to display percent of each grain in the row header.
    void setDisplayPercentages( bool var );
-   
+
+   // Stuff for setting display units and scales -- per cell first, then by
+   // column
+
+   /* per-cell disabled
+   unitDisplay displayUnit(const QModelIndex& index);
+   void setDisplayUnit(const QModelIndex& index, unitDisplay displayUnit);
+   unitScale displayScale(const QModelIndex& index);
+   void setDisplayScale(const QModelIndex& index, unitScale displayScale);
+   */
+
+   unitDisplay displayUnit(int column) const;
+   unitScale displayScale(int column) const;
+   void setDisplayUnit(int column, unitDisplay displayUnit);
+   void setDisplayScale(int column, unitScale displayScale);
+
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
    //! Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -86,11 +102,13 @@ public slots:
    void changed(QMetaProperty, QVariant);
 private:
    void updateTotalGrains();
+   QString generateName(int column) const;
    
    QList<Fermentable*> fermObs;
    Recipe* recObs;
    bool displayPercentages;
    double totalFermMass_kg;
+   
 };
 
 //class FermentableItemDelegate : public QStyledItemDelegate
