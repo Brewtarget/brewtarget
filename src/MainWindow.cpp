@@ -2082,6 +2082,259 @@ void MainWindow::finishCheckingVersion()
    }
 }
 
+void MainWindow::redisplayLabel(QString field)
+{
+   // There is a lot of magic going on in the showChanges(). I can either
+   // duplicate that magic or I can just call showChanges().
+   showChanges();
+}
+
+// per-cell unit and scale has been disabled.
+/*
+void MainWindow::fermentableCellSignal(const QPoint& point)
+{
+   QObject* calledBy = sender();
+   QTableView* tView = qobject_cast<QTableView*>(calledBy);
+   QModelIndex selected = tView->indexAt(point);
+   QModelIndex modelIndex = fermTableProxy->mapToSource(selected);
+   unitDisplay currentUnit; 
+   unitScale  currentScale;
+
+   // first, make sure I right clicked on the proper column
+   if ( selected.column() != FERMAMOUNTCOL )
+      return;
+
+   qDebug() << "calledBy =" << calledBy->objectName();
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+   if ( calledBy->objectName() == "fermentableTable" )
+   {
+      currentUnit = fermTableModel->displayUnit(modelIndex);
+      if ( currentUnit == noUnit )
+         currentUnit = fermTableModel->displayUnit(modelIndex.column());
+
+      currentScale = fermTableModel->displayScale(modelIndex);
+      if ( currentScale == noScale )
+         currentScale = fermTableModel->displayScale(modelIndex.column());
+
+   }
+
+   QMenu* menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale);
+   QAction* invoked;
+
+   invoked = menu->exec(tView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+
+   // Now, I need to tell the model to do something.
+   if ( pMenu == menu )
+      fermTableModel->setDisplayUnit(modelIndex,invoked->data().toInt());
+   else
+      fermTableModel->setDisplayScale(modelIndex, invoked->data().toInt());
+}
+*/
+
+void MainWindow::fermentableHeaderSignal(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+
+   int selected = hView->logicalIndexAt(point);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
+
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+
+   currentUnit  = fermTableModel->displayUnit(selected);
+   currentScale = fermTableModel->displayScale(selected);
+   
+   QMenu* menu;
+   QAction* invoked;
+
+   switch(selected)
+   {
+      case FERMAMOUNTCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
+         break;
+      case FERMCOLORCOL:
+         menu = Brewtarget::setupColorMenu(this,currentUnit); 
+         break;
+      default:
+         return;
+   }
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+   if ( pMenu == menu )
+      fermTableModel->setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+   else
+      fermTableModel->setDisplayScale(selected,(unitScale)invoked->data().toInt());
+
+   showChanges();
+}
+
+void MainWindow::hopHeaderSignal(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+
+   int selected = hView->logicalIndexAt(point);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
+
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+
+   currentUnit  = hopTableModel->displayUnit(selected);
+   currentScale = hopTableModel->displayScale(selected);
+   
+   QMenu* menu;
+   QAction* invoked;
+
+   switch(selected)
+   {
+      case HOPAMOUNTCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
+         break;
+      default:
+         return;
+   }
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+   if ( pMenu == menu )
+      hopTableModel->setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+   else
+      hopTableModel->setDisplayScale(selected,(unitScale)invoked->data().toInt());
+
+   showChanges();
+}
+
+void MainWindow::mashStepHeaderSignal(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+
+   int selected = hView->logicalIndexAt(point);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
+
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+
+   currentUnit  = mashStepTableModel->displayUnit(selected);
+   currentScale = mashStepTableModel->displayScale(selected);
+   
+   QMenu* menu;
+   QAction* invoked;
+
+   switch(selected)
+   {
+      case MASHSTEPAMOUNTCOL:
+         menu = Brewtarget::setupVolumeMenu(this,currentUnit, currentScale); 
+         break;
+      case MASHSTEPTEMPCOL:
+      case MASHSTEPTARGETTEMPCOL:
+         menu = Brewtarget::setupTemperatureMenu(this,currentUnit);
+         break;
+      default:
+         return;
+   }
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   QWidget* pMenu = invoked->parentWidget();
+   if ( pMenu == menu )
+      mashStepTableModel->setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+   else
+      mashStepTableModel->setDisplayScale(selected,(unitScale)invoked->data().toInt());
+
+   showChanges();
+}
+
+void MainWindow::miscHeaderSignal(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+
+   int selected = hView->logicalIndexAt(point);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
+
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+
+   currentUnit  = miscTableModel->displayUnit(selected);
+   currentScale = miscTableModel->displayScale(selected);
+   
+   QMenu* menu;
+   QAction* invoked;
+
+   switch(selected)
+   {
+      case MISCAMOUNTCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale, false); 
+         break;
+      default:
+         return;
+   }
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   miscTableModel->setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+
+   showChanges();
+}
+
+void MainWindow::yeastHeaderSignal(const QPoint &point)
+{
+   QObject* calledBy = sender();
+   QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
+
+   int selected = hView->logicalIndexAt(point);
+   unitDisplay currentUnit;
+   unitScale  currentScale;
+
+   // Since we need to call generateVolumeMenu() two different ways, we need
+   // to figure out the currentUnit and Scale here
+
+   currentUnit  = yeastTableModel->displayUnit(selected);
+   currentScale = yeastTableModel->displayScale(selected);
+   
+   QMenu* menu;
+   QAction* invoked;
+
+   switch(selected)
+   {
+      case YEASTAMOUNTCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale, false); 
+         break;
+      default:
+         return;
+   }
+
+   invoked = menu->exec(hView->mapToGlobal(point));
+   if ( invoked == 0 )
+      return;
+
+   yeastTableModel->setDisplayUnit(selected,(unitDisplay)invoked->data().toInt());
+
+   showChanges();
+}
+
 void MainWindow::showPitchDialog()
 {
    // First, copy the current recipe og and volume.
