@@ -88,10 +88,7 @@ void MiscDialog::populateTable()
    QList<Misc*> miscs;
    Database::instance().getMiscs(miscs);
 
-   numMiscs = miscs.size();
-   int i;
-   for( i = 0; i < numMiscs; ++i )
-      miscTableModel->addMisc(miscs[i]);
+   miscTableModel->addMiscs(miscs);
 }
 
 void MiscDialog::addMisc(const QModelIndex& index)

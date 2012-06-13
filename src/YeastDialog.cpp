@@ -48,8 +48,10 @@ YeastDialog::YeastDialog(MainWindow* parent)
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT( removeYeast() ) );
    connect( yeastTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addYeast(const QModelIndex&) ) );
    
+
    connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    populateTable();
+
 }
 
 void YeastDialog::removeYeast()
@@ -96,9 +98,7 @@ void YeastDialog::populateTable()
    Database::instance().getYeasts(yeasts);
    
    numYeasts = yeasts.size();
-   int i;
-   for( i = 0; i < numYeasts; ++i )
-      yeastTableModel->addYeast(yeasts[i]);
+   yeastTableModel->addYeasts(yeasts);
 }
 
 void YeastDialog::addYeast(const QModelIndex& index)
