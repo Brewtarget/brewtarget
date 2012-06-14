@@ -86,6 +86,9 @@ public:
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
 
+   //! Should be called when we are about to close down.
+   void unload();
+
    /*! Schedule an update of the entry, and call the notification when complete.
     */
    void updateEntry( Brewtarget::Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
@@ -507,9 +510,6 @@ private:
    {
       return metaObject()->property(metaObject()->indexOfProperty(name));
    }
-   
-   //! Should be called when we are about to close down.
-   void unload();
    
    /*! Make a new row in the \b table.
     *  \returns key of new row.

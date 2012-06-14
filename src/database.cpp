@@ -37,7 +37,6 @@
 #include <QDebug>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QtConcurrentRun>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -494,7 +493,7 @@ void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
 {
    removeIngredientFromRecipe( rec, ferm, "fermentables", "fermentable_in_recipe", "fermentable_id" );
    disconnect( ferm, 0, rec, 0 );
-   QtConcurrent::run(rec, &Recipe::recalcAll);
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Misc* m )
@@ -1292,7 +1291,7 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool initialLoad )
                                          "hop_id",
                                          initialLoad, &allHops );
    connect( allHops[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
-   QtConcurrent::run(rec, &Recipe::recalcIBU);
+   rec->recalcIBU();
 }
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
@@ -1306,7 +1305,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
                                                  "fermentable_id",
                                                  initialLoad, &allFermentables );
    connect( allFermentables[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
-   QtConcurrent::run(rec, &Recipe::recalcAll);
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Misc* m, bool initialLoad )

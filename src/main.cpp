@@ -75,6 +75,7 @@ int main(int argc, char **argv)
    if( i >= 0 )
    {
       Database::instance().importFromXML(args.at(i+1));
+      Database::instance().unload();
       return 0;
    }
    
