@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>454</width>
-    <height>389</height>
+    <width>470</width>
+    <height>407</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -206,16 +206,6 @@
             </property>
             <item>
              <property name="text">
-              <string>Boil</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dry Hop</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>Mash</string>
              </property>
             </item>
@@ -226,7 +216,17 @@
             </item>
             <item>
              <property name="text">
+              <string>Boil</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>Aroma</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dry Hop</string>
              </property>
             </item>
            </widget>
@@ -339,17 +339,17 @@
          </property>
          <item>
           <property name="text">
+           <string>Leaf</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Pellet</string>
           </property>
          </item>
          <item>
           <property name="text">
            <string>Plug</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Leaf</string>
           </property>
          </item>
         </widget>
