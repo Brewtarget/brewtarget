@@ -50,7 +50,12 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
    
    for( i = equips.begin(); i != equips.end(); i++ )
    {
-      if( !equipments.contains(*i) )
+      // if the equipment is not already in the list and
+      // if the equipment has not been deleted and
+      // if the equipment is to be displayed, then append it
+      if( !equipments.contains(*i) &&
+          !(*i)->deleted()             &&  
+           (*i)->display() )
          tmp.append(*i);
    }
    
