@@ -86,8 +86,7 @@ public:
    static bool backupToDir(QString dir);
    static bool restoreFromDir(QString dirStr);
 
-   //! Should be called when we are about to close down.
-   void unload();
+   bool loadSuccessful();
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
@@ -374,7 +373,7 @@ signals:
    
 private slots:
    //! Load database from file.
-   void load();
+   bool load();
    
 private:
    static Database* dbInstance; // The singleton object
@@ -384,6 +383,8 @@ private:
    static QString dbFileName;
    static QFile dataDbFile;
    static QString dataDbFileName;
+   static QFile dbTempBackupFile;
+   static QString dbTempBackupFileName;
    static QString dbConName;
    static QHash<Brewtarget::DBTable,QString> tableNames;
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
@@ -406,6 +407,9 @@ private:
    QHash< int, Style* > allStyles;
    QHash< int, Water* > allWaters;
    QHash< int, Yeast* > allYeasts;
+
+   bool loadWasSuccessful;
+   bool loadedFromXml;
    
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
@@ -695,6 +699,12 @@ private:
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
+
+   //! Should be called when we are about to close down.
+   void unload();
+
+   // Cleans up the backup database if it was leftover from an error.
+   bool cleanupBackupDatabase();
 };
 
 #endif   /* _DATABASE_H */

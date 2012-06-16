@@ -493,18 +493,22 @@ int Brewtarget::run()
    qApp->processEvents();
    splashScreen.showMessage("Loading...");
    qApp->processEvents();
-   Database::instance();
+  
+   // Check if the database was successfully loaded before
+   // loading the main window.
+   if (Database::instance().loadSuccessful())
+   {
+      mainWindow = new MainWindow();
+      mainWindow->setVisible(true);
    
-   mainWindow = new MainWindow();
-   mainWindow->setVisible(true);
-   
-   splashScreen.finish(mainWindow);
+      splashScreen.finish(mainWindow);
 
-   checkForNewVersion(mainWindow);
+      checkForNewVersion(mainWindow);
 
-   ret = qApp->exec();
+      ret = qApp->exec();
    
-   savePersistentOptions();
+      savePersistentOptions();
+   }
    
    // Close log file.
    if( logStream )
@@ -522,7 +526,6 @@ int Brewtarget::run()
    // Should I do qApp->removeTranslator() first?
    delete defaultTrans;
    delete btTrans;
-   
    delete mainWindow;
    
    Database::dropInstance();

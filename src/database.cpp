@@ -37,6 +37,7 @@
 #include <QDebug>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QtGui/QPushButton>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -64,6 +65,8 @@ QFile Database::dbFile;
 QString Database::dbFileName;
 QFile Database::dataDbFile;
 QString Database::dataDbFileName;
+QFile Database::dbTempBackupFile;
+QString Database::dbTempBackupFileName;
 QString Database::dbConName;
 QHash<Brewtarget::DBTable,QString> Database::tableNames = Database::tableNamesHash();
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable = Database::classNameToTableHash();
@@ -75,7 +78,9 @@ QMutex Database::_threadToConnectionMutex;
 Database::Database()
    : //_thread( new QThread() ),
      //_setterCommandStack( new SetterCommandStack(_thread) )
-     _setterCommandStack( new SetterCommandStack() )
+   _setterCommandStack( new SetterCommandStack() ),
+   loadedFromXml(false),
+   tableModel(NULL)
 {
    commandStack.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
@@ -97,7 +102,7 @@ Database::Database()
    _thread->start();
    */
    
-   load();
+   loadWasSuccessful = load();
 }
 
 Database::~Database()
@@ -118,7 +123,7 @@ Database::~Database()
    unload();
 }
 
-void Database::load()
+bool Database::load()
 {
    bool dbIsOpen;
    bool createFromScratch = false;
@@ -126,9 +131,19 @@ void Database::load()
    
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
-   dbFile.setFileName(dbFileName);
    dataDbFileName = (Brewtarget::getDataDir() + "database.sqlite");
+   dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
+   
+   // Cleanup the backup database if there was a previous error.
+   if (!cleanupBackupDatabase())
+   {
+      return false;
+   }
+
+   // Set the files.
+   dbFile.setFileName(dbFileName);
    dataDbFile.setFileName(dataDbFileName);
+   dbTempBackupFile.setFileName(dbTempBackupFileName);
    
    // If there's no dbFile, try to copy from dataDbFile.
    if( !dbFile.exists() )
@@ -153,6 +168,9 @@ void Database::load()
       QFile::copy( ":/blankdb.sqlite", dbFileName );
       QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
    }
+
+   // Create a copy of the database to revert to if the user decides not to make changes.
+   dbFile.copy(dbTempBackupFileName);
    
    // Open SQLite db.
    // http://www.developer.nokia.com/Community/Wiki/CS001504_-_Creating_an_SQLite_database_in_Qt
@@ -163,8 +181,12 @@ void Database::load()
    if( ! dbIsOpen )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(dbFileName).arg(sqldb.lastError().text()));
+      QMessageBox::critical(0,
+                            QObject::tr("Database Failure"),
+                            QString(QObject::tr("Failed to open the database '%1'.").arg(dbFileName)));
+
       // TODO: if we can't open the database, what should we do?
-      return;
+      return false;
    }
    // Associate this db with the current thread.
    _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
@@ -304,6 +326,13 @@ void Database::load()
          connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
       }
    }
+
+   return true;
+}
+
+bool Database::loadSuccessful()
+{
+   return loadWasSuccessful;
 }
 
 QSqlDatabase Database::sqlDatabase()
@@ -343,9 +372,13 @@ QSqlDatabase Database::sqlDatabase()
 void Database::unload()
 {
    // Delete all models that are stuck to the database.
-   //delete tableModel;
-   delete tableModel;
+   if (tableModel != NULL)
+   {
+      delete tableModel;
+   }
+
    qDeleteAll(tables);
+
    /*
    tableModel->deleteLater();
    QHash<Brewtarget::DBTable,QSqlRelationalTableModel*>::iterator i;
@@ -366,9 +399,41 @@ void Database::unload()
    qDeleteAll(allWaters);
    qDeleteAll(allYeasts);
    qDeleteAll(allRecipes);
-   
+
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
+
+   if (loadedFromXml || !loadWasSuccessful)
+   {
+      // If either the --from-xml switch was used, or load() failed, then
+      // just keep the database and don't revert to the backup.
+      if (dbFile.exists())
+      {
+         dbTempBackupFile.remove();
+      }
+   }
+   else 
+   {
+      // If the database has a more recent modified date than the backup, ask
+      // the user if they want to save changes.
+      if (QFileInfo(dbFileName).lastModified() > QFileInfo(dbTempBackupFileName).lastModified() && 
+            QMessageBox::question(0,
+                                  QObject::tr("Save Database Changes"),
+                                  QObject::tr("Would you like to save the changes you made?"),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::Yes) == QMessageBox::Yes)
+      {
+         // If the user wants to save changes, just remove the backup database.
+         dbTempBackupFile.remove();
+      }
+      else
+      {
+         // If the user doesn't want to save changes, remove the active database
+         // and restore the backup.
+         dbFile.remove();
+         dbTempBackupFile.rename(dbFileName);
+      }
+   }
 }
 
 Database& Database::instance()
@@ -1642,6 +1707,8 @@ QList<Yeast*> Database::yeasts()
 
 void Database::importFromXML(const QString& filename)
 {
+   loadedFromXml = true;
+
    unsigned int count;
    int line, col;
    QDomDocument xmlDoc;
@@ -3208,4 +3275,92 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
       addToRecipe( parent, ret );
    return ret;
 }
+
+/*
+ * Cleans up the backup database if an error occurred
+ * during the previous Brewtarget session.
+ */
+bool Database::cleanupBackupDatabase()
+{
+   // Check if the temporary backup database exists.
+   if (QFile::exists(dbTempBackupFileName))
+   {
+      // Check if the primary database also exists.
+      if (QFile::exists(dbFileName))
+      {
+         // If it does, prompt the user as to whether they'd like to keep their changes
+         // from the last session (keep the primary DB), or revert back to where they
+         // were before their changes (overwrite the primary DB with the backup).
+         QMessageBox messageBox;
+         messageBox.setIcon(QMessageBox::Question);
+         messageBox.setWindowTitle(QObject::tr("Multiple Databases Found"));
+         messageBox.setText(QObject::tr("Multiple databases were found.  Do you want to "
+                                                   "restore the changes you made during your last "
+                                                   "Brewtarget session, or rollback to before last session's changes?"));
+
+         // Add the Restore and Rollback buttons.
+         QPushButton *restoreButton = messageBox.addButton(QObject::tr("Restore"), QMessageBox::AcceptRole);
+         messageBox.addButton(QObject::tr("Rollback"), QMessageBox::RejectRole);
+         messageBox.setDefaultButton(restoreButton);
+         
+         // Display the message box.
+         messageBox.exec();
+
+         // Check which button the user clicked.
+         if (messageBox.clickedButton() == restoreButton)
+         {
+            // If they clicked Restore, then simply remove the backup database and keep
+            // the primary.  If that fails, display a message as something likely has
+            // the file locked, and it needs to be resolved outside Brewtarget.
+            if (!QFile::remove(dbTempBackupFileName))
+            {
+               QMessageBox::critical(0,
+                                     "Database Restore Failure",
+                                     QString(QObject::tr("Failed to remove the temporary backup database.  "
+                                                         "Navigate to '%1' and remove "
+                                                         "'tempBackupDatabase.sqlite'.")).arg(Brewtarget::getUserDataDir()));
+
+               return false;
+            }
+         }
+         else
+         {
+            // If they clicked Rollback, replace the primary DB with the temporary backup
+            // database.  If that fails, display a message as something likely has the
+            // file locked, and it needs to be cleaned up outside Brewtarget.
+            QFile::remove(dbFileName);
+            if (!QFile::rename(dbTempBackupFileName, dbFileName))
+            {
+               QMessageBox::critical(0,
+                                     "Database Rollback Failure",
+                                     QString(QObject::tr("Failed to rollback to the backup database.  "
+                                                         "Navigate to '%1', remove 'database.sqlite' if it exists, "
+                                                         "and rename 'tempBackupDatabase.sqlite' to "
+                                                         "'database.sqlite'.")).arg(Brewtarget::getUserDataDir()));
+
+               return false;
+            }
+         }
+      }
+      else
+      {
+         // If the primary DB doesn't exist, then restore the backup database as the
+         // primary.  If that fails, display a message as something likely has the
+         // file locked, and it needs to be cleaned up outside Brewtarget.
+         if (!QFile::rename(dbTempBackupFileName, dbFileName))
+         {
+            QMessageBox::critical(0,
+                                  QObject::tr("Database Restore Failure"),
+                                  QString(QObject::tr("Failed to restore the backup database. Navigate to '%1' "
+                                                      "and rename 'tempBackupDatabase.sqlite' to "
+                                                      "'database.sqlite'.").arg(Brewtarget::getUserDataDir())));
+
+            return false;
+         }
+      }
+   }
+
+   return true;
+}
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
