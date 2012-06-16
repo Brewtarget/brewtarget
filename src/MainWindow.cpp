@@ -393,6 +393,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
+   connect( lineEdit_boilTime, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilTime() ) );
    connect( lineEdit_efficiency, SIGNAL( editingFinished() ), this, SLOT( updateRecipeEfficiency() ) );
    connect( pushButton_addFerm, SIGNAL( clicked() ), fermDialog, SLOT( show() ) );
    connect( pushButton_addHop, SIGNAL( clicked() ), hopDialog, SLOT( show() ) );
@@ -762,7 +763,8 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lineEdit_name->setCursorPosition(0);
    lineEdit_batchSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "batchSize_l", Units::liters));
    lineEdit_boilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilSize_l", Units::liters));
-   lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "efficiency_pct", 0));
+   lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "efficiency_pct", 0,0));
+   lineEdit_boilTime->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilTime_min", 0,0));
    
    label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs,tab_recipe, "finalVolume_l", Units::liters));
    label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilVolume_l", Units::liters));
@@ -921,7 +923,7 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
 
    if( QMessageBox::question(this,
                              tr("Equipment request"),
-                             tr("Would you like to set the batch and boil size to that requested by the equipment?"),
+                             tr("Would you like to set the batch size, boil size and time to that requested by the equipment?"),
                              QMessageBox::Yes,
                              QMessageBox::No)
         == QMessageBox::Yes
@@ -931,6 +933,7 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
       {
          recipeObs->setBatchSize_l( kit->batchSize_l() );
          recipeObs->setBoilSize_l( kit->boilSize_l() );
+         recipeObs->setBoilTime_min( kit->boilTime_min() );
       }
    }
 }
@@ -947,8 +950,27 @@ void MainWindow::updateRecipeBoilSize()
 {
    if( recipeObs == 0 )
       return;
-   
+ 
    recipeObs->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
+}
+
+void MainWindow::updateRecipeBoilTime()
+{
+   double newBoilSize = 0.0;
+   double boilTime = 0.0;
+   Equipment* kit;
+
+   if( recipeObs == 0 )
+      return;
+ 
+   kit = recipeObs->equipment();
+   boilTime = lineEdit_boilTime->text().toDouble();
+
+   newBoilSize = recipeObs->batchSize_l() - kit->topUpWater_l() + kit->trubChillerLoss_l() + (boilTime/(double)60) * kit->evapRate_lHr();
+
+   // If we modify the boil time, we need to modify the boil size too.
+   recipeObs->setBoilTime_min(boilTime);
+   recipeObs->setBoilSize_l(newBoilSize);
 }
 
 void MainWindow::updateRecipeEfficiency()

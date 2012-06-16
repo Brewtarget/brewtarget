@@ -118,6 +118,7 @@ public slots:
    void updateRecipeEquipment();
    void updateRecipeBatchSize();
    void updateRecipeBoilSize();
+   void updateRecipeBoilTime();
    void updateRecipeEfficiency();
 
    void addFermentableToRecipe(Fermentable* ferm);
