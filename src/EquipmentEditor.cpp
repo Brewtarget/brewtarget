@@ -304,7 +304,10 @@ void EquipmentEditor::updateCheckboxRecord(int state)
 void EquipmentEditor::changedText()
 {
    Equipment* e = obsEquip;
-   changeText = (e->notes() != textEdit_notes->toPlainText());
+   if (obsEquip)
+   {
+      changeText = (e->notes() != textEdit_notes->toPlainText());
+   }
 }
 
 bool EquipmentEditor::eventFilter(QObject *object, QEvent* event)
@@ -315,7 +318,10 @@ bool EquipmentEditor::eventFilter(QObject *object, QEvent* event)
       textptr = qobject_cast<QTextEdit*>(object);
       if( textptr )
       {
-         obsEquip->setNotes(textptr->toPlainText());
+         if (obsEquip)
+         {
+            obsEquip->setNotes(textptr->toPlainText());
+         }
          changeText = false;
       }
    }
