@@ -76,11 +76,9 @@ QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
 
 Database::Database()
-   : //_thread( new QThread() ),
-     //_setterCommandStack( new SetterCommandStack(_thread) )
-   _setterCommandStack( new SetterCommandStack() ),
-   loadedFromXml(false),
-   tableModel(NULL)
+   : //_setterCommandStack( new SetterCommandStack() ),
+     loadedFromXml(false),
+     tableModel(NULL)
 {
    commandStack.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
@@ -119,7 +117,8 @@ Database::~Database()
    //QCoreApplication::processEvents();
    // Wait for _thread to join us.
    //_thread->wait();
-   delete _setterCommandStack;
+   
+   //delete _setterCommandStack;
    unload();
 }
 
@@ -1339,12 +1338,12 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
                                prop,
                                object,
                                notify);
-   
-   // Push the command on the undo stack for immediate execution.
-   //commandStack.push(command);
-   
+
    // Push onto custom stack.
-   _setterCommandStack->push(command);
+   //_setterCommandStack->push(command);
+   
+   // Just execute the damn thing.
+   command->redo();
 }
 
 // Add to recipe ==============================================================
@@ -2912,7 +2911,7 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
    BrewNote* ret = newBrewNote(parent);  
    fromXml( ret, BrewNote::tagToProp, node );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
 
    return ret;
 }
@@ -2922,7 +2921,7 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    Equipment* ret = newEquipment();
 
    fromXml( ret, Equipment::tagToProp, node );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
 
    if( parent )
       addToRecipe( parent, ret, true );
@@ -2944,7 +2943,7 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
                        n.firstChild().toText().nodeValue()
                     )
                  ) );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret, true );
    return ret;
@@ -3008,7 +3007,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 
    Hop* ret = newHop();
    fromXml( ret, Hop::tagToProp, node );
-  _setterCommandStack->flush();
+   //_setterCommandStack->flush();
   
    // Handle enums separately.
    n = node.firstChildElement("USE");
@@ -3032,7 +3031,7 @@ Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent 
    Instruction* ret = newInstruction(parent);
    
    fromXml( ret, Instruction::tagToProp, node );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    return ret;
 }
 
@@ -3047,7 +3046,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    
    // First, get all the standard properties.
    fromXml( ret, Mash::tagToProp, node );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    
    // Now, get the individual mash steps.
    n = node.firstChildElement("MASH_STEPS");
@@ -3075,7 +3074,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
                     )
                  ) );
    
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    return ret;
 }
 
@@ -3137,7 +3136,7 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    Misc* ret = newMisc();
    
    fromXml( ret, Misc::tagToProp, node );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -3157,7 +3156,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
   
    // Get standard properties.
    fromXml( ret, Recipe::tagToProp, node );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    
    // Get style. Note: styleFromXml requires the entire node, not just the
    // firstchild of the node.
@@ -3228,7 +3227,7 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
                     )
                  ) );
    
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret );
    return ret;
@@ -3270,7 +3269,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
                                n.firstChild().toText().nodeValue()
                             )
                          ) );
-   _setterCommandStack->flush();
+   //_setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret );
    return ret;

@@ -378,7 +378,7 @@ private slots:
 private:
    static Database* dbInstance; // The singleton object
    //QThread* _thread;
-   SetterCommandStack* _setterCommandStack;
+   //SetterCommandStack* _setterCommandStack;
    static QFile dbFile;
    static QString dbFileName;
    static QFile dataDbFile;

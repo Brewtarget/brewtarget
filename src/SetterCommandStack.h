@@ -34,6 +34,8 @@ class SetterCommand;
  *
  * \brief Collects SetterCommand commands together and periodically executes them in a single transaction.
  *
+ * This class is currently unused due to KISS.
+ *
  * This is analagous to QUndoStack, except it does not execute commands
  * immediately, but rather collects them together for a certain amount
  * of time, then combines and executes them. Its methods should also
