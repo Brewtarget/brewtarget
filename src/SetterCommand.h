@@ -24,6 +24,7 @@ class SetterCommand;
 #include <QMetaProperty>
 #include <QSqlRelationalTableModel>
 #include "BeerXMLElement.h"
+#include "brewtarget.h"
 
 /*!
  * \class SetterCommand
@@ -37,8 +38,7 @@ public:
    /*! A setter command that will set the entry specified by (table,key,col_name)
     * to value, and call prop's notify() method when done.
     */
-   SetterCommand( QSqlRelationalTableModel* table,
-                  const char* key_name,
+   SetterCommand( Brewtarget::DBTable table,
                   int key,
                   const char* col_name,
                   QVariant value,
@@ -58,7 +58,7 @@ public:
    virtual void undo();
    
 private:
-   QList<QSqlRelationalTableModel*> tables;
+   QList<Brewtarget::DBTable> tables;
    QList<QString> key_names;
    QList<int> keys;
    QList<QMetaProperty> props;
@@ -69,7 +69,7 @@ private:
    QList<bool> notify;
    
    //! Append a command to us.
-   void appendCommand( QSqlRelationalTableModel* table,
+   void appendCommand( Brewtarget::DBTable table,
                   QString const& key_name,
                   int key,
                   QString const& col_name,

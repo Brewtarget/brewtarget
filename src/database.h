@@ -27,7 +27,6 @@ class Database;
 #include <QHash>
 #include <QFile>
 #include <QString>
-#include <QSqlRelationalTableModel>
 #include <QSqlRecord>
 #include <QSqlQuery>
 #include <QVariant>
@@ -365,9 +364,6 @@ public:
    //! Get the file where this database was loaded from.
    static QString getDbFileName();
    
-   //! Get a const copy of a particular table model. Const so that no editing can take place outside the db.
-   const QSqlRelationalTableModel* getModel( Brewtarget::DBTable table );
-   
 signals:
    void changed(QMetaProperty prop, QVariant value);
    
@@ -421,24 +417,20 @@ private:
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
    {
-      int i, size, key;
+      int key;
       BeerXMLElement* e;
       T* et;
       
-      QSqlRelationalTableModel tm(0, sqlDatabase());//, sqldb);
-      tm.setTable(tableNames[table]);
-      tm.setFilter("");
-      tm.select();
+      QSqlQuery q(sqlDatabase());
+      q.setForwardOnly(true);
+      QString queryString = QString("SELECT `%1` FROM `%2`").arg(keyNames[table]).arg(tableNames[table]);
+      q.prepare( queryString );
+      q.exec();
       
-      while ( tm.canFetchMore() )
-         tm.fetchMore();
-
-      size = tm.rowCount();
-
-      for( i = 0; i < size; ++i )
+      while( q.next() )
       {
-         key = tm.record(i).value(keyNames[table]).toInt();
-
+         key = q.record().value(keyNames[table]).toInt();
+         
          e = new T();
          et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
          et->_key = key;
@@ -447,30 +439,32 @@ private:
          if( ! hash.contains(key) )
             hash.insert(key,et);
       }
+      
+      q.finish();
    }
    
    //! Helper to populate the list using the given filter.
    template <class T> void getElements( QList<T*>& list, QString filter, Brewtarget::DBTable table, QHash<int,T*> allElements )
    {
-      int i, size, key;
-      bool worked;
+      int key;
+      QSqlQuery q(sqlDatabase());
+      q.setForwardOnly(true);
+      QString queryString;
+      if( !filter.isEmpty() )
+         queryString = QString("SELECT `%1` FROM `%2` WHERE %3").arg(keyNames[table]).arg(tableNames[table]).arg(filter);
+      else
+         queryString = QString("SELECT `%1` FROM `%2`").arg(keyNames[table]).arg(tableNames[table]);
+      q.prepare( queryString );
+      q.exec();
       
-      QSqlRelationalTableModel tm(0, sqlDatabase());//, sqldb);
-      tm.setTable(tableNames[table]);
-      tm.setFilter(filter);
-      worked = tm.select();
-     
-      if ( !worked ) 
-         return;
-
-      list.clear();
-      size = tm.rowCount();
-      for( i = 0; i < size; ++i )
+      while( q.next() )
       {
-         key = tm.record(i).value(keyNames[table]).toInt();
+         key = q.record().value(keyNames[table]).toInt();
          if( allElements.contains(key) )
             list.append( allElements[key] );
       }
+      
+      q.finish();
    }
    
    /*! Populates the \b element with properties. This must be a class that
@@ -480,23 +474,6 @@ private:
     * \param elementNode is the root node of the element we are reading from.
     */
    void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode );
-   
-   // Model for all the tables in the db.
-   QSqlRelationalTableModel* tableModel;
-   // Models set to specific tables in the db.
-   QSqlRelationalTableModel* brewnotes_tm;
-   QSqlRelationalTableModel* equipments_tm;
-   QSqlRelationalTableModel* fermentables_tm;
-   QSqlRelationalTableModel* hops_tm;
-   QSqlRelationalTableModel* instructions_tm;
-   QSqlRelationalTableModel* mashs_tm;
-   QSqlRelationalTableModel* mashSteps_tm;
-   QSqlRelationalTableModel* miscs_tm;
-   QSqlRelationalTableModel* recipes_tm;
-   QSqlRelationalTableModel* styles_tm;
-   QSqlRelationalTableModel* waters_tm;
-   QSqlRelationalTableModel* yeasts_tm;
-   QHash<Brewtarget::DBTable,QSqlRelationalTableModel*> tables;
    
    //QUndoStack commandStack;
    
@@ -671,7 +648,7 @@ private:
                                     .arg(newValString)
                                     .arg(keyNames[t])
                                     .arg(newKey);
-      q = QSqlQuery( sqlDatabase() );//sqldb );
+      q = QSqlQuery( sqlDatabase() );
       q.prepare(updateString);
       q.exec();
       q.finish();
@@ -690,10 +667,10 @@ private:
    }
    
    //! Do an sql update.
-   void sqlUpdate( QString const& tableName, QString const& setClause, QString const& whereClause );
+   void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
    
    //! Do an sql delete.
-   void sqlDelete( QString const& tableName, QString const& whereClause );
+   void sqlDelete( Brewtarget::DBTable table, QString const& whereClause );
    
    int getQualifiedHopTypeIndex(QString type, Hop* hop);
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);

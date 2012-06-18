@@ -27,17 +27,17 @@
 #include "SetterCommand.h"
 #include "database.h"
 
-SetterCommand::SetterCommand( QSqlRelationalTableModel* table, const char* key_name, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
+SetterCommand::SetterCommand( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify)
    : QUndoCommand(QString("Change %1 to %2").arg(col_name).arg(value.toString()))
 {
-   appendCommand( table, key_name, key, col_name, value, prop, object, notify );
+   appendCommand( table, Database::keyNames[table], key, QString(col_name), value, prop, object, notify );
 }
 
 SetterCommand::~SetterCommand()
 {
 }
 
-void SetterCommand::appendCommand( QSqlRelationalTableModel* table,
+void SetterCommand::appendCommand( Brewtarget::DBTable table,
                   QString const& key_name,
                   int key,
                   QString const& col_name,
@@ -64,28 +64,36 @@ QList<QSqlQuery> SetterCommand::setterStatements()
    QList<QSqlQuery> ret;
    QString str;
    
-   int i, size;
-   size = tables.size();
-   if( size <= 0 )
-      return ret;
+   QList<Brewtarget::DBTable>::const_iterator tableIt, tableEnd;
+   QList<QString>::const_iterator colNameIt, keyNameIt;
+   QList<int>::const_iterator keyIt;
+   QList<QVariant>::const_iterator valueIt;
+   tableIt = tables.constBegin();
+   colNameIt = col_names.constBegin();
+   keyNameIt = key_names.constBegin();
+   keyIt = keys.constBegin();
+   valueIt = values.constBegin();
    
    // Construct the statements.
-   for( i = 0; i < size; ++i )
+   tableEnd = tables.constEnd();
+   while( tableIt != tableEnd )
    {
       QSqlQuery q( Database::sqlDatabase() );
-      str = QString("UPDATE `%1` SET `%2`= :value WHERE `%3`='%4'")
-                .arg(tables.at(i)->tableName())
-                .arg(col_names.at(i))
-                .arg(key_names.at(i))
-                .arg(keys.at(i));
       q.setForwardOnly(true); // Helps with speed/memory.
+      str = QString("UPDATE `%1` SET `%2`= :value WHERE `%3`='%4'")
+                .arg(Database::tableNames[*tableIt])
+                .arg(*colNameIt)
+                .arg(*keyNameIt)
+                .arg(*keyIt);
       q.prepare(str);
-      q.bindValue(":value",values[i]);
+      q.bindValue(":value",*valueIt);
       ret.append(q);
       
-      //qDebug() << "Value: " << values[i].toString();
-      //QVariant check = q.boundValues()[0];
-      //qDebug() << "Bound Value: " << check.toString();
+      ++tableIt;
+      ++colNameIt;
+      ++keyNameIt;
+      ++keyIt;
+      ++valueIt;
    }
    
    return ret;
@@ -95,25 +103,37 @@ QList<QSqlQuery> SetterCommand::undoStatements()
 {
    QList<QSqlQuery> ret;
    QString str;
-   int i, size;
-   
-   size = tables.size();
-   if( size <= 0 )
-      return ret;
+
+   QList<Brewtarget::DBTable>::const_iterator tableIt, tableEnd;
+   QList<QString>::const_iterator colNameIt, keyNameIt;
+   QList<int>::const_iterator keyIt;
+   QList<QVariant>::const_iterator oldValueIt;
+   tableIt = tables.constBegin();
+   colNameIt = col_names.constBegin();
+   keyNameIt = key_names.constBegin();
+   keyIt = keys.begin();
+   oldValueIt = oldValues.begin();
    
    // Construct the transaction string.
-   for( i = 0; i < size; ++i )
+   tableEnd = tables.constEnd();
+   while( tableIt != tableEnd )
    {
       QSqlQuery q( Database::sqlDatabase() );
-      str = QString("UPDATE `%1` SET `%2` = :oldValue WHERE `%3`='%4'")
-                .arg(tables.at(i)->tableName())
-                .arg(col_names.at(i))
-                .arg(key_names.at(i))
-                .arg(keys.at(i));
       q.setForwardOnly(true);
+      str = QString("UPDATE `%1` SET `%2` = :oldValue WHERE `%3`='%4'")
+                .arg(Database::tableNames[*tableIt])
+                .arg(*colNameIt)
+                .arg(*keyNameIt)
+                .arg(*keyIt);
       q.prepare(str);
-      q.bindValue(":oldValue",oldValues[i]);
+      q.bindValue(":oldValue",*oldValueIt);
       ret.append(q);
+      
+      ++tableIt;
+      ++colNameIt;
+      ++keyNameIt;
+      ++keyIt;
+      ++oldValueIt;
    }
    
    return ret;
@@ -122,34 +142,47 @@ QList<QSqlQuery> SetterCommand::undoStatements()
 void SetterCommand::oldValueTransaction()
 {
    QList<QSqlQuery> queries;
+   QList<QSqlQuery>::const_iterator qIt, qEnd;
    QString str;
+
+   QList<Brewtarget::DBTable>::const_iterator tableIt, tableEnd;
+   QList<QString>::const_iterator colNameIt, keyNameIt;
+   QList<int>::const_iterator keyIt;
+   QList<QVariant>::const_iterator oldValueIt;
+   tableIt = tables.constBegin();
+   colNameIt = col_names.constBegin();
+   keyNameIt = key_names.constBegin();
+   keyIt = keys.begin();
+   oldValueIt = oldValues.begin();
    
-   int i, size;
-   size = tables.size();
-   if( size <= 0 )
-      return;
-   
-   tables[0]->database().transaction();
-   for( i = 0; i < size; ++i )
+   tableEnd = tables.constEnd();
+   QSqlQuery transBegin("BEGIN TRANSACTION", Database::sqlDatabase());
+   while( tableIt != tableEnd )
    {
       QSqlQuery q( Database::sqlDatabase() );
-      str = QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
-                .arg(col_names.at(i))
-                .arg(tables.at(i)->tableName())
-                .arg(key_names.at(i))
-                .arg(keys.at(i));
       q.setForwardOnly(true);
+      str = QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
+                .arg(*colNameIt)
+                .arg(Database::tableNames[*tableIt])
+                .arg(*keyNameIt)
+                .arg(*keyIt);
       q.prepare(str);
       queries.append(q);
       q.exec();
+      ++tableIt;
+      ++colNameIt;
+      ++keyNameIt;
+      ++keyIt;
    }
-   tables[0]->database().commit();
+   QSqlQuery transCommit("COMMIT", Database::sqlDatabase());
    
-   for( i = 0; i < size; ++i )
+   qEnd = queries.constEnd();
+   oldValues.clear();
+   for( qIt = queries.constBegin(); qIt != qEnd; ++qIt )
    {
-      QSqlQuery q = queries[i];
+      QSqlQuery q = *qIt;
       if( q.next() )
-         oldValues[i] = q.record().value(0);
+         oldValues.append(q.record().value(0));
       else
          Brewtarget::logE( QString("SetterCommand::oldValueTransaction: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
@@ -208,16 +241,16 @@ void SetterCommand::redo()
    oldValueTransaction();
    
    // Set the new values.
-   tables[0]->database().transaction();
+   QSqlQuery transBegin("BEGIN TRANSACTION", Database::sqlDatabase());
    QList<QSqlQuery> queries = setterStatements();
-   size = queries.size();
-   for( i = 0; i < size; ++i )
+
+   foreach( QSqlQuery q, queries )
    {
-      if( ! queries[i].exec() )
-         Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(queries[i].lastError().text()).arg(queries[i].lastQuery()) );
+      if( ! q.exec() )
+         Brewtarget::logE( QString("SetterCommand::redo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
-   tables[0]->database().commit();
-   //qDebug() << "SetterCommand::redo()" << QThread::currentThread();
+   QSqlQuery transEnd("COMMIT", Database::sqlDatabase());
+   
    // Emit signals.
    for( i = 0; i < size; ++i )
    {
@@ -234,15 +267,15 @@ void SetterCommand::undo()
    size = tables.size();
    
    // Set back the old values.
-   tables[0]->database().transaction();
+   QSqlQuery transBegin("BEGIN TRANSACTION", Database::sqlDatabase());
    QList<QSqlQuery> queries = undoStatements();
-   size = queries.size();
-   for( i = 0; i < size; ++i )
+
+   foreach( QSqlQuery q, queries )
    {
-      if( ! queries[i].exec() )
-         Brewtarget::logE( QString("SetterCommand::undo: %1.\n   \"%2\"").arg(queries[i].lastError().text()).arg(queries[i].lastQuery()) );
+      if( ! q.exec() )
+         Brewtarget::logE( QString("SetterCommand::undo: %1.\n   \"%2\"").arg(q.lastError().text()).arg(q.lastQuery()) );
    }
-   tables[0]->database().commit();
+   QSqlQuery transEnd("COMMIT", Database::sqlDatabase());
    
    // Emit signals.
    for( i = 0; i < size; ++i )
