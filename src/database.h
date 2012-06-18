@@ -498,7 +498,7 @@ private:
    QSqlRelationalTableModel* yeasts_tm;
    QHash<Brewtarget::DBTable,QSqlRelationalTableModel*> tables;
    
-   QUndoStack commandStack;
+   //QUndoStack commandStack;
    
    //! Hidden constructor.
    Database();

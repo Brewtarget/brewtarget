@@ -80,7 +80,7 @@ Database::Database()
      loadedFromXml(false),
      tableModel(NULL)
 {
-   commandStack.setUndoLimit(100);
+   //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
    
@@ -774,17 +774,10 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 // Named constructors =========================================================
 
 int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
-{
-   // TODO: encapsulate this in a QUndoCommand so we can undo it.
-   /*
-   tableModel->setTable(tableNames[table]);
-   tableModel->insertRecord(-1,tableModel->record());
-   int key = tableModel->query().lastInsertId().toInt();
-   */
-   
+{   
    int key;
 
-   QSqlQuery q(sqlDatabase());//sqldb );
+   QSqlQuery q(sqlDatabase());
    q.exec( QString("INSERT INTO `%1` DEFAULT VALUES")
               .arg(tableNames[table])
          );
@@ -792,7 +785,7 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
    if( q.numRowsAffected() < 1 )
    {
       Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[table]) );
-      key = -1;
+      key = -42;
    }
    else
       key = q.lastInsertId().toInt();
@@ -816,7 +809,7 @@ int Database::insertNewMashStepRecord( Mash* parent )
    if( q.numRowsAffected() < 1 )
    {
       Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[Brewtarget::MASHSTEPTABLE]) );
-      key = -1;
+      key = -42;
    }
    else
       key = q.lastInsertId().toInt();
@@ -871,7 +864,6 @@ Equipment* Database::newEquipment()
    tmp->_key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
-   //emit changed( property("equipments"), allEquipments );
    emit changed( metaProperty("equipments"), QVariant() );
    return tmp;
 }
@@ -882,7 +874,6 @@ Equipment* Database::newEquipment(Equipment* other)
    tmp->_key = copy<Equipment>(other).value(keyNames[Brewtarget::EQUIPTABLE]).toInt();
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
-   //emit changed( property("equipments"), allEquipments );
    emit changed( metaProperty("equipments"), QVariant() );
    return tmp;
 }
@@ -1110,9 +1101,10 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
                          object,
                          true);
    // For now, immediately execute the command.
-   //command->redo();
+   command->redo();
+   
    // Push the command on the undo stack.
-   commandStack.push(command);
+   //commandStack.push(command);
 }
 
 void Database::removeEquipment(Equipment* equip)
