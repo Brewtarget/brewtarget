@@ -1629,6 +1629,9 @@ void MainWindow::dropEvent(QDropEvent *event)
    BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
    int type;
 
+   // Check that the recipe isn't a null pointer.
+   if (recipeObs == 0)
+      return;
 
    // If the sender cannot be morphed into a BrewTargetTreeView object
    if ( active == 0 )

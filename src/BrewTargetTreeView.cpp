@@ -208,8 +208,14 @@ QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes)
 {
    QMimeData *mimeData = new QMimeData();
    QByteArray encodedData;
-   QString name;
+   QString name = "";
    int type;
+
+   Fermentable *fermentable = 0;
+   Equipment *equipment = 0;
+   Hop *hop = 0;
+   Misc *misc = 0;
+   Yeast *yeast = 0;
 
    QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
@@ -221,19 +227,39 @@ QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes)
          switch(type)
          {
             case BrewTargetTreeItem::EQUIPMENT:
-               name = model->getEquipment(index)->name();
+               equipment = model->getEquipment(index);
+               if (equipment)
+               {
+                  name = equipment->name();
+               }
                break;
             case BrewTargetTreeItem::FERMENTABLE:
-               name = model->getFermentable(index)->name();
+               fermentable = model->getFermentable(index);
+               if (fermentable)
+               {
+                  name = fermentable->name();
+               }
                break;
             case BrewTargetTreeItem::HOP:
-               name = model->getHop(index)->name();
+               hop = model->getHop(index);
+               if (hop)
+               {
+                  name = hop->name();
+               }
                break;
             case BrewTargetTreeItem::MISC:
-               name = model->getMisc(index)->name();
+               misc = model->getMisc(index);
+               if (misc)
+               {
+                  name = misc->name();
+               }
                break;
             case BrewTargetTreeItem::YEAST:
-               name = model->getYeast(index)->name();
+               yeast = model->getYeast(index);
+               if (yeast)
+               {
+                  name = yeast->name();
+               }
                break;
             default:
                name = "";
