@@ -37,7 +37,7 @@
 #include <QDebug>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QtGui/QPushButton>
+#include <QPushButton>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -84,41 +84,11 @@ Database::Database()
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
    
-   //qDebug() << "Database::_thread" << _thread;
-   // qDebug() << "Main thread" << QThread::currentThread();
-   
-   /*
-   // All the functions and signals/slots should execute in _thread.
-   // NOTE: it is EXTREMELY important that all the sql operations use this thread.
-   moveToThread( _thread );
-   
-   // Doing it this way instead of just calling load() here ensures
-   // that load() runs in _thread, and not the thread that is calling
-   // the constructor, which potentially creates concurrency issues.
-   connect( _thread, SIGNAL(started()), this, SLOT(load()) );
-   
-   _thread->start();
-   */
-   
    loadWasSuccessful = load();
 }
 
 Database::~Database()
 {
-   // Tell the thread to stop. Destructing a running thread can result in a crash.
-   
-   // The following can cause race conditions. Have to be more delicate.
-   //_thread->quit();
-   
-   // Set up a call to quit from the calling thread to _thread.
-   //QTimer::singleShot( 0, _thread, SLOT(quit()) );
-   // Calling thread's event loop is probably stopped, so add an explicit call
-   // to execute the event.
-   //QCoreApplication::processEvents();
-   // Wait for _thread to join us.
-   //_thread->wait();
-   
-   //delete _setterCommandStack;
    unload();
 }
 
@@ -126,7 +96,6 @@ bool Database::load()
 {
    bool dbIsOpen;
    bool createFromScratch = false;
-   QSqlQuery q;
    
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
@@ -191,13 +160,12 @@ bool Database::load()
    _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
    _threadToConnectionMutex.unlock();
    
-   // NOTE: these two pragmas reduce --from-xml from 7min:15s to 1m:55s.
-   // Turn off database journaling for better speed.
-   QSqlQuery( "PRAGMA synchronous = off", sqlDatabase());//, sqldb );
-   QSqlQuery( "PRAGMA foreign_keys = on", sqlDatabase());//, sqldb );
-   QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqlDatabase());//, sqldb );
+   // NOTE: synchronous=off reduces query time by an order of magnitude!
+   QSqlQuery( "PRAGMA synchronous = off", sqlDatabase());
+   QSqlQuery( "PRAGMA foreign_keys = on", sqlDatabase());
+   QSqlQuery( "PRAGMA locking_mode = EXCLUSIVE", sqlDatabase());
    // Store temporary tables in memory.
-   QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());//, sqldb );
+   QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
    
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
@@ -221,65 +189,65 @@ bool Database::load()
    }
    
    // Set up the tables.
-   tableModel = new QSqlRelationalTableModel( 0, sqlDatabase());//, sqldb );
+   tableModel = new QSqlRelationalTableModel( 0, sqlDatabase());
    tables.clear();
    
-   brewnotes_tm = new QSqlRelationalTableModel( 0, sqlDatabase() ); //, sqldb );
+   brewnotes_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    brewnotes_tm->setTable(tableNames[Brewtarget::BREWNOTETABLE]);
    brewnotes_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::BREWNOTETABLE] = brewnotes_tm;
    
-   equipments_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   equipments_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    equipments_tm->setTable(tableNames[Brewtarget::EQUIPTABLE]);
    equipments_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::EQUIPTABLE] = equipments_tm;
    
-   fermentables_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   fermentables_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    fermentables_tm->setTable(tableNames[Brewtarget::FERMTABLE]);
    fermentables_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::FERMTABLE] = fermentables_tm;
    
-   hops_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   hops_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    hops_tm->setTable(tableNames[Brewtarget::HOPTABLE]);
    hops_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::HOPTABLE] = hops_tm;
    
-   instructions_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   instructions_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    instructions_tm->setTable(tableNames[Brewtarget::INSTRUCTIONTABLE]);
    instructions_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::INSTRUCTIONTABLE] = instructions_tm;
    
-   mashs_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   mashs_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    mashs_tm->setTable(tableNames[Brewtarget::MASHTABLE]);
    mashs_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::MASHTABLE] = mashs_tm;
    
-   mashSteps_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   mashSteps_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    mashSteps_tm->setTable(tableNames[Brewtarget::MASHSTEPTABLE]);
    mashSteps_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::MASHSTEPTABLE] = mashSteps_tm;
    
-   miscs_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   miscs_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    miscs_tm->setTable(tableNames[Brewtarget::MISCTABLE]);
    miscs_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::MISCTABLE] = miscs_tm;
    
-   recipes_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   recipes_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    recipes_tm->setTable(tableNames[Brewtarget::RECTABLE]);
    recipes_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::RECTABLE] = recipes_tm;
    
-   styles_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   styles_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    styles_tm->setTable(tableNames[Brewtarget::STYLETABLE]);
    styles_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::STYLETABLE] = styles_tm;
    
-   waters_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   waters_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    waters_tm->setTable(tableNames[Brewtarget::WATERTABLE]);
    waters_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::WATERTABLE] = waters_tm;
    
-   yeasts_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );//, sqldb );
+   yeasts_tm = new QSqlRelationalTableModel( 0, sqlDatabase() );
    yeasts_tm->setTable(tableNames[Brewtarget::YEASTTABLE]);
    yeasts_tm->setEditStrategy(QSqlTableModel::OnManualSubmit);
    tables[Brewtarget::YEASTTABLE] = yeasts_tm;
@@ -340,7 +308,6 @@ QSqlDatabase Database::sqlDatabase()
    //http://www.linuxjournal.com/article/9602
    
    QThread* t = QThread::currentThread();
-   //qDebug() << "sqlDatabase() " << t;
    
    _threadToConnectionMutex.lock();
    // If this thread already has a connection, return it.
@@ -377,13 +344,6 @@ void Database::unload()
    }
 
    qDeleteAll(tables);
-
-   /*
-   tableModel->deleteLater();
-   QHash<Brewtarget::DBTable,QSqlRelationalTableModel*>::iterator i;
-   for( i = tables.begin(); i != tables.end(); i++ )
-      (*i)->deleteLater();
-   */
    
    // Delete all the ingredients floating around.
    qDeleteAll(allBrewNotes);
@@ -438,10 +398,9 @@ void Database::unload()
 Database& Database::instance()
 {
    
-   /*** Not thread-safe
-   static Database dbSingleton;
-   return dbSingleton;
-   */
+   // Not thread-safe
+   //static Database dbSingleton;
+   //return dbSingleton;
    
    // This is not safe either. This is the double-check pattern that
    // avoids acquiring the lock unless we need to make a new instance.
@@ -1408,15 +1367,6 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )
    sqlUpdate(tableNames[Brewtarget::RECTABLE],
              QString("`mash_id`='%1'").arg(newKey),
              QString("`%1`='%2'").arg(keyNames[Brewtarget::RECTABLE]).arg(rec->_key));
-   /*
-   QSqlQuery q( QString("UPDATE %1 SET %2=%3 WHERE %4=%5")
-                .arg(tableNames[RECTABLE])
-                .arg("mash_id")
-                .arg(c.value("maid").toInt())
-                .arg("rid")
-                .arg(rec->_key),
-                sqldb );
-   */
    
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("mash"), QVariant() );
@@ -1485,7 +1435,6 @@ void Database::sqlUpdate( QString const& tableName, QString const& setClause, QS
                 .arg(setClause)
                 .arg(whereClause),
                 sqlDatabase());
-                //sqldb );
    q.finish();
 }
 
@@ -1495,7 +1444,6 @@ void Database::sqlDelete( QString const& tableName, QString const& whereClause )
                 .arg(tableName)
                 .arg(whereClause),
                 sqlDatabase());
-                //sqldb );
    q.finish();
 }
 
@@ -2954,7 +2902,7 @@ int Database::getQualifiedHopTypeIndex(QString type, Hop* hop)
   if ( Hop::types.indexOf(type) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT htype FROM hop WHERE name='%1' AND htype != ''").arg(hop->name()), sqlDatabase());//, sqldb);
+    QSqlQuery q(QString("SELECT htype FROM hop WHERE name='%1' AND htype != ''").arg(hop->name()), sqlDatabase());
     q.first();
     if ( q.isValid() )
     {
@@ -2982,7 +2930,7 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
   if ( Hop::uses.indexOf(use) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT use FROM hop WHERE name='%1' AND use != ''").arg(hop->name()), sqlDatabase());//, sqldb);
+    QSqlQuery q(QString("SELECT use FROM hop WHERE name='%1' AND use != ''").arg(hop->name()), sqlDatabase());
     q.first();
     if ( q.isValid() )
     {
@@ -3083,7 +3031,7 @@ int Database::getQualifiedMiscTypeIndex(QString type, Misc* misc)
   if ( Misc::types.indexOf(type) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT mtype FROM misc WHERE name='%1' AND mtype != ''").arg(misc->name()), sqlDatabase());//, sqldb);
+    QSqlQuery q(QString("SELECT mtype FROM misc WHERE name='%1' AND mtype != ''").arg(misc->name()), sqlDatabase());
     q.first();
     if ( q.isValid() )
     {
@@ -3111,7 +3059,7 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
   if ( Misc::uses.indexOf(use) < 0 )
   {
     // look for a valid hop type from our database to use
-    QSqlQuery q(QString("SELECT use FROM misc WHERE name='%1' AND use != ''").arg(misc->name()), sqlDatabase());//, sqldb);
+    QSqlQuery q(QString("SELECT use FROM misc WHERE name='%1' AND use != ''").arg(misc->name()), sqlDatabase());
     q.first();
     if ( q.isValid() )
     {
