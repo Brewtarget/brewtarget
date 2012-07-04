@@ -26,15 +26,15 @@
         <file>images/clock.svg</file>
         <file>css/brewday.css</file>
         <file>css/recipe.css</file>
-        <file>images/btFlagCatalonia.png</file>
-        <file>images/flagFrance.png</file>
-        <file>images/flagGermany.png</file>
-        <file>images/flagPoland.png</file>
-        <file>images/flagPortugal.png</file>
-        <file>images/flagNetherlands.png</file>
-        <file>images/flagSpain.png</file>
-        <file>images/flagUK.png</file>
-        <file>images/flagCzech.png</file>
+        <file>images/flagCatalonia.svg</file>
+        <file>images/flagFrance.svg</file>
+        <file>images/flagGermany.svg</file>
+        <file>images/flagPoland.svg</file>
+        <file>images/flagPortugal.svg</file>
+        <file>images/flagNetherlands.svg</file>
+        <file>images/flagSpain.svg</file>
+        <file>images/flagUK.svg</file>
+        <file>images/flagCzech.svg</file>
         <file>images/server-database.png</file>
         <file>images/printer.png</file>
         <file>images/merge.png</file>

@@ -390,7 +390,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagCzech.png</normaloff>:/images/flagCzech.png</iconset>
+             <normaloff>:/images/flagCzech.svg</normaloff>:/images/flagCzech.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -413,7 +413,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagGermany.png</normaloff>:/images/flagGermany.png</iconset>
+             <normaloff>:/images/flagGermany.svg</normaloff>:/images/flagGermany.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -436,7 +436,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagUK.png</normaloff>:/images/flagUK.png</iconset>
+             <normaloff>:/images/flagUK.svg</normaloff>:/images/flagUK.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -466,7 +466,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagSpain.png</normaloff>:/images/flagSpain.png</iconset>
+             <normaloff>:/images/flagSpain.svg</normaloff>:/images/flagSpain.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -489,7 +489,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagFrance.png</normaloff>:/images/flagFrance.png</iconset>
+             <normaloff>:/images/flagFrance.svg</normaloff>:/images/flagFrance.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -512,7 +512,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagNetherlands.png</normaloff>:/images/flagNetherlands.png</iconset>
+             <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -542,7 +542,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/btFlagCatalonia.png</normaloff>:/images/btFlagCatalonia.png</iconset>
+             <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -565,7 +565,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagPoland.png</normaloff>:/images/flagPoland.png</iconset>
+             <normaloff>:/images/flagPoland.svg</normaloff>:/images/flagPoland.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -588,7 +588,7 @@
            </property>
            <property name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagPortugal.png</normaloff>:/images/flagPortugal.png</iconset>
+             <normaloff>:/images/flagPortugal.svg</normaloff>:/images/flagPortugal.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
