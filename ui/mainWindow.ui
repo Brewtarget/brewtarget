@@ -1904,6 +1904,9 @@
    <property name="text">
     <string>About &amp;BrewTarget</string>
    </property>
+   <property name="toolTip">
+    <string>About Brewtarget</string>
+   </property>
   </action>
   <action name="actionExportRecipe">
    <property name="icon">
@@ -2017,6 +2020,10 @@
    </property>
   </action>
   <action name="actionManual">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/help-contents.png</normaloff>:/images/help-contents.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Manual</string>
    </property>
