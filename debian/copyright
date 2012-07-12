@@ -33,22 +33,22 @@ Copyright: 2009-2012, Philip G. Lee <rocketman768@gmail.com>
            2009-2010, Eric Tamme
 License: WTFPL-2
 
-Files: images/flag*
+Files: images/flag* images/bubbles.svg images/convert.svg
+       images/clipboard.svg images/refractometer.svg
+       images/restore.svg
 Copyright: 2012, Philip G. Lee <rocketman768@gmail.com>
 License: WTFPL-2
 
 Files: images/edit-copy.png images/document-print-preview.png
-       images/merge.png images/printer.png images/server-database.png
+       images/merge.png images/preferences-other.png
+       images/printer.png images/server-database.png
+       images/kbruch.png
 Copyright: David Vignoni et al. <www.oxygen-icons.org>
 License: CC-BY-SA-3.0 or LGPL-3.0
 
 Files: images/backup.png
 Copyright: David Vignoni <www.icon-king.com/projects/nuvola>
 License: LGPL-2.1
-
-Files: images/restore.svg
-Copyright: 2012, Philip G. Lee <rocketman768@gmail.com>
-License: WTFPL-2
 
 License: GPL-3
     This package is free software; you can redistribute it and/or modify

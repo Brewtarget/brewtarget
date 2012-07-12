@@ -1,8 +1,15 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/glass2.png</file>
         <file>images/brewtarget_icon.svg</file>
+        <file>images/bubbles.svg</file>
+        <file>images/clipboard.svg</file>
+        <file>images/convert.svg</file>
         <file>images/donate.svg</file>
+        <file>images/glass2.png</file>
+        <file>images/hydrometer.svg</file>
+        <file>images/kbruch.png</file>
+        <file>images/preferences-other.png</file>
+        <file>images/refractometer.svg</file>
         <file>images/smallBarley.svg</file>
         <file>images/smallWater.svg</file>
         <file>images/smallHop.svg</file>

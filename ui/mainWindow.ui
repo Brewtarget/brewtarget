@@ -2008,6 +2008,10 @@
    </property>
   </action>
   <action name="actionOptions">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/preferences-other.png</normaloff>:/images/preferences-other.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Options</string>
    </property>
@@ -2018,11 +2022,19 @@
    </property>
   </action>
   <action name="actionScale_Recipe">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/kbruch.png</normaloff>:/images/kbruch.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Scale Recipe</string>
    </property>
   </action>
   <action name="action_recipeToTextClipboard">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/clipboard.svg</normaloff>:/images/clipboard.svg</iconset>
+   </property>
    <property name="text">
     <string>Recipe to Clipboard as &amp;Text</string>
    </property>
@@ -2033,6 +2045,10 @@
    </property>
   </action>
   <action name="actionConvert_Units">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/convert.svg</normaloff>:/images/convert.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;Convert Units</string>
    </property>
@@ -2057,11 +2073,19 @@
    </property>
   </action>
   <action name="actionPriming_Calculator">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/bubbles.svg</normaloff>:/images/bubbles.svg</iconset>
+   </property>
    <property name="text">
     <string>Pr&amp;iming Calculator</string>
    </property>
   </action>
   <action name="actionRefractometer_Tools">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/refractometer.svg</normaloff>:/images/refractometer.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;Refractometer Tools</string>
    </property>
