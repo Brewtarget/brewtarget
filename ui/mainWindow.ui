@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>758</width>
-           <height>388</height>
+           <width>657</width>
+           <height>411</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1198,7 +1198,7 @@
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_9">
                    <item>
-                    <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
+                    <widget class="BeerColorWidget" name="beerColorWidget"/>
                    </item>
                   </layout>
                  </widget>
@@ -1229,7 +1229,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
               </item>
              </layout>
             </widget>
@@ -1239,7 +1239,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
               </item>
              </layout>
             </widget>
@@ -1257,8 +1257,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>758</width>
-           <height>329</height>
+           <width>657</width>
+           <height>321</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1781,7 +1781,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>30</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2178,7 +2178,7 @@
   <action name="actionRestore_Database">
    <property name="icon">
     <iconset resource="../brewtarget.qrc">
-     <normaloff>:/images/restore.png</normaloff>:/images/restore.png</iconset>
+     <normaloff>:/images/restore.svg</normaloff>:/images/restore.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Restore</string>
@@ -2278,6 +2278,11 @@
    <header>BrewDayScrollWidget.h</header>
   </customwidget>
   <customwidget>
+   <class>RecipeExtrasWidget</class>
+   <extends>QWidget</extends>
+   <header>RecipeExtrasWidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
    <header>CustomComboBox.h</header>
@@ -2286,11 +2291,6 @@
    <class>EquipmentButton</class>
    <extends>QPushButton</extends>
    <header>EquipmentButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>RecipeExtrasWidget</class>
-   <extends>QWidget</extends>
-   <header>RecipeExtrasWidget.h</header>
   </customwidget>
   <customwidget>
    <class>BtDigitWidget</class>
