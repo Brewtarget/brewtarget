@@ -42,7 +42,7 @@ License: WTFPL-2
 Files: images/edit-copy.png images/document-print-preview.png
        images/merge.png images/preferences-other.png
        images/printer.png images/server-database.png
-       images/kbruch.png
+       images/kbruch.png images/help-contents.png
 Copyright: David Vignoni et al. <www.oxygen-icons.org>
 License: CC-BY-SA-3.0 or LGPL-3.0
 
