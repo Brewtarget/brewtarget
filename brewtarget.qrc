@@ -1,16 +1,38 @@
 <RCC>
     <qresource prefix="/">
+        <file>images/backup.png</file>
         <file>images/brewtarget_icon.svg</file>
         <file>images/bubbles.svg</file>
         <file>images/clipboard.svg</file>
+        <file>images/clock.svg</file>
         <file>images/convert.svg</file>
+        <file>images/document-export.png</file>
+        <file>images/document-print-preview.png</file>
         <file>images/donate.svg</file>
+        <file>images/edit.svg</file>
+        <file>images/editshred.svg</file>
+        <file>images/edit-copy.png</file>
+        <file>images/exit.svg</file>
+        <file>images/filesave.svg</file>
+        <file>images/flagCatalonia.svg</file>
+        <file>images/flagFrance.svg</file>
+        <file>images/flagGermany.svg</file>
+        <file>images/flagPoland.svg</file>
+        <file>images/flagPortugal.svg</file>
+        <file>images/flagNetherlands.svg</file>
+        <file>images/flagSpain.svg</file>
+        <file>images/flagUK.svg</file>
+        <file>images/flagCzech.svg</file>
         <file>images/glass2.png</file>
         <file>images/help-contents.png</file>
         <file>images/hydrometer.svg</file>
         <file>images/kbruch.png</file>
+        <file>images/merge.png</file>
         <file>images/preferences-other.png</file>
+        <file>images/printer.png</file>
         <file>images/refractometer.svg</file>
+        <file>images/restore.svg</file>
+        <file>images/server-database.png</file>
         <file>images/smallBarley.svg</file>
         <file>images/smallWater.svg</file>
         <file>images/smallHop.svg</file>
@@ -24,33 +46,12 @@
         <file>images/smallDownArrow.svg</file>
         <file>images/smallInfo.svg</file>
         <file>images/smallOutArrow.svg</file>
-        <file>images/editshred.svg</file>
-        <file>images/exit.svg</file>
-        <file>images/filesave.svg</file>
+        <file>images/yeastVial.svg</file>
         <file>images/smallMinus.svg</file>
-        <file>images/edit.svg</file>
         <file>images/title.svg</file>
         <file>images/title.png</file>
-        <file>images/clock.svg</file>
         <file>css/brewday.css</file>
         <file>css/recipe.css</file>
-        <file>images/flagCatalonia.svg</file>
-        <file>images/flagFrance.svg</file>
-        <file>images/flagGermany.svg</file>
-        <file>images/flagPoland.svg</file>
-        <file>images/flagPortugal.svg</file>
-        <file>images/flagNetherlands.svg</file>
-        <file>images/flagSpain.svg</file>
-        <file>images/flagUK.svg</file>
-        <file>images/flagCzech.svg</file>
-        <file>images/server-database.png</file>
-        <file>images/printer.png</file>
-        <file>images/merge.png</file>
-        <file>images/restore.svg</file>
-        <file>images/edit-copy.png</file>
-        <file>images/document-print-preview.png</file>
-        <file>images/document-export.png</file>
-        <file>images/backup.png</file>
         <file>create_db.sql</file>
         <file>blankdb.sqlite</file>
     </qresource>

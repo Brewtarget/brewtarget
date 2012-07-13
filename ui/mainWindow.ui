@@ -2098,6 +2098,10 @@
    </property>
   </action>
   <action name="actionPitch_Rate_Calculator">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/yeastVial.svg</normaloff>:/images/yeastVial.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;Pitch Rate Calculator</string>
    </property>
