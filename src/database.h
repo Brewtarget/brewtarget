@@ -678,6 +678,10 @@ private:
 
    // Cleans up the backup database if it was leftover from an error.
    bool cleanupBackupDatabase();
+   
+   // Updates the brewtarget-provided ingredients from the given sqlite
+   // database file.
+   void updateDatabase(QString const& filename);
 };
 
 #endif   /* _DATABASE_H */

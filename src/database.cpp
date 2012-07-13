@@ -179,7 +179,7 @@ bool Database::load()
          == QMessageBox::Yes
          )
       {
-         // TODO: implement merging here.
+         updateDatabase(dataDbFile.fileName());
       }
       
       // Update this field.
@@ -3184,3 +3184,30 @@ bool Database::cleanupBackupDatabase()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void Database::updateDatabase(QString const& filename)
+{
+   QString newCon("newSqldbCon");
+   QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
+   newSqldb.setDatabaseName(dbFileName);
+   if( ! newSqldb.open() )
+   {
+      Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(filename).arg(newSqldb.lastError().text()));
+      QMessageBox::critical(0,
+                            QObject::tr("Database Failure"),
+                            QString(QObject::tr("Failed to open the database '%1'.").arg(filename)));
+      return;
+   }
+   
+   // For each (id, hop_id) in newSqldb.bt_hop...
+   
+   // Call this newRecord
+   // SELECT * FROM newSqldb.hop WHERE id=<hop_id>
+   
+   // UPDATE hop SET name=:name, alpha=:alpha,... WHERE id=(SELECT hop_id FROM bt_hop WHERE id=:bt_id)
+   
+   // Bind :bt_id from <id>
+   // Bind :name, :alpha, ..., from newRecord.
+   
+   // Execute.
+}
