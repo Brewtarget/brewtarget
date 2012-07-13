@@ -103,8 +103,8 @@ public:
    //! Get the contents of the cell specified by table/key/col_name. Mostly for BeerXMLElement.
    inline QVariant get( Brewtarget::DBTable table, int key, const char* col_name ) __attribute__((always_inline))
    {
-      QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
-                   .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key),
+      QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE id='%3'")
+                   .arg(col_name).arg(tableNames[table]).arg(key),
                    sqlDatabase()
                  );
                    
@@ -386,8 +386,6 @@ private:
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
    static QHash<QString,Brewtarget::DBTable> classNameToTable;
    static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
-   static QHash<Brewtarget::DBTable,QString> keyNames;
-   static QHash<Brewtarget::DBTable,QString> keyNamesHash();
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
    
    // Keeps all pointers to the elements referenced by key.
@@ -423,13 +421,13 @@ private:
       
       QSqlQuery q(sqlDatabase());
       q.setForwardOnly(true);
-      QString queryString = QString("SELECT `%1` FROM `%2`").arg(keyNames[table]).arg(tableNames[table]);
+      QString queryString = QString("SELECT id FROM `%1`").arg(tableNames[table]);
       q.prepare( queryString );
       q.exec();
       
       while( q.next() )
       {
-         key = q.record().value(keyNames[table]).toInt();
+         key = q.record().value("id").toInt();
          
          e = new T();
          et = qobject_cast<T*>(e); // Do this casting from BeerXMLElement* to T* to avoid including BeerXMLElement.h, causing circular inclusion.
@@ -451,15 +449,15 @@ private:
       q.setForwardOnly(true);
       QString queryString;
       if( !filter.isEmpty() )
-         queryString = QString("SELECT `%1` FROM `%2` WHERE %3").arg(keyNames[table]).arg(tableNames[table]).arg(filter);
+         queryString = QString("SELECT id FROM `%1` WHERE %2").arg(tableNames[table]).arg(filter);
       else
-         queryString = QString("SELECT `%1` FROM `%2`").arg(keyNames[table]).arg(tableNames[table]);
+         queryString = QString("SELECT id FROM `%1`").arg(tableNames[table]);
       q.prepare( queryString );
       q.exec();
       
       while( q.next() )
       {
-         key = q.record().value(keyNames[table]).toInt();
+         key = q.record().value("id").toInt();
          if( allElements.contains(key) )
             list.append( allElements[key] );
       }
@@ -546,8 +544,7 @@ private:
       if ( ! initialLoad ) 
       {
          r = copy<T>(ing, false, keyHash);
-         Brewtarget::DBTable t = classNameToTable[ing->metaObject()->className()];
-         newKey = r.value(keyNames[t]).toInt();
+         newKey = r.value("id").toInt();
       }
       else 
       {
@@ -603,8 +600,8 @@ private:
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
       QString tName = tableNames[t];
       
-      QSqlQuery q(QString("SELECT * FROM %1 WHERE %2 = %3")
-                  .arg(tName).arg(keyNames[t]).arg(object->_key),
+      QSqlQuery q(QString("SELECT * FROM %1 WHERE id = %2")
+                  .arg(tName).arg(object->_key),
                   sqlDatabase()
                  );
       
@@ -619,8 +616,8 @@ private:
       
       // Create a new row.
       newKey = insertNewDefaultRecord(t);
-      q = QSqlQuery( QString("SELECT * FROM %1 WHERE %2 = %3")
-                     .arg(tName).arg(keyNames[t]).arg(newKey),
+      q = QSqlQuery( QString("SELECT * FROM %1 WHERE id = %2")
+                     .arg(tName).arg(newKey),
                      sqlDatabase()
                    );
       q.next();
@@ -636,17 +633,16 @@ private:
             newValString += QString("`parent` = '%2',").arg(object->_key);      
          else if( oldRecord.fieldName(i) == "display" )
             newValString += QString("`display` = %2,").arg( displayed ? 1 : 0 );
-         else if ( oldRecord.fieldName(i) != keyNames[t] )
+         else if ( oldRecord.fieldName(i) != "id" )
             newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
       }
       
       // Remove last comma.
       newValString.chop(1);
       
-      QString updateString = QString("UPDATE `%1` SET %2 WHERE `%3` = '%4'")
+      QString updateString = QString("UPDATE `%1` SET %2 WHERE id = '%3'")
                                     .arg(tName)
                                     .arg(newValString)
-                                    .arg(keyNames[t])
                                     .arg(newKey);
       q = QSqlQuery( sqlDatabase() );
       q.prepare(updateString);

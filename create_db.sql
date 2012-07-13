@@ -1,5 +1,5 @@
 create table equipment(
-   eid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    boil_size real DEFAULT 0.0,
    batch_size real DEFAULT 0.0,
@@ -24,7 +24,7 @@ create table equipment(
 );
 
 create table fermentable(
-   fid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    ftype varchar(32) DEFAULT 'Grain',
    amount real DEFAULT 0.0,
@@ -50,7 +50,7 @@ create table fermentable(
 );
 
 create table hop(
-   hid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    alpha real DEFAULT 0.0,
    amount real DEFAULT 0.0,
@@ -75,7 +75,7 @@ create table hop(
 );
 
 create table misc(
-   mid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    mtype varchar(32) DEFAULT 'Other',
    use varchar(32) DEFAULT 'Boil',
@@ -93,7 +93,7 @@ create table misc(
 );
 
 create table style(
-   sid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    s_type varchar(64) DEFAULT 'Ale',
    category varchar(256) DEFAULT '',
@@ -122,7 +122,7 @@ create table style(
 );
 
 create table yeast(
-   yid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    ytype varchar(32) DEFAULT 'Ale',
    form varchar(32) DEFAULT 'Liquid',
@@ -150,7 +150,7 @@ create table yeast(
 
 -- unlike some of the other tables, you can have a mash with no name.
 create table mash(
-   maid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) DEFAULT '',
    grain_temp real DEFAULT 20.0,
    notes text DEFAULT '',
@@ -165,7 +165,7 @@ create table mash(
 );
 
 create table mashstep(
-   msid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    mstype varchar(32) DEFAULT 'Infusion',
    infuse_amount real DEFAULT 0.0,
@@ -226,11 +226,11 @@ create table brewnote(
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1,
    recipe_id integer,
-   foreign key(recipe_id) references recipe(rid)
+   foreign key(recipe_id) references recipe(id)
 );
 
 create table water(
-   wid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    amount real DEFAULT 0.0,
    calcium real DEFAULT 0.0,
@@ -248,7 +248,7 @@ create table water(
 
 -- instructions are many-to-one for recipes. 
 create table instruction(
-   iid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    directions text DEFAULT '',
    hasTimer boolean DEFAULT 0,
@@ -260,7 +260,7 @@ create table instruction(
    recipe_id integer,
    -- The order of this instruction in the recipe.
    instruction_number integer default 0,
-   foreign key(recipe_id) references recipe(rid),
+   foreign key(recipe_id) references recipe(id),
    unique(recipe_id,instruction_number)
 );
 
@@ -277,7 +277,7 @@ END;
 -- equipment. It just makes most sense for the recipe to carry that around
 -- instead of using another table
 create table recipe(
-   rid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
    type varchar(32) DEFAULT 'All Grain',
    brewer varchar(1024) DEFAULT '',
@@ -312,112 +312,112 @@ create table recipe(
    style_id integer,
    mash_id integer,
    equipment_id integer,
-   foreign key(style_id) references style(sid),
-   foreign key(mash_id) references mash(maid),
-   foreign key(equipment_id) references equipment(eid)
+   foreign key(style_id) references style(id),
+   foreign key(mash_id) references mash(id),
+   foreign key(equipment_id) references equipment(id)
 );
 
 create table fermentable_in_recipe(
-   hrid integer primary key autoincrement,
+   id integer primary key autoincrement,
    fermentable_id integer,
    recipe_id integer,
-   foreign key(fermentable_id) references fermentable(fid),
-   foreign key(recipe_id) references recipe(rid)
+   foreign key(fermentable_id) references fermentable(id),
+   foreign key(recipe_id) references recipe(id)
 );
 
 create table hop_in_recipe(
-   hrid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    hop_id integer,
    recipe_id integer,
-   foreign key(hop_id) references hop(hid),
-   foreign key(recipe_id) references recipe(rid)
+   foreign key(hop_id) references hop(id),
+   foreign key(recipe_id) references recipe(id)
 );
 
 create table misc_in_recipe(
-   mrid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    misc_id integer,
    recipe_id integer,
-   foreign key(misc_id) references misc(mid),
-   foreign key(recipe_id) references recipe(rid)
+   foreign key(misc_id) references misc(id),
+   foreign key(recipe_id) references recipe(id)
 );
 
 create table water_in_recipe(
-   wrid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    water_id integer,
    recipe_id integer,
-   foreign key(water_id) references water(wid),
-   foreign key(recipe_id) references recipe(rid)
+   foreign key(water_id) references water(id),
+   foreign key(recipe_id) references recipe(id)
 );
 
 create table yeast_in_recipe(
-   yrid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    yeast_id integer,
    recipe_id integer,
-   foreign key(yeast_id) references yeast(yid),
-   foreign key(recipe_id) references recipe(rid)
+   foreign key(yeast_id) references yeast(id),
+   foreign key(recipe_id) references recipe(id)
 );
 
 create table equipment_children(
-   ecid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references equipment(eid),
-   foreign key(child_id)  references equipment(eid)
+   foreign key(parent_id) references equipment(id),
+   foreign key(child_id)  references equipment(id)
 );
 
 create table fermentable_children(
-   fcid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references fermentable(fid),
-   foreign key(child_id)  references fermentable(fid)
+   foreign key(parent_id) references fermentable(id),
+   foreign key(child_id)  references fermentable(id)
 );
 
 create table hop_children(
-   hcid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references hop(hid),
-   foreign key(child_id)  references hop(hid)
+   foreign key(parent_id) references hop(id),
+   foreign key(child_id)  references hop(id)
 );
 
 create table misc_children(
-   mcid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references misc(mid),
-   foreign key(child_id)  references misc(mid)
+   foreign key(parent_id) references misc(id),
+   foreign key(child_id)  references misc(id)
 );
 
 create table recipe_children(
-   rcid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references recipe(rid),
-   foreign key(child_id)  references recipe(rid)
+   foreign key(parent_id) references recipe(id),
+   foreign key(child_id)  references recipe(id)
 );
 
 create table style_children(
-   scid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references style(sid),
-   foreign key(child_id)  references style(sid)
+   foreign key(parent_id) references style(id),
+   foreign key(child_id)  references style(id)
 );
 
 create table water_children(
-   wcid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references water(wid),
-   foreign key(child_id)  references water(wid)
+   foreign key(parent_id) references water(id),
+   foreign key(child_id)  references water(id)
 );
 
 create table yeast_children(
-   ycid integer PRIMARY KEY autoincrement,
+   id integer PRIMARY KEY autoincrement,
    parent_id integer,
    child_id integer,
-   foreign key(parent_id) references yeast(yid),
-   foreign key(child_id)  references yeast(yid)
+   foreign key(parent_id) references yeast(id),
+   foreign key(child_id)  references yeast(id)
 );
 

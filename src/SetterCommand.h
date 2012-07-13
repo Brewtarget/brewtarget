@@ -59,7 +59,6 @@ public:
    
 private:
    QList<Brewtarget::DBTable> tables;
-   QList<QString> key_names;
    QList<int> keys;
    QList<QMetaProperty> props;
    QList<QString> col_names;
@@ -70,7 +69,6 @@ private:
    
    //! Append a command to us.
    void appendCommand( Brewtarget::DBTable table,
-                  QString const& key_name,
                   int key,
                   QString const& col_name,
                   QVariant value,

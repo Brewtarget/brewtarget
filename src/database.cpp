@@ -70,7 +70,6 @@ QString Database::dbTempBackupFileName;
 QString Database::dbConName;
 QHash<Brewtarget::DBTable,QString> Database::tableNames = Database::tableNamesHash();
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable = Database::classNameToTableHash();
-QHash<Brewtarget::DBTable,QString> Database::keyNames = Database::keyNamesHash();
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
@@ -436,7 +435,7 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
    // Just mark the brew note as deleted.
    sqlUpdate( Brewtarget::BREWNOTETABLE,
               "deleted=1",
-              QString("%1=%2").arg(keyNames[Brewtarget::BREWNOTETABLE]).arg(b->_key) );
+              QString("id=%1").arg(b->_key) );
 }
 
 void Database::removeFromRecipe( Recipe* rec, Hop* hop )
@@ -473,7 +472,7 @@ void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
    // NOTE: is this the right thing to do?
    sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
               "deleted=1",
-              QString("%1=%2").arg(keyNames[Brewtarget::INSTRUCTIONTABLE]).arg(ins->_key) );
+              QString("id=%1").arg(ins->_key) );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -482,7 +481,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
    // Just mark the step as deleted.
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
               "deleted=1",
-              QString("%1=%2").arg(keyNames[Brewtarget::MASHSTEPTABLE]).arg(step->_key) );
+              QString("id=%1").arg(step->_key) );
    emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
 }
 
@@ -563,9 +562,8 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 void Database::insertInstruction(Instruction* in, int pos)
 {
    int parentRecipeKey;
-   QSqlQuery q( QString("SELECT recipe_id FROM %1 WHERE %2=%3")
+   QSqlQuery q( QString("SELECT recipe_id FROM %1 WHERE id=%2")
                    .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
-                   .arg(keyNames[Brewtarget::INSTRUCTIONTABLE])
                    .arg(in->_key),
                 sqlDatabase());//sqldb);
    q.next();
@@ -582,7 +580,7 @@ void Database::insertInstruction(Instruction* in, int pos)
    // Change in's position to pos.
    sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
               QString("instruction_number=%1").arg(pos),
-              QString("%1=%2").arg(keyNames[Brewtarget::INSTRUCTIONTABLE]).arg(in->_key) );
+              QString("id=%1").arg(in->_key) );
 
    // emit changed
    emit in->changed( in->metaProperty("instructionNumber"), pos );
@@ -591,14 +589,13 @@ void Database::insertInstruction(Instruction* in, int pos)
 QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 {
    QList<BrewNote*> ret;
-   QString queryString = QString("SELECT %1 FROM %2 WHERE recipe_id = %3")
-                            .arg(keyNames[Brewtarget::BREWNOTETABLE])
+   QString queryString = QString("SELECT id FROM %1 WHERE recipe_id = %2")
                             .arg(tableNames[Brewtarget::BREWNOTETABLE])
                             .arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase());//, sqldb );
    
    while( q.next() )
-      ret.append(allBrewNotes[q.record().value(keyNames[Brewtarget::BREWNOTETABLE]).toInt()]);
+      ret.append(allBrewNotes[q.record().value("id").toInt()]);
    q.finish();
    
    return ret;
@@ -647,15 +644,14 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
    QSqlQuery q( sqlDatabase() );
-   q.prepare( QString("SELECT %1 FROM %2 WHERE mash_id = %3 AND `deleted`='0'")
-              .arg(keyNames[Brewtarget::MASHSTEPTABLE])
+   q.prepare( QString("SELECT id FROM %1 WHERE mash_id = %2 AND `deleted`='0'")
               .arg(tableNames[Brewtarget::MASHSTEPTABLE])
               .arg(parent->_key) );
    q.exec();
    
    while( q.next() )
    {
-      ret.append(allMashSteps[q.record().value(keyNames[Brewtarget::MASHSTEPTABLE].toStdString().c_str()).toInt()]);
+      ret.append(allMashSteps[q.record().value("id").toInt()]);
    }
    q.finish();
    
@@ -665,14 +661,13 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
 QList<Instruction*> Database::instructions( Recipe const* parent )
 {
    QList<Instruction*> ret;
-   QString queryString = QString("SELECT %1 FROM %2 WHERE recipe_id = %3 ORDER BY instruction_number ASC")
-                            .arg(keyNames[Brewtarget::INSTRUCTIONTABLE])
+   QString queryString = QString("SELECT id FROM %1 WHERE recipe_id = %2 ORDER BY instruction_number ASC")
                             .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
                             .arg(parent->_key);
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
    
    while( q.next() )
-      ret.append(allInstructions[q.record().value(keyNames[Brewtarget::INSTRUCTIONTABLE].toStdString().c_str()).toInt()]);
+      ret.append(allInstructions[q.record().value("id").toInt()]);
    q.finish();
    
    return ret;
@@ -751,14 +746,13 @@ int Database::insertNewMashStepRecord( Mash* parent )
    // I *think* we need to set the mash_id first
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
               QString("`mash_id`='%1' ").arg(parent->_key),
-              QString("`%1`='%2'").arg(keyNames[Brewtarget::MASHSTEPTABLE]).arg(key)
+              QString("id='%1'").arg(key)
             );
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString( "`step_number` = (SELECT MAX(`step_number`)+1 FROM `%1` WHERE `%2`='%3' )")
+              QString( "`step_number` = (SELECT MAX(`step_number`)+1 FROM `%1` WHERE id='%2' )")
                       .arg(tableNames[Brewtarget::MASHSTEPTABLE])
-                      .arg(keyNames[Brewtarget::MASHSTEPTABLE])
                       .arg(parent->_key),
-              QString("`%1`='%2'").arg(keyNames[Brewtarget::MASHSTEPTABLE]).arg(key)
+              QString("id='%1'").arg(key)
             );
    return key;
 }
@@ -769,7 +763,7 @@ BrewNote* Database::newBrewNote(BrewNote* other)
    BrewNote* tmp = new BrewNote();
    
    QSqlRecord r = copy<BrewNote>(other);
-   newKey = r.value(keyNames[Brewtarget::BREWNOTETABLE]).toInt();
+   newKey = r.value("id").toInt();
    tmp->_key = newKey;
    tmp->_table = Brewtarget::BREWNOTETABLE;
    allBrewNotes.insert( newKey, tmp );
@@ -786,7 +780,7 @@ BrewNote* Database::newBrewNote(Recipe* parent)
    allBrewNotes.insert(tmp->_key,tmp);
    sqlUpdate( Brewtarget::BREWNOTETABLE,
               QString("recipe_id=%1").arg(parent->_key),
-              QString("%1=%2").arg(keyNames[Brewtarget::BREWNOTETABLE]).arg(tmp->_key) );
+              QString("id=%2").arg(tmp->_key) );
    emit changed( metaProperty("brewNotes"), QVariant() );
    return tmp;
 }
@@ -804,7 +798,7 @@ Equipment* Database::newEquipment()
 Equipment* Database::newEquipment(Equipment* other)
 {
    Equipment* tmp = new Equipment();
-   tmp->_key = copy<Equipment>(other).value(keyNames[Brewtarget::EQUIPTABLE]).toInt();
+   tmp->_key = copy<Equipment>(other).value("id").toInt();
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
    emit changed( metaProperty("equipments"), QVariant() );
@@ -824,7 +818,7 @@ Fermentable* Database::newFermentable()
 Fermentable* Database::newFermentable(Fermentable* other)
 {
    Fermentable* tmp = new Fermentable();
-   tmp->_key = copy<Fermentable>(other).value(keyNames[Brewtarget::FERMTABLE]).toInt();
+   tmp->_key = copy<Fermentable>(other).value("id").toInt();
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
    emit changed( metaProperty("fermentables"), QVariant() );
@@ -844,7 +838,7 @@ Hop* Database::newHop()
 Hop* Database::newHop(Hop* other)
 {
    Hop* tmp = new Hop();
-   tmp->_key = copy<Hop>(other).value(keyNames[Brewtarget::HOPTABLE]).toInt();
+   tmp->_key = copy<Hop>(other).value("id").toInt();
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
    emit changed( metaProperty("hops"), QVariant() );
@@ -897,7 +891,7 @@ Mash* Database::newMash(Recipe* parent)
    // Connect tmp to parent, removing any existing mash in parent.
    sqlUpdate( Brewtarget::RECTABLE,
               QString("mash_id=%1").arg(tmp->_key),
-              QString("%1=%2").arg(keyNames[Brewtarget::RECTABLE]).arg(parent->_key) );
+              QString("id=%1").arg(parent->_key) );
    
    emit changed( metaProperty("mashs"), QVariant() );
    return tmp;
@@ -906,7 +900,7 @@ Mash* Database::newMash(Recipe* parent)
 Mash* Database::newMash(Mash* other, bool displace)
 {
    Mash* tmp = new Mash();
-   tmp->_key = copy<Mash>(other).value(keyNames[Brewtarget::MASHTABLE]).toInt();
+   tmp->_key = copy<Mash>(other).value("id").toInt();
    tmp->_table = Brewtarget::MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
    
@@ -952,7 +946,7 @@ Misc* Database::newMisc()
 Misc* Database::newMisc(Misc* other)
 {
    Misc* tmp = new Misc();
-   tmp->_key = copy<Misc>(other).value(keyNames[Brewtarget::MISCTABLE]).toInt();
+   tmp->_key = copy<Misc>(other).value("id").toInt();
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
    emit changed( metaProperty("miscs"), QVariant() );
@@ -972,7 +966,7 @@ Recipe* Database::newRecipe()
 Recipe* Database::newRecipe(Recipe* other)
 {
    Recipe* tmp = new Recipe();
-   tmp->_key = copy<Recipe>(other).value(keyNames[Brewtarget::RECTABLE]).toInt();
+   tmp->_key = copy<Recipe>(other).value("id").toInt();
    tmp->_table = Brewtarget::RECTABLE;
    allRecipes.insert( tmp->_key, tmp );
    emit changed( metaProperty("recipes"), QVariant() );
@@ -1012,7 +1006,7 @@ Yeast* Database::newYeast()
 Yeast* Database::newYeast(Yeast* other)
 {
    Yeast* tmp = new Yeast();
-   tmp->_key = copy<Yeast>(other).value(keyNames[Brewtarget::YEASTTABLE]).toInt();
+   tmp->_key = copy<Yeast>(other).value("id").toInt();
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
    emit changed( metaProperty("yeasts"), QVariant() );
@@ -1278,8 +1272,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )
    if ( ! initialLoad ) 
    {
       c = copy<Mash>(m, false, &allMashs);
-      Brewtarget::DBTable t = Brewtarget::MASHTABLE;
-      newKey = c.value(keyNames[t]).toInt();
+      newKey = c.value("id").toInt();
    }
    else 
    {
@@ -1289,7 +1282,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )
    // Update mash_id
    sqlUpdate(Brewtarget::RECTABLE,
              QString("`mash_id`='%1'").arg(newKey),
-             QString("`%1`='%2'").arg(keyNames[Brewtarget::RECTABLE]).arg(rec->_key));
+             QString("id='%1'").arg(rec->_key));
    
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("mash"), QVariant() );
@@ -1308,7 +1301,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
    if ( ! initialLoad )
    {
       c = copy<Equipment>(e,false,&allEquipments);
-      newKey = c.value(keyNames[Brewtarget::EQUIPTABLE]).toInt();
+      newKey = c.value("id").toInt();
       
       newEquip = allEquipments[newKey];
    }
@@ -1322,7 +1315,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
    // Update equipment_id
    sqlUpdate(Brewtarget::RECTABLE,
              QString("`equipment_id`='%1'").arg(newKey),
-             QString("`%1`='%2'").arg(keyNames[Brewtarget::RECTABLE]).arg(rec->_key));
+             QString("id='%1'").arg(rec->_key));
 
    newEquip->setDisplay(false);
    // Emit a changed signal.
@@ -1331,20 +1324,10 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
 
 void Database::addToRecipe( Recipe* rec, Style* s)
 {
-   /*
-   // Make a copy of style.
-   QSqlRecord c = copy(s);
-   
-   // Update style_id
-   sqlUpdate(Brewtarget::RECTABLE,
-             QString("`style_id`='%1'").arg(c.value(keyNames[Brewtarget::STYLETABLE]).toInt()),
-             QString("`%1`='%2'").arg(keyNames[Brewtarget::RECTABLE]).arg(rec->_key));
-   */
-   
    // Just add the style directly. No need to copy I think.
    sqlUpdate(Brewtarget::RECTABLE,
              QString("`style_id`='%1'").arg(s->_key),
-             QString("`%1`='%2'").arg(keyNames[Brewtarget::RECTABLE]).arg(rec->_key));
+             QString("id='%1'").arg(rec->_key));
 
    // Emit a changed signal.
    // TODO: this is calling the SLOT, not the SIGNAL...erm...What do we do?
@@ -1441,26 +1424,6 @@ QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
    tmp[ Brewtarget::STYLETABLE ] = "style";
    tmp[ Brewtarget::WATERTABLE ] = "water";
    tmp[ Brewtarget::YEASTTABLE ] = "yeast";
-   
-   return tmp;
-}
-
-QHash<Brewtarget::DBTable,QString> Database::keyNamesHash()
-{
-   QHash<Brewtarget::DBTable,QString> tmp;
-   
-   tmp[ Brewtarget::BREWNOTETABLE ] = "id";
-   tmp[ Brewtarget::EQUIPTABLE ] = "eid";
-   tmp[ Brewtarget::FERMTABLE ] = "fid";
-   tmp[ Brewtarget::HOPTABLE ] = "hid";
-   tmp[ Brewtarget::INSTRUCTIONTABLE ] = "iid";
-   tmp[ Brewtarget::MASHSTEPTABLE ] = "msid";
-   tmp[ Brewtarget::MASHTABLE ] = "maid";
-   tmp[ Brewtarget::MISCTABLE ] = "mid";
-   tmp[ Brewtarget::RECTABLE ] = "rid";
-   tmp[ Brewtarget::STYLETABLE ] = "sid";
-   tmp[ Brewtarget::WATERTABLE ] = "wid";
-   tmp[ Brewtarget::YEASTTABLE ] = "yid";
    
    return tmp;
 }
