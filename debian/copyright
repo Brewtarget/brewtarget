@@ -17,7 +17,7 @@ The Debian packaging is:
 and is licensed under the GPL-3.
 
 Files: *
-Copyright: 2009-2011, Philip G. Lee <rocketman768@gmail.com>
+Copyright: 2009-2012, Philip G. Lee <rocketman768@gmail.com>
 License: GPL-3
 
 Files: cmake/modules/FindPhonon.cmake
