@@ -2047,6 +2047,10 @@
    </property>
   </action>
   <action name="actionOG_Correction_Help">
+   <property name="icon">
+    <iconset resource="../brewtarget.qrc">
+     <normaloff>:/images/hydrometer.svg</normaloff>:/images/hydrometer.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;OG Correction Help</string>
    </property>
