@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
-    <height>398</height>
+    <width>577</width>
+    <height>401</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>538</width>
-        <height>384</height>
+        <width>563</width>
+        <height>387</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -345,41 +345,44 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="title">
-            <string>Taste Notes</string>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="currentIndex">
+            <number>0</number>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QPlainTextEdit" name="plainTextEdit_tasteNotes">
-              <property name="minimumSize">
-               <size>
-                <width>256</width>
-                <height>0</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_2">
-           <property name="title">
-            <string>Notes</string>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QPlainTextEdit" name="plainTextEdit_notes">
-              <property name="minimumSize">
-               <size>
-                <width>256</width>
-                <height>0</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>Taste Notes</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QPlainTextEdit" name="plainTextEdit_tasteNotes">
+               <property name="minimumSize">
+                <size>
+                 <width>256</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_2">
+            <attribute name="title">
+             <string>Notes</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QPlainTextEdit" name="plainTextEdit_notes">
+               <property name="minimumSize">
+                <size>
+                 <width>256</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
