@@ -1,3 +1,11 @@
+-- NOTE: deleted=1 means the ingredient is "deleted" and should not be shown in
+--                 any list.
+--       deleted=0 means it isn't deleted and may or may not be shown.
+--       display=1 means the ingredient should be shown in a list, available to
+--                 be put into a recipe.
+--       display=0 means the ingredient is in a recipe already and should not
+--                 be shown in a list, available to be put into a recipe.
+
 create table equipment(
    id integer PRIMARY KEY autoincrement,
    name varchar(256) not null DEFAULT '',
@@ -148,6 +156,68 @@ create table yeast(
    display boolean DEFAULT 1
 );
 
+create table water(
+   id integer PRIMARY KEY autoincrement,
+   name varchar(256) not null DEFAULT '',
+   amount real DEFAULT 0.0,
+   calcium real DEFAULT 0.0,
+   bicarbonate real DEFAULT 0.0,
+   sulfate real DEFAULT 0.0,
+   chloride real DEFAULT 0.0,
+   sodium real DEFAULT 0.0,
+   magnesium real DEFAULT 0.0,
+   ph real DEFAULT 7.0,
+   notes text DEFAULT '',
+   -- metadata
+   deleted boolean DEFAULT 0,
+   display boolean DEFAULT 1
+);
+
+-- The following bt_* tables simply point to ingredients provided by brewtarget.
+-- This is to make updating and pushing new ingredients easy.
+
+create table bt_equipment(
+   id integer PRIMARY KEY autoincrement,
+   equipment_id integer,
+   foreign key(equipment_id) references equipment(id)
+);
+
+create table bt_fermentable(
+   id integer PRIMARY KEY autoincrement,
+   fermentable_id integer,
+   foreign key(fermentable_id) references fermentable(id)
+);
+
+create table bt_hop(
+   id integer PRIMARY KEY autoincrement,
+   hop_id integer,
+   foreign key(hop_id) references hop(id)
+);
+
+create table bt_misc(
+   id integer PRIMARY KEY autoincrement,
+   misc_id integer,
+   foreign key(misc_id) references misc(id)
+);
+
+create table bt_style(
+   id integer PRIMARY KEY autoincrement,
+   style_id integer,
+   foreign key(style_id) references style(id)
+);
+
+create table bt_yeast(
+   id integer PRIMARY KEY autoincrement,
+   yeast_id integer,
+   foreign key(yeast_id) references yeast(id)
+);
+
+create table bt_water(
+   id integer PRIMARY KEY autoincrement,
+   water_id integer,
+   foreign key(water_id) references water(id)
+);
+
 -- unlike some of the other tables, you can have a mash with no name.
 create table mash(
    id integer PRIMARY KEY autoincrement,
@@ -229,23 +299,6 @@ create table brewnote(
    foreign key(recipe_id) references recipe(id)
 );
 
-create table water(
-   id integer PRIMARY KEY autoincrement,
-   name varchar(256) not null DEFAULT '',
-   amount real DEFAULT 0.0,
-   calcium real DEFAULT 0.0,
-   bicarbonate real DEFAULT 0.0,
-   sulfate real DEFAULT 0.0,
-   chloride real DEFAULT 0.0,
-   sodium real DEFAULT 0.0,
-   magnesium real DEFAULT 0.0,
-   ph real DEFAULT 7.0,
-   notes text DEFAULT '',
-   -- metadata
-   deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
-);
-
 -- instructions are many-to-one for recipes. 
 create table instruction(
    id integer PRIMARY KEY autoincrement,
@@ -264,8 +317,8 @@ create table instruction(
    unique(recipe_id,instruction_number)
 );
 
--- unfortunately, autoincrement only works for primary keys.
--- this trigger will get the same work done, I hope
+-- When inserting a new instruction record, makes sure the instruction number
+-- is largest.
 CREATE TRIGGER update_ins_num AFTER INSERT ON instruction
 BEGIN
    UPDATE instruction SET instruction_number = 
