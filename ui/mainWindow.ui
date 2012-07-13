@@ -1895,6 +1895,9 @@
    <addaction name="actionYeasts"/>
    <addaction name="separator"/>
    <addaction name="actionTimers"/>
+   <addaction name="action_recipeToTextClipboard"/>
+   <addaction name="actionPitch_Rate_Calculator"/>
+   <addaction name="actionRefractometer_Tools"/>
   </widget>
   <action name="actionAbout_BrewTarget">
    <property name="icon">
