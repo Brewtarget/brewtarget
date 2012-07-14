@@ -165,6 +165,7 @@ bool Database::load()
    // Store temporary tables in memory.
    QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
    
+   /*
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -185,6 +186,8 @@ bool Database::load()
       // Update this field.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
+   */
+   updateDatabase("/home/philip/myc/brewtarget/build/new.sqlite");
    
    // Create and store all pointers.
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );
@@ -3187,9 +3190,17 @@ bool Database::cleanupBackupDatabase()
 
 void Database::updateDatabase(QString const& filename)
 {
+   // In the naming here "old" means our local database, and
+   // "new" means the database coming from 'filename'.
+   
+   QVariant btid, newhopid, oldhopid;
+   QVariant name, alpha, amount, use, time, notes, htype, form, beta, hsi,
+            origin, substitutes, humulene, caryophyllene, cohumulone,
+            myrcene;
+   
    QString newCon("newSqldbCon");
    QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
-   newSqldb.setDatabaseName(dbFileName);
+   newSqldb.setDatabaseName(filename);
    if( ! newSqldb.open() )
    {
       Brewtarget::logE(QString("Could not open %1 for reading.\n%2").arg(filename).arg(newSqldb.lastError().text()));
@@ -3198,6 +3209,9 @@ void Database::updateDatabase(QString const& filename)
                             QString(QObject::tr("Failed to open the database '%1'.").arg(filename)));
       return;
    }
+   
+   // The following just deals with hops. This is just to figure out how things
+   // will go, then we can generalize to the rest of the ingredients.
    
    // For each (id, hop_id) in newSqldb.bt_hop...
    
@@ -3210,4 +3224,120 @@ void Database::updateDatabase(QString const& filename)
    // Bind :name, :alpha, ..., from newRecord.
    
    // Execute.
+
+   QSqlQuery qNewBtHop( "SELECT * FROM bt_hop",
+                newSqldb );
+                
+   QSqlQuery qNewHop( newSqldb );
+   qNewHop.prepare("SELECT * FROM hop WHERE id=:id");
+   
+   QSqlQuery qUpdateOldHop( sqlDatabase() );
+   qUpdateOldHop.prepare(
+      "UPDATE hop SET "
+      "name=:name, "
+      "alpha=:alpha, "
+      "amount=:amount, "
+      "use=:use, "
+      "time=:time, "
+      "notes=:notes, "
+      "htype=:htype, "
+      "form=:form, "
+      "beta=:beta, "
+      "hsi=:hsi, "
+      "origin=:origin, "
+      "substitutes=:substitutes, "
+      "humulene=:humulene, "
+      "caryophyllene=:caryophyllene, "
+      "cohumulone=:cohumulone, "
+      "myrcene=:myrcene "
+      "WHERE id=:id"
+   );
+   
+   QSqlQuery qOldBtHop( sqlDatabase() );
+   qOldBtHop.prepare( "SELECT * FROM bt_hop WHERE `id`=:btid" );
+   
+   QSqlQuery qOldBtHopInsert( sqlDatabase() );
+   qOldBtHopInsert.prepare( "INSERT INTO bt_hop `id`=:id `hop_id`=:hop_id" );
+   
+   while( qNewBtHop.next() )
+   {
+      btid = qNewBtHop.record().value("id");
+      newhopid = qNewBtHop.record().value("hop_id");
+      
+      qNewHop.bindValue(":id", newhopid);
+      qNewHop.exec();
+      if( !qNewHop.next() )
+      {
+         Brewtarget::logE(QString("Oops. %1").arg(qNewHop.lastError().text()));
+         return;
+      }
+      
+      name = qNewHop.record().value("name");
+      alpha = qNewHop.record().value("alpha");
+      amount = qNewHop.record().value("amount");
+      use = qNewHop.record().value("use");
+      time = qNewHop.record().value("time");
+      notes = qNewHop.record().value("notes");
+      htype = qNewHop.record().value("htype");
+      form = qNewHop.record().value("form");
+      beta = qNewHop.record().value("beta");
+      hsi = qNewHop.record().value("hsi");
+      origin = qNewHop.record().value("origin");
+      substitutes = qNewHop.record().value("substitutes");
+      humulene = qNewHop.record().value("humulene");
+      caryophyllene = qNewHop.record().value("caryophyllene");
+      cohumulone = qNewHop.record().value("cohumulone");
+      myrcene = qNewHop.record().value("myrcene");
+      
+      // Done retrieving new hop data.
+      qNewHop.finish();
+      
+      // Bind the new hop data to the old hop.
+      qUpdateOldHop.bindValue( ":name", name);
+      qUpdateOldHop.bindValue( ":alpha", alpha);
+      qUpdateOldHop.bindValue( ":amount", amount);
+      qUpdateOldHop.bindValue( ":use", use);
+      qUpdateOldHop.bindValue( ":time", time);
+      qUpdateOldHop.bindValue( ":notes", notes);
+      qUpdateOldHop.bindValue( ":htype", htype);
+      qUpdateOldHop.bindValue( ":form", form);
+      qUpdateOldHop.bindValue( ":beta", beta);
+      qUpdateOldHop.bindValue( ":hsi", hsi);
+      qUpdateOldHop.bindValue( ":origin", origin);
+      qUpdateOldHop.bindValue( ":substitutes", substitutes);
+      qUpdateOldHop.bindValue( ":humulene", humulene);
+      qUpdateOldHop.bindValue( ":caryophyllene", caryophyllene);
+      qUpdateOldHop.bindValue( ":cohumulone", cohumulone);
+      qUpdateOldHop.bindValue( ":myrcene", myrcene);
+      
+      // Find the bt_hop record in the local table.
+      qOldBtHop.bindValue( ":btid", btid );
+      qOldBtHop.exec();
+      
+      // If the btid exists in the old bt_hop table, do an update.
+      if( qOldBtHop.next() )
+      {
+         oldhopid = qOldBtHop.record().value("hop_id");
+         qOldBtHop.finish();
+         
+         qUpdateOldHop.bindValue( ":id", oldhopid );
+         
+         qUpdateOldHop.exec();
+      }
+      // If the btid doesn't exist in the old bt_hop table, do an insert into
+      // the old hop table, then into the old bt_hop table.
+      else
+      {
+         // Create a new hop.
+         oldhopid = newHop()->_key;
+         // Copy in the new data.
+         qUpdateOldHop.bindValue( ":id", oldhopid );
+         qUpdateOldHop.exec();
+         
+         // Insert an entry into our bt_hop table.
+         qOldBtHopInsert.bindValue( ":id", btid );
+         qOldBtHopInsert.bindValue( ":hop_id", oldhopid );
+         qOldBtHopInsert.exec();
+      }
+   }
 }
