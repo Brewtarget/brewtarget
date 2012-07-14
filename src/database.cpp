@@ -165,7 +165,6 @@ bool Database::load()
    // Store temporary tables in memory.
    QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
    
-   /*
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -186,8 +185,6 @@ bool Database::load()
       // Update this field.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
-   */
-   updateDatabase("/home/philip/myc/brewtarget/build/new.sqlite");
    
    // Create and store all pointers.
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );
