@@ -367,7 +367,9 @@ QString Brewtarget::getConfigDir(bool *success)
    QFileInfo fileInfo;
    char* xdg_config_home = getenv("XDG_CONFIG_HOME");
    bool tmp;
-   
+   QFile::Permissions sevenFiveFive = QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner |
+                                      QFile::ReadGroup |                     QFile::ExeGroup |
+                                      QFile::ReadOther |                     QFile::ExeOther;
    // First, try XDG_CONFIG_HOME.
    // If that variable doesn't exist, create ~/.config
    if (xdg_config_home)
@@ -390,6 +392,9 @@ QString Brewtarget::getConfigDir(bool *success)
                *success = false;
             return "";
          }
+         
+         // chmod 755 ~/.config
+         QFile::setPermissions( dir.absolutePath() + "/.config", sevenFiveFive );
       }
 
       // CD to config directory.
@@ -415,6 +420,9 @@ QString Brewtarget::getConfigDir(bool *success)
             *success = false;
          return "";
       }
+      
+      // chmod 755 ~/.config/brewtarget
+      QFile::setPermissions( dir.absolutePath() + "/brewtarget", sevenFiveFive );
    }
 
    if( ! dir.cd("brewtarget") )
