@@ -1984,21 +1984,18 @@ void MainWindow::exportSelected()
    delete outFile;
 }
 
-void MainWindow::mergeDatabases()
+void MainWindow::updateDatabase()
 {
-   // TODO: implement.
-   /*
    QString otherDb;
-   QFile dbFile, otherDbFile;
-   QDomDocument dbDoc, otherDbDoc;
-   QString err;
-   int line, col;
    QMessageBox::StandardButton but;
    
    // Tell user what's about to happen.
    but = QMessageBox::question( this,
-                          tr("Database Merge"),
-                          tr("You are about to merge another database into the current one. Continue?"),
+                          tr("Database Update"),
+                          tr("You are about to update the current database with another one. "
+                             "This may make changes to (but will not delete) some of your ingredients. "
+                             "It will not modify any of your recipes. "
+                             "Continue?"),
                           QMessageBox::Yes | QMessageBox::No,
                           QMessageBox::No );
    if( but == QMessageBox::No )
@@ -2008,55 +2005,10 @@ void MainWindow::mergeDatabases()
    otherDb = QFileDialog::getOpenFileName( this,
                                            tr("Select Database File"),
                                            Brewtarget::getUserDataDir(),
-                                           tr("BeerXML File (*.xml)") );
-
-   // Try to open the file.
-   otherDbFile.setFileName(otherDb);
-   if( ! otherDbFile.open(QIODevice::ReadOnly) )
-   {
-      Brewtarget::logE(QString("Could not open %1 for reading.").arg(otherDbFile.fileName()));
-      return;
-   }
-   if( ! otherDbDoc.setContent(&otherDbFile, false, &err, &line, &col) )
-     Brewtarget::logW( QString("Bad document formatting in %1 %2:%3. %4").arg(otherDbFile.fileName()).arg(line).arg(col).arg(err) );
-   
-   // NOTE: What to do here?
-   // Save db.
-   //Database::savePersistent();
-   
-   // Open db.
-   dbFile.setFileName(Database::getDbFileName());
-   if( ! dbFile.open(QIODevice::ReadOnly) )
-   {
-      Brewtarget::logE(QString("Could not open %1 for reading.").arg(dbFile.fileName()));
-      return;
-   }
-   dbDoc.setContent(&dbFile, false, &err, &line, &col);
-   dbFile.close();
+                                           tr("Brewtarget Database (*.sqlite)") );
    
    // Merge.
-   Database::mergeBeerXMLDBDocs( dbDoc, otherDbDoc );
-   
-   // Write changes.
-   if( ! dbFile.open(QIODevice::Truncate | QIODevice::WriteOnly) )
-   {
-      Brewtarget::logE(QString("Could not open %1 for writing.").arg(dbFile.fileName()));
-      return;
-   }
-   QTextStream dbOut(&dbFile);
-   dbOut.setCodec( "UTF-8" );
-   //dbOut <<  "<?xml version=\"1.0\" encoding=\"" << dbOut.codec()->name() << "\"?>\n";
-   dbOut << dbDoc.toString();
-   
-   // Reload db. Probably safer just to ask the user to restart brewtarget.
-   QMessageBox::information(this,
-                            tr("Database Merged"),
-                            tr("Database successfully merged. Please restart Brewtarget NOW and changes will appear."));
-   
-
-   dbFile.close();
-   otherDbFile.close();
-   */
+   Database::instance().updateDatabase( otherDb );
 }
 
 void MainWindow::finishCheckingVersion()

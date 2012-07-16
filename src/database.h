@@ -364,6 +364,12 @@ public:
    //! Get the file where this database was loaded from.
    static QString getDbFileName();
    
+   /*!
+    * Updates the brewtarget-provided ingredients from the given sqlite
+    * database file.
+    */
+   void updateDatabase(QString const& filename);
+   
 signals:
    void changed(QMetaProperty prop, QVariant value);
    
@@ -678,10 +684,6 @@ private:
 
    // Cleans up the backup database if it was leftover from an error.
    bool cleanupBackupDatabase();
-   
-   // Updates the brewtarget-provided ingredients from the given sqlite
-   // database file.
-   void updateDatabase(QString const& filename);
 };
 
 #endif   /* _DATABASE_H */

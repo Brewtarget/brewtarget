@@ -173,7 +173,7 @@ public slots:
    void openDonateLink();
 
    //! Merges two database files.
-   void mergeDatabases(); // TODO: implement.
+   void updateDatabase();
    
    void dragEnterEvent(QDragEnterEvent *event);
    void dropEvent(QDropEvent *event);
