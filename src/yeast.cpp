@@ -191,7 +191,7 @@ const QString Yeast::flocculationStringTr() const
 
 double Yeast::attenuation_pct() const
 {
-   return get("attenuation_pct").toDouble();
+   return get("attenuation").toDouble();
 }
 
 QString Yeast::notes() const
