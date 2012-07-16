@@ -235,7 +235,7 @@ SET( brewtarget_DESKTOP
 
 # Icon files to install.
 SET( brewtarget_ICONS
-     ${ROOTDIR}/images/BrewtargetIcon.png
+     ${ROOTDIR}/images/brewtarget_icon.svg
 )
 
 SET( TRANSLATIONS_FILES
