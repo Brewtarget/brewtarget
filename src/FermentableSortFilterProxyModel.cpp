@@ -19,6 +19,7 @@
 #include "unit.h"
 #include "FermentableSortFilterProxyModel.h"
 #include "FermentableTableModel.h"
+#include "brewtarget.h"
 #include <iostream>
 #include <QDebug>
 
@@ -38,10 +39,10 @@ bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left,
       case FERMAMOUNTCOL:
          // This is a bit twisted. If the numbers are equal, reset the left
          // and right to the names and let it hit the default
-         if (Unit::qstringToSI(leftFermentable.toString()) == Unit::qstringToSI(rightFermentable.toString()))
+         if (Brewtarget::weightQStringToSI(leftFermentable.toString()) == Brewtarget::weightQStringToSI(rightFermentable.toString()))
             return getName(right) < getName(left);
          else
-            return Unit::qstringToSI(leftFermentable.toString()) < Unit::qstringToSI(rightFermentable.toString());
+            return Brewtarget::weightQStringToSI(leftFermentable.toString()) < Brewtarget::weightQStringToSI(rightFermentable.toString());
       case FERMYIELDCOL:
          if (leftFermentable.toDouble() == rightFermentable.toDouble() )
             return getName(right) < getName(left);

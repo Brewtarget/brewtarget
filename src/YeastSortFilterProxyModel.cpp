@@ -17,10 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "unit.h"
 #include "YeastSortFilterProxyModel.h"
 #include "YeastTableModel.h"
+#include "brewtarget.h"
 #include <iostream>
+
 YeastSortFilterProxyModel::YeastSortFilterProxyModel(QObject *parent) 
 : QSortFilterProxyModel(parent)
 {
@@ -34,8 +35,11 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
 
     switch( left.column() )
     {
+       // This is a lie. I need to figure out if they are weights or volumes.
+       // and then figure some reasonable way to compare weights to volumes.
+       // Maybe lying isn't such a bad idea
     case YEASTAMOUNTCOL:
-      return Unit::qstringToSI(leftYeast.toString()) < Unit::qstringToSI(rightYeast.toString());
+      return Brewtarget::volQStringToSI(leftYeast.toString()) < Brewtarget::volQStringToSI(rightYeast.toString());
     case YEASTPRODIDCOL:
       return leftYeast.toDouble() < rightYeast.toDouble();
     default:

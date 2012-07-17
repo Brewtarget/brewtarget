@@ -16,10 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "unit.h"
+#include "brewtarget.h"
 #include "HopSortFilterProxyModel.h"
 #include "HopTableModel.h"
 #include <iostream>
+
 HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent) 
 : QSortFilterProxyModel(parent)
 {
@@ -50,7 +51,8 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
         rUse = uses.indexOf( (sourceModel()->data(rSibling)).toString() );
 
         if ( lUse == rUse )
-           return Unit::qstringToSI(leftHop.toString()) < Unit::qstringToSI(rightHop.toString());
+            return Brewtarget::weightQStringToSI(leftHop.toString()) < Brewtarget::weightQStringToSI(rightHop.toString());
+
         return lUse < rUse;
     }
 

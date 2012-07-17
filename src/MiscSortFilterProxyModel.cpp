@@ -17,9 +17,9 @@
  */
 
 #include <QAbstractItemModel>
-#include "unit.h"
 #include "MiscSortFilterProxyModel.h"
 #include "MiscTableModel.h"
+#include "brewtarget.h"
 
 MiscSortFilterProxyModel::MiscSortFilterProxyModel(QObject *parent)
 : QSortFilterProxyModel(parent)
@@ -33,22 +33,16 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
    QVariant leftMisc, rightMisc;
    if( source )
    {
-      //if( left.isValid() )
       leftMisc = source->data(left);
-      //else
-      //   return true;
-      
-      //if( right.isValid() )
       rightMisc = source->data(right);
-      //else
-      //   return true;
    }
 
    switch( left.column() )
    {
    case MISCAMOUNTCOL:
+         return Brewtarget::weightQStringToSI(leftMisc.toString()) < Brewtarget::weightQStringToSI(rightMisc.toString());
    case MISCTIMECOL:
-      return Unit::qstringToSI(leftMisc.toString()) < Unit::qstringToSI(rightMisc.toString());
+      return Brewtarget::timeQStringToSI(leftMisc.toString()) < Brewtarget::timeQStringToSI(rightMisc.toString());
     default:
       return leftMisc.toString() < rightMisc.toString();
    }
