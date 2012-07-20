@@ -555,10 +555,10 @@ private:
       else 
       {
          newKey = ing->_key;
+         // Any ingredient added to a recipe should not be visible to the tree
+         ing->setDisplay(false);
       }
       
-      // Any ingredient added to a recipe should not be visible for the trees?
-      ing->setDisplay(false);
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
       q = QSqlQuery( sqlDatabase() );//sqldb );
       q.setForwardOnly(true);
