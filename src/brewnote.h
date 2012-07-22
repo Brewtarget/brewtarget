@@ -25,6 +25,13 @@
 #include <QString>
 #include <QStringList>
 #include <QDate>
+
+#include "equipment.h"
+#include "mash.h"
+#include "mashstep.h"
+#include "recipe.h"
+#include "yeast.h"
+
 #include "BeerXMLElement.h"
 
 // Forward declarations;
@@ -97,7 +104,9 @@ public:
    void setPitchTemp_c(double var);
    void setFg(double var);
    void setFinalVolume_l(double var);  
-   void setBoilOff_l(double var);  
+   void setBoilOff_l(double var);
+   // Metasetter
+   void populateNote(Recipe* parent);
 
    // Getters
    QDateTime brewDate() const;

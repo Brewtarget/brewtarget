@@ -1257,6 +1257,10 @@ void MainWindow::setSelection(QModelIndex item)
    if ( active == 0 )
       active = qobject_cast<BrewTargetTreeView*>(treeView_recipe);
 
+   // Couldn't cast the active item to a brwetargettreeview
+   if ( active == 0 )
+      return;
+
    QModelIndex parent = active->getParent(item);
 
    active->setCurrentIndex(item);
@@ -1280,6 +1284,8 @@ void MainWindow::newBrewNote()
          continue;
 
       BrewNote* bNote = Database::instance().newBrewNote(rec);
+      bNote->populateNote(rec);
+
       // Make sure everything is properly set and selected
       if( rec != recipeObs )
          setRecipe(rec);
@@ -2081,7 +2087,6 @@ void MainWindow::fermentableCellSignal(const QPoint& point)
    if ( selected.column() != FERMAMOUNTCOL )
       return;
 
-   qDebug() << "calledBy =" << calledBy->objectName();
    // Since we need to call generateVolumeMenu() two different ways, we need
    // to figure out the currentUnit and Scale here
    if ( calledBy->objectName() == "fermentableTable" )

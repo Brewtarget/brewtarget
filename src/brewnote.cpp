@@ -85,6 +85,81 @@ BrewNote::BrewNote()
 {
 }
 
+void BrewNote::populateNote(Recipe* parent)
+{
+
+   Equipment* equip = parent->equipment();
+   Mash* mash = parent->mash();
+   QList<MashStep*> steps;
+   MashStep* mStep;
+   QList<Yeast*> yeasts = parent->yeasts();
+   Yeast* yeast;
+   double atten_pct = -1.0;
+
+
+   // Since we have the recipe, lets set some defaults
+   setSg( parent->boilGrav() );
+   setProjBoilGrav(parent->boilGrav() );
+
+   setVolumeIntoBK_l( parent->boilSize_l() );
+   setProjVolIntoBK_l( parent->boilSize_l() );
+
+   if ( mash )
+   {
+      steps = mash->mashSteps();
+      mStep = steps.at(0);
+      if ( mStep )
+      {
+         setStrikeTemp_c( mStep->endTemp_c());
+         setProjStrikeTemp_c(mStep->endTemp_c());
+
+         setMashFinTemp_c( mStep->endTemp_c());
+         setProjMashFinTemp_c( mStep->endTemp_c());
+      }
+      if ( steps.size() - 2 > 0 )
+      {
+         mStep = steps.at( steps.size() - 2 );
+         setMashFinTemp_c( mStep->endTemp_c());
+         setProjMashFinTemp_c( mStep->endTemp_c());
+      }
+   }
+
+   setOg( parent->og());
+   setProjOg(parent->og());
+
+   setPostBoilVolume_l(parent->postBoilVolume_l());
+   setVolumeIntoFerm_l(parent->finalVolume_l());
+   setProjVolIntoFerm_l(parent->finalVolume_l());
+
+   setPitchTemp_c(parent->primaryTemp_c());
+
+   setFg( parent->fg());
+   setProjFg( parent->fg() );
+
+   setFinalVolume_l(parent->finalVolume_l());
+
+   setProjEff_pct(parent->efficiency_pct());
+   setProjPoints( parent->points() );
+   setProjABV_pct( parent->ABV_pct());
+
+   for (int i = 0; i < yeasts.size(); ++i)
+   {
+      yeast = yeasts.at(i);
+      if ( yeast->attenuation_pct() > atten_pct )
+         atten_pct = yeast->attenuation_pct();
+   }
+
+   if ( yeasts.size() == 0 || atten_pct < 0.0 )
+      atten_pct = 75;
+   setProjAtten(atten_pct);
+
+   if ( equip )
+      setBoilOff_l( equip->evapRate_lHr() * ( parent->boilTime_min()/60));
+
+}
+
+
+
 BrewNote::BrewNote(BrewNote const& other)
    : BeerXMLElement(other)
 {
