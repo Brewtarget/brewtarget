@@ -49,8 +49,7 @@ YeastDialog::YeastDialog(MainWindow* parent)
    connect( yeastTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addYeast(const QModelIndex&) ) );
    
 
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   populateTable();
+   yeastTableModel->observeDatabase(true);
 
 }
 
@@ -177,4 +176,5 @@ void YeastDialog::newYeast()
    y->setName(name);
    yeastEditor->setYeast(y);
    yeastEditor->show();
+   y->setDisplay(true);
 }

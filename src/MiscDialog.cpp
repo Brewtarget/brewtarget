@@ -48,8 +48,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMisc()) );
    connect( miscTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addMisc(const QModelIndex&) ) );
    
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   populateTable();
+   miscTableModel->observeDatabase(true);
 }
 
 void MiscDialog::removeMisc()
