@@ -594,15 +594,10 @@ void Database::insertInstruction(Instruction* in, int pos)
 QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 {
    QList<BrewNote*> ret;
-   QString queryString = QString("SELECT id FROM %1 WHERE recipe_id = %2")
-                            .arg(tableNames[Brewtarget::BREWNOTETABLE])
-                            .arg(parent->_key);
-   QSqlQuery q( queryString, sqlDatabase());//, sqldb );
+   QString filterString = QString("recipe_id = %1 AND deleted = 0 and display = 1").arg(parent->_key);
    
-   while( q.next() )
-      ret.append(allBrewNotes[q.record().value("id").toInt()]);
-   q.finish();
-   
+   getBrewNotes(ret, filterString);
+
    return ret;
 }
 
@@ -648,17 +643,9 @@ QList<Misc*> Database::miscs(Recipe const* parent)
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QSqlQuery q( sqlDatabase() );
-   q.prepare( QString("SELECT id FROM %1 WHERE mash_id = %2 AND `deleted`='0'")
-              .arg(tableNames[Brewtarget::MASHSTEPTABLE])
-              .arg(parent->_key) );
-   q.exec();
-   
-   while( q.next() )
-   {
-      ret.append(allMashSteps[q.record().value("id").toInt()]);
-   }
-   q.finish();
+   QString filterString = QString("mash_id = %1 AND deleted = 0 AND display = 1").arg(parent->_key);
+  
+   getMashSteps(ret, filterString);
    
    return ret;
 }
@@ -762,7 +749,7 @@ int Database::insertNewMashStepRecord( Mash* parent )
    return key;
 }
 
-BrewNote* Database::newBrewNote(BrewNote* other)
+BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
    int newKey;
    BrewNote* tmp = new BrewNote();
@@ -772,12 +759,13 @@ BrewNote* Database::newBrewNote(BrewNote* other)
    tmp->_key = newKey;
    tmp->_table = Brewtarget::BREWNOTETABLE;
    allBrewNotes.insert( newKey, tmp );
-   
-   emit changed( metaProperty("brewNotes"), QVariant() );
+  
+   if ( signal )
+      emit changed( metaProperty("brewNotes"), QVariant() );
    return tmp;
 }
 
-BrewNote* Database::newBrewNote(Recipe* parent)
+BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
 {
    BrewNote* tmp = new BrewNote();
 
@@ -789,7 +777,8 @@ BrewNote* Database::newBrewNote(Recipe* parent)
               QString("recipe_id=%1").arg(parent->_key),
               QString("id=%2").arg(tmp->_key) );
 
-   emit changed( metaProperty("brewNotes"), QVariant() );
+   if ( signal ) 
+      emit changed( metaProperty("brewNotes"), QVariant() );
    return tmp;
 }
 
@@ -1045,12 +1034,16 @@ void Database::removeEquipment(Equipment* equip, bool signal)
 
 void Database::removeEquipment(QList<Equipment*> equip)
 {
+   if ( equip.empty() )
+      return;
+
    QList<Equipment*>::Iterator it = equip.begin();
    while( it != equip.end() )
    {
       removeEquipment(*it,false);
       it++;
    }
+
    emit changed( metaProperty("equipments"), QVariant() );
 }
 
@@ -1063,6 +1056,9 @@ void Database::removeFermentable(Fermentable* ferm, bool signal)
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
 {
+   if ( ferm.empty() )
+      return;
+
    QList<Fermentable*>::Iterator it = ferm.begin();
    while( it != ferm.end() )
    {
@@ -1083,6 +1079,9 @@ void Database::removeHop(Hop* hop, bool signal)
 
 void Database::removeHop(QList<Hop*> hop)
 {
+   if ( hop.empty() )
+      return;
+
    QList<Hop*>::Iterator it = hop.begin();
    while( it != hop.end() )
    {
@@ -1101,6 +1100,9 @@ void Database::removeMash(Mash* mash, bool signal)
 
 void Database::removeMash(QList<Mash*> mash)
 {
+   if ( mash.empty() )
+      return;
+
    QList<Mash*>::Iterator it = mash.begin();
    while( it != mash.end() )
    {
@@ -1120,6 +1122,9 @@ void Database::removeMashStep(MashStep* mashStep, bool signal)
 
 void Database::removeMashStep(QList<MashStep*> mashStep)
 {
+   if ( mashStep.empty() )
+      return;
+
    QList<MashStep*>::Iterator it = mashStep.begin();
    while( it != mashStep.end() )
    {
@@ -1138,6 +1143,9 @@ void Database::removeMisc(Misc* misc, bool signal )
 
 void Database::removeMisc(QList<Misc*> misc)
 {
+   if ( misc.empty() )
+      return;
+
    QList<Misc*>::Iterator it = misc.begin();
    while( it != misc.end() )
    {
@@ -1156,6 +1164,9 @@ void Database::removeRecipe(Recipe* rec, bool signal)
 
 void Database::removeRecipe(QList<Recipe*> rec)
 {
+   if ( rec.empty() )
+      return;
+
    QList<Recipe*>::Iterator it = rec.begin();
    while( it != rec.end() )
    {
@@ -1174,6 +1185,9 @@ void Database::removeStyle(Style* style, bool signal)
 
 void Database::removeStyle(QList<Style*> style)
 {
+   if ( style.empty() )
+      return;
+
    QList<Style*>::Iterator it = style.begin();
    while( it != style.end() )
    {
@@ -1192,6 +1206,9 @@ void Database::removeWater(Water* water, bool signal)
 
 void Database::removeWater(QList<Water*> water)
 {
+   if ( water.empty() )
+      return;
+
    QList<Water*>::Iterator it = water.begin();
    while( it != water.end() )
    {
@@ -1210,6 +1227,9 @@ void Database::removeYeast(Yeast* yeast, bool signal)
 
 void Database::removeYeast(QList<Yeast*> yeast)
 {
+   if ( yeast.empty() )
+      return;
+
    QList<Yeast*>::Iterator it = yeast.begin();
    while( it != yeast.end() )
    {
@@ -1476,77 +1496,78 @@ QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
 QList<BrewNote*> Database::brewNotes()
 {
    QList<BrewNote*> tmp;
-   getBrewNotes( tmp, "`deleted`='0' AND `display`='1'" );
+
+   getBrewNotes( tmp, "deleted=0 AND display=1" );
    return tmp;
 }
 
 QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
-   getEquipments( tmp, "`deleted`='0' AND `display`='1'" );
+   getEquipments( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
-   getFermentables( tmp, "`deleted`='0' AND `display`='1'" );
+   getFermentables( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getHops( tmp, "`deleted`='0' AND `display`='1'" );
+   getHops( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
-   getMashs( tmp, "`deleted`='0' AND `display`='1'" );
+   getMashs( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getMashSteps( tmp, "`deleted`='0' AND `display`='1'" );
+   getMashSteps( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
-   getMiscs( tmp, "`deleted`='0' AND `display`='1'" );
+   getMiscs( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
-   getRecipes( tmp, "`deleted`='0'" );
+   getRecipes( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
-   getStyles( tmp, "`deleted`='0' AND `display`='1'" );
+   getStyles( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
-   getWaters( tmp, "`deleted`='0' AND `display`='1'" );
+   getWaters( tmp, "deleted=0 and display=1");
    return tmp;
 }
 
 QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
-   getYeasts( tmp, "`deleted`='0' AND `display`='1'" );
+   getYeasts( tmp, "deleted=0 and display=1");
    return tmp;
 }
 

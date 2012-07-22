@@ -31,6 +31,7 @@ class Recipe;
 #include "BeerXMLElement.h"
 #include "hop.h" // Dammit! Have to include these for Hop::Use and Misc::Use.
 #include "misc.h"
+#include "brewnote.h"
 
 // Forward declarations.
 //class Hop;
@@ -213,6 +214,9 @@ public:
     * in the form "Add %1 to %2 at %3".
     */
    QString nextAddToBoil(double& time);
+
+   // Not quite sure where this belongs
+   BrewNote* addBrewNote( BrewNote *old = 0 );
 
    // Getters
    QString name() const;

@@ -554,6 +554,9 @@ void Recipe::generateInstructions()
    double timeRemaining;
    double totalWaterAdded_l = 0.0;
 
+   if ( ! instructions().empty() )
+      clearInstructions();
+
    QVector<PreInstruction> preinstructions;
 
    // Mash instructions
@@ -608,7 +611,7 @@ void Recipe::generateInstructions()
    ins->setInterval(timeRemaining);
    ins->setDirections(str);
    
-   /*** Get fermentables we haven't added yet ***/
+   /*** Get fermentables unless we haven't added yet ***/
    if ( hasBoilFermentable() )
       preinstructions.push_back(boilFermentablesPre(timeRemaining));
    
@@ -677,8 +680,9 @@ void Recipe::generateInstructions()
    /*** Dry hopping ***/
    addPreinstructions(hopSteps(Hop::Dry_Hop));
 
-   // END fermentation instructions
-   //emit changed(metaObject()->property(metaObject->indexOfProperty("instructions")), instructions());
+   // END fermentation instructions. Let everybody know that now is the time
+   // to update instructions
+   emit changed( metaProperty("instructions"), instructions().size() );
 }
 
 QString Recipe::nextAddToBoil(double& time)
@@ -1438,7 +1442,8 @@ void Recipe::removeYeast(Yeast* var)
 
 void Recipe::removeBrewNote(BrewNote* var)
 {
-   Database::instance().removeFromRecipe( this, var );
+   Database::instance().removeFromRecipe(this, var);
+   emit changed(metaProperty("brewNotes"), QVariant());
 }
 
 //==============================Recalculators==================================
@@ -1925,6 +1930,22 @@ bool Recipe::isValidType( const QString &str )
          return true;
    
    return false;
+}
+
+BrewNote* Recipe::addBrewNote( BrewNote* old )
+{
+   BrewNote* newNote;
+   if ( old ) 
+      newNote = Database::instance().newBrewNote(old, false);
+   else
+   {
+      newNote = Database::instance().newBrewNote(this, false);
+      newNote->populateNote(this);
+   }
+
+   emit changed( metaProperty("brewNotes"), QVariant() );
+   return newNote;
+
 }
 
 //==========================Accept changes from ingredients====================

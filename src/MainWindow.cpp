@@ -442,7 +442,6 @@ void MainWindow::deleteSelected()
    QList<Yeast*> deadYeast;
    QList<BrewNote*> deadNote;
 
-
    if ( active == 0 )
       return;
 
@@ -495,12 +494,16 @@ void MainWindow::deleteSelected()
    // isolate this so it looks as clean as the others do.
    for (int i = 0; i < deadNote.count(); ++i)
    {
-      BrewNoteWidget* ni = brewNotes.value(deadNote.at(i)->brewDate_str());
+      BrewNoteWidget* ni = brewNotes.value(deadNote.at(i)->key());
       Recipe* rec = Database::instance().getParentRecipe(deadNote.at(i));
-      int numtab = tabWidget_recipeView->indexOf(ni);
+      int numtab = tabWidget_recipeView->indexOf(ni);  
 
+      // remove it from the recipe and from our internal tracking.
       rec->removeBrewNote(deadNote.at(i));
-      tabWidget_recipeView->removeTab(numtab);
+      brewNotes.remove(deadNote.at(i)->key());
+
+      if ( numtab > 2 )
+         tabWidget_recipeView->removeTab(numtab);
    }
 
    Database::instance().removeRecipe(deadRec);
@@ -520,6 +523,7 @@ void MainWindow::deleteSelected()
          setRecipeByIndex(first);
       setSelection(first);
    }
+
 }
 
 void MainWindow::treeActivated(const QModelIndex &index)
@@ -613,9 +617,9 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
    {
       setRecipe(parent);
    }
-   else if (brewNotes.contains(bNote->brewDate_str()))
+   else if (brewNotes.contains(bNote->key()))
    {
-      tabWidget_recipeView->setCurrentWidget(brewNotes.value(bNote->brewDate_str()));
+      tabWidget_recipeView->setCurrentWidget(brewNotes.value(bNote->key()));
       return;
    }
 
@@ -623,7 +627,7 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
    ni->setBrewNote(bNote);
 
    tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
-   brewNotes.insert(bNote->brewDate_str(), ni);
+   brewNotes.insert(bNote->key(), ni);
    tabWidget_recipeView->setCurrentWidget(ni);
 
 }
@@ -633,9 +637,9 @@ void MainWindow::setBrewNote(BrewNote* bNote)
    QString tabname;
    BrewNoteWidget* ni;
 
-   if (brewNotes.contains(bNote->brewDate_str()))
+   if (brewNotes.contains(bNote->key()))
    {
-      ni = brewNotes.value(bNote->brewDate_str());
+      ni = brewNotes.value(bNote->key());
       tabWidget_recipeView->setCurrentWidget(ni);
       return;
    }
@@ -643,7 +647,7 @@ void MainWindow::setBrewNote(BrewNote* bNote)
    ni = new BrewNoteWidget(tabWidget_recipeView);
    ni->setBrewNote(bNote);
 
-   brewNotes.insert(bNote->brewDate_str(), ni);
+   brewNotes.insert(bNote->key(), ni);
    tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
    tabWidget_recipeView->setCurrentWidget(ni);
 }
@@ -663,7 +667,7 @@ void MainWindow::setRecipe(Recipe* recipe)
       return;
 
    int startTab;
-   QHashIterator<QString,BrewNoteWidget*> b(brewNotes);
+   QHashIterator<int,BrewNoteWidget*> b(brewNotes);
 
    // Make sure this MainWindow is paying attention...
    if( recipeObs )
@@ -1283,12 +1287,13 @@ void MainWindow::newBrewNote()
       if( rec == 0 )
          continue;
 
-      BrewNote* bNote = Database::instance().newBrewNote(rec);
-      bNote->populateNote(rec);
 
       // Make sure everything is properly set and selected
       if( rec != recipeObs )
          setRecipe(rec);
+
+      BrewNote* bNote = rec->addBrewNote();
+      bNote->setBrewDate();
 
       setBrewNote(bNote);
 
@@ -1309,12 +1314,12 @@ void MainWindow::reBrewNote()
       if (! old || ! rec)
          return;
 
-      BrewNote* bNote = Database::instance().newBrewNote(old);
+      BrewNote* bNote = rec->addBrewNote(old);
       bNote->setBrewDate();
 
       if (rec != recipeObs)
          setRecipe(rec);
-      //recipeObs->addBrewNote(bNote);
+
       setBrewNote(bNote);
 
       setSelection(treeView_recipe->findBrewNote(bNote));

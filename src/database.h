@@ -140,7 +140,7 @@ public:
    
    // Named constructors ======================================================
    //! Create new brew note attached to \b parent.
-   BrewNote* newBrewNote(Recipe* parent);
+   BrewNote* newBrewNote(Recipe* parent, bool signal = true);
    Equipment* newEquipment();
    Fermentable* newFermentable();
    Hop* newHop();
@@ -160,7 +160,7 @@ public:
    
    // Named copy constructors==================================================
    //! \returns a copy of the given note.
-   BrewNote* newBrewNote(BrewNote* other);
+   BrewNote* newBrewNote(BrewNote* other, bool signal = true);
    Equipment* newEquipment(Equipment* other);
    //! \returns a copy of the given recipe.
    Recipe* newRecipe(Recipe* other);

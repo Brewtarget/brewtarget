@@ -134,6 +134,10 @@ public:
    double finalVolume_l() const;  
    double boilOff_l() const;  
    QString notes() const;
+   // ick, but I don't see another way. I need a unique key that has *nothing*
+   // to do with the data entered. The best one I can think of is the
+   // database's key
+   int key() const;
 
    // Calculations
    double calculateEffIntoBK_pct();

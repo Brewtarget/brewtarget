@@ -567,9 +567,9 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
    BrewTargetTreeItem* temp;
 
    bool loadAll = (propName == "");
-   
-   if ( (treeMask & RECIPEMASK ) &&
-        (loadAll || propName == "recipes") )
+  
+   if ( (treeMask & RECIPEMASK ) && 
+        (loadAll || propName == "recipes" ) )
    {  
       BrewTargetTreeItem* local = rootItem->child(trees.value(RECIPEMASK));
       QList<Recipe*> recipes = Database::instance().recipes();
@@ -763,6 +763,8 @@ void BrewTargetTreeModel::unloadTreeModel(QString propName)
 void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant /*value*/)
 {
    // Notifier could be the database. 
+   QString propName = prop.name();
+
    if( sender() == &(Database::instance()) )
    {
       unloadTreeModel(prop.name());
@@ -775,6 +777,9 @@ void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant /*value*/)
          return;
 
       Recipe* foo = qobject_cast<Recipe*>(sender());
+      // Make sure we could cast to a recipe
+      if ( foo == 0 )
+         return;
 
       QModelIndex changed = findRecipe(foo);
 

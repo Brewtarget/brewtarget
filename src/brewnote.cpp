@@ -158,8 +158,6 @@ void BrewNote::populateNote(Recipe* parent)
 
 }
 
-
-
 BrewNote::BrewNote(BrewNote const& other)
    : BeerXMLElement(other)
 {
@@ -266,6 +264,8 @@ double BrewNote::projABV_pct() const         { return get("projected_abv").toDou
 double BrewNote::projPoints() const      { return get("projected_points").toDouble(); }
 double BrewNote::projAtten() const       { return get("projected_atten").toDouble(); }
 double BrewNote::boilOff_l() const         { return get("boil_off").toDouble(); }
+
+int BrewNote::key() const                  { return _key; }
 
 // calculators -- these kind of act as both setters and getters.  Likely bad
 // form

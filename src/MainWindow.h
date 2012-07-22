@@ -246,7 +246,7 @@ private:
    EquipmentListModel* equipmentListModel;
    StyleListModel* styleListModel;
    
-   QMultiHash<QString, BrewNoteWidget*> brewNotes;
+   QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 
    //! Currently highlighted fermentable in the fermentable table.
