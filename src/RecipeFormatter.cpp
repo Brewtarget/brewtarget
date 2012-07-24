@@ -34,6 +34,7 @@
 #include <QObject>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QTextDocument>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -795,7 +796,7 @@ QString RecipeFormatter::buildNotes()
       return "";
 
    notes = QString("<h3>%1</h3>").arg(tr("Notes"));
-   notes += QString("%1").arg( rec->notes());
+   notes += QString("%1").arg( QTextDocument(rec->notes()).toHtml());
 
    return notes;
 }
