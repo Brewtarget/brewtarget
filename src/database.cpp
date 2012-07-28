@@ -1299,6 +1299,7 @@ void Database::addToRecipe( Recipe* rec, Misc* m, bool initialLoad )
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool initialLoad )
 {
    addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", initialLoad, &allYeasts );
+   rec->recalcOgFg();
 }
 
 void Database::addToRecipe( Recipe* rec, Water* w, bool initialLoad )
