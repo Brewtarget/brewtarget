@@ -91,15 +91,6 @@ public:
     */
    void updateEntry( Brewtarget::Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
    
-   // Hey, kate highlights all these words...
-   // FIXME
-   // HACK
-   // NOTE
-   // NOTICE
-   // TASK
-   // TODO
-   // ###
-   
    //! Get the contents of the cell specified by table/key/col_name. Mostly for BeerXMLElement.
    inline QVariant get( Brewtarget::DBTable table, int key, const char* col_name ) __attribute__((always_inline))
    {

@@ -704,7 +704,7 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
 
    if( q.numRowsAffected() < 1 )
    {
-      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[table]) );
+      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1. %2").arg(tableNames[table]).arg(q.lastError().text()) );
       key = -42;
    }
    else
@@ -918,6 +918,7 @@ MashStep* Database::newMashStep(Mash* mash)
    tmp->_table = Brewtarget::MASHSTEPTABLE;
 
    allMashSteps.insert(tmp->_key,tmp);
+   connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    // Database's steps have changed.
    emit changed( metaProperty("mashSteps"), QVariant() );
    // Mash's steps have changed.
@@ -951,6 +952,10 @@ Recipe* Database::newRecipe()
    tmp->_key = insertNewDefaultRecord(Brewtarget::RECTABLE);
    tmp->_table = Brewtarget::RECTABLE;
    allRecipes.insert(tmp->_key,tmp);
+   
+   // Now, need to create a new mash for the recipe.
+   newMash( tmp );
+   
    emit changed( metaProperty("recipes"), QVariant() );
    return tmp;
 }

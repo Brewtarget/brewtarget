@@ -43,11 +43,8 @@ class Hop : public BeerXMLElement
    friend class Database;
 public:
 
-   //enum Type { TYPEBITTERING, TYPEAROMA, TYPEBOTH, NUMTYPES };
    enum Type {Bittering, Aroma, Both};
-   //enum Form { FORMLEAF, FORMPELLET, FORMPLUG, NUMFORMS };
    enum Form {Leaf, Pellet, Plug};
-   //enum Use { USEBOIL, USEDRY_HOP, USEMASH, USEFIRST_WORT, USEAROMA, NUMUSES };
    // maf -- I need these in the order they are used to make sorting games
    //        work later
    enum Use {Mash, First_Wort, Boil, UseAroma, Dry_Hop }; // NOTE: way bad. We have a duplicate enum (Aroma), and BeerXML expects a space for "Dry Hop" and "First Wort". Damn. Damn damn.
