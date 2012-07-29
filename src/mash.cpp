@@ -135,6 +135,7 @@ void Mash::removeAllMashSteps()
    size = tmpSteps.size();
    for( i = 0; i < size; ++i )
       Database::instance().removeFrom(this, tmpSteps[i]);
+   emit mashStepsChanged();
 }
 
 //============================="GET" METHODS====================================

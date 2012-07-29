@@ -256,8 +256,9 @@ create table mashstep(
    -- Our step number is unique within our parent mash.
    mash_id integer,
    step_number integer DEFAULT 0,
-   foreign key(mash_id) references mash(id),
-   unique( mash_id, step_number )
+   foreign key(mash_id) references mash(id)
+   -- This is not necessary since we manage these internally in Brewtarget.
+   -- unique( mash_id, step_number )
 );
 
 create table brewnote(

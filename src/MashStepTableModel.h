@@ -78,8 +78,8 @@ public:
 public slots:
    void moveStepUp(int i);
    void moveStepDown(int i);
-   void mashChanged(QMetaProperty,QVariant);
-   //void mashStepChanged(QMetaProperty,QVariant);
+   void mashChanged();
+   void mashStepChanged(QMetaProperty,QVariant);
    
 private:
    Mash* mashObs;

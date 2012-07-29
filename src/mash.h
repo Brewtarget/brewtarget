@@ -88,11 +88,6 @@ public:
    // Relational getters
    QList<MashStep*> mashSteps() const;
    
-   // NOTE: this is not necessary due to Database::newMashStep(Mash* mash). Right?
-   //void addMashStep(MashStep* step);
-   //void removeMashStep(MashStep* step);
-   //void swapSteps( unsigned int i, unsigned int j );
-   
    // NOTE: should this be completely in Database?
    void removeAllMashSteps();
 
@@ -112,6 +107,9 @@ signals:
    void changedTotalMashWater_l(double);
    void changedTotalTime(double);
    */
+   
+   // Emitted when the number of steps change, or when you should call mashSteps() again.
+   void mashStepsChanged();
    
 private:
    Mash();

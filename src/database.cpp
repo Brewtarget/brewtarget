@@ -740,8 +740,9 @@ int Database::insertNewMashStepRecord( Mash* parent )
               QString("`mash_id`='%1' ").arg(parent->_key),
               QString("id='%1'").arg(key)
             );
+   // Just sets the step number within the mash to the next available number.
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString( "`step_number` = (SELECT MAX(`step_number`)+1 FROM `%1` WHERE id='%2' )")
+              QString( "`step_number` = (SELECT IFNULL(MAX(`step_number`)+1,0) FROM `%1` WHERE deleted=0 AND mash_id='%2' )")
                       .arg(tableNames[Brewtarget::MASHSTEPTABLE])
                       .arg(parent->_key),
               QString("id='%1'").arg(key)
@@ -923,6 +924,7 @@ MashStep* Database::newMashStep(Mash* mash)
    emit changed( metaProperty("mashSteps"), QVariant() );
    // Mash's steps have changed.
    emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+   emit mash->mashStepsChanged();
    return tmp;
 }
 
@@ -1392,6 +1394,8 @@ void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
                 .arg(setClause)
                 .arg(whereClause),
                 sqlDatabase());
+   if( q.lastError().isValid() )
+      Brewtarget::logE( QString("Database::sqlUpdate(): %1").arg(q.lastError().text()) );
    q.finish();
 }
 
