@@ -339,7 +339,9 @@ private:
    QMutex _recalcMutex;
    
    // Some recalculators for calculated properties.
-   //! Recalculates all the calculated properties. This is a BLOCKING call. Use QtConcurrent::run() for non-blocking behavior.
+   /*! \brief Recalculates all the calculated properties. This is a BLOCKING call. Use QtConcurrent::run() for non-blocking behavior.
+    * WARNING: this call currently takes 0.15s in rev 916!
+    */
    void recalcAll();
    
    /*! The theoretical maximum yield without any non-mashed anything. This

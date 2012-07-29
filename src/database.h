@@ -37,6 +37,7 @@ class Database;
 #include <QTableView>
 #include <QSqlError>
 #include <QDebug>
+#include <QMap>
 #include "BeerXMLElement.h"
 #include "brewtarget.h"
 #include "recipe.h"
@@ -91,9 +92,10 @@ public:
     */
    void updateEntry( Brewtarget::Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
    
-   //! Get the contents of the cell specified by table/key/col_name. Mostly for BeerXMLElement.
-   inline QVariant get( Brewtarget::DBTable table, int key, const char* col_name ) __attribute__((always_inline))
+   //! \brief Get the contents of the cell specified by table/key/col_name.
+   QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
+      /*
       QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE id='%3'")
                    .arg(col_name).arg(tableNames[table]).arg(key),
                    sqlDatabase()
@@ -110,20 +112,21 @@ public:
          q.finish();
          return QVariant();
       }
-      //======================
-      /*
-      BtSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE `%3`='%4'")
-                    .arg(col_name).arg(tableNames[table]).arg(keyNames[table]).arg(key)
-                  );
-                  
-      QList<QSqlRecord> records;
-      q.exec(records); // Wait here for the results.
-      
-      if( records.size() > 0 )
-         return records[0].value(0);
-      else
-         return QVariant();
       */
+      
+      QSqlQuery& q = selectAll[table];
+      q.bindValue( ":id", key );
+      q.exec();
+      if( !q.next() )
+      {
+         Brewtarget::logE( QString("Database::get(): %1").arg(q.lastError().text()) );
+         q.finish();
+         return QVariant();
+      }
+      
+      QVariant ret( q.record().value(col_name) );
+      q.finish();
+      return ret;
    }
    
    //! Get a table view.
@@ -379,11 +382,15 @@ private:
    static QFile dbTempBackupFile;
    static QString dbTempBackupFileName;
    static QString dbConName;
+   static QHash<Brewtarget::DBTable,QSqlQuery> selectAllHash();
    static QHash<Brewtarget::DBTable,QString> tableNames;
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
    static QHash<QString,Brewtarget::DBTable> classNameToTable;
    static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
+   
+   // Cannot be static yet.
+   QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
    
    // Keeps all pointers to the elements referenced by key.
    QHash< int, BrewNote* > allBrewNotes;

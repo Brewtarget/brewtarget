@@ -228,6 +228,9 @@ bool Database::load()
       }
    }
 
+   // Initialize the query hash.
+   selectAll = Database::selectAllHash();
+   
    return true;
 }
 
@@ -468,9 +471,8 @@ void Database::removeFromRecipe( Recipe* rec, Water* w )
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   // TODO: encapsulate in QUndoCommand.
    // NOTE: is this the right thing to do?
-   // No it isn't. Instructions just need to get whacked.
+   // --maf-- No it isn't. Instructions just need to get whacked.
 //   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
 //              "deleted=1",
 //              QString("%1=%2").arg(keyNames[Brewtarget::INSTRUCTIONTABLE]).arg(ins->_key) );
@@ -1462,6 +1464,22 @@ void Database::getWaters( QList<Water*>& list, QString filter )
 void Database::getYeasts( QList<Yeast*>& list, QString filter )
 {
    getElements( list, filter, Brewtarget::YEASTTABLE, allYeasts );
+}
+
+QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
+{
+   QHash<Brewtarget::DBTable,QSqlQuery> ret;
+   QHash<Brewtarget::DBTable,QString> names = Database::tableNamesHash();
+   
+   foreach( Brewtarget::DBTable table, names.keys() )
+   {
+      QSqlQuery q(sqlDatabase());
+      q.prepare( QString("SELECT * FROM `%1` WHERE `id`=:id").arg(names[table]) );
+      
+      ret[table] = q;
+   }
+   
+   return ret;
 }
 
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
