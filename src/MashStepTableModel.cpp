@@ -82,7 +82,6 @@ MashStep* MashStepTableModel::getMashStep(unsigned int i)
 
 void MashStepTableModel::mashChanged()
 {
-   qDebug() << "mashChanged()";
    // Remove and re-add all steps.
    setMash( mashObs );
 }
@@ -90,7 +89,6 @@ void MashStepTableModel::mashChanged()
 void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
 {
    int i;
-   qDebug() << "mashStepChanged()";
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
    if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
    {
