@@ -488,6 +488,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
               "deleted=1",
               QString("id=%1").arg(step->_key) );
    emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+   emit mash->mashStepsChanged();
 }
 
 Recipe* Database::getParentRecipe( BrewNote const* note )
