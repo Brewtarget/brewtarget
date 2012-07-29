@@ -101,6 +101,11 @@ SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
              "CPackSourceConfig.cmake"
             )
 
+#=========================Configure brewtarget.qrc.in==========================
+
+SET( brewtarget_QRC "${CMAKE_CURRENT_BINARY_DIR}/brewtarget.qrc" )
+CONFIGURE_FILE( brewtarget.qrc.in ${brewtarget_QRC} )
+
 #============================Doxygen Custom Target=============================
 FIND_PROGRAM( DOXYGEN_CMD doxygen )
 IF( DOXYGEN_CMD )
@@ -123,8 +128,9 @@ IF( SQLITE3_CMD )
    
    ADD_CUSTOM_COMMAND( OUTPUT blankdb.sqlite
                        COMMAND ${RM_COMMAND} ARGS ${RM_ARGS} "blankdb.sqlite" # Need to remove it if it exists first.
-                       COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "create_db.sql"
-                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                       COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "${ROOTDIR}/create_db.sql"
+                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                       MAIN_DEPENDENCY "create_db.sql"
    )
    
    # Always create the database when building.
@@ -177,8 +183,8 @@ ELSEIF( WIN32 )
   SET( DOCPATH "doc" )
 ELSEIF( APPLE )
   SET( CMAKE_INSTALL_PREFIX "/" )
-	SET( BT_BUNDLE "brewtarget.app" )
-	SET( BT_BUNDLE_DIR "/Applications/${BT_BUNDLE}" )
+  SET( BT_BUNDLE "brewtarget.app" )
+  SET( BT_BUNDLE_DIR "/Applications/${BT_BUNDLE}" )
   SET( DATAPATH "${BT_BUNDLE_DIR}/Contents/Resources" )
   SET( TARGETPATH "${BT_BUNDLE_DIR}/Contents/MacOS" )
   SET( DOCPATH  "${BT_BUNDLE_DIR}/Contents/Resources/en.lproj" )

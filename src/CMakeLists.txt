@@ -294,7 +294,7 @@ QT4_WRAP_CPP(brewtarget_MOC_SRCS ${brewtarget_MOC_HEADERS})
 QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 
 # Generate the resource .cpp from the .qrc file.
-QT4_ADD_RESOURCES(brewtarget_QRC_CPP "../brewtarget.qrc")
+QT4_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
 
 # Translations
 IF(UPDATE_TRANSLATIONS)
