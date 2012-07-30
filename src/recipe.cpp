@@ -1458,27 +1458,20 @@ void Recipe::recalcAll()
    // Someone has already called this function back in the call stack, so return to avoid recursion.
    if( !_recalcMutex.tryLock() )
       return;
-   /*
-   if( !_uninitializedCalcsMutex.tryLock() )
-   {
-      _recalcMutex.unlock();
-      return;
-   }
-   */
    
-   recalcGrainsInMash_kg();
-   recalcGrains_kg();
-   recalcVolumeEstimates();
-   recalcColor_srm();
-   recalcSRMColor();
-   recalcOgFg();
-   recalcABV_pct();
-   recalcBoilGrav();
-   recalcIBU();
+   // Times are in seconds, and are cumulative.
+   recalcGrainsInMash_kg(); // 0.01
+   recalcGrains_kg(); // 0.03
+   recalcVolumeEstimates(); // 0.06
+   recalcColor_srm(); // 0.08
+   recalcSRMColor(); // 0.08
+   recalcOgFg(); // 0.11
+   recalcABV_pct(); // 0.12
+   recalcBoilGrav(); // 0.14
+   recalcIBU(); // 0.15
    
    _uninitializedCalcs = false;
    
-   //_uninitializedCalcsMutex.unlock();
    _recalcMutex.unlock();
 }
 
@@ -1822,8 +1815,8 @@ void Recipe::recalcOgFg()
          sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
       else
          sugar_kg += ferm->equivSucrose_kg();
-   }
-
+   }   
+   
    // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
    if( equipment() != 0 )
    {
@@ -1856,14 +1849,14 @@ void Recipe::recalcOgFg()
       //sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
    }
-
+   
    // Combine the two sugars.
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
    plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolume_l);
 
    _og = Algorithms::Instance().PlatoToSG_20C20C( plato );
    _points = (_og-1)*1000.0;
-
+   
    // Calculage FG
    for( i = 0; static_cast<int>(i) < yeasts().size(); ++i )
    {

@@ -56,10 +56,11 @@ void MashStepTableModel::setMash( Mash* m )
    {
       QList<MashStep*> tmpSteps = mashObs->mashSteps();
       beginInsertRows( QModelIndex(), 0, tmpSteps.size()-1 );
-      connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      //connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
+      connect( mashObs, SIGNAL(mashStepsChanged()), this, SLOT(mashChanged()) );
       steps = tmpSteps;
       for( i = 0; i < steps.size(); ++i )
-         connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+         connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashStepChanged(QMetaProperty,QVariant)) );
       endInsertRows();
    }
    //reset(); // Tell everybody that the table has changed.
@@ -79,19 +80,15 @@ MashStep* MashStepTableModel::getMashStep(unsigned int i)
       return 0;
 }
 
-void MashStepTableModel::changed(QMetaProperty prop, QVariant /*val*/)
+void MashStepTableModel::mashChanged()
+{
+   // Remove and re-add all steps.
+   setMash( mashObs );
+}
+
+void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
 {
    int i;
-   
-   Mash* mashSender = qobject_cast<Mash*>(sender());
-   if( mashSender && mashSender == mashObs )
-   {
-      // Remove and re-add all steps.
-      setMash( mashObs );
-      return;
-   }
-   
-   
    MashStep* stepSender = qobject_cast<MashStep*>(sender());
    if( stepSender && (i = steps.indexOf(stepSender)) >= 0 )
    {

@@ -9,9 +9,9 @@ cmake_minimum_required(VERSION 2.8)
 SET(brewtarget_EXECUTABLE "brewtarget")
 
 #=================================Version======================================
-SET( brewtarget_VERSION_MAJOR 1 )
-SET( brewtarget_VERSION_MINOR 2 )
-SET( brewtarget_VERSION_PATCH 4 )
+SET( brewtarget_VERSION_MAJOR 2 )
+SET( brewtarget_VERSION_MINOR 0 )
+SET( brewtarget_VERSION_PATCH 0 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
 #===================================Options====================================
@@ -76,6 +76,15 @@ INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/QtDesignerPlugins")
 # Custom cmake modules.
 SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules" )
 
+#==============================OS-specific Commands============================
+IF( UNIX )
+   SET( RM_COMMAND "rm" )
+   SET( RM_ARGS "-f" )
+ELSEIF( WIN32 )
+   SET( RM_COMMAND "del" )
+   SET( RM_ARGS "" )
+ENDIF()
+
 # ======================Find Qt4 (>= 4.6.0) for this project===================
 SET( EXT_LIBS "" )
 
@@ -101,6 +110,11 @@ SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
              "CPackSourceConfig.cmake"
             )
 
+#=========================Configure brewtarget.qrc.in==========================
+
+SET( brewtarget_QRC "${CMAKE_CURRENT_BINARY_DIR}/brewtarget.qrc" )
+CONFIGURE_FILE( brewtarget.qrc.in ${brewtarget_QRC} )
+
 #============================Doxygen Custom Target=============================
 FIND_PROGRAM( DOXYGEN_CMD doxygen )
 IF( DOXYGEN_CMD )
@@ -112,24 +126,7 @@ ENDIF()
 
 #=============================Database Custom Target===========================
 FIND_PROGRAM( SQLITE3_CMD sqlite3 )
-IF( SQLITE3_CMD )
-   IF( UNIX )
-      SET( RM_COMMAND "rm" )
-      SET( RM_ARGS "-f" )
-   ELSEIF( WIN32 )
-      SET( RM_COMMAND "del" )
-      SET( RM_ARGS "" )
-   ENDIF()
-   
-   ADD_CUSTOM_COMMAND( OUTPUT blankdb.sqlite
-                       COMMAND ${RM_COMMAND} ARGS ${RM_ARGS} "blankdb.sqlite" # Need to remove it if it exists first.
-                       COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "create_db.sql"
-                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-   )
-   
-   # Always create the database when building.
-   ADD_CUSTOM_TARGET( blank_database ALL DEPENDS blankdb.sqlite )
-ELSE()
+IF( NOT SQLITE3_CMD )
    MESSAGE( FATAL_ERROR "Did not find sqlite3 to make the database." )
 ENDIF()
 
@@ -177,8 +174,8 @@ ELSEIF( WIN32 )
   SET( DOCPATH "doc" )
 ELSEIF( APPLE )
   SET( CMAKE_INSTALL_PREFIX "/" )
-	SET( BT_BUNDLE "brewtarget.app" )
-	SET( BT_BUNDLE_DIR "/Applications/${BT_BUNDLE}" )
+  SET( BT_BUNDLE "brewtarget.app" )
+  SET( BT_BUNDLE_DIR "/Applications/${BT_BUNDLE}" )
   SET( DATAPATH "${BT_BUNDLE_DIR}/Contents/Resources" )
   SET( TARGETPATH "${BT_BUNDLE_DIR}/Contents/MacOS" )
   SET( DOCPATH  "${BT_BUNDLE_DIR}/Contents/Resources/en.lproj" )

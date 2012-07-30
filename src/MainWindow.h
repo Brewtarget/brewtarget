@@ -30,6 +30,7 @@ class MainWindow;
 #include <QCloseEvent>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QTimer>
 #include "ui_mainWindow.h"
 
 // Forward Declarations
@@ -194,6 +195,9 @@ public slots:
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
+private slots:
+   void showChanges(QMetaProperty* prop = 0);
+   
 private:
    Recipe* recipeObs;
    Style* recStyle;
@@ -258,14 +262,14 @@ private:
    //! Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
 
+   QTimer* limitShowChangesTimer;
+   
    void setSelection(QModelIndex item);
 
    //! set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
    void setupShortCuts();
    void setupContextMenu();
-
-   void showChanges(QMetaProperty* prop = 0);
 
    // Copy methods used by copySelected()
    void copyThis(Recipe *rec);

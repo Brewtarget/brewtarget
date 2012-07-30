@@ -363,18 +363,31 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
 {
    Qt::ItemFlags defaults = Qt::ItemIsEnabled;
    int col = index.column();
+   Fermentable* row = fermObs[index.row()];
    
    if( col == FERMISMASHEDCOL )
-      return (defaults | Qt::ItemIsUserCheckable);
+   {
+      // Ensure that being mashed and being a late addition are mutually exclusive.
+      if( !row->addAfterBoil() )
+         return (defaults | Qt::ItemIsUserCheckable);
+      else
+         return Qt::ItemIsUserCheckable;
+   }
    else if( col == FERMAFTERBOIL )
-      return (defaults | Qt::ItemIsUserCheckable);
+   {
+      // Ensure that being mashed and being a late addition are mutually exclusive.
+      if( !row->isMashed() )
+         return (defaults | Qt::ItemIsUserCheckable);
+      else
+         return Qt::ItemIsUserCheckable;
+   }
    else if(  col == FERMNAMECOL )
       return (defaults | Qt::ItemIsSelectable);
    else
       return (defaults | Qt::ItemIsSelectable | Qt::ItemIsEditable);
 }
 
-/*
+/* --maf--
    The cell-specific work has been momentarily disabled until I can find a
    better way to implement. PLEASE DO NOT DELETE
 unitDisplay FermentableTableModel::displayUnit(const QModelIndex& index)
@@ -640,12 +653,10 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
       ***Didn't really do much either***/
       
       return box;
-
-      //return QItemDelegate::createEditor(parent, option, index);
-      //return itemEditorFactory()->createEditor(QVariant::Bool, parent);
    }
    else
       return new QLineEdit(parent);
+      //return QItemDelegate::createEditor(parent, option, index);
 }
 
 void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const

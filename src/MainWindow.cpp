@@ -101,7 +101,8 @@
 #include "StyleListModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
-        : QMainWindow(parent)
+        : QMainWindow(parent),
+          limitShowChangesTimer(new QTimer(this))
 {
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
@@ -418,6 +419,13 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashDown, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepDown() ) );
    connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
 
+   // The purpose of this timer is to limit how often showChanges() is called, since it is expensive.
+   // FIXME: this is a hack and we should just have an elegant way to avoid
+   // calling showChanges() over and over, and probably add specific blahChanged()
+   // signals to the recipe instead of one single signal.
+   limitShowChangesTimer->setSingleShot(true);
+   limitShowChangesTimer->setInterval(1000);
+   connect( limitShowChangesTimer, SIGNAL( timout() ), this, SLOT( showChanges() ) );
 }
 
 void MainWindow::setupShortCuts()
@@ -744,7 +752,13 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
       styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
    }
 
-   showChanges(&prop);
+   if( limitShowChangesTimer->isActive() )
+      return;
+   else
+   {
+      limitShowChangesTimer->start();
+      showChanges(&prop);
+   }
 }
 
 // This method should update all the widgets in the window (except the tables)
@@ -762,7 +776,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
    {
       propName = prop->name();
    }
-
+   
    lineEdit_name->setText(recipeObs->name());
    lineEdit_name->setCursorPosition(0);
    lineEdit_batchSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "batchSize_l", Units::liters));

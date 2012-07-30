@@ -228,6 +228,9 @@ bool Database::load()
       }
    }
 
+   // Initialize the query hash.
+   selectAll = Database::selectAllHash();
+   
    return true;
 }
 
@@ -468,9 +471,8 @@ void Database::removeFromRecipe( Recipe* rec, Water* w )
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   // TODO: encapsulate in QUndoCommand.
    // NOTE: is this the right thing to do?
-   // No it isn't. Instructions just need to get whacked.
+   // --maf-- No it isn't. Instructions just need to get whacked.
 //   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
 //              "deleted=1",
 //              QString("%1=%2").arg(keyNames[Brewtarget::INSTRUCTIONTABLE]).arg(ins->_key) );
@@ -488,6 +490,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
               "deleted=1",
               QString("id=%1").arg(step->_key) );
    emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+   emit mash->mashStepsChanged();
 }
 
 Recipe* Database::getParentRecipe( BrewNote const* note )
@@ -704,7 +707,7 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
 
    if( q.numRowsAffected() < 1 )
    {
-      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1.").arg(tableNames[table]) );
+      Brewtarget::logE( QString("Database::insertNewDefaultRecord: could not insert a record into %1. %2").arg(tableNames[table]).arg(q.lastError().text()) );
       key = -42;
    }
    else
@@ -740,8 +743,9 @@ int Database::insertNewMashStepRecord( Mash* parent )
               QString("`mash_id`='%1' ").arg(parent->_key),
               QString("id='%1'").arg(key)
             );
+   // Just sets the step number within the mash to the next available number.
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
-              QString( "`step_number` = (SELECT MAX(`step_number`)+1 FROM `%1` WHERE id='%2' )")
+              QString( "`step_number` = (SELECT IFNULL(MAX(`step_number`)+1,0) FROM `%1` WHERE deleted=0 AND mash_id='%2' )")
                       .arg(tableNames[Brewtarget::MASHSTEPTABLE])
                       .arg(parent->_key),
               QString("id='%1'").arg(key)
@@ -918,10 +922,12 @@ MashStep* Database::newMashStep(Mash* mash)
    tmp->_table = Brewtarget::MASHSTEPTABLE;
 
    allMashSteps.insert(tmp->_key,tmp);
+   connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    // Database's steps have changed.
    emit changed( metaProperty("mashSteps"), QVariant() );
    // Mash's steps have changed.
    emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+   emit mash->mashStepsChanged();
    return tmp;
 }
 
@@ -951,6 +957,10 @@ Recipe* Database::newRecipe()
    tmp->_key = insertNewDefaultRecord(Brewtarget::RECTABLE);
    tmp->_table = Brewtarget::RECTABLE;
    allRecipes.insert(tmp->_key,tmp);
+   
+   // Now, need to create a new mash for the recipe.
+   newMash( tmp );
+   
    emit changed( metaProperty("recipes"), QVariant() );
    return tmp;
 }
@@ -1299,6 +1309,7 @@ void Database::addToRecipe( Recipe* rec, Misc* m, bool initialLoad )
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool initialLoad )
 {
    addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", initialLoad, &allYeasts );
+   rec->recalcOgFg();
 }
 
 void Database::addToRecipe( Recipe* rec, Water* w, bool initialLoad )
@@ -1386,6 +1397,8 @@ void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
                 .arg(setClause)
                 .arg(whereClause),
                 sqlDatabase());
+   if( q.lastError().isValid() )
+      Brewtarget::logE( QString("Database::sqlUpdate(): %1").arg(q.lastError().text()) );
    q.finish();
 }
 
@@ -1451,6 +1464,22 @@ void Database::getWaters( QList<Water*>& list, QString filter )
 void Database::getYeasts( QList<Yeast*>& list, QString filter )
 {
    getElements( list, filter, Brewtarget::YEASTTABLE, allYeasts );
+}
+
+QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
+{
+   QHash<Brewtarget::DBTable,QSqlQuery> ret;
+   QHash<Brewtarget::DBTable,QString> names = Database::tableNamesHash();
+   
+   foreach( Brewtarget::DBTable table, names.keys() )
+   {
+      QSqlQuery q(sqlDatabase());
+      q.prepare( QString("SELECT * FROM `%1` WHERE `id`=:id").arg(names[table]) );
+      
+      ret[table] = q;
+   }
+   
+   return ret;
 }
 
 QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
