@@ -29,7 +29,6 @@
 #include "equipment.h"
 #include "mash.h"
 #include "mashstep.h"
-#include "recipe.h"
 #include "yeast.h"
 
 #include "BeerXMLElement.h"

@@ -1570,14 +1570,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Secondary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Primary</source>
         <translation type="unfinished"></translation>
     </message>

@@ -765,18 +765,6 @@
 <context>
     <name>HopTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Mauvais modèle d&apos;index de rangée =%1</translation>
-    </message>
-    <message>
-        <source>Bad column: %1</source>
-        <translation type="obsolete">Mauvaise colonne:%1</translation>
-    </message>
-    <message>
-        <source>HopTableModel::data Bad column: %1</source>
-        <translation type="obsolete">HopTableModel::data Mauvaise colonne: %1</translation>
-    </message>
-    <message>
         <location filename="../src/HopTableModel.cpp" line="286"/>
         <source>Name</source>
         <translation>Nom</translation>
@@ -806,17 +794,9 @@
         <source>Form</source>
         <translation>Format</translation>
     </message>
-    <message>
-        <source>HopTableModel::headerdata Bad column: %1</source>
-        <translation type="obsolete">HopTableModel::headerdata Mauvaise colonne %1</translation>
-    </message>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <source>Brew day mode</source>
-        <translation type="obsolete">Mode journée de brassage</translation>
-    </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="235"/>
         <source>Open</source>
@@ -832,62 +812,6 @@
         <location filename="../src/MainWindow.cpp" line="241"/>
         <source>Save</source>
         <translation>Sauvegardez</translation>
-    </message>
-    <message>
-        <source>Brewday mode</source>
-        <translation type="obsolete">Mode journée de brassage</translation>
-    </message>
-    <message>
-        <source>Extras</source>
-        <translation type="obsolete">Extras</translation>
-    </message>
-    <message>
-        <source>New recipe</source>
-        <translation type="obsolete">Nouvelle recette</translation>
-    </message>
-    <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Supprimer recette</translation>
-    </message>
-    <message>
-        <source>Remove recipe</source>
-        <translation type="obsolete">Retirer recette</translation>
-    </message>
-    <message>
-        <source>Save database</source>
-        <translation type="obsolete">Sauvegarder base de données</translation>
-    </message>
-    <message>
-        <source>View equipments</source>
-        <translation type="obsolete">Visualiser équipement</translation>
-    </message>
-    <message>
-        <source>View fermentables</source>
-        <translation type="obsolete">Visualiser ingré. fermetescibles</translation>
-    </message>
-    <message>
-        <source>View hops</source>
-        <translation type="obsolete">Visualiser houblon</translation>
-    </message>
-    <message>
-        <source>View miscs</source>
-        <translation type="obsolete">Visualier autres ingrédients</translation>
-    </message>
-    <message>
-        <source>View styles</source>
-        <translation type="obsolete">Visualiser style</translation>
-    </message>
-    <message>
-        <source>View yeasts</source>
-        <translation type="obsolete">Visualiser levures</translation>
-    </message>
-    <message>
-        <source>Timers</source>
-        <translation type="obsolete">Minuteries</translation>
-    </message>
-    <message>
-        <source>Unknown type %1.</source>
-        <translation type="obsolete">Type inconnu %1.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="870"/>
@@ -911,10 +835,6 @@
         <translation>Souhaitez-vous fixer la taille du brassin tel que spécifié par l&apos;équipement?</translation>
     </message>
     <message>
-        <source>Found %1 %2.</source>
-        <translation type="obsolete">Trouvé %1 %2.</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="1392"/>
         <source>Delete %1</source>
         <translation>Effacer %1</translation>
@@ -928,34 +848,6 @@
         <location filename="../src/MainWindow.cpp" line="1633"/>
         <source>HTML files (*.html)</source>
         <translation>Fichier HTML (*.html)</translation>
-    </message>
-    <message>
-        <source>New Recipe</source>
-        <translation type="obsolete">Nouvelle recette</translation>
-    </message>
-    <message>
-        <source>Brew it!</source>
-        <translation type="obsolete">Brasser cette recette !</translation>
-    </message>
-    <message>
-        <source>New Equipment</source>
-        <translation type="obsolete">Nouvel équipement</translation>
-    </message>
-    <message>
-        <source>New Fermentable</source>
-        <translation type="obsolete">Nouvel ingrédient fermentescible</translation>
-    </message>
-    <message>
-        <source>New Hop</source>
-        <translation type="obsolete">Nouveau houblon</translation>
-    </message>
-    <message>
-        <source>New miscellaneous</source>
-        <translation type="obsolete">Nouvel &quot;autre&quot;</translation>
-    </message>
-    <message>
-        <source>New Yeast</source>
-        <translation type="obsolete">Nouvelle levure</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1750"/>
@@ -991,26 +883,6 @@
         <location filename="../src/MainWindow.cpp" line="1756"/>
         <source>Yeast</source>
         <translation>Levures</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation type="obsolete">Copier</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Effacer</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="obsolete">Exporter</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="obsolete">Importer</translation>
-    </message>
-    <message>
-        <source>Brew Again</source>
-        <translation type="obsolete">Brasser à nouveau</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1771"/>
@@ -1053,33 +925,9 @@
         <translation>Copier la levure</translation>
     </message>
     <message>
-        <source>Could not open %1 for writing.</source>
-        <translation type="obsolete">Impossible d&apos;ouvrir %1 pour écriture.</translation>
-    </message>
-    <message>
-        <source>MainWindow::treeActivated Unknown type %1.</source>
-        <translation type="obsolete">Fusionner la base de données</translation>
-    </message>
-    <message>
-        <source>You are about to merge another database into the current one. Continue?</source>
-        <translation type="obsolete">Vous êtes sur le point de fusionner une autre base de données dans l&apos;actuelle. Continuer ?</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="2031"/>
         <source>Select Database File</source>
         <translation type="unfinished">Sélectrionner un fichier de base de données</translation>
-    </message>
-    <message>
-        <source>BeerXML File (*.xml)</source>
-        <translation type="obsolete">Fichier BeerXML (*.xml)</translation>
-    </message>
-    <message>
-        <source>Database Merged</source>
-        <translation type="obsolete">Base de données fusionnée</translation>
-    </message>
-    <message>
-        <source>Database successfully merged. Please restart Brewtarget NOW and changes will appear.</source>
-        <translation type="obsolete">La base de données a été fusionnée avec succès. Redémarrer Brewtarget pour faire apparaître les changements.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="944"/>
@@ -1149,22 +997,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not open %1 for reading.</source>
-        <translation type="obsolete">Lecture de %1 impossible.</translation>
-    </message>
-    <message>
-        <source>Bad document formatting in %1 %2:%3. %4</source>
-        <translation type="obsolete">Document mal formaté dans %1 %2:%3. %4</translation>
-    </message>
-    <message>
-        <source>Found %1 recipes.</source>
-        <translation type="obsolete">%1 recettes trouvées.</translation>
-    </message>
-    <message>
-        <source>Import recipe?</source>
-        <translation type="obsolete">Importer une recette?</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="1383"/>
         <source>Import %1?</source>
         <translation>Importer %1?</translation>
@@ -1178,22 +1010,6 @@
         <location filename="../src/MainWindow.cpp" line="1408"/>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
         <translation type="unfinished">Impossible d&apos;ajouter une infusion à palier sans créer un profil d&apos;infusion. Veuillez élaborer votre empâtage en premier.</translation>
-    </message>
-    <message>
-        <source>New instructions?</source>
-        <translation type="obsolete">Nouvelles instructions?</translation>
-    </message>
-    <message>
-        <source>Generate new instructions?</source>
-        <translation type="obsolete">Générer de nouvelles instructions?</translation>
-    </message>
-    <message>
-        <source>Save database?</source>
-        <translation type="obsolete">Sauvegarder la base de données?</translation>
-    </message>
-    <message>
-        <source>Do you want to save the changes made? If not, you will lose anything you changed in this session.</source>
-        <translation type="obsolete">Souhaitez-vous sauvegarder les changements?  Sinon, tout ce que vous avez modifié sera perdu.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1565"/>
@@ -1330,10 +1146,6 @@
         <translation>Température cible</translation>
     </message>
     <message>
-        <source>Temp</source>
-        <translation type="obsolete">Température</translation>
-    </message>
-    <message>
         <location filename="../src/MashStepTableModel.cpp" line="188"/>
         <source>Time</source>
         <translation>Temps</translation>
@@ -1362,10 +1174,6 @@
         <translation>Aucun palier</translation>
     </message>
     <message>
-        <source>You must have at least one mash step to run the wizard.</source>
-        <translation type="obsolete">Vous devez avoir au moins un pallier d&apos;empâtage pour activer le druide.</translation>
-    </message>
-    <message>
         <location filename="../src/MashWizard.cpp" line="54"/>
         <source>There must be at least one mash step to run the wizard.</source>
         <translation>Il doit y avoir au moins un palier pour exécuter l&apos;assistant de brassage.</translation>
@@ -1389,15 +1197,6 @@
         <location filename="../src/MashWizard.cpp" line="172"/>
         <source>Your mash is too thick for desired temp. at first step.</source>
         <translation>Votre empâtage est trop dense pour la température souhaitée à ce premier pallier.</translation>
-    </message>
-    <message>
-        <source>Decoction</source>
-        <translation type="obsolete">Décoction</translation>
-    </message>
-    <message>
-        <source>Haven&apos;t tested decoction calculations yet.
-Use at own risk.</source>
-        <translation type="obsolete">Les calculs de décoction n&apos;ont pas encore été vérifiés.  Utiliser à vos risques.</translation>
     </message>
     <message>
         <location filename="../src/MashWizard.cpp" line="213"/>
@@ -1509,10 +1308,6 @@ Use at own risk.</source>
         <translation>Mauvais modèle d&apos;indexde rangée =%1</translation>
     </message>
     <message>
-        <source>Bad model index. column = %1</source>
-        <translation type="obsolete">Mauvais modèle d&apos;index de rangée =%1</translation>
-    </message>
-    <message>
         <location filename="../src/MiscTableModel.cpp" line="219"/>
         <source>Name</source>
         <translation>Nom</translation>
@@ -1587,11 +1382,6 @@ Use at own risk.</source>
         <translation>Temps de cuisson %1</translation>
     </message>
     <message>
-        <source>Efficiency: %1%
-</source>
-        <translation type="obsolete">Rendement:%1%</translation>
-    </message>
-    <message>
         <location filename="../src/RecipeFormatter.cpp" line="103"/>
         <source>OG: %1
 </source>
@@ -1602,13 +1392,6 @@ Use at own risk.</source>
         <source>FG: %1
 </source>
         <translation>DF: %1</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <oldsource>ABV: %1
-</oldsource>
-        <translation type="obsolete">ABV:%1%</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="106"/>
@@ -1758,14 +1541,14 @@ Use at own risk.</source>
         <translation>Étape</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Secondary</source>
         <translation>Secondaire</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Primary</source>
         <translation>Primaire</translation>
     </message>
@@ -1796,50 +1579,6 @@ Use at own risk.</source>
         <source>Instructions
 </source>
         <translation>Directives</translation>
-    </message>
-    <message>
-        <source>WARNING: %1</source>
-        <translation type="obsolete">ATTENTION:%1</translation>
-    </message>
-    <message>
-        <source>ERROR: %1</source>
-        <translation type="obsolete">Erreur:%1</translation>
-    </message>
-    <message>
-        <source>Could not open %1 for reading.</source>
-        <translation type="obsolete">Impossible d&apos;ouvrir %1 pour fins de lecture.</translation>
-    </message>
-    <message>
-        <source>Bad document formatting in %1 %2:%3</source>
-        <translation type="obsolete">Erreur de formatage %1 %2:%3</translation>
-    </message>
-    <message>
-        <source>Could not find the weight_unit_system tag in the option file.</source>
-        <translation type="obsolete">Impossible de trouver le label du système d&apos;&apos;unité de poids dans le fichier option.</translation>
-    </message>
-    <message>
-        <source>Could not find the volume_unit_system tag in the option file.</source>
-        <translation type="obsolete">Impossible de trouver le label du système d&apos;&apos;unité de volume dans le fichier option.</translation>
-    </message>
-    <message>
-        <source>Could not find the temperature_scale tag in the option file.</source>
-        <translation type="obsolete">Impossible de trouver le label de température dans le fichier option.</translation>
-    </message>
-    <message>
-        <source>Could not find the ibu_formula tag in the option file.</source>
-        <translation type="obsolete">Impossible de trouver le label de formule d&apos;UAI dans le fichier option.</translation>
-    </message>
-    <message>
-        <source>Bad ibu_formula type: %1</source>
-        <translation type="obsolete">Mauvaise formule d&apos;UAI de type:%1</translation>
-    </message>
-    <message>
-        <source>Could not find the color_formula tag in the option file.</source>
-        <translation type="obsolete">Impossible de trouver le label de formule de couleur dans le fichier option.</translation>
-    </message>
-    <message>
-        <source>Bad color_formula type: %1</source>
-        <translation type="obsolete">Mauvaise formule de couleur de type:%1</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="103"/>
@@ -1879,10 +1618,6 @@ Use at own risk.</source>
         <location filename="../src/brewtarget.cpp" line="912"/>
         <source>Could not open %1 for writing</source>
         <translation>Impossible d&apos;ouvrir %1 pour écriture</translation>
-    </message>
-    <message>
-        <source>Bad document formatting in %1 %2:%3. %4</source>
-        <translation type="obsolete">Document mal formaté dans %1 %2:%3. %4</translation>
     </message>
     <message>
         <location filename="../src/database.cpp" line="151"/>
@@ -1957,22 +1692,6 @@ Use at own risk.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not open %1 for writing.</source>
-        <translation type="obsolete">Impossible d&apos;ouvrir %1 pour écriture.</translation>
-    </message>
-    <message>
-        <source>Node at line %1 is not an element.</source>
-        <translation type="obsolete">Noeud at la ligne %1 n&apos;est pas un élément.</translation>
-    </message>
-    <message>
-        <source>EQUIPMENT says it is not version %1. Line %2</source>
-        <translation type="obsolete">ÉQUIPEMENT indique ce ceci n&apos;est pas version %1. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported EQUIPMENT property: %1. Line %2</source>
-        <translation type="obsolete">Propriété ÉQUIPEMENT non supportée:%1. Line %2</translation>
-    </message>
-    <message>
         <location filename="../src/fermentable.cpp" line="216"/>
         <source>Grain</source>
         <translation>Grain</translation>
@@ -1998,90 +1717,14 @@ Use at own risk.</source>
         <translation>Succédané</translation>
     </message>
     <message>
-        <source>FERMENTABLE says it is not version %1. Line %2</source>
-        <translation type="obsolete">INGRÉDIENTS FERMENTESCIBLES indique que ceci n&apos;est pas version %1. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for FERMENTABLE. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas un type valide pour INGRÉDIENTS FERMENTESCIBLES. Line %2</translation>
-    </message>
-    <message>
-        <source>Unsupported FERMENTABLE property: %1. Line %2</source>
-        <translation type="obsolete">Propriété INGRÉDIENTS FERMENTSCIBLES non supportée:%1. Line %2</translation>
-    </message>
-    <message>
-        <source>Bittering</source>
-        <translation type="obsolete">Amérisant</translation>
-    </message>
-    <message>
-        <source>Aroma</source>
-        <translation type="obsolete">Arôme</translation>
-    </message>
-    <message>
-        <source>Both</source>
-        <translation type="obsolete">Les deux</translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="obsolete">Feuille</translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="obsolete">Granule</translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="obsolete">Pastille</translation>
-    </message>
-    <message>
         <location filename="../src/misc.cpp" line="175"/>
         <source>Boil</source>
         <translation>Cuisson</translation>
     </message>
     <message>
-        <source>Dry Hop</source>
-        <translation type="obsolete">Houblonnage à cru</translation>
-    </message>
-    <message>
         <location filename="../src/misc.cpp" line="175"/>
         <source>Mash</source>
         <translation>Empâtage</translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="obsolete">Houblonnage pré-cuisson</translation>
-    </message>
-    <message>
-        <source>HOP says it is not version %1. Line %2</source>
-        <translation type="obsolete">HOUBLON indique que ceci n&apos;est pas version %1. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid use for HOP. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas une utilisation valide pour HOUBLON. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for HOP. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas un type valide pour HOUBLON. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid form for HOP. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas une forme valide pour HOUBLON. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported HOP property: %1. Line %2</source>
-        <translation type="obsolete">Propriété HOUBLON non supportée:%1. Line %2</translation>
-    </message>
-    <message>
-        <source>Unsupported INSTRUCTION property: %1. Line %2</source>
-        <translation type="obsolete">Propriété INSTRUCTIONS non supportée:%1. Line %2</translation>
-    </message>
-    <message>
-        <source>YEAST says it is not version %1. Line %2</source>
-        <translation type="obsolete">LEVURES indique que ceci n&apos;est pas version %1. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MASH property: %1. Line %2</source>
-        <translation type="obsolete">Propriété EMPÂTAGE non supportée:%1. Line %2</translation>
     </message>
     <message>
         <location filename="../src/mashstep.cpp" line="24"/>
@@ -2097,14 +1740,6 @@ Use at own risk.</source>
         <location filename="../src/mashstep.cpp" line="24"/>
         <source>Decoction</source>
         <translation>Décoction</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for MASHSTEP. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas  un type pour INFUSION À PALLIER. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MASHSTEP property: %1. Line %2</source>
-        <translation type="obsolete">Propriété INFUSION A PALLEIRS non supportée:%1. Line %2</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="175"/>
@@ -2140,309 +1775,6 @@ Use at own risk.</source>
         <location filename="../src/misc.cpp" line="159"/>
         <source>Other</source>
         <translation>Autres</translation>
-    </message>
-    <message>
-        <source>MISC says it is not version %1. Line %2</source>
-        <translation type="obsolete">DIVERS indique que ceci n&apos;est pas version %1. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for MISC. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas un type valide pour DIVERS. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid use for MISC. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas une utilisation valide pour DIVERS. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MISC property: %1. Line %2</source>
-        <translation type="obsolete">Propriété DIVERS non supportée:%1. Line %2</translation>
-    </message>
-    <message>
-        <source>RECIPE says it is not version %1. Line %2</source>
-        <translation type="obsolete">RECETTES indique que ceci n&apos;est pas version %1. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Error at line %1.</source>
-        <translation type="obsolete">Erreur à la ligne %1.</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for RECIPE. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas un type valide pour RECETTE. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported RECIPE property: %1. Line %2</source>
-        <translation type="obsolete">Propriété RECETTE non supportée:%1. Line %2</translation>
-    </message>
-    <message>
-        <source>Add grains</source>
-        <translation type="obsolete">Ajoutez grains</translation>
-    </message>
-    <message>
-        <source>Add </source>
-        <translation type="obsolete">Ajoutez</translation>
-    </message>
-    <message>
-        <source>to the mash tun.</source>
-        <translation type="obsolete">à la cuve matière.</translation>
-    </message>
-    <message>
-        <source>Heat water</source>
-        <translation type="obsolete">Chauffez l&apos;eau</translation>
-    </message>
-    <message>
-        <source>Bring </source>
-        <translation type="obsolete">Amenez</translation>
-    </message>
-    <message>
-        <source>%1 water to %2, </source>
-        <translation type="obsolete">%1 eau à %2, </translation>
-    </message>
-    <message>
-        <source>for upcoming infusions.</source>
-        <translation type="obsolete">pour futures infusions.</translation>
-    </message>
-    <message>
-        <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation type="obsolete">Ajoutez %1 eau à %2 à l&apos;empâtage afin de l&apos;amener a %3.</translation>
-    </message>
-    <message>
-        <source>Heat mash to %1.</source>
-        <translation type="obsolete">Chauffez empâtage à %1.</translation>
-    </message>
-    <message>
-        <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation type="obsolete">Amenez %1 de l&apos;empâtage au point d&apos;ébulition et retournez-le à la cuve-matière afin de l&apos;amener à %2.</translation>
-    </message>
-    <message>
-        <source> Hold for %1.</source>
-        <translation type="obsolete">Gardez à %1.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into fermenter for %3.</source>
-        <translation type="obsolete">Mettez %1 %2 dans la cuve de fermentation pendant%3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into first wort for %3.</source>
-        <translation type="obsolete">Mettez %1 %2 en premier moût (first wort) pendant %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into mash for %3.</source>
-        <translation type="obsolete">Ajoutez %1 %2 à l&apos;empâtage pendant %3.</translation>
-    </message>
-    <message>
-        <source>Mash hop addition</source>
-        <translation type="obsolete">Addition d&apos;houblon à l&apos;empâtage</translation>
-    </message>
-    <message>
-        <source>Mash misc addition</source>
-        <translation type="obsolete">Addition divers à l&apos;empâtage</translation>
-    </message>
-    <message>
-        <source>Do first wort hopping with </source>
-        <translation type="obsolete">Complétez houblonnage pré-cuisson à l&apos;aide de</translation>
-    </message>
-    <message>
-        <source>First wort hopping</source>
-        <translation type="obsolete">Houblonnage pré-cuisson</translation>
-    </message>
-    <message>
-        <source>You should now have %1 wort.</source>
-        <translation type="obsolete">Vous devriez avoir %1 de moût.</translation>
-    </message>
-    <message>
-        <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation type="obsolete">Ajoutez %1 eau à à la chaudière à moût afin d&apos;avoir un volume pré-cuisson de moût de %2.</translation>
-    </message>
-    <message>
-        <source>Pre-boil</source>
-        <translation type="obsolete">Pré-cuisson</translation>
-    </message>
-    <message>
-        <source>Boil time</source>
-        <translation type="obsolete">Temps de cuisson</translation>
-    </message>
-    <message>
-        <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation type="obsolete">Vous n&apos;avez pas configuré les paramètres de votre équipement. Merci de me dire quelle sera la durée de cuisson.</translation>
-    </message>
-    <message>
-        <source>Bring the wort to a boil and hold for %1.</source>
-        <translation type="obsolete">Portez le moût au point d&apos;ébullition et maintenez-le pour %1.</translation>
-    </message>
-    <message>
-        <source>Start boil</source>
-        <translation type="obsolete">Débutez la cuisson</translation>
-    </message>
-    <message>
-        <source>Boil or steep </source>
-        <translation type="obsolete">Bouillir ou infuser</translation>
-    </message>
-    <message>
-        <source>Steep %1 %2 in wort for %3.</source>
-        <translation type="obsolete">Infuser %1 %2 dans le moût pendant %3.</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 for %3</source>
-        <translation type="obsolete">Utilisez %1 %2 pendant %3</translation>
-    </message>
-    <message>
-        <source>Hop addition</source>
-        <translation type="obsolete">Ajoût de houblon</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="obsolete">Utilisez %1 %2 àl&apos;embouteillage pendant %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into primary for %3.</source>
-        <translation type="obsolete">Mettez %1 %2 en fermentation primaire pendant %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into secondary for %3.</source>
-        <translation type="obsolete">Mettez %1 %2 en fermentation secondaire pendant %3.</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 for %3.</source>
-        <translation type="obsolete">Utilisez %1 %2 pendant %3.</translation>
-    </message>
-    <message>
-        <source>Misc addition</source>
-        <translation type="obsolete">Ajoût d&apos;ingrédients divers</translation>
-    </message>
-    <message>
-        <source>Boil/steep fermentables</source>
-        <translation type="obsolete">Bouillir/infuser les ingrédients fermentescibles</translation>
-    </message>
-    <message>
-        <source>to the boil.</source>
-        <translation type="obsolete">à la cuisson.</translation>
-    </message>
-    <message>
-        <source>Boil fermentables</source>
-        <translation type="obsolete">Cuire ingrédients </translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into boil for %3.</source>
-        <translation type="obsolete">Ajoutez %1 %2 à la cuisson pendant %3.</translation>
-    </message>
-    <message>
-        <source>Boil hop addition</source>
-        <translation type="obsolete">Addition de houblon a l&apos;ébullition</translation>
-    </message>
-    <message>
-        <source>to the boil at knockout.</source>
-        <translation type="obsolete">à l&apos;ébullition au moment d&apos;éteindre le feu.</translation>
-    </message>
-    <message>
-        <source>Knockout additions</source>
-        <translation type="obsolete">Additions au moment d&apos;éteindre le feu</translation>
-    </message>
-    <message>
-        <source>You should have %1 wort post-boil.</source>
-        <translation type="obsolete">Vous devriez maintenant avoir %1 de moût post-cuisson.</translation>
-    </message>
-    <message>
-        <source>
-You anticipate losing %1 to trub and chiller loss.</source>
-        <translation type="obsolete">Vous avez anticipé une perte de %1 due à la cassure et au refroidissement dans la chaudière à moût.</translation>
-    </message>
-    <message>
-        <source>
-Add %1 top up water into primary.</source>
-        <translation type="obsolete">Ajoutez%1 d&apos;eau supplémentaire à la cuve de fermentation.</translation>
-    </message>
-    <message>
-        <source>
-The final volume in the primary is %1.</source>
-        <translation type="obsolete">Le volume final dans la cuve de fermentation est de %1.</translation>
-    </message>
-    <message>
-        <source>Post boil</source>
-        <translation type="obsolete">Post cuisson</translation>
-    </message>
-    <message>
-        <source>Flameout</source>
-        <translation type="obsolete">Extinction</translation>
-    </message>
-    <message>
-        <source>Stop boiling the wort.</source>
-        <translation type="obsolete">Arrêtez l&apos;ébullition du moût.</translation>
-    </message>
-    <message>
-        <source>Cool wort and pitch </source>
-        <translation type="obsolete">Refroidir le moût et inoculez de levures</translation>
-    </message>
-    <message>
-        <source>%1 %2 yeast, </source>
-        <translation type="obsolete">%1 %2 levures, </translation>
-    </message>
-    <message>
-        <source>to the primary.</source>
-        <translation type="obsolete">à la cuve de fermentation primaire.</translation>
-    </message>
-    <message>
-        <source>Pitch yeast</source>
-        <translation type="obsolete">Inoculez de levures</translation>
-    </message>
-    <message>
-        <source>to primary.</source>
-        <translation type="obsolete">à la cuve de fermentation primaire.</translation>
-    </message>
-    <message>
-        <source>Additions to primary</source>
-        <translation type="obsolete">Ajouts à la cuve de fermentation primaire</translation>
-    </message>
-    <message>
-        <source>Let ferment until FG is %1.</source>
-        <translation type="obsolete">Laissez fermenter jusqu&apos;à une DF de %1.</translation>
-    </message>
-    <message>
-        <source>Ferment</source>
-        <translation type="obsolete">Fermentez</translation>
-    </message>
-    <message>
-        <source>Transfer beer to secondary.</source>
-        <translation type="obsolete">Soutirez la bière à la cuve de fermentation secondaire.</translation>
-    </message>
-    <message>
-        <source>Transfer to secondary</source>
-        <translation type="obsolete">Soutirez à la cuve de fermentation secondaire</translation>
-    </message>
-    <message>
-        <source>Add %1 %2 to secondary for %3.</source>
-        <translation type="obsolete">Ajoutez %1 %2 à la cuve de fermentation secondaire pendant%3.</translation>
-    </message>
-    <message>
-        <source>Secondary addition</source>
-        <translation type="obsolete">Addition secondaire</translation>
-    </message>
-    <message>
-        <source>Dry hop %1 %2 for %3.</source>
-        <translation type="obsolete">Houblonnage à cru %1 %2 pendant %3.</translation>
-    </message>
-    <message>
-        <source>Dry hop</source>
-        <translation type="obsolete">Houblonnage à cru</translation>
-    </message>
-    <message>
-        <source>Add %1 %2 to boil at %3.</source>
-        <translation type="obsolete">Ajoutez %1 %2 à la cuisson à %3.</translation>
-    </message>
-    <message>
-        <source>Node at line is not an element. Line %1</source>
-        <translation type="obsolete">Noeud at la ligne n&apos;est pas un élément.  Ligne %1</translation>
-    </message>
-    <message>
-        <source>Unsupported STYLE property: %1. Line %2</source>
-        <translation type="obsolete">Propriété STYLE non supportée:%1. Line %2</translation>
-    </message>
-    <message>
-        <source>WATER says it is not version %1. Line %2</source>
-        <translation type="obsolete">EAU indique que ceci n&apos;est pas version %1. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported WATER property: %1. Line %2</source>
-        <translation type="obsolete">Propriété EAU non supportée:%1. Line %2</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="116"/>
@@ -2510,26 +1842,6 @@ The final volume in the primary is %1.</source>
         <translation>Très élevé</translation>
     </message>
     <message>
-        <source>%1 is not a valid type for yeast. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas un type valide pour levures. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid form for yeast. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas une forme valide pour levures. Ligne %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid flocculation for yeast. Line %2</source>
-        <translation type="obsolete">%1 n&apos;est pas une floculation valide pour levures. Ligne %2</translation>
-    </message>
-    <message>
-        <source>Unsupported YEAST property: %1. Line %2</source>
-        <translation type="obsolete">Propriété LEVURES non supportée:%1. Line %2</translation>
-    </message>
-    <message>
-        <source>BrewTargetTreeItem::columnCount Bad column: %1</source>
-        <translation type="obsolete">Mauvaise colonne: %1</translation>
-    </message>
-    <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="187"/>
         <source>Recipes</source>
         <translation>Recettes</translation>
@@ -2558,10 +1870,6 @@ The final volume in the primary is %1.</source>
         <location filename="../src/BrewTargetTreeItem.cpp" line="304"/>
         <source>Yeast</source>
         <translation>Levure</translation>
-    </message>
-    <message>
-        <source>BrewTargetTreeItem::dataYeast Bad column: %1</source>
-        <translation type="obsolete">Type inconnu %1</translation>
     </message>
 </context>
 <context>
@@ -3478,10 +2786,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Insérez un nouveau palier</translation>
     </message>
     <message>
-        <source>Insert</source>
-        <translation type="obsolete">Insérez</translation>
-    </message>
-    <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="243"/>
         <source>Move steps</source>
         <translation type="unfinished">Déplacez les paliers</translation>
@@ -3492,26 +2796,14 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Déplacez le palier choisi vers le haut</translation>
     </message>
     <message>
-        <source>Up</source>
-        <translation type="obsolete">Haut</translation>
-    </message>
-    <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="293"/>
         <source>Move currently selected step down</source>
         <translation type="unfinished">Déplacez le palier choisi vers le bas</translation>
     </message>
     <message>
-        <source>Down</source>
-        <translation type="obsolete">Bas</translation>
-    </message>
-    <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="346"/>
         <source>Remove currently selected step</source>
         <translation type="unfinished">Supprimez le palier que vous avez choisi</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Supprimez</translation>
     </message>
 </context>
 <context>
@@ -3665,14 +2957,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Volume après ébullition</translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation type="obsolete">Date</translation>
-    </message>
-    <message>
-        <source>     Postboil Volume</source>
-        <translation type="obsolete">Volume après ébullition</translation>
-    </message>
-    <message>
         <location filename="../ui/brewNoteWidget.ui" line="339"/>
         <source>Volume of wort in BK after boil</source>
         <translation>Volume de moût dans la cuve, après ébullition</translation>
@@ -3703,10 +2987,6 @@ p, li { white-space: pre-wrap; }
         <translation>Après fermentation</translation>
     </message>
     <message>
-        <source>FG</source>
-        <translation type="obsolete">DF</translation>
-    </message>
-    <message>
         <location filename="../ui/brewNoteWidget.ui" line="480"/>
         <source>Final gravity</source>
         <translation>Densité finale</translation>
@@ -3715,10 +2995,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/brewNoteWidget.ui" line="518"/>
         <source>Volume of beer into serving keg/bottles</source>
         <translation>Volume de bière en fûts/bouteilles</translation>
-    </message>
-    <message>
-        <source>          Date</source>
-        <translation type="obsolete">Date</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="550"/>
@@ -3923,10 +3199,6 @@ p, li { white-space: pre-wrap; }
         <translation>Chaleur spécifique (cal/(g*K)</translation>
     </message>
     <message>
-        <source>Specific heat of mash tun</source>
-        <translation type="obsolete">Chaleur spécifique del a cuve-matière</translation>
-    </message>
-    <message>
         <location filename="../ui/equipmentEditor.ui" line="243"/>
         <source>Boiling &amp;&amp; Water</source>
         <translation>Eau bouillante</translation>
@@ -3966,14 +3238,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/equipmentEditor.ui" line="402"/>
         <source>Water added to fermenter</source>
         <translation>Eau ajouté à la cuve de fermentation primaire</translation>
-    </message>
-    <message>
-        <source>Hop utilization (pct)</source>
-        <translation type="obsolete">Valeur d&apos;utilisation d&apos;houblon (pct)</translation>
-    </message>
-    <message>
-        <source>Don&apos;t use this field. It is ignored.</source>
-        <translation type="obsolete">N&apos;utilisez pas ce champ.  Il est ignoré.</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="409"/>
@@ -4524,22 +3788,10 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>mainWindow</name>
     <message>
-        <source>Brewtarget - 1.2</source>
-        <translation type="obsolete">Brewtarget - 1.2</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="82"/>
         <location filename="../ui/mainWindow.ui" line="92"/>
         <source>Recipes</source>
         <translation>Recettes</translation>
-    </message>
-    <message>
-        <source>Recipe list</source>
-        <translation type="obsolete">Liste des recettes</translation>
-    </message>
-    <message>
-        <source>Your Recipe</source>
-        <translation type="obsolete">Votre recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="458"/>
@@ -4557,17 +3809,9 @@ p, li { white-space: pre-wrap; }
         <translation>Style</translation>
     </message>
     <message>
-        <source>Style of this recipe</source>
-        <translation type="obsolete">Style de cette recette</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="445"/>
         <source>Equipment</source>
         <translation>Équipement</translation>
-    </message>
-    <message>
-        <source>Equipment to brew this with</source>
-        <translation type="obsolete">Équipement utilisé pour brasser ceci</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="435"/>
@@ -4636,14 +3880,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="945"/>
         <source>Bitterness (IBU)</source>
         <translation>Amertume: (UAI)</translation>
-    </message>
-    <message>
-        <source>Color (SRM)</source>
-        <translation type="obsolete">Couleur (SRM)</translation>
-    </message>
-    <message>
-        <source>Brewtarget - 1.2.3</source>
-        <translation type="obsolete">Brewtarget - 1.2.3</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="214"/>
@@ -5124,45 +4360,9 @@ p, li { white-space: pre-wrap; }
         <translation>Retirer recette</translation>
     </message>
     <message>
-        <source>File</source>
-        <translation type="obsolete">Fichier</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Imprimer</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="obsolete">À propos</translation>
-    </message>
-    <message>
-        <source>Brewtarget - 1.2.2</source>
-        <translation type="obsolete">Brewtarget - 1.2.2</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="obsolete">Visulaliser</translation>
-    </message>
-    <message>
-        <source>Tools</source>
-        <translation type="obsolete">Outils</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="1924"/>
         <source>toolBar</source>
         <translation>Barre d&apos;outils</translation>
-    </message>
-    <message>
-        <source>About BrewTarget</source>
-        <translation type="obsolete">À propos de Brewtarget</translation>
-    </message>
-    <message>
-        <source>Export Recipe</source>
-        <translation type="obsolete">Exporter une recette</translation>
-    </message>
-    <message>
-        <source>New Recipe</source>
-        <translation type="obsolete">Nouvelle recette</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="157"/>
@@ -5175,46 +4375,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Levures</translation>
     </message>
     <message>
-        <source>Equipments</source>
-        <translation type="obsolete">Équipement</translation>
-    </message>
-    <message>
-        <source>Styles</source>
-        <translation type="obsolete">Styles</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="obsolete">Sortie</translation>
-    </message>
-    <message>
-        <source>Import Recipes</source>
-        <translation type="obsolete">Importer recettes</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="obsolete">Options</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="obsolete">Manuel</translation>
-    </message>
-    <message>
-        <source>Scale Recipe</source>
-        <translation type="obsolete">Ajustez la recette</translation>
-    </message>
-    <message>
-        <source>Recipe to Clipboard as Text</source>
-        <translation type="obsolete">Exporter la recette en format texte</translation>
-    </message>
-    <message>
-        <source>OG Correction Help</source>
-        <translation type="obsolete">Aide à la correction de DP</translation>
-    </message>
-    <message>
-        <source>Convert Units</source>
-        <translation type="obsolete">Convertir unités</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="2120"/>
         <source>Backup Database</source>
         <translation>Sauvegarde informatique de la base de données</translation>
@@ -5223,14 +4383,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="2125"/>
         <source>Restore Database</source>
         <translation>Restaurer la base de données</translation>
-    </message>
-    <message>
-        <source>Copy Recipe</source>
-        <translation type="obsolete">Copier la recette</translation>
-    </message>
-    <message>
-        <source>Priming Calculator</source>
-        <translation type="obsolete">Calculateur d&apos;édulcoration</translation>
     </message>
 </context>
 <context>
@@ -5872,10 +5024,6 @@ p, li { white-space: pre-wrap; }
         <translation>Plato/Brix/Balling</translation>
     </message>
     <message>
-        <source>Formulae</source>
-        <translation type="obsolete">Formule</translation>
-    </message>
-    <message>
         <location filename="../ui/optionsDialog.ui" line="165"/>
         <location filename="../ui/optionsDialog.ui" line="205"/>
         <source>Color</source>
@@ -6112,17 +5260,9 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Starter OG</source>
-        <translation type="obsolete">Densité primitive du starter</translation>
-    </message>
-    <message>
         <location filename="../ui/pitchDialog.ui" line="261"/>
         <source>Output</source>
         <translation>Sortie</translation>
-    </message>
-    <message>
-        <source># Vials/Smack Packs</source>
-        <translation type="obsolete">Nb d&apos;éprouvettes ou de paquets</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="309"/>
@@ -6312,10 +5452,6 @@ p, li { white-space: pre-wrap; }
         <translation>Notes</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation type="obsolete">Sauvegardez</translation>
-    </message>
-    <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="395"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
@@ -6490,10 +5626,6 @@ p, li { white-space: pre-wrap; }
         <translation>Nouvelle efficacité (pct)</translation>
     </message>
     <message>
-        <source>New Batch Size</source>
-        <translation type="obsolete">Nouvelle taille de brassin</translation>
-    </message>
-    <message>
         <location filename="../ui/scaleRecipeTool.ui" line="22"/>
         <location filename="../ui/scaleRecipeTool.ui" line="35"/>
         <source>New batch size</source>
@@ -6636,54 +5768,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/styleEditor.ui" line="641"/>
         <source>ABV (pct)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Min OG</source>
-        <translation type="obsolete">DP minimale</translation>
-    </message>
-    <message>
-        <source>Max OG</source>
-        <translation type="obsolete">DP maximale</translation>
-    </message>
-    <message>
-        <source>Min FG</source>
-        <translation type="obsolete">DF minimale</translation>
-    </message>
-    <message>
-        <source>Max FG</source>
-        <translation type="obsolete">DF maximale</translation>
-    </message>
-    <message>
-        <source>Min IBUs</source>
-        <translation type="obsolete">UAI minimale</translation>
-    </message>
-    <message>
-        <source>Max IBUs</source>
-        <translation type="obsolete">UAI maximale</translation>
-    </message>
-    <message>
-        <source>Min color (SRM)</source>
-        <translation type="obsolete">Couleur (SRM) minimale</translation>
-    </message>
-    <message>
-        <source>Max color (SRM)</source>
-        <translation type="obsolete">Couleur (SRM) maximale</translation>
-    </message>
-    <message>
-        <source>Min carb (vols)</source>
-        <translation type="obsolete">Carbonatation minimale (vols)</translation>
-    </message>
-    <message>
-        <source>Max carb (vols)</source>
-        <translation type="obsolete">Carbonatation maximale (vols)</translation>
-    </message>
-    <message>
-        <source>Min ABV (pct)</source>
-        <translation type="obsolete">ABV min (pct.)</translation>
-    </message>
-    <message>
-        <source>Max ABV (pct)</source>
-        <translation type="obsolete">ABV max. (pct.)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="728"/>

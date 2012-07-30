@@ -765,14 +765,6 @@
 <context>
     <name>HopTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Índex del model erroni. Fila = %1</translation>
-    </message>
-    <message>
-        <source>Bad column: %1</source>
-        <translation type="obsolete">Columna errònia: %1</translation>
-    </message>
-    <message>
         <location filename="../src/HopTableModel.cpp" line="286"/>
         <source>Name</source>
         <translation>Nom</translation>
@@ -806,10 +798,6 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <source>Brew day mode</source>
-        <translation type="obsolete">Mode dia d&apos;elaboració</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="235"/>
         <source>Open</source>
         <translation>Obrir</translation>
@@ -824,58 +812,6 @@
         <location filename="../src/MainWindow.cpp" line="241"/>
         <source>Save</source>
         <translation>Desar</translation>
-    </message>
-    <message>
-        <source>Brewday mode</source>
-        <translation type="obsolete">Mode Dia d\&apos;elaboració</translation>
-    </message>
-    <message>
-        <source>Extras</source>
-        <translation type="obsolete">Extres</translation>
-    </message>
-    <message>
-        <source>New recipe</source>
-        <translation type="obsolete">Recepta nova</translation>
-    </message>
-    <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Esborrar recepta</translation>
-    </message>
-    <message>
-        <source>Remove recipe</source>
-        <translation type="obsolete">Eliminar recepta</translation>
-    </message>
-    <message>
-        <source>Save database</source>
-        <translation type="obsolete">Desar la base de dades</translation>
-    </message>
-    <message>
-        <source>View equipments</source>
-        <translation type="obsolete">Veure equips</translation>
-    </message>
-    <message>
-        <source>View fermentables</source>
-        <translation type="obsolete">Veure maltes</translation>
-    </message>
-    <message>
-        <source>View hops</source>
-        <translation type="obsolete">Veure llúpols</translation>
-    </message>
-    <message>
-        <source>View miscs</source>
-        <translation type="obsolete">Veure ingredients extres</translation>
-    </message>
-    <message>
-        <source>View styles</source>
-        <translation type="obsolete">Veure estils</translation>
-    </message>
-    <message>
-        <source>View yeasts</source>
-        <translation type="obsolete">Veure llevats</translation>
-    </message>
-    <message>
-        <source>Timers</source>
-        <translation type="obsolete">Temporitzadors</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="870"/>
@@ -912,10 +848,6 @@
         <location filename="../src/MainWindow.cpp" line="1633"/>
         <source>HTML files (*.html)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Recipe</source>
-        <translation type="obsolete">Recepta nova</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1750"/>
@@ -1013,10 +945,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not open %1 for writing.</source>
-        <translation type="obsolete">No s&apos;ha pogut obrir %1 per a escriptura.</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="1250"/>
         <source>Recipe name</source>
         <translation>Nom de la recepta</translation>
@@ -1069,22 +997,6 @@
         <translation>Per algun motiu, l&apos;operació no s&apos;ha pogut dur a terme.</translation>
     </message>
     <message>
-        <source>Could not open %1 for reading.</source>
-        <translation type="obsolete">No s&apos;ha pogut obrir per llegir %1</translation>
-    </message>
-    <message>
-        <source>Bad document formatting in %1 %2:%3. %4</source>
-        <translation type="obsolete">Format del fitxer erroni a %1 %2: %3 %4</translation>
-    </message>
-    <message>
-        <source>Found %1 recipes.</source>
-        <translation type="obsolete">S&apos;han trobat %1 receptes.</translation>
-    </message>
-    <message>
-        <source>Import recipe?</source>
-        <translation type="obsolete">Vol importar la recepta?</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="1383"/>
         <source>Import %1?</source>
         <translation>Vol importar %1?</translation>
@@ -1098,22 +1010,6 @@
         <location filename="../src/MainWindow.cpp" line="1408"/>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
         <translation>Està intentant afegir un pas de la maceració sense tenir-la creada. Cal crear una maceració primer.</translation>
-    </message>
-    <message>
-        <source>New instructions?</source>
-        <translation type="obsolete">¿Instrucciones nuevas?</translation>
-    </message>
-    <message>
-        <source>Generate new instructions?</source>
-        <translation type="obsolete">¿Hacer instrucciones nuevas?</translation>
-    </message>
-    <message>
-        <source>Save database?</source>
-        <translation type="obsolete">Vol desar la Base de Dades?</translation>
-    </message>
-    <message>
-        <source>Do you want to save the changes made? If not, you will lose anything you changed in this session.</source>
-        <translation type="obsolete">Vol guardar els canvis? Sinó els canvis fets en aquesta sessió es perdran.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1565"/>
@@ -1250,10 +1146,6 @@
         <translation type="unfinished">Temperatura desitjada</translation>
     </message>
     <message>
-        <source>Temp</source>
-        <translation type="obsolete">Temp</translation>
-    </message>
-    <message>
         <location filename="../src/MashStepTableModel.cpp" line="188"/>
         <source>Time</source>
         <translation>Temps</translation>
@@ -1282,10 +1174,6 @@
         <translation>Sense passos</translation>
     </message>
     <message>
-        <source>You must have at least one mash step to run the wizard.</source>
-        <translation type="obsolete">Cal que hi hagi un pas de maceració per iniciar l&apos;assistent.</translation>
-    </message>
-    <message>
         <location filename="../src/MashWizard.cpp" line="54"/>
         <source>There must be at least one mash step to run the wizard.</source>
         <translation>Cal que hi hagi un pas de maceració per iniciar l&apos;assistent.</translation>
@@ -1309,16 +1197,6 @@
         <location filename="../src/MashWizard.cpp" line="172"/>
         <source>Your mash is too thick for desired temp. at first step.</source>
         <translation>La maceració està massa espesa per la temperatura desitjada en el primer pas.</translation>
-    </message>
-    <message>
-        <source>Decoction</source>
-        <translation type="obsolete">Cocció</translation>
-    </message>
-    <message>
-        <source>Haven&apos;t tested decoction calculations yet.
-Use at own risk.</source>
-        <translation type="obsolete">Encara no fet els càlculs de cocció.
-Compte.</translation>
     </message>
     <message>
         <location filename="../src/MashWizard.cpp" line="213"/>
@@ -1430,10 +1308,6 @@ Compte.</translation>
         <translation>Índex erroni. Fila = %1</translation>
     </message>
     <message>
-        <source>Bad model index. column = %1</source>
-        <translation type="obsolete">Bad model index. column = %1</translation>
-    </message>
-    <message>
         <location filename="../src/MiscTableModel.cpp" line="219"/>
         <source>Name</source>
         <translation>Nom</translation>
@@ -1511,12 +1385,6 @@ Compte.</translation>
 </translation>
     </message>
     <message>
-        <source>Efficiency: %1%
-</source>
-        <translation type="obsolete">Eficiencia: %1%
-</translation>
-    </message>
-    <message>
         <location filename="../src/RecipeFormatter.cpp" line="103"/>
         <source>OG: %1
 </source>
@@ -1528,14 +1396,6 @@ Compte.</translation>
         <source>FG: %1
 </source>
         <translation>DF: %1
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%
-</source>
-        <oldsource>ABV: %1
-</oldsource>
-        <translation type="obsolete">APV: %1%
 </translation>
     </message>
     <message>
@@ -1693,14 +1553,14 @@ Compte.</translation>
         <translation>Etapa</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Secondary</source>
         <translation>Secundaria</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Primary</source>
         <translation>Primaria</translation>
     </message>
@@ -1734,46 +1594,6 @@ Compte.</translation>
 </source>
         <translation>Instruccions
 </translation>
-    </message>
-    <message>
-        <source>Could not open %1 for reading.</source>
-        <translation type="obsolete">Could not open %1 for reading.</translation>
-    </message>
-    <message>
-        <source>Could not find the weight_unit_system tag in the option file.</source>
-        <translation type="obsolete">Could not find the weight_unit_system tag in the option file.</translation>
-    </message>
-    <message>
-        <source>Could not find the volume_unit_system tag in the option file.</source>
-        <translation type="obsolete">Could not find the volume_unit_system tag in the option file.</translation>
-    </message>
-    <message>
-        <source>Could not find the temperature_scale tag in the option file.</source>
-        <translation type="obsolete">Could not find the temperature_scale tag in the option file.</translation>
-    </message>
-    <message>
-        <source>Could not find the ibu_formula tag in the option file.</source>
-        <translation type="obsolete">Could not find the ibu_formula tag in the option file.</translation>
-    </message>
-    <message>
-        <source>Bad ibu_formula type: %1</source>
-        <translation type="obsolete">Bad ibu_formula type: %1</translation>
-    </message>
-    <message>
-        <source>Could not find the color_formula tag in the option file.</source>
-        <translation type="obsolete">Could not find the color_formula tag in the option file.</translation>
-    </message>
-    <message>
-        <source>Bad color_formula type: %1</source>
-        <translation type="obsolete">Bad color_formula type: %1</translation>
-    </message>
-    <message>
-        <source>Could not find the use_plato tag in the option file.</source>
-        <translation type="obsolete">Could not find the use_plato tag in the option file.</translation>
-    </message>
-    <message>
-        <source>Bad use_plato type: %1</source>
-        <translation type="obsolete">Bad use_plato type: %1</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="103"/>
@@ -1813,10 +1633,6 @@ Compte.</translation>
         <location filename="../src/brewtarget.cpp" line="912"/>
         <source>Could not open %1 for writing</source>
         <translation>No es pot obrir %1 per escriure</translation>
-    </message>
-    <message>
-        <source>Bad document formatting in %1 %2:%3. %4</source>
-        <translation type="obsolete">Bad document formatting in %1 %2:%3. %4</translation>
     </message>
     <message>
         <location filename="../src/database.cpp" line="151"/>
@@ -1891,22 +1707,6 @@ Compte.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not open %1 for writing.</source>
-        <translation type="obsolete">No es pot obrir %1 per escriptura.</translation>
-    </message>
-    <message>
-        <source>Node at line %1 is not an element.</source>
-        <translation type="obsolete">L&apos;element de la línia %1 no és correcte.</translation>
-    </message>
-    <message>
-        <source>EQUIPMENT says it is not version %1. Line %2</source>
-        <translation type="obsolete">EQUIPMENT diu que no és la versió %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported EQUIPMENT property: %1. Line %2</source>
-        <translation type="obsolete">EQUIPMENT no suporta la propietat: %1. Línia %2</translation>
-    </message>
-    <message>
         <location filename="../src/fermentable.cpp" line="216"/>
         <source>Grain</source>
         <translation>Gra</translation>
@@ -1932,90 +1732,14 @@ Compte.</translation>
         <translation>Adjunt</translation>
     </message>
     <message>
-        <source>FERMENTABLE says it is not version %1. Line %2</source>
-        <translation type="obsolete">FERMENTABLE diu que no és la versió %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for FERMENTABLE. Line %2</source>
-        <translation type="obsolete">%1 no és un tipus vàlid de FERMENTABLE. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported FERMENTABLE property: %1. Line %2</source>
-        <translation type="obsolete">FERMENTABLE no suporta la propietat: %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Bittering</source>
-        <translation type="obsolete">Amargor</translation>
-    </message>
-    <message>
-        <source>Aroma</source>
-        <translation type="obsolete">Aroma</translation>
-    </message>
-    <message>
-        <source>Both</source>
-        <translation type="obsolete">Ambdós</translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="obsolete">Flor</translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="obsolete">Pellet</translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="obsolete">Plug</translation>
-    </message>
-    <message>
         <location filename="../src/misc.cpp" line="175"/>
         <source>Boil</source>
         <translation>Bullir</translation>
     </message>
     <message>
-        <source>Dry Hop</source>
-        <translation type="obsolete">Dry Hop</translation>
-    </message>
-    <message>
         <location filename="../src/misc.cpp" line="175"/>
         <source>Mash</source>
         <translation>Maceració</translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="obsolete">Primera quota </translation>
-    </message>
-    <message>
-        <source>HOP says it is not version %1. Line %2</source>
-        <translation type="obsolete">HOP diu que no és la versió %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid use for HOP. Line %2</source>
-        <translation type="obsolete">%1 no és un ús vàlid per a HOP. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for HOP. Line %2</source>
-        <translation type="obsolete">%1 no és un tipus vàlid per a HOP. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid form for HOP. Line %2</source>
-        <translation type="obsolete">%1 no és una forma vàlida per HOP. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported HOP property: %1. Line %2</source>
-        <translation type="obsolete">HOP propietat no suportada: %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported INSTRUCTION property: %1. Line %2</source>
-        <translation type="obsolete">INSTRUCTION propietat no suportada: %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>YEAST says it is not version %1. Line %2</source>
-        <translation type="obsolete">YEAST diu que no es una versió %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MASH property: %1. Line %2</source>
-        <translation type="obsolete">MASH propietat no suportada: %1. Línia %2</translation>
     </message>
     <message>
         <location filename="../src/mashstep.cpp" line="24"/>
@@ -2031,14 +1755,6 @@ Compte.</translation>
         <location filename="../src/mashstep.cpp" line="24"/>
         <source>Decoction</source>
         <translation>Cocció</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for MASHSTEP. Line %2</source>
-        <translation type="obsolete">%1 no és un tipus vàlid per a MASHSTEP. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MASHSTEP property: %1. Line %2</source>
-        <translation type="obsolete">MASHSTEP propietat no suportada: %1. Línia %2</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="175"/>
@@ -2074,300 +1790,6 @@ Compte.</translation>
         <location filename="../src/misc.cpp" line="159"/>
         <source>Other</source>
         <translation>Altre</translation>
-    </message>
-    <message>
-        <source>MISC says it is not version %1. Line %2</source>
-        <translation type="obsolete">MISC diu que no és un versió %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for MISC. Line %2</source>
-        <translation type="obsolete">%1 no és un tipus vàlid per a MISC. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid use for MISC. Line %2</source>
-        <translation type="obsolete">%1 no és un ús vàlid per a MISC. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MISC property: %1. Line %2</source>
-        <translation type="obsolete">MISC propietat no suportada: %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>RECIPE says it is not version %1. Line %2</source>
-        <translation type="obsolete">RECIPE diu que no és la versió %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Error at line %1.</source>
-        <translation type="obsolete">Error a la línia %1.</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for RECIPE. Line %2</source>
-        <translation type="obsolete">%1 no és un tipus vàlid per a RECIPE. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported RECIPE property: %1. Line %2</source>
-        <translation type="obsolete">RECIPE propietat no suportada: %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Add grains</source>
-        <translation type="obsolete">Afegir el gra</translation>
-    </message>
-    <message>
-        <source>Add </source>
-        <translation type="obsolete">Afegir</translation>
-    </message>
-    <message>
-        <source>to the mash tun.</source>
-        <translation type="obsolete">al macerador.</translation>
-    </message>
-    <message>
-        <source>Heat water</source>
-        <translation type="obsolete">Escalfar l&apos;aigua</translation>
-    </message>
-    <message>
-        <source>Bring </source>
-        <translation type="obsolete">Escalfar</translation>
-    </message>
-    <message>
-        <source>%1 water to %2, </source>
-        <translation type="obsolete">%1 d&apos;aigua a %2, </translation>
-    </message>
-    <message>
-        <source>for upcoming infusions.</source>
-        <translation type="obsolete">per a les pròximes infusions.</translation>
-    </message>
-    <message>
-        <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation type="obsolete">Afegir %1 d&apos;aigua a %2 a la maceració per a escalfar a %3.</translation>
-    </message>
-    <message>
-        <source>Heat mash to %1.</source>
-        <translation type="obsolete">Escalfar la maceració a %1.</translation>
-    </message>
-    <message>
-        <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation type="obsolete">Escalfar %1 de la maceració a l&apos;ebullició i tornar-la al macerador per arribar a %2.</translation>
-    </message>
-    <message>
-        <source> Hold for %1.</source>
-        <translation type="obsolete"> Mantenir per %1.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into fermenter for %3.</source>
-        <translation type="obsolete">Posar %1 %2 al fermentador durant %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into first wort for %3.</source>
-        <translation type="obsolete">Posar %1 %2 a la primera quota durant %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into mash for %3.</source>
-        <translation type="obsolete">Posar %1 %2 a la maceració durant %3.</translation>
-    </message>
-    <message>
-        <source>Mash hop addition</source>
-        <translation type="obsolete">Adición de lúpolos a la maceración</translation>
-    </message>
-    <message>
-        <source>Mash misc addition</source>
-        <translation type="obsolete">Adición misc a la maceración</translation>
-    </message>
-    <message>
-        <source>Do first wort hopping with </source>
-        <translation type="obsolete">Fer la primera quota de llúpol amb</translation>
-    </message>
-    <message>
-        <source>First wort hopping</source>
-        <translation type="obsolete">Primera quota de llúpol</translation>
-    </message>
-    <message>
-        <source>You should now have %1 wort.</source>
-        <translation type="obsolete">Hauries de tenir %1 quota.</translation>
-    </message>
-    <message>
-        <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation type="obsolete"> Afegir %1 d&apos;aigua a l&apos;olla, amb el volume %2 abans de bullir.</translation>
-    </message>
-    <message>
-        <source>Pre-boil</source>
-        <translation type="obsolete">Abans de bullir</translation>
-    </message>
-    <message>
-        <source>Boil time</source>
-        <translation type="obsolete">Temps ebullició</translation>
-    </message>
-    <message>
-        <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation type="obsolete">No has configurat cap equip, així que cal que diguis el temps de ebullició.</translation>
-    </message>
-    <message>
-        <source>Bring the wort to a boil and hold for %1.</source>
-        <translation type="obsolete">Bullir durant %1.</translation>
-    </message>
-    <message>
-        <source>Start boil</source>
-        <translation type="obsolete">Començar a bullir</translation>
-    </message>
-    <message>
-        <source>Boil or steep </source>
-        <translation type="obsolete">Bullir</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 for %3</source>
-        <translation type="obsolete">Usar %1 %2 durant %3</translation>
-    </message>
-    <message>
-        <source>Hop addition</source>
-        <translation type="obsolete">Afegir el llúpol</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="obsolete">Usar %1 %2 al embotellar per %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into primary for %3.</source>
-        <translation type="obsolete">Posar %1 %2 al primari durant %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into secondary for %3.</source>
-        <translation type="obsolete">Posar %1 %2 al secundari durant %3.</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 for %3.</source>
-        <translation type="obsolete">Usar %1 %2 durant %3.</translation>
-    </message>
-    <message>
-        <source>Misc addition</source>
-        <translation type="obsolete">Afegir ingredients extres</translation>
-    </message>
-    <message>
-        <source>Boil/steep fermentables</source>
-        <translation type="obsolete">Bullir/remullar fermentables</translation>
-    </message>
-    <message>
-        <source>to the boil.</source>
-        <translation type="obsolete">al hervor.</translation>
-    </message>
-    <message>
-        <source>Boil fermentables</source>
-        <translation type="obsolete">Hervir fermentables</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into boil for %3.</source>
-        <translation type="obsolete">Posar %1 %2 a bullir durant %3.</translation>
-    </message>
-    <message>
-        <source>Boil hop addition</source>
-        <translation type="obsolete">Hervir lúpulo</translation>
-    </message>
-    <message>
-        <source>to the boil at knockout.</source>
-        <translation type="obsolete">al final de l&apos;ebullició.</translation>
-    </message>
-    <message>
-        <source>Knockout additions</source>
-        <translation type="obsolete">Adicions finals</translation>
-    </message>
-    <message>
-        <source>You should have %1 wort post-boil.</source>
-        <translation type="obsolete">Hauries de tenir %1 de caldo desprès de bullir.</translation>
-    </message>
-    <message>
-        <source>
-You anticipate losing %1 to trub and chiller loss.</source>
-        <translation type="obsolete">
-Esperes perdre %1 en sediments i al refredar.</translation>
-    </message>
-    <message>
-        <source>
-Add %1 top up water into primary.</source>
-        <translation type="obsolete">
-Agregar %1 d&apos;aigua a la primària.</translation>
-    </message>
-    <message>
-        <source>
-The final volume in the primary is %1.</source>
-        <translation type="obsolete">
-El volum final a la primària és %1.</translation>
-    </message>
-    <message>
-        <source>Post boil</source>
-        <translation type="obsolete">Desprès de bullir</translation>
-    </message>
-    <message>
-        <source>Cool wort and pitch </source>
-        <translation type="obsolete">Refredar el caldo i tirar-lo</translation>
-    </message>
-    <message>
-        <source>%1 %2 yeast, </source>
-        <translation type="obsolete">%1 %2 de llevat, </translation>
-    </message>
-    <message>
-        <source>to the primary.</source>
-        <translation type="obsolete">a la primària.</translation>
-    </message>
-    <message>
-        <source>Pitch yeast</source>
-        <translation type="obsolete">Tirar llevat</translation>
-    </message>
-    <message>
-        <source>to primary.</source>
-        <translation type="obsolete">al primario.</translation>
-    </message>
-    <message>
-        <source>Additions to primary</source>
-        <translation type="obsolete">Adiciónes al primario</translation>
-    </message>
-    <message>
-        <source>Let ferment until FG is %1.</source>
-        <translation type="obsolete">Deixar fermentar fins que la DF sigui %1.</translation>
-    </message>
-    <message>
-        <source>Ferment</source>
-        <translation type="obsolete">Fermentar</translation>
-    </message>
-    <message>
-        <source>Transfer beer to secondary.</source>
-        <translation type="obsolete">Traslladar la cervesa al secundari.</translation>
-    </message>
-    <message>
-        <source>Transfer to secondary</source>
-        <translation type="obsolete">Traslladar al secundari</translation>
-    </message>
-    <message>
-        <source>Add %1 %2 to secondary for %3.</source>
-        <translation type="obsolete">Agregar %1 %2 al secundario por %3.</translation>
-    </message>
-    <message>
-        <source>Secondary addition</source>
-        <translation type="obsolete">Adición al secundario</translation>
-    </message>
-    <message>
-        <source>Dry hop %1 %2 for %3.</source>
-        <translation type="obsolete">Agregar %1 %2 lúpulos secos por %3.</translation>
-    </message>
-    <message>
-        <source>Dry hop</source>
-        <translation type="obsolete">Agregar lúpulos secos</translation>
-    </message>
-    <message>
-        <source>Add %1 %2 to boil at %3.</source>
-        <translation type="obsolete">Agregar %1 %2 al bullir a %3.</translation>
-    </message>
-    <message>
-        <source>Node at line is not an element. Line %1</source>
-        <translation type="obsolete">L&apos;element de la línia és erroni. Línia %1</translation>
-    </message>
-    <message>
-        <source>Unsupported STYLE property: %1. Line %2</source>
-        <translation type="obsolete">STYLE propietat no suportada: %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>WATER says it is not version %1. Line %2</source>
-        <translation type="obsolete">WATER diu que no és la versió %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported WATER property: %1. Line %2</source>
-        <translation type="obsolete">WATER propietat no suportada: %1. Línia %2</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="116"/>
@@ -2433,26 +1855,6 @@ El volum final a la primària és %1.</translation>
         <location filename="../src/yeast.cpp" line="188"/>
         <source>Very High</source>
         <translation>Molt Alta</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for yeast. Line %2</source>
-        <translation type="obsolete">%1 no és un tipus de llevat vàlid. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid form for yeast. Line %2</source>
-        <translation type="obsolete">%1 no és una forma vàlida de llevat. Línia %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid flocculation for yeast. Line %2</source>
-        <translation type="obsolete">%1 no és una fluctuació vàlida del llevat. Línia %2</translation>
-    </message>
-    <message>
-        <source>Unsupported YEAST property: %1. Line %2</source>
-        <translation type="obsolete">YEAST propietat no suportada: %1. Línia %2</translation>
-    </message>
-    <message>
-        <source>Bad column: %1</source>
-        <translation type="obsolete">Columna errònia: %1</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="187"/>
@@ -2828,14 +2230,6 @@ El volum final a la primària és %1.</translation>
         <location filename="../src/RecipeFormatter.cpp" line="542"/>
         <source>Bitterness</source>
         <translation>Amargor</translation>
-    </message>
-    <message>
-        <source>%1 SRM (%2)</source>
-        <translation type="obsolete">%1 SRM (%2)</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">%1 (%2)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="559"/>
@@ -3366,56 +2760,6 @@ p, li { white-space: pre-wrap; }
         <source>Donate</source>
         <translation type="unfinished">Donació</translation>
     </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for brewing beer.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2010 Philip G. Lee (rocketman768@gmail.com)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Andrzej (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for brewing beer.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2010 Philip G. Lee (rocketman768@gmail.com)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Andrzej (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
@@ -3460,10 +2804,6 @@ p, li { white-space: pre-wrap; }
         <translation>Introduir el pas nou</translation>
     </message>
     <message>
-        <source>Insert</source>
-        <translation type="obsolete">Introducir</translation>
-    </message>
-    <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="243"/>
         <source>Move steps</source>
         <translation>Col·locar passos</translation>
@@ -3474,26 +2814,14 @@ p, li { white-space: pre-wrap; }
         <translation>Moure el pas seleccionat cap amunt</translation>
     </message>
     <message>
-        <source>Up</source>
-        <translation type="obsolete">Arriba</translation>
-    </message>
-    <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="293"/>
         <source>Move currently selected step down</source>
         <translation>Moure el pas seleccionat cap avall</translation>
     </message>
     <message>
-        <source>Down</source>
-        <translation type="obsolete">Abajo</translation>
-    </message>
-    <message>
         <location filename="../ui/brewDayScrollWidget.ui" line="346"/>
         <source>Remove currently selected step</source>
         <translation>Esborrar el pas seleccionat</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="obsolete">Remover</translation>
     </message>
 </context>
 <context>
@@ -3647,10 +2975,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Volum desprès de l&apos;ebullició</translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation type="obsolete">Data</translation>
-    </message>
-    <message>
         <location filename="../ui/brewNoteWidget.ui" line="339"/>
         <source>Volume of wort in BK after boil</source>
         <translation type="unfinished"></translation>
@@ -3679,10 +3003,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/brewNoteWidget.ui" line="443"/>
         <source>Postferment</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FG</source>
-        <translation type="obsolete">DF</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="480"/>
@@ -3897,10 +3217,6 @@ p, li { white-space: pre-wrap; }
         <translation>Calor específic (cal/(g*K))</translation>
     </message>
     <message>
-        <source>Specific heat of mash tun</source>
-        <translation type="obsolete">Calor específico de la cuba</translation>
-    </message>
-    <message>
         <location filename="../ui/equipmentEditor.ui" line="243"/>
         <source>Boiling &amp;&amp; Water</source>
         <translation>Ebullició i aigua</translation>
@@ -3940,14 +3256,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/equipmentEditor.ui" line="402"/>
         <source>Water added to fermenter</source>
         <translation>Quantitat d&apos;aigua que s&apos;agrega al fermentador</translation>
-    </message>
-    <message>
-        <source>Hop utilization (pct)</source>
-        <translation type="obsolete">Utilització de Llúpol (%)</translation>
-    </message>
-    <message>
-        <source>Don&apos;t use this field. It is ignored.</source>
-        <translation type="obsolete">No s&apos;usa aquesta dada. Serà ignorada.</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="409"/>
@@ -4504,14 +3812,6 @@ p, li { white-space: pre-wrap; }
         <translation>Receptes</translation>
     </message>
     <message>
-        <source>Recipe list</source>
-        <translation type="obsolete">Llista de receptes</translation>
-    </message>
-    <message>
-        <source>Your Recipe</source>
-        <translation type="obsolete">La Receta</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="458"/>
         <source>Name</source>
         <translation>Nom</translation>
@@ -4527,17 +3827,9 @@ p, li { white-space: pre-wrap; }
         <translation>Estil</translation>
     </message>
     <message>
-        <source>Style of this recipe</source>
-        <translation type="obsolete">Estil de la recepta</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="445"/>
         <source>Equipment</source>
         <translation>Equip</translation>
-    </message>
-    <message>
-        <source>Equipment to brew this with</source>
-        <translation type="obsolete">Equip amb el qual cuinar</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="435"/>
@@ -4604,14 +3896,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="945"/>
         <source>Bitterness (IBU)</source>
         <translation>Amargor (IBU)</translation>
-    </message>
-    <message>
-        <source>Color (SRM)</source>
-        <translation type="obsolete">Color (SRM)</translation>
-    </message>
-    <message>
-        <source>Brewtarget - 1.2.3</source>
-        <translation type="obsolete">Brewtarget - 1.2.3</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="214"/>
@@ -5093,57 +4377,9 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>File</source>
-        <translation type="obsolete">Fitxer</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Imprimir</translation>
-    </message>
-    <message>
-        <source>Refractometer Tools</source>
-        <translation type="obsolete">Calculadora per a refractómetre</translation>
-    </message>
-    <message>
-        <source>Pitch Rate Calculator</source>
-        <translation type="obsolete">Calculadora per a llevat</translation>
-    </message>
-    <message>
-        <source>Print Preview</source>
-        <translation type="obsolete">Vista Prèvia</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="obsolete">Quant a</translation>
-    </message>
-    <message>
-        <source>Brewtarget - 1.2.2</source>
-        <translation type="obsolete">Brewtarget - 1.2.2</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="obsolete">Veure</translation>
-    </message>
-    <message>
-        <source>Tools</source>
-        <translation type="obsolete">Eines</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="1924"/>
         <source>toolBar</source>
         <translation>Barra d&apos;eines</translation>
-    </message>
-    <message>
-        <source>About BrewTarget</source>
-        <translation type="obsolete">Quant a Brewtarget</translation>
-    </message>
-    <message>
-        <source>Export Recipe</source>
-        <translation type="obsolete">Exportar recepta</translation>
-    </message>
-    <message>
-        <source>New Recipe</source>
-        <translation type="obsolete">Recepta nova</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="157"/>
@@ -5156,46 +4392,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Llevats</translation>
     </message>
     <message>
-        <source>Equipments</source>
-        <translation type="obsolete">Equips</translation>
-    </message>
-    <message>
-        <source>Styles</source>
-        <translation type="obsolete">Estils</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="obsolete">Sortir</translation>
-    </message>
-    <message>
-        <source>Import Recipes</source>
-        <translation type="obsolete">Importar receptes</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="obsolete">Opcions</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="obsolete">Manual</translation>
-    </message>
-    <message>
-        <source>Scale Recipe</source>
-        <translation type="obsolete">Escalar la recepta</translation>
-    </message>
-    <message>
-        <source>Recipe to Clipboard as Text</source>
-        <translation type="obsolete">Recepta copiada com a text</translation>
-    </message>
-    <message>
-        <source>OG Correction Help</source>
-        <translation type="obsolete">Ajuda per corregir la DI</translation>
-    </message>
-    <message>
-        <source>Convert Units</source>
-        <translation type="obsolete">Conversor d&apos;unitats</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="2120"/>
         <source>Backup Database</source>
         <translation>Còpia de seguretat de la base de dades</translation>
@@ -5204,14 +4400,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="2125"/>
         <source>Restore Database</source>
         <translation>Restaurar base de dades</translation>
-    </message>
-    <message>
-        <source>Copy Recipe</source>
-        <translation type="obsolete">Copiar recepta</translation>
-    </message>
-    <message>
-        <source>Priming Calculator</source>
-        <translation type="obsolete">Calculadora del priming</translation>
     </message>
 </context>
 <context>
@@ -5851,10 +5039,6 @@ p, li { white-space: pre-wrap; }
         <translation>Plato/Brix/Balling</translation>
     </message>
     <message>
-        <source>Formulae</source>
-        <translation type="obsolete">Fórmulas</translation>
-    </message>
-    <message>
         <location filename="../ui/optionsDialog.ui" line="165"/>
         <location filename="../ui/optionsDialog.ui" line="205"/>
         <source>Color</source>
@@ -6091,17 +5275,9 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Starter OG</source>
-        <translation type="obsolete">DI del starter</translation>
-    </message>
-    <message>
         <location filename="../ui/pitchDialog.ui" line="261"/>
         <source>Output</source>
         <translation>Resultats</translation>
-    </message>
-    <message>
-        <source># Vials/Smack Packs</source>
-        <translation type="obsolete"># Ampolles/Paquets</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="309"/>
@@ -6291,10 +5467,6 @@ p, li { white-space: pre-wrap; }
         <translation>Notes</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation type="obsolete">Guardar</translation>
-    </message>
-    <message>
         <location filename="../ui/recipeExtrasDialog.ui" line="395"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
@@ -6469,10 +5641,6 @@ p, li { white-space: pre-wrap; }
         <translation>Nova eficiència (%)</translation>
     </message>
     <message>
-        <source>New Batch Size</source>
-        <translation type="obsolete">Tamaño de Lote Nuevo</translation>
-    </message>
-    <message>
         <location filename="../ui/scaleRecipeTool.ui" line="22"/>
         <location filename="../ui/scaleRecipeTool.ui" line="35"/>
         <source>New batch size</source>
@@ -6615,54 +5783,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/styleEditor.ui" line="641"/>
         <source>ABV (pct)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Min OG</source>
-        <translation type="obsolete">DI Min</translation>
-    </message>
-    <message>
-        <source>Max OG</source>
-        <translation type="obsolete">DI Max</translation>
-    </message>
-    <message>
-        <source>Min FG</source>
-        <translation type="obsolete">DF Min</translation>
-    </message>
-    <message>
-        <source>Max FG</source>
-        <translation type="obsolete">DF Max</translation>
-    </message>
-    <message>
-        <source>Min IBUs</source>
-        <translation type="obsolete">IBU Min</translation>
-    </message>
-    <message>
-        <source>Max IBUs</source>
-        <translation type="obsolete">IBU Max</translation>
-    </message>
-    <message>
-        <source>Min color (SRM)</source>
-        <translation type="obsolete">Color Min (SRM)</translation>
-    </message>
-    <message>
-        <source>Max color (SRM)</source>
-        <translation type="obsolete">Color Max (SRM)</translation>
-    </message>
-    <message>
-        <source>Min carb (vols)</source>
-        <translation type="obsolete">CO2 Min (vol.)</translation>
-    </message>
-    <message>
-        <source>Max carb (vols)</source>
-        <translation type="obsolete">CO2 Max (vol.)</translation>
-    </message>
-    <message>
-        <source>Min ABV (pct)</source>
-        <translation type="obsolete">ABV Min (pct)</translation>
-    </message>
-    <message>
-        <source>Max ABV (pct)</source>
-        <translation type="obsolete">ABV Max (pct)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="728"/>

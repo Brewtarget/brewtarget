@@ -28,7 +28,7 @@
 #include "brewtarget.h"
 #include "Algorithms.h"
 #include "mashstep.h"
-
+#include "recipe.h"
 
 QHash<QString,QString> BrewNote::tagToProp = BrewNote::tagToPropHash();
 

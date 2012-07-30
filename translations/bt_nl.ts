@@ -765,14 +765,6 @@
 <context>
     <name>HopTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Bad model index. row = %1</translation>
-    </message>
-    <message>
-        <source>HopTableModel::data Bad column: %1</source>
-        <translation type="obsolete">HopTableModel::data Bad column: %1</translation>
-    </message>
-    <message>
         <location filename="../src/HopTableModel.cpp" line="286"/>
         <source>Name</source>
         <translation>Naam</translation>
@@ -802,10 +794,6 @@
         <source>Form</source>
         <translation>Vorm</translation>
     </message>
-    <message>
-        <source>HopTableModel::headerdata Bad column: %1</source>
-        <translation type="obsolete">HopTableModel::headerdata Bad column: %1</translation>
-    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -824,50 +812,6 @@
         <location filename="../src/MainWindow.cpp" line="241"/>
         <source>Save</source>
         <translation>Opslaan</translation>
-    </message>
-    <message>
-        <source>New recipe</source>
-        <translation type="obsolete">Nieuw recept</translation>
-    </message>
-    <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Wis recept</translation>
-    </message>
-    <message>
-        <source>Remove recipe</source>
-        <translation type="obsolete">Verwijder recept</translation>
-    </message>
-    <message>
-        <source>Save database</source>
-        <translation type="obsolete">Database opslaan</translation>
-    </message>
-    <message>
-        <source>View equipments</source>
-        <translation type="obsolete">Bekeeij apparatuur</translation>
-    </message>
-    <message>
-        <source>View fermentables</source>
-        <translation type="obsolete">Bekijk mout</translation>
-    </message>
-    <message>
-        <source>View hops</source>
-        <translation type="obsolete">Bekijk hop</translation>
-    </message>
-    <message>
-        <source>View miscs</source>
-        <translation type="obsolete">Bekijk diversen</translation>
-    </message>
-    <message>
-        <source>View styles</source>
-        <translation type="obsolete">Bekijk stijlen</translation>
-    </message>
-    <message>
-        <source>View yeasts</source>
-        <translation type="obsolete">Bekeijk gisten</translation>
-    </message>
-    <message>
-        <source>Timers</source>
-        <translation type="obsolete">Timers</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="870"/>
@@ -894,10 +838,6 @@
         <location filename="../src/MainWindow.cpp" line="1633"/>
         <source>HTML files (*.html)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Recipe</source>
-        <translation type="obsolete">Nieuw Recept</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1750"/>
@@ -995,10 +935,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not open %1 for writing.</source>
-        <translation type="obsolete">Kon %1 niet openen om te schrijven.</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="1250"/>
         <source>Recipe name</source>
         <translation>Recept naam</translation>
@@ -1051,22 +987,6 @@
         <translation>De opratie faalde om de een of andere reden.</translation>
     </message>
     <message>
-        <source>Could not open %1 for reading.</source>
-        <translation type="obsolete">Kon %1 niet openen om te lezen.</translation>
-    </message>
-    <message>
-        <source>Bad document formatting in %1 %2:%3. %4</source>
-        <translation type="obsolete">Slechte document formattering in %1 %2:%3. %4</translation>
-    </message>
-    <message>
-        <source>Found %1 recipes.</source>
-        <translation type="obsolete">%1 recept(en) gevonden.</translation>
-    </message>
-    <message>
-        <source>Import recipe?</source>
-        <translation type="obsolete">Recept importeren?</translation>
-    </message>
-    <message>
         <location filename="../src/MainWindow.cpp" line="1383"/>
         <source>Import %1?</source>
         <translation>%1 importeren?</translation>
@@ -1090,14 +1010,6 @@
         <location filename="../src/MainWindow.cpp" line="1408"/>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
         <translation>Poging om een maisch stap toe te voegen zonder maisch. Maak a.u.b. eerst een maisch aan.</translation>
-    </message>
-    <message>
-        <source>Save database?</source>
-        <translation type="obsolete">Opslaan database?</translation>
-    </message>
-    <message>
-        <source>Do you want to save the changes made? If not, you will lose anything you changed in this session.</source>
-        <translation type="obsolete">Wilt u uw wijzigingen opslaan? Zo niet, verliest u alle wijzigingen in deze sessie.</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1565"/>
@@ -1262,10 +1174,6 @@
         <translation>Geen stappen</translation>
     </message>
     <message>
-        <source>You must have at least one mash step to run the wizard.</source>
-        <translation type="obsolete">U moet ten minste éen maisch stap hebben om de wizard te draaien.</translation>
-    </message>
-    <message>
         <location filename="../src/MashWizard.cpp" line="54"/>
         <source>There must be at least one mash step to run the wizard.</source>
         <translation type="unfinished"></translation>
@@ -1289,15 +1197,6 @@
         <location filename="../src/MashWizard.cpp" line="172"/>
         <source>Your mash is too thick for desired temp. at first step.</source>
         <translation>Uw maisch is te dik voor de gewenste temperatuur tijdens de eerste stap.</translation>
-    </message>
-    <message>
-        <source>Decoction</source>
-        <translation type="obsolete">Decoctie</translation>
-    </message>
-    <message>
-        <source>Haven&apos;t tested decoction calculations yet.
-Use at own risk.</source>
-        <translation type="obsolete">Decoctie berekeningen zijn nog niet getest.</translation>
     </message>
     <message>
         <location filename="../src/MashWizard.cpp" line="213"/>
@@ -1649,14 +1548,14 @@ Use at own risk.</source>
         <translation>Fase</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Secondary</source>
         <translation>Secundair</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="175"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Primary</source>
         <translation>Hoofdvergisting</translation>
     </message>
@@ -1803,22 +1702,6 @@ Use at own risk.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Could not open %1 for writing.</source>
-        <translation type="obsolete">Kon %1 niet openen om te schrijven.</translation>
-    </message>
-    <message>
-        <source>Node at line %1 is not an element.</source>
-        <translation type="obsolete">Node op regel %1 is geen element.</translation>
-    </message>
-    <message>
-        <source>EQUIPMENT says it is not version %1. Line %2</source>
-        <translation type="obsolete">EQUIPMENT zegt dat het geen versie %1 is. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported EQUIPMENT property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde EQUIPMENT eigenschap: %1. Regel %2</translation>
-    </message>
-    <message>
         <location filename="../src/fermentable.cpp" line="216"/>
         <source>Grain</source>
         <translation>Graan</translation>
@@ -1844,90 +1727,14 @@ Use at own risk.</source>
         <translation>Aanvulling</translation>
     </message>
     <message>
-        <source>FERMENTABLE says it is not version %1. Line %2</source>
-        <translation type="obsolete">FERMENTABLE zegt dat het geen versie %1 is. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for FERMENTABLE. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig type voor FERMENTABLE. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported FERMENTABLE property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde FERMENTABLE eigenschap: %1. Regel %2</translation>
-    </message>
-    <message>
-        <source>Bittering</source>
-        <translation type="obsolete">Bitter</translation>
-    </message>
-    <message>
-        <source>Aroma</source>
-        <translation type="obsolete">Aroma</translation>
-    </message>
-    <message>
-        <source>Both</source>
-        <translation type="obsolete">Beide</translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation type="obsolete">Blad</translation>
-    </message>
-    <message>
-        <source>Pellet</source>
-        <translation type="obsolete">Pellet</translation>
-    </message>
-    <message>
-        <source>Plug</source>
-        <translation type="obsolete">Geperste hop</translation>
-    </message>
-    <message>
         <location filename="../src/misc.cpp" line="175"/>
         <source>Boil</source>
         <translation>Koken</translation>
     </message>
     <message>
-        <source>Dry Hop</source>
-        <translation type="obsolete">Dry Hopping</translation>
-    </message>
-    <message>
         <location filename="../src/misc.cpp" line="175"/>
         <source>Mash</source>
         <translation>Maisch</translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="obsolete">Eerste Wort</translation>
-    </message>
-    <message>
-        <source>HOP says it is not version %1. Line %2</source>
-        <translation type="obsolete">HOP zegt dat het niet versie %1 is. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid use for HOP. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig gebruik voor HOP. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for HOP. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig type voor HOP. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid form for HOP. Line %2</source>
-        <translation type="obsolete">%1 is geen geldige vorm voor HOP. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported HOP property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde HOP eigenschap: %1. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported INSTRUCTION property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde INSTRUCTION eigenschap: %1. Line %2</translation>
-    </message>
-    <message>
-        <source>YEAST says it is not version %1. Line %2</source>
-        <translation type="obsolete">YEASTzegt dat het geen versie %1 is. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MASH property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde MASH eigenschap: %1. Line %2</translation>
     </message>
     <message>
         <location filename="../src/mashstep.cpp" line="24"/>
@@ -1943,14 +1750,6 @@ Use at own risk.</source>
         <location filename="../src/mashstep.cpp" line="24"/>
         <source>Decoction</source>
         <translation>Decoctie</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for MASHSTEP. Line %2</source>
-        <translation type="obsolete">%s1 is geen geldig type voor MASHSTEP. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MASHSTEP property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde MAISCHSTAP eigenschap: %1. Regel%2</translation>
     </message>
     <message>
         <location filename="../src/misc.cpp" line="175"/>
@@ -1986,257 +1785,6 @@ Use at own risk.</source>
         <location filename="../src/misc.cpp" line="159"/>
         <source>Other</source>
         <translation>Overig</translation>
-    </message>
-    <message>
-        <source>MISC says it is not version %1. Line %2</source>
-        <translation type="obsolete">MISC zegt dat het niet versie %1 is. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for MISC. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig type voor MISC. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid use for MISC. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig type voor MISC. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported MISC property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde MISC eigenschap: %1. Regel %2</translation>
-    </message>
-    <message>
-        <source>RECIPE says it is not version %1. Line %2</source>
-        <translation type="obsolete">RECIPE zegt dat het niet versie %1 is. Regel %2</translation>
-    </message>
-    <message>
-        <source>Error at line %1.</source>
-        <translation type="obsolete">Fout op regel %1.</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for RECIPE. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig type voor RECIPE. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported RECIPE property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde RECIPE eigenschap: %1. Regel %2</translation>
-    </message>
-    <message>
-        <source>Add grains</source>
-        <translation type="obsolete">Graan toevoegen</translation>
-    </message>
-    <message>
-        <source>Add </source>
-        <translation type="obsolete">Toevoegen </translation>
-    </message>
-    <message>
-        <source>to the mash tun.</source>
-        <translation type="obsolete">aan het maisch vat.</translation>
-    </message>
-    <message>
-        <source>Heat water</source>
-        <translation type="obsolete">Verhit water</translation>
-    </message>
-    <message>
-        <source>Bring </source>
-        <translation type="obsolete">Breng </translation>
-    </message>
-    <message>
-        <source>%1 water to %2, </source>
-        <translation type="obsolete">%1 water naar %2,</translation>
-    </message>
-    <message>
-        <source>for upcoming infusions.</source>
-        <translation type="obsolete">voor aanstaande infusies.</translation>
-    </message>
-    <message>
-        <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation type="obsolete">Voeg %1 water van %2 toe aan de maisch om het op %3 te brengen.</translation>
-    </message>
-    <message>
-        <source>Heat mash to %1.</source>
-        <translation type="obsolete">Verwarm maisch naar %1.</translation>
-    </message>
-    <message>
-        <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation type="obsolete">Breng %1 van de maisch aan het koken en voeg het wwer terug aan het maisch vat om het naar %2 te brengen.</translation>
-    </message>
-    <message>
-        <source> Hold for %1.</source>
-        <translation type="obsolete">%1 aanhouden.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into fermenter for %3.</source>
-        <translation type="obsolete">Stop %1 %2 in het vergistingsvat voor %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into first wort for %3.</source>
-        <translation type="obsolete">Stop %1 %2 in de eerste wort voor %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into mash for %3.</source>
-        <translation type="obsolete">Stop %1 %2 in de maisch voor %3.</translation>
-    </message>
-    <message>
-        <source>Do first wort hopping with </source>
-        <translation type="obsolete">Doe de eerste hopgift met </translation>
-    </message>
-    <message>
-        <source>First wort hopping</source>
-        <translation type="obsolete">Eerste hopgift</translation>
-    </message>
-    <message>
-        <source>You should now have %1 wort.</source>
-        <translation type="obsolete">U dient nu %1 wort te hebben.</translation>
-    </message>
-    <message>
-        <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation type="obsolete"> Voeg %1 water toe aan de ketel om het volume voor het koken op %2 te brengen.</translation>
-    </message>
-    <message>
-        <source>Pre-boil</source>
-        <translation type="obsolete">Voor het koken</translation>
-    </message>
-    <message>
-        <source>Boil time</source>
-        <translation type="obsolete">Kook tijd</translation>
-    </message>
-    <message>
-        <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation type="obsolete">U heeft geen apparatuur geconfigureerd (wat zou moeten), dus vertel mij de kooktijd.</translation>
-    </message>
-    <message>
-        <source>Bring the wort to a boil and hold for %1.</source>
-        <translation type="obsolete">Breng de wort aan de kook en houd dit aan voor %1.</translation>
-    </message>
-    <message>
-        <source>Start boil</source>
-        <translation type="obsolete">Start het koken</translation>
-    </message>
-    <message>
-        <source>Boil or steep </source>
-        <translation type="obsolete">Koken of weken</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 for %3</source>
-        <translation type="obsolete">Gebruik %1 %2 voor %3</translation>
-    </message>
-    <message>
-        <source>Hop addition</source>
-        <translation type="obsolete">Hop gift</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 at bottling for %3.</source>
-        <translation type="obsolete">Gebruik %1 %2 tijdens het bottelen voor %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into primary for %3.</source>
-        <translation type="obsolete">Stop %1 %2 in de hoofdvergisting voor %3.</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into secondary for %3.</source>
-        <translation type="obsolete">Stop %1 %2 in het nagistingsvat voor %3.</translation>
-    </message>
-    <message>
-        <source>Use %1 %2 for %3.</source>
-        <translation type="obsolete">Gebruik %1 %2 voor %3.</translation>
-    </message>
-    <message>
-        <source>Misc addition</source>
-        <translation type="obsolete">Overige toevoegingen</translation>
-    </message>
-    <message>
-        <source>Boil/steep fermentables</source>
-        <translation type="obsolete">Koken/weken mout</translation>
-    </message>
-    <message>
-        <source>Put %1 %2 into boil for %3.</source>
-        <translation type="obsolete">Stop %1 %2 in het kookvat voor %3.</translation>
-    </message>
-    <message>
-        <source>to the boil at knockout.</source>
-        <translation type="obsolete">aan het koken aan het eind.</translation>
-    </message>
-    <message>
-        <source>Knockout additions</source>
-        <translation type="obsolete">Toevoegingen aan het eind</translation>
-    </message>
-    <message>
-        <source>You should have %1 wort post-boil.</source>
-        <translation type="obsolete">U zou %1 wort moeten hebben na het koken.</translation>
-    </message>
-    <message>
-        <source>
-You anticipate losing %1 to trub and chiller loss.</source>
-        <translation type="obsolete">
-U anticipeert om %1 te verliezen aan eiwitafscheiding en koeler verlies.
-	</translation>
-    </message>
-    <message>
-        <source>
-Add %1 top up water into primary.</source>
-        <translation type="obsolete">
-Voeg %1 top-up water toe aan hoofdvergisting.</translation>
-    </message>
-    <message>
-        <source>
-The final volume in the primary is %1.</source>
-        <translation type="obsolete">
-Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
-    </message>
-    <message>
-        <source>Post boil</source>
-        <translation type="obsolete">Na het koken</translation>
-    </message>
-    <message>
-        <source>Cool wort and pitch </source>
-        <translation type="obsolete">Koel de wort en voeg gist toe</translation>
-    </message>
-    <message>
-        <source>%1 %2 yeast, </source>
-        <translation type="obsolete">%1 %2 gist, </translation>
-    </message>
-    <message>
-        <source>to the primary.</source>
-        <translation type="obsolete">aan de hoofdvergisting.</translation>
-    </message>
-    <message>
-        <source>Pitch yeast</source>
-        <translation type="obsolete">Voeg gist toe</translation>
-    </message>
-    <message>
-        <source>Let ferment until FG is %1.</source>
-        <translation type="obsolete">Laat vergisten totdat het eind SG %1 is.</translation>
-    </message>
-    <message>
-        <source>Ferment</source>
-        <translation type="obsolete">Vergisting</translation>
-    </message>
-    <message>
-        <source>Transfer beer to secondary.</source>
-        <translation type="obsolete">Hevel het bier naar het nagistingsvat.</translation>
-    </message>
-    <message>
-        <source>Transfer to secondary</source>
-        <translation type="obsolete">Hevel naar het nagistingsvat</translation>
-    </message>
-    <message>
-        <source>Add %1 %2 to boil at %3.</source>
-        <translation type="obsolete">Voeg %1 %2 toe aan het kookvat op %3.</translation>
-    </message>
-    <message>
-        <source>Node at line is not an element. Line %1</source>
-        <translation type="obsolete">Node op regel %1 is geen element.</translation>
-    </message>
-    <message>
-        <source>Unsupported STYLE property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde STYLE eigenschap: %1. Regel %2</translation>
-    </message>
-    <message>
-        <source>WATER says it is not version %1. Line %2</source>
-        <translation type="obsolete">WATER zegt dat het niet versie %1 is. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported WATER property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde WATER eigenschap: %1. Regel %2</translation>
     </message>
     <message>
         <location filename="../src/yeast.cpp" line="116"/>
@@ -2302,22 +1850,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <location filename="../src/yeast.cpp" line="188"/>
         <source>Very High</source>
         <translation>Erg Hoog</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid type for yeast. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig type voor gist. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid form for yeast. Line %2</source>
-        <translation type="obsolete">%1 is geen geldige vorm voor gist. Regel %2</translation>
-    </message>
-    <message>
-        <source>%1 is not a valid flocculation for yeast. Line %2</source>
-        <translation type="obsolete">%1 is geen geldig flocculatie voor gist. Regel %2</translation>
-    </message>
-    <message>
-        <source>Unsupported YEAST property: %1. Line %2</source>
-        <translation type="obsolete">Niet ondersteunde YEAST eigenschap: %1. Regel %2</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeItem.cpp" line="187"/>
@@ -2694,10 +2226,6 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
         <location filename="../src/RecipeFormatter.cpp" line="542"/>
         <source>Bitterness</source>
         <translation>Bitterheid</translation>
-    </message>
-    <message>
-        <source>%1 SRM (%2)</source>
-        <translation type="obsolete">%1 SRM (%2)</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="559"/>
@@ -3443,10 +2971,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Date</source>
-        <translation type="obsolete">Datum</translation>
-    </message>
-    <message>
         <location filename="../ui/brewNoteWidget.ui" line="339"/>
         <source>Volume of wort in BK after boil</source>
         <translation type="unfinished"></translation>
@@ -3728,14 +3252,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/equipmentEditor.ui" line="402"/>
         <source>Water added to fermenter</source>
         <translation>Water toegevoegd aan vergistingsvat</translation>
-    </message>
-    <message>
-        <source>Hop utilization (pct)</source>
-        <translation type="obsolete">Hop benutting</translation>
-    </message>
-    <message>
-        <source>Don&apos;t use this field. It is ignored.</source>
-        <translation type="obsolete">Dit veld niet gebruiken. Het wordt niet gebruikt.</translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="409"/>
@@ -4292,10 +3808,6 @@ p, li { white-space: pre-wrap; }
         <translation>Recepten</translation>
     </message>
     <message>
-        <source>Recipe list</source>
-        <translation type="obsolete">Recepten lijst</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="458"/>
         <source>Name</source>
         <translation>Naam</translation>
@@ -4311,17 +3823,9 @@ p, li { white-space: pre-wrap; }
         <translation>Stijl</translation>
     </message>
     <message>
-        <source>Style of this recipe</source>
-        <translation type="obsolete">Stijl van dit recept</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="445"/>
         <source>Equipment</source>
         <translation>Apparatuur</translation>
-    </message>
-    <message>
-        <source>Equipment to brew this with</source>
-        <translation type="obsolete">Apparatuur om dit mee te brouwen</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="435"/>
@@ -4388,10 +3892,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="945"/>
         <source>Bitterness (IBU)</source>
         <translation>Bitterheid (IBU)</translation>
-    </message>
-    <message>
-        <source>Brewtarget - 1.2.3</source>
-        <translation type="obsolete">Brewtarget - 1.2.3</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="214"/>
@@ -4873,53 +4373,9 @@ p, li { white-space: pre-wrap; }
         <translation>Verwijder recept</translation>
     </message>
     <message>
-        <source>File</source>
-        <translation type="obsolete">Bestand</translation>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="obsolete">Print</translation>
-    </message>
-    <message>
-        <source>Refractometer Tools</source>
-        <translation type="obsolete">Refractometer Gereedschap</translation>
-    </message>
-    <message>
-        <source>Pitch Rate Calculator</source>
-        <translation type="obsolete">Gistgift rekenhulp</translation>
-    </message>
-    <message>
-        <source>Print Preview</source>
-        <translation type="obsolete">Print Preview</translation>
-    </message>
-    <message>
-        <source>About</source>
-        <translation type="obsolete">Over</translation>
-    </message>
-    <message>
-        <source>View</source>
-        <translation type="obsolete">Bekijk</translation>
-    </message>
-    <message>
-        <source>Tools</source>
-        <translation type="obsolete">Gereedschap</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="1924"/>
         <source>toolBar</source>
         <translation>gereedschapsBalk</translation>
-    </message>
-    <message>
-        <source>About BrewTarget</source>
-        <translation type="obsolete">Over BrewTarget</translation>
-    </message>
-    <message>
-        <source>Export Recipe</source>
-        <translation type="obsolete">Exporteer recept</translation>
-    </message>
-    <message>
-        <source>New Recipe</source>
-        <translation type="obsolete">Nieuw Recept</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="157"/>
@@ -4932,46 +4388,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Gist</translation>
     </message>
     <message>
-        <source>Equipments</source>
-        <translation type="obsolete">Apparatuur</translation>
-    </message>
-    <message>
-        <source>Styles</source>
-        <translation type="obsolete">Stijlen</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="obsolete">Einde</translation>
-    </message>
-    <message>
-        <source>Import Recipes</source>
-        <translation type="obsolete">Importeer Recepten</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="obsolete">Opties</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="obsolete">Handleiding</translation>
-    </message>
-    <message>
-        <source>Scale Recipe</source>
-        <translation type="obsolete">Schaal Recept</translation>
-    </message>
-    <message>
-        <source>Recipe to Clipboard as Text</source>
-        <translation type="obsolete">Recept naar Klembord als Tekst</translation>
-    </message>
-    <message>
-        <source>OG Correction Help</source>
-        <translation type="obsolete">Hulp bij correctie oorspronkelijk SG</translation>
-    </message>
-    <message>
-        <source>Convert Units</source>
-        <translation type="obsolete">Conversie Eenheden</translation>
-    </message>
-    <message>
         <location filename="../ui/mainWindow.ui" line="2120"/>
         <source>Backup Database</source>
         <translation>Backup Database</translation>
@@ -4980,14 +4396,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="2125"/>
         <source>Restore Database</source>
         <translation>Restore Database</translation>
-    </message>
-    <message>
-        <source>Copy Recipe</source>
-        <translation type="obsolete">Copiëer Recept</translation>
-    </message>
-    <message>
-        <source>Priming Calculator</source>
-        <translation type="obsolete">Rekenhulp suiker toevoeging</translation>
     </message>
 </context>
 <context>
@@ -5863,17 +5271,9 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Starter OG</source>
-        <translation type="obsolete">Oorspronkelijk SG starter</translation>
-    </message>
-    <message>
         <location filename="../ui/pitchDialog.ui" line="261"/>
         <source>Output</source>
         <translation>Uitvoer</translation>
-    </message>
-    <message>
-        <source># Vials/Smack Packs</source>
-        <translation type="obsolete">Smack Packs</translation>
     </message>
     <message>
         <location filename="../ui/pitchDialog.ui" line="309"/>
@@ -6379,54 +5779,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/styleEditor.ui" line="641"/>
         <source>ABV (pct)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Min OG</source>
-        <translation type="obsolete">Minimaal Oorspronkelijk SG</translation>
-    </message>
-    <message>
-        <source>Max OG</source>
-        <translation type="obsolete">Maximaal Oorspronkelijk SG</translation>
-    </message>
-    <message>
-        <source>Min FG</source>
-        <translation type="obsolete">Min Eind SG</translation>
-    </message>
-    <message>
-        <source>Max FG</source>
-        <translation type="obsolete">Max Eind SG</translation>
-    </message>
-    <message>
-        <source>Min IBUs</source>
-        <translation type="obsolete">Min IBU</translation>
-    </message>
-    <message>
-        <source>Max IBUs</source>
-        <translation type="obsolete">Max IBU</translation>
-    </message>
-    <message>
-        <source>Min color (SRM)</source>
-        <translation type="obsolete">Min Kleur (SRM)</translation>
-    </message>
-    <message>
-        <source>Max color (SRM)</source>
-        <translation type="obsolete">Max Kleur (SRM)</translation>
-    </message>
-    <message>
-        <source>Min carb (vols)</source>
-        <translation type="obsolete">Min Koolzuur (vols)</translation>
-    </message>
-    <message>
-        <source>Max carb (vols)</source>
-        <translation type="obsolete">Max Koolzuur (vols)</translation>
-    </message>
-    <message>
-        <source>Min ABV (pct)</source>
-        <translation type="obsolete">Min Alc (vol%)</translation>
-    </message>
-    <message>
-        <source>Max ABV (pct)</source>
-        <translation type="obsolete">Max Alc (vol%)</translation>
     </message>
     <message>
         <location filename="../ui/styleEditor.ui" line="728"/>
