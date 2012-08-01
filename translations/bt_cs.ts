@@ -371,7 +371,7 @@
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="1259"/>
-        <source>ECB</source>
+        <source>EBC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1548,14 +1548,14 @@
         <translation>Etapa</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Secondary</source>
         <translation>Dokvašování</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Primary</source>
         <translation>Hlavní kvašení</translation>
     </message>

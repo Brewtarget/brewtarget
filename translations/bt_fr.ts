@@ -371,7 +371,7 @@
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="1259"/>
-        <source>ECB</source>
+        <source>EBC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1541,14 +1541,14 @@
         <translation>Étape</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Secondary</source>
         <translation>Secondaire</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Primary</source>
         <translation>Primaire</translation>
     </message>
@@ -2068,7 +2068,7 @@ The final volume in the primary is %1.</source>
     <message>
         <location filename="../src/recipe.cpp" line="604"/>
         <source>Boil time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temps d&apos;ébullition</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="605"/>

@@ -371,7 +371,7 @@
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="1259"/>
-        <source>ECB</source>
+        <source>EBC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -678,12 +678,12 @@
     <message>
         <location filename="../src/hop.cpp" line="297"/>
         <source>Dry Hop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dry Hop</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="323"/>
         <source>Bittering</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bitterhop</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="323"/>
@@ -1548,14 +1548,14 @@
         <translation>Fase</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Secondary</source>
         <translation>Secundair</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Primary</source>
         <translation>Hoofdvergisting</translation>
     </message>

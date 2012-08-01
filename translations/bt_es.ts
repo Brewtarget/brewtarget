@@ -370,9 +370,13 @@
         <translation>Defecto</translation>
     </message>
     <message>
-        <location filename="../src/brewtarget.cpp" line="1259"/>
         <source>ECB</source>
-        <translation>ECB</translation>
+        <translation type="obsolete">ECB</translation>
+    </message>
+    <message>
+        <location filename="../src/brewtarget.cpp" line="1259"/>
+        <source>EBC</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="1260"/>
@@ -1553,14 +1557,14 @@
         <translation>Etapa</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Secondary</source>
         <translation>Secundario</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Primary</source>
         <translation>Primario</translation>
     </message>

@@ -303,7 +303,7 @@ unitDisplay Brewtarget::getColorUnit()
    if ( colorUnit == Brewtarget::SRM )
       return displaySrm;
 
-   return displayEcb;
+   return displayEbc;
 }
 
 TempScale Brewtarget::getTemperatureScale()
@@ -1256,7 +1256,7 @@ QMenu* Brewtarget::setupColorMenu(QWidget* parent, unitDisplay unit)
    QMenu* menu = new QMenu(parent);
 
    generateAction(menu, tr("Default"), noUnit, unit);
-   generateAction(menu, tr("ECB"), displayEcb, unit);
+   generateAction(menu, tr("EBC"), displayEbc, unit);
    generateAction(menu, tr("SRM"), displaySrm, unit);
 
    return menu;

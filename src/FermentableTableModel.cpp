@@ -337,7 +337,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
          case FERMCOLORCOL:
             unit = displayUnit(section);
             if ( unit == noUnit )
-               unit = Brewtarget::getColorUnit() ? displayEcb : displaySrm;
+               unit = Brewtarget::getColorUnit() ? displayEbc : displaySrm;
 
             if ( unit == displaySrm)
                return QVariant(tr("Color (SRM)"));

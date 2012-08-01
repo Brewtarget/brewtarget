@@ -371,7 +371,7 @@
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="1259"/>
-        <source>ECB</source>
+        <source>EBC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -662,7 +662,7 @@
     <message>
         <location filename="../src/hop.cpp" line="297"/>
         <source>First Wort</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Primera quota</translation>
     </message>
     <message>
         <location filename="../src/hop.cpp" line="297"/>
@@ -1553,14 +1553,14 @@
         <translation>Etapa</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Secondary</source>
         <translation>Secundaria</translation>
     </message>
     <message>
-        <location filename="../src/misc.cpp" line="175"/>
         <location filename="../src/RecipeFormatter.cpp" line="278"/>
+        <location filename="../src/misc.cpp" line="175"/>
         <source>Primary</source>
         <translation>Primaria</translation>
     </message>
@@ -2086,7 +2086,7 @@ El volum final a la primària és %1.</translation>
     <message>
         <location filename="../src/recipe.cpp" line="604"/>
         <source>Boil time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temps d&apos;ebullició</translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="605"/>
@@ -4358,7 +4358,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="2319"/>
         <location filename="../ui/mainWindow.ui" line="2322"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Desar</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2331"/>
