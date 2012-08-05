@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0">
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
@@ -2301,20 +2303,12 @@ p, li { white-space: pre-wrap; }
         <translation>Densitat</translation>
     </message>
     <message>
-        <source>sg</source>
-        <translation>densitat</translation>
-    </message>
-    <message>
         <source>Preboil gravity</source>
         <translation>Desnistat abans de bullir</translation>
     </message>
     <message>
         <source>Volume</source>
         <translation>Volum</translation>
-    </message>
-    <message>
-        <source>volumeIntoBK_l</source>
-        <translation>volum dintre del recipient d&apos;ebullició L</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
@@ -2325,20 +2319,12 @@ p, li { white-space: pre-wrap; }
         <translation>Strike Temp</translation>
     </message>
     <message>
-        <source>strikeTemp_c</source>
-        <translation>strikeTemp_c</translation>
-    </message>
-    <message>
         <source>Temperature of mash after dough in</source>
         <translation>Temperatura del macerat</translation>
     </message>
     <message>
         <source>Final Temp</source>
         <translation>Temperatura Final</translation>
-    </message>
-    <message>
-        <source>mashFinTemp_c</source>
-        <translation>temperatura final maserat C</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
@@ -2353,24 +2339,12 @@ p, li { white-space: pre-wrap; }
         <translation>DI</translation>
     </message>
     <message>
-        <source>og</source>
-        <translation>DI</translation>
-    </message>
-    <message>
         <source>Post boil gravity</source>
         <translation>Desnsitat després de bulir</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
         <translation>Volum desprès de l&apos;ebullició</translation>
-    </message>
-    <message>
-        <source>postBoilVolume_l</source>
-        <translation>volum després de bullir L</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Data</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
@@ -2385,16 +2359,8 @@ p, li { white-space: pre-wrap; }
         <translation>Volum en el fermentador</translation>
     </message>
     <message>
-        <source>volumeIntoFerm_l</source>
-        <translation>volum al feremntador L</translation>
-    </message>
-    <message>
         <source> Pitch Temp</source>
         <translation> Pitch Temp</translation>
-    </message>
-    <message>
-        <source>pitchTemp_c</source>
-        <translation>pitchTemp_c</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
@@ -2405,20 +2371,8 @@ p, li { white-space: pre-wrap; }
         <translation>Post-fermentació</translation>
     </message>
     <message>
-        <source>FG</source>
-        <translation>DF</translation>
-    </message>
-    <message>
-        <source>fg</source>
-        <translation>DF</translation>
-    </message>
-    <message>
         <source>Final gravity</source>
         <translation>Densitat Final</translation>
-    </message>
-    <message>
-        <source>finalVolume_l</source>
-        <translation>Volum final L</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
@@ -2442,10 +2396,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>DI prevista</translation>
-    </message>
-    <message>
-        <source>projOg</source>
         <translation>DI prevista</translation>
     </message>
     <message>
@@ -2664,23 +2614,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Specific heat is a property that depends only on the material the tun is made of. The specific heats of some common materials are listed below.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;table&gt;
-  &lt;tr&gt; &lt;td&gt;Aluminum&lt;/td&gt; &lt;td&gt;- 0.215&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Brass&lt;/td&gt; &lt;td&gt;- 0.092&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Copper&lt;/td&gt; &lt;td&gt;- 0.092&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Plastic&lt;/td&gt; &lt;td&gt;- 0.359&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Steel&lt;/td&gt; &lt;td&gt;- 0.120&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;
-&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3300,48 +3233,8 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Quant a</translation>
     </message>
     <message>
-        <source>volume</source>
-        <translation>volum</translation>
-    </message>
-    <message>
-        <source>boilVolume_l</source>
-        <translation>volum al bullir L</translation>
-    </message>
-    <message>
-        <source>finalVolume_l</source>
-        <translation>volum final L</translation>
-    </message>
-    <message>
         <source>Boil Time</source>
         <translation>Temps d&apos;ebullició</translation>
-    </message>
-    <message>
-        <source>boilSize_l</source>
-        <translation>mida al bullir L</translation>
-    </message>
-    <message>
-        <source>og</source>
-        <translation>di</translation>
-    </message>
-    <message>
-        <source>gravity</source>
-        <translation>densitat</translation>
-    </message>
-    <message>
-        <source>boilGrav</source>
-        <translation>Densitat al bullir</translation>
-    </message>
-    <message>
-        <source>fg</source>
-        <translation>gf</translation>
-    </message>
-    <message>
-        <source>alcohol</source>
-        <translation>alcohol</translation>
-    </message>
-    <message>
-        <source>color_srm</source>
-        <translation>color_srm</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -3575,14 +3468,6 @@ p, li { white-space: pre-wrap; }
         <source>Restore Database</source>
         <translation>Restaurar base de dades</translation>
     </message>
-    <message>
-        <source>Brewtarget - $VERSIONSTRING</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>batchSize_l</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -3657,18 +3542,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>thickness</source>
         <translation>thickness</translation>
-    </message>
-    <message>
-        <source>Infusion</source>
-        <translation type="unfinished">Infusió</translation>
-    </message>
-    <message>
-        <source>Temperature</source>
-        <translation type="unfinished">Temperatura</translation>
-    </message>
-    <message>
-        <source>Decoction</source>
-        <translation type="unfinished">Cocció</translation>
     </message>
 </context>
 <context>
@@ -4768,38 +4641,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes</source>
         <translation>Notes</translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CaCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

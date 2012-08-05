@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0">
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
@@ -1614,7 +1616,7 @@
 You anticipate losing %1 to trub and chiller loss.</source>
         <translation type="unfinished">
 U anticipeert om %1 te verliezen aan eiwitafscheiding en koeler verlies.
-<byte value="x9"/></translation>
+	</translation>
     </message>
     <message>
         <source>
@@ -2419,58 +2421,6 @@ p, li { white-space: pre-wrap; }
         <source>Notes</source>
         <translation>Aantekeningen</translation>
     </message>
-    <message>
-        <source>sg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>volumeIntoBK_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>strikeTemp_c</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mashFinTemp_c</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>og</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>postBoilVolume_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>volumeIntoFerm_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pitchTemp_c</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>FG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>fg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>finalVolume_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished">Datum</translation>
-    </message>
-    <message>
-        <source>projOg</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>btSplashScreen</name>
@@ -2659,23 +2609,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Cancel</source>
         <translation>Annuleren</translation>
-    </message>
-    <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Specific heat is a property that depends only on the material the tun is made of. The specific heats of some common materials are listed below.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;table&gt;
-  &lt;tr&gt; &lt;td&gt;Aluminum&lt;/td&gt; &lt;td&gt;- 0.215&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Brass&lt;/td&gt; &lt;td&gt;- 0.092&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Copper&lt;/td&gt; &lt;td&gt;- 0.092&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Plastic&lt;/td&gt; &lt;td&gt;- 0.359&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt; &lt;td&gt;Steel&lt;/td&gt; &lt;td&gt;- 0.120&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;
-&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3532,54 +3465,6 @@ p, li { white-space: pre-wrap; }
         <source>Restore Database</source>
         <translation>Restore Database</translation>
     </message>
-    <message>
-        <source>Brewtarget - $VERSIONSTRING</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilVolume_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>finalVolume_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>batchSize_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilSize_l</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>og</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>gravity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>boilGrav</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>fg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>alcohol</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>color_srm</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>mashDesigner</name>
@@ -3654,18 +3539,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>thickness</source>
         <translation>Dikte</translation>
-    </message>
-    <message>
-        <source>Infusion</source>
-        <translation type="unfinished">Infusie</translation>
-    </message>
-    <message>
-        <source>Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Decoction</source>
-        <translation type="unfinished">Decoctie</translation>
     </message>
 </context>
 <context>
@@ -4197,7 +4070,7 @@ p, li { white-space: pre-wrap; }
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
         <translation>&lt;qt&gt;
-<byte value="x9"/>   &lt;b&gt;Beheerst u een andere taal?&lt;/b&gt;
+	   &lt;b&gt;Beheerst u een andere taal?&lt;/b&gt;
           &lt;br&gt;&lt;br&gt;
          Of, zou u een vertaling willen verbeteren? Help ons en
        &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
@@ -4765,38 +4638,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes</source>
         <translation>Aantekeningen</translation>
-    </message>
-    <message>
-        <source>Ca</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SO&lt;sub&gt;4&lt;/sub&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Na</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CaCO3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>pH</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
