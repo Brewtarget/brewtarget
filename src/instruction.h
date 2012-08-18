@@ -47,7 +47,7 @@ public:
    Q_PROPERTY( QString timerValue READ timerValue WRITE setTimerValue /*NOTIFY changed*/ /*changedTimerValue*/ )
    Q_PROPERTY( bool completed READ completed WRITE setCompleted /*NOTIFY changed*/ /*changedCompleted*/ )
    Q_PROPERTY( double interval READ interval WRITE setInterval /*NOTIFY changed*/ /*changedInterval*/ )
-   Q_PROPERTY( QVector<QString> reagents READ reagents /*WRITE*/ /*NOTIFY changed*/ /*changedReagents*/ )
+   Q_PROPERTY( QList<QString> reagents READ reagents /*WRITE*/ /*NOTIFY changed*/ /*changedReagents*/ )
    
    Q_PROPERTY( int instructionNumber READ instructionNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
@@ -67,7 +67,7 @@ public:
    QString timerValue();
    bool completed();
    //! This is a non-stored temporary in-memory set.
-   QVector<QString> reagents();
+   QList<QString> reagents();
    double interval();
 
    int instructionNumber() const;
@@ -92,7 +92,7 @@ private:
                 bool hasTimer = false,
                 const QString& timerVal = "0" );
    */
-   QVector<QString> _reagents;
+   QList<QString> _reagents;
    
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();

@@ -111,7 +111,7 @@ bool Instruction::completed()
    return get("completed").toBool();
 }
 
-QVector<QString> Instruction::reagents()
+QList<QString> Instruction::reagents()
 {
    return _reagents;
 }

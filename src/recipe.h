@@ -297,6 +297,9 @@ public:
 
    // Helper
    double ibuFromHop(Hop const* hop);
+   QList<QString> getReagents( QList<Fermentable*> ferms );
+   QList<QString> getReagents( QList<MashStep*> msteps );
+   QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
    
 
 signals:

@@ -190,7 +190,7 @@ QString BrewDayWidget::buildInstructionTable()
    for( i = 0; i < size; ++i )
    {
       QString stepTime, tmp;
-      QVector<QString> reagents;
+      QList<QString> reagents;
 
       if(instructions[i]->interval())
          stepTime = Brewtarget::displayAmount(instructions[i]->interval(), Units::minutes, 0);

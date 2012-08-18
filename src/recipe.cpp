@@ -167,24 +167,17 @@ Instruction* Recipe::mashFermentableIns()
 {
    Instruction* ins;
    QString str,tmp;
-   unsigned int i;
+   int i;
 
    /*** Add grains ***/
    ins = Database::instance().newInstruction(this);
    ins->setName(tr("Add grains"));
    str = tr("Add ");
-   QList<Fermentable*> ferms = fermentables();
-   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
-   {
-      if( ferms[i]->isMashed() )
-      {
-         tmp = QString("%1 %2, ")
-               .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), Units::kilograms))
-               .arg(ferms[i]->name());
-         str += tmp;
-         ins->addReagent(tmp);
-      }
-   }
+   QList<QString> reagents = getReagents(fermentables());
+
+   for( i = 0; i < reagents.size(); ++i )
+      str += reagents.at(i);
+
    str += tr("to the mash tun.");
    ins->setDirections(str);
 
@@ -205,19 +198,10 @@ Instruction* Recipe::mashWaterIns(unsigned int size)
    ins = Database::instance().newInstruction(this);
    ins->setName(tr("Heat water"));
    str = tr("Bring ");
-   QList<MashStep*> msteps = mash()->mashSteps();
-   for( i = 0; i < size; ++i )
-   {
-      mstep = msteps[i];
-      if( mstep->type() != MashStep::Infusion )
-         continue;
+   QList<QString> reagents = getReagents(mash()->mashSteps());
+   for( i = 0; i < reagents.size(); ++i )
+      str += reagents.at(i);
 
-      tmp = tr("%1 water to %2, ")
-             .arg(Brewtarget::displayAmount(mstep->infuseAmount_l(), Units::liters))
-             .arg(Brewtarget::displayAmount(mstep->infuseTemp_c(), Units::celsius));
-      str += tmp;
-      ins->addReagent(tmp);
-   }
    str += tr("for upcoming infusions.");
    ins->setDirections(str);
 
@@ -351,34 +335,23 @@ QVector<PreInstruction> Recipe::miscSteps(Misc::Use type)
 Instruction* Recipe::firstWortHopsIns()
 {
    Instruction* ins;
-   QString str,tmp;
-   unsigned int i;
-   int size;
-   bool hasHop = false;
+   QString str;
+   QList<QString> reagents;
 
    str = tr("Do first wort hopping with ");
-   QList<Hop*> hlist = hops();
-   size = hlist.size();
-   for( i = 0; static_cast<int>(i) < size; ++i )
+
+   reagents = getReagents(hops(), true);
+
+   if ( reagents.size() > 0 )
    {
-     Hop* hop = hlist[i];
-     if( hop->use() == Hop::First_Wort )
-     {
-       tmp = QString("%1 %2,")
-            .arg(Brewtarget::displayAmount(hop->amount_kg(), Units::kilograms))
-            .arg(hop->name());
-       str += tmp;
-       hasHop = true;
-     }
-   }
-   str += ".";
-   if( hasHop )
-   {
-     ins = Database::instance().newInstruction(this);
-     ins->setName(tr("First wort hopping"));
-     ins->setDirections(str);
-     ins->addReagent(tmp);
-     return ins;
+      for( int i = 0; i < reagents.size(); ++i )
+         str += reagents.at(i);
+
+      str += ".";
+      ins = Database::instance().newInstruction(this);
+      ins->setName(tr("First wort hopping"));
+      ins->setDirections(str);
+      return ins;
    }
    return 0;
 }
@@ -1939,6 +1912,79 @@ BrewNote* Recipe::addBrewNote( BrewNote* old )
    emit changed( metaProperty("brewNotes"), QVariant() );
    return newNote;
 
+}
+
+QList<QString> Recipe::getReagents( QList<Fermentable*> ferms )
+{
+   QList<QString> reagents;
+   QString format,tmp;
+
+   for ( int i = 0; i < ferms.size(); ++i )
+   {
+      if ( ferms[i]->isMashed() )
+      {
+         if ( i+1 < ferms.size() )
+         {
+            tmp = QString("%1 %2, ")
+                  .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), Units::kilograms))
+                  .arg(ferms[i]->name());
+         }
+         else
+         {
+            tmp = QString("%1 %2 ")
+                  .arg(Brewtarget::displayAmount(ferms[i]->amount_kg(), Units::kilograms))
+                  .arg(ferms[i]->name());
+         }
+         reagents.append(tmp);
+      }
+   }
+   return reagents;
+}
+
+QList<QString> Recipe::getReagents(QList<Hop*> hops, bool firstWort)
+{
+   QString tmp;
+   QList<QString> reagents;
+
+   for( int i = 0; i < hops.size(); ++i )
+   {
+      if( firstWort && 
+         (hops[i]->use() == Hop::First_Wort) )
+      {
+         tmp = QString("%1 %2,")
+               .arg(Brewtarget::displayAmount(hops[i]->amount_kg(), Units::kilograms))
+               .arg(hops[i]->name());
+         reagents.append(tmp);
+      }
+   }
+   return reagents;
+}
+
+QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
+{
+   QString tmp;
+   QList<QString> reagents;
+
+   for ( int i = 0; i < msteps.size(); ++i )
+   {
+      if( msteps[i]->type() != MashStep::Infusion )
+         continue;
+
+      if ( i+1 < msteps.size() ) 
+      {
+         tmp = tr("%1 water to %2, ")
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseAmount_l(), Units::liters))
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseTemp_c(), Units::celsius));
+      }
+      else 
+      {
+         tmp = tr("%1 water to %2 ")
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseAmount_l(), Units::liters))
+                .arg(Brewtarget::displayAmount(msteps[i]->infuseTemp_c(), Units::celsius));
+      }
+      reagents.append(tmp);
+   }
+   return reagents;
 }
 
 //==========================Accept changes from ingredients====================
