@@ -76,7 +76,7 @@ QMutex Database::_threadToConnectionMutex;
 
 Database::Database()
    : //_setterCommandStack( new SetterCommandStack() ),
-     loadedFromXml(false)
+     loadedFromXml(false), skipEmitChanged(false)
 {
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
@@ -1626,14 +1626,17 @@ void Database::importFromXML(const QString& filename)
    list = xmlDoc.elementsByTagName("RECIPE");
    if ( list.count() )
    {
+      skipEmitChanged = true;
       for(int i = 0; i < list.count(); ++i )
       {
          recipeFromXml( list.at(i) );
+	 
          //Recipe* newRec = new Recipe(list.at(i));
          //
          //if(verifyImport("recipe",newRec->getName()))
          //   db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
       }
+      skipEmitChanged = false;
    }
    else
    {

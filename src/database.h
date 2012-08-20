@@ -408,6 +408,7 @@ private:
 
    bool loadWasSuccessful;
    bool loadedFromXml;
+   bool skipEmitChanged;
    
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
@@ -570,7 +571,11 @@ private:
       if( q.exec() )
       {
          q.finish();
-         emit rec->changed( rec->metaProperty(propName), QVariant() );
+	 if ( !skipEmitChanged )
+	 {
+	    // Brewtarget::logE( "addIngredientToRecipe:: emit rec->changed fired");
+            emit rec->changed( rec->metaProperty(propName), QVariant() );
+	 }
       }
       else
       {
