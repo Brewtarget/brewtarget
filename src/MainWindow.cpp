@@ -1376,6 +1376,8 @@ void MainWindow::importFiles()
    
    foreach( QString filename, fileOpener->selectedFiles() )
       Database::instance().importFromXML(filename);
+   
+   showChanges();
 }
 
 bool MainWindow::verifyImport(QString tag, QString name)

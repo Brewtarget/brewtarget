@@ -409,6 +409,7 @@ private:
    bool loadWasSuccessful;
    bool loadedFromXml;
    bool skipEmitChanged;
+   bool needRecalc;
    
    // Each thread should have its own connection to QSqlDatabase.
    static QHash< QThread*, QString > _threadToConnection;
@@ -416,6 +417,9 @@ private:
    
    //! Get the right database connection for the calling thread.
    static QSqlDatabase sqlDatabase();
+   
+   void sendEmitchanged(QMetaProperty prop, QVariant value);
+   void sendEmitchanged(Recipe* rec, QMetaProperty prop, QVariant value);
    
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
@@ -571,11 +575,8 @@ private:
       if( q.exec() )
       {
          q.finish();
-	 if ( !skipEmitChanged )
-	 {
-	    // Brewtarget::logE( "addIngredientToRecipe:: emit rec->changed fired");
-            emit rec->changed( rec->metaProperty(propName), QVariant() );
-	 }
+	 // Brewtarget::logE( "addIngredientToRecipe:: emit rec->changed fired");
+	 sendEmitchanged( rec, rec->metaProperty(propName), QVariant() );
       }
       else
       {
