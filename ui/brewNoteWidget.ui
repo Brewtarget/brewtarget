@@ -27,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>616</width>
-        <height>428</height>
+        <width>626</width>
+        <height>438</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -55,15 +55,15 @@
             </size>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="page_preboil">
             <property name="geometry">
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>252</width>
-              <height>321</height>
+              <width>242</width>
+              <height>337</height>
              </rect>
             </property>
             <attribute name="label">
@@ -82,7 +82,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>sg</string>
+                <string notr="true">sg</string>
                </property>
               </widget>
              </item>
@@ -126,7 +126,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>volumeIntoBK_l</string>
+                <string notr="true">volumeIntoBK_l</string>
                </property>
               </widget>
              </item>
@@ -167,7 +167,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>strikeTemp_c</string>
+                <string notr="true">strikeTemp_c</string>
                </property>
               </widget>
              </item>
@@ -208,7 +208,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>mashFinTemp_c</string>
+                <string notr="true">mashFinTemp_c</string>
                </property>
               </widget>
              </item>
@@ -244,8 +244,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>252</width>
-              <height>321</height>
+              <width>242</width>
+              <height>337</height>
              </rect>
             </property>
             <attribute name="label">
@@ -264,7 +264,7 @@
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
                <property name="editField" stdset="0">
-                <string>og</string>
+                <string notr="true">og</string>
                </property>
               </widget>
              </item>
@@ -311,7 +311,7 @@
                 <bool>true</bool>
                </property>
                <property name="editField" stdset="0">
-                <string>postBoilVolume_l</string>
+                <string notr="true">postBoilVolume_l</string>
                </property>
               </widget>
              </item>
@@ -358,7 +358,7 @@
                 <bool>true</bool>
                </property>
                <property name="editField" stdset="0">
-                <string>volumeIntoFerm_l</string>
+                <string notr="true">volumeIntoFerm_l</string>
                </property>
               </widget>
              </item>
@@ -399,7 +399,7 @@
                 <bool>true</bool>
                </property>
                <property name="editField" stdset="0">
-                <string>pitchTemp_c</string>
+                <string notr="true">pitchTemp_c</string>
                </property>
               </widget>
              </item>
@@ -435,8 +435,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>252</width>
-              <height>321</height>
+              <width>242</width>
+              <height>337</height>
              </rect>
             </property>
             <attribute name="label">
@@ -449,10 +449,10 @@
                 <enum>Qt::CustomContextMenu</enum>
                </property>
                <property name="text">
-                <string>FG</string>
+                <string notr="true">FG</string>
                </property>
                <property name="editField" stdset="0">
-                <string>fg</string>
+                <string notr="true">fg</string>
                </property>
               </widget>
              </item>
@@ -487,10 +487,10 @@
                 <enum>Qt::CustomContextMenu</enum>
                </property>
                <property name="text">
-                <string>Volume</string>
+                <string notr="true">Volume</string>
                </property>
                <property name="editField" stdset="0">
-                <string>finalVolume_l</string>
+                <string notr="true">finalVolume_l</string>
                </property>
               </widget>
              </item>
@@ -522,7 +522,7 @@
              <item row="2" column="0">
               <widget class="QLabel" name="btLabel_fermentDate">
                <property name="text">
-                <string>Date</string>
+                <string notr="true">Date</string>
                </property>
               </widget>
              </item>
@@ -591,7 +591,7 @@
                 <string>Projected OG</string>
                </property>
                <property name="editField" stdset="0">
-                <string>projOg</string>
+                <string notr="true">projOg</string>
                </property>
               </widget>
              </item>

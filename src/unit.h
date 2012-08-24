@@ -93,7 +93,7 @@ enum unitDisplay
    displayUS    = 0x101,
    displayImp   = 0x102,
    displaySrm   = 0x200,
-   displayEcb   = 0x201,
+   displayEbc   = 0x201,
    displaySg    = 0x300,
    displayPlato = 0x301
 };

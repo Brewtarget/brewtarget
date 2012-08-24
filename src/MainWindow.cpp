@@ -491,7 +491,7 @@ void MainWindow::deleteSelected()
                deadNote.append(active->getBrewNote(*at));
             break;
          default:
-            Brewtarget::log(Brewtarget::WARNING, QObject::tr("MainWindow::deleteSelected Unknown type: %1").arg(treeView_recipe->getType(*at)));
+            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(treeView_recipe->getType(*at)));
       }
       if ( confirmDelete == QMessageBox::Cancel )
          return;
@@ -604,7 +604,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
          setBrewNoteByIndex(index);
          break;
       default:
-         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->getType(index)));
+         Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->getType(index)));
    }
    treeView_recipe->setCurrentIndex(index);
 }
@@ -1376,6 +1376,8 @@ void MainWindow::importFiles()
    
    foreach( QString filename, fileOpener->selectedFiles() )
       Database::instance().importFromXML(filename);
+   
+   showChanges();
 }
 
 bool MainWindow::verifyImport(QString tag, QString name)
@@ -1889,7 +1891,7 @@ void MainWindow::copySelected()
             break;
             // No Brewnote, because it just doesn't make sense
          default:
-            Brewtarget::log(Brewtarget::WARNING, QObject::tr("MainWindow::copySelected Unknown type: %1").arg(active->getType(*at)));
+            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::copySelected Unknown type: %1").arg(active->getType(*at)));
       }
    }
 
@@ -1925,7 +1927,7 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
 
       if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )
       {
-         Brewtarget::log(Brewtarget::WARNING, tr("MainWindow::openForWrite Could not open %1 for writing.").arg(filename));
+         Brewtarget::logW(QString("MainWindow::openForWrite Could not open %1 for writing.").arg(filename));
          outFile = 0;
       }
    }

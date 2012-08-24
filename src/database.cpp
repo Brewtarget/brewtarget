@@ -76,7 +76,7 @@ QMutex Database::_threadToConnectionMutex;
 
 Database::Database()
    : //_setterCommandStack( new SetterCommandStack() ),
-     loadedFromXml(false)
+     loadedFromXml(false), skipEmitChanged(false), needRecalc(true)
 {
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
@@ -782,7 +782,7 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
               QString("id=%2").arg(tmp->_key) );
 
    if ( signal ) 
-      emit changed( metaProperty("brewNotes"), QVariant() );
+      sendEmitchanged( metaProperty("brewNotes"), QVariant() );
    return tmp;
 }
 
@@ -792,7 +792,7 @@ Equipment* Database::newEquipment()
    tmp->_key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
-   emit changed( metaProperty("equipments"), QVariant() );
+   sendEmitchanged( metaProperty("equipments"), QVariant() );
    return tmp;
 }
 
@@ -802,7 +802,7 @@ Equipment* Database::newEquipment(Equipment* other)
    tmp->_key = copy<Equipment>(other).value("id").toInt();
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
-   emit changed( metaProperty("equipments"), QVariant() );
+   sendEmitchanged( metaProperty("equipments"), QVariant() );
    return tmp;
 }
 
@@ -812,7 +812,7 @@ Fermentable* Database::newFermentable()
    tmp->_key = insertNewDefaultRecord(Brewtarget::FERMTABLE);
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
-   emit changed( metaProperty("fermentables"), QVariant() );
+   sendEmitchanged( metaProperty("fermentables"), QVariant() );
    return tmp;
 }
 
@@ -822,7 +822,7 @@ Fermentable* Database::newFermentable(Fermentable* other)
    tmp->_key = copy<Fermentable>(other).value("id").toInt();
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
-   emit changed( metaProperty("fermentables"), QVariant() );
+   sendEmitchanged( metaProperty("fermentables"), QVariant() );
    return tmp;
 }
 
@@ -832,7 +832,7 @@ Hop* Database::newHop()
    tmp->_key = insertNewDefaultRecord(Brewtarget::HOPTABLE);
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
-   emit changed( metaProperty("hops"), QVariant() );
+   sendEmitchanged( metaProperty("hops"), QVariant() );
    return tmp;
 }
 
@@ -842,7 +842,7 @@ Hop* Database::newHop(Hop* other)
    tmp->_key = copy<Hop>(other).value("id").toInt();
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
-   emit changed( metaProperty("hops"), QVariant() );
+   sendEmitchanged( metaProperty("hops"), QVariant() );
    return tmp;
 }
 
@@ -861,7 +861,7 @@ Instruction* Database::newInstruction(Recipe* rec)
    allInstructions.insert(tmp->_key,tmp);
    
    // Database's instructions have changed.
-   emit changed( metaProperty("instructions"), QVariant() );
+   sendEmitchanged( metaProperty("instructions"), QVariant() );
    // Do not emit the recipe's changed() signal. It is up to the recipe to
    // decide when it wants its signals emitted... that sounds so kinky.
    return tmp;
@@ -873,7 +873,7 @@ Mash* Database::newMash()
    tmp->_key = insertNewDefaultRecord(Brewtarget::MASHTABLE);
    tmp->_table = Brewtarget::MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
-   emit changed( metaProperty("mashs"), QVariant() );
+   sendEmitchanged( metaProperty("mashs"), QVariant() );
    return tmp;
 }
 
@@ -889,7 +889,7 @@ Mash* Database::newMash(Recipe* parent)
               QString("mash_id=%1").arg(tmp->_key),
               QString("id=%1").arg(parent->_key) );
    
-   emit changed( metaProperty("mashs"), QVariant() );
+   sendEmitchanged( metaProperty("mashs"), QVariant() );
    return tmp;
 }
 
@@ -908,7 +908,7 @@ Mash* Database::newMash(Mash* other, bool displace)
                  QString("mash_id=%1").arg(other->_key) );
    }
    
-   emit changed( metaProperty("mashs"), QVariant() );
+   sendEmitchanged( metaProperty("mashs"), QVariant() );
    return tmp;
 }
 
@@ -924,7 +924,7 @@ MashStep* Database::newMashStep(Mash* mash)
    allMashSteps.insert(tmp->_key,tmp);
    connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    // Database's steps have changed.
-   emit changed( metaProperty("mashSteps"), QVariant() );
+   sendEmitchanged( metaProperty("mashSteps"), QVariant() );
    // Mash's steps have changed.
    emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
    emit mash->mashStepsChanged();
@@ -937,7 +937,7 @@ Misc* Database::newMisc()
    tmp->_key = insertNewDefaultRecord(Brewtarget::MISCTABLE);
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
-   emit changed( metaProperty("miscs"), QVariant() );
+   sendEmitchanged( metaProperty("miscs"), QVariant() );
    return tmp;
 }
 
@@ -947,7 +947,7 @@ Misc* Database::newMisc(Misc* other)
    tmp->_key = copy<Misc>(other).value("id").toInt();
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
-   emit changed( metaProperty("miscs"), QVariant() );
+   sendEmitchanged( metaProperty("miscs"), QVariant() );
    return tmp;
 }
 
@@ -961,7 +961,7 @@ Recipe* Database::newRecipe()
    // Now, need to create a new mash for the recipe.
    newMash( tmp );
    
-   emit changed( metaProperty("recipes"), QVariant() );
+   sendEmitchanged( metaProperty("recipes"), QVariant() );
    return tmp;
 }
 
@@ -971,7 +971,7 @@ Recipe* Database::newRecipe(Recipe* other)
    tmp->_key = copy<Recipe>(other).value("id").toInt();
    tmp->_table = Brewtarget::RECTABLE;
    allRecipes.insert( tmp->_key, tmp );
-   emit changed( metaProperty("recipes"), QVariant() );
+   sendEmitchanged( metaProperty("recipes"), QVariant() );
    return tmp;
 }
 
@@ -981,7 +981,7 @@ Style* Database::newStyle()
    tmp->_key = insertNewDefaultRecord(Brewtarget::STYLETABLE);
    tmp->_table = Brewtarget::STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
-   emit changed( metaProperty("styles"), QVariant() );
+   sendEmitchanged( metaProperty("styles"), QVariant() );
    return tmp;
 }
 
@@ -991,7 +991,7 @@ Water* Database::newWater()
    tmp->_key = insertNewDefaultRecord(Brewtarget::WATERTABLE);
    tmp->_table = Brewtarget::WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
-   emit changed( metaProperty("waters"), QVariant() );
+   sendEmitchanged( metaProperty("waters"), QVariant() );
    return tmp;
 }
 
@@ -1001,7 +1001,7 @@ Yeast* Database::newYeast()
    tmp->_key = insertNewDefaultRecord(Brewtarget::YEASTTABLE);
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
-   emit changed( metaProperty("yeasts"), QVariant() );
+   sendEmitchanged( metaProperty("yeasts"), QVariant() );
    return tmp;
 }
 
@@ -1011,7 +1011,7 @@ Yeast* Database::newYeast(Yeast* other)
    tmp->_key = copy<Yeast>(other).value("id").toInt();
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
-   emit changed( metaProperty("yeasts"), QVariant() );
+   sendEmitchanged( metaProperty("yeasts"), QVariant() );
    return tmp;
 }
 
@@ -1275,6 +1275,23 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
    command->redo();
 }
 
+void Database::sendEmitchanged(QMetaProperty prop, QVariant value)
+{
+  if ( !skipEmitChanged )
+  {
+    emit changed( prop, value );
+  }
+}
+
+void Database::sendEmitchanged(Recipe* rec, QMetaProperty prop, QVariant value)
+{
+  if ( !skipEmitChanged )
+  {
+    emit rec->changed( prop, value );
+  }
+}
+
+
 // Add to recipe ==============================================================
 void Database::addToRecipe( Recipe* rec, Hop* hop, bool initialLoad )
 {
@@ -1339,7 +1356,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )
              QString("id='%1'").arg(rec->_key));
    
    // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("mash"), QVariant() );
+   sendEmitchanged( rec, rec->metaProperty("mash"), QVariant() );
 }
 
 void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
@@ -1373,7 +1390,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
 
    newEquip->setDisplay(false);
    // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+   sendEmitchanged( rec, rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
 }
 
 void Database::addToRecipe( Recipe* rec, Style* s)
@@ -1387,7 +1404,7 @@ void Database::addToRecipe( Recipe* rec, Style* s)
    s->setDisplay(false);
    // Emit a changed signal.
    // TODO: this is calling the SLOT, not the SIGNAL...erm...What do we do?
-   emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(s) );
+   sendEmitchanged( rec, rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(s) );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
@@ -1626,14 +1643,20 @@ void Database::importFromXML(const QString& filename)
    list = xmlDoc.elementsByTagName("RECIPE");
    if ( list.count() )
    {
+      skipEmitChanged = true;
       for(int i = 0; i < list.count(); ++i )
       {
+	 if ( i  == list.count() -1 )
+	      skipEmitChanged = false;
+	 
          recipeFromXml( list.at(i) );
+	 
          //Recipe* newRec = new Recipe(list.at(i));
          //
          //if(verifyImport("recipe",newRec->getName()))
          //   db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
       }
+      skipEmitChanged = false;
    }
    else
    {
