@@ -33,9 +33,10 @@
 #include "mash.h"
 
 BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
-   : QWidget(parent), doc(new QWebView(this))
+   : QWidget(parent), doc(new QWebView())
 {
    setupUi(this);
+   setObjectName("BrewDayScrollWidget");
    recObs = 0;
 
    connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
@@ -229,7 +230,7 @@ QString BrewDayScrollWidget::buildInstructionTable()
    for( i = 0; i < size; ++i )
    {
       QString stepTime, tmp;
-      QVector<QString> reagents;
+      QList<QString> reagents;
       
       Instruction* ins = instructions[i];
 
@@ -239,23 +240,15 @@ QString BrewDayScrollWidget::buildInstructionTable()
          stepTime = "--";
 
       tmp = "";
-      reagents = ins->reagents();
 
       // TODO: comparing ins->name() with these untranslated strings means this
       // doesn't work in other languages. Find a better way.
-      if ( ins->name() == "Add grains")
-      {
-         // TODO: rewrite this somehow.
-         //Instruction* temp = recObs->mashFermentableIns();
-         //reagents = temp->reagents();
-      }
-      else if ( ins->name() == "Heat water")
-      {
-         // TODO: rewrite this somehow.
-         //int mashSize = mashSteps.size();
-         //Instruction* temp = recObs->getMashWater(mashSize);
-         //reagents = temp->reagents();
-      }
+      if ( ins->name() == tr("Add grains") )
+         reagents = recObs->getReagents( recObs->fermentables() );
+      else if ( ins->name() == tr("Heat water") )
+         reagents = recObs->getReagents( recObs->mash()->mashSteps() );
+      else 
+         reagents = ins->reagents();
 
       if ( reagents.size() > 1 )
       {
@@ -263,13 +256,17 @@ QString BrewDayScrollWidget::buildInstructionTable()
          for ( j = 0; j < reagents.size(); j++ )
          {
             tmp += QString("<li>%1</li>")
-                   .arg(reagents[j]);
+                   .arg(reagents.at(j));
          }
          tmp += QString("</ul>");
       }
+      else if ( reagents.size() == 1 )
+      {
+         tmp = reagents.at(0);
+      }
       else
       {
-         tmp = reagents[0];
+         tmp = ins->directions();
       }
 
       QString altTag = i % 2 ? "alt" : "norm";
@@ -316,7 +313,6 @@ void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
       int action, QFile* outFile)
 {
    QString pDoc;
-//   QPrintDialog *dialog = new QPrintDialog(printer, this);
 
    if( recObs == 0 )
       return;
