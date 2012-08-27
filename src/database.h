@@ -377,7 +377,7 @@ private:
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
    
    // Cannot be static yet.
-   const QList<TableParams> tableParams;
+   static const QList<TableParams> tableParams;
    QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
    
    // Keeps all pointers to the elements referenced by key.
@@ -677,7 +677,7 @@ private:
    // Cleans up the backup database if it was leftover from an error.
    bool cleanupBackupDatabase();
    
-   QList<TableParams> makeTableParams();
+   static QList<TableParams> makeTableParams();
 };
 
 #endif   /* _DATABASE_H */

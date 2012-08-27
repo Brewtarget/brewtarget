@@ -70,13 +70,13 @@ QString Database::dbTempBackupFileName;
 QString Database::dbConName;
 QHash<Brewtarget::DBTable,QString> Database::tableNames = Database::tableNamesHash();
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable = Database::classNameToTableHash();
+const QList<TableParams> Database::tableParams = Database::makeTableParams();
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
 
 Database::Database()
    : //_setterCommandStack( new SetterCommandStack() ),
-     tableParams(makeTableParams()),
      loadedFromXml(false), skipEmitChanged(false), needRecalc(true)
 {
    //.setUndoLimit(100);
