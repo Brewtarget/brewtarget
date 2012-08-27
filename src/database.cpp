@@ -76,6 +76,7 @@ QMutex Database::_threadToConnectionMutex;
 
 Database::Database()
    : //_setterCommandStack( new SetterCommandStack() ),
+     tableParams(makeTableParams()),
      loadedFromXml(false), skipEmitChanged(false), needRecalc(true)
 {
    //.setUndoLimit(100);
@@ -3283,16 +3284,126 @@ bool Database::cleanupBackupDatabase()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+QList<TableParams> Database::makeTableParams()
+{
+   typedef BeerXMLElement* (Database::*NewIngFunc)(void);
+   
+   QList<TableParams> ret;
+   TableParams tmp;
+   
+   //=============================Equipment====================================
+   
+   tmp.tableName = "equipment";
+   tmp.propName = QStringList() <<
+      "name" << "boil_size" << "batch_size" << "tun_volume" << "tun_weight" <<
+      "tun_specific_heat" << "top_up_water" << "trub_chiller_loss" <<
+      "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
+      "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
+      "notes";
+   tmp.newElement =
+      (NewIngFunc)
+      (Equipment*(Database::*)(void))
+      &Database::newEquipment;
+   
+   ret.append(tmp);
+   //==============================Fermentables================================
+   
+   tmp.tableName = "fermentable";
+   tmp.propName = QStringList() <<
+      "name" << "ftype" << "amount" << "yield" << "color" <<
+      "add_after_boil" << "origin" << "supplier" << "notes" <<
+      "coarse_fine_diff" << "moisture" << "diastatic_power" << "protein" <<
+      "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
+   tmp.newElement =
+      (NewIngFunc)
+      (Fermentable*(Database::*)(void))
+      &Database::newFermentable;
+   
+   //==============================Hops=============================
+   tmp.tableName = "hop";
+   tmp.propName = QStringList() <<
+      "name" << "alpha" << "amount" << "use" << "time" << "notes" << "htype" <<
+      "form" << "beta" << "hsi" << "origin" << "substitutes" << "humulene" <<
+      "caryophyllene" << "cohumulone" << "myrcene",
+   // First cast specifies which newHop() I want, since it is overloaded.
+   // Second cast is to force the conversion of the function pointer.
+   tmp.newElement =
+      (NewIngFunc)
+      (Hop*(Database::*)(void))
+      &Database::newHop;
+   
+   ret.append(tmp);
+   
+   //==================================Miscs===================================
+   
+   tmp.tableName = "misc";
+   tmp.propName = QStringList() <<
+      "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
+      "use_for" << "notes";
+   tmp.newElement =
+      (NewIngFunc)
+      (Misc*(Database::*)(void))
+      &Database::newMisc;
+   
+   ret.append(tmp);
+   //==================================Styles==================================
+   
+   tmp.tableName = "style";
+   tmp.propName = QStringList() <<
+      "name" << "s_type" << "category" << "category_number" <<
+      "style_letter" << "style_guide" << "og_min" << "og_max" << "fg_min" <<
+      "fg_max" << "ibu_min" << "ibu_max" << "color_min" << "color_max" <<
+      "abv_min" << "abv_max" << "carb_min" << "carb_max" << "notes" <<
+      "profile" << "ingredients" << "examples";
+   tmp.newElement =
+      (NewIngFunc)
+      (Style*(Database::*)(void))
+      &Database::newStyle;
+   
+   ret.append(tmp);
+   
+   //==================================Yeasts==================================
+   
+   tmp.tableName = "yeast";
+   tmp.propName = QStringList() <<
+      "name" << "ytype" << "form" << "amount" << "amount_is_weight" <<
+      "laboratory" << "product_id" << "min_temperature" << "max_temperature" <<
+      "flocculation" << "attenuation" << "notes" << "best_for" <<
+      "times_cultured" << "max_reuse" << "add_to_secondary";
+   tmp.newElement =
+      (NewIngFunc)
+      (Yeast*(Database::*)(void))
+      &Database::newYeast;
+   
+   ret.append(tmp);
+   
+   //===================================Waters=================================
+   
+   tmp.tableName = "water";
+   tmp.propName = QStringList() <<
+      "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
+      "chloride" << "sodium" << "magnesium" << "ph" << "notes";
+   tmp.newElement =
+      (NewIngFunc)
+      (Water*(Database::*)(void))
+      &Database::newWater;
+   
+   ret.append(tmp);
+   
+   return ret;
+}
+
 void Database::updateDatabase(QString const& filename)
 {
    // In the naming here "old" means our local database, and
    // "new" means the database coming from 'filename'.
+
+   QVariant btid, newid, oldid;
+   QVariant zero(0);
    
-   QVariant btid, newhopid, oldhopid;
-   QVariant name, alpha, amount, use, time, notes, htype, form, beta, hsi,
-            origin, substitutes, humulene, caryophyllene, cohumulone,
-            myrcene;
-   
+   QList<QVariant> propVal;
+   QStringList varAndHolder;
+
    QString newCon("newSqldbCon");
    QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
    newSqldb.setDatabaseName(filename);
@@ -3305,9 +3416,7 @@ void Database::updateDatabase(QString const& filename)
       return;
    }
    
-   // The following just deals with hops. This is just to figure out how things
-   // will go, then we can generalize to the rest of the ingredients.
-   
+   // This is the basic gist...
    // For each (id, hop_id) in newSqldb.bt_hop...
    
    // Call this newRecord
@@ -3320,119 +3429,119 @@ void Database::updateDatabase(QString const& filename)
    
    // Execute.
 
-   QSqlQuery qNewBtHop( "SELECT * FROM bt_hop",
-                newSqldb );
-                
-   QSqlQuery qNewHop( newSqldb );
-   qNewHop.prepare("SELECT * FROM hop WHERE id=:id");
-   
-   QSqlQuery qUpdateOldHop( sqlDatabase() );
-   qUpdateOldHop.prepare(
-      "UPDATE hop SET "
-      "name=:name, "
-      "alpha=:alpha, "
-      "amount=:amount, "
-      "use=:use, "
-      "time=:time, "
-      "notes=:notes, "
-      "htype=:htype, "
-      "form=:form, "
-      "beta=:beta, "
-      "hsi=:hsi, "
-      "origin=:origin, "
-      "substitutes=:substitutes, "
-      "humulene=:humulene, "
-      "caryophyllene=:caryophyllene, "
-      "cohumulone=:cohumulone, "
-      "myrcene=:myrcene "
-      "WHERE id=:id"
-   );
-   
-   QSqlQuery qOldBtHop( sqlDatabase() );
-   qOldBtHop.prepare( "SELECT * FROM bt_hop WHERE `id`=:btid" );
-   
-   QSqlQuery qOldBtHopInsert( sqlDatabase() );
-   qOldBtHopInsert.prepare( "INSERT INTO bt_hop `id`=:id `hop_id`=:hop_id" );
-   
-   while( qNewBtHop.next() )
+   foreach( TableParams tp, tableParams)
    {
-      btid = qNewBtHop.record().value("id");
-      newhopid = qNewBtHop.record().value("hop_id");
+      QSqlQuery qNewBtIng(
+         QString("SELECT * FROM bt_%1").arg(tp.tableName),
+         newSqldb );
+                  
+      QSqlQuery qNewIng( newSqldb );
+      qNewIng.prepare(QString("SELECT * FROM %1 WHERE id=:id").arg(tp.tableName));
       
-      qNewHop.bindValue(":id", newhopid);
-      qNewHop.exec();
-      if( !qNewHop.next() )
+      // Construct the big update query.
+      QSqlQuery qUpdateOldIng( sqlDatabase() );
+      QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
+      varAndHolder.clear();
+      foreach( QString pn, tp.propName)
+         varAndHolder.append(QString("`%1`=:%2").arg(pn).arg(pn));
+      updateString.append(varAndHolder.join(", "));
+      // Un-delete it if it is somehow deleted.
+      updateString.append(", `deleted`=:zero WHERE `id`=:id");
+      qUpdateOldIng.prepare(updateString);
+      qUpdateOldIng.bindValue( ":zero", zero );
+      
+      QSqlQuery qOldBtIng( sqlDatabase() );
+      qOldBtIng.prepare(
+         QString("SELECT * FROM bt_%1 WHERE `id`=:btid").arg(tp.tableName) );
+      
+      QSqlQuery qOldBtIngInsert( sqlDatabase() );
+      qOldBtIngInsert.prepare(
+         QString("INSERT INTO bt_%1 `id`=:id `%2_id`=:%3_id")
+            .arg(tp.tableName)
+            .arg(tp.tableName)
+            .arg(tp.tableName) );
+      
+      // Resize propVal appropriately for current table.
+      propVal.clear();
+      foreach( QString pn, tp.propName )
+         propVal.append(QVariant());
+      
+      while( qNewBtIng.next() )
       {
-         Brewtarget::logE(QString("Oops. %1").arg(qNewHop.lastError().text()));
-         return;
-      }
-      
-      name = qNewHop.record().value("name");
-      alpha = qNewHop.record().value("alpha");
-      amount = qNewHop.record().value("amount");
-      use = qNewHop.record().value("use");
-      time = qNewHop.record().value("time");
-      notes = qNewHop.record().value("notes");
-      htype = qNewHop.record().value("htype");
-      form = qNewHop.record().value("form");
-      beta = qNewHop.record().value("beta");
-      hsi = qNewHop.record().value("hsi");
-      origin = qNewHop.record().value("origin");
-      substitutes = qNewHop.record().value("substitutes");
-      humulene = qNewHop.record().value("humulene");
-      caryophyllene = qNewHop.record().value("caryophyllene");
-      cohumulone = qNewHop.record().value("cohumulone");
-      myrcene = qNewHop.record().value("myrcene");
-      
-      // Done retrieving new hop data.
-      qNewHop.finish();
-      
-      // Bind the new hop data to the old hop.
-      qUpdateOldHop.bindValue( ":name", name);
-      qUpdateOldHop.bindValue( ":alpha", alpha);
-      qUpdateOldHop.bindValue( ":amount", amount);
-      qUpdateOldHop.bindValue( ":use", use);
-      qUpdateOldHop.bindValue( ":time", time);
-      qUpdateOldHop.bindValue( ":notes", notes);
-      qUpdateOldHop.bindValue( ":htype", htype);
-      qUpdateOldHop.bindValue( ":form", form);
-      qUpdateOldHop.bindValue( ":beta", beta);
-      qUpdateOldHop.bindValue( ":hsi", hsi);
-      qUpdateOldHop.bindValue( ":origin", origin);
-      qUpdateOldHop.bindValue( ":substitutes", substitutes);
-      qUpdateOldHop.bindValue( ":humulene", humulene);
-      qUpdateOldHop.bindValue( ":caryophyllene", caryophyllene);
-      qUpdateOldHop.bindValue( ":cohumulone", cohumulone);
-      qUpdateOldHop.bindValue( ":myrcene", myrcene);
-      
-      // Find the bt_hop record in the local table.
-      qOldBtHop.bindValue( ":btid", btid );
-      qOldBtHop.exec();
-      
-      // If the btid exists in the old bt_hop table, do an update.
-      if( qOldBtHop.next() )
-      {
-         oldhopid = qOldBtHop.record().value("hop_id");
-         qOldBtHop.finish();
+         btid = qNewBtIng.record().value("id");
+         newid = qNewBtIng.record().value(QString("%1_id").arg(tp.tableName));
          
-         qUpdateOldHop.bindValue( ":id", oldhopid );
+         qNewIng.bindValue(":id", newid);
+         qNewIng.exec();
+         if( !qNewIng.next() )
+         {
+            Brewtarget::logE(QString("Oops. %1").arg(qNewIng.lastError().text()));
+            return;
+         }
          
-         qUpdateOldHop.exec();
-      }
-      // If the btid doesn't exist in the old bt_hop table, do an insert into
-      // the old hop table, then into the old bt_hop table.
-      else
-      {
-         // Create a new hop.
-         oldhopid = newHop()->_key;
-         // Copy in the new data.
-         qUpdateOldHop.bindValue( ":id", oldhopid );
-         qUpdateOldHop.exec();
+         QList<QVariant>::iterator it = propVal.begin();
+         foreach( QString pn, tp.propName )
+         {
+            // Get new value.
+            *it = qNewIng.record().value(pn);
+            // Bind it to the old ingredient.
+            qUpdateOldIng.bindValue(
+               QString(":%1").arg(pn),
+               *it );
+            ++it;
+         }
          
-         // Insert an entry into our bt_hop table.
-         qOldBtHopInsert.bindValue( ":id", btid );
-         qOldBtHopInsert.bindValue( ":hop_id", oldhopid );
-         qOldBtHopInsert.exec();
+         // Done retrieving new ingredient data.
+         qNewIng.finish();
+         
+         // Find the bt_<ingredient> record in the local table.
+         qOldBtIng.bindValue( ":btid", btid );
+         qOldBtIng.exec();
+         
+         // If the btid exists in the old bt_hop table, do an update.
+         if( qOldBtIng.next() )
+         {
+            oldid = qOldBtIng.record().value(
+               QString("%1_id").arg(tp.tableName) );
+            qOldBtIng.finish();
+            
+            qUpdateOldIng.bindValue( ":id", oldid );
+            
+            qUpdateOldIng.exec();
+            if( qUpdateOldIng.lastError().isValid() )
+            {
+               Brewtarget::logE(
+                  QString("Database::updateDatabase(): %1")
+                  .arg(qUpdateOldIng.lastError().text()) );
+            }
+         }
+         // If the btid doesn't exist in the old bt_hop table, do an insert into
+         // the old hop table, then into the old bt_hop table.
+         else
+         {
+            // Create a new ingredient.
+            oldid = (this->*(tp.newElement))()->_key;
+            // Copy in the new data.
+            qUpdateOldIng.bindValue( ":id", oldid );
+            qUpdateOldIng.exec();
+            if( qUpdateOldIng.lastError().isValid() )
+            {
+               Brewtarget::logE(
+                  QString("Database::updateDatabase(): %1")
+                  .arg(qUpdateOldIng.lastError().text()) );
+            }
+            
+            // Insert an entry into our bt_<ingredient> table.
+            qOldBtIngInsert.bindValue( ":id", btid );
+            qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
+            qOldBtIngInsert.exec();
+            if( qOldBtIng.lastError().isValid() )
+            {
+               Brewtarget::logE(
+                  QString("Database::updateDatabase(): %1")
+                  .arg(qOldBtIng.lastError().text()) );
+            }
+         }
       }
    }
 }

@@ -318,7 +318,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), this, SLOT(showPitchDialog()));
-   connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(mergeDatabases()) );
+   connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
@@ -425,7 +425,7 @@ MainWindow::MainWindow(QWidget* parent)
    // signals to the recipe instead of one single signal.
    limitShowChangesTimer->setSingleShot(true);
    limitShowChangesTimer->setInterval(1000);
-   connect( limitShowChangesTimer, SIGNAL( timout() ), this, SLOT( showChanges() ) );
+   connect( limitShowChangesTimer, SIGNAL( timeout() ), this, SLOT( showChanges() ) );
 }
 
 void MainWindow::setupShortCuts()
