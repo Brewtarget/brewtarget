@@ -563,8 +563,7 @@ private:
       if( q.exec() )
       {
          q.finish();
-	 // Brewtarget::logE( "addIngredientToRecipe:: emit rec->changed fired");
-	 sendEmitchanged( rec, rec->metaProperty(propName), QVariant() );
+         sendEmitchanged( rec, rec->metaProperty(propName), QVariant() );
       }
       else
       {
