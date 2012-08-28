@@ -42,9 +42,14 @@ BtDigitWidget::BtDigitWidget(QWidget *parent) : QLabel(parent)
 
 void BtDigitWidget::display(QString str)
 {
-   lastNum = str.toDouble();
+   static bool converted;
+   
+   lastNum = str.toDouble(&converted);
    lastPrec = str.length() - str.lastIndexOf(".") - 1;
-   display(lastNum,lastPrec);
+   if( converted )
+      display(lastNum,lastPrec);
+   else
+      setText("-");
 }
 
 void BtDigitWidget::display(double num, int prec)

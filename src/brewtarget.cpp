@@ -538,7 +538,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
 
    // Check for insane values.
    if( Algorithms::Instance().isnan(amount) || Algorithms::Instance().isinf(amount) )
-      return "?";
+      return "-";
    
    // Special case.
    if( units == 0 )
@@ -1020,6 +1020,9 @@ QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnit
 {
    QString ret;
 
+   if( Algorithms::Instance().isnan(og) || Algorithms::Instance().isinf(og) )
+      return "-";
+   
    // Field settings override defaults
    if ( displayUnit == noUnit ) 
       displayUnit = usePlato ? displayPlato : displaySg;
@@ -1055,14 +1058,19 @@ QString Brewtarget::displayOG( BeerXMLElement* element, QObject* object, QString
       og = element->property(attribute.toLatin1().constData()).toDouble();
       return displayOG(og, displayUnit, showUnits);
    }
-
-   return "?";
+   else
+      return "?";
 }
 
 QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bool showUnits  )
 {
    QString ret = "%1";
 
+   if( Algorithms::Instance().isnan(fg) || Algorithms::Instance().isinf(fg) ||
+       Algorithms::Instance().isnan(og) || Algorithms::Instance().isinf(og)
+   )
+      return "-";
+   
    if ( displayUnit == noUnit )
       displayUnit = usePlato ? displayPlato : displaySg;
 

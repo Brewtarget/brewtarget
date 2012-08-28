@@ -776,7 +776,6 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
 // to reflect the currently observed recipe.
 void MainWindow::showChanges(QMetaProperty* prop)
 {
-   QStringList attributes = QStringList() << "fg" << "og";
    if( recipeObs == 0 )
       return;
 
