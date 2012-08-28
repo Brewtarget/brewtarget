@@ -190,7 +190,6 @@ Instruction* Recipe::mashFermentableIns()
 Instruction* Recipe::mashWaterIns(unsigned int size)
 {
    Instruction* ins;
-   MashStep* mstep;
    QString str, tmp;
    unsigned int i;
 
@@ -1070,13 +1069,6 @@ void Recipe::setKegPrimingFactor( double var )
 
 double Recipe::og()
 {
-   /*
-   if( _uninitializedCalcsMutex.tryLock() && _uninitializedCalcs )
-   {
-      _uninitializedCalcsMutex.unlock();
-      recalcAll();
-   }
-   */
    if( _uninitializedCalcs )
       recalcAll();
    return _og;
@@ -1456,6 +1448,7 @@ void Recipe::recalcPoints(double volume)
    Fermentable* ferm;
    double sugar_kg = 0.0;
    double sugar_kg_ignoreEfficiency = 0.0;
+   double ret;
    Fermentable::Type type;
 
    // Calculate OG
@@ -1474,37 +1467,37 @@ void Recipe::recalcPoints(double volume)
          sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
    }
 
-   _points = 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
-   
-   emit changed( metaProperty("points"), _points );
+   ret = 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
+
+   if ( ret != _points ) 
+   {
+      _points = ret;
+      emit changed( metaProperty("points"), _points );
+   }
 }
 
 void Recipe::recalcABV_pct()
 {
-    // Alcohol by weight.  This is a different formula than used
-    // when calculating the calories.
-    //abw = 76.08 * (og-fg)/(1.775-og);
-    //return abw * (fg/0.794);
+   double ret;
 
-    // George Fix: Brewing Science and Practice, page 686.
-    // The multiplicative factor actually varies from
-    // 125 for weak beers to 135 for strong beers.
-    _ABV_pct = 130*(_og-_fg);
+   // George Fix: Brewing Science and Practice, page 686.
+   // The multiplicative factor actually varies from
+   // 125 for weak beers to 135 for strong beers.
+   ret = 130*(_og-_fg);
 
-    // From http://en.wikipedia.org/w/index.php?title=Alcohol_by_volume&oldid=414661414
-    // Has no citations, so I don't know how trustworthy it is.
-    // It seems to be in conflict with Fix's method above, because
-    // if the beer is weak, it should have a low fg, meaning the
-    // multiplicative factor is higher.
-    // return 132.9*(og - fg)/fg;
-    
-    emit changed( metaProperty("ABV_pct"), _ABV_pct );
+  
+   if ( ret != _ABV_pct ) 
+   {
+      _ABV_pct = ret;
+      emit changed( metaProperty("ABV_pct"), _ABV_pct );
+   }
 }
 
 void Recipe::recalcColor_srm()
 {
    Fermentable *ferm;
    double mcu = 0.0;
+   double ret;
    unsigned int i;
 
    QList<Fermentable*> ferms = fermentables();
@@ -1515,9 +1508,14 @@ void Recipe::recalcColor_srm()
       mcu += ferm->color_srm()*8.34538 * ferm->amount_kg()/_finalVolume_l;
    }
 
-   _color_srm = ColorMethods::mcuToSrm(mcu);
-   
-   emit changed( metaProperty("color_srm"), _color_srm );
+   ret = ColorMethods::mcuToSrm(mcu);
+ 
+   if ( _color_srm != ret ) 
+   {
+      _color_srm = ret;
+      emit changed( metaProperty("color_srm"), _color_srm );
+   }
+
 }
 
 void Recipe::recalcBoilGrav()
@@ -1526,6 +1524,7 @@ void Recipe::recalcBoilGrav()
    Fermentable* ferm;
    double sugar_kg = 0.0;
    double sugar_kg_ignoreEfficiency = 0.0;
+   double ret;
    Fermentable::Type type;
 
    // Calculate OG
@@ -1553,16 +1552,20 @@ void Recipe::recalcBoilGrav()
    if( equipment() )
       sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/_postBoilVolume_l);
 
-   _boilGrav = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, _boilVolume_l) );
-   
-   emit changed( metaProperty("boilGrav"), _boilGrav );
+   ret = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, _boilVolume_l) );
+ 
+   if ( ret != _boilGrav )
+   {
+      _boilGrav = ret;
+      emit changed( metaProperty("boilGrav"), _boilGrav );
+   }
 }
 
 void Recipe::recalcIBU()
 {
    unsigned int i;
    double ibus = 0.0;
-   double tmp;
+   double tmp = 0.0;
    
    // Bitterness due to hops...
    _ibus.clear();
@@ -1584,9 +1587,11 @@ void Recipe::recalcIBU()
               (ferms[i]->amount_kg() / batchSize_l()) / 8.34538;
    }
 
-   _IBU = ibus;
-   
-   emit changed( metaProperty("IBU"), _IBU );
+   if ( ibus != _IBU ) 
+   {
+      _IBU = ibus;
+      emit changed( metaProperty("IBU"), _IBU );
+   }
 }
 
 void Recipe::recalcVolumeEstimates()
@@ -1594,28 +1599,29 @@ void Recipe::recalcVolumeEstimates()
    // wortFromMash_l ==========================
    double waterAdded_l;
    double absorption_lKg;
-   
+   double tmp = 0.0;
+   double tmp_wfm, tmp_bv, tmp_fv, tmp_pbv;
+
    if( mash() == 0 )
       _wortFromMash_l = 0.0;
    else
    {
    
-       waterAdded_l = mash()->totalMashWater_l();
-       if( equipment() != 0 )
-          absorption_lKg = equipment()->grainAbsorption_LKg();
-       else
-          absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
+      waterAdded_l = mash()->totalMashWater_l();
+      if( equipment() != 0 )
+         absorption_lKg = equipment()->grainAbsorption_LKg();
+      else
+         absorption_lKg = PhysicalConstants::grainAbsorption_Lkg;
 
-       _wortFromMash_l = (waterAdded_l - absorption_lKg * _grainsInMash_kg);
+      tmp_wfm = (waterAdded_l - absorption_lKg * _grainsInMash_kg);
    }
    
    // boilVolume_l ==============================
-   double tmp = 0.0;
    
    if( equipment() != 0 )
-      tmp = _wortFromMash_l - equipment()->lauterDeadspace_l() + equipment()->topUpKettle_l();
+      tmp = tmp_wfm - equipment()->lauterDeadspace_l() + equipment()->topUpKettle_l();
    else
-      tmp = _wortFromMash_l;
+      tmp = tmp_wfm;
    
    // Need to account for extract/sugar volume also.
    QList<Fermentable*> ferms = fermentables();
@@ -1632,28 +1638,46 @@ void Recipe::recalcVolumeEstimates()
    
    if( tmp <= 0.0 )
       tmp = boilSize_l(); // Give up.
-   
-   _boilVolume_l = tmp;
+ 
+   tmp_bv = tmp;
    
    // finalVolume_l ==============================
    
    if( equipment() != 0 )
-      _finalVolume_l = equipment()->wortEndOfBoil_l(_boilVolume_l) - equipment()->trubChillerLoss_l() + equipment()->topUpWater_l();
+      tmp_fv = equipment()->wortEndOfBoil_l(tmp_bv) - equipment()->trubChillerLoss_l() + equipment()->topUpWater_l();
    else
-      _finalVolume_l = _boilVolume_l - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
-   
+      _finalVolume_l = tmp_bv - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
+
    // postBoilVolume_l ===========================
 
    if( equipment() != 0 )
-      _postBoilVolume_l = equipment()->wortEndOfBoil_l( _boilVolume_l );
+      tmp_pbv = equipment()->wortEndOfBoil_l( tmp_bv );
    else
-      _postBoilVolume_l = batchSize_l(); // Give up.
-      
-   // Emit changes.
-   emit changed( metaProperty("wortFromMash_l"), _wortFromMash_l );
-   emit changed( metaProperty("boilVolume_l"), _boilVolume_l );
-   emit changed( metaProperty("finalVolume_l"), _finalVolume_l );
-   emit changed( metaProperty("postBoilVolume_l"), _postBoilVolume_l );
+      tmp_pbv = batchSize_l(); // Give up.
+
+   if ( tmp_wfm != _wortFromMash_l )
+   {
+      _wortFromMash_l = tmp_wfm;
+      emit changed( metaProperty("wortFromMash_l"), _wortFromMash_l );
+   }
+
+   if ( tmp_bv != _boilVolume_l )
+   {
+      _boilVolume_l = tmp_bv;
+      emit changed( metaProperty("boilVolume_l"), _boilVolume_l );
+   }
+   
+   if ( tmp_fv != _finalVolume_l )
+   {
+      _finalVolume_l = tmp_fv;
+      emit changed( metaProperty("finalVolume_l"), _finalVolume_l );
+   }
+
+   if ( tmp_pbv != _postBoilVolume_l )
+   {
+      _postBoilVolume_l = tmp_pbv;
+      emit changed( metaProperty("postBoilVolume_l"), _postBoilVolume_l );
+   }
 }
 
 void Recipe::recalcGrainsInMash_kg()
@@ -1671,10 +1695,12 @@ void Recipe::recalcGrainsInMash_kg()
       if( ferm->type() == Fermentable::Grain && ferm->isMashed() )
          ret += ferm->amount_kg();
    }
-   
-   _grainsInMash_kg = ret;
-   
-   emit changed( metaProperty("grainsInMash_kg"), _grainsInMash_kg );
+
+   if ( ret != _grainsInMash_kg ) 
+   {
+      _grainsInMash_kg = ret;
+      emit changed( metaProperty("grainsInMash_kg"), _grainsInMash_kg );
+   }
 }
 
 void Recipe::recalcGrains_kg()
@@ -1687,44 +1713,16 @@ void Recipe::recalcGrains_kg()
    for( i = 0; i < size; ++i )
       ret += ferms[i]->amount_kg();
 
-   _grains_kg = ret;
-   
-   emit changed( metaProperty("grains_kg"), _grains_kg );
+   if ( ret != _grains_kg ) 
+   {
+      _grains_kg = ret;
+      emit changed( metaProperty("grains_kg"), _grains_kg );
+   }
 }
 
 void Recipe::recalcSRMColor()
 {
-   /**** Original method from a website: Came out dark. ***
-   
-   // Luminance Y
-   double Y = 94.6914*exp(-0.131272*color_srm);
-   // Chroma x
-   double x = 0.73978 - 0.25442*exp(-0.037865*color_srm) - 0.017511*exp(-0.24307*color_srm);
-   // Chroma y
-   double y = 0.197785 + 0.260472*exp( -pow( (x-0.491021)/.214194, 2)   );
-   // Chroma z
-   double z = 1 - x - y;
-
-   double X = (Y/y)*x;
-   double Z = (Y/y)*z;
-
-   // Get [0,255] RGB values.
-   int R = (int)ceil(1.910*X  - 0.533*Y - 0.288*Z);
-   R = (R<0)?0:((R>255)?255:R);
-
-   int G = (int)ceil(-0.985*X + 2.000*Y - 0.0280*Z);
-   G = (G<0)?0:((G>255)?255:G);
-
-   int B = (int)ceil(0.058*X -0.118*Y + 0.896*Z);
-   B = (B<0)?0:((B>255)?255:B);
-
-   QColor ret;
-
-   ret.setRgb( R, G, B, 255 );
-
-   return ret;
-   ***********/
-
+   QColor tmp;
    //==========My approximation from a photo and spreadsheet===========
 
    double red = 232.9 * pow( (double)0.93, _color_srm );
@@ -1734,32 +1732,40 @@ void Recipe::recalcSRMColor()
    int g = (green < 0)? 0 : ((green > 255)? 255 : (int)Algorithms::Instance().round(green));
    int b = 0;
 
-   _SRMColor.setRgb( r, g, b );
+   tmp.setRgb( r, g, b );
 
-   emit changed( metaProperty("SRMColor"), _SRMColor );
+   if ( tmp != _SRMColor )
+   {
+      _SRMColor = tmp;
+      emit changed( metaProperty("SRMColor"), _SRMColor );
+   }
 }
 
 // the formula in here are taken from http://hbd.org/ensmingr/
 void Recipe::recalcCalories()
 {
-    double startPlato, finishPlato, RE, abw, oog, ffg;
+   double startPlato, finishPlato, RE, abw, oog, ffg, tmp;
 
-    oog = _og;
-    ffg = _fg;
+   oog = _og;
+   ffg = _fg;
 
-    // Need to translate OG and FG into plato
-    startPlato  = -463.37 + ( 668.72 * oog ) - (205.35 * oog * oog);
-    finishPlato = -463.37 + ( 668.72 * ffg ) - (205.35 * ffg * ffg);
+   // Need to translate OG and FG into plato
+   startPlato  = -463.37 + ( 668.72 * oog ) - (205.35 * oog * oog);
+   finishPlato = -463.37 + ( 668.72 * ffg ) - (205.35 * ffg * ffg);
 
-    // RE (real extract)
-    RE = (0.1808 * startPlato) + (0.8192 * finishPlato);
+   // RE (real extract)
+   RE = (0.1808 * startPlato) + (0.8192 * finishPlato);
 
-    // Alcohol by weight?
-    abw = (startPlato-RE)/(2.0665 - (0.010665 * startPlato));
+   // Alcohol by weight?
+   abw = (startPlato-RE)/(2.0665 - (0.010665 * startPlato));
 
-    _calories = ((6.9*abw) + 4.0 * (RE-0.1)) * ffg * 3.55;
+   tmp = ((6.9*abw) + 4.0 * (RE-0.1)) * ffg * 3.55;
 
-    emit changed( metaProperty("calories"), _calories );
+   if ( tmp != _calories ) 
+   {
+      _calories = tmp;
+      emit changed( metaProperty("calories"), _calories );
+   }
 }
 
 void Recipe::recalcOgFg()
@@ -1773,12 +1779,13 @@ void Recipe::recalcOgFg()
    double sugar_kg_ignoreEfficiency = 0.0;
    Fermentable::Type fermtype;
    double attenuation_pct = 0.0;
+   double tmp_og, tmp_fg, tmp_pnts;
    Fermentable* ferm;
    Yeast* yeast;
    
    QList<Fermentable*> ferms = fermentables();
    
-   _points = 0;
+   // _points = 0;
    // Calculate OG
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
@@ -1795,22 +1802,7 @@ void Recipe::recalcOgFg()
    // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
    if( equipment() != 0 )
    {
-      /* Ignore lauter deadspace since it should be included in efficiency ***
-      // First, lauter deadspace.
-      ratio = (estimateWortFromMash_l() - equipment->getLauterDeadspace_l()) / (estimateWortFromMash_l());
-      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-         ratio = 1.0;
-      else if( ratio < 0.0 ) // Only happens if the user is stupid with lauter deadspace.
-         ratio = 0.0;
-      else if( isnan(ratio) )
-         ratio = 1.0; // Need this in case we have no mash, and therefore end up with NaN.
       
-      sugar_kg *= ratio;
-      // Don't consider this one since nobody adds sugar or extract to the mash.
-      //sugar_kg_ignoreEfficiency *= ratio;
-      */
-      
-      // Next, trub/chiller loss.
       kettleWort_l = (_wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
       postBoilWort_l = equipment()->wortEndOfBoil_l(kettleWort_l);
       ratio = (postBoilWort_l - equipment()->trubChillerLoss_l()) / postBoilWort_l;
@@ -1829,9 +1821,10 @@ void Recipe::recalcOgFg()
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
    plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolume_l);
 
-   _og = Algorithms::Instance().PlatoToSG_20C20C( plato );
-   _points = (_og-1)*1000.0;
-   
+   tmp_og = Algorithms::Instance().PlatoToSG_20C20C( plato );
+
+   tmp_pnts = (_og-1)*1000.0;
+
    // Calculage FG
    for( i = 0; static_cast<int>(i) < yeasts().size(); ++i )
    {
@@ -1843,11 +1836,27 @@ void Recipe::recalcOgFg()
    if( yeasts().size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
 
-   _points = _points*(1.0 - attenuation_pct/100.0);
-   _fg =  1 + _points/1000.0;
-   
-   emit changed( metaProperty("og"), _og );
-   emit changed( metaProperty("fg"), _fg );
+   tmp_pnts = tmp_pnts*(1.0 - attenuation_pct/100.0);
+
+   tmp_fg =  1 + tmp_pnts/1000.0;
+
+   if ( _og != tmp_og ) 
+   {
+      _og     = tmp_og;
+      emit changed( metaProperty("og"), _og );
+   }
+
+   if ( tmp_pnts != _points )
+   {
+      _points = tmp_pnts;
+      emit changed( metaProperty("points"), _points );
+   }
+
+   if ( tmp_fg != _fg ) 
+   {
+      _fg     = tmp_fg;
+      emit changed( metaProperty("fg"), _fg );
+   }
 }
 
 //====================================Helpers===========================================
@@ -1991,37 +2000,7 @@ QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
 
 //==========================Accept changes from ingredients====================
 
-/*
-void Recipe::acceptChanges(QMetaProperty prop, QVariant val)
-{
-   QObject* senderObj = sender();
-   // Sender can be null if the sender is from another thread.
-   if( senderObj == 0 )
-      return;
-   
-   QString senderClass(senderObj->metaObject()->className());
-   
-   // Pass along the signal if it's one of our ingredients?
-   // I don't know really what to emit here...
-   //if( senderClass == "Hop" )
-   //   emit changed(...);
-   //else if( senderClass == "Fermentable" )
-   //   emit changed(...);
-   //else if( senderClass == "Misc" )
-   //   emit changed(...);
-   //else if( senderClass == "Yeast" )
-   //   emit changed(...);
-   //else if( senderClass == "Water" )
-   //   emit changed(...);
-   //else if( senderClass == "BrewNote" )
-   //   emit changed(...);
-   //else if( senderClass == "Instruction" )
-   //   emit changed(...);
-   
-}
-*/
-
-void Recipe::acceptFermChange(QMetaProperty /*prop*/, QVariant /*val*/)
+void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
 {
    recalcAll();
 }
@@ -2031,7 +2010,17 @@ void Recipe::acceptHopChange(QMetaProperty prop, QVariant val)
    recalcIBU();
 }
 
-void Recipe::acceptMashChange(QMetaProperty /*prop*/, QVariant /*val*/)
+void Recipe::acceptMashChange(QMetaProperty prop, QVariant val)
 {
-   recalcAll();
+   Mash* mashSend = qobject_cast<Mash*>(sender());
+   int key;
+
+   if ( mashSend == 0 )
+      return;
+   
+   key = mashSend->key();
+   // Don't do anything if this isn't our thing
+   if ( mash()->key() == key ) {
+      recalcAll();
+   }
 }
