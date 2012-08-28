@@ -267,7 +267,7 @@ void OptionDialog::saveAndClose()
    if( newUserDataDir != Brewtarget::getUserDataDir() )
    {
       // If there are no data files present...
-      if( ! QFileInfo(newUserDataDir + "database.xml").exists() )
+      if( ! QFileInfo(newUserDataDir + "database.sqlite").exists() )
       {
          // ...tell user we will copy old data files to new location.
          QMessageBox::information(this,

@@ -112,6 +112,17 @@ MainWindow::MainWindow(QWidget* parent)
    // Ensure database initializes.
    Database::instance();
 
+   // Now check to see if there's an old xml recipe file that we might need
+   // to import recipes from.
+   QFile oldXmlFile( Brewtarget::getUserDataDir() + "recipes.xml" );
+   if( oldXmlFile.exists() )
+   {
+      // NOTE: Should we pop up an information dialog here? Doing it silently
+      //       for now.
+      Database::instance().importFromXML( oldXmlFile.fileName() );
+      oldXmlFile.remove();
+   }
+   
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
    

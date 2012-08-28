@@ -102,10 +102,8 @@ bool Database::load()
    dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
    
    // Cleanup the backup database if there was a previous error.
-   if (!cleanupBackupDatabase())
-   {
+   if( !cleanupBackupDatabase() )
       return false;
-   }
 
    // Set the files.
    dbFile.setFileName(dbFileName);
@@ -172,13 +170,16 @@ bool Database::load()
       && QFileInfo(dataDbFile).lastModified() > Brewtarget::lastDbMergeRequest )
    {
       
-      if( QMessageBox::question(0,
-         QObject::tr("Merge Database"),
-                                QObject::tr("There may be new ingredients and recipes available. Would you like to add these to your database?"),
-                                QMessageBox::Yes | QMessageBox::No,
-                                QMessageBox::Yes)
-         == QMessageBox::Yes
+      if(
+         QMessageBox::question(
+            0,
+            tr("Merge Database"),
+            tr("There may be new ingredients and recipes available. Would you like to add these to your database?"),
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::Yes
          )
+         == QMessageBox::Yes
+      )
       {
          updateDatabase(dataDbFile.fileName());
       }
@@ -1647,15 +1648,9 @@ void Database::importFromXML(const QString& filename)
       skipEmitChanged = true;
       for(int i = 0; i < list.count(); ++i )
       {
-	 if ( i  == list.count() -1 )
-	      skipEmitChanged = false;
-	 
+         if ( i  == list.count() -1 )
+            skipEmitChanged = false;
          recipeFromXml( list.at(i) );
-	 
-         //Recipe* newRec = new Recipe(list.at(i));
-         //
-         //if(verifyImport("recipe",newRec->getName()))
-         //   db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
       }
       skipEmitChanged = false;
    }

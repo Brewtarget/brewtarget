@@ -259,4 +259,3 @@ private:
  */
 
 #endif   /* _BREWTARGET_H */
-
