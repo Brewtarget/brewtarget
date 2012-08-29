@@ -51,8 +51,10 @@ void MiscTableModel::observeDatabase(bool val)
 {
    if( val )
    {
+      observeRecipe(0);
       removeAll();
-      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( &(Database::instance()), SIGNAL(newMiscSignal(Misc*)), this, SLOT(addMisc(Misc*)) );
+      connect( &(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)), this, SLOT(removeMisc(Misc*)) );
       addMiscs( Database::instance().miscs() );
    }
    else
@@ -66,7 +68,17 @@ void MiscTableModel::addMisc(Misc* misc)
 {
    if( miscObs.contains(misc) )
       return;
-   
+   // If we are observing the database, ensure that the item is undeleted and
+   // fit to display.
+   if(
+      recObs == 0 &&
+      (
+         misc->deleted() ||
+         !misc->display()
+      )
+   )
+      return;
+ 
    int size = miscObs.size();
    beginInsertRows( QModelIndex(), size, size );
    miscObs.append(misc);

@@ -24,23 +24,26 @@
 EquipmentListModel::EquipmentListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)
 {
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(dbChanged(QMetaProperty,QVariant)) );
+   //connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(dbChanged(QMetaProperty,QVariant)) );
+   connect( &(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)), this, SLOT(addEquipment(Equipment*)) );
+   connect( &(Database::instance()), SIGNAL(deletedEquipmentSignal(Equipment*)), this, SLOT(removeEquipment(Equipment*)) );
    repopulateList();
 }
 
 void EquipmentListModel::addEquipment(Equipment* equipment)
 {
-   if( ! equipment )
+   if( !equipment ||
+      equipments.contains(equipment) ||
+      equipment->deleted() ||
+      !equipment->display()
+   )
       return;
    
-   if( !equipments.contains(equipment) )
-   {
-      int size = equipments.size();
-      beginInsertRows( QModelIndex(), size, size );
-      equipments.append(equipment);
-      connect( equipment, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
-      endInsertRows();
-   }
+   int size = equipments.size();
+   beginInsertRows( QModelIndex(), size, size );
+   equipments.append(equipment);
+   connect( equipment, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
+   endInsertRows();
 }
 
 void EquipmentListModel::addEquipments(QList<Equipment*> equips)
@@ -54,7 +57,7 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
       // if the equipment has not been deleted and
       // if the equipment is to be displayed, then append it
       if( !equipments.contains(*i) &&
-          !(*i)->deleted()             &&  
+          !(*i)->deleted()         &&  
            (*i)->display() )
          tmp.append(*i);
    }
@@ -89,11 +92,6 @@ void EquipmentListModel::removeAll()
       disconnect( equipments.takeLast(), 0, this, 0 );
    }
    endRemoveRows();
-}
-
-void EquipmentListModel::dbChanged(QMetaProperty prop, QVariant val)
-{   
-   repopulateList();
 }
 
 void EquipmentListModel::equipChanged(QMetaProperty prop, QVariant val)
@@ -151,9 +149,7 @@ void EquipmentListModel::observeRecipe(Recipe* rec)
    recipe = rec;
    
    if( recipe )
-   {
       connect( recipe, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(recChanged(QMetaProperty,QVariant)) );
-   }
 }
 
 int EquipmentListModel::rowCount( QModelIndex const& parent ) const

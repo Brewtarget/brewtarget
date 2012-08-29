@@ -57,11 +57,8 @@ public:
    void observeRecipe(Recipe* rec);
    //! Whether or not we should be looking at the database.
    void observeDatabase(bool val);
-   void addYeast(Yeast* yeast);
    void addYeasts(QList<Yeast*> yeasts);
    Yeast* getYeast(unsigned int i);
-   //! \returns true if the \b yeast is found and removed.
-   bool removeYeast(Yeast* yeast);
    void removeAll();
 
    // Inherit the following from QAbstractItemModel via QAbstractTableModel
@@ -80,6 +77,8 @@ public:
 
 public slots:
    void changed(QMetaProperty,QVariant);
+   void addYeast(Yeast* yeast);
+   void removeYeast(Yeast* yeast);
    
 private:
    QList<Yeast*> yeastObs;

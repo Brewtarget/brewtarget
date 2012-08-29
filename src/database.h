@@ -353,6 +353,24 @@ public:
    
 signals:
    void changed(QMetaProperty prop, QVariant value);
+   void newEquipmentSignal(Equipment*);
+   void deletedEquipmentSignal(Equipment*);
+   void newFermentableSignal(Fermentable*);
+   void deletedFermentableSignal(Fermentable*);
+   void newHopSignal(Hop*);
+   void deletedHopSignal(Hop*);
+   void newMashSignal(Mash*);
+   void deletedMashSignal(Mash*);
+   void newMiscSignal(Misc*);
+   void deletedMiscSignal(Misc*);
+   void newRecipeSignal(Recipe*);
+   void deletedRecipeSignal(Recipe*);
+   void newStyleSignal(Style*);
+   void deletedStyleSignal(Style*);
+   void newWaterSignal(Water*);
+   void deletedWaterSignal(Water*);
+   void newYeastSignal(Yeast*);
+   void deletedYeastSignal(Yeast*);
    
 private slots:
    //! Load database from file.

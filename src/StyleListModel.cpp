@@ -24,13 +24,14 @@
 StyleListModel::StyleListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)
 {
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(dbChanged(QMetaProperty,QVariant)) );
+   connect( &(Database::instance()), SIGNAL(newStyleSignal(Style*)), this, SLOT(addStyle(Style*)) );
+   connect( &(Database::instance()), SIGNAL(deletedStyleSignal(Style*)), this, SLOT(removeStyle(Style*)) );
    repopulateList();
 }
 
 void StyleListModel::addStyle(Style* s)
 {
-   if( ! s )
+   if( !s || !s->display() || s->deleted() )
       return;
    
    if( !styles.contains(s) )
@@ -67,7 +68,7 @@ void StyleListModel::addStyles(QList<Style*> s)
 void StyleListModel::removeStyle(Style* style)
 {
    int ndx = styles.indexOf(style);
-   if( ndx > 0 )
+   if( ndx >= 0 )
    {
       beginRemoveRows( QModelIndex(), ndx, ndx );
       disconnect( style, 0, this, 0 );
@@ -82,11 +83,6 @@ void StyleListModel::removeAll()
    while( !styles.isEmpty() )
       disconnect( styles.takeLast(), 0, this, 0 );
    endRemoveRows();
-}
-
-void StyleListModel::dbChanged(QMetaProperty prop, QVariant val)
-{   
-   repopulateList();
 }
 
 void StyleListModel::styleChanged(QMetaProperty prop, QVariant val)

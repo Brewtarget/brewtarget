@@ -432,6 +432,8 @@ create table yeast_in_recipe(
    foreign key(recipe_id) references recipe(id)
 );
 
+-- Ingredient inheritance tables
+
 create table equipment_children(
    id integer PRIMARY KEY autoincrement,
    parent_id integer,
@@ -494,4 +496,38 @@ create table yeast_children(
    child_id integer,
    foreign key(parent_id) references yeast(id),
    foreign key(child_id)  references yeast(id)
+);
+
+-- Inventory tables for the future.
+
+create table fermentable_in_inventory(
+   id integer PRIMARY KEY autoincrement,
+   fermentable_id integer,
+   amount real DEFAULT 0.0,
+   foreign key(fermentable_id) references fermentable(id)
+);
+
+create table hop_in_inventory(
+   id integer PRIMARY KEY autoincrement,
+   hop_id integer,
+   amount real DEFAULT 0.0,
+   foreign key(hop_id) references hop(id)
+);
+
+create table misc_in_inventory(
+   id integer PRIMARY KEY autoincrement,
+   misc_id integer,
+   amount real DEFAULT 0.0,
+   foreign key(misc_id) references misc(id)
+);
+
+-- For yeast, homebrewers don't usually keep stores of yeast. They keep
+-- packets or vials or some other type of discrete integer quantity. So, I
+-- don't know how useful a real-valued inventory amount would be for yeast.
+create table yeast_in_inventory(
+   id integer PRIMARY KEY autoincrement,
+   yeast_id integer,
+   --amount real DEFAULT 0.0,
+   quanta integer DEFAULT 0,
+   foreign key(yeast_id) references yeast(id)
 );

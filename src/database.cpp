@@ -447,6 +447,7 @@ void Database::removeFromRecipe( Recipe* rec, Hop* hop )
 {
    removeIngredientFromRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
    disconnect( hop, 0, rec, 0 );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
@@ -459,16 +460,19 @@ void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
 void Database::removeFromRecipe( Recipe* rec, Misc* m )
 {
    removeIngredientFromRecipe( rec, m, "miscs", "misc_in_recipe", "misc_id" );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Yeast* y )
 {
    removeIngredientFromRecipe( rec, y, "yeasts", "yeast_in_recipe", "yeast_id" );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Water* w )
 {
    removeIngredientFromRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
@@ -794,7 +798,10 @@ Equipment* Database::newEquipment()
    tmp->_key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("equipments"), QVariant() );
+   emit newEquipmentSignal(tmp);
+   
    return tmp;
 }
 
@@ -804,7 +811,10 @@ Equipment* Database::newEquipment(Equipment* other)
    tmp->_key = copy<Equipment>(other).value("id").toInt();
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("equipments"), QVariant() );
+   emit newEquipmentSignal(tmp);
+   
    return tmp;
 }
 
@@ -814,7 +824,10 @@ Fermentable* Database::newFermentable()
    tmp->_key = insertNewDefaultRecord(Brewtarget::FERMTABLE);
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("fermentables"), QVariant() );
+   emit newFermentableSignal(tmp);
+   
    return tmp;
 }
 
@@ -824,7 +837,10 @@ Fermentable* Database::newFermentable(Fermentable* other)
    tmp->_key = copy<Fermentable>(other).value("id").toInt();
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("fermentables"), QVariant() );
+   emit newFermentableSignal(tmp);
+   
    return tmp;
 }
 
@@ -834,7 +850,10 @@ Hop* Database::newHop()
    tmp->_key = insertNewDefaultRecord(Brewtarget::HOPTABLE);
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("hops"), QVariant() );
+   emit newHopSignal(tmp);
+   
    return tmp;
 }
 
@@ -844,15 +863,16 @@ Hop* Database::newHop(Hop* other)
    tmp->_key = copy<Hop>(other).value("id").toInt();
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("hops"), QVariant() );
+   emit newHopSignal(tmp);
+   
    return tmp;
 }
 
 Instruction* Database::newInstruction(Recipe* rec)
 {
    // TODO: encapsulate in QUndoCommand.
-   // NOTE: we have unique(recipe_id,instruction_number) constraints on this table,
-   // so may have to pay special attention when creating the new record.
    Instruction* tmp = new Instruction();
    tmp->_key = insertNewDefaultRecord(Brewtarget::INSTRUCTIONTABLE);
    tmp->_table = Brewtarget::INSTRUCTIONTABLE;
@@ -875,7 +895,10 @@ Mash* Database::newMash()
    tmp->_key = insertNewDefaultRecord(Brewtarget::MASHTABLE);
    tmp->_table = Brewtarget::MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(tmp);
+   
    return tmp;
 }
 
@@ -892,6 +915,8 @@ Mash* Database::newMash(Recipe* parent)
               QString("id=%1").arg(parent->_key) );
    
    sendEmitchanged( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(tmp);
+   
    return tmp;
 }
 
@@ -911,6 +936,8 @@ Mash* Database::newMash(Mash* other, bool displace)
    }
    
    sendEmitchanged( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(tmp);
+   
    return tmp;
 }
 
@@ -939,7 +966,10 @@ Misc* Database::newMisc()
    tmp->_key = insertNewDefaultRecord(Brewtarget::MISCTABLE);
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("miscs"), QVariant() );
+   emit newMiscSignal(tmp);
+   
    return tmp;
 }
 
@@ -949,7 +979,10 @@ Misc* Database::newMisc(Misc* other)
    tmp->_key = copy<Misc>(other).value("id").toInt();
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("miscs"), QVariant() );
+   emit newMiscSignal(tmp);
+   
    return tmp;
 }
 
@@ -964,6 +997,8 @@ Recipe* Database::newRecipe()
    newMash( tmp );
    
    sendEmitchanged( metaProperty("recipes"), QVariant() );
+   emit newRecipeSignal(tmp);
+   
    return tmp;
 }
 
@@ -973,7 +1008,10 @@ Recipe* Database::newRecipe(Recipe* other)
    tmp->_key = copy<Recipe>(other).value("id").toInt();
    tmp->_table = Brewtarget::RECTABLE;
    allRecipes.insert( tmp->_key, tmp );
+   
    sendEmitchanged( metaProperty("recipes"), QVariant() );
+   emit newRecipeSignal(tmp);
+   
    return tmp;
 }
 
@@ -983,7 +1021,10 @@ Style* Database::newStyle()
    tmp->_key = insertNewDefaultRecord(Brewtarget::STYLETABLE);
    tmp->_table = Brewtarget::STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("styles"), QVariant() );
+   emit newStyleSignal(tmp);
+   
    return tmp;
 }
 
@@ -993,7 +1034,10 @@ Water* Database::newWater()
    tmp->_key = insertNewDefaultRecord(Brewtarget::WATERTABLE);
    tmp->_table = Brewtarget::WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("waters"), QVariant() );
+   emit newWaterSignal(tmp);
+   
    return tmp;
 }
 
@@ -1003,7 +1047,10 @@ Yeast* Database::newYeast()
    tmp->_key = insertNewDefaultRecord(Brewtarget::YEASTTABLE);
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("yeasts"), QVariant() );
+   emit newYeastSignal(tmp);
+   
    return tmp;
 }
 
@@ -1013,7 +1060,10 @@ Yeast* Database::newYeast(Yeast* other)
    tmp->_key = copy<Yeast>(other).value("id").toInt();
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("yeasts"), QVariant() );
+   emit newYeastSignal(tmp);
+   
    return tmp;
 }
 
@@ -1042,6 +1092,7 @@ void Database::removeEquipment(Equipment* equip, bool signal)
    deleteRecord(Brewtarget::EQUIPTABLE,equip);
    if ( signal )
       emit changed( metaProperty("equipments"), QVariant() );
+   emit deletedEquipmentSignal(equip);
 }
 
 void Database::removeEquipment(QList<Equipment*> equip)
@@ -1064,6 +1115,7 @@ void Database::removeFermentable(Fermentable* ferm, bool signal)
    deleteRecord(Brewtarget::FERMTABLE,ferm);
    if ( signal ) 
       emit changed( metaProperty("fermentables"), QVariant());
+   emit deletedFermentableSignal(ferm);
 }
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
@@ -1087,6 +1139,7 @@ void Database::removeHop(Hop* hop, bool signal)
    // NOTE: what to put for the QVariant?
    if ( signal )
       emit changed( metaProperty("hops"), QVariant() );
+   emit deletedHopSignal(hop);
 }
 
 void Database::removeHop(QList<Hop*> hop)
@@ -1108,6 +1161,7 @@ void Database::removeMash(Mash* mash, bool signal)
    deleteRecord(Brewtarget::MASHTABLE,mash);
    if ( signal )
       emit changed( metaProperty("mashs"), QVariant() );
+   emit deletedMashSignal(mash);
 }
 
 void Database::removeMash(QList<Mash*> mash)
@@ -1151,6 +1205,7 @@ void Database::removeMisc(Misc* misc, bool signal )
    deleteRecord(Brewtarget::MISCTABLE,misc);
    if ( signal )
       emit changed( metaProperty("miscs"), QVariant());
+   emit deletedMiscSignal(misc);
 }
 
 void Database::removeMisc(QList<Misc*> misc)
@@ -1172,6 +1227,7 @@ void Database::removeRecipe(Recipe* rec, bool signal)
    deleteRecord(Brewtarget::RECTABLE,rec);
    if ( signal ) 
       emit changed( metaProperty("recipes"), QVariant() );
+   emit deletedRecipeSignal(rec);
 }
 
 void Database::removeRecipe(QList<Recipe*> rec)
@@ -1193,6 +1249,7 @@ void Database::removeStyle(Style* style, bool signal)
    deleteRecord(Brewtarget::STYLETABLE,style);
    if ( signal )
       emit changed( metaProperty("styles"), QVariant() );
+   emit deletedStyleSignal(style);
 }
 
 void Database::removeStyle(QList<Style*> style)
@@ -1214,6 +1271,7 @@ void Database::removeWater(Water* water, bool signal)
    deleteRecord(Brewtarget::WATERTABLE,water);
    if ( signal )
       emit changed( metaProperty("waters"), QVariant());
+   emit deletedWaterSignal(water);
 }
 
 void Database::removeWater(QList<Water*> water)
@@ -1235,6 +1293,7 @@ void Database::removeYeast(Yeast* yeast, bool signal)
    deleteRecord(Brewtarget::YEASTTABLE,yeast);
    if ( signal )
       emit changed( metaProperty("yeasts"), QVariant());
+   emit deletedYeastSignal(yeast);
 }
 
 void Database::removeYeast(QList<Yeast*> yeast)
@@ -1323,6 +1382,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
 void Database::addToRecipe( Recipe* rec, Misc* m, bool initialLoad )
 {
    addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", initialLoad, &allMiscs );
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool initialLoad )
@@ -1334,6 +1394,7 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool initialLoad )
 void Database::addToRecipe( Recipe* rec, Water* w, bool initialLoad )
 {
    addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", initialLoad, &allWaters );
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )

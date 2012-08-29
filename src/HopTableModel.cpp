@@ -67,8 +67,10 @@ void HopTableModel::observeDatabase(bool val)
 {
    if( val )
    {
+      observeRecipe(0);
       removeAll();
-      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)), this, SLOT(addHop(Hop*)) );
+      connect( &(Database::instance()), SIGNAL(deletedHopSignal(Hop*)), this, SLOT(removeHop(Hop*)) );
       addHops( Database::instance().hops() );
    }
    else
@@ -81,6 +83,17 @@ void HopTableModel::observeDatabase(bool val)
 void HopTableModel::addHop(Hop* hop)
 {
    if( hop == 0 || hopObs.contains(hop) )
+      return;
+
+   // If we are observing the database, ensure that the item is undeleted and
+   // fit to display.
+   if(
+      recObs == 0 &&
+      (
+         hop->deleted() ||
+         !hop->display()
+      )
+   )
       return;
    
    int size = hopObs.size();
@@ -193,14 +206,6 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       }
       if( rowCount() > 0 )
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
-      return;
-   }
-   
-   // See if sender is the database.
-   if( sender() == &(Database::instance()) && QString(prop.name()) == "hops" )
-   {
-      removeAll();
-      addHops( Database::instance().hops() );
       return;
    }
 }

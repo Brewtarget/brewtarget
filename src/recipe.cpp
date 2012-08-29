@@ -191,7 +191,7 @@ Instruction* Recipe::mashWaterIns(unsigned int size)
 {
    Instruction* ins;
    QString str, tmp;
-   unsigned int i;
+   int i;
 
    if( mash() == 0 )
       return 0;

@@ -47,12 +47,8 @@ public:
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
    void observeRecipe(Recipe* rec);
-   //! Add an equipment to the list.
-   void addEquipment(Equipment* equipment);
    //! Add many equipments to the list.
    void addEquipments(QList<Equipment*> equips);
-   //! Remove an equipment from the list.
-   void removeEquipment(Equipment* equipment);
    //! Remove all equipments from the list.
    void removeAll();
    
@@ -62,9 +58,12 @@ public:
    int indexOf(Equipment* e);
    
 public slots:
-   void dbChanged(QMetaProperty,QVariant);
    void recChanged(QMetaProperty,QVariant);
    void equipChanged(QMetaProperty,QVariant);
+   //! Add an equipment to the list.
+   void addEquipment(Equipment* equipment);
+   //! Remove an equipment from the list.
+   void removeEquipment(Equipment* equipment);
    
 private:
    QList<Equipment*> equipments;

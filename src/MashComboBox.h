@@ -47,10 +47,6 @@ class MashComboBox : public QComboBox
    public:
       MashComboBox(QWidget* parent=0);
       virtual ~MashComboBox() {}
-      //! Add a mash to the internal model's list.
-      void addMash(Mash* m);
-      //! Remove a mash from the internal model's list.
-      void removeMash(Mash* m);
       //! Set the current index to that which corresponds to \b m.
       void setIndexByMash(Mash* m);
       //! Set the index.
@@ -65,6 +61,11 @@ class MashComboBox : public QComboBox
       
    public slots:
       void changed(QMetaProperty, QVariant);
+      //! Add a mash to the internal model's list.
+      void addMash(Mash* m);
+      //! Remove a mash from the internal model's list.
+      void removeMash(Mash* m);
+      
    private:
       QList<Mash*> mashObs;
 };

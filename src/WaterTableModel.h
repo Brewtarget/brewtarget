@@ -52,11 +52,9 @@ class WaterTableModel : public QAbstractTableModel
 public:
    WaterTableModel(WaterTableWidget* parent=0);
    virtual ~WaterTableModel() {}
-   void addWater(Water* water);
    void addWaters(QList<Water*> waters);
    void observeRecipe(Recipe* rec);
    void observeDatabase(bool val);
-   bool removeWater(Water* water); // Returns true if "water" is successfully found and removed.
    void removeAll();
 
    //! Reimplemented from QAbstractTableModel.
@@ -74,6 +72,8 @@ public:
 
 public slots:
    void changed(QMetaProperty,QVariant);
+   void addWater(Water* water);
+   void removeWater(Water* water);
    
 private:
    QList<Water*> waterObs;
