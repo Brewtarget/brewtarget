@@ -298,7 +298,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
          case HOPTIMECOL:
             return QVariant(tr("Time"));
          case HOPFORMCOL:
-           return QVariant(tr("Form"));
+            return QVariant(tr("Form"));
          default:
             Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::headerdata Bad column: %1").arg(section));
             return QVariant();
@@ -504,11 +504,12 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("Dry Hop"));
+      // NOTE: these need to be in the same order as the Hop::Use enum.
       box->addItem(tr("Mash"));
+      box->addItem(tr("First Wort"));
       box->addItem(tr("Boil"));
       box->addItem(tr("Aroma"));
-      box->addItem(tr("First Wort"));
+      box->addItem(tr("Dry Hop"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;
