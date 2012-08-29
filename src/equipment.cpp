@@ -229,6 +229,7 @@ void Equipment::setBoilSize_l( double var )
    else
    {
       set("boilSize_l", "boil_size", var);
+      emit changedBoilSize_l(var);
    }
 }
 
@@ -353,6 +354,7 @@ void Equipment::setBoilTime_min( double var )
    else
    {
       set("boilTime_min", "boil_time", var);
+      emit changedBoilTime_min(var);
       doCalculations();
    }
 }

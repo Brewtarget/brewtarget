@@ -696,6 +696,26 @@ void MainWindow::setRecipe(Recipe* recipe)
    recStyle = recipe->style();
    recEquip = recipe->equipment();
 
+   // BeerXML is stupid and has reduntant fields.
+   // Ensure that recEquip and recipeObs always have the same boil size and time.
+   // NOTE: should probably move this connection code to the Database.
+   if( recEquip )
+   {
+      connect(
+         recEquip,
+         SIGNAL(changedBoilSize_l(double)),
+         recipeObs,
+         SLOT(setBoilSize_l(double))
+      );
+      
+      connect(
+         recEquip,
+         SIGNAL(changedBoilTime_min(double)),
+         recipeObs,
+         SLOT(setBoilTime_min(double))
+      );
+   }
+   
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
    hopTableModel->observeRecipe(recipe);
@@ -789,7 +809,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lineEdit_batchSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "batchSize_l", Units::liters));
    lineEdit_boilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilSize_l", Units::liters));
    lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "efficiency_pct", 0,0));
-   lineEdit_boilTime->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilTime_min", 0,0));
+   lineEdit_boilTime->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilTime_min", Units::minutes));
    
    label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs,tab_recipe, "finalVolume_l", Units::liters));
    label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilVolume_l", Units::liters));
@@ -981,7 +1001,6 @@ void MainWindow::updateRecipeBoilSize()
 
 void MainWindow::updateRecipeBoilTime()
 {
-   double newBoilSize = 0.0;
    double boilTime = 0.0;
    Equipment* kit;
 
@@ -989,13 +1008,14 @@ void MainWindow::updateRecipeBoilTime()
       return;
  
    kit = recipeObs->equipment();
-   boilTime = lineEdit_boilTime->text().toDouble();
-
-   newBoilSize = recipeObs->batchSize_l() - kit->topUpWater_l() + kit->trubChillerLoss_l() + (boilTime/(double)60) * kit->evapRate_lHr();
-
-   // If we modify the boil time, we need to modify the boil size too.
-   recipeObs->setBoilTime_min(boilTime);
-   recipeObs->setBoilSize_l(newBoilSize);
+   boilTime = Brewtarget::timeQStringToSI( lineEdit_boilTime->text() );
+   
+   // Here, we rely on a signa/slot connection to propagate the equipment
+   // changes to recipeObs->boilTime_min and maybe recipeObs->boilSize_l
+   if( kit )
+      kit->setBoilTime_min(boilTime);
+   else
+      recipeObs->setBoilTime_min(boilTime);
 }
 
 void MainWindow::updateRecipeEfficiency()
