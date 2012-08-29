@@ -740,7 +740,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    // causes this signal to be slotted, which then causes showChanges() to be
    // called.
    connect( recipeObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   recipe->recalcAll();
    showChanges();
 }
 

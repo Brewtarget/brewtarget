@@ -301,15 +301,6 @@ public:
    QList<QString> getReagents( QList<MashStep*> msteps );
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
    
-   /*! \brief Recalculates all the calculated properties.
-    * 
-    * You should never really have to call this as a user of this class, so
-    * don't unless you know what you're doing.
-    *
-    * WARNING: this call currently takes 0.15s in rev 916!
-    */
-   void recalcAll();
-   
 signals:
 
 public slots:
@@ -325,7 +316,6 @@ private:
    Recipe(Recipe const& other);
    
    // Calculated properties.
-   double _points;
    double _ABV_pct;
    double _color_srm;
    double _boilGrav;
@@ -351,11 +341,11 @@ private:
    
    // Some recalculators for calculated properties.
    
-   /*! The theoretical maximum yield without any non-mashed anything. This
-    * will need to be communicated somewhere. Emits changed(points).
-    * Depends on: --.
+   /*! \brief Recalculates all the calculated properties.
+    * 
+    * WARNING: this call currently takes 0.15s in rev 916!
     */
-   Q_INVOKABLE void recalcPoints(double volume);
+   void recalcAll();
    //! Emits changed(ABV_pct). Depends on: _og, _fg
    Q_INVOKABLE void recalcABV_pct();
    //! Emits changed(color_srm). Depends on: _finalVolume_l
