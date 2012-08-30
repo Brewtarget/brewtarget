@@ -1191,11 +1191,7 @@ Style* Recipe::style() const
 
 Mash* Recipe::mash() const
 {
-   QVariant key = get("mash_id");
-   if( key.isValid() )
-      return Database::instance().mash( key.toInt() );
-   else
-      return 0;
+   return Database::instance().mash( this );
 }
 
 Equipment* Recipe::equipment() const
@@ -1972,14 +1968,9 @@ void Recipe::acceptHopChange(QMetaProperty prop, QVariant val)
 void Recipe::acceptMashChange(QMetaProperty prop, QVariant val)
 {
    Mash* mashSend = qobject_cast<Mash*>(sender());
-   int key;
 
    if ( mashSend == 0 )
       return;
    
-   key = mashSend->key();
-   // Don't do anything if this isn't our thing
-   if ( mash()->key() == key ) {
-      recalcAll();
-   }
+   recalcAll();
 }

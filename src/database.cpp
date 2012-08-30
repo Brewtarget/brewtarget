@@ -164,6 +164,9 @@ bool Database::load()
    // Store temporary tables in memory.
    QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
    
+   // Initialize the SELECT * query hashes.
+   selectAll = Database::selectAllHash();
+   
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -216,23 +219,22 @@ bool Database::load()
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); j++ )
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+      
       QList<Hop*> tmpH = hops(*i);
       for( k = tmpH.begin(); k != tmpH.end(); ++k )
          connect( *k, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptHopChange(QMetaProperty,QVariant)) );
-      // DO we need to connect both Mash and MashSteps? I think we do, but I don't know.
-      QList<Mash*> tmpM = mashs();
-      for( l = tmpM.begin(); l != tmpM.end(); ++l)
-      {
-         QList<MashStep*> tmpMS = mashSteps(*l);
-         for( m=tmpMS.begin(); m != tmpMS.end(); ++m)
-            connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
-         connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
-      }
+      
+      connect( mash(*i), SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
+   }
+   
+   QList<Mash*> tmpM = mashs();
+   for( l = tmpM.begin(); l != tmpM.end(); ++l)
+   {
+      QList<MashStep*> tmpMS = mashSteps(*l);
+      for( m=tmpMS.begin(); m != tmpMS.end(); ++m)
+         connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
-   // Initialize the query hash.
-   selectAll = Database::selectAllHash();
-   
    return true;
 }
 
@@ -647,6 +649,16 @@ QList<Misc*> Database::miscs(Recipe const* parent)
    q.finish();
    
    return ret;
+}
+
+Mash* Database::mash( Recipe const* parent )
+{
+   int mashId = get( Brewtarget::RECTABLE, parent->key(), "mash_id" ).toInt();
+   
+   if( allMashs.contains(mashId) )
+      return allMashs[mashId];
+   else
+      return 0;
 }
 
 QList<MashStep*> Database::mashSteps(Mash const* parent)

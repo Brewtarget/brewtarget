@@ -308,6 +308,8 @@ public:
    QList<Water*> waters( Recipe const* parent );
    //! Return a list of all the yeasts in a recipe.
    QList<Yeast*> yeasts( Recipe const* parent );
+   //! Get the recipe's mash.
+   Mash* mash( Recipe const* parent );
    //! Return a list of all the steps in a mash.
    QList<MashStep*> mashSteps(Mash const* parent);
    

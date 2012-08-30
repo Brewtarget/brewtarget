@@ -72,11 +72,11 @@ public:
    void setDisplay(bool var);
 
    //! \returns our key in the table we are stored in.
-   int key();
+   int key() const;
    //! \returns the table we are stored in.
-   Brewtarget::DBTable table();
+   Brewtarget::DBTable table() const;
    //! \returns the BeerXML version of this element.
-   int version();
+   int version() const;
    //! Convenience method to get a meta property by name.
    QMetaProperty metaProperty(const char* name) const;
    //! Convenience method to get a meta property by name.
