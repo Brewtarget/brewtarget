@@ -64,8 +64,10 @@ QString USVolumeUnitSystem::displayAmount( double amount, Unit* units, unitScale
             ret = QString("%1 %2").arg(Units::us_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_cups->getUnitName());
          else if( absSIAmount < Units::us_gallons->toSI(1.0) ) // If less than 1 gallon, show us_quarts
             ret = QString("%1 %2").arg(Units::us_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_quarts->getUnitName());
-         else
+         else if( absSIAmount < Units::us_barrels->toSI(1.0) ) // If less than 1 barrel, show gallons.
             ret = QString("%1 %2").arg(Units::us_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_gallons->getUnitName());
+         else
+            ret = QString("%1 %2").arg(Units::us_barrels->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::us_barrels->getUnitName());
    }
 
    return ret;
@@ -89,6 +91,7 @@ void USVolumeUnitSystem::ensureMapIsSetup()
    nameToUnit.insert(Units::milliliters->getUnitName(), Units::milliliters);
 
    // Assume that "gal" "qt" etc. refer to the US versions.
+   nameToUnit.insert(Units::us_barrels->getUnitName(), Units::us_barrels);
    nameToUnit.insert(Units::us_gallons->getUnitName(), Units::us_gallons);
    nameToUnit.insert(Units::us_quarts->getUnitName(), Units::us_quarts);
    nameToUnit.insert(Units::us_cups->getUnitName(), Units::us_cups);

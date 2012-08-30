@@ -28,6 +28,7 @@ class PoundUnit;
 class OunceUnit;
 class LiterUnit;
 class MilliliterUnit;
+class USBarrelUnit;
 class USGallonUnit;
 class USQuartUnit;
 class USCupUnit;
@@ -284,6 +285,24 @@ class MilliliterUnit : public Unit
       QString SIUnitName;
 };
 
+class USBarrelUnit : public Unit
+{
+   public:
+      USBarrelUnit();
+      
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return USCustomary; }
+      
+   private:
+      QString unitName;
+      QString SIUnitName;
+};
+
 class USGallonUnit : public Unit
 {
    public:
@@ -333,6 +352,24 @@ class USCupUnit : public Unit
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
 
+   private:
+      QString unitName;
+      QString SIUnitName;
+};
+
+class ImperialBarrelUnit : public Unit
+{
+   public:
+      ImperialBarrelUnit();
+      
+      // Inherited methods.
+      double toSI( double amt ) const;
+      double fromSI( double amt ) const;
+      const QString getUnitName() const { return unitName; }
+      const QString getSIUnitName() const { return SIUnitName; }
+      const int getUnitType() const { return Volume; }
+      const int getUnitOrTempSystem() const { return Imperial; }
+      
    private:
       QString unitName;
       QString SIUnitName;
@@ -647,9 +684,11 @@ public:
    // === Volume ===
    static LiterUnit *liters;
    static MilliliterUnit *milliliters;
+   static USBarrelUnit *us_barrels;
    static USGallonUnit *us_gallons;
    static USQuartUnit *us_quarts;
    static USCupUnit *us_cups;
+   static ImperialBarrelUnit *imperial_barrels;
    static ImperialGallonUnit *imperial_gallons;
    static ImperialQuartUnit *imperial_quarts;
    static ImperialCupUnit *imperial_cups;
