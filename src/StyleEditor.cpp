@@ -190,8 +190,8 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_fgMax->setText(Brewtarget::displayAmount(s->fgMax(), 0));
       lineEdit_ibuMin->setText(Brewtarget::displayAmount(s->ibuMin(), 0));
       lineEdit_ibuMax->setText(Brewtarget::displayAmount(s->ibuMax(), 0));
-      lineEdit_colorMin->setText(Brewtarget::displayAmount(s->colorMax_srm(), 0));
-      lineEdit_colorMax->setText(Brewtarget::displayAmount(s->colorMin_srm(), 0));
+      lineEdit_colorMin->setText(Brewtarget::displayAmount(s->colorMin_srm(), 0));
+      lineEdit_colorMax->setText(Brewtarget::displayAmount(s->colorMax_srm(), 0));
       lineEdit_carbMin->setText(Brewtarget::displayAmount(s->carbMin_vol(), 0));
       lineEdit_carbMax->setText(Brewtarget::displayAmount(s->carbMax_vol(), 0));
       lineEdit_abvMin->setText(Brewtarget::displayAmount(s->abvMin_pct(), 0));
