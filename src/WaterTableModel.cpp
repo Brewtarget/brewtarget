@@ -60,8 +60,10 @@ void WaterTableModel::observeDatabase(bool val)
 {
    if( val )
    {
+      observeRecipe(0);
       removeAll();
-      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( &(Database::instance()), SIGNAL(newWaterSignal(Water*)), this, SLOT(addWater(Water*)) );
+      connect( &(Database::instance()), SIGNAL(deletedWaterSignal(Water*)), this, SLOT(removeWater(Water*)) );
       addWaters( Database::instance().waters() );
    }
    else
@@ -74,6 +76,16 @@ void WaterTableModel::observeDatabase(bool val)
 void WaterTableModel::addWater(Water* water)
 {
    if( waterObs.contains(water) )
+      return;
+   // If we are observing the database, ensure that the item is undeleted and
+   // fit to display.
+   if(
+      recObs == 0 &&
+      (
+         water->deleted() ||
+         !water->display()
+      )
+   )
       return;
    
    waterObs.append(water);
@@ -115,7 +127,7 @@ void WaterTableModel::addWaters(QList<Water*> waters)
    
 }
 
-bool WaterTableModel::removeWater(Water* water)
+void WaterTableModel::removeWater(Water* water)
 {
    int i;
    
@@ -131,11 +143,7 @@ bool WaterTableModel::removeWater(Water* water)
          parentTableWidget->resizeColumnsToContents();
          parentTableWidget->resizeRowsToContents();
       }
-         
-      return true;
    }
-      
-   return false;
 }
 
 void WaterTableModel::removeAll()
@@ -160,14 +168,6 @@ void WaterTableModel::changed(QMetaProperty prop, QVariant /*val*/)
       if( i >= 0 )
          emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                            QAbstractItemModel::createIndex(i, WATERNUMCOLS-1));
-      return;
-   }
-   
-   // See if sender is the database.
-   if( sender() == &(Database::instance()) && QString(prop.name()) == "waters" )
-   {
-      removeAll();
-      addWaters( Database::instance().waters() );
       return;
    }
 }

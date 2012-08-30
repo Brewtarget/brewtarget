@@ -36,6 +36,7 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
    : QWidget(parent), doc(new QWebView())
 {
    setupUi(this);
+   setObjectName("BrewDayScrollWidget");
    recObs = 0;
 
    connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );

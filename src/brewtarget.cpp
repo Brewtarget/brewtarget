@@ -141,19 +141,12 @@ void Brewtarget::checkForNewVersion(MainWindow* mw)
 
 bool Brewtarget::copyDataFiles(QString newPath)
 {
-   QString dbFileName, recipeFileName, mashFileName, optionsFileName;
+   QString dbFileName;
    bool success = true;
 
    // Database files.
-   dbFileName = getUserDataDir() + "database.xml";
-   recipeFileName = getUserDataDir() + "recipes.xml";
-   mashFileName = getUserDataDir() + "mashs.xml";
-   //optionsFileName = getUserDataDir() + "options.xml";
-
-   success &= QFile::copy(dbFileName, newPath + "database.xml");
-   success &= QFile::copy(recipeFileName, newPath + "recipes.xml");
-   success &= QFile::copy(mashFileName, newPath + "mashs.xml");
-   //success &= QFile::copy(optionsFileName, newPath + "options.xml");
+   dbFileName = getUserDataDir() + "database.sqlite";
+   success &= QFile::copy(dbFileName, newPath + "database.sqlite");
 
    return success;
 }
@@ -182,21 +175,12 @@ bool Brewtarget::ensureOptionFileExists()
 
 bool Brewtarget::ensureDataFilesExist()
 {
-   QString dbFileName, recipeFileName, mashFileName, optionsFileName, logFileName;
-   QFile dbFile, recipeFile, mashFile, optionsFile;
+   QString optionsFileName, logFileName;
+   QFile optionsFile;
    bool success = true;
    
    logFile = new QFile();
 
-   // Database files.
-   dbFileName = getUserDataDir() + "database.xml";
-   recipeFileName = getUserDataDir() + "recipes.xml";
-   mashFileName = getUserDataDir() + "mashs.xml";
-   
-   dbFile.setFileName(dbFileName);
-   recipeFile.setFileName(recipeFileName);
-   mashFile.setFileName(mashFileName);
-   
    // Log file
    logFile->setFileName(getUserDataDir() + "brewtarget_log.txt");
    if( logFile->open(QFile::WriteOnly | QFile::Truncate) )
@@ -212,37 +196,6 @@ bool Brewtarget::ensureDataFilesExist()
       }
       else
          logW(QString("Could not create a log file."));
-   }
-
-   if( !dbFile.exists() )
-   {
-      userDatabaseDidNotExist = true;
-      success = QFile::copy(Brewtarget::getDataDir() + "database.xml", dbFileName);
-      if( ! success )
-      {
-         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "database.xml").arg(dbFileName));
-         return false;
-      }
-   }
-   if( !recipeFile.exists() )
-   {
-      userDatabaseDidNotExist = true;
-      success = QFile::copy(Brewtarget::getDataDir() + "recipes.xml", recipeFileName);
-      if( ! success )
-      {
-         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "recipes.xml").arg(recipeFileName));
-         return false;
-      }
-   }
-   if( !mashFile.exists() )
-   {
-      userDatabaseDidNotExist = true;
-      success &= QFile::copy(Brewtarget::getDataDir() + "mashs.xml", mashFileName);
-      if( ! success )
-      {
-         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "mashs.xml").arg(mashFileName));
-         return false;
-      }
    }
 
    return success;
@@ -585,7 +538,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
 
    // Check for insane values.
    if( Algorithms::Instance().isnan(amount) || Algorithms::Instance().isinf(amount) )
-      return "?";
+      return "-";
    
    // Special case.
    if( units == 0 )
@@ -1067,6 +1020,9 @@ QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnit
 {
    QString ret;
 
+   if( Algorithms::Instance().isnan(og) || Algorithms::Instance().isinf(og) )
+      return "-";
+   
    // Field settings override defaults
    if ( displayUnit == noUnit ) 
       displayUnit = usePlato ? displayPlato : displaySg;
@@ -1102,14 +1058,19 @@ QString Brewtarget::displayOG( BeerXMLElement* element, QObject* object, QString
       og = element->property(attribute.toLatin1().constData()).toDouble();
       return displayOG(og, displayUnit, showUnits);
    }
-
-   return "?";
+   else
+      return "?";
 }
 
 QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bool showUnits  )
 {
    QString ret = "%1";
 
+   if( Algorithms::Instance().isnan(fg) || Algorithms::Instance().isinf(fg) ||
+       Algorithms::Instance().isnan(og) || Algorithms::Instance().isinf(og)
+   )
+      return "-";
+   
    if ( displayUnit == noUnit )
       displayUnit = usePlato ? displayPlato : displaySg;
 

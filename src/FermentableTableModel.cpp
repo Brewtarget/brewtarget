@@ -44,8 +44,7 @@ FermentableTableModel::FermentableTableModel(QTableView* parent)
    : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0), displayPercentages(false), totalFermMass_kg(0)
 {
    fermObs.clear();
-   // if we do not explicitly set this, objectName() returns an empty string
-   // and messes things up for units and scales
+   // for units and scales
    setObjectName("fermentableTable"); 
 }
 
@@ -69,14 +68,18 @@ void FermentableTableModel::observeDatabase(bool val)
 {
    if( val )
    {
+      // Observing a database and a recipe are mutually exclusive.
+      observeRecipe(0);
+      
       removeAll();
-      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( &(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)), this, SLOT(addFermentable(Fermentable*)) );
+      connect( &(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)), this, SLOT(removeFermentable(Fermentable*)) );
       addFermentables( Database::instance().fermentables() );
    }
    else
    {
-      removeAll();
       disconnect( &(Database::instance()), 0, this, 0 );
+      removeAll();
    }
 }
 
@@ -84,6 +87,16 @@ void FermentableTableModel::addFermentable(Fermentable* ferm)
 {
    //Check to see if it's already in the list
    if( fermObs.contains(ferm) )
+      return;
+   // If we are observing the database, ensure that the ferm is undeleted and
+   // fit to display.
+   if(
+      recObs == 0 &&
+      (
+         ferm->deleted() ||
+         !ferm->display()
+      )
+   )
       return;
  
    int size = fermObs.size();
@@ -211,14 +224,6 @@ void FermentableTableModel::changed(QMetaProperty prop, QVariant /*val*/)
    {
       removeAll();
       addFermentables( recObs->fermentables() );
-      return;
-   }
-   
-   // See if the database gained or lost fermentables.
-   if( sender() == &(Database::instance()) && QString(prop.name()) == "fermentables" )
-   {
-      removeAll();
-      addFermentables( Database::instance().fermentables() );
       return;
    }
 }

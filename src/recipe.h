@@ -143,42 +143,6 @@ public:
    Q_PROPERTY( QList<Yeast*> yeasts READ yeasts /*WRITE*/ /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( QList<Water*> waters READ waters /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
-   // Setters
-   void setName( const QString &var );
-   void setType( const QString &var );
-   void setBrewer( const QString &var );
-   //void setStyle( Style *var );
-   void setBatchSize_l( double var );
-   void setBoilSize_l( double var );
-   void setBoilTime_min( double var );
-   void setEfficiency_pct( double var );
-   //void setMash( Mash *var );
-   void setAsstBrewer( const QString &var );
-   //void setEquipment( Equipment *var );
-   void setNotes( const QString &var );
-   void setTasteNotes( const QString &var );
-   void setTasteRating( double var );
-   void setOg( double var );
-   void setFg( double var );
-   void setFermentationStages( int var );
-   void setPrimaryAge_days( double var );
-   void setPrimaryTemp_c( double var );
-   void setSecondaryAge_days( double var );
-   void setSecondaryTemp_c( double var );
-   void setTertiaryAge_days( double var );
-   void setTertiaryTemp_c( double var );
-   void setAge_days( double var );
-   void setAgeTemp_c( double var );
-   void setDate( const QDate &var );
-   void setCarbonation_vols( double var );
-   void setForcedCarbonation( bool var );
-   void setPrimingSugarName( const QString &var );
-   void setCarbonationTemp_c( double var );
-   //! Set the multiplication factor to convert mass of glucose to mass of this priming sugar.
-   void setPrimingSugarEquiv( double var );
-   //! Set multiplication factor to convert mass of glucose reqd. to bottle prime to that required to keg prime.
-   void setKegPrimingFactor( double var );
-
    // Relational setters.
    // NOTE: do these add/remove methods belong here? Should they only exist in Database?
    void addHop( Hop *var );
@@ -301,7 +265,6 @@ public:
    QList<QString> getReagents( QList<MashStep*> msteps );
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
    
-
 signals:
 
 public slots:
@@ -311,13 +274,45 @@ public slots:
    void acceptHopChange(QMetaProperty prop, QVariant val);
    void acceptMashChange(QMetaProperty prop, QVariant val);
 
+   // Setters
+   void setName( const QString &var );
+   void setType( const QString &var );
+   void setBrewer( const QString &var );
+   void setBatchSize_l( double var );
+   void setBoilSize_l( double var );
+   void setBoilTime_min( double var );
+   void setEfficiency_pct( double var );
+   void setAsstBrewer( const QString &var );
+   void setNotes( const QString &var );
+   void setTasteNotes( const QString &var );
+   void setTasteRating( double var );
+   void setOg( double var );
+   void setFg( double var );
+   void setFermentationStages( int var );
+   void setPrimaryAge_days( double var );
+   void setPrimaryTemp_c( double var );
+   void setSecondaryAge_days( double var );
+   void setSecondaryTemp_c( double var );
+   void setTertiaryAge_days( double var );
+   void setTertiaryTemp_c( double var );
+   void setAge_days( double var );
+   void setAgeTemp_c( double var );
+   void setDate( const QDate &var );
+   void setCarbonation_vols( double var );
+   void setForcedCarbonation( bool var );
+   void setPrimingSugarName( const QString &var );
+   void setCarbonationTemp_c( double var );
+   //! Set the multiplication factor to convert mass of glucose to mass of this priming sugar.
+   void setPrimingSugarEquiv( double var );
+   //! Set multiplication factor to convert mass of glucose reqd. to bottle prime to that required to keg prime.
+   void setKegPrimingFactor( double var );
+   
 private:
    
    Recipe();
    Recipe(Recipe const& other);
    
    // Calculated properties.
-   double _points;
    double _ABV_pct;
    double _color_srm;
    double _boilGrav;
@@ -342,16 +337,12 @@ private:
    QMutex _recalcMutex;
    
    // Some recalculators for calculated properties.
-   /*! \brief Recalculates all the calculated properties. This is a BLOCKING call. Use QtConcurrent::run() for non-blocking behavior.
+   
+   /*! \brief Recalculates all the calculated properties.
+    * 
     * WARNING: this call currently takes 0.15s in rev 916!
     */
    void recalcAll();
-   
-   /*! The theoretical maximum yield without any non-mashed anything. This
-    * will need to be communicated somewhere. Emits changed(points).
-    * Depends on: --.
-    */
-   Q_INVOKABLE void recalcPoints(double volume);
    //! Emits changed(ABV_pct). Depends on: _og, _fg
    Q_INVOKABLE void recalcABV_pct();
    //! Emits changed(color_srm). Depends on: _finalVolume_l

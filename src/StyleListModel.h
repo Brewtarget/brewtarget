@@ -46,17 +46,16 @@ class StyleListModel : public QAbstractListModel
       //! Reimplemented from QAbstractListModel.
       virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
       
-      void addStyle(Style* equipment);
       void addStyles(QList<Style*> s);
-      void removeStyle(Style* equipment);
       void removeAll();
       
       Style* at(int ndx);
       int indexOf(Style* s);
 
    public slots:
-      void dbChanged(QMetaProperty,QVariant);
       void styleChanged(QMetaProperty,QVariant);
+      void addStyle(Style*);
+      void removeStyle(Style*);
       
    private:
       QList<Style*> styles;

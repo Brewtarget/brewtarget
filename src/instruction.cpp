@@ -38,6 +38,7 @@ QHash<QString,QString> Instruction::tagToPropHash()
 Instruction::Instruction()
    : BeerXMLElement()
 {
+   setObjectName("Instruction"); 
 }
 
 // Setters ====================================================================

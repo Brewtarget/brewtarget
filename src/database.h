@@ -58,6 +58,12 @@ class Yeast;
 class QThread;
 class SetterCommandStack;
 
+typedef struct{
+   QString tableName; // Name of the table.
+   QStringList propName; // List of BeerXML column names.
+   BeerXMLElement* (Database::*newElement)(void); // Function to make a new ingredient in this table.
+} TableParams;
+
 /*!
  * \class Database
  * \author Philip G. Lee
@@ -95,25 +101,6 @@ public:
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
    {
-      /*
-      QSqlQuery q( QString("SELECT `%1` FROM `%2` WHERE id='%3'")
-                   .arg(col_name).arg(tableNames[table]).arg(key),
-                   sqlDatabase()
-                 );
-                   
-      if( q.next() )
-      {
-         QVariant ret(q.value(0));
-         q.finish();
-         return ret;
-      }
-      else
-      {
-         q.finish();
-         return QVariant();
-      }
-      */
-      
       QSqlQuery& q = selectAll[table];
       q.bindValue( ":id", key );
       q.exec();
@@ -366,6 +353,24 @@ public:
    
 signals:
    void changed(QMetaProperty prop, QVariant value);
+   void newEquipmentSignal(Equipment*);
+   void deletedEquipmentSignal(Equipment*);
+   void newFermentableSignal(Fermentable*);
+   void deletedFermentableSignal(Fermentable*);
+   void newHopSignal(Hop*);
+   void deletedHopSignal(Hop*);
+   void newMashSignal(Mash*);
+   void deletedMashSignal(Mash*);
+   void newMiscSignal(Misc*);
+   void deletedMiscSignal(Misc*);
+   void newRecipeSignal(Recipe*);
+   void deletedRecipeSignal(Recipe*);
+   void newStyleSignal(Style*);
+   void deletedStyleSignal(Style*);
+   void newWaterSignal(Water*);
+   void deletedWaterSignal(Water*);
+   void newYeastSignal(Yeast*);
+   void deletedYeastSignal(Yeast*);
    
 private slots:
    //! Load database from file.
@@ -390,6 +395,7 @@ private:
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
    
    // Cannot be static yet.
+   static const QList<TableParams> tableParams;
    QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
    
    // Keeps all pointers to the elements referenced by key.
@@ -575,8 +581,7 @@ private:
       if( q.exec() )
       {
          q.finish();
-	 // Brewtarget::logE( "addIngredientToRecipe:: emit rec->changed fired");
-	 sendEmitchanged( rec, rec->metaProperty(propName), QVariant() );
+         sendEmitchanged( rec, rec->metaProperty(propName), QVariant() );
       }
       else
       {
@@ -672,10 +677,10 @@ private:
       return newRecord;
    }
    
-   //! Do an sql update.
+   // Do an sql update.
    void sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause );
    
-   //! Do an sql delete.
+   // Do an sql delete.
    void sqlDelete( Brewtarget::DBTable table, QString const& whereClause );
    
    int getQualifiedHopTypeIndex(QString type, Hop* hop);
@@ -683,11 +688,13 @@ private:
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
 
-   //! Should be called when we are about to close down.
+   // Should be called when we are about to close down.
    void unload();
 
    // Cleans up the backup database if it was leftover from an error.
    bool cleanupBackupDatabase();
+   
+   static QList<TableParams> makeTableParams();
 };
 
 #endif   /* _DATABASE_H */

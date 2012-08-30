@@ -56,12 +56,8 @@ public:
    void observeRecipe(Recipe* rec);
    //! Whether or not we should be looking at the database.
    void observeDatabase(bool val);
-   //! Watch \b ferm for changes.
-   void addFermentable(Fermentable* ferm);
    //! Watch all the \b ferms for changes.
    void addFermentables(QList<Fermentable*> ferms);
-   //! \returns true if "ferm" is successfully found and removed.
-   bool removeFermentable(Fermentable* ferm);
    void removeAll();
    Fermentable* getFermentable(unsigned int i);
    //! True if you want to display percent of each grain in the row header.
@@ -100,6 +96,11 @@ public:
    
 public slots:
    void changed(QMetaProperty, QVariant);
+   //! Watch \b ferm for changes.
+   void addFermentable(Fermentable* ferm);
+   //! \returns true if "ferm" is successfully found and removed.
+   bool removeFermentable(Fermentable* ferm);
+   
 private:
    void updateTotalGrains();
    QString generateName(int column) const;

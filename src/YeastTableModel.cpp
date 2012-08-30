@@ -45,7 +45,16 @@ void YeastTableModel::addYeast(Yeast* yeast)
 {
    if( yeastObs.contains(yeast) )
       return;
-
+   // If we are observing the database, ensure that the item is undeleted and
+   // fit to display.
+   if(
+      recObs == 0 &&
+      (
+         yeast->deleted() ||
+         !yeast->display()
+      )
+   )
+      return;
    int size = yeastObs.size();
    beginInsertRows( QModelIndex(), size, size );
    yeastObs.append(yeast);
@@ -80,8 +89,11 @@ void YeastTableModel::observeDatabase(bool val)
 {
    if( val )
    {
+      observeRecipe(0);
+      
       removeAll();
-      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( &(Database::instance()), SIGNAL(newYeastSignal(Yeast*)), this, SLOT(addYeast(Yeast*)) );
+      connect( &(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)), this, SLOT(removeYeast(Yeast*)) );
       addYeasts( Database::instance().yeasts() );
    }
    else
@@ -119,7 +131,7 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
    
 }
 
-bool YeastTableModel::removeYeast(Yeast* yeast)
+void YeastTableModel::removeYeast(Yeast* yeast)
 {
    int i = yeastObs.indexOf(yeast);
 
@@ -136,11 +148,7 @@ bool YeastTableModel::removeYeast(Yeast* yeast)
          parentTableWidget->resizeColumnsToContents();
          parentTableWidget->resizeRowsToContents();
       }
-      
-      return true;
    }
-
-   return false;
 }
 
 void YeastTableModel::removeAll()
@@ -183,14 +191,6 @@ void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
       return;
    }
-   
-   // See if sender is the database.
-   if( sender() == &(Database::instance()) && QString(prop.name()) == "yeasts" )
-   {
-      removeAll();
-      addYeasts( Database::instance().yeasts() );
-      return;
-   }
 }
 
 int YeastTableModel::rowCount(const QModelIndex& /*parent*/) const
@@ -206,7 +206,6 @@ int YeastTableModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
 {
    Yeast* row;
-   int col = index.column();
    unitDisplay unit;
 
    // Ensure the row is ok.

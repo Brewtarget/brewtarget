@@ -53,13 +53,9 @@ public:
    void observeDatabase(bool val);
    //! If you want to show ibus in the vertical header.
    void setShowIBUs( bool var );
-   //! Add a hop to the model list.
-   void addHop(Hop* hop);
    //! Watch all the \b ferms for changes.
    void addHops(QList<Hop*> hops);
    Hop* getHop(unsigned int i);
-   //! \returns true if "hop" is successfully found and removed.
-   bool removeHop(Hop* hop);
    //! Remove all hops from the list.
    void removeAll();
    
@@ -88,6 +84,10 @@ public:
    QString generateName(int column) const;
 public slots:
    void changed(QMetaProperty, QVariant);
+   //! Add a hop to the model list.
+   void addHop(Hop* hop);
+   //! \returns true if "hop" is successfully found and removed.
+   bool removeHop(Hop* hop);
    
 private:
    QList<Hop*> hopObs;

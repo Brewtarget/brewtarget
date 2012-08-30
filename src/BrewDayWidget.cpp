@@ -22,6 +22,7 @@
 #include <QDate>
 #include <QVector>
 #include <QDir>
+#include <QDebug>
 #include "database.h"
 #include "InstructionWidget.h"
 #include "TimerWidget.h"
@@ -37,6 +38,7 @@ BrewDayWidget::BrewDayWidget(QWidget* parent) :
 {
    setupUi(this);
 
+   setObjectName("BrewDayWidget");
    // HAVE to do this since apparently the stackedWidget NEEDS at least 1
    // widget at all times.
    stackedWidget->insertWidget(0, new InstructionWidget(stackedWidget) );

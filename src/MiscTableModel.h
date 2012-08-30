@@ -59,14 +59,10 @@ public:
    void observeRecipe(Recipe* rec);
    //! Whether or not we should be looking at the database.
    void observeDatabase(bool val);
-   //! Add a misc to the model.
-   void addMisc(Misc* misc);
    //! Add miscs to the model.
    void addMiscs(QList<Misc*> miscs);
    //! \returns the \b Misc at model index \b i.
    Misc* getMisc(unsigned int i);
-   //! Remove a misc from the model.
-   bool removeMisc(Misc* misc);
    //! Remove all miscs from the model.
    void removeAll();
    
@@ -91,6 +87,10 @@ public:
 
 public slots:
    void changed(QMetaProperty,QVariant);
+   //! Add a misc to the model.
+   void addMisc(Misc* misc);
+   //! Remove a misc from the model.
+   bool removeMisc(Misc* misc);
    
 private:
    QList<Misc*> miscObs;

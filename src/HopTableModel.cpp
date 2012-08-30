@@ -67,8 +67,10 @@ void HopTableModel::observeDatabase(bool val)
 {
    if( val )
    {
+      observeRecipe(0);
       removeAll();
-      connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)), this, SLOT(addHop(Hop*)) );
+      connect( &(Database::instance()), SIGNAL(deletedHopSignal(Hop*)), this, SLOT(removeHop(Hop*)) );
       addHops( Database::instance().hops() );
    }
    else
@@ -81,6 +83,17 @@ void HopTableModel::observeDatabase(bool val)
 void HopTableModel::addHop(Hop* hop)
 {
    if( hop == 0 || hopObs.contains(hop) )
+      return;
+
+   // If we are observing the database, ensure that the item is undeleted and
+   // fit to display.
+   if(
+      recObs == 0 &&
+      (
+         hop->deleted() ||
+         !hop->display()
+      )
+   )
       return;
    
    int size = hopObs.size();
@@ -195,14 +208,6 @@ void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)
          emit headerDataChanged( Qt::Vertical, 0, rowCount()-1 );
       return;
    }
-   
-   // See if sender is the database.
-   if( sender() == &(Database::instance()) && QString(prop.name()) == "hops" )
-   {
-      removeAll();
-      addHops( Database::instance().hops() );
-      return;
-   }
 }
 
 int HopTableModel::rowCount(const QModelIndex& /*parent*/) const
@@ -293,7 +298,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
          case HOPTIMECOL:
             return QVariant(tr("Time"));
          case HOPFORMCOL:
-           return QVariant(tr("Form"));
+            return QVariant(tr("Form"));
          default:
             Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::headerdata Bad column: %1").arg(section));
             return QVariant();
@@ -499,11 +504,12 @@ QWidget* HopItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem(tr("Dry Hop"));
+      // NOTE: these need to be in the same order as the Hop::Use enum.
       box->addItem(tr("Mash"));
+      box->addItem(tr("First Wort"));
       box->addItem(tr("Boil"));
       box->addItem(tr("Aroma"));
-      box->addItem(tr("First Wort"));
+      box->addItem(tr("Dry Hop"));
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;

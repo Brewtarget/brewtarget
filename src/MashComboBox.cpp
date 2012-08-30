@@ -1,20 +1,20 @@
 /*
-* MashComboBox.cpp is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2011.
-*
-* Brewtarget is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
+ * MashComboBox.cpp is part of Brewtarget, and is Copyright Philip G. Lee
+ * (rocketman768@gmail.com), 2009-2012.
+ *
+ * Brewtarget is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
 
-* Brewtarget is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Brewtarget is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "MashComboBox.h"
 #include <QList>
@@ -25,13 +25,14 @@ MashComboBox::MashComboBox(QWidget* parent)
    : QComboBox(parent)
 {
    setCurrentIndex(-1);
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   connect( &(Database::instance()), SIGNAL(newMashSignal(Mash*)), this, SLOT(addMash(Mash*)) );
+   connect( &(Database::instance()), SIGNAL(deletedMashSignal(Mash*)), this, SLOT(removeMash(Mash*)) );
    repopulateList();
 }
 
 void MashComboBox::addMash(Mash* m)
 {
-   if( m && !mashObs.contains(m) )
+   if( m && !mashObs.contains(m) && m->display() && !m->deleted() )
    {
       mashObs.append(m);
       connect( m, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
@@ -65,30 +66,12 @@ void MashComboBox::changed(QMetaProperty prop, QVariant /*val*/)
 {
    int i;
    
-   QString propName(prop.name());
-   
-   // Notifier could be the database. Only pay attention if the number of
-   // mashs has changed.
-   if( sender() == &(Database::instance()) &&
-      propName == "mashs" )
+   i = mashObs.indexOf( qobject_cast<Mash*>(sender()) );
+   if( i >= 0 )
    {
-      // Don't want to be emitting signals while we repopulate.
-      blockSignals(true);
-      
-      removeAllMashs();
-      repopulateList();
-      
-      blockSignals(false);
-   }
-   else // Otherwise, we know that one of the mashs changed.
-   {
-      i = mashObs.indexOf( qobject_cast<Mash*>(sender()) );
-      if( i >= 0 )
-      {
-         // Notice we assume 'i' is an index into both 'mashObs' and also
-         // to the text list in this combo box...
-         setItemText( i, mashObs[i]->name() );
-      }
+      // Notice we assume 'i' is an index into both 'mashObs' and also
+      // to the text list in this combo box...
+      setItemText( i, mashObs[i]->name() );
    }
 }
 

@@ -109,7 +109,6 @@ void Recipe::clear()
 
 Recipe::Recipe()
    : BeerXMLElement(),
-     _points(0),
      _ABV_pct(0),
      _color_srm(0),
      _boilGrav(1.000),
@@ -191,7 +190,7 @@ Instruction* Recipe::mashWaterIns(unsigned int size)
 {
    Instruction* ins;
    QString str, tmp;
-   unsigned int i;
+   int i;
 
    if( mash() == 0 )
       return 0;
@@ -1176,7 +1175,7 @@ double Recipe::points()
 {
    if( _uninitializedCalcs )
       recalcAll();
-   return _points;
+   return (_og-1.0)*1e3;
 }
 
 //=========================Relational Getters=============================
@@ -1440,40 +1439,6 @@ void Recipe::recalcAll()
    _uninitializedCalcs = false;
    
    _recalcMutex.unlock();
-}
-
-void Recipe::recalcPoints(double volume)
-{
-   unsigned int i;
-   Fermentable* ferm;
-   double sugar_kg = 0.0;
-   double sugar_kg_ignoreEfficiency = 0.0;
-   double ret;
-   Fermentable::Type type;
-
-   // Calculate OG
-   QList<Fermentable*> ferms = fermentables();
-   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
-   {
-      ferm = ferms[i];
-      if( ferm->addAfterBoil() )
-         continue;
-
-      // If we have some sort of non-grain, we have to ignore efficiency.
-      type = ferm->type();
-      if( type==Fermentable::Sugar|| type==Fermentable::Extract || type==Fermentable::Dry_Extract )
-         sugar_kg_ignoreEfficiency += (ferm->yield_pct()/100.0)*ferm->amount_kg();
-      else
-         sugar_kg += (ferm->yield_pct()/100.0)*ferm->amount_kg();
-   }
-
-   ret = 1000 * (  Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg,volume)) - 1);
-
-   if ( ret != _points ) 
-   {
-      _points = ret;
-      emit changed( metaProperty("points"), _points );
-   }
 }
 
 void Recipe::recalcABV_pct()
@@ -1822,34 +1787,28 @@ void Recipe::recalcOgFg()
    plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolume_l);
 
    tmp_og = Algorithms::Instance().PlatoToSG_20C20C( plato );
-
-   tmp_pnts = (_og-1)*1000.0;
+   tmp_pnts = (tmp_og-1)*1000.0;
 
    // Calculage FG
-   for( i = 0; static_cast<int>(i) < yeasts().size(); ++i )
+   QList<Yeast*> yeasties = yeasts();
+   for( i = 0; static_cast<int>(i) < yeasties.size(); ++i )
    {
-      yeast = yeasts()[i];
+      yeast = yeasties[i];
       // Get the yeast with the greatest attenuation.
       if( yeast->attenuation_pct() > attenuation_pct )
          attenuation_pct = yeast->attenuation_pct();
    }
-   if( yeasts().size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
+   if( yeasties.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
 
-   tmp_pnts = tmp_pnts*(1.0 - attenuation_pct/100.0);
-
+   tmp_pnts *= (1.0 - attenuation_pct/100.0);
    tmp_fg =  1 + tmp_pnts/1000.0;
 
    if ( _og != tmp_og ) 
    {
       _og     = tmp_og;
       emit changed( metaProperty("og"), _og );
-   }
-
-   if ( tmp_pnts != _points )
-   {
-      _points = tmp_pnts;
-      emit changed( metaProperty("points"), _points );
+      emit changed( metaProperty("points"), (_og-1.0)*1e3 );
    }
 
    if ( tmp_fg != _fg ) 

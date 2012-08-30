@@ -70,6 +70,7 @@ QString Database::dbTempBackupFileName;
 QString Database::dbConName;
 QHash<Brewtarget::DBTable,QString> Database::tableNames = Database::tableNamesHash();
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable = Database::classNameToTableHash();
+const QList<TableParams> Database::tableParams = Database::makeTableParams();
 
 QHash< QThread*, QString > Database::_threadToConnection;
 QMutex Database::_threadToConnectionMutex;
@@ -101,10 +102,8 @@ bool Database::load()
    dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
    
    // Cleanup the backup database if there was a previous error.
-   if (!cleanupBackupDatabase())
-   {
+   if( !cleanupBackupDatabase() )
       return false;
-   }
 
    // Set the files.
    dbFile.setFileName(dbFileName);
@@ -171,13 +170,16 @@ bool Database::load()
       && QFileInfo(dataDbFile).lastModified() > Brewtarget::lastDbMergeRequest )
    {
       
-      if( QMessageBox::question(0,
-         QObject::tr("Merge Database"),
-                                QObject::tr("There may be new ingredients and recipes available. Would you like to add these to your database?"),
-                                QMessageBox::Yes | QMessageBox::No,
-                                QMessageBox::Yes)
-         == QMessageBox::Yes
+      if(
+         QMessageBox::question(
+            0,
+            tr("Merge Database"),
+            tr("There may be new ingredients and recipes available. Would you like to add these to your database?"),
+            QMessageBox::Yes | QMessageBox::No,
+            QMessageBox::Yes
          )
+         == QMessageBox::Yes
+      )
       {
          updateDatabase(dataDbFile.fileName());
       }
@@ -445,6 +447,7 @@ void Database::removeFromRecipe( Recipe* rec, Hop* hop )
 {
    removeIngredientFromRecipe( rec, hop, "hops", "hop_in_recipe", "hop_id" );
    disconnect( hop, 0, rec, 0 );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
@@ -457,16 +460,19 @@ void Database::removeFromRecipe( Recipe* rec, Fermentable* ferm )
 void Database::removeFromRecipe( Recipe* rec, Misc* m )
 {
    removeIngredientFromRecipe( rec, m, "miscs", "misc_in_recipe", "misc_id" );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Yeast* y )
 {
    removeIngredientFromRecipe( rec, y, "yeasts", "yeast_in_recipe", "yeast_id" );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Water* w )
 {
    removeIngredientFromRecipe( rec, w, "waters", "water_in_recipe", "water_id" );
+   rec->recalcAll();
 }
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
@@ -792,7 +798,10 @@ Equipment* Database::newEquipment()
    tmp->_key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("equipments"), QVariant() );
+   emit newEquipmentSignal(tmp);
+   
    return tmp;
 }
 
@@ -802,7 +811,10 @@ Equipment* Database::newEquipment(Equipment* other)
    tmp->_key = copy<Equipment>(other).value("id").toInt();
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("equipments"), QVariant() );
+   emit newEquipmentSignal(tmp);
+   
    return tmp;
 }
 
@@ -812,7 +824,10 @@ Fermentable* Database::newFermentable()
    tmp->_key = insertNewDefaultRecord(Brewtarget::FERMTABLE);
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("fermentables"), QVariant() );
+   emit newFermentableSignal(tmp);
+   
    return tmp;
 }
 
@@ -822,7 +837,10 @@ Fermentable* Database::newFermentable(Fermentable* other)
    tmp->_key = copy<Fermentable>(other).value("id").toInt();
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("fermentables"), QVariant() );
+   emit newFermentableSignal(tmp);
+   
    return tmp;
 }
 
@@ -832,7 +850,10 @@ Hop* Database::newHop()
    tmp->_key = insertNewDefaultRecord(Brewtarget::HOPTABLE);
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("hops"), QVariant() );
+   emit newHopSignal(tmp);
+   
    return tmp;
 }
 
@@ -842,15 +863,16 @@ Hop* Database::newHop(Hop* other)
    tmp->_key = copy<Hop>(other).value("id").toInt();
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("hops"), QVariant() );
+   emit newHopSignal(tmp);
+   
    return tmp;
 }
 
 Instruction* Database::newInstruction(Recipe* rec)
 {
    // TODO: encapsulate in QUndoCommand.
-   // NOTE: we have unique(recipe_id,instruction_number) constraints on this table,
-   // so may have to pay special attention when creating the new record.
    Instruction* tmp = new Instruction();
    tmp->_key = insertNewDefaultRecord(Brewtarget::INSTRUCTIONTABLE);
    tmp->_table = Brewtarget::INSTRUCTIONTABLE;
@@ -873,7 +895,10 @@ Mash* Database::newMash()
    tmp->_key = insertNewDefaultRecord(Brewtarget::MASHTABLE);
    tmp->_table = Brewtarget::MASHTABLE;
    allMashs.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(tmp);
+   
    return tmp;
 }
 
@@ -890,6 +915,8 @@ Mash* Database::newMash(Recipe* parent)
               QString("id=%1").arg(parent->_key) );
    
    sendEmitchanged( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(tmp);
+   
    return tmp;
 }
 
@@ -909,6 +936,8 @@ Mash* Database::newMash(Mash* other, bool displace)
    }
    
    sendEmitchanged( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(tmp);
+   
    return tmp;
 }
 
@@ -937,7 +966,10 @@ Misc* Database::newMisc()
    tmp->_key = insertNewDefaultRecord(Brewtarget::MISCTABLE);
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("miscs"), QVariant() );
+   emit newMiscSignal(tmp);
+   
    return tmp;
 }
 
@@ -947,7 +979,10 @@ Misc* Database::newMisc(Misc* other)
    tmp->_key = copy<Misc>(other).value("id").toInt();
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("miscs"), QVariant() );
+   emit newMiscSignal(tmp);
+   
    return tmp;
 }
 
@@ -962,6 +997,8 @@ Recipe* Database::newRecipe()
    newMash( tmp );
    
    sendEmitchanged( metaProperty("recipes"), QVariant() );
+   emit newRecipeSignal(tmp);
+   
    return tmp;
 }
 
@@ -971,7 +1008,10 @@ Recipe* Database::newRecipe(Recipe* other)
    tmp->_key = copy<Recipe>(other).value("id").toInt();
    tmp->_table = Brewtarget::RECTABLE;
    allRecipes.insert( tmp->_key, tmp );
+   
    sendEmitchanged( metaProperty("recipes"), QVariant() );
+   emit newRecipeSignal(tmp);
+   
    return tmp;
 }
 
@@ -981,7 +1021,10 @@ Style* Database::newStyle()
    tmp->_key = insertNewDefaultRecord(Brewtarget::STYLETABLE);
    tmp->_table = Brewtarget::STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("styles"), QVariant() );
+   emit newStyleSignal(tmp);
+   
    return tmp;
 }
 
@@ -991,7 +1034,10 @@ Water* Database::newWater()
    tmp->_key = insertNewDefaultRecord(Brewtarget::WATERTABLE);
    tmp->_table = Brewtarget::WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("waters"), QVariant() );
+   emit newWaterSignal(tmp);
+   
    return tmp;
 }
 
@@ -1001,7 +1047,10 @@ Yeast* Database::newYeast()
    tmp->_key = insertNewDefaultRecord(Brewtarget::YEASTTABLE);
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("yeasts"), QVariant() );
+   emit newYeastSignal(tmp);
+   
    return tmp;
 }
 
@@ -1011,7 +1060,10 @@ Yeast* Database::newYeast(Yeast* other)
    tmp->_key = copy<Yeast>(other).value("id").toInt();
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
+   
    sendEmitchanged( metaProperty("yeasts"), QVariant() );
+   emit newYeastSignal(tmp);
+   
    return tmp;
 }
 
@@ -1040,6 +1092,7 @@ void Database::removeEquipment(Equipment* equip, bool signal)
    deleteRecord(Brewtarget::EQUIPTABLE,equip);
    if ( signal )
       emit changed( metaProperty("equipments"), QVariant() );
+   emit deletedEquipmentSignal(equip);
 }
 
 void Database::removeEquipment(QList<Equipment*> equip)
@@ -1062,6 +1115,7 @@ void Database::removeFermentable(Fermentable* ferm, bool signal)
    deleteRecord(Brewtarget::FERMTABLE,ferm);
    if ( signal ) 
       emit changed( metaProperty("fermentables"), QVariant());
+   emit deletedFermentableSignal(ferm);
 }
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
@@ -1085,6 +1139,7 @@ void Database::removeHop(Hop* hop, bool signal)
    // NOTE: what to put for the QVariant?
    if ( signal )
       emit changed( metaProperty("hops"), QVariant() );
+   emit deletedHopSignal(hop);
 }
 
 void Database::removeHop(QList<Hop*> hop)
@@ -1106,6 +1161,7 @@ void Database::removeMash(Mash* mash, bool signal)
    deleteRecord(Brewtarget::MASHTABLE,mash);
    if ( signal )
       emit changed( metaProperty("mashs"), QVariant() );
+   emit deletedMashSignal(mash);
 }
 
 void Database::removeMash(QList<Mash*> mash)
@@ -1149,6 +1205,7 @@ void Database::removeMisc(Misc* misc, bool signal )
    deleteRecord(Brewtarget::MISCTABLE,misc);
    if ( signal )
       emit changed( metaProperty("miscs"), QVariant());
+   emit deletedMiscSignal(misc);
 }
 
 void Database::removeMisc(QList<Misc*> misc)
@@ -1170,6 +1227,7 @@ void Database::removeRecipe(Recipe* rec, bool signal)
    deleteRecord(Brewtarget::RECTABLE,rec);
    if ( signal ) 
       emit changed( metaProperty("recipes"), QVariant() );
+   emit deletedRecipeSignal(rec);
 }
 
 void Database::removeRecipe(QList<Recipe*> rec)
@@ -1191,6 +1249,7 @@ void Database::removeStyle(Style* style, bool signal)
    deleteRecord(Brewtarget::STYLETABLE,style);
    if ( signal )
       emit changed( metaProperty("styles"), QVariant() );
+   emit deletedStyleSignal(style);
 }
 
 void Database::removeStyle(QList<Style*> style)
@@ -1212,6 +1271,7 @@ void Database::removeWater(Water* water, bool signal)
    deleteRecord(Brewtarget::WATERTABLE,water);
    if ( signal )
       emit changed( metaProperty("waters"), QVariant());
+   emit deletedWaterSignal(water);
 }
 
 void Database::removeWater(QList<Water*> water)
@@ -1233,6 +1293,7 @@ void Database::removeYeast(Yeast* yeast, bool signal)
    deleteRecord(Brewtarget::YEASTTABLE,yeast);
    if ( signal )
       emit changed( metaProperty("yeasts"), QVariant());
+   emit deletedYeastSignal(yeast);
 }
 
 void Database::removeYeast(QList<Yeast*> yeast)
@@ -1321,6 +1382,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
 void Database::addToRecipe( Recipe* rec, Misc* m, bool initialLoad )
 {
    addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", initialLoad, &allMiscs );
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool initialLoad )
@@ -1332,6 +1394,7 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool initialLoad )
 void Database::addToRecipe( Recipe* rec, Water* w, bool initialLoad )
 {
    addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", initialLoad, &allWaters );
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )
@@ -1646,15 +1709,9 @@ void Database::importFromXML(const QString& filename)
       skipEmitChanged = true;
       for(int i = 0; i < list.count(); ++i )
       {
-	 if ( i  == list.count() -1 )
-	      skipEmitChanged = false;
-	 
+         if ( i  == list.count() -1 )
+            skipEmitChanged = false;
          recipeFromXml( list.at(i) );
-	 
-         //Recipe* newRec = new Recipe(list.at(i));
-         //
-         //if(verifyImport("recipe",newRec->getName()))
-         //   db->addRecipe( newRec, true ); // Copy all subelements of the recipe into the db also.
       }
       skipEmitChanged = false;
    }
@@ -3283,16 +3340,126 @@ bool Database::cleanupBackupDatabase()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+QList<TableParams> Database::makeTableParams()
+{
+   typedef BeerXMLElement* (Database::*NewIngFunc)(void);
+   
+   QList<TableParams> ret;
+   TableParams tmp;
+   
+   //=============================Equipment====================================
+   
+   tmp.tableName = "equipment";
+   tmp.propName = QStringList() <<
+      "name" << "boil_size" << "batch_size" << "tun_volume" << "tun_weight" <<
+      "tun_specific_heat" << "top_up_water" << "trub_chiller_loss" <<
+      "evap_rate" << "real_evap_rate" << "boil_time" << "calc_boil_volume" <<
+      "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
+      "notes";
+   tmp.newElement =
+      (NewIngFunc)
+      (Equipment*(Database::*)(void))
+      &Database::newEquipment;
+   
+   ret.append(tmp);
+   //==============================Fermentables================================
+   
+   tmp.tableName = "fermentable";
+   tmp.propName = QStringList() <<
+      "name" << "ftype" << "amount" << "yield" << "color" <<
+      "add_after_boil" << "origin" << "supplier" << "notes" <<
+      "coarse_fine_diff" << "moisture" << "diastatic_power" << "protein" <<
+      "max_in_batch" << "recommend_mash" << "ibu_gal_per_lb";
+   tmp.newElement =
+      (NewIngFunc)
+      (Fermentable*(Database::*)(void))
+      &Database::newFermentable;
+   
+   //==============================Hops=============================
+   tmp.tableName = "hop";
+   tmp.propName = QStringList() <<
+      "name" << "alpha" << "amount" << "use" << "time" << "notes" << "htype" <<
+      "form" << "beta" << "hsi" << "origin" << "substitutes" << "humulene" <<
+      "caryophyllene" << "cohumulone" << "myrcene",
+   // First cast specifies which newHop() I want, since it is overloaded.
+   // Second cast is to force the conversion of the function pointer.
+   tmp.newElement =
+      (NewIngFunc)
+      (Hop*(Database::*)(void))
+      &Database::newHop;
+   
+   ret.append(tmp);
+   
+   //==================================Miscs===================================
+   
+   tmp.tableName = "misc";
+   tmp.propName = QStringList() <<
+      "name" << "mtype" << "use" << "time" << "amount" << "amount_is_weight" <<
+      "use_for" << "notes";
+   tmp.newElement =
+      (NewIngFunc)
+      (Misc*(Database::*)(void))
+      &Database::newMisc;
+   
+   ret.append(tmp);
+   //==================================Styles==================================
+   
+   tmp.tableName = "style";
+   tmp.propName = QStringList() <<
+      "name" << "s_type" << "category" << "category_number" <<
+      "style_letter" << "style_guide" << "og_min" << "og_max" << "fg_min" <<
+      "fg_max" << "ibu_min" << "ibu_max" << "color_min" << "color_max" <<
+      "abv_min" << "abv_max" << "carb_min" << "carb_max" << "notes" <<
+      "profile" << "ingredients" << "examples";
+   tmp.newElement =
+      (NewIngFunc)
+      (Style*(Database::*)(void))
+      &Database::newStyle;
+   
+   ret.append(tmp);
+   
+   //==================================Yeasts==================================
+   
+   tmp.tableName = "yeast";
+   tmp.propName = QStringList() <<
+      "name" << "ytype" << "form" << "amount" << "amount_is_weight" <<
+      "laboratory" << "product_id" << "min_temperature" << "max_temperature" <<
+      "flocculation" << "attenuation" << "notes" << "best_for" <<
+      "times_cultured" << "max_reuse" << "add_to_secondary";
+   tmp.newElement =
+      (NewIngFunc)
+      (Yeast*(Database::*)(void))
+      &Database::newYeast;
+   
+   ret.append(tmp);
+   
+   //===================================Waters=================================
+   
+   tmp.tableName = "water";
+   tmp.propName = QStringList() <<
+      "name" << "amount" << "calcium" << "bicarbonate" << "sulfate" <<
+      "chloride" << "sodium" << "magnesium" << "ph" << "notes";
+   tmp.newElement =
+      (NewIngFunc)
+      (Water*(Database::*)(void))
+      &Database::newWater;
+   
+   ret.append(tmp);
+   
+   return ret;
+}
+
 void Database::updateDatabase(QString const& filename)
 {
    // In the naming here "old" means our local database, and
    // "new" means the database coming from 'filename'.
+
+   QVariant btid, newid, oldid;
+   QVariant zero(0);
    
-   QVariant btid, newhopid, oldhopid;
-   QVariant name, alpha, amount, use, time, notes, htype, form, beta, hsi,
-            origin, substitutes, humulene, caryophyllene, cohumulone,
-            myrcene;
-   
+   QList<QVariant> propVal;
+   QStringList varAndHolder;
+
    QString newCon("newSqldbCon");
    QSqlDatabase newSqldb = QSqlDatabase::addDatabase("QSQLITE", newCon);
    newSqldb.setDatabaseName(filename);
@@ -3305,9 +3472,7 @@ void Database::updateDatabase(QString const& filename)
       return;
    }
    
-   // The following just deals with hops. This is just to figure out how things
-   // will go, then we can generalize to the rest of the ingredients.
-   
+   // This is the basic gist...
    // For each (id, hop_id) in newSqldb.bt_hop...
    
    // Call this newRecord
@@ -3320,119 +3485,119 @@ void Database::updateDatabase(QString const& filename)
    
    // Execute.
 
-   QSqlQuery qNewBtHop( "SELECT * FROM bt_hop",
-                newSqldb );
-                
-   QSqlQuery qNewHop( newSqldb );
-   qNewHop.prepare("SELECT * FROM hop WHERE id=:id");
-   
-   QSqlQuery qUpdateOldHop( sqlDatabase() );
-   qUpdateOldHop.prepare(
-      "UPDATE hop SET "
-      "name=:name, "
-      "alpha=:alpha, "
-      "amount=:amount, "
-      "use=:use, "
-      "time=:time, "
-      "notes=:notes, "
-      "htype=:htype, "
-      "form=:form, "
-      "beta=:beta, "
-      "hsi=:hsi, "
-      "origin=:origin, "
-      "substitutes=:substitutes, "
-      "humulene=:humulene, "
-      "caryophyllene=:caryophyllene, "
-      "cohumulone=:cohumulone, "
-      "myrcene=:myrcene "
-      "WHERE id=:id"
-   );
-   
-   QSqlQuery qOldBtHop( sqlDatabase() );
-   qOldBtHop.prepare( "SELECT * FROM bt_hop WHERE `id`=:btid" );
-   
-   QSqlQuery qOldBtHopInsert( sqlDatabase() );
-   qOldBtHopInsert.prepare( "INSERT INTO bt_hop `id`=:id `hop_id`=:hop_id" );
-   
-   while( qNewBtHop.next() )
+   foreach( TableParams tp, tableParams)
    {
-      btid = qNewBtHop.record().value("id");
-      newhopid = qNewBtHop.record().value("hop_id");
+      QSqlQuery qNewBtIng(
+         QString("SELECT * FROM bt_%1").arg(tp.tableName),
+         newSqldb );
+                  
+      QSqlQuery qNewIng( newSqldb );
+      qNewIng.prepare(QString("SELECT * FROM %1 WHERE id=:id").arg(tp.tableName));
       
-      qNewHop.bindValue(":id", newhopid);
-      qNewHop.exec();
-      if( !qNewHop.next() )
+      // Construct the big update query.
+      QSqlQuery qUpdateOldIng( sqlDatabase() );
+      QString updateString = QString("UPDATE %1 SET ").arg(tp.tableName);
+      varAndHolder.clear();
+      foreach( QString pn, tp.propName)
+         varAndHolder.append(QString("`%1`=:%2").arg(pn).arg(pn));
+      updateString.append(varAndHolder.join(", "));
+      // Un-delete it if it is somehow deleted.
+      updateString.append(", `deleted`=:zero WHERE `id`=:id");
+      qUpdateOldIng.prepare(updateString);
+      qUpdateOldIng.bindValue( ":zero", zero );
+      
+      QSqlQuery qOldBtIng( sqlDatabase() );
+      qOldBtIng.prepare(
+         QString("SELECT * FROM bt_%1 WHERE `id`=:btid").arg(tp.tableName) );
+      
+      QSqlQuery qOldBtIngInsert( sqlDatabase() );
+      qOldBtIngInsert.prepare(
+         QString("INSERT INTO bt_%1 `id`=:id `%2_id`=:%3_id")
+            .arg(tp.tableName)
+            .arg(tp.tableName)
+            .arg(tp.tableName) );
+      
+      // Resize propVal appropriately for current table.
+      propVal.clear();
+      foreach( QString pn, tp.propName )
+         propVal.append(QVariant());
+      
+      while( qNewBtIng.next() )
       {
-         Brewtarget::logE(QString("Oops. %1").arg(qNewHop.lastError().text()));
-         return;
-      }
-      
-      name = qNewHop.record().value("name");
-      alpha = qNewHop.record().value("alpha");
-      amount = qNewHop.record().value("amount");
-      use = qNewHop.record().value("use");
-      time = qNewHop.record().value("time");
-      notes = qNewHop.record().value("notes");
-      htype = qNewHop.record().value("htype");
-      form = qNewHop.record().value("form");
-      beta = qNewHop.record().value("beta");
-      hsi = qNewHop.record().value("hsi");
-      origin = qNewHop.record().value("origin");
-      substitutes = qNewHop.record().value("substitutes");
-      humulene = qNewHop.record().value("humulene");
-      caryophyllene = qNewHop.record().value("caryophyllene");
-      cohumulone = qNewHop.record().value("cohumulone");
-      myrcene = qNewHop.record().value("myrcene");
-      
-      // Done retrieving new hop data.
-      qNewHop.finish();
-      
-      // Bind the new hop data to the old hop.
-      qUpdateOldHop.bindValue( ":name", name);
-      qUpdateOldHop.bindValue( ":alpha", alpha);
-      qUpdateOldHop.bindValue( ":amount", amount);
-      qUpdateOldHop.bindValue( ":use", use);
-      qUpdateOldHop.bindValue( ":time", time);
-      qUpdateOldHop.bindValue( ":notes", notes);
-      qUpdateOldHop.bindValue( ":htype", htype);
-      qUpdateOldHop.bindValue( ":form", form);
-      qUpdateOldHop.bindValue( ":beta", beta);
-      qUpdateOldHop.bindValue( ":hsi", hsi);
-      qUpdateOldHop.bindValue( ":origin", origin);
-      qUpdateOldHop.bindValue( ":substitutes", substitutes);
-      qUpdateOldHop.bindValue( ":humulene", humulene);
-      qUpdateOldHop.bindValue( ":caryophyllene", caryophyllene);
-      qUpdateOldHop.bindValue( ":cohumulone", cohumulone);
-      qUpdateOldHop.bindValue( ":myrcene", myrcene);
-      
-      // Find the bt_hop record in the local table.
-      qOldBtHop.bindValue( ":btid", btid );
-      qOldBtHop.exec();
-      
-      // If the btid exists in the old bt_hop table, do an update.
-      if( qOldBtHop.next() )
-      {
-         oldhopid = qOldBtHop.record().value("hop_id");
-         qOldBtHop.finish();
+         btid = qNewBtIng.record().value("id");
+         newid = qNewBtIng.record().value(QString("%1_id").arg(tp.tableName));
          
-         qUpdateOldHop.bindValue( ":id", oldhopid );
+         qNewIng.bindValue(":id", newid);
+         qNewIng.exec();
+         if( !qNewIng.next() )
+         {
+            Brewtarget::logE(QString("Oops. %1").arg(qNewIng.lastError().text()));
+            return;
+         }
          
-         qUpdateOldHop.exec();
-      }
-      // If the btid doesn't exist in the old bt_hop table, do an insert into
-      // the old hop table, then into the old bt_hop table.
-      else
-      {
-         // Create a new hop.
-         oldhopid = newHop()->_key;
-         // Copy in the new data.
-         qUpdateOldHop.bindValue( ":id", oldhopid );
-         qUpdateOldHop.exec();
+         QList<QVariant>::iterator it = propVal.begin();
+         foreach( QString pn, tp.propName )
+         {
+            // Get new value.
+            *it = qNewIng.record().value(pn);
+            // Bind it to the old ingredient.
+            qUpdateOldIng.bindValue(
+               QString(":%1").arg(pn),
+               *it );
+            ++it;
+         }
          
-         // Insert an entry into our bt_hop table.
-         qOldBtHopInsert.bindValue( ":id", btid );
-         qOldBtHopInsert.bindValue( ":hop_id", oldhopid );
-         qOldBtHopInsert.exec();
+         // Done retrieving new ingredient data.
+         qNewIng.finish();
+         
+         // Find the bt_<ingredient> record in the local table.
+         qOldBtIng.bindValue( ":btid", btid );
+         qOldBtIng.exec();
+         
+         // If the btid exists in the old bt_hop table, do an update.
+         if( qOldBtIng.next() )
+         {
+            oldid = qOldBtIng.record().value(
+               QString("%1_id").arg(tp.tableName) );
+            qOldBtIng.finish();
+            
+            qUpdateOldIng.bindValue( ":id", oldid );
+            
+            qUpdateOldIng.exec();
+            if( qUpdateOldIng.lastError().isValid() )
+            {
+               Brewtarget::logE(
+                  QString("Database::updateDatabase(): %1")
+                  .arg(qUpdateOldIng.lastError().text()) );
+            }
+         }
+         // If the btid doesn't exist in the old bt_hop table, do an insert into
+         // the old hop table, then into the old bt_hop table.
+         else
+         {
+            // Create a new ingredient.
+            oldid = (this->*(tp.newElement))()->_key;
+            // Copy in the new data.
+            qUpdateOldIng.bindValue( ":id", oldid );
+            qUpdateOldIng.exec();
+            if( qUpdateOldIng.lastError().isValid() )
+            {
+               Brewtarget::logE(
+                  QString("Database::updateDatabase(): %1")
+                  .arg(qUpdateOldIng.lastError().text()) );
+            }
+            
+            // Insert an entry into our bt_<ingredient> table.
+            qOldBtIngInsert.bindValue( ":id", btid );
+            qOldBtIngInsert.bindValue( QString(":%1_id").arg(tp.tableName), oldid );
+            qOldBtIngInsert.exec();
+            if( qOldBtIng.lastError().isValid() )
+            {
+               Brewtarget::logE(
+                  QString("Database::updateDatabase(): %1")
+                  .arg(qOldBtIng.lastError().text()) );
+            }
+         }
       }
    }
 }
