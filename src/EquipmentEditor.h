@@ -62,7 +62,7 @@ public slots:
    void resetAbsorption();
 
    //! Edit the equipment currently selected in our combobox.
-   void equipmentSelected( const QString& text );
+   void equipmentSelected();
    //! Depending on the sender, set the correct equipment field to the appropriate value.
    void updateRecord();
    //! If state==Qt::Checked, set the "calculate boil volume" checkbox. Otherwise, unset.
