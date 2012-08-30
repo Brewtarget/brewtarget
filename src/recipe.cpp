@@ -1803,6 +1803,7 @@ void Recipe::recalcOgFg()
    if ( _og != tmp_og ) 
    {
       _og     = tmp_og;
+      set( "og", "og", _og, false );
       emit changed( metaProperty("og"), _og );
       emit changed( metaProperty("points"), (_og-1.0)*1e3 );
    }
@@ -1810,6 +1811,7 @@ void Recipe::recalcOgFg()
    if ( tmp_fg != _fg ) 
    {
       _fg     = tmp_fg;
+      set( "fg", "fg", _fg, false );
       emit changed( metaProperty("fg"), _fg );
    }
 }
