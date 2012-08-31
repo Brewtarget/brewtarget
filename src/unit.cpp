@@ -35,9 +35,11 @@ OunceUnit* Units::ounces = new OunceUnit();
 // === Volume ===
 LiterUnit* Units::liters = new LiterUnit();
 MilliliterUnit* Units::milliliters = new MilliliterUnit();
+USBarrelUnit* Units::us_barrels = new USBarrelUnit();
 USGallonUnit* Units::us_gallons = new USGallonUnit();
 USQuartUnit* Units::us_quarts = new USQuartUnit();
 USCupUnit* Units::us_cups = new USCupUnit();
+ImperialBarrelUnit* Units::imperial_barrels = new ImperialBarrelUnit();
 ImperialGallonUnit* Units::imperial_gallons = new ImperialGallonUnit();
 ImperialQuartUnit* Units::imperial_quarts = new ImperialQuartUnit();
 ImperialCupUnit* Units::imperial_cups = new ImperialCupUnit();
@@ -351,6 +353,24 @@ double MilliliterUnit::fromSI( double amt ) const
    return amt * (double)1000.0;
 }
 
+// === US Beer Barrel ===
+
+USBarrelUnit::USBarrelUnit()
+{
+   unitName = "bbl";
+   SIUnitName = "L";
+}
+
+double USBarrelUnit::toSI( double amt ) const
+{
+   return amt * 117.34777;
+}
+
+double USBarrelUnit::fromSI( double amt ) const
+{
+   return amt / 117.34777;
+}
+
 // === USGallons ===
 USGallonUnit::USGallonUnit()
 {
@@ -400,6 +420,24 @@ double USCupUnit::toSI( double amt ) const
 double USCupUnit::fromSI( double amt ) const
 {
    return amt / 0.236588236;
+}
+
+// === Imperial Beer Barrel ===
+
+ImperialBarrelUnit::ImperialBarrelUnit()
+{
+   unitName = "bbl";
+   SIUnitName = "L";
+}
+
+double ImperialBarrelUnit::toSI( double amt ) const
+{
+   return amt * 163.659;
+}
+
+double ImperialBarrelUnit::fromSI( double amt ) const
+{
+   return amt / 163.659;
 }
 
 // === ImperialGallons ===

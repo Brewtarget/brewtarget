@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>202</width>
-    <height>123</height>
+    <height>125</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -76,7 +76,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEdit"/>
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="toolTip">
+           <string>HH:MM:SS</string>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="horizontalSpacer_4">

@@ -164,6 +164,9 @@ bool Database::load()
    // Store temporary tables in memory.
    QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
    
+   // Initialize the SELECT * query hashes.
+   selectAll = Database::selectAllHash();
+   
    // See if there are new ingredients that we need to merge from the data-space db.
    if( dataDbFile.fileName() != dbFile.fileName()
       && ! Brewtarget::userDatabaseDidNotExist // Don't do this if we JUST copied the dataspace database.
@@ -216,23 +219,22 @@ bool Database::load()
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); j++ )
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+      
       QList<Hop*> tmpH = hops(*i);
       for( k = tmpH.begin(); k != tmpH.end(); ++k )
          connect( *k, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptHopChange(QMetaProperty,QVariant)) );
-      // DO we need to connect both Mash and MashSteps? I think we do, but I don't know.
-      QList<Mash*> tmpM = mashs();
-      for( l = tmpM.begin(); l != tmpM.end(); ++l)
-      {
-         QList<MashStep*> tmpMS = mashSteps(*l);
-         for( m=tmpMS.begin(); m != tmpMS.end(); ++m)
-            connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
-         connect( *l, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
-      }
+      
+      connect( mash(*i), SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
+   }
+   
+   QList<Mash*> tmpM = mashs();
+   for( l = tmpM.begin(); l != tmpM.end(); ++l)
+   {
+      QList<MashStep*> tmpMS = mashSteps(*l);
+      for( m=tmpMS.begin(); m != tmpMS.end(); ++m)
+         connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
-   // Initialize the query hash.
-   selectAll = Database::selectAllHash();
-   
    return true;
 }
 
@@ -647,6 +649,16 @@ QList<Misc*> Database::miscs(Recipe const* parent)
    q.finish();
    
    return ret;
+}
+
+Mash* Database::mash( Recipe const* parent )
+{
+   int mashId = get( Brewtarget::RECTABLE, parent->key(), "mash_id" ).toInt();
+   
+   if( allMashs.contains(mashId) )
+      return allMashs[mashId];
+   else
+      return 0;
 }
 
 QList<MashStep*> Database::mashSteps(Mash const* parent)
@@ -1354,18 +1366,18 @@ void Database::sendEmitchanged(Recipe* rec, QMetaProperty prop, QVariant value)
 
 
 // Add to recipe ==============================================================
-void Database::addToRecipe( Recipe* rec, Hop* hop, bool initialLoad )
+void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
 {
    int key = addIngredientToRecipe<Hop>( rec, hop,
                                          "hops",
                                          "hop_in_recipe",
                                          "hop_id",
-                                         initialLoad, &allHops );
+                                         noCopy, &allHops );
    connect( allHops[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    rec->recalcIBU();
 }
 
-void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
+void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
 {
    if ( ferm == 0 )
       return;
@@ -1374,36 +1386,36 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad )
                                                  "fermentables",
                                                  "fermentable_in_recipe",
                                                  "fermentable_id",
-                                                 initialLoad, &allFermentables );
+                                                 noCopy, &allFermentables );
    connect( allFermentables[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    rec->recalcAll();
 }
 
-void Database::addToRecipe( Recipe* rec, Misc* m, bool initialLoad )
+void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
 {
-   addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", initialLoad, &allMiscs );
+   addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", noCopy, &allMiscs );
    rec->recalcAll();
 }
 
-void Database::addToRecipe( Recipe* rec, Yeast* y, bool initialLoad )
+void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
-   addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", initialLoad, &allYeasts );
+   addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
    rec->recalcOgFg();
 }
 
-void Database::addToRecipe( Recipe* rec, Water* w, bool initialLoad )
+void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
 {
-   addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", initialLoad, &allWaters );
+   addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", noCopy, &allWaters );
    rec->recalcAll();
 }
 
-void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )
+void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
 {
    QSqlRecord c;
    int newKey;
 
    // Make a copy of mash.
-   if ( ! initialLoad ) 
+   if ( ! noCopy ) 
    {
       c = copy<Mash>(m, false, &allMashs);
       newKey = c.value("id").toInt();
@@ -1422,7 +1434,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool initialLoad )
    sendEmitchanged( rec, rec->metaProperty("mash"), QVariant() );
 }
 
-void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
+void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 {
    QSqlRecord c;
    int newKey;
@@ -1432,7 +1444,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool initialLoad )
       return;
   
    // Make a copy of equipment.
-   if ( ! initialLoad )
+   if ( ! noCopy )
    {
       c = copy<Equipment>(e,false,&allEquipments);
       newKey = c.value("id").toInt();
@@ -3214,7 +3226,7 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
    Water* ret = newWater();
    fromXml( ret, Water::tagToProp, node );
    if( parent )
-      addToRecipe( parent, ret );
+      addToRecipe( parent, ret, true );
    return ret;
 }
 
@@ -3247,7 +3259,7 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
                          ) );
    //_setterCommandStack->flush();
    if( parent )
-      addToRecipe( parent, ret );
+      addToRecipe( parent, ret, true );
    return ret;
 }
 

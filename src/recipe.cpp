@@ -1191,11 +1191,7 @@ Style* Recipe::style() const
 
 Mash* Recipe::mash() const
 {
-   QVariant key = get("mash_id");
-   if( key.isValid() )
-      return Database::instance().mash( key.toInt() );
-   else
-      return 0;
+   return Database::instance().mash( this );
 }
 
 Equipment* Recipe::equipment() const
@@ -1807,6 +1803,7 @@ void Recipe::recalcOgFg()
    if ( _og != tmp_og ) 
    {
       _og     = tmp_og;
+      set( "og", "og", _og, false );
       emit changed( metaProperty("og"), _og );
       emit changed( metaProperty("points"), (_og-1.0)*1e3 );
    }
@@ -1814,6 +1811,7 @@ void Recipe::recalcOgFg()
    if ( tmp_fg != _fg ) 
    {
       _fg     = tmp_fg;
+      set( "fg", "fg", _fg, false );
       emit changed( metaProperty("fg"), _fg );
    }
 }
@@ -1972,14 +1970,9 @@ void Recipe::acceptHopChange(QMetaProperty prop, QVariant val)
 void Recipe::acceptMashChange(QMetaProperty prop, QVariant val)
 {
    Mash* mashSend = qobject_cast<Mash*>(sender());
-   int key;
 
    if ( mashSend == 0 )
       return;
    
-   key = mashSend->key();
-   // Don't do anything if this isn't our thing
-   if ( mash()->key() == key ) {
-      recalcAll();
-   }
+   recalcAll();
 }

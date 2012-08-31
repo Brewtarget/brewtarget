@@ -38,11 +38,11 @@ bool BeerXMLElement::display() const { return get("display").toBool(); }
 void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var ? 1 : 0); }
 void BeerXMLElement::setDisplay(bool var) { set("display", "display", var ? 1 : 0); }
 
-int BeerXMLElement::key(){ return _key; }
+int BeerXMLElement::key() const { return _key; }
 
-Brewtarget::DBTable BeerXMLElement::table(){ return _table; }
+Brewtarget::DBTable BeerXMLElement::table() const{ return _table; }
 
-int BeerXMLElement::version(){ return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
+int BeerXMLElement::version() const { return QString(metaObject()->classInfo(metaObject()->indexOfClassInfo("version")).value()).toInt(); }
 
 QMetaProperty BeerXMLElement::metaProperty(const char* name) const
 {

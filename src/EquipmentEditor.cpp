@@ -65,7 +65,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeEquipment() ) );
    connect( pushButton_absorption, SIGNAL( clicked() ), this, SLOT( resetAbsorption() ) );
-   connect( equipmentComboBox, SIGNAL(currentIndexChanged ( const QString& )), this, SLOT( equipmentSelected(const QString&) ) );
+   connect( equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
 
    // Connect all the edit boxen
    connect(lineEdit_name,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
@@ -141,7 +141,7 @@ void EquipmentEditor::clear()
    lineEdit_grainAbsorption->setText("");
 }
 
-void EquipmentEditor::equipmentSelected( const QString& /*text*/ )
+void EquipmentEditor::equipmentSelected()
 {
    setEquipment( equipmentListModel->at(equipmentComboBox->currentIndex()) );
 }

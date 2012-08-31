@@ -68,8 +68,10 @@ QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units, uni
             ret = QString("%1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
          else if( absSIAmount < Units::imperial_gallons->toSI(1.0) ) // If less than 1 gallon, show imperial_quarts
             ret = QString("%1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
-         else
+         else if( absSIAmount < Units::imperial_barrels->toSI(1.0) ) // If less than 1 barrel, show gallons.
             ret = QString("%1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());
+         else
+            ret = QString("%1 %2").arg(Units::imperial_barrels->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_barrels->getUnitName());
    }
 
    return ret;
@@ -87,12 +89,10 @@ void ImperialVolumeUnitSystem::ensureMapIsSetup()
    if( isMapSetup )
       return;
 
-   // Ok, map was not setup, so set it up.
-
    nameToUnit.insert(Units::liters->getUnitName(), Units::liters);
    nameToUnit.insert(Units::milliliters->getUnitName(), Units::milliliters);
 
-
+   nameToUnit.insert(Units::imperial_barrels->getUnitName(), Units::imperial_barrels);
    nameToUnit.insert(Units::imperial_gallons->getUnitName(), Units::imperial_gallons);
    nameToUnit.insert(Units::imperial_quarts->getUnitName(), Units::imperial_quarts);
    nameToUnit.insert(Units::imperial_cups->getUnitName(), Units::imperial_cups);
