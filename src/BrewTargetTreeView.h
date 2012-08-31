@@ -27,6 +27,7 @@ class BrewTargetTreeView;
 #include <QPoint>
 #include <QMouseEvent>
 #include "BrewTargetTreeItem.h"
+#include "BtTreeFilterProxyModel.h"
 
 // Forward declarations.
 class BrewTargetTreeModel;
@@ -105,6 +106,7 @@ public:
 
 private:
    BrewTargetTreeModel* model;
+   BtTreeFilterProxyModel* filter;
    QMenu* contextMenu, *subMenu;
    QPoint dragStart;
 
