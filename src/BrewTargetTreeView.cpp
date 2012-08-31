@@ -22,6 +22,7 @@
 #include <QMenu>
 #include "BrewTargetTreeView.h"
 #include "BrewTargetTreeModel.h"
+#include "BtTreeFilterProxyModel.h"
 #include "recipe.h"
 #include "equipment.h"
 #include "fermentable.h"
@@ -36,7 +37,6 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    // Set some global properties that all the kids will use.
    setContextMenuPolicy(Qt::CustomContextMenu);
    setRootIsDecorated(false);
-   resizeColumnToContents(0);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
@@ -47,88 +47,92 @@ BrewTargetTreeModel* BrewTargetTreeView::getModel()
 
 bool BrewTargetTreeView::removeRow(const QModelIndex &index)
 {
-   QModelIndex parent = model->parent(index);
-   int position       = index.row();
+   QModelIndex modelIndex = filter->mapToSource(index);
+   QModelIndex parent = model->parent(modelIndex);
+   int position       = modelIndex.row();
 
    return model->removeRows(position,1,parent);
 }
 
 bool BrewTargetTreeView::isParent(const QModelIndex& parent, const QModelIndex& child)
 {
-   return parent == model->parent(child);
+   QModelIndex modelParent = filter->mapToSource(parent);
+   QModelIndex modelChild = filter->mapToSource(child);
+   return modelParent == model->parent(modelChild);
 }
 
 QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
 {
-   if ( child.isValid())
-      return model->parent(child);
+   QModelIndex modelChild = filter->mapToSource(child);
+   if ( modelChild.isValid())
+      return filter->mapFromSource(model->parent(modelChild));
 
    return QModelIndex();
 }
 
 QModelIndex BrewTargetTreeView::getFirst(int type)
 {
-   return model->getFirst(type);
+   return filter->mapFromSource(model->getFirst(type));
 }
 
 Recipe* BrewTargetTreeView::getRecipe(const QModelIndex &index) const
 {
-   return model->getRecipe(index);
+   return model->getRecipe(filter->mapToSource(index));
 }
 
 QModelIndex BrewTargetTreeView::findRecipe(Recipe* rec)
 {
-   return model->findRecipe(rec);
+   return filter->mapFromSource(model->findRecipe(rec));
 }
 
 Equipment* BrewTargetTreeView::getEquipment(const QModelIndex &index) const
 {
-   return model->getEquipment(index);
+   return model->getEquipment(filter->mapToSource(index));
 }
 
 QModelIndex BrewTargetTreeView::findEquipment(Equipment* kit)
 {
-   return model->findEquipment(kit);
+   return filter->mapFromSource(model->findEquipment(kit));
 }
 
 Fermentable* BrewTargetTreeView::getFermentable(const QModelIndex &index) const
 {
-   return model->getFermentable(index);
+   return model->getFermentable(filter->mapToSource(index));
 }
 
 QModelIndex BrewTargetTreeView::findFermentable(Fermentable* ferm)
 {
-   return model->findFermentable(ferm);
+   return filter->mapFromSource(model->findFermentable(ferm));
 }
 
 Hop* BrewTargetTreeView::getHop(const QModelIndex &index) const
 {
-   return model->getHop(index);
+   return model->getHop(filter->mapToSource(index));
 }
 
 QModelIndex BrewTargetTreeView::findHop(Hop* hop)
 {
-   return model->findHop(hop);
+   return filter->mapFromSource(model->findHop(hop));
 }
 
 Misc* BrewTargetTreeView::getMisc(const QModelIndex &index) const
 {
-   return model->getMisc(index);
+   return model->getMisc(filter->mapToSource(index));
 }
 
 QModelIndex BrewTargetTreeView::findMisc(Misc* misc)
 {
-   return model->findMisc(misc);
+   return filter->mapFromSource(model->findMisc(misc));
 }
 
 Yeast* BrewTargetTreeView::getYeast(const QModelIndex &index) const
 {
-   return model->getYeast(index);
+   return model->getYeast(filter->mapToSource(index));
 }
 
 QModelIndex BrewTargetTreeView::findYeast(Yeast* yeast)
 {
-   return model->findYeast(yeast);
+   return filter->mapFromSource(model->findYeast(yeast));
 }
 
 BrewNote* BrewTargetTreeView::getBrewNote(const QModelIndex &index) const
@@ -136,17 +140,17 @@ BrewNote* BrewTargetTreeView::getBrewNote(const QModelIndex &index) const
    if ( ! index.isValid() ) 
       return NULL;
 
-   return model->getBrewNote(index);
+   return model->getBrewNote(filter->mapToSource(index));
 }
 
 QModelIndex BrewTargetTreeView::findBrewNote(BrewNote* bNote)
 {
-   return model->findBrewNote(bNote);
+   return filter->mapFromSource(model->findBrewNote(bNote));
 }
 
 int BrewTargetTreeView::getType(const QModelIndex &index)
 {
-   return model->getType(index);
+   return model->getType(filter->mapToSource(index));
 }
 
 void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)
@@ -219,6 +223,8 @@ QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes)
 
    QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
+   // All of the calls like getType, getEquipment, etc. will translate between
+   // the model and the proxy indexes, so we don't have to here
    foreach (QModelIndex index, indexes)
    {
       if (index.isValid())
@@ -285,7 +291,8 @@ bool BrewTargetTreeView::multiSelected()
 
    foreach (QModelIndex selection, selected)
    {
-      if (model->isRecipe(selection))
+      QModelIndex selectModel = filter->mapToSource(selection);
+      if (model->isRecipe(selectModel))
          hasRecipe = true;
       else
          hasSomethingElse = true;
@@ -360,18 +367,29 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::RECIPEMASK);
+   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::RECIPEMASK);
+   filter->setSourceModel(model);
 
-   setModel(model);
+   setModel(filter);
    setExpanded(findRecipe(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   // Resizing before you set the model doesn't do much.
+   resizeColumnToContents(0);
 }
 
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::EQUIPMASK);
+   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::EQUIPMASK);
+   filter->setSourceModel(model);
 
-   setModel(model);
+   setModel(filter);
    setExpanded(findEquipment(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   resizeColumnToContents(0);
 
 }
 
@@ -380,9 +398,14 @@ FermentableTreeView::FermentableTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::FERMENTMASK);
+   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::FERMENTMASK);
+   filter->setSourceModel(model);
 
-   setModel(model);
+   setModel(filter);
    setExpanded(findFermentable(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   resizeColumnToContents(0);
 }
 
 // More Ick
@@ -390,9 +413,14 @@ HopTreeView::HopTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::HOPMASK);
+   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::HOPMASK);
+   filter->setSourceModel(model);
 
-   setModel(model);
+   setModel(filter);
    setExpanded(findHop(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   resizeColumnToContents(0);
 }
 
 // Ick some more
@@ -400,9 +428,14 @@ MiscTreeView::MiscTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::MISCMASK);
+   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::MISCMASK);
+   filter->setSourceModel(model);
 
-   setModel(model);
+   setModel(filter);
    setExpanded(findMisc(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   resizeColumnToContents(0);
 }
 
 // Will this ick never end?
@@ -410,7 +443,12 @@ YeastTreeView::YeastTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::YEASTMASK);
+   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::YEASTMASK);
+   filter->setSourceModel(model);
 
-   setModel(model);
+   setModel(filter);
    setExpanded(findYeast(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   resizeColumnToContents(0);
 }
