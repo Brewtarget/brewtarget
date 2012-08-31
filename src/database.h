@@ -179,15 +179,15 @@ public:
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
    // of ingredients in rec.
-   void addToRecipe( Recipe* rec, Hop* hop, bool initialLoad = false );
-   void addToRecipe( Recipe* rec, Fermentable* ferm, bool initialLoad = false );
-   void addToRecipe( Recipe* rec, Misc* m, bool initialLoad = false );
-   void addToRecipe( Recipe* rec, Yeast* y, bool initialLoad = false );
-   void addToRecipe( Recipe* rec, Water* w, bool initialLoad = false );
+   void addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false );
+   void addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false );
+   void addToRecipe( Recipe* rec, Misc* m, bool noCopy = false );
+   void addToRecipe( Recipe* rec, Yeast* y, bool noCopy = false );
+   void addToRecipe( Recipe* rec, Water* w, bool noCopy = false );
    //! Add a mash, displacing any current mash.
-   void addToRecipe( Recipe* rec, Mash* m, bool initialLoad = false );
+   void addToRecipe( Recipe* rec, Mash* m, bool noCopy = false );
    //! Add an equipment, displacing any current equipment.
-   void addToRecipe( Recipe* rec, Equipment* e, bool initialLoad = false );
+   void addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false );
    //! Add a style, displacing any current style. Does not add a copy, adds the actual style \b s.
    void addToRecipe( Recipe* rec, Style* s);
    // NOTE: not possible in this format.
@@ -524,6 +524,9 @@ private:
    /*!
     * Create a \e copy of \b ing and add the copy to \b recipe where \b ing's
     * key is \b ingKeyName and the relational table is \b relTableName.
+    *
+    * \param noCopy By default, we create a copy of the ingredient. If true,
+    *               add the ingredient directly.
     * \returns the key of the new ingredient.
     */
    template<class T> int addIngredientToRecipe( Recipe* rec,
@@ -531,7 +534,7 @@ private:
                                                 QString propName,
                                                 QString relTableName,
                                                 QString ingKeyName,
-                                                bool initialLoad = false,
+                                                bool noCopy = false,
                                                 QHash<int,T*>* keyHash = 0 )
    {
       // TODO: encapsulate this in a QUndoCommand.
@@ -556,18 +559,16 @@ private:
       else
          q.finish();
       
-      // Create a copy of the ingredient. We don't want to do this on the initial
-      // load of the recipe database, because the stuff is already a copy.
-      if ( ! initialLoad ) 
+      if ( noCopy ) 
       {
-         r = copy<T>(ing, false, keyHash);
-         newKey = r.value("id").toInt();
+         newKey = ing->_key;
+         // Any ingredient part of a recipe shouldn't be visible. 
+         ing->setDisplay(false);
       }
       else 
       {
-         newKey = ing->_key;
-         // Any ingredient added on an initial load shouldn't be visible. 
-         ing->setDisplay(false);
+         r = copy<T>(ing, false, keyHash);
+         newKey = r.value("id").toInt();
       }
       
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
