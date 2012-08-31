@@ -280,8 +280,9 @@ void OptionDialog::saveAndClose()
       Brewtarget::userDataDir = newUserDataDir;
    }
 
-   if( Brewtarget::mainWindow != 0 )
-      Brewtarget::mainWindow->showChanges(); // Make sure the main window updates.
+   // Make sure the main window updates.
+   if( Brewtarget::mainWindow() )
+      Brewtarget::mainWindow()->showChanges();
 
    setVisible(false);
 }
