@@ -29,6 +29,7 @@ class EquipmentEditor;
 // Forward declarations
 class Equipment;
 class EquipmentListModel;
+class BeerXMLSortProxyModel;
 
 /*!
  * \class EquipmentEditor
@@ -75,6 +76,7 @@ public slots:
 private:
    Equipment* obsEquip;
    EquipmentListModel* equipmentListModel;
+   BeerXMLSortProxyModel* equipmentSortProxyModel;
    
    bool changeText;
    bool eventFilter(QObject *object, QEvent* event);

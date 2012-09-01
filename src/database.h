@@ -415,7 +415,6 @@ private:
    QHash< int, Yeast* > allYeasts;
 
    bool loadWasSuccessful;
-   bool loadedFromXml;
    bool skipEmitChanged;
    bool needRecalc;
    

@@ -120,6 +120,13 @@ MainWindow::MainWindow(QWidget* parent)
       // NOTE: Should we pop up an information dialog here? Doing it silently
       //       for now.
       Database::instance().importFromXML( oldXmlFile.fileName() );
+      
+      QDir dir(Brewtarget::getUserDataDir());
+      if( !dir.exists("obsolete") )
+         dir.mkdir("obsolete");
+      dir.cd("obsolete");
+      
+      oldXmlFile.copy(dir.canonicalPath()+"/recipes.xml");
       oldXmlFile.remove();
    }
    

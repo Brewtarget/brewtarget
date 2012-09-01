@@ -77,7 +77,7 @@ QMutex Database::_threadToConnectionMutex;
 
 Database::Database()
    : //_setterCommandStack( new SetterCommandStack() ),
-     loadedFromXml(false), skipEmitChanged(false), needRecalc(true)
+     skipEmitChanged(false), needRecalc(true)
 {
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
@@ -295,14 +295,12 @@ void Database::unload()
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
-   if (loadedFromXml || !loadWasSuccessful)
+   if (!loadWasSuccessful)
    {
-      // If either the --from-xml switch was used, or load() failed, then
+      // If load() failed, then
       // just keep the database and don't revert to the backup.
       if (dbFile.exists())
-      {
          dbTempBackupFile.remove();
-      }
    }
    else 
    {
@@ -1694,8 +1692,6 @@ QList<Yeast*> Database::yeasts()
 
 void Database::importFromXML(const QString& filename)
 {
-   loadedFromXml = true;
-
    unsigned int count;
    int line, col;
    QDomDocument xmlDoc;

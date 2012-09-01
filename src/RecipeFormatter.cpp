@@ -46,7 +46,7 @@ RecipeFormatter::RecipeFormatter(QObject* parent)
    rec = 0;
 
    //===Construct a print-preview dialog.===
-   docDialog = new QDialog(Brewtarget::mainWindow);
+   docDialog = new QDialog(Brewtarget::mainWindow());
    docDialog->setWindowTitle("Print Preview");
    if( docDialog->layout() == 0 )
       docDialog->setLayout(new QVBoxLayout(docDialog));

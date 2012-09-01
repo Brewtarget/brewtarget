@@ -59,7 +59,7 @@
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
 
-MainWindow* Brewtarget::mainWindow;
+MainWindow* Brewtarget::_mainWindow;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
@@ -459,12 +459,12 @@ int Brewtarget::run()
    // loading the main window.
    if (Database::instance().loadSuccessful())
    {
-      mainWindow = new MainWindow();
-      mainWindow->setVisible(true);
-   
-      splashScreen.finish(mainWindow);
+      _mainWindow = new MainWindow();
+      _mainWindow->setVisible(true);
+      
+      splashScreen.finish(_mainWindow);
 
-      checkForNewVersion(mainWindow);
+      checkForNewVersion(_mainWindow);
 
       ret = qApp->exec();
    
@@ -487,7 +487,7 @@ int Brewtarget::run()
    // Should I do qApp->removeTranslator() first?
    delete defaultTrans;
    delete btTrans;
-   delete mainWindow;
+   delete _mainWindow;
    
    Database::dropInstance();
    
@@ -508,10 +508,8 @@ void Brewtarget::log(LogType lt, QString message)
    // First, write out to stderr.
    std::cerr << m.toStdString() << std::endl;
    // Then display it in the GUI's status bar.
-   // Hmm... I can't access the mainWindow from outside the
-   // GUI event loop?
-   //if( mainWindow->statusBar() != 0 )
-   //   mainWindow->statusBar()->showMessage(m, 3000);
+   if( _mainWindow && _mainWindow->statusBar() )
+      _mainWindow->statusBar()->showMessage(m, 3000);
 
    // Now, write it to the log file if there is one.
    if( logStream != 0 )
@@ -1358,8 +1356,7 @@ void Brewtarget::generateAction(QMenu* menu, QString text, QVariant data, QVaria
   menu->addAction(action);
 }
 
-MainWindow* Brewtarget::getMainWindow()
+MainWindow* Brewtarget::mainWindow()
 {
-   return mainWindow;
+   return _mainWindow;
 }
-

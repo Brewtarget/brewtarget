@@ -177,10 +177,10 @@ public:
    static void generateAction(QMenu* menu, QString text, QVariant data, QVariant currentVal);
 
    //! \return the main window.
-   static MainWindow* getMainWindow();
+   static MainWindow* mainWindow();
 
 private:
-   static MainWindow* mainWindow;
+   static MainWindow* _mainWindow;
    static QDomDocument* optionsDoc;
    static QTranslator* defaultTrans;
    static QTranslator* btTrans;
