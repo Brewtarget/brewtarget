@@ -54,6 +54,7 @@ ENDMACRO(ADD_PCH_RULE _src_list _header_filename)
 SET( brewtarget_SRCS
     ${SRCDIR}/Algorithms.cpp
     ${SRCDIR}/BeerXMLElement.cpp
+    ${SRCDIR}/BeerXMLSortProxyModel.cpp
     ${SRCDIR}/BrewDayWidget.cpp
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/brewnote.cpp
@@ -197,6 +198,7 @@ SET( brewtarget_UIS
 SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BeerColorWidget.h
     ${SRCDIR}/BeerXMLElement.h
+    ${SRCDIR}/BeerXMLSortProxyModel.h
     ${SRCDIR}/BrewDayWidget.h
     ${SRCDIR}/BrewDayScrollWidget.h
     ${SRCDIR}/brewnote.h

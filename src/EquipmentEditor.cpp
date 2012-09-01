@@ -29,6 +29,7 @@
 #include "brewtarget.h"
 #include "HeatCalculations.h"
 #include "PhysicalConstants.h"
+#include "BeerXMLSortProxyModel.h"
 
 EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    : QDialog(parent)
@@ -55,7 +56,8 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    label_absorption->setText(tr("Grain absorption (%1/%2)").arg(volumeUnit->getUnitName()).arg(weightUnit->getUnitName()));
    
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
-   equipmentComboBox->setModel(equipmentListModel);
+   equipmentSortProxyModel = new BeerXMLSortProxyModel(equipmentListModel);
+   equipmentComboBox->setModel(equipmentSortProxyModel);
    
    obsEquip = 0;
    changeText = false;
@@ -143,7 +145,17 @@ void EquipmentEditor::clear()
 
 void EquipmentEditor::equipmentSelected()
 {
-   setEquipment( equipmentListModel->at(equipmentComboBox->currentIndex()) );
+   QModelIndex modelIndex;
+   QModelIndex viewIndex(
+      equipmentComboBox->rootModelIndex().child(
+         equipmentComboBox->currentIndex(),
+         0
+      )
+   );
+   
+   modelIndex = equipmentSortProxyModel->mapToSource(viewIndex);
+   
+   setEquipment( equipmentListModel->at(modelIndex.row()) );
 }
 
 void EquipmentEditor::save()
