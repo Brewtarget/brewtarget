@@ -56,8 +56,6 @@ public slots:
    void editSelected();
    //! Add a new misc to the database.
    void newMisc();
-
-   void changed(QMetaProperty prop, QVariant val);
    
 private:
    MainWindow* mainWindow;
@@ -66,7 +64,6 @@ private:
    int numMiscs;
    MiscEditor* miscEdit;
 
-   void populateTable();
 };
 
 #endif   /* _MISCDIALOG_H */

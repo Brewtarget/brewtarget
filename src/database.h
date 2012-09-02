@@ -158,23 +158,8 @@ public:
    //! Import ingredients from BeerXML documents.
    void importFromXML(const QString& filename);
    
-   //! Retrieve a list of elements with given \b filter.
-   QList<BeerXMLElement*> listByFilter( Brewtarget::DBTable table, QString filter = "" );
-   
-   // NOTICE: Necessary?
    //! Get recipe by key value.
    Recipe* recipe(int key);
-   Equipment* equipment(int key);
-   Mash* mash(int key);
-   Style* style(int key);
-   /*
-   Fermentable* fermentable(int key);
-   Hop* hop(int key);
-   MashStep* mashStep(int key);
-   Misc* misc(int key);
-   Water* water(int key);
-   Yeast* yeast(int key);
-   */
    
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
@@ -207,18 +192,6 @@ public:
    //! Remove \b step from \b mash.
    void removeFrom( Mash* mash, MashStep* step );
    
-   // Remove these from a recipe, then call the changed()
-   // signal corresponding to the appropriate QVector
-   // of ingredients in rec.
-   /*
-   void removeFromRecipe( Recipe* rec, QList<Hop*> hop );
-   void removeFromRecipe( Recipe* rec, QList<Fermentable*> ferm );
-   void removeFromRecipe( Recipe* rec, QList<Misc*> m );
-   void removeFromRecipe( Recipe* rec, QList<Yeast*> y );
-   void removeFromRecipe( Recipe* rec, QList<Water*> w );
-   void removeFromRecipe( Recipe* rec, QList<Instruction*> ins );
-   */
-   
    // Mark an item as deleted.
    // NOTE: should these also remove all references to the ingredients?
    void removeEquipment(Equipment* equip);
@@ -233,8 +206,6 @@ public:
    void removeYeast(Yeast* yeast);
 
    // Or you can mark whole lists as deleted.
-   // NOTE: should these also remove all references to the ingredients?
-   // TODO: convert from a sequence of single removes to one single operation?
    void removeEquipment(QList<Equipment*> equip);
    void removeFermentable(QList<Fermentable*> ferm);
    void removeHop(QList<Hop*> hop);
@@ -246,19 +217,6 @@ public:
    void removeWater(QList<Water*> water);
    void removeYeast(QList<Yeast*> yeast);
 
-   // Return a list of elements according to the given filter.
-   void getBrewNotes( QList<BrewNote*>& list, QString filter="" );
-   void getEquipments( QList<Equipment*>&, QString filter="" );
-   void getFermentables( QList<Fermentable*>&, QString filter="" );
-   void getHops( QList<Hop*>&, QString filter="" );
-   void getMashs( QList<Mash*>&, QString filter="" );
-   void getMashSteps( QList<MashStep*>&, QString filter="" );
-   void getMiscs( QList<Misc*>&, QString filter="" );
-   void getRecipes( QList<Recipe*>&, QString filter="" );
-   void getStyles( QList<Style*>&, QString filter="" );
-   void getWaters( QList<Water*>&, QString filter="" );
-   void getYeasts( QList<Yeast*>&, QString filter="" );
-   
    //! Get the recipe that this \b note is part of.
    Recipe* getParentRecipe( BrewNote const* note );
    
@@ -308,26 +266,14 @@ public:
    QList<Water*> waters( Recipe const* parent );
    //! Return a list of all the yeasts in a recipe.
    QList<Yeast*> yeasts( Recipe const* parent );
+   //! Get recipe's equipment.
+   Equipment* equipment(Recipe const* parent);
    //! Get the recipe's mash.
    Mash* mash( Recipe const* parent );
+   //! Get recipe's style.
+   Style* style(Recipe const* parent);
    //! Return a list of all the steps in a mash.
    QList<MashStep*> mashSteps(Mash const* parent);
-   
-   // Import from BeerXML =====================================================
-   // TODO: make all these private.
-   BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
-   Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Hop* hopFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Instruction* instructionFromXml( QDomNode const& node, Recipe* parent );
-   Mash* mashFromXml( QDomNode const& node, Recipe* parent = 0 );
-   MashStep* mashStepFromXml( QDomNode const& node, Mash* parent );
-   Misc* miscFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Recipe* recipeFromXml( QDomNode const& node );
-   Style* styleFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Water* waterFromXml( QDomNode const& node, Recipe* parent = 0 );
-   Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = 0 );
-   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
    // Export to BeerXML =======================================================
    void toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent );
@@ -396,11 +342,14 @@ private:
    static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
    
-   // Cannot be static yet.
    static const QList<TableParams> tableParams;
-   QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
    
-   // Keeps all pointers to the elements referenced by key.
+   // Each thread should have its own connection to QSqlDatabase.
+   static QHash< QThread*, QString > _threadToConnection;
+   static QMutex _threadToConnectionMutex;
+
+   // Instance variables.
+   bool loadWasSuccessful;
    QHash< int, BrewNote* > allBrewNotes;
    QHash< int, Equipment* > allEquipments;
    QHash< int, Fermentable* > allFermentables;
@@ -413,20 +362,10 @@ private:
    QHash< int, Style* > allStyles;
    QHash< int, Water* > allWaters;
    QHash< int, Yeast* > allYeasts;
-
-   bool loadWasSuccessful;
-   bool skipEmitChanged;
-   bool needRecalc;
-   
-   // Each thread should have its own connection to QSqlDatabase.
-   static QHash< QThread*, QString > _threadToConnection;
-   static QMutex _threadToConnectionMutex;
+   QHash<Brewtarget::DBTable,QSqlQuery> selectAll;
    
    //! Get the right database connection for the calling thread.
    static QSqlDatabase sqlDatabase();
-   
-   void sendEmitchanged(QMetaProperty prop, QVariant value);
-   void sendEmitchanged(Recipe* rec, QMetaProperty prop, QVariant value);
    
    //! Helper to populate all* hashes. T should be a BeerXMLElement subclass.
    template <class T> void populateElements( QHash<int,T*>& hash, Brewtarget::DBTable table )
@@ -489,7 +428,20 @@ private:
     */
    void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode );
    
-   //QUndoStack commandStack;
+   // Import from BeerXML =====================================================
+   BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
+   Equipment* equipmentFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Fermentable* fermentableFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Hop* hopFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Instruction* instructionFromXml( QDomNode const& node, Recipe* parent );
+   Mash* mashFromXml( QDomNode const& node, Recipe* parent = 0 );
+   MashStep* mashStepFromXml( QDomNode const& node, Mash* parent );
+   Misc* miscFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Recipe* recipeFromXml( QDomNode const& node );
+   Style* styleFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Water* waterFromXml( QDomNode const& node, Recipe* parent = 0 );
+   Yeast* yeastFromXml( QDomNode const& node, Recipe* parent = 0 );
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
    //! Hidden constructor.
    Database();
@@ -583,7 +535,7 @@ private:
       if( q.exec() )
       {
          q.finish();
-         sendEmitchanged( rec, rec->metaProperty(propName), QVariant() );
+         emit rec->changed( rec->metaProperty(propName), QVariant() );
       }
       else
       {
@@ -594,7 +546,6 @@ private:
       return newKey;
    }
    
-   // TODO: encapsulate in QUndoCommand
    //! Remove ingredient from a recipe.
    void removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName );
    

@@ -133,7 +133,7 @@ bool MiscTableModel::removeMisc(Misc* misc)
       disconnect( misc, 0, this, 0 );
       miscObs.removeAt(i);
       //reset(); // Tell everybody the table has changed.
-      endInsertRows();
+      endRemoveRows();
       
       if(parentTableWidget)
       {
@@ -175,7 +175,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)miscObs.size() )
    {
-      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
+      Brewtarget::logW(QString("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else

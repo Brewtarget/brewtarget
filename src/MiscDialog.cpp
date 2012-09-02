@@ -68,26 +68,8 @@ void MiscDialog::removeMisc()
          return;
    }
 
-   Misc* m = miscTableModel->getMisc(row);
+   Misc* m = miscTableModel->getMisc(miscTableProxy->mapToSource(selected[0]).row());
    Database::instance().removeMisc(m);
-}
-
-void MiscDialog::changed(QMetaProperty prop, QVariant /*value*/)
-{
-   if( sender() == &(Database::instance()) &&
-       QString(prop.name()) == "miscs" )
-   {
-      miscTableModel->removeAll();
-      populateTable();
-   }
-}
-
-void MiscDialog::populateTable()
-{
-   QList<Misc*> miscs;
-   Database::instance().getMiscs(miscs);
-
-   miscTableModel->addMiscs(miscs);
 }
 
 void MiscDialog::addMisc(const QModelIndex& index)

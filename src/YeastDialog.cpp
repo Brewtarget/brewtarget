@@ -47,7 +47,6 @@ YeastDialog::YeastDialog(MainWindow* parent)
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newYeast() ) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT( removeYeast() ) );
    connect( yeastTableWidget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT( addYeast(const QModelIndex&) ) );
-   
 
    yeastTableModel->observeDatabase(true);
 
@@ -76,28 +75,6 @@ void YeastDialog::removeYeast()
    translated = yeastTableProxy->mapToSource(selected[0]);
    Yeast *yeast = yeastTableModel->getYeast(translated.row());
    Database::instance().removeYeast(yeast);
-}
-
-void YeastDialog::changed(QMetaProperty prop, QVariant val)
-{
-   QString propName(prop.name());
-   
-   // Notifier should only be the database.
-   if( sender() == &(Database::instance()) &&
-       propName == "yeasts" )
-   {
-      yeastTableModel->removeAll();
-      populateTable();
-   }
-}
-
-void YeastDialog::populateTable()
-{
-   QList<Yeast*> yeasts;
-   Database::instance().getYeasts(yeasts);
-   
-   numYeasts = yeasts.size();
-   yeastTableModel->addYeasts(yeasts);
 }
 
 void YeastDialog::addYeast(const QModelIndex& index)
