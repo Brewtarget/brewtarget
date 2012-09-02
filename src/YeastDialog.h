@@ -54,15 +54,12 @@ public slots:
    void editSelected();
    void newYeast();
 
-   void changed(QMetaProperty, QVariant);
 private:
    MainWindow* mainWindow;
    YeastTableModel* yeastTableModel;
    YeastSortFilterProxyModel* yeastTableProxy;
    YeastEditor* yeastEditor;
    int numYeasts;
-
-   void populateTable();
 };
 
 #endif   /* _YEASTDIALOG_H */
