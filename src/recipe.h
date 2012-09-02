@@ -79,7 +79,7 @@ public:
     */
    void clear();
    
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
    Q_PROPERTY( QString type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
    Q_PROPERTY( QString brewer READ brewer WRITE setBrewer /*NOTIFY changed*/ /*changedBrewer*/ )
    Q_PROPERTY( double batchSize_l READ batchSize_l WRITE setBatchSize_l /*NOTIFY changed*/ /*changedBatchSize_l*/ )
@@ -266,7 +266,8 @@ public:
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
    
 signals:
-
+   void changedName(const QString&);
+   
 public slots:
    //void changed(QMetaProperty prop, QVariant val);
    

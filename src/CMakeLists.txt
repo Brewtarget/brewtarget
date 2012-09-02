@@ -117,8 +117,8 @@ SET( brewtarget_SRCS
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/recipe.cpp
-    ${SRCDIR}/RecipeComboBox.cpp
     ${SRCDIR}/RecipeFormatter.cpp
+    ${SRCDIR}/RecipeListModel.cpp
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/SetterCommand.cpp
     ${SRCDIR}/SetterCommandStack.cpp
@@ -244,10 +244,10 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/QueuedMethod.h
-    ${SRCDIR}/RecipeComboBox.h
     ${SRCDIR}/RecipeExtrasDialog.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
+    ${SRCDIR}/RecipeListModel.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
     ${SRCDIR}/SetterCommandStack.h
