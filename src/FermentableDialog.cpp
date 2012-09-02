@@ -49,8 +49,6 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newFermentable() ) );
    connect( fermentableTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT(addFermentable(const QModelIndex&)) );
    
-   //connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   
    fermTableModel->observeDatabase(true);
 }
 

@@ -49,8 +49,6 @@ HopDialog::HopDialog(MainWindow* parent)
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeHop() ));
    connect( hopTableWidget, SIGNAL( doubleClicked(const QModelIndex&) ), this, SLOT( addHop(const QModelIndex&) ) );
    
-   //connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   //populateTable();
    hopTableModel->observeDatabase(true);
 }
 

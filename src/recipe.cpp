@@ -745,6 +745,7 @@ void Recipe::addWater( Water* var )
 void Recipe::setName( const QString &var )
 {
    set( "name", "name", var );
+   emit changedName(var);
 }
 
 void Recipe::setType( const QString &var )

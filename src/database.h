@@ -221,16 +221,16 @@ public:
    
    // Mark an item as deleted.
    // NOTE: should these also remove all references to the ingredients?
-   void removeEquipment(Equipment* equip, bool signal = true);
-   void removeFermentable(Fermentable* ferm, bool signal = true);
-   void removeHop(Hop* hop, bool signal = true);
-   void removeMash(Mash* mash, bool signal = true);
-   void removeMashStep(MashStep* mashStep, bool signal = true);
-   void removeMisc(Misc* misc, bool signal = true);
-   void removeRecipe(Recipe* rec, bool signal = true);
-   void removeStyle(Style* style, bool signal = true);
-   void removeWater(Water* water, bool signal = true);
-   void removeYeast(Yeast* yeast, bool signal = true);
+   void removeEquipment(Equipment* equip);
+   void removeFermentable(Fermentable* ferm);
+   void removeHop(Hop* hop);
+   void removeMash(Mash* mash);
+   void removeMashStep(MashStep* mashStep);
+   void removeMisc(Misc* misc);
+   void removeRecipe(Recipe* rec);
+   void removeStyle(Style* style);
+   void removeWater(Water* water);
+   void removeYeast(Yeast* yeast);
 
    // Or you can mark whole lists as deleted.
    // NOTE: should these also remove all references to the ingredients?

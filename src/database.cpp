@@ -1097,11 +1097,11 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
    //commandStack.push(command);
 }
 
-void Database::removeEquipment(Equipment* equip, bool signal)
+void Database::removeEquipment(Equipment* equip)
 {
    deleteRecord(Brewtarget::EQUIPTABLE,equip);
-   if ( signal )
-      emit changed( metaProperty("equipments"), QVariant() );
+   
+   emit changed( metaProperty("equipments"), QVariant() );
    emit deletedEquipmentSignal(equip);
 }
 
@@ -1113,18 +1113,19 @@ void Database::removeEquipment(QList<Equipment*> equip)
    QList<Equipment*>::Iterator it = equip.begin();
    while( it != equip.end() )
    {
-      removeEquipment(*it,false);
+      deleteRecord(Brewtarget::EQUIPTABLE,*it);
+      emit deletedEquipmentSignal(*it);
       it++;
    }
 
    emit changed( metaProperty("equipments"), QVariant() );
 }
 
-void Database::removeFermentable(Fermentable* ferm, bool signal)
+void Database::removeFermentable(Fermentable* ferm)
 {
    deleteRecord(Brewtarget::FERMTABLE,ferm);
-   if ( signal ) 
-      emit changed( metaProperty("fermentables"), QVariant());
+   
+   emit changed( metaProperty("fermentables"), QVariant());
    emit deletedFermentableSignal(ferm);
 }
 
@@ -1136,19 +1137,20 @@ void Database::removeFermentable(QList<Fermentable*> ferm)
    QList<Fermentable*>::Iterator it = ferm.begin();
    while( it != ferm.end() )
    {
-      removeFermentable(*it, false);
+      deleteRecord(Brewtarget::FERMTABLE,*it);
+      emit deletedFermentableSignal(*it);
+      
       it++;
    }
+   
    emit changed( metaProperty("fermentables"), QVariant());
 }
 
-void Database::removeHop(Hop* hop, bool signal)
+void Database::removeHop(Hop* hop)
 {
    deleteRecord(Brewtarget::HOPTABLE,hop);
-   // Need to tell everyone our hops changed.
-   // NOTE: what to put for the QVariant?
-   if ( signal )
-      emit changed( metaProperty("hops"), QVariant() );
+   
+   emit changed( metaProperty("hops"), QVariant() );
    emit deletedHopSignal(hop);
 }
 
@@ -1160,17 +1162,20 @@ void Database::removeHop(QList<Hop*> hop)
    QList<Hop*>::Iterator it = hop.begin();
    while( it != hop.end() )
    {
-      removeHop(*it, false);
+      deleteRecord(Brewtarget::HOPTABLE,*it);
+      emit deletedHopSignal(*it);
+      
       it++;
    }
+
    emit changed( metaProperty("hops"), QVariant() );
 }
 
-void Database::removeMash(Mash* mash, bool signal)
+void Database::removeMash(Mash* mash)
 {
    deleteRecord(Brewtarget::MASHTABLE,mash);
-   if ( signal )
-      emit changed( metaProperty("mashs"), QVariant() );
+   
+   emit changed( metaProperty("mashs"), QVariant() );
    emit deletedMashSignal(mash);
 }
 
@@ -1182,18 +1187,18 @@ void Database::removeMash(QList<Mash*> mash)
    QList<Mash*>::Iterator it = mash.begin();
    while( it != mash.end() )
    {
-      removeMash(*it, false);
+      deleteRecord(Brewtarget::MASHTABLE,*it);
+      emit deletedMashSignal(*it);
       it++;
    }
    emit changed( metaProperty("mashs"), QVariant() );
 }
 
-void Database::removeMashStep(MashStep* mashStep, bool signal)
+void Database::removeMashStep(MashStep* mashStep)
 {
    deleteRecord(Brewtarget::MASHSTEPTABLE,mashStep);
-   // Database's steps have changed.
-   if ( signal )
-      emit changed( metaProperty("mashSteps"), QVariant() );
+   
+   emit changed( metaProperty("mashSteps"), QVariant() );
 }
 
 void Database::removeMashStep(QList<MashStep*> mashStep)
@@ -1204,17 +1209,17 @@ void Database::removeMashStep(QList<MashStep*> mashStep)
    QList<MashStep*>::Iterator it = mashStep.begin();
    while( it != mashStep.end() )
    {
-      removeMashStep(*it, false);
+      deleteRecord(Brewtarget::MASHSTEPTABLE,*it);
       it++;
    }
    emit changed( metaProperty("mashSteps"), QVariant() );
 }
 
-void Database::removeMisc(Misc* misc, bool signal )
+void Database::removeMisc(Misc* misc)
 {
    deleteRecord(Brewtarget::MISCTABLE,misc);
-   if ( signal )
-      emit changed( metaProperty("miscs"), QVariant());
+   
+   emit changed( metaProperty("miscs"), QVariant());
    emit deletedMiscSignal(misc);
 }
 
@@ -1226,17 +1231,18 @@ void Database::removeMisc(QList<Misc*> misc)
    QList<Misc*>::Iterator it = misc.begin();
    while( it != misc.end() )
    {
-      removeMisc(*it, false);
+      deleteRecord(Brewtarget::MISCTABLE,*it);
+      emit deletedMiscSignal(*it);
       it++;
    }
    emit changed( metaProperty("miscs"), QVariant());
 }
 
-void Database::removeRecipe(Recipe* rec, bool signal)
+void Database::removeRecipe(Recipe* rec)
 {
    deleteRecord(Brewtarget::RECTABLE,rec);
-   if ( signal ) 
-      emit changed( metaProperty("recipes"), QVariant() );
+   
+   emit changed( metaProperty("recipes"), QVariant() );
    emit deletedRecipeSignal(rec);
 }
 
@@ -1248,17 +1254,18 @@ void Database::removeRecipe(QList<Recipe*> rec)
    QList<Recipe*>::Iterator it = rec.begin();
    while( it != rec.end() )
    {
-      removeRecipe(*it, false);
+      deleteRecord(Brewtarget::RECTABLE,*it);
+      emit deletedRecipeSignal(*it);
       it++;
    }
    emit changed( metaProperty("recipes"), QVariant() );
 }
 
-void Database::removeStyle(Style* style, bool signal)
+void Database::removeStyle(Style* style)
 {
    deleteRecord(Brewtarget::STYLETABLE,style);
-   if ( signal )
-      emit changed( metaProperty("styles"), QVariant() );
+   
+   emit changed( metaProperty("styles"), QVariant() );
    emit deletedStyleSignal(style);
 }
 
@@ -1270,17 +1277,18 @@ void Database::removeStyle(QList<Style*> style)
    QList<Style*>::Iterator it = style.begin();
    while( it != style.end() )
    {
-      removeStyle(*it, false);
+      deleteRecord(Brewtarget::STYLETABLE,*it);
+      emit deletedStyleSignal(*it);
       it++;
    }
    emit changed( metaProperty("styles"), QVariant() );
 }
 
-void Database::removeWater(Water* water, bool signal)
+void Database::removeWater(Water* water)
 {
    deleteRecord(Brewtarget::WATERTABLE,water);
-   if ( signal )
-      emit changed( metaProperty("waters"), QVariant());
+   
+   emit changed( metaProperty("waters"), QVariant());
    emit deletedWaterSignal(water);
 }
 
@@ -1292,17 +1300,18 @@ void Database::removeWater(QList<Water*> water)
    QList<Water*>::Iterator it = water.begin();
    while( it != water.end() )
    {
-      removeWater(*it, false);
+      deleteRecord(Brewtarget::WATERTABLE,*it);
+      emit deletedWaterSignal(*it);
       it++;
    }
    emit changed( metaProperty("waters"), QVariant());
 }
 
-void Database::removeYeast(Yeast* yeast, bool signal)
+void Database::removeYeast(Yeast* yeast)
 {
    deleteRecord(Brewtarget::YEASTTABLE,yeast);
-   if ( signal )
-      emit changed( metaProperty("yeasts"), QVariant());
+   
+   emit changed( metaProperty("yeasts"), QVariant());
    emit deletedYeastSignal(yeast);
 }
 
@@ -1314,7 +1323,8 @@ void Database::removeYeast(QList<Yeast*> yeast)
    QList<Yeast*>::Iterator it = yeast.begin();
    while( it != yeast.end() )
    {
-      removeYeast(*it,false);
+      deleteRecord(Brewtarget::YEASTTABLE,*it);
+      emit deletedYeastSignal(*it);
       it++;
    }
    emit changed( metaProperty("yeasts"), QVariant());
@@ -1473,8 +1483,10 @@ void Database::addToRecipe( Recipe* rec, Style* s)
              QString("`style_id`='%1'").arg(s->_key),
              QString("id='%1'").arg(rec->_key));
 
-   // Any style being added to a recipe shouldn't be displayed
-   s->setDisplay(false);
+   // We do not need to set s->display() to false here, because we are using
+   // the styles directly out of the style table. If we did that, then we could
+   // only use a style once before it disappeared.
+   
    // Emit a changed signal.
    // TODO: this is calling the SLOT, not the SIGNAL...erm...What do we do?
    sendEmitchanged( rec, rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(s) );
