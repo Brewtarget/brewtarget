@@ -1500,8 +1500,10 @@ void Database::addToRecipe( Recipe* rec, Style* s)
              QString("`style_id`='%1'").arg(s->_key),
              QString("id='%1'").arg(rec->_key));
 
-   // Any style being added to a recipe shouldn't be displayed
-   s->setDisplay(false);
+   // We do not need to set s->display() to false here, because we are using
+   // the styles directly out of the style table. If we did that, then we could
+   // only use a style once before it disappeared.
+   
    // Emit a changed signal.
    // TODO: this is calling the SLOT, not the SIGNAL...erm...What do we do?
    sendEmitchanged( rec, rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(s) );
