@@ -1101,8 +1101,10 @@ void Database::removeEquipment(Equipment* equip, bool signal)
 {
    deleteRecord(Brewtarget::EQUIPTABLE,equip);
    if ( signal )
+   {
       emit changed( metaProperty("equipments"), QVariant() );
-   emit deletedEquipmentSignal(equip);
+      emit deletedEquipmentSignal(equip);
+   }
 }
 
 void Database::removeEquipment(QList<Equipment*> equip)
@@ -1118,14 +1120,17 @@ void Database::removeEquipment(QList<Equipment*> equip)
    }
 
    emit changed( metaProperty("equipments"), QVariant() );
+   emit deletedEquipmentSignal(0);
 }
 
 void Database::removeFermentable(Fermentable* ferm, bool signal)
 {
    deleteRecord(Brewtarget::FERMTABLE,ferm);
    if ( signal ) 
+   {
       emit changed( metaProperty("fermentables"), QVariant());
-   emit deletedFermentableSignal(ferm);
+      emit deletedFermentableSignal(ferm);
+   }
 }
 
 void Database::removeFermentable(QList<Fermentable*> ferm)
@@ -1140,6 +1145,7 @@ void Database::removeFermentable(QList<Fermentable*> ferm)
       it++;
    }
    emit changed( metaProperty("fermentables"), QVariant());
+   emit deletedFermentableSignal(0);
 }
 
 void Database::removeHop(Hop* hop, bool signal)
@@ -1148,8 +1154,10 @@ void Database::removeHop(Hop* hop, bool signal)
    // Need to tell everyone our hops changed.
    // NOTE: what to put for the QVariant?
    if ( signal )
+   {
       emit changed( metaProperty("hops"), QVariant() );
-   emit deletedHopSignal(hop);
+      emit deletedHopSignal(hop);
+   }
 }
 
 void Database::removeHop(QList<Hop*> hop)
@@ -1164,14 +1172,17 @@ void Database::removeHop(QList<Hop*> hop)
       it++;
    }
    emit changed( metaProperty("hops"), QVariant() );
+   emit deletedHopSignal(0);
 }
 
 void Database::removeMash(Mash* mash, bool signal)
 {
    deleteRecord(Brewtarget::MASHTABLE,mash);
    if ( signal )
+   {
       emit changed( metaProperty("mashs"), QVariant() );
-   emit deletedMashSignal(mash);
+      emit deletedMashSignal(mash);
+   }
 }
 
 void Database::removeMash(QList<Mash*> mash)
@@ -1186,6 +1197,7 @@ void Database::removeMash(QList<Mash*> mash)
       it++;
    }
    emit changed( metaProperty("mashs"), QVariant() );
+   emit deletedMashSignal(0);
 }
 
 void Database::removeMashStep(MashStep* mashStep, bool signal)
@@ -1214,8 +1226,10 @@ void Database::removeMisc(Misc* misc, bool signal )
 {
    deleteRecord(Brewtarget::MISCTABLE,misc);
    if ( signal )
+   {
       emit changed( metaProperty("miscs"), QVariant());
-   emit deletedMiscSignal(misc);
+      emit deletedMiscSignal(misc);
+   }
 }
 
 void Database::removeMisc(QList<Misc*> misc)
@@ -1230,14 +1244,17 @@ void Database::removeMisc(QList<Misc*> misc)
       it++;
    }
    emit changed( metaProperty("miscs"), QVariant());
+   emit deletedMiscSignal(0);
 }
 
 void Database::removeRecipe(Recipe* rec, bool signal)
 {
    deleteRecord(Brewtarget::RECTABLE,rec);
    if ( signal ) 
+   {
       emit changed( metaProperty("recipes"), QVariant() );
-   emit deletedRecipeSignal(rec);
+      emit deletedRecipeSignal(rec);
+   }
 }
 
 void Database::removeRecipe(QList<Recipe*> rec)
@@ -1252,14 +1269,17 @@ void Database::removeRecipe(QList<Recipe*> rec)
       it++;
    }
    emit changed( metaProperty("recipes"), QVariant() );
+   emit deletedRecipeSignal(0);
 }
 
 void Database::removeStyle(Style* style, bool signal)
 {
    deleteRecord(Brewtarget::STYLETABLE,style);
    if ( signal )
+   {
       emit changed( metaProperty("styles"), QVariant() );
-   emit deletedStyleSignal(style);
+      emit deletedStyleSignal(style);
+   }
 }
 
 void Database::removeStyle(QList<Style*> style)
@@ -1274,14 +1294,17 @@ void Database::removeStyle(QList<Style*> style)
       it++;
    }
    emit changed( metaProperty("styles"), QVariant() );
+   emit deletedStyleSignal(0);
 }
 
 void Database::removeWater(Water* water, bool signal)
 {
    deleteRecord(Brewtarget::WATERTABLE,water);
    if ( signal )
+   {
       emit changed( metaProperty("waters"), QVariant());
-   emit deletedWaterSignal(water);
+      emit deletedWaterSignal(water);
+   }
 }
 
 void Database::removeWater(QList<Water*> water)
@@ -1296,14 +1319,17 @@ void Database::removeWater(QList<Water*> water)
       it++;
    }
    emit changed( metaProperty("waters"), QVariant());
+   emit deletedWaterSignal(0);
 }
 
 void Database::removeYeast(Yeast* yeast, bool signal)
 {
    deleteRecord(Brewtarget::YEASTTABLE,yeast);
    if ( signal )
+   {
       emit changed( metaProperty("yeasts"), QVariant());
-   emit deletedYeastSignal(yeast);
+      emit deletedYeastSignal(yeast);
+   }
 }
 
 void Database::removeYeast(QList<Yeast*> yeast)
@@ -1318,6 +1344,7 @@ void Database::removeYeast(QList<Yeast*> yeast)
       it++;
    }
    emit changed( metaProperty("yeasts"), QVariant());
+   emit deletedYeastSignal(yeast.at(0));
 }
 
 QString Database::getDbFileName()

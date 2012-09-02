@@ -20,9 +20,12 @@
 #include <QApplication>
 #include <QDrag>
 #include <QMenu>
+#include <QDebug>
+#include <QHeaderView>
 #include "BrewTargetTreeView.h"
 #include "BrewTargetTreeModel.h"
 #include "BtTreeFilterProxyModel.h"
+#include "database.h"
 #include "recipe.h"
 #include "equipment.h"
 #include "fermentable.h"
@@ -35,6 +38,7 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    QTreeView(parent)
 {
    // Set some global properties that all the kids will use.
+   setAllColumnsShowFocus(true);
    setContextMenuPolicy(Qt::CustomContextMenu);
    setRootIsDecorated(false);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -63,6 +67,9 @@ bool BrewTargetTreeView::isParent(const QModelIndex& parent, const QModelIndex& 
 
 QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
 {
+   if ( ! child.isValid() )
+      return QModelIndex();
+
    QModelIndex modelChild = filter->mapToSource(child);
    if ( modelChild.isValid())
       return filter->mapFromSource(model->parent(modelChild));
@@ -370,6 +377,9 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::RECIPEMASK);
    filter->setSourceModel(model);
 
+   connect (&(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)), this, SLOT(event(Recipe*)));
+   connect (&(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)), this, SLOT(event(Recipe*)));
+
    setModel(filter);
    setExpanded(findRecipe(0), true);
    setSortingEnabled(true);
@@ -378,12 +388,17 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
    resizeColumnToContents(0);
 }
 
+void RecipeTreeView::event(Recipe* event) { filter->invalidate(); }
+
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
 {
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::EQUIPMASK);
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::EQUIPMASK);
    filter->setSourceModel(model);
+
+   connect (&(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)), this, SLOT(event(Equipment*)));
+   connect (&(Database::instance()), SIGNAL(deletedEquipmentSignal(Equipment*)), this, SLOT(event(Equipment*)));
 
    setModel(filter);
    setExpanded(findEquipment(0), true);
@@ -393,6 +408,8 @@ EquipmentTreeView::EquipmentTreeView(QWidget *parent)
 
 }
 
+void EquipmentTreeView::event(Equipment* event) { filter->invalidate(); }
+
 // Icky ick ikcy
 FermentableTreeView::FermentableTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
@@ -401,12 +418,17 @@ FermentableTreeView::FermentableTreeView(QWidget *parent)
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::FERMENTMASK);
    filter->setSourceModel(model);
 
+   connect (&(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)), this, SLOT(event(Fermentable*)));
+   connect (&(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)), this, SLOT(event(Fermentable*)));
+
    setModel(filter);
    setExpanded(findFermentable(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
 }
+
+void FermentableTreeView::event(Fermentable* event) { filter->invalidate(); }
 
 // More Ick
 HopTreeView::HopTreeView(QWidget *parent)
@@ -416,12 +438,17 @@ HopTreeView::HopTreeView(QWidget *parent)
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::HOPMASK);
    filter->setSourceModel(model);
 
+   connect (&(Database::instance()), SIGNAL(newHopSignal(Hop*)), this, SLOT(event(Hop*)));
+   connect (&(Database::instance()), SIGNAL(deletedHopSignal(Hop*)), this, SLOT(event(Hop*)));
+
    setModel(filter);
    setExpanded(findHop(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
 }
+
+void HopTreeView::event(Hop* event) { filter->invalidate(); }
 
 // Ick some more
 MiscTreeView::MiscTreeView(QWidget *parent)
@@ -431,12 +458,17 @@ MiscTreeView::MiscTreeView(QWidget *parent)
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::MISCMASK);
    filter->setSourceModel(model);
 
+   connect (&(Database::instance()), SIGNAL(newMiscSignal(Misc*)), this, SLOT(event(Misc*)));
+   connect (&(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)), this, SLOT(event(Misc*)));
+
    setModel(filter);
    setExpanded(findMisc(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
 }
+
+void MiscTreeView::event(Misc* event) { filter->invalidate(); }
 
 // Will this ick never end?
 YeastTreeView::YeastTreeView(QWidget *parent)
@@ -446,9 +478,17 @@ YeastTreeView::YeastTreeView(QWidget *parent)
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::YEASTMASK);
    filter->setSourceModel(model);
 
+   connect (&(Database::instance()), SIGNAL(newYeastSignal(Yeast*)), this, SLOT(event(Yeast*)));
+   connect (&(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)), this, SLOT(event(Yeast*)));
+
    setModel(filter);
    setExpanded(findYeast(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
+}
+
+void YeastTreeView::event(Yeast* event) 
+{ 
+   filter->invalidate(); 
 }

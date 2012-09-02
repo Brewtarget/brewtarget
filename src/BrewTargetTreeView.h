@@ -121,6 +121,10 @@ class RecipeTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    RecipeTreeView(QWidget *parent = 0);
+
+public slots:
+   void event(Recipe *event);
+
 };
 
 // EquipmentTreeView only shows equipment. I think you can see where this is headed?
@@ -129,6 +133,9 @@ class EquipmentTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    EquipmentTreeView(QWidget *parent = 0);
+
+public slots:
+   void event(Equipment *event);
 };
 
 class FermentableTreeView : public BrewTargetTreeView
@@ -136,6 +143,10 @@ class FermentableTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    FermentableTreeView(QWidget *parent = 0);
+
+public slots:
+   void event(Fermentable *event);
+
 };
 
 class HopTreeView : public BrewTargetTreeView
@@ -143,6 +154,10 @@ class HopTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    HopTreeView(QWidget *parent = 0);
+
+public slots:
+   void event(Hop *event);
+
 };
 
 class MiscTreeView : public BrewTargetTreeView
@@ -150,6 +165,9 @@ class MiscTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    MiscTreeView(QWidget *parent = 0);
+
+public slots:
+   void event(Misc *event);
 };
 
 class YeastTreeView : public BrewTargetTreeView
@@ -157,6 +175,10 @@ class YeastTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    YeastTreeView(QWidget *parent = 0);
+
+public slots:
+   void event(Yeast *event);
+
 };
 
 #endif /* BREWTARGETTREEVIEW_H_ */
