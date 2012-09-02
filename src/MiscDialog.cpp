@@ -85,7 +85,7 @@ void MiscDialog::changed(QMetaProperty prop, QVariant /*value*/)
 void MiscDialog::populateTable()
 {
    QList<Misc*> miscs;
-   Database::instance().getMiscs(miscs);
+   miscs = Database::instance().miscs();
 
    miscTableModel->addMiscs(miscs);
 }

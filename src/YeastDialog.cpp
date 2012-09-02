@@ -94,7 +94,7 @@ void YeastDialog::changed(QMetaProperty prop, QVariant val)
 void YeastDialog::populateTable()
 {
    QList<Yeast*> yeasts;
-   Database::instance().getYeasts(yeasts);
+   yeasts = Database::instance().yeasts();
    
    numYeasts = yeasts.size();
    yeastTableModel->addYeasts(yeasts);
