@@ -23,7 +23,6 @@
 RecipeListModel::RecipeListModel(QWidget* parent)
    : QAbstractListModel(parent)
 {
-   //connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(dbChanged(QMetaProperty,QVariant)) );
    connect( &(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)), this, SLOT(addRecipe(Recipe*)) );
    connect( &(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)), this, SLOT(removeRecipe(Recipe*)) );
    repopulateList();
