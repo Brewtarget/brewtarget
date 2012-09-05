@@ -20,6 +20,7 @@
 #include "UnitSystem.h"
 #include <QRegExp>
 #include <QString>
+#include <QLocale>
 
 const int UnitSystem::fieldWidth = 0;
 const char UnitSystem::format = 'f';
@@ -34,14 +35,17 @@ UnitSystem::UnitSystem()
 
 double UnitSystem::qstringToSI(QString qstr, Unit* defUnit)
 {
-   
+   bool convOk = true;
    double amt = 0.0;
    Unit* u = defUnit;
 
    if (amtUnit.indexIn(qstr) == -1)
       return 0.0;
 
-   amt = amtUnit.cap(1).toDouble();
+   amt = QLocale().toDouble(amtUnit.cap(1), &convOk);
+   if( !convOk )
+      amt = QLocale::c().toDouble(amtUnit.cap(1));
+   
    QString unit = amtUnit.cap(2);
 
    if ( unit.size() > 0 && getUnit(unit) )

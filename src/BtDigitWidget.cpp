@@ -19,6 +19,7 @@
 #include "BtDigitWidget.h"
 #include <QFrame>
 #include <iostream>
+#include <QLocale>
 
 BtDigitWidget::BtDigitWidget(QWidget *parent) : QLabel(parent)
 {
@@ -45,7 +46,7 @@ void BtDigitWidget::display(QString str)
    static bool converted;
    
    lastNum = str.toDouble(&converted);
-   lastPrec = str.length() - str.lastIndexOf(".") - 1;
+   lastPrec = str.length() - str.lastIndexOf(QLocale().decimalPoint()) - 1;
    if( converted )
       display(lastNum,lastPrec);
    else
@@ -54,7 +55,7 @@ void BtDigitWidget::display(QString str)
 
 void BtDigitWidget::display(double num, int prec)
 {
-   QString str = QString("%1").arg(num,0,'f',prec);
+   QString str = QString("%L1").arg(num,0,'f',prec);
    QString style = styleSheet;
 
    lastNum = num;

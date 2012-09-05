@@ -161,7 +161,7 @@ QString BrewDayWidget::buildTitleTable()
            .arg(tr("Boil Time"))
            .arg(Brewtarget::displayAmount(recObs->boilTime_min(),Units::minutes))
            .arg(tr("IBU"))
-           .arg(recObs->IBU(),0,'f',1);
+           .arg(Brewtarget::displayAmount(recObs->IBU(),0,1));
 
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
            .arg(tr("Predicted Efficiency"))

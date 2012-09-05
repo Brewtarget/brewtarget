@@ -36,9 +36,9 @@ QString CelsiusTempUnitSystem::displayAmount( double amount, Unit* units, unitSc
    // Special cases. Make sure the unit isn't null and that we're
    // dealing with temperature.
    if( units == 0 || SIUnitName.compare("C") != 0 )
-      return QString("%1").arg(amount, fieldWidth, format, precision);
+      return QString("%L1").arg(amount, fieldWidth, format, precision);
 
-   ret = QString("%1 %2").arg(Units::celsius->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::celsius->getUnitName());
+   ret = QString("%L1 %2").arg(Units::celsius->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::celsius->getUnitName());
 
    return ret;
 }

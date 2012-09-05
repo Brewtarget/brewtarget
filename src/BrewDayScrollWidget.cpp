@@ -196,16 +196,16 @@ QString BrewDayScrollWidget::buildTitleTable(bool includeImage)
    // fifth row: IBU and Final gravity
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
             .arg(tr("IBU"))
-            .arg( recObs->IBU(),0,'f',1)
+            .arg( Brewtarget::displayAmount(recObs->IBU(),0,1))
             .arg(tr("Final Gravity"))
             .arg(Brewtarget::displayFG(recObs->fg(), recObs->og(), noUnit, true));
 
    // sixth row: ABV and estimate calories
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</tr>")
             .arg(tr("ABV"))
-            .arg( recObs->ABV_pct(), 0, 'f', 1)
+            .arg( Brewtarget::displayAmount(recObs->ABV_pct(),0,1) )
             .arg(tr("Estimated calories(per 12 oz)"))
-            .arg( recObs->calories(), 0, 'f', 0);
+            .arg( Brewtarget::displayAmount(recObs->calories(),0,0) );
    body += "</table>";
 
    return header + body;
