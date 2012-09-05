@@ -99,10 +99,10 @@ QString RecipeFormatter::getTextFormat()
    ret += QObject::tr("Boil Time: %1\n").arg( (rec->equipment() == 0)?
                                               Brewtarget::displayAmount(0, Units::minutes)
                                             : Brewtarget::displayAmount( rec->equipment()->boilTime_min(), Units::minutes));
-   ret += QObject::tr("Efficiency: %1%%\n").arg(rec->efficiency_pct(), 0, 'f', 0);
+   ret += QObject::tr("Efficiency: %1%\n").arg(rec->efficiency_pct(), 0, 'f', 0);
    ret += QObject::tr("OG: %1\n").arg( Brewtarget::displayOG(rec->og(), noUnit, true) );
    ret += QObject::tr("FG: %1\n").arg( Brewtarget::displayFG(rec->fg(), rec->og(),noUnit,  true) );
-   ret += QObject::tr("ABV: %1%%\n").arg( Brewtarget::displayAmount(rec->ABV_pct(), 0, 1) );
+   ret += QObject::tr("ABV: %1%\n").arg( Brewtarget::displayAmount(rec->ABV_pct(), 0, 1) );
    bitternessString = QObject::tr("Bitterness: %1 IBUs (%2)\n").arg( Brewtarget::displayAmount(rec->IBU(), 0, 1) );
    switch( Brewtarget::ibuFormula )
    {
@@ -155,7 +155,7 @@ QString RecipeFormatter::getTextFormat()
          amounts.append( Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms) );
          masheds.append( ferm->isMashed() ? QObject::tr("Yes") : QObject::tr("No") );
          lates.append( ferm->addAfterBoil() ? QObject::tr("Yes") : QObject::tr("No") );
-         yields.append( QString("%1%%").arg( Brewtarget::displayAmount(ferm->yield_pct(), 0, 0) ) );
+         yields.append( QString("%1%").arg( Brewtarget::displayAmount(ferm->yield_pct(), 0, 0) ) );
          colors.append( QString("%1 L").arg( Brewtarget::displayAmount(ferm->color_srm(), 0, 0) ) );
       }
       
@@ -198,7 +198,7 @@ QString RecipeFormatter::getTextFormat()
          Hop* hop = hops[i];
          
          names.append( hop->name() );
-         alphas.append( QString("%1%%").arg(Brewtarget::displayAmount(hop->alpha_pct(), 0, 1) ) );
+         alphas.append( QString("%1%").arg(Brewtarget::displayAmount(hop->alpha_pct(), 0, 1) ) );
          amounts.append( Brewtarget::displayAmount(hop->amount_kg(), Units::kilograms) );
          uses.append( hop->useStringTr() );
          times.append( Brewtarget::displayAmount(hop->time_min(), Units::minutes) );
