@@ -430,8 +430,6 @@ int Brewtarget::run()
    int ret;
    bool success;
    
-   //QPixmap splashImg(BTICON);
-   //QSplashScreen splashScreen(splashImg);
    BtSplashScreen splashScreen;
    splashScreen.show();
    
@@ -540,7 +538,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
    
    // Special case.
    if( units == 0 )
-      return QString("%1").arg(amount, fieldWidth, format, precision);
+      return QString("%L1").arg(amount, fieldWidth, format, precision);
 
    QString SIUnitName = units->getSIUnitName();
    double SIAmount = units->toSI( amount );
@@ -566,7 +564,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
    else if( SIUnitName.compare("min") == 0 ) // Time
       ret = timeSystem->displayAmount( amount, units );
    else // If we don't deal with it above, just use the SI amount.
-      ret = QString("%1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
+      ret = QString("%L1 %2").arg(SIAmount, fieldWidth, format, precision).arg(SIUnitName);
 
    return ret;
 }
@@ -648,9 +646,9 @@ QString Brewtarget::displayThickness( double thick_lkg, bool showUnits )
    double den = weightUnit->fromSI(1.0);
 
    if( showUnits )
-      return QString("%1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
+      return QString("%L1 %2/%3").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
    else
-      return QString("%1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
+      return QString("%L1").arg(num/den, fieldWidth, format, precision).arg(volUnit->getUnitName()).arg(weightUnit->getUnitName());
 }
 
 QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString& option, bool* hasOption)
@@ -1025,9 +1023,9 @@ QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnit
    if ( displayUnit == noUnit ) 
       displayUnit = usePlato ? displayPlato : displaySg;
 
-   QString tmp = "%1";
+   QString tmp = "%L1";
    if ( showUnits && displayUnit == displayPlato )
-      tmp = "%1 %2";
+      tmp = "%L1 %2";
 
    if( displayUnit == displaySg )
       ret = tmp.arg(og, 0, 'f', 3);
@@ -1062,7 +1060,7 @@ QString Brewtarget::displayOG( BeerXMLElement* element, QObject* object, QString
 
 QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bool showUnits  )
 {
-   QString ret = "%1";
+   QString ret = "%L1";
 
    if( Algorithms::Instance().isnan(fg) || Algorithms::Instance().isinf(fg) ||
        Algorithms::Instance().isnan(og) || Algorithms::Instance().isinf(og)
@@ -1073,7 +1071,7 @@ QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bo
       displayUnit = usePlato ? displayPlato : displaySg;
 
    if ( showUnits && displayUnit == displayPlato ) 
-      ret = "%1 %2";
+      ret = "%L1 %2";
 
    if( displayUnit == displaySg )
       ret = ret.arg(fg, 0, 'f', 3);
@@ -1130,11 +1128,11 @@ QString Brewtarget::displayColor( double srm, unitDisplay displayUnit, bool show
    QString ret;
 
    if ( displayUnit == noUnit || displayUnit == displaySrm )
-      ret = showUnits ? QString("%1 %2").arg(srm,0,'f',1).arg(Units::srm->getUnitName()) : QString("%1").arg(srm,0,'f',1);
+      ret = showUnits ? QString("%L1 %2").arg(srm,0,'f',1).arg(Units::srm->getUnitName()) : QString("%L1").arg(srm,0,'f',1);
    else
    {
       double ebc = Units::ebc->fromSI(srm);
-      ret = showUnits ? QString("%1 %2").arg(ebc,0,'f',1).arg(Units::ebc->getUnitName()) : QString("%1").arg(ebc,0,'f',1);
+      ret = showUnits ? QString("%L1 %2").arg(ebc,0,'f',1).arg(Units::ebc->getUnitName()) : QString("%L1").arg(ebc,0,'f',1);
    }
 
    return ret;

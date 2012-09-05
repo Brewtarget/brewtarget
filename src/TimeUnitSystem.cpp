@@ -36,16 +36,16 @@ QString TimeUnitSystem::displayAmount( double amount, Unit* units, unitScale sca
    // Special cases. Make sure the unit isn't null and that we're
    // dealing with time.
    if( units == 0 || SIUnitName.compare("min") != 0 )
-      return QString("%1").arg(amount, fieldWidth, format, precision);
+      return QString("%L1").arg(amount, fieldWidth, format, precision);
 
    if( absSIAmount < Units::minutes->toSI(1.0) ) // Less than a minute, show seconds.
-      ret = QString("%1 %2").arg(Units::seconds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::seconds->getUnitName());
+      ret = QString("%L1 %2").arg(Units::seconds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::seconds->getUnitName());
    else if( absSIAmount < Units::hours->toSI(2.0) ) // Less than two hours, show minutes.
-      ret = QString("%1 %2").arg(Units::minutes->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::minutes->getUnitName());
+      ret = QString("%L1 %2").arg(Units::minutes->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::minutes->getUnitName());
    else if( absSIAmount < Units::days->toSI(1.0) )// Show hours.
-      ret = QString("%1 %2").arg(Units::hours->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::hours->getUnitName());
+      ret = QString("%L1 %2").arg(Units::hours->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::hours->getUnitName());
    else
-      ret = QString("%1 %2").arg(Units::days->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::days->getUnitName());
+      ret = QString("%L1 %2").arg(Units::days->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::days->getUnitName());
 
    return ret;
 }

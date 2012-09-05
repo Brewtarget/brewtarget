@@ -92,10 +92,10 @@ void PitchDialog::calculate()
    double inoculationRate = pow((12.522 / growthRate), 2.18);
    double starterVol_l = totalCellsPitched / (inoculationRate * aerationFactor);
 
-   lineEdit_cells->setText(QString("%1").arg(cells/1e9, 1, 'f', 0, QChar('0')));
+   lineEdit_cells->setText(QString("%L1").arg(cells/1e9, 1, 'f', 0, QChar('0')));
    lineEdit_starterVol->setText(Brewtarget::displayAmount(starterVol_l, Units::liters));
    lineEdit_yeast->setText(Brewtarget::displayAmount(dry_g, Units::grams));
-   lineEdit_vials->setText(QString("%1").arg(vials, 1, 'f', 1, QChar('0')));
+   lineEdit_vials->setText(QString("%L1").arg(vials, 1, 'f', 1, QChar('0')));
 }
 
 void PitchDialog::updateShownPitchRate(int percent)
@@ -103,7 +103,7 @@ void PitchDialog::updateShownPitchRate(int percent)
    // Allow selection of 0.75 to 2 million cells per mL per degree P.
    double rate_MpermLP = (2-0.75) * ((double)percent) / 100.0 + 0.75;
 
-   label_pitchRate->setText( QString("%1").arg(rate_MpermLP, 1, 'f', 2, QChar('0')) );
+   label_pitchRate->setText( QString("%L1").arg(rate_MpermLP, 1, 'f', 2, QChar('0')) );
 }
 
 /*

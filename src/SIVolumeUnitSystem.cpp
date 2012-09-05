@@ -36,21 +36,21 @@ QString SIVolumeUnitSystem::displayAmount( double amount, Unit* units, unitScale
    // Special cases. Make sure the unit isn't null and that we're
    // dealing with volume.
    if( units == 0 || SIUnitName.compare("L") != 0 )
-      return QString("%1").arg(amount, fieldWidth, format, precision);
+      return QString("%L1").arg(amount, fieldWidth, format, precision);
 
    switch(scale)
    {
       case extrasmall:
-         ret = QString("%1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
+         ret = QString("%L1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
          break;
       case small:
-         ret = QString("%1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
+         ret = QString("%L1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
          break;
       default:
          if( qAbs(SIAmount) < Units::liters->toSI(1.0) ) // If less than 1 L, display mL.
-            ret = QString("%1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
+            ret = QString("%L1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
          else // Otherwise, display liters.
-            ret = QString("%1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
+            ret = QString("%L1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
    }
 
    return ret;

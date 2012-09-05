@@ -191,9 +191,9 @@ QString Unit::convert(QString qstr, QString toUnit)
    Unit* u = getUnit(toUnit, false);
    
    if( u == 0 || f == 0 || u->getUnitType() != f->getUnitType() )
-      return QString("%1 ?").arg(si, 0, 'f', 3);
+      return QString("%1 ?").arg(Brewtarget::displayAmount(si));
    else
-      return QString("%1 %2").arg(u->fromSI(si), 0, 'f', 3).arg(toUnit);
+      return QString("%1 %2").arg(Brewtarget::displayAmount(u->fromSI(si))).arg(toUnit);
 }
 
 void Unit::setupMap()

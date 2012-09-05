@@ -309,7 +309,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
       QList<double> ibus = recObs->IBUs();
 
       if ( ibus.size() > section )
-         return QVariant( QString("%1 IBU").arg( ibus.at(section), 0, 'f', 1 ) );
+         return QVariant( QString("%L1 IBU").arg( ibus.at(section), 0, 'f', 1 ) );
    }
    return QVariant();
 }

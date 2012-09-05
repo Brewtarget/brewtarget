@@ -204,18 +204,52 @@ double BrewNote::translateSG(QString qstr)
    return var;
 }
 
-void BrewNote::setSg(double var)              { set("sg", "sg", var); }
+// These five items cause the calculated fields to change. I should do this
+// with signals/slots, likely, but the *only* slot for the signal will be
+// the brewnote.
+void BrewNote::setSg(double var)
+{ 
+   set("sg", "sg", var);
+   calculateEffIntoBK_pct();
+   calculateOg();
+
+}
+
+void BrewNote::setVolumeIntoBK_l(double var)
+{ 
+   set("volumeIntoBK_l", "volume_into_bk", var);
+   calculateEffIntoBK_pct();
+   calculateOg();
+   calculateBrewHouseEff_pct();
+}
+
+void BrewNote::setOg(double var)
+{ 
+   set("og", "og", var);
+   calculateBrewHouseEff_pct();
+   calculateABV_pct();
+   calculateActualABV_pct();
+}
+
+void BrewNote::setVolumeIntoFerm_l(double var)
+{ 
+   set("volumeIntoFerm_l", "volume_into_fermenter", var);
+   calculateBrewHouseEff_pct();
+}
+
+void BrewNote::setFg(double var)
+{ 
+   set("fg", "fg", var);
+   calculateActualABV_pct();
+}
+
 void BrewNote::setABV(double var)               { set("abv", "abv", var); }
-void BrewNote::setVolumeIntoBK_l(double var)    { set("volumeIntoBK_l", "volume_into_bk", var); }
 void BrewNote::setEffIntoBK_pct(double var)     { set("effIntoBK_pct", "eff_into_bk", var); }
 void BrewNote::setBrewhouseEff_pct(double var)  { set("brewhouseEff_pct", "brewhouse_eff", var); }
 void BrewNote::setStrikeTemp_c(double var)      { set("strikeTemp_c", "strike_temp", var); }
 void BrewNote::setMashFinTemp_c(double var)     { set("mashFinTemp_c", "mash_final_temp", var); }
-void BrewNote::setOg(double var)              { set("og", "og", var); }
 void BrewNote::setPostBoilVolume_l(double var)  { set("postBoilVolume_l", "post_boil_volume", var); }
-void BrewNote::setVolumeIntoFerm_l(double var)  { set("volumeIntoFerm_l", "volume_into_fermenter", var); }
 void BrewNote::setPitchTemp_c(double var)       { set("pitchTemp_c", "pitch_temp", var); }
-void BrewNote::setFg(double var)              { set("fg", "fg", var); }
 void BrewNote::setFinalVolume_l(double var)     { set("finalVolume_l", "final_volume", var); }
 void BrewNote::setProjBoilGrav(double var)      { set("projBoilGrav", "projected_boil_grav", var); }
 void BrewNote::setProjVolIntoBK_l(double var)   { set("projVolIntoBK_l", "projected_vol_into_bk", var); }

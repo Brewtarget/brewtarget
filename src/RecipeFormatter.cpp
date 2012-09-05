@@ -99,11 +99,11 @@ QString RecipeFormatter::getTextFormat()
    ret += QObject::tr("Boil Time: %1\n").arg( (rec->equipment() == 0)?
                                               Brewtarget::displayAmount(0, Units::minutes)
                                             : Brewtarget::displayAmount( rec->equipment()->boilTime_min(), Units::minutes));
-   ret += QObject::tr("Efficiency: %1%%\n").arg(rec->efficiency_pct(), 0, 'f', 0);
+   ret += QObject::tr("Efficiency: %1%\n").arg(rec->efficiency_pct(), 0, 'f', 0);
    ret += QObject::tr("OG: %1\n").arg( Brewtarget::displayOG(rec->og(), noUnit, true) );
    ret += QObject::tr("FG: %1\n").arg( Brewtarget::displayFG(rec->fg(), rec->og(),noUnit,  true) );
-   ret += QObject::tr("ABV: %1%%\n").arg( rec->ABV_pct(), 0, 'f', 1 );
-   bitternessString = QObject::tr("Bitterness: %1 IBUs (%2)\n").arg( rec->IBU(), 0, 'f', 1 );
+   ret += QObject::tr("ABV: %1%\n").arg( Brewtarget::displayAmount(rec->ABV_pct(), 0, 1) );
+   bitternessString = QObject::tr("Bitterness: %1 IBUs (%2)\n").arg( Brewtarget::displayAmount(rec->IBU(), 0, 1) );
    switch( Brewtarget::ibuFormula )
    {
       case Brewtarget::TINSETH:
@@ -114,7 +114,7 @@ QString RecipeFormatter::getTextFormat()
          break;
    }
    ret += bitternessString;
-   colorString = QObject::tr("Color: %1 SRM (%2)\n").arg( rec->color_srm(), 0, 'f', 0 );
+   colorString = QObject::tr("Color: %1 SRM (%2)\n").arg( Brewtarget::displayAmount(rec->color_srm(), 0, 0) );
    switch( Brewtarget::colorFormula )
    {
       case Brewtarget::MOREY:
@@ -155,8 +155,8 @@ QString RecipeFormatter::getTextFormat()
          amounts.append( Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms) );
          masheds.append( ferm->isMashed() ? QObject::tr("Yes") : QObject::tr("No") );
          lates.append( ferm->addAfterBoil() ? QObject::tr("Yes") : QObject::tr("No") );
-         yields.append( QString("%1%%").arg(ferm->yield_pct(), 0, 'f', 0) );
-         colors.append( QString("%1 L").arg(ferm->color_srm(), 0, 'f', 0) );
+         yields.append( QString("%1%").arg( Brewtarget::displayAmount(ferm->yield_pct(), 0, 0) ) );
+         colors.append( QString("%1 L").arg( Brewtarget::displayAmount(ferm->color_srm(), 0, 0) ) );
       }
       
       padAllToMaxLength(&names);
@@ -198,12 +198,12 @@ QString RecipeFormatter::getTextFormat()
          Hop* hop = hops[i];
          
          names.append( hop->name() );
-         alphas.append( QString("%1%%").arg(hop->alpha_pct(), 0, 'f', 1) );
+         alphas.append( QString("%1%").arg(Brewtarget::displayAmount(hop->alpha_pct(), 0, 1) ) );
          amounts.append( Brewtarget::displayAmount(hop->amount_kg(), Units::kilograms) );
          uses.append( hop->useStringTr() );
          times.append( Brewtarget::displayAmount(hop->time_min(), Units::minutes) );
          forms.append( hop->formStringTr() );
-         ibus.append( QString("%1").arg( ibuList[i], 0, 'f', 1 ) );
+         ibus.append( QString("%1").arg( Brewtarget::displayAmount(ibuList[i], 0, 1) ) );
       }
       
       padAllToMaxLength(&names);
@@ -523,7 +523,7 @@ QString RecipeFormatter::buildTitleTable()
 
    // Fourth row: ABV and Bitterness.  We need to set the bitterness string up first
    bitterness = QString("%1 IBU (%2)")
-         .arg( rec->IBU(), 0, 'f', 1);
+         .arg( Brewtarget::displayAmount(rec->IBU(), 0, 1) );
    switch ( Brewtarget::ibuFormula )
    {
       case Brewtarget::TINSETH:
@@ -537,7 +537,7 @@ QString RecipeFormatter::buildTitleTable()
    }
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td>")
            .arg(tr("ABV"))
-           .arg(rec->ABV_pct(), 0, 'f', 1);
+           .arg(Brewtarget::displayAmount(rec->ABV_pct(), 0, 1));
    body += QString("<td class=\"right\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Bitterness"))
            .arg(bitterness);
@@ -560,7 +560,7 @@ QString RecipeFormatter::buildTitleTable()
            .arg(color);
    body += QString("<td class=\"right\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Calories (per 12 oz.)"))
-           .arg(rec->calories(), 0, 'f', 0);
+           .arg(Brewtarget::displayAmount(rec->calories(), 0, 0));
 
    body += "</table>";
 
@@ -606,7 +606,7 @@ QString RecipeFormatter::buildFermentableTable()
             .arg( Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms))
             .arg( ferm->isMashed() ? tr("Yes") : tr("No") )
             .arg( ferm->addAfterBoil() ? tr("Yes") : tr("No"))
-            .arg( ferm->yield_pct(), 0, 'f', 0)
+            .arg( Brewtarget::displayAmount(ferm->yield_pct(), 0, 0) )
             .arg( Brewtarget::displayColor(ferm->color_srm(),noUnit,true));
       ftable += "</tr>";
    }
@@ -643,12 +643,12 @@ QString RecipeFormatter::buildHopsTable()
       Hop *hop = hops[i];
       hTable += QString("<tr><td>%1</td><td>%2%</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>")
             .arg( hop->name())
-            .arg( hop->alpha_pct(), 0, 'g', 3)
+            .arg( Brewtarget::displayAmount(hop->alpha_pct(),0,1) )
             .arg( Brewtarget::displayAmount(hop->amount_kg(), Units::kilograms))
             .arg( hop->useStringTr())
             .arg( Brewtarget::displayAmount(hop->time_min(), Units::minutes) )
             .arg( hop->formStringTr())
-            .arg( rec->ibuFromHop(hop), 0, 'f', 1);
+            .arg( Brewtarget::displayAmount(rec->ibuFromHop(hop), 0, 1) );
       hTable += "</tr>";
    }
    hTable += "</table>";
@@ -864,7 +864,7 @@ QString RecipeFormatter::buildBrewNotes()
 
       bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td><td class=\"right\">%3</td><td class=\"value\">%4</td></tr>")
                  .arg(tr("Eff into BK"))
-                 .arg(note->calculateEffIntoBK_pct(), 0, 'f', 2)
+                 .arg(Brewtarget::displayAmount(note->calculateEffIntoBK_pct(), 0, 2))
                  .arg(tr("Projected OG"))
                  .arg(Brewtarget::displayOG(note->calculateOg(),noUnit, true));
       bnTable += "</table>";
@@ -881,10 +881,10 @@ QString RecipeFormatter::buildBrewNotes()
                  .arg(tr("Volume Into Fermenter"))
                  .arg(Brewtarget::displayAmount(note->volumeIntoFerm_l(), Units::liters))
                  .arg(tr("Brewhouse Eff"))
-                 .arg(note->calculateBrewHouseEff_pct(), 0, 'f', 2);
+                 .arg(Brewtarget::displayAmount(note->calculateBrewHouseEff_pct(), 0, 2));
       bnTable += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td></tr>")
                  .arg(tr("Projected ABV"))
-                 .arg(note->calculateABV_pct(), 0, 'f', 2);
+                 .arg(Brewtarget::displayAmount(note->calculateABV_pct(), 0, 2));
       bnTable += "</table>";
 
 
@@ -900,7 +900,7 @@ QString RecipeFormatter::buildBrewNotes()
                  .arg(tr("Date"))
                  .arg(note->fermentDate_short())
                  .arg(tr("ABV"))
-                 .arg(note->calculateActualABV_pct(), 0, 'f', 2);
+                 .arg(Brewtarget::displayAmount(note->calculateActualABV_pct(), 0, 2));
       bnTable += "</table>";
 
    }

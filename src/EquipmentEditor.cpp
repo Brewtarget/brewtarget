@@ -208,7 +208,7 @@ void EquipmentEditor::resetAbsorption()
    double gaCustomUnits = PhysicalConstants::grainAbsorption_Lkg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
    
    obsEquip->setGrainAbsorption_LKg( PhysicalConstants::grainAbsorption_Lkg );
-   lineEdit_grainAbsorption->setText(QString("%1").arg(gaCustomUnits, 0, 'f', 3));
+   lineEdit_grainAbsorption->setText(Brewtarget::displayAmount(gaCustomUnits));
 }
 
 void EquipmentEditor::changed(QMetaProperty /*prop*/, QVariant /*val*/)
@@ -257,7 +257,7 @@ void EquipmentEditor::showChanges()
    textEdit_notes->setText( e->notes() );
 
    double gaCustomUnits = e->grainAbsorption_LKg() * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
-   lineEdit_grainAbsorption->setText( QString("%1").arg( gaCustomUnits, 0, 'f', 3) );
+   lineEdit_grainAbsorption->setText( Brewtarget::displayAmount(gaCustomUnits,0,3) );
    
    lineEdit_boilingPoint->setText( Brewtarget::displayAmount(e->boilingPoint_c(), Units::celsius) );
 }
