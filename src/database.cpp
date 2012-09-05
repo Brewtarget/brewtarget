@@ -765,14 +765,7 @@ int Database::insertNewMashStepRecord( Mash* parent )
 
 BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
 {
-   int newKey;
-   BrewNote* tmp = new BrewNote();
-   
-   QSqlRecord r = copy<BrewNote>(other);
-   newKey = r.value("id").toInt();
-   tmp->_key = newKey;
-   tmp->_table = Brewtarget::BREWNOTETABLE;
-   allBrewNotes.insert( newKey, tmp );
+   BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
   
    if ( signal )
       emit changed( metaProperty("brewNotes"), QVariant() );
@@ -811,10 +804,7 @@ Equipment* Database::newEquipment()
 
 Equipment* Database::newEquipment(Equipment* other)
 {
-   Equipment* tmp = new Equipment();
-   tmp->_key = copy<Equipment>(other).value("id").toInt();
-   tmp->_table = Brewtarget::EQUIPTABLE;
-   allEquipments.insert(tmp->_key,tmp);
+   Equipment* tmp = copy<Equipment>(other, true, &allEquipments);
    
    emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(tmp);
@@ -837,10 +827,7 @@ Fermentable* Database::newFermentable()
 
 Fermentable* Database::newFermentable(Fermentable* other)
 {
-   Fermentable* tmp = new Fermentable();
-   tmp->_key = copy<Fermentable>(other).value("id").toInt();
-   tmp->_table = Brewtarget::FERMTABLE;
-   allFermentables.insert(tmp->_key,tmp);
+   Fermentable* tmp = copy<Fermentable>(other, true, &allFermentables);
    
    emit changed( metaProperty("fermentables"), QVariant() );
    emit newFermentableSignal(tmp);
@@ -863,10 +850,7 @@ Hop* Database::newHop()
 
 Hop* Database::newHop(Hop* other)
 {
-   Hop* tmp = new Hop();
-   tmp->_key = copy<Hop>(other).value("id").toInt();
-   tmp->_table = Brewtarget::HOPTABLE;
-   allHops.insert(tmp->_key,tmp);
+   Hop* tmp = copy<Hop>(other, true, &allHops);
    
    emit changed( metaProperty("hops"), QVariant() );
    emit newHopSignal(tmp);
@@ -926,10 +910,7 @@ Mash* Database::newMash(Recipe* parent)
 
 Mash* Database::newMash(Mash* other, bool displace)
 {
-   Mash* tmp = new Mash();
-   tmp->_key = copy<Mash>(other).value("id").toInt();
-   tmp->_table = Brewtarget::MASHTABLE;
-   allMashs.insert(tmp->_key,tmp);
+   Mash* tmp = copy<Mash>(other, true, &allMashs);
    
    // Connect tmp to parent, removing any existing mash in parent.
    if( displace )
@@ -979,10 +960,7 @@ Misc* Database::newMisc()
 
 Misc* Database::newMisc(Misc* other)
 {
-   Misc* tmp = new Misc();
-   tmp->_key = copy<Misc>(other).value("id").toInt();
-   tmp->_table = Brewtarget::MISCTABLE;
-   allMiscs.insert(tmp->_key,tmp);
+   Misc* tmp = copy<Misc>(other, true, &allMiscs);
    
    emit changed( metaProperty("miscs"), QVariant() );
    emit newMiscSignal(tmp);
@@ -1008,10 +986,7 @@ Recipe* Database::newRecipe()
 
 Recipe* Database::newRecipe(Recipe* other)
 {
-   Recipe* tmp = new Recipe();
-   tmp->_key = copy<Recipe>(other).value("id").toInt();
-   tmp->_table = Brewtarget::RECTABLE;
-   allRecipes.insert( tmp->_key, tmp );
+   Recipe* tmp = copy<Recipe>(other, true, &allRecipes);
    
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
@@ -1060,10 +1035,7 @@ Yeast* Database::newYeast()
 
 Yeast* Database::newYeast(Yeast* other)
 {
-   Yeast* tmp = new Yeast();
-   tmp->_key = copy<Yeast>(other).value("id").toInt();
-   tmp->_table = Brewtarget::YEASTTABLE;
-   allYeasts.insert(tmp->_key,tmp);
+   Yeast* tmp = copy<Yeast>(other, true, &allYeasts);
    
    emit changed( metaProperty("yeasts"), QVariant() );
    emit newYeastSignal(tmp);
@@ -1353,12 +1325,12 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 // Add to recipe ==============================================================
 void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
 {
-   int key = addIngredientToRecipe<Hop>( rec, hop,
+   Hop* newHop = addIngredientToRecipe<Hop>( rec, hop,
                                          "hops",
                                          "hop_in_recipe",
                                          "hop_id",
                                          noCopy, &allHops );
-   connect( allHops[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+   connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    rec->recalcIBU();
 }
 
@@ -1367,12 +1339,12 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
    if ( ferm == 0 )
       return;
 
-   int key = addIngredientToRecipe<Fermentable>( rec, ferm,
+   Fermentable* newFerm = addIngredientToRecipe<Fermentable>( rec, ferm,
                                                  "fermentables",
                                                  "fermentable_in_recipe",
                                                  "fermentable_id",
                                                  noCopy, &allFermentables );
-   connect( allFermentables[key], SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+   connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    rec->recalcAll();
 }
 
@@ -1396,33 +1368,25 @@ void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
 
 void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
 {
-   QSqlRecord c;
-   int newKey;
-
+   Mash* newMash;
+   
    // Make a copy of mash.
-   if ( ! noCopy ) 
-   {
-      c = copy<Mash>(m, false, &allMashs);
-      newKey = c.value("id").toInt();
-   }
-   else 
-   {
-      newKey = m->_key;
-   }
+   if ( ! noCopy )
+      newMash = copy<Mash>(m, false, &allMashs);
+   else
+      newMash = m;
    
    // Update mash_id
    sqlUpdate(Brewtarget::RECTABLE,
-             QString("`mash_id`='%1'").arg(newKey),
+             QString("`mash_id`='%1'").arg(newMash->key()),
              QString("id='%1'").arg(rec->_key));
    
    // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("mash"), QVariant() );
+   emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
 }
 
 void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 {
-   QSqlRecord c;
-   int newKey;
    Equipment* newEquip;
 
    if( e == 0 )
@@ -1430,22 +1394,14 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
   
    // Make a copy of equipment.
    if ( ! noCopy )
-   {
-      c = copy<Equipment>(e,false,&allEquipments);
-      newKey = c.value("id").toInt();
-      
-      newEquip = allEquipments[newKey];
-   }
-   else 
-   {
-      newKey = e->_key;
+      newEquip = copy<Equipment>(e,false,&allEquipments);
+   else
       newEquip = e;
-   }
 
    
    // Update equipment_id
    sqlUpdate(Brewtarget::RECTABLE,
-             QString("`equipment_id`='%1'").arg(newKey),
+             QString("`equipment_id`='%1'").arg(newEquip->key()),
              QString("id='%1'").arg(rec->_key));
 
    newEquip->setDisplay(false);
@@ -1453,20 +1409,23 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
 }
 
-void Database::addToRecipe( Recipe* rec, Style* s)
+void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
 {
-   // Just add the style directly. No need to copy I think.
+   Style* newStyle;
+   
+   if ( ! noCopy )
+      newStyle = copy<Style>(s,false,&allStyles);
+   else 
+      newStyle = s;
+   
    sqlUpdate(Brewtarget::RECTABLE,
-             QString("`style_id`='%1'").arg(s->_key),
+             QString("`style_id`='%1'").arg(newStyle->key()),
              QString("id='%1'").arg(rec->_key));
-
-   // We do not need to set s->display() to false here, because we are using
-   // the styles directly out of the style table. If we did that, then we could
-   // only use a style once before it disappeared.
+   
+   newStyle->setDisplay(false);
    
    // Emit a changed signal.
-   // TODO: this is calling the SLOT, not the SIGNAL...erm...What do we do?
-   emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(s) );
+   emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )

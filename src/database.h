@@ -173,8 +173,8 @@ public:
    void addToRecipe( Recipe* rec, Mash* m, bool noCopy = false );
    //! Add an equipment, displacing any current equipment.
    void addToRecipe( Recipe* rec, Equipment* e, bool noCopy = false );
-   //! Add a style, displacing any current style. Does not add a copy, adds the actual style \b s.
-   void addToRecipe( Recipe* rec, Style* s);
+   //! Add a style, displacing any current style.
+   void addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
    
@@ -478,22 +478,22 @@ private:
     *
     * \param noCopy By default, we create a copy of the ingredient. If true,
     *               add the ingredient directly.
-    * \returns the key of the new ingredient.
+    * \returns the new ingredient.
     */
-   template<class T> int addIngredientToRecipe( Recipe* rec,
-                                                BeerXMLElement* ing,
-                                                QString propName,
-                                                QString relTableName,
-                                                QString ingKeyName,
-                                                bool noCopy = false,
-                                                QHash<int,T*>* keyHash = 0 )
+   template<class T> T* addIngredientToRecipe(
+      Recipe* rec,
+      BeerXMLElement* ing,
+      QString propName,
+      QString relTableName,
+      QString ingKeyName,
+      bool noCopy = false,
+      QHash<int,T*>* keyHash = 0
+   )
    {
-      // TODO: encapsulate this in a QUndoCommand.
-      int newKey;
-      QSqlRecord r;
+      T* newIng = 0;
       
       if( rec == 0 || ing == 0 )
-         return -1;
+         return 0;
       
       // Ensure this ingredient is not already in the recipe.
       QSqlQuery q(
@@ -505,21 +505,20 @@ private:
       {
          q.finish();
          Brewtarget::logW( "Database::addIngredientToRecipe: Ingredient already exists in recipe." );
-         return -1;
+         return 0;
       }
       else
          q.finish();
       
       if ( noCopy ) 
       {
-         newKey = ing->_key;
+         newIng = qobject_cast<T*>(ing);
          // Any ingredient part of a recipe shouldn't be visible. 
          ing->setDisplay(false);
       }
-      else 
+      else
       {
-         r = copy<T>(ing, false, keyHash);
-         newKey = r.value("id").toInt();
+         newIng = copy<T>(ing, false, keyHash);
       }
       
       // Put this (ing,rec) pair in the <ing_type>_in_recipe table.
@@ -530,7 +529,7 @@ private:
                  .arg(relTableName)
                  .arg(ingKeyName)
                );
-      q.bindValue(":ingredient", newKey);
+      q.bindValue(":ingredient", newIng->key());
       q.bindValue(":recipe", rec->_key);
       if( q.exec() )
       {
@@ -543,7 +542,7 @@ private:
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
       }
       
-      return newKey;
+      return newIng;
    }
    
    //! Remove ingredient from a recipe.
@@ -552,7 +551,7 @@ private:
    /*!
     * \brief Create a deep copy of the \b object.
     * \em T must be a subclass of \em BeerXMLElement.
-    * \returns a record to the new copy. You must manually emit the changed()
+    * \returns a pointer to the new copy. You must manually emit the changed()
     * signal after a copy() call. Also, does not insert things magically into
     * allHop or allInstructions etc. hashes. This just simply duplicates a
     * row in a table, unless you provide \em keyHash.
@@ -560,10 +559,11 @@ private:
     * \param displayed is true if you want the \em displayed column set to true.
     * \param keyHash if nonzero, inserts the new (key,T*) pair into the hash.
     */
-   template<class T> QSqlRecord copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0 )
+   template<class T> T* copy( BeerXMLElement const* object, bool displayed = true, QHash<int,T*>* keyHash=0 )
    {
       int newKey;
       int i;
+      T* newOne = 0;
       
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
       QString tName = tableNames[t];
@@ -575,12 +575,13 @@ private:
       
       if( !q.next() )
       {
+         Brewtarget::logE( QString("Database::copy: %1").arg(q.lastError().text()) );
          q.finish();
-         return QSqlRecord();
+         return 0;
       }
       
       QSqlRecord oldRecord = q.record();
-      q.finish(); // NOTE: Is this safe, since we will later use oldRecord?
+      q.finish();
       
       // Create a new row.
       newKey = insertNewDefaultRecord(t);
@@ -590,7 +591,7 @@ private:
                    );
       q.next();
       QSqlRecord newRecord = q.record();
-      q.finish(); // NOTE: Is this safe, since we will later use newRecord?
+      q.finish();
       
       // Set the new row's columns equal to the old one's, except for any "parent"
       // field, which should be set to the oldRecord's key.
@@ -620,14 +621,14 @@ private:
       // Update the hash if need be.
       if( keyHash )
       {
-         T* newOne = new T();
+         newOne = new T();
          BeerXMLElement* newOneCast = qobject_cast<BeerXMLElement*>(newOne);
          newOneCast->_key = newKey;
          newOneCast->_table = t;
          keyHash->insert( newKey, newOne );
       }
       
-      return newRecord;
+      return newOne;
    }
    
    // Do an sql update.
