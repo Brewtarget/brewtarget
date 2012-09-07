@@ -26,6 +26,7 @@
 #include <QItemEditorFactory>
 #include <QStyle>
 #include <QRect>
+#include <QDebug>
 
 #include "database.h"
 #include "brewtarget.h"
@@ -342,7 +343,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
          case FERMCOLORCOL:
             unit = displayUnit(section);
             if ( unit == noUnit )
-               unit = Brewtarget::getColorUnit() ? displayEbc : displaySrm;
+               unit = Brewtarget::getColorUnit();
 
             if ( unit == displaySrm)
                return QVariant(tr("Color (SRM)"));
@@ -528,6 +529,8 @@ QString FermentableTableModel::generateName(int column) const
 bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Fermentable* row;
+   double color;
+   unitDisplay unit;
    
    if( index.row() >= (int)fermObs.size() )
    {
@@ -591,7 +594,15 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMCOLORCOL:
          if( value.canConvert(QVariant::Double) )
          {
-            row->setColor_srm( value.toDouble() );
+            unit = displayUnit(index.column());
+            if ( unit == noUnit )
+               unit = Brewtarget::getColorUnit();
+
+            color = value.toDouble();
+            if ( unit == displayEbc )
+               color = Units::ebc->toSI(value.toDouble());
+
+            row->setColor_srm( color );
             return true;
          }
          else
