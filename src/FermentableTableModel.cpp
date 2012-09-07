@@ -560,7 +560,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
+            row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString(),displayUnit(FERMAMOUNTCOL)));
             if( rowCount() > 0 )
                headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
             return true;

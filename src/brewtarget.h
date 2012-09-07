@@ -120,11 +120,11 @@ public:
    static QString displayColor(  BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
 
    //! \return SI amount for weight string. I.e. 0.454 for "1 lb".
-   static double weightQStringToSI( QString qstr );
+   static double weightQStringToSI( QString qstr, unitDisplay dispUnit = noUnit);
    //! \return SI amount for volume string.
-   static double volQStringToSI( QString qstr );
+   static double volQStringToSI( QString qstr, unitDisplay dispUnit = noUnit );
    //! \return SI amount for temperature string.
-   static double tempQStringToSI( QString qstr );
+   static double tempQStringToSI( QString qstr, unitDisplay dispUnit = noUnit);
    //! \return SI amount for time string.
    static double timeQStringToSI( QString qstr );
    //! \return SI amount for color string.

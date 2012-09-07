@@ -210,6 +210,7 @@ Qt::ItemFlags MashStepTableModel::flags(const QModelIndex& index ) const
 bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    MashStep *row;
+   unitDisplay unit;
 
    if( mashObs == 0 )
       return false;
@@ -240,10 +241,11 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
+            unit = displayUnit(MASHSTEPAMOUNTCOL);
             if( row->type() == MashStep::Decoction )
-               row->setDecoctionAmount_l( Brewtarget::volQStringToSI(value.toString()) );
+               row->setDecoctionAmount_l( Brewtarget::volQStringToSI(value.toString(),unit) );
             else
-               row->setInfuseAmount_l( Brewtarget::volQStringToSI(value.toString()) );
+               row->setInfuseAmount_l( Brewtarget::volQStringToSI(value.toString(),unit) );
             return true;
          }
          else
@@ -251,7 +253,8 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTEMPCOL:
          if( value.canConvert(QVariant::String) && row->type() != MashStep::Decoction )
          {
-            row->setInfuseTemp_c( Brewtarget::tempQStringToSI(value.toString()) );
+            unit = displayUnit(MASHSTEPTEMPCOL);
+            row->setInfuseTemp_c( Brewtarget::tempQStringToSI(value.toString(),unit) );
             return true;
          }
          else
@@ -259,8 +262,9 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTARGETTEMPCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setStepTemp_c( Brewtarget::tempQStringToSI(value.toString()) );
-            row->setEndTemp_c( Brewtarget::tempQStringToSI(value.toString()) );
+            unit = displayUnit(MASHSTEPTARGETTEMPCOL);
+            row->setStepTemp_c( Brewtarget::tempQStringToSI(value.toString(),unit) );
+            row->setEndTemp_c( Brewtarget::tempQStringToSI(value.toString(),unit) );
             return true;
          }
          else

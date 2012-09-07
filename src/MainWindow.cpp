@@ -992,18 +992,22 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
 
 void MainWindow::updateRecipeBatchSize()
 {
+   unitDisplay dispUnit;
    if( recipeObs == 0 )
       return;
    
-   recipeObs->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
+   dispUnit  = (unitDisplay)Brewtarget::option("batchsize_L", noUnit,tab_recipe,Brewtarget::UNIT).toInt();
+   recipeObs->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text(),dispUnit) );
 }
 
 void MainWindow::updateRecipeBoilSize()
 {
+   unitDisplay dispUnit;
    if( recipeObs == 0 )
       return;
  
-   recipeObs->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
+   dispUnit  = (unitDisplay)Brewtarget::option("boilsize_L", noUnit,tab_recipe,Brewtarget::UNIT).toInt();
+   recipeObs->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text(), dispUnit) );
 }
 
 void MainWindow::updateRecipeBoilTime()
