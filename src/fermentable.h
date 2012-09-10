@@ -128,6 +128,7 @@ public:
    
    /*** My extensions ***/
    bool isMashed() const;
+   bool isExtract();
    void setIsMashed(bool var);
    /*** END my extensions ***/
   

@@ -258,7 +258,9 @@ public:
    QVector<PreInstruction> miscSteps(Misc::Use type = Misc::Boil);
    PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
-
+   bool hasBoilExtract();
+   PreInstruction addExtracts(double timeRemaining);
+   
    // Helper
    double ibuFromHop(Hop const* hop);
    QList<QString> getReagents( QList<Fermentable*> ferms );

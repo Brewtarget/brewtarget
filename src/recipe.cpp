@@ -401,6 +401,20 @@ bool Recipe::hasBoilFermentable()
    return false;
 }
 
+bool Recipe::hasBoilExtract()
+{
+   unsigned int i;
+   for ( i = 0; static_cast<int>(i) < fermentables().size(); ++i )
+   {
+      Fermentable* ferm = fermentables()[i];
+      if( ferm->isExtract() )
+         return true;
+      else
+         continue;
+   }
+   return false;
+}
+
 PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
 {
    QString str;
@@ -413,7 +427,7 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
    for( i = 0; static_cast<int>(i) < size; ++i )
    {
      Fermentable* ferm = flist[i];
-     if( ferm->isMashed() || ferm->addAfterBoil() )
+     if( ferm->isMashed() || ferm->addAfterBoil() || ferm->isExtract() )
        continue;
 
      str += QString("%1 %2, ")
@@ -423,6 +437,30 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
    str += ".";
 
    return PreInstruction(str, tr("Boil/steep fermentables"), timeRemaining);
+}
+
+PreInstruction Recipe::addExtracts(double timeRemaining)
+{
+   QString str;
+   unsigned int i;
+   int size;
+
+   str = tr("Raise water to boil and then remove from heat. Stir in  ");
+   QList<Fermentable*> flist = fermentables();
+   size = flist.size();
+   for( i = 0; static_cast<int>(i) < size; ++i )
+   {
+     Fermentable* ferm = flist[i];
+     if ( ferm->isExtract() )
+     {
+	str += QString("%1 %2, ")
+	    .arg(Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms))
+	    .arg(ferm->name());
+     }
+   }
+   str += ".";
+
+   return PreInstruction(str, tr("Add Extracts to water"), timeRemaining);
 }
 
 Instruction* Recipe::postboilFermentablesIns()
@@ -561,7 +599,7 @@ void Recipe::generateInstructions()
 
    // First wort hopping
    firstWortHopsIns();
-
+    
    // Need to top up the kettle before boil?
    topOffIns();
 
@@ -588,6 +626,10 @@ void Recipe::generateInstructions()
    if ( hasBoilFermentable() )
       preinstructions.push_back(boilFermentablesPre(timeRemaining));
    
+   // add the intructions for including Extracts to wort
+   if ( hasBoilExtract() )
+      preinstructions.push_back(addExtracts(timeRemaining-1));
+
    /*** Boiled hops ***/
    preinstructions += hopSteps(Hop::Boil);
 
