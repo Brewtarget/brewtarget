@@ -41,7 +41,7 @@ class StyleEditor : public QDialog, public Ui::styleEditor
    Q_OBJECT
 
 public:
-   StyleEditor( QWidget *parent=0 );
+   StyleEditor( QWidget *parent=0, bool singleSyleEditor = false );
    virtual ~StyleEditor() {}
    void setStyle( Style* s );
 

@@ -635,7 +635,14 @@ Equipment* Database::equipment(Recipe const* parent)
 
 Style* Database::style(Recipe const* parent)
 {
-   int id = get( Brewtarget::RECTABLE, parent->key(), "style_id" ).toInt();
+   int id;
+   
+   QString queryString = QString("SELECT style_id FROM recipe WHERE id = %1").arg(parent->_key);
+   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   
+   while( q.next() )
+      id = q.record().value("style_id").toInt();
+   q.finish();
    
    if( allStyles.contains(id) )
       return allStyles[id];
@@ -1421,7 +1428,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
    sqlUpdate(Brewtarget::RECTABLE,
              QString("`style_id`='%1'").arg(newStyle->key()),
              QString("id='%1'").arg(rec->_key));
-   
+
    newStyle->setDisplay(false);
    
    // Emit a changed signal.

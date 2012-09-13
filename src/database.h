@@ -37,6 +37,7 @@ class Database;
 #include <QTableView>
 #include <QSqlError>
 #include <QDebug>
+#include <QRegExp>
 #include <QMap>
 #include "BeerXMLElement.h"
 #include "brewtarget.h"
@@ -595,6 +596,9 @@ private:
       
       // Set the new row's columns equal to the old one's, except for any "parent"
       // field, which should be set to the oldRecord's key.
+      // For now, we are trying to make sure ' get properly escaped.
+      // TODO: parsing complex languages with simplistic regex is almost never
+      // a good idea. Should we reconsider?  (mik)
       QString newValString;
       for( i = 0; i < oldRecord.count(); ++i )
       {
@@ -603,7 +607,10 @@ private:
          else if( oldRecord.fieldName(i) == "display" )
             newValString += QString("`display` = %2,").arg( displayed ? 1 : 0 );
          else if ( oldRecord.fieldName(i) != "id" )
-            newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
+            newValString += QString("`%1` = '%2',")
+               .arg(oldRecord.fieldName(i))
+               .arg( oldRecord.value(i).toString().replace( QRegExp("'"),"''"));
+//               .arg(oldRecord.value(i).toString());
       }
       
       // Remove last comma.

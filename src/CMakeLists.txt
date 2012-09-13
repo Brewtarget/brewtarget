@@ -126,6 +126,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
     ${SRCDIR}/style.cpp
+    ${SRCDIR}/StyleButton.cpp
     ${SRCDIR}/StyleListModel.cpp
     ${SRCDIR}/StyleEditor.cpp
     ${SRCDIR}/TimerListDialog.cpp
@@ -251,6 +252,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
     ${SRCDIR}/SetterCommandStack.h
+    ${SRCDIR}/StyleButton.h
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleEditor.h
     ${SRCDIR}/TimerListDialog.h

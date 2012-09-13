@@ -173,6 +173,7 @@ MainWindow::MainWindow(QWidget* parent)
    miscDialog = new MiscDialog(this);
    miscEditor = new MiscEditor(this);
    styleEditor = new StyleEditor(this);
+   singleStyleEditor = new StyleEditor(this,true);
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
    optionDialog = new OptionDialog(this);
@@ -405,10 +406,15 @@ MainWindow::MainWindow(QWidget* parent)
    connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(mashStepHeaderSignal(const QPoint&)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
+
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
    connect( equipmentButton, SIGNAL( clicked() ), singleEquipEditor, SLOT(show()) );
-   connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
+
    connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
+   connect( styleButton, SIGNAL( clicked() ), singleStyleEditor, SLOT(show()) );
+
+   connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
+
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
    connect( lineEdit_boilSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBoilSize() ) );
@@ -740,7 +746,7 @@ void MainWindow::setRecipe(Recipe* recipe)
       tabWidget_recipeView->removeTab(startTab);
    }
    brewNotes.clear();
-   
+  
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
@@ -754,14 +760,12 @@ void MainWindow::setRecipe(Recipe* recipe)
    mashDesigner->setRecipe(recipe);
    equipmentButton->setRecipe(recipe);
    singleEquipEditor->setEquipment(recEquip);
+   styleButton->setRecipe(recipe);
+   singleStyleEditor->setStyle(recStyle);
    
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setEquipment(recEquip);
    recipeScaler->setRecipe(recipeObs);
-
-   // Update combobox indices.
-   styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
-  
 
    // If you don't connect this late, every previous set of an attribute
    // causes this signal to be slotted, which then causes showChanges() to be
@@ -784,7 +788,8 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    {
       //recStyle = recipeObs->style();
       recStyle = qobject_cast<Style*>(BeerXMLElement::extractPtr(value));
-      styleComboBox->setCurrentIndex(styleListModel->indexOf(recStyle));
+      singleStyleEditor->setStyle(recStyle);
+      
    }
 
    if( limitShowChangesTimer->isActive() )
@@ -812,11 +817,15 @@ void MainWindow::showChanges(QMetaProperty* prop)
    }
    
    lineEdit_name->setText(recipeObs->name());
-   lineEdit_name->setCursorPosition(0);
    lineEdit_batchSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "batchSize_l", Units::liters));
    lineEdit_boilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilSize_l", Units::liters));
    lineEdit_efficiency->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "efficiency_pct", 0,0));
    lineEdit_boilTime->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilTime_min", Units::minutes));
+   lineEdit_name->setCursorPosition(0);
+   lineEdit_batchSize->setCursorPosition(0);
+   lineEdit_boilSize->setCursorPosition(0);
+   lineEdit_efficiency->setCursorPosition(0);
+   lineEdit_boilTime->setCursorPosition(0);
    
    label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs,tab_recipe, "finalVolume_l", Units::liters));
    label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilVolume_l", Units::liters));
@@ -925,9 +934,14 @@ void MainWindow::updateRecipeStyle()
    if( recipeObs == 0 )
       return;
    
+
    Style* selected = styleListModel->at(styleComboBox->currentIndex());
    if( selected )
+   {
+
+      qDebug() << "selected =" << selected << "name =" << selected->name();
       Database::instance().addToRecipe( recipeObs, selected );
+   }
 }
 
 void MainWindow::updateRecipeEquipment()

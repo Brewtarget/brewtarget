@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>586</width>
-    <height>517</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,7 +21,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_styles">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -51,7 +51,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset>
          <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
        </property>
        <property name="autoDefault">
@@ -820,7 +820,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset>
          <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
        </property>
        <property name="autoDefault">
@@ -837,7 +837,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset>
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
        <property name="autoDefault">
@@ -857,7 +857,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../brewtarget.qrc">
+        <iconset>
          <normaloff>:/images/exit.svg</normaloff>:/images/exit.svg</iconset>
        </property>
        <property name="autoDefault">
