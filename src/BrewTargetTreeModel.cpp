@@ -49,41 +49,53 @@ BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks t
    {
       rootItem->insertChildren(items,1,BrewTargetTreeItem::RECIPE);
       trees.insert(RECIPEMASK, items++);
+      connect( &(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)),this, SLOT(recipeAdded(Recipe*)));
+      connect( &(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)),this, SLOT(recipeRemoved(Recipe*)));
    }
 
    if ( type & EQUIPMASK )
    {
-     rootItem->insertChildren(items,1,BrewTargetTreeItem::EQUIPMENT);
-     trees.insert(EQUIPMASK, items++);
+      rootItem->insertChildren(items,1,BrewTargetTreeItem::EQUIPMENT);
+      trees.insert(EQUIPMASK, items++);
+      connect( &(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)),this, SLOT(equipmentAdded(Equipment*)));
+      connect( &(Database::instance()), SIGNAL(deletedEquipmentSignal(Equipment*)),this, SLOT(equipmentRemoved(Equipment*)));
    }
 
    if ( type & FERMENTMASK )
    {
       rootItem->insertChildren(items,1,BrewTargetTreeItem::FERMENTABLE);
       trees.insert(FERMENTMASK,items++);
+      connect( &(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)),this, SLOT(fermentableAdded(Fermentable*)));
+      connect( &(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)),this, SLOT(fermentableRemoved(Fermentable*)));
    }
 
    if ( type & HOPMASK )
    {
-     rootItem->insertChildren(items,1,BrewTargetTreeItem::HOP);
-     trees.insert(HOPMASK,items++);
+      rootItem->insertChildren(items,1,BrewTargetTreeItem::HOP);
+      trees.insert(HOPMASK,items++);
+      connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)),this, SLOT(hopAdded(Hop*)));
+      connect( &(Database::instance()), SIGNAL(deletedHopSignal(Hop*)),this, SLOT(hopRemoved(Hop*)));
    }
 
    if ( type & MISCMASK )
    {
-     rootItem->insertChildren(items,1,BrewTargetTreeItem::MISC);
-     trees.insert(MISCMASK,items++);
+      rootItem->insertChildren(items,1,BrewTargetTreeItem::MISC);
+      trees.insert(MISCMASK,items++);
+      connect( &(Database::instance()), SIGNAL(newMiscSignal(Misc*)),this, SLOT(miscAdded(Misc*)));
+      connect( &(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)),this, SLOT(miscRemoved(Misc*)));
    }
 
    if ( type & YEASTMASK )
    {
-     rootItem->insertChildren(items,1,BrewTargetTreeItem::YEAST);
-     trees.insert(YEASTMASK,items++);
+      rootItem->insertChildren(items,1,BrewTargetTreeItem::YEAST);
+      trees.insert(YEASTMASK,items++);
+
+      connect( &(Database::instance()), SIGNAL(newYeastSignal(Yeast*)),this, SLOT(yeastAdded(Yeast*)));
+      connect( &(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)),this, SLOT(yeastRemoved(Yeast*)));
    }
 
    treeMask = type;
    parentTree = parent;
-   connect( &(Database::instance()), SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
    loadTreeModel();
 }
 
@@ -543,7 +555,7 @@ QModelIndex BrewTargetTreeModel::findBrewNote(BrewNote* bNote)
       return QModelIndex();
 }
 
-
+/*
 void BrewTargetTreeModel::addObserved( BeerXMLElement* element )
 {
    connect( element, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
@@ -553,6 +565,7 @@ void BrewTargetTreeModel::removeObserved( BeerXMLElement* element )
 {
    disconnect( element, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 }
+*/
 
 // Under construction -- I haven't figured out quite how to pay attention
 // to the display and/or delete flag. The prototype here likely won't work, since there is now
@@ -586,7 +599,6 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
          Recipe* foo = recipes[i];
 
          // Watch the recipe for updates.
-         addObserved(foo);
 
          temp->setData(BrewTargetTreeItem::RECIPE, foo);
 
@@ -700,7 +712,8 @@ void BrewTargetTreeModel::unobserve( QList<Recipe*>& objects )
    int i, size;
    size = objects.size();
    for( i = 0; i < size; ++i )
-      removeObserved(objects[i]);
+      qDebug() << "unobserved";
+      // removeObserved(objects[i]);
 }
 
 void BrewTargetTreeModel::unloadTreeModel(QString propName)
@@ -759,8 +772,8 @@ void BrewTargetTreeModel::unloadTreeModel(QString propName)
       removeRows(0,breadth,parent);
    }
 }
-
-void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant /*value*/)
+/*
+void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant value)
 {
    // Notifier could be the database. 
    QString propName = prop.name();
@@ -809,6 +822,7 @@ void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant /*value*/)
       }
    }
 }
+*/
 
 Recipe* BrewTargetTreeModel::getRecipe(const QModelIndex &index) const
 {
@@ -910,5 +924,155 @@ int BrewTargetTreeModel::getType(const QModelIndex &index)
 int BrewTargetTreeModel::getMask()
 {
    return treeMask;
+}
+
+void BrewTargetTreeModel::equipmentAdded(Equipment* victim)
+{
+   BrewTargetTreeItem* temp;
+
+   BrewTargetTreeItem* local = rootItem->child(trees.value(EQUIPMASK));
+   QModelIndex parent = createIndex(BrewTargetTreeItem::EQUIPMENT,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+    insertRows(breadth, 1, createIndex(trees.value(EQUIPMASK),0,local));
+    temp = local->child(breadth);
+    temp->setData(BrewTargetTreeItem::EQUIPMENT, victim);
+}
+
+void BrewTargetTreeModel::equipmentRemoved(Equipment* victim)
+{
+   QModelIndex index = findEquipment(victim);
+
+   if ( index.isValid() )
+      removeRows(index.row(), 1, createIndex(BrewTargetTreeItem::EQUIPMENT,0,rootItem->child(trees.value(EQUIPMASK))));
+}
+
+void BrewTargetTreeModel::fermentableAdded(Fermentable* victim)
+{
+   BrewTargetTreeItem* temp;
+
+   BrewTargetTreeItem* local = rootItem->child(trees.value(FERMENTMASK));
+   QModelIndex parent = createIndex(BrewTargetTreeItem::FERMENTABLE,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+    insertRows(breadth, 1, createIndex(trees.value(FERMENTMASK),0,local));
+    temp = local->child(breadth);
+    temp->setData(BrewTargetTreeItem::FERMENTABLE, victim);
+}
+
+void BrewTargetTreeModel::fermentableRemoved(Fermentable* victim)
+{
+   QModelIndex index = findFermentable(victim);
+   QModelIndex parent = createIndex(BrewTargetTreeItem::FERMENTABLE,0,rootItem->child(trees.value(FERMENTMASK)));
+
+   removeRows(index.row(),1,parent);
+}
+
+void BrewTargetTreeModel::hopAdded(Hop* victim)
+{
+   BrewTargetTreeItem* temp;
+
+   BrewTargetTreeItem* local = rootItem->child(trees.value(HOPMASK));
+   QModelIndex parent = createIndex(BrewTargetTreeItem::HOP,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+    insertRows(breadth, 1, createIndex(trees.value(HOPMASK),0,local));
+    temp = local->child(breadth);
+    temp->setData(BrewTargetTreeItem::HOP, victim);
+}
+
+void BrewTargetTreeModel::hopRemoved(Hop* victim)
+{
+   QModelIndex index = findHop(victim);
+   QModelIndex parent = createIndex(BrewTargetTreeItem::HOP,0,rootItem->child(trees.value(HOPMASK)));
+
+   removeRows(index.row(),1,parent);
+}
+
+void BrewTargetTreeModel::miscAdded(Misc* victim)
+{
+   BrewTargetTreeItem* temp;
+
+   BrewTargetTreeItem* local = rootItem->child(trees.value(MISCMASK));
+   QModelIndex parent = createIndex(BrewTargetTreeItem::MISC,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+    insertRows(breadth, 1, createIndex(trees.value(MISCMASK),0,local));
+    temp = local->child(breadth);
+    temp->setData(BrewTargetTreeItem::MISC, victim);
+}
+
+void BrewTargetTreeModel::miscRemoved(Misc* victim)
+{
+   QModelIndex index = findMisc(victim);
+   QModelIndex parent = createIndex(BrewTargetTreeItem::MISC,0,rootItem->child(trees.value(MISCMASK)));
+
+   removeRows(index.row(),1,parent);
+}
+
+void BrewTargetTreeModel::recipeAdded(Recipe* victim)
+{
+   BrewTargetTreeItem* temp;
+
+   BrewTargetTreeItem* local = rootItem->child(trees.value(RECIPEMASK));
+   QModelIndex parent = createIndex(BrewTargetTreeItem::RECIPE,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+    insertRows(breadth, 1, createIndex(trees.value(RECIPEMASK),0,local));
+    temp = local->child(breadth);
+    temp->setData(BrewTargetTreeItem::RECIPE, victim);
+}
+
+void BrewTargetTreeModel::recipeRemoved(Recipe* victim)
+{
+   QModelIndex index = findRecipe(victim);
+   QModelIndex parent = createIndex(BrewTargetTreeItem::RECIPE,0,rootItem->child(trees.value(RECIPEMASK)));
+
+   removeRows(index.row(),1,parent);
+}
+
+void BrewTargetTreeModel::yeastAdded(Yeast* victim)
+{
+   BrewTargetTreeItem* temp;
+
+   BrewTargetTreeItem* local = rootItem->child(trees.value(YEASTMASK));
+   QModelIndex parent = createIndex(BrewTargetTreeItem::YEAST,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+    insertRows(breadth, 1, createIndex(trees.value(YEASTMASK),0,local));
+    temp = local->child(breadth);
+    temp->setData(BrewTargetTreeItem::YEAST, victim);
+}
+
+void BrewTargetTreeModel::yeastRemoved(Yeast* victim)
+{
+   QModelIndex index = findYeast(victim);
+   QModelIndex parent = createIndex(BrewTargetTreeItem::YEAST,0,rootItem->child(trees.value(YEASTMASK)));
+
+   removeRows(index.row(),1,parent);
 }
 

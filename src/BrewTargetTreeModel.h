@@ -98,12 +98,12 @@ public:
 
    int getType(const QModelIndex &index);
    int getMask();
-
+/*
    //! Connect the element's changed signal to our slot.
    void addObserved( BeerXMLElement* element );
    //! Disconnect the element's changed signal from our slot.
    void removeObserved( BeerXMLElement* element );
-   
+*/  
    // Methods required for observable
    //virtual void notify(Observable *notifier, QVariant info = QVariant());
    //void startObservingDB();
@@ -126,8 +126,26 @@ public:
    QModelIndex findBrewNote(BrewNote* bNote);
 
 private slots:
-   void changed( QMetaProperty, QVariant );
+//   void changed( QMetaProperty, QVariant );
+//
+   void equipmentAdded(Equipment* victim);
+   void equipmentRemoved(Equipment* victim);
    
+   void fermentableAdded(Fermentable* victim);
+   void fermentableRemoved(Fermentable* victim);
+
+   void hopAdded(Hop* victim);
+   void hopRemoved(Hop* victim);
+
+   void miscAdded(Misc* victim);
+   void miscRemoved(Misc* victim);
+
+   void recipeAdded(Recipe* victim);
+   void recipeRemoved(Recipe* victim);
+
+   void yeastAdded(Yeast* victim);
+   void yeastRemoved(Yeast* victim);
+
 private:
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
    //! Loads the data. Empty \b propname means load all trees.
