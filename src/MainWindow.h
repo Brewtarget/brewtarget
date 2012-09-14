@@ -219,6 +219,7 @@ private:
    MiscDialog* miscDialog;
    MiscEditor* miscEditor;
    StyleEditor* styleEditor;
+   StyleEditor* singleStyleEditor;
    YeastDialog* yeastDialog;
    YeastEditor* yeastEditor;
    OptionDialog* optionDialog;

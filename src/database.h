@@ -564,7 +564,9 @@ private:
    {
       int newKey;
       int i;
-      T* newOne = 0;
+      T* newOne = new T();
+      QList<QString> attrs = newOne->tagToPropHash().values();
+      QList<QString> populated;
       
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
       QString tName = tableNames[t];
@@ -599,36 +601,44 @@ private:
       // For now, we are trying to make sure ' get properly escaped.
       // TODO: parsing complex languages with simplistic regex is almost never
       // a good idea. Should we reconsider?  (mik)
-      QString newValString;
-      for( i = 0; i < oldRecord.count(); ++i )
+      QString prepString = QString("UPDATE `%1` SET `display`=:display," ).arg(tName);
+
+      // We need to be concerned with empty db fields. I don't think they work
+      // so well with the bindValue. So try to avoid that
+      for( i = 0; i < attrs.count(); ++i )
       {
-         if( oldRecord.fieldName(i) == "parent" )
-            newValString += QString("`parent` = '%2',").arg(object->_key);      
-         else if( oldRecord.fieldName(i) == "display" )
-            newValString += QString("`display` = %2,").arg( displayed ? 1 : 0 );
-         else if ( oldRecord.fieldName(i) != "id" )
-            newValString += QString("`%1` = '%2',")
-               .arg(oldRecord.fieldName(i))
-               .arg( oldRecord.value(i).toString().replace( QRegExp("'"),"''"));
-//               .arg(oldRecord.value(i).toString());
+         QString attr = attrs.at(i);
+         if ( oldRecord.value(attr).isValid() )
+         {
+            populated.append(attr);
+            prepString.append(QString("`%1`=:%1,").arg(attr));
+         }
       }
       
       // Remove last comma.
-      newValString.chop(1);
-      
-      QString updateString = QString("UPDATE `%1` SET %2 WHERE id = '%3'")
-                                    .arg(tName)
-                                    .arg(newValString)
-                                    .arg(newKey);
+      prepString.chop(1);
+     
+      prepString.append( QString(" where `id`='%1'").arg(newKey));
+
       q = QSqlQuery( sqlDatabase() );
-      q.prepare(updateString);
+      q.prepare(prepString);
+
+      // Bind, bind like the wind! Or at least like mueslix
+      q.bindValue(":display", displayed ? 1 : 0 );
+      for( i = 0; i < populated.count(); ++i )
+      {
+         if ( populated[i] == "parent" )
+            q.bindValue(QString(":%1").arg(populated[i]), object->_key);
+         else
+            q.bindValue(QString(":%1").arg(populated[i]), oldRecord.value(populated[i]));
+      }
+
       q.exec();
       q.finish();
       
       // Update the hash if need be.
       if( keyHash )
       {
-         newOne = new T();
          BeerXMLElement* newOneCast = qobject_cast<BeerXMLElement*>(newOne);
          newOneCast->_key = newKey;
          newOneCast->_table = t;

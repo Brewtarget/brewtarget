@@ -938,8 +938,6 @@ void MainWindow::updateRecipeStyle()
    Style* selected = styleListModel->at(styleComboBox->currentIndex());
    if( selected )
    {
-
-      qDebug() << "selected =" << selected << "name =" << selected->name();
       Database::instance().addToRecipe( recipeObs, selected );
    }
 }
