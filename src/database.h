@@ -565,14 +565,11 @@ private:
       int newKey;
       int i;
       T* newOne = new T();
-      QList<QString> attrs = newOne->tagToPropHash().values();
-      QList<QString> populated;
       
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
       QString tName = tableNames[t];
       
-      QSqlQuery q(QString("SELECT * FROM %1 WHERE id = %2")
-                  .arg(tName).arg(object->_key),
+      QSqlQuery q(QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key),
                   sqlDatabase()
                  );
       
@@ -585,7 +582,19 @@ private:
       
       QSqlRecord oldRecord = q.record();
       q.finish();
-      
+      QString prepString = QString("UPDATE `%1` SET " ).arg(tName);
+    
+      // Get the field names from the oldRecord. But skip ID, because it 
+      // won't work to copy it
+      for (i=0; i< oldRecord.count(); ++i)
+      {
+         QString name = oldRecord.fieldName(i);
+         if ( name != "id" )
+            prepString.append(QString("`%1`=:%2,").arg(name).arg(name));
+      }
+
+      // Remove the trailing ,
+      prepString.chop(1);
       // Create a new row.
       newKey = insertNewDefaultRecord(t);
       q = QSqlQuery( QString("SELECT * FROM %1 WHERE id = %2")
@@ -596,41 +605,26 @@ private:
       QSqlRecord newRecord = q.record();
       q.finish();
       
-      // Set the new row's columns equal to the old one's, except for any "parent"
-      // field, which should be set to the oldRecord's key.
-      // For now, we are trying to make sure ' get properly escaped.
-      // TODO: parsing complex languages with simplistic regex is almost never
-      // a good idea. Should we reconsider?  (mik)
-      QString prepString = QString("UPDATE `%1` SET `display`=:display," ).arg(tName);
-
-      // We need to be concerned with empty db fields. I don't think they work
-      // so well with the bindValue. So try to avoid that
-      for( i = 0; i < attrs.count(); ++i )
-      {
-         QString attr = attrs.at(i);
-         if ( oldRecord.value(attr).isValid() )
-         {
-            populated.append(attr);
-            prepString.append(QString("`%1`=:%1,").arg(attr));
-         }
-      }
-      
-      // Remove last comma.
-      prepString.chop(1);
-     
       prepString.append( QString(" where `id`='%1'").arg(newKey));
 
       q = QSqlQuery( sqlDatabase() );
       q.prepare(prepString);
 
       // Bind, bind like the wind! Or at least like mueslix
-      q.bindValue(":display", displayed ? 1 : 0 );
-      for( i = 0; i < populated.count(); ++i )
+      for (i=0; i< oldRecord.count(); ++i)
       {
-         if ( populated[i] == "parent" )
-            q.bindValue(QString(":%1").arg(populated[i]), object->_key);
-         else
-            q.bindValue(QString(":%1").arg(populated[i]), oldRecord.value(populated[i]));
+         QString name = oldRecord.fieldName(i);
+         QVariant val = oldRecord.value(i);
+
+         // We need to set the parent correctly. 
+         if ( name == "parent" )
+            q.bindValue(QString(":%1").arg(name), object->_key);
+         // Display is being set by the call, not by what we are copying
+         else if ( name == "display" )
+            q.bindValue(":display", displayed ? 1 : 0 );
+         // Ignore ID again, for the same reasons as before.
+         else if ( name != "id" )
+            q.bindValue(QString(":%1").arg(name), val);
       }
 
       q.exec();
