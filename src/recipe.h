@@ -259,6 +259,7 @@ public:
    PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
    bool hasBoilExtract();
+   bool isFermentableSugar(Fermentable*);
    PreInstruction addExtracts(double timeRemaining);
    
    // Helper
@@ -333,6 +334,8 @@ private:
    // Calculated, but stored...BeerXML is weird sometimes.
    double _og;
    double _fg;
+   double _og_fermentable;
+   double _fg_fermentable;
    
    // True when constructed, indicates whether recalcAll has been called.
    bool _uninitializedCalcs;

@@ -438,6 +438,13 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
 
    return PreInstruction(str, tr("Boil/steep fermentables"), timeRemaining);
 }
+bool Recipe::isFermentableSugar(Fermentable *fermy)
+{
+  if (fermy->type() == Fermentable::Sugar && fermy->name() == "Milk Sugar (Lactose)" )
+    return false;
+  else
+    return true;
+}
 
 PreInstruction Recipe::addExtracts(double timeRemaining)
 {
@@ -1479,8 +1486,7 @@ void Recipe::recalcABV_pct()
    // George Fix: Brewing Science and Practice, page 686.
    // The multiplicative factor actually varies from
    // 125 for weak beers to 135 for strong beers.
-   ret = 130*(_og-_fg);
-
+   ret = 130*(_og_fermentable - _fg_fermentable);
   
    if ( ret != _ABV_pct ) 
    {
@@ -1772,12 +1778,15 @@ void Recipe::recalcOgFg()
    double plato;
    double ratio = 0;
    double sugar_kg = 0;
-   double sugar_kg_ignoreEfficiency = 0.0;
+    double sugar_kg_ignoreEfficiency = 0.0;
    Fermentable::Type fermtype;
    double attenuation_pct = 0.0;
-   double tmp_og, tmp_fg, tmp_pnts;
+   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
    Fermentable* ferm;
    Yeast* yeast;
+   double nonFermetableSugars_kg = 0.0;
+   double ferm_kg = 0.0;
+  _og_fermentable = _fg_fermentable = 0.0;
    
    QList<Fermentable*> ferms = fermentables();
    
@@ -1789,8 +1798,14 @@ void Recipe::recalcOgFg()
 
       // If we have some sort of non-grain, we have to ignore efficiency.
       fermtype = ferm->type();
-      if( fermtype==Fermentable::Sugar|| fermtype==Fermentable::Extract || fermtype==Fermentable::Dry_Extract )
-         sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
+      if( fermtype==Fermentable::Sugar || fermtype==Fermentable::Extract || fermtype==Fermentable::Dry_Extract )
+      {
+	sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
+	if ( !isFermentableSugar(ferm) )
+	{
+	  nonFermetableSugars_kg += ferm->equivSucrose_kg();
+	}
+      }
       else
          sugar_kg += ferm->equivSucrose_kg();
    }   
@@ -1811,6 +1826,8 @@ void Recipe::recalcOgFg()
       // Ignore this again since it should be included in efficiency.
       //sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
+      if ( nonFermetableSugars_kg != 0.0 )
+	nonFermetableSugars_kg *= ratio;
    }
    
    // Combine the two sugars.
@@ -1819,6 +1836,19 @@ void Recipe::recalcOgFg()
 
    tmp_og = Algorithms::Instance().PlatoToSG_20C20C( plato );
    tmp_pnts = (tmp_og-1)*1000.0;
+   if ( nonFermetableSugars_kg != 0.0 )
+   {
+    ferm_kg = sugar_kg - nonFermetableSugars_kg;
+    plato = Algorithms::Instance().getPlato( ferm_kg, _finalVolume_l);
+     _og_fermentable = Algorithms::Instance().PlatoToSG_20C20C( plato );
+    plato = Algorithms::Instance().getPlato( nonFermetableSugars_kg, _finalVolume_l); 
+    tmp_ferm_pnts = ((Algorithms::Instance().PlatoToSG_20C20C( plato ))-1)*1000.0;
+   }
+   else
+   {
+     _og_fermentable = tmp_og;
+     tmp_ferm_pnts = 0;
+   }
 
    // Calculage FG
    QList<Yeast*> yeasties = yeasts();
@@ -1831,10 +1861,21 @@ void Recipe::recalcOgFg()
    }
    if( yeasties.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
-
-   tmp_pnts *= (1.0 - attenuation_pct/100.0);
-   tmp_fg =  1 + tmp_pnts/1000.0;
-
+   
+   if ( nonFermetableSugars_kg != 0.0 )
+   {
+      tmp_ferm_pnts = (tmp_pnts-tmp_ferm_pnts) * (1.0 - attenuation_pct/100.0);
+      tmp_pnts *= (1.0 - attenuation_pct/100.0);
+      tmp_fg =  1 + tmp_pnts/1000.0;
+      _fg_fermentable =  1 + tmp_ferm_pnts/1000.0;
+   }
+   else
+   {
+      tmp_pnts *= (1.0 - attenuation_pct/100.0);
+      tmp_fg =  1 + tmp_pnts/1000.0;
+      _fg_fermentable = tmp_fg;
+   }
+   
    if ( _og != tmp_og ) 
    {
       _og     = tmp_og;
