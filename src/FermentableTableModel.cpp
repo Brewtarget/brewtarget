@@ -180,6 +180,8 @@ void FermentableTableModel::removeAll()
       disconnect( fermObs.takeLast(), 0, this, 0 );
    }
    endRemoveRows();
+   // I think we need to zero this out
+   totalFermMass_kg = 0;
 }
 
 void FermentableTableModel::updateTotalGrains()

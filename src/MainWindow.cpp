@@ -545,9 +545,6 @@ void MainWindow::deleteSelected()
    Database::instance().removeMisc(deadMisc);
    Database::instance().removeYeast(deadYeast);
 
-   // This is wrong. Since we have split the trees out, the selection should
-   // be set to the top element of the active tree. I am just not sure how to
-   // do it
    first = active->getFirst();
    if ( first.isValid() )
    {
@@ -588,8 +585,8 @@ void MainWindow::treeActivated(const QModelIndex &index)
          kit = active->getEquipment(index);
          if ( kit )
          {
-            equipEditor->setEquipment(kit);
-            equipEditor->show();
+            singleEquipEditor->setEquipment(kit);
+            singleEquipEditor->show();
          }
          break;
       case BrewTargetTreeItem::FERMENTABLE:
@@ -1901,7 +1898,6 @@ void MainWindow::copySelected()
       return;
 
    const QModelIndexList selected = active->selectionModel()->selectedRows();
-   above = active->getFirst();
 
    // We need to process them all before we get the names, because adding new things does mess
    // up the indexes.  This ... is not gonna be pretty.
@@ -1957,6 +1953,7 @@ void MainWindow::copySelected()
       copyThis(copyYeast.at(i));
 
 
+   above = active->getFirst();
    if ( active->getType(above) == BrewTargetTreeItem::RECIPE )
       setRecipeByIndex(above);
    setSelection(above);
