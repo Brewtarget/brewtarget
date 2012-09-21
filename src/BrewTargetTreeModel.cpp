@@ -51,6 +51,9 @@ BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks t
       trees.insert(RECIPEMASK, items++);
       connect( &(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)),this, SLOT(recipeAdded(Recipe*)));
       connect( &(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)),this, SLOT(recipeRemoved(Recipe*)));
+      // Brewnotes need love too!
+      connect( &(Database::instance()), SIGNAL(newBrewNoteSignal(BrewNote*)),this, SLOT(brewNoteAdded(BrewNote*)));
+      connect( &(Database::instance()), SIGNAL(deletedBrewNoteSignal(BrewNote*)),this, SLOT(brewNoteRemoved(BrewNote*)));
    }
 
    if ( type & EQUIPMASK )
@@ -537,6 +540,9 @@ QModelIndex BrewTargetTreeModel::findYeast(Yeast* yeast)
  */
 QModelIndex BrewTargetTreeModel::findBrewNote(BrewNote* bNote)
 {
+   if (! bNote )
+      return QModelIndex();
+
    // Get the brewnote's parent
    Recipe *parent = Database::instance().getParentRecipe(bNote);
    // Find that recipe in the list
@@ -544,8 +550,6 @@ QModelIndex BrewTargetTreeModel::findBrewNote(BrewNote* bNote)
    // and get the associated treeItem
    BrewTargetTreeItem* pItem = getItem(pInd);
 
-   if (! bNote )
-      return QModelIndex();
 
    QList<BrewNote*> notes = parent->brewNotes();
    int i = notes.indexOf(bNote);
@@ -772,6 +776,7 @@ void BrewTargetTreeModel::unloadTreeModel(QString propName)
       removeRows(0,breadth,parent);
    }
 }
+
 /*
 void BrewTargetTreeModel::changed(QMetaProperty prop, QVariant value)
 {
@@ -1074,5 +1079,50 @@ void BrewTargetTreeModel::yeastRemoved(Yeast* victim)
    QModelIndex parent = createIndex(BrewTargetTreeItem::YEAST,0,rootItem->child(trees.value(YEASTMASK)));
 
    removeRows(index.row(),1,parent);
+}
+
+// BrewNotes get no respect, but they get signals. They also get mighty
+// confusing
+void BrewTargetTreeModel::brewNoteAdded(BrewNote* victim)
+{
+   // Get the brewnote's parent
+   Recipe *parent = Database::instance().getParentRecipe(victim);
+   // Find that recipe in the list
+   QModelIndex pInd = findRecipe(parent);
+   // and get the associated treeItem
+   BrewTargetTreeItem* pItem = getItem(pInd);
+
+   int breadth = pItem->childCount();
+   insertRows(breadth,1,pInd);
+   pItem->child(breadth)->setData(BrewTargetTreeItem::BREWNOTE, victim);
+}
+
+// deleting them is worse. Unfortunately, the blasted brewnote is deleted by
+// the time we get this signal. So we have to rebuild the entire list.
+void BrewTargetTreeModel::brewNoteRemoved(BrewNote* victim)
+{
+   // Get the brewnote's parent recipe
+   Recipe *parent = Database::instance().getParentRecipe(victim);
+   // Find that recipe's index in the tree
+   QModelIndex parentInd = findRecipe(parent);
+   // and get the treeItem
+   BrewTargetTreeItem* parentItem = getItem(parentInd);
+
+   // If the tree item has children -- brewnotes -- remove them all
+   if ( parentItem->childCount() )
+      removeRows(0,parentItem->childCount(),parentInd);
+   
+   QList<BrewNote*> brewNotes = parent->brewNotes();
+   if ( brewNotes.size() > 0 )
+   {
+      // Put back how many ever rows are left
+      insertRows(0,brewNotes.size(),parentInd);
+      for (int j=0; j < brewNotes.size(); ++j)
+      {
+         // And populate them.
+         BrewTargetTreeItem* bar = parentItem->child(j);
+         bar->setData(BrewTargetTreeItem::BREWNOTE,brewNotes[j]);
+      }
+   }
 }
 

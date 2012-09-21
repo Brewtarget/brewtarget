@@ -320,6 +320,9 @@ signals:
    void deletedWaterSignal(Water*);
    void newYeastSignal(Yeast*);
    void deletedYeastSignal(Yeast*);
+   // This is still experimental. Or at least mental
+   void newBrewNoteSignal(BrewNote*);
+   void deletedBrewNoteSignal(BrewNote*);
    
 private slots:
    //! Load database from file.

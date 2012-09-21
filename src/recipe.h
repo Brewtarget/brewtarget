@@ -180,7 +180,9 @@ public:
    QString nextAddToBoil(double& time);
 
    // Not quite sure where this belongs
-   BrewNote* addBrewNote( BrewNote *old = 0 );
+   // Answer? It doesn't belong. This is commented out to make sure, but it
+   // should be deleted before the v2.0 release.
+   // BrewNote* addBrewNote( BrewNote *old = 0 );
 
    // Getters
    QString name() const;

@@ -24,6 +24,7 @@
 #include <QDateTime>
 #include <algorithm>
 #include <QRegExp>
+#include <QDebug>
 #include "brewnote.h"
 #include "brewtarget.h"
 #include "Algorithms.h"
@@ -98,11 +99,21 @@ void BrewNote::populateNote(Recipe* parent)
 
 
    // Since we have the recipe, lets set some defaults
+
+   // The order in which these are done is very specific.
+   // Later calls require certain things set first. Do not rearrange this
+   // without good reason and test.
+   setProjPoints( parent->points() );
+
+   setProjVolIntoBK_l( parent->boilSize_l() );
+
+   setPostBoilVolume_l(parent->postBoilVolume_l());
+   setVolumeIntoFerm_l(parent->finalVolume_l());
+   setProjVolIntoFerm_l(parent->finalVolume_l());
+
    setSg( parent->boilGrav() );
    setProjBoilGrav(parent->boilGrav() );
-
    setVolumeIntoBK_l( parent->boilSize_l() );
-   setProjVolIntoBK_l( parent->boilSize_l() );
 
    if ( mash )
    {
@@ -127,10 +138,6 @@ void BrewNote::populateNote(Recipe* parent)
    setOg( parent->og());
    setProjOg(parent->og());
 
-   setPostBoilVolume_l(parent->postBoilVolume_l());
-   setVolumeIntoFerm_l(parent->finalVolume_l());
-   setProjVolIntoFerm_l(parent->finalVolume_l());
-
    setPitchTemp_c(parent->primaryTemp_c());
 
    setFg( parent->fg());
@@ -139,7 +146,6 @@ void BrewNote::populateNote(Recipe* parent)
    setFinalVolume_l(parent->finalVolume_l());
 
    setProjEff_pct(parent->efficiency_pct());
-   setProjPoints( parent->points() );
    setProjABV_pct( parent->ABV_pct());
 
    for (int i = 0; i < yeasts.size(); ++i)
@@ -313,7 +319,7 @@ double BrewNote::calculateEffIntoBK_pct()
 
    if (maxPoints <= 0.0)
    {
-      Brewtarget::logW(QString("Avoiding div by 0, maxpoints is %1").arg(maxPoints));
+      Brewtarget::logW(QString("calculateEffIntoBK :: Avoiding div by 0, maxpoints is %1").arg(maxPoints));
       return 0.0;
    }
    effIntoBK = actualPoints/maxPoints * 100;

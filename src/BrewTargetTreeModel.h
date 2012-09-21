@@ -146,6 +146,9 @@ private slots:
    void yeastAdded(Yeast* victim);
    void yeastRemoved(Yeast* victim);
 
+   void brewNoteAdded(BrewNote* victim);
+   void brewNoteRemoved(BrewNote* victim);
+
 private:
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
    //! Loads the data. Empty \b propname means load all trees.

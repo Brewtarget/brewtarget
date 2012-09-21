@@ -1447,7 +1447,6 @@ void Recipe::removeYeast(Yeast* var)
 void Recipe::removeBrewNote(BrewNote* var)
 {
    Database::instance().removeFromRecipe(this, var);
-   emit changed(metaProperty("brewNotes"), QVariant());
 }
 
 //==============================Recalculators==================================
@@ -1942,6 +1941,7 @@ bool Recipe::isValidType( const QString &str )
    return false;
 }
 
+/*
 BrewNote* Recipe::addBrewNote( BrewNote* old )
 {
    BrewNote* newNote;
@@ -1957,6 +1957,7 @@ BrewNote* Recipe::addBrewNote( BrewNote* old )
    return newNote;
 
 }
+*/
 
 QList<QString> Recipe::getReagents( QList<Fermentable*> ferms )
 {

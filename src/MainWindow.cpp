@@ -1353,7 +1353,9 @@ void MainWindow::newBrewNote()
       if( rec != recipeObs )
          setRecipe(rec);
 
-      BrewNote* bNote = rec->addBrewNote();
+//      BrewNote* bNote = rec->addBrewNote();
+      BrewNote* bNote = Database::instance().newBrewNote(rec);
+      bNote->populateNote(rec);
       bNote->setBrewDate();
 
       setBrewNote(bNote);
@@ -1375,7 +1377,8 @@ void MainWindow::reBrewNote()
       if (! old || ! rec)
          return;
 
-      BrewNote* bNote = rec->addBrewNote(old);
+//      BrewNote* bNote = rec->addBrewNote(old);
+      BrewNote* bNote = Database::instance().newBrewNote(old);
       bNote->setBrewDate();
 
       if (rec != recipeObs)

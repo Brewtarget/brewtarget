@@ -439,6 +439,7 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
    sqlUpdate( Brewtarget::BREWNOTETABLE,
               "deleted=1",
               QString("id=%1").arg(b->_key) );
+   emit deletedBrewNoteSignal(b);
 }
 
 void Database::removeFromRecipe( Recipe* rec, Hop* hop )
@@ -775,7 +776,10 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
    BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
   
    if ( signal )
+   {
       emit changed( metaProperty("brewNotes"), QVariant() );
+      emit newBrewNoteSignal(tmp);
+   }
    return tmp;
 }
 
@@ -791,8 +795,12 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
               QString("recipe_id=%1").arg(parent->_key),
               QString("id=%2").arg(tmp->_key) );
 
+   tmp->populateNote(parent);
    if ( signal ) 
+   {
       emit changed( metaProperty("brewNotes"), QVariant() );
+      emit newBrewNoteSignal(tmp);
+   }
    return tmp;
 }
 
