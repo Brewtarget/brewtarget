@@ -25,8 +25,8 @@
 #include "brewtarget.h"
 #include "recipe.h"
 
-MiscTableModel::MiscTableModel(QTableView* parent)
-   : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent)
+MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
+   : QAbstractTableModel(parent), editable(editable), recObs(0), parentTableWidget(parent)
 {
    miscObs.clear();
 }
@@ -253,7 +253,7 @@ Qt::ItemFlags MiscTableModel::flags(const QModelIndex& index ) const
       case MISCNAMECOL:
          return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
       default:
-         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+         return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
             Qt::ItemIsEnabled;
    }
 }

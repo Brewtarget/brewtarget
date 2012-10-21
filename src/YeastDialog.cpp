@@ -35,7 +35,7 @@ YeastDialog::YeastDialog(MainWindow* parent)
 {
    setupUi(this);
 
-   yeastTableModel = new YeastTableModel(yeastTableWidget);
+   yeastTableModel = new YeastTableModel(yeastTableWidget, false);
    yeastTableProxy = new YeastSortFilterProxyModel(yeastTableWidget);
    yeastTableProxy->setSourceModel(yeastTableModel);
    yeastTableWidget->setModel(yeastTableProxy);

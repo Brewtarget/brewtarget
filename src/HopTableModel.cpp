@@ -35,11 +35,21 @@
 #include "unit.h"
 #include "brewtarget.h"
 
-HopTableModel::HopTableModel(QTableView* parent)
-   : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent), showIBUs(false)
+HopTableModel::HopTableModel(QTableView* parent, bool editable)
+   : QAbstractTableModel(parent), colFlags(HOPNUMCOLS), recObs(0), parentTableWidget(parent), showIBUs(false)
 {
    hopObs.clear();
    setObjectName("hopTable");
+   
+   int i;
+   for( i = 0; i < HOPNUMCOLS; ++i )
+   {
+      if( i == HOPNAMECOL )
+         colFlags[i] = Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      else
+         colFlags[i] = Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
+            Qt::ItemIsEnabled;
+   }
 }
 
 HopTableModel::~HopTableModel()
@@ -318,11 +328,7 @@ Qt::ItemFlags HopTableModel::flags(const QModelIndex& index ) const
 {
    int col = index.column();
    
-   if( col == HOPNAMECOL )
-      return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
-   else
-      return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
-         Qt::ItemIsEnabled;
+   return colFlags[col];
 }
 
 bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, int role )

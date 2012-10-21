@@ -51,7 +51,7 @@ class YeastTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   YeastTableModel(QTableView* parent=0);
+   YeastTableModel(QTableView* parent=0, bool editable=true);
    virtual ~YeastTableModel() {}
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -81,6 +81,7 @@ public slots:
    void removeYeast(Yeast* yeast);
    
 private:
+   bool editable;
    QList<Yeast*> yeastObs;
    QTableView* parentTableWidget;
    Recipe* recObs;

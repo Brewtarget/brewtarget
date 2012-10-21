@@ -35,8 +35,8 @@
 #include "brewtarget.h"
 #include "recipe.h"
 
-YeastTableModel::YeastTableModel(QTableView* parent)
-: QAbstractTableModel(parent), parentTableWidget(parent), recObs(0)
+YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
+: QAbstractTableModel(parent), editable(editable), parentTableWidget(parent), recObs(0)
 {
    yeastObs.clear();
 }
@@ -304,7 +304,7 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
       case YEASTNAMECOL:
          return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
       default:
-         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+         return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
             Qt::ItemIsEnabled;
    }
 }

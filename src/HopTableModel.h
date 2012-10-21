@@ -45,7 +45,8 @@ class HopTableModel : public QAbstractTableModel
    Q_OBJECT
            
 public:
-   HopTableModel(QTableView* parent=0);
+
+   HopTableModel(QTableView* parent=0, bool editable=true);
    virtual ~HopTableModel();
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -90,6 +91,7 @@ public slots:
    bool removeHop(Hop* hop);
    
 private:
+   QVector<Qt::ItemFlags> colFlags;
    QList<Hop*> hopObs;
    Recipe* recObs;
    QTableView* parentTableWidget;

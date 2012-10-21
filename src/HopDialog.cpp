@@ -36,7 +36,7 @@ HopDialog::HopDialog(MainWindow* parent)
 {
    setupUi(this);
 
-   hopTableModel = new HopTableModel(hopTableWidget);
+   hopTableModel = new HopTableModel(hopTableWidget, false);
    hopTableProxy = new HopSortFilterProxyModel(hopTableWidget);
    hopTableProxy->setSourceModel(hopTableModel);
    hopTableWidget->setModel(hopTableProxy);

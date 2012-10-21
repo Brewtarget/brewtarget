@@ -41,8 +41,8 @@
 #include "recipe.h"
 
 //=====================CLASS FermentableTableModel==============================
-FermentableTableModel::FermentableTableModel(QTableView* parent)
-   : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0), displayPercentages(false), totalFermMass_kg(0)
+FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
+   : QAbstractTableModel(parent), parentTableWidget(parent), editable(editable), recObs(0), displayPercentages(false), totalFermMass_kg(0)
 {
    fermObs.clear();
    // for units and scales
@@ -377,22 +377,22 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
    {
       // Ensure that being mashed and being a late addition are mutually exclusive.
       if( !row->addAfterBoil() )
-         return (defaults | Qt::ItemIsUserCheckable);
+         return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
       else
-         return Qt::ItemIsUserCheckable;
+         return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
    }
    else if( col == FERMAFTERBOIL )
    {
       // Ensure that being mashed and being a late addition are mutually exclusive.
       if( !row->isMashed() )
-         return (defaults | Qt::ItemIsUserCheckable);
+         return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
       else
-         return Qt::ItemIsUserCheckable;
+         return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
    }
    else if(  col == FERMNAMECOL )
       return (defaults | Qt::ItemIsSelectable);
    else
-      return (defaults | Qt::ItemIsSelectable | Qt::ItemIsEditable);
+      return (defaults | Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) );
 }
 
 /* --maf--

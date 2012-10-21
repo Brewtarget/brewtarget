@@ -50,7 +50,7 @@ class FermentableTableModel : public QAbstractTableModel
    Q_OBJECT
 
 public:
-   FermentableTableModel(QTableView* parent=0);
+   FermentableTableModel(QTableView* parent=0, bool editable=true);
    virtual ~FermentableTableModel() {}
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -105,6 +105,7 @@ private:
    void updateTotalGrains();
    QString generateName(int column) const;
    
+   bool editable;
    QList<Fermentable*> fermObs;
    Recipe* recObs;
    bool displayPercentages;
