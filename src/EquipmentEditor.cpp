@@ -147,10 +147,7 @@ void EquipmentEditor::equipmentSelected()
 {
    QModelIndex modelIndex;
    QModelIndex viewIndex(
-      equipmentComboBox->rootModelIndex().child(
-         equipmentComboBox->currentIndex(),
-         0
-      )
+      equipmentComboBox->model()->index(equipmentComboBox->currentIndex(),0)
    );
    
    modelIndex = equipmentSortProxyModel->mapToSource(viewIndex);
