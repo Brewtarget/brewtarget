@@ -715,7 +715,7 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 // Named constructors =========================================================
 
 int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
-{   
+{
    int key;
 
    QSqlQuery q(sqlDatabase());
@@ -919,7 +919,8 @@ Mash* Database::newMash(Recipe* parent)
    
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
-   
+
+   connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), parent, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
    return tmp;
 }
 
