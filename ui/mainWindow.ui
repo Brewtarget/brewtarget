@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>742</width>
-           <height>401</height>
+           <width>661</width>
+           <height>406</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1362,8 +1362,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>742</width>
-           <height>317</height>
+           <width>661</width>
+           <height>329</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1886,7 +1886,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -1989,7 +1989,6 @@
    <addaction name="actionNewRecipe"/>
    <addaction name="actionSave"/>
    <addaction name="actionDeleteSelected"/>
-   <addaction name="actionClearRecipe"/>
    <addaction name="separator"/>
    <addaction name="actionEquipments"/>
    <addaction name="actionStyles"/>
@@ -2379,18 +2378,6 @@
    </property>
    <property name="toolTip">
     <string>Save</string>
-   </property>
-  </action>
-  <action name="actionClearRecipe">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/images/editshred.svg</normaloff>:/images/editshred.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Clear recipe</string>
-   </property>
-   <property name="toolTip">
-    <string>Clear recipe</string>
    </property>
   </action>
   <action name="actionDeleteSelected">

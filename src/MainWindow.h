@@ -112,7 +112,6 @@ public slots:
    void save();
    void setRecipeByIndex(const QModelIndex &index);
    void treeActivated(const QModelIndex &index);
-   void clear();
 
    void updateRecipeName();
    void updateRecipeStyle();

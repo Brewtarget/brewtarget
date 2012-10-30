@@ -341,7 +341,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
-   connect( actionClearRecipe, SIGNAL(triggered()), this, SLOT(clear()) );
+//   connect( actionClearRecipe, SIGNAL(triggered()), this, SLOT(clear()) );
    connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // TreeView for clicks, both double and right
@@ -903,19 +903,6 @@ void MainWindow::save()
 {
    // TODO: seems like we don't need this at all?
    //Database::savePersistent();
-}
-
-void MainWindow::clear()
-{
-   if( QMessageBox::question(this, tr("Sure about that?"),
-                             tr("You are about to obliterate the recipe. Is that ok?"),
-                             QMessageBox::Ok,
-                             QMessageBox::No)
-       == QMessageBox::Ok )
-   {
-      recipeObs->clear();
-      setRecipe(recipeObs); // This will update tables and everything.
-   }
 }
 
 void MainWindow::updateRecipeName()
