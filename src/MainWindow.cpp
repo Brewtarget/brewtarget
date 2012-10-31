@@ -114,20 +114,24 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Now check to see if there's an old xml recipe file that we might need
    // to import recipes from.
-   QFile oldXmlFile( Brewtarget::getUserDataDir() + "recipes.xml" );
-   if( oldXmlFile.exists() )
+   QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
+   for ( int i = 0; i < oldFiles.size(); ++i ) 
    {
-      // NOTE: Should we pop up an information dialog here? Doing it silently
-      //       for now.
-      Database::instance().importFromXML( oldXmlFile.fileName() );
-      
-      QDir dir(Brewtarget::getUserDataDir());
-      if( !dir.exists("obsolete") )
-         dir.mkdir("obsolete");
-      dir.cd("obsolete");
-      
-      oldXmlFile.copy(dir.canonicalPath()+"/recipes.xml");
-      oldXmlFile.remove();
+      QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
+      if( oldXmlFile.exists() )
+      {
+         // NOTE: Should we pop up an information dialog here? Doing it silently
+         //       for now.
+         Database::instance().importFromXML( oldXmlFile.fileName() );
+         
+         QDir dir(Brewtarget::getUserDataDir());
+         if( !dir.exists("obsolete") )
+            dir.mkdir("obsolete");
+         dir.cd("obsolete");
+         
+         oldXmlFile.copy(dir.canonicalPath() + "/" + oldFiles[i]);
+         oldXmlFile.remove();
+      }
    }
    
    // Set the window title.
