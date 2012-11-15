@@ -54,5 +54,6 @@
         <file alias="css/recipe.css">${ROOTDIR}/css/recipe.css</file>
         <file alias="create_db.sql">${ROOTDIR}/create_db.sql</file>
         <file alias="blankdb.sqlite">${CMAKE_CURRENT_BINARY_DIR}/src/blankdb.sqlite</file>
+        <file alias="initialize_db.sql">${ROOTDIR}/initialize_db.sql</file>
     </qresource>
 </RCC>
