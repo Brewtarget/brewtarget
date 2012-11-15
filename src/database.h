@@ -59,7 +59,8 @@ class Yeast;
 class QThread;
 class SetterCommandStack;
 
-typedef struct{
+typedef struct
+{
    QString tableName; // Name of the table.
    QStringList propName; // List of BeerXML column names.
    BeerXMLElement* (Database::*newElement)(void); // Function to make a new ingredient in this table.
@@ -323,6 +324,10 @@ signals:
    // This is still experimental. Or at least mental
    void newBrewNoteSignal(BrewNote*);
    void deletedBrewNoteSignal(BrewNote*);
+
+   // MashSteps need signals too
+   void newMashStepSignal(MashStep*);
+   void deletedMashStepSignal(MashStep*);
    
 private slots:
    //! Load database from file.
@@ -430,7 +435,7 @@ private:
     * \param xmlTagsToProperties is a hash from xml tags to meta property names.
     * \param elementNode is the root node of the element we are reading from.
     */
-   void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode );
+   void fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
    
    // Import from BeerXML =====================================================
    BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );

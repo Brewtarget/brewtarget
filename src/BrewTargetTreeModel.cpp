@@ -935,6 +935,9 @@ void BrewTargetTreeModel::equipmentAdded(Equipment* victim)
 {
    BrewTargetTreeItem* temp;
 
+   if ( ! victim->display() ) 
+      return;
+
    BrewTargetTreeItem* local = rootItem->child(trees.value(EQUIPMASK));
    QModelIndex parent = createIndex(BrewTargetTreeItem::EQUIPMENT,0,local);
 
@@ -959,6 +962,11 @@ void BrewTargetTreeModel::equipmentRemoved(Equipment* victim)
 void BrewTargetTreeModel::fermentableAdded(Fermentable* victim)
 {
    BrewTargetTreeItem* temp;
+
+   // This is an import edge case. Things are being added to the db that are
+   // marked not display. Don't do anything if they are not display
+   if ( ! victim->display() ) 
+      return;
 
    BrewTargetTreeItem* local = rootItem->child(trees.value(FERMENTMASK));
    QModelIndex parent = createIndex(BrewTargetTreeItem::FERMENTABLE,0,local);
@@ -985,6 +993,9 @@ void BrewTargetTreeModel::hopAdded(Hop* victim)
 {
    BrewTargetTreeItem* temp;
 
+   if ( ! victim->display() ) 
+      return;
+
    BrewTargetTreeItem* local = rootItem->child(trees.value(HOPMASK));
    QModelIndex parent = createIndex(BrewTargetTreeItem::HOP,0,local);
 
@@ -1009,6 +1020,9 @@ void BrewTargetTreeModel::hopRemoved(Hop* victim)
 void BrewTargetTreeModel::miscAdded(Misc* victim)
 {
    BrewTargetTreeItem* temp;
+
+   if ( ! victim->display() ) 
+      return;
 
    BrewTargetTreeItem* local = rootItem->child(trees.value(MISCMASK));
    QModelIndex parent = createIndex(BrewTargetTreeItem::MISC,0,local);
@@ -1035,6 +1049,9 @@ void BrewTargetTreeModel::recipeAdded(Recipe* victim)
 {
    BrewTargetTreeItem* temp;
 
+   if ( ! victim->display() ) 
+      return;
+
    BrewTargetTreeItem* local = rootItem->child(trees.value(RECIPEMASK));
    QModelIndex parent = createIndex(BrewTargetTreeItem::RECIPE,0,local);
 
@@ -1059,6 +1076,9 @@ void BrewTargetTreeModel::recipeRemoved(Recipe* victim)
 void BrewTargetTreeModel::yeastAdded(Yeast* victim)
 {
    BrewTargetTreeItem* temp;
+
+   if ( ! victim->display() ) 
+      return;
 
    BrewTargetTreeItem* local = rootItem->child(trees.value(YEASTMASK));
    QModelIndex parent = createIndex(BrewTargetTreeItem::YEAST,0,local);

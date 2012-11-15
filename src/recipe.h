@@ -280,6 +280,10 @@ public slots:
    void acceptHopChange(QMetaProperty prop, QVariant val);
    void acceptMashChange(QMetaProperty prop, QVariant val);
 
+   void acceptFermChange(Fermentable* ferm);
+   void acceptHopChange(Hop* hop);
+   void acceptMashChange(Mash* mash);
+
    // Setters
    void setName( const QString &var );
    void setType( const QString &var );

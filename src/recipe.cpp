@@ -1601,7 +1601,10 @@ void Recipe::recalcVolumeEstimates()
    double waterAdded_l;
    double absorption_lKg;
    double tmp = 0.0;
-   double tmp_wfm, tmp_bv, tmp_fv, tmp_pbv;
+   double tmp_wfm = 0.0;
+   double tmp_bv = 0.0;
+   double tmp_fv = 0.0;
+   double tmp_pbv = 0.0;
 
    if( mash() == 0 )
       _wortFromMash_l = 0.0;
@@ -1729,10 +1732,12 @@ void Recipe::recalcSRMColor()
    double red = 232.9 * pow( (double)0.93, _color_srm );
    double green = (double)-106.25 * log(_color_srm) + 280.9;
 
-   int r = (red < 0)? 0 : ((red > 255)? 255 : (int)Algorithms::Instance().round(red));
-   int g = (green < 0)? 0 : ((green > 255)? 255 : (int)Algorithms::Instance().round(green));
+   int r = (int)Algorithms::Instance().round(red);
+   int g = (int)Algorithms::Instance().round(green);
    int b = 0;
 
+   r = (r < 0) ? 0 : ((r > 255)? 255 : r);
+   g = (g < 0) ? 0 : ((g > 255)? 255 : g);
    tmp.setRgb( r, g, b );
 
    if ( tmp != _SRMColor )
@@ -2039,7 +2044,17 @@ void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
    recalcAll();
 }
 
+void Recipe::acceptFermChange(Fermentable *ferm)
+{
+   recalcAll();
+}
+
 void Recipe::acceptHopChange(QMetaProperty prop, QVariant val)
+{
+   recalcIBU();
+}
+
+void Recipe::acceptHopChange(Hop* hop) 
 {
    recalcIBU();
 }
@@ -2052,4 +2067,10 @@ void Recipe::acceptMashChange(QMetaProperty prop, QVariant val)
       return;
    
    recalcAll();
+}
+
+void Recipe::acceptMashChange(Mash* newMash)
+{
+   if ( newMash == mash() )
+      recalcAll();
 }
