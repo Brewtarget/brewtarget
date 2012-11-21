@@ -238,6 +238,9 @@ void BrewNoteWidget::saveAll()
 
 void BrewNoteWidget::showChanges(QString field)
 {
+   double low  = 0.95;
+   double high = 1.05;
+
    if (bNoteObs == 0)
       return;
 
@@ -257,7 +260,11 @@ void BrewNoteWidget::showChanges(QString field)
 
    // Now with the calculated stuff
    lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
+
+   lcdnumber_projectedOG->setLowLim( low * Brewtarget::displayOG(bNoteObs, scrollAreaWidgetContents, "projOg",false).toDouble() );
+   lcdnumber_projectedOG->setHighLim( high * Brewtarget::displayOG(bNoteObs, scrollAreaWidgetContents, "projOg",false).toDouble() );
    lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs, scrollAreaWidgetContents, "projOg",false));
+
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
    lcdnumber_abv->display(bNoteObs->abv(),2);
