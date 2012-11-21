@@ -298,10 +298,8 @@ SET( FILES_TO_TRANSLATE
 ADD_CUSTOM_COMMAND( OUTPUT blankdb.sqlite
                     COMMAND ${RM_COMMAND} ARGS ${RM_ARGS} "blankdb.sqlite" # Need to remove it if it exists first.
                     COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "${ROOTDIR}/create_db.sql"
-                    COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "${ROOTDIR}/initialize_db.sql"
                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                     MAIN_DEPENDENCY "${ROOTDIR}/create_db.sql"
-                    MAIN_DEPENDENCY "${ROOTDIR}/initialize_db.sql"
 )
 
 #==================================Qt Junk=====================================

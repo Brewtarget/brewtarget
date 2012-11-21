@@ -112,28 +112,37 @@ MainWindow::MainWindow(QWidget* parent)
    // Ensure database initializes.
    Database::instance();
 
-   // Now check to see if there's an old xml recipe file that we might need
-   // to import recipes from.
-   QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
-   for ( int i = 0; i < oldFiles.size(); ++i ) 
+   // We have two use cases to consider here. The first is a BT
+   // 1.x user running BT 2 for the first time. The second is a BT 2 clean
+   // install. I am also trying to protect the developers from double imports.
+   // If the old "obsolete" directory exists, don't do anything other thann
+   // set the converted flag
+   if ( ! Brewtarget::btSettings.contains("converted")) 
    {
-      QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
-      if( oldXmlFile.exists() )
+      QDir dir(Brewtarget::getUserDataDir());
+      if ( !dir.exists("obsolete") )
       {
-         // NOTE: Should we pop up an information dialog here? Doing it silently
-         //       for now.
-         Database::instance().importFromXML( oldXmlFile.fileName() );
-         
-         QDir dir(Brewtarget::getUserDataDir());
-         if( !dir.exists("obsolete") )
-            dir.mkdir("obsolete");
-         dir.cd("obsolete");
-         
-         oldXmlFile.copy(dir.canonicalPath() + "/" + oldFiles[i]);
-         oldXmlFile.remove();
+         QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
+         for ( int i = 0; i < oldFiles.size(); ++i ) 
+         {
+            QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
+            // If the old file exists, import.
+            if( oldXmlFile.exists() )
+            {
+               // NOTE: Should we pop up an information dialog here? Doing it silently
+               //       for now.
+               Database::instance().importFromXML( oldXmlFile.fileName() );
+            }
+            // else we assume this is a fresh install and use the internal files
+            else 
+            {
+               Database::instance().importFromXML( ":/data/" + oldFiles[i]);
+            }
+         }
       }
+      Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
    }
-   
+
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
    
