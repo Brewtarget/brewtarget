@@ -1774,25 +1774,25 @@ void Recipe::recalcCalories()
    }
 }
 
-void Recipe::recalcOgFg()
+// other efficiency calculations need access to the maximum theoretical sugars
+// available. The only way I can see of doing that which doesn't suck is to
+// split that calcuation out of recalcOgFg();
+
+QHash<QString,double> Recipe::calcTotalPoints()
 {
-   unsigned int i;
-   double kettleWort_l;
-   double postBoilWort_l;
-   double plato;
-   double ratio = 0;
-   double sugar_kg = 0;
-    double sugar_kg_ignoreEfficiency = 0.0;
+   int i;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   double sugar_kg                  = 0.0;
+   double nonFermetableSugars_kg    = 0.0;
+   double kettleWort_l              = 0.0;
+   double postBoilWort_l            = 0.0;
+   double ratio                     = 0.0;
+
    Fermentable::Type fermtype;
-   double attenuation_pct = 0.0;
-   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
    Fermentable* ferm;
-   Yeast* yeast;
-   double nonFermetableSugars_kg = 0.0;
-   double ferm_kg = 0.0;
-  _og_fermentable = _fg_fermentable = 0.0;
-   
+
    QList<Fermentable*> ferms = fermentables();
+   QHash<QString,double> ret;
    
    // _points = 0;
    // Calculate OG
@@ -1804,11 +1804,11 @@ void Recipe::recalcOgFg()
       fermtype = ferm->type();
       if( fermtype==Fermentable::Sugar || fermtype==Fermentable::Extract || fermtype==Fermentable::Dry_Extract )
       {
-	sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
-	if ( !isFermentableSugar(ferm) )
-	{
-	  nonFermetableSugars_kg += ferm->equivSucrose_kg();
-	}
+         sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
+         if ( !isFermentableSugar(ferm) )
+         {
+           nonFermetableSugars_kg += ferm->equivSucrose_kg();
+         }
       }
       else
          sugar_kg += ferm->equivSucrose_kg();
@@ -1831,10 +1831,37 @@ void Recipe::recalcOgFg()
       //sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
       if ( nonFermetableSugars_kg != 0.0 )
-	nonFermetableSugars_kg *= ratio;
+         nonFermetableSugars_kg *= ratio;
    }
+   ret.insert("sugar_kg", sugar_kg);
+   ret.insert("nonFermetableSugars_kg", nonFermetableSugars_kg);
+   ret.insert("sugar_kg_ignoreEfficiency", sugar_kg_ignoreEfficiency);
+
+   return ret;
+
+}
+
+void Recipe::recalcOgFg()
+{
+   unsigned int i;
+   double plato;
+   double sugar_kg = 0;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   double nonFermetableSugars_kg = 0.0;
+   double ferm_kg = 0.0;
+   double attenuation_pct = 0.0;
+   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
+   Yeast* yeast;
+   QHash<QString,double> sugars;
    
-   // Combine the two sugars.
+   _og_fermentable = _fg_fermentable = 0.0;
+
+   // Find out how much sugar we have.
+   sugars = calcTotalPoints();
+   sugar_kg                  = sugars.value("sugar_kg");
+   sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
+   nonFermetableSugars_kg    = sugars.value("nonFermetableSugars_kg");
+
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
    plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolume_l);
 

@@ -269,6 +269,7 @@ public:
    QList<QString> getReagents( QList<Fermentable*> ferms );
    QList<QString> getReagents( QList<MashStep*> msteps );
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
+   QHash<QString,double> calcTotalPoints();
    
 signals:
    void changedName(const QString&);

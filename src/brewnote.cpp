@@ -95,7 +95,9 @@ void BrewNote::populateNote(Recipe* parent)
    MashStep* mStep;
    QList<Yeast*> yeasts = parent->yeasts();
    Yeast* yeast;
+   QHash<QString,double> sugars;
    double atten_pct = -1.0;
+   double plato,total_g;
 
 
    // Since we have the recipe, lets set some defaults
@@ -103,7 +105,13 @@ void BrewNote::populateNote(Recipe* parent)
    // The order in which these are done is very specific.
    // Later calls require certain things set first. Do not rearrange this
    // without good reason and test.
-   setProjPoints( parent->points() );
+
+   // Just getting the points won't work. parent->points() is already adjusted
+   // for efficiency and it throws off the rest of the calculations. I need
+   // the original theoretical maximum points. I only get the sugars, because
+   // the gravity will change depending on the volume
+   sugars = parent->calcTotalPoints();
+   setProjPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
 
    setProjVolIntoBK_l( parent->boilSize_l() );
 
@@ -127,6 +135,7 @@ void BrewNote::populateNote(Recipe* parent)
          setMashFinTemp_c( mStep->endTemp_c());
          setProjMashFinTemp_c( mStep->endTemp_c());
       }
+
       if ( steps.size() - 2 > 0 )
       {
          mStep = steps.at( steps.size() - 2 );
@@ -313,8 +322,15 @@ double BrewNote::calculateEffIntoBK_pct()
 {
    double effIntoBK;
    double maxPoints, actualPoints;
+   double plato, total_g;
 
-   maxPoints = (projPoints() * projVolIntoBK_l());
+   // We need to figure out the maximum theoretical points available to us at
+   // this point. Not sure if we should be using 
+   plato = Algorithms::Instance().getPlato(projPoints(), projVolIntoBK_l());
+   total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
+
+   maxPoints = (total_g - 1) * 1000 * projVolIntoBK_l();
+
    actualPoints = (sg() - 1) * 1000 * volumeIntoBK_l();
 
    if (maxPoints <= 0.0)
@@ -322,6 +338,7 @@ double BrewNote::calculateEffIntoBK_pct()
       Brewtarget::logW(QString("calculateEffIntoBK :: Avoiding div by 0, maxpoints is %1").arg(maxPoints));
       return 0.0;
    }
+
    effIntoBK = actualPoints/maxPoints * 100;
    setEffIntoBK_pct(effIntoBK);
    
@@ -355,9 +372,14 @@ double BrewNote::calculateBrewHouseEff_pct()
 {
    double expectedPoints, actualPoints;
    double brewhouseEff;
+   double plato, total_g;
+
+   plato = Algorithms::Instance().getPlato(projPoints(), projVolIntoFerm_l());
+   total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
+   expectedPoints = (total_g - 1) * 1000 * projVolIntoFerm_l();
    
    actualPoints = (og()-1.0) * 1000.0 * volumeIntoFerm_l();
-   expectedPoints = projPoints() * volumeIntoBK_l();
+//   expectedPoints = projPoints() * volumeIntoBK_l();
 
    brewhouseEff = actualPoints/expectedPoints * 100.0;
    setBrewhouseEff_pct(brewhouseEff);
