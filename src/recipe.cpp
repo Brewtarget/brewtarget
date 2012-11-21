@@ -1472,6 +1472,7 @@ void Recipe::recalcAll()
    recalcABV_pct(); // 0.12
    recalcBoilGrav(); // 0.14
    recalcIBU(); // 0.15
+   recalcCalories();
    
    _uninitializedCalcs = false;
    
