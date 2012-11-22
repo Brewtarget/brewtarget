@@ -354,7 +354,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
-//   connect( actionClearRecipe, SIGNAL(triggered()), this, SLOT(clear()) );
    connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // TreeView for clicks, both double and right
@@ -856,7 +855,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
    lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
-   // FG is outstanding
+   
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
    lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
@@ -872,19 +871,15 @@ void MainWindow::showChanges(QMetaProperty* prop)
    {
       lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false));
       lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false));
-      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle,  tab_recipe, "ogMin",false).toDouble());
-      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle, tab_recipe, "ogMax",false).toDouble());
 
       // 
       fg.first = "fgMin";
       fg.second = recStyle;
       lcdNumber_fgLow->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
       lcdNumber_fg->setLowLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
-      // lcdNumber_fg->setLowLim(Brewtarget::displayFG(recStyle->fgMin(),recipeObs->og(),false,"og").toDouble());
 
       fg.first = "fgMax";
       lcdNumber_fgHigh->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
-      // lcdNumber_fg->setHighLim(Brewtarget::displayFG(recStyle->fgMax(),recipeObs->og(),false,"og").toDouble());
       lcdNumber_fg->setHighLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
 
       lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
@@ -965,6 +960,7 @@ void MainWindow::updateRecipeEquipment()
          recipeObs->setBatchSize_l( equip->batchSize_l() );
          recipeObs->setBoilSize_l( equip->boilSize_l() );
          recipeObs->setBoilTime_min( equip->boilTime_min() );
+         equipmentButton->setEquipment(equip);
          mashEditor->setEquipment(equip);
       }
    }
