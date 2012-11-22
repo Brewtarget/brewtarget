@@ -946,23 +946,16 @@ void MainWindow::updateRecipeEquipment()
 
    // Notice that we are using a copy from the database.
    Database::instance().addToRecipe(recipeObs,equip);
+   equipmentButton->setEquipment(equip);
 
-   if( QMessageBox::question(this,
-                             tr("Equipment request"),
+   if( QMessageBox::question(this, tr("Equipment request"),
                              tr("Would you like to set the batch and boil size to that requested by the equipment?"),
-                             QMessageBox::Yes,
-                             QMessageBox::No)
-        == QMessageBox::Yes
-     )
+                             QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
    {
-      if( recipeObs )
-      {
-         recipeObs->setBatchSize_l( equip->batchSize_l() );
-         recipeObs->setBoilSize_l( equip->boilSize_l() );
-         recipeObs->setBoilTime_min( equip->boilTime_min() );
-         equipmentButton->setEquipment(equip);
-         mashEditor->setEquipment(equip);
-      }
+      recipeObs->setBatchSize_l( equip->batchSize_l() );
+      recipeObs->setBoilSize_l( equip->boilSize_l() );
+      recipeObs->setBoilTime_min( equip->boilTime_min() );
+      mashEditor->setEquipment(equip);
    }
 }
 
@@ -977,6 +970,7 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
 
    // Notice that we are using a copy from the database.
    Database::instance().addToRecipe(recipeObs,kit);
+   equipmentButton->setEquipment(kit);
 
    if( QMessageBox::question(this,
                              tr("Equipment request"),
@@ -986,12 +980,10 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
         == QMessageBox::Yes
      )
    {
-      if( recipeObs )
-      {
-         recipeObs->setBatchSize_l( kit->batchSize_l() );
-         recipeObs->setBoilSize_l( kit->boilSize_l() );
-         recipeObs->setBoilTime_min( kit->boilTime_min() );
-      }
+      recipeObs->setBatchSize_l( kit->batchSize_l() );
+      recipeObs->setBoilSize_l( kit->boilSize_l() );
+      recipeObs->setBoilTime_min( kit->boilTime_min() );
+      mashEditor->setEquipment(kit);
    }
 }
 
