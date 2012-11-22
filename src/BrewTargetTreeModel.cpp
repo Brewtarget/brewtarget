@@ -145,8 +145,6 @@ int BrewTargetTreeModel::columnCount( const QModelIndex &parent) const
       return BrewTargetTreeItem::MISCNUMCOLS;
    case YEASTMASK:
       return BrewTargetTreeItem::YEASTNUMCOLS;
-   case ALLMASK:
-      return BrewTargetTreeItem::RECIPENUMCOLS;
    default:
       return 0;
    }
@@ -393,33 +391,24 @@ QVariant BrewTargetTreeModel::getYeastHeader(int section) const
    return QVariant();
 }
 
-bool BrewTargetTreeModel::insertRows(int row, int count, const QModelIndex &parent)
+bool BrewTargetTreeModel::insertRows(int row, int count, const QModelIndex &parent, QObject* victim, int victimType )
 {
    if ( ! parent.isValid() )
       return false;
 
    BrewTargetTreeItem *pItem = getItem(parent);
    int type = pItem->getType();
-   int gpType;
-
-   if ( treeMask == ALLMASK )
-   {
-      BrewTargetTreeItem *gpItem = pItem->parent();
-      gpType = gpItem->getType();
-   }
-   else
-      gpType = type;
-
-   // This is somehwat tricky. Basically, if the current item and its grandparent are both
-   // recipes, then this must be a brewnote. This makes some sense (not much, but some)
-   // when doing an ALLMASK tree. I am not certain it makes sense for the new trees.
-   if (gpType == BrewTargetTreeItem::RECIPE && type == BrewTargetTreeItem::RECIPE)
-      type = BrewTargetTreeItem::BREWNOTE;
 
    bool success = true;
 
    beginInsertRows(parent, row, row + count - 1);
    success = pItem->insertChildren(row, count, type);
+   if ( victim ) 
+   {
+      type = victimType == -1 ? type : victimType;
+      BrewTargetTreeItem* added = pItem->child(row);
+      added->setData(type, victim);
+   }
    endInsertRows();
 
    return success;
@@ -933,8 +922,6 @@ int BrewTargetTreeModel::getMask()
 
 void BrewTargetTreeModel::equipmentAdded(Equipment* victim)
 {
-   BrewTargetTreeItem* temp;
-
    if ( ! victim->display() ) 
       return;
 
@@ -946,9 +933,7 @@ void BrewTargetTreeModel::equipmentAdded(Equipment* victim)
 
    int breadth = rowCount(parent);
 
-    insertRows(breadth, 1, createIndex(trees.value(EQUIPMASK),0,local));
-    temp = local->child(breadth);
-    temp->setData(BrewTargetTreeItem::EQUIPMENT, victim);
+    insertRows(breadth, 1, createIndex(trees.value(EQUIPMASK),0,local),victim);
 }
 
 void BrewTargetTreeModel::equipmentRemoved(Equipment* victim)
@@ -961,8 +946,6 @@ void BrewTargetTreeModel::equipmentRemoved(Equipment* victim)
 
 void BrewTargetTreeModel::fermentableAdded(Fermentable* victim)
 {
-   BrewTargetTreeItem* temp;
-
    // This is an import edge case. Things are being added to the db that are
    // marked not display. Don't do anything if they are not display
    if ( ! victim->display() ) 
@@ -976,9 +959,7 @@ void BrewTargetTreeModel::fermentableAdded(Fermentable* victim)
 
    int breadth = rowCount(parent);
 
-    insertRows(breadth, 1, createIndex(trees.value(FERMENTMASK),0,local));
-    temp = local->child(breadth);
-    temp->setData(BrewTargetTreeItem::FERMENTABLE, victim);
+    insertRows(breadth, 1, createIndex(trees.value(FERMENTMASK),0,local),victim);
 }
 
 void BrewTargetTreeModel::fermentableRemoved(Fermentable* victim)
@@ -991,8 +972,6 @@ void BrewTargetTreeModel::fermentableRemoved(Fermentable* victim)
 
 void BrewTargetTreeModel::hopAdded(Hop* victim)
 {
-   BrewTargetTreeItem* temp;
-
    if ( ! victim->display() ) 
       return;
 
@@ -1004,9 +983,7 @@ void BrewTargetTreeModel::hopAdded(Hop* victim)
 
    int breadth = rowCount(parent);
 
-    insertRows(breadth, 1, createIndex(trees.value(HOPMASK),0,local));
-    temp = local->child(breadth);
-    temp->setData(BrewTargetTreeItem::HOP, victim);
+    insertRows(breadth, 1, createIndex(trees.value(HOPMASK),0,local),victim);
 }
 
 void BrewTargetTreeModel::hopRemoved(Hop* victim)
@@ -1019,8 +996,6 @@ void BrewTargetTreeModel::hopRemoved(Hop* victim)
 
 void BrewTargetTreeModel::miscAdded(Misc* victim)
 {
-   BrewTargetTreeItem* temp;
-
    if ( ! victim->display() ) 
       return;
 
@@ -1032,9 +1007,7 @@ void BrewTargetTreeModel::miscAdded(Misc* victim)
 
    int breadth = rowCount(parent);
 
-    insertRows(breadth, 1, createIndex(trees.value(MISCMASK),0,local));
-    temp = local->child(breadth);
-    temp->setData(BrewTargetTreeItem::MISC, victim);
+    insertRows(breadth, 1, createIndex(trees.value(MISCMASK),0,local),victim);
 }
 
 void BrewTargetTreeModel::miscRemoved(Misc* victim)
@@ -1047,8 +1020,6 @@ void BrewTargetTreeModel::miscRemoved(Misc* victim)
 
 void BrewTargetTreeModel::recipeAdded(Recipe* victim)
 {
-   BrewTargetTreeItem* temp;
-
    if ( ! victim->display() ) 
       return;
 
@@ -1060,9 +1031,7 @@ void BrewTargetTreeModel::recipeAdded(Recipe* victim)
 
    int breadth = rowCount(parent);
 
-    insertRows(breadth, 1, createIndex(trees.value(RECIPEMASK),0,local));
-    temp = local->child(breadth);
-    temp->setData(BrewTargetTreeItem::RECIPE, victim);
+    insertRows(breadth, 1, createIndex(trees.value(RECIPEMASK),0,local),victim);
 }
 
 void BrewTargetTreeModel::recipeRemoved(Recipe* victim)
@@ -1075,8 +1044,6 @@ void BrewTargetTreeModel::recipeRemoved(Recipe* victim)
 
 void BrewTargetTreeModel::yeastAdded(Yeast* victim)
 {
-   BrewTargetTreeItem* temp;
-
    if ( ! victim->display() ) 
       return;
 
@@ -1088,9 +1055,7 @@ void BrewTargetTreeModel::yeastAdded(Yeast* victim)
 
    int breadth = rowCount(parent);
 
-    insertRows(breadth, 1, createIndex(trees.value(YEASTMASK),0,local));
-    temp = local->child(breadth);
-    temp->setData(BrewTargetTreeItem::YEAST, victim);
+    insertRows(breadth, 1, createIndex(trees.value(YEASTMASK),0,local),victim);
 }
 
 void BrewTargetTreeModel::yeastRemoved(Yeast* victim)
@@ -1113,8 +1078,7 @@ void BrewTargetTreeModel::brewNoteAdded(BrewNote* victim)
    BrewTargetTreeItem* pItem = getItem(pInd);
 
    int breadth = pItem->childCount();
-   insertRows(breadth,1,pInd);
-   pItem->child(breadth)->setData(BrewTargetTreeItem::BREWNOTE, victim);
+   insertRows(breadth,1,pInd,victim,BrewTargetTreeItem::BREWNOTE);
 }
 
 // deleting them is worse. Unfortunately, the blasted brewnote is deleted by

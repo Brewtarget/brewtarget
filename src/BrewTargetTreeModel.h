@@ -84,7 +84,7 @@ public:
    QModelIndex getFirst(int type);
    // Methods required for read-write access.  We are not implementing adding
     // or removing columns because that doesn't make sense for this model.
-   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex(), QObject* victim = 0, int victimType = -1);
    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
    // Good stuff to have.  Like a Ruination clone happily dry hopping

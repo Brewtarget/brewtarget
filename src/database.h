@@ -165,7 +165,8 @@ public:
    
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
-   // of ingredients in rec.
+   // of ingredients in rec. If noCopy is true, then don't copy, and set
+   // the ingredient's display parameter to 0 (don't display in lists).
    void addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false );
    void addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false );
    void addToRecipe( Recipe* rec, Misc* m, bool noCopy = false );

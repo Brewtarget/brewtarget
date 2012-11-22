@@ -92,11 +92,10 @@ Database::~Database()
 bool Database::load()
 {
    bool dbIsOpen;
-   bool createFromScratch = false;
    
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
-   dataDbFileName = (Brewtarget::getDataDir() + "database.sqlite");
+   dataDbFileName = (Brewtarget::getDataDir() + "default_db.sqlite");
    dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
    
    // Cleanup the backup database if there was a previous error.
@@ -111,32 +110,25 @@ bool Database::load()
    // If there's no dbFile, try to copy from dataDbFile.
    if( !dbFile.exists() )
    {
+      Brewtarget::userDatabaseDidNotExist = true;
+      
       // If there's no dataDbFile, create dbFile from scratch.
       if( !dataDbFile.exists() )
-         createFromScratch = true;
+      {
+         QFile::copy( ":/blankdb.sqlite", dbFileName );
+         QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+      }
       else
+      {
          dataDbFile.copy(dbFileName);
-   }
-
-   // NOTE: I don't think this will be necessary anymore, but leaving it
-   // commented just in case.
-   // Sometimes, the database file gets created but is empty. This fixes that
-   // problem
-   //if ( dbFile.size() == 0 )
-   //   createFromScratch = true;
-   
-   // If we need to create from scratch, do it.
-   if( createFromScratch )
-   {
-      QFile::copy( ":/blankdb.sqlite", dbFileName );
-      QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+         QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+      }
    }
 
    // Create a copy of the database to revert to if the user decides not to make changes.
    dbFile.copy(dbTempBackupFileName);
    
    // Open SQLite db.
-   // http://www.developer.nokia.com/Community/Wiki/CS001504_-_Creating_an_SQLite_database_in_Qt
    QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE");
    sqldb.setDatabaseName(dbFileName);
    dbIsOpen = sqldb.open();
@@ -2810,8 +2802,32 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    // When loading from XML, we need to delay the signals until after
    // everything is done. This should significantly speed up the load times
    blockSignals(true); 
-   Equipment* ret = newEquipment();
+   
+   Equipment* ret;
+   QList<Equipment*> matchingEquips;
+   QDomNode n;
+   bool createdNew = true;
 
+   // If we are just importing an equip by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      
+      getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
+      
+      if( matchingEquips.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingEquips.first();
+      }
+      else
+         ret = newEquipment();
+   }
+   else
+      ret = newEquipment();
+   
    fromXml( ret, Equipment::tagToProp, node );
 
    if( parent )
@@ -2821,8 +2837,11 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    }
 
    blockSignals(false);
-   emit changed( metaProperty("equipments"), QVariant() );
-   emit newEquipmentSignal(ret);
+   if( createdNew )
+   {
+      emit changed( metaProperty("equipments"), QVariant() );
+      emit newEquipmentSignal(ret);
+   }
    
    return ret;
 }
@@ -2830,9 +2849,30 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-
-   blockSignals(true); 
-   Fermentable* ret = newFermentable();
+   Fermentable* ret;
+   bool createdNew = true;
+   blockSignals(true);
+   
+   // If we are just importing a hop by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Fermentable*> matchingFerms;
+      getElements<Fermentable>( matchingFerms, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
+      
+      if( matchingFerms.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingFerms.first();
+      }
+      else
+         ret = newFermentable();
+   }
+   else
+      ret = newFermentable();
+   
    fromXml( ret, Fermentable::tagToProp, node );
 
    
@@ -2847,8 +2887,11 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
       addToRecipe( parent, ret, true );
 
    blockSignals(false);
-   emit changed( metaProperty("fermentables"), QVariant() );
-   emit newFermentableSignal(ret);
+   if( createdNew )
+   {
+      emit changed( metaProperty("fermentables"), QVariant() );
+      emit newFermentableSignal(ret);
+   }
 
    return ret;
 }
@@ -2908,10 +2951,30 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
 Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-
+   Hop* ret;
+   bool createdNew = true;
    blockSignals(true); 
 
-   Hop* ret = newHop();
+   // If we are just importing a hop by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Hop*> matchingHops;
+      getElements<Hop>( matchingHops, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
+      
+      if( matchingHops.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingHops.first();
+      }
+      else
+         ret = newHop();
+   }
+   else
+      ret = newHop();
+   
    fromXml( ret, Hop::tagToProp, node );
   
    // Handle enums separately.
@@ -2929,9 +2992,12 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
    if( parent )
       addToRecipe( parent, ret, true );
 
-   blockSignals(false); 
-   emit changed( metaProperty("hops"), QVariant() );
-   emit newHopSignal(ret);
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("hops"), QVariant() );
+      emit newHopSignal(ret);
+   }
    return ret;
 }
 
@@ -3069,9 +3135,29 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
 Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-
+   bool createdNew = true;
    blockSignals(true); 
-   Misc* ret = newMisc();
+   Misc* ret;
+   
+   // If we are just importing a misc by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Misc*> matchingMiscs;
+      getElements<Misc>( matchingMiscs, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
+      
+      if( matchingMiscs.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingMiscs.first();
+      }
+      else
+         ret = newMisc();
+   }
+   else
+      ret = newMisc();
    
    fromXml( ret, Misc::tagToProp, node );
    
@@ -3084,9 +3170,12 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    if( parent )
       addToRecipe( parent, ret, true );
 
-   blockSignals(false); 
-   emit changed( metaProperty("miscs"), QVariant() );
-   emit newMiscSignal(ret);
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("miscs"), QVariant() );
+      emit newMiscSignal(ret);
+   }
    return ret;
 }
 
@@ -3159,10 +3248,30 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-
+   bool createdNew = true;
    blockSignals(true); 
-   Style* ret = newStyle();
+   Style* ret;
 
+   // If we are just importing a style by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Style*> matching;
+      getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
+      
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+      else
+         ret = newStyle();
+   }
+   else
+      ret = newStyle();
+   
    fromXml( ret, Style::tagToProp, node );
 
    // Handle enums separately.
@@ -3176,9 +3285,12 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    if( parent )
       addToRecipe( parent, ret );
 
-   blockSignals(false); 
-   emit changed( metaProperty("styles"), QVariant() );
-   emit newStyleSignal(ret);
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("styles"), QVariant() );
+      emit newStyleSignal(ret);
+   }
 
    return ret;
 }
@@ -3186,14 +3298,40 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 {
    blockSignals(true); 
-   Water* ret = newWater();
+   bool createdNew = true;
+   Water* ret;
+   QDomNode n;
+   
+   // If we are just importing a style by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Water*> matching;
+      getElements<Water>( matching, QString("name='%1'").arg(name), Brewtarget::WATERTABLE, allWaters );
+      
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+      else
+         ret = newWater();
+   }
+   else
+      ret = newWater();
+   
    fromXml( ret, Water::tagToProp, node );
    if( parent )
       addToRecipe( parent, ret, true );
 
-   blockSignals(false); 
-   emit changed( metaProperty("waters"), QVariant() );
-   emit newWaterSignal(ret);
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("waters"), QVariant() );
+      emit newWaterSignal(ret);
+   }
    
    return ret;
 }
@@ -3201,8 +3339,30 @@ Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   blockSignals(true); 
-   Yeast* ret = newYeast();
+   blockSignals(true);
+   bool createdNew = true;
+   Yeast* ret;
+   
+   // If we are just importing a yeast by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Yeast*> matching;
+      getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
+      
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+      else
+         ret = newYeast();
+   }
+   else
+      ret = newYeast();
+   
    fromXml( ret, Yeast::tagToProp, node );
 
    // Handle enums separately.
@@ -3229,9 +3389,12 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    if( parent )
       addToRecipe( parent, ret, true );
    
-   blockSignals(false); 
-   emit changed( metaProperty("yeasts"), QVariant() );
-   emit newYeastSignal(ret);
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("yeasts"), QVariant() );
+      emit newYeastSignal(ret);
+   }
    
    return ret;
 }

@@ -119,9 +119,15 @@ MainWindow::MainWindow(QWidget* parent)
    // set the converted flag
    if ( ! Brewtarget::btSettings.contains("converted")) 
    {
+   
       QDir dir(Brewtarget::getUserDataDir());
-      if ( !dir.exists("obsolete") )
+      // Checking for non-existence is redundant with the new "converted" setting,
+      // but better safe than sorry.
+      if( !dir.exists("obsolete") )
       {
+         dir.mkdir("obsolete");
+         dir.cd("obsolete");
+         
          QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
          for ( int i = 0; i < oldFiles.size(); ++i ) 
          {
@@ -132,14 +138,14 @@ MainWindow::MainWindow(QWidget* parent)
                // NOTE: Should we pop up an information dialog here? Doing it silently
                //       for now.
                Database::instance().importFromXML( oldXmlFile.fileName() );
-            }
-            // else we assume this is a fresh install and use the internal files
-            else 
-            {
-               Database::instance().importFromXML( ":/data/" + oldFiles[i]);
+               
+               // Move to obsolete/ directory.
+               if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
+                  oldXmlFile.remove();
             }
          }
       }
+   
       Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
    }
 
