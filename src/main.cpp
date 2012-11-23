@@ -76,6 +76,9 @@ int main(int argc, char **argv)
    {
       Database::instance().importFromXML(args.at(i+1));
       Database::dropInstance();
+      // If you know enough to run --from-xml, I am going to assume you know
+      // enough to do it right
+      Brewtarget::setOption("converted", QDate().currentDate().toString());
       return 0;
    }
    
