@@ -1985,6 +1985,7 @@ void MainWindow::exportSelected()
 {
    BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
    QModelIndexList selected;
+   QList<QModelIndex>::const_iterator at,end;
    QDomDocument doc;
    QFile* outFile;
    QDomElement root,dbase,recipe;
@@ -2018,10 +2019,10 @@ void MainWindow::exportSelected()
    dbase = doc.createElement("DATABASE"); 
    recipe = doc.createElement("RECIPES"); 
 
-   for(int i=0; i < selected.count(); ++i)
+   for(at = selected.begin(),end = selected.end(); at < end; ++at)
    {
-      QModelIndex selection = selected.value(i);
-      int type = treeView_recipe->getType(selection);
+      QModelIndex selection = *at;
+      int type = active->getType(selection);
 
       switch(type)
       {
@@ -2030,16 +2031,16 @@ void MainWindow::exportSelected()
             didRecipe = true;
             break;
          case BrewTargetTreeItem::EQUIPMENT:
-            Database::instance().toXml( treeView_recipe->getEquipment(selection), doc, recipe);
+            Database::instance().toXml( treeView_equip->getEquipment(selection), doc, dbase);
             break;
          case BrewTargetTreeItem::HOP:
-            Database::instance().toXml( treeView_recipe->getHop(selection), doc, recipe);
+            Database::instance().toXml( treeView_hops->getHop(selection), doc, dbase);
             break;
          case BrewTargetTreeItem::MISC:
-            Database::instance().toXml( treeView_recipe->getMisc(selection), doc, recipe);
+            Database::instance().toXml( treeView_misc->getMisc(selection), doc, dbase);
             break;
          case BrewTargetTreeItem::YEAST:
-            Database::instance().toXml( treeView_recipe->getYeast(selection), doc, recipe);
+            Database::instance().toXml( treeView_yeast->getYeast(selection), doc, dbase);
             break;
       }
    }
