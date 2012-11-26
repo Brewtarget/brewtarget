@@ -84,7 +84,7 @@ public:
    QModelIndex getFirst(int type);
    // Methods required for read-write access.  We are not implementing adding
     // or removing columns because that doesn't make sense for this model.
-   bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex(), QObject* victim = 0, int victimType = -1);
+   bool insertRow(int row, const QModelIndex &parent = QModelIndex(), QObject* victim = 0, int victimType = -1);
    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
    // Good stuff to have.  Like a Ruination clone happily dry hopping
@@ -98,15 +98,6 @@ public:
 
    int getType(const QModelIndex &index);
    int getMask();
-/*
-   //! Connect the element's changed signal to our slot.
-   void addObserved( BeerXMLElement* element );
-   //! Disconnect the element's changed signal from our slot.
-   void removeObserved( BeerXMLElement* element );
-*/  
-   // Methods required for observable
-   //virtual void notify(Observable *notifier, QVariant info = QVariant());
-   //void startObservingDB();
 
    // Convenience functions to make the rest of the software play nice
    Recipe* getRecipe(const QModelIndex &index) const;
@@ -126,8 +117,6 @@ public:
    QModelIndex findBrewNote(BrewNote* bNote);
 
 private slots:
-//   void changed( QMetaProperty, QVariant );
-//
    void equipmentAdded(Equipment* victim);
    void equipmentRemoved(Equipment* victim);
    
@@ -155,10 +144,6 @@ private:
    void loadTreeModel(QString propName = "");
    //! Unloads the data. Empty \b propname means unload all trees.
    void unloadTreeModel(QString propName = "");
-   //! Disconnect all the \b objects' signals from us. \b T must be BeerXMLElement.
-   void unobserve( QList<Recipe*>& objects );
-   
-   QList<Recipe*> recipes;
    
    // Helper methods for recipe headers
    QVariant getRecipeHeader(int section) const;
@@ -171,7 +156,6 @@ private:
    BrewTargetTreeItem* rootItem;
    QHash<TypeMasks, int> trees;
    BrewTargetTreeView *parentTree;
-   Recipe* recObs;
    TypeMasks treeMask;
 
 };

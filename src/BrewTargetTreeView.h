@@ -104,6 +104,9 @@ public:
    friend class MiscTreeView;
    friend class YeastTreeView;
 
+private slots:
+   void somethingChanged(const QModelIndex &parent, int row, int count);
+
 private:
    BrewTargetTreeModel* model;
    BtTreeFilterProxyModel* filter;
@@ -113,6 +116,7 @@ private:
    bool doubleClick;
 
    QMimeData *mimeData(QModelIndexList indexes);
+   void connectSignals();
 };
 
 // RecipeTreeView subclasses BrewTargetTreeView to only show recipes.

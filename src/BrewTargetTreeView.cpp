@@ -42,6 +42,7 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    setContextMenuPolicy(Qt::CustomContextMenu);
    setRootIsDecorated(false);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
+
 }
 
 BrewTargetTreeModel* BrewTargetTreeView::getModel()
@@ -158,6 +159,12 @@ QModelIndex BrewTargetTreeView::findBrewNote(BrewNote* bNote)
 int BrewTargetTreeView::getType(const QModelIndex &index)
 {
    return model->getType(filter->mapToSource(index));
+}
+
+void BrewTargetTreeView::connectSignals()
+{
+   connect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),this, SLOT(somethingChanged(const QModelIndex &, int, int)));
+   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),this, SLOT(somethingChanged(const QModelIndex &, int, int)));
 }
 
 void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)
@@ -368,6 +375,7 @@ QMenu* BrewTargetTreeView::getContextMenu(QModelIndex selected)
    return contextMenu;
 }
 
+void BrewTargetTreeView::somethingChanged(const QModelIndex &parent, int row, int count) { filter->invalidate(); }
 // Bad form likely
 
 RecipeTreeView::RecipeTreeView(QWidget *parent)
@@ -384,6 +392,8 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
    sortByColumn(0,Qt::AscendingOrder);
    // Resizing before you set the model doesn't do much.
    resizeColumnToContents(0);
+
+   connectSignals();
 }
 
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
@@ -393,13 +403,14 @@ EquipmentTreeView::EquipmentTreeView(QWidget *parent)
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::EQUIPMASK);
    filter->setSourceModel(model);
    setModel(filter);
-   filter->setDynamicSortFilter(true);
+   filter->setDynamicSortFilter(false);
 
    setExpanded(findEquipment(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
 
+   connectSignals();
 }
 
 // Icky ick ikcy
@@ -411,11 +422,14 @@ FermentableTreeView::FermentableTreeView(QWidget *parent)
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
-   
+  
+   filter->dumpObjectInfo(); 
    setExpanded(findFermentable(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
+
+   connectSignals();
 }
 
 // More Ick
@@ -432,6 +446,8 @@ HopTreeView::HopTreeView(QWidget *parent)
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
+
+   connectSignals();
 }
 
 // Ick some more
@@ -448,6 +464,8 @@ MiscTreeView::MiscTreeView(QWidget *parent)
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
+
+   connectSignals();
 }
 
 // Will this ick never end?
@@ -464,4 +482,6 @@ YeastTreeView::YeastTreeView(QWidget *parent)
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
+
+   connectSignals();
 }
