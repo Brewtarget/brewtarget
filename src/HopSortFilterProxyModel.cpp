@@ -38,8 +38,9 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
    switch( left.column() )
    {
       case HOPALPHACOL:
-        return leftHop.toDouble() < rightHop.toDouble();
+         return leftHop.toDouble() < rightHop.toDouble();
       case HOPAMOUNTCOL:
+         return Brewtarget::weightQStringToSI(leftHop.toString()) < Brewtarget::weightQStringToSI(rightHop.toString());
       case HOPTIMECOL:
         // Get the indexes of the Use column
         lSibling = left.sibling(left.row(), HOPUSECOL);

@@ -37,6 +37,7 @@ class Database;
 #include <QTableView>
 #include <QSqlError>
 #include <QDebug>
+#include <QRegExp>
 #include <QMap>
 #include "BeerXMLElement.h"
 #include "brewtarget.h"
@@ -58,7 +59,8 @@ class Yeast;
 class QThread;
 class SetterCommandStack;
 
-typedef struct{
+typedef struct
+{
    QString tableName; // Name of the table.
    QStringList propName; // List of BeerXML column names.
    BeerXMLElement* (Database::*newElement)(void); // Function to make a new ingredient in this table.
@@ -163,7 +165,8 @@ public:
    
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
-   // of ingredients in rec.
+   // of ingredients in rec. If noCopy is true, then don't copy, and set
+   // the ingredient's display parameter to 0 (don't display in lists).
    void addToRecipe( Recipe* rec, Hop* hop, bool noCopy = false );
    void addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy = false );
    void addToRecipe( Recipe* rec, Misc* m, bool noCopy = false );
@@ -319,6 +322,13 @@ signals:
    void deletedWaterSignal(Water*);
    void newYeastSignal(Yeast*);
    void deletedYeastSignal(Yeast*);
+   // This is still experimental. Or at least mental
+   void newBrewNoteSignal(BrewNote*);
+   void deletedBrewNoteSignal(BrewNote*);
+
+   // MashSteps need signals too
+   void newMashStepSignal(MashStep*);
+   void deletedMashStepSignal(MashStep*);
    
 private slots:
    //! Load database from file.
@@ -426,7 +436,7 @@ private:
     * \param xmlTagsToProperties is a hash from xml tags to meta property names.
     * \param elementNode is the root node of the element we are reading from.
     */
-   void fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode );
+   void fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode);
    
    // Import from BeerXML =====================================================
    BrewNote* brewNoteFromXml( QDomNode const& node, Recipe* parent );
@@ -563,13 +573,12 @@ private:
    {
       int newKey;
       int i;
-      T* newOne = 0;
+      T* newOne = new T();
       
       Brewtarget::DBTable t = classNameToTable[object->metaObject()->className()];
       QString tName = tableNames[t];
       
-      QSqlQuery q(QString("SELECT * FROM %1 WHERE id = %2")
-                  .arg(tName).arg(object->_key),
+      QSqlQuery q(QString("SELECT * FROM %1 WHERE id = %2").arg(tName).arg(object->_key),
                   sqlDatabase()
                  );
       
@@ -582,7 +591,19 @@ private:
       
       QSqlRecord oldRecord = q.record();
       q.finish();
-      
+      QString prepString = QString("UPDATE `%1` SET " ).arg(tName);
+    
+      // Get the field names from the oldRecord. But skip ID, because it 
+      // won't work to copy it
+      for (i=0; i< oldRecord.count(); ++i)
+      {
+         QString name = oldRecord.fieldName(i);
+         if ( name != "id" )
+            prepString.append(QString("`%1`=:%2,").arg(name).arg(name));
+      }
+
+      // Remove the trailing ,
+      prepString.chop(1);
       // Create a new row.
       newKey = insertNewDefaultRecord(t);
       q = QSqlQuery( QString("SELECT * FROM %1 WHERE id = %2")
@@ -593,35 +614,34 @@ private:
       QSqlRecord newRecord = q.record();
       q.finish();
       
-      // Set the new row's columns equal to the old one's, except for any "parent"
-      // field, which should be set to the oldRecord's key.
-      QString newValString;
-      for( i = 0; i < oldRecord.count(); ++i )
-      {
-         if( oldRecord.fieldName(i) == "parent" )
-            newValString += QString("`parent` = '%2',").arg(object->_key);      
-         else if( oldRecord.fieldName(i) == "display" )
-            newValString += QString("`display` = %2,").arg( displayed ? 1 : 0 );
-         else if ( oldRecord.fieldName(i) != "id" )
-            newValString += QString("`%1` = '%2',").arg(oldRecord.fieldName(i)).arg(oldRecord.value(i).toString());
-      }
-      
-      // Remove last comma.
-      newValString.chop(1);
-      
-      QString updateString = QString("UPDATE `%1` SET %2 WHERE id = '%3'")
-                                    .arg(tName)
-                                    .arg(newValString)
-                                    .arg(newKey);
+      prepString.append( QString(" where `id`='%1'").arg(newKey));
+
       q = QSqlQuery( sqlDatabase() );
-      q.prepare(updateString);
+      q.prepare(prepString);
+
+      // Bind, bind like the wind! Or at least like mueslix
+      for (i=0; i< oldRecord.count(); ++i)
+      {
+         QString name = oldRecord.fieldName(i);
+         QVariant val = oldRecord.value(i);
+
+         // We need to set the parent correctly. 
+         if ( name == "parent" )
+            q.bindValue(QString(":%1").arg(name), object->_key);
+         // Display is being set by the call, not by what we are copying
+         else if ( name == "display" )
+            q.bindValue(":display", displayed ? 1 : 0 );
+         // Ignore ID again, for the same reasons as before.
+         else if ( name != "id" )
+            q.bindValue(QString(":%1").arg(name), val);
+      }
+
       q.exec();
       q.finish();
       
       // Update the hash if need be.
       if( keyHash )
       {
-         newOne = new T();
          BeerXMLElement* newOneCast = qobject_cast<BeerXMLElement*>(newOne);
          newOneCast->_key = newKey;
          newOneCast->_table = t;

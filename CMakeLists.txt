@@ -148,7 +148,6 @@ IF( NOT EXEC_PREFIX )
 ENDIF()
    
 SET( DATAROOTDIR "${EXEC_PREFIX}/share" )
-#SET( DATADIR ${DATAROOTDIR} )
 SET( BINDIR "${EXEC_PREFIX}/bin" )
 SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
 
@@ -156,7 +155,7 @@ SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
 IF( UNIX AND NOT APPLE )
   SET( DATAPATH "${DATAROOTDIR}/${CMAKE_PROJECT_NAME}" )
   SET( TARGETPATH ${BINDIR} )
-  SET( DOCPATH ${DOCDIR} )
+  SET( DOCPATH ${DOCDIR}-${brewtarget_VERSION_STRING} )
 ELSEIF( WIN32 )
   # Works for regular "make install", but not CPack/NSIS installer.
   #SET( CMAKE_INSTALL_PREFIX "C:/Program Files/brewtarget-${brewtarget_VERSION_STRING}" )
@@ -217,10 +216,11 @@ SET( brewtarget_DOCS
 
 # List of data files to be installed.
 SET( brewtarget_DATA
-     ${DATADIR}/database.xml
-     ${DATADIR}/mashs.xml
+     ${DATADIR}/default_db.sqlite
+     #${DATADIR}/database.xml
+     #${DATADIR}/mashs.xml
      ${DATADIR}/options.xml
-     ${DATADIR}/recipes.xml
+     #${DATADIR}/recipes.xml
 )
 
 # Desktop files to install.

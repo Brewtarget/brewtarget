@@ -180,7 +180,9 @@ public:
    QString nextAddToBoil(double& time);
 
    // Not quite sure where this belongs
-   BrewNote* addBrewNote( BrewNote *old = 0 );
+   // Answer? It doesn't belong. This is commented out to make sure, but it
+   // should be deleted before the v2.0 release.
+   // BrewNote* addBrewNote( BrewNote *old = 0 );
 
    // Getters
    QString name() const;
@@ -258,12 +260,16 @@ public:
    QVector<PreInstruction> miscSteps(Misc::Use type = Misc::Boil);
    PreInstruction boilFermentablesPre(double timeRemaining);
    bool hasBoilFermentable();
-
+   bool hasBoilExtract();
+   bool isFermentableSugar(Fermentable*);
+   PreInstruction addExtracts(double timeRemaining);
+   
    // Helper
    double ibuFromHop(Hop const* hop);
    QList<QString> getReagents( QList<Fermentable*> ferms );
    QList<QString> getReagents( QList<MashStep*> msteps );
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
+   QHash<QString,double> calcTotalPoints();
    
 signals:
    void changedName(const QString&);
@@ -274,6 +280,10 @@ public slots:
    void acceptFermChange(QMetaProperty prop, QVariant val);
    void acceptHopChange(QMetaProperty prop, QVariant val);
    void acceptMashChange(QMetaProperty prop, QVariant val);
+
+   void acceptFermChange(Fermentable* ferm);
+   void acceptHopChange(Hop* hop);
+   void acceptMashChange(Mash* mash);
 
    // Setters
    void setName( const QString &var );
@@ -331,6 +341,8 @@ private:
    // Calculated, but stored...BeerXML is weird sometimes.
    double _og;
    double _fg;
+   double _og_fermentable;
+   double _fg_fermentable;
    
    // True when constructed, indicates whether recalcAll has been called.
    bool _uninitializedCalcs;

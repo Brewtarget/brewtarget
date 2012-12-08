@@ -53,7 +53,7 @@ class MiscTableModel : public QAbstractTableModel
    Q_OBJECT
    
 public:
-   MiscTableModel(QTableView* parent=0);
+   MiscTableModel(QTableView* parent=0, bool editable=true);
    virtual ~MiscTableModel() {}
    //! Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
@@ -93,6 +93,7 @@ public slots:
    bool removeMisc(Misc* misc);
    
 private:
+   bool editable;
    QList<Misc*> miscObs;
    Recipe* recObs;
    QTableView* parentTableWidget;

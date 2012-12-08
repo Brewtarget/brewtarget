@@ -35,8 +35,8 @@
 #include "brewtarget.h"
 #include "recipe.h"
 
-YeastTableModel::YeastTableModel(QTableView* parent)
-: QAbstractTableModel(parent), parentTableWidget(parent), recObs(0)
+YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
+: QAbstractTableModel(parent), editable(editable), parentTableWidget(parent), recObs(0)
 {
    yeastObs.clear();
 }
@@ -304,7 +304,7 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
       case YEASTNAMECOL:
          return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
       default:
-         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+         return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
             Qt::ItemIsEnabled;
    }
 }
@@ -312,6 +312,7 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
 bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Yeast *row;
+   unitDisplay unit;
 
    if( index.row() >= (int)yeastObs.size() || role != Qt::EditRole )
       return false;
@@ -363,7 +364,10 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
       case YEASTAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount( row->amountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
+            unit = displayUnit(YEASTAMOUNTCOL);
+            row->setAmount( row->amountIsWeight() ? 
+                            Brewtarget::weightQStringToSI(value.toString(),unit) : 
+                            Brewtarget::volQStringToSI(value.toString(),unit) );
             return true;
          }
          else

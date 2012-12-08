@@ -25,8 +25,8 @@
 #include "brewtarget.h"
 #include "recipe.h"
 
-MiscTableModel::MiscTableModel(QTableView* parent)
-   : QAbstractTableModel(parent), recObs(0), parentTableWidget(parent)
+MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
+   : QAbstractTableModel(parent), editable(editable), recObs(0), parentTableWidget(parent)
 {
    miscObs.clear();
 }
@@ -253,7 +253,7 @@ Qt::ItemFlags MiscTableModel::flags(const QModelIndex& index ) const
       case MISCNAMECOL:
          return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
       default:
-         return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled |
+         return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
             Qt::ItemIsEnabled;
    }
 }
@@ -263,6 +263,7 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
    Misc *row;
    int col;
    QString tmpStr;
+   unitDisplay unit;
    
    if( index.row() >= (int)miscObs.size() )
       return false;
@@ -270,51 +271,47 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
       row = miscObs[index.row()];
    
    col = index.column();
-   
-   if( col == MISCNAMECOL )
+   switch (col )
    {
-      if( value.canConvert(QVariant::String) )
-      {
-         tmpStr = value.toString();
-         row->setName(tmpStr);
-      }
-      else
+      case MISCNAMECOL:
+         if( value.canConvert(QVariant::String) )
+         {
+            tmpStr = value.toString();
+            row->setName(tmpStr);
+         }
+         else
+            return false;
+         break;
+      case MISCTYPECOL:
+         if( value.canConvert(QVariant::Int) )
+            row->setType( static_cast<Misc::Type>(value.toInt()) );
+         else
+            return false;
+         break;
+      case MISCUSECOL:
+         if( value.canConvert(QVariant::Int) )
+            row->setUse( static_cast<Misc::Use>(value.toInt()) );
+         else
+            return false;
+         break;
+      case MISCTIMECOL:
+         if( value.canConvert(QVariant::String) )
+            row->setTime( Brewtarget::timeQStringToSI(value.toString()) );
+         else
+            return false;
+         break;
+      case MISCAMOUNTCOL:
+         unit = displayUnit(col);
+         if( value.canConvert(QVariant::String) )
+            row->setAmount( row->amountIsWeight() ? 
+                            Brewtarget::weightQStringToSI(value.toString(),unit) : 
+                            Brewtarget::volQStringToSI(value.toString(),unit) );
+         else
+            return false;
+         break;
+      default:
          return false;
    }
-   else if( col == MISCTYPECOL )
-   {
-      if( value.canConvert(QVariant::Int) )
-      {
-         row->setType( static_cast<Misc::Type>(value.toInt()) );
-      }
-      else
-         return false;
-   }
-   else if( col == MISCUSECOL )
-   {
-      if( value.canConvert(QVariant::Int) )
-      {
-         row->setUse( static_cast<Misc::Use>(value.toInt()) );
-      }
-      else
-         return false;
-   }
-   else if( col == MISCTIMECOL )
-   {
-      if( value.canConvert(QVariant::String) )
-         row->setTime( Brewtarget::timeQStringToSI(value.toString()) );
-      else
-         return false;
-   }
-   else if( col == MISCAMOUNTCOL )
-   {
-      if( value.canConvert(QVariant::String) )
-         row->setAmount( row->amountIsWeight() ? Brewtarget::weightQStringToSI(value.toString()) : Brewtarget::volQStringToSI(value.toString()) );
-      else
-         return false;
-   }
-   else
-      return false;
    
    emit dataChanged( index, index );
    return true;

@@ -104,6 +104,9 @@ public:
    friend class MiscTreeView;
    friend class YeastTreeView;
 
+private slots:
+   void somethingChanged(const QModelIndex &parent, int row, int count);
+
 private:
    BrewTargetTreeModel* model;
    BtTreeFilterProxyModel* filter;
@@ -113,6 +116,7 @@ private:
    bool doubleClick;
 
    QMimeData *mimeData(QModelIndexList indexes);
+   void connectSignals();
 };
 
 // RecipeTreeView subclasses BrewTargetTreeView to only show recipes.
@@ -122,9 +126,6 @@ class RecipeTreeView : public BrewTargetTreeView
 public:
    RecipeTreeView(QWidget *parent = 0);
 
-public slots:
-   void event(Recipe *event);
-
 };
 
 // EquipmentTreeView only shows equipment. I think you can see where this is headed?
@@ -133,9 +134,6 @@ class EquipmentTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    EquipmentTreeView(QWidget *parent = 0);
-
-public slots:
-   void event(Equipment *event);
 };
 
 class FermentableTreeView : public BrewTargetTreeView
@@ -143,9 +141,6 @@ class FermentableTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    FermentableTreeView(QWidget *parent = 0);
-
-public slots:
-   void event(Fermentable *event);
 
 };
 
@@ -155,9 +150,6 @@ class HopTreeView : public BrewTargetTreeView
 public:
    HopTreeView(QWidget *parent = 0);
 
-public slots:
-   void event(Hop *event);
-
 };
 
 class MiscTreeView : public BrewTargetTreeView
@@ -165,9 +157,6 @@ class MiscTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    MiscTreeView(QWidget *parent = 0);
-
-public slots:
-   void event(Misc *event);
 };
 
 class YeastTreeView : public BrewTargetTreeView
@@ -175,9 +164,6 @@ class YeastTreeView : public BrewTargetTreeView
    Q_OBJECT
 public:
    YeastTreeView(QWidget *parent = 0);
-
-public slots:
-   void event(Yeast *event);
 
 };
 

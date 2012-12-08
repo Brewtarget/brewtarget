@@ -42,6 +42,7 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    setContextMenuPolicy(Qt::CustomContextMenu);
    setRootIsDecorated(false);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
+
 }
 
 BrewTargetTreeModel* BrewTargetTreeView::getModel()
@@ -158,6 +159,12 @@ QModelIndex BrewTargetTreeView::findBrewNote(BrewNote* bNote)
 int BrewTargetTreeView::getType(const QModelIndex &index)
 {
    return model->getType(filter->mapToSource(index));
+}
+
+void BrewTargetTreeView::connectSignals()
+{
+   connect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),this, SLOT(somethingChanged(const QModelIndex &, int, int)));
+   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),this, SLOT(somethingChanged(const QModelIndex &, int, int)));
 }
 
 void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)
@@ -368,6 +375,7 @@ QMenu* BrewTargetTreeView::getContextMenu(QModelIndex selected)
    return contextMenu;
 }
 
+void BrewTargetTreeView::somethingChanged(const QModelIndex &parent, int row, int count) { filter->invalidate(); }
 // Bad form likely
 
 RecipeTreeView::RecipeTreeView(QWidget *parent)
@@ -376,19 +384,17 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::RECIPEMASK);
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::RECIPEMASK);
    filter->setSourceModel(model);
-
-   connect (&(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)), this, SLOT(event(Recipe*)));
-   connect (&(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)), this, SLOT(event(Recipe*)));
-
    setModel(filter);
+   filter->setDynamicSortFilter(true);
+   
    setExpanded(findRecipe(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    // Resizing before you set the model doesn't do much.
    resizeColumnToContents(0);
-}
 
-void RecipeTreeView::event(Recipe* event) { filter->invalidate(); }
+   connectSignals();
+}
 
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
    : BrewTargetTreeView(parent)
@@ -396,19 +402,16 @@ EquipmentTreeView::EquipmentTreeView(QWidget *parent)
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::EQUIPMASK);
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::EQUIPMASK);
    filter->setSourceModel(model);
-
-   connect (&(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)), this, SLOT(event(Equipment*)));
-   connect (&(Database::instance()), SIGNAL(deletedEquipmentSignal(Equipment*)), this, SLOT(event(Equipment*)));
-
    setModel(filter);
+   filter->setDynamicSortFilter(false);
+
    setExpanded(findEquipment(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
 
+   connectSignals();
 }
-
-void EquipmentTreeView::event(Equipment* event) { filter->invalidate(); }
 
 // Icky ick ikcy
 FermentableTreeView::FermentableTreeView(QWidget *parent)
@@ -417,18 +420,17 @@ FermentableTreeView::FermentableTreeView(QWidget *parent)
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::FERMENTMASK);
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::FERMENTMASK);
    filter->setSourceModel(model);
-
-   connect (&(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)), this, SLOT(event(Fermentable*)));
-   connect (&(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)), this, SLOT(event(Fermentable*)));
-
    setModel(filter);
+   filter->setDynamicSortFilter(true);
+  
+   filter->dumpObjectInfo(); 
    setExpanded(findFermentable(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
-}
 
-void FermentableTreeView::event(Fermentable* event) { filter->invalidate(); }
+   connectSignals();
+}
 
 // More Ick
 HopTreeView::HopTreeView(QWidget *parent)
@@ -437,18 +439,16 @@ HopTreeView::HopTreeView(QWidget *parent)
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::HOPMASK);
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::HOPMASK);
    filter->setSourceModel(model);
-
-   connect (&(Database::instance()), SIGNAL(newHopSignal(Hop*)), this, SLOT(event(Hop*)));
-   connect (&(Database::instance()), SIGNAL(deletedHopSignal(Hop*)), this, SLOT(event(Hop*)));
-
    setModel(filter);
+   filter->setDynamicSortFilter(true);
+   
    setExpanded(findHop(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
-}
 
-void HopTreeView::event(Hop* event) { filter->invalidate(); }
+   connectSignals();
+}
 
 // Ick some more
 MiscTreeView::MiscTreeView(QWidget *parent)
@@ -457,18 +457,16 @@ MiscTreeView::MiscTreeView(QWidget *parent)
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::MISCMASK);
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::MISCMASK);
    filter->setSourceModel(model);
-
-   connect (&(Database::instance()), SIGNAL(newMiscSignal(Misc*)), this, SLOT(event(Misc*)));
-   connect (&(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)), this, SLOT(event(Misc*)));
-
    setModel(filter);
+   filter->setDynamicSortFilter(true);
+   
    setExpanded(findMisc(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
-}
 
-void MiscTreeView::event(Misc* event) { filter->invalidate(); }
+   connectSignals();
+}
 
 // Will this ick never end?
 YeastTreeView::YeastTreeView(QWidget *parent)
@@ -477,18 +475,13 @@ YeastTreeView::YeastTreeView(QWidget *parent)
    model = new BrewTargetTreeModel(this, BrewTargetTreeModel::YEASTMASK);
    filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::YEASTMASK);
    filter->setSourceModel(model);
-
-   connect (&(Database::instance()), SIGNAL(newYeastSignal(Yeast*)), this, SLOT(event(Yeast*)));
-   connect (&(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)), this, SLOT(event(Yeast*)));
-
    setModel(filter);
+   filter->setDynamicSortFilter(true);
+   
    setExpanded(findYeast(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
-}
 
-void YeastTreeView::event(Yeast* event) 
-{ 
-   filter->invalidate(); 
+   connectSignals();
 }

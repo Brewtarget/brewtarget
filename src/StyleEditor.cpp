@@ -24,10 +24,21 @@
 #include "unit.h"
 #include "brewtarget.h"
 
-StyleEditor::StyleEditor(QWidget* parent)
+StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    : QDialog(parent), obsStyle(0)
 {
    setupUi(this);
+   if ( singleStyleEditor ) 
+   {
+      for(int i = 0; i < horizontalLayout_styles->count(); ++i)
+      {
+         QWidget* w = horizontalLayout_styles->itemAt(i)->widget();
+         if(w)
+            w->setVisible(false);
+      }
+      
+      pushButton_new->setVisible(false);
+   }
 
    styleListModel = new StyleListModel(styleComboBox);
    styleComboBox->setModel(styleListModel);
@@ -50,7 +61,7 @@ void StyleEditor::setStyle( Style* s )
       connect( obsStyle, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       showChanges();
    }
-   
+ 
    styleComboBox->setCurrentIndex(styleListModel->indexOf(obsStyle));
 }
 

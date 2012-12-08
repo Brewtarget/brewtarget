@@ -75,7 +75,6 @@ void MashEditor::fromEquipment()
    if ( equip == 0 )
       return;
 
-   qDebug() << "resetting mass " << equip->tunWeight_kg();
    lineEdit_tunMass->setText(Brewtarget::displayAmount(equip->tunWeight_kg(), Units::kilograms));
    lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(equip->tunSpecificHeat_calGC()));
 }

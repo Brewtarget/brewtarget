@@ -26,6 +26,7 @@
 #include <QItemEditorFactory>
 #include <QStyle>
 #include <QRect>
+#include <QDebug>
 
 #include "database.h"
 #include "brewtarget.h"
@@ -40,8 +41,8 @@
 #include "recipe.h"
 
 //=====================CLASS FermentableTableModel==============================
-FermentableTableModel::FermentableTableModel(QTableView* parent)
-   : QAbstractTableModel(parent), parentTableWidget(parent), recObs(0), displayPercentages(false), totalFermMass_kg(0)
+FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
+   : QAbstractTableModel(parent), parentTableWidget(parent), editable(editable), recObs(0), displayPercentages(false), totalFermMass_kg(0)
 {
    fermObs.clear();
    // for units and scales
@@ -179,6 +180,8 @@ void FermentableTableModel::removeAll()
       disconnect( fermObs.takeLast(), 0, this, 0 );
    }
    endRemoveRows();
+   // I think we need to zero this out
+   totalFermMass_kg = 0;
 }
 
 void FermentableTableModel::updateTotalGrains()
@@ -342,7 +345,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
          case FERMCOLORCOL:
             unit = displayUnit(section);
             if ( unit == noUnit )
-               unit = Brewtarget::getColorUnit() ? displayEbc : displaySrm;
+               unit = Brewtarget::getColorUnit();
 
             if ( unit == displaySrm)
                return QVariant(tr("Color (SRM)"));
@@ -374,22 +377,22 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
    {
       // Ensure that being mashed and being a late addition are mutually exclusive.
       if( !row->addAfterBoil() )
-         return (defaults | Qt::ItemIsUserCheckable);
+         return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
       else
-         return Qt::ItemIsUserCheckable;
+         return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
    }
    else if( col == FERMAFTERBOIL )
    {
       // Ensure that being mashed and being a late addition are mutually exclusive.
       if( !row->isMashed() )
-         return (defaults | Qt::ItemIsUserCheckable);
+         return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
       else
-         return Qt::ItemIsUserCheckable;
+         return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
    }
    else if(  col == FERMNAMECOL )
       return (defaults | Qt::ItemIsSelectable);
    else
-      return (defaults | Qt::ItemIsSelectable | Qt::ItemIsEditable);
+      return (defaults | Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) );
 }
 
 /* --maf--
@@ -528,6 +531,8 @@ QString FermentableTableModel::generateName(int column) const
 bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Fermentable* row;
+   double color;
+   unitDisplay unit;
    
    if( index.row() >= (int)fermObs.size() )
    {
@@ -557,7 +562,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMAMOUNTCOL:
          if( value.canConvert(QVariant::String) )
          {
-            row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString()) );
+            row->setAmount_kg( Brewtarget::weightQStringToSI(value.toString(),displayUnit(FERMAMOUNTCOL)));
             if( rowCount() > 0 )
                headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
             return true;
@@ -591,7 +596,15 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
       case FERMCOLORCOL:
          if( value.canConvert(QVariant::Double) )
          {
-            row->setColor_srm( value.toDouble() );
+            unit = displayUnit(index.column());
+            if ( unit == noUnit )
+               unit = Brewtarget::getColorUnit();
+
+            color = value.toDouble();
+            if ( unit == displayEbc )
+               color = Units::ebc->toSI(value.toDouble());
+
+            row->setColor_srm( color );
             return true;
          }
          else

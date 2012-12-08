@@ -3,17 +3,77 @@
    <title>Brewtarget 2.0.0 Manual</title>
 </head>
 <body>
+   <h1>Brewtarget 2.0.0 Manual</h1>
 
-<h1>Brewtarget 2.0.0 Manual</h1>
+   <h2>Table of Contents</h2>
+   <ul id="toc">
+      <li><span><a href="#walkthrough">A Walkthrough</a></span></li>
+      <ul id="toc">
+         <li><span><a href="#settingoptions">Setting Options</a></span></li>
+         <li><span><a href="#newrecipe">Making a New Recipe</a></span></li>
+         <li><span><a href="#newequipment">Defining Your Equipment</a></span></li>
+         <li><span><a href="#adjustingrecipe">Adjusting Recipe Parameters</a></span></li>
+         <li><span><a href="#setstyles">Selecting the Style</a></span></li>
+         <li><span><a href="#addingingredients">Adding Ingredients</a></span></li>
+         <li><span><a href="#makemash">Making A Mash</a></span></li>
+         <ul id="toc">
+            <li><span><a href="#mashwiz">Method 1: Mash Wizard</a></span></li>
+            <li><span><a href="#mashdesigner">Method 2: Mash Designer</a></span></li>
+         </ul>
+         <li><span><a href="#brewdaymode">Brewday Mode</a></span></li>
+         <li><span><a href="#printrecipe">Printing the Recipe</a></span></li>
+         <li><span><a href="#savework">Saving Your Work</a></span></li>
+      </ul>
+      <li><span><a href="#generalconcepts">General Concepts</a></span></li>
+      <ul>
+         <li><span><a href="#trees">Trees</a></span></li>
+         <ul>
+            <li><span><a href="#treecontextmenu">Context Menus</a></span></li>
+            <li><span><a href="#brewnotes">Brewnotes</a></span></li>
+         </ul>
+         <li><span><a href="#ingredtorecipe">Adding Ingredients to Recipes</a></span></li>
+         <ul>
+            <li><span><a href="#ingrededitors">Method 1: Editors</a></span></li>
+            <li><span><a href="#ingreddrag">Method 2: Drag'n'Drop</a></span></li>
+         </ul>
+         <li><span><a href="#importingrecipes">Importing Recipes</a></span></li>
+         <li><span><a href="#exportingrecipes">Exporting Recipes</a></span></li>
+         <li><span><a href="#backupandrestore">Backing Up and Restoring Databases</a></span></li>
+         <li><span><a href="#postingrecipe">Posting Your Recipe</a></span></li>
+         <ul>
+            <li><span><a href="#postclip">Method 1: Recipe to Clipboard</a></span></li>
+            <li><span><a href="#posthtml">Method 2: Save to HTML</a></span></li>
+         </ul>
+         <li><span><a href="#tools">Tools</a></span></li>
+         <ul>
+            <li><span><a href="#ogcorrection">OG Correction</a></span></li>
+            <li><span><a href="#pitchrate">Pitch Rate</a></span></li>
+            <li><span><a href="#primingcalc">Priming Calculator</a></span></li>
+            <li><span><a href="#refractometer">Refractometer</a></span></li>
+         </ul>
+         <li><span><a href="#units">Units</a></span></li>
+         <ul>
+            <li><span><a href="#unitsandscale">Controlling Units and Scale</a></span></li>
+            <li><span><a href="#caveats">Caveats with Auto-conversion</a></span></li>
+            <li><span><a href="#supportunits">Caveats with Auto-conversion</a></span></li>
+         </ul>
+      </ul>
+      <li><span><a href="#newin2">New In Brewtarget v2</a></span></li>
+      <ul>
+         <li><span><a href="#newdatabase">SQLite DB</a></span></li>
+         <li><span><a href="#newunitsandscales">Units and Scales</a></span></li>
+         <li><span><a href="#newtrees">Trees</a></span></li>
+      </ul>
+   </ul>
 
-<h2>A Walkthrough</h2>
+<a id="walkthough"><h2>A Walkthrough</h2></a>
 <p>
 I figure it's probably easier to demonstrate the features of the program rather than try to explain
 every single concept. So, here we will create a nice American Amber Ale, trying to touch on as many
 features as possible.
 </p>
 
-<h3>Setting Options</h3>
+<a id="settingoptions"><h3>Setting Options</h3></a>
 <p>
 Brewtarget's options are in Tools-&gt;Options. Here you should set your preferences for the unit
 system you wish to use, and which formulae you want to use in creating your recipes. For the purposes
@@ -23,13 +83,13 @@ numbers are <i>not</i> corrected. So, the displayed FG reflects the actual FG: n
 you use your refractometer.
 </p>
 
-<h3>Making a New Recipe</h3>
+<a id="newrecipe"><h3>Making a New Recipe</h3></a>
 <p>
 Click on either File-&gt;&quot;New Recipe&quot;, click the blue plus in the toolbar at the top of the main
 window or right-click on the recipe part of the tree and select &quot;New Recipe&quot;. Now, title your recipe in the box that pops up, and click &quot;OK&quot;.
 </p>
 
-<h3>Making a New Equipment Record</h3>
+<a id="newequipment"><h3>Defining Your Equipment</h3></a>
 <p>
 Never <b>ever</b> try to formulate a recipe without setting up an equipment record.
 Having an equipment record for your recipe is very important in Brewtarget. It contains a lot of
@@ -74,17 +134,18 @@ these fields as you can.
 Then, press the diskette button at the bottom to save.
 </p>
 
-<h3>Adjusting Recipe Parameters</h3>
+<a id="adjustingrecipe"><h3>Adjusting Recipe Parameters</h3></a>
 <p> From the Equipment drop-down list, choose &quot;5 gal batch - Ideal&quot;
 (which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses) 
 which is already provided by Brewtarget, just for the sake of demonstration.
 You can also drag the &quot;5 gal batch - Ideal&quot; item from the tree on
 the left and drop it on the recipe. For now, leave
 the efficiency at 70% for the same reason. After selecting or dropping the
-equipment or , you will be asked if you want to set the batch and boil size of
+equipment you will be asked if you want to set the batch and boil size of
 the recipe to that of the equipment. Click &quot;Yes&quot;.
 </p>
 
+<a id="setstyles"><h3>Selecting the Style</h3></a>
 <p>
 Brewtarget comes pre-loaded with all of the BJCP styles. This means you can check your recipe against the guidelines
 for the particular style you are trying to make. To do this, select &quot; American Amber Ale&quot; from the Style
@@ -95,7 +156,7 @@ and green means you're in the Goldilocks zone. If you choose, you can create you
 dialog. You can also view descriptions of the particular style and recommended ingredients there.
 </p>
 
-<h3>Adding Ingredients</h3>
+<a id="addingingredients"><h3>Adding Ingredients</h3></a>
 <p>
 First, go to the Fermentables tab on the main window, and click the blue plus sign on the right.
 This brings up the database of fermentables that Brewtarget has. Scroll down to &quot;Pale Malt (2 row) US&quot;,
@@ -118,11 +179,36 @@ it &quot;32 oz&quot; and watch it get converted into &quot;2.000 lb&quot;. You
 can change US/English/SI preferences in Tools-&gt;Options. Please see the
 section called &quot;Supported Units&quot; in this document to see the correct
 abbreviation for each unit.
+<p>
+You can control this feature for each of the main tables and fields in the
+display. For example, lets say you use a refractometer to measure you SG and
+OG, but you use a hydrometer to measure the FG. In the options, select
+"Brix/Plato" as the system default. In the main window, right
+click on the "FG" label and select "Specific Gravity". OG and SG will still be
+shown in Brix, but the FG will now display in specific gravity.
+</p>
+<p>
+This feature works on all of the fields in the main window and on brewnotes by
+right-clicking on the label for the field. It works on the fermentables, hops,
+miscellaneous, yeast and mash tables by right-clicking on the header for the
+column. It works for any field for which it makes sense. For example, you can
+specify the units for amount, infusion temp and target temp on the mash table
+but not for the time.
+</p>
+<p>
+Additionally, you can control the scaling where it makes sense. For example,
+assume you always want your fermentables in the table to displayed in grams.
+Right click on the "Amount" column in the table. Select "Default" if your
+system default is SI, or select SI. Then click on the "Scale" submenu and you
+can select "Default", "Grams" or "Kilograms". Selecting the first option will
+give you the default brewtarget behavior. The other three choices will force
+brewtarget to automatically scale the weights appropriately.
+</p>
 <b>Important</b>: do not forget that you SHOULD enter the unit suffix (lb, kg,
 L, mL, etc.) for almost all amount boxes in brewtarget. If you do not,
 brewtarget will simply try to guess what you mean, which can give unexpected
 results. In this case, brewtarget will assume that fermentables are entered in
-either lbs or kg, depending on how you have configured brewtarget.
+either lbs or kg, depending on how you have configured brewtarget. 
 </p>
 <p>
 Now you should notice something different about the OG, FG, etc., displayed in
@@ -150,7 +236,7 @@ opening up the &quot;Hops&quot; or the &quot;Yeast&quot;, respectively, tree in 
 dragging the ingredients onto the recipe pane and dropping them.
 </p>
 
-<h3>Making a Mash</h3>
+<a id="makemash"><h3>Making a Mash</h3></a>
 <p>
 Let's do a 2-step mash with a protein rest at 121 F and a conversion rest at 152 F.
 </p>
@@ -175,7 +261,7 @@ recall a mash profile by selecting it in the appropriate drop down box.
 From here, there are two ways to create the mash.
 </p>
 
-<h3>Method 1: Mash wiz</h3>
+<a id="mashwiz"><h3>Method 1: Mash wiz</h3></a>
 <p>
 Go to the mash
 tab and click the blue plus. Name it &quot;Protein&quot; and click &quot;OK&quot;. Double click its &quot;Target Temp&quot; cell and
@@ -198,7 +284,7 @@ Since your equipment and recipe
 might change, you should always do the mash wizard after recalling a saved mash profile.
 </p>
 
-<h3>Method 2: Mash designer</h3>
+<a id="mashdesigner"><h3>Method 2: Mash designer</h3></a>
 <p>
 The mash designer is for more advanced users. It can be used to create pretty much any mash schedule
 you desire with however many sparges, and at whatever infusion temp or volume you desire. To enter it,
@@ -232,7 +318,7 @@ careful and pay attention to the text which shows the actual collected wort. Cli
 to return to the main window.
 </p>
 
-<h3>Brewday Mode</h3>
+<a id="brewdaymode"><h3>Brewday Mode</h3></a>
 <p>
 Now that your recipe is all planned, wouldn't it be good to have some instructions on your
 brewday? Click the &quot;Brewday&quot; tab at the top of the main window. Click &quot;Generate Instructions&quot;.
@@ -250,7 +336,7 @@ the timer reaches zero. Brewtarget has provided many default sounds to choose fr
 select any other sound file on your computer.
 </p>
 
-<h3>Printing the Recipe</h3>
+<a id="printrecipe"><h3>Printing the Recipe</h3></a>
 <p>
 Print and print preview are available under the &quot;File&quot; menu. There are two printouts
 available. One is &quot;Recipe&quot; and the other is &quot;Brewday&quot;. The recipe printout is
@@ -258,33 +344,45 @@ all the info related to the recipe you have made. The brewday printout is format
 fashion specifically for following when you actually brew the recipe.
 </p>
 
-<h3>Saving your work</h3>
+<a id="savework"><h3>Saving Your Work</h3></a>
 <p>
 Before you close Brewtarget, be sure to press the diskette at the top in the toolbar,
 <b>or you will lose any changes you have made in this session!</b>
 </p>
 
-<h2>General Concepts</h2>
+<a id="generalconcepts"><h2>General Concepts</h2></a>
 <p>
-Brewtarget maintains an internal BeerXML database of recipes, ingredients, etc. At program startup,
-it reads these files into memory, and all the editing you do occurs in memory until such time that
-you decide to press &quot;save&quot; on the main window. At this point, all your changes will be committed to
-the BeerXML database on disk.
+Brewtarget v2.0 uses an SQLite database of recipes, ingredients, etc. At start
+up, a copy of this database is created and all changes are made to this copy.
+When the program is closed, you can either save your changes or cancel. This
+will either roll your changes into the database, or delete the copy
+respectively.
+</p>
+<p>
+If brewtarget should crash unexpectedly, you will be prompted to either
+roll the changes or restore the original database. The first option will
+incorporate your changes into the database and the second will delete the
+copy.
 </p>
 
-<h2>Trees</h2>
+<a id="trees"><h2>Trees</h2></a>
 <p>
-The old recipe dropdown box has been replaced by a tree view in the left pane.
+The application window is split into three major panes: the trees, the recipe
+and the ingredients. The tree pane is a tabbed window that displays your
+recipes, equipment profiles, fermentables, hops, miscellaneous items and hops.
+You can sort any of the tree on the displayed fields. You cannot currently
+select which columns are being displayed.
+
 As a rule, double clicking on any item in the tree will open up the
 appropriate editor for that item. In the case of recipes, it will open the
 recipe in the main window.
 </p>
 
-There are 6 entries in the tree:
+There are 6 tabs:
 <ul>
-   <li>Recipes - replacing the old drop down box, this tree shows all your
-   recipes.  You can drag'n'drop the recipe onto the main
-   window and that recipe will be loaded</li>
+   <li>Recipes - this tree shows all your recipes.  You can drag'n'drop the
+   recipe onto the main window and that recipe will be loaded. Each recipe
+   will also show any assocaited brewnote.</li>
    <li>Equipment - this shows all your defined kit. You can drag'n'drop a
    piece of equipment onto your recipe which will have the same effect as
    changing the equipment via the dropdown box. </li>
@@ -294,22 +392,22 @@ There are 6 entries in the tree:
    recipe.</li>
 </ul>
 
-<h3>Context menus</h3>
+<a id="treecontextmenu"><h3>Context menus</h3></a>
 <p>
-You can right click almost anywhere in the tree and get a menu of options.
-Depending on where you click, the menus will change a bit. If you right click
-on a recipe, the first option will be "new recipe". If you right click on a
+You can right-click almost anywhere on a tree and get a menu of options.
+Depending on where you click, the menus will change a bit. If you right-click
+on a recipe, the first option will be "new recipe". If you right-click on a
 fermentable, the first option will be "new fermentable". Otherwise, the
 available options will be the same.
 </p>
 <p>
-You can select multiple items, right click and then perform an action on the
+You can select multiple items, right-click and then perform an action on the
 entire selected list. The only exception is the &quot;Export&quot; function.
 Limitations in the BeerXML format makes it very difficult to export both recipes
 and anything else at the same time.
 </p>
 
-<h3>BrewNotes</h3>
+<a id="brewnotes"><h3>BrewNotes</h3></a>
 <p>
 If you right-click a recipe, you may notice an action called &quot;Brew
 It!&quot;. If you select this option, a new entry will be created underneath
@@ -363,8 +461,8 @@ There are three main sections on the brewnote tab.
 </ul>
 </p>
 
-<h2>Adding Ingredients to a Recipe</h2>
-<h3>Using the editors</h3>
+<a id="ingredtorecipe"><h2>Adding Ingredients to a Recipe</h2></a>
+<a id="ingrededitors"><h3>Method 1: Editors</h3></a>
 If you are looking for a fermentable with a specific SRM or a yeast from a
 specific lab, this approach allows you to sort on any column you want.
 <ol>
@@ -373,7 +471,7 @@ specific lab, this approach allows you to sort on any column you want.
 	<li>Select any column of the row of the ingredient you wish to add.</li>
 	<li>Click &quot;Add to Recipe&quot;.</li>
 </ol>
-<h3>Using drag'n'drop</h3>
+<a id="ingreddrag"><h3>Method 2: Drag'n'Drop</h3></a>
 This is the lazy way of doing it, as long as you don't mind the default sort
 order.
 <ol>
@@ -385,7 +483,7 @@ order.
    &quot;Fermentables&quot; tab, the focus will change to the &quot;Hops&quot;
    tab. </li>
 </ol>
-<h2>Importing Recipes</h2>
+<a id="importingrecipes"><h2>Importing Recipes</h2></a>
 <p>
 You can import other BeerXML recipes (such as, from Beersmith) by using File-&gt;Import Recipes.
 However, you need to be aware that Beersmith does not strictly adhere to XML standards or even
@@ -393,12 +491,12 @@ BeerXML itself (!), so you may have some trouble importing recipes from time to 
 to maintain strict compatability with both.
 </p>
 
-<h2>Exporting Recipes</h2>
+<a id="exportingrecipes"><h2>Exporting Recipes</h2></a>
 <p>
 I bet you can figure this one out.
 </p>
 
-<h2>Backing Up and Importing Databases</h2>
+<a href="backupandrestore"><h2>Backing Up and Restoring Databases</h2></a>
 <p>
 For many reasons, you may want to back up all your recipes and ingredients and everything. To do this,
 go to File-&gt;&quot;Backup Database&quot; and select an empty directory. Restoring the database is
@@ -406,21 +504,28 @@ just as simple. However, be aware that when you restore a database, anything in 
 be wiped out.
 </p>
 
-<h2>Posting Your Recipe - Recipe to Clipboard</h2>
+<a id="postingrecipe"><h2>Posting Your Recipe</h2></a>
+Brewtarget offers two different methods for posting your recipes.
+      
+<a id="postclip"><h3>Method 1: Recipe to Clipboard</h3></a>
 <p>
 This tool is used to make a text version of the recipe so that you may post it online
 or whatever else you can do with a text version. To get the text version, Tools-&gt;&quot;Recipe to Clipboard as Text&quot;,
 then click paste in a text editor or other paste-able window.
 </p>
 
-<h2>Posting Your Recipe - Save to HTML</h2>
+<a id="posthtml"><h3>Posting Your Recipe - Save to HTML</h3></a>
 <p>
 Another way you can share you recipes is to export them to HTML. Use
 File-&gt;&quot;Save to HTML&quot;. You can export either the recipe or the
 brewday instructions.
 </p>
 
-<h2>OG Correction Tool</h2>
+<a id="tools"><h2>Tools</h2></a>
+Brewtarget offers a lot of tools to aid the brewer in writing recipes and on
+the brew day itself.
+
+<a id="ogcorrection"><h3>OG Correction</h3></a>
 <p>
 A common problem is that you under or over estimate your efficiency and get a different OG than you
 planned for. To correct this in the boil, choose Tools-&gt;&quot;OG Correction Help&quot;. Please note
@@ -432,7 +537,7 @@ The next shows you how much water to add (or boil off if negative) in order to a
 The last shows how much wort you will end up with.
 </p>
 
-<h2>Pitch Rate Calculator</h2>
+<a id="pitchrate"><h3>Pitch Rate Calculator</h3></a>
 <p>
 This tool is located in Tools-&gt;&quot;Pitch Rate Calculator&quot; and helps you to make a starter
 that has the correct amount of yeast for your beer. Put in the wort volume, OG and starter OG (in specific gravity)
@@ -442,13 +547,13 @@ white labs vials needed without a starter, the amount of dry yeast required (wit
 size of the starter needed to reach the cell count at the given starter OG (usually never over 1.030).
 </p>
 
-<h2>Priming Calculator</h2>
+<a id="primingcalc"><h3>Priming Calculator</h3></a>
 <p>
 Tools-&gt;&quot;Priming Calculator&quot;. Put in the required input values, select a priming agent, and
 press calculate.
 </p>
 
-<h2>Refractometer Tools</h2>
+<a id="refractometer"><h3>Refractometer</h3></a>
 <p>
 Tools-&gt;&quot;Refractometer Tools&quot;. Here, you can find OG and current SG by using refractometer
 readings. You must always enter the current plato and either the original plato OR the OG. If you just
@@ -456,7 +561,7 @@ want to find out what 11.2 Plato corresponds to, enter 11.2 in both the original
 fields.
 </p>
 
-<h2>Units</h2>
+<a id="units"><h2>Units</h2></a>
 	<p>
 	Brewtarget supports SI, Imperial, and US customary units.
 	To switch between these modes, go to tools-&gt;options, and check/uncheck the appropriate box.
@@ -466,15 +571,48 @@ fields.
 	has the same units as the BeerXML entry for that field (which is usuall SI). For example, if you enter &quot;20 asdf&quot;
 	into a volume field while in US mode, you will see &quot;5.283 gal&quot; because Brewtarget assumed you meant &quot;20 L&quot;
 	and then converted to US units. In other words, always use a valid unit suffix.
-	</p>
-	<h3>Caveats with Auto-conversion</h3>
+   </p>
+   <a id="unitsandscale"><h3>Controlling unit and scale</h3></a>
+   <p>
+   A new feature to Brewtarget v2.0 is the ability to control what units are
+   used in the display and how they scale. In any field where it makes sense
+   (volumes, weights, temperatures and gravities), you can right-click the
+   associated label and be presented with the unit and scale menu.
+   </p>
+   <p>
+   Volumes will present you with the options "default", "SI", "US Customary" and "British
+   Imperial"; weights will present you with the options "default", "SI" and
+   "US Customary"; temperatures will present the options "default", "Celsius"
+   and "Fahrenheit"; gravities will show "default", "Plato" and "Specific
+   Gravity".
+   </p>
+   <p>
+   Selecting one of those options will cause that field to be displayed in the
+   selected unit. So you can, for example, display Boil SG and OG in Plato,
+   but FG in specific gravity.
+   </p>
+   <p>
+   You can also select the scale for any volume or weight field. The scale
+   menu will change significantly depending on what the field is (weight or
+   volume) and which unit is selected. You can use this to, for example, cause
+   your target batch size to be displayed in US Customary quarts instead of
+   gallons. 
+   </p>
+   <p>
+   You can do the same thing in any of the ingredient tabs by right clicking
+   on the column header. This will allow you to display your hops in grams,
+   but keep your fermentables displayed in pounds.
+   </p>
+
+
+   <a id="caveats"><h3>Caveats with Auto-conversion</h3></a>
 	<p>
 	With US and Imperial units, people have a tendency to sometimes put a trailing &quot;s&quot; or a period at the end (hrs, hrs., etc.).
 	Brewtarget only supports singular no-period units. This is a common error among users since the habit is
 	so ingrained. The reason for this lack of support for such spellings should be obvious...it would mean the program has
 	to guess what you mean. The units supported, and the exact unit abbreviation you should use are given below.
 	</p>
-	<h3>Supported Units</h3>
+   <a id="supportunits"><h3>Supported Units</h3></a>
 		<h4>US Customary Units</h4>
 			<h5>Mass/Weight (BeerXML pretends they are the same)</h5>
 			<ul>
@@ -520,7 +658,37 @@ fields.
 				<li>Hours - &quot;hr&quot;</li>
 				<li>Minutes - &quot;min&quot;</li>
 				<li>Seconds - &quot;s&quot;</li>
-			</ul>
-
+         </ul>
+   <a id="newin2"><h2>New in this release</h2></a>
+   Brewtarget v2.0 has been long in the making, mostly because we have done a
+   massive reworking of the internals. 
+   <a id="newdatabase"><h3>SQLite DB</h3></a>
+   <p>
+   We have replaced the old XML files with a brand new SQLite database. 
+   We have spent a long time making this as transparent as possible. If we
+   have done our jobs well, the only thing most users should notice is
+   brewtarget seems to load faster and is a bit faster in other places.
+   </p>
+   <p>
+   We will be using this change to implement inventory, multi-level undo,
+   automatic versioning of recipes, etc. We also hope to allow you to decide
+   which database engine you want to use -- SQLite and mysql at least,
+   postgresql likely. 
+   </p>
+   <a id="newunitandscales"><h3>Units and Scales</h3></a>
+   <p>
+   This has been a very requested feature that has taken us a long time to
+   implement correctly. You can now override the default unit (e.g., US
+   Customary) per field, and you can control the scale (so your hops are
+   always displayed in grams, no matter how many kilos you are adding). I have
+   likely missed a few places, but this is a great start.
+   </p>
+   <a id="newtrees"><h3>Tree Views</h3></a>
+   <p>
+   The trees continue to evolve. They are now split into their own separate
+   tabs and can be sorted on the fields displayed. The next release will let
+   you select which fields are displayed and hopefully allow you to define
+   folders.
+   </p>
 </body>
 </html>

@@ -64,6 +64,25 @@ QSize BrewDayWidget::sizeHint() const
    return QSize(0,0);
 }
 
+void BrewDayWidget::insertInstruction()
+{
+   if( recObs == 0 )
+      return;
+
+   int pos = lineEdit_step->text().toInt();
+   int size = recObs->instructions().size();
+   if( pos < 0 || pos > size )
+      pos = size;
+
+   Instruction* ins = Database::instance().newInstruction(recObs);
+   ins->setName(lineEdit_name->text());
+
+   // TODO: figure out how to do ordering of ingredients.
+   recObs->insertInstruction( ins, pos );
+   //listWidget->insertItem(pos, ins->text(false));
+   repopulateListWidget();
+}
+
 void BrewDayWidget::removeSelectedInstruction()
 {
    if( recObs == 0 )
@@ -72,6 +91,8 @@ void BrewDayWidget::removeSelectedInstruction()
    int row = listWidget->currentRow();
    if( row < 0 )
       return;
+   listWidget->takeItem(row);
+   repopulateListWidget();
    Database::instance().removeFromRecipe(recObs,recObs->instructions()[row]);
 }
 
@@ -86,7 +107,11 @@ void BrewDayWidget::pushInstructionUp()
       return;
    
    recObs->swapInstructions(ins[row], ins[row-1]);
+   QString instrStep = listWidget->item(row)->text();
+   listWidget->insertItem(row, listWidget->item(row-1)->text());
+   listWidget->insertItem(row-1, instrStep);
    listWidget->setCurrentRow(row-1);
+   //repopulateListWidget();
 }
 
 void BrewDayWidget::pushInstructionDown()
@@ -100,7 +125,11 @@ void BrewDayWidget::pushInstructionDown()
       return;
    
    recObs->swapInstructions(ins[row], ins[row+1]);
+  QString instrStep = listWidget->item(row+1)->text();
+   listWidget->insertItem(row+1, listWidget->item(row)->text());
+  listWidget->insertItem(row, instrStep);
    listWidget->setCurrentRow(row+1);
+  // repopulateListWidget();
 }
 
 QString BrewDayWidget::getCSS() 
@@ -311,22 +340,6 @@ void BrewDayWidget::setRecipe(Recipe* rec)
    showChanges();
 }
 
-void BrewDayWidget::insertInstruction()
-{
-   if( recObs == 0 )
-      return;
-
-   int pos = lineEdit_step->text().toInt();
-   int size = recObs->instructions().size();
-   if( pos < 0 || pos > size )
-      pos = size;
-
-   Instruction* ins = Database::instance().newInstruction(recObs);
-   ins->setName(lineEdit_name->text());
-
-   // TODO: figure out how to do ordering of ingredients.
-   recObs->insertInstruction( ins, pos );
-}
 
 void BrewDayWidget::changed(QMetaProperty prop, QVariant /*val*/)
 {
@@ -401,4 +414,6 @@ void BrewDayWidget::repopulateListWidget()
       listWidget->setCurrentRow(0);
    else
       listWidget->setCurrentRow(-1);
+   this->setUpdatesEnabled(true);
+   listWidget->update();
 }

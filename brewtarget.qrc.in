@@ -52,6 +52,9 @@
         <file alias="images/title.png">${ROOTDIR}/images/title.png</file>
         <file alias="css/brewday.css">${ROOTDIR}/css/brewday.css</file>
         <file alias="css/recipe.css">${ROOTDIR}/css/recipe.css</file>
+        <file alias="data/database.xml">${ROOTDIR}/data/database.xml</file>
+        <file alias="data/recipes.xml">${ROOTDIR}/data/recipes.xml</file>
+        <file alias="data/mashs.xml">${ROOTDIR}/data/mashs.xml</file>
         <file alias="create_db.sql">${ROOTDIR}/create_db.sql</file>
         <file alias="blankdb.sqlite">${CMAKE_CURRENT_BINARY_DIR}/src/blankdb.sqlite</file>
     </qresource>

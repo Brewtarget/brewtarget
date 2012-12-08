@@ -112,7 +112,6 @@ public slots:
    void save();
    void setRecipeByIndex(const QModelIndex &index);
    void treeActivated(const QModelIndex &index);
-   void clear();
 
    void updateRecipeName();
    void updateRecipeStyle();
@@ -219,6 +218,7 @@ private:
    MiscDialog* miscDialog;
    MiscEditor* miscEditor;
    StyleEditor* styleEditor;
+   StyleEditor* singleStyleEditor;
    YeastDialog* yeastDialog;
    YeastEditor* yeastEditor;
    OptionDialog* optionDialog;

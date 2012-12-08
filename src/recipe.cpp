@@ -401,6 +401,20 @@ bool Recipe::hasBoilFermentable()
    return false;
 }
 
+bool Recipe::hasBoilExtract()
+{
+   unsigned int i;
+   for ( i = 0; static_cast<int>(i) < fermentables().size(); ++i )
+   {
+      Fermentable* ferm = fermentables()[i];
+      if( ferm->isExtract() )
+         return true;
+      else
+         continue;
+   }
+   return false;
+}
+
 PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
 {
    QString str;
@@ -413,7 +427,7 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
    for( i = 0; static_cast<int>(i) < size; ++i )
    {
      Fermentable* ferm = flist[i];
-     if( ferm->isMashed() || ferm->addAfterBoil() )
+     if( ferm->isMashed() || ferm->addAfterBoil() || ferm->isExtract() )
        continue;
 
      str += QString("%1 %2, ")
@@ -423,6 +437,37 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
    str += ".";
 
    return PreInstruction(str, tr("Boil/steep fermentables"), timeRemaining);
+}
+bool Recipe::isFermentableSugar(Fermentable *fermy)
+{
+  if (fermy->type() == Fermentable::Sugar && fermy->name() == "Milk Sugar (Lactose)" )
+    return false;
+  else
+    return true;
+}
+
+PreInstruction Recipe::addExtracts(double timeRemaining)
+{
+   QString str;
+   unsigned int i;
+   int size;
+
+   str = tr("Raise water to boil and then remove from heat. Stir in  ");
+   QList<Fermentable*> flist = fermentables();
+   size = flist.size();
+   for( i = 0; static_cast<int>(i) < size; ++i )
+   {
+     Fermentable* ferm = flist[i];
+     if ( ferm->isExtract() )
+     {
+	str += QString("%1 %2, ")
+	    .arg(Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms))
+	    .arg(ferm->name());
+     }
+   }
+   str += ".";
+
+   return PreInstruction(str, tr("Add Extracts to water"), timeRemaining);
 }
 
 Instruction* Recipe::postboilFermentablesIns()
@@ -561,7 +606,7 @@ void Recipe::generateInstructions()
 
    // First wort hopping
    firstWortHopsIns();
-
+    
    // Need to top up the kettle before boil?
    topOffIns();
 
@@ -588,6 +633,10 @@ void Recipe::generateInstructions()
    if ( hasBoilFermentable() )
       preinstructions.push_back(boilFermentablesPre(timeRemaining));
    
+   // add the intructions for including Extracts to wort
+   if ( hasBoilExtract() )
+      preinstructions.push_back(addExtracts(timeRemaining-1));
+
    /*** Boiled hops ***/
    preinstructions += hopSteps(Hop::Boil);
 
@@ -1398,7 +1447,6 @@ void Recipe::removeYeast(Yeast* var)
 void Recipe::removeBrewNote(BrewNote* var)
 {
    Database::instance().removeFromRecipe(this, var);
-   emit changed(metaProperty("brewNotes"), QVariant());
 }
 
 //==============================Recalculators==================================
@@ -1424,6 +1472,7 @@ void Recipe::recalcAll()
    recalcABV_pct(); // 0.12
    recalcBoilGrav(); // 0.14
    recalcIBU(); // 0.15
+   recalcCalories();
    
    _uninitializedCalcs = false;
    
@@ -1437,8 +1486,7 @@ void Recipe::recalcABV_pct()
    // George Fix: Brewing Science and Practice, page 686.
    // The multiplicative factor actually varies from
    // 125 for weak beers to 135 for strong beers.
-   ret = 130*(_og-_fg);
-
+   ret = 130*(_og_fermentable - _fg_fermentable);
   
    if ( ret != _ABV_pct ) 
    {
@@ -1554,7 +1602,10 @@ void Recipe::recalcVolumeEstimates()
    double waterAdded_l;
    double absorption_lKg;
    double tmp = 0.0;
-   double tmp_wfm, tmp_bv, tmp_fv, tmp_pbv;
+   double tmp_wfm = 0.0;
+   double tmp_bv = 0.0;
+   double tmp_fv = 0.0;
+   double tmp_pbv = 0.0;
 
    if( mash() == 0 )
       _wortFromMash_l = 0.0;
@@ -1682,10 +1733,12 @@ void Recipe::recalcSRMColor()
    double red = 232.9 * pow( (double)0.93, _color_srm );
    double green = (double)-106.25 * log(_color_srm) + 280.9;
 
-   int r = (red < 0)? 0 : ((red > 255)? 255 : (int)Algorithms::Instance().round(red));
-   int g = (green < 0)? 0 : ((green > 255)? 255 : (int)Algorithms::Instance().round(green));
+   int r = (int)Algorithms::Instance().round(red);
+   int g = (int)Algorithms::Instance().round(green);
    int b = 0;
 
+   r = (r < 0) ? 0 : ((r > 255)? 255 : r);
+   g = (g < 0) ? 0 : ((g > 255)? 255 : g);
    tmp.setRgb( r, g, b );
 
    if ( tmp != _SRMColor )
@@ -1722,22 +1775,25 @@ void Recipe::recalcCalories()
    }
 }
 
-void Recipe::recalcOgFg()
+// other efficiency calculations need access to the maximum theoretical sugars
+// available. The only way I can see of doing that which doesn't suck is to
+// split that calcuation out of recalcOgFg();
+
+QHash<QString,double> Recipe::calcTotalPoints()
 {
-   unsigned int i;
-   double kettleWort_l;
-   double postBoilWort_l;
-   double plato;
-   double ratio = 0;
-   double sugar_kg = 0;
+   int i;
    double sugar_kg_ignoreEfficiency = 0.0;
+   double sugar_kg                  = 0.0;
+   double nonFermetableSugars_kg    = 0.0;
+   double kettleWort_l              = 0.0;
+   double postBoilWort_l            = 0.0;
+   double ratio                     = 0.0;
+
    Fermentable::Type fermtype;
-   double attenuation_pct = 0.0;
-   double tmp_og, tmp_fg, tmp_pnts;
    Fermentable* ferm;
-   Yeast* yeast;
-   
+
    QList<Fermentable*> ferms = fermentables();
+   QHash<QString,double> ret;
    
    // _points = 0;
    // Calculate OG
@@ -1747,8 +1803,14 @@ void Recipe::recalcOgFg()
 
       // If we have some sort of non-grain, we have to ignore efficiency.
       fermtype = ferm->type();
-      if( fermtype==Fermentable::Sugar|| fermtype==Fermentable::Extract || fermtype==Fermentable::Dry_Extract )
+      if( fermtype==Fermentable::Sugar || fermtype==Fermentable::Extract || fermtype==Fermentable::Dry_Extract )
+      {
          sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
+         if ( !isFermentableSugar(ferm) )
+         {
+           nonFermetableSugars_kg += ferm->equivSucrose_kg();
+         }
+      }
       else
          sugar_kg += ferm->equivSucrose_kg();
    }   
@@ -1769,14 +1831,56 @@ void Recipe::recalcOgFg()
       // Ignore this again since it should be included in efficiency.
       //sugar_kg *= ratio;
       sugar_kg_ignoreEfficiency *= ratio;
+      if ( nonFermetableSugars_kg != 0.0 )
+         nonFermetableSugars_kg *= ratio;
    }
+   ret.insert("sugar_kg", sugar_kg);
+   ret.insert("nonFermetableSugars_kg", nonFermetableSugars_kg);
+   ret.insert("sugar_kg_ignoreEfficiency", sugar_kg_ignoreEfficiency);
+
+   return ret;
+
+}
+
+void Recipe::recalcOgFg()
+{
+   unsigned int i;
+   double plato;
+   double sugar_kg = 0;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   double nonFermetableSugars_kg = 0.0;
+   double ferm_kg = 0.0;
+   double attenuation_pct = 0.0;
+   double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
+   Yeast* yeast;
+   QHash<QString,double> sugars;
    
-   // Combine the two sugars.
+   _og_fermentable = _fg_fermentable = 0.0;
+
+   // Find out how much sugar we have.
+   sugars = calcTotalPoints();
+   sugar_kg                  = sugars.value("sugar_kg");
+   sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
+   nonFermetableSugars_kg    = sugars.value("nonFermetableSugars_kg");
+
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
    plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolume_l);
 
    tmp_og = Algorithms::Instance().PlatoToSG_20C20C( plato );
    tmp_pnts = (tmp_og-1)*1000.0;
+   if ( nonFermetableSugars_kg != 0.0 )
+   {
+    ferm_kg = sugar_kg - nonFermetableSugars_kg;
+    plato = Algorithms::Instance().getPlato( ferm_kg, _finalVolume_l);
+     _og_fermentable = Algorithms::Instance().PlatoToSG_20C20C( plato );
+    plato = Algorithms::Instance().getPlato( nonFermetableSugars_kg, _finalVolume_l); 
+    tmp_ferm_pnts = ((Algorithms::Instance().PlatoToSG_20C20C( plato ))-1)*1000.0;
+   }
+   else
+   {
+     _og_fermentable = tmp_og;
+     tmp_ferm_pnts = 0;
+   }
 
    // Calculage FG
    QList<Yeast*> yeasties = yeasts();
@@ -1789,10 +1893,21 @@ void Recipe::recalcOgFg()
    }
    if( yeasties.size() > 0 && attenuation_pct <= 0.0 ) // This means we have yeast, but they neglected to provide attenuation percentages.
       attenuation_pct = 75.0; // 75% is an average attenuation.
-
-   tmp_pnts *= (1.0 - attenuation_pct/100.0);
-   tmp_fg =  1 + tmp_pnts/1000.0;
-
+   
+   if ( nonFermetableSugars_kg != 0.0 )
+   {
+      tmp_ferm_pnts = (tmp_pnts-tmp_ferm_pnts) * (1.0 - attenuation_pct/100.0);
+      tmp_pnts *= (1.0 - attenuation_pct/100.0);
+      tmp_fg =  1 + tmp_pnts/1000.0;
+      _fg_fermentable =  1 + tmp_ferm_pnts/1000.0;
+   }
+   else
+   {
+      tmp_pnts *= (1.0 - attenuation_pct/100.0);
+      tmp_fg =  1 + tmp_pnts/1000.0;
+      _fg_fermentable = tmp_fg;
+   }
+   
    if ( _og != tmp_og ) 
    {
       _og     = tmp_og;
@@ -1813,6 +1928,7 @@ void Recipe::recalcOgFg()
 
 double Recipe::ibuFromHop(Hop const* hop)
 {
+   Equipment* equip = equipment();
    double ibus = 0.0;
    
    if( hop == 0 )
@@ -1821,21 +1937,23 @@ double Recipe::ibuFromHop(Hop const* hop)
    double AArating = hop->alpha_pct()/100.0;
    double grams = hop->amount_kg()*1000.0;
    double minutes = hop->time_min();
-   //double water_l = estimateFinalVolume_l();
-   //double boilVol_l = estimateBoilVolume_l();
-   //double boilGrav = boilGrav();
    double boilGrav_final = _boilGrav; 
    double avgBoilGrav;
    
-   if( equipment() )
-      boilGrav_final = _boilVolume_l / equipment()->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
+   if( equip )
+      boilGrav_final = _boilVolume_l / equip->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
    
    avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
    
    if( hop->use() == Hop::Boil)
       ibus = IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, minutes );
    else if( hop->use() == Hop::First_Wort )
-      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, 20 ); // I am estimating First wort hops give 10% more ibus than a 20 minute addition.
+   {
+      if( equip )
+         ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, equip->boilTime_min() );
+      else
+         ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, 60 );
+   }
 
    // Adjust for hop form.
    if( hop->form() == Hop::Leaf )
@@ -1859,6 +1977,7 @@ bool Recipe::isValidType( const QString &str )
    return false;
 }
 
+/*
 BrewNote* Recipe::addBrewNote( BrewNote* old )
 {
    BrewNote* newNote;
@@ -1874,6 +1993,7 @@ BrewNote* Recipe::addBrewNote( BrewNote* old )
    return newNote;
 
 }
+*/
 
 QList<QString> Recipe::getReagents( QList<Fermentable*> ferms )
 {
@@ -1955,7 +2075,17 @@ void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
    recalcAll();
 }
 
+void Recipe::acceptFermChange(Fermentable *ferm)
+{
+   recalcAll();
+}
+
 void Recipe::acceptHopChange(QMetaProperty prop, QVariant val)
+{
+   recalcIBU();
+}
+
+void Recipe::acceptHopChange(Hop* hop) 
 {
    recalcIBU();
 }
@@ -1968,4 +2098,10 @@ void Recipe::acceptMashChange(QMetaProperty prop, QVariant val)
       return;
    
    recalcAll();
+}
+
+void Recipe::acceptMashChange(Mash* newMash)
+{
+   if ( newMash == mash() )
+      recalcAll();
 }

@@ -92,11 +92,10 @@ Database::~Database()
 bool Database::load()
 {
    bool dbIsOpen;
-   bool createFromScratch = false;
    
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
-   dataDbFileName = (Brewtarget::getDataDir() + "database.sqlite");
+   dataDbFileName = (Brewtarget::getDataDir() + "default_db.sqlite");
    dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
    
    // Cleanup the backup database if there was a previous error.
@@ -111,32 +110,25 @@ bool Database::load()
    // If there's no dbFile, try to copy from dataDbFile.
    if( !dbFile.exists() )
    {
+      Brewtarget::userDatabaseDidNotExist = true;
+      
       // If there's no dataDbFile, create dbFile from scratch.
       if( !dataDbFile.exists() )
-         createFromScratch = true;
+      {
+         QFile::copy( ":/blankdb.sqlite", dbFileName );
+         QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+      }
       else
+      {
          dataDbFile.copy(dbFileName);
-   }
-
-   // NOTE: I don't think this will be necessary anymore, but leaving it
-   // commented just in case.
-   // Sometimes, the database file gets created but is empty. This fixes that
-   // problem
-   //if ( dbFile.size() == 0 )
-   //   createFromScratch = true;
-   
-   // If we need to create from scratch, do it.
-   if( createFromScratch )
-   {
-      QFile::copy( ":/blankdb.sqlite", dbFileName );
-      QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+         QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+      }
    }
 
    // Create a copy of the database to revert to if the user decides not to make changes.
    dbFile.copy(dbTempBackupFileName);
    
    // Open SQLite db.
-   // http://www.developer.nokia.com/Community/Wiki/CS001504_-_Creating_an_SQLite_database_in_Qt
    QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE");
    sqldb.setDatabaseName(dbFileName);
    dbIsOpen = sqldb.open();
@@ -439,6 +431,7 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
    sqlUpdate( Brewtarget::BREWNOTETABLE,
               "deleted=1",
               QString("id=%1").arg(b->_key) );
+   emit deletedBrewNoteSignal(b);
 }
 
 void Database::removeFromRecipe( Recipe* rec, Hop* hop )
@@ -493,7 +486,7 @@ void Database::removeFrom( Mash* mash, MashStep* step )
    sqlUpdate( Brewtarget::MASHSTEPTABLE,
               "deleted=1",
               QString("id=%1").arg(step->_key) );
-   emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+   // emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
    emit mash->mashStepsChanged();
 }
 
@@ -635,7 +628,14 @@ Equipment* Database::equipment(Recipe const* parent)
 
 Style* Database::style(Recipe const* parent)
 {
-   int id = get( Brewtarget::RECTABLE, parent->key(), "style_id" ).toInt();
+   int id;
+   
+   QString queryString = QString("SELECT style_id FROM recipe WHERE id = %1").arg(parent->_key);
+   QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
+   
+   while( q.next() )
+      id = q.record().value("style_id").toInt();
+   q.finish();
    
    if( allStyles.contains(id) )
       return allStyles[id];
@@ -707,7 +707,7 @@ QList<Yeast*> Database::yeasts(Recipe const* parent)
 // Named constructors =========================================================
 
 int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
-{   
+{
    int key;
 
    QSqlQuery q(sqlDatabase());
@@ -768,7 +768,10 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
    BrewNote* tmp = copy<BrewNote>(other, true, &allBrewNotes);
   
    if ( signal )
+   {
       emit changed( metaProperty("brewNotes"), QVariant() );
+      emit newBrewNoteSignal(tmp);
+   }
    return tmp;
 }
 
@@ -784,8 +787,12 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
               QString("recipe_id=%1").arg(parent->_key),
               QString("id=%2").arg(tmp->_key) );
 
+   tmp->populateNote(parent);
    if ( signal ) 
+   {
       emit changed( metaProperty("brewNotes"), QVariant() );
+      emit newBrewNoteSignal(tmp);
+   }
    return tmp;
 }
 
@@ -795,10 +802,10 @@ Equipment* Database::newEquipment()
    tmp->_key = insertNewDefaultRecord(Brewtarget::EQUIPTABLE);
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
-   
+
    emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(tmp);
-   
+
    return tmp;
 }
 
@@ -904,7 +911,8 @@ Mash* Database::newMash(Recipe* parent)
    
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
-   
+
+   connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), parent, SLOT(acceptMashChange(QMetaProperty,QVariant)) );
    return tmp;
 }
 
@@ -937,10 +945,8 @@ MashStep* Database::newMashStep(Mash* mash)
 
    allMashSteps.insert(tmp->_key,tmp);
    connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
-   // Database's steps have changed.
-   emit changed( metaProperty("mashSteps"), QVariant() );
-   // Mash's steps have changed.
-   emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+
+   emit changed( metaProperty("mashs"), QVariant() );
    emit mash->mashStepsChanged();
    return tmp;
 }
@@ -1315,76 +1321,10 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
                                object,
                                notify);
 
-   // Push onto custom stack.
-   //_setterCommandStack->push(command);
-   
-   // Just execute the damn thing.
    command->redo();
 }
 
 // Add to recipe ==============================================================
-void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
-{
-   Hop* newHop = addIngredientToRecipe<Hop>( rec, hop,
-                                         "hops",
-                                         "hop_in_recipe",
-                                         "hop_id",
-                                         noCopy, &allHops );
-   connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
-   rec->recalcIBU();
-}
-
-void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
-{
-   if ( ferm == 0 )
-      return;
-
-   Fermentable* newFerm = addIngredientToRecipe<Fermentable>( rec, ferm,
-                                                 "fermentables",
-                                                 "fermentable_in_recipe",
-                                                 "fermentable_id",
-                                                 noCopy, &allFermentables );
-   connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
-   rec->recalcAll();
-}
-
-void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
-{
-   addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", noCopy, &allMiscs );
-   rec->recalcAll();
-}
-
-void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
-{
-   addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
-   rec->recalcOgFg();
-}
-
-void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
-{
-   addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", noCopy, &allWaters );
-   rec->recalcAll();
-}
-
-void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
-{
-   Mash* newMash;
-   
-   // Make a copy of mash.
-   if ( ! noCopy )
-      newMash = copy<Mash>(m, false, &allMashs);
-   else
-      newMash = m;
-   
-   // Update mash_id
-   sqlUpdate(Brewtarget::RECTABLE,
-             QString("`mash_id`='%1'").arg(newMash->key()),
-             QString("id='%1'").arg(rec->_key));
-   
-   // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
-}
-
 void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 {
    Equipment* newEquip;
@@ -1406,7 +1346,68 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 
    newEquip->setDisplay(false);
    // Emit a changed signal.
-   emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+   //emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+}
+
+void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
+{
+   if ( ferm == 0 )
+      return;
+
+   Fermentable* newFerm = addIngredientToRecipe<Fermentable>( rec, ferm,
+                                                 "fermentables",
+                                                 "fermentable_in_recipe",
+                                                 "fermentable_id",
+                                                 noCopy, &allFermentables );
+   connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+   // recalcAll is very expensive. When doing a massive import, don't do it
+   // with every fermentable. Let it happen once
+   if (! noCopy ) 
+      rec->recalcAll();
+}
+
+void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
+{
+   Hop* newHop = addIngredientToRecipe<Hop>( rec, hop,
+                                         "hops",
+                                         "hop_in_recipe",
+                                         "hop_id",
+                                         noCopy, &allHops );
+   connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+   rec->recalcIBU();
+}
+
+void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
+{
+   Mash* newMash;
+   
+   // Make a copy of mash.
+   if ( ! noCopy )
+      newMash = copy<Mash>(m, false, &allMashs);
+   else
+      newMash = m;
+   
+   // Update mash_id
+   sqlUpdate(Brewtarget::RECTABLE,
+             QString("`mash_id`='%1'").arg(newMash->key()),
+             QString("id='%1'").arg(rec->_key));
+   
+   // Emit a changed signal.
+   emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
+}
+
+void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
+{
+   addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", noCopy, &allMiscs );
+   if (! noCopy ) 
+      rec->recalcAll();
+}
+
+void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
+{
+   addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", noCopy, &allWaters );
+   if (! noCopy ) 
+      rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
@@ -1421,12 +1422,22 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
    sqlUpdate(Brewtarget::RECTABLE,
              QString("`style_id`='%1'").arg(newStyle->key()),
              QString("id='%1'").arg(rec->_key));
-   
+
    newStyle->setDisplay(false);
    
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
 }
+
+void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
+{
+   addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
+
+   y->setDisplay(false);
+   if ( ! noCopy )
+      rec->recalcOgFg();
+}
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )
 {
@@ -2707,7 +2718,7 @@ void Database::toXml( Yeast* a, QDomDocument& doc, QDomNode& parent )
 }
 
 // fromXml ====================================================================
-void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode )
+void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xmlTagsToProperties, QDomNode const& elementNode)
 {
    QDomNode node, child;
    QDomText textNode;
@@ -2718,7 +2729,7 @@ void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& x
    QString stringVal;
    QDateTime dateTimeVal;
    QDate dateVal;
-  
+
    for( node = elementNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
    {
       if( ! node.isElement() )
@@ -2733,7 +2744,7 @@ void Database::fromXml( BeerXMLElement* element, QHash<QString,QString> const& x
       
       xmlTag = node.nodeName();
       textNode = child.toText();
-         
+        
       if( xmlTagsToProperties.contains(xmlTag) )
       {
          switch( element->metaProperty(xmlTagsToProperties[xmlTag]).type() )
@@ -2782,28 +2793,86 @@ BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
    BrewNote* ret = newBrewNote(parent);  
    fromXml( ret, BrewNote::tagToProp, node );
-   //_setterCommandStack->flush();
 
    return ret;
 }
 
 Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
 {
-   Equipment* ret = newEquipment();
+   // When loading from XML, we need to delay the signals until after
+   // everything is done. This should significantly speed up the load times
+   blockSignals(true); 
+   
+   Equipment* ret;
+   QList<Equipment*> matchingEquips;
+   QDomNode n;
+   bool createdNew = true;
 
+   // If we are just importing an equip by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      
+      getElements<Equipment>( matchingEquips, QString("name='%1'").arg(name), Brewtarget::EQUIPTABLE, allEquipments );
+      
+      if( matchingEquips.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingEquips.first();
+      }
+      else
+         ret = newEquipment();
+   }
+   else
+      ret = newEquipment();
+   
    fromXml( ret, Equipment::tagToProp, node );
-   //_setterCommandStack->flush();
 
    if( parent )
+   {
+      ret->setDisplay(false);
       addToRecipe( parent, ret, true );
+   }
 
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("equipments"), QVariant() );
+      emit newEquipmentSignal(ret);
+   }
+   
    return ret;
 }
 
 Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   Fermentable* ret = newFermentable();
+   Fermentable* ret;
+   bool createdNew = true;
+   blockSignals(true);
+   
+   // If we are just importing a hop by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Fermentable*> matchingFerms;
+      getElements<Fermentable>( matchingFerms, QString("name='%1'").arg(name), Brewtarget::FERMTABLE, allFermentables );
+      
+      if( matchingFerms.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingFerms.first();
+      }
+      else
+         ret = newFermentable();
+   }
+   else
+      ret = newFermentable();
+   
    fromXml( ret, Fermentable::tagToProp, node );
 
    
@@ -2814,9 +2883,16 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
                        n.firstChild().toText().nodeValue()
                     )
                  ) );
-   //_setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret, true );
+
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("fermentables"), QVariant() );
+      emit newFermentableSignal(ret);
+   }
+
    return ret;
 }
 
@@ -2875,10 +2951,31 @@ int Database::getQualifiedHopUseIndex(QString use, Hop* hop)
 Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
+   Hop* ret;
+   bool createdNew = true;
+   blockSignals(true); 
 
-   Hop* ret = newHop();
+   // If we are just importing a hop by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Hop*> matchingHops;
+      getElements<Hop>( matchingHops, QString("name='%1'").arg(name), Brewtarget::HOPTABLE, allHops );
+      
+      if( matchingHops.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingHops.first();
+      }
+      else
+         ret = newHop();
+   }
+   else
+      ret = newHop();
+   
    fromXml( ret, Hop::tagToProp, node );
-   //_setterCommandStack->flush();
   
    // Handle enums separately.
    n = node.firstChildElement("USE");
@@ -2894,22 +2991,36 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
    
    if( parent )
       addToRecipe( parent, ret, true );
+
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("hops"), QVariant() );
+      emit newHopSignal(ret);
+   }
    return ret;
 }
 
 Instruction* Database::instructionFromXml( QDomNode const& node, Recipe* parent )
 {
+
+   blockSignals(true); 
    Instruction* ret = newInstruction(parent);
    
    fromXml( ret, Instruction::tagToProp, node );
-   //_setterCommandStack->flush();
+
+   blockSignals(false); 
+   emit changed( metaProperty("instructions"), QVariant() );
    return ret;
 }
 
 Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
+
+   blockSignals(true); 
    Mash* ret;
+
    if( parent )
       ret = newMash(parent);
    else
@@ -2917,8 +3028,7 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    
    // First, get all the standard properties.
    fromXml( ret, Mash::tagToProp, node );
-   //_setterCommandStack->flush();
-   
+
    // Now, get the individual mash steps.
    n = node.firstChildElement("MASH_STEPS");
    if( n.isNull() )
@@ -2927,15 +3037,29 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       mashStepFromXml( n, ret );
 
+   blockSignals(false); 
+
+   emit changed( metaProperty("mashs"), QVariant() );
+   emit newMashSignal(ret);
+   emit ret->mashStepsChanged();
+
    return ret;
 }
 
 MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
 {
    QDomNode n;
+   bool blocked = signalsBlocked();
+
+   if (! blocked )
+      blockSignals(true); 
+
    MashStep* ret = newMashStep(parent);
-   
-   fromXml( ret, MashStep::tagToProp, node );
+   // I am only doing this on mashsteps because they cause all sorts of
+   // expensive recalculations to happen
+   ret->blockSignals(true);
+  
+   fromXml(ret,MashStep::tagToProp,node);
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -2944,8 +3068,15 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
                        n.firstChild().toText().nodeValue()
                     )
                  ) );
-   
-   //_setterCommandStack->flush();
+  
+   if (! blocked )
+   {
+      blockSignals(false); 
+      emit changed( metaProperty("mashs"), QVariant() );
+      emit parent->mashStepsChanged();
+   }
+
+   ret->blockSignals(false);
    return ret;
 }
 
@@ -3004,10 +3135,31 @@ int Database::getQualifiedMiscUseIndex(QString use, Misc* misc)
 Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   Misc* ret = newMisc();
+   bool createdNew = true;
+   blockSignals(true); 
+   Misc* ret;
+   
+   // If we are just importing a misc by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Misc*> matchingMiscs;
+      getElements<Misc>( matchingMiscs, QString("name='%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
+      
+      if( matchingMiscs.length() > 0 )
+      {
+         createdNew = false;
+         ret = matchingMiscs.first();
+      }
+      else
+         ret = newMisc();
+   }
+   else
+      ret = newMisc();
    
    fromXml( ret, Misc::tagToProp, node );
-   //_setterCommandStack->flush();
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
@@ -3017,17 +3169,26 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    
    if( parent )
       addToRecipe( parent, ret, true );
+
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("miscs"), QVariant() );
+      emit newMiscSignal(ret);
+   }
    return ret;
 }
 
 Recipe* Database::recipeFromXml( QDomNode const& node )
 {
    QDomNode n;
+
+   // Oddly, I don't think we need to block these signals. All of the
+   // subcomponents are, and that should be enough
    Recipe* ret = newRecipe();
-  
+ 
    // Get standard properties.
    fromXml( ret, Recipe::tagToProp, node );
-   //_setterCommandStack->flush();
    
    // Get style. Note: styleFromXml requires the entire node, not just the
    // firstchild of the node.
@@ -3075,19 +3236,42 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
       instructionFromXml(n, ret);
 
    // Get brew notes
-
    n = node.firstChildElement("BREWNOTES");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       brewNoteFromXml(n, ret);
 
+   // Recalc everything, just for grins and giggles.
+   ret->recalcAll();
    return ret;
 }
 
 Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   Style* ret = newStyle();
+   bool createdNew = true;
+   blockSignals(true); 
+   Style* ret;
 
+   // If we are just importing a style by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Style*> matching;
+      getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
+      
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+      else
+         ret = newStyle();
+   }
+   else
+      ret = newStyle();
+   
    fromXml( ret, Style::tagToProp, node );
 
    // Handle enums separately.
@@ -3098,25 +3282,87 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
                     )
                  ) );
    
-   //_setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret );
+
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("styles"), QVariant() );
+      emit newStyleSignal(ret);
+   }
+
    return ret;
 }
 
 Water* Database::waterFromXml( QDomNode const& node, Recipe* parent )
 {
-   Water* ret = newWater();
+   blockSignals(true); 
+   bool createdNew = true;
+   Water* ret;
+   QDomNode n;
+   
+   // If we are just importing a style by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Water*> matching;
+      getElements<Water>( matching, QString("name='%1'").arg(name), Brewtarget::WATERTABLE, allWaters );
+      
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+      else
+         ret = newWater();
+   }
+   else
+      ret = newWater();
+   
    fromXml( ret, Water::tagToProp, node );
    if( parent )
       addToRecipe( parent, ret, true );
+
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("waters"), QVariant() );
+      emit newWaterSignal(ret);
+   }
+   
    return ret;
 }
 
 Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 {
    QDomNode n;
-   Yeast* ret = newYeast();
+   blockSignals(true);
+   bool createdNew = true;
+   Yeast* ret;
+   
+   // If we are just importing a yeast by itself, need to do some dupe-checking.
+   if( parent == 0 )
+   {
+      // Check to see if there is a hop already in the DB with the same name.
+      n = node.firstChildElement("NAME");
+      QString name = n.firstChild().toText().nodeValue();
+      QList<Yeast*> matching;
+      getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
+      
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+      else
+         ret = newYeast();
+   }
+   else
+      ret = newYeast();
+   
    fromXml( ret, Yeast::tagToProp, node );
 
    // Handle enums separately.
@@ -3140,9 +3386,16 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
                                n.firstChild().toText().nodeValue()
                             )
                          ) );
-   //_setterCommandStack->flush();
    if( parent )
       addToRecipe( parent, ret, true );
+   
+   blockSignals(false);
+   if( createdNew )
+   {
+      emit changed( metaProperty("yeasts"), QVariant() );
+      emit newYeastSignal(ret);
+   }
+   
    return ret;
 }
 
@@ -3252,8 +3505,7 @@ QList<TableParams> Database::makeTableParams()
       "lauter_deadspace" << "top_up_kettle" << "hop_utilization" <<
       "notes";
    tmp.newElement =
-      (NewIngFunc)
-      (Equipment*(Database::*)(void))
+      (NewIngFunc) (Equipment*(Database::*)(void))
       &Database::newEquipment;
    
    ret.append(tmp);

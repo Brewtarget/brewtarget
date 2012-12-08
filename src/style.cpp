@@ -18,6 +18,7 @@
 
 #include "brewtarget.h"
 #include "style.h"
+#include <QDebug>
 
 QStringList Style::types = QStringList() << "Lager" << "Ale" << "Mead" << "Wheat" << "Mixed" << "Cider";
 QHash<QString,QString> Style::tagToProp = Style::tagToPropHash();
@@ -57,7 +58,7 @@ bool operator<(Style &s1, Style &s2)
 
 bool operator==(Style &s1, Style &s2)
 {
-   return s1.name() == s2.name();
+   return s1.key() == s2.key();
 }
 
 //===========================CONSTRUCTORS=======================================

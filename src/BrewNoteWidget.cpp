@@ -92,28 +92,34 @@ void BrewNoteWidget::updateSG()
 
 void BrewNoteWidget::updateVolumeIntoBK_l()
 {
+   unitDisplay dispUnit;
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setVolumeIntoBK_l(Brewtarget::volQStringToSI(lineEdit_volIntoBK->text()));
+   dispUnit  = (unitDisplay)Brewtarget::option("volumeIntoBK_l", noUnit,page_preboil,Brewtarget::UNIT).toInt();
+   bNoteObs->setVolumeIntoBK_l(Brewtarget::volQStringToSI(lineEdit_volIntoBK->text(),dispUnit));
    showChanges();
 }
 
 void BrewNoteWidget::updateStrikeTemp_c()
 {
+   unitDisplay dispUnit;
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setStrikeTemp_c(Brewtarget::tempQStringToSI(lineEdit_strikeTemp->text()));
+   dispUnit  = (unitDisplay)Brewtarget::option("strikeTemp_c",noUnit,page_preboil,Brewtarget::UNIT).toInt();
+   bNoteObs->setStrikeTemp_c(Brewtarget::tempQStringToSI(lineEdit_strikeTemp->text(),dispUnit));
    showChanges();
 }
 
 void BrewNoteWidget::updateMashFinTemp_c()
 {
+   unitDisplay dispUnit;
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setMashFinTemp_c(Brewtarget::tempQStringToSI(lineEdit_mashFinTemp->text()));
+   dispUnit  = (unitDisplay)Brewtarget::option("mashFinTemp_c",noUnit,page_preboil,Brewtarget::UNIT).toInt();
+   bNoteObs->setMashFinTemp_c(Brewtarget::tempQStringToSI(lineEdit_mashFinTemp->text(),dispUnit));
    showChanges();
 }
 
@@ -128,28 +134,34 @@ void BrewNoteWidget::updateOG()
 
 void BrewNoteWidget::updatePostBoilVolume_l()
 {
+   unitDisplay dispUnit;
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setPostBoilVolume_l(Brewtarget::volQStringToSI(lineEdit_postBoilVol->text()));
+   dispUnit  = (unitDisplay)Brewtarget::option("postBoilVolume_l",noUnit,page_postboil,Brewtarget::UNIT).toInt();
+   bNoteObs->setPostBoilVolume_l(Brewtarget::volQStringToSI(lineEdit_postBoilVol->text(),dispUnit));
    showChanges();
 }
 
 void BrewNoteWidget::updateVolumeIntoFerm_l()
 {
+   unitDisplay dispUnit;
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setVolumeIntoFerm_l(Brewtarget::volQStringToSI(lineEdit_volIntoFerm->text()));
+   dispUnit  = (unitDisplay)Brewtarget::option("volumeIntoFerm_l",noUnit,page_postboil,Brewtarget::UNIT).toInt();
+   bNoteObs->setVolumeIntoFerm_l(Brewtarget::volQStringToSI(lineEdit_volIntoFerm->text(),dispUnit));
    showChanges();
 }
 
 void BrewNoteWidget::updatePitchTemp_c()
 {
+   unitDisplay dispUnit;
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setPitchTemp_c(Brewtarget::tempQStringToSI(lineEdit_pitchTemp->text()));
+   dispUnit  = (unitDisplay)Brewtarget::option("pitchTemp_c",noUnit,page_postboil,Brewtarget::UNIT).toInt();
+   bNoteObs->setPitchTemp_c(Brewtarget::tempQStringToSI(lineEdit_pitchTemp->text(),dispUnit));
    showChanges();
 }
 
@@ -164,10 +176,12 @@ void BrewNoteWidget::updateFG()
 
 void BrewNoteWidget::updateFinalVolume_l()
 {
+   unitDisplay dispUnit;
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setFinalVolume_l(Brewtarget::volQStringToSI(lineEdit_finalVol->text()));
+   dispUnit  = (unitDisplay)Brewtarget::option("finalVolume_l",noUnit,page_postferment,Brewtarget::UNIT).toInt();
+   bNoteObs->setFinalVolume_l(Brewtarget::volQStringToSI(lineEdit_finalVol->text(),dispUnit));
    showChanges();
 }
 
@@ -224,6 +238,9 @@ void BrewNoteWidget::saveAll()
 
 void BrewNoteWidget::showChanges(QString field)
 {
+   double low  = 0.95;
+   double high = 1.05;
+
    if (bNoteObs == 0)
       return;
 
@@ -243,7 +260,11 @@ void BrewNoteWidget::showChanges(QString field)
 
    // Now with the calculated stuff
    lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
+
+   lcdnumber_projectedOG->setLowLim( low * Brewtarget::displayOG(bNoteObs, scrollAreaWidgetContents, "projOg",false).toDouble() );
+   lcdnumber_projectedOG->setHighLim( high * Brewtarget::displayOG(bNoteObs, scrollAreaWidgetContents, "projOg",false).toDouble() );
    lcdnumber_projectedOG->display( Brewtarget::displayOG(bNoteObs, scrollAreaWidgetContents, "projOg",false));
+
    lcdnumber_brewhouseEff->display(bNoteObs->brewhouseEff_pct(),2);
    lcdnumber_projABV->display(bNoteObs->projABV_pct(),2);
    lcdnumber_abv->display(bNoteObs->abv(),2);

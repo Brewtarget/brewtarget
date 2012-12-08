@@ -35,7 +35,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
 {
    setupUi(this);
 
-   miscTableModel = new MiscTableModel(miscTableWidget);
+   miscTableModel = new MiscTableModel(miscTableWidget, false);
    miscTableProxy = new MiscSortFilterProxyModel(miscTableWidget);
    miscTableProxy->setSourceModel(miscTableModel);
    miscTableWidget->setModel(miscTableProxy);
