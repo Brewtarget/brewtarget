@@ -95,8 +95,9 @@ public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
    
 signals:
-   /*
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedGrainTemp_c(double);
    void changedTunTemp_c(double);
    void changedSpargeTemp_c(double);

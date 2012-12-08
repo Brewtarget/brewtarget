@@ -114,8 +114,10 @@ public:
    bool addToSecondary() const;
    
 signals:
-   /*
+
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedType(Type);
    void changedForm(Form);
    void changedAmount(double);

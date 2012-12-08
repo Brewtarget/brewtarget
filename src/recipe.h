@@ -272,6 +272,7 @@ public:
    QHash<QString,double> calcTotalPoints();
    
 signals:
+   //! \brief Emitted when \c name() changes.
    void changedName(const QString&);
    
 public slots:

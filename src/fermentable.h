@@ -139,8 +139,9 @@ public:
 
 signals:
    
+   //! \brief Emitted when \c name() changes.
+   void changedName(QString);
    /*
-   void changedName( QString newName );
    void changedType( Type newType );
    void changedTypeString( QString newTypeString );
    void changedTypeStringTr( QString newTypeStringTr );

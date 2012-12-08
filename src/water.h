@@ -77,8 +77,10 @@ public:
    void setNotes( const QString &var );
    
 signals:
-   /*
+   
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedAmount_l(double);
    void changedCalcium_ppm(double);
    void changedBicarbonate_ppm(double);

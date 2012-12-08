@@ -119,8 +119,9 @@ public:
    QString examples() const;
 
 signals:
-   /*
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedCategory(QString);
    void changedCategoryNumber(QString);
    void changedStyleLetter(QString);

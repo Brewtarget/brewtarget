@@ -113,6 +113,7 @@ Hop::Hop( Hop const& other )
 void Hop::setName( const QString& str )
 {
    set("name","name",str);
+   emit changedName(str);
 }
 
 void Hop::setAlpha_pct( double num )

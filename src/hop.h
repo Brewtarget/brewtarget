@@ -115,8 +115,9 @@ public:
    void setMyrcene_pct( double num );
 
 signals:
-   /*
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedAlpha_pct(double);
    void changedAmount_kg(double);
    void changedUse(Use);

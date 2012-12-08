@@ -217,6 +217,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
 void Equipment::setName( const QString &var )
 {
    set( "name", "name", var );
+   emit changedName(var);
 }
 
 void Equipment::setBoilSize_l( double var )
