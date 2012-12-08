@@ -17,10 +17,8 @@
  */
 
 #ifndef _MISC_H
-#define   _MISC_H
+#define _MISC_H
 
-#include <QDomNode>
-#include <QDomText>
 #include <QString>
 #include "BeerXMLElement.h"
 
@@ -40,25 +38,37 @@ class Misc : public BeerXMLElement
    friend class Database;
 public:
   
-   //enum Type{ TYPESPICE, TYPEFINING, TYPEWATER_AGENT, TYPEHERB, TYPEFLAVOR, TYPEOTHER };
+   //! \brief The type of ingredient.
    enum Type {Spice, Fining, Water_Agent, Herb, Flavor, Other}; // NOTE: BeerXML expects "Water Agent", but we can't have white space in enums :-/.
-   //enum Use{ USEBOIL, USEMASH, USEPRIMARY, USESECONDARY, USEBOTTLING };
+   //! \brief Where the ingredient is used.
    enum Use { Boil, Mash, Primary, Secondary, Bottling };
    Q_ENUMS( Type Use )
    
    virtual ~Misc() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   //! \brief The name.
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
+   //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief The  \c Type string.
    Q_PROPERTY( QString typeString READ typeString /*NOTIFY changed*/ STORED false )
+   //! \brief The translated \c Type string.
    Q_PROPERTY( QString typeStringTr READ typeStringTr /*NOTIFY changed*/ STORED false )
+   //! \brief The \c Use.
    Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
+   //! \brief The \c Use string.
    Q_PROPERTY( QString useString READ useString /*NOTIFY changed*/ /*changedUse*/ STORED false )
+   //! \brief The translated \c Use string.
    Q_PROPERTY( QString useStringTr READ useStringTr /*NOTIFY changed*/ /*changedUse*/ STORED false )
+   //! \brief The time used in minutes.
    Q_PROPERTY( double time READ time WRITE setTime /*NOTIFY changed*/ /*changedTime*/ )
+   //! \brief The amount in either kg or L, depending on \c amountIsWeight().
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
+   //! \brief Whether the amount is weight (kg), or volume (L).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
+   //! \brief What to use it for.
    Q_PROPERTY( QString useFor READ useFor WRITE setUseFor /*NOTIFY changed*/ /*changedUseFor*/ )
+   //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    
    // Set
@@ -75,11 +85,9 @@ public:
    QString name() const;
    Type type() const;
    const QString typeString() const;
-   //! Returns a translated type string.
    const QString typeStringTr() const;
    Use use() const;
    const QString useString() const;
-   //! Returns a translated use string.
    const QString useStringTr() const;
    double amount() const;
    double time() const;

@@ -19,7 +19,6 @@
 #ifndef _MASHSTEP_H
 #define _MASHSTEP_H
 
-#include <QDomNode>
 #include "BeerXMLElement.h"
 #include <QStringList>
 #include <QString>
@@ -42,22 +41,33 @@ class MashStep : public BeerXMLElement
    friend class Database;
 public:
 
-   //enum Type {TYPEINFUSION, TYPETEMPERATURE, TYPEDECOCTION};
+   //! \brief The type of step.
    enum Type { Infusion, Temperature, Decoction };
    Q_ENUMS( Type )
    
    virtual ~MashStep() {}
 
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   //! \brief The name.
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
+   //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief The translated \c Type string.
+   Q_PROPERTY( QString typeStringTr READ typeStringTr )
+   //! \brief The infusion amount in liters.
    Q_PROPERTY( double infuseAmount_l READ infuseAmount_l WRITE setInfuseAmount_l /*NOTIFY changed*/ /*changedInfuseAmount_l*/ )
+   //! \brief The target temperature of this step in C.
    Q_PROPERTY( double stepTemp_c READ stepTemp_c WRITE setStepTemp_c /*NOTIFY changed*/ /*changedStepTemp_c*/ )
+   //! \brief The time of the step in min.
    Q_PROPERTY( double stepTime_min READ stepTime_min WRITE setStepTime_min /*NOTIFY changed*/ /*changedStepTime_min*/ )
+   //! \brief The time it takes to ramp the temp to the target temp in min.
    Q_PROPERTY( double rampTime_min READ rampTime_min WRITE setRampTime_min /*NOTIFY changed*/ /*changedRampTime_min*/ )
+   //! \brief The target ending temp of the step in C.
    Q_PROPERTY( double endTemp_c READ endTemp_c WRITE setEndTemp_c /*NOTIFY changed*/ /*changedEndTemp_c*/ )
+   //! \brief The infusion temp in C.
    Q_PROPERTY( double infuseTemp_c READ infuseTemp_c WRITE setInfuseTemp_c /*NOTIFY changed*/ /*changedInfuseTemp_c*/ )
+   //! \brief The decoction amount in liters.
    Q_PROPERTY( double decoctionAmount_l READ decoctionAmount_l WRITE setDecoctionAmount_l /*NOTIFY changed*/ /*changedDecoctionAmount_l*/ )
-   
+   //! \brief The step number in a sequence of other steps.
    Q_PROPERTY( int stepNumber READ stepNumber /*WRITE*/ /*NOTIFY changed*/ STORED false )
    
    void setName( const QString &var );
@@ -73,7 +83,6 @@ public:
    QString name() const;
    Type type() const;
    const QString typeString() const;
-   //! Returns a translated type string.
    const QString typeStringTr() const;
    double infuseAmount_l() const;
    double stepTemp_c() const;
