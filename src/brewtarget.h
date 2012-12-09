@@ -63,18 +63,55 @@ class Brewtarget : public QObject
 public:
    Brewtarget();
 
-   enum LogType {WARNING, ERROR};
+   //! \brief The log level of a message.
+   enum LogType{
+          //! Just a warning.
+          WARNING,
+          //! Full-blown error.
+          ERROR
+   };
+   //! \brief The formula used to get beer color.
    enum ColorType {MOSHER, DANIEL, MOREY};
+   //! \brief The units to display color in.
    enum ColorUnitType {SRM, EBC};
+   //! \brief The formula used to get IBUs.
    enum IbuType {TINSETH, RAGER};
+   //! \brief Don't know what the fuck this is.
    enum iUnitOps {
       NOOP = -1 ,
       SCALE, 
       UNIT
    };
-
-   enum DBTable{ NOTABLE, BREWNOTETABLE, EQUIPTABLE, FERMTABLE, HOPTABLE, INSTRUCTIONTABLE,
-                 MASHSTEPTABLE, MASHTABLE, MISCTABLE, RECTABLE, STYLETABLE, WATERTABLE, YEASTTABLE  };
+   //! \brief The database tables.
+   enum DBTable{
+      //! None of the tables.
+      NOTABLE,
+      //! In the BrewNote table.
+      BREWNOTETABLE,
+      //! In the Equipment table.
+      EQUIPTABLE,
+      //! In the Fermentable table.
+      FERMTABLE,
+      //! In the Hop table.
+      HOPTABLE,
+      //! In the Instruction table.
+      INSTRUCTIONTABLE,
+      //! In the MashStep table.
+      MASHSTEPTABLE,
+      //! In the Mash table.
+      MASHTABLE,
+      //! In the Misc table.
+      MISCTABLE,
+      //! In the Recipe table.
+      RECTABLE,
+      //! In the Style table.
+      STYLETABLE,
+      //! In the Water table.
+      WATERTABLE,
+      //! In the Yeast table.
+      YEASTTABLE
+   };
+   
    //! \return the data directory
    static QString getDataDir();
    //! \return the doc directory
@@ -83,39 +120,55 @@ public:
    static QString getConfigDir(bool* success = 0);
    //! \return user-specified directory where the database files reside.
    static QString getUserDataDir();
-   //! \return blocking call that starts the application.
+   //! \brief Blocking call that starts the application.
    static int run();
-   //! Log a message.
+   //! \brief Log a message.
    static void log( LogType lt, QString message );
-   //! Log an error message.
+   //! \brief Log an error message.
    static void logE( QString message );
-   //! Log a warning message.
+   //! \brief Log a warning message.
    static void logW( QString message );
 
    /*!
-    * Produces the appropriate string for 'amount' which has units 'units'.
-    * Variable 'precision' controls how many decimal places. I've overloaded
-    * it to aid in the transition
+    *  \brief Displays an amount in the appropriate units.
+    * 
+    *  \param amount the amount to display
+    *  \param units the units that \c amount is in
+    *  \param precision how many decimal places
     */
    static QString displayAmount( double amount, Unit* units=0, int precision=3, 
                                  unitDisplay displayUnit = noUnit, unitScale displayScale = noScale );
+   /*!
+    *  \brief Displays an amount in the appropriate units.
+    * 
+    *  \param amount the amount to display
+    *  \param units the units that \c amount is in
+    *  \param precision how many decimal places
+    */
    static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
 
-   //! Display date correctly depending on locale.
+   //! \brief Display date formatted for the locale.
    static QString displayDate( QDate const& date );
-   //! Displays thickness in appropriate units from standard thickness in L/kg.
+   //! \brief Displays thickness in appropriate units from standard thickness in L/kg.
    static QString displayThickness( double thick_lkg, bool showUnits=true );
-   //! Appropriate thickness units will be placed in *volumeUnit and *weightUnit.
+   //! \brief Appropriate thickness units will be placed in \c *volumeUnit and \c *weightUnit.
    static void getThicknessUnits( Unit** volumeUnit, Unit** weightUnit );
-   //! Display original gravity appropriately.
+   //! \brief Display original gravity appropriately.
    static QString displayOG( double og, unitDisplay displayUnit = noUnit, bool showUnits=false);
+   //! \brief Display original gravity appropriately.
    static QString displayOG( BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
 
-   //! Display final gravity appropriately.
+   /*!
+    * \brief Display final gravity appropriately.
+    * 
+    * \param fg the final gravity in 20C/20C units.
+    * \param og the original gravity in 20C/20C units. Necessary to have the
+    *           \c og since some FG displays depend on the \c og.
+    */
    static QString displayFG( double fg, double og, unitDisplay displayUnit = noUnit, bool showUnits=false );
    static QString displayFG(QPair<QString, BeerXMLElement*> fg, QPair<QString, BeerXMLElement*> og, QObject* object, bool showUnits = false);
 
-   //! Display color appropriately.
+   //! \brief Display color appropriately.
    static QString displayColor( double srm, unitDisplay displayUnit = noUnit, bool showUnits=false);
    static QString displayColor(  BeerXMLElement* element, QObject* object, QString attribute, bool showUnits=false);
 
@@ -130,6 +183,7 @@ public:
    //! \return SI amount for color string.
    static double colorQStringToSI(QString qstr);
 
+   //! \return true iff the string has a valid unit substring at the end.
    static bool hasUnits(QString qstr);
    //! \return the weight system
    static iUnitSystem getWeightUnitSystem();
@@ -140,25 +194,29 @@ public:
    //! \return the color units
    static unitDisplay getColorUnit();
    
-   //! Read options from file.
+   //! \brief Read options from file.
    static void readPersistentOptions();
-   //! Save options to file.
+   //! \brief Save options to file.
    static void savePersistentOptions();
 
    /*!
-    * Loads the brewtarget translator with two letter ISO 639-1 code
-    * 'twoLetterLanguage'. For example, for spanish, it would
-    * be 'es'.
-    * Currently, this does NO checking to make sure the locale
-    * code is acceptable.
+    *  \brief Loads the brewtarget translator with two letter ISO 639-1 code.
+    * 
+    *  For example, for spanish, it would
+    *  be 'es'. Currently, this does NO checking to make sure the locale
+    *  code is acceptable.
+    * 
+    *  \param twoLetterLanguage two letter ISO 639-1 code
     */
    static void setLanguage(QString twoLetterLanguage);
    /*!
-    * Gets the 2-letter ISO 639-1 language code we are currently using.
+    *  \brief Gets the 2-letter ISO 639-1 language code we are currently using.
+    *  \returns current 2-letter ISO 639-1 language code.
     */
    static const QString& getCurrentLanguage();
    /*!
-    * Gets the ISO 639-1 language code for the system.
+    *  \brief Gets the ISO 639-1 language code for the system.
+    *  \returns current 2-letter ISO 639-1 system language code
     */
    static const QString& getSystemLanguage();
 
@@ -190,30 +248,34 @@ private:
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;
 
-   /*! Helper to get option values. If \b hasOption is not null,
+   /*!
+    *  \brief Helper to get option values from XML.
+    * 
+    *  If \b hasOption is not null,
     *  is set to true iff the option exists in the document.
     */
    static QString getOptionValue(const QDomDocument& optionsDoc,
                                  const QString& option,
                                  bool* hasOption = 0);
 
-   /*! Copies the user xml files to another directory. Returns
-    *  false iff the copy is unsuccessful.
+   /*!
+    *  \brief Copies the user xml files to another directory.
+    *  \returns false iff the copy is unsuccessful.
     */
    static bool copyDataFiles(QString newPath);
 
-   //! Ensure our directories exist.
+   //! \brief Ensure our directories exist.
    static bool ensureDirectoriesExist();
-   //! Ensure the datafiles exist.
+   //! \brief Ensure the datafiles exist.
    static bool ensureDataFilesExist();
-   //! Ensure the option file exists.
+   //! \brief Ensure the option file exists.
    static bool ensureOptionFileExists();
-   //! Load translation files.
+   //! \brief Load translation files.
    static void loadTranslations();
-   //! Checks for a newer version and prompts user to download.
+   //! \brief Checks for a newer version and prompts user to download.
    static void checkForNewVersion(MainWindow* mw);
    
-   //! If this option is false, do not bother the user about new versions.
+   //! \brief If this option is false, do not bother the user about new versions.
    static bool checkVersion;
 
    /*! Stores the date that we last asked the user to merge the
@@ -221,7 +283,7 @@ private:
     */
    static QDateTime lastDbMergeRequest;
 
-   //! Where the user says the .xml files are
+   //! \brief Where the user says the database files are
    static QString userDataDir;
 
    // These are options that are ONLY to be edited by the OptionDialog.
