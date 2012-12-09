@@ -322,7 +322,7 @@ MainWindow::MainWindow(QWidget* parent)
       recipeObs = Database::instance().recipe( key );
 
       setRecipe(recipeObs);
-      setSelection(treeView_recipe->findRecipe(recipeObs));
+      setTreeSelection(treeView_recipe->findRecipe(recipeObs));
    }     
    else
    {
@@ -359,7 +359,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
-   connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
+   //connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // TreeView for clicks, both double and right
@@ -405,23 +405,23 @@ MainWindow::MainWindow(QWidget* parent)
    // connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableCellSignal(const QPoint&)));
    QHeaderView* headerView = fermentableTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableContextMenu(const QPoint&)));
 
    headerView = hopTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(hopHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(hopContextMenu(const QPoint&)));
 
    headerView = miscTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(miscHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(miscContextMenu(const QPoint&)));
 
    headerView = yeastTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(yeastHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(yeastContextMenu(const QPoint&)));
 
    headerView = mashStepTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(mashStepHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(mashStepContextMenu(const QPoint&)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
 
@@ -568,7 +568,7 @@ void MainWindow::deleteSelected()
    {
       if (active->getType(first) == BrewTargetTreeItem::RECIPE)
          setRecipeByIndex(first);
-      setSelection(first);
+      setTreeSelection(first);
    }
 
 }
@@ -816,8 +816,6 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    }
 }
 
-// This method should update all the widgets in the window (except the tables)
-// to reflect the currently observed recipe.
 void MainWindow::showChanges(QMetaProperty* prop)
 {
    if( recipeObs == 0 )
@@ -911,12 +909,6 @@ void MainWindow::showChanges(QMetaProperty* prop)
    {
       mashStepTableModel->setMash(recipeObs->mash());
    }
-}
-
-void MainWindow::save()
-{
-   // TODO: seems like we don't need this at all?
-   //Database::savePersistent();
 }
 
 void MainWindow::updateRecipeName()
@@ -1302,11 +1294,11 @@ void MainWindow::newRecipe()
    newRec->setBoilSize_l(23.47);  // 6.2 gallons
    newRec->setEfficiency_pct(70.0);
 
-   setSelection(treeView_recipe->findRecipe(newRec));
+   setTreeSelection(treeView_recipe->findRecipe(newRec));
    setRecipe(newRec);
 }
 
-void MainWindow::setSelection(QModelIndex item)
+void MainWindow::setTreeSelection(QModelIndex item)
 {
    BrewTargetTreeView *active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
@@ -1356,7 +1348,7 @@ void MainWindow::newBrewNote()
 
       bIndex = treeView_recipe->findBrewNote(bNote);
       if ( bIndex.isValid() )
-         setSelection(bIndex);
+         setTreeSelection(bIndex);
    }
 }
   
@@ -1380,7 +1372,7 @@ void MainWindow::reBrewNote()
 
       setBrewNote(bNote);
 
-      setSelection(treeView_recipe->findBrewNote(bNote));
+      setTreeSelection(treeView_recipe->findBrewNote(bNote));
    }
 }
 
@@ -1786,8 +1778,6 @@ void MainWindow::contextMenu(const QPoint &point)
       tempMenu->exec(active->mapToGlobal(point));
 }
 
-// Set up the context menus.  This is much prettier now that I moved the
-// tree-specific pieces into the treeview objects. I may do the same for the unit menus
 void MainWindow::setupContextMenu()
 {
    QMenu *sMenu = new QMenu(this);
@@ -1953,7 +1943,7 @@ void MainWindow::copySelected()
    above = active->getFirst();
    if ( active->getType(above) == BrewTargetTreeItem::RECIPE )
       setRecipeByIndex(above);
-   setSelection(above);
+   setTreeSelection(above);
 }
 
 QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
@@ -2106,7 +2096,7 @@ void MainWindow::finishCheckingVersion()
                                    QMessageBox::Yes) == QMessageBox::Yes )
       {
          // ...take them to the website.
-         QDesktopServices::openUrl(QUrl("http://brewtarget.sourceforge.net"));
+         QDesktopServices::openUrl(QUrl("http://www.brewtarget.org/download.html"));
       }
       else // ... and the user does NOT want to download the new version...
       {
@@ -2138,53 +2128,7 @@ void MainWindow::redisplayLabel(QString field)
    showChanges();
 }
 
-// per-cell unit and scale has been disabled.
-/*
-void MainWindow::fermentableCellSignal(const QPoint& point)
-{
-   QObject* calledBy = sender();
-   QTableView* tView = qobject_cast<QTableView*>(calledBy);
-   QModelIndex selected = tView->indexAt(point);
-   QModelIndex modelIndex = fermTableProxy->mapToSource(selected);
-   unitDisplay currentUnit; 
-   unitScale  currentScale;
-
-   // first, make sure I right clicked on the proper column
-   if ( selected.column() != FERMAMOUNTCOL )
-      return;
-
-   // Since we need to call generateVolumeMenu() two different ways, we need
-   // to figure out the currentUnit and Scale here
-   if ( calledBy->objectName() == "fermentableTable" )
-   {
-      currentUnit = fermTableModel->displayUnit(modelIndex);
-      if ( currentUnit == noUnit )
-         currentUnit = fermTableModel->displayUnit(modelIndex.column());
-
-      currentScale = fermTableModel->displayScale(modelIndex);
-      if ( currentScale == noScale )
-         currentScale = fermTableModel->displayScale(modelIndex.column());
-
-   }
-
-   QMenu* menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale);
-   QAction* invoked;
-
-   invoked = menu->exec(tView->mapToGlobal(point));
-   if ( invoked == 0 )
-      return;
-
-   QWidget* pMenu = invoked->parentWidget();
-
-   // Now, I need to tell the model to do something.
-   if ( pMenu == menu )
-      fermTableModel->setDisplayUnit(modelIndex,invoked->data().toInt());
-   else
-      fermTableModel->setDisplayScale(modelIndex, invoked->data().toInt());
-}
-*/
-
-void MainWindow::fermentableHeaderSignal(const QPoint &point)
+void MainWindow::fermentableContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2227,7 +2171,7 @@ void MainWindow::fermentableHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::hopHeaderSignal(const QPoint &point)
+void MainWindow::hopContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2267,7 +2211,7 @@ void MainWindow::hopHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::mashStepHeaderSignal(const QPoint &point)
+void MainWindow::mashStepContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2311,7 +2255,7 @@ void MainWindow::mashStepHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::miscHeaderSignal(const QPoint &point)
+void MainWindow::miscContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2347,7 +2291,7 @@ void MainWindow::miscHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::yeastHeaderSignal(const QPoint &point)
+void MainWindow::yeastContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
