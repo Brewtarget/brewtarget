@@ -48,29 +48,30 @@ public:
 
    HopTableModel(QTableView* parent=0, bool editable=true);
    virtual ~HopTableModel();
-   //! Observe a recipe's list of fermentables.
+   //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
-   //! Whether or not we should be looking at the database.
+   //! \brief If true, we model the database's list of hops.
    void observeDatabase(bool val);
-   //! If you want to show ibus in the vertical header.
+   //! \brief Show ibus in the vertical header.
    void setShowIBUs( bool var );
-   //! Watch all the \b ferms for changes.
+   //! \brief Watch all the \c hops for changes.
    void addHops(QList<Hop*> hops);
+   //! \brief Return the \c i-th hop in the model.
    Hop* getHop(unsigned int i);
-   //! Remove all hops from the list.
+   //! \brief Clear the model.
    void removeAll();
    
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
    // Stuff for setting display units and scales -- per cell first, then by
@@ -85,7 +86,7 @@ public:
    QString generateName(int column) const;
 public slots:
    void changed(QMetaProperty, QVariant);
-   //! Add a hop to the model list.
+   //! \brief Add a hop to the model.
    void addHop(Hop* hop);
    //! \returns true if "hop" is successfully found and removed.
    bool removeHop(Hop* hop);
@@ -99,10 +100,11 @@ private:
 };
 
 /*!
- * \class HopItemDelegate
- * \author Philip G. Lee
+ *  \class HopItemDelegate
+ *  \author Philip G. Lee
  *
- * An item delegate for hop tables.
+ *  \brief An item delegate for hop tables.
+ *  \sa HopTableModel
  */
 class HopItemDelegate : public QItemDelegate
 {

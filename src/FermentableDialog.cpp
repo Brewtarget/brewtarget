@@ -42,6 +42,7 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
    fermentableTableWidget->setModel(fermTableProxy);
    fermentableTableWidget->setSortingEnabled(true);
    fermentableTableWidget->sortByColumn( FERMNAMECOL, Qt::AscendingOrder );
+   fermTableProxy->setDynamicSortFilter(true);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addFermentable() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );

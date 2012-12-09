@@ -17,7 +17,7 @@
  */
 
 #ifndef _YEASTTABLEMODEL_H
-#define   _YEASTTABLEMODEL_H
+#define _YEASTTABLEMODEL_H
 
 class YeastTableModel;
 class YeastItemDelegate;
@@ -53,20 +53,28 @@ class YeastTableModel : public QAbstractTableModel
 public:
    YeastTableModel(QTableView* parent=0, bool editable=true);
    virtual ~YeastTableModel() {}
-   //! Observe a recipe's list of fermentables.
+   //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
-   //! Whether or not we should be looking at the database.
+   //! \brief If true, we model the database's list of yeasts.
    void observeDatabase(bool val);
+   //! \brief Add \c yeasts to the model.
    void addYeasts(QList<Yeast*> yeasts);
+   //! \brief Get the yeast at model index \c i.
    Yeast* getYeast(unsigned int i);
+   //! \brief Clear the model.
    void removeAll();
 
-   // Inherit the following from QAbstractItemModel via QAbstractTableModel
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
    unitDisplay displayUnit(int column) const;
@@ -76,9 +84,14 @@ public:
    QString generateName(int column) const;
 
 public slots:
-   void changed(QMetaProperty,QVariant);
+   //! \brief Add a \c yeast to the model.
    void addYeast(Yeast* yeast);
+   //! \brief Remove a \c yeast from the model.
    void removeYeast(Yeast* yeast);
+
+private slots:
+   //! \brief Catch changes to Recipe, Database, and Yeast.
+   void changed(QMetaProperty, QVariant);
    
 private:
    bool editable;

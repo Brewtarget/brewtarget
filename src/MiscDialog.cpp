@@ -41,6 +41,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
    miscTableWidget->setModel(miscTableProxy);
    miscTableWidget->setSortingEnabled(true);
    miscTableWidget->sortByColumn( MISCNAMECOL, Qt::AscendingOrder );
+   miscTableProxy->setDynamicSortFilter(true);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addMisc() ) );
    connect( pushButton_new, SIGNAL(clicked()), this, SLOT( newMisc() ) );
