@@ -118,8 +118,10 @@ CONFIGURE_FILE( brewtarget.qrc.in ${brewtarget_QRC} )
 #============================Doxygen Custom Target=============================
 FIND_PROGRAM( DOXYGEN_CMD doxygen )
 IF( DOXYGEN_CMD )
+  SET( DOXYFILE "${CMAKE_CURRENT_BINARY_DIR}/doc/Doxyfile" )
+  CONFIGURE_FILE( "${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in" ${DOXYFILE} )
   ADD_CUSTOM_TARGET( source_doc
-                     COMMAND ${DOXYGEN_CMD} Doxyfile
+                     COMMAND ${DOXYGEN_CMD} ${DOXYFILE}
                      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/doc"
                    )
 ENDIF()
