@@ -229,6 +229,8 @@ public:
    void swapInstructionOrder(Instruction* in1, Instruction* in2);
    //! Insert an instruction (already in a recipe) into position \b pos.
    void insertInstruction(Instruction* in, int pos);
+   //! \brief The instruction number of an instruction.
+   int instructionNumber(Instruction const* in);
    
    Q_PROPERTY( QList<BrewNote*> brewNotes READ brewNotes /*WRITE*/ NOTIFY changed STORED false )
    Q_PROPERTY( QList<Equipment*> equipments READ equipments /*WRITE*/ NOTIFY changed STORED false )
@@ -483,11 +485,19 @@ private:
    
    // TODO: encapsulate this in a QUndoCommand.
    /*!
-    * Create a \e copy of \b ing and add the copy to \b recipe where \b ing's
+    * Create a \e copy (by default) of \b ing and add the copy to \b recipe where \b ing's
     * key is \b ingKeyName and the relational table is \b relTableName.
     *
+    * \tparam T the type of ingredient. Must inherit BeerXMLElement.
+    * \param rec the recipe to add the ingredient to
+    * \param ing the ingredient to add to the recipe
+    * \param propName the Recipe property that will change when we add \c ing to it
+    * \param relTableName the name of the relational table, perhaps "ingredient_in_recipe"
+    * \param ingKeyName the name of the key in the ingredient table corresponding to \c ing
     * \param noCopy By default, we create a copy of the ingredient. If true,
     *               add the ingredient directly.
+    * \param keyHash if not null, add the new (key, \c ing) pair to it
+    * \param doNotDisplay if true (default), calls \c setDisplay(\c false) on the new ingredient
     * \returns the new ingredient.
     */
    template<class T> T* addIngredientToRecipe(
@@ -497,7 +507,8 @@ private:
       QString relTableName,
       QString ingKeyName,
       bool noCopy = false,
-      QHash<int,T*>* keyHash = 0
+      QHash<int,T*>* keyHash = 0,
+      bool doNotDisplay = true
    )
    {
       T* newIng = 0;
@@ -523,8 +534,9 @@ private:
       if ( noCopy ) 
       {
          newIng = qobject_cast<T*>(ing);
-         // Any ingredient part of a recipe shouldn't be visible. 
-         ing->setDisplay(false);
+         // Any ingredient part of a recipe shouldn't be visible, unless otherwise requested.
+         if( doNotDisplay )
+            ing->setDisplay(false);
       }
       else
       {

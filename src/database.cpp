@@ -401,21 +401,6 @@ bool Database::restoreFromDir(QString dirStr)
 // removeFromRecipe ===========================================================
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
 {
-   /*
-   tableModel->setTable(relTableName);
-   QString filter = tableModel->filter();
-   
-   // Find the row in the relational db that connects the ingredient to the recipe.
-   tableModel->setFilter( QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
-   tableModel->select();
-   if( tableModel->rowCount() > 0 )
-      tableModel->removeRows(0,1);
-   
-   // Restore the old filter.
-   tableModel->setFilter(filter);
-   tableModel->select();
-   */
-   
    QSqlQuery q(sqlDatabase());
    q.setForwardOnly(true);
    q.prepare( QString("DELETE FROM `%1` WHERE `%2`='%3' AND recipe_id='%4'").arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
@@ -468,15 +453,14 @@ void Database::removeFromRecipe( Recipe* rec, Water* w )
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   // NOTE: is this the right thing to do?
-   // --maf-- No it isn't. Instructions just need to get whacked.
-//   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-//              "deleted=1",
-//              QString("%1=%2").arg(keyNames[Brewtarget::INSTRUCTIONTABLE]).arg(ins->_key) );
-
+   removeIngredientFromRecipe( rec, ins, "instructions", "instruction_in_recipe", "instruction_id" );
+   
+   // --maf-- Instructions just need to get whacked.
    sqlDelete( Brewtarget::INSTRUCTIONTABLE,
               QString("id=%1").arg(ins->_key) );
-
+   
+   allInstructions.remove(ins->_key);
+   emit changed( metaProperty("instructions"), QVariant() );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -531,9 +515,18 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 {
    // TODO: encapsulate in QUndoCommand.
-   QSqlQuery q( QString("UPDATE instruction SET instruction_number = CASE id WHEN %1 then %2 when %3 then %4 END WHERE id IN (%5,%6)")
-                .arg(in1->_key).arg(in2->_key).arg(in2->_key).arg(in1->_key).arg(in1->_key).arg(in2->_key),
-                sqlDatabase());//sqldb );
+   QSqlQuery q(
+      QString(
+         "UPDATE instruction_in_recipe "
+         "SET instruction_number = "
+         "  CASE instruction_id "
+         "    WHEN %1 THEN %3 "
+         "    WHEN %2 THEN %4 "
+         "  END "
+         "WHERE instruction_id IN (%1,%2)"
+      ).arg(in1->_key).arg(in2->_key).arg(in2->instructionNumber()).arg(in1->instructionNumber()),
+      sqlDatabase()
+   );
    q.finish();
    
    emit in1->changed( in1->metaProperty("instructionNumber") );
@@ -543,8 +536,7 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 void Database::insertInstruction(Instruction* in, int pos)
 {
    int parentRecipeKey;
-   QSqlQuery q( QString("SELECT recipe_id FROM %1 WHERE id=%2")
-                   .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
+   QSqlQuery q( QString("SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=%2")
                    .arg(in->_key),
                 sqlDatabase());//sqldb);
    q.next();
@@ -552,18 +544,28 @@ void Database::insertInstruction(Instruction* in, int pos)
    q.finish();
    
    // Increment all instruction positions greater or equal to pos.
-   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-              QString("instruction_number=instruction_number+1"),
-              QString("recipe_id=%1 AND instruction_number>=%2")
-                 .arg(parentRecipeKey)
-                 .arg(pos) );
-              
+   q.exec(
+      QString(
+         "UPDATE instruction_in_recipe "
+         "SET instruction_number=instruction_number+1 "
+         "WHERE recipe_id=%1 AND instruction_number>=%2"
+      ).arg(parentRecipeKey).arg(pos)
+   );
+   
+   // NOTE: right here, we should be emitting changed( "instructionNumber" )
+   // for each one of the rows affected above. Probably creating problems by
+   // not doing so :-/
+   
    // Change in's position to pos.
-   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-              QString("instruction_number=%1").arg(pos),
-              QString("id=%1").arg(in->_key) );
-
-   // emit changed
+   q.exec(
+      QString(
+         "UPDATE instruction_in_recipe "
+         "SET instruction_number=%1 "
+         "WHERE instruction_id=%2"
+      ).arg(pos).arg(in->_key)
+   );
+   q.finish();
+   
    emit in->changed( in->metaProperty("instructionNumber"), pos );
 }
 
@@ -666,13 +668,14 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
 QList<Instruction*> Database::instructions( Recipe const* parent )
 {
    QList<Instruction*> ret;
-   QString queryString = QString("SELECT id FROM %1 WHERE recipe_id = %2 ORDER BY instruction_number ASC")
-                            .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
-                            .arg(parent->_key);
+   QString queryString = QString(
+      "SELECT instruction_id FROM instruction_in_recipe WHERE recipe_id = %1 ORDER BY instruction_number ASC"
+   ).arg(parent->_key);
+   
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
    
    while( q.next() )
-      ret.append(allInstructions[q.record().value("id").toInt()]);
+      ret.append(allInstructions[q.record().value("instruction_id").toInt()]);
    q.finish();
    
    return ret;
@@ -871,17 +874,30 @@ Instruction* Database::newInstruction(Recipe* rec)
    Instruction* tmp = new Instruction();
    tmp->_key = insertNewDefaultRecord(Brewtarget::INSTRUCTIONTABLE);
    tmp->_table = Brewtarget::INSTRUCTIONTABLE;
-
-   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-              QString("`recipe_id`='%1'").arg(rec->_key),
-              QString("`id`='%1'").arg(tmp->_key) );
    allInstructions.insert(tmp->_key,tmp);
    
    // Database's instructions have changed.
    emit changed( metaProperty("instructions"), QVariant() );
-   // Do not emit the recipe's changed() signal. It is up to the recipe to
-   // decide when it wants its signals emitted... that sounds so kinky.
+   
+   // Add without copying to "instruction_in_recipe"
+   addIngredientToRecipe<Instruction>( rec, tmp, "instructions", "instruction_in_recipe", "instruction_id", true, 0, false );
+   
    return tmp;
+}
+
+int Database::instructionNumber(Instruction const* in)
+{
+   QSqlQuery q(
+      QString(
+         "SELECT instruction_number FROM instruction_in_recipe WHERE instruction_id=%1"
+      ).arg(in->_key),
+      sqlDatabase()
+   );
+   
+   if( q.next() )
+      return q.record().value("instruction_number").toInt();
+   else
+      return 0;
 }
 
 Mash* Database::newMash()

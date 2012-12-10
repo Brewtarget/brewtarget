@@ -44,14 +44,14 @@ public:
 
    BrewDayScrollWidget(QWidget* parent=0);
    virtual ~BrewDayScrollWidget() {}
-   //! Sets the observed recipe.
+   //! \brief Sets the observed recipe.
    void setRecipe(Recipe* rec);
 
    virtual QSize sizeHint() const; // From QWidget
 
    /*!
-    * Prints a paper version of the info in this dialog.
-    * Should probably be moved to its own view class.
+    *  \brief Prints a paper version of the info in this dialog.
+    *  Should be moved to its own view class.
     */
    void print(QPrinter* mainPrinter, QPrintDialog *dialog, int action = PRINT, QFile* outFile = 0);
 
@@ -68,8 +68,10 @@ public slots:
    void pushInstructionDown();
 
 private slots:
-   //! Receive notifications from the recipe.
+   //! \brief Receive notifications from the recipe.
    void acceptChanges( QMetaProperty prop, QVariant value );
+   //! \brief Receive changes from instructions.
+   void acceptInsChanges( QMetaProperty prop, QVariant value );
    
 private:
    //! Update the view.
@@ -77,6 +79,7 @@ private:
    //! Repopulate the list widget with all the instructions.
    void repopulateListWidget();
    void clear();
+   
    QString buildTitleTable(bool includeImage = true);
    QString buildInstructionTable();
    QString buildFooterTable();
@@ -85,6 +88,8 @@ private:
    Recipe* recObs;
    QPrinter* printer;
    QWebView* doc;
+   //! Internal list of recipe instructions, always sorted by instruction number.
+   QList<Instruction*> recIns;
 
    QString cssName;
 

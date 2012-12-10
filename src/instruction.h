@@ -17,7 +17,7 @@
  */
 
 #ifndef _INSTRUCTION_H
-#define   _INSTRUCTION_H
+#define _INSTRUCTION_H
 
 // This class is completely outside the BeerXML spec.
 class Instruction;
@@ -97,6 +97,12 @@ private:
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };
+
+//! \brief Compares Instruction pointers by Instruction::instructionNumber().
+inline bool insPtrLtByNumber( Instruction* lhs, Instruction* rhs)
+{
+   return lhs->instructionNumber() < rhs->instructionNumber();
+}
 
 #endif   /* _INSTRUCTION_H */
 

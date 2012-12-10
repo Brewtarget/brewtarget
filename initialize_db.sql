@@ -702,32 +702,6 @@ INSERT INTO "recipe" VALUES(7,'Extract - Session English Mild','All Grain','Bob 
 INSERT INTO "recipe" VALUES(8,'Extract - Stone Ruination IIPA','All Grain','Yooper at homebrewtalk.com','Brewtarget: free beer software',18.9271,20.8198,0.0,70.0,1.06510192233749,1.01627548058437,0,14.0,16.6667,7.0,18.3333,0.0,0.0,14.0,18.3333,'7/1/2010',2.5,'false','',0.0,0.0,0.0,'','Very much like Stone Ruination, and it turned out really good!',0.0,0,1,115,16,14);
 INSERT INTO "recipe" VALUES(9,'Red Hook ESB Clone','All Grain','Nobody','Brewtarget: free beer software',18.9271,22.2672,0.0,70.0,1.05166897291567,1.01343393295807,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,'12/2/2011',0.0,'false','',0.0,0.0,0.0,'','',0.0,0,1,117,18,15);
 INSERT INTO "recipe" VALUES(10,'St. Faud''s Irish Red','All Grain','Nobody','Brewtarget: free beer software',18.9271,22.2672,0.0,70.0,1.0568213726804,1.01534177062371,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,'12/2/2011',0.0,'false','',0.0,0.0,0.0,'','',0.0,0,1,119,20,16);
-INSERT INTO "instruction" VALUES(1,'Pre-boil','You should now have 0.000 tsp wort. Add 3.000 gal water to the kettle, bringing pre-boil volume to 3.000 gal.','false','00:00:00','false',0.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(2,'Start boil','Bring the wort to a boil and hold for 1.000 hr.','false','00:00:00','false',60.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(3,'Boil/steep fermentables','Boil or steep 8.000 oz Caramel/Crystal Malt - 60L, 6.000 oz Chocolate Malt (UK), 4.000 oz Special Roast, 1.000 lb Light Dry Extract, .','false','00:00:00','false',60.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(4,'Hop addition','Put 1.000 oz Hallertau into boil for 1.000 hr.','false','00:00:00','false',60.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(5,'Knockout additions','Add 3.000 lb Light Dry Extract, to the boil at knockout.','false','00:00:00','false',0.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(6,'Post boil','You should have 2.500 gal wort post-boil.
-You anticipate losing 0.000 tsp to trub and chiller loss.
-Add 2.500 gal top up water into primary.
-The final volume in the primary is 5.000 gal.','false','00:00:00','false',0.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(7,'Pitch yeast','Cool wort and pitch Danstar - Nottingham Ale yeast, to the primary.','false','00:00:00','false',0.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(8,'Ferment','Let ferment until FG is 1.008.','false','00:00:00','false',0.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(9,'Transfer to secondary','Transfer beer to secondary.','false','00:00:00','false',0.0,0,1,7,0);
-INSERT INTO "instruction" VALUES(10,'Pre-boil','You should now have 0.000 tsp wort. Add 5.500 gal water to the kettle, bringing pre-boil volume to 5.500 gal.','false','00:00:00','false',0.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(11,'Start boil','Bring the wort to a boil and hold for 1.000 hr.','false','00:00:00','false',60.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(12,'Boil/steep fermentables','Boil or steep 8.000 lb Extra Light Dry Extract, 1.000 lb Caramel/Crystal Malt - 20L, .','false','00:00:00','false',60.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(13,'Hop addition','Put 1.750 oz Magnum into boil for 1.000 hr.','false','00:00:00','false',60.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(14,'Hop addition','Put 1.000 oz Centennial into boil for 30.000 min.','false','00:00:00','false',30.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(15,'Hop addition','Put 1.000 oz Centennial into boil for 10.000 min.','false','00:00:00','false',10.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(16,'Hop addition','Put 1.000 oz Centennial into boil for 1.000 min.','false','00:00:00','false',1.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(17,'Post boil','You should have 5.000 gal wort post-boil.
-You anticipate losing 0.000 tsp to trub and chiller loss.
-The final volume in the primary is 5.000 gal.','false','00:00:00','false',0.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(18,'Pitch yeast','Cool wort and pitch Wyeast - American Ale Ale yeast, to the primary.','false','00:00:00','false',0.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(19,'Ferment','Let ferment until FG is 1.018.','false','00:00:00','false',0.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(20,'Transfer to secondary','Transfer beer to secondary.','false','00:00:00','false',0.0,0,1,8,0);
-INSERT INTO "instruction" VALUES(21,'Hop addition','Put 2.000 oz Centennial into fermenter for 7.000 day.','false','00:00:00','false',10080.0,0,1,8,0);
 INSERT INTO "fermentable_in_recipe" VALUES(1,196,1);
 INSERT INTO "fermentable_in_recipe" VALUES(2,197,1);
 INSERT INTO "fermentable_in_recipe" VALUES(3,198,1);

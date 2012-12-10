@@ -58,11 +58,14 @@ void BrewDayScrollWidget::showInstruction(int insNdx)
    if( recObs == 0 )
       return;
 
-   int size = recObs->instructions().size();
+   int size = recIns.size();
    if( insNdx < 0 || insNdx >= size )
       return;
 
-   plainTextEdit->setPlainText((recObs->instructions()[insNdx])->directions());
+   // Block signals to avoid setPlainText() from triggering saveInstruction().
+   plainTextEdit->blockSignals(true);
+   plainTextEdit->setPlainText((recIns[insNdx])->directions());
+   plainTextEdit->blockSignals(false);
 }
 
 void BrewDayScrollWidget::generateInstructions()
@@ -86,13 +89,11 @@ void BrewDayScrollWidget::removeSelectedInstruction()
    int row = listWidget->currentRow();
    if( row < 0 )
       return;
-   Database::instance().removeFromRecipe(recObs, recObs->instructions()[row]);
+   Database::instance().removeFromRecipe(recObs, recIns[row]);
 }
 
 void BrewDayScrollWidget::pushInstructionUp()
 {
-   // TODO: implement
-   /*
    if( recObs == 0 )
       return;
    
@@ -100,31 +101,164 @@ void BrewDayScrollWidget::pushInstructionUp()
    if( row <= 0 )
       return;
    
-   recObs->swapInstructions(row, row-1);
+   recObs->swapInstructions(recIns[row], recIns[row-1]);
    listWidget->setCurrentRow(row-1);
-   */
 }
 
 void BrewDayScrollWidget::pushInstructionDown()
 {
-   // TODO: implement
-   /*
    if( recObs == 0 )
       return;
    
    int row = listWidget->currentRow();
 
-   if( row >= listWidget->count() )
-      return;
-
-   // This happens when the user is bouncing on the Step Down button but no
-   // instruction is selected.
-   if ( row < 0 )
+   if( row >= listWidget->count() || row < 0 )
       return;
    
-   recObs->swapInstructions(row, row+1);
+   recObs->swapInstructions(recIns[row], recIns[row+1]);
    listWidget->setCurrentRow(row+1);
-   */
+}
+
+bool BrewDayScrollWidget::loadComplete(bool ok) 
+{
+   doc->print(printer);
+   disconnect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+   return ok;
+}
+
+void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
+      int action, QFile* outFile)
+{
+   QString pDoc;
+
+   if( recObs == 0 )
+      return;
+
+   /* Connect the webview's signal */
+   if ( action == PRINT )
+   {
+      printer = mainPrinter;
+      connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
+
+      dialog->setWindowTitle(tr("Print Document"));
+      if (dialog->exec() != QDialog::Accepted)
+         return;
+   }
+
+   // Start building the document to be printed.  The HTML doesn't work with
+   // the image since it is a compiled resource
+   pDoc = buildTitleTable( action != HTML );
+   pDoc += buildInstructionTable();
+   pDoc += buildFooterTable();
+
+   pDoc += tr("<h2>Notes</h2>");
+   if ( recObs->notes() != "" )
+      pDoc += QString("%1").arg(recObs->notes());
+
+   pDoc += "</body></html>";
+
+   doc->setHtml(pDoc);
+   if ( action == PREVIEW )
+      doc->show();
+   else if ( action == HTML )
+   {
+      QTextStream out(outFile);
+      out << pDoc;
+      outFile->close();
+   }
+}
+
+void BrewDayScrollWidget::setRecipe(Recipe* rec)
+{
+   // Disconnect old notifier.
+   if( recObs )
+      disconnect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
+   
+   recObs = rec;
+   connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
+   
+   recIns = recObs->instructions();
+   foreach( Instruction* ins, recIns )
+         connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
+   
+   showChanges();
+}
+
+void BrewDayScrollWidget::insertInstruction()
+{
+   if( recObs == 0 )
+      return;
+
+   int pos = lineEdit_step->text().toInt();
+   Instruction* ins = Database::instance().newInstruction(recObs);
+
+   pos = qBound(1, pos, recIns.size());
+
+   ins->setName(lineEdit_name->text());
+
+   recObs->insertInstruction( ins, pos );
+   listWidget->setCurrentRow(pos-1);
+}
+
+void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/)
+{
+   if( recObs && QString(prop.name()) == "instructions" )
+   {
+      // An instruction has been added or deleted, so update internal list.
+      foreach( Instruction* ins, recIns )
+         disconnect( ins, 0, this, 0 );
+      recIns = recObs->instructions(); // Already sorted by instruction numbers.
+      foreach( Instruction* ins, recIns )
+         connect( ins, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptInsChanges(QMetaProperty,QVariant)) );
+      showChanges();
+   }
+}
+
+void BrewDayScrollWidget::acceptInsChanges(QMetaProperty prop, QVariant /*value*/)
+{
+   QString propName = prop.name();
+   
+   if( propName == "instructionNumber" )
+   {
+      // The order changed, so resort our internal list.
+      qSort( recIns.begin(), recIns.end(), insPtrLtByNumber );
+   }
+   
+   showChanges();
+}
+
+void BrewDayScrollWidget::clear()
+{
+   listWidget->clear();
+}
+
+void BrewDayScrollWidget::showChanges()
+{
+   clear();
+   if( recObs == 0 )
+      return;
+
+   repopulateListWidget();
+}
+
+void BrewDayScrollWidget::repopulateListWidget()
+{
+   listWidget->clear();
+
+   if( recObs == 0 )
+      return;
+   
+   foreach( Instruction* ins, recIns )
+   {
+      //QString text = tr("Step %1: %2").arg(i).arg(ins->name());
+      QString text = tr("Step %1: %2").arg(ins->instructionNumber()).arg(ins->name());
+      listWidget->addItem(new QListWidgetItem(text));
+   }
+
+   if( recIns.size() > 0 )
+      listWidget->setCurrentRow(0);
+   else
+      listWidget->setCurrentRow(-1);
 }
 
 QString BrewDayScrollWidget::getCSS() 
@@ -300,126 +434,4 @@ QString BrewDayScrollWidget::buildFooterTable()
    bottom += "</table>";
 
    return bottom;
-}
-
-bool BrewDayScrollWidget::loadComplete(bool ok) 
-{
-   doc->print(printer);
-   disconnect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
-   return ok;
-}
-
-void BrewDayScrollWidget::print(QPrinter *mainPrinter, QPrintDialog* dialog,
-      int action, QFile* outFile)
-{
-   QString pDoc;
-
-   if( recObs == 0 )
-      return;
-
-   /* Connect the webview's signal */
-   if ( action == PRINT )
-   {
-      printer = mainPrinter;
-      connect( doc, SIGNAL(loadFinished(bool)), this, SLOT(loadComplete(bool)) );
-
-      dialog->setWindowTitle(tr("Print Document"));
-      if (dialog->exec() != QDialog::Accepted)
-         return;
-   }
-
-   // Start building the document to be printed.  The HTML doesn't work with
-   // the image since it is a compiled resource
-   pDoc = buildTitleTable( action != HTML );
-   pDoc += buildInstructionTable();
-   pDoc += buildFooterTable();
-
-   pDoc += tr("<h2>Notes</h2>");
-   if ( recObs->notes() != "" )
-      pDoc += QString("%1").arg(recObs->notes());
-
-   pDoc += "</body></html>";
-
-   doc->setHtml(pDoc);
-   if ( action == PREVIEW )
-      doc->show();
-   else if ( action == HTML )
-   {
-      QTextStream out(outFile);
-      out << pDoc;
-      outFile->close();
-   }
-}
-
-void BrewDayScrollWidget::setRecipe(Recipe* rec)
-{
-   // Disconnect old notifier.
-   if( recObs )
-      disconnect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
-   
-   recObs = rec;
-   connect( recObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(acceptChanges(QMetaProperty,QVariant)) );
-   showChanges();
-}
-
-void BrewDayScrollWidget::insertInstruction()
-{
-   // TODO: implement.
-   /*
-   if( recObs == 0 )
-      return;
-
-   int pos = lineEdit_step->text().toInt();
-   Instruction* ins = Database::instance().newInstruction(recObs);
-
-   if( pos < 0 || pos > recObs->getNumInstructions() )
-      pos = recObs->getNumInstructions();
-
-   ins->setName(lineEdit_name->text());
-
-   recObs->insertInstruction( ins, pos );
-   */
-}
-
-void BrewDayScrollWidget::acceptChanges(QMetaProperty prop, QVariant /*value*/)
-{
-   if( recObs && QString(prop.name()) == "instructions" )
-      showChanges();
-}
-
-void BrewDayScrollWidget::clear()
-{
-   listWidget->clear();
-}
-
-void BrewDayScrollWidget::showChanges()
-{
-   clear();
-   if( recObs == 0 )
-      return;
-
-   repopulateListWidget();
-}
-
-void BrewDayScrollWidget::repopulateListWidget()
-{
-   listWidget->clear();
-
-   if( recObs == 0 )
-      return;
-
-   int i, size;
-   QList<Instruction*> instructions = recObs->instructions();
-   size = instructions.size();
-
-   for( i = 0; i < size; ++i )
-   {
-      QString text = tr("Step %1: %2").arg(i).arg(instructions[i]->name());
-      listWidget->addItem(new QListWidgetItem(text));
-   }
-
-   if( size > 0 )
-      listWidget->setCurrentRow(0);
-   else
-      listWidget->setCurrentRow(-1);
 }
