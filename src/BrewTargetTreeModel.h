@@ -47,7 +47,11 @@ class Yeast;
  * \class BrewTargetTreeModel
  * \author Mik Firestone
  *
- * \brief Model for a tree of Recipes, Equipments, Fermentables, Hops, Miscs, Yeasts, and BrewNotes.
+ * \brief Model for a tree of Recipes, Equipments, Fermentables, Hops, Miscs and Yeasts
+ *
+ * Provides the necessary model so we can build the trees. It extends the
+ * QAbstractItemModel, so it has to implement some of the virtual methods
+ * required.
  */
 class BrewTargetTreeModel : public QAbstractItemModel
 {
@@ -117,7 +121,7 @@ public:
    //! \brief Test type at \c index.
    bool isBrewNote(const QModelIndex &index);
 
-   //! \brief Test type at \c index.
+   //! \brief Gets the type of item at \c index
    int getType(const QModelIndex &index);
    //! \brief Return the type mask for this tree. \sa BrewTargetTreeModel::TypeMasks
    int getMask();
@@ -153,56 +157,85 @@ public:
    QModelIndex findBrewNote(BrewNote* bNote);
 
 private slots:
-   // Called when new items are added to database.
+   //! \brief slot to catch a newEquipmentSignal
    void equipmentAdded(Equipment* victim);
+   //! \brief slot to catch a newFermentableSignal
    void fermentableAdded(Fermentable* victim);
+   //! \brief slot to catch a newHopSignal
    void hopAdded(Hop* victim);
+   //! \brief slot to catch a newMiscSignal
    void miscAdded(Misc* victim);
+   //! \brief slot to catch a newRecipeSignal
    void recipeAdded(Recipe* victim);
+   //! \brief slot to catch a newYeastSignal
    void yeastAdded(Yeast* victim);
+   //! \brief slot to catch a newBrewNoteSignal
    void brewNoteAdded(BrewNote* victim);
    
-   // Called when one of our items change.
+   //! \brief slot to catch a changed signal from an equipment
    void equipmentChanged();
+   //! \brief slot to catch a changed signal from a fermentable
    void fermentableChanged();
+   //! \brief slot to catch a changed signal from a hop
    void hopChanged();
+   //! \brief slot to catch a changed signal from a misc
    void miscChanged();
+   //! \brief slot to catch a changed signal from a recipe
    void recipeChanged();
+   //! \brief slot to catch a changed signal from a yeast
    void yeastChanged();
+   //! \brief slot to catch a changed signal from a brewnote
    void brewNoteChanged();
    
-   // Called when an item is removed from the database.
+   //! \brief slot to catch a deletedEquipmentSignal
    void equipmentRemoved(Equipment* victim);
+   //! \brief slot to catch a deletedFermentableSignal
    void fermentableRemoved(Fermentable* victim);
+   //! \brief slot to catch a deletedHopSignal
    void hopRemoved(Hop* victim);
+   //! \brief slot to catch a deletedMiscSignal
    void miscRemoved(Misc* victim);
+   //! \brief slot to catch a deletedRecipeSignal
    void recipeRemoved(Recipe* victim);
+   //! \brief slot to catch a deletedYeastSignal
    void yeastRemoved(Yeast* victim);
+   //! \brief slot to catch a deletedBrewNoteSignal
    void brewNoteRemoved(BrewNote* victim);
 
 private:
+   //! \brief returns the BrewTargetTreeItem at \c index
    BrewTargetTreeItem *getItem(const QModelIndex &index) const;
-   // Loads the data. Empty \b propname means load all trees.
+   //! \brief Loads the data. Empty \c propname means load all trees.
    void loadTreeModel(QString propName = "");
-   // Unloads the data. Empty \b propname means unload all trees.
+   //! \brief Unloads the data. Empty \c propname means unload all trees.
    void unloadTreeModel(QString propName = "");
    
-   // Helpers to connect signals in the underlying data to model slots that catch
-   // and re-emit model changes.
+   //! \brief connects the changedName() signal from \c Equipment to the equipmentChanged() slot
    void observeEquipment(Equipment*);
+   //! \brief connects the changedName() signal from \c Fermentable to the fermentableChanged() slot
    void observeFermentable(Fermentable*);
+   //! \brief connects the changedName() signal from \c Hop to the hopChanged() slot
    void observeHop(Hop*);
+   //! \brief connects the changedName() signal from \c Misc to the miscChanged() slot
    void observeMisc(Misc*);
+   //! \brief connects the changedName() signal from \c Recipe to the recipeChanged() slot
    void observeRecipe(Recipe*);
+   //! \brief connects the changedName() signal from \c Yeast to the yeastChanged() slot
    void observeYeast(Yeast*);
+   //! \brief connects the changedName() signal from \c BrewNote to the brewnoteChanged() slot
    void observeBrewNote(BrewNote*);
    
-   // Helper methods for recipe headers
+   //! \brief returns the \c section header from a recipe
    QVariant getRecipeHeader(int section) const;
+   //! \brief returns the \c section header from an equipment
    QVariant getEquipmentHeader(int section) const;
+   //! \brief returns the \c section header from a fermentable
    QVariant getFermentableHeader(int section) const;
+   //! \brief returns the \c section header from a hop
    QVariant getHopHeader(int section) const;
+   //! \brief returns the \c section header from a misc
    QVariant getMiscHeader(int section) const;
+   //! \brief returns the \c section header from a yeast
    QVariant getYeastHeader(int section) const;
    
    BrewTargetTreeItem* rootItem;
