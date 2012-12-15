@@ -222,9 +222,13 @@ void BrewDayScrollWidget::acceptInsChanges(QMetaProperty prop, QVariant /*value*
    {
       // The order changed, so resort our internal list.
       qSort( recIns.begin(), recIns.end(), insPtrLtByNumber );
+      showChanges();
    }
-   
-   showChanges();
+   else if( propName == "directions" )
+   {
+      // This will make the displayed text directions update.
+      listWidget->setCurrentRow( listWidget->currentRow() );
+   }
 }
 
 void BrewDayScrollWidget::clear()
