@@ -284,7 +284,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    // And test out the maltiness widget.
    maltWidget = new MaltinessWidget(tabWidget_recipeView);
-   verticalLayout_beerColor->insertWidget( -1, maltWidget );
+   verticalLayout_beerColor->insertWidget( 1, maltWidget );
    horizontalLayout_mash->insertWidget( 1, mashComboBox );
 
    // Set up HtmlViewer to view documentation.
