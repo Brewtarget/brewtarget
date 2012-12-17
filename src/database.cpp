@@ -206,6 +206,10 @@ bool Database::load()
 
    for( i = allRecipes.begin(); i != allRecipes.end(); i++ )
    {
+      Equipment* e = equipment(*i);
+      if( e )
+         connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+      
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); j++ )
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
@@ -1361,8 +1365,13 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
              QString("id='%1'").arg(rec->_key));
 
    newEquip->setDisplay(false);
+   
+   // NOTE: need to disconnect the recipe's old equipment?
+   connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+   
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )

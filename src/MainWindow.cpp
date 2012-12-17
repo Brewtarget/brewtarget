@@ -723,7 +723,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    
    recStyle = recipe->style();
    recEquip = recipe->equipment();
-
+   
    // BeerXML is stupid and has reduntant fields.
    // Ensure that recEquip and recipeObs always have the same boil size and time.
    // NOTE: should probably move this connection code to the Database.
@@ -795,8 +795,9 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    
    if( propName == "equipment" )
    {
-      //recEquip = recipeObs->equipment();
-      recEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(value));
+      Equipment* newRecEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(value));
+      recEquip = newRecEquip;
+      
       singleEquipEditor->setEquipment(recEquip);
    }
    else if( propName == "style" )

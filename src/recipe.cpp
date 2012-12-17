@@ -2070,6 +2070,11 @@ QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
 
 //==========================Accept changes from ingredients====================
 
+void Recipe::acceptEquipChange(QMetaProperty prop, QVariant val)
+{
+   recalcAll();
+}
+
 void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
 {
    recalcAll();
