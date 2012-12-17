@@ -898,9 +898,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
    lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
    lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
 
-   fg.first = "fg";
-   og.first = "og";
-   lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
+   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
 
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
