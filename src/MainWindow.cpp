@@ -857,25 +857,18 @@ void MainWindow::showChanges(QMetaProperty* prop)
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
 
-   lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
-   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
-   
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
-   lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
-
-   lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
-   lcdNumber_ibu->display(recipeObs->IBU(), 1);
-   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
-   lcdNumber_ibugu->display(recipeObs->IBU()/((recipeObs->og()-1)*1000), 2);
-   lcdNumber_calories->display( recipeObs->calories(), 0);
-
+   
    // Want to do some manipulation based on selected style.
    if( recStyle != 0 )
    {
       lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false));
+      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false).toDouble());
+      
       lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false));
-
+      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false).toDouble());
+      
       // 
       fg.first = "fgMin";
       fg.second = recStyle;
@@ -901,6 +894,19 @@ void MainWindow::showChanges(QMetaProperty* prop)
       lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false).toDouble());
       lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false).toDouble());
    }
+
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
+
+   fg.first = "fg";
+   og.first = "og";
+   lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
+
+   lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
+   lcdNumber_ibu->display(recipeObs->IBU(), 1);
+   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
+   lcdNumber_ibugu->display(recipeObs->IBU()/((recipeObs->og()-1)*1000), 2);
+   lcdNumber_calories->display( recipeObs->calories(), 0);
 
    // See if we need to change the mash in the table.
    if( (updateAll && recipeObs->mash()) ||
