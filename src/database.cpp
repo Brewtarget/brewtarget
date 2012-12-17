@@ -1362,7 +1362,7 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 
    newEquip->setDisplay(false);
    // Emit a changed signal.
-   //emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+   emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
 }
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
