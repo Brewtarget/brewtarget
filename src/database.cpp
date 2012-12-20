@@ -909,6 +909,7 @@ Mash* Database::newMash()
    Mash* tmp = new Mash();
    tmp->_key = insertNewDefaultRecord(Brewtarget::MASHTABLE);
    tmp->_table = Brewtarget::MASHTABLE;
+
    allMashs.insert(tmp->_key,tmp);
    
    emit changed( metaProperty("mashs"), QVariant() );
@@ -994,7 +995,7 @@ Misc* Database::newMisc(Misc* other)
    return tmp;
 }
 
-Recipe* Database::newRecipe()
+Recipe* Database::newRecipe(bool addMash)
 {
    Recipe* tmp = new Recipe();
    tmp->_key = insertNewDefaultRecord(Brewtarget::RECTABLE);
@@ -1002,7 +1003,8 @@ Recipe* Database::newRecipe()
    allRecipes.insert(tmp->_key,tmp);
    
    // Now, need to create a new mash for the recipe.
-   newMash( tmp );
+   if ( addMash )
+      newMash( tmp );
    
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
@@ -1628,7 +1630,7 @@ void Database::importFromXML(const QString& filename)
    QDomNodeList list;
    QString err;
    QFile inFile;
-   QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER";
+   QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER" << "MASHS";
    inFile.setFileName(filename);
    
    if( ! inFile.open(QIODevice::ReadOnly) )
@@ -1695,6 +1697,11 @@ void Database::importFromXML(const QString& filename)
             {
                for( int i = 0; i < list.count(); ++i )
                   waterFromXml( list.at(i) );
+            }
+            else if( tag == "MASHS" )
+            {
+               for( int i = 0; i < list.count(); ++i )
+                  mashFromXml( list.at(i) );
             }
          }
       }
@@ -3046,18 +3053,34 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    blockSignals(true); 
    Mash* ret;
 
+   // Mashes are weird. We need to know if this is a duplicate, but we need to
+   // make a copy of it anyway. 
+   n = node.firstChildElement("NAME");
+   QString name = n.firstChild().toText().nodeValue();
+   
    if( parent )
       ret = newMash(parent);
    else
       ret = newMash();
-   
+  
+   // If the mash has a name 
+   if ( ! name.isEmpty() )
+   {
+      QList<Mash*> matchingMash;
+      getElements<Mash>( matchingMash, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
+     
+      // If there are no other matches in the database 
+      if( matchingMash.isEmpty() )
+         ret->setDisplay(true);
+   }
    // First, get all the standard properties.
    fromXml( ret, Mash::tagToProp, node );
 
-   // Now, get the individual mash steps.
+   // Now, get the individual mash steps. 
    n = node.firstChildElement("MASH_STEPS");
    if( n.isNull() )
       return ret;
+
    // Iterate through all the mash steps.
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       mashStepFromXml( n, ret );
@@ -3210,7 +3233,9 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 
    // Oddly, I don't think we need to block these signals. All of the
    // subcomponents are, and that should be enough
-   Recipe* ret = newRecipe();
+
+   // Don't create a new mash -- we do that later
+   Recipe* ret = newRecipe(false);
  
    // Get standard properties.
    fromXml( ret, Recipe::tagToProp, node );
