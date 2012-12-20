@@ -185,6 +185,7 @@ void EquipmentEditor::newEquipment()
    e->setName( name );
 
    setEquipment(e);
+   show();
 }
 
 void EquipmentEditor::clearAndClose()
