@@ -1143,5 +1143,5 @@ void BrewTargetTreeModel::observeYeast(Yeast* d)
 
 void BrewTargetTreeModel::observeBrewNote(BrewNote* d)
 {
-   connect( d, SIGNAL(changedName(QString)), this, SLOT(brewNoteChanged()) );
+   connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(brewNoteChanged()) );
 }  
