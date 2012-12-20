@@ -249,7 +249,8 @@ create table mash(
    equip_adjust boolean DEFAULT 1,
    -- Metadata
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   -- Mashes default to be undisplayed until they are named
+   display boolean DEFAULT 0
 );
 
 create table mashstep(
