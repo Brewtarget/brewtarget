@@ -170,3 +170,14 @@ bool BtTreeFilterProxyModel::lessThanYeast(BrewTargetTreeModel* model, const QMo
    return leftYeast->name() < rightYeast->name();
 }
 
+bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+   if ( !source_parent.isValid() )
+      return true;
+
+   const BrewTargetTreeModel* model = qobject_cast<const BrewTargetTreeModel*>(source_parent.model());
+   QModelIndex child = model->index(source_row, 0, source_parent);
+
+   return model->getThing(child)->display();
+
+}

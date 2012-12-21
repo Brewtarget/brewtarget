@@ -761,6 +761,13 @@ BrewNote* BrewTargetTreeModel::getBrewNote(const QModelIndex &index) const
    return item->getBrewNote();
 }
 
+BeerXMLElement* BrewTargetTreeModel::getThing(const QModelIndex &index) const
+{
+   BrewTargetTreeItem* item = getItem(index);
+
+   return item->getThing();
+}
+
 bool BrewTargetTreeModel::isRecipe(const QModelIndex &index)
 {
    BrewTargetTreeItem* item = getItem(index);

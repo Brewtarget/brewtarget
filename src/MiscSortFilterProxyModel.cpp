@@ -19,11 +19,13 @@
 #include <QAbstractItemModel>
 #include "MiscSortFilterProxyModel.h"
 #include "MiscTableModel.h"
+#include "misc.h"
 #include "brewtarget.h"
 
-MiscSortFilterProxyModel::MiscSortFilterProxyModel(QObject *parent)
+MiscSortFilterProxyModel::MiscSortFilterProxyModel(QObject *parent, bool filt)
 : QSortFilterProxyModel(parent)
 {
+   filter = filt;
 }
 
 bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
@@ -49,3 +51,8 @@ bool MiscSortFilterProxyModel::lessThan(const QModelIndex &left,
 }
 
 
+bool MiscSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
+{
+   MiscTableModel* model = qobject_cast<MiscTableModel*>(sourceModel());
+   return ! filter || model->getMisc(source_row)->display();
+}

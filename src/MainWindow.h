@@ -59,11 +59,12 @@ class RecipeFormatter;
 class OgAdjuster;
 class ConverterTool;
 class TimerListDialog;
-class MashComboBox;
+//class MashComboBox;
 class PrimingDialog;
 class RecipeExtrasWidget;
 class RefractoDialog;
 class MashDesigner;
+class MashListModel;
 class PitchDialog;
 class BrewNoteWidget;
 class FermentableTableModel;
@@ -127,6 +128,8 @@ public slots:
    void updateRecipeBoilTime();
    //! \brief Update Recipe efficiency to that given by the relevant widget.
    void updateRecipeEfficiency();
+   //! \brief Update Recipe's mash
+   void updateRecipeMash();
 
    //! \brief Add given Fermentable to the Recipe.
    void addFermentableToRecipe(Fermentable* ferm);
@@ -274,7 +277,6 @@ private:
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
    TimerListDialog* timerListDialog;
-   MashComboBox* mashComboBox;
    PrimingDialog* primingDialog;
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
@@ -291,6 +293,7 @@ private:
    YeastSortFilterProxyModel* yeastTableProxy;
    MashStepTableModel* mashStepTableModel;
    EquipmentListModel* equipmentListModel;
+   MashListModel* mashListModel;
    StyleListModel* styleListModel;
    
    QHash<int, BrewNoteWidget*> brewNotes;

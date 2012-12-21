@@ -110,10 +110,7 @@ void MashEditor::showChanges(QMetaProperty* prop)
 {
    bool updateAll = false;
    QString propName;
-   
-   if( sender() != mashObs )
-      return;
-   
+
    if( mashObs == 0 )
    {
       clear();
@@ -123,10 +120,8 @@ void MashEditor::showChanges(QMetaProperty* prop)
    if( prop == 0 )
       updateAll = true;
    else
-   {
       propName = prop->name();
-   }
-   
+
    if( propName == "name" || updateAll ) {
       lineEdit_name->setText(mashObs->name());
       if( ! updateAll )

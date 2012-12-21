@@ -99,6 +99,7 @@
 #include "YeastSortFilterProxyModel.h"
 #include "EquipmentListModel.h"
 #include "StyleListModel.h"
+#include "MashListModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
@@ -115,7 +116,7 @@ MainWindow::MainWindow(QWidget* parent)
    // We have two use cases to consider here. The first is a BT
    // 1.x user running BT 2 for the first time. The second is a BT 2 clean
    // install. I am also trying to protect the developers from double imports.
-   // If the old "obsolete" directory exists, don't do anything other thann
+   // If the old "obsolete" directory exists, don't do anything other than
    // set the converted flag
    if ( ! Brewtarget::btSettings.contains("converted")) 
    {
@@ -202,7 +203,6 @@ MainWindow::MainWindow(QWidget* parent)
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
    timerListDialog = new TimerListDialog(this);
-   mashComboBox = new MashComboBox(this);
    primingDialog = new PrimingDialog(this);
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
@@ -211,13 +211,19 @@ MainWindow::MainWindow(QWidget* parent)
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
    equipmentComboBox->setModel(equipmentListModel);
+
+   // Set the style combo box
    styleListModel = new StyleListModel(styleComboBox);
    styleComboBox->setModel(styleListModel);
-   
+  
+   // Set the mash combo box
+   mashListModel =  new MashListModel(mashComboBox);
+   mashComboBox->setModel(mashListModel);
+
    // Set table models.
    // Fermentables
    fermTableModel = new FermentableTableModel(fermentableTable);
-   fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable);
+   fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable,false);
    fermTableProxy->setSourceModel(fermTableModel);
    fermentableTable->setItemDelegate(new FermentableItemDelegate(fermentableTable));
    fermentableTable->setModel(fermTableProxy);
@@ -226,7 +232,7 @@ MainWindow::MainWindow(QWidget* parent)
    
    // Hops
    hopTableModel = new HopTableModel(hopTable);
-   hopTableProxy = new HopSortFilterProxyModel(hopTable);
+   hopTableProxy = new HopSortFilterProxyModel(hopTable, false);
    hopTableProxy->setSourceModel(hopTableModel);
    hopTable->setItemDelegate(new HopItemDelegate(hopTable));
    hopTable->setModel(hopTableProxy);
@@ -235,14 +241,14 @@ MainWindow::MainWindow(QWidget* parent)
    
    // Misc
    miscTableModel = new MiscTableModel(miscTable);
-   miscTableProxy = new MiscSortFilterProxyModel(miscTable);
+   miscTableProxy = new MiscSortFilterProxyModel(miscTable,false);
    miscTableProxy->setSourceModel(miscTableModel);
    miscTable->setItemDelegate(new MiscItemDelegate(miscTable));
    miscTable->setModel(miscTableProxy);
    
    // Yeast
    yeastTableModel = new YeastTableModel(yeastTable);
-   yeastTableProxy = new YeastSortFilterProxyModel(yeastTable);
+   yeastTableProxy = new YeastSortFilterProxyModel(yeastTable,false);
    yeastTableProxy->setSourceModel(yeastTableModel);
    yeastTable->setItemDelegate(new YeastItemDelegate(yeastTable));
    yeastTable->setModel(yeastTableProxy);
@@ -285,7 +291,6 @@ MainWindow::MainWindow(QWidget* parent)
    // And test out the maltiness widget.
    maltWidget = new MaltinessWidget(tabWidget_recipeView);
    verticalLayout_beerColor->insertWidget( 1, maltWidget );
-   horizontalLayout_mash->insertWidget( 1, mashComboBox );
 
    // Set up HtmlViewer to view documentation.
    htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
@@ -431,7 +436,8 @@ MainWindow::MainWindow(QWidget* parent)
    connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
    connect( styleButton, SIGNAL( clicked() ), singleStyleEditor, SLOT(show()) );
 
-   connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
+   connect( mashComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeMash()) );
+   connect( mashButton, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
 
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
@@ -780,6 +786,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setEquipment(recEquip);
+   mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
    // If you don't connect this late, every previous set of an attribute
@@ -928,12 +935,25 @@ void MainWindow::updateRecipeStyle()
 {
    if( recipeObs == 0 )
       return;
-   
 
    Style* selected = styleListModel->at(styleComboBox->currentIndex());
    if( selected )
    {
       Database::instance().addToRecipe( recipeObs, selected );
+   }
+}
+
+void MainWindow::updateRecipeMash()
+{
+   if( recipeObs == 0 )
+      return;
+
+   Mash* selected = mashListModel->at(mashComboBox->currentIndex());
+   if( selected )
+   {
+      Database::instance().addToRecipe( recipeObs, selected );
+      mashEditor->setMash(recipeObs->mash());
+      mashButton->setMash(recipeObs->mash());
    }
 }
 
@@ -1559,16 +1579,18 @@ void MainWindow::editSelectedMashStep()
    mashStepEditor->setVisible(true);
 }
 
+// Temporarily disabled as I rework the mash combo box
 void MainWindow::removeMash()
 {
+   Mash *m = mashButton->mash();
 
-   if( mashComboBox->currentIndex() == -1)
+   if( m == 0)
       return;
    //due to way this is designed, we can't have a NULL mash, so
    //we need to remove all the mash steps and then remove the mash
    //from the database.
    //remove from db
-   Mash *m = mashComboBox->getSelectedMash();
+
    m->removeAllMashSteps();
    Database::instance().removeMash(m);
    
@@ -1576,8 +1598,8 @@ void MainWindow::removeMash()
    mashStepTableModel->setMash(defaultMash);
    
    //remove from combobox handled automatically by qt
-   mashComboBox->setIndex( -1 );
-   //recipeObs->forceNotify();
+   mashButton->setMash(defaultMash);
+
 }
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
@@ -1618,21 +1640,20 @@ void MainWindow::setMashToCurrentlySelected()
 {
    if( recipeObs == 0 )
       return;
-   
-   Mash* mash = mashComboBox->getSelectedMash();
-   
-   if( mash == 0 )
-      return;
 
-   // NOTE: Should displace mash as the mash associated with recipeObs.
-   Database::instance().newMash(mash);
+   Mash* selected = mashListModel->at(mashComboBox->currentIndex());
+   if( selected )
+   {
+      Database::instance().newMash(selected);
+      mashButton->setMash(selected);
+   }
 }
 
 void MainWindow::saveMash()
 {
    if( recipeObs == 0 || recipeObs->mash() == 0 )
       return;
-   
+
    Mash* mash = recipeObs->mash();
    // Ensure the mash has a name.
    if( mash->name() == "" )
@@ -1643,7 +1664,10 @@ void MainWindow::saveMash()
    
    // NOTE: should NOT displace recipeObs' current mash.
    Mash* newMash = Database::instance().newMash(mash, false);
-   mashComboBox->setIndexByMash(newMash);
+   // NOTE: need to set the display to true for the saved, named mash to work
+   newMash->setDisplay(true);
+   mashButton->setMash(newMash);
+
 }
 
 void MainWindow::openDonateLink()

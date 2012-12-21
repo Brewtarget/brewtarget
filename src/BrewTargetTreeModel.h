@@ -140,6 +140,8 @@ public:
    Yeast* getYeast(const QModelIndex &index) const;
    //! \brief Get BrewNote at \c index.
    BrewNote* getBrewNote(const QModelIndex &index) const;
+   //! \brief Get BeerXMLElement at \c index.
+   BeerXMLElement* getThing(const QModelIndex &index) const;
 
    //! \brief Get index of \c rec.
    QModelIndex findRecipe(Recipe* rec);

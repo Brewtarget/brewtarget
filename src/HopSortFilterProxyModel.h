@@ -36,11 +36,14 @@ class HopSortFilterProxyModel : public QSortFilterProxyModel
    Q_OBJECT
 
 public:
-   HopSortFilterProxyModel(QObject *parent = 0);
+   HopSortFilterProxyModel(QObject *parent = 0, bool filt = true);
 
 protected:
    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+   bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 
+private:
+   bool filter;
 };
 
 #endif

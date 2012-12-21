@@ -19,11 +19,13 @@
 #include "brewtarget.h"
 #include "HopSortFilterProxyModel.h"
 #include "HopTableModel.h"
+#include "hop.h"
 #include <iostream>
 
-HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent) 
+HopSortFilterProxyModel::HopSortFilterProxyModel(QObject *parent, bool filt) 
 : QSortFilterProxyModel(parent)
 {
+   filter = filt;
 }
 
 bool HopSortFilterProxyModel::lessThan(const QModelIndex &left, 
@@ -60,4 +62,9 @@ bool HopSortFilterProxyModel::lessThan(const QModelIndex &left,
     return leftHop.toString() < rightHop.toString();
 }
 
-
+bool HopSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
+{
+   HopTableModel* model = qobject_cast<HopTableModel*>(sourceModel());
+   //! return true if we don't want to filter or if the hop is set to display
+   return !filter || model->getHop(source_row)->display();
+}

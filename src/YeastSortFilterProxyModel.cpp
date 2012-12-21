@@ -19,12 +19,14 @@
 
 #include "YeastSortFilterProxyModel.h"
 #include "YeastTableModel.h"
+#include "yeast.h"
 #include "brewtarget.h"
 #include <iostream>
 
-YeastSortFilterProxyModel::YeastSortFilterProxyModel(QObject *parent) 
+YeastSortFilterProxyModel::YeastSortFilterProxyModel(QObject *parent, bool filt) 
 : QSortFilterProxyModel(parent)
 {
+   filter = filt;
 }
 
 bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left, 
@@ -45,4 +47,10 @@ bool YeastSortFilterProxyModel::lessThan(const QModelIndex &left,
     default:
       return leftYeast.toString() < rightYeast.toString();
     }
+}
+
+bool YeastSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
+{
+   YeastTableModel* model = qobject_cast<YeastTableModel*>(sourceModel());
+   return ! filter || model->getYeast(source_row)->display();
 }

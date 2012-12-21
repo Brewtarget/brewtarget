@@ -35,12 +35,14 @@ class YeastSortFilterProxyModel : public QSortFilterProxyModel
    Q_OBJECT
 
 public:
-   YeastSortFilterProxyModel(QObject *parent = 0);
-//   QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex());
+   YeastSortFilterProxyModel(QObject *parent = 0, bool filt = true);
 
 protected:
    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+   bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 
+private:
+   bool filter;
 };
 
 #endif

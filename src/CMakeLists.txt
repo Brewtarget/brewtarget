@@ -3,9 +3,12 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} )
 # The current directory in the output build directory.
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 
-# Put all the required Qt dirs in the includes.
+# Put all the required Qt dirs in the includes. 
+#   That isn't quite what this include does. QT_USE_FILE references
+#   a cmake macro include, which is good but not required. PHONON_INCLUDES
+#   references an include directory, which is not what INCLUDE wants
 INCLUDE(${QT_USE_FILE})
-INCLUDE(${PHONON_INCLUDES})
+# INCLUDE(${PHONON_INCLUDES})
 
 # (ADD_PCH_RULE  _header_filename _src_list)
 # Version 7/26/2010
@@ -98,8 +101,10 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MainWindow.cpp
     ${SRCDIR}/MaltinessWidget.cpp
     ${SRCDIR}/mash.cpp
+    ${SRCDIR}/MashButton.cpp
     ${SRCDIR}/MashComboBox.cpp
     ${SRCDIR}/MashEditor.cpp
+    ${SRCDIR}/MashListModel.cpp
     ${SRCDIR}/mashstep.cpp
     ${SRCDIR}/MashStepEditor.cpp
     ${SRCDIR}/MashStepTableModel.cpp
@@ -229,9 +234,11 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/InstructionWidget.h
     ${SRCDIR}/MainWindow.h
     ${SRCDIR}/MaltinessWidget.h
+    ${SRCDIR}/MashButton.h
     ${SRCDIR}/MashComboBox.h
     ${SRCDIR}/MashDesigner.h
     ${SRCDIR}/MashEditor.h
+    ${SRCDIR}/MashListModel.h
     ${SRCDIR}/MashStepEditor.h
     ${SRCDIR}/MashStepTableModel.h
     ${SRCDIR}/MashStepTableWidget.h

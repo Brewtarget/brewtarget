@@ -1977,24 +1977,6 @@ bool Recipe::isValidType( const QString &str )
    return false;
 }
 
-/*
-BrewNote* Recipe::addBrewNote( BrewNote* old )
-{
-   BrewNote* newNote;
-   if ( old ) 
-      newNote = Database::instance().newBrewNote(old, false);
-   else
-   {
-      newNote = Database::instance().newBrewNote(this, false);
-      newNote->populateNote(this);
-   }
-
-   emit changed( metaProperty("brewNotes"), QVariant() );
-   return newNote;
-
-}
-*/
-
 QList<QString> Recipe::getReagents( QList<Fermentable*> ferms )
 {
    QList<QString> reagents;

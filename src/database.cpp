@@ -576,7 +576,7 @@ void Database::insertInstruction(Instruction* in, int pos)
 QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 {
    QList<BrewNote*> ret;
-   QString filterString = QString("recipe_id = %1 AND deleted = 0 and display = 1").arg(parent->_key);
+   QString filterString = QString("recipe_id = %1 AND deleted = 0").arg(parent->_key);
    
    getElements(ret, filterString, Brewtarget::BREWNOTETABLE, allBrewNotes);
    
@@ -662,7 +662,7 @@ Mash* Database::mash( Recipe const* parent )
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QString filterString = QString("mash_id = %1 AND deleted = 0 AND display = 1").arg(parent->_key);
+   QString filterString = QString("mash_id = %1 AND deleted = 0").arg(parent->_key);
   
    getElements(ret, filterString, Brewtarget::MASHSTEPTABLE, allMashSteps);
    
@@ -940,7 +940,9 @@ Mash* Database::newMash(Recipe* parent)
 Mash* Database::newMash(Mash* other, bool displace)
 {
    Mash* tmp = copy<Mash>(other, true, &allMashs);
-   
+   // Just copying the Mash isn't enough. We need to copy the mashsteps too
+   duplicateMashSteps(other,tmp);
+
    // Connect tmp to parent, removing any existing mash in parent.
    if( displace )
    {
@@ -1089,6 +1091,20 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
    
    // Push the command on the undo stack.
    //commandStack.push(command);
+}
+
+void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
+{
+   QList<MashStep*> tmpMS = mashSteps(oldMash);
+   QList<MashStep*>::iterator ms;
+   for( ms=tmpMS.begin(); ms != tmpMS.end(); ++ms)
+   {
+      MashStep* newStep = copy<MashStep>(*ms,true,&allMashSteps);
+      // Gods, I hope this is right.
+      sqlUpdate(Brewtarget::MASHSTEPTABLE,
+               QString("mash_id='%1'").arg(newMash->key()),
+               QString("id='%1'").arg(newStep->key()));
+   }
 }
 
 void Database::removeEquipment(Equipment* equip)
@@ -1407,10 +1423,15 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
 void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
 {
    Mash* newMash;
-   
+  
    // Make a copy of mash.
+   // Making a copy of the mash isn't enough. We need a copy of the mashsteps
+   // too.
    if ( ! noCopy )
+   {
       newMash = copy<Mash>(m, false, &allMashs);
+      duplicateMashSteps(m,newMash);
+   }
    else
       newMash = m;
    
@@ -1420,7 +1441,11 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
              QString("id='%1'").arg(rec->_key));
    
    // Emit a changed signal.
+   connect( newMash, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptMashChange(QMetaProperty,QVariant)));
    emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
+   // And let the recipe recalc all?
+   if ( !noCopy)
+      rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
@@ -1460,7 +1485,6 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
    addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
 
-   y->setDisplay(false);
    if ( ! noCopy )
       rec->recalcOgFg();
 }
@@ -1547,77 +1571,78 @@ QList<BrewNote*> Database::brewNotes()
 {
    QList<BrewNote*> tmp;
 
-   getElements( tmp, "deleted=0 AND display=1", Brewtarget::BREWNOTETABLE, allBrewNotes );
+   getElements( tmp, "deleted=0", Brewtarget::BREWNOTETABLE, allBrewNotes );
    return tmp;
 }
 
 QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::EQUIPTABLE, allEquipments);
+   getElements( tmp, "deleted=0", Brewtarget::EQUIPTABLE, allEquipments);
    return tmp;
 }
 
 QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::FERMTABLE, allFermentables);
+   getElements( tmp, "deleted=0", Brewtarget::FERMTABLE, allFermentables);
    return tmp;
 }
 
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::HOPTABLE, allHops);
+   getElements( tmp, "deleted=0", Brewtarget::HOPTABLE, allHops);
    return tmp;
 }
 
 QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::MASHTABLE, allMashs);
+   //! Mashs and mashsteps are the odd balls.
+   getElements( tmp, "deleted=0", Brewtarget::MASHTABLE, allMashs);
    return tmp;
 }
 
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::MASHSTEPTABLE, allMashSteps);
+   getElements( tmp, "deleted=0", Brewtarget::MASHSTEPTABLE, allMashSteps);
    return tmp;
 }
 
 QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::MISCTABLE, allMiscs );
+   getElements( tmp, "deleted=0", Brewtarget::MISCTABLE, allMiscs );
    return tmp;
 }
 
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::RECTABLE, allRecipes );
+   getElements( tmp, "deleted=0", Brewtarget::RECTABLE, allRecipes );
    return tmp;
 }
 
 QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::STYLETABLE, allStyles );
+   getElements( tmp, "deleted=0", Brewtarget::STYLETABLE, allStyles );
    return tmp;
 }
 
 QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::WATERTABLE, allWaters );
+   getElements( tmp, "deleted=0", Brewtarget::WATERTABLE, allWaters );
    return tmp;
 }
 
 QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::YEASTTABLE, allYeasts );
+   getElements( tmp, "deleted=0", Brewtarget::YEASTTABLE, allYeasts );
    return tmp;
 }
 
@@ -3117,6 +3142,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
                     )
                  ) );
   
+   ret->blockSignals(false);
    if (! blocked )
    {
       blockSignals(false); 
@@ -3124,7 +3150,6 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
       emit parent->mashStepsChanged();
    }
 
-   ret->blockSignals(false);
    return ret;
 }
 

@@ -156,7 +156,9 @@ public:
    Misc* newMisc(Misc* other);
    Yeast* newYeast(Yeast* other);
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   
+  
+   //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
+   void duplicateMashSteps(Mash *oldMash, Mash *newMash);
    //! Import ingredients from BeerXML documents.
    void importFromXML(const QString& filename);
    
