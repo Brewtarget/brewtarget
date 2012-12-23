@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>363</width>
+    <width>383</width>
     <height>223</height>
    </rect>
   </property>
@@ -167,6 +167,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="3" column="0">
@@ -189,6 +192,9 @@
           <width>64</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -213,6 +219,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="6" column="0">
@@ -235,6 +244,9 @@
           <width>64</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -266,6 +278,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -288,6 +303,9 @@
           <width>64</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

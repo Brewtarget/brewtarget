@@ -178,6 +178,9 @@
           <property name="toolTip">
            <string>How much priming ingredient to use</string>
           </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
