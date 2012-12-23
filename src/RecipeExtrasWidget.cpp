@@ -232,6 +232,26 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
       val = prop->read(recipe);
    }
    
+   if( updateAll && recipe )
+   {
+      lineEdit_age->setText( Brewtarget::displayAmount(recipe->age_days()) );
+      lineEdit_ageTemp->setText( Brewtarget::displayAmount(recipe->ageTemp_c(), Units::celsius) );
+      lineEdit_asstBrewer->setText( recipe->asstBrewer() );
+      lineEdit_brewer->setText( recipe->brewer() );
+      lineEdit_carbVols->setText( Brewtarget::displayAmount(recipe->carbonation_vols()) );
+      lineEdit_primaryAge->setText( Brewtarget::displayAmount(recipe->primaryAge_days()) );
+      lineEdit_primaryTemp->setText( Brewtarget::displayAmount(recipe->primaryTemp_c(), Units::celsius) );
+      lineEdit_secAge->setText( Brewtarget::displayAmount(recipe->secondaryAge_days()) );
+      lineEdit_secTemp->setText( Brewtarget::displayAmount(recipe->secondaryTemp_c(), Units::celsius) );
+      lineEdit_tertAge->setText( Brewtarget::displayAmount(recipe->tertiaryAge_days()) );
+      lineEdit_tertTemp->setText( Brewtarget::displayAmount(recipe->tertiaryTemp_c(), Units::celsius) );
+      spinBox_tasteRating->setValue( recipe->tasteRating() );
+      dateEdit_date->setDate( recipe->date() );
+      plainTextEdit_notes->setPlainText( recipe->notes() );
+      plainTextEdit_tasteNotes->setPlainText( recipe->tasteNotes() );
+      return;
+   }
+   
    if( propName == "age_days" || updateAll )
       lineEdit_age->setText( Brewtarget::displayAmount(val.toDouble()) );
    else if( propName == "ageTemp_c" || updateAll )
@@ -258,15 +278,8 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
       spinBox_tasteRating->setValue( (int)(val.toDouble()) );
    else if( propName == "date" || updateAll )
       dateEdit_date->setDate( val.toDate() );
-
-   // Prevent signals from being sent when we update the notes.
-   // This prevents an infinite loop of changing and updating the notes.
-   //plainTextEdit_notes->blockSignals(true);
    else if( propName == "notes" || updateAll )
       plainTextEdit_notes->setPlainText( val.toString() );
-   //plainTextEdit_notes->blockSignals(false);
-   //plainTextEdit_tasteNotes->blockSignals(true);
    else if( propName == "tasteNotes" || updateAll )
       plainTextEdit_tasteNotes->setPlainText( val.toString() );
-   //plainTextEdit_tasteNotes->blockSignals(false);
 }
