@@ -9,7 +9,7 @@
 --                 be put into a recipe.
 --       display=0 means the ingredient is in a recipe already and should not
 --                 be shown in a list, available to be put into a recipe.
-
+BEGIN TRANSACTION;
 create table equipment(
    id integer PRIMARY KEY autoincrement,
    -- BeerXML properties
@@ -544,3 +544,5 @@ create table yeast_in_inventory(
    quanta integer DEFAULT 0,
    foreign key(yeast_id) references yeast(id)
 );
+
+COMMIT;
