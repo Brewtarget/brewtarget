@@ -78,6 +78,7 @@ class YeastSortFilterProxyModel;
 class MashStepTableModel;
 class EquipmentListModel;
 class StyleListModel;
+class StyleSortFilterProxyModel;
 
 /*!
  * \class MainWindow
@@ -295,6 +296,7 @@ private:
    EquipmentListModel* equipmentListModel;
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
+   StyleSortFilterProxyModel* styleProxyModel;
    
    QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;

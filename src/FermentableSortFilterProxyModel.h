@@ -1,5 +1,5 @@
 /*
- * FermentableSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
+ * FermentableSortFilterProxyModel.h is part of Brewtarget, and is Copyright Mik
  * Firestone (mikfire@gmail.com) and Philip G. Lee (rocketman768@gmail.com,
  * 2010-2012.
  *

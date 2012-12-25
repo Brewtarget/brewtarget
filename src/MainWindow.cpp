@@ -100,6 +100,7 @@
 #include "EquipmentListModel.h"
 #include "StyleListModel.h"
 #include "MashListModel.h"
+#include "StyleSortFilterProxyModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
@@ -214,7 +215,10 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Set the style combo box
    styleListModel = new StyleListModel(styleComboBox);
-   styleComboBox->setModel(styleListModel);
+   styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);
+   styleProxyModel->setDynamicSortFilter(true);
+   styleProxyModel->setSourceModel(styleListModel);
+   styleComboBox->setModel(styleProxyModel);
   
    // Set the mash combo box
    mashListModel =  new MashListModel(mashComboBox);
@@ -936,7 +940,9 @@ void MainWindow::updateRecipeStyle()
    if( recipeObs == 0 )
       return;
 
-   Style* selected = styleListModel->at(styleComboBox->currentIndex());
+   QModelIndex proxyIndex( styleProxyModel->index(styleComboBox->currentIndex(),0) );
+   QModelIndex sourceIndex( styleProxyModel->mapToSource(proxyIndex) );
+   Style* selected = styleListModel->at(sourceIndex.row());
    if( selected )
    {
       Database::instance().addToRecipe( recipeObs, selected );
