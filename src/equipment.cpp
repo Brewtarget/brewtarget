@@ -395,9 +395,9 @@ void Equipment::setTopUpKettle_l( double var )
 
 void Equipment::setHopUtilization_pct( double var )
 {
-   if( var < 0.0 || var > 100.0 )
+   if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: 0 < hop utilization < 100: %1").arg(var) );
+      Brewtarget::logW( QString("Equipment: 0 < hop utilization: %1").arg(var) );
       return;
    }
    else

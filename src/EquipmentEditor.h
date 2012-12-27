@@ -68,6 +68,8 @@ public slots:
    void updateRecord();
    //! If state==Qt::Checked, set the "calculate boil volume" checkbox. Otherwise, unset.
    void updateCheckboxRecord(int state);
+   //! \brief set the default equipment, or unset the current equipment as the default
+   void updateDefaultEquipment(int state);
    //! Set a dirty bit if the notes change.
    void changedText();
    

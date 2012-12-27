@@ -164,6 +164,8 @@ public:
    
    //! Get recipe by key value.
    Recipe* recipe(int key);
+   //! Get equipment by key value.
+   Equipment* equipment(int key);
    
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList

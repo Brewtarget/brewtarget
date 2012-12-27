@@ -494,14 +494,16 @@ Recipe* Database::recipe(int key)
 {
    Recipe* ret;
    if( allRecipes.contains(key) )
-   {
       ret = allRecipes[key];
-      //if( ret->_uninitializedCalcs )
-      //   ret->recalcAll();
-      return ret;
-   }
    else
-      return 0;
+      ret = 0;
+
+   return ret;
+}
+
+Equipment* Database::equipment(int key)
+{
+   return allEquipments[key];
 }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)

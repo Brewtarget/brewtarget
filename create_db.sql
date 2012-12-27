@@ -26,7 +26,7 @@ create table equipment(
    calc_boil_volume boolean DEFAULT 0,
    lauter_deadspace real DEFAULT 0.0,
    top_up_kettle real DEFAULT 0.0,
-   hop_utilization real DEFAULT 0.0,
+   hop_utilization real DEFAULT 100.0,
    notes text DEFAULT '',
    -- Out BeerXML extensions
    real_evap_rate real DEFAULT 0.0,

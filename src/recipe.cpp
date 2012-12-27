@@ -1948,29 +1948,35 @@ double Recipe::ibuFromHop(Hop const* hop)
    double grams = hop->amount_kg()*1000.0;
    double minutes = hop->time_min();
    double boilGrav_final = _boilGrav; 
+   // Assume 100% utilization until further notice
+   double hopUtilization = 1.0;
+   // Assume 60 min boil until further notice
+   int boilTime = 60;
    double avgBoilGrav;
    
    if( equip )
+   {
       boilGrav_final = _boilVolume_l / equip->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
+      hopUtilization = equip->hopUtilization_pct() / 100.0;
+      boilTime = equip->boilTime_min();
+   }
    
    avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
    
    if( hop->use() == Hop::Boil)
       ibus = IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, minutes );
    else if( hop->use() == Hop::First_Wort )
-   {
-      if( equip )
-         ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, equip->boilTime_min() );
-      else
-         ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, 60 );
-   }
+      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, boilTime );
 
    // Adjust for hop form.
    if( hop->form() == Hop::Leaf )
       ibus *= 0.90;
    else if( hop->form() == Hop::Plug )
       ibus *= 0.92;
-   
+
+   // Adjust for hop utilization. 
+   ibus *= hopUtilization;
+
    return ibus;
 }
 

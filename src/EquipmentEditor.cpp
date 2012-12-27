@@ -19,6 +19,7 @@
 #include <QInputDialog>
 #include <QIcon>
 #include <QMessageBox>
+#include <QDebug>
 
 #include "database.h"
 #include "equipment.h"
@@ -85,6 +86,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
    connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
    connect(lineEdit_boilingPoint,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
+   connect(lineEdit_hopUtilization,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
 
    // Doing the text properly is actually a two step thing. The first is to
    // connect to the textChanged() signal, but only to set a "has changed" flag. The second
@@ -92,8 +94,9 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(textEdit_notes, SIGNAL(textChanged()), this, SLOT(changedText()));
    textEdit_notes->installEventFilter(this);
 
-   // The checkbox is the odd thing out
+   // checkboxes are the odd things out
    connect(checkBox_calcBoilVolume, SIGNAL(stateChanged(int)), this, SLOT(updateCheckboxRecord(int)));
+   connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
 }
 
 void EquipmentEditor::setEquipment( Equipment* e )
@@ -138,6 +141,7 @@ void EquipmentEditor::clear()
    lineEdit_trubChillerLoss->setText(QString(""));
    lineEdit_lauterDeadspace->setText(QString(""));
 
+   lineEdit_hopUtilization->setText(QString(""));
    textEdit_notes->setText("");
 
    lineEdit_grainAbsorption->setText("");
@@ -258,6 +262,14 @@ void EquipmentEditor::showChanges()
    lineEdit_grainAbsorption->setText( Brewtarget::displayAmount(gaCustomUnits,0,3) );
    
    lineEdit_boilingPoint->setText( Brewtarget::displayAmount(e->boilingPoint_c(), Units::celsius) );
+
+   lineEdit_hopUtilization->setText(Brewtarget::displayAmount(e->hopUtilization_pct(),0,1));
+   checkBox_defaultEquipment->blockSignals(true);
+   if ( Brewtarget::option("defaultEquipmentKey",-1) == e->key() ) 
+      checkBox_defaultEquipment->setCheckState(Qt::Checked);
+   else
+      checkBox_defaultEquipment->setCheckState(Qt::Unchecked);
+   checkBox_defaultEquipment->blockSignals(false);
 }
 
 void EquipmentEditor::updateRecord()
@@ -302,6 +314,8 @@ void EquipmentEditor::updateRecord()
    }
    else if ( selection == lineEdit_boilingPoint )
       obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
+   else if ( selection == lineEdit_hopUtilization )
+      obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
 
    showChanges();
 }
@@ -311,6 +325,21 @@ void EquipmentEditor::updateCheckboxRecord(int state)
    obsEquip->setCalcBoilVolume(state == Qt::Checked);
 }
 
+void EquipmentEditor::updateDefaultEquipment(int state)
+{
+   QString optionName = "defaultEquipmentKey";
+
+   QVariant currentDefault = Brewtarget::option(optionName, -1);
+   if ( state == Qt::Checked )
+   {
+      Brewtarget::setOption(optionName, obsEquip->key());
+   }
+   else if ( currentDefault == obsEquip->key() )
+   {
+      Brewtarget::setOption(optionName,-1);
+   }
+}
+      
 void EquipmentEditor::changedText()
 {
    Equipment* e = obsEquip;

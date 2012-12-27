@@ -1325,6 +1325,7 @@ void MainWindow::newRecipe()
 {
    QString name = QInputDialog::getText(this, tr("Recipe name"),
                                           tr("Recipe name:"));
+   QVariant defEquipKey = Brewtarget::option("defaultEquipmentKey", -1); 
    if( name.isEmpty() )
       return;
 
@@ -1336,6 +1337,13 @@ void MainWindow::newRecipe()
    newRec->setBatchSize_l(18.93); // 5 gallons
    newRec->setBoilSize_l(23.47);  // 6.2 gallons
    newRec->setEfficiency_pct(70.0);
+
+   if ( defEquipKey != -1 )
+   {
+      Equipment* e = Database::instance().equipment(defEquipKey.toInt());
+      if ( e )
+         Database::instance().addToRecipe(newRec, e);
+   }
 
    setTreeSelection(treeView_recipe->findRecipe(newRec));
    setRecipe(newRec);
@@ -2391,15 +2399,23 @@ void MainWindow::showPitchDialog()
 void MainWindow::showEquipmentEditor()
 {
    if ( ! recipeObs->equipment() )
+   {
       QMessageBox::warning( this, tr("No equipment"), tr("You must select or define an equipment profile first."));
+   }
    else
+   {
       singleEquipEditor->show();
+   }
 }
 
 void MainWindow::showStyleEditor()
 {
    if ( ! recipeObs->style() )
+   {
       QMessageBox::warning( this, tr("No style"), tr("You must select a style first."));
+   }
    else
+   {
       singleStyleEditor->show();
+   }
 }
