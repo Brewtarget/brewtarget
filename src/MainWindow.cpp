@@ -233,7 +233,7 @@ MainWindow::MainWindow(QWidget* parent)
    fermentableTable->setModel(fermTableProxy);
    // Make the fermentable table show grain percentages in row headers.
    fermTableModel->setDisplayPercentages(true);
-   
+
    // Hops
    hopTableModel = new HopTableModel(hopTable);
    hopTableProxy = new HopSortFilterProxyModel(hopTable, false);
@@ -263,14 +263,14 @@ MainWindow::MainWindow(QWidget* parent)
    mashStepTableWidget->setModel(mashStepTableModel);
    
    // Enable sorting in the main tables.
+   fermentableTable->horizontalHeader()->setSortIndicator( FERMAMOUNTCOL, Qt::DescendingOrder );
    fermentableTable->setSortingEnabled(true);
-   fermentableTable->sortByColumn( FERMAMOUNTCOL, Qt::DescendingOrder );
+   hopTable->horizontalHeader()->setSortIndicator( HOPTIMECOL, Qt::DescendingOrder );
    hopTable->setSortingEnabled(true);
-   hopTable->sortByColumn( HOPTIMECOL, Qt::DescendingOrder );
+   miscTable->horizontalHeader()->setSortIndicator( MISCUSECOL, Qt::DescendingOrder );
    miscTable->setSortingEnabled(true);
-   miscTable->sortByColumn( MISCUSECOL, Qt::DescendingOrder );
+   yeastTable->horizontalHeader()->setSortIndicator( YEASTNAMECOL, Qt::DescendingOrder );
    yeastTable->setSortingEnabled(true);
-   yeastTable->sortByColumn( YEASTNAMECOL, Qt::DescendingOrder );
    
    // Create the keyboard shortcuts
    setupShortCuts();
