@@ -147,13 +147,11 @@ void MashEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   /*
    if( propName == "tunMass_kg" || updateAll ) {
-      lineEdit_tunMass->setText(Brewtarget::displayAmount(mashObs->tunMass_kg(), Units::kilograms));
+      lineEdit_tunMass->setText(Brewtarget::displayAmount(mashObs->tunWeight_kg(), Units::kilograms));
       if( ! updateAll )
          return;
    }
-   */
    if( propName == "tunSpecificHeat_calGC" || updateAll ) {
       lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(mashObs->tunSpecificHeat_calGC()));
       if( ! updateAll )
