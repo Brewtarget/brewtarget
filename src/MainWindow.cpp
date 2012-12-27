@@ -1342,7 +1342,12 @@ void MainWindow::newRecipe()
    {
       Equipment* e = Database::instance().equipment(defEquipKey.toInt());
       if ( e )
+      {
          Database::instance().addToRecipe(newRec, e);
+         newRec->setBatchSize_l( e->batchSize_l() );
+         newRec->setBoilSize_l( e->boilSize_l() );
+         newRec->setBoilTime_min( e->boilTime_min() );
+      }
    }
 
    setTreeSelection(treeView_recipe->findRecipe(newRec));
