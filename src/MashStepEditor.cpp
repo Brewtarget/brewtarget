@@ -44,6 +44,7 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
    QString propName;
    QVariant value;
    bool updateAll = false;
+
    if( metaProp == 0 )
       updateAll = true;
    else
@@ -52,23 +53,36 @@ void MashStepEditor::showChanges(QMetaProperty* metaProp)
       value = metaProp->read(obs);
    }
 
-   if( propName == "name" || updateAll )
+   if ( updateAll ) 
+   {
       lineEdit_name->setText(obs->name());
-   else if( propName == "type" || updateAll )
       comboBox_type->setCurrentIndex(obs->type());
-   else if( propName == "infuseAmount_l" || updateAll )
       lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->infuseAmount_l(), Units::liters));
-   else if( propName == "infuseTemp_c" || updateAll )
       lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->infuseTemp_c(), Units::celsius));
-   else if( propName == "decoctionAmount_l" || updateAll )
       lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->decoctionAmount_l(), Units::liters));
-   else if( propName == "stepTemp_c" || updateAll )
       lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->stepTemp_c(), Units::celsius));
-   else if( propName == "stepTime_min" || updateAll )
       lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->stepTime_min(), Units::minutes));
-   else if( propName == "rampTime_min" || updateAll )
       lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->rampTime_min(), Units::minutes));
-   else if( propName == "endTemp_c" || updateAll )
+      lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->endTemp_c(), Units::celsius));
+   }
+
+   else if( propName == "name" ) 
+      lineEdit_name->setText(obs->name());
+   else if( propName == "type" ) 
+      comboBox_type->setCurrentIndex(obs->type());
+   else if( propName == "infuseAmount_l" ) 
+      lineEdit_infuseAmount->setText(Brewtarget::displayAmount(obs->infuseAmount_l(), Units::liters));
+   else if( propName == "infuseTemp_c" ) 
+      lineEdit_infuseTemp->setText(Brewtarget::displayAmount(obs->infuseTemp_c(), Units::celsius));
+   else if( propName == "decoctionAmount_l" ) 
+      lineEdit_decoctionAmount->setText(Brewtarget::displayAmount(obs->decoctionAmount_l(), Units::liters));
+   else if( propName == "stepTemp_c" ) 
+      lineEdit_stepTemp->setText(Brewtarget::displayAmount(obs->stepTemp_c(), Units::celsius));
+   else if( propName == "stepTime_min" ) 
+      lineEdit_stepTime->setText(Brewtarget::displayAmount(obs->stepTime_min(), Units::minutes));
+   else if( propName == "rampTime_min" ) 
+      lineEdit_rampTime->setText(Brewtarget::displayAmount(obs->rampTime_min(), Units::minutes));
+   else if( propName == "endTemp_c" ) 
       lineEdit_endTemp->setText(Brewtarget::displayAmount(obs->endTemp_c(), Units::celsius));
 }
 
