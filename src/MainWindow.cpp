@@ -2083,6 +2083,9 @@ void MainWindow::exportSelected()
          case BrewTargetTreeItem::EQUIPMENT:
             Database::instance().toXml( treeView_equip->getEquipment(selection), doc, dbase);
             break;
+         case BrewTargetTreeItem::FERMENTABLE:
+            Database::instance().toXml( treeView_ferm->getFermentable(selection), doc, dbase);
+            break;
          case BrewTargetTreeItem::HOP:
             Database::instance().toXml( treeView_hops->getHop(selection), doc, dbase);
             break;
