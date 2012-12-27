@@ -439,10 +439,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
 
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
-   connect( equipmentButton, SIGNAL( clicked() ), singleEquipEditor, SLOT(show()) );
+   connect( equipmentButton, SIGNAL( clicked() ), this, SLOT(showEquipmentEditor()));
 
    connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
-   connect( styleButton, SIGNAL( clicked() ), singleStyleEditor, SLOT(show()) );
+   connect( styleButton, SIGNAL( clicked() ), this, SLOT(showStyleEditor()) );
 
    connect( mashComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeMash()) );
    connect( mashButton, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
@@ -2386,4 +2386,20 @@ void MainWindow::showPitchDialog()
    }
    
    pitchDialog->show();
+}
+
+void MainWindow::showEquipmentEditor()
+{
+   if ( ! recipeObs->equipment() )
+      QMessageBox::warning( this, tr("No equipment"), tr("You must select or define an equipment profile first."));
+   else
+      singleEquipEditor->show();
+}
+
+void MainWindow::showStyleEditor()
+{
+   if ( ! recipeObs->style() )
+      QMessageBox::warning( this, tr("No style"), tr("You must select a style first."));
+   else
+      singleStyleEditor->show();
 }

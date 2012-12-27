@@ -219,6 +219,8 @@ public slots:
 
    void redisplayLabel(QString field);
 
+   void showEquipmentEditor();
+   void showStyleEditor();
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
