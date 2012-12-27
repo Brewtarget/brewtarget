@@ -1101,12 +1101,22 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
    QList<MashStep*>::iterator ms;
    for( ms=tmpMS.begin(); ms != tmpMS.end(); ++ms)
    {
+      // Copy the old mash step.
       MashStep* newStep = copy<MashStep>(*ms,true,&allMashSteps);
-      // Gods, I hope this is right.
-      sqlUpdate(Brewtarget::MASHSTEPTABLE,
-               QString("mash_id='%1'").arg(newMash->key()),
-               QString("id='%1'").arg(newStep->key()));
+      
+      // Put it in the new mash.
+      sqlUpdate(
+         Brewtarget::MASHSTEPTABLE,
+         QString("mash_id='%1'").arg(newMash->key()),
+         QString("id='%1'").arg(newStep->key())
+      );
+      
+      // Make the new mash pay attention to the new step.
+      connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)), newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );          
    }
+   
+   emit changed( metaProperty("mashs"), QVariant() );
+   emit newMash->mashStepsChanged();
 }
 
 void Database::removeEquipment(Equipment* equip)
