@@ -832,6 +832,11 @@ void Recipe::setBatchSize_l( double var )
    }
 
    set( "batchSize_l", "batch_size", tmp );
+   
+   // NOTE: this is bad, but we have to call recalcAll(), because the estimated
+   // boil/batch volumes depend on the target volumes when there are no mash
+   // steps to actually provide an estimate for the volumes.
+   recalcAll();
 }
 
 void Recipe::setBoilSize_l( double var )
@@ -848,6 +853,11 @@ void Recipe::setBoilSize_l( double var )
    }
 
    set( "boilSize_l", "boil_size", tmp );
+   
+   // NOTE: this is bad, but we have to call recalcAll(), because the estimated
+   // boil/batch volumes depend on the target volumes when there are no mash
+   // steps to actually provide an estimate for the volumes.
+   recalcAll();
 }
 
 void Recipe::setBoilTime_min( double var )
