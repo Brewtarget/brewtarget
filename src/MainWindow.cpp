@@ -265,12 +265,16 @@ MainWindow::MainWindow(QWidget* parent)
    // Enable sorting in the main tables.
    fermentableTable->horizontalHeader()->setSortIndicator( FERMAMOUNTCOL, Qt::DescendingOrder );
    fermentableTable->setSortingEnabled(true);
+   fermTableProxy->setDynamicSortFilter(true);
    hopTable->horizontalHeader()->setSortIndicator( HOPTIMECOL, Qt::DescendingOrder );
    hopTable->setSortingEnabled(true);
+   hopTableProxy->setDynamicSortFilter(true);
    miscTable->horizontalHeader()->setSortIndicator( MISCUSECOL, Qt::DescendingOrder );
    miscTable->setSortingEnabled(true);
+   miscTableProxy->setDynamicSortFilter(true);
    yeastTable->horizontalHeader()->setSortIndicator( YEASTNAMECOL, Qt::DescendingOrder );
    yeastTable->setSortingEnabled(true);
+   yeastTableProxy->setDynamicSortFilter(true);
    
    // Create the keyboard shortcuts
    setupShortCuts();
