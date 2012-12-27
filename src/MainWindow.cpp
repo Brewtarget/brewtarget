@@ -977,6 +977,14 @@ void MainWindow::updateRecipeEquipment()
    Database::instance().addToRecipe(recipeObs,equip);
    equipmentButton->setEquipment(equip);
 
+   // Keep the mash tun weight and specific heat up to date.
+   Mash* m = recipeObs->mash();
+   if( m )
+   {
+      m->setTunWeight_kg( equip->tunWeight_kg() );
+      m->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
+   }
+   
    if( QMessageBox::question(this, tr("Equipment request"),
                              tr("Would you like to set the batch and boil size to that requested by the equipment?"),
                              QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
