@@ -98,14 +98,14 @@ bool Database::load()
    dataDbFileName = (Brewtarget::getDataDir() + "default_db.sqlite");
    dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
    
-   // Cleanup the backup database if there was a previous error.
-   if( !cleanupBackupDatabase() )
-      return false;
-
    // Set the files.
    dbFile.setFileName(dbFileName);
    dataDbFile.setFileName(dataDbFileName);
    dbTempBackupFile.setFileName(dbTempBackupFileName);
+   
+   // Cleanup the backup database if there was a previous error.
+   if( !cleanupBackupDatabase() )
+      return false;
    
    // If there's no dbFile, try to copy from dataDbFile.
    if( !dbFile.exists() )
