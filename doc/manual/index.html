@@ -10,8 +10,8 @@
       <li><span><a href="#walkthrough">A Walkthrough</a></span></li>
       <ul id="toc">
          <li><span><a href="#settingoptions">Setting Options</a></span></li>
-         <li><span><a href="#newrecipe">Making a New Recipe</a></span></li>
          <li><span><a href="#newequipment">Defining Your Equipment</a></span></li>
+         <li><span><a href="#newrecipe">Making a New Recipe</a></span></li>
          <li><span><a href="#adjustingrecipe">Adjusting Recipe Parameters</a></span></li>
          <li><span><a href="#setstyles">Selecting the Style</a></span></li>
          <li><span><a href="#addingingredients">Adding Ingredients</a></span></li>
@@ -63,6 +63,8 @@
          <li><span><a href="#newdatabase">SQLite DB</a></span></li>
          <li><span><a href="#newunitsandscales">Units and Scales</a></span></li>
          <li><span><a href="#newtrees">Trees</a></span></li>
+         <li><span><a href="#defaultequipment">Default Equipment</a></span></li>
+         <li><span><a href="#hoputilization">Hop Utilization</a></span></li>
       </ul>
    </ul>
 
@@ -83,20 +85,15 @@ numbers are <i>not</i> corrected. So, the displayed FG reflects the actual FG: n
 you use your refractometer.
 </p>
 
-<a id="newrecipe"><h3>Making a New Recipe</h3></a>
-<p>
-Click on either File-&gt;&quot;New Recipe&quot;, click the blue plus in the toolbar at the top of the main
-window or right-click on the recipe part of the tree and select &quot;New Recipe&quot;. Now, title your recipe in the box that pops up, and click &quot;OK&quot;.
-</p>
-
 <a id="newequipment"><h3>Defining Your Equipment</h3></a>
 <p>
 Never <b>ever</b> try to formulate a recipe without setting up an equipment record.
 Having an equipment record for your recipe is very important in Brewtarget. It contains a lot of
 information about your <i>particular</i> setup, and helps Brewtarget better estimate your results.
-Click on View-&gt;Equipments to bring up the Equipment Editor. At the bottom, press the green plus
-and enter the name you wish to give it. Check &quot;calculate pre-boil volume&quot;, and enter as many of
-these fields as you can.
+Click on View-&gt;Equipments to bring up the Equipment Editor, or go to the
+equipment tree, right click and select "New Equipment". At the bottom, press
+the green plus and enter the name you wish to give it. Check &quot;calculate
+pre-boil volume&quot;, and enter as many of these fields as you can.
 
 <ul>
    <li><b>Name</b> - Any name you choose to title your equipment setup.</li>
@@ -129,16 +126,29 @@ these fields as you can.
    
    <li><b>Kettle to fermenter</b> - How much wort you usually leave behind in the kettle when you transfer the wort to primary.</li>
    <li><b>Lauter deadspace</b> - How much wort you usually lose in the lauter tun.</li>
+
+   <li><b>Hop Utilization</b> - Some larger systems can actually get more than 100 percent utilization.</li>
+   <li><b>Default</b> - Set this equipment profile as the default profile to be used when creating recipes.</li>
 </ul>
 
 Then, press the diskette button at the bottom to save.
 </p>
 
+<a id="newrecipe"><h3>Making a New Recipe</h3></a>
+<p>
+Click on either File-&gt;&quot;New Recipe&quot;, click the blue plus in the toolbar at the top of the main
+window or right-click on the recipe part of the tree and select &quot;New Recipe&quot;. Now, title your recipe in the box that pops up, and click &quot;OK&quot;.
+</p>
+
 <a id="adjustingrecipe"><h3>Adjusting Recipe Parameters</h3></a>
-<p> From the Equipment drop-down list, choose &quot;5 gal batch - Ideal&quot;
-(which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses) 
-which is already provided by Brewtarget, just for the sake of demonstration.
-You can also drag the &quot;5 gal batch - Ideal&quot; item from the tree on
+<p> If you created your equipment profile as shown above, and you made it the
+default profile, you won't need to do anything else.
+</p>
+
+<p> Otherwise, choose &quot;5 gal batch - Ideal&quot;
+(which assumes 5 gallon batches, 0.75 gal/hr evap. rate, and no losses) from
+the Equipment drop-down list.  You can also drag the &quot;5 gal batch -
+Ideal&quot; item from the tree on
 the left and drop it on the recipe. For now, leave
 the efficiency at 70% for the same reason. After selecting or dropping the
 equipment you will be asked if you want to set the batch and boil size of
@@ -147,13 +157,17 @@ the recipe to that of the equipment. Click &quot;Yes&quot;.
 
 <a id="setstyles"><h3>Selecting the Style</h3></a>
 <p>
-Brewtarget comes pre-loaded with all of the BJCP styles. This means you can check your recipe against the guidelines
-for the particular style you are trying to make. To do this, select &quot; American Amber Ale&quot; from the Style
-drop down list. You will notice that the left-most and right-most numbers for OG, FG, ABV, Bitterness, and Color
-fields have changed. These reflect the lower and upper bounds of these parameters for the style. The middle number
-for each row is the current estimate for your recipe. If the number is blue, it means it is too low; red means too high,
-and green means you're in the Goldilocks zone. If you choose, you can create your own styles in the View-&gt;Styles
-dialog. You can also view descriptions of the particular style and recommended ingredients there.
+Brewtarget comes pre-loaded with all of the BJCP styles. This means you can
+check your recipe against the guidelines for the particular style you are
+trying to make. To do this, select &quot; American Amber Ale&quot; from the
+Style drop down list. You will notice that the left-most and right-most
+numbers for OG, FG, ABV, Bitterness, and Color fields have changed. These
+reflect the lower and upper bounds of these parameters for the style. The
+middle number for each row is the current estimate for your recipe. If the
+number is blue, it means it is too low; red means too high, and green means
+you're in the Goldilocks zone. If you choose, you can create your own styles
+in the View-&gt;Styles dialog. You can also view descriptions of the
+particular style and recommended ingredients there.
 </p>
 
 <a id="addingingredients"><h3>Adding Ingredients</h3></a>
@@ -176,12 +190,12 @@ Let's see what I mean. Double-click the 2-row's &quot;amount&quot; cell and
 enter &quot;3.175 kg&quot;. You will see that it immediately gets converted
 into &quot;7.000 lb&quot; if you're using US units. For the crystal 40, tell
 it &quot;32 oz&quot; and watch it get converted into &quot;2.000 lb&quot;. You
-can change US/English/SI preferences in Tools-&gt;Options. Please see the
-section called &quot;Supported Units&quot; in this document to see the correct
+can change US/English/SI preferences in Tools-&gt;Options. Please see 
+<a href="#supportunits">Supported Units</a> in this document to see the correct
 abbreviation for each unit.
 <p>
 You can control this feature for each of the main tables and fields in the
-display. For example, lets say you use a refractometer to measure you SG and
+display. For example, lets say you use a refractometer to measure your SG and
 OG, but you use a hydrometer to measure the FG. In the options, select
 "Brix/Plato" as the system default. In the main window, right
 click on the "FG" label and select "Specific Gravity". OG and SG will still be
@@ -200,13 +214,14 @@ Additionally, you can control the scaling where it makes sense. For example,
 assume you always want your fermentables in the table to displayed in grams.
 Right click on the "Amount" column in the table. Select "Default" if your
 system default is SI, or select SI. Then click on the "Scale" submenu and you
-can select "Default", "Grams" or "Kilograms". Selecting the first option will
+can select "Default", "Milligrams", "Grams" or "Kilograms". Selecting the first option will
 give you the default brewtarget behavior. The other three choices will force
 brewtarget to automatically scale the weights appropriately.
 </p>
 <b>Important</b>: do not forget that you SHOULD enter the unit suffix (lb, kg,
 L, mL, etc.) for almost all amount boxes in brewtarget. If you do not,
-brewtarget will simply try to guess what you mean, which can give unexpected
+brewtarget will try to guess what you mean based on your defaults and what
+field you are editting. The guessing is pretty good, but can give unexpected
 results. In this case, brewtarget will assume that fermentables are entered in
 either lbs or kg, depending on how you have configured brewtarget. 
 </p>
@@ -218,8 +233,8 @@ FG is red, which means it's too high, the ABV is blue which means it is too
 low, and the Color number is green: just right. The glass of beer to the right
 represents the approximate color of your beer, and the thing right below that
 which reads &quot;Cloying&quot; is the maltiness indicator (based on IBU/GU
-ratio which now shows 0).  Please note that the maltiness indicator is just a
-general guide.
+ratio which now shows 0).  You shouldn't take the maltiness indicator too
+seriously; it is just a general guide.
 </p>
 <p>
 Now, go to the Hops tab and add 1 oz Cascade at 1 hr, 1 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
@@ -232,7 +247,7 @@ have configured brewtarget to use.
 </p>
 <p>
 Like the &quot;Fermentables&quot;, you can also add the hops and the yeast by
-opening up the &quot;Hops&quot; or the &quot;Yeast&quot;, respectively, tree in the left pane and 
+opening up the &quot;Hops&quot; or the &quot;Yeast&quot; trees in the left pane and 
 dragging the ingredients onto the recipe pane and dropping them.
 </p>
 
@@ -247,9 +262,9 @@ the calculated boil size. These are estimates based on your mash and equipment w
 volumes will be. Now, since there are no water additions in the &quot;5 gal batch - Ideal&quot; equipment and since we're
 not actually adding any water for the mash yet, the displayed volumes should both be 0. However,
 Brewtarget uses these calculated batch/boil sizes in the calculation of the OG, IBUs, et cetera. So, brewtarget is
-lying because it's convenient
-when you haven't set up the mash just to be able to start adding the ingredients
-and get an approximate answer. After setting the mash addition volumes, you will get a real answer.
+lying because it's convenient when you haven't set up the mash just to be able
+to start adding the ingredients and get an approximate answer. After setting
+the mash addition volumes, you will get a real answer.
 </p>
 <p>
 Click on &quot;Edit Mash&quot; and give it a name. Notice that you can enter the initial grain temp, sparge
@@ -263,25 +278,28 @@ From here, there are two ways to create the mash.
 
 <a id="mashwiz"><h3>Method 1: Mash wiz</h3></a>
 <p>
-Go to the mash
-tab and click the blue plus. Name it &quot;Protein&quot; and click &quot;OK&quot;. Double click its &quot;Target Temp&quot; cell and
-change to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;. This means we want
-to hit a target temperature of 121 F for 20 minutes. Do the same for a &quot;Conversion&quot; step at &quot;152 F&quot;
-for &quot;1 hr&quot;.
+Go to the mash tab and click the blue plus. Name it &quot;Protein&quot; and
+click &quot;OK&quot;. Double click its &quot;Target Temp&quot; cell and change
+to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;.
+This means we want to hit a target temperature of 121 F for 20 minutes. Do the
+same for a &quot;Conversion&quot; step at &quot;152 F&quot; for &quot;1
+hr&quot;.
 </p>
 <p>
-The mash wiz is for quickly and easily getting the correct mash temperatures and volumes for a single
-batch sparge mash.
-Click on the
-&quot;Mash wiz&quot; button, and give it a mash thickness of 1.25 qt/lb.
-The mash wizard just did 3 things for you: calculated infusion volumes, infusion temps, and
-gave you a sparge step that will make you hit your pre-boil volume. <b>NOTE</b>:
-you don't have to actually sparge with all of the sparge water, but can put a portion directly
-into the kettle depending on how you like to sparge. Now Brewtarget is not lying anymore
-about the calculated boil volume and batch size. Pretty cool? You can
-see any of the infusion temperatures under the &quot;Infusion Temp&quot; column. 
-Since your equipment and recipe
-might change, you should always do the mash wizard after recalling a saved mash profile.
+The mash wiz is for quickly and easily getting the correct mash temperatures
+and volumes for a single batch sparge mash.  Click on the &quot;Mash wiz&quot;
+button, and give it a mash thickness of 1.25 qt/lb.  The mash wizard just did
+3 things for you: calculated infusion volumes, infusion temps, and gave you a
+sparge step that will make you hit your pre-boil volume. <b>NOTE</b>: you
+don't have to actually sparge with all of the sparge water, but can put a
+portion directly into the kettle depending on how you like to sparge. 
+</p>
+<p>
+Now Brewtarget is not lying anymore about the calculated boil volume and batch
+size. Pretty cool? You can see any of the infusion temperatures under the
+&quot;Infusion Temp&quot; column.  Since your equipment and recipe
+might change, you should always do the mash wizard after recalling a saved
+mash profile.  
 </p>
 
 <a id="mashdesigner"><h3>Method 2: Mash designer</h3></a>
@@ -340,8 +358,8 @@ select any other sound file on your computer.
 <p>
 Print and print preview are available under the &quot;File&quot; menu. There are two printouts
 available. One is &quot;Recipe&quot; and the other is &quot;Brewday&quot;. The recipe printout is
-all the info related to the recipe you have made. The brewday printout is formatted in an organized
-fashion specifically for following when you actually brew the recipe.
+all the info related to the recipe you have made. The brewday printout is formatted in organized
+specifically for following when you brew.
 </p>
 
 <a id="savework"><h3>Saving Your Work</h3></a>
@@ -370,7 +388,7 @@ copy.
 The application window is split into three major panes: the trees, the recipe
 and the ingredients. The tree pane is a tabbed window that displays your
 recipes, equipment profiles, fermentables, hops, miscellaneous items and hops.
-You can sort any of the tree on the displayed fields. You cannot currently
+You can sort any of the trees on the displayed fields. You cannot currently
 select which columns are being displayed.
 
 As a rule, double clicking on any item in the tree will open up the
@@ -382,7 +400,7 @@ There are 6 tabs:
 <ul>
    <li>Recipes - this tree shows all your recipes.  You can drag'n'drop the
    recipe onto the main window and that recipe will be loaded. Each recipe
-   will also show any assocaited brewnote.</li>
+   will also show any associated brewnotes.</li>
    <li>Equipment - this shows all your defined kit. You can drag'n'drop a
    piece of equipment onto your recipe which will have the same effect as
    changing the equipment via the dropdown box. </li>
@@ -429,7 +447,7 @@ all change to reflect the lower SG.
 </p>
 
 <p>
-There are three main sections on the brewnote tab. 
+There are four main sections on the brewnote tab. 
 <ul>
    <li>Preboil is for mash information
       <ul>
@@ -457,7 +475,8 @@ There are three main sections on the brewnote tab.
          bottles or kegs</li>
          <li>Date - the date the beer finished fermenting</li>
       </ul>
-   </li>
+      </li>
+   <li> Notes - these notes are specific to that brewing day, a good place to describe the elements which make the brewday unique.  </li>
 </ul>
 </p>
 
@@ -690,5 +709,15 @@ fields.
    you select which fields are displayed and hopefully allow you to define
    folders.
    </p>
+   <a id="defaultequipment"><h3>Default Equipment</h3></a>
+   <p>
+   You can select one piece of equipment as the default and any new recipe
+   will have that automatically defined as the equipment.
+   </p>
+   <a id="hoputilization"><h3>Hop Utilization</h3></a>
+   <p>
+   You can configure your hop utilization from the equipment screen.
+   </p>
+
 </body>
 </html>
