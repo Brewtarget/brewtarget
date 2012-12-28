@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
-    <height>401</height>
+    <width>612</width>
+    <height>372</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>563</width>
-        <height>387</height>
+        <width>598</width>
+        <height>358</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -43,6 +43,12 @@
          </item>
          <item row="0" column="1">
           <widget class="QLineEdit" name="lineEdit_brewer">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -89,6 +95,12 @@
          </item>
          <item row="1" column="1">
           <widget class="QLineEdit" name="lineEdit_asstBrewer">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -112,6 +124,12 @@
          </item>
          <item row="3" column="1">
           <widget class="QLineEdit" name="lineEdit_primaryAge">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -135,6 +153,12 @@
          </item>
          <item row="4" column="1">
           <widget class="QLineEdit" name="lineEdit_primaryTemp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -158,6 +182,12 @@
          </item>
          <item row="5" column="1">
           <widget class="QLineEdit" name="lineEdit_secAge">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -181,6 +211,12 @@
          </item>
          <item row="6" column="1">
           <widget class="QLineEdit" name="lineEdit_secTemp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -204,6 +240,12 @@
          </item>
          <item row="7" column="1">
           <widget class="QLineEdit" name="lineEdit_tertAge">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -227,6 +269,12 @@
          </item>
          <item row="8" column="1">
           <widget class="QLineEdit" name="lineEdit_tertTemp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -250,6 +298,12 @@
          </item>
          <item row="9" column="1">
           <widget class="QLineEdit" name="lineEdit_age">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -273,6 +327,12 @@
          </item>
          <item row="10" column="1">
           <widget class="QLineEdit" name="lineEdit_ageTemp">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>
@@ -326,6 +386,12 @@
          </item>
          <item row="12" column="1">
           <widget class="QLineEdit" name="lineEdit_carbVols">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="minimumSize">
             <size>
              <width>64</width>

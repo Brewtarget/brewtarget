@@ -182,6 +182,9 @@ public:
     */
    static double translateSG(QString qstr);
 
+signals:
+   void brewDateChanged(const QDateTime&);
+
 private:
    BrewNote();
    BrewNote(BrewNote const& other);

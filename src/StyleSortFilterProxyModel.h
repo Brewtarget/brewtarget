@@ -1,48 +1,43 @@
 /*
- * MiscSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright
- * Philip G. Lee <rocketman768@gmail.com>, 2011-2012.
+ * StyleSortFilterProxyModel.h is part of Brewtarget, and is Copyright
+ * Philip G. Lee (rocketman768@gmail.com, 2010-2012.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * Brewtarget is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MISCSORTFILTERPROXYMODEL_H
-#define _MISCSORTFILTERPROXYMODEL_H
-
-class MiscSortFilterProxyModel;
+#ifndef _STYLESORTFILTERPROXYMODEL_H
+#define _STYLESORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 /*!
- * \class MiscSortFilterProxyModel
+ * \class StyleSortFilterProxyModel
  * \author Philip G. Lee
  *
- * \brief Proxy model for sorting miscs.
+ * \brief Proxy model for sorting/filtering Styles.
+ * This should really be a base filter for all ingredient models that filters
+ * based on the BeerXMLElement::display() field.
  */
-class MiscSortFilterProxyModel : public QSortFilterProxyModel
+class StyleSortFilterProxyModel : public QSortFilterProxyModel
 {
    Q_OBJECT
-
-public:
-   MiscSortFilterProxyModel(QObject *parent = 0, bool filt = true);
-
-protected:
-
-   bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
-   bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
-
-private:
-   bool filter;
+   
+   public:
+      StyleSortFilterProxyModel(QObject* parent = 0);
+      
+   protected:
+      bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 };
 
 #endif

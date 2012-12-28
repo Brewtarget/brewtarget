@@ -17,6 +17,7 @@
         <file alias="images/flagCatalonia.svg">${ROOTDIR}/images/flagCatalonia.svg</file>
         <file alias="images/flagFrance.svg">${ROOTDIR}/images/flagFrance.svg</file>
         <file alias="images/flagGermany.svg">${ROOTDIR}/images/flagGermany.svg</file>
+        <file alias="images/flagItaly.svg">${ROOTDIR}/images/flagItaly.svg</file>
         <file alias="images/flagPoland.svg">${ROOTDIR}/images/flagPoland.svg</file>
         <file alias="images/flagPortugal.svg">${ROOTDIR}/images/flagPortugal.svg</file>
         <file alias="images/flagNetherlands.svg">${ROOTDIR}/images/flagNetherlands.svg</file>

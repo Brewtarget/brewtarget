@@ -73,86 +73,11 @@ Water::Water()
 {
 }
 
-/*
-void Water::fromNode(const QDomNode& waterNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString property, value;
-   
-   setDefaults();
-   
-   for( node = waterNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line is not an element. Line %1").arg(textNode.lineNumber()) );
-         continue;
-      }
-      
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-      
-      property = node.nodeName();
-      textNode = child.toText();
-      value = textNode.nodeValue();
-      
-      if( property == "NAME" )
-      {
-         name = value;
-      }
-      else if( property == "VERSION" )
-      {
-         if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("WATER says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
-      }
-      else if( property == "AMOUNT" )
-      {
-         setAmount_l(getDouble(textNode));
-      }
-      else if( property == "CALCIUM" )
-      {
-         setCalcium_ppm(getDouble(textNode));
-      }
-      else if( property == "BICARBONATE" )
-      {
-         setBicarbonate_ppm(getDouble(textNode));
-      }
-      else if( property == "SULFATE" )
-      {
-         setSulfate_ppm(getDouble(textNode));
-      }
-      else if( property == "CHLORIDE" )
-      {
-         setChloride_ppm(getDouble(textNode));
-      }
-      else if( property == "SODIUM" )
-      {
-         setSodium_ppm(getDouble(textNode));
-      }
-      else if( property == "MAGNESIUM" )
-      {
-         setMagnesium_ppm(getDouble(textNode));
-      }
-      else if( property == "PH" )
-      {
-         setPh(getDouble(textNode));
-      }
-      else if( property == "NOTES" )
-      {
-         setNotes(value);
-      }
-      else
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported WATER property: %1. Line %2").arg(property).arg(node.lineNumber()) );
-   }
-}
-*/
-
 //================================"SET" METHODS=================================
 void Water::setName( const QString &var )
 {
    set("name", "name", var);
+   emit changedName(var);
 }
 
 void Water::setAmount_l( double var )

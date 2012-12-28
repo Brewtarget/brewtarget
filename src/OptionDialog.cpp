@@ -58,6 +58,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    languageToButtonMap["en"] = pushButton_en;
    languageToButtonMap["es"] = pushButton_es;
    languageToButtonMap["fr"] = pushButton_fr;
+   languageToButtonMap["it"] = pushButton_it;
    languageToButtonMap["nl"] = pushButton_nl;
    languageToButtonMap["pl"] = pushButton_pl;
    languageToButtonMap["pt"] = pushButton_pt;
@@ -82,6 +83,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    languageGroup->addButton(pushButton_en);
    languageGroup->addButton(pushButton_es);
    languageGroup->addButton(pushButton_fr);
+   languageGroup->addButton(pushButton_it);
    languageGroup->addButton(pushButton_nl);
    languageGroup->addButton(pushButton_pl);
    languageGroup->addButton(pushButton_pt);

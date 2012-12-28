@@ -832,6 +832,11 @@ void Recipe::setBatchSize_l( double var )
    }
 
    set( "batchSize_l", "batch_size", tmp );
+   
+   // NOTE: this is bad, but we have to call recalcAll(), because the estimated
+   // boil/batch volumes depend on the target volumes when there are no mash
+   // steps to actually provide an estimate for the volumes.
+   recalcAll();
 }
 
 void Recipe::setBoilSize_l( double var )
@@ -848,6 +853,11 @@ void Recipe::setBoilSize_l( double var )
    }
 
    set( "boilSize_l", "boil_size", tmp );
+   
+   // NOTE: this is bad, but we have to call recalcAll(), because the estimated
+   // boil/batch volumes depend on the target volumes when there are no mash
+   // steps to actually provide an estimate for the volumes.
+   recalcAll();
 }
 
 void Recipe::setBoilTime_min( double var )
@@ -1938,29 +1948,35 @@ double Recipe::ibuFromHop(Hop const* hop)
    double grams = hop->amount_kg()*1000.0;
    double minutes = hop->time_min();
    double boilGrav_final = _boilGrav; 
+   // Assume 100% utilization until further notice
+   double hopUtilization = 1.0;
+   // Assume 60 min boil until further notice
+   int boilTime = 60;
    double avgBoilGrav;
    
    if( equip )
+   {
       boilGrav_final = _boilVolume_l / equip->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
+      hopUtilization = equip->hopUtilization_pct() / 100.0;
+      boilTime = equip->boilTime_min();
+   }
    
    avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
    
    if( hop->use() == Hop::Boil)
       ibus = IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, minutes );
    else if( hop->use() == Hop::First_Wort )
-   {
-      if( equip )
-         ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, equip->boilTime_min() );
-      else
-         ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, 60 );
-   }
+      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, boilTime );
 
    // Adjust for hop form.
    if( hop->form() == Hop::Leaf )
       ibus *= 0.90;
    else if( hop->form() == Hop::Plug )
       ibus *= 0.92;
-   
+
+   // Adjust for hop utilization. 
+   ibus *= hopUtilization;
+
    return ibus;
 }
 
@@ -1976,24 +1992,6 @@ bool Recipe::isValidType( const QString &str )
    
    return false;
 }
-
-/*
-BrewNote* Recipe::addBrewNote( BrewNote* old )
-{
-   BrewNote* newNote;
-   if ( old ) 
-      newNote = Database::instance().newBrewNote(old, false);
-   else
-   {
-      newNote = Database::instance().newBrewNote(this, false);
-      newNote->populateNote(this);
-   }
-
-   emit changed( metaProperty("brewNotes"), QVariant() );
-   return newNote;
-
-}
-*/
 
 QList<QString> Recipe::getReagents( QList<Fermentable*> ferms )
 {
@@ -2069,6 +2067,11 @@ QList<QString> Recipe::getReagents( QList<MashStep*> msteps )
 }
 
 //==========================Accept changes from ingredients====================
+
+void Recipe::acceptEquipChange(QMetaProperty prop, QVariant val)
+{
+   recalcAll();
+}
 
 void Recipe::acceptFermChange(QMetaProperty prop, QVariant val)
 {

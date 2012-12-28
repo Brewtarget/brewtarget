@@ -256,6 +256,7 @@ unitScale Fermentable::displayScale() const { return (unitScale)get("display_sca
 void Fermentable::setName( const QString& str )
 {
    set("name", "name", str);
+   emit changedName(str);
 }
 void Fermentable::setType( Type t )
 {

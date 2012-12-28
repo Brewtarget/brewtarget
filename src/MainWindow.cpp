@@ -99,6 +99,8 @@
 #include "YeastSortFilterProxyModel.h"
 #include "EquipmentListModel.h"
 #include "StyleListModel.h"
+#include "MashListModel.h"
+#include "StyleSortFilterProxyModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent),
@@ -115,7 +117,7 @@ MainWindow::MainWindow(QWidget* parent)
    // We have two use cases to consider here. The first is a BT
    // 1.x user running BT 2 for the first time. The second is a BT 2 clean
    // install. I am also trying to protect the developers from double imports.
-   // If the old "obsolete" directory exists, don't do anything other thann
+   // If the old "obsolete" directory exists, don't do anything other than
    // set the converted flag
    if ( ! Brewtarget::btSettings.contains("converted")) 
    {
@@ -202,7 +204,6 @@ MainWindow::MainWindow(QWidget* parent)
    ogAdjuster = new OgAdjuster(this);
    converterTool = new ConverterTool(this);
    timerListDialog = new TimerListDialog(this);
-   mashComboBox = new MashComboBox(this);
    primingDialog = new PrimingDialog(this);
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
@@ -211,22 +212,31 @@ MainWindow::MainWindow(QWidget* parent)
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
    equipmentComboBox->setModel(equipmentListModel);
+
+   // Set the style combo box
    styleListModel = new StyleListModel(styleComboBox);
-   styleComboBox->setModel(styleListModel);
-   
+   styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);
+   styleProxyModel->setDynamicSortFilter(true);
+   styleProxyModel->setSourceModel(styleListModel);
+   styleComboBox->setModel(styleProxyModel);
+  
+   // Set the mash combo box
+   mashListModel =  new MashListModel(mashComboBox);
+   mashComboBox->setModel(mashListModel);
+
    // Set table models.
    // Fermentables
    fermTableModel = new FermentableTableModel(fermentableTable);
-   fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable);
+   fermTableProxy = new FermentableSortFilterProxyModel(fermentableTable,false);
    fermTableProxy->setSourceModel(fermTableModel);
    fermentableTable->setItemDelegate(new FermentableItemDelegate(fermentableTable));
    fermentableTable->setModel(fermTableProxy);
    // Make the fermentable table show grain percentages in row headers.
    fermTableModel->setDisplayPercentages(true);
-   
+
    // Hops
    hopTableModel = new HopTableModel(hopTable);
-   hopTableProxy = new HopSortFilterProxyModel(hopTable);
+   hopTableProxy = new HopSortFilterProxyModel(hopTable, false);
    hopTableProxy->setSourceModel(hopTableModel);
    hopTable->setItemDelegate(new HopItemDelegate(hopTable));
    hopTable->setModel(hopTableProxy);
@@ -235,14 +245,14 @@ MainWindow::MainWindow(QWidget* parent)
    
    // Misc
    miscTableModel = new MiscTableModel(miscTable);
-   miscTableProxy = new MiscSortFilterProxyModel(miscTable);
+   miscTableProxy = new MiscSortFilterProxyModel(miscTable,false);
    miscTableProxy->setSourceModel(miscTableModel);
    miscTable->setItemDelegate(new MiscItemDelegate(miscTable));
    miscTable->setModel(miscTableProxy);
    
    // Yeast
    yeastTableModel = new YeastTableModel(yeastTable);
-   yeastTableProxy = new YeastSortFilterProxyModel(yeastTable);
+   yeastTableProxy = new YeastSortFilterProxyModel(yeastTable,false);
    yeastTableProxy->setSourceModel(yeastTableModel);
    yeastTable->setItemDelegate(new YeastItemDelegate(yeastTable));
    yeastTable->setModel(yeastTableProxy);
@@ -253,14 +263,18 @@ MainWindow::MainWindow(QWidget* parent)
    mashStepTableWidget->setModel(mashStepTableModel);
    
    // Enable sorting in the main tables.
+   fermentableTable->horizontalHeader()->setSortIndicator( FERMAMOUNTCOL, Qt::DescendingOrder );
    fermentableTable->setSortingEnabled(true);
-   fermentableTable->sortByColumn( FERMAMOUNTCOL, Qt::DescendingOrder );
+   fermTableProxy->setDynamicSortFilter(true);
+   hopTable->horizontalHeader()->setSortIndicator( HOPTIMECOL, Qt::DescendingOrder );
    hopTable->setSortingEnabled(true);
-   hopTable->sortByColumn( HOPTIMECOL, Qt::DescendingOrder );
+   hopTableProxy->setDynamicSortFilter(true);
+   miscTable->horizontalHeader()->setSortIndicator( MISCUSECOL, Qt::DescendingOrder );
    miscTable->setSortingEnabled(true);
-   miscTable->sortByColumn( MISCUSECOL, Qt::DescendingOrder );
+   miscTableProxy->setDynamicSortFilter(true);
+   yeastTable->horizontalHeader()->setSortIndicator( YEASTNAMECOL, Qt::DescendingOrder );
    yeastTable->setSortingEnabled(true);
-   yeastTable->sortByColumn( YEASTNAMECOL, Qt::DescendingOrder );
+   yeastTableProxy->setDynamicSortFilter(true);
    
    // Create the keyboard shortcuts
    setupShortCuts();
@@ -284,8 +298,7 @@ MainWindow::MainWindow(QWidget* parent)
 
    // And test out the maltiness widget.
    maltWidget = new MaltinessWidget(tabWidget_recipeView);
-   verticalLayout_beerColor->insertWidget( -1, maltWidget );
-   horizontalLayout_mash->insertWidget( 1, mashComboBox );
+   verticalLayout_beerColor->insertWidget( 1, maltWidget );
 
    // Set up HtmlViewer to view documentation.
    htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
@@ -322,7 +335,7 @@ MainWindow::MainWindow(QWidget* parent)
       recipeObs = Database::instance().recipe( key );
 
       setRecipe(recipeObs);
-      setSelection(treeView_recipe->findRecipe(recipeObs));
+      setTreeSelection(treeView_recipe->findRecipe(recipeObs));
    }     
    else
    {
@@ -359,7 +372,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
-   connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
+   //connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // TreeView for clicks, both double and right
@@ -405,33 +418,34 @@ MainWindow::MainWindow(QWidget* parent)
    // connect(fermentableTable, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableCellSignal(const QPoint&)));
    QHeaderView* headerView = fermentableTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(fermentableContextMenu(const QPoint&)));
 
    headerView = hopTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(hopHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(hopContextMenu(const QPoint&)));
 
    headerView = miscTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(miscHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(miscContextMenu(const QPoint&)));
 
    headerView = yeastTable->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(yeastHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(yeastContextMenu(const QPoint&)));
 
    headerView = mashStepTableWidget->horizontalHeader();
    headerView->setContextMenuPolicy(Qt::CustomContextMenu);
-   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(mashStepHeaderSignal(const QPoint&)));
+   connect(headerView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(mashStepContextMenu(const QPoint&)));
 
    connect( dialog_about->pushButton_donate, SIGNAL(clicked()), this, SLOT(openDonateLink()) );
 
    connect( equipmentComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeEquipment()) );
-   connect( equipmentButton, SIGNAL( clicked() ), singleEquipEditor, SLOT(show()) );
+   connect( equipmentButton, SIGNAL( clicked() ), this, SLOT(showEquipmentEditor()));
 
    connect( styleComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeStyle()) );
-   connect( styleButton, SIGNAL( clicked() ), singleStyleEditor, SLOT(show()) );
+   connect( styleButton, SIGNAL( clicked() ), this, SLOT(showStyleEditor()) );
 
-   connect( mashComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT(setMashToCurrentlySelected()) );
+   connect( mashComboBox, SIGNAL( activated(int) ), this, SLOT(updateRecipeMash()) );
+   connect( mashButton, SIGNAL( clicked() ), mashEditor, SLOT( showEditor() ) );
 
    connect( lineEdit_name, SIGNAL( editingFinished() ), this, SLOT( updateRecipeName() ) );
    connect( lineEdit_batchSize, SIGNAL( editingFinished() ), this, SLOT( updateRecipeBatchSize() ) );
@@ -568,7 +582,7 @@ void MainWindow::deleteSelected()
    {
       if (active->getType(first) == BrewTargetTreeItem::RECIPE)
          setRecipeByIndex(first);
-      setSelection(first);
+      setTreeSelection(first);
    }
 
 }
@@ -723,7 +737,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    
    recStyle = recipe->style();
    recEquip = recipe->equipment();
-
+   
    // BeerXML is stupid and has reduntant fields.
    // Ensure that recEquip and recipeObs always have the same boil size and time.
    // NOTE: should probably move this connection code to the Database.
@@ -780,6 +794,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setEquipment(recEquip);
+   mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
    // If you don't connect this late, every previous set of an attribute
@@ -795,8 +810,9 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    
    if( propName == "equipment" )
    {
-      //recEquip = recipeObs->equipment();
-      recEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(value));
+      Equipment* newRecEquip = qobject_cast<Equipment*>(BeerXMLElement::extractPtr(value));
+      recEquip = newRecEquip;
+      
       singleEquipEditor->setEquipment(recEquip);
    }
    else if( propName == "style" )
@@ -816,8 +832,6 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    }
 }
 
-// This method should update all the widgets in the window (except the tables)
-// to reflect the currently observed recipe.
 void MainWindow::showChanges(QMetaProperty* prop)
 {
    if( recipeObs == 0 )
@@ -859,25 +873,18 @@ void MainWindow::showChanges(QMetaProperty* prop)
    else
       label_calcBoilSize->setPalette(lcdPalette_tooHigh);
 
-   lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
-   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
-   
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
-   lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
-
-   lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
-   lcdNumber_ibu->display(recipeObs->IBU(), 1);
-   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
-   lcdNumber_ibugu->display(recipeObs->IBU()/((recipeObs->og()-1)*1000), 2);
-   lcdNumber_calories->display( recipeObs->calories(), 0);
-
+   
    // Want to do some manipulation based on selected style.
    if( recStyle != 0 )
    {
       lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false));
+      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false).toDouble());
+      
       lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false));
-
+      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false).toDouble());
+      
       // 
       fg.first = "fgMin";
       fg.second = recStyle;
@@ -904,6 +911,17 @@ void MainWindow::showChanges(QMetaProperty* prop)
       lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false).toDouble());
    }
 
+   lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
+   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
+
+   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
+
+   lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
+   lcdNumber_ibu->display(recipeObs->IBU(), 1);
+   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
+   lcdNumber_ibugu->display(recipeObs->IBU()/((recipeObs->og()-1)*1000), 2);
+   lcdNumber_calories->display( recipeObs->calories(), 0);
+
    // See if we need to change the mash in the table.
    if( (updateAll && recipeObs->mash()) ||
        (propName == "mash" &&
@@ -911,12 +929,6 @@ void MainWindow::showChanges(QMetaProperty* prop)
    {
       mashStepTableModel->setMash(recipeObs->mash());
    }
-}
-
-void MainWindow::save()
-{
-   // TODO: seems like we don't need this at all?
-   //Database::savePersistent();
 }
 
 void MainWindow::updateRecipeName()
@@ -931,12 +943,27 @@ void MainWindow::updateRecipeStyle()
 {
    if( recipeObs == 0 )
       return;
-   
 
-   Style* selected = styleListModel->at(styleComboBox->currentIndex());
+   QModelIndex proxyIndex( styleProxyModel->index(styleComboBox->currentIndex(),0) );
+   QModelIndex sourceIndex( styleProxyModel->mapToSource(proxyIndex) );
+   Style* selected = styleListModel->at(sourceIndex.row());
    if( selected )
    {
       Database::instance().addToRecipe( recipeObs, selected );
+   }
+}
+
+void MainWindow::updateRecipeMash()
+{
+   if( recipeObs == 0 )
+      return;
+
+   Mash* selected = mashListModel->at(mashComboBox->currentIndex());
+   if( selected )
+   {
+      Database::instance().addToRecipe( recipeObs, selected );
+      mashEditor->setMash(recipeObs->mash());
+      mashButton->setMash(recipeObs->mash());
    }
 }
 
@@ -954,6 +981,14 @@ void MainWindow::updateRecipeEquipment()
    Database::instance().addToRecipe(recipeObs,equip);
    equipmentButton->setEquipment(equip);
 
+   // Keep the mash tun weight and specific heat up to date.
+   Mash* m = recipeObs->mash();
+   if( m )
+   {
+      m->setTunWeight_kg( equip->tunWeight_kg() );
+      m->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
+   }
+   
    if( QMessageBox::question(this, tr("Equipment request"),
                              tr("Would you like to set the batch and boil size to that requested by the equipment?"),
                              QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
@@ -1290,6 +1325,7 @@ void MainWindow::newRecipe()
 {
    QString name = QInputDialog::getText(this, tr("Recipe name"),
                                           tr("Recipe name:"));
+   QVariant defEquipKey = Brewtarget::option("defaultEquipmentKey", -1); 
    if( name.isEmpty() )
       return;
 
@@ -1302,11 +1338,23 @@ void MainWindow::newRecipe()
    newRec->setBoilSize_l(23.47);  // 6.2 gallons
    newRec->setEfficiency_pct(70.0);
 
-   setSelection(treeView_recipe->findRecipe(newRec));
+   if ( defEquipKey != -1 )
+   {
+      Equipment* e = Database::instance().equipment(defEquipKey.toInt());
+      if ( e )
+      {
+         Database::instance().addToRecipe(newRec, e);
+         newRec->setBatchSize_l( e->batchSize_l() );
+         newRec->setBoilSize_l( e->boilSize_l() );
+         newRec->setBoilTime_min( e->boilTime_min() );
+      }
+   }
+
+   setTreeSelection(treeView_recipe->findRecipe(newRec));
    setRecipe(newRec);
 }
 
-void MainWindow::setSelection(QModelIndex item)
+void MainWindow::setTreeSelection(QModelIndex item)
 {
    BrewTargetTreeView *active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
 
@@ -1356,7 +1404,7 @@ void MainWindow::newBrewNote()
 
       bIndex = treeView_recipe->findBrewNote(bNote);
       if ( bIndex.isValid() )
-         setSelection(bIndex);
+         setTreeSelection(bIndex);
    }
 }
   
@@ -1380,7 +1428,7 @@ void MainWindow::reBrewNote()
 
       setBrewNote(bNote);
 
-      setSelection(treeView_recipe->findBrewNote(bNote));
+      setTreeSelection(treeView_recipe->findBrewNote(bNote));
    }
 }
 
@@ -1562,16 +1610,18 @@ void MainWindow::editSelectedMashStep()
    mashStepEditor->setVisible(true);
 }
 
+// Temporarily disabled as I rework the mash combo box
 void MainWindow::removeMash()
 {
+   Mash *m = mashButton->mash();
 
-   if( mashComboBox->currentIndex() == -1)
+   if( m == 0)
       return;
    //due to way this is designed, we can't have a NULL mash, so
    //we need to remove all the mash steps and then remove the mash
    //from the database.
    //remove from db
-   Mash *m = mashComboBox->getSelectedMash();
+
    m->removeAllMashSteps();
    Database::instance().removeMash(m);
    
@@ -1579,8 +1629,8 @@ void MainWindow::removeMash()
    mashStepTableModel->setMash(defaultMash);
    
    //remove from combobox handled automatically by qt
-   mashComboBox->setIndex( -1 );
-   //recipeObs->forceNotify();
+   mashButton->setMash(defaultMash);
+
 }
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
@@ -1621,21 +1671,20 @@ void MainWindow::setMashToCurrentlySelected()
 {
    if( recipeObs == 0 )
       return;
-   
-   Mash* mash = mashComboBox->getSelectedMash();
-   
-   if( mash == 0 )
-      return;
 
-   // NOTE: Should displace mash as the mash associated with recipeObs.
-   Database::instance().newMash(mash);
+   Mash* selected = mashListModel->at(mashComboBox->currentIndex());
+   if( selected )
+   {
+      Database::instance().newMash(selected);
+      mashButton->setMash(selected);
+   }
 }
 
 void MainWindow::saveMash()
 {
    if( recipeObs == 0 || recipeObs->mash() == 0 )
       return;
-   
+
    Mash* mash = recipeObs->mash();
    // Ensure the mash has a name.
    if( mash->name() == "" )
@@ -1646,7 +1695,10 @@ void MainWindow::saveMash()
    
    // NOTE: should NOT displace recipeObs' current mash.
    Mash* newMash = Database::instance().newMash(mash, false);
-   mashComboBox->setIndexByMash(newMash);
+   // NOTE: need to set the display to true for the saved, named mash to work
+   newMash->setDisplay(true);
+   mashButton->setMash(newMash);
+
 }
 
 void MainWindow::openDonateLink()
@@ -1786,8 +1838,6 @@ void MainWindow::contextMenu(const QPoint &point)
       tempMenu->exec(active->mapToGlobal(point));
 }
 
-// Set up the context menus.  This is much prettier now that I moved the
-// tree-specific pieces into the treeview objects. I may do the same for the unit menus
 void MainWindow::setupContextMenu()
 {
    QMenu *sMenu = new QMenu(this);
@@ -1953,7 +2003,7 @@ void MainWindow::copySelected()
    above = active->getFirst();
    if ( active->getType(above) == BrewTargetTreeItem::RECIPE )
       setRecipeByIndex(above);
-   setSelection(above);
+   setTreeSelection(above);
 }
 
 QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
@@ -2033,6 +2083,9 @@ void MainWindow::exportSelected()
          case BrewTargetTreeItem::EQUIPMENT:
             Database::instance().toXml( treeView_equip->getEquipment(selection), doc, dbase);
             break;
+         case BrewTargetTreeItem::FERMENTABLE:
+            Database::instance().toXml( treeView_ferm->getFermentable(selection), doc, dbase);
+            break;
          case BrewTargetTreeItem::HOP:
             Database::instance().toXml( treeView_hops->getHop(selection), doc, dbase);
             break;
@@ -2106,7 +2159,7 @@ void MainWindow::finishCheckingVersion()
                                    QMessageBox::Yes) == QMessageBox::Yes )
       {
          // ...take them to the website.
-         QDesktopServices::openUrl(QUrl("http://brewtarget.sourceforge.net"));
+         QDesktopServices::openUrl(QUrl("http://www.brewtarget.org/download.html"));
       }
       else // ... and the user does NOT want to download the new version...
       {
@@ -2138,53 +2191,7 @@ void MainWindow::redisplayLabel(QString field)
    showChanges();
 }
 
-// per-cell unit and scale has been disabled.
-/*
-void MainWindow::fermentableCellSignal(const QPoint& point)
-{
-   QObject* calledBy = sender();
-   QTableView* tView = qobject_cast<QTableView*>(calledBy);
-   QModelIndex selected = tView->indexAt(point);
-   QModelIndex modelIndex = fermTableProxy->mapToSource(selected);
-   unitDisplay currentUnit; 
-   unitScale  currentScale;
-
-   // first, make sure I right clicked on the proper column
-   if ( selected.column() != FERMAMOUNTCOL )
-      return;
-
-   // Since we need to call generateVolumeMenu() two different ways, we need
-   // to figure out the currentUnit and Scale here
-   if ( calledBy->objectName() == "fermentableTable" )
-   {
-      currentUnit = fermTableModel->displayUnit(modelIndex);
-      if ( currentUnit == noUnit )
-         currentUnit = fermTableModel->displayUnit(modelIndex.column());
-
-      currentScale = fermTableModel->displayScale(modelIndex);
-      if ( currentScale == noScale )
-         currentScale = fermTableModel->displayScale(modelIndex.column());
-
-   }
-
-   QMenu* menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale);
-   QAction* invoked;
-
-   invoked = menu->exec(tView->mapToGlobal(point));
-   if ( invoked == 0 )
-      return;
-
-   QWidget* pMenu = invoked->parentWidget();
-
-   // Now, I need to tell the model to do something.
-   if ( pMenu == menu )
-      fermTableModel->setDisplayUnit(modelIndex,invoked->data().toInt());
-   else
-      fermTableModel->setDisplayScale(modelIndex, invoked->data().toInt());
-}
-*/
-
-void MainWindow::fermentableHeaderSignal(const QPoint &point)
+void MainWindow::fermentableContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2227,7 +2234,7 @@ void MainWindow::fermentableHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::hopHeaderSignal(const QPoint &point)
+void MainWindow::hopContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2267,7 +2274,7 @@ void MainWindow::hopHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::mashStepHeaderSignal(const QPoint &point)
+void MainWindow::mashStepContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2311,7 +2318,7 @@ void MainWindow::mashStepHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::miscHeaderSignal(const QPoint &point)
+void MainWindow::miscContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2347,7 +2354,7 @@ void MainWindow::miscHeaderSignal(const QPoint &point)
    showChanges();
 }
 
-void MainWindow::yeastHeaderSignal(const QPoint &point)
+void MainWindow::yeastContextMenu(const QPoint &point)
 {
    QObject* calledBy = sender();
    QHeaderView* hView = qobject_cast<QHeaderView*>(calledBy);
@@ -2395,4 +2402,28 @@ void MainWindow::showPitchDialog()
    }
    
    pitchDialog->show();
+}
+
+void MainWindow::showEquipmentEditor()
+{
+   if ( ! recipeObs->equipment() )
+   {
+      QMessageBox::warning( this, tr("No equipment"), tr("You must select or define an equipment profile first."));
+   }
+   else
+   {
+      singleEquipEditor->show();
+   }
+}
+
+void MainWindow::showStyleEditor()
+{
+   if ( ! recipeObs->style() )
+   {
+      QMessageBox::warning( this, tr("No style"), tr("You must select a style first."));
+   }
+   else
+   {
+      singleStyleEditor->show();
+   }
 }

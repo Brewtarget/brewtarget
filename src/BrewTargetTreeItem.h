@@ -30,6 +30,8 @@ class BrewTargetTreeItem;
 #include <QVector>
 #include <QObject>
 
+#include "BeerXMLElement.h"
+
 // Forward declarations.
 class BrewNote;
 class Equipment;
@@ -44,63 +46,183 @@ class Yeast;
  * \author Mik Firestone
  *
  * \brief Model for an item in a tree.
+ *
+ * This provides a generic item from which the trees are built. Since most of
+ * the actions required are the same regardless of the item being stored (e.g.
+ * hop or equipment), this class considers them all the same. 
+ *
+ * It does assume that everything being stored can be cast into a QObject.
  */
 class BrewTargetTreeItem
 {
 
 public:
 
-   enum{RECIPENAMECOL, RECIPEBREWDATECOL, RECIPESTYLECOL, RECIPENUMCOLS /*This one MUST be last*/};
-   enum{EQUIPMENTNAMECOL, EQUIPMENTBOILTIMECOL, EQUIPMENTNUMCOLS};
-   enum{FERMENTABLENAMECOL, FERMENTABLETYPECOL, FERMENTABLECOLORCOL, FERMENTABLENUMCOLS};
-   enum{HOPNAMECOL, HOPFORMCOL, HOPUSECOL, HOPNUMCOLS};
-   enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCNUMCOLS};
-   enum{YEASTNAMECOL, YEASTTYPECOL, YEASTFORMCOL, YEASTNUMCOLS};
-   enum{BREWDATE,BREWNUMCOLS};
-    
-   enum{RECIPE,EQUIPMENT,FERMENTABLE,HOP,MISC,YEAST,BREWNOTE,NUMTYPES};
+   /*! 
+    * The columns being displayed for recipes
+    */
+   enum RECIPEITEM {
+      //! Recipe name
+      RECIPENAMECOL, 
+      //! Recipe brewdate
+      RECIPEBREWDATECOL, 
+      //! Recipe style
+      RECIPESTYLECOL, 
+      //! the number of columns available for recipes
+      RECIPENUMCOLS 
+   };
+   /*! 
+    * The columns being displayed for equipment
+    */
+   enum EQUIPITEM {
+      //! Equipment name
+      EQUIPMENTNAMECOL, 
+      //! Equipment boil time
+      EQUIPMENTBOILTIMECOL, 
+      //! the number of columns available for equipment
+      EQUIPMENTNUMCOLS
+   };
+   /*! 
+    * The columns being displayed for fermentables
+    */
+   enum FERMITEM {
+      //! Fermentable name
+      FERMENTABLENAMECOL, 
+      //! Fermentable type
+      FERMENTABLETYPECOL, 
+      //! Fermentable color
+      FERMENTABLECOLORCOL, 
+      //! the number of columns available for fermentables
+      FERMENTABLENUMCOLS
+   };
+   /*! 
+    * The columns being displayed for hops
+    */
+   enum HOPITEM {
+      //! Hop name
+      HOPNAMECOL, 
+      //! Hop form
+      HOPFORMCOL, 
+      //! Hop use
+      HOPUSECOL, 
+      //! the number of columns available for hops
+      HOPNUMCOLS
+   };
+   /*! 
+    * The columns being displayed for misc
+    */
+   enum MISCITEM {
+      //! Misc name
+      MISCNAMECOL, 
+      //! Misc type
+      MISCTYPECOL, 
+      //! Misc user
+      MISCUSECOL, 
+      //! the number of columns available for misc
+      MISCNUMCOLS
+   };
+   /*! 
+    * The columns being displayed for yeast
+    */
+   enum YEASTITEM {
+      //! Yeast name
+      YEASTNAMECOL, 
+      //! Yeast type
+      YEASTTYPECOL, 
+      //! Yeast form
+      YEASTFORMCOL, 
+      //! the number of columns available for yeast
+      YEASTNUMCOLS
+   };
+   /*! 
+    * The columns being displayed for brewnotes
+    */
+   enum BREWNOTEITEM {
+      //! Brew date
+      BREWDATE,
+      //! the number of columns available for brewnote
+      BREWNUMCOLS
+   };
+   
+   /*! 
+    * This enum lists the different things that we can store in an item
+    */
+   enum ITEMTYPE {
+      RECIPE,
+      EQUIPMENT,
+      FERMENTABLE,
+      HOP,
+      MISC,
+      YEAST,
+      BREWNOTE,
+      NUMTYPES
+   };
 
    friend bool operator==(BrewTargetTreeItem &lhs, BrewTargetTreeItem &rhs);
 
+   //! \brief A constructor that sets the \c type of the BrewTargetTreeItem and
+   // the \c parent
    BrewTargetTreeItem(int type = NUMTYPES, BrewTargetTreeItem *parent=0 );
    virtual ~BrewTargetTreeItem();
 
-   BrewTargetTreeItem *child(int number);       // Gets the child object
+   //! \brief returns the child at \c number
+   BrewTargetTreeItem *child(int number);       
+   //! \brief returns item's parent
    BrewTargetTreeItem *parent();
 
+   //! \brief returns item's type
    int getType();
+   //! \brief returns the number of the item's children
    int childCount() const;
+   //! \brief returns number of columns associated with the item's \c type
    int columnCount(int type) const;
-   QVariant data(int type, int column);        // gets the information at column X
+   //! \brief returns the data of the item of \c type at \c column
+   QVariant data(int type, int column);        
+   //! \brief returns the index of the item in it's parents list
    int childNumber() const;
 
-   // The nature of the data means we only add entire rows/recipes.
-   // Therefore, we don't need to implement anything for changing the
-   // column data
+   //! \brief provides a wrapper to data() so that the caller doesn't need to
+   // know the type of the item
     QVariant getData(int column);
 
+   //! \brief sets the \c t type of the object and the \d data 
    void setData(int t, QObject *d);
 
+   //! \brief returns the data as a Recipe
    Recipe*      getRecipe();
+   //! \brief returns the data as an Equipment
    Equipment*   getEquipment();
+   //! \brief returns the data as a fermentable
    Fermentable* getFermentable();
+   //! \brief returns the data as a hop
    Hop*         getHop();
+   //! \brief returns the data as a misc
    Misc*        getMisc();
+   //! \brief returns the data as a yeast
    Yeast*       getYeast();
+   //! \brief returns the data as a brewnote
    BrewNote*    getBrewNote();
+   //! \brief returns the data as a BeerXMLElement
+   BeerXMLElement* getThing();
 
+   //! \brief inserts \c count new items of \c type, starting at \c position
    bool insertChildren(int position, int count, int type = RECIPE);
+   //! \brief removes \c count items starting at \c position
    bool removeChildren(int position, int count);
 
 
 private:
+   /*!  Keep a pointer to the parent tree item. */
    BrewTargetTreeItem* parentItem;
+   /*!  The list of children associated with this item */
    QList<BrewTargetTreeItem*> childItems;
 
+   /*! the type of this item */
    int type;
+   /*! the data associated with this item */
    QObject* thing;
 
-   // With great abstraction comes great ... sorry, I was distracted.
+   /*! helper functions to get the information from the item */
    QVariant dataRecipe(int column);
    QVariant dataEquipment(int column);
    QVariant dataFermentable(int column);

@@ -97,8 +97,6 @@ void BrewNote::populateNote(Recipe* parent)
    Yeast* yeast;
    QHash<QString,double> sugars;
    double atten_pct = -1.0;
-   double plato,total_g;
-
 
    // Since we have the recipe, lets set some defaults
 
@@ -129,12 +127,12 @@ void BrewNote::populateNote(Recipe* parent)
       mStep = steps.at(0);
       if ( mStep )
       {
-         double temp = mStep->endTemp_c() > 0.0 ? mStep->endTemp_c() : mStep->stepTemp_c();
-         setStrikeTemp_c(temp);
-         setProjStrikeTemp_c(temp);
+         double endTemp = mStep->endTemp_c() > 0.0 ? mStep->endTemp_c() : mStep->stepTemp_c();
+         setStrikeTemp_c(mStep->infuseTemp_c());
+         setProjStrikeTemp_c(mStep->infuseTemp_c());
 
-         setMashFinTemp_c(temp);
-         setProjMashFinTemp_c(temp);
+         setMashFinTemp_c(endTemp);
+         setProjMashFinTemp_c(endTemp);
       }
 
       if ( steps.size() - 2 > 0 )
@@ -183,6 +181,7 @@ BrewNote::BrewNote(BrewNote const& other)
 void BrewNote::setBrewDate(QDateTime const& date)
 {
    set("brewDate", "brewDate", date.toString(Qt::ISODate));
+   emit brewDateChanged(date);
 }
 
 void BrewNote::setFermentDate(QDateTime const& date)

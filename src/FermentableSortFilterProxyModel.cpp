@@ -19,13 +19,15 @@
 #include "unit.h"
 #include "FermentableSortFilterProxyModel.h"
 #include "FermentableTableModel.h"
+#include "fermentable.h"
 #include "brewtarget.h"
 #include <iostream>
 #include <QDebug>
 
-FermentableSortFilterProxyModel::FermentableSortFilterProxyModel(QObject *parent) 
+FermentableSortFilterProxyModel::FermentableSortFilterProxyModel(QObject *parent, bool filt) 
 : QSortFilterProxyModel(parent)
 {
+   filter = filt;
 }
 
 bool FermentableSortFilterProxyModel::lessThan(const QModelIndex &left, 
@@ -62,4 +64,10 @@ QString FermentableSortFilterProxyModel::getName( const QModelIndex &index ) con
 {
    QVariant info = sourceModel()->data(QAbstractItemModel::createIndex(index.row(),FERMNAMECOL));
    return info.toString();
+}
+
+bool FermentableSortFilterProxyModel::filterAcceptsRow( int source_row, const QModelIndex &source_parent) const
+{
+   FermentableTableModel* model = qobject_cast<FermentableTableModel*>(sourceModel());
+   return ! filter || model->getFermentable(source_row)->display();
 }

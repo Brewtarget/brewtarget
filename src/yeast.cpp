@@ -70,31 +70,6 @@ Yeast::Yeast(Yeast const& other) : BeerXMLElement(other)
 {
 }
 
-/*
-void Yeast::setDefaults()
-{
-   // Required fields.
-   name = "";
-   type = TYPEALE;
-   form = FORMLIQUID;
-   amount = 0.0;
-
-   // Optional fields.
-   amountIsWeight = false;
-   laboratory = "";
-   productID = "";
-   minTemperature_c = 0.0;
-   maxTemperature_c = 0.0;
-   flocculation = FLOCMEDIUM;
-   attenuation_pct = 0.0;
-   notes = "";
-   bestFor = "";
-   timesCultured = 0;
-   maxReuse = 0;
-   addToSecondary = false;
-}
-*/
-
 //============================="GET" METHODS====================================
 QString Yeast::name() const
 {
@@ -223,6 +198,7 @@ bool Yeast::addToSecondary() const
 void Yeast::setName( const QString& var )
 {
    set("name", "name", var);
+   emit changedName(var);
 }
 
 void Yeast::setType( Yeast::Type t )

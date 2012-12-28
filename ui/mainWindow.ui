@@ -199,8 +199,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>661</width>
-           <height>406</height>
+           <width>626</width>
+           <height>391</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -261,6 +261,12 @@
                   </item>
                   <item row="7" column="0">
                    <widget class="QLabel" name="efficiencyLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="text">
                      <string>Efficiency (%)</string>
                     </property>
@@ -268,6 +274,12 @@
                   </item>
                   <item row="6" column="0">
                    <widget class="BtVolumeLabel" name="calculatedBoilSizeLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="contextMenuPolicy">
                      <enum>Qt::CustomContextMenu</enum>
                     </property>
@@ -281,6 +293,12 @@
                   </item>
                   <item row="4" column="0">
                    <widget class="BtVolumeLabel" name="calculatedBatchSizeLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="contextMenuPolicy">
                      <enum>Qt::CustomContextMenu</enum>
                     </property>
@@ -360,6 +378,12 @@
                   </item>
                   <item row="1" column="0">
                    <widget class="QLabel" name="styleLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="text">
                      <string>Style</string>
                     </property>
@@ -367,6 +391,12 @@
                   </item>
                   <item row="8" column="0">
                    <widget class="QLabel" name="label_boiltime">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="text">
                      <string>Boil Time</string>
                     </property>
@@ -427,6 +457,12 @@
                   </item>
                   <item row="3" column="0">
                    <widget class="BtVolumeLabel" name="targetBatchSizeLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="contextMenuPolicy">
                      <enum>Qt::CustomContextMenu</enum>
                     </property>
@@ -440,6 +476,12 @@
                   </item>
                   <item row="2" column="0">
                    <widget class="QLabel" name="equipmentLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="text">
                      <string>Equipment</string>
                     </property>
@@ -448,8 +490,8 @@
                   <item row="0" column="0">
                    <widget class="QLabel" name="label">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                      <horstretch>20</horstretch>
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
@@ -460,6 +502,12 @@
                   </item>
                   <item row="5" column="0">
                    <widget class="BtVolumeLabel" name="targetBoilSizeLabel">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="contextMenuPolicy">
                      <enum>Qt::CustomContextMenu</enum>
                     </property>
@@ -631,7 +679,7 @@
                   <item row="0" column="2">
                    <widget class="BtDigitWidget" name="lcdNumber_og">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
@@ -1261,17 +1309,11 @@
                </layout>
               </item>
               <item>
-               <spacer name="horizontalSpacer_3">
+               <widget class="Line" name="line_2">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Vertical</enum>
                 </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>181</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_beerColor">
@@ -1308,6 +1350,19 @@
                   </layout>
                  </widget>
                 </item>
+                <item>
+                 <spacer name="verticalSpacer_8">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                </layout>
               </item>
               <item>
@@ -1321,6 +1376,19 @@
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>5</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>181</width>
                   <height>20</height>
                  </size>
                 </property>
@@ -1362,8 +1430,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>661</width>
-           <height>329</height>
+           <width>626</width>
+           <height>348</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1811,6 +1879,29 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="MashButton" name="mashButton">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="CustomComboBox" name="mashComboBox">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>30</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <spacer name="horizontalSpacer_4">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -1886,7 +1977,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2482,6 +2573,11 @@
    <class>StyleButton</class>
    <extends>QPushButton</extends>
    <header>StyleButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MashButton</class>
+   <extends>QPushButton</extends>
+   <header>MashButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

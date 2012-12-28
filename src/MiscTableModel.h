@@ -17,7 +17,7 @@
  */
 
 #ifndef _MISCTABLEMODEL_H
-#define   _MISCTABLEMODEL_H
+#define _MISCTABLEMODEL_H
 
 class MiscTableModel;
 class MiscItemDelegate;
@@ -55,28 +55,28 @@ class MiscTableModel : public QAbstractTableModel
 public:
    MiscTableModel(QTableView* parent=0, bool editable=true);
    virtual ~MiscTableModel() {}
-   //! Observe a recipe's list of fermentables.
+   //! \brief Observe a recipe's list of miscs.
    void observeRecipe(Recipe* rec);
-   //! Whether or not we should be looking at the database.
+   //! \brief If true, we model the database's list of miscs.
    void observeDatabase(bool val);
-   //! Add miscs to the model.
+   //! \brief Add \c miscs to the model.
    void addMiscs(QList<Misc*> miscs);
-   //! \returns the \b Misc at model index \b i.
+   //! \returns the \c Misc at model index \b i.
    Misc* getMisc(unsigned int i);
-   //! Remove all miscs from the model.
+   //! \brief Clear the model.
    void removeAll();
    
-   //! Reimplemented from QAbstractTableModel
+   //! \brief Reimplemented from QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-   //! Reimplemented from QAbstractTableModel
+   //! \brief Reimplemented from QAbstractTableModel
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-   //! Reimplemented from QAbstractTableModel
+   //! \brief Reimplemented from QAbstractTableModel
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-   //! Reimplemented from QAbstractTableModel
+   //! \brief Reimplemented from QAbstractTableModel
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-   //! Reimplemented from QAbstractTableModel
+   //! \brief Reimplemented from QAbstractTableModel
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
-   //! Reimplemented from QAbstractTableModel
+   //! \brief Reimplemented from QAbstractTableModel
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
    unitDisplay displayUnit(int column) const;
@@ -86,12 +86,15 @@ public:
    QString generateName(int column) const;
 
 public slots:
-   void changed(QMetaProperty,QVariant);
-   //! Add a misc to the model.
+   //! \brief Add a misc to the model.
    void addMisc(Misc* misc);
-   //! Remove a misc from the model.
+   //! \brief Remove a misc from the model.
    bool removeMisc(Misc* misc);
-   
+
+private slots:
+   //! \brief Catch changes to Recipe, Database, and Misc.
+   void changed(QMetaProperty, QVariant);
+
 private:
    bool editable;
    QList<Misc*> miscObs;
@@ -100,10 +103,11 @@ private:
 };
 
 /*!
- * \class MiscItemDelegate
- * \author Philip G. Lee
+ *  \class MiscItemDelegate
+ *  \author Philip G. Lee
  *
- * Item delegate for misc tables.
+ *  \brief Item delegate for misc tables.
+ *  \sa MiscTableModel
  */
 class MiscItemDelegate : public QItemDelegate
 {

@@ -152,6 +152,7 @@ void MashStep::fromNode(const QDomNode& mashStepNode)
 void MashStep::setName( const QString &var )
 {
    set("name", "name", var);
+   emit changedName(var);
 }
 
 void MashStep::setInfuseTemp_c(double var)

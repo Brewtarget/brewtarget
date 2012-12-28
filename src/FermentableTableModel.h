@@ -52,56 +52,51 @@ class FermentableTableModel : public QAbstractTableModel
 public:
    FermentableTableModel(QTableView* parent=0, bool editable=true);
    virtual ~FermentableTableModel() {}
-   //! Observe a recipe's list of fermentables.
+   //! \brief Observe a recipe's list of fermentables.
    void observeRecipe(Recipe* rec);
-   //! Whether or not we should be looking at the database.
+   //! \brief If true, we model the database's list of fermentables.
    void observeDatabase(bool val);
-   //! Watch all the \b ferms for changes.
+   //! \brief Watch all the \b ferms for changes.
    void addFermentables(QList<Fermentable*> ferms);
+   //! \brief Clear the model.
    void removeAll();
+   //! \brief Return the \c i-th fermentable in the model.
    Fermentable* getFermentable(unsigned int i);
-   //! True if you want to display percent of each grain in the row header.
+   //! \brief True if you want to display percent of each grain in the row header.
    void setDisplayPercentages( bool var );
-
-   // Stuff for setting display units and scales -- per cell first, then by
-   // column
-
-   /* per-cell disabled
-   unitDisplay displayUnit(const QModelIndex& index);
-   void setDisplayUnit(const QModelIndex& index, unitDisplay displayUnit);
-   unitScale displayScale(const QModelIndex& index);
-   void setDisplayScale(const QModelIndex& index, unitScale displayScale);
-   */
 
    unitDisplay displayUnit(int column) const;
    unitScale displayScale(int column) const;
    void setDisplayUnit(int column, unitDisplay displayUnit);
    void setDisplayScale(int column, unitScale displayScale);
 
-   // Inherit the following from QAbstractItemModel via QAbstractTableModel
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
-   //! Reimplemented from QAbstractTableModel.
+   //! \brief Reimplemented from QAbstractTableModel.
    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
    
    QTableView* parentTableWidget;
    
 public slots:
-   void changed(QMetaProperty, QVariant);
-   //! Watch \b ferm for changes.
+   //! \brief Watch \b ferm for changes.
    void addFermentable(Fermentable* ferm);
    //! \returns true if "ferm" is successfully found and removed.
    bool removeFermentable(Fermentable* ferm);
-   
+
+private slots:
+   //! \brief Catch changes to Recipe, Database, and Fermentable.
+   void changed(QMetaProperty, QVariant);
+
 private:
+   //! \brief Recalculate the total amount of grains in the model.
    void updateTotalGrains();
    QString generateName(int column) const;
    
@@ -113,7 +108,12 @@ private:
    
 };
 
-//class FermentableItemDelegate : public QStyledItemDelegate
+/*!
+ * \brief An item delegate for Fermentable tables.
+ * \sa FermentableTableModel.
+ * 
+ * \author Philip G. Lee
+ */
 class FermentableItemDelegate : public QItemDelegate
 {
    Q_OBJECT
@@ -121,13 +121,13 @@ class FermentableItemDelegate : public QItemDelegate
 public:
    FermentableItemDelegate(QObject* parent = 0);
    
-   //! Reimplemented from QItemDelegate.
+   //! \brief Reimplemented from QItemDelegate.
    virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   //! Reimplemented from QItemDelegate.
+   //! \brief Reimplemented from QItemDelegate.
    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
-   //! Reimplemented from QItemDelegate.
+   //! \brief Reimplemented from QItemDelegate.
    virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-   //! Reimplemented from QItemDelegate.
+   //! \brief Reimplemented from QItemDelegate.
    virtual void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
    //virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
    

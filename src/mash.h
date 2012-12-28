@@ -19,7 +19,6 @@
 #ifndef _MASH_H
 #define _MASH_H
 
-#include <QDomNode>
 #include "BeerXMLElement.h"
 
 // Forward declarations.
@@ -43,19 +42,30 @@ public:
 
    virtual ~Mash() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   //! \brief The name.
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
+   //! \brief The initial grain temp in Celsius.
    Q_PROPERTY( double grainTemp_c READ grainTemp_c WRITE setGrainTemp_c /*NOTIFY changed*/ /*changedGrainTemp_c*/ )
+   //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   //! \brief The initial tun temp in Celsius.
    Q_PROPERTY( double tunTemp_c READ tunTemp_c WRITE setTunTemp_c /*NOTIFY changed*/ /*changedTunTemp_c*/ )
+   //! \brief The sparge temp in C.
    Q_PROPERTY( double spargeTemp_c READ spargeTemp_c WRITE setSpargeTemp_c /*NOTIFY changed*/ /*changedSpargeTemp_c*/ )
+   //! \brief The pH.
    Q_PROPERTY( double ph READ ph WRITE setPh /*NOTIFY changed*/ /*changedPh*/ )
+   //! \brief The mass of the tun in kg.
    Q_PROPERTY( double tunWeight_kg READ tunWeight_kg WRITE setTunWeight_kg /*NOTIFY changed*/ /*changedTunWeight_kg*/ )
+   //! \brief The tun's specific heat in kcal/(g*C).
    Q_PROPERTY( double tunSpecificHeat_calGC READ tunSpecificHeat_calGC WRITE setTunSpecificHeat_calGC /*NOTIFY changed*/ /*changedTunSpecificHeat_calGC*/ )
+   //! \brief Whether to adjust strike temperatures to account for the tun.
    Q_PROPERTY( bool equipAdjust READ equipAdjust WRITE setEquipAdjust /*NOTIFY changed*/ /*changedEquipAdjust*/ )
+   //! \brief The total water that went into the mash in liters. Calculated.
    Q_PROPERTY( double totalMashWater_l READ totalMashWater_l /*WRITE*/ /*NOTIFY changed*/ /*changedTotalMashWater_l*/ STORED false )
+   //! \brief The total mash time in minutes. Calculated.
    Q_PROPERTY( double totalTime READ totalTime /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
   // Q_PROPERTY( double tunMass_kg READ tunMass_kg  WRITE setTunMass_kg /*NOTIFY changed*/ /*changedTotalTime*/ )
-   
+   //! \brief The individual mash steps.
    Q_PROPERTY( QList<MashStep*> mashSteps  READ mashSteps /*WRITE*/ /*NOTIFY changed*/ /*changedTotalTime*/ STORED false )
    
    // Setters
@@ -82,7 +92,7 @@ public:
    bool equipAdjust() const;
    
    // Calculated getters
-   double totalMashWater_l(); // Total amount of water that went INTO the mash.
+   double totalMashWater_l();
    double totalTime();
    
    // Relational getters
@@ -95,8 +105,9 @@ public slots:
    void acceptMashStepChange(QMetaProperty, QVariant);
    
 signals:
-   /*
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedGrainTemp_c(double);
    void changedTunTemp_c(double);
    void changedSpargeTemp_c(double);

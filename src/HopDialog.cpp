@@ -42,6 +42,7 @@ HopDialog::HopDialog(MainWindow* parent)
    hopTableWidget->setModel(hopTableProxy);
    hopTableWidget->setSortingEnabled(true);
    hopTableWidget->sortByColumn( HOPNAMECOL, Qt::AscendingOrder );
+   hopTableProxy->setDynamicSortFilter(true);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addHop() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );

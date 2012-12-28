@@ -62,6 +62,7 @@ Mash::Mash()
 void Mash::setName( const QString& var )
 {
    set("name", "name", var);
+   emit changedName(var);
 }
 
 void Mash::setGrainTemp_c( double var )

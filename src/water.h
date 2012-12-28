@@ -17,9 +17,8 @@
  */
 
 #ifndef _WATER_H
-#define   _WATER_H
+#define _WATER_H
 
-#include <QDomNode>
 #include <QString>
 #include "BeerXMLElement.h"
 
@@ -43,15 +42,25 @@ public:
 
    virtual ~Water() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   //! \brief The name.
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
+   //! \brief The amount in liters.
    Q_PROPERTY( double amount_l READ amount_l WRITE setAmount_l /*NOTIFY changed*/ /*changedAmount_l*/ )
+   //! \brief The ppm of calcium.
    Q_PROPERTY( double calcium_ppm READ calcium_ppm WRITE setCalcium_ppm /*NOTIFY changed*/ /*changedCalcium_ppm*/ )
+   //! \brief The ppm of bicarbonate.
    Q_PROPERTY( double bicarbonate_ppm READ bicarbonate_ppm WRITE setBicarbonate_ppm /*NOTIFY changed*/ /*changedBicarbonate_ppm*/ )
+   //! \brief The ppm of sulfate.
    Q_PROPERTY( double sulfate_ppm READ sulfate_ppm WRITE setSulfate_ppm /*NOTIFY changed*/ /*changedSulfate_ppm*/ )
+   //! \brief The ppm of chloride.
    Q_PROPERTY( double chloride_ppm READ chloride_ppm WRITE setChloride_ppm /*NOTIFY changed*/ /*changedChloride_ppm*/ )
+   //! \brief The ppm of sodium.
    Q_PROPERTY( double sodium_ppm READ sodium_ppm WRITE setSodium_ppm /*NOTIFY changed*/ /*changedSodium_ppm*/ )
+   //! \brief The ppm of magnesium.
    Q_PROPERTY( double magnesium_ppm READ magnesium_ppm WRITE setMagnesium_ppm /*NOTIFY changed*/ /*changedMagnesium_ppm*/ )
+   //! \brief The pH.
    Q_PROPERTY( double ph READ ph WRITE setPh /*NOTIFY changed*/ /*changedPh*/ )
+   //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
    
    QString name() const;
@@ -77,8 +86,10 @@ public:
    void setNotes( const QString &var );
    
 signals:
-   /*
+   
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedAmount_l(double);
    void changedCalcium_ppm(double);
    void changedBicarbonate_ppm(double);

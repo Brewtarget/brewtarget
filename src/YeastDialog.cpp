@@ -41,6 +41,7 @@ YeastDialog::YeastDialog(MainWindow* parent)
    yeastTableWidget->setModel(yeastTableProxy);
    yeastTableWidget->setSortingEnabled(true);
    yeastTableWidget->sortByColumn( YEASTNAMECOL, Qt::AscendingOrder );
+   yeastTableProxy->setDynamicSortFilter(true);
    
    connect( pushButton_addToRecipe, SIGNAL( clicked() ), this, SLOT( addYeast() ) );
    connect( pushButton_edit, SIGNAL( clicked() ), this, SLOT( editSelected() ) );

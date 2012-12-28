@@ -20,7 +20,6 @@
 #define _YEAST_H
 
 #include "BeerXMLElement.h"
-#include <QDomNode>
 #include <QString>
 #include <QStringList>
 
@@ -41,31 +40,59 @@ class Yeast : public BeerXMLElement
    
    friend class Database;
 public:
-   //enum Type {TYPEALE, TYPELAGER, TYPEWHEAT, TYPEWINE, TYPECHAMPAGNE};
+   //! \brief What beverage the yeast is for.
    enum Type {Ale, Lager, Wheat, Wine, Champagne};
-   //enum Form {FORMLIQUID, FORMDRY, FORMSLANT, FORMCULTURE};
+   //! \brief What form the yeast comes in.
    enum Form {Liquid, Dry, Slant, Culture};
-   //enum Flocculation {FLOCLOW, FLOCMEDIUM, FLOCHIGH, FLOCVERY_HIGH};
+   //! \brief How flocculant the strain is.
    enum Flocculation {Low, Medium, High, Very_High}; // NOTE: BeerXML expects a space in "Very High", but not possible with enum. What to do?
    Q_ENUMS( Type Form Flocculation )
    
    virtual ~Yeast() {}
    
-   Q_PROPERTY( QString name READ name WRITE setName /*NOTIFY changed*/ /*changedName*/ )
+   //! \brief The name.
+   Q_PROPERTY( QString name READ name WRITE setName NOTIFY changedName )
+   //! \brief The \c Type.
    Q_PROPERTY( Type type READ type WRITE setType /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief The \c Type string.
+   Q_PROPERTY( QString typeString READ typeString )
+   //! \brief The translated \c Type string.
+   Q_PROPERTY( QString typeStringTr READ typeStringTr )
+   //! \brief The \c Form.
    Q_PROPERTY( Form form READ form WRITE setForm /*NOTIFY changed*/ /*changedForm*/ )
+   //! \brief The \c Form string.
+   Q_PROPERTY( QString formString READ formString )
+   //! \brief The translated \c Form string.
+   Q_PROPERTY( QString formStringTr READ formStringTr )
+   //! \brief The amount in either liters or kg depending on \c amountIsWeight().
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
+   //! \brief Whether the \c amount() is weight (kg) or volume (liters).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
+   //! \brief The lab from which it came.
    Q_PROPERTY( QString laboratory READ laboratory WRITE setLaboratory /*NOTIFY changed*/ /*changedLaboratory*/ )
+   //! \brief The product ID.
    Q_PROPERTY( QString productID READ productID WRITE setProductID /*NOTIFY changed*/ /*changedProductID*/ )
+   //! \brief The minimum fermenting temperature.
    Q_PROPERTY( double minTemperature_c READ minTemperature_c WRITE setMinTemperature_c /*NOTIFY changed*/ /*changedMinTemperature_c*/ )
+   //! \brief The maximum fermenting temperature.
    Q_PROPERTY( double maxTemperature_c READ maxTemperature_c WRITE setMaxTemperature_c /*NOTIFY changed*/ /*changedMaxTemperature_c*/ )
+   //! \brief The \c Flocculation.
    Q_PROPERTY( Flocculation flocculation READ flocculation WRITE setFlocculation /*NOTIFY changed*/ /*changedFlocculation*/ )
+   //! \brief The \c Flocculation string.
+   Q_PROPERTY( QString flocculationString READ flocculationString )
+   //! \brief The translated \c Flocculation string.
+   Q_PROPERTY( QString flocculationStringTr READ flocculationStringTr )
+   //! \brief The apparent attenuation in percent.
    Q_PROPERTY( double attenuation_pct READ attenuation_pct WRITE setAttenuation_pct /*NOTIFY changed*/ /*changedAttenuation_pct*/ )
+   //! \brief The notes.
    Q_PROPERTY( QString notes READ notes WRITE setNotes /*NOTIFY changed*/ /*changedNotes*/ )
+   //! \brief What styles the strain is best for.
    Q_PROPERTY( QString bestFor READ bestFor WRITE setBestFor /*NOTIFY changed*/ /*changedBestFor*/ )
+   //! \brief The number of times recultured.
    Q_PROPERTY( int timesCultured READ timesCultured WRITE setTimesCultured /*NOTIFY changed*/ /*changedTimesCultured*/ )
+   //! \brief The maximum recommended number of reculturings.
    Q_PROPERTY( int maxReuse READ maxReuse WRITE setMaxReuse /*NOTIFY changed*/ /*changedMaxReuse*/ )
+   //! \brief Whether the yeast is added to secondary or primary.
    Q_PROPERTY( bool addToSecondary READ addToSecondary WRITE setAddToSecondary /*NOTIFY changed*/ /*changedAddToSecondary*/ )
    
    // Setters
@@ -90,11 +117,9 @@ public:
    QString name() const;
    Type type() const;
    const QString typeString() const;
-   //! Returns a translated type string.
    const QString typeStringTr() const;
    Form form() const;
    const QString formString() const;
-   //! Returns a translated form string.
    const QString formStringTr() const;
    double amount() const;
    bool amountIsWeight() const;
@@ -104,7 +129,6 @@ public:
    double maxTemperature_c() const;
    Flocculation flocculation() const;
    const QString flocculationString() const;
-   //! Returns a flocculation string.
    const QString flocculationStringTr() const;
    double attenuation_pct() const;
    QString notes() const;
@@ -114,8 +138,10 @@ public:
    bool addToSecondary() const;
    
 signals:
-   /*
+
+   //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   /*
    void changedType(Type);
    void changedForm(Form);
    void changedAmount(double);

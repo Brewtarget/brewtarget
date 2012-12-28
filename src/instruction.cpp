@@ -18,6 +18,7 @@
 
 #include "instruction.h"
 #include "brewtarget.h"
+#include "database.h"
 
 QHash<QString,QString> Instruction::tagToProp = Instruction::tagToPropHash();
 
@@ -124,5 +125,5 @@ double Instruction::interval()
 
 int Instruction::instructionNumber() const
 {
-   return get("instruction_number").toInt();
+   return Database::instance().instructionNumber(this);
 }

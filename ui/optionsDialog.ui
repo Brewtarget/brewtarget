@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
-    <height>280</height>
+    <width>533</width>
+    <height>283</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -389,7 +389,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagCzech.svg</normaloff>:/images/flagCzech.svg</iconset>
            </property>
            <property name="iconSize">
@@ -412,7 +412,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagGermany.svg</normaloff>:/images/flagGermany.svg</iconset>
            </property>
            <property name="iconSize">
@@ -435,7 +435,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagUK.svg</normaloff>:/images/flagUK.svg</iconset>
            </property>
            <property name="iconSize">
@@ -465,7 +465,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagSpain.svg</normaloff>:/images/flagSpain.svg</iconset>
            </property>
            <property name="iconSize">
@@ -488,8 +488,31 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagFrance.svg</normaloff>:/images/flagFrance.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_it">
+           <property name="toolTip">
+            <string>Italian</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../build/brewtarget.qrc">
+             <normaloff>:/images/flagItaly.svg</normaloff>:/images/flagItaly.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -511,7 +534,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
            </property>
            <property name="iconSize">
@@ -541,7 +564,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
            </property>
            <property name="iconSize">
@@ -564,7 +587,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagPoland.svg</normaloff>:/images/flagPoland.svg</iconset>
            </property>
            <property name="iconSize">
@@ -587,7 +610,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../brewtarget.qrc">
+            <iconset resource="../../../build/brewtarget.qrc">
              <normaloff>:/images/flagPortugal.svg</normaloff>:/images/flagPortugal.svg</iconset>
            </property>
            <property name="iconSize">
@@ -655,7 +678,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../../../build/brewtarget.qrc"/>
  </resources>
  <connections>
   <connection>

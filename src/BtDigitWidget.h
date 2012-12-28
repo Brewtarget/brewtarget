@@ -30,6 +30,7 @@ class BtDigitWidget;
  * \author Philip G. Lee
  *
  * \brief Widget that displays colored numbers, depending on if the number is ok, high, or low.
+ * \todo Make this thing directly accept signals from the model items it is supposed to watch.
  */
 class BtDigitWidget : public QLabel
 {
@@ -39,19 +40,18 @@ public:
 
    BtDigitWidget(QWidget* parent = 0);
 
-   //void display(const QString& str);
-   //! Displays the given \b num with precision \b prec.
+   //! \brief Displays the given \c num with precision \c prec.
    void display( double num, int prec );
-   //! Display a QString.
+   //! \brief Display a QString.
    void display(QString str);
 
-   //! Set the lower limit of the "good" range.
+   //! \brief Set the lower limit of the "good" range.
    void setLowLim(double num);
-   //! Set the upper limit of the "good" range.
+   //! \brief Set the upper limit of the "good" range.
    void setHighLim(double num);
-   //! Always use a constant color.
+   //! \brief Always use a constant color.
    void setConstantColor( ColorType c );
-   //! Automatically choose color.
+   //! \brief Automatically choose color.
    void unsetConstantColor();
 
 private:

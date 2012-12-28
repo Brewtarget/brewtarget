@@ -52,92 +52,6 @@ Misc::Misc(Misc const& other) : BeerXMLElement(other)
 {
 }
 
-// Move all of this to Database to convert XML to SQLite tables.
-/*
-Misc::Misc(const QDomNode& miscNode)
-{
-   fromNode(miscNode);
-}
-
-void Misc::fromNode(const QDomNode& miscNode)
-{
-   QDomNode node, child;
-   QDomText textNode;
-   QString property, value;
-   
-   setDefaults();
-   
-   for( node = miscNode.firstChild(); ! node.isNull(); node = node.nextSibling() )
-   {
-      if( ! node.isElement() )
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
-         continue;
-      }
-      
-      child = node.firstChild();
-      if( child.isNull() || ! child.isText() )
-         continue;
-      
-      property = node.nodeName();
-      textNode = child.toText();
-      value = textNode.nodeValue();
-      
-      if( property == "NAME" )
-      {
-         name = value;
-      }
-      else if( property == "VERSION" )
-      {
-         if( version != getInt(textNode) )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("MISC says it is not version %1. Line %2").arg(version).arg(textNode.lineNumber()) );
-      }
-      else if( property == "TYPE" )
-      {
-         int ndx = types.indexOf(value);
-         if( ndx < 0 )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid type for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
-         else
-            type = static_cast<Misc::Type>(ndx);
-      }
-      else if( property == "USE" )
-      {
-         int ndx = uses.indexOf(value);
-         if( ndx < 0 )
-            Brewtarget::log(Brewtarget::ERROR, QObject::tr("%1 is not a valid use for MISC. Line %2").arg(value).arg(textNode.lineNumber()) );
-         else
-            use = static_cast<Misc::Use>(ndx);
-      }
-      else if( property == "TIME" )
-      {
-         setTime(getDouble(textNode));
-      }
-      else if( property == "AMOUNT" )
-      {
-         setAmount(getDouble(textNode));
-      }
-      else if( property == "AMOUNT_IS_WEIGHT" )
-      {
-         setAmountIsWeight(getBool(textNode));
-      }
-      else if( property == "USE_FOR" )
-      {
-         setUseFor(value);
-      }
-      else if( property == "NOTES" )
-      {
-         setNotes(value);
-      }
-      else
-      {
-         Brewtarget::log(Brewtarget::WARNING, QObject::tr("Unsupported MISC property: %1. Line %2").arg(property).arg(node.lineNumber()) );
-      }
-   }
-   
-   hasChanged();
-}
-*/
-
 //============================"GET" METHODS=====================================
 QString Misc::name() const
 {
@@ -205,6 +119,7 @@ QString Misc::notes() const
 void Misc::setName( const QString& var )
 {
    set( "name", "name", var );
+   emit changedName(var);
 }
 
 void Misc::setType( Type t )

@@ -19,7 +19,6 @@
 #ifndef _FERMENTABLE_H
 #define _FERMENTABLE_H
 
-#include <QDomNode>
 #include <QStringList>
 #include <QString>
 #include "BeerXMLElement.h"
@@ -43,41 +42,54 @@ class Fermentable : public BeerXMLElement
    friend class Database;
 public:
 
-   //enum Type { TYPEGRAIN=0, TYPESUGAR, TYPEEXTRACT, TYPEDRY_EXTRACT, TYPEADJUNCT, NUMTYPES };
+   //! \brief The type of Fermentable.
    enum Type {Grain, Sugar, Extract, Dry_Extract, Adjunct}; // NOTE: BeerXML expects a space for "Dry_Extract". We're screwed.
-
-
-
    Q_ENUMS( TYPE )
    
    virtual ~Fermentable() {}
    
-   // New Q_PROPERTIES
-   Q_PROPERTY( QString name                  READ name                   WRITE setName                   /*NOTIFY changed*/ /*changedName*/ )
+   //! \brief The name.
+   Q_PROPERTY( QString name                  READ name                   WRITE setName                   NOTIFY changedName )
+   //! \brief The \c Type.
    Q_PROPERTY( Type type                     READ type                   WRITE setType                   /*NOTIFY changed*/ /*changedType*/ )
+   //! \brief The \c Type string.
    Q_PROPERTY( QString typeString            READ typeString             /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeString*/             STORED false )
+   //! \brief The translated \c Type string.
    Q_PROPERTY( QString typeStringTr          READ typeStringTr           /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeStringTr*/           STORED false )
+   //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg              READ amount_kg              WRITE setAmount_kg              /*NOTIFY changed*/ /*changedAmount_kg*/ )
+   //! \brief The yield (when finely milled) as a percentage of equivalent glucose.
    Q_PROPERTY( double yield_pct              READ yield_pct              WRITE setYield_pct              /*NOTIFY changed*/ /*changedYield_pct*/ )
+   //! \brief The color in SRM.
    Q_PROPERTY( double color_srm              READ color_srm              WRITE setColor_srm              /*NOTIFY changed*/ /*changedColor_srm*/ )
+   //! \brief Whether to add after the boil.
    Q_PROPERTY( bool addAfterBoil             READ addAfterBoil           WRITE setAddAfterBoil           /*NOTIFY changed*/ /*changedAddAfterBoil*/ )
+   //! \brief The origin.
    Q_PROPERTY( QString origin                READ origin                 WRITE setOrigin                 /*NOTIFY changed*/ /*changedOrigin*/ )
+   //! \brief The supplier.
    Q_PROPERTY( QString supplier              READ supplier               WRITE setSupplier               /*NOTIFY changed*/ /*changedSupplier*/ )
+   //! \brief The notes.
    Q_PROPERTY( QString notes                 READ notes                  WRITE setNotes                  /*NOTIFY changed*/ /*changedNotes*/ )
+   //! \brief The difference in yield between coarsely milled and finely milled grain.
    Q_PROPERTY( double coarseFineDiff_pct     READ coarseFineDiff_pct     WRITE setCoarseFineDiff_pct     /*NOTIFY changed*/ /*changedCoarseFineDiff_pct*/ )
+   //! \brief The moisture in pct.
    Q_PROPERTY( double moisture_pct           READ moisture_pct           WRITE setMoisture_pct           /*NOTIFY changed*/ /*changedMoisture_pct*/ )
+   //! \brief The diastatic power in Lintner.
    Q_PROPERTY( double diastaticPower_lintner READ diastaticPower_lintner WRITE setDiastaticPower_lintner /*NOTIFY changed*/ /*changedDiastaticPower_lintner*/ )
+   //! \brief The percent protein.
    Q_PROPERTY( double protein_pct            READ protein_pct            WRITE setProtein_pct            /*NOTIFY changed*/ /*changedProtein_pct*/ )
+   //! \brief The maximum recommended amount in a batch, as a percentage of the total grains.
    Q_PROPERTY( double maxInBatch_pct         READ maxInBatch_pct         WRITE setMaxInBatch_pct         /*NOTIFY changed*/ /*changedMaxInBatch_pct*/ )
+   //! \brief Whether a mash is recommended.
    Q_PROPERTY( bool recommendMash            READ recommendMash          WRITE setRecommendMash          /*NOTIFY changed*/ /*changedRecommendMash*/ )
+   //! \brief The IBUs per gal/lb if this is a liquid extract.
    Q_PROPERTY( double ibuGalPerLb            READ ibuGalPerLb            WRITE setIbuGalPerLb            /*NOTIFY changed*/ /*changedIbuGalPerLb*/ )
+   //! \brief The maximum kg of equivalent glucose that will come from this Fermentable.
    Q_PROPERTY( double equivSucrose_kg        READ equivSucrose_kg        /*WRITE*/                       /*NOTIFY changed*/ /*changedEquivSucrose_kg*/        STORED false )
+   //! \brief Whether the grains actually is mashed.
    Q_PROPERTY( bool isMashed                 READ isMashed               WRITE setIsMashed               /*NOTIFY changed*/ /*changedIsMashed*/ )
-   // Playing with some deep magic for units and scale
-   // and now disabled
-   // Q_PROPERTY( int displayUnit       READ displayUnit            WRITE setDisplayUnit            /*NOTIFY changed*/ /*changedDisplayUnit*/)
-   // Q_PROPERTY( int displayScale      READ displayScale           WRITE setDisplayScale           /*NOTIFY changed*/ /*changedDisplayScale*/)
-   
+   //! \brief Whether this fermentable is an extract.
+   Q_PROPERTY( bool isExtract                READ isExtract )
    
    const QString name() const;
    const Type type() const;
@@ -105,7 +117,6 @@ public:
    */
 
    // Calculated getters.
-   //! Get the maximum kg of equivalent sucrose that will come out of this ferm.
    double equivSucrose_kg() const;
 
    void setName( const QString& str );
@@ -131,16 +142,12 @@ public:
    bool isExtract();
    void setIsMashed(bool var);
    /*** END my extensions ***/
-  
-   /* disabled per-cell
-   void setDisplayUnit( unitDisplay unit );
-   void setDisplayScale( unitScale scale);
-   */
 
 signals:
    
+   //! \brief Emitted when \c name() changes.
+   void changedName(QString);
    /*
-   void changedName( QString newName );
    void changedType( Type newType );
    void changedTypeString( QString newTypeString );
    void changedTypeStringTr( QString newTypeStringTr );
@@ -164,6 +171,7 @@ signals:
 private:
    Fermentable();
    Fermentable( Fermentable const& other );
+   
    static bool isValidType( const QString& str );
    static QStringList types;
    

@@ -217,6 +217,7 @@ void Equipment::fromNode(const QDomNode& equipmentNode)
 void Equipment::setName( const QString &var )
 {
    set( "name", "name", var );
+   emit changedName(var);
 }
 
 void Equipment::setBoilSize_l( double var )
@@ -394,9 +395,9 @@ void Equipment::setTopUpKettle_l( double var )
 
 void Equipment::setHopUtilization_pct( double var )
 {
-   if( var < 0.0 || var > 100.0 )
+   if( var < 0.0 )
    {
-      Brewtarget::logW( QString("Equipment: 0 < hop utilization < 100: %1").arg(var) );
+      Brewtarget::logW( QString("Equipment: 0 < hop utilization: %1").arg(var) );
       return;
    }
    else
@@ -533,13 +534,6 @@ void Equipment::doCalculations()
    // Only do the calculation if we're asked to.
    if( ! calcBoilVolume() )
       return;
-   
-   /* The equation given the BeerXML 1.0 spec was way wrong. */
-   /*
-   boilSize_l =
-      (batchSize_l - topUpWater_l + trubChillerLoss_l)
-      / (1 - (boilTime_min/(double)60) * (evapRate_pctHr/(double)100) );
-   */
 
    setBoilSize_l( batchSize_l() - topUpWater_l() + trubChillerLoss_l() + (boilTime_min()/(double)60)*evapRate_lHr());
 }

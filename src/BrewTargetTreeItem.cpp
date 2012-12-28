@@ -383,3 +383,12 @@ BrewNote* BrewTargetTreeItem::getBrewNote()
 
     return 0;
 }
+
+BeerXMLElement* BrewTargetTreeItem::getThing()
+{
+    if ( thing )
+        return qobject_cast<BeerXMLElement*>(thing);
+
+    return 0;
+}
+

@@ -9,7 +9,7 @@
 --                 be put into a recipe.
 --       display=0 means the ingredient is in a recipe already and should not
 --                 be shown in a list, available to be put into a recipe.
-
+BEGIN TRANSACTION;
 create table equipment(
    id integer PRIMARY KEY autoincrement,
    -- BeerXML properties
@@ -26,7 +26,7 @@ create table equipment(
    calc_boil_volume boolean DEFAULT 0,
    lauter_deadspace real DEFAULT 0.0,
    top_up_kettle real DEFAULT 0.0,
-   hop_utilization real DEFAULT 0.0,
+   hop_utilization real DEFAULT 100.0,
    notes text DEFAULT '',
    -- Out BeerXML extensions
    real_evap_rate real DEFAULT 0.0,
@@ -249,7 +249,8 @@ create table mash(
    equip_adjust boolean DEFAULT 1,
    -- Metadata
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   -- Mashes default to be undisplayed until they are named
+   display boolean DEFAULT 0
 );
 
 create table mashstep(
@@ -331,22 +332,8 @@ create table instruction(
    completed boolean DEFAULT 0,
    interval real DEFAULT 0.0,
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1,
-   recipe_id integer,
-   -- The order of this instruction in the recipe.
-   instruction_number integer default 0,
-   foreign key(recipe_id) references recipe(id),
-   unique(recipe_id,instruction_number)
+   display boolean DEFAULT 1
 );
-
--- When inserting a new instruction record, makes sure the instruction number
--- is largest.
-CREATE TRIGGER update_ins_num AFTER INSERT ON instruction
-BEGIN
-   UPDATE instruction SET instruction_number = 
-      (SELECT max(instruction_number) FROM instruction) + 1 
-      WHERE rowid = new.rowid;
-END;
 
 create table recipe(
    id integer PRIMARY KEY autoincrement,
@@ -431,6 +418,32 @@ create table yeast_in_recipe(
    foreign key(yeast_id) references yeast(id),
    foreign key(recipe_id) references recipe(id)
 );
+
+create table instruction_in_recipe(
+   id integer PRIMARY KEY autoincrement,
+   instruction_id integer,
+   recipe_id integer,
+   -- instruction_number is the order of the instruction in the recipe.
+   instruction_number integer DEFAULT 0,
+   foreign key(instruction_id) references instruction(id),
+   foreign key(recipe_id) references recipe(id)
+);
+
+-- This trigger automatically makes a new instruction in a recipe the last.
+CREATE TRIGGER inc_ins_num AFTER INSERT ON instruction_in_recipe
+BEGIN
+   UPDATE instruction_in_recipe SET instruction_number = 
+      (SELECT max(instruction_number) FROM instruction_in_recipe WHERE recipe_id = new.recipe_id) + 1 
+      WHERE rowid = new.rowid;
+END;
+
+-- This trigger automatically decrements all instruction numbers greater than the one
+-- deleted in the given recipe.
+CREATE TRIGGER dec_ins_num AFTER DELETE ON instruction_in_recipe
+BEGIN
+   UPDATE instruction_in_recipe SET instruction_number = instruction_number - 1
+      WHERE recipe_id = old.recipe_id AND instruction_id > old.instruction_id;
+END;
 
 -- Ingredient inheritance tables
 
@@ -531,3 +544,5 @@ create table yeast_in_inventory(
    quanta integer DEFAULT 0,
    foreign key(yeast_id) references yeast(id)
 );
+
+COMMIT;

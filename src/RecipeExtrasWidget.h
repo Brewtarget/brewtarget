@@ -43,10 +43,10 @@ class RecipeExtrasWidget : public QWidget, public Ui::recipeExtrasWidget
 public:
    RecipeExtrasWidget(QWidget* parent=0);
    virtual ~RecipeExtrasWidget() {}
-   //! Set the recipe to view/edit.
+   //! \brief Set the recipe to view/edit.
    void setRecipe(Recipe* rec);
 
-public slots:
+private slots:
    void updateBrewer();
    void updateBrewerAsst();
    void updateTasteRating();

@@ -17,7 +17,7 @@
  */
 
 #ifndef _MAINWINDOW_H
-#define   _MAINWINDOW_H
+#define _MAINWINDOW_H
 
 class MainWindow;
 
@@ -59,11 +59,12 @@ class RecipeFormatter;
 class OgAdjuster;
 class ConverterTool;
 class TimerListDialog;
-class MashComboBox;
+//class MashComboBox;
 class PrimingDialog;
 class RecipeExtrasWidget;
 class RefractoDialog;
 class MashDesigner;
+class MashListModel;
 class PitchDialog;
 class BrewNoteWidget;
 class FermentableTableModel;
@@ -77,6 +78,7 @@ class YeastSortFilterProxyModel;
 class MashStepTableModel;
 class EquipmentListModel;
 class StyleListModel;
+class StyleSortFilterProxyModel;
 
 /*!
  * \class MainWindow
@@ -92,11 +94,11 @@ class MainWindow : public QMainWindow, public Ui::mainWindow
 public:
    MainWindow(QWidget* parent=0);
    virtual ~MainWindow() {}
-   //! View the given recipe.
+   //! \brief View the given recipe.
    void setRecipe(Recipe* recipe);
-   //! Get the currently observed recipe.
+   //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
-   //! Display a file dialog for writing xml files.
+   //! \brief Display a file dialog for writing xml files.
    QFile* openForWrite(QString filterStr = "BeerXML files (*.xml)", QString defaultSuff = "xml");
 
    bool verifyImport(QString tag, QString name);
@@ -107,95 +109,142 @@ public:
 
 public slots:
    
+   //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
    void changed(QMetaProperty,QVariant);
    
-   void save();
    void setRecipeByIndex(const QModelIndex &index);
    void treeActivated(const QModelIndex &index);
 
+   //! \brief Update Recipe name to that given by the relevant widget.
    void updateRecipeName();
+   //! \brief Update Recipe Style to that given by the relevant widget.
    void updateRecipeStyle();
+   //! \brief Update Recipe Equipment to that given by the relevant widget.
    void updateRecipeEquipment();
+   //! \brief Update Recipe batch size to that given by the relevant widget.
    void updateRecipeBatchSize();
+   //! \brief Update Recipe boil size to that given by the relevant widget.
    void updateRecipeBoilSize();
+   //! \brief Update Recipe boil time to that given by the relevant widget.
    void updateRecipeBoilTime();
+   //! \brief Update Recipe efficiency to that given by the relevant widget.
    void updateRecipeEfficiency();
+   //! \brief Update Recipe's mash
+   void updateRecipeMash();
 
+   //! \brief Add given Fermentable to the Recipe.
    void addFermentableToRecipe(Fermentable* ferm);
+   //! \brief Remove selected Fermentable from the Recipe.
    void removeSelectedFermentable();
+   //! \brief Edit selected Fermentable.
    void editSelectedFermentable();
 
+   //! \brief Show the pitch dialog.
    void showPitchDialog();
    
+   //! \brief Add given Hop to the Recipe.
    void addHopToRecipe(Hop *hop);
+   //! \brief Remove selected Hop from the Recipe.
    void removeSelectedHop();
+   //! \brief Edit selected Hop.
    void editSelectedHop();
 
+   //! \brief Add given Misc to the Recipe.
    void addMiscToRecipe(Misc* misc);
+   //! \brief Remove selected Misc from the Recipe.
    void removeSelectedMisc();
+   //! \brief Edit selected Misc.
    void editSelectedMisc();
 
+   //! \brief Add given Yeast to the Recipe.
    void addYeastToRecipe(Yeast* yeast);
+   //! \brief Remove selected Yeast from the Recipe.
    void removeSelectedYeast();
+   //! \brief Edit selected Yeast
    void editSelectedYeast();
 
+   //! \brief Add a new mash step to the recipe.
    void addMashStep();
+   //! \brief Move currently selected mash step down.
    void moveSelectedMashStepUp();
+   //! \brief Move currently selected mash step up.
    void moveSelectedMashStepDown();
+   //! \brief Remove currently selected mash step.
    void removeSelectedMashStep();
+   //! \brief Edit currently selected mash step.
    void editSelectedMashStep();
+   //! \brief Set the current recipe's mash to the one selected in the mash combo box.
    void setMashToCurrentlySelected();
+   //! \brief Save the current recipe's mash to be used in other recipes.
    void saveMash();
+   //! \brief Remove the current mash from the recipe, and replace with a blank one.
    void removeMash();
 
-   //! Create a new recipe in the database.
+   //! \brief Create a new recipe in the database.
    void newRecipe();
+   //! \brief Export current recipe to BeerXML.
    void exportRecipe();
+   //! \brief Display file selection dialog and import BeerXML files.
    void importFiles();
+   //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
    
    void deleteSelected();
    void copySelected();
    void exportSelected();
 
+   //! \brief Prints the right thing, depending on the signal sender.
    void print();
 
-   //! Backup the database.
+   //! \brief Backup the database.
    void backup();
-   //! Restore the database.
+   //! \brief Restore the database.
    void restoreFromBackup();
 
    void contextMenu(const QPoint &point);
    void newBrewNote();
    void reBrewNote();
 
-   //! Open the default browser to Brewtarget's donation page.
+   //! \brief Open the default browser to Brewtarget's donation page.
    void openDonateLink();
 
-   //! Merges two database files.
+   //! \brief Merges two database files.
    void updateDatabase();
    
    void dragEnterEvent(QDragEnterEvent *event);
    void dropEvent(QDropEvent *event);
 
+   //! \brief Catches a QNetworkReply signal and gets info about any new version available.
    void finishCheckingVersion();
 
    void redisplayLabel(QString field);
-   // per-cell disabled code
-   // void fermentableCellSignal(const QPoint& point);
-   // void hopCellSignal(const QPoint& point);
-   void fermentableHeaderSignal(const QPoint& point);
-   void hopHeaderSignal(const QPoint& point);
-   void mashStepHeaderSignal(const QPoint& point);
-   void miscHeaderSignal(const QPoint& point);
-   void yeastHeaderSignal(const QPoint& point);
 
-
+   void showEquipmentEditor();
+   void showStyleEditor();
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
 private slots:
+   /*!
+    * \brief Make the widgets in the window update changes.
+    * 
+    * Updates all the widgets with info about the currently
+    * selected Recipe, except for the tables.
+    * 
+    * \param prop Not yet used. Will indicate which Recipe property has changed.
+    */
    void showChanges(QMetaProperty* prop = 0);
+   
+   //! \brief Displays custom Fermentable context menu.
+   void fermentableContextMenu(const QPoint& point);
+   //! \brief Displays custom Hop context menu.
+   void hopContextMenu(const QPoint& point);
+   //! \brief Displays custom MashStep context menu.
+   void mashStepContextMenu(const QPoint& point);
+   //! \brief Displays custom Misc context menu.
+   void miscContextMenu(const QPoint& point);
+   //! \brief Displays custom Yeast context menu.
+   void yeastContextMenu(const QPoint& point);
    
 private:
    Recipe* recipeObs;
@@ -231,7 +280,6 @@ private:
    OgAdjuster* ogAdjuster;
    ConverterTool* converterTool;
    TimerListDialog* timerListDialog;
-   MashComboBox* mashComboBox;
    PrimingDialog* primingDialog;
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
@@ -248,27 +296,33 @@ private:
    YeastSortFilterProxyModel* yeastTableProxy;
    MashStepTableModel* mashStepTableModel;
    EquipmentListModel* equipmentListModel;
+   MashListModel* mashListModel;
    StyleListModel* styleListModel;
+   StyleSortFilterProxyModel* styleProxyModel;
    
    QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 
-   //! Currently highlighted fermentable in the fermentable table.
+   //! \brief Currently highlighted fermentable in the fermentable table.
    Fermentable* selectedFermentable();
-   //! Currently highlighted hop in the hop table.
+   //! \brief Currently highlighted hop in the hop table.
    Hop* selectedHop();
-   //! Currently highlighted misc in the misc table.
+   //! \brief Currently highlighted misc in the misc table.
    Misc* selectedMisc();
-   //! Currently highlighted yeast in the yeast table
+   //! \brief Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
 
+   //! \brief Timer that limits how often \c showChanges() may be called.
    QTimer* limitShowChangesTimer;
    
-   void setSelection(QModelIndex item);
+   //! \brief Scroll to the given \c item in the currently visible item tree.
+   void setTreeSelection(QModelIndex item);
 
-   //! set the equipment based on a drop event
+   //! \brief Set the equipment based on a drop event
    void droppedRecipeEquipment(Equipment *kit);
+   //! \brief Set the keyboard shortcuts.
    void setupShortCuts();
+   //! \brief Set the context menus.
    void setupContextMenu();
 
    // Copy methods used by copySelected()

@@ -98,14 +98,14 @@ bool Database::load()
    dataDbFileName = (Brewtarget::getDataDir() + "default_db.sqlite");
    dbTempBackupFileName = (Brewtarget::getUserDataDir() + "tempBackupDatabase.sqlite");
    
-   // Cleanup the backup database if there was a previous error.
-   if( !cleanupBackupDatabase() )
-      return false;
-
    // Set the files.
    dbFile.setFileName(dbFileName);
    dataDbFile.setFileName(dataDbFileName);
    dbTempBackupFile.setFileName(dbTempBackupFileName);
+   
+   // Cleanup the backup database if there was a previous error.
+   if( !cleanupBackupDatabase() )
+      return false;
    
    // If there's no dbFile, try to copy from dataDbFile.
    if( !dbFile.exists() )
@@ -206,6 +206,10 @@ bool Database::load()
 
    for( i = allRecipes.begin(); i != allRecipes.end(); i++ )
    {
+      Equipment* e = equipment(*i);
+      if( e )
+         connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+      
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); j++ )
          connect( *j, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
@@ -401,21 +405,6 @@ bool Database::restoreFromDir(QString dirStr)
 // removeFromRecipe ===========================================================
 void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QString propName, QString relTableName, QString ingKeyName )
 {
-   /*
-   tableModel->setTable(relTableName);
-   QString filter = tableModel->filter();
-   
-   // Find the row in the relational db that connects the ingredient to the recipe.
-   tableModel->setFilter( QString("%1=%2 AND recipe_id=%3").arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
-   tableModel->select();
-   if( tableModel->rowCount() > 0 )
-      tableModel->removeRows(0,1);
-   
-   // Restore the old filter.
-   tableModel->setFilter(filter);
-   tableModel->select();
-   */
-   
    QSqlQuery q(sqlDatabase());
    q.setForwardOnly(true);
    q.prepare( QString("DELETE FROM `%1` WHERE `%2`='%3' AND recipe_id='%4'").arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
@@ -468,15 +457,14 @@ void Database::removeFromRecipe( Recipe* rec, Water* w )
 
 void Database::removeFromRecipe( Recipe* rec, Instruction* ins )
 {
-   // NOTE: is this the right thing to do?
-   // --maf-- No it isn't. Instructions just need to get whacked.
-//   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-//              "deleted=1",
-//              QString("%1=%2").arg(keyNames[Brewtarget::INSTRUCTIONTABLE]).arg(ins->_key) );
-
+   removeIngredientFromRecipe( rec, ins, "instructions", "instruction_in_recipe", "instruction_id" );
+   
+   // --maf-- Instructions just need to get whacked.
    sqlDelete( Brewtarget::INSTRUCTIONTABLE,
               QString("id=%1").arg(ins->_key) );
-
+   
+   allInstructions.remove(ins->_key);
+   emit changed( metaProperty("instructions"), QVariant() );
 }
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -506,14 +494,16 @@ Recipe* Database::recipe(int key)
 {
    Recipe* ret;
    if( allRecipes.contains(key) )
-   {
       ret = allRecipes[key];
-      //if( ret->_uninitializedCalcs )
-      //   ret->recalcAll();
-      return ret;
-   }
    else
-      return 0;
+      ret = 0;
+
+   return ret;
+}
+
+Equipment* Database::equipment(int key)
+{
+   return allEquipments[key];
 }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
@@ -531,9 +521,18 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 {
    // TODO: encapsulate in QUndoCommand.
-   QSqlQuery q( QString("UPDATE instruction SET instruction_number = CASE id WHEN %1 then %2 when %3 then %4 END WHERE id IN (%5,%6)")
-                .arg(in1->_key).arg(in2->_key).arg(in2->_key).arg(in1->_key).arg(in1->_key).arg(in2->_key),
-                sqlDatabase());//sqldb );
+   QSqlQuery q(
+      QString(
+         "UPDATE instruction_in_recipe "
+         "SET instruction_number = "
+         "  CASE instruction_id "
+         "    WHEN %1 THEN %3 "
+         "    WHEN %2 THEN %4 "
+         "  END "
+         "WHERE instruction_id IN (%1,%2)"
+      ).arg(in1->_key).arg(in2->_key).arg(in2->instructionNumber()).arg(in1->instructionNumber()),
+      sqlDatabase()
+   );
    q.finish();
    
    emit in1->changed( in1->metaProperty("instructionNumber") );
@@ -543,8 +542,7 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
 void Database::insertInstruction(Instruction* in, int pos)
 {
    int parentRecipeKey;
-   QSqlQuery q( QString("SELECT recipe_id FROM %1 WHERE id=%2")
-                   .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
+   QSqlQuery q( QString("SELECT recipe_id FROM instruction_in_recipe WHERE instruction_id=%2")
                    .arg(in->_key),
                 sqlDatabase());//sqldb);
    q.next();
@@ -552,25 +550,35 @@ void Database::insertInstruction(Instruction* in, int pos)
    q.finish();
    
    // Increment all instruction positions greater or equal to pos.
-   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-              QString("instruction_number=instruction_number+1"),
-              QString("recipe_id=%1 AND instruction_number>=%2")
-                 .arg(parentRecipeKey)
-                 .arg(pos) );
-              
+   q.exec(
+      QString(
+         "UPDATE instruction_in_recipe "
+         "SET instruction_number=instruction_number+1 "
+         "WHERE recipe_id=%1 AND instruction_number>=%2"
+      ).arg(parentRecipeKey).arg(pos)
+   );
+   
+   // NOTE: right here, we should be emitting changed( "instructionNumber" )
+   // for each one of the rows affected above. Probably creating problems by
+   // not doing so :-/
+   
    // Change in's position to pos.
-   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-              QString("instruction_number=%1").arg(pos),
-              QString("id=%1").arg(in->_key) );
-
-   // emit changed
+   q.exec(
+      QString(
+         "UPDATE instruction_in_recipe "
+         "SET instruction_number=%1 "
+         "WHERE instruction_id=%2"
+      ).arg(pos).arg(in->_key)
+   );
+   q.finish();
+   
    emit in->changed( in->metaProperty("instructionNumber"), pos );
 }
 
 QList<BrewNote*> Database::brewNotes(Recipe const* parent)
 {
    QList<BrewNote*> ret;
-   QString filterString = QString("recipe_id = %1 AND deleted = 0 and display = 1").arg(parent->_key);
+   QString filterString = QString("recipe_id = %1 AND deleted = 0").arg(parent->_key);
    
    getElements(ret, filterString, Brewtarget::BREWNOTETABLE, allBrewNotes);
    
@@ -656,7 +664,7 @@ Mash* Database::mash( Recipe const* parent )
 QList<MashStep*> Database::mashSteps(Mash const* parent)
 {
    QList<MashStep*> ret;
-   QString filterString = QString("mash_id = %1 AND deleted = 0 AND display = 1").arg(parent->_key);
+   QString filterString = QString("mash_id = %1 AND deleted = 0").arg(parent->_key);
   
    getElements(ret, filterString, Brewtarget::MASHSTEPTABLE, allMashSteps);
    
@@ -666,13 +674,14 @@ QList<MashStep*> Database::mashSteps(Mash const* parent)
 QList<Instruction*> Database::instructions( Recipe const* parent )
 {
    QList<Instruction*> ret;
-   QString queryString = QString("SELECT id FROM %1 WHERE recipe_id = %2 ORDER BY instruction_number ASC")
-                            .arg(tableNames[Brewtarget::INSTRUCTIONTABLE])
-                            .arg(parent->_key);
+   QString queryString = QString(
+      "SELECT instruction_id FROM instruction_in_recipe WHERE recipe_id = %1 ORDER BY instruction_number ASC"
+   ).arg(parent->_key);
+   
    QSqlQuery q( queryString, sqlDatabase() );//, sqldb );
    
    while( q.next() )
-      ret.append(allInstructions[q.record().value("id").toInt()]);
+      ret.append(allInstructions[q.record().value("instruction_id").toInt()]);
    q.finish();
    
    return ret;
@@ -871,17 +880,30 @@ Instruction* Database::newInstruction(Recipe* rec)
    Instruction* tmp = new Instruction();
    tmp->_key = insertNewDefaultRecord(Brewtarget::INSTRUCTIONTABLE);
    tmp->_table = Brewtarget::INSTRUCTIONTABLE;
-
-   sqlUpdate( Brewtarget::INSTRUCTIONTABLE,
-              QString("`recipe_id`='%1'").arg(rec->_key),
-              QString("`id`='%1'").arg(tmp->_key) );
    allInstructions.insert(tmp->_key,tmp);
    
    // Database's instructions have changed.
    emit changed( metaProperty("instructions"), QVariant() );
-   // Do not emit the recipe's changed() signal. It is up to the recipe to
-   // decide when it wants its signals emitted... that sounds so kinky.
+   
+   // Add without copying to "instruction_in_recipe"
+   addIngredientToRecipe<Instruction>( rec, tmp, "instructions", "instruction_in_recipe", "instruction_id", true, 0, false );
+   
    return tmp;
+}
+
+int Database::instructionNumber(Instruction const* in)
+{
+   QSqlQuery q(
+      QString(
+         "SELECT instruction_number FROM instruction_in_recipe WHERE instruction_id=%1"
+      ).arg(in->_key),
+      sqlDatabase()
+   );
+   
+   if( q.next() )
+      return q.record().value("instruction_number").toInt();
+   else
+      return 0;
 }
 
 Mash* Database::newMash()
@@ -889,6 +911,7 @@ Mash* Database::newMash()
    Mash* tmp = new Mash();
    tmp->_key = insertNewDefaultRecord(Brewtarget::MASHTABLE);
    tmp->_table = Brewtarget::MASHTABLE;
+
    allMashs.insert(tmp->_key,tmp);
    
    emit changed( metaProperty("mashs"), QVariant() );
@@ -919,7 +942,9 @@ Mash* Database::newMash(Recipe* parent)
 Mash* Database::newMash(Mash* other, bool displace)
 {
    Mash* tmp = copy<Mash>(other, true, &allMashs);
-   
+   // Just copying the Mash isn't enough. We need to copy the mashsteps too
+   duplicateMashSteps(other,tmp);
+
    // Connect tmp to parent, removing any existing mash in parent.
    if( displace )
    {
@@ -974,7 +999,7 @@ Misc* Database::newMisc(Misc* other)
    return tmp;
 }
 
-Recipe* Database::newRecipe()
+Recipe* Database::newRecipe(bool addMash)
 {
    Recipe* tmp = new Recipe();
    tmp->_key = insertNewDefaultRecord(Brewtarget::RECTABLE);
@@ -982,7 +1007,8 @@ Recipe* Database::newRecipe()
    allRecipes.insert(tmp->_key,tmp);
    
    // Now, need to create a new mash for the recipe.
-   newMash( tmp );
+   if ( addMash )
+      newMash( tmp );
    
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
@@ -1067,6 +1093,30 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
    
    // Push the command on the undo stack.
    //commandStack.push(command);
+}
+
+void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
+{
+   QList<MashStep*> tmpMS = mashSteps(oldMash);
+   QList<MashStep*>::iterator ms;
+   for( ms=tmpMS.begin(); ms != tmpMS.end(); ++ms)
+   {
+      // Copy the old mash step.
+      MashStep* newStep = copy<MashStep>(*ms,true,&allMashSteps);
+      
+      // Put it in the new mash.
+      sqlUpdate(
+         Brewtarget::MASHSTEPTABLE,
+         QString("mash_id='%1'").arg(newMash->key()),
+         QString("id='%1'").arg(newStep->key())
+      );
+      
+      // Make the new mash pay attention to the new step.
+      connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)), newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );          
+   }
+   
+   emit changed( metaProperty("mashs"), QVariant() );
+   emit newMash->mashStepsChanged();
 }
 
 void Database::removeEquipment(Equipment* equip)
@@ -1345,8 +1395,13 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
              QString("id='%1'").arg(rec->_key));
 
    newEquip->setDisplay(false);
+   
+   // NOTE: need to disconnect the recipe's old equipment?
+   connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+   
    // Emit a changed signal.
-   //emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+   emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
+   rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
@@ -1380,10 +1435,15 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
 void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
 {
    Mash* newMash;
-   
+  
    // Make a copy of mash.
+   // Making a copy of the mash isn't enough. We need a copy of the mashsteps
+   // too.
    if ( ! noCopy )
+   {
       newMash = copy<Mash>(m, false, &allMashs);
+      duplicateMashSteps(m,newMash);
+   }
    else
       newMash = m;
    
@@ -1393,7 +1453,11 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
              QString("id='%1'").arg(rec->_key));
    
    // Emit a changed signal.
+   connect( newMash, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptMashChange(QMetaProperty,QVariant)));
    emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
+   // And let the recipe recalc all?
+   if ( !noCopy)
+      rec->recalcAll();
 }
 
 void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
@@ -1433,7 +1497,6 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
    addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
 
-   y->setDisplay(false);
    if ( ! noCopy )
       rec->recalcOgFg();
 }
@@ -1520,77 +1583,78 @@ QList<BrewNote*> Database::brewNotes()
 {
    QList<BrewNote*> tmp;
 
-   getElements( tmp, "deleted=0 AND display=1", Brewtarget::BREWNOTETABLE, allBrewNotes );
+   getElements( tmp, "deleted=0", Brewtarget::BREWNOTETABLE, allBrewNotes );
    return tmp;
 }
 
 QList<Equipment*> Database::equipments()
 {
    QList<Equipment*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::EQUIPTABLE, allEquipments);
+   getElements( tmp, "deleted=0", Brewtarget::EQUIPTABLE, allEquipments);
    return tmp;
 }
 
 QList<Fermentable*> Database::fermentables()
 {
    QList<Fermentable*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::FERMTABLE, allFermentables);
+   getElements( tmp, "deleted=0", Brewtarget::FERMTABLE, allFermentables);
    return tmp;
 }
 
 QList<Hop*> Database::hops()
 {
    QList<Hop*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::HOPTABLE, allHops);
+   getElements( tmp, "deleted=0", Brewtarget::HOPTABLE, allHops);
    return tmp;
 }
 
 QList<Mash*> Database::mashs()
 {
    QList<Mash*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::MASHTABLE, allMashs);
+   //! Mashs and mashsteps are the odd balls.
+   getElements( tmp, "deleted=0", Brewtarget::MASHTABLE, allMashs);
    return tmp;
 }
 
 QList<MashStep*> Database::mashSteps()
 {
    QList<MashStep*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::MASHSTEPTABLE, allMashSteps);
+   getElements( tmp, "deleted=0", Brewtarget::MASHSTEPTABLE, allMashSteps);
    return tmp;
 }
 
 QList<Misc*> Database::miscs()
 {
    QList<Misc*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::MISCTABLE, allMiscs );
+   getElements( tmp, "deleted=0", Brewtarget::MISCTABLE, allMiscs );
    return tmp;
 }
 
 QList<Recipe*> Database::recipes()
 {
    QList<Recipe*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::RECTABLE, allRecipes );
+   getElements( tmp, "deleted=0", Brewtarget::RECTABLE, allRecipes );
    return tmp;
 }
 
 QList<Style*> Database::styles()
 {
    QList<Style*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::STYLETABLE, allStyles );
+   getElements( tmp, "deleted=0", Brewtarget::STYLETABLE, allStyles );
    return tmp;
 }
 
 QList<Water*> Database::waters()
 {
    QList<Water*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::WATERTABLE, allWaters );
+   getElements( tmp, "deleted=0", Brewtarget::WATERTABLE, allWaters );
    return tmp;
 }
 
 QList<Yeast*> Database::yeasts()
 {
    QList<Yeast*> tmp;
-   getElements( tmp, "deleted=0 and display=1", Brewtarget::YEASTTABLE, allYeasts );
+   getElements( tmp, "deleted=0", Brewtarget::YEASTTABLE, allYeasts );
    return tmp;
 }
 
@@ -1603,7 +1667,7 @@ void Database::importFromXML(const QString& filename)
    QDomNodeList list;
    QString err;
    QFile inFile;
-   QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER";
+   QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER" << "MASHS";
    inFile.setFileName(filename);
    
    if( ! inFile.open(QIODevice::ReadOnly) )
@@ -1670,6 +1734,11 @@ void Database::importFromXML(const QString& filename)
             {
                for( int i = 0; i < list.count(); ++i )
                   waterFromXml( list.at(i) );
+            }
+            else if( tag == "MASHS" )
+            {
+               for( int i = 0; i < list.count(); ++i )
+                  mashFromXml( list.at(i) );
             }
          }
       }
@@ -3021,18 +3090,34 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
    blockSignals(true); 
    Mash* ret;
 
+   // Mashes are weird. We need to know if this is a duplicate, but we need to
+   // make a copy of it anyway. 
+   n = node.firstChildElement("NAME");
+   QString name = n.firstChild().toText().nodeValue();
+   
    if( parent )
       ret = newMash(parent);
    else
       ret = newMash();
-   
+  
+   // If the mash has a name 
+   if ( ! name.isEmpty() )
+   {
+      QList<Mash*> matchingMash;
+      getElements<Mash>( matchingMash, QString("name='%1'").arg(name), Brewtarget::MASHTABLE, allMashs );
+     
+      // If there are no other matches in the database 
+      if( matchingMash.isEmpty() )
+         ret->setDisplay(true);
+   }
    // First, get all the standard properties.
    fromXml( ret, Mash::tagToProp, node );
 
-   // Now, get the individual mash steps.
+   // Now, get the individual mash steps. 
    n = node.firstChildElement("MASH_STEPS");
    if( n.isNull() )
       return ret;
+
    // Iterate through all the mash steps.
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       mashStepFromXml( n, ret );
@@ -3069,6 +3154,7 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
                     )
                  ) );
   
+   ret->blockSignals(false);
    if (! blocked )
    {
       blockSignals(false); 
@@ -3076,7 +3162,6 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
       emit parent->mashStepsChanged();
    }
 
-   ret->blockSignals(false);
    return ret;
 }
 
@@ -3185,7 +3270,9 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 
    // Oddly, I don't think we need to block these signals. All of the
    // subcomponents are, and that should be enough
-   Recipe* ret = newRecipe();
+
+   // Don't create a new mash -- we do that later
+   Recipe* ret = newRecipe(false);
  
    // Get standard properties.
    fromXml( ret, Recipe::tagToProp, node );

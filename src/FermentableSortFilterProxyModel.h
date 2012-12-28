@@ -1,5 +1,5 @@
 /*
- * FermentableSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
+ * FermentableSortFilterProxyModel.h is part of Brewtarget, and is Copyright Mik
  * Firestone (mikfire@gmail.com) and Philip G. Lee (rocketman768@gmail.com,
  * 2010-2012.
  *
@@ -36,12 +36,15 @@ class FermentableSortFilterProxyModel : public QSortFilterProxyModel
    Q_OBJECT
 
 public:
-   FermentableSortFilterProxyModel(QObject *parent = 0);
+   FermentableSortFilterProxyModel(QObject *parent = 0, bool filt = true);
 
 protected:
    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+   bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 
 private:
+   bool filter;
+
    QString getName( const QModelIndex &index ) const;
 };
 

@@ -110,10 +110,7 @@ void MashEditor::showChanges(QMetaProperty* prop)
 {
    bool updateAll = false;
    QString propName;
-   
-   if( sender() != mashObs )
-      return;
-   
+
    if( mashObs == 0 )
    {
       clear();
@@ -123,10 +120,8 @@ void MashEditor::showChanges(QMetaProperty* prop)
    if( prop == 0 )
       updateAll = true;
    else
-   {
       propName = prop->name();
-   }
-   
+
    if( propName == "name" || updateAll ) {
       lineEdit_name->setText(mashObs->name());
       if( ! updateAll )
@@ -152,13 +147,11 @@ void MashEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
-   /*
    if( propName == "tunMass_kg" || updateAll ) {
-      lineEdit_tunMass->setText(Brewtarget::displayAmount(mashObs->tunMass_kg(), Units::kilograms));
+      lineEdit_tunMass->setText(Brewtarget::displayAmount(mashObs->tunWeight_kg(), Units::kilograms));
       if( ! updateAll )
          return;
    }
-   */
    if( propName == "tunSpecificHeat_calGC" || updateAll ) {
       lineEdit_tunSpHeat->setText(Brewtarget::displayAmount(mashObs->tunSpecificHeat_calGC()));
       if( ! updateAll )
