@@ -86,7 +86,7 @@ public:
    /*!
     * Evaluates a finite-order polynomial.
     * \param x - where to evaluate f(x)
-    * \param order - the order of the polynomial
+    * \param order - the order of the polynomial, NOT the size of the \c poly array.
     * \param poly - f(x) = poly[0]x^0 + poly[1]x^1 + ... + poly[order]x^order
     */
    double polyEval( double* poly, unsigned int order, double x );

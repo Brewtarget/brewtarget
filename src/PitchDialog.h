@@ -39,6 +39,11 @@ public:
    PitchDialog(QWidget* parent=0);
    ~PitchDialog();
 
+   //! \brief Set the wort volume in liters.
+   void setWortVolume_l(double volume);
+   //! \brief Set the wort gravity in 20C/20C SG.
+   void setWortGravity(double sg);
+   
 public slots:
    void calculate();
    void updateShownPitchRate(int percent);

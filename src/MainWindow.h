@@ -312,9 +312,6 @@ private:
    //! \brief Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
 
-   //! \brief Timer that limits how often \c showChanges() may be called.
-   QTimer* limitShowChangesTimer;
-   
    //! \brief Scroll to the given \c item in the currently visible item tree.
    void setTreeSelection(QModelIndex item);
 

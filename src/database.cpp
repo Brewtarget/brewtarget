@@ -107,6 +107,18 @@ bool Database::load()
    if( !cleanupBackupDatabase() )
       return false;
    
+   // If user restored the database from a backup, make the backup into the primary.
+   {
+      QFile newdb(QString("%1.new").arg(dbFileName));
+      if( newdb.exists() )
+      {
+         dbFile.remove();
+         newdb.copy(dbFileName);
+         QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
+         newdb.remove();
+      }
+   }
+   
    // If there's no dbFile, try to copy from dataDbFile.
    if( !dbFile.exists() )
    {
@@ -123,6 +135,9 @@ bool Database::load()
          dataDbFile.copy(dbFileName);
          QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
       }
+      
+      // Reset the last merge request.
+      Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
 
    // Create a copy of the database to revert to if the user decides not to make changes.
@@ -380,9 +395,6 @@ bool Database::restoreFromDir(QString dirStr)
 {
    bool success = true;
    
-   // Ensure singleton exists.
-   instance();
-   
    QString prefix = dirStr + "/";
    QString newDbFileName = prefix + "database.sqlite";
    QFile newDbFile(newDbFileName);
@@ -391,13 +403,8 @@ bool Database::restoreFromDir(QString dirStr)
    if( !newDbFile.exists() )
       return false;
    
-   // TODO: there are probably concurrency issues here. What if a query happens
-   // between these two lines?
-   success &= dbFile.remove();   
-   success &= newDbFile.copy(dbFile.fileName());
-   
-   // Reload everything.
-   instance().load();
+   success &= newDbFile.copy(QString("%1.new").arg(dbFile.fileName()));
+   QFile::setPermissions( newDbFile.fileName(), QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
    
    return success;
 }
@@ -2899,6 +2906,11 @@ Equipment* Database::equipmentFromXml( QDomNode const& node, Recipe* parent )
    
    fromXml( ret, Equipment::tagToProp, node );
 
+   // If we are importing one of our beerXML files, the utilization is always
+   // 0%. We need to fix that.
+   if ( ret->hopUtilization_pct() == 0.0 )
+      ret->setHopUtilization_pct(100.0);
+
    if( parent )
    {
       ret->setDisplay(false);
@@ -3057,7 +3069,7 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
                        n.firstChild().toText().nodeValue()
                     )
                  ) );
-   
+  
    if( parent )
       addToRecipe( parent, ret, true );
 

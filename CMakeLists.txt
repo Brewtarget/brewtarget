@@ -27,23 +27,28 @@ OPTION( ENABLE_PROFILING
 OPTION( NO_PHONON
         "If on, does not build any Phonon code."
         OFF )
+OPTION( NO_MESSING_WITH_FLAGS
+        "On means do not add any build flags whatsoever. May override other options."
+        OFF )
 OPTION( UPDATE_TRANSLATIONS
         "Update source translation *.ts files (WARNING: 'make clean' will delete the source .ts files! Danger!)"
         OFF)
 #==============================Compile flags===================================
-IF( CMAKE_COMPILER_IS_GNUCXX )
-   SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -Wno-long-long -O2" )
-   SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -g3" )
-ENDIF()
+IF( NOT ${NO_MESSING_WITH_FLAGS} )
+   IF( CMAKE_COMPILER_IS_GNUCXX )
+      SET( CMAKE_CXX_FLAGS_RELEASE "-Wall -ansi -pedantic -Wno-long-long -O2" )
+      SET( CMAKE_CXX_FLAGS_DEBUG "-Wall -g3" )
+   ENDIF()
 
-# Speed up compilation if using gcc.
-IF( UNIX AND NOT APPLE )
-   SET( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe" )
-   SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pipe" )
-ENDIF()
+   # Speed up compilation if using gcc.
+   IF( UNIX AND NOT APPLE )
+      SET( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe" )
+      SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pipe" )
+   ENDIF()
 
-IF( ${ENABLE_PROFILING} )
-   SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pg" )
+   IF( ${ENABLE_PROFILING} )
+      SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pg" )
+   ENDIF()
 ENDIF()
 
 IF( ${NO_PHONON} )

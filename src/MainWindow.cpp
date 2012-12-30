@@ -103,8 +103,7 @@
 #include "StyleSortFilterProxyModel.h"
 
 MainWindow::MainWindow(QWidget* parent)
-        : QMainWindow(parent),
-          limitShowChangesTimer(new QTimer(this))
+        : QMainWindow(parent)
 {
    // Need to call this to get all the widgets added (I think).
    setupUi(this);
@@ -475,13 +474,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashDown, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepDown() ) );
    connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
 
-   // The purpose of this timer is to limit how often showChanges() is called, since it is expensive.
-   // FIXME: this is a hack and we should just have an elegant way to avoid
-   // calling showChanges() over and over, and probably add specific blahChanged()
-   // signals to the recipe instead of one single signal.
-   limitShowChangesTimer->setSingleShot(true);
-   limitShowChangesTimer->setInterval(1000);
-   connect( limitShowChangesTimer, SIGNAL( timeout() ), this, SLOT( showChanges() ) );
 }
 
 void MainWindow::setupShortCuts()
@@ -823,13 +815,7 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
       
    }
 
-   if( limitShowChangesTimer->isActive() )
-      return;
-   else
-   {
-      limitShowChangesTimer->start();
-      showChanges(&prop);
-   }
+   showChanges(&prop);
 }
 
 void MainWindow::showChanges(QMetaProperty* prop)
@@ -1444,10 +1430,14 @@ void MainWindow::backup()
 
 void MainWindow::restoreFromBackup()
 {
-   if( QMessageBox::question( this, tr("A Warning"),
-         tr("This will obliterate your current set of recipes and ingredients. Do you want to continue?"),QMessageBox::Yes, QMessageBox::No )
+   if( QMessageBox::question(
+          this,
+          tr("A Warning"),
+          tr("This will obliterate your current set of recipes and ingredients. Do you want to continue?"),
+          QMessageBox::Yes, QMessageBox::No
+       )
        == QMessageBox::No
-      )
+   )
    {
       return;
    }
@@ -1458,6 +1448,8 @@ void MainWindow::restoreFromBackup()
    
    if( ! success )
       QMessageBox::warning( this, tr("Oops!"), tr("For some reason, the operation failed.") );
+   else
+      QMessageBox::information(this, tr("Restart"), tr("Please restart Brewtarget."));
 }
 
 // Imports all the recipes from a file into the database.
@@ -2395,9 +2387,8 @@ void MainWindow::showPitchDialog()
    // First, copy the current recipe og and volume.
    if( recipeObs )
    {
-      pitchDialog->lineEdit_vol->setText( QString("%1 L").arg( recipeObs->finalVolume_l(), 0, 'f', 3 ) );
-      pitchDialog->lineEdit_OG->setText( QString("%1").arg( recipeObs->og(), 0, 'f', 3 ) );
-   
+      pitchDialog->setWortVolume_l( recipeObs->finalVolume_l() );
+      pitchDialog->setWortGravity( recipeObs->og() );
       pitchDialog->calculate();
    }
    

@@ -97,7 +97,7 @@
            <string>For ales, 0.75-1. For lagers, 1.5-2.</string>
           </property>
           <property name="text">
-           <string>Pitch Rate (cells)/(mL*P)</string>
+           <string>Pitch Rate (M cells)/(mL*P)</string>
           </property>
          </widget>
         </item>

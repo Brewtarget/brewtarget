@@ -19,8 +19,6 @@
 #include <QApplication>
 #include <QStringList>
 #include <QList>
-#include <QSharedMemory>
-#include <iostream>
 #include "brewtarget.h"
 #include "config.h"
 #include "database.h"
@@ -51,15 +49,7 @@ Q_DECLARE_METATYPE( QList<Yeast*> )
 Q_DECLARE_METATYPE( QList<Water*> )
 
 int main(int argc, char **argv)
-{
-   // This uses shared memory to detect other instances.
-   QSharedMemory mem("brewtargetCheck");
-   if( !mem.create(1) )
-   {
-      std::cerr << "Another instance of brewtarget is already runnning." << std::endl;
-      return 1;
-   }
-   
+{  
    QApplication app(argc, argv);
    app.setApplicationName("brewtarget");
    app.setApplicationVersion(VERSIONSTRING);

@@ -75,7 +75,8 @@ public:
       YEASTMASK         = 32,
       //! Show brewnotes
       BREWNOTEMASK      = 64,
-      //! Show everything
+      //! Show everything -- deprecated. This is a remenant of the original
+      //trees implementation and should not be used
       ALLMASK           = 127
    };
    
@@ -103,8 +104,8 @@ public:
    //! \brief Reimplemented from QAbstractItemModel
    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-   //! \brief Get the upper-left index for the given \c type.
-   QModelIndex getFirst(int type);
+   //! \brief Get the upper-left index for the tree
+   QModelIndex getFirst();
 
    //! \brief Test type at \c index.
    bool isRecipe(const QModelIndex &index);
@@ -241,7 +242,9 @@ private:
    QVariant getYeastHeader(int section) const;
    
    BrewTargetTreeItem* rootItem;
-   QHash<TypeMasks, int> trees;
+   //! Deprecated. This is a remanent from the original implementation and
+   //  should not be used
+   //QHash<TypeMasks, int> trees;
    BrewTargetTreeView *parentTree;
    TypeMasks treeMask;
 

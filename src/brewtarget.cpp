@@ -430,6 +430,40 @@ int Brewtarget::run()
    int ret;
    bool success;
    
+   // In Unix, make sure the user isn't running 2 copies.
+#if defined(Q_WS_X11)
+   QFile pidFile(QString("%1.pid").arg(getUserDataDir()));
+   if( pidFile.exists() )
+   {
+      // Read the pid.
+      qint64 pid;
+      pidFile.open(QIODevice::ReadOnly);
+      {
+         QTextStream pidStream(&pidFile);
+         pidStream >> pid;
+      }
+      pidFile.close();
+      
+      // If the pid is in the proc filesystem, another instance is running.
+      // Have to check /proc, because perhaps the last instance crashed without
+      // cleaning up after itself.
+      QDir procDir(QString("/proc/%1").arg(pid));
+      if( procDir.exists() )
+      {
+         std::cerr << "Brewtarget is already running. PID: " << pid << std::endl;
+         return 1;
+      }
+   }
+   
+   // Open the pidFile, erasing any contents, and write our pid.
+   pidFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+   {
+      QTextStream pidStream(&pidFile);
+      pidStream << QCoreApplication::applicationPid();
+   }
+   pidFile.close();
+#endif
+   
    BtSplashScreen splashScreen;
    splashScreen.show();
    
@@ -488,7 +522,10 @@ int Brewtarget::run()
    delete _mainWindow;
    
    Database::dropInstance();
-   
+#if defined(Q_WS_X11)
+   pidFile.remove();
+#endif
+
    return ret;
 }
 

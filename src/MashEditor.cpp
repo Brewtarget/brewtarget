@@ -98,6 +98,11 @@ void MashEditor::setEquipment(Equipment* e)
       return;
 
    equip = e;
+   if( mashObs )
+   {
+      mashObs->setTunWeight_kg( e->tunWeight_kg() );
+      mashObs->setTunSpecificHeat_calGC( e->tunSpecificHeat_calGC() );
+   }
 }
 
 void MashEditor::changed(QMetaProperty prop, QVariant /*val*/)

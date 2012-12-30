@@ -280,6 +280,11 @@ void OptionDialog::saveAndClose()
       }
 
       Brewtarget::userDataDir = newUserDataDir;
+      QMessageBox::information(
+         this,
+         tr("Restart"),
+         tr("Please restart Brewtarget.")
+      );
    }
 
    // Make sure the main window updates.

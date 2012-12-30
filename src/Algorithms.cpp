@@ -58,7 +58,6 @@ inline double Algorithms::intPow( double base, unsigned int pow )
    return ret;
 }
 
-// NOTE: order is the ORDER of the polynomial, NOT THE SIZE of the poly array.
 double Algorithms::polyEval( double* poly, unsigned int order, double x )
 {
    double ret = 0.0;
@@ -72,11 +71,10 @@ double Algorithms::polyEval( double* poly, unsigned int order, double x )
    return ret;
 }
 
-// Root finding of a polynomial via the secant method. Returns HUGE_VAL on failure.
 double Algorithms::rootFind( double* poly, unsigned int order, double x0, double x1 )
 {
    double guesses[] = { x0, x1 };
-   double newGuess;
+   double newGuess = x0;
    double maxAllowableSeparation = qAbs( x0 - x1 ) * 1e3;
 
    while( qAbs( guesses[0] - guesses[1] ) > ROOT_PRECISION )
@@ -93,7 +91,6 @@ double Algorithms::rootFind( double* poly, unsigned int order, double x0, double
    return newGuess;
 }
 
-// Returns the additive correction (in SG 15C units).
 double Algorithms::hydrometer15CCorrection( double celsius )
 {
    return polyEval( hydroCorrection15CPoly,hydroCorrection15CPoly_order, celsius ) * (double)1e-3;

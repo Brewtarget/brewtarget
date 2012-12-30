@@ -64,7 +64,7 @@ public:
    QModelIndex getParent(const QModelIndex& child);
 
    //! \brief returns the first \c type element in the tree
-   QModelIndex getFirst(int type = BrewTargetTreeItem::NUMTYPES);
+   QModelIndex getFirst();
 
    //! \brief returns the recipe at \c index 
    Recipe* getRecipe(const QModelIndex &index) const;

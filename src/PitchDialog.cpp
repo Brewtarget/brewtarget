@@ -49,6 +49,17 @@ PitchDialog::~PitchDialog()
 {
 }
 
+void PitchDialog::setWortVolume_l(double volume)
+{
+   lineEdit_vol->setText(Brewtarget::displayAmount(volume, Units::liters));
+}
+
+void PitchDialog::setWortGravity(double sg)
+{
+   //lineEdit_OG->setText(Brewtarget::displayOG(sg));
+   lineEdit_OG->setText(QString::number(sg,'f',3));
+}
+
 void PitchDialog::calculate()
 {
    bool ok;

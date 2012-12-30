@@ -2,9 +2,14 @@
 
 SVNDIR="trunk"
 NAME="brewtarget"
-VERSION="1.2.4"
+VERSION="2.0.0"
 TARDIR="$NAME-$VERSION"
 TARFILE="${NAME}_${VERSION}.orig.tar"
+
+if [ -n "$1" ]
+then
+   SVNDIR="$1"
+fi
 
 # Copy SVNDIR to TARDIR
 cp -r ${SVNDIR} ${TARDIR}
