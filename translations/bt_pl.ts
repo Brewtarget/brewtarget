@@ -99,6 +99,14 @@
         <source>Step %1: %2</source>
         <translation>Krok %1: %2</translation>
     </message>
+    <message>
+        <source>Add grains</source>
+        <translation>Dodaj słody</translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <translation>Podgrzej wodę</translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -285,7 +293,7 @@
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished"></translation>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>SRM</source>
@@ -381,6 +389,17 @@
     <message>
         <source>Too high for style.</source>
         <translation>Za wysoka wartość dla stylu.</translation>
+    </message>
+</context>
+<context>
+    <name>Database</name>
+    <message>
+        <source>Merge Database</source>
+        <translation>Połącz bazy danych</translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation>Są dostępne nowe składniki i receptury. Czy chcesz je dodać do swojej bazy danych?</translation>
     </message>
 </context>
 <context>
@@ -639,11 +658,11 @@
     </message>
     <message>
         <source>Sure about that?</source>
-        <translation>Czy jesteś pewny?</translation>
+        <translation type="obsolete">Czy jesteś pewny?</translation>
     </message>
     <message>
         <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation>Zamierzasz zniszczyć recepturę. Czy jesteś pewien?</translation>
+        <translation type="obsolete">Zamierzasz zniszczyć recepturę. Czy jesteś pewien?</translation>
     </message>
     <message>
         <source>Equipment request</source>
@@ -800,6 +819,30 @@
     <message>
         <source>Please give your mash a name before saving.</source>
         <translation>Podaj nazwę zacierania przed zapisaniem.</translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation>Ponownie uruchomić</translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
+        <translation>Proszę ponownie uruchomić program.</translation>
+    </message>
+    <message>
+        <source>No equipment</source>
+        <translation>Brak sprzętu</translation>
+    </message>
+    <message>
+        <source>You must select or define an equipment profile first.</source>
+        <translation>Musisz wybrać lub zdefiniować profil urządzenia.</translation>
+    </message>
+    <message>
+        <source>No style</source>
+        <translation>Brak styl</translation>
+    </message>
+    <message>
+        <source>You must select a style first.</source>
+        <translation>Musisz wybrać styl.</translation>
     </message>
 </context>
 <context>
@@ -1028,7 +1071,7 @@
     <name>MiscTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Nieprawidłowy indeks modelu. wiersz = %1</translation>
+        <translation type="obsolete">Nieprawidłowy indeks modelu. wiersz = %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1064,6 +1107,14 @@
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
         <translation>W tym katalogu wydaje się nie być żadnych danych, skopiujemy tutaj twoje stare dane.</translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation>Ponownie uruchomić</translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
+        <translation>Proszę ponownie uruchomić program.</translation>
     </message>
 </context>
 <context>
@@ -1109,13 +1160,13 @@
     <message>
         <source>Efficiency: %1%%
 </source>
-        <translation>Wydajność: %1%
+        <translation type="obsolete">Wydajność: %1%
 </translation>
     </message>
     <message>
         <source>ABV: %1%%
 </source>
-        <translation>Zawartość alkoholu: %1%
+        <translation type="obsolete">Zawartość alkoholu: %1%
 </translation>
     </message>
     <message>
@@ -1292,11 +1343,11 @@
     </message>
     <message>
         <source>Merge Database</source>
-        <translation>Połącz bazy danych</translation>
+        <translation type="obsolete">Połącz bazy danych</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Są dostępne nowe składniki i receptury. Czy chcesz je dodać do swojej bazy danych?</translation>
+        <translation type="obsolete">Są dostępne nowe składniki i receptury. Czy chcesz je dodać do swojej bazy danych?</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -1481,6 +1532,18 @@
     <message>
         <source>Yeast</source>
         <translation>Drożdże</translation>
+    </message>
+    <message>
+        <source>Efficiency: %1%
+</source>
+        <translation>Wydajność: %1%
+</translation>
+    </message>
+    <message>
+        <source>ABV: %1%
+</source>
+        <translation>Zawartość alkoholu: %1%
+</translation>
     </message>
 </context>
 <context>
@@ -1698,6 +1761,18 @@ Końcowa pojemność w fermentorze wyniesie %1.</translation>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
         <translation>Dodaj %1 %2 do gotowania przy %3.</translation>
+    </message>
+    <message>
+        <source>Raise water to boil and then remove from heat. Stir in  </source>
+        <translation>Podnieść wodę do wrzenia, a następnie zdjąć z ognia. Mieszać w  </translation>
+    </message>
+    <message>
+        <source>Add Extracts to water</source>
+        <translation>Dodać wody do ekstraktów</translation>
+    </message>
+    <message>
+        <source>%1 water to %2 </source>
+        <translation>%1 wody do %2 </translation>
     </message>
 </context>
 <context>
@@ -2615,6 +2690,14 @@ p, li { white-space: pre-wrap; }
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
+    <message>
+        <source>Set as Default</source>
+        <translation>Domyślne</translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation>Wykorzystanie chmiel</translation>
+    </message>
 </context>
 <context>
     <name>fermentableDialog</name>
@@ -3438,7 +3521,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Clear recipe</source>
-        <translation>Wyczyść recepturę</translation>
+        <translation type="obsolete">Wyczyść recepturę</translation>
     </message>
     <message>
         <source>Delete selected</source>
@@ -4080,6 +4163,10 @@ p, li { white-space: pre-wrap; }
   zaproponuj tłumaczenie&lt;/a&gt; aby twoi przjaciele mogli używać brewtarget!
 &lt;/qt&gt;</translation>
     </message>
+    <message>
+        <source>Italian</source>
+        <translation>Włoski</translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4105,7 +4192,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation>Ilość zadania (komórki/mL*P)</translation>
+        <translation type="obsolete">Ilość zadania (komórki/mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
@@ -4170,6 +4257,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Billions of Yeast Cells Required</source>
         <translation>Miliardy komórek drożdżowych</translation>
+    </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
+        <translation>Ilość zadania (M komórki)/(mL*P)</translation>
     </message>
 </context>
 <context>
@@ -4626,6 +4717,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Sound</source>
         <translation>Dźwięk</translation>
+    </message>
+    <message>
+        <source>HH:MM:SS</source>
+        <translation>HH:MM:SS</translation>
     </message>
 </context>
 <context>

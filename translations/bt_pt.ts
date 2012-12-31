@@ -5,7 +5,7 @@
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Date</source>
@@ -37,7 +37,7 @@
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Final Gravity</source>
@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Estimated calories(per 12 oz)</source>
@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instruções</translation>
+        <translation>Instruções</translation>
     </message>
     <message>
         <source>Completed</source>
@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Step</source>
@@ -97,14 +97,22 @@
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation type="unfinished">Etapa %1: %2</translation>
+        <translation>Etapa %1: %2</translation>
+    </message>
+    <message>
+        <source>Add grains</source>
+        <translation>Adicionar grãos</translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <translation>Aquecer a água</translation>
     </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Date</source>
@@ -132,7 +140,7 @@
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Predicted Efficiency</source>
@@ -144,7 +152,7 @@
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instruções</translation>
+        <translation>Instruções</translation>
     </message>
     <message>
         <source>Completed</source>
@@ -152,7 +160,7 @@
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Step</source>
@@ -184,7 +192,7 @@
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
@@ -195,7 +203,7 @@
     <name>BrewTargetTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -203,7 +211,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -211,7 +219,7 @@
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Type</source>
@@ -219,11 +227,11 @@
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Uso</translation>
+        <translation>Uso</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
 </context>
 <context>
@@ -384,6 +392,17 @@
     </message>
 </context>
 <context>
+    <name>Database</name>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
@@ -429,23 +448,23 @@
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation type="unfinished">Grão</translation>
+        <translation>Grão</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished">Açucar</translation>
+        <translation>Açucar</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished">Extrato</translation>
+        <translation>Extrato</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished">Extrato seco</translation>
+        <translation>Extrato seco</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished">Adjunto</translation>
+        <translation>Adjunto</translation>
     </message>
 </context>
 <context>
@@ -511,43 +530,43 @@
     <name>Hop</name>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation>Brassagem</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Primeira lupulagem</translation>
+        <translation>Primeira lupulagem</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Ferver</translation>
+        <translation>Ferver</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Dry Hop</translation>
+        <translation>Dry Hop</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Amargor</translation>
+        <translation>Amargor</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="unfinished">Ambos</translation>
+        <translation>Ambos</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Folha</translation>
+        <translation>Folha</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pellet</translation>
+        <translation>Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Plug</translation>
+        <translation>Plug</translation>
     </message>
 </context>
 <context>
@@ -565,35 +584,35 @@
     <name>HopItemDelegate</name>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Ferver</translation>
+        <translation>Ferver</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation type="unfinished">Dry Hop</translation>
+        <translation>Dry Hop</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation>Brassagem</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Primeira lupulagem</translation>
+        <translation>Primeira lupulagem</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation type="unfinished">Aroma</translation>
+        <translation>Aroma</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation type="unfinished">Folha</translation>
+        <translation>Folha</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation type="unfinished">Pellet</translation>
+        <translation>Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation type="unfinished">Plug</translation>
+        <translation>Plug</translation>
     </message>
 </context>
 <context>
@@ -620,7 +639,7 @@
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
 </context>
 <context>
@@ -639,11 +658,11 @@
     </message>
     <message>
         <source>Sure about that?</source>
-        <translation>Você tem certeza disso?</translation>
+        <translation type="obsolete">Você tem certeza disso?</translation>
     </message>
     <message>
         <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation>Você está prestes a destruir a receita. Isto está correto?</translation>
+        <translation type="obsolete">Você está prestes a destruir a receita. Isto está correto?</translation>
     </message>
     <message>
         <source>Equipment request</source>
@@ -671,7 +690,7 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Recipe</source>
@@ -679,7 +698,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Equipamento</translation>
+        <translation>Equipamento</translation>
     </message>
     <message>
         <source>Fermentable</source>
@@ -801,6 +820,30 @@
         <source>Please give your mash a name before saving.</source>
         <translation>Por favor, dê um nome a sua brassagem antes de salvar.</translation>
     </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must select or define an equipment profile first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must select a style first.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MaltinessWidget</name>
@@ -830,7 +873,7 @@
     </message>
     <message>
         <source>&lt;b&gt;Way hoppy&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Muito Lúpulo&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Muito Lúpulo&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -951,7 +994,7 @@
     </message>
     <message>
         <source>Sparge temp.</source>
-        <translation type="unfinished">Temperatura de lavagem.</translation>
+        <translation>Temperatura de lavagem.</translation>
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
@@ -1005,19 +1048,19 @@
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Ferver</translation>
+        <translation>Ferver</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation>Brassagem</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Primário</translation>
+        <translation>Primário</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Secundário</translation>
+        <translation>Secundário</translation>
     </message>
     <message>
         <source>Bottling</source>
@@ -1028,7 +1071,7 @@
     <name>MiscTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Modelo de índice ruim. Linha = %1</translation>
+        <translation type="obsolete">Modelo de índice ruim. Linha = %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1063,6 +1106,14 @@
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1109,14 +1160,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Merge Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Save Database Changes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1158,31 +1201,31 @@
     </message>
     <message>
         <source>Grain</source>
-        <translation type="unfinished">Grão</translation>
+        <translation>Grão</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation type="unfinished">Açucar</translation>
+        <translation>Açucar</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished">Extrato</translation>
+        <translation>Extrato</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation type="unfinished">Extrato seco</translation>
+        <translation>Extrato seco</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation type="unfinished">Adjunto</translation>
+        <translation>Adjunto</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Ferver</translation>
+        <translation>Ferver</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation>Brassagem</translation>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
@@ -1198,7 +1241,7 @@
     </message>
     <message>
         <source>Decoction</source>
-        <translation type="unfinished">Decocção</translation>
+        <translation>Decocção</translation>
     </message>
     <message>
         <source>Bottling</source>
@@ -1257,16 +1300,6 @@
 </source>
         <translation>FG: %1
 </translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
-</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bitterness: %1 IBUs (%2)
@@ -1384,7 +1417,7 @@
     </message>
     <message>
         <source>Temp</source>
-        <translation type="unfinished">Temperatura</translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <source>Target</source>
@@ -1456,19 +1489,19 @@
     </message>
     <message>
         <source>Recipes</source>
-        <translation type="unfinished">Receitas</translation>
+        <translation>Receitas</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Equipamento</translation>
+        <translation>Equipamento</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished">Fermentáveis</translation>
+        <translation>Fermentáveis</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished">Lúpulos</translation>
+        <translation>Lúpulos</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
@@ -1478,56 +1511,66 @@
         <source>Yeast</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Efficiency: %1%
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV: %1%
+</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation type="unfinished">Adicionar grãos</translation>
+        <translation>Adicionar grãos</translation>
     </message>
     <message>
         <source>Add </source>
-        <translation type="unfinished">Adicionar</translation>
+        <translation>Adicionar</translation>
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation type="unfinished">Para o recipiente de brassagem.</translation>
+        <translation>Para o recipiente de brassagem.</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation type="unfinished">Aquecer a água</translation>
+        <translation>Aquecer a água</translation>
     </message>
     <message>
         <source>Bring </source>
-        <translation type="unfinished">Trazer</translation>
+        <translation>Trazer</translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation type="unfinished">%1 água para %2, </translation>
+        <translation>%1 água para %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
-        <translation type="unfinished">programado para infusões.</translation>
+        <translation>programado para infusões.</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation type="unfinished">Adicionar %1 água em %2 para a brassagem para trazê-lo para %3.</translation>
+        <translation>Adicionar %1 água em %2 para a brassagem para trazê-lo para %3.</translation>
     </message>
     <message>
         <source>Heat mash to %1.</source>
-        <translation type="unfinished">Aquecer a brassagem para %1.</translation>
+        <translation>Aquecer a brassagem para %1.</translation>
     </message>
     <message>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation type="unfinished">Trazer %1 do mosto para ferver e retornar para o recipiente de brassagem para trazê-lo para %2.</translation>
+        <translation>Trazer %1 do mosto para ferver e retornar para o recipiente de brassagem para trazê-lo para %2.</translation>
     </message>
     <message>
         <source> Hold for %1.</source>
-        <translation type="unfinished"> Manter por %1.</translation>
+        <translation> Manter por %1.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation type="unfinished">Coloque %1 %2 para cozir por%3.</translation>
+        <translation>Coloque %1 %2 para cozir por%3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
@@ -1539,7 +1582,7 @@
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation type="unfinished">Colocar %1 %2 na brassagem por %3.</translation>
+        <translation>Colocar %1 %2 na brassagem por %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
@@ -1575,23 +1618,23 @@
     </message>
     <message>
         <source>Do first wort hopping with </source>
-        <translation type="unfinished">Faça primeiro a lupulagem com</translation>
+        <translation>Faça primeiro a lupulagem com</translation>
     </message>
     <message>
         <source>First wort hopping</source>
-        <translation type="unfinished">Primeira lupulagem</translation>
+        <translation>Primeira lupulagem</translation>
     </message>
     <message>
         <source>You should now have %1 wort.</source>
-        <translation type="unfinished">Você deve ter agora %1 de lupulagem.</translation>
+        <translation>Você deve ter agora %1 de lupulagem.</translation>
     </message>
     <message>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation type="unfinished"> Adicione %1 de água para a caldeira, elevando o volume de pré-cozimento para %2.</translation>
+        <translation> Adicione %1 de água para a caldeira, elevando o volume de pré-cozimento para %2.</translation>
     </message>
     <message>
         <source>Pre-boil</source>
-        <translation type="unfinished">Pré-cozimento</translation>
+        <translation>Pré-cozimento</translation>
     </message>
     <message>
         <source>Boil or steep </source>
@@ -1603,50 +1646,50 @@
     </message>
     <message>
         <source>to the boil at knockout.</source>
-        <translation type="unfinished">a fever para nocaute.</translation>
+        <translation>a fever para nocaute.</translation>
     </message>
     <message>
         <source>Knockout additions</source>
-        <translation type="unfinished">Adições nocaute</translation>
+        <translation>Adições nocaute</translation>
     </message>
     <message>
         <source>You should have %1 wort post-boil.</source>
-        <translation type="unfinished">Você deve ter %1 do mosto pós fervura.</translation>
+        <translation>Você deve ter %1 do mosto pós fervura.</translation>
     </message>
     <message>
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
-        <translation type="unfinished">Você antecipa perder %1 para o trub e chiller.</translation>
+        <translation>Você antecipa perder %1 para o trub e chiller.</translation>
     </message>
     <message>
         <source>
 Add %1 top up water into primary.</source>
-        <translation type="unfinished">Adicionar %1 de água acima no primário.</translation>
+        <translation>Adicionar %1 de água acima no primário.</translation>
     </message>
     <message>
         <source>
 The final volume in the primary is %1.</source>
-        <translation type="unfinished">O volume final no primário é %1.</translation>
+        <translation>O volume final no primário é %1.</translation>
     </message>
     <message>
         <source>Post boil</source>
-        <translation type="unfinished">Pós fervura</translation>
+        <translation>Pós fervura</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation type="unfinished">Tempo de cozimento</translation>
+        <translation>Tempo de cozimento</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation type="unfinished">Você não configurou um equipamento (o que você realmente deveria!), então me diga o tempo de cozimento.</translation>
+        <translation>Você não configurou um equipamento (o que você realmente deveria!), então me diga o tempo de cozimento.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
-        <translation type="unfinished">Leve o mosto a cozir e segure por %1.</translation>
+        <translation>Leve o mosto a cozir e segure por %1.</translation>
     </message>
     <message>
         <source>Start boil</source>
-        <translation type="unfinished">Iniciar cozimento</translation>
+        <translation>Iniciar cozimento</translation>
     </message>
     <message>
         <source>Flameout</source>
@@ -1658,39 +1701,51 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cool wort and pitch </source>
-        <translation type="unfinished">Esfriar o mosto e despejar o fermento</translation>
+        <translation>Esfriar o mosto e despejar o fermento</translation>
     </message>
     <message>
         <source>%1 %2 yeast, </source>
-        <translation type="unfinished">%1 %2 fermento, </translation>
+        <translation>%1 %2 fermento, </translation>
     </message>
     <message>
         <source>to the primary.</source>
-        <translation type="unfinished">para o primário.</translation>
+        <translation>para o primário.</translation>
     </message>
     <message>
         <source>Pitch yeast</source>
-        <translation type="unfinished">Despejar o fermento</translation>
+        <translation>Despejar o fermento</translation>
     </message>
     <message>
         <source>Let ferment until FG is %1.</source>
-        <translation type="unfinished">Deixer fermentar até a FG ser%1.</translation>
+        <translation>Deixer fermentar até a FG ser%1.</translation>
     </message>
     <message>
         <source>Ferment</source>
-        <translation type="unfinished">Fermento</translation>
+        <translation>Fermento</translation>
     </message>
     <message>
         <source>Transfer beer to secondary.</source>
-        <translation type="unfinished">Transferir a cervaja para o secundário.</translation>
+        <translation>Transferir a cervaja para o secundário.</translation>
     </message>
     <message>
         <source>Transfer to secondary</source>
-        <translation type="unfinished">Transferir para o secundário</translation>
+        <translation>Transferir para o secundário</translation>
     </message>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
-        <translation type="unfinished">Adicionar %1 %2 para fervura em %3.</translation>
+        <translation>Adicionar %1 %2 para fervura em %3.</translation>
+    </message>
+    <message>
+        <source>Raise water to boil and then remove from heat. Stir in  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Extracts to water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 water to %2 </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1729,11 +1784,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished">OG</translation>
+        <translation>OG</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="unfinished">FG</translation>
+        <translation>FG</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -1741,7 +1796,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Bitterness</source>
@@ -1749,7 +1804,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Calories (per 12 oz.)</source>
@@ -1757,7 +1812,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation type="unfinished">Fermentáveis</translation>
+        <translation>Fermentáveis</translation>
     </message>
     <message>
         <source>Total grain:</source>
@@ -1765,7 +1820,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Type</source>
@@ -1773,11 +1828,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Amount</source>
-        <translation type="unfinished">Quantidade</translation>
+        <translation>Quantidade</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation type="unfinished">Triturado</translation>
+        <translation>Triturado</translation>
     </message>
     <message>
         <source>Late</source>
@@ -1785,39 +1840,39 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Yield</source>
-        <translation type="unfinished">Rendimento</translation>
+        <translation>Rendimento</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished">Sim</translation>
+        <translation>Sim</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished">Não</translation>
+        <translation>Não</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation type="unfinished">Lúpulos</translation>
+        <translation>Lúpulos</translation>
     </message>
     <message>
         <source>Alpha</source>
-        <translation type="unfinished">Alfa</translation>
+        <translation>Alfa</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Uso</translation>
+        <translation>Uso</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished">Tempo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>IBU</source>
-        <translation type="unfinished">IBU</translation>
+        <translation>IBU</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -1829,23 +1884,23 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Stage</source>
-        <translation type="unfinished">Estágio</translation>
+        <translation>Estágio</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation type="unfinished">Secundário</translation>
+        <translation>Secundário</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation type="unfinished">Primário</translation>
+        <translation>Primário</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation>Brassagem</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation type="unfinished">Temperatura</translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <source>Target Temp</source>
@@ -1853,11 +1908,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation type="unfinished">Instruções</translation>
+        <translation>Instruções</translation>
     </message>
     <message>
         <source>Brew Date</source>
@@ -1917,7 +1972,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -2171,7 +2226,7 @@ p, li { white-space: pre-wrap; }
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
@@ -2179,27 +2234,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Insert step</source>
-        <translation type="unfinished">Inserir estapa</translation>
+        <translation>Inserir estapa</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation type="unfinished">Nome da nova estapa</translation>
+        <translation>Nome da nova estapa</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation type="unfinished">Estapa #</translation>
+        <translation>Estapa #</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation type="unfinished">O número onde a nova etapa deve ser colocada</translation>
+        <translation>O número onde a nova etapa deve ser colocada</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation type="unfinished">Inserir a nova etapa</translation>
+        <translation>Inserir a nova etapa</translation>
     </message>
     <message>
         <source>Move steps</source>
@@ -2207,15 +2262,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation type="unfinished">Mover etapa selecionada para cima</translation>
+        <translation>Mover etapa selecionada para cima</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation type="unfinished">Mover etapa selecionada para baixo</translation>
+        <translation>Mover etapa selecionada para baixo</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation type="unfinished">Remover etapa selecionada</translation>
+        <translation>Remover etapa selecionada</translation>
     </message>
 </context>
 <context>
@@ -2285,7 +2340,7 @@ p, li { white-space: pre-wrap; }
     <name>brewNoteWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Preboil</source>
@@ -2301,7 +2356,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
@@ -2329,7 +2384,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished">OG</translation>
+        <translation>OG</translation>
     </message>
     <message>
         <source>Post boil gravity</source>
@@ -2413,18 +2468,18 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ABV</source>
-        <translation type="unfinished">ABV</translation>
+        <translation>ABV</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
 </context>
 <context>
     <name>btSplashScreen</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
 </context>
 <context>
@@ -2608,6 +2663,14 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Set as Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3232,7 +3295,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation type="unfinished">Sobre o Brewtarget</translation>
+        <translation>Sobre o Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
@@ -3406,7 +3469,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Clear recipe</source>
-        <translation>Limpar receita</translation>
+        <translation type="obsolete">Limpar receita</translation>
     </message>
     <message>
         <source>Delete selected</source>
@@ -3422,7 +3485,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -3568,7 +3631,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <source>Tun</source>
@@ -3709,7 +3772,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Adicionar para receita</translation>
+        <translation>Adicionar para receita</translation>
     </message>
     <message>
         <source>Create a new ingredient</source>
@@ -3717,15 +3780,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation type="unfinished">Editar ingrediente selecionado</translation>
+        <translation>Editar ingrediente selecionado</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Remover ingrediente selecionado</translation>
+        <translation>Remover ingrediente selecionado</translation>
     </message>
 </context>
 <context>
@@ -3772,11 +3835,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Boil</source>
-        <translation type="unfinished">Ferver</translation>
+        <translation>Ferver</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation>Brassagem</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -3816,7 +3879,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes:</source>
-        <translation type="unfinished">Notas:</translation>
+        <translation>Notas:</translation>
     </message>
 </context>
 <context>
@@ -3827,7 +3890,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Entrada</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <source>SG</source>
@@ -3875,7 +3938,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Saída</translation>
+        <translation>Saída</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
@@ -3934,7 +3997,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Temperature</source>
@@ -4070,6 +4133,10 @@ p, li { white-space: pre-wrap; }
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4079,7 +4146,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Entrada</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <source>Wort Volume</source>
@@ -4091,10 +4158,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4147,7 +4210,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Saída</translation>
+        <translation>Saída</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
@@ -4161,6 +4224,10 @@ p, li { white-space: pre-wrap; }
         <source>Billions of Yeast Cells Required</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>primingDialog</name>
@@ -4170,7 +4237,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Entrada</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
@@ -4214,7 +4281,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Saída</translation>
+        <translation>Saída</translation>
     </message>
     <message>
         <source>Prime with</source>
@@ -4297,18 +4364,18 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Forma</translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Brewer</source>
@@ -4372,7 +4439,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
 </context>
 <context>
@@ -4453,7 +4520,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -4529,11 +4596,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>OG</source>
-        <translation type="unfinished">OG</translation>
+        <translation>OG</translation>
     </message>
     <message>
         <source>FG</source>
-        <translation type="unfinished">FG</translation>
+        <translation>FG</translation>
     </message>
     <message>
         <source>IBUs</source>
@@ -4541,7 +4608,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation type="unfinished">Cor (SRM)</translation>
+        <translation>Cor (SRM)</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
@@ -4565,11 +4632,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Save</source>
@@ -4577,7 +4644,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -4599,7 +4666,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Iniciar</translation>
+        <translation>Iniciar</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
@@ -4617,6 +4684,10 @@ p, li { white-space: pre-wrap; }
         <source>Sound</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>HH:MM:SS</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>waterEditor</name>
@@ -4626,11 +4697,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notas</translation>
+        <translation>Notas</translation>
     </message>
 </context>
 <context>
@@ -4645,7 +4716,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation type="unfinished">Adicionar para receita</translation>
+        <translation>Adicionar para receita</translation>
     </message>
     <message>
         <source>Create new yeast</source>
@@ -4653,7 +4724,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
@@ -4820,7 +4891,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes:</source>
-        <translation type="unfinished">Notas:</translation>
+        <translation>Notas:</translation>
     </message>
 </context>
 </TS>

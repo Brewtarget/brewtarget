@@ -99,6 +99,14 @@
         <source>Step %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add grains</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -384,6 +392,17 @@
     </message>
 </context>
 <context>
+    <name>Database</name>
+    <message>
+        <source>Merge Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
@@ -638,14 +657,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sure about that?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Equipment request</source>
         <translation type="unfinished"></translation>
     </message>
@@ -799,6 +810,30 @@
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must select or define an equipment profile first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must select a style first.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1027,10 +1062,6 @@
 <context>
     <name>MiscTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1063,6 +1094,14 @@
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1098,16 +1137,6 @@
     </message>
     <message>
         <source>FG: %1
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1271,14 +1300,6 @@
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1463,6 +1484,16 @@
     </message>
     <message>
         <source>Yeast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Efficiency: %1%
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ABV: %1%
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1677,6 +1708,18 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raise water to boil and then remove from heat. Stir in  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Extracts to water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 water to %2 </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2595,6 +2638,14 @@ p, li { white-space: pre-wrap; }
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Set as Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>fermentableDialog</name>
@@ -3425,10 +3476,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Clear recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Delete selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4054,6 +4101,10 @@ p, li { white-space: pre-wrap; }
 &lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4075,10 +4126,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4143,6 +4190,10 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4599,6 +4650,10 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HH:MM:SS</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

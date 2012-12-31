@@ -103,6 +103,14 @@
         <source>Step %1: %2</source>
         <translation>Passo %1: %2</translation>
     </message>
+    <message>
+        <source>Add grains</source>
+        <translation>Aggiunta grani</translation>
+    </message>
+    <message>
+        <source>Heat water</source>
+        <translation>Calore dell&apos;acqua</translation>
+    </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
@@ -390,6 +398,17 @@
     </message>
 </context>
 <context>
+    <name>Database</name>
+    <message>
+        <source>Merge Database</source>
+        <translation>Unisci database</translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation>Ci possono essere nuovi ingredienti e ricette disponibili. Vuoi aggiungere questi al database?</translation>
+    </message>
+</context>
+<context>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
@@ -645,11 +664,11 @@
     </message>
     <message>
         <source>Sure about that?</source>
-        <translation>Sicuro di Questo?</translation>
+        <translation type="obsolete">Sicuro di Questo?</translation>
     </message>
     <message>
         <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation>Stai per cancellare la ricetta. Va bene?</translation>
+        <translation type="obsolete">Stai per cancellare la ricetta. Va bene?</translation>
     </message>
     <message>
         <source>Equipment request</source>
@@ -806,6 +825,30 @@
     <message>
         <source>Please give your mash a name before saving.</source>
         <translation>Si prega di dare il nome al tuo mash prima di salvare.</translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation>Riavviare</translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
+        <translation>Si prega di riavviare Brewtarget.</translation>
+    </message>
+    <message>
+        <source>No equipment</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>You must select or define an equipment profile first.</source>
+        <translation>È necessario selezionare o definire un profilo di primo equipaggiamento.</translation>
+    </message>
+    <message>
+        <source>No style</source>
+        <translation>Nessun stile</translation>
+    </message>
+    <message>
+        <source>You must select a style first.</source>
+        <translation>È necessario selezionare uno stile.</translation>
     </message>
 </context>
 <context>
@@ -1034,7 +1077,7 @@
     <name>MiscTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello di indice.Riga= %1</translation>
+        <translation type="obsolete">Cattivo modello di indice.Riga= %1</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1070,6 +1113,14 @@
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
         <translation>Non sembrano esserci qualsiasi file di dati in questa directory, quindi dovremo copiare i vostri vecchi dati qui.</translation>
+    </message>
+    <message>
+        <source>Restart</source>
+        <translation>Riavviare</translation>
+    </message>
+    <message>
+        <source>Please restart Brewtarget.</source>
+        <translation>Si prega di riavviare Brewtarget.</translation>
     </message>
 </context>
 <context>
@@ -1201,12 +1252,12 @@
     <message>
         <source>Efficiency: %1%%
 </source>
-        <translation>Efficenza: %1%%</translation>
+        <translation type="obsolete">Efficenza: %1%%</translation>
     </message>
     <message>
         <source>ABV: %1%%
 </source>
-        <translation>ABV: %1%%</translation>
+        <translation type="obsolete">ABV: %1%%</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -1281,11 +1332,11 @@
     </message>
     <message>
         <source>Merge Database</source>
-        <translation>Unisci database</translation>
+        <translation type="obsolete">Unisci database</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Ci possono essere nuovi ingredienti e ricette disponibili. Vuoi aggiungere questi al database?</translation>
+        <translation type="obsolete">Ci possono essere nuovi ingredienti e ricette disponibili. Vuoi aggiungere questi al database?</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -1470,6 +1521,16 @@
     <message>
         <source>Yeast</source>
         <translation>Lievito</translation>
+    </message>
+    <message>
+        <source>Efficiency: %1%
+</source>
+        <translation>Efficenza: %1%</translation>
+    </message>
+    <message>
+        <source>ABV: %1%
+</source>
+        <translation>ABV: %1%</translation>
     </message>
 </context>
 <context>
@@ -1684,6 +1745,18 @@ The final volume in the primary is %1.</source>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
         <translation>Aggiungi %1 %2 per bollire a %3.</translation>
+    </message>
+    <message>
+        <source>Raise water to boil and then remove from heat. Stir in  </source>
+        <translation>Sollevare l&apos;acqua ad ebollizione e poi togliere dal fuoco. Mescolare</translation>
+    </message>
+    <message>
+        <source>Add Extracts to water</source>
+        <translation>Aggiungi estratti all&apos;acqua</translation>
+    </message>
+    <message>
+        <source>%1 water to %2 </source>
+        <translation>%1 acqua a %2 </translation>
     </message>
 </context>
 <context>
@@ -2648,6 +2721,14 @@ p, li { white-space: pre-wrap; }
         <source>Cancel</source>
         <translation>Cancella</translation>
     </message>
+    <message>
+        <source>Set as Default</source>
+        <translation>Imposta come default</translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation>L&apos;utilizzo di luppolo</translation>
+    </message>
 </context>
 <context>
     <name>fermentableDialog</name>
@@ -3479,7 +3560,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Clear recipe</source>
-        <translation>Pulisci ricetta</translation>
+        <translation type="obsolete">Pulisci ricetta</translation>
     </message>
     <message>
         <source>Delete selected</source>
@@ -4113,6 +4194,10 @@ p, li { white-space: pre-wrap; }
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</translation>
     </message>
+    <message>
+        <source>Italian</source>
+        <translation>Italiano</translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4135,10 +4220,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
         <translation>Per ale, 0.75-1. Per lager, 1.5-2.</translation>
-    </message>
-    <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation></translation>
     </message>
     <message>
         <source>Aeration Method</source>
@@ -4204,6 +4285,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Billions of Yeast Cells Required</source>
         <translation>Miliardi di cellule di lievito richieste</translation>
+    </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
+        <translation>Lievito tasso (M)/(mL*P)</translation>
     </message>
 </context>
 <context>
@@ -4660,6 +4745,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Sound</source>
         <translation>Suono</translation>
+    </message>
+    <message>
+        <source>HH:MM:SS</source>
+        <translation>HH:MM:SS</translation>
     </message>
 </context>
 <context>
