@@ -92,7 +92,7 @@ public:
    static void dropInstance();
 
    static bool backupToDir(QString dir);
-   static bool restoreFromDir(QString dirStr);
+   static bool restoreFromFile(QString newDbFileStr);
 
    bool loadSuccessful();
 

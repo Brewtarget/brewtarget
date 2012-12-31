@@ -391,14 +391,16 @@ bool Database::backupToDir(QString dir)
    return success;
 }
 
-bool Database::restoreFromDir(QString dirStr)
+bool Database::restoreFromFile(QString newDbFileStr)
 {
    bool success = true;
-   
+   /*
    QString prefix = dirStr + "/";
    QString newDbFileName = prefix + "database.sqlite";
    QFile newDbFile(newDbFileName);
-   
+   */
+	
+	QFile newDbFile(newDbFileStr);
    // Fail if we can't find file.
    if( !newDbFile.exists() )
       return false;

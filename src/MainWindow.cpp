@@ -1442,14 +1442,14 @@ void MainWindow::restoreFromBackup()
       return;
    }
    
-   QString dir = QFileDialog::getExistingDirectory(this, tr("Restore Database"));
-   
-   bool success = Database::restoreFromDir(dir);
+	QString restoreDbFile = QFileDialog::getOpenFileName(this, tr("Choose File"), "", tr("SQLite (*.sqlite)"));
+	bool success = Database::restoreFromFile(restoreDbFile);
    
    if( ! success )
       QMessageBox::warning( this, tr("Oops!"), tr("For some reason, the operation failed.") );
    else
       QMessageBox::information(this, tr("Restart"), tr("Please restart Brewtarget."));
+	 //TODO: do this without requiring restarting :)
 }
 
 // Imports all the recipes from a file into the database.
