@@ -91,8 +91,11 @@ public:
    //! Call this to delete the internal instance.
    static void dropInstance();
 
+	//! backs up database to 'dir' in chosen directory
    static bool backupToDir(QString dir);
-   static bool restoreFromFile(QString newDbFileStr);
+	
+	//! \brief Reverts database to that of chosen file.
+   static bool restoreFromFile(QString newDbFileStr); 
 
    bool loadSuccessful();
 
