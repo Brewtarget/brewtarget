@@ -1,6 +1,6 @@
 /*
  * recipe.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2012.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -368,6 +368,8 @@ private:
    double _boilVolume_l;
    double _postBoilVolume_l;
    double _finalVolume_l;
+   // Final volume before any losses out of the kettle, used in calculations for sg/ibu/etc.
+   double _finalVolumeNoLosses_l;
    double _calories;
    double _grainsInMash_kg;
    double _grains_kg;
@@ -383,6 +385,9 @@ private:
    bool _uninitializedCalcs;
    QMutex _uninitializedCalcsMutex;
    QMutex _recalcMutex;
+   
+   // Batch size without losses.
+   double batchSizeNoLosses_l();
    
    // Some recalculators for calculated properties.
    

@@ -1,125 +1,125 @@
+body{
+   width: 8.5in;
+}
 caption { caption-side:top; }
 ul { list-style-type:circle; }
 h1 
 { 
-	font-size:36px;
-	font-weight:bold;
-	text-align:left;
+   font-size:36px;
+   font-weight:bold;
+   text-align:left;
 }
 h2
 {
-	font-size:20px;
-	font-weight:bold;
-	text-align:center;
-	border-bottom-style:solid;
+   font-size:20px;
+   font-weight:bold;
+   text-align:center;
+   border-bottom-style:solid;
 }
 
 img
 {
-	position:absolute;
-	right:0px;
-	top:0px;
-	z-index:-1;
+   position:absolute;
+   right:0px;
+   top:0px;
+   z-index:-1;
 }
 #title
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
 }
 #title td, #title th
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
+   empty-cells:show;
 }
 #title td.left
 {
-	width:10%;
-	font-weight:bold;
-	text-align:left;
+   font-weight:bold;
+   text-align:left;
 }
 #title td.value
 {
-	width:30%;
-	font-weight:normal;
-	text-align:left;
+   font-weight:normal;
+   text-align:left;
 }
 #title td.right
 {
-	width:20%;
-	font-weight:bold;
-	text-align:right;
+   font-weight:bold;
+   text-align:right;
 }
 #steps
 {
-	border-collapse:collapse;
-	width:100%;
-	margin-right:auto;
+   border-collapse:collapse;
+   width:100%;
+   margin-right:auto;
 }
 #steps td, #steps th 
 {
-	border: 1px solid black;
-	padding: 3px 7px 2px 7px;
+   border: 1px solid black;
+   padding: 3px 7px 2px 7px;
 }
 #steps th
 {
-	text-align:left;
-	padding-top:5px;
-	padding-bottom:4px;
-	background-color:#d8d8d8;
+   text-align:left;
+   padding-top:5px;
+   padding-bottom:4px;
+   background-color:#d8d8d8;
 }
 #steps tr.alt td
 {
-	color:black;
-	background-color:#e8e8e8;
+   color:black;
+   background-color:#e8e8e8;
 }
 #steps th.check
 {
-	width:10%;
+   width:10%;
 }
 #steps td.check
 {
-	width:10%;
-	font-size:3em;
-	text-align:center;
+   width:10%;
+   font-size:3em;
+   text-align:center;
 }
 #steps td.time
 {
-	width:10%;
+   width:10%;
 }
 #notes
 {
-	border-collapse:collapse;
-	width:100%;
+   border-collapse:collapse;
+   width:100%;
 }
 #notes td, #notes th
 {
-	border: 0px solid white;
-	padding: 30px 10px 20px 10px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 30px 10px 20px 10px;
+   empty-cells:show;
 }
 #notes tr.alt
 {
-	color:black;
-	background-color:#e8e8e8;
+   color:black;
+   background-color:#e8e8e8;
 }
 #notes td.left
 {
-	width:20%;
-	font-weight:bold;
-	text-align:left;
+   width:20%;
+   font-weight:bold;
+   text-align:left;
 }
 #notes td.value
 {
-	width:30%;
-	font-weight:normal;
-	text-align:left;
+   width:30%;
+   font-weight:normal;
+   text-align:left;
 }
 #notes td.right
 {
-	width:20%;
-	font-weight:bold;
-	text-align:right;
+   width:20%;
+   font-weight:bold;
+   text-align:right;
 }
 

@@ -1,6 +1,6 @@
 /*
  * MainWindow.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,7 +80,6 @@
 #include "ConverterTool.h"
 #include "TimerListDialog.h"
 #include "RecipeFormatter.h"
-#include "MashComboBox.h"
 #include "PrimingDialog.h"
 #include "RefractoDialog.h"
 #include "MashDesigner.h"
@@ -101,6 +100,7 @@
 #include "StyleListModel.h"
 #include "MashListModel.h"
 #include "StyleSortFilterProxyModel.h"
+#include "NamedMashEditor.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -222,6 +222,11 @@ MainWindow::MainWindow(QWidget* parent)
    // Set the mash combo box
    mashListModel =  new MashListModel(mashComboBox);
    mashComboBox->setModel(mashListModel);
+
+   // Nothing to say.
+   namedMashEditor = new NamedMashEditor(this, mashStepEditor);
+   // I don't think this is used yet
+   singleNamedMashEditor = new NamedMashEditor(this,mashStepEditor,true);
 
    // Set table models.
    // Fermentables
@@ -351,6 +356,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionImport_Recipes, SIGNAL( triggered() ), this, SLOT( importFiles() ) );
    connect( actionExportRecipe, SIGNAL( triggered() ), this, SLOT( exportRecipe() ) );
    connect( actionEquipments, SIGNAL( triggered() ), equipEditor, SLOT( show() ) );
+   connect( actionMashs, SIGNAL( triggered() ), namedMashEditor, SLOT( show() ) );
    connect( actionStyles, SIGNAL( triggered() ), styleEditor, SLOT( show() ) );
    connect( actionFermentables, SIGNAL( triggered() ), fermDialog, SLOT( show() ) );
    connect( actionHops, SIGNAL( triggered() ), hopDialog, SLOT( show() ) );
@@ -786,6 +792,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setEquipment(recEquip);
+
    mashButton->setMash(recipeObs->mash());
    recipeScaler->setRecipe(recipeObs);
 
@@ -1602,7 +1609,6 @@ void MainWindow::editSelectedMashStep()
    mashStepEditor->setVisible(true);
 }
 
-// Temporarily disabled as I rework the mash combo box
 void MainWindow::removeMash()
 {
    Mash *m = mashButton->mash();

@@ -1,6 +1,6 @@
 /*
  * database.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -93,9 +93,9 @@ public:
 
 	//! backs up database to 'dir' in chosen directory
    static bool backupToDir(QString dir);
-	
-	//! \brief Reverts database to that of chosen file.
-   static bool restoreFromFile(QString newDbFileStr); 
+
+   //! \brief Reverts database to that of chosen file.
+   static bool restoreFromFile(QString newDbFileStr);
 
    bool loadSuccessful();
 

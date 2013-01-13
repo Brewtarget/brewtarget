@@ -1,6 +1,6 @@
 /*
  * database.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1028,6 +1028,27 @@ Recipe* Database::newRecipe(bool addMash)
 Recipe* Database::newRecipe(Recipe* other)
 {
    Recipe* tmp = copy<Recipe>(other, true, &allRecipes);
+   
+   // Copy fermentables
+   foreach( Fermentable* a, other->fermentables() )
+      addToRecipe( tmp, a );
+   
+   // Copy hops
+   foreach( Hop* a, other->hops() )
+      addToRecipe( tmp, a );
+   
+   // Copy miscs
+   foreach( Misc* a, other->miscs() )
+      addToRecipe( tmp, a );
+   
+   // Copy yeasts
+   foreach( Yeast* a, other->yeasts() )
+      addToRecipe( tmp, a );
+   
+   // Copy style/mash/equipment
+   addToRecipe( tmp, other->equipment() );
+   addToRecipe( tmp, other->mash() );
+   addToRecipe( tmp, other->style() );
    
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);

@@ -102,7 +102,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MaltinessWidget.cpp
     ${SRCDIR}/mash.cpp
     ${SRCDIR}/MashButton.cpp
-    ${SRCDIR}/MashComboBox.cpp
     ${SRCDIR}/MashEditor.cpp
     ${SRCDIR}/MashListModel.cpp
     ${SRCDIR}/mashstep.cpp
@@ -116,6 +115,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/MiscDialog.cpp
     ${SRCDIR}/MiscSortFilterProxyModel.cpp
     ${SRCDIR}/MiscTableModel.cpp
+    ${SRCDIR}/NamedMashEditor.cpp
     ${SRCDIR}/OgAdjuster.cpp
     ${SRCDIR}/OptionDialog.cpp
     ${SRCDIR}/PreInstruction.cpp
@@ -180,6 +180,7 @@ SET( brewtarget_UIS
     ${UIDIR}/htmlViewer.ui
     ${UIDIR}/instructionWidget.ui
     ${UIDIR}/mashEditor.ui
+    ${UIDIR}/namedMashEditor.ui
     ${UIDIR}/mashWizard.ui
     ${UIDIR}/miscDialog.ui
     ${UIDIR}/ogAdjuster.ui
@@ -236,9 +237,9 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/MainWindow.h
     ${SRCDIR}/MaltinessWidget.h
     ${SRCDIR}/MashButton.h
-    ${SRCDIR}/MashComboBox.h
     ${SRCDIR}/MashDesigner.h
     ${SRCDIR}/MashEditor.h
+    ${SRCDIR}/NamedMashEditor.h
     ${SRCDIR}/MashListModel.h
     ${SRCDIR}/MashStepEditor.h
     ${SRCDIR}/MashStepTableModel.h

@@ -1,6 +1,6 @@
 /*
  * MainWindow.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2012.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,6 @@ class RecipeFormatter;
 class OgAdjuster;
 class ConverterTool;
 class TimerListDialog;
-//class MashComboBox;
 class PrimingDialog;
 class RecipeExtrasWidget;
 class RefractoDialog;
@@ -79,6 +78,7 @@ class MashStepTableModel;
 class EquipmentListModel;
 class StyleListModel;
 class StyleSortFilterProxyModel;
+class NamedMashEditor;
 
 /*!
  * \class MainWindow
@@ -299,7 +299,10 @@ private:
    MashListModel* mashListModel;
    StyleListModel* styleListModel;
    StyleSortFilterProxyModel* styleProxyModel;
-   
+  
+   NamedMashEditor* namedMashEditor;
+   NamedMashEditor* singleNamedMashEditor;
+
    QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 

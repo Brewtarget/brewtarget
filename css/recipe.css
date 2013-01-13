@@ -1,3 +1,6 @@
+body{
+   width: 8.5in;
+}
 ul { list-style-type:circle; }
 caption 
 { 
@@ -6,39 +9,39 @@ caption
 }
 h1 
 { 
-	font-size:36px;
-	font-weight:bold;
-	text-align:left;
+   font-size:36px;
+   font-weight:bold;
+   text-align:left;
 }
 h2
 {
-	font-size:18px;
-	font-weight:bold;
-	text-align:left;
-	border-bottom-style:solid;
+   font-size:18px;
+   font-weight:bold;
+   text-align:left;
+   border-bottom-style:solid;
 }
 h3
 {
-	font-size:14px;
+   font-size:14px;
    text-align:left;
    font-weight:normal;
    border-bottom-width:1px;
-	border-bottom-style:solid;
+   border-bottom-style:solid;
 }
 
 h4
 {
-	font-size:12px;
+   font-size:12px;
    text-align:left;
    font-weight:normal;
 }
 
 img
 {
-	position:absolute;
-	right:0px;
-	top:0px;
-	z-index:-1;
+   position:absolute;
+   right:0px;
+   top:0px;
+   z-index:-1;
 }
 #headerdiv
 {
@@ -46,29 +49,29 @@ img
 }
 #header
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
 }
 #header td 
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
     empty-cells:hide;
 }
 #header td.label
 {
     width:10%;
     font-size:14px;
-	font-weight:bold;
-	text-align:left;
+   font-weight:bold;
+   text-align:left;
 }
 #header td.value
 {
-	width:60%;
+   width:60%;
     font-size:14px;
-	font-weight:normal;
-	text-align:left;
+   font-weight:normal;
+   text-align:left;
 }
 #header caption
 {
@@ -78,49 +81,47 @@ img
 }
 #title
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
+   border: 1px solid;
 }
 #title td, #title th
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
+   empty-cells:show;
 }
 #title td.left
 {
-	width:10%;
-	font-weight:bold;
-	text-align:left;
+   font-weight:bold;
+   text-align:left;
 }
 #title td.value
 {
-	width:30%;
-	font-weight:normal;
-	text-align:left;
+   font-weight:normal;
+   text-align:left;
 }
 #title td.right
 {
-	width:20%;
-	font-weight:bold;
-	text-align:right;
+   font-weight:bold;
+   text-align:right;
 }
 #fermentables
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
 }
 #fermentables td
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
+   empty-cells:show;
 }
 #fermentables th
 {
-	border: 0px solid white;
+   border: 0px solid white;
    padding: 3px 7px 2px 7px;
    font-weight:bold;
    text-align:left;
@@ -135,19 +136,19 @@ img
 }
 #hops
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
 }
 #hops td
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
+   empty-cells:show;
 }
 #hops th
 {
-	border: 0px solid white;
+   border: 0px solid white;
     padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
@@ -161,19 +162,19 @@ img
 }
 #misc
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
 }
 #misc td
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
+   empty-cells:show;
 }
 #misc th
 {
-	border: 0px solid white;
+   border: 0px solid white;
     padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
@@ -187,19 +188,19 @@ img
 }
 #yeast
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
 }
 #yeast td
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
+   empty-cells:show;
 }
 #yeast th
 {
-	border: 0px solid white;
+   border: 0px solid white;
     padding: 3px 7px 2px 7px;
     font-weight:bold;
     text-align:left;
@@ -213,19 +214,19 @@ img
 }
 #mash
 {
-	border-collapse:collapse;
-	width:100%;
-	empty-cells:hide;
+   border-collapse:collapse;
+   width:100%;
+   empty-cells:hide;
 }
 #mash td
 {
-	border: 0px solid white;
-	padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   border: 0px solid white;
+   padding: 3px 7px 2px 7px;
+   empty-cells:show;
 }
 #mash th
 {
-	border: 0px solid white;
+   border: 0px solid white;
    padding: 3px 7px 2px 7px;
    font-weight:bold;
    text-align:left;
@@ -243,8 +244,8 @@ img
 }
 #brewnote
 {
-	border-collapse:collapse;
-	width:100%;
+   border-collapse:collapse;
+   width:100%;
 }
 #brewnote caption 
 { 
@@ -255,30 +256,30 @@ img
 }
 #brewnote td, #brewnote th
 {
-	border: 0px solid white;
+   border: 0px solid white;
    padding: 3px 7px 2px 7px;
-	empty-cells:show;
+   empty-cells:show;
 }
 #brewnote tr.alt
 {
-	color:black;
-	background-color:#e8e8e8;
+   color:black;
+   background-color:#e8e8e8;
 }
 #brewnote td.left
 {
-	width:20%;
-	font-weight:normal;
-	text-align:left;
+   width:20%;
+   font-weight:normal;
+   text-align:left;
 }
 #brewnote td.value
 {
-	width:30%;
-	font-weight:normal;
-	text-align:left;
+   width:30%;
+   font-weight:normal;
+   text-align:left;
 }
 #brewnote td.right
 {
-	width:20%;
-	font-weight:normal;
-	text-align:left;
+   width:20%;
+   font-weight:normal;
+   text-align:left;
 }

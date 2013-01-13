@@ -1,6 +1,6 @@
 /*
  * EquipmentEditor.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,6 +97,9 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    // checkboxes are the odd things out
    connect(checkBox_calcBoilVolume, SIGNAL(stateChanged(int)), this, SLOT(updateCheckboxRecord(int)));
    connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
+	
+	// make sure the dialog gets populated the first time it's opened from the menu
+	equipmentSelected();
 }
 
 void EquipmentEditor::setEquipment( Equipment* e )
@@ -108,6 +111,13 @@ void EquipmentEditor::setEquipment( Equipment* e )
    {
       obsEquip = e;
       connect( obsEquip, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      
+      // Make sure the combo box gets set to the right place.
+      QModelIndex modelIndex(equipmentListModel->find(e));
+      QModelIndex viewIndex(equipmentSortProxyModel->mapFromSource(modelIndex));
+      if( viewIndex.isValid() )
+         equipmentComboBox->setCurrentIndex(viewIndex.row());
+      
       showChanges();
    }
 }
@@ -173,6 +183,8 @@ void EquipmentEditor::save()
       QMessageBox::warning(this, tr("Tun Volume Warning"), tr("The tun volume you entered is 0. This may cause problems."));
    if( obsEquip->batchSize_l() <= 0.001 )
       QMessageBox::warning(this, tr("Batch Size Warning"), tr("The batch size you entered is 0. This may cause problems."));
+   if (obsEquip->hopUtilization_pct() <= 0.001)
+	   QMessageBox::warning(this, tr("Hop Utilization Warning"), tr("The hop utilization percentage you entered is 0. This may cause problems."));
 
    setVisible(false);
    return;

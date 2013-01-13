@@ -1,6 +1,6 @@
 /*
  * brewtarget.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -393,21 +393,10 @@ QString Brewtarget::getConfigDir(bool *success)
 #else // Windows OS.
 
    QDir dir;
-   // Before the app is running, app==0
-   if( app != 0 )
-   {
-      // This is the bin/ directory.
-      dir = QDir(qApp->applicationDirPath());
-      dir.cdUp();
-   }
-   else
-   {
-      // We're either in bin/ or bin/../
-      dir = QDir::current(); // Guess it's bin/../.
-      if( ! dir.exists("bin") ) // Already in bin/
-         dir.cdUp();
-   }
-   // Now we should be in the base directory (i.e. Brewtarget-1.2.4/)
+   // This is the bin/ directory.
+   dir = QDir(qApp->applicationDirPath());
+   dir.cdUp();
+   // Now we should be in the base directory (i.e. Brewtarget-2.0.0/)
 
    dir.cd("data");
    if( success != 0 )

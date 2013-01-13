@@ -1,6 +1,6 @@
 /*
  * StyleEditor.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <QInputDialog>
 #include "style.h"
 #include "StyleListModel.h"
+#include "StyleSortFilterProxyModel.h"
 #include "unit.h"
 #include "brewtarget.h"
 
@@ -41,13 +42,18 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    }
 
    styleListModel = new StyleListModel(styleComboBox);
-   styleComboBox->setModel(styleListModel);
+   styleProxyModel = new StyleSortFilterProxyModel(styleComboBox);
+   styleProxyModel->setDynamicSortFilter(true);
+   styleProxyModel->setSourceModel(styleListModel);
+   styleComboBox->setModel(styleProxyModel);
    
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newStyle() ) );
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT(removeStyle()) );
    connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
+
+   setStyle( styleListModel->at(styleComboBox->currentIndex()));
 }
 
 void StyleEditor::setStyle( Style* s )
@@ -75,7 +81,9 @@ void StyleEditor::removeStyle()
 
 void StyleEditor::styleSelected( const QString& /*text*/ )
 {
-   setStyle( styleListModel->at(styleComboBox->currentIndex()) );
+   QModelIndex proxyIndex( styleProxyModel->index(styleComboBox->currentIndex(),0) );
+   QModelIndex sourceIndex( styleProxyModel->mapToSource(proxyIndex) );
+   setStyle( styleListModel->at(sourceIndex.row()) );
 }
 
 void StyleEditor::save()
@@ -86,9 +94,7 @@ void StyleEditor::save()
       setVisible(false);
       return;
    }
-
-   //s->disableNotification();
-
+   
    s->setName( lineEdit_name->text() );
    s->setCategory( lineEdit_category->text() );
    s->setCategoryNumber( lineEdit_categoryNumber->text() );
@@ -111,9 +117,6 @@ void StyleEditor::save()
    s->setIngredients( textEdit_ingredients->toPlainText() );
    s->setExamples( textEdit_examples->toPlainText() );
    s->setNotes( textEdit_notes->toPlainText() );
-   
-   //s->reenableNotification();
-   //s->forceNotify();
 
    setVisible(false);
 }
@@ -194,6 +197,7 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_category->setText(s->category());
       lineEdit_categoryNumber->setText(s->categoryNumber());
       lineEdit_styleLetter->setText(s->styleLetter());
+		lineEdit_styleGuide->setText(s->styleGuide());
       comboBox_type->setCurrentIndex(s->type());
       lineEdit_ogMin->setText(Brewtarget::displayAmount(s->ogMin(), 0));
       lineEdit_ogMax->setText(Brewtarget::displayAmount(s->ogMax(), 0));

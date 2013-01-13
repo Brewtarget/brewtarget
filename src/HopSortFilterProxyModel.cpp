@@ -1,6 +1,6 @@
 /*
  * HopSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright Mik
- * Firestone (mikfire@gmail.com), 2010-2011.
+ * Firestone (mikfire@gmail.com), 2010-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

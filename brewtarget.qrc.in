@@ -28,6 +28,7 @@
         <file alias="images/help-contents.png">${ROOTDIR}/images/help-contents.png</file>
         <file alias="images/hydrometer.svg">${ROOTDIR}/images/hydrometer.svg</file>
         <file alias="images/kbruch.png">${ROOTDIR}/images/kbruch.png</file>
+        <file alias="images/mashpaddle.svg">${ROOTDIR}/images/mashpaddle.svg</file>
         <file alias="images/merge.png">${ROOTDIR}/images/merge.png</file>
         <file alias="images/preferences-other.png">${ROOTDIR}/images/preferences-other.png</file>
         <file alias="images/printer.png">${ROOTDIR}/images/printer.png</file>

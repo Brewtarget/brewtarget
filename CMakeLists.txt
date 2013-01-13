@@ -305,9 +305,15 @@ IF( WIN32 )
         ${QT_BINARY_DIR}/QtGui4.dll
         ${QT_BINARY_DIR}/QtNetwork4.dll
         ${QT_BINARY_DIR}/QtSvg4.dll
+        ${QT_BINARY_DIR}/QtSql4.dll
         ${QT_BINARY_DIR}/QtWebKit4.dll
         ${QT_BINARY_DIR}/QtXml4.dll
    )
+   
+   SET( SQL_Drivers_DLLs
+        ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll
+   )
+
    SET( Phonon_Backend_DLLs
         ${QT_PLUGINS_DIR}/phonon_backend/phonon_ds94.dll
    )
@@ -472,6 +478,8 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
    IF( WIN32 )
       INSTALL( FILES ${Qt_DLLs}
                DESTINATION "bin" )
+      INSTALL( FILES ${SQL_Drivers_DLLs}
+               DESTINATION "bin/sqldrivers" )
       INSTALL( FILES ${Phonon_Backend_DLLs}
                DESTINATION "bin/phonon_backend" )
       INSTALL( FILES ${Image_Formats_DLLs}

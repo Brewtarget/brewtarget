@@ -1,6 +1,6 @@
 /*
  * recipe.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,6 +117,7 @@ Recipe::Recipe()
      _boilVolume_l(1.0),
      _postBoilVolume_l(1.0),
      _finalVolume_l(1.0),
+     _finalVolumeNoLosses_l(1.0),
      _calories(0),
      _grainsInMash_kg(0),
      _grains_kg(0),
@@ -1459,6 +1460,16 @@ void Recipe::removeBrewNote(BrewNote* var)
    Database::instance().removeFromRecipe(this, var);
 }
 
+double Recipe::batchSizeNoLosses_l()
+{
+   double ret = batchSize_l();
+   Equipment* e = equipment();
+   if( e )
+      ret += e->trubChillerLoss_l();
+   
+   return ret;
+}
+
 //==============================Recalculators==================================
 
 void Recipe::recalcAll()
@@ -1517,7 +1528,7 @@ void Recipe::recalcColor_srm()
    {
       ferm = ferms[i];
       // Conversion factor for lb/gal to kg/l = 8.34538.
-      mcu += ferm->color_srm()*8.34538 * ferm->amount_kg()/_finalVolume_l;
+      mcu += ferm->color_srm()*8.34538 * ferm->amount_kg()/_finalVolumeNoLosses_l;
    }
 
    ret = ColorMethods::mcuToSrm(mcu);
@@ -1562,9 +1573,9 @@ void Recipe::recalcBoilGrav()
    // we need to adjust for that here.
    sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
    if( equipment() )
-      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/_postBoilVolume_l);
+      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/_finalVolumeNoLosses_l);
 
-   ret = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, _boilVolume_l) );
+   ret = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, boilSize_l()) );
  
    if ( ret != _boilGrav )
    {
@@ -1608,7 +1619,6 @@ void Recipe::recalcIBU()
 
 void Recipe::recalcVolumeEstimates()
 {
-   // wortFromMash_l ==========================
    double waterAdded_l;
    double absorption_lKg;
    double tmp = 0.0;
@@ -1617,6 +1627,7 @@ void Recipe::recalcVolumeEstimates()
    double tmp_fv = 0.0;
    double tmp_pbv = 0.0;
 
+   // wortFromMash_l ==========================
    if( mash() == 0 )
       _wortFromMash_l = 0.0;
    else
@@ -1658,11 +1669,20 @@ void Recipe::recalcVolumeEstimates()
    
    // finalVolume_l ==============================
    
+   // NOTE: the following figure is not based on the other volume estimates
+   // since we want to show og,fg,ibus,etc. as if the collected wort is correct.
+   _finalVolumeNoLosses_l = batchSizeNoLosses_l();
    if( equipment() != 0 )
-      tmp_fv = equipment()->wortEndOfBoil_l(tmp_bv) - equipment()->trubChillerLoss_l() + equipment()->topUpWater_l();
+   {
+      //_finalVolumeNoLosses_l = equipment()->wortEndOfBoil_l(tmp_bv) + equipment()->topUpWater_l();
+      tmp_fv = equipment()->wortEndOfBoil_l(tmp_bv) + equipment()->topUpWater_l() - equipment()->trubChillerLoss_l();
+   }
    else
+   {
       _finalVolume_l = tmp_bv - 4.0; // This is just shooting in the dark. Can't do much without an equipment.
-
+      //_finalVolumeNoLosses_l = _finalVolume_l;
+   }
+   
    // postBoilVolume_l ===========================
 
    if( equipment() != 0 )
@@ -1778,6 +1798,12 @@ void Recipe::recalcCalories()
 
    tmp = ((6.9*abw) + 4.0 * (RE-0.1)) * ffg * 3.55;
 
+   //! If there are no fermentables in the recipe, if there is no mash, etc.,
+   //  then the calories/12 oz ends up negative. Since negative doesn't make
+   //  sense, set it to 0
+   if ( tmp < 0 )
+      tmp = 0;
+
    if ( tmp != _calories ) 
    {
       _calories = tmp;
@@ -1874,22 +1900,22 @@ void Recipe::recalcOgFg()
    nonFermetableSugars_kg    = sugars.value("nonFermetableSugars_kg");
 
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
-   plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolume_l);
+   plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolumeNoLosses_l);
 
    tmp_og = Algorithms::Instance().PlatoToSG_20C20C( plato );
    tmp_pnts = (tmp_og-1)*1000.0;
    if ( nonFermetableSugars_kg != 0.0 )
    {
-    ferm_kg = sugar_kg - nonFermetableSugars_kg;
-    plato = Algorithms::Instance().getPlato( ferm_kg, _finalVolume_l);
-     _og_fermentable = Algorithms::Instance().PlatoToSG_20C20C( plato );
-    plato = Algorithms::Instance().getPlato( nonFermetableSugars_kg, _finalVolume_l); 
-    tmp_ferm_pnts = ((Algorithms::Instance().PlatoToSG_20C20C( plato ))-1)*1000.0;
+      ferm_kg = sugar_kg - nonFermetableSugars_kg;
+      plato = Algorithms::Instance().getPlato( ferm_kg, _finalVolumeNoLosses_l);
+      _og_fermentable = Algorithms::Instance().PlatoToSG_20C20C( plato );
+      plato = Algorithms::Instance().getPlato( nonFermetableSugars_kg, _finalVolumeNoLosses_l); 
+      tmp_ferm_pnts = ((Algorithms::Instance().PlatoToSG_20C20C( plato ))-1)*1000.0;
    }
    else
    {
-     _og_fermentable = tmp_og;
-     tmp_ferm_pnts = 0;
+      _og_fermentable = tmp_og;
+      tmp_ferm_pnts = 0;
    }
 
    // Calculage FG
@@ -1964,9 +1990,9 @@ double Recipe::ibuFromHop(Hop const* hop)
    avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
    
    if( hop->use() == Hop::Boil)
-      ibus = IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, minutes );
+      ibus = IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, minutes );
    else if( hop->use() == Hop::First_Wort )
-      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolume_l, avgBoilGrav, boilTime );
+      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, boilTime );
 
    // Adjust for hop form.
    if( hop->form() == Hop::Leaf )

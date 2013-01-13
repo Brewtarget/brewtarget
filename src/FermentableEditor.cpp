@@ -1,6 +1,6 @@
 /*
  * FermentableEditor.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2011.
+ * (rocketman768@gmail.com), 2009-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,7 +170,7 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
       if( ! updateAll )
          return;
    }
-   else if( propName == "moisture_pct" || updateAll) {
+   if( propName == "moisture_pct" || updateAll) {
       lineEdit_moisture->setText(Brewtarget::displayAmount(obsFerm->moisture_pct(), 0));
       if( ! updateAll )
          return;

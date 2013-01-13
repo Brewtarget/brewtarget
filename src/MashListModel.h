@@ -1,6 +1,6 @@
 /*
 * MashListModel.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2012.
+* (rocketman768@gmail.com), 2009-2013.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,9 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef _MASHLISTMODEL_H
+#define   _MASHLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QModelIndex>
@@ -67,3 +70,5 @@ class MashListModel : public QAbstractListModel
       
       void repopulateList();
 };
+
+#endif /* _MASHLISTMODEL_H */

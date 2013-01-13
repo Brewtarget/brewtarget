@@ -1,6 +1,6 @@
 /*
  * BrewNoteWidget.h is part of Brewtarget, and is Copyright Mik Firestone
- * (mikfire@gmail.com) and Philip G. Lee (rocketman768@gmail.com), 2011-2012.
+ * (mikfire@gmail.com) and Philip G. Lee (rocketman768@gmail.com), 2011-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

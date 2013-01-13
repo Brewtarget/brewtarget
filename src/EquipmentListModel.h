@@ -1,6 +1,6 @@
 /*
 * EquipmentListModel.h is part of Brewtarget, and is Copyright Philip G. Lee
-* (rocketman768@gmail.com), 2009-2012.
+* (rocketman768@gmail.com), 2009-2013.
 *
 * Brewtarget is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef _EQUIPMENTLISTMODEL_H
+#define _EQUIPMENTLISTMODEL_H
 #include <QAbstractListModel>
 #include <QModelIndex>
 #include <QList>
@@ -39,23 +41,25 @@ class EquipmentListModel : public QAbstractListModel
 public:
    EquipmentListModel(QWidget* parent = 0);
    
-   //! Reimplemented from QAbstractListModel.
+   //! \brief Reimplemented from QAbstractListModel.
    virtual int rowCount( QModelIndex const& parent = QModelIndex() ) const;
-   //! Reimplemented from QAbstractListModel.
+   //! \brief Reimplemented from QAbstractListModel.
    virtual QVariant data( QModelIndex const& index, int role = Qt::DisplayRole ) const;
-   //! Reimplemented from QAbstractListModel.
+   //! \brief Reimplemented from QAbstractListModel.
    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
    void observeRecipe(Recipe* rec);
-   //! Add many equipments to the list.
+   //! \brief Add many equipments to the list.
    void addEquipments(QList<Equipment*> equips);
-   //! Remove all equipments from the list.
+   //! \brief Remove all equipments from the list.
    void removeAll();
    
-   //! Return the equipment at the index in the list.
+   //! \brief Return the equipment at the index in the list.
    Equipment* at(int ndx);
-   //! Return the index of a particular equipment.
+   //! \brief Return the index of a particular equipment. DEPRECATED.
    int indexOf(Equipment* e);
+   //! \brief Return the index of a particular equipment.
+   QModelIndex find(Equipment* e);
    
 public slots:
    void recChanged(QMetaProperty,QVariant);
@@ -71,3 +75,5 @@ private:
    
    void repopulateList();
 };
+
+#endif /* _EQUIPMENTLISTMODEL_H */
