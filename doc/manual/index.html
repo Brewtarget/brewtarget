@@ -1,162 +1,409 @@
 <html>
 <head>
    <title>Brewtarget 2.0.0 Manual</title>
-</head>
-<style type="text/css">
-h2{
-   /*text-decoration: underline;*/
-   width: 100%;
-   border-bottom: 2px solid black;
-}
-</style>
-<body>
+   <style type='text/css' media='all'>
+      body 
+      { 
+         margin: 0; 
+         padding: 0; 
+         font-family: Lucida Grande, Verdana, Geneva, Sans-serif; 
+         font-size: 14px; 
+         color: #333; 
+         background-color: #fff; 
+      } 
+      a 
+      { 
+         color: #0134c5;
+         background-color: transparent;
+         text-decoration: none;
+         font-weight: normal;
+         outline-style: none;
+      }
+      a:visited 
+      { 
+         color: #0134c5;
+         background-color: transparent;
+         text-decoration: none;
+         outline-style: none;
+      } 
+      a:hover 
+      { 
+         color: #000;
+         text-decoration: none;
+         background-color: transparent;
+         outline-style: none;
+      } 
+      #content
+      {
+         margin: 20px 40px 0 40px;
+         padding: 0;
+      }
+      #content p
+      {
+         margin: 12px 20px 12px 0;
+      }
+      #content h1
+      {
+         color: #e13300;
+         border-bottom: 1px solid #666;
+         background-color: transparent;
+         font-weight: normal;
+         font-size: 24px;
+         margin: 0 0 20px 0;
+         padding: 3px 0 7px 3px;
+      }
+      #content h2
+      {
+         background-color: transparent;
+         border-bottom: 1px solid #999;
+         color: #000;
+         font-size: 18px;
+         font-weight: bold;
+         margin: 28px 0 16px 0;
+         padding: 5px 0 6px 0;
+      }
+      #content h3
+      {
+         background-color: transparent;
+         color: #333;
+         font-size: 16px;
+         font-weight: bold;
+         margin: 16px 0 15px 0;
+         padding: 0 0 0 0;
+      }
+      #content h4
+      {
+         background-color: transparent;
+         color: #444;
+         font-size: 14px;
+         font-weight: bold;
+         margin: 22px 0 0 0;
+         padding: 0 0 0 0;
+      }
+      #content kbd
+      {
+         font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+         color: #A70000;
+         font-weight: bold;
+         font-style: normal;
+      }
+      #content ul
+      {
+         list-style: none;
+         margin-left: 10;
+         padding-left: 1em;
+         text-indent: -1em;
+         margin-bottom: 10px;
+      }
+      #content li
+      {
+         margin-bottom: 2px;
+      }
+      #content li p
+      {
+         margin-left: 0;
+         margin-right: 0;
+      }
+      #content .tableborder
+      {
+         border: 1px solid #999;
+      }
+      #content th
+      {
+         font-weight: bold;
+         text-align: left;
+         font-size: 12px;
+         background-color: #666;
+         color: #fff;
+         padding: 4px;
+      }
+      #content .td
+      {
+         font-weight: normal;
+         font-size: 12px;
+         padding: 6px;
+         background-color: #f3f3f3;
+      }
+      #content .important
+      {
+         background: #FBE6F2;
+         border: 1px solid #D893A1;
+         color: #333;
+         margin: 10px 0 5px 0;
+         padding: 10px;
+      }
+      #content .important p
+      {
+         margin: 6px 0 8px 0;
+         padding: 0;
+      }
+      #content .important .leftpad
+      {
+         margin: 6px 0 8px 0;
+         padding-left: 20px;
+      }
+      #content .critical
+      {
+         background: #FBE6F2;
+         border: 1px solid #E68F8F;
+         color: #333;
+         margin: 10px 0 5px 0;
+         padding: 10px;
+      }
+      #content .critical p
+      {
+         margin: 5px 0 6px 0;
+         padding: 0;
+      }
+      </style>
+   </head>
+   <body>
+   <div id="content">
    <h1>Brewtarget 2.0.0 Manual</h1>
 
-   <h2>Table of Contents</h2>
-   <ul id="toc">
-      <li><span><a href="#walkthrough">A Walkthrough</a></span></li>
-      <ul id="toc">
-         <li><span><a href="#settingoptions">Setting Options</a></span></li>
-         <li><span><a href="#newequipment">Defining Your Equipment</a></span></li>
-         <li><span><a href="#newrecipe">Making a New Recipe</a></span></li>
-         <li><span><a href="#adjustingrecipe">Adjusting Recipe Parameters</a></span></li>
-         <li><span><a href="#setstyles">Selecting the Style</a></span></li>
-         <li><span><a href="#addingingredients">Adding Ingredients</a></span></li>
-         <li><span><a href="#makemash">Making A Mash</a></span></li>
-         <ul id="toc">
-            <li><span><a href="#mashwiz">Method 1: Mash Wizard</a></span></li>
-            <li><span><a href="#mashdesigner">Method 2: Mash Designer</a></span></li>
-         </ul>
-         <li><span><a href="#brewdaymode">Brewday Mode</a></span></li>
-         <li><span><a href="#printrecipe">Printing the Recipe</a></span></li>
-         <li><span><a href="#savework">Saving Your Work</a></span></li>
-      </ul>
-      <li><span><a href="#generalconcepts">General Concepts</a></span></li>
+   <h2>Table of Contents: </h2>
+   <ul>
+      <li><a href="#walkthrough">A Walkthrough</a></li>
       <ul>
-         <li><span><a href="#trees">Trees</a></span></li>
+         <li><a href="#settingoptions">Setting Options</a></li>
+         <li><a href="#newequipment">Defining Your Equipment</a></li>
+         <li><a href="#newrecipe">Making a New Recipe</a></li>
+         <li><a href="#adjustingrecipe">Adjusting Recipe Parameters</a></li>
+         <li><a href="#setstyles">Selecting the Style</a></li>
+         <li><a href="#addingingredients">Adding Ingredients</a></li>
+         <li><a href="#makemash">Making A Mash</a></li>
          <ul>
-            <li><span><a href="#brewnotes">Brewnotes</a></span></li>
+            <li><a href="#mashwiz">Method 1: Mash Wizard</a></li>
+            <li><a href="#mashdesigner">Method 2: Mash Designer</a></li>
          </ul>
-         <li><span><a href="#ingredtorecipe">Adding Ingredients to Recipes</a></span></li>
+         <li><a href="#brewdaymode">Brewday Mode</a></li>
+         <li><a href="#printrecipe">Printing the Recipe</a></li>
+         <li><a href="#savework">Saving Your Work</a></li>
+      </ul>
+      <li><a href="#generalconcepts">General Concepts</a></li>
+      <ul>
+         <li><a href="#trees">Trees</a></li>
          <ul>
-            <li><span><a href="#ingrededitors">Method 1: Editors</a></span></li>
-            <li><span><a href="#ingreddrag">Method 2: Drag'n'Drop</a></span></li>
+            <li><a href="#brewnotes">Brewnotes</a></li>
          </ul>
-         <li><span><a href="#importingrecipes">Importing Recipes</a></span></li>
-         <li><span><a href="#exportingrecipes">Exporting Recipes</a></span></li>
-         <li><span><a href="#backupandrestore">Backing Up and Restoring Databases</a></span></li>
-         <li><span><a href="#postingrecipe">Posting Your Recipe</a></span></li>
+         <li><a href="#ingredtorecipe">Adding Ingredients to Recipes</a></li>
          <ul>
-            <li><span><a href="#postclip">Method 1: Recipe to Clipboard</a></span></li>
-            <li><span><a href="#posthtml">Method 2: Save to HTML</a></span></li>
+            <li><a href="#ingrededitors">Method 1: Editors</a></li>
+            <li><a href="#ingreddrag">Method 2: Drag'n'Drop</a></li>
          </ul>
-         <li><span><a href="#tools">Tools</a></span></li>
+         <li><a href="#importingrecipes">Importing Recipes</a></li>
+         <li><a href="#exportingrecipes">Exporting Recipes</a></li>
+         <li><a href="#backupandrestore">Backing Up and Restoring Databases</a></li>
+         <li><a href="#postingrecipe">Posting Your Recipe</a></li>
          <ul>
-            <li><span><a href="#ogcorrection">OG Correction</a></span></li>
-            <li><span><a href="#pitchrate">Pitch Rate</a></span></li>
-            <li><span><a href="#primingcalc">Priming Calculator</a></span></li>
-            <li><span><a href="#refractometer">Refractometer</a></span></li>
-         </ul>
-         <li><span><a href="#units">Units</a></span></li>
-         <ul>
-            <li><span><a href="#unitsandscale">Controlling Units and Scale</a></span></li>
-            <li><span><a href="#caveats">Caveats with Auto-conversion</a></span></li>
-            <li><span><a href="#supportunits">Caveats with Auto-conversion</a></span></li>
+            <li><a href="#postclip">Method 1: Recipe to Clipboard</a></li>
+            <li><a href="#posthtml">Method 2: Save to HTML</a></li>
          </ul>
       </ul>
-      <li><span><a href="#newin2">New In Brewtarget v2</a></span></li>
+      <li><a href="#tools">Tools</a></li>
       <ul>
-         <li><span><a href="#newdatabase">SQLite DB</a></span></li>
-         <li><span><a href="#newunitsandscales">Units and Scales</a></span></li>
-         <li><span><a href="#newtrees">Trees</a></span></li>
-         <li><span><a href="#defaultequipment">Default Equipment</a></span></li>
-         <li><span><a href="#hoputilization">Hop Utilization</a></span></li>
+         <li><a href="#ogcorrection">OG Correction</a></li>
+         <li><a href="#pitchrate">Pitch Rate</a></li>
+         <li><a href="#primingcalc">Priming Calculator</a></li>
+         <li><a href="#refractometer">Refractometer</a></li>
+         <li><a href="#units">Units</a></li>
+         <li><a href="#unitsandscale">Contrulling Units and Scale</a></li>
+         <li><a href="#caveats">Caveats with Auto-conversion</a></li>
+         <li><a href="#supportunits">Units and Abbreviations</a></li>
+      </ul>
+      <li><a href="#newin2">New In Brewtarget v2</a></li>
+      <ul>
+         <li><a href="#newdatabase">SQLite DB</a></li>
+         <li><a href="#newunitsandscales">Units and Scales</a></li>
+         <li><a href="#newtrees">Trees</a></li>
+         <li><a href="#defaultequipment">Default Equipment</a></li>
+         <li><a href="#hoputilization">Hop Utilization</a></li>
       </ul>
    </ul>
 
-<a id="walkthough"><h2>A Walkthrough</h2></a>
+<a id="walkthrough"><h1>A Walkthrough</h1></a>
 <p>
 I figure it's probably easier to demonstrate the features of the program rather than try to explain
 every single concept. So, here we will create a nice American Amber Ale, trying to touch on as many
 features as possible.
 </p>
 
-<a id="settingoptions"><h3>Setting Options</h3></a>
+<a id="settingoptions"><h2>Setting Options</h2></a>
 <p>
 Brewtarget's options are in Tools-&gt;Options. Here you should set your preferences for the unit
 system you wish to use, and which formulae you want to use in creating your recipes. For the purposes
 of this walkthrough, set the units to US traditional, temperature to Fahrenheit, gravity to specific gravity,
-color to Morey, and IBU to Tinseth. <b>Note</b>: if you choose Plato for gravity, then all the displayed FG
-numbers are <i>not</i> corrected. So, the displayed FG reflects the actual FG: not what you will see if
+color to Morey, and IBU to Tinseth. 
+</p>
+<p class="critical"><strong>Note</strong>: if you choose Plato for gravity, then all the displayed FG
+numbers are <kbd>not</kbd> corrected. So, the displayed FG reflects the actual FG: not what you will see if
 you use your refractometer.
 </p>
 
-<a id="newequipment"><h3>Defining Your Equipment</h3></a>
-<p>
-Never <b>ever</b> try to formulate a recipe without setting up an equipment record.
+<a id="newequipment"><h2>Defining Your Equipment</h2></a>
+<p>Never <kbd>ever</kbd> try to formulate a recipe without setting up an equipment record.
 Having an equipment record for your recipe is very important in Brewtarget. It contains a lot of
-information about your <i>particular</i> setup, and helps Brewtarget better estimate your results.
-Click on View-&gt;Equipments to bring up the Equipment Editor, or go to the
+information about your <i>particular</i> setup, and helps Brewtarget better estimate your results. </p>
+<p> Click on View-&gt;Equipments to bring up the Equipment Editor, or go to the
 equipment tree, right click and select "New Equipment". At the bottom, press
 the green plus and enter the name you wish to give it. Check &quot;calculate
-pre-boil volume&quot;, and enter as many of these fields as you can.
+pre-boil volume&quot;, and enter as many of these fields as you can. When
+done, press the diskette button at the bottom of the dialog to save.
 
-<ul>
-   <li><b>Name</b> - Any name you choose to title your equipment setup.</li>
-   <li><b>Set as Default</b> - Set this equipment profile as the default profile to be used when creating recipes.</li>
-   <li><b>Pre-boil volume</b> - Amount of wort in the kettle immediately prior to boil.</li>
-   <li><b>Calculate pre-boil volume</b> - Based on the boil time, losses, and water additions, automatically
-          calculate the pre-boil volume instead of entering it by hand.
-   <li><b>Batch size</b> - How much wort you want to end up in the primary.</li>
+</p>
 
-   <li><b>Boil time</b> - How long you usually boil.</li>
-   <li><b>Evaporation rate</b> - Every hour, your boil will lose this much water. Typically, around 3L or 0.75 US gallons.</li>
-   <li><b>Kettle top-up water</b> - Amount of water you usually add directly to the kettle before boiling.
-                                    For <b>extract recipes</b>, this should be equal to the boil volume.</li>
-   <li><b>Final top-up water</b> - Amount of water to add to the wort immediately before going into the primary.</li>
-   <li><b>Grain absorption</b> - How many liters of water are permanently lost to each kilogram of grain during
-          mashing. The default value is 1.0875 liters per kilogram. This can fluctuate due to the fine-ness of
-          your grind, humidity, brand, and other factors.
-   <li><b>Boiling Point of Water</b> - The temperature at which water boils. This will vary with altitude. </li>
-   <li><b>Hop Utilization</b> - Multiplicative correction for hop utilization. Typically 100 percent in homebrew systems. Larger systems typically somewhat more than 100 percent.</li>
-   <li><b>Volume</b> - The maximum volume your mash tun can hold.</li>
-   <li><b>Mass</b> - Mass of your mash tun.</li>
-   <li><b>Specific heat</b> - Specific heat of the material of your mash tun in cal/(g*C). Typical values are:</li>
-   
-   <ul>
-      <li>Aluminum - 0.215</li>
-      <li>Copper - 0.092</li>
-      <li>Iron/Steel - 0.108</li>
-      <li>Plastic - 0.359</li>
-   </ul>
-   
-   <li><b>Kettle to fermenter</b> - How much wort you usually leave behind in the kettle when you transfer the wort to primary.</li>
-   <li><b>Lauter deadspace</b> - How much wort you usually lose in the lauter tun.</li>
-</ul>
+<table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
+   <tr>
+      <th>Section</th>
+      <th>Field</th>
+      <th>Description</th>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Header</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Set as Default</kbd></td>
+      <td class="td">Set this equipment profile as the default profile to be used when creating recipes.</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Required Fields</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Name</kbd></td>
+      <td class="td">Any name you choose to title your equipment setup</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Pre-boil volume</kbd></td>
+      <td class="td">Amount of wort in the kettle immediately prior to boil.</li>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Calculate pre-boil volume</kbd></td>
+      <td class="td">Based on the boil time, losses, and water additions, automatically calculate the pre-boil volume instead of entering it by hand.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Batch size</kbd></td>
+      <td class="td">How much wort you want to end up in the primary fermenter</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Boiling &amp; Water</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Boil time</kbd></td>
+      <td class="td">How long you usually boil. <kbd>Note:</kbd> As of version
+         2.0, brewtarget allows you to modify the boil time directly on the
+         recipe. This works simply as a default.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Evaporation rate</kbd></td>
+      <td class="td">Water loss during the boil, per hour. Typically, around 3L or 0.75 US gallons.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Kettle top-up water</kbd></td>
+      <td class="td">Amount of water you usually add directly to the kettle
+         before boiling.  For <kbd>extract recipes</kbd>, this should be equal to
+         the boil volume.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Final top-up water</kbd></td>
+      <td class="td">Amount of water to add to the wort immediately before going into the primary.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Grain absorption</kbd></td>
+      <td class="td">How many liters of water are permanently lost to each
+         kilogram of grain during mashing. The default value is 1.0875 liters
+         per kilogram. This can fluctuate due to the fine-ness of
+          your grind, humidity, brand, and other factors. Pressing the
+          "Default Absorption" button will reset the value to this
+          default.</td>
+    </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Boiling Point of Water</kbd></td>
+      <td class="td">The temperature at which water boils. The default value
+         is 100C (212F), but the actual value will vary with altitude.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Hop Utilization</kbd></td>
+      <td class="td">Correction for hop utilization. Typically 100 percent in
+         homebrew systems, somewhat more than 100 percent for larger systems.</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Mash Tun</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Volume</kbd></td>
+      <td class="td">The maximum volume your mash tun can hold.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Mass</kbd></td>
+      <td class="td">Mass of your mash tun.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Specific Heat</kbd></td>
+      <td class="td">Specific heat of the material of your mash tun in cal/(g*C). Typical values are:
+         <ul>
+            <li>Aluminum - 0.215</li>
+            <li>Copper - 0.092</li>
+            <li>Iron/Steel - 0.108</li>
+            <li>Plastic - 0.359</li>
+         </ul>
+      </td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Losses</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Kettle to fermenter</kbd></td>
+      <td class="td">How much wort you leave in the kettle when you transfer the wort to primary.</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Lauter deadspace</kbd></td>
+      <td class="td">How much wort you lose in the lauter tun.</td>
+   </tr>
+</table>
 
-Then, press the diskette button at the bottom to save.
 </p>
 
 <a id="newrecipe"><h3>Making a New Recipe</h3></a>
 <p>
-Click on either File-&gt;&quot;New Recipe&quot;, click the blue plus in the toolbar at the top of the main
-window or right-click on the recipe part of the tree and select &quot;New Recipe&quot;. Now, title your recipe in the box that pops up, and click &quot;OK&quot;.
+Click on either File-&gt;&quot;New Recipe&quot;, click the blue plus in the
+toolbar at the top of the main window or right-click in the recipe tab of the
+tree and select &quot;New Recipe&quot;. Name your recipe in the box that
+pops up, and click &quot;OK&quot;.
 </p>
 
-<a id="adjustingrecipe"><h3>Adjusting Recipe Parameters</h3></a>
-<p> If you created your equipment profile as shown above, and you made it the
+<a id="adjustingrecipe"><h2>Adjusting Recipe Parameters</h2></a>
+<p> 
+If you created your equipment profile as shown above, and you made it the
 default profile, you won't need to do anything else.
 </p>
 
-<p> Otherwise, choose &quot;5.5 gal batch - All Grain - Ideal&quot;
-(5.5 gallon batch, 0.75 gal/hr evap. rate, and no losses) from
-the Equipment drop-down list.  You can also drag it from the tree on
-the left and drop it on the recipe. After selecting or dropping the
-equipment, you will be asked if you want to set the batch and boil size of
-the recipe to that of the equipment. Click &quot;Yes&quot;.
+<p> 
+Otherwise, choose the equipment profile you set up in the <a
+href="#newequipment">New Equipment</a> section from the Equipment drop-down
+list.  You can also drag it from the tree on the left and drop it on the
+recipe. After selecting or dropping the equipment, you will be asked if you
+want to set the batch and boil size of the recipe to that of the equipment.
+Click &quot;Yes&quot;.
 </p>
 
-<a id="setstyles"><h3>Selecting the Style</h3></a>
+<a id="setstyles"><h2>Selecting the Style</h2></a>
 <p>
 Brewtarget comes pre-loaded with all of the BJCP styles. This means you can
 check your recipe against the guidelines for the particular style you are
@@ -171,7 +418,7 @@ in the View-&gt;Styles dialog. You can also view descriptions of the
 particular style and recommended ingredients there.
 </p>
 
-<a id="addingingredients"><h3>Adding Ingredients</h3></a>
+<a id="addingingredients"><h2>Adding Ingredients</h2></a>
 <p>
 Open the &quot;Fermentable&quot; tree in the left pane (denoted with a barley icon),
 and drag'n'drop the &quot;Pale Malt (2 row) US&quot;, &quot;Caramel/Crystal Malt - 80L&quot; onto the recipe pane.
@@ -180,20 +427,22 @@ Back at the main window, you will see those two malts in your recipe. Click on t
 checkbox to tell it that we want to have this in the mash (this malt can also be simply steeped).
 </p>
 <p>
-Here's a cool feature about Brewtarget: you can enter amounts of stuff in pretty much any units you want.
-Let's see what I mean. Double-click the 2-row's &quot;amount&quot; cell and
-enter &quot;4.536 kg&quot;. You will see that it immediately gets converted
-into &quot;10.000 lb&quot; if you're using US units. For the Crystal 80, tell
-it &quot;32 oz&quot; and watch it get converted into &quot;2.000 lb&quot;. You
-can change US/English/SI preferences in Tools-&gt;Options. Please see 
-<a href="#supportunits">Supported Units</a> in this document to see the correct
-abbreviation for each unit.
+<h3>Units</h3>
+Here's a cool feature about Brewtarget: you can enter amounts of stuff in
+pretty much any units you want.  Let's see what I mean. Double-click the
+2-row's &quot;amount&quot; cell and enter &quot;4.536 kg&quot;. You will see
+that it immediately gets converted into &quot;10.000 lb&quot; if you're using
+US units. For the Crystal 80, tell it &quot;32 oz&quot; and watch it get
+converted into &quot;2.000 lb&quot;. You can change US/English/SI preferences
+in Tools-&gt;Options. Please see <a href="#supportunits">Supported Units</a>
+in this document to see the correct abbreviation for each unit.
 <p>
+<h3>Controlling units</h3>
 You can control this feature for each of the main tables and fields in the
 display. For example, lets say you use a refractometer to measure your SG and
 OG, but you use a hydrometer to measure the FG. In the options, select
-"Brix/Plato" as the system default. In the main window, right
-click on the "FG" label and select "Specific Gravity". OG and SG will still be
+&quot;Brix/Plato&quot; as the system default. In the main window, right
+click on the &quot;FG&quot; label and select &quot;Specific Gravity&quot; OG and SG will still be
 shown in Brix, but the FG will now display in specific gravity.
 </p>
 <p>
@@ -202,23 +451,27 @@ right-clicking on the label for the field. It works on the fermentables, hops,
 miscellaneous, yeast and mash tables by right-clicking on the header for the
 column. It works for any field for which it makes sense. For example, you can
 specify the units for amount, infusion temp and target temp on the mash table
-but not for the time.
+but not for the time. Additionally, this feature may not be fully implemented
+in all of the tables, editors and tools. 
 </p>
 <p>
+<h3>Controlling scale</h3>
 Additionally, you can control the scaling where it makes sense. For example,
 assume you always want your fermentables in the table to displayed in grams.
-Right click on the "Amount" column in the table. Select "Default" if your
-system default is SI, or select SI. Then click on the "Scale" submenu and you
-can select "Default", "Milligrams", "Grams" or "Kilograms". Selecting the first option will
-give you the default brewtarget behavior. The other three choices will force
+Right click on the &quot;Amount&quot; column in the table. Select &quot;Default&quot; if your
+system default is SI, or select SI. Then click on the &quot;Scale&quot; submenu and you
+can select &quot;Default&quot; &quot;Milligrams&quot; &quot;Grams&quot; or
+&quot;Kilograms&quot; Selecting the first option will give you the default
+brewtarget behavior. The other three choices will force
 brewtarget to automatically scale the weights appropriately.
 </p>
-<b>Important</b>: do not forget that you SHOULD enter the unit suffix (lb, kg,
-L, mL, etc.) for the amount boxes in brewtarget. If you do not,
-brewtarget will try to guess what you mean based on your defaults and what
-field you are editting. The guessing is pretty good, but you should not rely on
-it. In this case, brewtarget will assume that fermentables are entered in
-either lbs or kg, depending on the default units you have chosen. 
+<p class="important"><strong>Important</strong>: do not forget that you SHOULD
+enter the unit suffix (lb, kg, L, mL, etc.) for the amount boxes in
+brewtarget. If you do not, brewtarget will try to guess what you mean based on
+your defaults and what field you are editting. The guessing is pretty good,
+but you should not rely on it. In this case, brewtarget will assume that
+fermentables are entered in either lbs or kg, depending on the default units
+you have chosen. 
 </p>
 <p>
 Now you should notice something different about the OG, FG, etc., displayed in
@@ -235,24 +488,25 @@ seriously; it is just a general guide.
 Now, go to the Hops tab and add 1 oz Cascade at 1 hr, 1 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
 be about 32.4, and in the green. Add WLP001 yeast to the recipe. Now everything should be in
 the green.
+</p>
 
-<a id="makemash"><h3>Making a Mash</h3></a>
+<a id="makemash"><h2>Making a Mash</h2></a>
 <p>
 Let's do a 2-step mash with a protein rest at 121 F and a conversion rest at 152 F.
 </p>
-<p>
-<b>Aside:</b> I should mention something here. Until now, Brewtarget has been <b>lying</b> to you. Underneath the
-target batch size on the main window, it says your calculated batch size is 5.500 gal. A similar thing occurs with
-the calculated boil size. These are estimates based on your mash and equipment what the actual
-volumes will be. Since there are no water additions in the &quot;5.5 gal batch - All Grain - Ideal&quot; equipment and since we're
-not actually adding any water for the mash yet, the displayed volumes should both be 0. Brewtarget is
-lying because it's convenient just to be able to start adding the ingredients and get an approximate answer. After setting
-the mash addition volumes, you will get a real answer.
+<p class="important">
+<strong>Aside:</strong> I should mention something here. Until now, Brewtarget has been
+<kbd>lying</kbd> to you. Underneath the target batch size on the main window, it
+says your calculated batch size and the calculated boil size are not 0. These
+are estimates based on your equipment profile. Brewtarget is lying because
+it's convenient just to be able to start adding the ingredients and get an
+approximate answer. After setting the mash addition volumes, you will get a
+real answer.
 </p>
 <p>
 Click on &quot;Edit Mash&quot; and give it a name. Notice that you can enter the initial grain temp, sparge
 temp and initial tun temp here. Entering these as accurately as possible will give you the best chance
-to nail your temperatures. To set tun mass and specific heat, you would click &quot;From Equipment&quot;.
+to nail your temperatures. To set tun mass and specific heat, you should click &quot;From Equipment&quot;.
 You can save this mash profile by pressing &quot;Save Mash&quot; at the bottom of the mash tab. It
 will be saved under the name you gave it in the &quot;Edit mash&quot; dialog. You can
 recall a mash profile by selecting it in the appropriate drop down box.
@@ -279,10 +533,10 @@ portion directly into the kettle depending on how you like to sparge.
 </p>
 <p>
 Now Brewtarget is not lying anymore about the calculated boil volume and batch
-size. Pretty cool? You can see any of the infusion temperatures under the
-&quot;Infusion Temp&quot; column.  Since your equipment and recipe
-might change, you should always do the mash wizard after recalling a saved
-mash profile.  
+size. You can see any of the infusion temperatures under the &quot;Infusion
+Temp&quot; column.  
+<p class="important">Since your equipment and recipe might change, you should
+always do the mash wizard after recalling a saved mash profile.
 </p>
 
 <a id="mashdesigner"><h3>Method 2: Mash designer</h3></a>
@@ -290,8 +544,8 @@ mash profile.
 The mash designer is for more advanced users. It can be used to create pretty much any mash schedule
 you desire with however many sparges, and at whatever infusion temp or volume you desire. To enter it,
 just click the &quot;Mash Des&quot; button. It is not necessary to add all of the steps beforehand
-as we did with the mash wiz. A dialog will ask you for
-the temperature of the tun before the first infusion, so enter 70 F and continue.
+as we did with the mash wiz. A dialog will ask you for the temperature of the
+tun before the first infusion, so enter 70 F and continue.
 </p>
 <p>
 We are now looking at the parameters for the first infusion. Enter &quot;Protein&quot; for the name,
@@ -314,12 +568,12 @@ target temp to 152 F and the time to 1 hr. Slowly move the temp slider all the w
 checkbox, set the target temp to 165 F, and the time to 15 min. You will notice that the tun fullness
 has gone down, simulating that you have drained the tun of liquid; this is the purpose of the checkbox.
 Move the amount slider slowly to the right until the total collected wort reaches about 6.25 gal.
-<b>NOTE</b>: if you exceed the target collected wort volume, the progress bar will still show 100 percent, so be
+<p class="important">If you exceed the target collected wort volume, the progress bar will still show 100 percent, so be
 careful and pay attention to the text which shows the actual collected wort. Click &quot;Finish&quot;
 to return to the main window.
 </p>
 
-<a id="brewdaymode"><h3>Brewday Mode</h3></a>
+<a id="brewdaymode"><h2>Brewday Mode</h2></a>
 <p>
 Now that your recipe is all planned, wouldn't it be good to have some instructions on your
 brewday? Click the &quot;Brewday&quot; tab at the top of the main window. Click &quot;Generate Instructions&quot;.
@@ -337,7 +591,7 @@ the timer reaches zero. Brewtarget has provided many default sounds to choose fr
 select any other sound file on your computer.
 </p>
 
-<a id="printrecipe"><h3>Printing the Recipe</h3></a>
+<a id="printrecipe"><h2>Printing the Recipe</h2></a>
 <p>
 Print and print preview are available under the &quot;File&quot; menu. There are two printouts
 available. One is &quot;Recipe&quot; and the other is &quot;Brewday&quot;. The recipe printout is
@@ -345,17 +599,17 @@ all the info related to the recipe you have made. The brewday printout is format
 specifically for following when you brew.
 </p>
 
-<a id="savework"><h3>Saving Your Work</h3></a>
+<a id="savework"><h2>Saving Your Work</h2></a>
 <p>
-Before you close Brewtarget, be sure to press the diskette at the top in the toolbar,
-<b>or you will lose any changes you have made in this session!</b>
+When you close brewtarget, you will be given an option to either save or
+discard your work.
 </p>
 
 <a id="generalconcepts"><h1>General Concepts</h1></a>
 <p>
 Brewtarget v2.0 uses an SQLite database of recipes, ingredients, etc.
 If brewtarget should crash unexpectedly, you will be prompted to either
-restore the changes made last session or rollback the database to ignore
+restore the changes made last session or rollback the database to discard
 the changes in the last session.
 </p>
 
@@ -398,18 +652,17 @@ Limitations in the BeerXML format makes it very difficult to export both recipes
 and anything else at the same time.
 </p>
 
-<a id="brewnotes"><h3>BrewNotes</h3></a>
+<a id="brewnotes"><h2>BrewNotes</h2></a>
 <p>
-If you right-click a recipe, you will notice an action called &quot;Brew
-It!&quot;. If you select this option, a new entry will be created underneath
+If you right-click a recipe, you can select an action called &quot;Brew
+It!&quot;. If you select this action, a new entry will be created underneath
 the recipe and a new tab will be opened in the main window. This new tab
 allows you to record important information about your beer during its creation
-(sg, volumes, temperatures, etc.). This should allow the brewer to track
+(sg, volumes, temperatures, etc.). This allows the brewer to track
 performance over time and adjust their equipment and efficiencies to better
 predict what you brew.
 </p>
-<b>Note:</b> The current list of fields is our initial pass only. If you want
-more fields available, open a feature request on source forge
+<p class="important">If you want more fields available, open a feature request</p>
 
 <p>
 The values are preloaded based on the recipe as written. As you move through
@@ -421,37 +674,85 @@ all change to reflect the lower SG.
 
 <p>
 There are four main sections on the brewnote tab. 
-<ul>
-   <li>Preboil is for mash information
-      <ul>
-         <li>SG - starting gravity</li>
-         <li>Volume - the volume of wort that made it into your boil kettle</li>
-         <li>Strike Temp - the temperature of your mash after dough in </li>
-         <li>Final Temp - the temperature of your mash at the end of the mash </li>
-      </ul>
-   </li>
-   <li>Postboil is for information after the boil is complete
-      <ul>
-         <li>OG - original gravity </li>
-         <li>Postboil Volume - the volume of wort in the boil kettle after the
-         boil</li>
-         <li>Volume into fermenter - the volume of wort that actually makes it
-         into the fermenter.</li>
-         <li>Pitch temp - the temperature of the wort when you pitched the
-         yeast</li>
-      </ul>
-   </li>
-   <li>Postferment is for information after the beer is fermented
-      <ul>
-         <li>FG - final gravity </li>
-         <li>Volume - the volume of beer that actually makes it into your
-         bottles or kegs</li>
-         <li>Date - the date the beer finished fermenting</li>
-      </ul>
-      </li>
-   <li> Notes - these notes are specific to that brewing day, a good place to describe the elements which make the brewday unique.  </li>
-</ul>
-</p>
+<table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
+   <tr>
+      <th>Section</th>
+      <th>Field</th>
+      <th>Description</th>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Preboil</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>SG</kbd></td>
+      <td class="td">Specific gravity of the collected wort</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Volume</kbd></td>
+      <td class="td">the volume of wort that made it into your boil kettle</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Strike temp</kbd></td>
+      <td class="td">The temperature of your strike water before dough in</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Final temp</kbd></td>
+      <td class="td">The temperature of your mash after dough in</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Postboil</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>OG</kbd></td>
+      <td class="td">Specific gravity of the wort after the boil</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Postboil Volume</kbd></td>
+      <td class="td">the volume of wort in your boil kettle</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Volume into Fermenter</kbd></td>
+      <td class="td">the volume of wort in your primary fermenter</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Pitch temp</kbd></td>
+      <td class="td">the temperature of your wort when you pitched the yeast</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Postferment</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>FG</kbd></td>
+      <td class="td">Specific gravity of the wort after fermentation</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Volume</kbd></td>
+      <td class="td">the volume of beer bottled or kegged</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Date</kbd></td>
+      <td class="td">the date the beer finished fermenting</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Notes</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Notes</kbd></td>
+      <td class="td">Any notes specific to the brew day</td>
+   </tr>
+</table>
 
 <a id="ingredtorecipe"><h2>Adding Ingredients to a Recipe</h2></a>
 <a id="ingrededitors"><h3>Method 1: Editors</h3></a>
@@ -485,7 +786,7 @@ to maintain strict compatability with both.
 
 <a id="exportingrecipes"><h2>Exporting Recipes</h2></a>
 <p>
-I bet you can figure this one out.
+This option will export selected recipes to BeerXML.
 </p>
 
 <a id="backupandrestore"><h2>Backing Up and Restoring Databases</h2></a>
@@ -494,6 +795,9 @@ For many reasons, you may want to back up all your recipes and ingredients and e
 go to File-&gt;&quot;Backup Database&quot; and select an empty directory. Restoring the database is
 just as simple. However, be aware that when you restore a database, anything in your current one will
 be wiped out.
+</p>
+<p class="important">As of Brewtarget v2.0, restoring a database will cause
+brewtarget to automatically restart.
 </p>
 
 <a id="postingrecipe"><h2>Posting Your Recipe</h2></a>
@@ -509,8 +813,8 @@ then click paste in a text editor or other paste-able window.
 <a id="posthtml"><h3>Method 2: Recipe to HTML</h3></a>
 <p>
 Another way you can share you recipes is to export them to HTML. Use
-File-&gt;&quot;Save to HTML&quot;. You can export either the recipe or the
-brewday instructions.
+File-&gt;&quot;Recipe&quot;-&gt;&quot;Save to HTML&quot;. You can export
+either the recipe or the brewday instructions.
 </p>
 
 <a id="tools"><h2>Tools</h2></a>
@@ -556,7 +860,7 @@ fields.
 <a id="units"><h2>Units</h2></a>
 	<p>
 	Brewtarget supports SI, Imperial, and US customary units.
-	To switch between these modes, go to tools-&gt;options, and check/uncheck the appropriate box.
+	To switch between these modes, go to Tools-&gt;Options-&gt;Units, and check/uncheck the appropriate box.
 	It also supports <b>auto-conversion</b>. For example, if you are in US mode, and you enter
 	&quot;0.50 gal&quot; into a text field, it will appear as &quot;2.000 qt&quot;. You may also enter units from the other
 	unit system if you like. However, if you enter an unsupported unit, Brewtarget will assume the quantity you entered
@@ -572,11 +876,13 @@ fields.
    associated label and be presented with the unit and scale menu.
    </p>
    <p>
-   Volumes will present you with the options "default", "SI", "US Customary" and "British
-   Imperial"; weights will present you with the options "default", "SI" and
-   "US Customary"; temperatures will present the options "default", "Celsius"
-   and "Fahrenheit"; gravities will show "default", "Plato" and "Specific
-   Gravity".
+   Volumes will present you with the options &quot;default&quot;,
+   &quot;SI&quot;, &quot;US Customary&quot; and &quot;British Imperial&quot;;
+   weights will present you with the options &quot;default&quot;,
+   &quot;SI&quot; and &quot;US Customary&quot;; temperatures will present the
+   options &quot;default&quot;, &quot;Celsius&quot; and
+   &quot;Fahrenheit&quot;; gravities will show &quot;default&quot;,
+   &quot;Plato&quot; and &quot;Specific Gravity&quot;.
    </p>
    <p>
    Selecting one of those options will cause that field to be displayed in the
@@ -602,56 +908,157 @@ fields.
 	so ingrained. The units supported, and the exact unit abbreviation you should use are given below.
 	</p>
    <a id="supportunits"><h3>Supported Units</h3></a>
-		<h4>US Customary Units</h4>
-			<h5>Mass/Weight (BeerXML pretends they are the same)</h5>
-			<ul>
-				<li>Pounds - &quot;lb&quot;</li>
-				<li>Ounces - &quot;oz&quot;</li>
-			</ul>
-			<h5>Volume</h5>
-			<ul>
-				<li>Gallons - &quot;gal&quot;</li>
-				<li>Quarts - &quot;qt&quot;</li>
-				<li>Cups - &quot;cup&quot;</li>
-				<li>Tablespoon - &quot;tbsp&quot;</li>
-				<li>Teaspoon - &quot;tsp&quot;</li>
-			</ul>
-			<h5>Temperature</h5>
-			<ul>
-				<li>Fahrenheit - &quot;F&quot;</li>
-			</ul>
-                <h4>Imperial Units</h4>
-                        The abbreviations are the same as for US units, but they denote the appropriate quantity
-                        in the imperial system.
-		<h4>Metric Units</h4>
-			<h5>Mass/Weight (BeerXML pretends they are the same)</h5>
-			<ul>
-				<li>Kilograms - &quot;kg&quot;</li>
-				<li>Grams - &quot;g&quot;</li>
-				<li>Milligrams - &quot;mg&quot;</li>
-			</ul>
-			<h5>Volume</h5>
-			<ul>
-				<li>Liters - &quot;L&quot;</li>
-				<li>Milliliters - &quot;mL&quot;</li>
-			</ul>
-			<h5>Temperature</h5>
-			<ul>
-				<li>Celsius - &quot;C&quot;</li>
-				<li>Kelvin - &quot;K&quot;</li>
-			</ul>
-		<h4>Shared Units</h4>
-			<h5>Time</h5>
-			<ul>
-                                <li>Days - &quot;day&quot;</li>
-				<li>Hours - &quot;hr&quot;</li>
-				<li>Minutes - &quot;min&quot;</li>
-				<li>Seconds - &quot;s&quot;</li>
-         </ul>
+   <h4>US Customary and British Imperial Units</h4>
+   <p class="important"> The abbreviations are the same as for US Customary and British Imperial units, but they denote the
+   appropriate quantity in each system.  
+   </p>
+<table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
+   <tr>
+      <th>Unit</th>
+      <th>Scale</th>
+      <th>Abbreviation</th>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Mass/Weight (BeerXML pretends they
+            are the same)</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Pounds</kbd></td>
+      <td class="td">lb</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>ounces</kbd></td>
+      <td class="td">oz</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Volume</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Gallons</kbd></td>
+      <td class="td">gal</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Quarts</kbd></td>
+      <td class="td">qt</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Cups</kbd></td>
+      <td class="td">cp</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Tablespoon</kbd></td>
+      <td class="td">tbs</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Teaspoon</kbd></td>
+      <td class="td">tsp</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Temperature</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Fahrenheit</kbd></td>
+      <td class="td">F</td>
+   </tr>
+</table>
+<h4>Metric Units</h4>
+<table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
+   <tr>
+      <th>Unit</th>
+      <th>Scale</th>
+      <th>Abbreviation</th>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Mass/Weight (BeerXML pretends they
+            are the same)</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Kilograms</kbd></td>
+      <td class="td">kg</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Grams</kbd></td>
+      <td class="td">g</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Milligrams</kbd></td>
+      <td class="td">mg</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Volume</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Liters</kbd></td>
+      <td class="td">L</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Milliliters</kbd></td>
+      <td class="td">mL</td>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Temperature</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Celsius</kbd></td>
+      <td class="td">C</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Kelvin</kbd></td>
+      <td class="td">K</td>
+   </tr>
+</table>
+
+<h4>Shared Units</h4>
+<table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
+   <tr>
+      <th>Unit</th>
+      <th>Scale</th>
+      <th>Abbreviation</th>
+   </tr>
+   <tr>
+      <td colspan="3" class="td"><strong>Time</strong></td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Days</kbd></td>
+      <td class="td">day</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Hours</kbd></td>
+      <td class="td">hr</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Minutes</kbd></td>
+      <td class="td">min</td>
+   </tr>
+   <tr>
+      <td class="td"></td>
+      <td class="td"><kbd>Seconds</kbd></td>
+      <td class="td">s</td>
+   </tr>
+</table>
+
    <a id="newin2"><h1>New in this release</h1></a>
    Brewtarget v2.0 has been long in the making, mostly because we have done a
    massive reworking of the internals. 
-   <a id="newdatabase"><h3>SQLite DB</h3></a>
+   <a id="newdatabase"><h2>SQLite DB</h2></a>
    <p>
    We have replaced the old XML files with a brand new SQLite database. 
    We have spent a long time making this as transparent as possible. If we
@@ -664,29 +1071,34 @@ fields.
    which database engine you want to use -- SQLite and mysql at least,
    postgresql likely. 
    </p>
-   <a id="newunitandscales"><h3>Units and Scales</h3></a>
+   <a id="newunitandscales"><h2>Units and Scales</h2></a>
    <p>
    This has been a very requested feature that has taken us a long time to
    implement correctly. You can now override the default unit (e.g., US
    Customary) per field, and you can control the scale (so your hops are
    always displayed in grams, no matter how many kilos you are adding).
    </p>
-   <a id="newtrees"><h3>Tree Views</h3></a>
+   <a id="newtrees"><h2>Tree Views</h2></a>
    <p>
    The trees continue to evolve. They are now split into their own separate
    tabs and can be sorted on the fields displayed. The next release will let
    you select which fields are displayed and hopefully allow you to define
    folders.
    </p>
-   <a id="defaultequipment"><h3>Default Equipment</h3></a>
+   <a id="defaultequipment"><h2>Default Equipment</h2></a>
    <p>
    You can select one piece of equipment as the default and any new recipe
-   will have that automatically defined as the equipment.
+   will have that automatically defined as the equipment. You can do this by
+   opening the equipment profile and selecting the "Set as default" option in
+   the upper left.
    </p>
-   <a id="hoputilization"><h3>Hop Utilization</h3></a>
+   <a id="hoputilization"><h2>Hop Utilization</h2></a>
    <p>
    You can configure your hop utilization from the equipment screen.
+   This may cause your recipes to show 0 IBU. If you are seeing this, set your
+   hop utilization to 100 on your equipment.
    </p>
 
 </body>
+</div>
 </html>
