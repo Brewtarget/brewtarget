@@ -203,8 +203,17 @@ CONFIGURE_FILE( brewtarget.desktop.in brewtarget.desktop )
 # "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
 # by the below corresponding value in ${CONFIGDATADIR} below when
 # CONFIGURE_FILE() is called.
-SET( CONFIGDATADIR "${DATAPATH}/" )
-SET( CONFIGDOCDIR "${DOCPATH}/" )
+IF( ${DATAPATH} MATCHES "^/" )
+   SET( CONFIGDATADIR "${DATAPATH}/" )
+ELSE()
+   SET( CONFIGDATADIR "/${DATAPATH}/" )
+ENDIF()
+
+IF( ${DOCPATH} MATCHES "^/" )
+   SET( CONFIGDOCDIR "${DOCPATH}/" )
+ELSE()
+   SET( CONFIGDOCDIR "/${DOCPATH}/" )
+ENDIF()
 
 # Tell cmake where the configure file is and where
 # to put the output. All variables in config.in written as "${VAR}$
