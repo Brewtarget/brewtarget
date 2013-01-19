@@ -86,7 +86,19 @@ Database::Database()
 
 Database::~Database()
 {
-   unload();
+   // Delete all the ingredients floating around.
+   qDeleteAll(allBrewNotes);
+   qDeleteAll(allEquipments);
+   qDeleteAll(allFermentables);
+   qDeleteAll(allHops);
+   qDeleteAll(allInstructions);
+   qDeleteAll(allMashSteps);
+   qDeleteAll(allMashs);
+   qDeleteAll(allMiscs);
+   qDeleteAll(allStyles);
+   qDeleteAll(allWaters);
+   qDeleteAll(allYeasts);
+   qDeleteAll(allRecipes);
 }
 
 bool Database::load()
@@ -285,53 +297,24 @@ QSqlDatabase Database::sqlDatabase()
    return sqldb;
 }
 
-void Database::unload()
+void Database::unload(bool keepChanges)
 {
-   // Delete all the ingredients floating around.
-   qDeleteAll(allBrewNotes);
-   qDeleteAll(allEquipments);
-   qDeleteAll(allFermentables);
-   qDeleteAll(allHops);
-   qDeleteAll(allInstructions);
-   qDeleteAll(allMashSteps);
-   qDeleteAll(allMashs);
-   qDeleteAll(allMiscs);
-   qDeleteAll(allStyles);
-   qDeleteAll(allWaters);
-   qDeleteAll(allYeasts);
-   qDeleteAll(allRecipes);
-
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
-   if (!loadWasSuccessful)
+   if( !loadWasSuccessful || keepChanges )
    {
-      // If load() failed, then
+      // If load() failed or want to keep the changes, then
       // just keep the database and don't revert to the backup.
       if (dbFile.exists())
          dbTempBackupFile.remove();
    }
-   else 
+   else
    {
-      // If the database has a more recent modified date than the backup, ask
-      // the user if they want to save changes.
-      if (QFileInfo(dbFileName).lastModified() > QFileInfo(dbTempBackupFileName).lastModified() && 
-            QMessageBox::question(0,
-                                  QObject::tr("Save Database Changes"),
-                                  QObject::tr("Would you like to save the changes you made?"),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  QMessageBox::Yes) == QMessageBox::Yes)
-      {
-         // If the user wants to save changes, just remove the backup database.
-         dbTempBackupFile.remove();
-      }
-      else
-      {
-         // If the user doesn't want to save changes, remove the active database
-         // and restore the backup.
-         dbFile.remove();
-         dbTempBackupFile.rename(dbFileName);
-      }
+      // If the user doesn't want to save changes, remove the active database
+      // and restore the backup.
+      dbFile.remove();
+      dbTempBackupFile.rename(dbFileName);
    }
 }
 
