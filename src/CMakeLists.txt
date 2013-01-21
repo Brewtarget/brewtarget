@@ -134,6 +134,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/StyleButton.cpp
     ${SRCDIR}/StyleListModel.cpp
     ${SRCDIR}/StyleEditor.cpp
+    ${SRCDIR}/StyleRangeWidget.cpp
     ${SRCDIR}/StyleSortFilterProxyModel.cpp
     ${SRCDIR}/TimerListDialog.cpp
     ${SRCDIR}/TimerWidget.cpp
@@ -266,6 +267,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/StyleButton.h
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleEditor.h
+    ${SRCDIR}/StyleRangeWidget.h
     ${SRCDIR}/StyleSortFilterProxyModel.h
     ${SRCDIR}/TimerListDialog.h
     ${SRCDIR}/TimerWidget.h
