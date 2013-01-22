@@ -116,35 +116,6 @@ MainWindow::MainWindow(QWidget* parent)
 
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
-  
-   // If we converted from XML, pop a dialog telling the user where they can
-   // find their old files.
-   if (Database::instance().isConverted())
-      convertedMsg(); 
-
-   // Different palettes for some text.
-   lcdPalette_old = lcdNumber_og->palette();
-   lcdPalette_tooLow = QPalette(lcdPalette_old);
-   lcdPalette_tooLow.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 0, 208));
-   lcdPalette_good = QPalette(lcdPalette_old);
-   lcdPalette_good.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 128, 0));
-   lcdPalette_tooHigh = QPalette(lcdPalette_old);
-   lcdPalette_tooHigh.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(208, 0, 0));
-
-   // Set constant colors for some lcds.
-   lcdNumber_ogLow->setConstantColor(BtDigitWidget::LOW);
-   lcdNumber_ogHigh->setConstantColor(BtDigitWidget::HIGH);
-   lcdNumber_fgLow->setConstantColor(BtDigitWidget::LOW);
-   lcdNumber_fgHigh->setConstantColor(BtDigitWidget::HIGH);
-   lcdNumber_abvLow->setConstantColor(BtDigitWidget::LOW);
-   lcdNumber_abvHigh->setConstantColor(BtDigitWidget::HIGH);
-   lcdNumber_ibuLow->setConstantColor(BtDigitWidget::LOW);
-   lcdNumber_ibuHigh->setConstantColor(BtDigitWidget::HIGH);
-   lcdNumber_srmLow->setConstantColor(BtDigitWidget::LOW);
-   lcdNumber_srmHigh->setConstantColor(BtDigitWidget::HIGH);
-   lcdNumber_boilSG->setConstantColor(BtDigitWidget::BLACK);
-   lcdNumber_ibugu->setConstantColor(BtDigitWidget::BLACK);
-   lcdNumber_calories->setConstantColor(BtDigitWidget::BLACK);
 
    // Null out the recipe
    recipeObs = 0;
@@ -178,6 +149,17 @@ MainWindow::MainWindow(QWidget* parent)
    pitchDialog = new PitchDialog(this);
    btDatePopup = new BtDatePopup(this);
 
+   styleRangeWidget_og->setRange(1.000, 1.120);
+   styleRangeWidget_og->setPrecision(3);
+   styleRangeWidget_fg->setRange(1.000, 1.030);
+   styleRangeWidget_fg->setPrecision(3);
+   styleRangeWidget_abv->setRange(0.0, 15.0);
+   styleRangeWidget_abv->setPrecision(1);
+   styleRangeWidget_ibu->setRange(0.0, 120.0);
+   styleRangeWidget_ibu->setPrecision(1);
+   styleRangeWidget_srm->setRange(0.0, 60.0);
+   styleRangeWidget_srm->setPrecision(1);
+   
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
    equipmentComboBox->setModel(equipmentListModel);
@@ -736,6 +718,37 @@ void MainWindow::setRecipe(Recipe* recipe)
    
    recStyle = recipe->style();
    recEquip = recipe->equipment();
+  
+   /* 
+   // BeerXML is stupid and has reduntant fields.
+   // Ensure that recEquip and recipeObs always have the same boil size and time.
+   // NOTE: should probably move this connection code to the Database.
+   if( recEquip )
+   {
+      connect(
+         recEquip,
+         SIGNAL(changedBoilSize_l(double)),
+         recipeObs,
+         SLOT(setBoilSize_l(double))
+      );
+      
+      connect(
+         recEquip,
+         SIGNAL(changedBoilTime_min(double)),
+         recipeObs,
+         SLOT(setBoilTime_min(double))
+      );
+   }
+   */
+
+   if( recStyle )
+   {
+      styleRangeWidget_og->setStyleRange(recStyle->ogMin(), recStyle->ogMax());
+      styleRangeWidget_fg->setStyleRange(recStyle->fgMin(), recStyle->fgMax());
+      styleRangeWidget_abv->setStyleRange(recStyle->abvMin_pct(), recStyle->abvMax_pct());
+      styleRangeWidget_ibu->setStyleRange(recStyle->ibuMin(), recStyle->ibuMax());
+      styleRangeWidget_srm->setStyleRange(recStyle->colorMin_srm(), recStyle->colorMax_srm());
+   }
    
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
@@ -832,69 +845,20 @@ void MainWindow::showChanges(QMetaProperty* prop)
    
    label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs,tab_recipe, "finalVolume_l", Units::liters));
    label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilVolume_l", Units::liters));
-   
-   // Color manipulation
-   if( 0.95*recipeObs->batchSize_l() <= recipeObs->finalVolume_l() && recipeObs->finalVolume_l() <= 1.05*recipeObs->batchSize_l() )
-      label_calcBatchSize->setPalette(lcdPalette_good);
-   else if( recipeObs->finalVolume_l() < 0.95*recipeObs->batchSize_l() )
-      label_calcBatchSize->setPalette(lcdPalette_tooLow);
-   else
-      label_calcBatchSize->setPalette(lcdPalette_tooHigh);
-   if( 0.95*recipeObs->boilSize_l() <= recipeObs->boilVolume_l() && recipeObs->boilVolume_l() <= 1.05*recipeObs->boilSize_l() )
-      label_calcBoilSize->setPalette(lcdPalette_good);
-   else if( recipeObs->boilVolume_l() < 0.95* recipeObs->boilSize_l() )
-      label_calcBoilSize->setPalette(lcdPalette_tooLow);
-   else
-      label_calcBoilSize->setPalette(lcdPalette_tooHigh);
 
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
-   
-   // Want to do some manipulation based on selected style.
-   if( recStyle != 0 )
-   {
-      lcdNumber_ogLow->display(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false));
-      lcdNumber_og->setLowLim(Brewtarget::displayOG(recStyle, tab_recipe, "ogMin",false).toDouble());
-      
-      lcdNumber_ogHigh->display(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false));
-      lcdNumber_og->setHighLim(Brewtarget::displayOG(recStyle,tab_recipe, "ogMax",false).toDouble());
-      
-      // 
-      fg.first = "fgMin";
-      fg.second = recStyle;
-      lcdNumber_fgLow->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
-      lcdNumber_fg->setLowLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
 
-      fg.first = "fgMax";
-      lcdNumber_fgHigh->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
-      lcdNumber_fg->setHighLim(Brewtarget::displayFG(fg,og,tab_recipe,false).toDouble());
+   styleRangeWidget_og->setValue(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
+   label_boilSG->setText(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
 
-      lcdNumber_abvLow->display(recStyle->abvMin_pct(), 1);
-      lcdNumber_abvHigh->display(recStyle->abvMax_pct(), 1);
-      lcdNumber_abv->setLowLim(recStyle->abvMin_pct());
-      lcdNumber_abv->setHighLim(recStyle->abvMax_pct());
+   styleRangeWidget_fg->setValue(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
 
-      lcdNumber_ibuLow->display(recStyle->ibuMin(), 1);
-      lcdNumber_ibuHigh->display(recStyle->ibuMax(), 1);
-      lcdNumber_ibu->setLowLim(recStyle->ibuMin());
-      lcdNumber_ibu->setHighLim(recStyle->ibuMax());
-
-      lcdNumber_srmLow->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false));
-      lcdNumber_srmHigh->display(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false));
-      lcdNumber_srm->setLowLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMin_srm", false).toDouble());
-      lcdNumber_srm->setHighLim(Brewtarget::displayColor(recStyle, tab_recipe, "colorMax_srm", false).toDouble());
-   }
-
-   lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
-   lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
-
-   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
-
-   lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
-   lcdNumber_ibu->display(recipeObs->IBU(), 1);
-   lcdNumber_srm->display(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
-   lcdNumber_ibugu->display(recipeObs->IBU()/((recipeObs->og()-1)*1000), 2);
-   lcdNumber_calories->display( recipeObs->calories(), 0);
+   styleRangeWidget_abv->setValue(recipeObs->ABV_pct());
+   styleRangeWidget_ibu->setValue(recipeObs->IBU());
+   styleRangeWidget_srm->setValue(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
+   label_ibugu->setText( QString("%1").arg(recipeObs->IBU()/((recipeObs->og()-1)*1000), 0, 'f', 2) );
+   label_calories->setText( QString("%1").arg(recipeObs->calories(),0,'f',0) );
 
    // See if we need to change the mash in the table.
    if( (updateAll && recipeObs->mash()) ||
@@ -924,6 +888,11 @@ void MainWindow::updateRecipeStyle()
    if( selected )
    {
       Database::instance().addToRecipe( recipeObs, selected );
+      styleRangeWidget_og->setStyleRange(selected->ogMin(), selected->ogMax());
+      styleRangeWidget_fg->setStyleRange(selected->fgMin(), selected->fgMax());
+      styleRangeWidget_abv->setStyleRange(selected->abvMin_pct(), selected->abvMax_pct());
+      styleRangeWidget_ibu->setStyleRange(selected->ibuMin(), selected->ibuMax());
+      styleRangeWidget_srm->setStyleRange(selected->colorMin_srm(), selected->colorMax_srm());
    }
 }
 

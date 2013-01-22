@@ -41,14 +41,14 @@ StyleRangeWidget::StyleRangeWidget(QWidget* parent)
    repaint();
 }
 
-void StyleRangeWidget::setStyleRange( int min, int max )
+void StyleRangeWidget::setStyleRange( double min, double max )
 {
    _styleMin = min;
    _styleMax = max;
    update();
 }
 
-void StyleRangeWidget::setRange( int min, int max )
+void StyleRangeWidget::setRange( double min, double max )
 {
    _min = min;
    _max = max;
@@ -59,6 +59,19 @@ void StyleRangeWidget::setValue(double value)
 {
    _val = value;
    _valText = QString("%1").arg(_val, 0, 'f', _prec);
+   update();
+}
+
+void StyleRangeWidget::setValue(QString const& value)
+{
+   _valText = value;
+   _val = value.toDouble();
+   update();
+}
+
+void StyleRangeWidget::setPrecision(int precision)
+{
+   _prec = precision;
    update();
 }
 
@@ -74,10 +87,10 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
    static const QPalette palette(QApplication::palette());
    static const int rectHeight = 16;
    static const int textWidth  = 48;
-   static const int indWidth   = 2;
-   static const QColor bgRectColor(palette.color(QPalette::Active, QPalette::Button));
+   static const int indWidth   = 4;
+   static const QColor bgRectColor(QColor(121,201,121));//(palette.color(QPalette::Active, QPalette::Button));
    static const QColor fgRectColor(0,127,0);
-   static const QColor indColor(bgRectColor);
+   static const QColor indColor(QColor(255,255,255));
    static const QColor textColor(0,127,0);
    static const QFont textFont("Arial", 14, QFont::Black);
    

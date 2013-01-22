@@ -666,6 +666,36 @@
                     <property name="verticalSpacing">
                      <number>5</number>
                     </property>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="aBVLabel">
+                      <property name="text">
+                       <string>ABV</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="BtColorLabel" name="colorSRMLabel">
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::CustomContextMenu</enum>
+                      </property>
+                      <property name="text">
+                       <string>Color</string>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">color_srm</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="bitternessIBULabel">
+                      <property name="text">
+                       <string>Bitterness (IBU)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="StyleRangeWidget" name="styleRangeWidget_og"/>
+                    </item>
                     <item row="0" column="0">
                      <widget class="BtGravityLabel" name="oGLabel">
                       <property name="contextMenuPolicy">
@@ -679,83 +709,7 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="0" column="1">
-                     <widget class="BtDigitWidget" name="lcdNumber_ogLow">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_og">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                      <property name="unit" stdset="0">
-                       <string notr="true">gravity</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="3">
-                     <widget class="BtDigitWidget" name="lcdNumber_ogHigh">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="0">
+                    <item row="5" column="0">
                      <widget class="BtGravityLabel" name="boilSgLabel">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
@@ -768,43 +722,7 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_boilSG">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>20</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                      <property name="unit" stdset="0">
-                       <string notr="true">gravity</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
+                    <item row="1" column="0">
                      <widget class="BtGravityLabel" name="fGLabel">
                       <property name="contextMenuPolicy">
                        <enum>Qt::CustomContextMenu</enum>
@@ -817,459 +735,10 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="2" column="1">
-                     <widget class="BtDigitWidget" name="lcdNumber_fgLow">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_fg">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>20</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                      <property name="unit" stdset="0">
-                       <string notr="true">gravity</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="3">
-                     <widget class="BtDigitWidget" name="lcdNumber_fgHigh">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="palette">
-                       <palette>
-                        <active>
-                         <colorrole role="WindowText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                         <colorrole role="Text">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                         <colorrole role="ButtonText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                        </active>
-                        <inactive>
-                         <colorrole role="WindowText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                         <colorrole role="Text">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                         <colorrole role="ButtonText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                        </inactive>
-                        <disabled>
-                         <colorrole role="WindowText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                         <colorrole role="Text">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                         <colorrole role="ButtonText">
-                          <brush brushstyle="SolidPattern">
-                           <color alpha="255">
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>0</blue>
-                           </color>
-                          </brush>
-                         </colorrole>
-                        </disabled>
-                       </palette>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="0">
-                     <widget class="QLabel" name="aBVLabel">
-                      <property name="text">
-                       <string>ABV</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="1">
-                     <widget class="BtDigitWidget" name="lcdNumber_abvLow">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_abv">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>20</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                      <property name="unit" stdset="0">
-                       <string notr="true">alcohol</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="3" column="3">
-                     <widget class="BtDigitWidget" name="lcdNumber_abvHigh">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="0">
-                     <widget class="QLabel" name="bitternessIBULabel">
-                      <property name="text">
-                       <string>Bitterness (IBU)</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="1">
-                     <widget class="BtDigitWidget" name="lcdNumber_ibuLow">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_ibu">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>20</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="4" column="3">
-                     <widget class="BtDigitWidget" name="lcdNumber_ibuHigh">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="0">
-                     <widget class="BtColorLabel" name="colorSRMLabel">
-                      <property name="contextMenuPolicy">
-                       <enum>Qt::CustomContextMenu</enum>
-                      </property>
-                      <property name="text">
-                       <string>Color</string>
-                      </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">color_srm</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="1">
-                     <widget class="BtDigitWidget" name="lcdNumber_srmLow">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_srm">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>20</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="5" column="3">
-                     <widget class="BtDigitWidget" name="lcdNumber_srmHigh">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="6" column="0">
                      <widget class="QLabel" name="label_4">
                       <property name="text">
                        <string>IBU/GU</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="6" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_ibugu">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>20</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <family>DejaVu Sans Mono</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
-                      </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
-                      </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
                       </property>
                      </widget>
                     </item>
@@ -1280,37 +749,63 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="7" column="2">
-                     <widget class="BtDigitWidget" name="lcdNumber_calories">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                        <horstretch>0</horstretch>
-                        <verstretch>20</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="minimumSize">
-                       <size>
-                        <width>70</width>
-                        <height>30</height>
-                       </size>
-                      </property>
+                    <item row="1" column="1">
+                     <widget class="StyleRangeWidget" name="styleRangeWidget_fg"/>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="StyleRangeWidget" name="styleRangeWidget_abv"/>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="StyleRangeWidget" name="styleRangeWidget_ibu"/>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="StyleRangeWidget" name="styleRangeWidget_srm"/>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QLabel" name="label_boilSG">
                       <property name="font">
                        <font>
-                        <family>DejaVu Sans Mono [unknown]</family>
+                        <family>Sans Serif</family>
                         <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                        <kerning>true</kerning>
                        </font>
                       </property>
-                      <property name="frameShape">
-                       <enum>QFrame::Box</enum>
+                      <property name="text">
+                       <string>1.0</string>
                       </property>
-                      <property name="frameShadow">
-                       <enum>QFrame::Raised</enum>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="QLabel" name="label_ibugu">
+                      <property name="font">
+                       <font>
+                        <family>Sans Serif</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                        <kerning>true</kerning>
+                       </font>
                       </property>
                       <property name="text">
-                       <string/>
+                       <string>1.0</string>
                       </property>
-                      <property name="alignment">
-                       <set>Qt::AlignCenter</set>
+                     </widget>
+                    </item>
+                    <item row="7" column="1">
+                     <widget class="QLabel" name="label_calories">
+                      <property name="font">
+                       <font>
+                        <family>Sans Serif</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                        <kerning>true</kerning>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>1.0</string>
                       </property>
                      </widget>
                     </item>
@@ -1320,6 +815,9 @@
                    <spacer name="verticalSpacer_2">
                     <property name="orientation">
                      <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                     <enum>QSizePolicy::Expanding</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -2078,6 +1576,12 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -2534,6 +2038,11 @@
    <header>BtLabel.h</header>
   </customwidget>
   <customwidget>
+   <class>StyleRangeWidget</class>
+   <extends>QWidget</extends>
+   <header>StyleRangeWidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
    <header>CustomComboBox.h</header>
@@ -2557,6 +2066,16 @@
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>RecipeExtrasWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtGravityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeTreeView</class>
@@ -2663,6 +2182,8 @@
  </tabstops>
  <resources>
   <include location="../build/brewtarget.qrc"/>
+  <include location="../../build/brewtarget.qrc"/>
+  <include location="../../../build/brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

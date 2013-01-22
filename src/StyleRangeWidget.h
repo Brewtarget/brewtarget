@@ -35,9 +35,9 @@ public:
    StyleRangeWidget(QWidget* parent=0);
    
    //! \brief Set the \c min and \c max values for the style.
-   void setStyleRange( int min, int max );
+   void setStyleRange( double min, double max );
    //! \brief Set the \c min and \c max values for the whole widget.
-   void setRange( int min, int max );
+   void setRange( double min, double max );
    //! \brief Set the \c precision for displaying values.
    void setPrecision(int precision);
    
@@ -47,6 +47,8 @@ public:
 public slots:
    //! \brief Set the \c value for the indicator.
    void setValue(double value);
+   //! \brief Set the \c value for the indicator. Must be convertible to double.
+   void setValue(QString const& value);
    
 protected:
    //! \brief Reimplemented from QWidget.
