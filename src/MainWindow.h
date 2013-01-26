@@ -331,6 +331,7 @@ private:
    void copyThis(Fermentable *ferm);
    void copyThis(Hop *hop);
    void copyThis(Misc *misc);
+   void copyThis(Style *style);
    void copyThis(Yeast *yeast);
 
 };

@@ -157,6 +157,7 @@ public:
    Fermentable* newFermentable(Fermentable* other);
    Hop* newHop(Hop* other);
    Misc* newMisc(Misc* other);
+   Style* newStyle(Style* other);
    Yeast* newYeast(Yeast* other);
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   

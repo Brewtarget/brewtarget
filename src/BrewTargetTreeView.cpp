@@ -33,6 +33,7 @@
 #include "misc.h"
 #include "yeast.h"
 #include "brewnote.h"
+#include "style.h"
 
 BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
    QTreeView(parent)
@@ -141,6 +142,16 @@ Yeast* BrewTargetTreeView::getYeast(const QModelIndex &index) const
 QModelIndex BrewTargetTreeView::findYeast(Yeast* yeast)
 {
    return filter->mapFromSource(model->findYeast(yeast));
+}
+
+Style* BrewTargetTreeView::getStyle(const QModelIndex &index) const
+{
+   return model->getStyle(filter->mapToSource(index));
+}
+
+QModelIndex BrewTargetTreeView::findStyle(Style* style)
+{
+   return filter->mapFromSource(model->findStyle(style));
 }
 
 BrewNote* BrewTargetTreeView::getBrewNote(const QModelIndex &index) const
@@ -343,6 +354,10 @@ void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *
          contextMenu->addAction(tr("New Misc"), editor, SLOT(newMisc()));
          contextMenu->addSeparator();
          break;
+      case BrewTargetTreeItem::STYLE:
+         contextMenu->addAction(tr("New Style"), editor, SLOT(newStyle()));
+         contextMenu->addSeparator();
+         break;
       case BrewTargetTreeItem::YEAST:
          contextMenu->addAction(tr("New Yeast"), editor, SLOT(newYeast()));
          contextMenu->addSeparator();
@@ -462,6 +477,22 @@ YeastTreeView::YeastTreeView(QWidget *parent)
    filter->setDynamicSortFilter(true);
    
    setExpanded(findYeast(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   resizeColumnToContents(0);
+}
+
+// Nope. Apparently not, cause I keep adding more
+StyleTreeView::StyleTreeView(QWidget *parent)
+   : BrewTargetTreeView(parent)
+{
+   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::STYLEMASK);
+   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::STYLEMASK);
+   filter->setSourceModel(model);
+   setModel(filter);
+   filter->setDynamicSortFilter(true);
+   
+   setExpanded(findStyle(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);

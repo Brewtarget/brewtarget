@@ -47,6 +47,8 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
         return lessThanMisc(model,left, right);
       case BrewTargetTreeModel::YEASTMASK:
         return lessThanYeast(model,left, right);
+      case BrewTargetTreeModel::STYLEMASK:
+        return lessThanStyle(model,left, right);
       default:
         return lessThanRecipe(model,left, right);
 
@@ -170,6 +172,29 @@ bool BtTreeFilterProxyModel::lessThanYeast(BrewTargetTreeModel* model, const QMo
    return leftYeast->name() < rightYeast->name();
 }
 
+bool BtTreeFilterProxyModel::lessThanStyle(BrewTargetTreeModel* model, const QModelIndex &left, 
+                                         const QModelIndex &right) const
+{
+   Style* leftStyle = model->getStyle(left);
+   Style* rightStyle = model->getStyle(right);
+
+
+   switch(left.column())
+   {
+      case BrewTargetTreeItem::STYLENAMECOL:
+         return leftStyle->name() < rightStyle->name();
+      case BrewTargetTreeItem::STYLECATEGORYCOL:
+         return leftStyle->category() < rightStyle->category();
+      case BrewTargetTreeItem::STYLENUMBERCOL:
+         return leftStyle->categoryNumber() < rightStyle->categoryNumber();
+      case BrewTargetTreeItem::STYLELETTERCOL:
+         return leftStyle->styleLetter() < rightStyle->styleLetter();
+      case BrewTargetTreeItem::STYLEGUIDECOL:
+         return leftStyle->styleGuide() < rightStyle->styleGuide();
+   }
+   return leftStyle->name() < rightStyle->name();
+}
+
 bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
    if ( !source_parent.isValid() )
@@ -177,7 +202,8 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
 
    const BrewTargetTreeModel* model = qobject_cast<const BrewTargetTreeModel*>(source_parent.model());
    QModelIndex child = model->index(source_row, 0, source_parent);
+   BeerXMLElement* thing = model->getThing(child);
 
-   return model->getThing(child)->display();
+   return thing->display();
 
 }

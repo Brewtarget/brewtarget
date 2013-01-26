@@ -36,6 +36,7 @@
 #include "recipe.h"
 #include "yeast.h"
 #include "brewnote.h"
+#include "style.h"
 
 BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks type)
    : QAbstractItemModel(parent)
@@ -91,6 +92,14 @@ BrewTargetTreeModel::BrewTargetTreeModel(BrewTargetTreeView *parent, TypeMasks t
       connect( &(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)),this, SLOT(yeastRemoved(Yeast*)));
    }
 
+   if ( type & STYLEMASK )
+   {
+      rootItem->insertChildren(items,1,BrewTargetTreeItem::STYLE);
+
+      connect( &(Database::instance()), SIGNAL(newStyleSignal(Style*)),this, SLOT(styleAdded(Style*)));
+      connect( &(Database::instance()), SIGNAL(deletedStyleSignal(Style*)),this, SLOT(styleRemoved(Style*)));
+   }
+
    treeMask = type;
    parentTree = parent;
    loadTreeModel();
@@ -139,6 +148,8 @@ int BrewTargetTreeModel::columnCount( const QModelIndex &parent) const
       return BrewTargetTreeItem::MISCNUMCOLS;
    case YEASTMASK:
       return BrewTargetTreeItem::YEASTNUMCOLS;
+   case STYLEMASK:
+      return BrewTargetTreeItem::STYLENUMCOLS;
    default:
       return 0;
    }
@@ -227,6 +238,9 @@ QVariant BrewTargetTreeModel::data(const QModelIndex &index, int role) const
    case YEASTMASK:
       maxColumns = BrewTargetTreeItem::YEASTNUMCOLS;
       break;
+   case STYLEMASK:
+      maxColumns = BrewTargetTreeItem::STYLENUMCOLS;
+      break;
    default:
       // Backwards compatibility. This MUST be fixed prior to releasing the code
       maxColumns = BrewTargetTreeItem::RECIPENUMCOLS;
@@ -262,6 +276,8 @@ QVariant BrewTargetTreeModel::headerData(int section, Qt::Orientation orientatio
       return getMiscHeader(section);
    case YEASTMASK:
       return getYeastHeader(section);
+   case STYLEMASK:
+      return getStyleHeader(section);
    default: // This needs to be fixed later
       return getRecipeHeader(section);
 
@@ -362,6 +378,26 @@ QVariant BrewTargetTreeModel::getYeastHeader(int section) const
    return QVariant();
 }
 
+QVariant BrewTargetTreeModel::getStyleHeader(int section) const
+{
+   switch(section)
+   {
+   case BrewTargetTreeItem::STYLENAMECOL:
+      return QVariant(tr("Name"));
+   case BrewTargetTreeItem::STYLECATEGORYCOL:
+      return QVariant(tr("Category"));
+   case BrewTargetTreeItem::STYLENUMBERCOL:
+      return QVariant(tr("Number"));
+   case BrewTargetTreeItem::STYLELETTERCOL:
+      return QVariant(tr("Letter"));
+   case BrewTargetTreeItem::STYLEGUIDECOL:
+      return QVariant(tr("Guide"));
+   }
+
+   Brewtarget::logW( QString("BrewTargetTreeModel::getYeastHeader Bad column: %1").arg(section) );
+   return QVariant();
+}
+
 bool BrewTargetTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim, int victimType )
 {
    if ( ! parent.isValid() )
@@ -374,7 +410,7 @@ bool BrewTargetTreeModel::insertRow(int row, const QModelIndex &parent, QObject*
 
    beginInsertRows(parent, row, row );
    success = pItem->insertChildren(row, 1, type);
-   if ( victim ) 
+   if ( victim && success ) 
    {
       type = victimType == -1 ? type : victimType;
       BrewTargetTreeItem* added = pItem->child(row);
@@ -488,6 +524,22 @@ QModelIndex BrewTargetTreeModel::findYeast(Yeast* yeast)
    for(i=0; i < pItem->childCount(); ++i)
    {
       if ( pItem->child(i)->getYeast() == yeast )
+         return createIndex(i,0,pItem->child(i));
+   }
+   return QModelIndex();
+}
+
+QModelIndex BrewTargetTreeModel::findStyle(Style* style)
+{
+   BrewTargetTreeItem* pItem = rootItem->child(0);
+   int i;
+
+   if (! style || (treeMask & STYLEMASK) == 0)
+      return createIndex(0,0,pItem);
+
+   for(i=0; i < pItem->childCount(); ++i)
+   {
+      if ( pItem->child(i)->getStyle() == style )
          return createIndex(i,0,pItem->child(i));
    }
    return QModelIndex();
@@ -633,6 +685,21 @@ void BrewTargetTreeModel::loadTreeModel(QString propName)
         ++i;
       }
    }
+
+   if ( (treeMask & STYLEMASK) &&
+      (loadAll || propName == "styles") )
+   {
+      BrewTargetTreeItem* local = rootItem->child(0);
+      QModelIndex ndxLocal = createIndex(0,0,local);
+      QList<Style*> styles = Database::instance().styles();
+
+      i = 0;
+      foreach( Style* style, styles )
+      {
+        insertRow(i++,ndxLocal,style);
+        observeStyle(style);
+      }
+   }
 }
 
 void BrewTargetTreeModel::unloadTreeModel(QString propName)
@@ -687,6 +754,13 @@ void BrewTargetTreeModel::unloadTreeModel(QString propName)
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
+   if ((treeMask & STYLEMASK) &&
+      (unloadAll || propName == "styles"))
+   {
+      parent = createIndex(BrewTargetTreeItem::STYLE,0,rootItem->child(0));
+      breadth = rowCount(parent);
+      removeRows(0,breadth,parent);
+   }
 }
 
 Recipe* BrewTargetTreeModel::getRecipe(const QModelIndex &index) const
@@ -729,6 +803,13 @@ Yeast* BrewTargetTreeModel::getYeast(const QModelIndex &index) const
    BrewTargetTreeItem* item = getItem(index);
 
    return item->getYeast();
+}
+
+Style* BrewTargetTreeModel::getStyle(const QModelIndex &index) const
+{
+   BrewTargetTreeItem* item = getItem(index);
+
+   return item->getStyle();
 }
 
 BrewNote* BrewTargetTreeModel::getBrewNote(const QModelIndex &index) const
@@ -781,6 +862,12 @@ bool BrewTargetTreeModel::isYeast(const QModelIndex &index)
    return item->getType() == BrewTargetTreeItem::YEAST;
 }
 
+bool BrewTargetTreeModel::isStyle(const QModelIndex &index)
+{
+   BrewTargetTreeItem* item = getItem(index);
+   return item->getType() == BrewTargetTreeItem::STYLE;
+}
+
 bool BrewTargetTreeModel::isBrewNote(const QModelIndex &index)
 {
    BrewTargetTreeItem* item = getItem(index);
@@ -796,28 +883,6 @@ int BrewTargetTreeModel::getType(const QModelIndex &index)
 int BrewTargetTreeModel::getMask()
 {
    return treeMask;
-}
-
-void BrewTargetTreeModel::equipmentAdded(Equipment* victim)
-{
-   if ( ! victim->display() ) 
-      return;
-
-   BrewTargetTreeItem* local = rootItem->child(0);
-   // Not quite sure what my logic here was. The index now will be 1,0 in
-   // Item list. Shouldn't this be 0,0?
-   // QModelIndex parent = createIndex(BrewTargetTreeItem::EQUIPMENT,0,local);
-   QModelIndex parent = createIndex(0,0,local);
-
-   if ( ! parent.isValid() )
-      return;
-
-   int breadth = rowCount(parent);
-
-   // This goes with the previous commented out statement
-   // insertRow(breadth, createIndex(0,0,local),victim);
-   insertRow(breadth,parent,victim);
-   observeEquipment(victim);
 }
 
 void BrewTargetTreeModel::equipmentChanged()
@@ -904,6 +969,20 @@ void BrewTargetTreeModel::yeastChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
+void BrewTargetTreeModel::styleChanged()
+{
+   Style* d = qobject_cast<Style*>(sender());
+   if( !d )
+      return;
+   
+   QModelIndex ndxLeft = findStyle(d);
+   if( ! ndxLeft.isValid() )
+      return;
+   
+   QModelIndex ndxRight = createIndex(ndxLeft.row(), columnCount(ndxLeft)-1, ndxLeft.internalPointer());
+   emit dataChanged( ndxLeft, ndxRight );
+}
+
 void BrewTargetTreeModel::brewNoteChanged()
 {
    BrewNote* d = qobject_cast<BrewNote*>(sender());
@@ -916,6 +995,28 @@ void BrewTargetTreeModel::brewNoteChanged()
    
    QModelIndex ndxRight = createIndex(ndxLeft.row(), columnCount(ndxLeft)-1, ndxLeft.internalPointer());
    emit dataChanged( ndxLeft, ndxRight );
+}
+
+void BrewTargetTreeModel::equipmentAdded(Equipment* victim)
+{
+   if ( ! victim->display() ) 
+      return;
+
+   BrewTargetTreeItem* local = rootItem->child(0);
+   // Not quite sure what my logic here was. The index now will be 1,0 in
+   // Item list. Shouldn't this be 0,0?
+   // QModelIndex parent = createIndex(BrewTargetTreeItem::EQUIPMENT,0,local);
+   QModelIndex parent = createIndex(0,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+   // This goes with the previous commented out statement
+   // insertRow(breadth, createIndex(0,0,local),victim);
+   insertRow(breadth,parent,victim);
+   observeEquipment(victim);
 }
 
 void BrewTargetTreeModel::equipmentRemoved(Equipment* victim)
@@ -1080,6 +1181,32 @@ void BrewTargetTreeModel::yeastRemoved(Yeast* victim)
    disconnect( victim, 0, this, 0 );
 }
 
+void BrewTargetTreeModel::styleAdded(Style* victim)
+{
+   if ( ! victim->display() ) 
+      return;
+
+   BrewTargetTreeItem* local = rootItem->child(0);
+   QModelIndex parent = createIndex(0,0,local);
+
+   if ( ! parent.isValid() )
+      return;
+
+   int breadth = rowCount(parent);
+
+   insertRow(breadth,parent,victim);
+   observeStyle(victim);
+}
+
+void BrewTargetTreeModel::styleRemoved(Style* victim)
+{
+   QModelIndex index = findStyle(victim);
+   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+
+   removeRows(index.row(),1,parent);
+   disconnect( victim, 0, this, 0 );
+}
+
 // BrewNotes get no respect, but they get signals. They also get mighty
 // confusing
 void BrewTargetTreeModel::brewNoteAdded(BrewNote* victim)
@@ -1146,6 +1273,11 @@ void BrewTargetTreeModel::observeRecipe(Recipe* d)
 void BrewTargetTreeModel::observeYeast(Yeast* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(yeastChanged()) );
+}
+
+void BrewTargetTreeModel::observeStyle(Style* d)
+{
+   connect( d, SIGNAL(changedName(QString)), this, SLOT(styleChanged()) );
 }
 
 void BrewTargetTreeModel::observeBrewNote(BrewNote* d)

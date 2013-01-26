@@ -399,6 +399,9 @@ MainWindow::MainWindow(QWidget* parent)
    connect( treeView_yeast, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
    connect( treeView_yeast, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
 
+   connect( treeView_style, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_style, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
@@ -501,6 +504,7 @@ void MainWindow::deleteSelected()
    QList<Fermentable*> deadFerm;
    QList<Hop*> deadHop;
    QList<Misc*> deadMisc;
+   QList<Style*> deadStyle;
    QList<Yeast*> deadYeast;
    QList<BrewNote*> deadNote;
 
@@ -535,6 +539,10 @@ void MainWindow::deleteSelected()
          case BrewTargetTreeItem::MISC:
             if (*at != active->findMisc(0) && verifyDelete("Misc",active->getMisc(*at)->name()))
                deadMisc.append(active->getMisc(*at));
+            break;
+         case BrewTargetTreeItem::STYLE:
+            if (*at != active->findStyle(0) && verifyDelete("Style",active->getStyle(*at)->name()))
+               deadStyle.append(active->getStyle(*at));
             break;
          case BrewTargetTreeItem::YEAST:
             if (*at != active->findYeast(0) && verifyDelete("Yeast",active->getYeast(*at)->name()))
@@ -573,6 +581,7 @@ void MainWindow::deleteSelected()
    Database::instance().removeFermentable(deadFerm);
    Database::instance().removeHop(deadHop);
    Database::instance().removeMisc(deadMisc);
+   Database::instance().removeStyle(deadStyle);
    Database::instance().removeYeast(deadYeast);
 
    first = active->getFirst();
@@ -592,6 +601,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
    Hop* h;
    Misc *m;
    Yeast *y;
+   Style *s;
 
    QObject* calledBy = sender();
    BrewTargetTreeView* active;
@@ -641,6 +651,14 @@ void MainWindow::treeActivated(const QModelIndex &index)
          {
             miscEditor->setMisc(m);
             miscEditor->show();
+         }
+         break;
+      case BrewTargetTreeItem::STYLE:
+         s = active->getStyle(index);
+         if ( s )
+         {
+            singleStyleEditor->setStyle(s);
+            singleStyleEditor->show();
          }
          break;
       case BrewTargetTreeItem::YEAST:
@@ -1774,9 +1792,6 @@ void MainWindow::dropEvent(QDropEvent *event)
                setRecipeByIndex(index);
                break;
             case BrewTargetTreeItem::EQUIPMENT:
-               //equipmentComboBox->setCurrentIndex(equipmentListModel->indexOf(active->getEquipment(index)));
-               //NOTE: is the following right?
-               //equipmentComboBox->setText(active->getEquipment(index)->name());
                droppedRecipeEquipment(active->getEquipment(index));
                break;
             // NOTE: addToRecipe() calls the appropriate new* under the covers. Calling it twice caused some odd problems
@@ -1791,6 +1806,10 @@ void MainWindow::dropEvent(QDropEvent *event)
             case BrewTargetTreeItem::MISC:
                Database::instance().addToRecipe( recipeObs, active->getMisc(index) );
                last = miscTab;
+               break;
+            case BrewTargetTreeItem::STYLE:
+               Database::instance().addToRecipe( recipeObs, active->getStyle(index) );
+               styleButton->setStyle(active->getStyle(index));
                break;
             case BrewTargetTreeItem::YEAST:
                Database::instance().addToRecipe( recipeObs, active->getYeast(index) );
@@ -1847,6 +1866,7 @@ void MainWindow::setupContextMenu()
    sMenu->addAction(tr("Fermentable"), fermDialog, SLOT(newFermentable()));
    sMenu->addAction(tr("Hop"), hopDialog, SLOT(newHop()));
    sMenu->addAction(tr("Miscellaneous"), miscDialog, SLOT(newMisc()));
+   sMenu->addAction(tr("Style"), singleStyleEditor, SLOT(newStyle()));
    sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
 
    treeView_recipe->setupContextMenu(this,this,sMenu,BrewTargetTreeItem::RECIPE);
@@ -1855,8 +1875,8 @@ void MainWindow::setupContextMenu()
    treeView_ferm->setupContextMenu(this,fermDialog,sMenu,BrewTargetTreeItem::FERMENTABLE);
    treeView_hops->setupContextMenu(this,hopDialog,sMenu,BrewTargetTreeItem::HOP);
    treeView_misc->setupContextMenu(this,miscDialog,sMenu,BrewTargetTreeItem::MISC);
+   treeView_style->setupContextMenu(this,singleStyleEditor,sMenu,BrewTargetTreeItem::STYLE);
    treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,BrewTargetTreeItem::YEAST);
-
 
 }
 
@@ -1926,6 +1946,17 @@ void MainWindow::copyThis(Yeast *yeast)
    newYeast->setName(name);
 }
 
+void MainWindow::copyThis(Style *style)
+{
+   QString name = QInputDialog::getText( this, tr("Copy Style"), tr("Enter a unique name for the copy of %1.").arg(style->name()) );
+
+   if( name.isEmpty() )
+      return;
+
+   Style* newStyle = Database::instance().newStyle(style); // Create a deep copy.
+   newStyle->setName(name);
+}
+
 void MainWindow::copySelected()
 {
    BrewTargetTreeView* active = qobject_cast<BrewTargetTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
@@ -1937,6 +1968,7 @@ void MainWindow::copySelected()
    QList<Fermentable*> copyFerm;
    QList<Hop*> copyHop;
    QList<Misc*> copyMisc;
+   QList<Style*> copyStyle;
    QList<Yeast*> copyYeast;
 
    if ( active == 0 )
@@ -1975,6 +2007,11 @@ void MainWindow::copySelected()
                continue;
             copyMisc.append(active->getMisc(*at));
             break;
+         case BrewTargetTreeItem::STYLE:
+            if ( *at == active->findStyle(0) )
+               continue;
+            copyStyle.append(active->getStyle(*at));
+            break;
          case BrewTargetTreeItem::YEAST:
             if ( *at == active->findYeast(0) )
                continue;
@@ -1994,6 +2031,8 @@ void MainWindow::copySelected()
       copyThis(copyFerm.at(i));
    for(int i = 0; i < copyMisc.count(); ++i)
       copyThis(copyMisc.at(i));
+   for(int i = 0; i < copyStyle.count(); ++i)
+      copyThis(copyStyle.at(i));
    for(int i = 0; i < copyYeast.count(); ++i)
       copyThis(copyYeast.at(i));
 
@@ -2089,6 +2128,9 @@ void MainWindow::exportSelected()
             break;
          case BrewTargetTreeItem::MISC:
             Database::instance().toXml( treeView_misc->getMisc(selection), doc, dbase);
+            break;
+         case BrewTargetTreeItem::STYLE:
+            Database::instance().toXml( treeView_style->getStyle(selection), doc, dbase);
             break;
          case BrewTargetTreeItem::YEAST:
             Database::instance().toXml( treeView_yeast->getYeast(selection), doc, dbase);
