@@ -20,11 +20,15 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QColor>
-#include <QDebug>
 #include <QPalette>
 #include <QApplication>
 #include <QRectF>
 #include <QFont>
+#include <QMouseEvent>
+#include <QLabel>
+#include <QToolTip>
+
+#include <QDebug>
 
 StyleRangeWidget::StyleRangeWidget(QWidget* parent)
    : QWidget(parent),
@@ -36,10 +40,15 @@ StyleRangeWidget::StyleRangeWidget(QWidget* parent)
      _valText("0.500"),
      _prec(3),
      _tickInterval(0),
-     _secondaryTicks(1)
+     _secondaryTicks(1),
+     _tooltipText("")
 {
    setMinimumSize( 32, 16 );
    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
+   
+   // Generate mouse move events whenever mouse movers over widget.
+   setMouseTracking(true);
+   
    repaint();
 }
 
@@ -47,6 +56,9 @@ void StyleRangeWidget::setStyleRange( double min, double max )
 {
    _styleMin = min;
    _styleMax = max;
+   
+   _tooltipText = QString("%1 - %2").arg(min, 0, 'f', _prec).arg(max, 0, 'f', _prec);
+   
    update();
 }
 
@@ -90,6 +102,14 @@ QSize StyleRangeWidget::sizeHint() const
    static const QSize hint(64,16);
    
    return hint;
+}
+
+void StyleRangeWidget::mouseMoveEvent(QMouseEvent* event)
+{
+   event->accept();
+   
+   QPoint tipPoint( mapToGlobal(QPoint(0,0)) );
+   QToolTip::showText( tipPoint, _tooltipText, this );
 }
 
 void StyleRangeWidget::paintEvent(QPaintEvent* event)
@@ -158,7 +178,7 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
       painter.restore();
    painter.restore();
    
-   painter.translate( width() - textWidth - 2, 0 );
+   painter.translate( width() - textWidth, 0 );
    // Draw the text.
    painter.setPen(textColor);
    painter.setFont(textFont);

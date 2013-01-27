@@ -23,6 +23,8 @@
 #include <QSize>
 #include <QString>
 class QPaintEvent;
+class QLabel;
+class QMouseEvent;
 
 /*!
  * \brief Widget to display a recipe statistic with "in-range" context from the style.
@@ -63,6 +65,8 @@ public slots:
 protected:
    //! \brief Reimplemented from QWidget.
    virtual void paintEvent(QPaintEvent* event);
+   //! \brief Reimplemented from QWidget for popup on mouseover.
+   virtual void mouseMoveEvent(QMouseEvent* event);
    
 private:
    double _min;
@@ -74,6 +78,7 @@ private:
    int _prec;
    double _tickInterval;
    int _secondaryTicks;
+   QString _tooltipText;
 };
 
 #endif /*STYLERANGEWIDGET_H*/
