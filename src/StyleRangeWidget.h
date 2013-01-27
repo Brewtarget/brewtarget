@@ -47,9 +47,9 @@ public:
     * If either parameter is <= 0, then the tick marks are not drawn.
     * 
     * \param primaryInterval How often to draw big tick marks.
-    * \param secondaryInterval How often to draw small tick marks.
+    * \param secondaryTicks Number of secondary ticks per primary tick.
     */
-   void setTickMarks( double primaryInterval, double secondaryInterval = 0.0 );
+   void setTickMarks( double primaryInterval, int secondaryTicks = 1 );
    
    //! \brief Reimplemented from QWidget.
    virtual QSize sizeHint() const;
@@ -73,7 +73,7 @@ private:
    QString _valText;
    int _prec;
    double _tickInterval;
-   double _smallTickInterval;
+   int _secondaryTicks;
 };
 
 #endif /*STYLERANGEWIDGET_H*/

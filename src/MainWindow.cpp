@@ -151,14 +151,23 @@ MainWindow::MainWindow(QWidget* parent)
 
    styleRangeWidget_og->setRange(1.000, 1.120);
    styleRangeWidget_og->setPrecision(3);
+   styleRangeWidget_og->setTickMarks(0.010, 2);
+   
    styleRangeWidget_fg->setRange(1.000, 1.030);
    styleRangeWidget_fg->setPrecision(3);
+   styleRangeWidget_fg->setTickMarks(0.010, 2);
+   
    styleRangeWidget_abv->setRange(0.0, 15.0);
    styleRangeWidget_abv->setPrecision(1);
+   styleRangeWidget_abv->setTickMarks(1, 2);
+   
    styleRangeWidget_ibu->setRange(0.0, 120.0);
    styleRangeWidget_ibu->setPrecision(1);
+   styleRangeWidget_ibu->setTickMarks(10, 2);
+   
    styleRangeWidget_srm->setRange(0.0, 60.0);
    styleRangeWidget_srm->setPrecision(1);
+   styleRangeWidget_srm->setTickMarks(10, 2);
    
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);

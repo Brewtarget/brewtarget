@@ -36,7 +36,7 @@ StyleRangeWidget::StyleRangeWidget(QWidget* parent)
      _valText("0.500"),
      _prec(3),
      _tickInterval(0),
-     _smallTickInterval(0)
+     _secondaryTicks(1)
 {
    setMinimumSize( 32, 16 );
    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
@@ -77,10 +77,10 @@ void StyleRangeWidget::setPrecision(int precision)
    update();
 }
 
-void StyleRangeWidget::setTickMarks( double primaryInterval, double secondaryInterval )
+void StyleRangeWidget::setTickMarks( double primaryInterval, int secondaryTicks )
 {
-   _tickInterval = primaryInterval;
-   _smallTickInterval = secondaryInterval;
+   _secondaryTicks = (secondaryTicks<1)? 1 : secondaryTicks;
+   _tickInterval = primaryInterval/_secondaryTicks;
    
    update();
 }
@@ -134,15 +134,28 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
       painter.setBrush(indColor);
       painter.drawRect( QRectF(indLeft, 0, indWidth, rectHeight) );
       
-      // Draw the primary ticks.
-      if( _tickInterval > 0.0 )
-      {
-         for( double currentTick = _min+_tickInterval; currentTick <= _max; currentTick += _tickInterval )
+      painter.save();
+         // Draw the ticks.
+         painter.setPen(Qt::black);
+         if( _tickInterval > 0.0 )
          {
-            painter.translate( rectWidth/(_max-_min) * _tickInterval, 0);
-            painter.drawLine( QPointF(0,0), QPointF(0,rectHeight) );
+            int secTick = 1;
+            for( double currentTick = _min+_tickInterval; _max - currentTick > _tickInterval-1e-6; currentTick += _tickInterval )
+            {
+               painter.translate( rectWidth/(_max-_min) * _tickInterval, 0);
+               if( secTick == _secondaryTicks )
+               {
+                  painter.drawLine( QPointF(0,0.25*rectHeight), QPointF(0,0.75*rectHeight) );
+                  secTick = 1;
+               }
+               else
+               {
+                  painter.drawLine( QPointF(0,0.333*rectHeight), QPointF(0,0.666*rectHeight) );
+                  ++secTick;
+               }
+            }
          }
-      }
+      painter.restore();
    painter.restore();
    
    painter.translate( width() - textWidth - 2, 0 );
