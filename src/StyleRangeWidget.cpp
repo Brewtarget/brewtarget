@@ -27,6 +27,7 @@
 #include <QMouseEvent>
 #include <QLabel>
 #include <QToolTip>
+#include <QLinearGradient>
 
 #include <QDebug>
 
@@ -124,6 +125,11 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
    static const QColor textColor(0,127,0);
    static const QFont textFont("Arial", 14, QFont::Black);
    
+   QLinearGradient glassGrad( QPointF(0,0), QPointF(0,rectHeight) );
+   glassGrad.setColorAt( 0, QColor(255,255,255,127) );
+   glassGrad.setColorAt( 1, QColor(255,255,255,0) );
+   QBrush glassBrush(glassGrad);
+   
    QPainter painter(this);
    float rectWidth   = 512;
    float fgRectLeft  = rectWidth/(_max-_min) * (_styleMin-_min);
@@ -144,7 +150,9 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
       
       // Draw the background rectangle.
       painter.setBrush(bgRectColor);
-      painter.drawRect( QRectF(0, 0, rectWidth, rectHeight) );
+      painter.setRenderHint(QPainter::Antialiasing);
+      painter.drawRoundedRect( QRectF(0, 0, rectWidth, rectHeight), 8, 8 );
+      painter.setRenderHint(QPainter::Antialiasing,false);
       
       // Draw the style "foreground" rectangle.
       painter.setBrush(fgRectColor);
@@ -154,28 +162,32 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
       painter.setBrush(indColor);
       painter.drawRect( QRectF(indLeft, 0, indWidth, rectHeight) );
       
-      painter.save();
-         // Draw the ticks.
-         painter.setPen(Qt::black);
-         if( _tickInterval > 0.0 )
+      // Draw a white to clear gradient to suggest "glassy."
+      painter.setBrush(glassBrush);
+      painter.setRenderHint(QPainter::Antialiasing);
+      painter.drawRoundedRect( QRectF(0, 0, rectWidth, rectHeight), 8, 8 );
+      painter.setRenderHint(QPainter::Antialiasing,false);
+      
+      // Draw the ticks.
+      painter.setPen(Qt::black);
+      if( _tickInterval > 0.0 )
+      {
+         int secTick = 1;
+         for( double currentTick = _min+_tickInterval; _max - currentTick > _tickInterval-1e-6; currentTick += _tickInterval )
          {
-            int secTick = 1;
-            for( double currentTick = _min+_tickInterval; _max - currentTick > _tickInterval-1e-6; currentTick += _tickInterval )
+            painter.translate( rectWidth/(_max-_min) * _tickInterval, 0);
+            if( secTick == _secondaryTicks )
             {
-               painter.translate( rectWidth/(_max-_min) * _tickInterval, 0);
-               if( secTick == _secondaryTicks )
-               {
-                  painter.drawLine( QPointF(0,0.25*rectHeight), QPointF(0,0.75*rectHeight) );
-                  secTick = 1;
-               }
-               else
-               {
-                  painter.drawLine( QPointF(0,0.333*rectHeight), QPointF(0,0.666*rectHeight) );
-                  ++secTick;
-               }
+               painter.drawLine( QPointF(0,0.25*rectHeight), QPointF(0,0.75*rectHeight) );
+               secTick = 1;
+            }
+            else
+            {
+               painter.drawLine( QPointF(0,0.333*rectHeight), QPointF(0,0.666*rectHeight) );
+               ++secTick;
             }
          }
-      painter.restore();
+      }
    painter.restore();
    
    painter.translate( width() - textWidth, 0 );
