@@ -41,6 +41,16 @@ public:
    //! \brief Set the \c precision for displaying values.
    void setPrecision(int precision);
    
+   /*!
+    * \brief Set the tick mark intervals.
+    * 
+    * If either parameter is <= 0, then the tick marks are not drawn.
+    * 
+    * \param primaryInterval How often to draw big tick marks.
+    * \param secondaryInterval How often to draw small tick marks.
+    */
+   void setTickMarks( double primaryInterval, double secondaryInterval = 0.0 );
+   
    //! \brief Reimplemented from QWidget.
    virtual QSize sizeHint() const;
    
@@ -62,6 +72,8 @@ private:
    double _val;
    QString _valText;
    int _prec;
+   double _tickInterval;
+   double _smallTickInterval;
 };
 
 #endif /*STYLERANGEWIDGET_H*/

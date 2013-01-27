@@ -34,7 +34,9 @@ StyleRangeWidget::StyleRangeWidget(QWidget* parent)
      _styleMax(0.75),
      _val(0.5),
      _valText("0.500"),
-     _prec(3)
+     _prec(3),
+     _tickInterval(0),
+     _smallTickInterval(0)
 {
    setMinimumSize( 32, 16 );
    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
@@ -75,6 +77,14 @@ void StyleRangeWidget::setPrecision(int precision)
    update();
 }
 
+void StyleRangeWidget::setTickMarks( double primaryInterval, double secondaryInterval )
+{
+   _tickInterval = primaryInterval;
+   _smallTickInterval = secondaryInterval;
+   
+   update();
+}
+
 QSize StyleRangeWidget::sizeHint() const
 {
    static const QSize hint(64,16);
@@ -107,29 +117,37 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
    indX        = qBound( 0.f, indX, rectWidth-indWidth/2 );
    indLeft     = qBound( 0.f, indX-indWidth/2, rectWidth );
    
+   painter.save();
+      painter.setPen(Qt::NoPen);
+      // Scale coordinates so that 'rectWidth' units == width()-textWidth-2 pixels.
+      painter.scale( (width()-textWidth-2)/rectWidth, 1.0 );
+      
+      // Draw the background rectangle.
+      painter.setBrush(bgRectColor);
+      painter.drawRect( QRectF(0, 0, rectWidth, rectHeight) );
+      
+      // Draw the style "foreground" rectangle.
+      painter.setBrush(fgRectColor);
+      painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, rectHeight) );
+      
+      // Draw the indicator.
+      painter.setBrush(indColor);
+      painter.drawRect( QRectF(indLeft, 0, indWidth, rectHeight) );
+      
+      // Draw the primary ticks.
+      if( _tickInterval > 0.0 )
+      {
+         for( double currentTick = _min+_tickInterval; currentTick <= _max; currentTick += _tickInterval )
+         {
+            painter.translate( rectWidth/(_max-_min) * _tickInterval, 0);
+            painter.drawLine( QPointF(0,0), QPointF(0,rectHeight) );
+         }
+      }
+   painter.restore();
+   
+   painter.translate( width() - textWidth - 2, 0 );
    // Draw the text.
    painter.setPen(textColor);
    painter.setFont(textFont);
    painter.drawText( 0, 0, textWidth, 16, Qt::AlignRight | Qt::AlignVCenter, _valText );
-   
-   // Border style.
-   painter.setPen(Qt::NoPen);
-   
-   painter.save();
-   painter.translate(textWidth+2, 0);
-   // Scale coordinates so that 'rectWidth' units == width()-textWidth-2 pixels.
-   painter.scale( (width()-textWidth-2)/rectWidth, 1.0 );
-   
-   // Draw the background rectangle.
-   painter.setBrush(bgRectColor);
-   painter.drawRect( QRectF(0, 0, rectWidth, rectHeight) );
-   
-   // Draw the style "foreground" rectangle.
-   painter.setBrush(fgRectColor);
-   painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, rectHeight) );
-   
-   // Draw the indicator.
-   painter.setBrush(indColor);
-   painter.drawRect( QRectF(indLeft, 0, indWidth, rectHeight) );
-   painter.restore();
 }
