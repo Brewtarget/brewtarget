@@ -310,7 +310,11 @@ public:
     * database file.
     */
    void updateDatabase(QString const& filename);
-   
+   void saveDatabase();
+   void convertFromXml();
+
+   bool isConverted();
+
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
@@ -369,6 +373,9 @@ private:
 
    // Instance variables.
    bool loadWasSuccessful;
+   bool converted;
+   bool dirty;
+
    QHash< int, BrewNote* > allBrewNotes;
    QHash< int, Equipment* > allEquipments;
    QHash< int, Fermentable* > allFermentables;
@@ -571,6 +578,7 @@ private:
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
       }
       
+      dirty = true; 
       return newIng;
    }
    

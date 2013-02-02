@@ -38,6 +38,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPushButton>
+#include <QCryptographicHash>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -80,7 +81,9 @@ Database::Database()
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
-   
+
+   converted = false;   
+   dirty = false;
    loadWasSuccessful = load();
 }
 
@@ -223,7 +226,11 @@ bool Database::load()
    {
       Equipment* e = equipment(*i);
       if( e )
+      {
          connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+         connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
+         connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
+      }
       
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); j++ )
@@ -244,12 +251,63 @@ bool Database::load()
          connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
+   dirty = false;
    return true;
 }
 
 bool Database::loadSuccessful()
 {
    return loadWasSuccessful;
+}
+
+void Database::convertFromXml()
+{
+
+   // We have two use cases to consider here. The first is a BT
+   // 1.x user running BT 2 for the first time. The second is a BT 2 clean
+   // install. I am also trying to protect the developers from double imports.
+   // If the old "obsolete" directory exists, don't do anything other than
+   // set the converted flag
+   QDir dir(Brewtarget::getUserDataDir());
+   // Checking for non-existence is redundant with the new "converted" setting,
+   // but better safe than sorry.
+   if( !dir.exists("obsolete") )
+   {
+      dir.mkdir("obsolete");
+      dir.cd("obsolete");
+      
+      QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
+      for ( int i = 0; i < oldFiles.size(); ++i ) 
+      {
+         QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
+         // If the old file exists, import.
+         if( oldXmlFile.exists() )
+         {
+            importFromXML( oldXmlFile.fileName() );
+            
+            // Move to obsolete/ directory.
+            if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
+               oldXmlFile.remove();
+
+            // Let us know something was converted
+            converted = true;
+         }
+      }
+   }
+   Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
+   saveDatabase();
+}
+
+void Database::saveDatabase()
+{
+   dbTempBackupFile.remove();
+   dbFile.copy(dbTempBackupFileName);
+   dirty = false;
+}
+
+bool Database::isConverted()
+{
+   return converted;
 }
 
 QSqlDatabase Database::sqlDatabase()
@@ -304,6 +362,10 @@ void Database::unload()
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
+   QByteArray dbHash;
+   QByteArray backupHash;
+
+   qDebug() << "dirty =" << dirty;
    if (!loadWasSuccessful)
    {
       // If load() failed, then
@@ -313,9 +375,15 @@ void Database::unload()
    }
    else 
    {
+      if ( dbFile.open(QIODevice::ReadOnly) )
+         dbHash = QCryptographicHash::hash(dbFile.readAll(),QCryptographicHash::Md5);
+      if ( dbTempBackupFile.open(QIODevice::ReadOnly) )
+         backupHash = QCryptographicHash::hash(dbTempBackupFile.readAll(),QCryptographicHash::Md5);
+      qDebug() << "dbHash     =" << dbHash.toHex();
+      qDebug() << "backupHash =" << backupHash.toHex();
       // If the database has a more recent modified date than the backup, ask
       // the user if they want to save changes.
-      if (QFileInfo(dbFileName).lastModified() > QFileInfo(dbTempBackupFileName).lastModified() && 
+      if (dirty &&
             QMessageBox::question(0,
                                   QObject::tr("Save Database Changes"),
                                   QObject::tr("Would you like to save the changes you made?"),
@@ -365,7 +433,7 @@ Database& Database::instance()
 void Database::dropInstance()
 {
    static QMutex mutex;
-   
+  
    mutex.lock();
    delete dbInstance;
    dbInstance=0;
@@ -419,7 +487,9 @@ void Database::removeIngredientFromRecipe( Recipe* rec, BeerXMLElement* ing, QSt
    q.prepare( QString("DELETE FROM `%1` WHERE `%2`='%3' AND recipe_id='%4'").arg(relTableName).arg(ingKeyName).arg(ing->_key).arg(rec->_key) );
    q.exec();
    q.finish();
-   
+ 
+   qDebug() << "removeIngredientFromRecipe setting dirty"; 
+   dirty = true; 
    emit rec->changed( rec->metaProperty(propName), QVariant() );
 }
 
@@ -429,6 +499,8 @@ void Database::removeFromRecipe( Recipe* rec, BrewNote* b )
    sqlUpdate( Brewtarget::BREWNOTETABLE,
               "deleted=1",
               QString("id=%1").arg(b->_key) );
+   qDebug() << "removeFromRecipe setting dirty"; 
+   dirty = true; 
    emit deletedBrewNoteSignal(b);
 }
 
@@ -484,6 +556,8 @@ void Database::removeFrom( Mash* mash, MashStep* step )
               "deleted=1",
               QString("id=%1").arg(step->_key) );
    // emit mash->changed( mash->metaProperty("mashSteps"), QVariant() );
+   qDebug() << "removeFrom(mash, mashstep) is setting dirty";
+   dirty = true; 
    emit mash->mashStepsChanged();
 }
 
@@ -522,7 +596,9 @@ void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
                 .arg(m1->_key).arg(m2->_key).arg(m2->_key).arg(m1->_key).arg(m1->_key).arg(m2->_key),
                 sqlDatabase());//sqldb );
    q.finish();
-   
+  
+  qDebug() << "swapMashStepOrder is setting dirty"; 
+   dirty = true; 
    emit m1->changed( m1->metaProperty("stepNumber") );
    emit m2->changed( m2->metaProperty("stepNumber") );
 }
@@ -543,7 +619,9 @@ void Database::swapInstructionOrder(Instruction* in1, Instruction* in2)
       sqlDatabase()
    );
    q.finish();
-   
+  
+  qDebug() << "swapInstructionOrder setting dirty"; 
+   dirty = true; 
    emit in1->changed( in1->metaProperty("instructionNumber") );
    emit in2->changed( in2->metaProperty("instructionNumber") );
 }
@@ -580,7 +658,9 @@ void Database::insertInstruction(Instruction* in, int pos)
       ).arg(pos).arg(in->_key)
    );
    q.finish();
-   
+  
+   qDebug() << "insertInstruction setting dirty"; 
+   dirty = true; 
    emit in->changed( in->metaProperty("instructionNumber"), pos );
 }
 
@@ -744,7 +824,9 @@ int Database::insertNewDefaultRecord( Brewtarget::DBTable table )
    
    //if( q.lastError().isValid() )
    //   Brewtarget::logE( QString("Database::insertNewDefaultRecord: %1").arg(q.lastError().text()) );
-   
+  
+   qDebug() << "insertNewDefaultRecord setting dirty"; 
+   dirty = true;
    return key;
 }
 
@@ -778,6 +860,8 @@ int Database::insertNewMashStepRecord( Mash* parent )
                       .arg(parent->_key),
               QString("id='%1'").arg(key)
             );
+   qDebug() << "insertNewMashStepRecord setting dirty";
+   dirty = true;
    return key;
 }
 
@@ -790,6 +874,9 @@ BrewNote* Database::newBrewNote(BrewNote* other, bool signal)
       emit changed( metaProperty("brewNotes"), QVariant() );
       emit newBrewNoteSignal(tmp);
    }
+
+   qDebug() << "newBrewNote(other,signal) setting dirty";
+   dirty = true; 
    return tmp;
 }
 
@@ -811,6 +898,9 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
       emit changed( metaProperty("brewNotes"), QVariant() );
       emit newBrewNoteSignal(tmp);
    }
+   
+   qDebug() << "newBrewNote(parent,signal) setting dirty";
+   dirty = true; 
    return tmp;
 }
 
@@ -821,6 +911,8 @@ Equipment* Database::newEquipment()
    tmp->_table = Brewtarget::EQUIPTABLE;
    allEquipments.insert(tmp->_key,tmp);
 
+   qDebug() << "newEquipemnt() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(tmp);
 
@@ -831,6 +923,8 @@ Equipment* Database::newEquipment(Equipment* other)
 {
    Equipment* tmp = copy<Equipment>(other, true, &allEquipments);
    
+   qDebug() << "newEquipemnt(other) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("equipments"), QVariant() );
    emit newEquipmentSignal(tmp);
    
@@ -844,6 +938,8 @@ Fermentable* Database::newFermentable()
    tmp->_table = Brewtarget::FERMTABLE;
    allFermentables.insert(tmp->_key,tmp);
    
+   qDebug() << "newFermentable() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("fermentables"), QVariant() );
    emit newFermentableSignal(tmp);
    
@@ -854,6 +950,8 @@ Fermentable* Database::newFermentable(Fermentable* other)
 {
    Fermentable* tmp = copy<Fermentable>(other, true, &allFermentables);
    
+   qDebug() << "newFermentable(other) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("fermentables"), QVariant() );
    emit newFermentableSignal(tmp);
    
@@ -867,6 +965,8 @@ Hop* Database::newHop()
    tmp->_table = Brewtarget::HOPTABLE;
    allHops.insert(tmp->_key,tmp);
    
+   qDebug() << "newHop() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("hops"), QVariant() );
    emit newHopSignal(tmp);
    
@@ -877,6 +977,8 @@ Hop* Database::newHop(Hop* other)
 {
    Hop* tmp = copy<Hop>(other, true, &allHops);
    
+   qDebug() << "newHop(other) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("hops"), QVariant() );
    emit newHopSignal(tmp);
    
@@ -892,6 +994,9 @@ Instruction* Database::newInstruction(Recipe* rec)
    allInstructions.insert(tmp->_key,tmp);
    
    // Database's instructions have changed.
+
+   qDebug() << "newInstruction() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("instructions"), QVariant() );
    
    // Add without copying to "instruction_in_recipe"
@@ -923,6 +1028,8 @@ Mash* Database::newMash()
 
    allMashs.insert(tmp->_key,tmp);
    
+   qDebug() << "newMash() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
    
@@ -941,6 +1048,8 @@ Mash* Database::newMash(Recipe* parent)
               QString("mash_id=%1").arg(tmp->_key),
               QString("id=%1").arg(parent->_key) );
    
+   qDebug() << "newMash(parent) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
 
@@ -962,6 +1071,8 @@ Mash* Database::newMash(Mash* other, bool displace)
                  QString("mash_id=%1").arg(other->_key) );
    }
    
+   qDebug() << "newMash(other) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMashSignal(tmp);
    
@@ -980,6 +1091,8 @@ MashStep* Database::newMashStep(Mash* mash)
    allMashSteps.insert(tmp->_key,tmp);
    connect( tmp, SIGNAL(changed(QMetaProperty,QVariant)), mash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
 
+   qDebug() << "newMashStep() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("mashs"), QVariant() );
    emit mash->mashStepsChanged();
    return tmp;
@@ -992,6 +1105,8 @@ Misc* Database::newMisc()
    tmp->_table = Brewtarget::MISCTABLE;
    allMiscs.insert(tmp->_key,tmp);
    
+   qDebug() << "newMisc() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("miscs"), QVariant() );
    emit newMiscSignal(tmp);
    
@@ -1002,6 +1117,8 @@ Misc* Database::newMisc(Misc* other)
 {
    Misc* tmp = copy<Misc>(other, true, &allMiscs);
    
+   qDebug() << "newMisc(other) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("miscs"), QVariant() );
    emit newMiscSignal(tmp);
    
@@ -1019,6 +1136,8 @@ Recipe* Database::newRecipe(bool addMash)
    if ( addMash )
       newMash( tmp );
    
+   qDebug() << "newRecipe() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
    
@@ -1050,6 +1169,8 @@ Recipe* Database::newRecipe(Recipe* other)
    addToRecipe( tmp, other->mash() );
    addToRecipe( tmp, other->style() );
    
+   qDebug() << "newRecipe(other) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("recipes"), QVariant() );
    emit newRecipeSignal(tmp);
    
@@ -1063,6 +1184,8 @@ Style* Database::newStyle()
    tmp->_table = Brewtarget::STYLETABLE;
    allStyles.insert(tmp->_key,tmp);
    
+   qDebug() << "newStyle() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("styles"), QVariant() );
    emit newStyleSignal(tmp);
    
@@ -1076,6 +1199,8 @@ Water* Database::newWater()
    tmp->_table = Brewtarget::WATERTABLE;
    allWaters.insert(tmp->_key,tmp);
    
+   qDebug() << "newWater() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("waters"), QVariant() );
    emit newWaterSignal(tmp);
    
@@ -1089,6 +1214,8 @@ Yeast* Database::newYeast()
    tmp->_table = Brewtarget::YEASTTABLE;
    allYeasts.insert(tmp->_key,tmp);
    
+   qDebug() << "newYeast() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("yeasts"), QVariant() );
    emit newYeastSignal(tmp);
    
@@ -1099,6 +1226,8 @@ Yeast* Database::newYeast(Yeast* other)
 {
    Yeast* tmp = copy<Yeast>(other, true, &allYeasts);
    
+   qDebug() << "newYeast(other) setting dirty";
+   dirty = true; 
    emit changed( metaProperty("yeasts"), QVariant() );
    emit newYeastSignal(tmp);
    
@@ -1120,6 +1249,8 @@ void Database::deleteRecord( Brewtarget::DBTable table, BeerXMLElement* object )
                          true);
    // For now, immediately execute the command.
    command->redo();
+   qDebug() << "deleteRecord() setting dirty";
+   dirty = true; 
    
    // Push the command on the undo stack.
    //commandStack.push(command);
@@ -1145,6 +1276,8 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
       connect( newStep, SIGNAL(changed(QMetaProperty,QVariant)), newMash, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );          
    }
    
+   qDebug() << "duplicateMashSteps() setting dirty";
+   dirty = true; 
    emit changed( metaProperty("mashs"), QVariant() );
    emit newMash->mashStepsChanged();
 }
@@ -1402,6 +1535,8 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
                                notify);
 
    command->redo();
+   qDebug() << "updateEntry() setting dirty" << table << col_name << value;
+   dirty = true; 
 }
 
 // Add to recipe ==============================================================
@@ -1419,6 +1554,8 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
       newEquip = e;
 
    
+   qDebug() << "addToRecipe(rec,equip) setting dirty";
+   dirty = true; 
    // Update equipment_id
    sqlUpdate(Brewtarget::RECTABLE,
              QString("`equipment_id`='%1'").arg(newEquip->key()),
@@ -1428,6 +1565,8 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
    
    // NOTE: need to disconnect the recipe's old equipment?
    connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+   connect( newEquip, SIGNAL(changedBoilSize_l(double)), rec, SLOT(setBoilSize_l(double)));
+   connect( newEquip, SIGNAL(changedBoilTime_min(double)), rec, SLOT(setBoilTime_min(double)));
    
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
@@ -1483,6 +1622,8 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
              QString("id='%1'").arg(rec->_key));
    
    // Emit a changed signal.
+   qDebug() << "addToRecipe(rec,mash) setting dirty";
+   dirty = true; 
    connect( newMash, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptMashChange(QMetaProperty,QVariant)));
    emit rec->changed( rec->metaProperty("mash"), BeerXMLElement::qVariantFromPtr(newMash) );
    // And let the recipe recalc all?
@@ -1518,6 +1659,8 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
              QString("id='%1'").arg(rec->_key));
 
    newStyle->setDisplay(false);
+   qDebug() << "addToRecipe(rec,style) setting dirty";
+   dirty = true; 
    
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
@@ -1542,6 +1685,8 @@ void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, Q
    if( q.lastError().isValid() )
       Brewtarget::logE( QString("Database::sqlUpdate(): %1").arg(q.lastError().text()) );
    q.finish();
+   qDebug() << "sqlUpdate() setting dirty";
+   dirty = true; 
 }
 
 void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause )
@@ -1551,6 +1696,8 @@ void Database::sqlDelete( Brewtarget::DBTable table, QString const& whereClause 
                 .arg(whereClause),
                 sqlDatabase());
    q.finish();
+   qDebug() << "sqlDelete() setting dirty";
+   dirty = true; 
 }
 
 QHash<Brewtarget::DBTable,QSqlQuery> Database::selectAllHash()
@@ -2886,6 +3033,9 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
          //   Brewtarget::logW(QString("Database::fromXML: Unsupported property: %1. Line %2").arg(xmlTag).arg(node.lineNumber()) );
       }
    }
+
+   qDebug() << "fromXml() setting dirty";
+   dirty = true; 
 }
 
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
@@ -3869,4 +4019,7 @@ void Database::updateDatabase(QString const& filename)
          }
       }
    }
+   // I think
+   qDebug() << "updateDatabase() setting dirty";
+   dirty = true;
 }
