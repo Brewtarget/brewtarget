@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QToolTip>
 #include <QLinearGradient>
+#include <QPainterPath>
 
 #include <QDebug>
 
@@ -147,6 +148,11 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
       painter.setPen(Qt::NoPen);
       // Scale coordinates so that 'rectWidth' units == width()-textWidth-2 pixels.
       painter.scale( (width()-textWidth-2)/rectWidth, 1.0 );
+      
+      // Make sure anything we draw "inside" the "glass rectangle" stays inside.
+      QPainterPath clipRect;
+      clipRect.addRoundedRect( QRectF(0, 0, rectWidth, rectHeight), 8, 8 );
+      painter.setClipPath(clipRect);
       
       // Draw the background rectangle.
       painter.setBrush(bgRectColor);
