@@ -333,6 +333,7 @@ private:
    void copyThis(Misc *misc);
    void copyThis(Yeast *yeast);
 
+   void convertedMsg(); 
 };
 
 #endif   /* _MAINWINDOW_H */
