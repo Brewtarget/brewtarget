@@ -737,25 +737,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    recEquip = recipe->equipment();
    
    // BeerXML is stupid and has reduntant fields.
-   // Ensure that recEquip and recipeObs always have the same boil size and time.
-   // NOTE: should probably move this connection code to the Database.
-   if( recEquip )
-   {
-      connect(
-         recEquip,
-         SIGNAL(changedBoilSize_l(double)),
-         recipeObs,
-         SLOT(setBoilSize_l(double))
-      );
-      
-      connect(
-         recEquip,
-         SIGNAL(changedBoilTime_min(double)),
-         recipeObs,
-         SLOT(setBoilTime_min(double))
-      );
-   }
-   
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
    hopTableModel->observeRecipe(recipe);
