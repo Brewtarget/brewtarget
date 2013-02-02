@@ -223,7 +223,13 @@ bool Database::load()
    {
       Equipment* e = equipment(*i);
       if( e )
+      {
          connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+         // NOTE: If we don't reconnect these signals, bad things happen when
+         // changing boil times on the mainwindow
+         connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
+         connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
+      }
       
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); j++ )
