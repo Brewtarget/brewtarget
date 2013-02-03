@@ -132,13 +132,16 @@ void HopTableModel::addHops(QList<Hop*> hops)
    }
    
    int size = hopObs.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   hopObs.append(tmp);
-   
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   if (size)
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      hopObs.append(tmp);
+      
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
-   endInsertRows();
+      endInsertRows();
+   }
 
    if( parentTableWidget )
    {
@@ -179,12 +182,15 @@ void HopTableModel::setShowIBUs( bool var )
 
 void HopTableModel::removeAll()
 {
-   beginRemoveRows( QModelIndex(), 0, hopObs.size()-1 );
-   while( !hopObs.isEmpty() )
+   if (hopObs.size())
    {
-      disconnect( hopObs.takeLast(), 0, this, 0 );
+      beginRemoveRows( QModelIndex(), 0, hopObs.size()-1 );
+      while( !hopObs.isEmpty() )
+      {
+         disconnect( hopObs.takeLast(), 0, this, 0 );
+      }
+      endRemoveRows();
    }
-   endRemoveRows();
 }
 
 void HopTableModel::changed(QMetaProperty prop, QVariant /*val*/)

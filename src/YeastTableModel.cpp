@@ -115,13 +115,16 @@ void YeastTableModel::addYeasts(QList<Yeast*> yeasts)
    }
    
    int size = yeastObs.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   yeastObs.append(tmp);
-   
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   
-   endInsertRows();
+   if (size)
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      yeastObs.append(tmp);
+      
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      
+      endInsertRows();
+   }
 
    if( parentTableWidget )
    {
@@ -153,12 +156,15 @@ void YeastTableModel::removeYeast(Yeast* yeast)
 
 void YeastTableModel::removeAll()
 {
-   beginRemoveRows( QModelIndex(), 0, yeastObs.size()-1 );
-   while( !yeastObs.isEmpty() )
+   if (yeastObs.size())
    {
-      disconnect( yeastObs.takeLast(), 0, this, 0 );
+      beginRemoveRows( QModelIndex(), 0, yeastObs.size()-1 );
+      while( !yeastObs.isEmpty() )
+      {
+         disconnect( yeastObs.takeLast(), 0, this, 0 );
+      }
+      endRemoveRows();
    }
-   endRemoveRows();
 }
 
 void YeastTableModel::changed(QMetaProperty prop, QVariant /*val*/)

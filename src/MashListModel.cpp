@@ -56,13 +56,16 @@ void MashListModel::addMashes(QList<Mash*> m)
    }
    
    int size = mashes.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   mashes.append(tmp);
-   
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
-   
-   endInsertRows();
+   if (size)
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      mashes.append(tmp);
+      
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
+      
+      endInsertRows();
+   }
 }
 
 void MashListModel::removeMash(Mash* mash)
@@ -79,10 +82,13 @@ void MashListModel::removeMash(Mash* mash)
 
 void MashListModel::removeAll()
 {
-   beginRemoveRows( QModelIndex(), 0, mashes.size()-1 );
-   while( !mashes.isEmpty() )
-      disconnect( mashes.takeLast(), 0, this, 0 );
-   endRemoveRows();
+   if (mashes.size())
+   {
+      beginRemoveRows( QModelIndex(), 0, mashes.size()-1 );
+      while( !mashes.isEmpty() )
+         disconnect( mashes.takeLast(), 0, this, 0 );
+      endRemoveRows();
+   }
 }
 
 void MashListModel::mashChanged(QMetaProperty prop, QVariant val)
