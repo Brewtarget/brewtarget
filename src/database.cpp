@@ -89,7 +89,19 @@ Database::Database()
 
 Database::~Database()
 {
-   unload();
+   // Delete all the ingredients floating around.
+   qDeleteAll(allBrewNotes);
+   qDeleteAll(allEquipments);
+   qDeleteAll(allFermentables);
+   qDeleteAll(allHops);
+   qDeleteAll(allInstructions);
+   qDeleteAll(allMashSteps);
+   qDeleteAll(allMashs);
+   qDeleteAll(allMiscs);
+   qDeleteAll(allStyles);
+   qDeleteAll(allWaters);
+   qDeleteAll(allYeasts);
+   qDeleteAll(allRecipes);
 }
 
 bool Database::load()
@@ -228,6 +240,8 @@ bool Database::load()
       if( e )
       {
          connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+         // NOTE: If we don't reconnect these signals, bad things happen when
+         // changing boil times on the mainwindow
          connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
          connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
       }
@@ -343,22 +357,8 @@ QSqlDatabase Database::sqlDatabase()
    return sqldb;
 }
 
-void Database::unload()
+void Database::unload(bool keepChanges)
 {
-   // Delete all the ingredients floating around.
-   qDeleteAll(allBrewNotes);
-   qDeleteAll(allEquipments);
-   qDeleteAll(allFermentables);
-   qDeleteAll(allHops);
-   qDeleteAll(allInstructions);
-   qDeleteAll(allMashSteps);
-   qDeleteAll(allMashs);
-   qDeleteAll(allMiscs);
-   qDeleteAll(allStyles);
-   qDeleteAll(allWaters);
-   qDeleteAll(allYeasts);
-   qDeleteAll(allRecipes);
-
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
@@ -368,12 +368,12 @@ void Database::unload()
    qDebug() << "dirty =" << dirty;
    if (!loadWasSuccessful)
    {
-      // If load() failed, then
+      // If load() failed or want to keep the changes, then
       // just keep the database and don't revert to the backup.
       if (dbFile.exists())
          dbTempBackupFile.remove();
    }
-   else 
+   else
    {
       if ( dbFile.open(QIODevice::ReadOnly) )
          dbHash = QCryptographicHash::hash(dbFile.readAll(),QCryptographicHash::Md5);
@@ -1565,9 +1565,11 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
    
    // NOTE: need to disconnect the recipe's old equipment?
    connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+   // NOTE: If we don't reconnect these signals, bad things happen when
+   // changing boil times on the mainwindow
    connect( newEquip, SIGNAL(changedBoilSize_l(double)), rec, SLOT(setBoilSize_l(double)));
    connect( newEquip, SIGNAL(changedBoilTime_min(double)), rec, SLOT(setBoilTime_min(double)));
-   
+
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
    rec->recalcAll();

@@ -1586,25 +1586,32 @@ void MainWindow::removeMash()
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-   // TODO: anything to do here?
-   /*
-   if( QMessageBox::question(this, tr("Save database?"),
-                             tr("Do you want to save the changes made? If not, you will lose anything you changed in this session."),
-                             QMessageBox::Yes,
-                             QMessageBox::No)
-       == QMessageBox::Yes )
-   {
-      Database::savePersistent();
-   }
-   */
-   
    Brewtarget::savePersistentOptions();
 
    Brewtarget::btSettings.setValue("geometry", saveGeometry());
    Brewtarget::btSettings.setValue("windowState", saveState());
    if ( recipeObs )
       Brewtarget::btSettings.setValue("recipeKey", recipeObs->key());
+   
+   // After unloading the database, can't make any more queries to it, so first
+   // make the main window disappear so that redraw events won't inadvertently
+   // cause any more queries.
    setVisible(false);
+   
+   // Ask the user if they want to save changes.
+   if( QMessageBox::question(this,
+          QObject::tr("Save Database Changes"),
+          QObject::tr("Would you like to save the changes you made?"),
+          QMessageBox::Yes | QMessageBox::No,
+          QMessageBox::Yes)
+      == QMessageBox::Yes)
+   {
+      Database::instance().unload(true);
+   }
+   else
+   {
+      Database::instance().unload(false);
+   }
 }
 
 void MainWindow::copyRecipe()
