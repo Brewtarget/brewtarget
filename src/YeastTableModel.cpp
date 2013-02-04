@@ -529,15 +529,18 @@ void YeastItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
    if( col == YEASTTYPECOL || col == YEASTFORMCOL )
    {
       QComboBox* box = (QComboBox*)editor;
-      int value = box->currentIndex();
+      int ndx = box->currentIndex();
+      int curr = model->data(index,Qt::UserRole).toInt();
 
-      model->setData(index, value, Qt::EditRole);
+      if ( ndx != curr )
+         model->setData(index, ndx, Qt::EditRole);
    }
    else
    {
       QLineEdit* line = (QLineEdit*)editor;
-
-      model->setData(index, line->text(), Qt::EditRole);
+      
+      if ( line->isModified() )
+         model->setData(index, line->text(), Qt::EditRole);
    }
 }
 

@@ -1890,8 +1890,18 @@ void Recipe::recalcOgFg()
    double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
    Yeast* yeast;
    QHash<QString,double> sugars;
-   
+  
    _og_fermentable = _fg_fermentable = 0.0;
+
+   // The first time through really has to get the _og and _fg from the
+   // database, not use the initialized values of 1. I (maf) tried putting
+   // this in the initialize, but it just hung. So I moved it here, but only
+   // if if we aren't initialized yet.
+   if ( _uninitializedCalcs )
+   {
+      _og = get("og").toDouble();
+      _fg = get("fg").toDouble();
+   }
 
    // Find out how much sugar we have.
    sugars = calcTotalPoints();
@@ -1947,6 +1957,12 @@ void Recipe::recalcOgFg()
    if ( _og != tmp_og ) 
    {
       _og     = tmp_og;
+      // NOTE: We don't want to do this on the first load of the recipe. The
+      // _og is initialized to 1, and we calculate that to be something
+      // different. So this code is being triggered and the OG and FG are
+      // being updated for no good reason.
+      // NOTE: We are we recalculating all of these on load? Shouldn't we be
+      // reading these values from the database somehow?
       set( "og", "og", _og, false );
       emit changed( metaProperty("og"), _og );
       emit changed( metaProperty("points"), (_og-1.0)*1e3 );

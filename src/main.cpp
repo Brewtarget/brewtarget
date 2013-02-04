@@ -81,6 +81,6 @@ int main(int argc, char **argv)
       Brewtarget::setOption("converted", QDate().currentDate().toString());
       return 0;
    }
-   
-   return Brewtarget::run();
+  
+   Brewtarget::run();
 }

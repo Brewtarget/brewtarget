@@ -567,18 +567,25 @@ void HopItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, c
    {
       QComboBox* box = (QComboBox*)editor;
       int value = box->currentIndex();
-      model->setData(index, value, Qt::EditRole);
+      int ndx = model->data(index, Qt::UserRole).toInt();
+
+      if ( value != ndx )
+         model->setData(index, value, Qt::EditRole);
    }
    else if (index.column() == HOPFORMCOL )
    {
       QComboBox* box = (QComboBox*)editor;
       int value = box->currentIndex();
-      model->setData(index, value, Qt::EditRole);
+      int ndx = model->data(index, Qt::UserRole).toInt();
+
+      if ( value != ndx )
+         model->setData(index, value, Qt::EditRole);
    }
    else
    {
       QLineEdit* line = (QLineEdit*)editor;
-      model->setData(index, line->text(), Qt::EditRole);
+      if ( line->isModified() )
+         model->setData(index, line->text(), Qt::EditRole);
    }
 }
 

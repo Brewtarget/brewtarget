@@ -221,6 +221,7 @@ public slots:
 
    void showEquipmentEditor();
    void showStyleEditor();
+
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
@@ -332,6 +333,9 @@ private:
    void copyThis(Hop *hop);
    void copyThis(Misc *misc);
    void copyThis(Yeast *yeast);
+
+   // Restart the app
+   void convertedMsg();
 
 };
 

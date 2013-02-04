@@ -113,46 +113,14 @@ MainWindow::MainWindow(QWidget* parent)
    // Ensure database initializes.
    Database::instance();
 
-   // We have two use cases to consider here. The first is a BT
-   // 1.x user running BT 2 for the first time. The second is a BT 2 clean
-   // install. I am also trying to protect the developers from double imports.
-   // If the old "obsolete" directory exists, don't do anything other than
-   // set the converted flag
-   if ( ! Brewtarget::btSettings.contains("converted")) 
-   {
-   
-      QDir dir(Brewtarget::getUserDataDir());
-      // Checking for non-existence is redundant with the new "converted" setting,
-      // but better safe than sorry.
-      if( !dir.exists("obsolete") )
-      {
-         dir.mkdir("obsolete");
-         dir.cd("obsolete");
-         
-         QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
-         for ( int i = 0; i < oldFiles.size(); ++i ) 
-         {
-            QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
-            // If the old file exists, import.
-            if( oldXmlFile.exists() )
-            {
-               // NOTE: Should we pop up an information dialog here? Doing it silently
-               //       for now.
-               Database::instance().importFromXML( oldXmlFile.fileName() );
-               
-               // Move to obsolete/ directory.
-               if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
-                  oldXmlFile.remove();
-            }
-         }
-      }
-   
-      Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
-   }
-
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
-   
+  
+   // If we converted from XML, pop a dialog telling the user where they can
+   // find their old files.
+   if (Database::instance().isConverted())
+      convertedMsg(); 
+
    // Different palettes for some text.
    lcdPalette_old = lcdNumber_og->palette();
    lcdPalette_tooLow = QPalette(lcdPalette_old);
@@ -736,26 +704,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    recStyle = recipe->style();
    recEquip = recipe->equipment();
    
-   // BeerXML is stupid and has reduntant fields.
-   // Ensure that recEquip and recipeObs always have the same boil size and time.
-   // NOTE: should probably move this connection code to the Database.
-   if( recEquip )
-   {
-      connect(
-         recEquip,
-         SIGNAL(changedBoilSize_l(double)),
-         recipeObs,
-         SLOT(setBoilSize_l(double))
-      );
-      
-      connect(
-         recEquip,
-         SIGNAL(changedBoilTime_min(double)),
-         recipeObs,
-         SLOT(setBoilTime_min(double))
-      );
-   }
-   
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
    hopTableModel->observeRecipe(recipe);
@@ -773,7 +721,7 @@ void MainWindow::setRecipe(Recipe* recipe)
       tabWidget_recipeView->removeTab(startTab);
    }
    brewNotes.clear();
-  
+ 
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
@@ -789,7 +737,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    singleEquipEditor->setEquipment(recEquip);
    styleButton->setRecipe(recipe);
    singleStyleEditor->setStyle(recStyle);
-   
+
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setEquipment(recEquip);
 
@@ -926,7 +874,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
 void MainWindow::updateRecipeName()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_name->isModified())
       return;
    
    recipeObs->setName(lineEdit_name->text());
@@ -969,6 +917,9 @@ void MainWindow::updateRecipeEquipment()
    Equipment* equip = equipmentListModel->at(equipmentComboBox->currentIndex());
    if( equip == 0 )
       return;
+   // if it isn't, we need to disconnect a few signals here
+//   else 
+//      disconnect( equip, 0, recipeObs, 0 );
 
    // Notice that we are using a copy from the database.
    Database::instance().addToRecipe(recipeObs,equip);
@@ -1024,9 +975,9 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
 void MainWindow::updateRecipeBatchSize()
 {
    unitDisplay dispUnit;
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_batchSize->isModified() )
       return;
-   
+ 
    dispUnit  = (unitDisplay)Brewtarget::option("batchsize_L", noUnit,tab_recipe,Brewtarget::UNIT).toInt();
    recipeObs->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text(),dispUnit) );
 }
@@ -1034,7 +985,7 @@ void MainWindow::updateRecipeBatchSize()
 void MainWindow::updateRecipeBoilSize()
 {
    unitDisplay dispUnit;
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_boilSize->isModified() )
       return;
  
    dispUnit  = (unitDisplay)Brewtarget::option("boilsize_L", noUnit,tab_recipe,Brewtarget::UNIT).toInt();
@@ -1046,14 +997,16 @@ void MainWindow::updateRecipeBoilTime()
    double boilTime = 0.0;
    Equipment* kit;
 
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_boilTime->isModified() )
       return;
  
    kit = recipeObs->equipment();
    boilTime = Brewtarget::timeQStringToSI( lineEdit_boilTime->text() );
    
-   // Here, we rely on a signa/slot connection to propagate the equipment
+   // Here, we rely on a signal/slot connection to propagate the equipment
    // changes to recipeObs->boilTime_min and maybe recipeObs->boilSize_l
+   // NOTE: This works because kit is the recipe's equipment, not the generic
+   // equipment in the recipe drop down.
    if( kit )
       kit->setBoilTime_min(boilTime);
    else
@@ -1062,7 +1015,7 @@ void MainWindow::updateRecipeBoilTime()
 
 void MainWindow::updateRecipeEfficiency()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_efficiency->isModified() )
       return;
    
    recipeObs->setEfficiency_pct( lineEdit_efficiency->text().toDouble() );
@@ -2424,3 +2377,16 @@ void MainWindow::showStyleEditor()
       singleStyleEditor->show();
    }
 }
+
+void MainWindow::convertedMsg()
+{
+
+   QMessageBox msgBox;
+   QDir dir(Brewtarget::getUserDataDir());
+
+   msgBox.setText( tr("The database has been converted/upgraded."));
+   msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir() + "obsolete");
+   msgBox.exec();
+
+}
+

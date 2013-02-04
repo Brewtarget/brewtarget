@@ -505,14 +505,17 @@ void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
    {
       QComboBox* box = (QComboBox*)editor;
       int ndx = box->currentIndex();
-      
-      model->setData(index, ndx, Qt::EditRole);
+      int curr = model->data(index, Qt::UserRole).toInt();
+
+      if ( curr != ndx ) 
+         model->setData(index, ndx, Qt::EditRole);
    }
    else
    {
       QLineEdit* line = (QLineEdit*)editor;
-      
-      model->setData(index, line->text(), Qt::EditRole);
+
+      if ( line->isModified() )      
+         model->setData(index, line->text(), Qt::EditRole);
    }
 }
 

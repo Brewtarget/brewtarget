@@ -25,7 +25,7 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent)
    connect(lineEdit_finalVol,SIGNAL(editingFinished()),this,SLOT(updateFinalVolume_l()));
    connect(lineEdit_fermentDate,SIGNAL(editingFinished()),this,SLOT(updateFermentDate()));
 
-   connect(plainTextEdit_brewNotes,SIGNAL(textChanged()), this, SLOT(updateNotes()));
+   connect(btTextEdit_brewNotes,SIGNAL(textModified()), this, SLOT(updateNotes()));
 
    // Labels
    connect( btLabel_Sg, SIGNAL(labelChanged(QString)), this, SLOT(showChanges(QString)));
@@ -86,8 +86,11 @@ void BrewNoteWidget::updateSG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setSg(BrewNote::translateSG(lineEdit_SG->text()));
-   showChanges();
+   if ( lineEdit_SG->isModified() )
+   {
+      bNoteObs->setSg(BrewNote::translateSG(lineEdit_SG->text()));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateVolumeIntoBK_l()
@@ -96,9 +99,12 @@ void BrewNoteWidget::updateVolumeIntoBK_l()
    if (bNoteObs == 0)
       return;
 
-   dispUnit  = (unitDisplay)Brewtarget::option("volumeIntoBK_l", noUnit,page_preboil,Brewtarget::UNIT).toInt();
-   bNoteObs->setVolumeIntoBK_l(Brewtarget::volQStringToSI(lineEdit_volIntoBK->text(),dispUnit));
-   showChanges();
+   if ( lineEdit_volIntoBK->isModified() )
+   {
+      dispUnit  = (unitDisplay)Brewtarget::option("volumeIntoBK_l", noUnit,page_preboil,Brewtarget::UNIT).toInt();
+      bNoteObs->setVolumeIntoBK_l(Brewtarget::volQStringToSI(lineEdit_volIntoBK->text(),dispUnit));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateStrikeTemp_c()
@@ -107,9 +113,12 @@ void BrewNoteWidget::updateStrikeTemp_c()
    if (bNoteObs == 0)
       return;
 
-   dispUnit  = (unitDisplay)Brewtarget::option("strikeTemp_c",noUnit,page_preboil,Brewtarget::UNIT).toInt();
-   bNoteObs->setStrikeTemp_c(Brewtarget::tempQStringToSI(lineEdit_strikeTemp->text(),dispUnit));
-   showChanges();
+   if ( lineEdit_strikeTemp->isModified() )
+   {
+      dispUnit  = (unitDisplay)Brewtarget::option("strikeTemp_c",noUnit,page_preboil,Brewtarget::UNIT).toInt();
+      bNoteObs->setStrikeTemp_c(Brewtarget::tempQStringToSI(lineEdit_strikeTemp->text(),dispUnit));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateMashFinTemp_c()
@@ -118,9 +127,12 @@ void BrewNoteWidget::updateMashFinTemp_c()
    if (bNoteObs == 0)
       return;
 
-   dispUnit  = (unitDisplay)Brewtarget::option("mashFinTemp_c",noUnit,page_preboil,Brewtarget::UNIT).toInt();
-   bNoteObs->setMashFinTemp_c(Brewtarget::tempQStringToSI(lineEdit_mashFinTemp->text(),dispUnit));
-   showChanges();
+   if ( lineEdit_mashFinTemp->isModified() )
+   {
+      dispUnit  = (unitDisplay)Brewtarget::option("mashFinTemp_c",noUnit,page_preboil,Brewtarget::UNIT).toInt();
+      bNoteObs->setMashFinTemp_c(Brewtarget::tempQStringToSI(lineEdit_mashFinTemp->text(),dispUnit));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateOG()
@@ -128,8 +140,11 @@ void BrewNoteWidget::updateOG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setOg(BrewNote::translateSG(lineEdit_OG->text()));
-   showChanges();
+   if ( lineEdit_OG->isModified() )
+   {
+      bNoteObs->setOg(BrewNote::translateSG(lineEdit_OG->text()));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updatePostBoilVolume_l()
@@ -138,9 +153,12 @@ void BrewNoteWidget::updatePostBoilVolume_l()
    if (bNoteObs == 0)
       return;
 
-   dispUnit  = (unitDisplay)Brewtarget::option("postBoilVolume_l",noUnit,page_postboil,Brewtarget::UNIT).toInt();
-   bNoteObs->setPostBoilVolume_l(Brewtarget::volQStringToSI(lineEdit_postBoilVol->text(),dispUnit));
-   showChanges();
+   if (lineEdit_postBoilVol->isModified() )
+   {
+      dispUnit  = (unitDisplay)Brewtarget::option("postBoilVolume_l",noUnit,page_postboil,Brewtarget::UNIT).toInt();
+      bNoteObs->setPostBoilVolume_l(Brewtarget::volQStringToSI(lineEdit_postBoilVol->text(),dispUnit));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateVolumeIntoFerm_l()
@@ -149,9 +167,12 @@ void BrewNoteWidget::updateVolumeIntoFerm_l()
    if (bNoteObs == 0)
       return;
 
-   dispUnit  = (unitDisplay)Brewtarget::option("volumeIntoFerm_l",noUnit,page_postboil,Brewtarget::UNIT).toInt();
-   bNoteObs->setVolumeIntoFerm_l(Brewtarget::volQStringToSI(lineEdit_volIntoFerm->text(),dispUnit));
-   showChanges();
+   if ( lineEdit_volIntoFerm->isModified() )
+   {
+      dispUnit  = (unitDisplay)Brewtarget::option("volumeIntoFerm_l",noUnit,page_postboil,Brewtarget::UNIT).toInt();
+      bNoteObs->setVolumeIntoFerm_l(Brewtarget::volQStringToSI(lineEdit_volIntoFerm->text(),dispUnit));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updatePitchTemp_c()
@@ -160,9 +181,12 @@ void BrewNoteWidget::updatePitchTemp_c()
    if (bNoteObs == 0)
       return;
 
-   dispUnit  = (unitDisplay)Brewtarget::option("pitchTemp_c",noUnit,page_postboil,Brewtarget::UNIT).toInt();
-   bNoteObs->setPitchTemp_c(Brewtarget::tempQStringToSI(lineEdit_pitchTemp->text(),dispUnit));
-   showChanges();
+   if ( lineEdit_pitchTemp->isModified() )
+   {
+      dispUnit  = (unitDisplay)Brewtarget::option("pitchTemp_c",noUnit,page_postboil,Brewtarget::UNIT).toInt();
+      bNoteObs->setPitchTemp_c(Brewtarget::tempQStringToSI(lineEdit_pitchTemp->text(),dispUnit));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateFG()
@@ -170,8 +194,11 @@ void BrewNoteWidget::updateFG()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setFg(BrewNote::translateSG(lineEdit_FG->text()));
-   showChanges();
+   if ( lineEdit_FG->isModified() )
+   {
+      bNoteObs->setFg(BrewNote::translateSG(lineEdit_FG->text()));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateFinalVolume_l()
@@ -180,9 +207,12 @@ void BrewNoteWidget::updateFinalVolume_l()
    if (bNoteObs == 0)
       return;
 
-   dispUnit  = (unitDisplay)Brewtarget::option("finalVolume_l",noUnit,page_postferment,Brewtarget::UNIT).toInt();
-   bNoteObs->setFinalVolume_l(Brewtarget::volQStringToSI(lineEdit_finalVol->text(),dispUnit));
-   showChanges();
+   if ( lineEdit_finalVol->isModified() )
+   {
+      dispUnit  = (unitDisplay)Brewtarget::option("finalVolume_l",noUnit,page_postferment,Brewtarget::UNIT).toInt();
+      bNoteObs->setFinalVolume_l(Brewtarget::volQStringToSI(lineEdit_finalVol->text(),dispUnit));
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateFermentDate()
@@ -190,8 +220,11 @@ void BrewNoteWidget::updateFermentDate()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setFermentDate( BeerXMLElement::getDateTime(lineEdit_fermentDate->text()) );
-   showChanges();
+   if (lineEdit_fermentDate->isModified() )
+   {
+      bNoteObs->setFermentDate( BeerXMLElement::getDateTime(lineEdit_fermentDate->text()) );
+      showChanges();
+   }
 }
 
 void BrewNoteWidget::updateNotes()
@@ -199,7 +232,7 @@ void BrewNoteWidget::updateNotes()
    if (bNoteObs == 0)
       return;
 
-   bNoteObs->setNotes(plainTextEdit_brewNotes->toPlainText(), false);
+   bNoteObs->setNotes(btTextEdit_brewNotes->toPlainText(), false);
 }
 
 void BrewNoteWidget::changed(QMetaProperty /*prop*/, QVariant /*val*/)
@@ -215,8 +248,6 @@ void BrewNoteWidget::saveAll()
    if ( ! bNoteObs )
       return;
    
-   //bNoteObs->disableNotification();
-
    updateSG();
    updateVolumeIntoBK_l();
    updateStrikeTemp_c();
@@ -229,9 +260,6 @@ void BrewNoteWidget::saveAll()
    updateFinalVolume_l();
    updateFermentDate();
    updateNotes();
-
-   //bNoteObs->reenableNotification();
-   //bNoteObs->forceNotify();
 
    hide();
 }
@@ -256,7 +284,7 @@ void BrewNoteWidget::showChanges(QString field)
    lineEdit_FG->setText(Brewtarget::displayOG(bNoteObs, page_postferment, "fg",false));
    lineEdit_finalVol->setText(Brewtarget::displayAmount(bNoteObs, page_postferment, "finalVolume_l", Units::liters));
    lineEdit_fermentDate->setText(bNoteObs->fermentDate_short());
-   plainTextEdit_brewNotes->setPlainText(bNoteObs->notes());
+   btTextEdit_brewNotes->setPlainText(bNoteObs->notes());
 
    // Now with the calculated stuff
    lcdnumber_effBK->display(bNoteObs->effIntoBK_pct(),2);
@@ -271,3 +299,7 @@ void BrewNoteWidget::showChanges(QString field)
    
 }
 
+void BrewNoteWidget::focusOutEvent(QFocusEvent *e)
+{
+   qDebug() << "Notes lost focus";
+}

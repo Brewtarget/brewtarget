@@ -480,7 +480,12 @@ int Brewtarget::run()
    // loading the main window.
    if (Database::instance().loadSuccessful())
    {
+      // See if the user needs to convert from the deprecated XML formats
+      if ( ! Brewtarget::btSettings.contains("converted") )
+           Database::instance().convertFromXml();
+      
       _mainWindow = new MainWindow();
+      
       _mainWindow->setVisible(true);
       
       splashScreen.finish(_mainWindow);
@@ -488,7 +493,6 @@ int Brewtarget::run()
       checkForNewVersion(_mainWindow);
 
       ret = qApp->exec();
-   
       savePersistentOptions();
    }
    

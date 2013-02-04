@@ -58,17 +58,19 @@ private slots:
    void updateTertiaryTemp();
    void updateAge();
    void updateAgeTemp();
-   void updateDate();
+   void updateDate(const QDate &date = QDate());
    void updateCarbonation();
    void updateTasteNotes();
    void updateNotes();
 
+   void changeRatings(int rating);
    void saveAll();
 
    void changed(QMetaProperty,QVariant);
    
 private:
    Recipe* recipe;
+   bool ratingChanged;
 
    void showChanges(QMetaProperty* prop = 0);
 };

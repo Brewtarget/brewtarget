@@ -46,6 +46,8 @@ public:
 
    void setBrewNote(BrewNote* bNote);
 
+   void focusOutEvent(QFocusEvent *e);
+
 public slots:
    void updateBrewDate();
    void updateSG();
