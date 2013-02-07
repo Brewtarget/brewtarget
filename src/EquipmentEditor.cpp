@@ -61,7 +61,6 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    equipmentComboBox->setModel(equipmentSortProxyModel);
    
    obsEquip = 0;
-   changeText = false;
 
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
@@ -70,34 +69,6 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect( pushButton_absorption, SIGNAL( clicked() ), this, SLOT( resetAbsorption() ) );
    connect( equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
 
-   // Connect all the edit boxen
-   connect(lineEdit_name,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_boilSize,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_batchSize,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_tunVolume,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_tunWeight,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_tunSpecificHeat,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_boilTime,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_evaporationRate,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_topUpKettle,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_topUpWater,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_trubChillerLoss,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_lauterDeadspace,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_boilingPoint,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-   connect(lineEdit_hopUtilization,SIGNAL(editingFinished()),this,SLOT(updateRecord()));
-
-   // Doing the text properly is actually a two step thing. The first is to
-   // connect to the textChanged() signal, but only to set a "has changed" flag. The second
-   // is to use an event filter to actually handle the updates.
-   connect(textEdit_notes, SIGNAL(textChanged()), this, SLOT(changedText()));
-   textEdit_notes->installEventFilter(this);
-
-   // checkboxes are the odd things out
-   connect(checkBox_calcBoilVolume, SIGNAL(stateChanged(int)), this, SLOT(updateCheckboxRecord(int)));
-   connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
-	
 	// make sure the dialog gets populated the first time it's opened from the menu
 	equipmentSelected();
 }
@@ -171,7 +142,6 @@ void EquipmentEditor::equipmentSelected()
 
 void EquipmentEditor::save()
 {
-   // NOTE: this isn't actually doing any saving...that's already been done.
    if( obsEquip == 0 )
    {
       setVisible(false);
@@ -185,6 +155,27 @@ void EquipmentEditor::save()
       QMessageBox::warning(this, tr("Batch Size Warning"), tr("The batch size you entered is 0. This may cause problems."));
    if (obsEquip->hopUtilization_pct() <= 0.001)
 	   QMessageBox::warning(this, tr("Hop Utilization Warning"), tr("The hop utilization percentage you entered is 0. This may cause problems."));
+
+   Unit* weightUnit = 0;
+   Unit* volumeUnit = 0;
+   Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
+   double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
+
+   obsEquip->setName( lineEdit_name->text() );
+   obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
+   obsEquip->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
+   obsEquip->setTunVolume_l( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) );
+   obsEquip->setTunWeight_kg( Brewtarget::weightQStringToSI(lineEdit_tunWeight->text()) );
+   obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
+   obsEquip->setBoilTime_min( Brewtarget::timeQStringToSI(lineEdit_boilTime->text()) );
+   obsEquip->setEvapRate_lHr( Brewtarget::volQStringToSI(lineEdit_evaporationRate->text()) );
+   obsEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
+   obsEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
+   obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
+   obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
+   obsEquip->setGrainAbsorption_LKg( ga_LKg );
+   obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
+   obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
 
    setVisible(false);
    return;
@@ -284,54 +275,6 @@ void EquipmentEditor::showChanges()
    checkBox_defaultEquipment->blockSignals(false);
 }
 
-void EquipmentEditor::updateRecord()
-{
-   QObject* selection = sender();
-
-   if( obsEquip == 0 )
-      return;
- 
-   Unit* weightUnit = 0;
-   Unit* volumeUnit = 0;
-   Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
-
-   if ( selection == lineEdit_name )
-      obsEquip->setName( lineEdit_name->text() );
-   else if ( selection == lineEdit_boilSize )
-      obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
-   else if ( selection == lineEdit_batchSize )
-      obsEquip->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
-   else if ( selection == lineEdit_tunVolume )
-      obsEquip->setTunVolume_l( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) );
-   else if ( selection == lineEdit_tunWeight )
-      obsEquip->setTunWeight_kg( Brewtarget::weightQStringToSI(lineEdit_tunWeight->text()) );
-   else if ( selection == lineEdit_tunSpecificHeat )
-      obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
-   else if ( selection == lineEdit_boilTime )
-      obsEquip->setBoilTime_min( Brewtarget::timeQStringToSI(lineEdit_boilTime->text()) );
-   else if ( selection == lineEdit_evaporationRate )
-      obsEquip->setEvapRate_lHr( Brewtarget::volQStringToSI(lineEdit_evaporationRate->text()) );
-   else if ( selection == lineEdit_topUpKettle )
-      obsEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
-   else if ( selection == lineEdit_topUpWater )
-      obsEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
-   else if ( selection == lineEdit_trubChillerLoss )
-      obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
-   else if ( selection == lineEdit_lauterDeadspace )
-      obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
-   else if ( selection == lineEdit_grainAbsorption )
-   {
-      double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
-      obsEquip->setGrainAbsorption_LKg( ga_LKg );
-   }
-   else if ( selection == lineEdit_boilingPoint )
-      obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
-   else if ( selection == lineEdit_hopUtilization )
-      obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
-
-   showChanges();
-}
-
 void EquipmentEditor::updateCheckboxRecord(int state)
 {
    obsEquip->setCalcBoilVolume(state == Qt::Checked);
@@ -350,31 +293,4 @@ void EquipmentEditor::updateDefaultEquipment(int state)
    {
       Brewtarget::setOption(optionName,-1);
    }
-}
-      
-void EquipmentEditor::changedText()
-{
-   Equipment* e = obsEquip;
-   if (obsEquip)
-   {
-      changeText = (e->notes() != textEdit_notes->toPlainText());
-   }
-}
-
-bool EquipmentEditor::eventFilter(QObject *object, QEvent* event)
-{
-   QTextEdit *textptr;
-   if ( event->type() == QEvent::FocusOut )
-   {
-      textptr = qobject_cast<QTextEdit*>(object);
-      if( textptr )
-      {
-         if (obsEquip)
-         {
-            obsEquip->setNotes(textptr->toPlainText());
-         }
-         changeText = false;
-      }
-   }
-   return false;
 }
