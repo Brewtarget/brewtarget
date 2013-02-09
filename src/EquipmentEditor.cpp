@@ -148,34 +148,43 @@ void EquipmentEditor::save()
       return;
    }
 
-   // Do some checks...
-   if( obsEquip->tunVolume_l() <= 0.001 )
-      QMessageBox::warning(this, tr("Tun Volume Warning"), tr("The tun volume you entered is 0. This may cause problems."));
-   if( obsEquip->batchSize_l() <= 0.001 )
-      QMessageBox::warning(this, tr("Batch Size Warning"), tr("The batch size you entered is 0. This may cause problems."));
-   if (obsEquip->hopUtilization_pct() <= 0.001)
-	   QMessageBox::warning(this, tr("Hop Utilization Warning"), tr("The hop utilization percentage you entered is 0. This may cause problems."));
-
    Unit* weightUnit = 0;
    Unit* volumeUnit = 0;
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
 
-   obsEquip->setName( lineEdit_name->text() );
-   obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
-   obsEquip->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
-   obsEquip->setTunVolume_l( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) );
-   obsEquip->setTunWeight_kg( Brewtarget::weightQStringToSI(lineEdit_tunWeight->text()) );
-   obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
-   obsEquip->setBoilTime_min( Brewtarget::timeQStringToSI(lineEdit_boilTime->text()) );
-   obsEquip->setEvapRate_lHr( Brewtarget::volQStringToSI(lineEdit_evaporationRate->text()) );
-   obsEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
-   obsEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
-   obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
-   obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
-   obsEquip->setGrainAbsorption_LKg( ga_LKg );
-   obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
-   obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
+   if ( lineEdit_name->isModified() )
+      obsEquip->setName( lineEdit_name->text() );
+   if (lineEdit_boilSize->isModified() )
+      obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
+   if ( lineEdit_batchSize->isModified() )
+      obsEquip->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
+   if ( lineEdit_tunVolume->isModified() )
+      obsEquip->setTunVolume_l( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) );
+   if ( lineEdit_tunWeight->isModified() )
+      obsEquip->setTunWeight_kg( Brewtarget::weightQStringToSI(lineEdit_tunWeight->text()) );
+   if ( lineEdit_tunSpecificHeat->isModified() )
+      obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
+   if ( lineEdit_boilTime->isModified() )
+      obsEquip->setBoilTime_min( Brewtarget::timeQStringToSI(lineEdit_boilTime->text()) );
+   if ( lineEdit_evaporationRate->isModified() )
+      obsEquip->setEvapRate_lHr( Brewtarget::volQStringToSI(lineEdit_evaporationRate->text()) );
+   if ( lineEdit_topUpKettle->isModified() )
+      obsEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
+   if ( lineEdit_topUpWater->isModified() )
+      obsEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
+   if ( lineEdit_trubChillerLoss->isModified() )
+      obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
+   if ( lineEdit_lauterDeadspace->isModified() )
+      obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
+   if ( lineEdit_boilingPoint->isModified() )
+      obsEquip->setGrainAbsorption_LKg( ga_LKg );
+   if ( lineEdit_boilingPoint->isModified() )
+      obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
+   if ( lineEdit_hopUtilization->isModified() )
+      obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
+
+   obsEquip->setNotes(textEdit_notes->toPlainText());
 
    setVisible(false);
    return;
