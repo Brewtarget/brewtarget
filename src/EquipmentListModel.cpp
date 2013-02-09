@@ -62,13 +62,16 @@ void EquipmentListModel::addEquipments(QList<Equipment*> equips)
    }
    
    int size = equipments.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   equipments.append(tmp);
+   if (size+tmp.size())
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      equipments.append(tmp);
    
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(equipChanged(QMetaProperty,QVariant)) );
    
-   endInsertRows();
+      endInsertRows();
+   }
 }
 
 void EquipmentListModel::removeEquipment(Equipment* equipment)
@@ -85,12 +88,15 @@ void EquipmentListModel::removeEquipment(Equipment* equipment)
 
 void EquipmentListModel::removeAll()
 {
-   beginRemoveRows( QModelIndex(), 0, equipments.size()-1 );
-   while( !equipments.isEmpty() )
+   if (equipments.size())
    {
-      disconnect( equipments.takeLast(), 0, this, 0 );
+      beginRemoveRows( QModelIndex(), 0, equipments.size()-1 );
+      while( !equipments.isEmpty() )
+      {
+         disconnect( equipments.takeLast(), 0, this, 0 );
+      }
+      endRemoveRows();
    }
-   endRemoveRows();
 }
 
 void EquipmentListModel::equipChanged(QMetaProperty prop, QVariant val)
