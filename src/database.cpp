@@ -80,6 +80,7 @@ Database::Database()
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
+   converted = false;
    
    loadWasSuccessful = load();
 }
@@ -237,8 +238,6 @@ bool Database::load()
       if( e )
       {
          connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
-         // NOTE: If we don't reconnect these signals, bad things happen when
-         // changing boil times on the mainwindow
          connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
          connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
       }
@@ -268,6 +267,54 @@ bool Database::load()
 bool Database::loadSuccessful()
 {
    return loadWasSuccessful;
+}
+
+void Database::convertFromXml()
+{
+
+   // We have two use cases to consider here. The first is a BT
+   // 1.x user running BT 2 for the first time. The second is a BT 2 clean
+   // install. I am also trying to protect the developers from double imports.
+   // If the old "obsolete" directory exists, don't do anything other than
+   // set the converted flag
+   QDir dir(Brewtarget::getUserDataDir());
+   // Checking for non-existence is redundant with the new "converted" setting,
+   // but better safe than sorry.
+   if( !dir.exists("obsolete") )
+   {
+      dir.mkdir("obsolete");
+      dir.cd("obsolete");
+      
+      QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
+      for ( int i = 0; i < oldFiles.size(); ++i ) 
+      {
+         QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
+         // If the old file exists, import.
+         if( oldXmlFile.exists() )
+         {
+            importFromXML( oldXmlFile.fileName() );
+            
+            // Move to obsolete/ directory.
+            if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
+               oldXmlFile.remove();
+
+            converted = true;
+         }
+      }
+   }
+   Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
+   saveDatabase();
+}
+
+void Database::saveDatabase()
+{
+   dbTempBackupFile.remove();
+   dbFile.copy(dbTempBackupFileName);
+}
+
+bool Database::isConverted()
+{
+   return converted;
 }
 
 QSqlDatabase Database::sqlDatabase()
