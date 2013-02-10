@@ -153,6 +153,17 @@ void EquipmentEditor::save()
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
 
+   // Do some prewarning things. I would prefer to do this only on change, but
+   // we need to be worried about new equipment too.
+   if ( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) <= 0.001 )
+      QMessageBox::warning(this, tr("Tun Volume Warning"), tr("The tun volume you entered is 0. This may cause problems"));
+
+   if ( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) <= 0.001 )
+      QMessageBox::warning(this, tr("Batch Size Warning"), tr("The batch size you entered is 0. This may cause problems"));
+
+   if ( lineEdit_hopUtilization->text().toDouble() < 0.001 )
+      QMessageBox::warning(this, tr("Hop Utilization Warning"), tr("The hop utilization percentage you entered is 0. This may cause problems"));
+
    if ( lineEdit_name->isModified() )
       obsEquip->setName( lineEdit_name->text() );
    if (lineEdit_boilSize->isModified() )
