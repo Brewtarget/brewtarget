@@ -228,7 +228,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    QVariant val;
    if( prop )
    {
-      propName == prop->name();
+      propName = prop->name();
       val = prop->read(recipe);
    }
    
