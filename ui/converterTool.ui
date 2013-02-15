@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>Converter Tool</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../brewtarget.qrc">
-    <normaloff>:/images/BrewtargetIcon.png</normaloff>:/images/BrewtargetIcon.png</iconset>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
@@ -152,7 +148,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../../build/brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

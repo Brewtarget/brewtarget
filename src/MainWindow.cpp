@@ -113,45 +113,13 @@ MainWindow::MainWindow(QWidget* parent)
    // Ensure database initializes.
    Database::instance();
 
-   // We have two use cases to consider here. The first is a BT
-   // 1.x user running BT 2 for the first time. The second is a BT 2 clean
-   // install. I am also trying to protect the developers from double imports.
-   // If the old "obsolete" directory exists, don't do anything other than
-   // set the converted flag
-   if ( ! Brewtarget::btSettings.contains("converted")) 
-   {
-   
-      QDir dir(Brewtarget::getUserDataDir());
-      // Checking for non-existence is redundant with the new "converted" setting,
-      // but better safe than sorry.
-      if( !dir.exists("obsolete") )
-      {
-         dir.mkdir("obsolete");
-         dir.cd("obsolete");
-         
-         QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
-         for ( int i = 0; i < oldFiles.size(); ++i ) 
-         {
-            QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
-            // If the old file exists, import.
-            if( oldXmlFile.exists() )
-            {
-               // NOTE: Should we pop up an information dialog here? Doing it silently
-               //       for now.
-               Database::instance().importFromXML( oldXmlFile.fileName() );
-               
-               // Move to obsolete/ directory.
-               if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
-                  oldXmlFile.remove();
-            }
-         }
-      }
-   
-      Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
-   }
-
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
+  
+   // If we converted from XML, pop a dialog telling the user where they can
+   // find their backups.
+   if (Database::instance().isConverted())
+      convertedMsg(); 
    
    // Different palettes for some text.
    lcdPalette_old = lcdNumber_og->palette();
@@ -755,25 +723,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    recEquip = recipe->equipment();
    
    // BeerXML is stupid and has reduntant fields.
-   // Ensure that recEquip and recipeObs always have the same boil size and time.
-   // NOTE: should probably move this connection code to the Database.
-   if( recEquip )
-   {
-      connect(
-         recEquip,
-         SIGNAL(changedBoilSize_l(double)),
-         recipeObs,
-         SLOT(setBoilSize_l(double))
-      );
-      
-      connect(
-         recEquip,
-         SIGNAL(changedBoilTime_min(double)),
-         recipeObs,
-         SLOT(setBoilTime_min(double))
-      );
-   }
-   
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
    hopTableModel->observeRecipe(recipe);
@@ -1651,25 +1600,32 @@ void MainWindow::removeMash()
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-   // TODO: anything to do here?
-   /*
-   if( QMessageBox::question(this, tr("Save database?"),
-                             tr("Do you want to save the changes made? If not, you will lose anything you changed in this session."),
-                             QMessageBox::Yes,
-                             QMessageBox::No)
-       == QMessageBox::Yes )
-   {
-      Database::savePersistent();
-   }
-   */
-   
    Brewtarget::savePersistentOptions();
 
    Brewtarget::btSettings.setValue("geometry", saveGeometry());
    Brewtarget::btSettings.setValue("windowState", saveState());
    if ( recipeObs )
       Brewtarget::btSettings.setValue("recipeKey", recipeObs->key());
+   
+   // After unloading the database, can't make any more queries to it, so first
+   // make the main window disappear so that redraw events won't inadvertently
+   // cause any more queries.
    setVisible(false);
+   
+   // Ask the user if they want to save changes.
+   if( QMessageBox::question(this,
+          QObject::tr("Save Database Changes"),
+          QObject::tr("Would you like to save the changes you made?"),
+          QMessageBox::Yes | QMessageBox::No,
+          QMessageBox::Yes)
+      == QMessageBox::Yes)
+   {
+      Database::instance().unload(true);
+   }
+   else
+   {
+      Database::instance().unload(false);
+   }
 }
 
 void MainWindow::copyRecipe()
@@ -2466,3 +2422,16 @@ void MainWindow::showStyleEditor()
       singleStyleEditor->show();
    }
 }
+
+void MainWindow::convertedMsg()
+{
+
+   QMessageBox msgBox;
+   QDir dir(Brewtarget::getUserDataDir());
+
+   msgBox.setText( tr("The database has been converted/upgraded."));
+   msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir() + "obsolete");
+   msgBox.exec();
+
+}
+   

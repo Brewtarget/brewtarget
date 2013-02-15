@@ -334,6 +334,7 @@ private:
    void copyThis(Style *style);
    void copyThis(Yeast *yeast);
 
+   void convertedMsg(); 
 };
 
 #endif   /* _MAINWINDOW_H */

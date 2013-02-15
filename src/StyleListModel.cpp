@@ -56,13 +56,16 @@ void StyleListModel::addStyles(QList<Style*> s)
    }
    
    int size = styles.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   styles.append(tmp);
-   
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(styleChanged(QMetaProperty,QVariant)) );
-   
-   endInsertRows();
+   if (size+tmp.size())
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      styles.append(tmp);
+      
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(styleChanged(QMetaProperty,QVariant)) );
+      
+      endInsertRows();
+   }
 }
 
 void StyleListModel::removeStyle(Style* style)
@@ -79,10 +82,13 @@ void StyleListModel::removeStyle(Style* style)
 
 void StyleListModel::removeAll()
 {
-   beginRemoveRows( QModelIndex(), 0, styles.size()-1 );
-   while( !styles.isEmpty() )
-      disconnect( styles.takeLast(), 0, this, 0 );
-   endRemoveRows();
+   if (styles.size())
+   {
+      beginRemoveRows( QModelIndex(), 0, styles.size()-1 );
+      while( !styles.isEmpty() )
+         disconnect( styles.takeLast(), 0, this, 0 );
+      endRemoveRows();
+   }
 }
 
 void StyleListModel::styleChanged(QMetaProperty prop, QVariant val)

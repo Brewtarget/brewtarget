@@ -228,7 +228,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    QVariant val;
    if( prop )
    {
-      propName == prop->name();
+      propName = prop->name();
       val = prop->read(recipe);
    }
    
@@ -247,8 +247,12 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
       lineEdit_tertTemp->setText( Brewtarget::displayAmount(recipe->tertiaryTemp_c(), Units::celsius) );
       spinBox_tasteRating->setValue( recipe->tasteRating() );
       dateEdit_date->setDate( recipe->date() );
-      plainTextEdit_notes->setPlainText( recipe->notes() );
-      plainTextEdit_tasteNotes->setPlainText( recipe->tasteNotes() );
+      plainTextEdit_notes->blockSignals(true);
+         plainTextEdit_notes->setPlainText( recipe->notes() );
+      plainTextEdit_notes->blockSignals(false);
+      plainTextEdit_tasteNotes->blockSignals(true);
+         plainTextEdit_tasteNotes->setPlainText( recipe->tasteNotes() );
+      plainTextEdit_tasteNotes->blockSignals(false);
       return;
    }
    

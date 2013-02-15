@@ -80,13 +80,26 @@ Database::Database()
    //.setUndoLimit(100);
    // Lock this here until we actually construct the first database connection.
    _threadToConnectionMutex.lock();
+   converted = false;
    
    loadWasSuccessful = load();
 }
 
 Database::~Database()
 {
-   unload();
+   // Delete all the ingredients floating around.
+   qDeleteAll(allBrewNotes);
+   qDeleteAll(allEquipments);
+   qDeleteAll(allFermentables);
+   qDeleteAll(allHops);
+   qDeleteAll(allInstructions);
+   qDeleteAll(allMashSteps);
+   qDeleteAll(allMashs);
+   qDeleteAll(allMiscs);
+   qDeleteAll(allStyles);
+   qDeleteAll(allWaters);
+   qDeleteAll(allYeasts);
+   qDeleteAll(allRecipes);
 }
 
 bool Database::load()
@@ -223,7 +236,11 @@ bool Database::load()
    {
       Equipment* e = equipment(*i);
       if( e )
+      {
          connect( e, SIGNAL(changed(QMetaProperty,QVariant)), *i, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
+         connect( e, SIGNAL(changedBoilSize_l(double)), *i, SLOT(setBoilSize_l(double)));
+         connect( e, SIGNAL(changedBoilTime_min(double)), *i, SLOT(setBoilTime_min(double)));
+      }
       
       QList<Fermentable*> tmpF = fermentables(*i);
       for( j = tmpF.begin(); j != tmpF.end(); j++ )
@@ -250,6 +267,54 @@ bool Database::load()
 bool Database::loadSuccessful()
 {
    return loadWasSuccessful;
+}
+
+void Database::convertFromXml()
+{
+
+   // We have two use cases to consider here. The first is a BT
+   // 1.x user running BT 2 for the first time. The second is a BT 2 clean
+   // install. I am also trying to protect the developers from double imports.
+   // If the old "obsolete" directory exists, don't do anything other than
+   // set the converted flag
+   QDir dir(Brewtarget::getUserDataDir());
+   // Checking for non-existence is redundant with the new "converted" setting,
+   // but better safe than sorry.
+   if( !dir.exists("obsolete") )
+   {
+      dir.mkdir("obsolete");
+      dir.cd("obsolete");
+      
+      QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
+      for ( int i = 0; i < oldFiles.size(); ++i ) 
+      {
+         QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
+         // If the old file exists, import.
+         if( oldXmlFile.exists() )
+         {
+            importFromXML( oldXmlFile.fileName() );
+            
+            // Move to obsolete/ directory.
+            if( oldXmlFile.copy(dir.filePath(oldFiles[i])) )
+               oldXmlFile.remove();
+
+            converted = true;
+         }
+      }
+   }
+   Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
+   saveDatabase();
+}
+
+void Database::saveDatabase()
+{
+   dbTempBackupFile.remove();
+   dbFile.copy(dbTempBackupFileName);
+}
+
+bool Database::isConverted()
+{
+   return converted;
 }
 
 QSqlDatabase Database::sqlDatabase()
@@ -285,53 +350,24 @@ QSqlDatabase Database::sqlDatabase()
    return sqldb;
 }
 
-void Database::unload()
+void Database::unload(bool keepChanges)
 {
-   // Delete all the ingredients floating around.
-   qDeleteAll(allBrewNotes);
-   qDeleteAll(allEquipments);
-   qDeleteAll(allFermentables);
-   qDeleteAll(allHops);
-   qDeleteAll(allInstructions);
-   qDeleteAll(allMashSteps);
-   qDeleteAll(allMashs);
-   qDeleteAll(allMiscs);
-   qDeleteAll(allStyles);
-   qDeleteAll(allWaters);
-   qDeleteAll(allYeasts);
-   qDeleteAll(allRecipes);
-
    QSqlDatabase::database( dbConName, false ).close();
    QSqlDatabase::removeDatabase( dbConName );
 
-   if (!loadWasSuccessful)
+   if( !loadWasSuccessful || keepChanges )
    {
-      // If load() failed, then
+      // If load() failed or want to keep the changes, then
       // just keep the database and don't revert to the backup.
       if (dbFile.exists())
          dbTempBackupFile.remove();
    }
-   else 
+   else
    {
-      // If the database has a more recent modified date than the backup, ask
-      // the user if they want to save changes.
-      if (QFileInfo(dbFileName).lastModified() > QFileInfo(dbTempBackupFileName).lastModified() && 
-            QMessageBox::question(0,
-                                  QObject::tr("Save Database Changes"),
-                                  QObject::tr("Would you like to save the changes you made?"),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  QMessageBox::Yes) == QMessageBox::Yes)
-      {
-         // If the user wants to save changes, just remove the backup database.
-         dbTempBackupFile.remove();
-      }
-      else
-      {
-         // If the user doesn't want to save changes, remove the active database
-         // and restore the backup.
-         dbFile.remove();
-         dbTempBackupFile.rename(dbFileName);
-      }
+      // If the user doesn't want to save changes, remove the active database
+      // and restore the backup.
+      dbFile.remove();
+      dbTempBackupFile.rename(dbFileName);
    }
 }
 
@@ -1438,7 +1474,11 @@ void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
    
    // NOTE: need to disconnect the recipe's old equipment?
    connect( newEquip, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptEquipChange(QMetaProperty,QVariant)) );
-   
+   // NOTE: If we don't reconnect these signals, bad things happen when
+   // changing boil times on the mainwindow
+   connect( newEquip, SIGNAL(changedBoilSize_l(double)), rec, SLOT(setBoilSize_l(double)));
+   connect( newEquip, SIGNAL(changedBoilTime_min(double)), rec, SLOT(setBoilTime_min(double)));
+
    // Emit a changed signal.
    emit rec->changed( rec->metaProperty("equipment"), BeerXMLElement::qVariantFromPtr(newEquip) );
    rec->recalcAll();
