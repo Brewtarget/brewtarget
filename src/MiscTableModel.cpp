@@ -105,13 +105,16 @@ void MiscTableModel::addMiscs(QList<Misc*> miscs)
    }
    
    int size = miscObs.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   miscObs.append(tmp);
-   
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+   if (size+tmp.size())
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      miscObs.append(tmp);
+      
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
 
-   endInsertRows();
+      endInsertRows();
+   }
 
    if( parentTableWidget )
    {
@@ -149,12 +152,15 @@ bool MiscTableModel::removeMisc(Misc* misc)
 
 void MiscTableModel::removeAll()
 {
-   beginRemoveRows( QModelIndex(), 0, miscObs.size()-1 );
-   while( !miscObs.isEmpty() )
+   if (miscObs.size())
    {
-      disconnect( miscObs.takeLast(), 0, this, 0 );
+      beginRemoveRows( QModelIndex(), 0, miscObs.size()-1 );
+      while( !miscObs.isEmpty() )
+      {
+         disconnect( miscObs.takeLast(), 0, this, 0 );
+      }
+      endRemoveRows();
    }
-   endRemoveRows();
 }
 
 int MiscTableModel::rowCount(const QModelIndex& /*parent*/) const

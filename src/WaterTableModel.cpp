@@ -111,13 +111,16 @@ void WaterTableModel::addWaters(QList<Water*> waters)
    }
    
    int size = waterObs.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   waterObs.append(tmp);
-   
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   
-   endInsertRows();
+   if (size+tmp.size())
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      waterObs.append(tmp);
+      
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
+      
+      endInsertRows();
+   }
 
    if( parentTableWidget )
    {

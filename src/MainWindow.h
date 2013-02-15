@@ -334,9 +334,7 @@ private:
    void copyThis(Misc *misc);
    void copyThis(Yeast *yeast);
 
-   // Restart the app
-   void convertedMsg();
-
+   void convertedMsg(); 
 };
 
 #endif   /* _MAINWINDOW_H */

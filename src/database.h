@@ -315,6 +315,7 @@ public:
    void saveDatabase();
    void convertFromXml();
 
+
    bool isConverted();
 
 signals:

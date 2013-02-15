@@ -62,13 +62,16 @@ void RecipeListModel::addRecipes(QList<Recipe*> recs)
    }
    
    int size = recipes.size();
-   beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
-   recipes.append(tmp);
-   
-   for( i = tmp.begin(); i != tmp.end(); i++ )
-      connect( *i, SIGNAL(changedName(const QString&)), this, SLOT(recNameChanged(const QString&)) );
-   
-   endInsertRows();
+   if (size+tmp.size())
+   {
+      beginInsertRows( QModelIndex(), size, size+tmp.size()-1 );
+      recipes.append(tmp);
+      
+      for( i = tmp.begin(); i != tmp.end(); i++ )
+         connect( *i, SIGNAL(changedName(const QString&)), this, SLOT(recNameChanged(const QString&)) );
+      
+      endInsertRows();
+   }
 }
 
 void RecipeListModel::removeRecipe(Recipe* recipe)

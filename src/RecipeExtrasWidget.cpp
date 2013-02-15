@@ -244,7 +244,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    QVariant val;
    if( prop )
    {
-      propName == prop->name();
+      propName = prop->name();
       val = prop->read(recipe);
    }
    
@@ -254,7 +254,6 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
   // The two plaintext fields cause some weird updates. In essence, we load
   // the text from teh database, which fires a signal which causes that text
   // to be read and stored in the database. Blocking signals should help 
-   blockSignals(true); 
 
    if( propName == "age_days" || updateAll )
       lineEdit_age->setText( Brewtarget::displayAmount(val.toDouble()) );
@@ -286,7 +285,5 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
       btTextEdit_notes->setPlainText( val.toString() );
    else if( propName == "tasteNotes" || updateAll )
       btTextEdit_tasteNotes->setPlainText( val.toString() );
-
-   blockSignals(false); 
 
 }

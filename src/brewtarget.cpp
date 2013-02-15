@@ -482,7 +482,7 @@ int Brewtarget::run()
    {
       // See if the user needs to convert from the deprecated XML formats
       if ( ! Brewtarget::btSettings.contains("converted") )
-           Database::instance().convertFromXml();
+         Database::instance().convertFromXml();
       
       _mainWindow = new MainWindow();
       
