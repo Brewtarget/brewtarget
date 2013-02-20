@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es">
+<TS version="2.0" language="es" sourcelanguage="en_US">
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tiempo de Ebullición</translation>
+        <translation>Tiempo de hervido</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -21,11 +21,11 @@
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Volumen de la Ebullición</translation>
+        <translation>Volumen de hervido</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Densidad antes de la Ebullición</translation>
+        <translation>Densidad antes del hervido</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -69,19 +69,19 @@
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
-        <translation>Volumen real después de la ebullición</translation>
+        <translation>Volumen actual antes del hervido</translation>
     </message>
     <message>
         <source>Actual PreBoil Gravity</source>
-        <translation>Densidad real después de la ebullición</translation>
+        <translation>Densidad actual antes del hervido</translation>
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation>Volumen después de la ebullición</translation>
+        <translation>Volumen posterior al hervido</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
-        <translation>Densidad después de la ebullición</translation>
+        <translation>Densidad posterior al hervido</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
@@ -120,11 +120,11 @@
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Volumen de la Ebullición</translation>
+        <translation>Volumen de hervido</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Densidad antes de la Ebullición</translation>
+        <translation>Densidad antes del hervido</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -136,7 +136,7 @@
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tiempo de Ebullición</translation>
+        <translation>Tiempo de hervido</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -168,19 +168,19 @@
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation>Volumen real antes de la ebullición:</translation>
+        <translation>Volumen actual antes del hervido:</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation>Densidad real antes de la ebullición:</translation>
+        <translation>Densidad actual antes del hervido:</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation>Volumen después de la ebullición:</translation>
+        <translation>Volumen posterior al hervido:</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>Densidad después de la ebullición:</translation>
+        <translation>Densidad posterior al hervido:</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
@@ -406,31 +406,31 @@
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Absorción de Granos (%1/%2)</translation>
+        <translation>Absorción del Grano (%1/%2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
-        <translation>Aviso del Volumen</translation>
+        <translation>Precaución con el volumen de la olla</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation>El volumen de la cuba que pusiste es 0. Puede hacer problemas.</translation>
+        <translation>El volumen de la olla que pusiste es 0. Puede haber problemas.</translation>
     </message>
     <message>
         <source>Batch Size Warning</source>
-        <translation>Aviso de Lote</translation>
+        <translation>Precaución con el volumen del Lote</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation>El tamaño del lote que pusiste es 0. Puede hacer problemas.</translation>
+        <translation>El volumen del lote que pusiste es 0. Puede haber problemas.</translation>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Nombre de equipaje</translation>
+        <translation>Nombre del equipo</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Nombre de equipaje:</translation>
+        <translation>Nombre del equipo:</translation>
     </message>
 </context>
 <context>
@@ -487,7 +487,7 @@
     </message>
     <message>
         <source>Late</source>
-        <translation>Atrasada</translation>
+        <translation>Posterior</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -511,11 +511,11 @@
     </message>
     <message>
         <source>Late Addition</source>
-        <translation>Adición Tarde</translation>
+        <translation>Adición Posterior</translation>
     </message>
     <message>
         <source>Yield %</source>
-        <translation>Rendimiento %</translation>
+        <translation>Potencial de extracto %</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
@@ -588,7 +588,7 @@
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Lúpulos secos</translation>
+        <translation>Lúpulizado en seco</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -596,7 +596,7 @@
     </message>
     <message>
         <source>First Wort</source>
-        <translation>First Wort</translation>
+        <translation>Primer Mosto</translation>
     </message>
     <message>
         <source>Aroma</source>
@@ -608,7 +608,7 @@
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Bolita</translation>
+        <translation>Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
@@ -658,19 +658,19 @@
     </message>
     <message>
         <source>Sure about that?</source>
-        <translation type="obsolete">¿Seguro?</translation>
+        <translation>¿Seguro?</translation>
     </message>
     <message>
         <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation type="obsolete">Estás por borrar la receta. ¿Está bien?</translation>
+        <translation>Estás por borrar la receta. ¿Esto es correcto?</translation>
     </message>
     <message>
         <source>Equipment request</source>
-        <translation>Peticíon de equipaje</translation>
+        <translation>Solicitud de equipo</translation>
     </message>
     <message>
         <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
-        <translation>¿Quieres cambiar las cantidades de lote y hervor a las que pide el equipaje?</translation>
+        <translation>¿Quieres cambiar las cantidades de lote y hervor a las que pide el equipo?</translation>
     </message>
     <message>
         <source>Delete %1</source>
@@ -694,7 +694,7 @@
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Equipaje</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Fermentable</source>
@@ -722,7 +722,7 @@
     </message>
     <message>
         <source>Copy Equipment</source>
-        <translation>Copiar Equipaje</translation>
+        <translation>Copiar Equipo</translation>
     </message>
     <message>
         <source>Copy Fermentable</source>
@@ -770,7 +770,7 @@
     </message>
     <message>
         <source>A Warning</source>
-        <translation>Un Aviso</translation>
+        <translation>Precaución</translation>
     </message>
     <message>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
@@ -802,7 +802,7 @@
     </message>
     <message>
         <source>No mash</source>
-        <translation>Ningún maceración</translation>
+        <translation>No macerado</translation>
     </message>
     <message>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
@@ -857,7 +857,7 @@
     </message>
     <message>
         <source>&lt;b&gt;Slightly malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Un poco maltosa&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Ligeramente maltosa&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Balanced&lt;/b&gt;</source>
@@ -865,15 +865,15 @@
     </message>
     <message>
         <source>&lt;b&gt;Slightly hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Un poco lupuloso&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Ligeramente amarga&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Extra hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Extra lupuloso&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Extra amarga&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Way hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Muy lupuloso&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Muy amarga&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -888,19 +888,19 @@
     </message>
     <message>
         <source>No Equipment</source>
-        <translation>Ningún Equipaje</translation>
+        <translation>Ningún Equipo configurado</translation>
     </message>
     <message>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
-        <translation>No le pusiste un equipaje a la receta. No podemos seguir sin él.</translation>
+        <translation>No configuraste un equipo a la receta. No podemos seguir sin él.</translation>
     </message>
     <message>
         <source>Tun Temp</source>
-        <translation>Temp. de la Cuba</translation>
+        <translation>Temp. de la Olla</translation>
     </message>
     <message>
         <source>Enter the temperature of the tun before your first infusion.</source>
-        <translation>Introduzca la temperatura de la cuba antes de la primera infusión.</translation>
+        <translation>Introduzca la temperatura de la olla antes de la primera infusión.</translation>
     </message>
     <message>
         <source>Decoction error</source>
@@ -950,15 +950,15 @@
     <name>MashWizard</name>
     <message>
         <source>Mash thickness (%1/%2)</source>
-        <translation>Grosor de maceración (%1/%2)</translation>
+        <translation>Relación agua granos (%1/%2)</translation>
     </message>
     <message>
         <source>Bad thickness</source>
-        <translation>Grosor malo</translation>
+        <translation>Relación agua grano erronea</translation>
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
-        <translation>El grosor tiene que ser positivo.</translation>
+        <translation>La relación agua grano tiene que ser positiva.</translation>
     </message>
     <message>
         <source>No steps</source>
@@ -978,11 +978,11 @@
     </message>
     <message>
         <source>Mash too thick</source>
-        <translation>Maceración demasiado espeso</translation>
+        <translation>Maceración demasiada espesa</translation>
     </message>
     <message>
         <source>Your mash is too thick for desired temp. at first step.</source>
-        <translation>La maceración está demasiado espeso para la temp. deseada en el primer paso.</translation>
+        <translation>La maceración está demasiado espesa para la temp deseada. En el primer paso.</translation>
     </message>
     <message>
         <source>Decoction error</source>
@@ -994,19 +994,19 @@
     </message>
     <message>
         <source>Sparge temp.</source>
-        <translation>Temp del lavado.</translation>
+        <translation>Temp de lavado.</translation>
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation>Para alcanzar la temp del lavado, el agua debe estar encima de la ebullición. Baja la temp del lavado, o permite más agua para el lavado.</translation>
+        <translation>Para alcanzar la temp de lavado, el agua debe estar por encima del punto de ebullición. Baja la temp de lavado, o usa más agua para el lavado.</translation>
     </message>
     <message>
         <source>Too much wort</source>
-        <translation>Demasiado caldo</translation>
+        <translation>Demasiado mosto</translation>
     </message>
     <message>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation>Tienes demasiado caldo de la maceración para el tamaño hirviente. Te sugiero que aumentes el tamaño hirviente por aumentar el tempo hirviente, or por reducir el grosor de la maceración.</translation>
+        <translation>Tienes demasiado mosto para hervir. Te sugiero que aumentes el tiempo de hervido, o reduce la relación agua/granos en la maceración.</translation>
     </message>
 </context>
 <context>
@@ -1136,13 +1136,13 @@
     <message>
         <source>Boil Size: %1
 </source>
-        <translation>Tamaño Hirviente: %1
+        <translation>Tamaño de Hervido: %1
 </translation>
     </message>
     <message>
         <source>Boil Time: %1
 </source>
-        <translation>Tiempo Hirviente: %1
+        <translation>Tiempo de hervido: %1
 </translation>
     </message>
     <message>
@@ -1193,11 +1193,11 @@
     </message>
     <message>
         <source>Late</source>
-        <translation>Atrasado</translation>
+        <translation>Posterior</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation>Rendimiento</translation>
+        <translation>Potencial de extracción</translation>
     </message>
     <message>
         <source>Color</source>
@@ -1214,7 +1214,7 @@
     <message>
         <source>Total grain: %1
 </source>
-        <translation>Grano total: %1
+        <translation>Total granos: %1
 </translation>
     </message>
     <message>
@@ -1257,13 +1257,13 @@
     <message>
         <source>Efficiency: %1%%
 </source>
-        <translation type="obsolete">Eficiencia: %1%%
+        <translation>Eficiencia: %1%%
 </translation>
     </message>
     <message>
         <source>ABV: %1%%
 </source>
-        <translation type="obsolete">APV: %1%%
+        <translation>APV: %1%%
 </translation>
     </message>
     <message>
@@ -1322,7 +1322,7 @@
     </message>
     <message>
         <source>Version %1 is now available. Download it?</source>
-        <translation>La versión %1 ahora está disponible. ¿La quieres bajar?</translation>
+        <translation>La versión %1 se encuentra disponible. ¿La quieres bajar?</translation>
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
@@ -1557,7 +1557,7 @@
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>a la cuba de maceración.</translation>
+        <translation>a la olla de maceración.</translation>
     </message>
     <message>
         <source>Heat water</source>
@@ -1585,7 +1585,8 @@
     </message>
     <message>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation>Calentar %1 de la maceración a la ebullición y devolverla a la cuba para alcanzar %2.</translation>
+        <translatorcomment>Decoction metod</translatorcomment>
+        <translation>Calentar %1 del contenido del macerador hasta que hierva y devolverla a la olla de maceración para alcanzar %2.</translation>
     </message>
     <message>
         <source> Hold for %1.</source>
@@ -1601,15 +1602,15 @@
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Agregar %1 %2 al first wort por %3.</translation>
+        <translation>Agregar %1 %2 al primer mosto por %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Poner %1 %2 a la maceración por %3.</translation>
+        <translation>Poner %1 %2 en la maceración por %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Remojar %1 %2 en el wort por %3.</translation>
+        <translation>Remojar %1 %2 en el mosto por %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
@@ -1617,7 +1618,7 @@
     </message>
     <message>
         <source>Hop addition</source>
-        <translation>Adición de lúpolos</translation>
+        <translation>Adición de lúpulo</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
@@ -1625,7 +1626,7 @@
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Agrega %1 %2 al primario por %3.</translation>
+        <translation>Agregar %1 %2 al primario por %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
@@ -1786,7 +1787,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Fabricante</translation>
+        <translation>Maestro cervecero</translation>
     </message>
     <message>
         <source>Date</source>
@@ -1798,11 +1799,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Boil Size</source>
-        <translation>Tamaño de la Ebullición</translation>
+        <translation>Tamaño del hervido</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tiempo de Ebullición</translation>
+        <translation>Tiempo de hervido</translation>
     </message>
     <message>
         <source>Efficiency</source>
@@ -1842,7 +1843,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Total grain:</source>
-        <translation>Grano total:</translation>
+        <translation>Total granos:</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1862,11 +1863,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation>Atrasado</translation>
+        <translation>Posterior</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation>Rendimiento</translation>
+        <translation>Potencial de extracción</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -1931,7 +1932,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Temp. Deseado</translation>
+        <translation>Temp. Deseada</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -1943,7 +1944,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Fecha de Fabricación</translation>
+        <translation>Fecha de Preparación</translation>
     </message>
     <message>
         <source>Preboil</source>
@@ -1951,15 +1952,15 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Densidad</translation>
+        <translation>Gravedad específica</translation>
     </message>
     <message>
         <source>Volume into BK</source>
-        <translation>Volumen en el calderón</translation>
+        <translation>Volumen en la olla de hervido</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Temp de la infusión</translation>
+        <translation>Temp de Salto</translation>
     </message>
     <message>
         <source>Final Temp</source>
@@ -1971,7 +1972,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>Densidad Predijo</translation>
+        <translation>Densidad Proyectada</translation>
     </message>
     <message>
         <source>Postboil</source>
@@ -1979,7 +1980,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Volumen después de la ebullición</translation>
+        <translation>Volumen después de hervir</translation>
     </message>
     <message>
         <source>Volume Into Fermenter</source>
@@ -1991,7 +1992,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>APV Predijo</translation>
+        <translation>APV Proyectado</translation>
     </message>
     <message>
         <source>Postferment</source>
@@ -2010,11 +2011,11 @@ El volumen final en el primario es %1.</translation>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>DF no de acuerdo</translation>
+        <translation>DF no concuerda</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
-        <translation>Basado en el Plato dado, la DF debería estar %1, pero pusiste %2. Siguiendo con la DF calculada.</translation>
+        <translation>Basado en la densidad Plato original, la DF debería ser %1, pero pusiste %2. Siguiendo con la DF calculada.</translation>
     </message>
 </context>
 <context>
@@ -2025,11 +2026,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>La maceración se ha reiniciado por el hecho que las temperaturas de la maceración no se ajustan facilmente. Favor de ver la maceración.</translation>
+        <translation>La maceración se ha reiniciado por el hecho que las temperaturas de la maceración no se ajustan facilmente. Favor de reiniciar el asistente de maceración.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>El equipaje y la maceración se han reiniciado debido al hecho que las temperaturas de la maceración no se escalan facilmente. Favor de reiniciar el asistente de la maceración.</translation>
+        <translation>El equipo y la maceración se han reiniciado debido al hecho que las temperaturas de la maceración no se escalan facilmente. Favor de reiniciar el asistente de la maceración.</translation>
     </message>
 </context>
 <context>
@@ -2040,7 +2041,7 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Nobre del estilo:</translation>
+        <translation>Nombre del estilo:</translation>
     </message>
 </context>
 <context>
@@ -2148,11 +2149,11 @@ El volumen final en el primario es %1.</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Slant</translation>
+        <translation>Pendientes</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation>Cultivo</translation>
     </message>
 </context>
 <context>
@@ -3173,7 +3174,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>IBU/GU</source>
-        <translation>IBU/Densidad</translation>
+        <translation>IBU por Densidad</translation>
     </message>
     <message>
         <source>Calories/12oz</source>
