@@ -62,6 +62,24 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    
    obsEquip = 0;
 
+   // Connect all the edit boxen
+   connect(lineEdit_boilSize,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_batchSize,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_tunVolume,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_tunWeight,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_tunSpecificHeat,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_boilTime,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_evaporationRate,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_topUpKettle,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_topUpWater,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_trubChillerLoss,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_lauterDeadspace,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_boilingPoint,SIGNAL(editingFinished()),this,SLOT(updateField()));
+   connect(lineEdit_hopUtilization,SIGNAL(editingFinished()),this,SLOT(updateField()));
+
+   // Set up the buttons
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
    connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
@@ -69,19 +87,22 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect( pushButton_absorption, SIGNAL( clicked() ), this, SLOT( resetAbsorption() ) );
    connect( equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
 
+	// Check boxen
+   connect(checkBox_calcBoilVolume, SIGNAL(stateChanged(int)), this, SLOT(updateCheckboxRecord(int)));
+   connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
+	
+
+
+
 	// make sure the dialog gets populated the first time it's opened from the menu
 	equipmentSelected();
 }
 
 void EquipmentEditor::setEquipment( Equipment* e )
 {
-   if( obsEquip )
-      disconnect( obsEquip, 0, this, 0 );
-   
    if( e )
    {
       obsEquip = e;
-      connect( obsEquip, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
       
       // Make sure the combo box gets set to the right place.
       QModelIndex modelIndex(equipmentListModel->find(e));
@@ -164,36 +185,22 @@ void EquipmentEditor::save()
    if ( lineEdit_hopUtilization->text().toDouble() < 0.001 )
       QMessageBox::warning(this, tr("Hop Utilization Warning"), tr("The hop utilization percentage you entered is 0. This may cause problems"));
 
-   if ( lineEdit_name->isModified() )
-      obsEquip->setName( lineEdit_name->text() );
-   if (lineEdit_boilSize->isModified() )
-      obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
-   if ( lineEdit_batchSize->isModified() )
-      obsEquip->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
-   if ( lineEdit_tunVolume->isModified() )
-      obsEquip->setTunVolume_l( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) );
-   if ( lineEdit_tunWeight->isModified() )
-      obsEquip->setTunWeight_kg( Brewtarget::weightQStringToSI(lineEdit_tunWeight->text()) );
-   if ( lineEdit_tunSpecificHeat->isModified() )
-      obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
-   if ( lineEdit_boilTime->isModified() )
-      obsEquip->setBoilTime_min( Brewtarget::timeQStringToSI(lineEdit_boilTime->text()) );
-   if ( lineEdit_evaporationRate->isModified() )
-      obsEquip->setEvapRate_lHr( Brewtarget::volQStringToSI(lineEdit_evaporationRate->text()) );
-   if ( lineEdit_topUpKettle->isModified() )
-      obsEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
-   if ( lineEdit_topUpWater->isModified() )
-      obsEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
-   if ( lineEdit_trubChillerLoss->isModified() )
-      obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
-   if ( lineEdit_lauterDeadspace->isModified() )
-      obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
-   if ( lineEdit_boilingPoint->isModified() )
-      obsEquip->setGrainAbsorption_LKg( ga_LKg );
-   if ( lineEdit_boilingPoint->isModified() )
-      obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
-   if ( lineEdit_hopUtilization->isModified() )
-      obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
+
+   obsEquip->setName( lineEdit_name->text() );
+   obsEquip->setBoilSize_l( Brewtarget::volQStringToSI(lineEdit_boilSize->text()) );
+   obsEquip->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text()) );
+   obsEquip->setTunVolume_l( Brewtarget::volQStringToSI(lineEdit_tunVolume->text()) );
+   obsEquip->setTunWeight_kg( Brewtarget::weightQStringToSI(lineEdit_tunWeight->text()) );
+   obsEquip->setTunSpecificHeat_calGC( lineEdit_tunSpecificHeat->text().toDouble() );
+   obsEquip->setBoilTime_min( Brewtarget::timeQStringToSI(lineEdit_boilTime->text()) );
+   obsEquip->setEvapRate_lHr( Brewtarget::volQStringToSI(lineEdit_evaporationRate->text()) );
+   obsEquip->setTopUpKettle_l( Brewtarget::volQStringToSI(lineEdit_topUpKettle->text()) );
+   obsEquip->setTopUpWater_l( Brewtarget::volQStringToSI(lineEdit_topUpWater->text()) );
+   obsEquip->setTrubChillerLoss_l( Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text()) );
+   obsEquip->setLauterDeadspace_l( Brewtarget::volQStringToSI(lineEdit_lauterDeadspace->text()) );
+   obsEquip->setGrainAbsorption_LKg( ga_LKg );
+   obsEquip->setBoilingPoint_c( Brewtarget::tempQStringToSI(lineEdit_boilingPoint->text()));
+   obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
 
    obsEquip->setNotes(textEdit_notes->toPlainText());
 
@@ -232,7 +239,6 @@ void EquipmentEditor::resetAbsorption()
    Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
    double gaCustomUnits = PhysicalConstants::grainAbsorption_Lkg * volumeUnit->fromSI(1.0) * weightUnit->toSI(1.0);
    
-   obsEquip->setGrainAbsorption_LKg( PhysicalConstants::grainAbsorption_Lkg );
    lineEdit_grainAbsorption->setText(Brewtarget::displayAmount(gaCustomUnits));
 }
 
@@ -297,7 +303,23 @@ void EquipmentEditor::showChanges()
 
 void EquipmentEditor::updateCheckboxRecord(int state)
 {
-   obsEquip->setCalcBoilVolume(state == Qt::Checked);
+	 if ( state == Qt::Checked )
+	 {
+		 double bar = calcBatchSize();
+       lineEdit_boilSize->setText( Brewtarget::displayAmount(bar, Units::liters));
+	 }
+}
+
+double EquipmentEditor::calcBatchSize()
+{
+   double size, topUp, trubLoss, time, evapRate;
+	size = Brewtarget::volQStringToSI(lineEdit_batchSize->text());
+	topUp = Brewtarget::volQStringToSI(lineEdit_topUpWater->text());
+	trubLoss = Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text());
+	time = Brewtarget::timeQStringToSI(lineEdit_boilTime->text());
+	evapRate = Brewtarget::volQStringToSI(lineEdit_evaporationRate->text());
+
+	return size - topUp + trubLoss + (time/(double)60)*evapRate;
 }
 
 void EquipmentEditor::updateDefaultEquipment(int state)
@@ -313,4 +335,55 @@ void EquipmentEditor::updateDefaultEquipment(int state)
    {
       Brewtarget::setOption(optionName,-1);
    }
+}
+
+void EquipmentEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   QString current;
+   double foo;
+
+   if( obsEquip == 0 )
+      return;
+ 
+   Unit* weightUnit = 0;
+   Unit* volumeUnit = 0;
+   Brewtarget::getThicknessUnits( &volumeUnit, &weightUnit );
+
+   if ( field == lineEdit_boilTime )
+   {
+	  foo = Brewtarget::timeQStringToSI(field->text());
+	  field->setText(Brewtarget::displayAmount(foo, Units::minutes) );
+   }
+   else if ( field == lineEdit_tunWeight )
+   {
+	  foo = Brewtarget::weightQStringToSI(field->text());
+     field->setText( Brewtarget::displayAmount(foo, Units::kilograms) );
+   }
+   else if ( field == lineEdit_boilingPoint )
+   {
+	   foo = Brewtarget::tempQStringToSI(field->text());
+	   field->setText( Brewtarget::displayAmount(foo, Units::celsius));
+   }
+   else if ( field == lineEdit_grainAbsorption )
+   {
+      double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
+		lineEdit_grainAbsorption->setText( Brewtarget::displayAmount(ga_LKg) );
+   }
+   else if ( field == lineEdit_hopUtilization || field == lineEdit_tunSpecificHeat )
+   {
+	   foo = field->text().toDouble();
+	   field->setText( Brewtarget::displayAmount(foo));
+   }
+   else
+   {
+	  foo = Brewtarget::volQStringToSI(field->text());
+	  field->setText( Brewtarget::displayAmount(foo, Units::liters) );
+   }
+
+	// We also need to recalculate the preboil size if a few fields change
+	if ( selection == lineEdit_boilTime || selection == lineEdit_evaporationRate || selection == lineEdit_trubChillerLoss || selection == lineEdit_topUpWater )
+		 updateCheckboxRecord( checkBox_calcBoilVolume->checkState());
 }
