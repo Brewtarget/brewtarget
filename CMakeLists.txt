@@ -264,6 +264,7 @@ SET( TRANSLATIONS_FILES
      ${TRANSLATIONSDIR}/bt_pl.ts # Polish
      ${TRANSLATIONSDIR}/bt_pt.ts # Portuguese
      ${TRANSLATIONSDIR}/bt_hu.ts # Hungarian
+     ${TRANSLATIONSDIR}/bt_ru.ts # Russian
      ${TRANSLATIONSDIR}/bt_sv.ts # Swedish
 )
 
