@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <QRegExp>
 #include <QDebug>
+#include <QLocale>
 #include "brewnote.h"
 #include "brewtarget.h"
 #include "Algorithms.h"
@@ -201,7 +202,10 @@ double BrewNote::translateSG(QString qstr)
    QRegExp numUnit;
 
    // Try to make some guesses about what is there.
-   numUnit.setPattern("(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(\\w+)?");
+   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
+   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+
+   numUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
    numUnit.setCaseSensitivity(Qt::CaseInsensitive);
 
    if ( qstr.contains(numUnit) )
