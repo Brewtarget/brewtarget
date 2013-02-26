@@ -79,6 +79,7 @@ class EquipmentListModel;
 class StyleListModel;
 class StyleSortFilterProxyModel;
 class NamedMashEditor;
+class BtDatePopup;
 
 /*!
  * \class MainWindow
@@ -204,6 +205,7 @@ public slots:
    void contextMenu(const QPoint &point);
    void newBrewNote();
    void reBrewNote();
+   void changeBrewDate();
 
    //! \brief Open the default browser to Brewtarget's donation page.
    void openDonateLink();
@@ -303,6 +305,7 @@ private:
    NamedMashEditor* namedMashEditor;
    NamedMashEditor* singleNamedMashEditor;
 
+   BtDatePopup* btDatePopup;
    QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 

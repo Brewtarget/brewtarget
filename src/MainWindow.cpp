@@ -101,6 +101,7 @@
 #include "MashListModel.h"
 #include "StyleSortFilterProxyModel.h"
 #include "NamedMashEditor.h"
+#include "BtDatePopup.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -175,6 +176,7 @@ MainWindow::MainWindow(QWidget* parent)
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
+   btDatePopup = new BtDatePopup(this);
 
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
@@ -2392,4 +2394,30 @@ void MainWindow::convertedMsg()
    msgBox.exec();
 
 }
-   
+  
+void MainWindow::changeBrewDate()
+{
+   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
+   QDateTime newDate;
+
+   foreach(QModelIndex selected, indexes)
+   {
+      BrewNote* target = treeView_recipe->getBrewNote(selected);
+
+      // Pop the calendar, get the date. 
+      if ( btDatePopup->exec() == QDialog::Accepted )
+      {
+         newDate = btDatePopup->selectedDate();
+         target->setBrewDate(newDate);
+
+         // If this note is open in a tab
+         if (brewNotes.contains(target->key()))
+         {
+            // Rename it. I hope
+            int tabIndex = tabWidget_recipeView->indexOf(brewNotes.value(target->key()));
+            tabWidget_recipeView->setTabText(tabIndex, target->brewDate_short());
+            return;
+         }
+      }
+   }
+}
