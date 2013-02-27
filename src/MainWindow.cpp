@@ -120,7 +120,7 @@ MainWindow::MainWindow(QWidget* parent)
    // find their backups.
    if (Database::instance().isConverted())
       convertedMsg(); 
-   
+
    // Different palettes for some text.
    lcdPalette_old = lcdNumber_og->palette();
    lcdPalette_tooLow = QPalette(lcdPalette_old);
