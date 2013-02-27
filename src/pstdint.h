@@ -354,7 +354,7 @@ typedef signed short int16_t;
 # define INT32_MIN INT32_C(0x80000000)
 #endif
 #ifndef int32_t
-#if (LONG_MAX == INT32_MAX) || defined (S_SPLINT_S)
+#if ((LONG_MAX == INT32_MAX) || defined (S_SPLINT_S)) && ! defined(__FreeBSD__)
 typedef signed long int32_t;
 # define INT32_C(v) v ## L
 # ifndef PRINTF_INT32_MODIFIER
@@ -443,7 +443,7 @@ typedef __int64 int64_t;
 # define UINT32_MAX (0xffffffffUL)
 #endif
 #ifndef uint32_t
-#if (ULONG_MAX == UINT32_MAX) || defined (S_SPLINT_S)
+#if ((ULONG_MAX == UINT32_MAX) || defined (S_SPLINT_S)) && ! defined(__FreeBSD__)
   typedef unsigned long uint32_t;
 # define UINT32_C(v) v ## UL
 # ifndef PRINTF_INT32_MODIFIER
@@ -649,10 +649,12 @@ typedef __int64 int64_t;
  *  stdint.h.
  */
 
+#ifndef __FreeBSD__
 typedef   int_least8_t   int_fast8_t;
 typedef  uint_least8_t  uint_fast8_t;
 typedef  int_least16_t  int_fast16_t;
 typedef uint_least16_t uint_fast16_t;
+#endif
 typedef  int_least32_t  int_fast32_t;
 typedef uint_least32_t uint_fast32_t;
 #define  UINT_FAST8_MAX  UINT_LEAST8_MAX
