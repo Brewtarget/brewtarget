@@ -59,6 +59,10 @@
 #include "SetterCommand.h"
 #include "SetterCommandStack.h"
 
+#if defined(Q_WS_WIN)
+   #include <windows.h>
+#endif
+
 // Static members.
 Database* Database::dbInstance = 0;
 QFile Database::dbFile;
@@ -366,8 +370,16 @@ void Database::unload(bool keepChanges)
    {
       // If the user doesn't want to save changes, remove the active database
       // and restore the backup.
+	  dbFile.close();
+	  
+	  // Windows is being a real bitch about removing the damn file. AAAAGGGHHHH
+#if defined(Q_WS_WIN)
+      if( CopyFile(dbTempBackupFile.fileName().toStdString().c_str(), dbFile.fileName().toStdString().c_str(), false) )
+		DeleteFile( dbTempBackupFile.fileName().toStdString().c_str() );
+#else
       dbFile.remove();
       dbTempBackupFile.rename(dbFileName);
+#endif
    }
 }
 

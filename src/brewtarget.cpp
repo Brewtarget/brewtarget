@@ -452,7 +452,7 @@ int Brewtarget::run()
    }
    pidFile.close();
 #endif
-   
+   userDataDir = getConfigDir();
    BtSplashScreen splashScreen;
    splashScreen.show();
    
