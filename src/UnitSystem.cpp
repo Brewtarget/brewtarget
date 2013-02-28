@@ -29,7 +29,13 @@ QMap<QString, Unit*> UnitSystem::nameToUnit;
 
 UnitSystem::UnitSystem()
 {
-   amtUnit.setPattern("(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(\\w+)?");
+   // Make sure we get the right decimal point (. or ,) and the right grouping
+   // separator (, or .). Some locales write 1.000,10 and other write
+   // 1,000.10. We need to catch both
+   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
+   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+
+   amtUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
    amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
 }
 

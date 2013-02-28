@@ -75,7 +75,6 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(lineEdit_trubChillerLoss,SIGNAL(editingFinished()),this,SLOT(updateField()));
    connect(lineEdit_lauterDeadspace,SIGNAL(editingFinished()),this,SLOT(updateField()));
    connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateField()));
-   connect(lineEdit_grainAbsorption,SIGNAL(editingFinished()),this,SLOT(updateField()));
    connect(lineEdit_boilingPoint,SIGNAL(editingFinished()),this,SLOT(updateField()));
    connect(lineEdit_hopUtilization,SIGNAL(editingFinished()),this,SLOT(updateField()));
 
@@ -91,9 +90,6 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect(checkBox_calcBoilVolume, SIGNAL(stateChanged(int)), this, SLOT(updateCheckboxRecord(int)));
    connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
 	
-
-
-
 	// make sure the dialog gets populated the first time it's opened from the menu
 	equipmentSelected();
 }
@@ -203,6 +199,7 @@ void EquipmentEditor::save()
    obsEquip->setHopUtilization_pct( lineEdit_hopUtilization->text().toDouble());
 
    obsEquip->setNotes(textEdit_notes->toPlainText());
+   obsEquip->setCalcBoilVolume(checkBox_calcBoilVolume->checkState() == Qt::Checked);
 
    setVisible(false);
    return;
@@ -369,8 +366,9 @@ void EquipmentEditor::updateField()
    }
    else if ( field == lineEdit_grainAbsorption )
    {
-      double ga_LKg = lineEdit_grainAbsorption->text().toDouble() * volumeUnit->toSI(1.0) * weightUnit->fromSI(1.0);
-		lineEdit_grainAbsorption->setText( Brewtarget::displayAmount(ga_LKg) );
+      // Just reformat in a pleasing fashion
+      foo = lineEdit_grainAbsorption->text().toDouble(); 
+		lineEdit_grainAbsorption->setText( Brewtarget::displayAmount(foo) );
    }
    else if ( field == lineEdit_hopUtilization || field == lineEdit_tunSpecificHeat )
    {
