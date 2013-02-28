@@ -85,6 +85,7 @@ bool operator==(BrewNote const& lhs, BrewNote const& rhs)
 BrewNote::BrewNote()
    : BeerXMLElement()
 {
+   loading = false;
 }
 
 void BrewNote::populateNote(Recipe* parent)
@@ -104,6 +105,7 @@ void BrewNote::populateNote(Recipe* parent)
    // The order in which these are done is very specific.
    // Later calls require certain things set first. Do not rearrange this
    // without good reason and test.
+   setProjVolIntoBK_l( parent->boilSize_l() );
 
    // Just getting the points won't work. parent->points() is already adjusted
    // for efficiency and it throws off the rest of the calculations. I need
@@ -111,8 +113,6 @@ void BrewNote::populateNote(Recipe* parent)
    // the gravity will change depending on the volume
    sugars = parent->calcTotalPoints();
    setProjPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
-
-   setProjVolIntoBK_l( parent->boilSize_l() );
 
    setPostBoilVolume_l(parent->postBoilVolume_l());
    setVolumeIntoFerm_l(parent->finalVolume_l());
@@ -223,20 +223,29 @@ double BrewNote::translateSG(QString qstr)
    return var;
 }
 
+void BrewNote::setLoading(bool flag) { loading = flag; }
+
 // These five items cause the calculated fields to change. I should do this
 // with signals/slots, likely, but the *only* slot for the signal will be
 // the brewnote.
 void BrewNote::setSg(double var)
 { 
    set("sg", "sg", var);
+
+   if ( loading )
+      return;
+
    calculateEffIntoBK_pct();
    calculateOg();
-
 }
 
 void BrewNote::setVolumeIntoBK_l(double var)
 { 
    set("volumeIntoBK_l", "volume_into_bk", var);
+
+   if ( loading )
+      return;
+
    calculateEffIntoBK_pct();
    calculateOg();
    calculateBrewHouseEff_pct();
@@ -245,6 +254,10 @@ void BrewNote::setVolumeIntoBK_l(double var)
 void BrewNote::setOg(double var)
 { 
    set("og", "og", var);
+
+   if ( loading )
+      return;
+
    calculateBrewHouseEff_pct();
    calculateABV_pct();
    calculateActualABV_pct();
@@ -253,13 +266,40 @@ void BrewNote::setOg(double var)
 void BrewNote::setVolumeIntoFerm_l(double var)
 { 
    set("volumeIntoFerm_l", "volume_into_fermenter", var);
+
+   if ( loading )
+      return;
+
    calculateBrewHouseEff_pct();
 }
 
 void BrewNote::setFg(double var)
 { 
    set("fg", "fg", var);
+
+   if ( loading )
+      return;
+
    calculateActualABV_pct();
+}
+
+// This one is a bit of an odd ball. We need to convert to pure glucose points
+// before we store it in the database. 
+void BrewNote::setProjPoints(double var)
+{ 
+   double convertPnts;
+   double plato, total_g;
+
+   if ( loading )
+      convertPnts = var;
+   else
+   { 
+      plato = Algorithms::Instance().getPlato(var, projVolIntoBK_l());
+      total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
+      convertPnts = (total_g - 1.0 ) * 1000;
+   }
+
+   set("projPoints", "projected_points", convertPnts); 
 }
 
 void BrewNote::setABV(double var)               { set("abv", "abv", var); }
@@ -279,7 +319,6 @@ void BrewNote::setProjVolIntoFerm_l(double var) { set("projVolIntoFerm_l", "proj
 void BrewNote::setProjFg(double var)          { set("projFg", "projected_fg", var); }
 void BrewNote::setProjEff_pct(double var)         { set("projEff_pct", "projected_eff", var); }
 void BrewNote::setProjABV_pct(double var)         { set("projABV_pct", "projected_abv", var); }
-void BrewNote::setProjPoints(double var)      { set("projPoints", "projected_points", var); }
 void BrewNote::setProjAtten(double var)       { set("projAtten", "projected_atten", var); }
 void BrewNote::setBoilOff_l(double var)         { set("boilOff_l", "boil_off", var); }
 
@@ -326,14 +365,10 @@ double BrewNote::calculateEffIntoBK_pct()
 {
    double effIntoBK;
    double maxPoints, actualPoints;
-   double plato, total_g;
 
-   // We need to figure out the maximum theoretical points available to us at
-   // this point. Not sure if we should be using 
-   plato = Algorithms::Instance().getPlato(projPoints(), projVolIntoBK_l());
-   total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
-
-   maxPoints = (total_g - 1) * 1000 * projVolIntoBK_l();
+   // I don't think we need a lot of math here. Points has already been
+   // translated from SG into pure glucose points
+   maxPoints = projPoints() * projVolIntoBK_l();
 
    actualPoints = (sg() - 1) * 1000 * volumeIntoBK_l();
 
@@ -376,14 +411,9 @@ double BrewNote::calculateBrewHouseEff_pct()
 {
    double expectedPoints, actualPoints;
    double brewhouseEff;
-   double plato, total_g;
 
-   plato = Algorithms::Instance().getPlato(projPoints(), projVolIntoFerm_l());
-   total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
-   expectedPoints = (total_g - 1) * 1000 * projVolIntoFerm_l();
-   
+   expectedPoints = projPoints() * projVolIntoFerm_l();
    actualPoints = (og()-1.0) * 1000.0 * volumeIntoFerm_l();
-//   expectedPoints = projPoints() * volumeIntoBK_l();
 
    brewhouseEff = actualPoints/expectedPoints * 100.0;
    setBrewhouseEff_pct(brewhouseEff);
