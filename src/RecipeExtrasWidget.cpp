@@ -283,7 +283,19 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    else if( propName == "date" || updateAll )
       dateEdit_date->setDate( val.toDate() );
    else if( propName == "notes" || updateAll )
+   {
+      plainTextEdit_notes->blockSignals(true);
       plainTextEdit_notes->setPlainText( val.toString() );
+      // Fucking setPlainText moves the damn cursor back to the beginning!
+      plainTextEdit_notes->moveCursor(QTextCursor::End);
+      plainTextEdit_notes->blockSignals(false);
+   }
    else if( propName == "tasteNotes" || updateAll )
+   {
+      plainTextEdit_tasteNotes->blockSignals(true);
       plainTextEdit_tasteNotes->setPlainText( val.toString() );
+      // Fucking setPlainText moves the damn cursor back to the beginning!
+      plainTextEdit_tasteNotes->moveCursor(QTextCursor::End);
+      plainTextEdit_tasteNotes->blockSignals(false);
+   }
 }
