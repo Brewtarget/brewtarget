@@ -295,7 +295,7 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
       plainTextEdit_tasteNotes->blockSignals(true);
       plainTextEdit_tasteNotes->setPlainText( val.toString() );
       // Fucking setPlainText moves the damn cursor back to the beginning!
-      plainTextEdit_tasetNotes->moveCursor(QTextCursor::End);
+      plainTextEdit_tasteNotes->moveCursor(QTextCursor::End);
       plainTextEdit_tasteNotes->blockSignals(false);
    }
 }
