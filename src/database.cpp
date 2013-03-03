@@ -853,7 +853,6 @@ BrewNote* Database::newBrewNote(Recipe* parent, bool signal)
               QString("recipe_id=%1").arg(parent->_key),
               QString("id=%2").arg(tmp->_key) );
 
-   tmp->populateNote(parent);
    if ( signal ) 
    {
       emit changed( metaProperty("brewNotes"), QVariant() );
@@ -2895,7 +2894,7 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
       
       xmlTag = node.nodeName();
       textNode = child.toText();
-        
+       
       if( xmlTagsToProperties.contains(xmlTag) )
       {
          switch( element->metaProperty(xmlTagsToProperties[xmlTag]).type() )
@@ -2943,7 +2942,11 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
 BrewNote* Database::brewNoteFromXml( QDomNode const& node, Recipe* parent )
 {
    BrewNote* ret = newBrewNote(parent);  
-   fromXml( ret, BrewNote::tagToProp, node );
+
+   // Need to tell the brewnote not to perform the calculations
+   ret->setLoading(true);
+   fromXml( ret, BrewNote::tagToProp, node);
+   ret->setLoading(false);
 
    return ret;
 }
@@ -3362,7 +3365,7 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    Recipe* ret = newRecipe(false);
  
    // Get standard properties.
-   fromXml( ret, Recipe::tagToProp, node );
+   fromXml( ret, Recipe::tagToProp, node);
    
    // Get style. Note: styleFromXml requires the entire node, not just the
    // firstchild of the node.
