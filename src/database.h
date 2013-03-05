@@ -100,6 +100,7 @@ public:
    static bool restoreFromFile(QString newDbFileStr);
 
    bool loadSuccessful();
+   bool isDirty();
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */

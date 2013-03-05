@@ -40,7 +40,8 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
    recObs = 0;
 
    connect( listWidget, SIGNAL(currentRowChanged(int)), this, SLOT(showInstruction(int)) );
-   connect( plainTextEdit, SIGNAL(textChanged()), this, SLOT(saveInstruction()) );
+   // connect( plainTextEdit, SIGNAL(textChanged()), this, SLOT(saveInstruction()) );
+   connect(btTextEdit,SIGNAL(textModified()), this, SLOT(saveInstruction()));
    connect( pushButton_insert, SIGNAL(clicked()), this, SLOT(insertInstruction()) );
    connect( pushButton_remove, SIGNAL(clicked()), this, SLOT(removeSelectedInstruction()) );
    connect( pushButton_up, SIGNAL(clicked()), this, SLOT(pushInstructionUp()) );
@@ -50,7 +51,7 @@ BrewDayScrollWidget::BrewDayScrollWidget(QWidget* parent)
 
 void BrewDayScrollWidget::saveInstruction()
 {
-   recObs->instructions()[ listWidget->currentRow() ]->setDirections( plainTextEdit->toPlainText() );
+   recObs->instructions()[ listWidget->currentRow() ]->setDirections( btTextEdit->toPlainText() );
 }
 
 void BrewDayScrollWidget::showInstruction(int insNdx)
@@ -63,9 +64,7 @@ void BrewDayScrollWidget::showInstruction(int insNdx)
       return;
 
    // Block signals to avoid setPlainText() from triggering saveInstruction().
-   plainTextEdit->blockSignals(true);
-   plainTextEdit->setPlainText((recIns[insNdx])->directions());
-   plainTextEdit->blockSignals(false);
+   btTextEdit->setPlainText((recIns[insNdx])->directions());
 }
 
 void BrewDayScrollWidget::generateInstructions()

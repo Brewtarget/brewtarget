@@ -61,7 +61,6 @@ void BtTextEdit::setPlainText(const QString & text)
 
 void BtTextEdit::focusOutEvent(QFocusEvent *e)
 {
-   qDebug() << "focusOutEvent " << wasModified;
    if ( wasModified )
    {
       wasModified = false;

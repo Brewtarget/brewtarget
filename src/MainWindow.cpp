@@ -345,7 +345,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
-   //connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
+   connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // TreeView for clicks, both double and right
@@ -1597,6 +1597,11 @@ void MainWindow::removeMash()
 
 }
 
+void MainWindow::save()
+{
+   Database::instance().saveDatabase();
+}
+
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
    Brewtarget::savePersistentOptions();
@@ -1611,8 +1616,10 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    // cause any more queries.
    setVisible(false);
    
-   // Ask the user if they want to save changes.
-   if( QMessageBox::question(this,
+   // Ask the user if they want to save changes, only if the dirty bit has
+   // been thrown
+   if( Database::instance().isDirty() &&
+       QMessageBox::question(this,
           QObject::tr("Save Database Changes"),
           QObject::tr("Would you like to save the changes you made?"),
           QMessageBox::Yes | QMessageBox::No,
