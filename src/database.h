@@ -90,6 +90,8 @@ public:
    static Database& instance();
    //! Call this to delete the internal instance.
    static void dropInstance();
+   //! \brief Should be called when we are about to close down.
+   void unload(bool keepChanges = true);
 
 	//! backs up database to 'dir' in chosen directory
    static bool backupToDir(QString dir);
@@ -310,7 +312,12 @@ public:
     * database file.
     */
    void updateDatabase(QString const& filename);
-   
+
+   void saveDatabase();
+   void convertFromXml();
+  
+   bool isConverted();
+
 signals:
    void changed(QMetaProperty prop, QVariant value);
    void newEquipmentSignal(Equipment*);
@@ -369,6 +376,8 @@ private:
 
    // Instance variables.
    bool loadWasSuccessful;
+   bool converted;
+
    QHash< int, BrewNote* > allBrewNotes;
    QHash< int, Equipment* > allEquipments;
    QHash< int, Fermentable* > allFermentables;
@@ -680,9 +689,6 @@ private:
    int getQualifiedMiscTypeIndex(QString type, Misc* misc);
    int getQualifiedMiscUseIndex(QString use, Misc* misc);
    int getQualifiedHopUseIndex(QString use, Hop* hop);
-
-   // Should be called when we are about to close down.
-   void unload();
 
    // Cleans up the backup database if it was leftover from an error.
    bool cleanupBackupDatabase();

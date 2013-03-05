@@ -5,7 +5,7 @@ Exec=brewtarget
 Name=Brewtarget
 GenericName=Beer calculator
 X-KDE-StartupNotify=true
-Icon=${brewtarget_ICONS_LOCATION}/BrewtargetIcon.png
+Icon=${brewtarget_ICONS_LOCATION}/brewtarget_icon.svg
 Terminal=false
 Type=Application
 

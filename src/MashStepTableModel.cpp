@@ -432,9 +432,9 @@ void MashStepItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
    if( index.column() == MASHSTEPTYPECOL )
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
-      QString value = box->currentText();
+      int ndx = box->currentIndex();
 
-      model->setData(index, value, Qt::EditRole);
+      model->setData(index, ndx, Qt::EditRole);
    }
    else
    {
