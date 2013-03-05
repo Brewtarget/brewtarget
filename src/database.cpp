@@ -406,6 +406,7 @@ void Database::unload(bool keepChanges)
          dbFile.remove();
          dbTempBackupFile.rename(dbFileName);
 #endif
+      }
    }
 }
 
