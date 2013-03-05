@@ -636,6 +636,19 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
 
    if ( ! bNote )
       return;
+   // HERE
+   // This is some clean up work. REMOVE FROM HERE TO THERE
+   if ( bNote->projPoints() < 15 )
+   {
+      double pnts = bNote->projPoints();
+      bNote->setProjPoints(pnts);
+   }
+   if ( bNote->effIntoBK_pct() < 10 )
+   {
+      bNote->calculateEffIntoBK_pct();
+      bNote->calculateBrewHouseEff_pct();
+   }
+   // THERE
 
    Recipe* parent  = Database::instance().getParentRecipe(bNote);
    // I think this means a brew note for a different recipe has been selected.

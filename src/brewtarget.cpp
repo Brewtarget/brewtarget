@@ -452,7 +452,7 @@ int Brewtarget::run()
    }
    pidFile.close();
 #endif
-   
+   userDataDir = getConfigDir();
    BtSplashScreen splashScreen;
    splashScreen.show();
    
@@ -1038,8 +1038,12 @@ double Brewtarget::timeQStringToSI(QString qstr)
 
 bool Brewtarget::hasUnits(QString qstr)
 {
-   // accepts X.YZ as well as .YZ followed by some unit string
-   QRegExp amtUnit("(\\d+(?:\\.\\d+)?|\\.\\d+)\\s*(\\w+)?");
+   // accepts X,XXX.YZ (or X.XXX,YZ for EU users) as well as .YZ (or ,YZ) followed by
+   // some unit string
+   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
+   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+
+   QRegExp amtUnit("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
    amtUnit.indexIn(qstr);
 
    return amtUnit.cap(2).size() > 0;

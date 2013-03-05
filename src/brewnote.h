@@ -106,6 +106,7 @@ public:
    void setBoilOff_l(double var);
    // Metasetter
    void populateNote(Recipe* parent);
+   void setLoading(bool flag);
 
    // Getters
    QDateTime brewDate() const;
@@ -188,6 +189,7 @@ signals:
 private:
    BrewNote();
    BrewNote(BrewNote const& other);
+   bool loading;
 
    QHash<QString,double> info;
    QHash<QString,QString> XMLTagToName();

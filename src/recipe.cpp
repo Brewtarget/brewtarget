@@ -439,6 +439,7 @@ PreInstruction Recipe::boilFermentablesPre(double timeRemaining)
 
    return PreInstruction(str, tr("Boil/steep fermentables"), timeRemaining);
 }
+
 bool Recipe::isFermentableSugar(Fermentable *fermy)
 {
   if (fermy->type() == Fermentable::Sugar && fermy->name() == "Milk Sugar (Lactose)" )
@@ -890,7 +891,13 @@ void Recipe::setEfficiency_pct( double var )
       tmp = var;
    }
 
+
    set( "efficiency_pct", "efficiency", tmp );
+
+   // If you change the efficency, you really should recalc. And I'm afraid it
+   // means recalc all, since og and fg will change, which means your ratios
+   // change
+   recalcAll();
 }
 
 void Recipe::setAsstBrewer( const QString &var )
