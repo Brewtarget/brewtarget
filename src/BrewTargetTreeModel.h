@@ -42,6 +42,7 @@ class Fermentable;
 class Hop;
 class Misc;
 class Yeast;
+class Style;
 
 /*!
  * \class BrewTargetTreeModel
@@ -75,9 +76,11 @@ public:
       YEASTMASK         = 32,
       //! Show brewnotes
       BREWNOTEMASK      = 64,
+      //! Show styles
+      STYLEMASK         = 128,
       //! Show everything -- deprecated. This is a remenant of the original
       //trees implementation and should not be used
-      ALLMASK           = 127
+      ALLMASK           = 255
    };
    
    BrewTargetTreeModel(BrewTargetTreeView *parent = 0, TypeMasks type = ALLMASK);
@@ -121,6 +124,8 @@ public:
    bool isYeast(const QModelIndex &index);
    //! \brief Test type at \c index.
    bool isBrewNote(const QModelIndex &index);
+   //! \brief Test type at \c index.
+   bool isStyle(const QModelIndex &index);
 
    //! \brief Gets the type of item at \c index
    int getType(const QModelIndex &index);
@@ -141,6 +146,8 @@ public:
    Yeast* getYeast(const QModelIndex &index) const;
    //! \brief Get BrewNote at \c index.
    BrewNote* getBrewNote(const QModelIndex &index) const;
+   //! \brief Get Style at \c index.
+   Style* getStyle(const QModelIndex &index) const;
    //! \brief Get BeerXMLElement at \c index.
    BeerXMLElement* getThing(const QModelIndex &index) const;
 
@@ -158,6 +165,8 @@ public:
    QModelIndex findYeast(Yeast* yeast);
    //! \brief Get index of \c bNote.
    QModelIndex findBrewNote(BrewNote* bNote);
+   //! \brief Get index of \c bNote.
+   QModelIndex findStyle(Style* style);
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal
@@ -174,6 +183,8 @@ private slots:
    void yeastAdded(Yeast* victim);
    //! \brief slot to catch a newBrewNoteSignal
    void brewNoteAdded(BrewNote* victim);
+   //! \brief slot to catch a newStyleSignal
+   void styleAdded(Style* victim);
    
    //! \brief slot to catch a changed signal from an equipment
    void equipmentChanged();
@@ -189,6 +200,8 @@ private slots:
    void yeastChanged();
    //! \brief slot to catch a changed signal from a brewnote
    void brewNoteChanged();
+   //! \brief slot to catch a changed signal from a style
+   void styleChanged();
    
    //! \brief slot to catch a deletedEquipmentSignal
    void equipmentRemoved(Equipment* victim);
@@ -204,6 +217,8 @@ private slots:
    void yeastRemoved(Yeast* victim);
    //! \brief slot to catch a deletedBrewNoteSignal
    void brewNoteRemoved(BrewNote* victim);
+   //! \brief slot to catch a deletedStyleSignal
+   void styleRemoved(Style* victim);
 
 private:
    //! \brief returns the BrewTargetTreeItem at \c index
@@ -227,6 +242,8 @@ private:
    void observeYeast(Yeast*);
    //! \brief connects the changedName() signal from \c BrewNote to the brewnoteChanged() slot
    void observeBrewNote(BrewNote*);
+   //! \brief connects the changedName() signal from \c Style to the styleChanged() slot
+   void observeStyle(Style*);
    
    //! \brief returns the \c section header from a recipe
    QVariant getRecipeHeader(int section) const;
@@ -240,11 +257,10 @@ private:
    QVariant getMiscHeader(int section) const;
    //! \brief returns the \c section header from a yeast
    QVariant getYeastHeader(int section) const;
+   //! \brief returns the \c section header from a style
+   QVariant getStyleHeader(int section) const;
    
    BrewTargetTreeItem* rootItem;
-   //! Deprecated. This is a remanent from the original implementation and
-   //  should not be used
-   //QHash<TypeMasks, int> trees;
    BrewTargetTreeView *parentTree;
    TypeMasks treeMask;
 

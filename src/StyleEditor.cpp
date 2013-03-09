@@ -132,6 +132,7 @@ void StyleEditor::newStyle()
    s->setName( name );
 
    setStyle(s);
+   show();
 }
 
 void StyleEditor::clearAndClose()

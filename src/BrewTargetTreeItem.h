@@ -40,6 +40,7 @@ class Hop;
 class Recipe;
 class Misc;
 class Yeast;
+class Style;
 
 /*!
  * \class BrewTargetTreeItem
@@ -143,6 +144,24 @@ public:
       //! the number of columns available for brewnote
       BREWNUMCOLS
    };
+   /*!
+    * The columns to display for styles
+    */
+   enum STYLEITEM {
+      //! Name
+      STYLENAMECOL,
+      //! Category
+      STYLECATEGORYCOL,
+      //! category number 
+      STYLENUMBERCOL,
+      //! category letter
+      STYLELETTERCOL,
+      //! which style guide definition comes from
+      STYLEGUIDECOL,
+      //! And the standard number of columns
+      STYLENUMCOLS
+   };
+
    
    /*! 
     * This enum lists the different things that we can store in an item
@@ -155,6 +174,7 @@ public:
       MISC,
       YEAST,
       BREWNOTE,
+      STYLE,
       NUMTYPES
    };
 
@@ -202,6 +222,8 @@ public:
    Yeast*       getYeast();
    //! \brief returns the data as a brewnote
    BrewNote*    getBrewNote();
+   //! \brief returns the data as a style
+   Style*       getStyle();
    //! \brief returns the data as a BeerXMLElement
    BeerXMLElement* getThing();
 
@@ -230,6 +252,7 @@ private:
    QVariant dataMisc(int column);
    QVariant dataYeast(int column);
    QVariant dataBrewNote(int column);
+   QVariant dataStyle(int column);
 
    void setType(int t);
 };
