@@ -319,7 +319,6 @@ void BrewNote::setProjVolIntoFerm_l(double var) { set("projVolIntoFerm_l", "proj
 void BrewNote::setProjFg(double var)            { set("projFg", "projected_fg", var); }
 void BrewNote::setProjEff_pct(double var)       { set("projEff_pct", "projected_eff", var); }
 void BrewNote::setProjABV_pct(double var)       { set("projABV_pct", "projected_abv", var); }
-void BrewNote::setProjPoints(double var)        { set("projPoints", "projected_points", var); }
 void BrewNote::setProjAtten(double var)         { set("projAtten", "projected_atten", var); }
 void BrewNote::setBoilOff_l(double var)         { set("boilOff_l", "boil_off", var); }
 
