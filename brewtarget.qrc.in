@@ -59,5 +59,6 @@
         <file alias="data/mashs.xml">${ROOTDIR}/data/mashs.xml</file>
         <file alias="create_db.sql">${ROOTDIR}/create_db.sql</file>
         <file alias="blankdb.sqlite">${CMAKE_CURRENT_BINARY_DIR}/src/blankdb.sqlite</file>
+        <file alias="migrations/migration_2.0.0_to_2.0.2.sql">${ROOTDIR}/migrations/migration_2.0.0_to_2.0.2.sql</file>
     </qresource>
 </RCC>
