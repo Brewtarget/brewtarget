@@ -1790,7 +1790,7 @@ void Database::updateSchema()
    // Determine the current version.
    QSqlQuery verq( "SELECT version FROM settings WHERE id=1", sqlDatabase() );
    if( verq.next() )
-      curVer = verq.record().value("id").toString();
+      curVer = verq.record().value("version").toString();
    else
       curVer = "2.0.0";
    
