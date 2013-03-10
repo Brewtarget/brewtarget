@@ -38,6 +38,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPushButton>
+#include <QPair>
 
 #include "Algorithms.h"
 #include "brewnote.h"
@@ -212,6 +213,9 @@ bool Database::load()
       // Update this field.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
+   
+   // Update the database if need be.
+   updateSchema();
    
    // Create and store all pointers.
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );
@@ -1747,6 +1751,75 @@ QList<Yeast*> Database::yeasts()
    QList<Yeast*> tmp;
    getElements( tmp, "deleted=0", Brewtarget::YEASTTABLE, allYeasts );
    return tmp;
+}
+
+void Database::updateSchema()
+{
+   int line, col;
+   QDomDocument xmlDoc;
+   QDomElement element;
+   QDomNodeList list;
+   QString err;
+   QFile inFile;
+   inFile.setFileName(":migrations/migrations.xml");
+   // Key is current version, value is (migration-file, next version).
+   QHash<QString, QPair<QString, QString> > migHash;
+   QString curVer, nextVer, migFile;
+   
+   // Open the XML file describing the migrations.
+   if( ! inFile.open(QIODevice::ReadOnly) )
+   {
+      Brewtarget::logW(QString("Database::updateSchema: Could not open %1 for reading.").arg(inFile.fileName()));
+      return;
+   }
+   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
+      Brewtarget::logW(QString("Database::updateSchema: Bad document formatting in %1 %2:%3. %4").arg(inFile.fileName()).arg(line).arg(col).arg(err) );
+   
+   // Process the list of available migrations.
+   list = xmlDoc.elementsByTagName("migration");
+   for( int i = 0; i < list.count(); ++i )
+   {
+      element = list.at(i).toElement();
+      curVer = element.attribute("from");
+      nextVer = element.attribute("to");
+      migFile = QString(":migrations/%1").arg(element.firstChild().toText().nodeValue().trimmed());
+      
+      migHash.insert( curVer, qMakePair(migFile, nextVer) );
+   }
+   
+   // Determine the current version.
+   QSqlQuery verq( "SELECT version FROM settings WHERE id=1", sqlDatabase() );
+   if( verq.next() )
+      curVer = verq.record().value("id").toString();
+   else
+      curVer = "2.0.0";
+   
+   // Keep applying migrations and walking the list until there are no more to apply.
+   while( migHash.contains(curVer) )
+   {
+      QFile migFile(migHash[curVer].first);
+      migFile.open(QFile::ReadOnly);
+      nextVer = migHash[curVer].second;
+      QTextStream stream(&migFile);
+      
+      // Hope that each line is its own statement.
+      while( !stream.atEnd() )
+      {
+         QString statement = stream.readLine().trimmed();
+         if( statement.isEmpty() )
+            continue;
+         QSqlQuery q(statement, sqlDatabase());
+         if( q.lastError().isValid() )
+            Brewtarget::logW( q.lastError().text() );
+      }
+      
+      curVer = nextVer;
+   }
+   
+   // Save the current version to the database.
+   verq.prepare("UPDATE settings SET version=:version WHERE id=1");
+   verq.bindValue(":version", curVer);
+   verq.exec();
 }
 
 void Database::importFromXML(const QString& filename)
