@@ -251,39 +251,55 @@ void RecipeExtrasWidget::showChanges(QMetaProperty* prop)
    if( ! recipe )
       return;
  
-  // The two plaintext fields cause some weird updates. In essence, we load
-  // the text from teh database, which fires a signal which causes that text
-  // to be read and stored in the database. Blocking signals should help 
-
-   if( propName == "age_days" || updateAll )
+   // Unlike other editors, this one needs to read from recipe when it gets an
+   // updateAll
+   if ( updateAll )
+   {
+      lineEdit_age->setText(         Brewtarget::displayAmount(recipe->age_days(),          Units::days)    );
+      lineEdit_ageTemp->setText(     Brewtarget::displayAmount(recipe->ageTemp_c(),         Units::celsius) );
+      lineEdit_asstBrewer->setText(                            recipe->asstBrewer()                         );
+      lineEdit_brewer->setText(                                recipe->brewer()                             );
+      lineEdit_carbVols->setText(    Brewtarget::displayAmount(recipe->carbonation_vols())                  );
+      lineEdit_primaryAge->setText(  Brewtarget::displayAmount(recipe->primaryAge_days(),   Units::days)    );
+      lineEdit_primaryTemp->setText( Brewtarget::displayAmount(recipe->primaryTemp_c(),     Units::celsius) );
+      lineEdit_secAge->setText(      Brewtarget::displayAmount(recipe->secondaryAge_days(), Units::days)    );
+      lineEdit_secTemp->setText(     Brewtarget::displayAmount(recipe->secondaryTemp_c(),   Units::celsius) );
+      lineEdit_tertAge->setText(     Brewtarget::displayAmount(recipe->tertiaryAge_days(),  Units::days)    );
+      lineEdit_tertTemp->setText(    Brewtarget::displayAmount(recipe->tertiaryTemp_c(),    Units::celsius) );
+      spinBox_tasteRating->setValue(                     (int)(recipe->tasteRating())                       );
+      dateEdit_date->setDate(                                  recipe->date()                               );
+      btTextEdit_notes->setPlainText(                          recipe->notes()                              );
+      btTextEdit_tasteNotes->setPlainText(                     recipe->tasteNotes()                         );
+   }
+   else if( propName == "age_days" )
       lineEdit_age->setText( Brewtarget::displayAmount(val.toDouble()) );
-   else if( propName == "ageTemp_c" || updateAll )
+   else if( propName == "ageTemp_c" )
       lineEdit_ageTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
-   else if( propName == "asstBrewer" || updateAll )
+   else if( propName == "asstBrewer" )
       lineEdit_asstBrewer->setText( val.toString() );
-   else if( propName == "brewer" || updateAll )
+   else if( propName == "brewer" )
       lineEdit_brewer->setText( val.toString() );
-   else if( propName == "carbonation_vols" || updateAll )
+   else if( propName == "carbonation_vols" )
       lineEdit_carbVols->setText( Brewtarget::displayAmount(val.toDouble()) );
-   else if( propName == "primaryAge_days" || updateAll )
+   else if( propName == "primaryAge_days" )
       lineEdit_primaryAge->setText( Brewtarget::displayAmount(val.toDouble()) );
-   else if( propName == "primaryTemp_c" || updateAll )
+   else if( propName == "primaryTemp_c" )
       lineEdit_primaryTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
-   else if( propName == "secondaryAge_days" || updateAll )
+   else if( propName == "secondaryAge_days" )
       lineEdit_secAge->setText( Brewtarget::displayAmount(val.toDouble()) );
-   else if( propName == "secondaryTemp_c" || updateAll )
+   else if( propName == "secondaryTemp_c" )
       lineEdit_secTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
-   else if( propName == "tertiaryAge_days" || updateAll )
+   else if( propName == "tertiaryAge_days" )
       lineEdit_tertAge->setText( Brewtarget::displayAmount(val.toDouble()) );
-   else if( propName == "tertiaryTemp_c" || updateAll )
+   else if( propName == "tertiaryTemp_c" )
       lineEdit_tertTemp->setText( Brewtarget::displayAmount(val.toDouble(), Units::celsius) );
-   else if( propName == "tasteRating" || updateAll )
+   else if( propName == "tasteRating" )
       spinBox_tasteRating->setValue( (int)(val.toDouble()) );
-   else if( propName == "date" || updateAll )
+   else if( propName == "date" )
       dateEdit_date->setDate( val.toDate() );
-   else if( propName == "notes" || updateAll )
+   else if( propName == "notes" )
       btTextEdit_notes->setPlainText( val.toString() );
-   else if( propName == "tasteNotes" || updateAll )
+   else if( propName == "tasteNotes" )
       btTextEdit_tasteNotes->setPlainText( val.toString() );
 
 }

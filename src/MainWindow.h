@@ -79,6 +79,7 @@ class EquipmentListModel;
 class StyleListModel;
 class StyleSortFilterProxyModel;
 class NamedMashEditor;
+class BtDatePopup;
 
 /*!
  * \class MainWindow
@@ -210,6 +211,7 @@ public slots:
    void newBrewNote();
    //! \brief copies an existing brewnote to a new brewday
    void reBrewNote();
+   void changeBrewDate();
 
    //! \brief Open the default browser to Brewtarget's donation page.
    void openDonateLink();
@@ -312,6 +314,7 @@ private:
    NamedMashEditor* namedMashEditor;
    NamedMashEditor* singleNamedMashEditor;
 
+   BtDatePopup* btDatePopup;
    QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 
@@ -340,6 +343,7 @@ private:
    void copyThis(Fermentable *ferm);
    void copyThis(Hop *hop);
    void copyThis(Misc *misc);
+   void copyThis(Style *style);
    void copyThis(Yeast *yeast);
 
    void convertedMsg(); 

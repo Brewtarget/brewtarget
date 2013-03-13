@@ -34,6 +34,7 @@ class BtTreeFilterProxyModel;
 #include "hop.h"
 #include "yeast.h"
 #include "style.h"
+
 /*!
  * \class BtTreeFilterProxyModel
  * \author Mik Firestone
@@ -61,6 +62,7 @@ private:
    bool lessThanMisc(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
    bool lessThanHop(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
    bool lessThanYeast(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanStyle(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
 };
 
 #endif

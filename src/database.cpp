@@ -1156,6 +1156,16 @@ Style* Database::newStyle()
    return tmp;
 }
 
+Style* Database::newStyle(Style* other)
+{
+   Style* tmp = copy<Style>(other, true, &allStyles);
+   
+   emit changed( metaProperty("styles"), QVariant() );
+   emit newStyleSignal(tmp);
+   
+   return tmp;
+}
+
 Water* Database::newWater()
 {
    Water* tmp = new Water();

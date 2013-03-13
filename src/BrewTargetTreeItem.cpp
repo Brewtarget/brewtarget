@@ -96,6 +96,8 @@ int BrewTargetTreeItem::columnCount(int type) const
             return MISCNUMCOLS;
         case YEAST:
             return YEASTNUMCOLS;
+        case STYLE:
+            return STYLENUMCOLS;
         case BREWNOTE:
             return BREWNUMCOLS;
         default:
@@ -122,6 +124,8 @@ QVariant BrewTargetTreeItem::data(int type, int column)
          return dataMisc(column);
       case YEAST:
          return dataYeast(column);
+      case STYLE:
+         return dataStyle(column);
       case BREWNOTE:
          return dataBrewNote(column);
       default:
@@ -328,6 +332,35 @@ QVariant BrewTargetTreeItem::dataBrewNote(int column)
    return bNote->brewDate_short();
 }
 
+QVariant BrewTargetTreeItem::dataStyle(int column)
+{
+   Style* style = qobject_cast<Style*>(thing);
+
+   if ( ! style && column == STYLENAMECOL )
+   {
+      return QVariant(QObject::tr("Style"));
+   }
+   else if ( style )
+   {
+      switch(column)
+      {
+         case STYLENAMECOL:
+               return QVariant(style->name());
+         case STYLECATEGORYCOL:
+            return QVariant(style->category());
+         case STYLENUMBERCOL:
+               return QVariant(style->categoryNumber());
+         case STYLELETTERCOL:
+               return QVariant(style->styleLetter());
+         case STYLEGUIDECOL:
+               return QVariant(style->styleGuide());
+         default :
+            Brewtarget::log(Brewtarget::WARNING, QString("BrewTargetTreeItem::dataYeast Bad column: %1").arg(column));
+      }
+   }
+   return QVariant();
+}
+
 void BrewTargetTreeItem::setType(int t)
 {
     type = t;
@@ -380,6 +413,14 @@ BrewNote* BrewTargetTreeItem::getBrewNote()
 {
     if ( type == BREWNOTE && thing ) 
        return qobject_cast<BrewNote*>(thing);
+
+    return 0;
+}
+
+Style* BrewTargetTreeItem::getStyle()
+{
+    if ( type == STYLE && thing ) 
+       return qobject_cast<Style*>(thing);
 
     return 0;
 }

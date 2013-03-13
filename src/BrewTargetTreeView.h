@@ -38,6 +38,7 @@ class Hop;
 class Misc;
 class Yeast;
 class BrewNote;
+class Style;
 
 /*!
  * \class BrewTargetTreeItem
@@ -96,6 +97,11 @@ public:
    //! \brief finds the index of the \c yeast in the tree
    QModelIndex findYeast(Yeast* yeast);
 
+   //! \brief returns the yeast at \c index 
+   Style* getStyle(const QModelIndex &index) const;
+   //! \brief finds the index of the \c yeast in the tree
+   QModelIndex findStyle(Style* style);
+
    //! \brief returns the brewnote at \c index 
    BrewNote* getBrewNote(const QModelIndex &index) const;
    //! \brief finds the index of the \c brewnote in the tree
@@ -129,6 +135,7 @@ public:
    friend class HopTreeView;
    friend class MiscTreeView;
    friend class YeastTreeView;
+   friend class StyleTreeView;
 
 private:
    BrewTargetTreeModel* model;
@@ -214,6 +221,19 @@ public:
    //! \brief Constructs the tree view, sets up the filter proxy and sets a
    // few options on the tree that can only be set after the model
    YeastTreeView(QWidget *parent = 0);
+
+};
+
+//!
+// \class StyleTreeView 
+// \brief subclasses BrewTargetTreeView to only show styles.
+class StyleTreeView : public BrewTargetTreeView
+{
+   Q_OBJECT
+public:
+   //! \brief Constructs the tree view, sets up the filter proxy and sets a
+   // few options on the tree that can only be set after the model
+   StyleTreeView(QWidget *parent = 0);
 
 };
 
