@@ -459,6 +459,25 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>lineEdit_brewer</tabstop>
+  <tabstop>lineEdit_asstBrewer</tabstop>
+  <tabstop>spinBox_tasteRating</tabstop>
+  <tabstop>lineEdit_primaryAge</tabstop>
+  <tabstop>lineEdit_primaryTemp</tabstop>
+  <tabstop>lineEdit_secAge</tabstop>
+  <tabstop>lineEdit_secTemp</tabstop>
+  <tabstop>lineEdit_tertAge</tabstop>
+  <tabstop>lineEdit_tertTemp</tabstop>
+  <tabstop>lineEdit_age</tabstop>
+  <tabstop>lineEdit_ageTemp</tabstop>
+  <tabstop>dateEdit_date</tabstop>
+  <tabstop>lineEdit_carbVols</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>plainTextEdit_tasteNotes</tabstop>
+  <tabstop>plainTextEdit_notes</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

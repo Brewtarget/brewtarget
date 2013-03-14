@@ -314,6 +314,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_op</tabstop>
+  <tabstop>lineEdit_inputOG</tabstop>
+  <tabstop>lineEdit_cp</tabstop>
+  <tabstop>lineEdit_ri</tabstop>
+  <tabstop>lineEdit_og</tabstop>
+  <tabstop>lineEdit_sg</tabstop>
+  <tabstop>lineEdit_re</tabstop>
+  <tabstop>lineEdit_abv</tabstop>
+  <tabstop>lineEdit_abw</tabstop>
+  <tabstop>pushButton_calculate</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

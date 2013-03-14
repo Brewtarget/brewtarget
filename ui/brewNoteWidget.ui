@@ -55,7 +55,7 @@
             </size>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page_preboil">
             <property name="geometry">
@@ -63,7 +63,7 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>337</height>
+              <height>340</height>
              </rect>
             </property>
             <attribute name="label">
@@ -245,7 +245,7 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>337</height>
+              <height>340</height>
              </rect>
             </property>
             <attribute name="label">
@@ -436,7 +436,7 @@
               <x>0</x>
               <y>0</y>
               <width>242</width>
-              <height>337</height>
+              <height>340</height>
              </rect>
             </property>
             <attribute name="label">
@@ -672,6 +672,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="mouseTracking">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
