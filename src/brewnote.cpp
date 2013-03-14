@@ -111,8 +111,11 @@ void BrewNote::populateNote(Recipe* parent)
    // for efficiency and it throws off the rest of the calculations. I need
    // the original theoretical maximum points. I only get the sugars, because
    // the gravity will change depending on the volume
-   sugars = parent->calcTotalPoints();
+   sugars = parent->calcTotalPoints(true);
    setProjPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
+
+   // I need another value for the postboil sugars. That will come when I
+   // verify the calculations are mostly correct.
 
    setPostBoilVolume_l(parent->postBoilVolume_l());
    setVolumeIntoFerm_l(parent->finalVolume_l());
