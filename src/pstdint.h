@@ -394,7 +394,9 @@ typedef long long int64_t;
 #if !defined (stdint_int64_defined)
 # if defined(__GNUC__)
 #  define stdint_int64_defined
-__extension__ typedef long long int64_t;
+#  ifndef __FreeBSD__
+      __extension__ typedef long long int64_t;
+#  endif
 # elif defined(__MWERKS__) || defined (__SUNPRO_C) || defined (__SUNPRO_CC) || defined (__APPLE_CC__) || defined (_LONG_LONG) || defined (_CRAYC) || defined (S_SPLINT_S)
 #  define stdint_int64_defined
 typedef long long int64_t;
@@ -477,7 +479,9 @@ typedef __int64 int64_t;
 #if (defined(__STDC__) && defined(__STDC_VERSION__)) || defined (S_SPLINT_S)
 # if (__STDC__ && __STDC_VERSION__ >= 199901L) || defined (S_SPLINT_S)
 #  define stdint_int64_defined
-   typedef unsigned long long uint64_t;
+#  ifndef __FreeBSD__
+      typedef unsigned long long uint64_t;
+#  endif
 #  define UINT64_C(v) v ## ULL
 #  define  INT64_C(v) v ## LL
 #  ifndef PRINTF_INT64_MODIFIER
@@ -489,7 +493,9 @@ typedef __int64 int64_t;
 #if !defined (stdint_int64_defined)
 # if defined(__GNUC__)
 #  define stdint_int64_defined
-   __extension__ typedef unsigned long long uint64_t;
+#  ifndef __FreeBSD__
+      __extension__ typedef unsigned long long uint64_t;
+#  endif
 #  define UINT64_C(v) v ## ULL
 #  define  INT64_C(v) v ## LL
 #  ifndef PRINTF_INT64_MODIFIER
