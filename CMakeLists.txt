@@ -91,8 +91,6 @@ ELSEIF( WIN32 )
 ENDIF()
 
 # ======================Find Qt4 (>= 4.6.0) for this project===================
-SET( EXT_LIBS "" )
-
 IF( ${BUILD_DESIGNER_PLUGINS} )
    FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebKit QtXml QtDesigner REQUIRED)
 ELSE()
@@ -104,6 +102,7 @@ MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 # Some distros seem to treat Qt and Phonon as separate, so try to find Phonon.
 IF( NOT ${NO_PHONON} )
    FIND_PACKAGE( Phonon REQUIRED )
+   INCLUDE_DIRECTORIES(${PHONON_INCLUDES})
 ENDIF()
 
 # Some extra files for the "make clean" target.
