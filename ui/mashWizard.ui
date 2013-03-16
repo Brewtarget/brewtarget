@@ -68,6 +68,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_mashThickness</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

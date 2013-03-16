@@ -389,7 +389,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagCzech.svg</normaloff>:/images/flagCzech.svg</iconset>
            </property>
            <property name="iconSize">
@@ -412,7 +412,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagGermany.svg</normaloff>:/images/flagGermany.svg</iconset>
            </property>
            <property name="iconSize">
@@ -435,7 +435,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagUK.svg</normaloff>:/images/flagUK.svg</iconset>
            </property>
            <property name="iconSize">
@@ -465,7 +465,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagSpain.svg</normaloff>:/images/flagSpain.svg</iconset>
            </property>
            <property name="iconSize">
@@ -488,7 +488,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagFrance.svg</normaloff>:/images/flagFrance.svg</iconset>
            </property>
            <property name="iconSize">
@@ -511,7 +511,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagItaly.svg</normaloff>:/images/flagItaly.svg</iconset>
            </property>
            <property name="iconSize">
@@ -534,7 +534,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
            </property>
            <property name="iconSize">
@@ -564,7 +564,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
            </property>
            <property name="iconSize">
@@ -587,7 +587,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagPoland.svg</normaloff>:/images/flagPoland.svg</iconset>
            </property>
            <property name="iconSize">
@@ -610,7 +610,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../../build/brewtarget.qrc">
+            <iconset resource="../build/brewtarget.qrc">
              <normaloff>:/images/flagPortugal.svg</normaloff>:/images/flagPortugal.svg</iconset>
            </property>
            <property name="iconSize">
@@ -677,8 +677,42 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>weight_si</tabstop>
+  <tabstop>weight_us</tabstop>
+  <tabstop>weight_imperial</tabstop>
+  <tabstop>celsius</tabstop>
+  <tabstop>fahrenheit</tabstop>
+  <tabstop>volume_si</tabstop>
+  <tabstop>volume_us</tabstop>
+  <tabstop>volume_imperial</tabstop>
+  <tabstop>radioButton_sg</tabstop>
+  <tabstop>radioButton_plato</tabstop>
+  <tabstop>radioButton_srm</tabstop>
+  <tabstop>radioButton_ebc</tabstop>
+  <tabstop>checkBox_mosher</tabstop>
+  <tabstop>checkBox_daniel</tabstop>
+  <tabstop>checkBox_morey</tabstop>
+  <tabstop>checkBox_tinseth</tabstop>
+  <tabstop>checkBox_rager</tabstop>
+  <tabstop>lineEdit_dbDir</tabstop>
+  <tabstop>pushButton_dbDirBrowse</tabstop>
+  <tabstop>pushButton_dbDirDefault</tabstop>
+  <tabstop>pushButton_cs</tabstop>
+  <tabstop>pushButton_de</tabstop>
+  <tabstop>pushButton_en</tabstop>
+  <tabstop>pushButton_es</tabstop>
+  <tabstop>pushButton_fr</tabstop>
+  <tabstop>pushButton_it</tabstop>
+  <tabstop>pushButton_nl</tabstop>
+  <tabstop>pushButton_ca</tabstop>
+  <tabstop>pushButton_pl</tabstop>
+  <tabstop>pushButton_pt</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources>
-  <include location="../../../build/brewtarget.qrc"/>
+  <include location="../build/brewtarget.qrc"/>
  </resources>
  <connections>
   <connection>

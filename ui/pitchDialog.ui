@@ -356,6 +356,20 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_vol</tabstop>
+  <tabstop>lineEdit_OG</tabstop>
+  <tabstop>slider_pitchRate</tabstop>
+  <tabstop>spinBox_VialsPitched</tabstop>
+  <tabstop>comboBox_AerationMethod</tabstop>
+  <tabstop>dateEdit_ProductionDate</tabstop>
+  <tabstop>spinBox_Viability</tabstop>
+  <tabstop>checkBox_CalculateViability</tabstop>
+  <tabstop>lineEdit_cells</tabstop>
+  <tabstop>lineEdit_vials</tabstop>
+  <tabstop>lineEdit_yeast</tabstop>
+  <tabstop>lineEdit_starterVol</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

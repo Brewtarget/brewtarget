@@ -384,7 +384,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../../qtcreator-build/brewtarget.qrc">
+        <iconset resource="../build/brewtarget.qrc">
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
       </widget>
@@ -407,8 +407,27 @@
    <header>BtTextEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>lineEdit_brewer</tabstop>
+  <tabstop>lineEdit_asstBrewer</tabstop>
+  <tabstop>spinBox_tasteRating</tabstop>
+  <tabstop>lineEdit_primaryAge</tabstop>
+  <tabstop>lineEdit_primaryTemp</tabstop>
+  <tabstop>lineEdit_secAge</tabstop>
+  <tabstop>lineEdit_secTemp</tabstop>
+  <tabstop>lineEdit_tertAge</tabstop>
+  <tabstop>lineEdit_tertTemp</tabstop>
+  <tabstop>lineEdit_age</tabstop>
+  <tabstop>lineEdit_ageTemp</tabstop>
+  <tabstop>dateEdit_date</tabstop>
+  <tabstop>lineEdit_carbVols</tabstop>
+  <tabstop>btTextEdit_tasteNotes</tabstop>
+  <tabstop>btTextEdit_notes</tabstop>
+  <tabstop>pushButton_save</tabstop>
+  <tabstop>pushButton_cancel</tabstop>
+ </tabstops>
  <resources>
-  <include location="../../qtcreator-build/brewtarget.qrc"/>
+  <include location="../build/brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

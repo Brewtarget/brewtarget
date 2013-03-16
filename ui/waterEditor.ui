@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>394</width>
-    <height>262</height>
+    <width>401</width>
+    <height>264</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -530,6 +530,19 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>lineEdit_ca</tabstop>
+  <tabstop>lineEdit_mg</tabstop>
+  <tabstop>lineEdit_so4</tabstop>
+  <tabstop>lineEdit_na</tabstop>
+  <tabstop>lineEdit_cl</tabstop>
+  <tabstop>lineEdit_alk</tabstop>
+  <tabstop>comboBox_alk</tabstop>
+  <tabstop>lineEdit_ph</tabstop>
+  <tabstop>plainTextEdit_notes</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
