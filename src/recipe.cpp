@@ -481,7 +481,7 @@ Instruction* Recipe::postboilFermentablesIns()
    bool hasFerms = false;
 
    str = tr("Add ");
-   QList<Fermentable*> flist;
+   QList<Fermentable*> flist = fermentables();
    size = flist.size();
    for( i = 0; static_cast<int>(i) < size; ++i )
    {
