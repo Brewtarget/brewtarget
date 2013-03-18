@@ -452,7 +452,7 @@ int Brewtarget::run()
    }
    pidFile.close();
 #endif
-   
+   userDataDir = getConfigDir();
    BtSplashScreen splashScreen;
    splashScreen.show();
    
@@ -484,8 +484,8 @@ int Brewtarget::run()
       if ( ! Brewtarget::btSettings.contains("converted") )
          Database::instance().convertFromXml();
       
-
       _mainWindow = new MainWindow();
+      
       _mainWindow->setVisible(true);
       
       splashScreen.finish(_mainWindow);
@@ -493,7 +493,6 @@ int Brewtarget::run()
       checkForNewVersion(_mainWindow);
 
       ret = qApp->exec();
-   
       savePersistentOptions();
    }
    

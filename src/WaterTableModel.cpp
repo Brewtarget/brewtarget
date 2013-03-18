@@ -372,7 +372,9 @@ void WaterItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index)
 void WaterItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
    QLineEdit* line = qobject_cast<QLineEdit*>(editor);
-   model->setData(index, line->text(), Qt::EditRole);
+
+   if ( line->isModified() )
+      model->setData(index, line->text(), Qt::EditRole);
 }
 
 void WaterItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex& /*index*/) const

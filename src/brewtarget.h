@@ -19,6 +19,10 @@
 #ifndef _BREWTARGET_H
 #define _BREWTARGET_H
 
+// I think this will make things restart. I hope this will make things
+// restart.
+#define RESTART_CODE 0x1000
+
 // need to use this to turn on mac keyboard shortcuts (see http://doc.qt.nokia.com/4.7-snapshot/qtglobal.html#qt_set_sequence_auto_mnemonic)
 extern void qt_set_sequence_auto_mnemonic(bool b);
 
@@ -84,31 +88,31 @@ public:
    };
    //! \brief The database tables.
    enum DBTable{
-      //! None of the tables.
+      //! None of the tables. 0
       NOTABLE,
-      //! In the BrewNote table.
+      //! In the BrewNote table. 1
       BREWNOTETABLE,
-      //! In the Equipment table.
+      //! In the Equipment table. 2
       EQUIPTABLE,
-      //! In the Fermentable table.
+      //! In the Fermentable table. 3
       FERMTABLE,
-      //! In the Hop table.
+      //! In the Hop table. 4
       HOPTABLE,
-      //! In the Instruction table.
+      //! In the Instruction table. 5
       INSTRUCTIONTABLE,
-      //! In the MashStep table.
+      //! In the MashStep table. 6
       MASHSTEPTABLE,
-      //! In the Mash table.
+      //! In the Mash table. 7
       MASHTABLE,
-      //! In the Misc table.
+      //! In the Misc table. 8
       MISCTABLE,
-      //! In the Recipe table.
+      //! In the Recipe table. 9
       RECTABLE,
-      //! In the Style table.
+      //! In the Style table. 10
       STYLETABLE,
-      //! In the Water table.
+      //! In the Water table. 11
       WATERTABLE,
-      //! In the Yeast table.
+      //! In the Yeast table. 12
       YEASTTABLE
    };
    

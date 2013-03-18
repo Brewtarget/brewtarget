@@ -79,6 +79,7 @@ class EquipmentListModel;
 class StyleListModel;
 class StyleSortFilterProxyModel;
 class NamedMashEditor;
+class BtDatePopup;
 
 /*!
  * \class MainWindow
@@ -195,23 +196,32 @@ public slots:
 
    //! \brief Prints the right thing, depending on the signal sender.
    void print();
-
+   //! \brief saves the database, which will have some interesting
+   //implications later
+   void save();
    //! \brief Backup the database.
    void backup();
    //! \brief Restore the database.
    void restoreFromBackup();
 
+   //! \brief draws a context menu, the exact nature of which depends on which
+   //tree is focused
    void contextMenu(const QPoint &point);
+   //! \brief creates a new brewnote
    void newBrewNote();
+   //! \brief copies an existing brewnote to a new brewday
    void reBrewNote();
+   void changeBrewDate();
 
    //! \brief Open the default browser to Brewtarget's donation page.
    void openDonateLink();
 
    //! \brief Merges two database files.
    void updateDatabase();
-   
+  
+   //! \brief decides if we accept the drop event
    void dragEnterEvent(QDragEnterEvent *event);
+   //! \brief handles the actual drop event
    void dropEvent(QDropEvent *event);
 
    //! \brief Catches a QNetworkReply signal and gets info about any new version available.
@@ -221,6 +231,7 @@ public slots:
 
    void showEquipmentEditor();
    void showStyleEditor();
+
 protected:
    virtual void closeEvent(QCloseEvent* event);
 
@@ -303,6 +314,7 @@ private:
    NamedMashEditor* namedMashEditor;
    NamedMashEditor* singleNamedMashEditor;
 
+   BtDatePopup* btDatePopup;
    QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 

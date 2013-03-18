@@ -219,6 +219,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_beerVol</tabstop>
+  <tabstop>lineEdit_temp</tabstop>
+  <tabstop>lineEdit_vols</tabstop>
+  <tabstop>checkBox_glucMono</tabstop>
+  <tabstop>checkBox_gluc</tabstop>
+  <tabstop>checkBox_sucrose</tabstop>
+  <tabstop>checkBox_dme</tabstop>
+  <tabstop>lineEdit_output</tabstop>
+  <tabstop>pushButton_calculate</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

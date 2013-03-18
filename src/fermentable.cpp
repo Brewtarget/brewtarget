@@ -231,7 +231,7 @@ double Fermentable::protein_pct() const { return get("protein").toDouble(); }
 double Fermentable::maxInBatch_pct() const { return get("max_in_batch").toDouble(); }
 bool Fermentable::recommendMash() const { return get("recommend_mash").toBool(); }
 bool Fermentable::isMashed() const { return get("is_mashed").toBool(); }
-bool Fermentable::isExtract() { return ((typeStringTr() == "Extract") || (typeStringTr() == "Dry Extract")); }
+bool Fermentable::isExtract() { return ((type() == Extract) || (type() == Dry_Extract)); }
 
 double Fermentable::ibuGalPerLb() const { return get("ibu_gal_per_lb").toDouble(); }
 

@@ -233,6 +233,7 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTYPECOL:
          if( value.canConvert(QVariant::Int) )
          {
+            qDebug() << "Converting " << value <<" to int?";
             row->setType(static_cast<MashStep::Type>(value.toInt()));
             return true;
          }
@@ -429,18 +430,22 @@ void MashStepItemDelegate::setEditorData(QWidget *editor, const QModelIndex &ind
 
 void MashStepItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
+   QStringList typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
    if( index.column() == MASHSTEPTYPECOL )
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       int ndx = box->currentIndex();
+      int curr  = typesTr.indexOf(model->data(index,Qt::DisplayRole).toString());
 
-      model->setData(index, ndx, Qt::EditRole);
+      if ( ndx != curr )
+         model->setData(index, ndx, Qt::EditRole);
    }
    else
    {
       QLineEdit* line = qobject_cast<QLineEdit*>(editor);
 
-      model->setData(index, line->text(), Qt::EditRole);
+      if ( line->isModified() )
+         model->setData(index, line->text(), Qt::EditRole);
    }
 }
 

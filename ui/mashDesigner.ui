@@ -467,6 +467,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>comboBox_type</tabstop>
+  <tabstop>checkBox_batchSparge</tabstop>
+  <tabstop>lineEdit_temp</tabstop>
+  <tabstop>lineEdit_time</tabstop>
+  <tabstop>horizontalSlider_amount</tabstop>
+  <tabstop>horizontalSlider_temp</tabstop>
+  <tabstop>pushButton_next</tabstop>
+  <tabstop>pushButton_finish</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

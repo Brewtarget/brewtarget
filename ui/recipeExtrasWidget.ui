@@ -375,6 +375,9 @@
            <property name="displayFormat">
             <string>dd MMM yyyy</string>
            </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="12" column="0">
@@ -421,7 +424,7 @@
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
-              <widget class="QPlainTextEdit" name="plainTextEdit_tasteNotes">
+              <widget class="BtTextEdit" name="btTextEdit_tasteNotes">
                <property name="minimumSize">
                 <size>
                  <width>256</width>
@@ -438,7 +441,7 @@
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <widget class="QPlainTextEdit" name="plainTextEdit_notes">
+              <widget class="BtTextEdit" name="btTextEdit_notes">
                <property name="minimumSize">
                 <size>
                  <width>256</width>
@@ -459,6 +462,32 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>BtTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>lineEdit_brewer</tabstop>
+  <tabstop>lineEdit_asstBrewer</tabstop>
+  <tabstop>spinBox_tasteRating</tabstop>
+  <tabstop>lineEdit_primaryAge</tabstop>
+  <tabstop>lineEdit_primaryTemp</tabstop>
+  <tabstop>lineEdit_secAge</tabstop>
+  <tabstop>lineEdit_secTemp</tabstop>
+  <tabstop>lineEdit_tertAge</tabstop>
+  <tabstop>lineEdit_tertTemp</tabstop>
+  <tabstop>lineEdit_age</tabstop>
+  <tabstop>lineEdit_ageTemp</tabstop>
+  <tabstop>dateEdit_date</tabstop>
+  <tabstop>lineEdit_carbVols</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>btTextEdit_tasteNotes</tabstop>
+  <tabstop>btTextEdit_notes</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

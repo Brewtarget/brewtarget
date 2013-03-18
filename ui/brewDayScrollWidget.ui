@@ -172,7 +172,7 @@
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset>
+                   <iconset resource="../../mik-build/brewtarget.qrc">
                     <normaloff>:/images/smallPlus.svg</normaloff>:/images/smallPlus.svg</iconset>
                   </property>
                  </widget>
@@ -223,7 +223,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../../mik-build/brewtarget.qrc">
                   <normaloff>:/images/smallUpArrow.svg</normaloff>:/images/smallUpArrow.svg</iconset>
                 </property>
                </widget>
@@ -243,7 +243,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../../mik-build/brewtarget.qrc">
                   <normaloff>:/images/smallDownArrow.svg</normaloff>:/images/smallDownArrow.svg</iconset>
                 </property>
                </widget>
@@ -270,7 +270,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../../mik-build/brewtarget.qrc">
                   <normaloff>:/images/smallMinus.svg</normaloff>:/images/smallMinus.svg</iconset>
                 </property>
                </widget>
@@ -318,7 +318,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="plainTextEdit">
+        <widget class="BtTextEdit" name="btTextEdit">
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -333,8 +333,15 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BtTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header location="global">BtTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
-  <include location="../brewtarget.qrc"/>
+  <include location="../../mik-build/brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

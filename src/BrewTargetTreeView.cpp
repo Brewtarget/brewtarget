@@ -335,6 +335,7 @@ void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *
          contextMenu->addSeparator();
 
          subMenu->addAction(tr("Brew Again"), top, SLOT(reBrewNote()));
+         subMenu->addAction(tr("Change date"), top, SLOT(changeBrewDate()));
          subMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
 
          break;

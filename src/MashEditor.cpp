@@ -100,8 +100,12 @@ void MashEditor::setEquipment(Equipment* e)
    equip = e;
    if( mashObs )
    {
-      mashObs->setTunWeight_kg( e->tunWeight_kg() );
-      mashObs->setTunSpecificHeat_calGC( e->tunSpecificHeat_calGC() );
+      // Only do this if we have to. Otherwise, it causes some uneccesary
+      // updates to the database.
+      if ( mashObs->tunWeight_kg() != e->tunWeight_kg() )
+         mashObs->setTunWeight_kg( e->tunWeight_kg() );
+      if ( mashObs->tunSpecificHeat_calGC() != e->tunSpecificHeat_calGC() )
+         mashObs->setTunSpecificHeat_calGC( e->tunSpecificHeat_calGC() );
    }
 }
 

@@ -101,6 +101,7 @@
 #include "MashListModel.h"
 #include "StyleSortFilterProxyModel.h"
 #include "NamedMashEditor.h"
+#include "BtDatePopup.h"
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -117,7 +118,7 @@ MainWindow::MainWindow(QWidget* parent)
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
   
    // If we converted from XML, pop a dialog telling the user where they can
-   // find their backups.
+   // find their old files.
    if (Database::instance().isConverted())
       convertedMsg(); 
 
@@ -175,6 +176,7 @@ MainWindow::MainWindow(QWidget* parent)
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
+   btDatePopup = new BtDatePopup(this);
 
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
@@ -345,7 +347,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );
    connect( actionTimers, SIGNAL(triggered()), timerListDialog, SLOT(show()) );
    connect( actionDeleteSelected, SIGNAL(triggered()), this, SLOT(deleteSelected()) );
-   //connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
+   connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
    // TreeView for clicks, both double and right
@@ -654,6 +656,19 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
 
    if ( ! bNote )
       return;
+   // HERE
+   // This is some clean up work. REMOVE FROM HERE TO THERE
+   if ( bNote->projPoints() < 15 )
+   {
+      double pnts = bNote->projPoints();
+      bNote->setProjPoints(pnts);
+   }
+   if ( bNote->effIntoBK_pct() < 10 )
+   {
+      bNote->calculateEffIntoBK_pct();
+      bNote->calculateBrewHouseEff_pct();
+   }
+   // THERE
 
    Recipe* parent  = Database::instance().getParentRecipe(bNote);
    // I think this means a brew note for a different recipe has been selected.
@@ -722,7 +737,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    recStyle = recipe->style();
    recEquip = recipe->equipment();
    
-   // BeerXML is stupid and has reduntant fields.
    // Reset all previous recipe shit.
    fermTableModel->observeRecipe(recipe);
    hopTableModel->observeRecipe(recipe);
@@ -740,7 +754,7 @@ void MainWindow::setRecipe(Recipe* recipe)
       tabWidget_recipeView->removeTab(startTab);
    }
    brewNotes.clear();
-  
+ 
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
@@ -756,7 +770,7 @@ void MainWindow::setRecipe(Recipe* recipe)
    singleEquipEditor->setEquipment(recEquip);
    styleButton->setRecipe(recipe);
    singleStyleEditor->setStyle(recStyle);
-   
+
    mashEditor->setMash(recipeObs->mash());
    mashEditor->setEquipment(recEquip);
 
@@ -893,7 +907,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
 void MainWindow::updateRecipeName()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_name->isModified())
       return;
    
    recipeObs->setName(lineEdit_name->text());
@@ -936,6 +950,9 @@ void MainWindow::updateRecipeEquipment()
    Equipment* equip = equipmentListModel->at(equipmentComboBox->currentIndex());
    if( equip == 0 )
       return;
+   // if it isn't, we need to disconnect a few signals here
+//   else 
+//      disconnect( equip, 0, recipeObs, 0 );
 
    // Notice that we are using a copy from the database.
    Database::instance().addToRecipe(recipeObs,equip);
@@ -991,9 +1008,9 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
 void MainWindow::updateRecipeBatchSize()
 {
    unitDisplay dispUnit;
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_batchSize->isModified() )
       return;
-   
+ 
    dispUnit  = (unitDisplay)Brewtarget::option("batchsize_L", noUnit,tab_recipe,Brewtarget::UNIT).toInt();
    recipeObs->setBatchSize_l( Brewtarget::volQStringToSI(lineEdit_batchSize->text(),dispUnit) );
 }
@@ -1001,7 +1018,7 @@ void MainWindow::updateRecipeBatchSize()
 void MainWindow::updateRecipeBoilSize()
 {
    unitDisplay dispUnit;
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_boilSize->isModified() )
       return;
  
    dispUnit  = (unitDisplay)Brewtarget::option("boilsize_L", noUnit,tab_recipe,Brewtarget::UNIT).toInt();
@@ -1013,14 +1030,16 @@ void MainWindow::updateRecipeBoilTime()
    double boilTime = 0.0;
    Equipment* kit;
 
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_boilTime->isModified() )
       return;
  
    kit = recipeObs->equipment();
    boilTime = Brewtarget::timeQStringToSI( lineEdit_boilTime->text() );
    
-   // Here, we rely on a signa/slot connection to propagate the equipment
+   // Here, we rely on a signal/slot connection to propagate the equipment
    // changes to recipeObs->boilTime_min and maybe recipeObs->boilSize_l
+   // NOTE: This works because kit is the recipe's equipment, not the generic
+   // equipment in the recipe drop down.
    if( kit )
       kit->setBoilTime_min(boilTime);
    else
@@ -1029,7 +1048,7 @@ void MainWindow::updateRecipeBoilTime()
 
 void MainWindow::updateRecipeEfficiency()
 {
-   if( recipeObs == 0 )
+   if( recipeObs == 0 || ! lineEdit_efficiency->isModified() )
       return;
    
    recipeObs->setEfficiency_pct( lineEdit_efficiency->text().toDouble() );
@@ -1598,6 +1617,11 @@ void MainWindow::removeMash()
 
 }
 
+void MainWindow::save()
+{
+   Database::instance().saveDatabase();
+}
+
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
    Brewtarget::savePersistentOptions();
@@ -1612,8 +1636,10 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
    // cause any more queries.
    setVisible(false);
    
-   // Ask the user if they want to save changes.
-   if( QMessageBox::question(this,
+   // Ask the user if they want to save changes, only if the dirty bit has
+   // been thrown
+   if( Database::instance().isDirty() &&
+       QMessageBox::question(this,
           QObject::tr("Save Database Changes"),
           QObject::tr("Would you like to save the changes you made?"),
           QMessageBox::Yes | QMessageBox::No,
@@ -2434,4 +2460,31 @@ void MainWindow::convertedMsg()
    msgBox.exec();
 
 }
-   
+
+void MainWindow::changeBrewDate()
+{
+   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
+   QDateTime newDate;
+
+   foreach(QModelIndex selected, indexes)
+   {
+      BrewNote* target = treeView_recipe->getBrewNote(selected);
+
+      // Pop the calendar, get the date. 
+      if ( btDatePopup->exec() == QDialog::Accepted )
+      {
+         newDate = btDatePopup->selectedDate();
+         target->setBrewDate(newDate);
+
+         // If this note is open in a tab
+         if (brewNotes.contains(target->key()))
+         {
+            // Rename it. I hope
+            int tabIndex = tabWidget_recipeView->indexOf(brewNotes.value(target->key()));
+            tabWidget_recipeView->setTabText(tabIndex, target->brewDate_short());
+            return;
+         }
+      }
+   }
+}
+

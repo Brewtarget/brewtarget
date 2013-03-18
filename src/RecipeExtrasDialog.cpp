@@ -27,26 +27,6 @@ RecipeExtrasDialog::RecipeExtrasDialog(QWidget* parent)
 {
    setupUi(this);
 
-   /*
-   connect( lineEdit_age, SIGNAL(editingFinished()), this, SLOT(updateAge()));
-   connect( lineEdit_ageTemp, SIGNAL(editingFinished()), this, SLOT(updateAgeTemp()));
-   connect( lineEdit_asstBrewer, SIGNAL(editingFinished()), this, SLOT(updateBrewerAsst()) );
-   connect( lineEdit_brewer, SIGNAL(editingFinished()), this, SLOT(updateBrewer()) );
-   connect( lineEdit_carbVols, SIGNAL(editingFinished()), this, SLOT(updateCarbonation()) );
-   connect( lineEdit_primaryAge, SIGNAL(editingFinished()), this, SLOT(updatePrimaryAge()) );
-   connect( lineEdit_primaryTemp, SIGNAL(editingFinished()), this, SLOT(updatePrimaryTemp()) );
-   connect( lineEdit_secAge, SIGNAL(editingFinished()), this, SLOT(updateSecondaryAge()) );
-   connect( lineEdit_secTemp, SIGNAL(editingFinished()), this, SLOT(updateSecondaryTemp()) );
-   connect( lineEdit_tertAge, SIGNAL(editingFinished()), this, SLOT(updateTertiaryAge()) );
-   connect( lineEdit_tertTemp, SIGNAL(editingFinished()), this, SLOT(updateTertiaryTemp()) );
-   connect( spinBox_tasteRating, SIGNAL(editingFinished()), this, SLOT(updateTasteRating()) );
-   connect( dateEdit_date, SIGNAL(editingFinished()), this, SLOT(updateDate()) );
-   */
-   //connect( plainTextEdit_notes, SIGNAL(textChanged()), this, SLOT(updateNotes()) );
-   //connect( plainTextEdit_tasteNotes, SIGNAL(textChanged()), this, SLOT(updateTasteNotes()) );
-   /** The above 2 signal/slot pairs cause infinite recursion and segfault since updating
-     the notes calls textChanged() to be called. **/
-
    connect( pushButton_save, SIGNAL(clicked()), this, SLOT(saveAndQuit()) );
    connect( pushButton_cancel, SIGNAL(clicked()), this, SLOT(hide()) );
 }
@@ -69,7 +49,8 @@ void RecipeExtrasDialog::updateBrewer()
    if( recObs == 0 )
       return;
 
-   recObs->setBrewer(lineEdit_brewer->text());
+   if ( lineEdit_brewer->isModified() )
+      recObs->setBrewer(lineEdit_brewer->text());
 }
 
 void RecipeExtrasDialog::updateBrewerAsst()
@@ -77,9 +58,11 @@ void RecipeExtrasDialog::updateBrewerAsst()
    if( recObs == 0 )
       return;
 
-   recObs->setAsstBrewer(lineEdit_asstBrewer->text());
+   if ( lineEdit_asstBrewer->isModified() )
+      recObs->setAsstBrewer(lineEdit_asstBrewer->text());
 }
 
+// TODO: Need to fix this so we only change it when required
 void RecipeExtrasDialog::updateTasteRating()
 {
    if( recObs == 0 )
@@ -93,7 +76,8 @@ void RecipeExtrasDialog::updatePrimaryAge()
    if( recObs == 0 )
       return;
 
-   recObs->setPrimaryAge_days( lineEdit_primaryAge->text().toDouble() );
+   if ( lineEdit_primaryAge->isModified() )
+      recObs->setPrimaryAge_days( lineEdit_primaryAge->text().toDouble() );
 }
 
 void RecipeExtrasDialog::updatePrimaryTemp()
@@ -101,7 +85,8 @@ void RecipeExtrasDialog::updatePrimaryTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setPrimaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_primaryTemp->text()) );
+   if ( lineEdit_primaryTemp->isModified() )
+      recObs->setPrimaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_primaryTemp->text()) );
 }
 
 void RecipeExtrasDialog::updateSecondaryAge()
@@ -109,7 +94,8 @@ void RecipeExtrasDialog::updateSecondaryAge()
    if( recObs == 0 )
       return;
 
-   recObs->setSecondaryAge_days( lineEdit_secAge->text().toDouble() );
+   if ( lineEdit_secAge->isModified() )
+      recObs->setSecondaryAge_days( lineEdit_secAge->text().toDouble() );
 }
 
 void RecipeExtrasDialog::updateSecondaryTemp()
@@ -117,7 +103,8 @@ void RecipeExtrasDialog::updateSecondaryTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setSecondaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_secTemp->text()) );
+   if ( lineEdit_secTemp->isModified() )
+      recObs->setSecondaryTemp_c( Brewtarget::tempQStringToSI(lineEdit_secTemp->text()) );
 }
 
 void RecipeExtrasDialog::updateTertiaryAge()
@@ -125,7 +112,8 @@ void RecipeExtrasDialog::updateTertiaryAge()
    if( recObs == 0 )
       return;
 
-   recObs->setTertiaryAge_days( lineEdit_tertAge->text().toDouble() );
+   if ( lineEdit_tertAge->isModified() )
+      recObs->setTertiaryAge_days( lineEdit_tertAge->text().toDouble() );
 }
 
 void RecipeExtrasDialog::updateTertiaryTemp()
@@ -133,7 +121,8 @@ void RecipeExtrasDialog::updateTertiaryTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setTertiaryTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
+   if ( lineEdit_tertTemp->isModified() )
+      recObs->setTertiaryTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
 }
 
 void RecipeExtrasDialog::updateAge()
@@ -141,7 +130,8 @@ void RecipeExtrasDialog::updateAge()
    if( recObs == 0 )
       return;
 
-   recObs->setAge_days( lineEdit_tertAge->text().toDouble() );
+   if ( lineEdit_tertAge->isModified() )
+      recObs->setAge_days( lineEdit_tertAge->text().toDouble() );
 }
 
 void RecipeExtrasDialog::updateAgeTemp()
@@ -149,9 +139,11 @@ void RecipeExtrasDialog::updateAgeTemp()
    if( recObs == 0 )
       return;
 
-   recObs->setAgeTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
+   if ( lineEdit_tertTemp->isModified() )
+      recObs->setAgeTemp_c( Brewtarget::tempQStringToSI( lineEdit_tertTemp->text() ) );
 }
 
+// TODO: Need to fix this to update only when a real change happens
 void RecipeExtrasDialog::updateDate()
 {
    if( recObs == 0 )
@@ -165,7 +157,8 @@ void RecipeExtrasDialog::updateCarbonation()
    if( recObs == 0 )
       return;
 
-   recObs->setCarbonation_vols( lineEdit_carbVols->text().toDouble() );
+   if ( lineEdit_carbVols->isModified() )
+      recObs->setCarbonation_vols( lineEdit_carbVols->text().toDouble() );
 }
 
 void RecipeExtrasDialog::updateTasteNotes()
@@ -173,7 +166,8 @@ void RecipeExtrasDialog::updateTasteNotes()
    if( recObs == 0 )
       return;
 
-   recObs->setTasteNotes( plainTextEdit_tasteNotes->toPlainText() );
+   if ( btTextEdit_tasteNotes->isModified() )
+      recObs->setTasteNotes( btTextEdit_tasteNotes->toPlainText() );
 }
 
 void RecipeExtrasDialog::updateNotes()
@@ -181,7 +175,8 @@ void RecipeExtrasDialog::updateNotes()
    if( recObs == 0 )
       return;
 
-   recObs->setNotes( plainTextEdit_notes->toPlainText() );
+   if ( btTextEdit_notes->isModified() )
+      recObs->setNotes( btTextEdit_notes->toPlainText() );
 }
 
 void RecipeExtrasDialog::changed(QMetaProperty prop, QVariant /*val*/)
@@ -256,7 +251,7 @@ void RecipeExtrasDialog::showChanges(QMetaProperty* prop)
    else if( propName == "date" || updateAll )
       dateEdit_date->setDate( val.toDate() );
    else if( propName == "notes" || updateAll )
-      plainTextEdit_notes->setPlainText( val.toString() );
+      btTextEdit_notes->setPlainText( val.toString() );
    else if( propName == "tasteNotes" || updateAll )
-      plainTextEdit_tasteNotes->setPlainText( val.toString() );
+      btTextEdit_tasteNotes->setPlainText( val.toString() );
 }

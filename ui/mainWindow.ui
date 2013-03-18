@@ -69,7 +69,7 @@
            <enum>QTabWidget::West</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="iconSize">
            <size>
@@ -2519,6 +2519,21 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>BtDigitWidget</class>
+   <extends>QLabel</extends>
+   <header>BtDigitWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtVolumeLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BtGravityLabel</class>
+   <extends>QLabel</extends>
+   <header>BtLabel.h</header>
+  </customwidget>
+  <customwidget>
    <class>CustomComboBox</class>
    <extends>QComboBox</extends>
    <header>CustomComboBox.h</header>
@@ -2542,21 +2557,6 @@
    <class>RecipeExtrasWidget</class>
    <extends>QWidget</extends>
    <header>RecipeExtrasWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtDigitWidget</class>
-   <extends>QLabel</extends>
-   <header>BtDigitWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtVolumeLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BtGravityLabel</class>
-   <extends>QLabel</extends>
-   <header>BtLabel.h</header>
   </customwidget>
   <customwidget>
    <class>RecipeTreeView</class>
@@ -2609,9 +2609,59 @@
    <header location="global">BrewTargetTreeView.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget_Trees</tabstop>
+  <tabstop>treeView_recipe</tabstop>
+  <tabstop>treeView_style</tabstop>
+  <tabstop>treeView_equip</tabstop>
+  <tabstop>treeView_ferm</tabstop>
+  <tabstop>treeView_hops</tabstop>
+  <tabstop>treeView_misc</tabstop>
+  <tabstop>treeView_yeast</tabstop>
+  <tabstop>scrollArea_2</tabstop>
+  <tabstop>tabWidget_recipeView</tabstop>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>styleButton</tabstop>
+  <tabstop>styleComboBox</tabstop>
+  <tabstop>equipmentButton</tabstop>
+  <tabstop>equipmentComboBox</tabstop>
+  <tabstop>lineEdit_batchSize</tabstop>
+  <tabstop>lineEdit_boilSize</tabstop>
+  <tabstop>lineEdit_efficiency</tabstop>
+  <tabstop>lineEdit_boilTime</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>fermentableTable</tabstop>
+  <tabstop>pushButton_addFerm</tabstop>
+  <tabstop>pushButton_removeFerm</tabstop>
+  <tabstop>pushButton_editFerm</tabstop>
+  <tabstop>hopTable</tabstop>
+  <tabstop>pushButton_addHop</tabstop>
+  <tabstop>pushButton_removeHop</tabstop>
+  <tabstop>pushButton_editHop</tabstop>
+  <tabstop>miscTable</tabstop>
+  <tabstop>pushButton_addMisc</tabstop>
+  <tabstop>pushButton_removeMisc</tabstop>
+  <tabstop>pushButton_editMisc</tabstop>
+  <tabstop>yeastTable</tabstop>
+  <tabstop>pushButton_addYeast</tabstop>
+  <tabstop>pushButton_removeYeast</tabstop>
+  <tabstop>pushButton_editYeast</tabstop>
+  <tabstop>mashStepTableWidget</tabstop>
+  <tabstop>pushButton_addMashStep</tabstop>
+  <tabstop>pushButton_removeMashStep</tabstop>
+  <tabstop>pushButton_editMashStep</tabstop>
+  <tabstop>pushButton_editMash</tabstop>
+  <tabstop>pushButton_mashDes</tabstop>
+  <tabstop>pushButton_mashWizard</tabstop>
+  <tabstop>mashButton</tabstop>
+  <tabstop>mashComboBox</tabstop>
+  <tabstop>pushButton_mashRemove</tabstop>
+  <tabstop>pushButton_mashUp</tabstop>
+  <tabstop>pushButton_mashDown</tabstop>
+  <tabstop>pushButton_saveMash</tabstop>
+ </tabstops>
  <resources>
-  <include location="../build/brewtarget.qrc"/>
-  <include location="../build/brewtarget.qrc"/>
   <include location="../build/brewtarget.qrc"/>
  </resources>
  <connections/>

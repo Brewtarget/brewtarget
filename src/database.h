@@ -100,6 +100,7 @@ public:
    static bool restoreFromFile(QString newDbFileStr);
 
    bool loadSuccessful();
+   bool isDirty();
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
@@ -313,10 +314,10 @@ public:
     * database file.
     */
    void updateDatabase(QString const& filename);
-
    void saveDatabase();
    void convertFromXml();
-  
+
+
    bool isConverted();
 
 signals:
@@ -378,6 +379,7 @@ private:
    // Instance variables.
    bool loadWasSuccessful;
    bool converted;
+   bool dirty;
 
    QHash< int, BrewNote* > allBrewNotes;
    QHash< int, Equipment* > allEquipments;
@@ -581,6 +583,7 @@ private:
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
       }
       
+      dirty = true; 
       return newIng;
    }
    

@@ -42,7 +42,12 @@
 
 //=====================CLASS FermentableTableModel==============================
 FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent), parentTableWidget(parent), editable(editable), recObs(0), displayPercentages(false), totalFermMass_kg(0)
+   : QAbstractTableModel(parent), 
+     parentTableWidget(parent), 
+     editable(editable), 
+     recObs(0), 
+     displayPercentages(false), 
+     totalFermMass_kg(0)
 {
    fermObs.clear();
    // for units and scales
@@ -631,16 +636,7 @@ Fermentable* FermentableTableModel::getFermentable(unsigned int i)
 FermentableItemDelegate::FermentableItemDelegate(QObject* parent)
         : QItemDelegate(parent)
 {
-   //connect( this, SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)), this, SLOT(destroyWidget(QWidget*, QAbstractItemDelegate::EndEditHint)) );
 }
-
-/*
-void FermentableItemDelegate::destroyWidget(QWidget* widget, QAbstractItemDelegate::EndEditHint hint)
-{
-   //delete widget;
-   widget->deleteLater();
-}
-*/
 
 QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
@@ -663,24 +659,10 @@ QWidget* FermentableItemDelegate::createEditor(QWidget *parent, const QStyleOpti
       box->setFocusPolicy(Qt::StrongFocus);
       box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-      /*
-      QWidget* displayWidget = (((FermentableTableModel*)(index.model()))->parentTableWidget)->indexWidget(index);
-      if( displayWidget != 0 )
-      box->move(displayWidget->pos());
-      ***Didn't work at all***/
-      
-      /*
-      QRect rect = QStyle::alignedRect(Qt::LeftToRight, Qt::AlignLeft, box->sizeHint(), option.rect);
-      std::cerr << "option.rect " << option.rect.x() << " " << option.rect.y() << " " << option.rect.width() << " " << option.rect.height() << std::endl;
-      std::cerr << "rect " << rect.x() << " " << rect.y() << " " << rect.width() << " " << rect.height() << std::endl;
-      box->move(rect.topRight());
-      ***Didn't really do much either***/
-      
       return box;
    }
    else
       return new QLineEdit(parent);
-      //return QItemDelegate::createEditor(parent, option, index);
 }
 
 void FermentableItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
@@ -717,21 +699,25 @@ void FermentableItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
    {
       QComboBox* box = qobject_cast<QComboBox*>(editor);
       int value = box->currentIndex();
-      
-      model->setData(index, value, Qt::EditRole);
+      int ndx = model->data(index, Qt::UserRole).toInt();
+    
+     // Only do something when something needs to be done 
+      if ( value != ndx )
+         model->setData(index, value, Qt::EditRole);
    }
    else if( col == FERMISMASHEDCOL || col == FERMAFTERBOIL )
    {
       QCheckBox* checkBox = qobject_cast<QCheckBox*>(editor);
       bool checked = (checkBox->checkState() == Qt::Checked);
-      
+    
       model->setData(index, checked, Qt::EditRole);
    }
    else
    {
       QLineEdit* line = qobject_cast<QLineEdit*>(editor);
-      
-      model->setData(index, line->text(), Qt::EditRole);
+
+      if ( line->isModified() )
+          model->setData(index, line->text(), Qt::EditRole);
    }
 }
 

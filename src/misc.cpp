@@ -25,6 +25,7 @@
 #include <QDomElement>
 #include <QDomText>
 #include <QObject>
+#include <QDebug>
 
 QStringList Misc::uses = QStringList() << "Boil" << "Mash" << "Primary" << "Secondary" << "Bottling";
 QStringList Misc::types = QStringList() << "Spice" << "Fining" << "Water Agent" << "Herb" << "Flavor" << "Other";
@@ -129,6 +130,7 @@ void Misc::setType( Type t )
 
 void Misc::setUse( Use u )
 {
+   qDebug() << "u =" << u << "uses.at(u) =" << uses.at(u);
    set( "use", "use", uses.at(u) );
 }
 
