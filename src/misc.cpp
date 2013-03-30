@@ -130,7 +130,6 @@ void Misc::setType( Type t )
 
 void Misc::setUse( Use u )
 {
-   qDebug() << "u =" << u << "uses.at(u) =" << uses.at(u);
    set( "use", "use", uses.at(u) );
 }
 

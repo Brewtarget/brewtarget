@@ -233,7 +233,6 @@ bool MashStepTableModel::setData( const QModelIndex& index, const QVariant& valu
       case MASHSTEPTYPECOL:
          if( value.canConvert(QVariant::Int) )
          {
-            qDebug() << "Converting " << value <<" to int?";
             row->setType(static_cast<MashStep::Type>(value.toInt()));
             return true;
          }
