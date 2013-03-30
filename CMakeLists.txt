@@ -422,6 +422,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
     SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
     SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
+    SET(CPACK_RPM_SPEC_MORE_DEFINE "%define ignore \#")
+    SET(CPACK_RPM_USER_FILELIST "%ignore /usr" "%ignore /usr/local" "%ignore /usr/local/bin" "%ignore /usr/local/share" "%ignore /usr/local/share/applications")
   #============================WINDOWS===============================
   ELSEIF(WIN32)
     # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
