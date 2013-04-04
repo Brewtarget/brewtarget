@@ -18,6 +18,7 @@
 
 #include <QComboBox>
 #include <QLineEdit>
+#include <QCheckBox>
 #include "database.h"
 #include "misc.h"
 #include "MiscTableModel.h"
@@ -221,6 +222,13 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
          unit = displayUnit(index.column());
          return QVariant( Brewtarget::displayAmount(row->amount(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, noScale ) );
 
+      case MISCISWEIGHT:
+         if ( role == Qt::CheckStateRole )
+            return QVariant( row->amountIsWeight() ? Qt::Checked : Qt::Unchecked );
+         else if ( role == Qt::DisplayRole )
+            return row->amountIsWeight() ? tr("Weight") : tr("Volume");
+         else
+            return QVariant();
       default:
          Brewtarget::log(Brewtarget::WARNING, QString("Bad model index. column = %1").arg(index.column()));
    }
@@ -243,6 +251,8 @@ QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, i
             return QVariant(tr("Time"));
          case MISCAMOUNTCOL:
             return QVariant(tr("Amount"));
+         case MISCISWEIGHT:
+            return QVariant(tr("Is Weight"));
          default:
             return QVariant();
       }
@@ -254,17 +264,19 @@ QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, i
 Qt::ItemFlags MiscTableModel::flags(const QModelIndex& index ) const
 {
    int col = index.column();
+   Qt::ItemFlags defaults = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
    switch( col )
    {
       case MISCNAMECOL:
-         return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+         return defaults;
+      case MISCISWEIGHT:
+         return defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
       default:
-         return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
-            Qt::ItemIsEnabled;
+         return defaults | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
    }
 }
 
-bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, int /*role*/ )
+bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
    Misc *row;
    int col;
@@ -312,6 +324,12 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
             row->setAmount( row->amountIsWeight() ? 
                             Brewtarget::weightQStringToSI(value.toString(),unit) : 
                             Brewtarget::volQStringToSI(value.toString(),unit) );
+         else
+            return false;
+         break;
+      case MISCISWEIGHT:
+         if ( role == Qt::CheckStateRole && value.canConvert(QVariant::Int) )
+            row->setAmountIsWeight( ((Qt::CheckState)value.toInt()) == Qt::Checked );
          else
             return false;
          break;
@@ -480,6 +498,14 @@ QWidget* MiscItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
       return box;
    }
+   else if ( index.column() == MISCISWEIGHT )
+   {
+      QCheckBox* box = new QCheckBox(parent);
+      box->setFocusPolicy(Qt::StrongFocus);
+      box->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+      return box;
+   }
    else
       return new QLineEdit(parent);
 }
@@ -495,13 +521,18 @@ void MiscItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
          return;
       box->setCurrentIndex(index.model()->data(index, Qt::UserRole).toInt());
    }
+   else if ( column == MISCISWEIGHT ) 
+   {
+      QCheckBox* checkBox = (QCheckBox*)editor;
+      Qt::CheckState checkState = (Qt::CheckState)index.model()->data(index, Qt::CheckStateRole).toInt();
+      checkBox->setCheckState( checkState );
+   }
    else
    {
       QLineEdit* line = (QLineEdit*)editor;
       
       line->setText(index.model()->data(index, Qt::DisplayRole).toString());
    }
-   
 }
 
 void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
@@ -515,6 +546,13 @@ void MiscItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
 
       if ( curr != ndx ) 
          model->setData(index, ndx, Qt::EditRole);
+   }
+   else if ( column == MISCISWEIGHT ) 
+   {
+      QCheckBox* checkBox = qobject_cast<QCheckBox*>(editor);
+      bool checked = ( checkBox->checkState() == Qt::Checked );
+
+      model->setData( index, checked, Qt::EditRole);
    }
    else
    {
