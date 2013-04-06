@@ -252,7 +252,7 @@ QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, i
          case MISCAMOUNTCOL:
             return QVariant(tr("Amount"));
          case MISCISWEIGHT:
-            return QVariant(tr("Is Weight"));
+            return QVariant(tr("Amount Type"));
          default:
             return QVariant();
       }
