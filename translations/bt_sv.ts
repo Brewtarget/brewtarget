@@ -235,7 +235,7 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Категория</translation>
     </message>
     <message>
         <source>Number</source>
@@ -562,7 +562,7 @@
     <name>Hop</name>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -624,7 +624,7 @@
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -1096,7 +1096,7 @@
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -1135,11 +1135,11 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вес</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём</translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1168,17 +1168,17 @@
         <source>Please restart Brewtarget.</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
         <source>Invalid color formula type: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Неправильный тип цвета: %1</translation>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Неопределённый тип IBU. %1</translation>
     </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
         <source>Batch Size: %1
 </source>
@@ -1432,7 +1432,7 @@
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>Infusion</source>
@@ -1563,6 +1563,14 @@
     <message>
         <source>Style</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid color formula type: %1</source>
+        <translation type="unfinished">Неправильный тип цвета: %1</translation>
+    </message>
+    <message>
+        <source>Unrecognized IBU formula type. %1</source>
+        <translation type="unfinished">Неопределённый тип IBU. %1</translation>
     </message>
 </context>
 <context>
@@ -1939,7 +1947,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>Temp</source>
@@ -2015,7 +2023,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -2213,10 +2221,6 @@ The final volume in the primary is %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2263,9 +2267,17 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Donate</source>
+        <translation type="unfinished">Пожертвовать</translation>
+    </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
+    <message>
+        <source>Donate</source>
+        <translation type="obsolete">Пожертвовать</translation>
+    </message>
     <message>
         <source>Form</source>
         <translation type="unfinished"></translation>
@@ -2331,7 +2343,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
@@ -2398,7 +2410,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
@@ -2611,7 +2623,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
@@ -2916,11 +2928,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить</translation>
     </message>
 </context>
 <context>
     <name>hopEditor</name>
+    <message>
+        <source>Remove</source>
+        <translation type="obsolete">Удалить</translation>
+    </message>
     <message>
         <source>Hop Editor</source>
         <translation type="unfinished"></translation>
@@ -2963,7 +2979,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -3268,15 +3284,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить этап затирания</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить выбранный этап затирания</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
@@ -3308,11 +3324,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Этап затирания выше</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Этап затирания ниже</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
@@ -3324,7 +3340,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Donate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пожертвовать</translation>
     </message>
     <message>
         <source>&amp;About</source>
@@ -3662,19 +3678,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная температура солода</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура промывки</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нужная температура промывки</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pH промывки</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -3682,11 +3698,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Заторник</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная температура затора</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
@@ -3694,19 +3710,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">С Оборудования</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масса Заторника</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Теплоемк. Заторника</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Теплоемкость Заторника (кал/(гр*С))</translation>
     </message>
 </context>
 <context>
@@ -3886,7 +3902,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -3937,11 +3953,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Затор</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить выбранный сорт</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3949,19 +3965,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная температура солода</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Температура промывки</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нужная температура промывки</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">pH промывки</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -3969,43 +3985,43 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Заторник</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Начальная температура затора</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">С Оборудования</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масса Заторника</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Теплоемк. Заторника</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Теплоемкость Заторника (кал/(гр*С))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Добавить этап затирания</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить выбранный этап затирания</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Этап затирания выше</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Этап затирания ниже</translation>
     </message>
 </context>
 <context>
@@ -4107,7 +4123,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вес</translation>
     </message>
     <message>
         <source>Use SI units</source>
@@ -4123,7 +4139,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Объём</translation>
     </message>
     <message>
         <source>Temperature</source>
@@ -4650,7 +4666,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить выбранный сорт</translation>
     </message>
     <message>
         <source>Basic Information</source>
@@ -4662,7 +4678,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Категория</translation>
     </message>
     <message>
         <source>Category number</source>

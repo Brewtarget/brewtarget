@@ -235,7 +235,7 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Katogoria</translation>
+        <translation type="unfinished">Kategoria</translation>
     </message>
     <message>
         <source>Number</source>
@@ -306,7 +306,7 @@
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Styl</translation>
     </message>
 </context>
 <context>
@@ -437,16 +437,8 @@
         <translation>Ostrzeżenie dotyczące pojemności kadzi zaciernej</translation>
     </message>
     <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">Pojemność kadzi zaciernej wynosi 0. Może to spowodować problemy.</translation>
-    </message>
-    <message>
         <source>Batch Size Warning</source>
         <translation>Ostrzeżenie dotyczące wielkości warki</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">Wielkość warki wynosi 0. Może to spowodować problemy.</translation>
     </message>
     <message>
         <source>Equipment name</source>
@@ -458,19 +450,27 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pojemność kadzi zaciernej wynosi 0. Może to spowodować problemy.</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wielkość warki wynosi 0. Może to spowodować problemy.</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wykorzystanie chmiel </translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wielkość warki wynosi 0. Może to spowodować problemy.</translation>
+    </message>
+    <message>
+        <source>The tun volume you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">Pojemność kadzi zaciernej wynosi 0. Może to spowodować problemy.</translation>
+    </message>
+    <message>
+        <source>The batch size you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">Wielkość warki wynosi 0. Może to spowodować problemy.</translation>
     </message>
 </context>
 <context>
@@ -817,10 +817,6 @@
         <translation>Ustawienia receptury oraz składników zostaną usunięte. Czy chcesz kontynuować?</translation>
     </message>
     <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Przywróć bazę danych</translation>
-    </message>
-    <message>
         <source>For some reason, the operation failed.</source>
         <translation>Z jakiegoś powodu operacja się nie powiodła.</translation>
     </message>
@@ -898,7 +894,7 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brak styl</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -907,6 +903,10 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation type="obsolete">Przywróć bazę danych</translation>
     </message>
 </context>
 <context>
@@ -1134,10 +1134,6 @@
 <context>
     <name>MiscTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Nieprawidłowy indeks modelu. wiersz = %1</translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
@@ -1163,11 +1159,15 @@
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Objętość</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ilość </translation>
+    </message>
+    <message>
+        <source>Bad model index. row = %1</source>
+        <translation type="obsolete">Nieprawidłowy indeks modelu. wiersz = %1</translation>
     </message>
 </context>
 <context>
@@ -1231,18 +1231,6 @@
         <source>FG: %1
 </source>
         <translation>Gęstość końcowa: %1
-</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="obsolete">Wydajność: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
-</source>
-        <translation type="obsolete">Zawartość alkoholu: %1%
 </translation>
     </message>
     <message>
@@ -1415,15 +1403,7 @@
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation>Niemożliwe otwarcie bazy danych&apos;%1&apos;. </translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="obsolete">Połącz bazy danych</translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="obsolete">Są dostępne nowe składniki i receptury. Czy chcesz je dodać do swojej bazy danych?</translation>
+        <translation>Niemożliwe otwarcie bazy danych&apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -1451,11 +1431,11 @@
     </message>
     <message>
         <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
-        <translation>Nie udało się usunąć tymczasowej bazy danych kopii zapasowej. Przejdź do &apos;% 1&apos; i usuń.&apos;tempBackupDatabase.sqlite&apos;.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to rollback to the backup database.  Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation>Nie udało się wycofać do kopii zapasowej bazy danych. Przejdź do &apos;% 1&apos;, usuń &apos;database.sqlite&apos; jeżeli istnieje, i zmień nazwę &apos;tempBackupDatabase.sqlite&apos; na &apos;database.sqlite&apos;.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Database Restore Failure</source>
@@ -1625,6 +1605,26 @@
         <source>Style</source>
         <translation type="unfinished">Styl</translation>
     </message>
+    <message>
+        <source>Efficiency: %1%%
+</source>
+        <translation type="obsolete">Wydajność: %1%
+</translation>
+    </message>
+    <message>
+        <source>ABV: %1%%
+</source>
+        <translation type="obsolete">Zawartość alkoholu: %1%
+</translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="obsolete">Połącz bazy danych</translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="obsolete">Są dostępne nowe składniki i receptury. Czy chcesz je dodać do swojej bazy danych?</translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -1742,7 +1742,7 @@
     </message>
     <message>
         <source>Boil or steep </source>
-        <translation>Gotowanie lub ekstrahowanie</translation>
+        <translation>Gotowanie lub ekstrahowanie </translation>
     </message>
     <message>
         <source>Boil/steep fermentables</source>
@@ -2514,7 +2514,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation>Temp. zadania drożdży</translation>
+        <translation> Temp. zadania drożdży</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
@@ -2775,7 +2775,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>Wykorzystanie chmiel</translation>
+        <translation>Wykorzystanie chmiel </translation>
     </message>
 </context>
 <context>
@@ -3007,7 +3007,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Amount </source>
-        <translation>Ilość</translation>
+        <translation>Ilość </translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3599,10 +3599,6 @@ p, li { white-space: pre-wrap; }
         <translation>Zapisz</translation>
     </message>
     <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Wyczyść recepturę</translation>
-    </message>
-    <message>
         <source>Delete selected</source>
         <translation>Usuń zaznaczenie</translation>
     </message>
@@ -3632,15 +3628,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sty&amp;le</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schematy zacierania</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schematy zacierania</translation>
+    </message>
+    <message>
+        <source>Clear recipe</source>
+        <translation type="obsolete">Usuń recepturę</translation>
     </message>
 </context>
 <context>
@@ -3703,7 +3703,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>vol</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun Fullness</source>
@@ -3711,11 +3711,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>tunVol</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4001,11 +4001,11 @@ p, li { white-space: pre-wrap; }
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Parametry zacierania</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Do zacierania</translation>
     </message>
     <message>
         <source>Delete selected style</source>
@@ -4013,7 +4013,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
@@ -4361,10 +4361,6 @@ p, li { white-space: pre-wrap; }
         <translation>Dla ale: 0,75-1. Dla legerów: 1,5-2.</translation>
     </message>
     <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="obsolete">Ilość zadania (komórki/mL*P)</translation>
-    </message>
-    <message>
         <source>Aeration Method</source>
         <translation>Metoda natleniania</translation>
     </message>
@@ -4398,7 +4394,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>TextLabel</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
@@ -4431,6 +4427,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
         <translation>Ilość zadania (M komórki)/(mL*P)</translation>
+    </message>
+    <message>
+        <source>Pitch Rate (cells)/(mL*P)</source>
+        <translation type="obsolete">Ilość zadania (M komórki)/(mL*P)</translation>
     </message>
 </context>
 <context>
@@ -4740,11 +4740,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Category</source>
-        <translation>Katogoria</translation>
+        <translation>Kategoria</translation>
     </message>
     <message>
         <source>Category number</source>
-        <translation>Numer kategori</translation>
+        <translation>Numer kategorii</translation>
     </message>
     <message>
         <source>Style letter</source>

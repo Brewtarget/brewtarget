@@ -306,7 +306,7 @@
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Estil</translation>
     </message>
 </context>
 <context>
@@ -437,16 +437,8 @@
         <translation>Avís de Volum</translation>
     </message>
     <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">El volum que has posat és 0. Pot causar problemes.</translation>
-    </message>
-    <message>
         <source>Batch Size Warning</source>
         <translation>Avís del lot</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">La mida del lot que has posat és 0. Pot causar problemes.</translation>
     </message>
     <message>
         <source>Equipment name</source>
@@ -458,19 +450,27 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">El volum que has posat és 0. Pot causar problemes.</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La mida del lot que has posat és 0. Pot causar problemes.</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Utilització de Llúpol </translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La mida del lot que has posat és 0. Pot causar problemes.</translation>
+    </message>
+    <message>
+        <source>The tun volume you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">El volum que has posat és 0. Pot causar problemes.</translation>
+    </message>
+    <message>
+        <source>The batch size you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">La mida del lot que has posat és 0. Pot causar problemes.</translation>
     </message>
 </context>
 <context>
@@ -706,7 +706,7 @@
     </message>
     <message>
         <source>Equipment request</source>
-        <translation>Petició d&apos;equip </translation>
+        <translation>Petició d&apos;equip</translation>
     </message>
     <message>
         <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
@@ -829,10 +829,6 @@
         <translation>S&apos;esborraran les receptes i els ingredients actuals. Vol continuar?</translation>
     </message>
     <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Restaurar la Base de Dades</translation>
-    </message>
-    <message>
         <source>For some reason, the operation failed.</source>
         <translation>Per algun motiu, l&apos;operació no s&apos;ha pogut dur a terme.</translation>
     </message>
@@ -898,7 +894,7 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sense estil</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -907,6 +903,10 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation type="obsolete">Restaurar la Base de Dades</translation>
     </message>
 </context>
 <context>
@@ -1134,10 +1134,6 @@
 <context>
     <name>MiscTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Índex erroni. Fila = %1</translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
@@ -1167,7 +1163,11 @@
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quantitat </translation>
+    </message>
+    <message>
+        <source>Bad model index. row = %1</source>
+        <translation type="obsolete">Índex de model erroni. Fila =%1</translation>
     </message>
 </context>
 <context>
@@ -1332,18 +1332,6 @@
         <translation>Format</translation>
     </message>
     <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="obsolete">Eficiència: %1%%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
-</source>
-        <translation type="obsolete">ABV: %1%%
-</translation>
-    </message>
-    <message>
         <source>Stage</source>
         <translation>Etapa</translation>
     </message>
@@ -1416,14 +1404,6 @@
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
         <translation>Error al obrir la base de dades &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="obsolete">Unir la base de dades</translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="obsolete">Hi ha nous ingredients i receptes disponibles. Vol afegir-les a la la seva base de dades?</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -1625,6 +1605,26 @@
         <source>Style</source>
         <translation type="unfinished">Estil</translation>
     </message>
+    <message>
+        <source>Efficiency: %1%%
+</source>
+        <translation type="obsolete">Eficiència: %1%
+</translation>
+    </message>
+    <message>
+        <source>ABV: %1%%
+</source>
+        <translation type="obsolete">ABV: %1%
+</translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="obsolete">Unir la base de dades</translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="obsolete">Hi ha nous ingredients i receptes disponibles. Vol afegir-les a la la seva base de dades?</translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -1634,7 +1634,7 @@
     </message>
     <message>
         <source>Add </source>
-        <translation>Afegir</translation>
+        <translation>Afegir </translation>
     </message>
     <message>
         <source>to the mash tun.</source>
@@ -1646,7 +1646,7 @@
     </message>
     <message>
         <source>Bring </source>
-        <translation>Escalfar</translation>
+        <translation>Escalfar </translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
@@ -1722,7 +1722,7 @@
     </message>
     <message>
         <source>Do first wort hopping with </source>
-        <translation>Fer la primera quota de llúpol amb</translation>
+        <translation>Fer la primera quota de llúpol amb </translation>
     </message>
     <message>
         <source>First wort hopping</source>
@@ -1742,7 +1742,7 @@
     </message>
     <message>
         <source>Boil or steep </source>
-        <translation>Bullir</translation>
+        <translation>Bullir </translation>
     </message>
     <message>
         <source>Boil/steep fermentables</source>
@@ -1808,7 +1808,7 @@ El volum final a la primària és %1.</translation>
     </message>
     <message>
         <source>Cool wort and pitch </source>
-        <translation>Refredar el caldo i tirar-lo</translation>
+        <translation>Refredar el caldo i tirar-lo </translation>
     </message>
     <message>
         <source>%1 %2 yeast, </source>
@@ -2775,7 +2775,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>Utilització de Llúpol</translation>
+        <translation>Utilització de Llúpol </translation>
     </message>
 </context>
 <context>
@@ -3007,7 +3007,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Amount </source>
-        <translation>Quantitat</translation>
+        <translation>Quantitat </translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3599,10 +3599,6 @@ p, li { white-space: pre-wrap; }
         <translation>Desar</translation>
     </message>
     <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Netejar recepta</translation>
-    </message>
-    <message>
         <source>Delete selected</source>
         <translation>Esborrar la selecció</translation>
     </message>
@@ -3632,15 +3628,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Estils</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maceracions</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maceracions</translation>
+    </message>
+    <message>
+        <source>Clear recipe</source>
+        <translation type="obsolete">Esborrar recepta</translation>
     </message>
 </context>
 <context>
@@ -3845,7 +3845,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation>Lapse de temps de la temperatura </translation>
+        <translation>Lapse de temps de la temperatura</translation>
     </message>
     <message>
         <source>Lag time</source>
@@ -4001,7 +4001,7 @@ p, li { white-space: pre-wrap; }
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Editor de maceració</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -4361,10 +4361,6 @@ p, li { white-space: pre-wrap; }
         <translation>Per a ales, 0.75-1. Pera a lagers, 1.5-2.</translation>
     </message>
     <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="obsolete">Tassa de llevat</translation>
-    </message>
-    <message>
         <source>Aeration Method</source>
         <translation>Mètode d&apos;aireig</translation>
     </message>
@@ -4432,12 +4428,16 @@ p, li { white-space: pre-wrap; }
         <source>Pitch Rate (M cells)/(mL*P)</source>
         <translation>Tassa de llevat</translation>
     </message>
+    <message>
+        <source>Pitch Rate (cells)/(mL*P)</source>
+        <translation type="obsolete">Tassa de llevat</translation>
+    </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation>Calculador de priming </translation>
+        <translation>Calculador de priming</translation>
     </message>
     <message>
         <source>Input</source>

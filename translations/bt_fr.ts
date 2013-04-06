@@ -306,7 +306,7 @@
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Style</translation>
     </message>
 </context>
 <context>
@@ -437,16 +437,8 @@
         <translation>Avertissement concernant le volume de la cuve</translation>
     </message>
     <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">Le volume de la cuve renseigné est 0. Ceci peut causer des problèmes.</translation>
-    </message>
-    <message>
         <source>Batch Size Warning</source>
         <translation>Avertissement concernant la taille du brassin</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
     </message>
     <message>
         <source>Equipment name</source>
@@ -458,19 +450,27 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Le volume de la cuve renseigné est 0. Ceci peut causer des problèmes.</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">L&apos;utilisation du Houblon </translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
+    </message>
+    <message>
+        <source>The tun volume you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">Le volume de la cuve renseigné est 0. Ceci peut causer des problèmes.</translation>
+    </message>
+    <message>
+        <source>The batch size you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
     </message>
 </context>
 <context>
@@ -817,10 +817,6 @@
         <translation>Ceci supprimera votre recette et vos ingrédients. Voulez-vous poursuivre?</translation>
     </message>
     <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Restaurer la base de données</translation>
-    </message>
-    <message>
         <source>For some reason, the operation failed.</source>
         <translation>Cette opération a échoué.</translation>
     </message>
@@ -898,7 +894,7 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aucun style</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -907,6 +903,10 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation type="obsolete">Restaurer la base de données</translation>
     </message>
 </context>
 <context>
@@ -1134,10 +1134,6 @@
 <context>
     <name>MiscTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Mauvais modèle d&apos;indexde rangée =%1</translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
@@ -1167,7 +1163,11 @@
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Quantité </translation>
+    </message>
+    <message>
+        <source>Bad model index. row = %1</source>
+        <translation type="obsolete">Mauvais modèle d&apos;index de rangée =%1</translation>
     </message>
 </context>
 <context>
@@ -1206,42 +1206,50 @@
     <message>
         <source>Batch Size: %1
 </source>
-        <translation>Taille de brassin %1</translation>
+        <translation>Taille de brassin %1
+</translation>
     </message>
     <message>
         <source>Boil Size: %1
 </source>
-        <translation>Taille de cuisson %1</translation>
+        <translation>Taille de cuisson %1
+</translation>
     </message>
     <message>
         <source>Boil Time: %1
 </source>
-        <translation>Temps de cuisson %1</translation>
+        <translation>Temps de cuisson %1
+</translation>
     </message>
     <message>
         <source>OG: %1
 </source>
-        <translation>DP:%1</translation>
+        <translation>DP:%1
+</translation>
     </message>
     <message>
         <source>FG: %1
 </source>
-        <translation>DF: %1</translation>
+        <translation>DF: %1
+</translation>
     </message>
     <message>
         <source>Bitterness: %1 IBUs (%2)
 </source>
-        <translation>Amertume:%1 UAI (%2)</translation>
+        <translation>Amertume:%1 UAI (%2)
+</translation>
     </message>
     <message>
         <source>Color: %1 SRM (%2)
 </source>
-        <translation>Couleur: %1 SRM (%2)</translation>
+        <translation>Couleur: %1 SRM (%2)
+</translation>
     </message>
     <message>
         <source>Fermentables
 </source>
-        <translation>Ingrédients fermentescibles</translation>
+        <translation>Ingrédients fermentescibles
+</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1282,12 +1290,14 @@
     <message>
         <source>Total grain: %1
 </source>
-        <translation>Total grains: %1</translation>
+        <translation>Total grains: %1
+</translation>
     </message>
     <message>
         <source>Hops
 </source>
-        <translation>Houblon</translation>
+        <translation>Houblon
+</translation>
     </message>
     <message>
         <source>Alpha</source>
@@ -1308,26 +1318,18 @@
     <message>
         <source>Misc
 </source>
-        <translation>Autres</translation>
+        <translation>Autres
+</translation>
     </message>
     <message>
         <source>Yeast
 </source>
-        <translation>Levure</translation>
+        <translation>Levure
+</translation>
     </message>
     <message>
         <source>Form</source>
         <translation>Format</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="obsolete">Efficacité: %1%%</translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
-</source>
-        <translation type="obsolete">ABV: %1%%</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -1344,7 +1346,8 @@
     <message>
         <source>Mash
 </source>
-        <translation>Empâtage</translation>
+        <translation>Empâtage
+</translation>
     </message>
     <message>
         <source>Temp</source>
@@ -1357,12 +1360,14 @@
     <message>
         <source>Notes
 </source>
-        <translation>Notes</translation>
+        <translation>Notes
+</translation>
     </message>
     <message>
         <source>Instructions
 </source>
-        <translation>Directives</translation>
+        <translation>Directives
+</translation>
     </message>
     <message>
         <source>Directory Problem</source>
@@ -1399,14 +1404,6 @@
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
         <translation>Impossible d&apos;ouvrir la base de données &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="obsolete">Fusionner la base de données</translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="obsolete">Il peut y avoir de nouveaux ingrédients et recettes disponibles. Voulez-vous les ajouter à votre base de données ?</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -1595,16 +1592,38 @@
     <message>
         <source>Efficiency: %1%
 </source>
-        <translation>Efficacité: %1%</translation>
+        <translation>Efficacité: %1%
+</translation>
     </message>
     <message>
         <source>ABV: %1%
 </source>
-        <translation>ABV: %1%</translation>
+        <translation>ABV: %1%
+</translation>
     </message>
     <message>
         <source>Style</source>
         <translation type="unfinished">Style</translation>
+    </message>
+    <message>
+        <source>Efficiency: %1%%
+</source>
+        <translation type="obsolete">Efficacité: %1%
+</translation>
+    </message>
+    <message>
+        <source>ABV: %1%%
+</source>
+        <translation type="obsolete">ABV: %1%
+</translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="obsolete">Fusionner la base de données</translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="obsolete">Il peut y avoir de nouveaux ingrédients et recettes disponibles. Voulez-vous les ajouter à votre base de données ?</translation>
     </message>
 </context>
 <context>
@@ -1615,7 +1634,7 @@
     </message>
     <message>
         <source>Add </source>
-        <translation>Ajoutez</translation>
+        <translation>Ajoutez </translation>
     </message>
     <message>
         <source>to the mash tun.</source>
@@ -1627,7 +1646,7 @@
     </message>
     <message>
         <source>Bring </source>
-        <translation>Amenez</translation>
+        <translation>Amenez </translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
@@ -1651,7 +1670,7 @@
     </message>
     <message>
         <source> Hold for %1.</source>
-        <translation>Gardez à %1.</translation>
+        <translation> Gardez à %1.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
@@ -1703,7 +1722,7 @@
     </message>
     <message>
         <source>Do first wort hopping with </source>
-        <translation>Complétez houblonnage pré-cuisson à l&apos;aide de</translation>
+        <translation>Complétez houblonnage pré-cuisson à l&apos;aide de </translation>
     </message>
     <message>
         <source>First wort hopping</source>
@@ -1715,7 +1734,7 @@
     </message>
     <message>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation>Ajoutez %1 eau à à la chaudière à moût afin d&apos;avoir un volume pré-cuisson de moût de %2.</translation>
+        <translation> Ajoutez %1 eau à à la chaudière à moût afin d&apos;avoir un volume pré-cuisson de moût de %2.</translation>
     </message>
     <message>
         <source>Pre-boil</source>
@@ -1723,7 +1742,7 @@
     </message>
     <message>
         <source>Boil or steep </source>
-        <translation>Bouillir ou infuser</translation>
+        <translation>Bouillir ou infuser </translation>
     </message>
     <message>
         <source>Boil/steep fermentables</source>
@@ -1744,17 +1763,20 @@
     <message>
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
-        <translation>Vous avez anticipé une perte de %1 due à la cassure et au refroidissement dans la chaudière à moût.</translation>
+        <translation>
+Vous avez anticipé une perte de %1 due à la cassure et au refroidissement dans la chaudière à moût.</translation>
     </message>
     <message>
         <source>
 Add %1 top up water into primary.</source>
-        <translation>Ajoutez%1 d&apos;eau supplémentaire à la cuve de fermentation.</translation>
+        <translation>
+Ajoutez%1 d&apos;eau supplémentaire à la cuve de fermentation.</translation>
     </message>
     <message>
         <source>
 The final volume in the primary is %1.</source>
-        <translation>Le volume final dans la cuve de fermentation est de %1.</translation>
+        <translation>
+Le volume final dans la cuve de fermentation est de %1.</translation>
     </message>
     <message>
         <source>Post boil</source>
@@ -1786,7 +1808,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Cool wort and pitch </source>
-        <translation>Refroidir le moût et inoculez de levures</translation>
+        <translation>Refroidir le moût et inoculez de levures </translation>
     </message>
     <message>
         <source>%1 %2 yeast, </source>
@@ -2492,7 +2514,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation>Température d&apos;inoculation</translation>
+        <translation> Température d&apos;inoculation</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
@@ -2753,7 +2775,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>L&apos;utilisation du Houblon</translation>
+        <translation>L&apos;utilisation du Houblon </translation>
     </message>
 </context>
 <context>
@@ -2985,7 +3007,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Amount </source>
-        <translation>Quantité</translation>
+        <translation>Quantité </translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3378,11 +3400,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>Fichier</translation>
+        <translation>&amp;Fichier</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
-        <translation>Journée de brassage</translation>
+        <translation>Journée de &amp;brassage</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
@@ -3394,7 +3416,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>Visulaliser</translation>
+        <translation>&amp;Visulaliser</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
@@ -3577,10 +3599,6 @@ p, li { white-space: pre-wrap; }
         <translation>Sauvegardez</translation>
     </message>
     <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Supprimer recette</translation>
-    </message>
-    <message>
         <source>Delete selected</source>
         <translation>Supprimez le sélectionné</translation>
     </message>
@@ -3610,15 +3628,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Styles</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Empâtage</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Empâtage</translation>
+    </message>
+    <message>
+        <source>Clear recipe</source>
+        <translation type="obsolete">Retirer recette</translation>
     </message>
 </context>
 <context>
@@ -3979,7 +4001,7 @@ p, li { white-space: pre-wrap; }
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Éditeur d&apos;empâtage</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -4339,10 +4361,6 @@ p, li { white-space: pre-wrap; }
         <translation>Pour ferm. haute: 0.75-1. Pour ferm. basse: 1.5-2.</translation>
     </message>
     <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="obsolete">Taux d&apos;inoculation [cellules / (ml * P)]</translation>
-    </message>
-    <message>
         <source>Aeration Method</source>
         <translation>Méthode d&apos;aération</translation>
     </message>
@@ -4409,6 +4427,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
         <translation>Taux d&apos;inoculation [M cellules/(mL*P)]</translation>
+    </message>
+    <message>
+        <source>Pitch Rate (cells)/(mL*P)</source>
+        <translation type="obsolete">Taux d&apos;inoculation [M cellules/(mL*P)]</translation>
     </message>
 </context>
 <context>

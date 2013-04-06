@@ -306,7 +306,7 @@
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stijl</translation>
     </message>
 </context>
 <context>
@@ -437,16 +437,8 @@
         <translation>Vat Volume Waarschuwing</translation>
     </message>
     <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">Het ingevoerde vat volume is 0. Dit kan problemen veroorzaken.</translation>
-    </message>
-    <message>
         <source>Batch Size Warning</source>
         <translation>Batch Grootte Waarschuwing</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">De ingevoerde batch grootte is 0. Dit kan prolemen veroorzaken.</translation>
     </message>
     <message>
         <source>Equipment name</source>
@@ -458,11 +450,11 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Het ingevoerde vat volume is 0. Dit kan problemen veroorzaken.</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">De ingevoerde batch grootte is 0. Dit kan prolemen veroorzaken.</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
@@ -470,7 +462,15 @@
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">De ingevoerde batch grootte is 0. Dit kan prolemen veroorzaken.</translation>
+    </message>
+    <message>
+        <source>The tun volume you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">Het ingevoerde vat volume is 0. Dit kan problemen veroorzaken.</translation>
+    </message>
+    <message>
+        <source>The batch size you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">De ingevoerde batch grootte is 0. Dit kan prolemen veroorzaken.</translation>
     </message>
 </context>
 <context>
@@ -821,10 +821,6 @@
         <translation>Dit schoont uw huidige set recepten en ingrediënten. Doorgaan?</translation>
     </message>
     <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Herstellen Database</translation>
-    </message>
-    <message>
         <source>For some reason, the operation failed.</source>
         <translation>De opratie faalde om de een of andere reden.</translation>
     </message>
@@ -898,7 +894,7 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stijl</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -907,6 +903,10 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation type="obsolete">Herstellen Database</translation>
     </message>
 </context>
 <context>
@@ -1134,10 +1134,6 @@
 <context>
     <name>MiscTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Bad model index. row = %1</translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation>Naam</translation>
     </message>
@@ -1167,7 +1163,11 @@
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hoeveelheid </translation>
+    </message>
+    <message>
+        <source>Bad model index. row = %1</source>
+        <translation type="obsolete">Bad model index. row = %1</translation>
     </message>
 </context>
 <context>
@@ -1201,32 +1201,36 @@
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation>Onbekend IBU formule type.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Batch Size: %1
 </source>
-        <translation>Batch grootte: %1</translation>
+        <translation>Batch grootte: %1
+</translation>
     </message>
     <message>
         <source>Boil Size: %1
 </source>
-        <translation>Kook Volume:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Boil Time: %1
 </source>
-        <translation>Kook Tijd: %1</translation>
+        <translation>Kook Tijd: %1
+</translation>
     </message>
     <message>
         <source>OG: %1
 </source>
-        <translation>Oorspronkelijk SG: %1</translation>
+        <translation>Oorspronkelijk SG: %1
+</translation>
     </message>
     <message>
         <source>FG: %1
 </source>
-        <translation>Eind SG: %1</translation>
+        <translation>Eind SG: %1
+</translation>
     </message>
     <message>
         <source>Bitterness: %1 IBUs (%2)
@@ -1319,17 +1323,12 @@
     <message>
         <source>Yeast
 </source>
-        <translation>Gist</translation>
+        <translation>Gist
+</translation>
     </message>
     <message>
         <source>Form</source>
         <translation>Vorm</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="obsolete">Efficiëntie: %1%%
-</translation>
     </message>
     <message>
         <source>ABV: %1%%
@@ -1410,14 +1409,6 @@
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="obsolete">Database Samenvoegen</translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="obsolete">Er zijn mogelijk nieuwe ingrediënten en recepten verkrijgbaar. Wilt u deze toevoegen aan uw database?</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
@@ -1617,6 +1608,19 @@
         <source>Style</source>
         <translation type="unfinished">Stijl</translation>
     </message>
+    <message>
+        <source>Efficiency: %1%%
+</source>
+        <translation type="obsolete">Efficiëntie (%)</translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="obsolete">Database Samenvoegen</translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="obsolete">Er zijn mogelijk nieuwe ingrediënten en recepten verkrijgbaar. Wilt u deze toevoegen aan uw database?</translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -1642,7 +1646,7 @@
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 water naar %2,</translation>
+        <translation>%1 water naar %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
@@ -1662,7 +1666,7 @@
     </message>
     <message>
         <source> Hold for %1.</source>
-        <translation>%1 aanhouden.</translation>
+        <translation> %1 aanhouden.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
@@ -1734,7 +1738,7 @@
     </message>
     <message>
         <source>Boil or steep </source>
-        <translation>Koken of weken</translation>
+        <translation>Koken of weken </translation>
     </message>
     <message>
         <source>Boil/steep fermentables</source>
@@ -1756,8 +1760,7 @@
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
         <translation>
-U anticipeert om %1 te verliezen aan eiwitafscheiding en koeler verlies.
-	</translation>
+U anticipeert om %1 te verliezen aan eiwitafscheiding en koeler verlies.</translation>
     </message>
     <message>
         <source>
@@ -1801,7 +1804,7 @@ Het uiteindelijke volume in de hoofdvergisting is %1.</translation>
     </message>
     <message>
         <source>Cool wort and pitch </source>
-        <translation>Koel de wort en voeg gist toe</translation>
+        <translation>Koel de wort en voeg gist toe </translation>
     </message>
     <message>
         <source>%1 %2 yeast, </source>
@@ -3429,8 +3432,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation>Mout
-</translation>
+        <translation>Mout</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
@@ -3438,8 +3440,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation>Hop
-</translation>
+        <translation>Hop</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
@@ -3594,10 +3595,6 @@ p, li { white-space: pre-wrap; }
         <translation>Opslaan</translation>
     </message>
     <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Wis recept</translation>
-    </message>
-    <message>
         <source>Delete selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3627,15 +3624,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stijlen</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maisch</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maisch</translation>
+    </message>
+    <message>
+        <source>Clear recipe</source>
+        <translation type="obsolete">Verwijder recept</translation>
     </message>
 </context>
 <context>
@@ -3996,7 +3997,7 @@ p, li { white-space: pre-wrap; }
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Maisch Editor</translation>
     </message>
     <message>
         <source>Mash</source>

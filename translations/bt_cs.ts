@@ -144,7 +144,7 @@
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="173"/>
         <source>Date</source>
-        <translation></translation>
+        <translation type="unfinished">Datum</translation>
     </message>
     <message>
         <location filename="../src/BrewDayWidget.cpp" line="178"/>
@@ -372,7 +372,7 @@
     <message>
         <location filename="../src/BrewTargetTreeView.cpp" line="359"/>
         <source>New Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Styl</translation>
     </message>
     <message>
         <location filename="../src/BrewTargetTreeView.cpp" line="363"/>
@@ -565,35 +565,27 @@
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="176"/>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zadaný objem kádě je 0. To může způsobit potíže.</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="179"/>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zadaný objem várky je 0. To může způsobit potíže.</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="182"/>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Využití Chmele </translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="182"/>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">Zadaný objem kádě je 0. To může způsobit potíže.</translation>
+        <translation type="unfinished">Zadaný objem várky je 0. To může způsobit potíže.</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="179"/>
         <source>Batch Size Warning</source>
         <translation>Varování objemu várky</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">Zadaný objem várky je 0. To může způsobit potíže.</translation>
     </message>
     <message>
         <location filename="../src/EquipmentEditor.cpp" line="210"/>
@@ -604,6 +596,14 @@
         <location filename="../src/EquipmentEditor.cpp" line="211"/>
         <source>Equipment name:</source>
         <translation>Název vybavení:</translation>
+    </message>
+    <message>
+        <source>The tun volume you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">Zadaný objem kádě je 0. To může způsobit potíže.</translation>
+    </message>
+    <message>
+        <source>The batch size you entered is 0. This may cause problems.</source>
+        <translation type="obsolete">Zadaný objem várky je 0. To může způsobit potíže.</translation>
     </message>
 </context>
 <context>
@@ -1023,7 +1023,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="1933"/>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Žádné styl</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="2153"/>
@@ -1063,7 +1063,7 @@
     <message>
         <location filename="../src/MainWindow.cpp" line="995"/>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
-        <translation>Chcete nastavit velikost várky, objeml pro chmelovar a čas podle požadavků vybavení? </translation>
+        <translation>Chcete nastavit velikost várky, objeml pro chmelovar a čas podle požadavků vybavení?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1305"/>
@@ -1101,10 +1101,6 @@
         <location filename="../src/MainWindow.cpp" line="1429"/>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
         <translation>Toto vymaže aktuální recepty a ingredience. Chcete pokračovat?</translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Obnovit databázi</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1442"/>
@@ -1155,6 +1151,10 @@
         <location filename="../src/MainWindow.cpp" line="1690"/>
         <source>Please give your mash a name before saving.</source>
         <translation>Prosím, před ukládáním svůj rmut pojmenujte.</translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation type="obsolete">Obnovit databázi</translation>
     </message>
 </context>
 <context>
@@ -1433,10 +1433,6 @@
 <context>
     <name>MiscTableModel</name>
     <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Chybný index modelu. řádek = %1</translation>
-    </message>
-    <message>
         <location filename="../src/MiscTableModel.cpp" line="229"/>
         <source>Weight</source>
         <translation type="unfinished">Hmotnost</translation>
@@ -1474,7 +1470,11 @@
     <message>
         <location filename="../src/MiscTableModel.cpp" line="255"/>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Množství </translation>
+    </message>
+    <message>
+        <source>Bad model index. row = %1</source>
+        <translation type="obsolete">Chybný index modelu. řádek = %1</translation>
     </message>
 </context>
 <context>
@@ -1521,7 +1521,8 @@
         <location filename="../src/RecipeFormatter.cpp" line="97"/>
         <source>Batch Size: %1
 </source>
-        <translation>Objem várky: %1</translation>
+        <translation>Objem várky: %1
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="98"/>
@@ -1538,28 +1539,17 @@
 </translation>
     </message>
     <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="obsolete">Výtěžnost: %1%%
-</translation>
-    </message>
-    <message>
         <location filename="../src/RecipeFormatter.cpp" line="103"/>
         <source>OG: %1
 </source>
-        <translation>Počáteční hustota: %1</translation>
+        <translation>Počáteční hustota: %1
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="104"/>
         <source>FG: %1
 </source>
         <translation>Konečná hustota: %1
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
-</source>
-        <translation type="obsolete">Obsah alkoholu: %1 %%
 </translation>
     </message>
     <message>
@@ -1587,13 +1577,15 @@
         <location filename="../src/RecipeFormatter.cpp" line="117"/>
         <source>Color: %1 SRM (%2)
 </source>
-        <translation>Barva: %1 SRM (%2)</translation>
+        <translation>Barva: %1 SRM (%2)
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="138"/>
         <source>Fermentables
 </source>
-        <translation>Suroviny</translation>
+        <translation>Suroviny
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="142"/>
@@ -1664,7 +1656,8 @@
         <location filename="../src/RecipeFormatter.cpp" line="183"/>
         <source>Hops
 </source>
-        <translation>Chmele</translation>
+        <translation>Chmele
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="189"/>
@@ -1699,7 +1692,8 @@
         <location filename="../src/RecipeFormatter.cpp" line="227"/>
         <source>Misc
 </source>
-        <translation>Přípravky</translation>
+        <translation>Přípravky
+</translation>
     </message>
     <message>
         <location filename="../src/RecipeFormatter.cpp" line="262"/>
@@ -1714,14 +1708,14 @@
         <translation>Etapa</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="90"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Secondary</source>
         <translation>Dokvašování</translation>
     </message>
     <message>
-        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <location filename="../src/misc.cpp" line="90"/>
+        <location filename="../src/RecipeFormatter.cpp" line="278"/>
         <source>Primary</source>
         <translation>Hlavní kvašení</translation>
     </message>
@@ -1753,7 +1747,8 @@
         <location filename="../src/RecipeFormatter.cpp" line="355"/>
         <source>Instructions
 </source>
-        <translation>Instrukce</translation>
+        <translation>Instrukce
+</translation>
     </message>
     <message>
         <location filename="../src/brewtarget.cpp" line="103"/>
@@ -1805,14 +1800,6 @@
         <location filename="../src/database.cpp" line="3858"/>
         <source>Failed to open the database &apos;%1&apos;.</source>
         <translation>Nepodařilo se otevřít databázi &apos;%1&apos;.</translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="obsolete">Spojit databáze</translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="obsolete">Možná jsou k dispozici nové přísady a recepty. Chcete je přidat do své databáze?</translation>
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="1643"/>
@@ -1900,20 +1887,20 @@
         <translation>Rmutování</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="432"/>
         <location filename="../src/mashstep.cpp" line="24"/>
+        <location filename="../src/MashStepTableModel.cpp" line="432"/>
         <source>Infusion</source>
         <translation>Infuze</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="432"/>
         <location filename="../src/mashstep.cpp" line="24"/>
+        <location filename="../src/MashStepTableModel.cpp" line="432"/>
         <source>Temperature</source>
         <translation>Teplota</translation>
     </message>
     <message>
-        <location filename="../src/MashStepTableModel.cpp" line="432"/>
         <location filename="../src/mashstep.cpp" line="24"/>
+        <location filename="../src/MashStepTableModel.cpp" line="432"/>
         <source>Decoction</source>
         <translation>Dekokce</translation>
     </message>
@@ -2051,6 +2038,26 @@
         <location filename="../src/BrewTargetTreeItem.cpp" line="341"/>
         <source>Style</source>
         <translation type="unfinished">Styl</translation>
+    </message>
+    <message>
+        <source>Efficiency: %1%%
+</source>
+        <translation type="obsolete">Výtěžnost: %1%
+</translation>
+    </message>
+    <message>
+        <source>ABV: %1%%
+</source>
+        <translation type="obsolete">Obsah alkoholu: %1 %
+</translation>
+    </message>
+    <message>
+        <source>Merge Database</source>
+        <translation type="obsolete">Spojit databáze</translation>
+    </message>
+    <message>
+        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
+        <translation type="obsolete">Možná jsou k dispozici nové přísady a recepty. Chcete je přidat do své databáze?</translation>
     </message>
 </context>
 <context>
@@ -2201,7 +2208,7 @@
     <message>
         <location filename="../src/recipe.cpp" line="425"/>
         <source>Boil or steep </source>
-        <translation>Chmelovar nebo máčení</translation>
+        <translation>Chmelovar nebo máčení </translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="440"/>
@@ -2297,7 +2304,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <message>
         <location filename="../src/recipe.cpp" line="679"/>
         <source>%1 %2 yeast, </source>
-        <translation>%1 %2 kvasnic</translation>
+        <translation>%1 %2 kvasnic </translation>
     </message>
     <message>
         <location filename="../src/recipe.cpp" line="681"/>
@@ -2933,7 +2940,56 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, software pro vývoj pivních receptů.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2012 vývojáři níže.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Vývojáři&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Mik Firestone&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Dan Cavanagh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Eric Tamme&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jeff Bailey&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Zdrojový kód&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Zdrojový kód Brewtargetu je dostupný na &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Zvláštní poděkování&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (francouzský překlad)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (polský překlad)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (polský překlad)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (portugalský překlad)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jan Grmela (český překlad)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alfatestování)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;A68 - Freelance Graphics Design (obrázky vlajek)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázky serveru, tiskárny, upravit-kopírovat, náhled tisku a spojení z tématu Oxygen (licence CC)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázek zálohování z tématu Nuvola (LGPL)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázek obnovení od Fatcow Web Hosting &amp;quot;Farm Fresh Icons&amp;quot; (licence CC)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../ui/aboutDialog.ui" line="107"/>
+        <source>Donate</source>
+        <translation>Zaslat dar</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -3026,11 +3082,6 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázky serveru, tiskárny, upravit-kopírovat, náhled tisku a spojení z tématu Oxygen (licence CC)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázek zálohování z tématu Nuvola (LGPL)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázek obnovení od Fatcow Web Hosting &amp;quot;Farm Fresh Icons&amp;quot; (licence CC)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../ui/aboutDialog.ui" line="107"/>
-        <source>Donate</source>
-        <translation>Zaslat dar</translation>
     </message>
 </context>
 <context>
@@ -3264,7 +3315,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="393"/>
         <source> Pitch Temp</source>
-        <translation>Teplota zakvašení</translation>
+        <translation> Teplota zakvašení</translation>
     </message>
     <message>
         <location filename="../ui/brewNoteWidget.ui" line="427"/>
@@ -3517,7 +3568,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/equipmentEditor.ui" line="468"/>
         <source>Hop Utilization </source>
-        <translation>Využití Chmele</translation>
+        <translation>Využití Chmele </translation>
     </message>
     <message>
         <location filename="../ui/equipmentEditor.ui" line="513"/>
@@ -3793,7 +3844,8 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/fermentableEditor.ui" line="523"/>
         <source>Is Mashed</source>
-        <translatorcomment>Znamená to, že už je po rmutování?</translatorcomment>
+        <translatorcomment>Znamená to, že už je po rmutování?
+</translatorcomment>
         <translation>Je rmutovaná</translation>
     </message>
     <message>
@@ -3886,7 +3938,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/hopEditor.ui" line="156"/>
         <source>Amount </source>
-        <translation>Množství</translation>
+        <translation>Množství </translation>
     </message>
     <message>
         <location filename="../ui/hopEditor.ui" line="181"/>
@@ -4386,7 +4438,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="102"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">S&amp;tyly</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="437"/>
@@ -4649,16 +4701,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/mainWindow.ui" line="2513"/>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rmutování</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2516"/>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Vyprázdnit recept</translation>
+        <translation type="unfinished">Rmutování</translation>
     </message>
     <message>
         <location filename="../ui/mainWindow.ui" line="2491"/>
@@ -4694,6 +4742,10 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/mainWindow.ui" line="2285"/>
         <source>Restore Database</source>
         <translation>Obnovit databázi</translation>
+    </message>
+    <message>
+        <source>Clear recipe</source>
+        <translation type="obsolete">Odebrat recept</translation>
     </message>
 </context>
 <context>
@@ -5158,12 +5210,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/namedMashEditor.ui" line="14"/>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Editor rmutů</translation>
     </message>
     <message>
         <location filename="../ui/namedMashEditor.ui" line="22"/>
         <source>Mash</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mash (do vystírky)</translation>
     </message>
     <message>
         <location filename="../ui/namedMashEditor.ui" line="42"/>
@@ -5612,10 +5664,6 @@ p, li { white-space: pre-wrap; }
         <translation>Pro ejly 0,75. Pro ležáky 1,5-2.</translation>
     </message>
     <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="obsolete">Rychl. množení (buňek)/(ml*P)</translation>
-    </message>
-    <message>
         <location filename="../ui/pitchDialog.ui" line="107"/>
         <source>Aeration Method</source>
         <translation>Způsob provzdušnění</translation>
@@ -5699,6 +5747,10 @@ p, li { white-space: pre-wrap; }
         <location filename="../ui/pitchDialog.ui" line="275"/>
         <source>Billions of Yeast Cells Required</source>
         <translation>Žádaný počet miliard kvasinek</translation>
+    </message>
+    <message>
+        <source>Pitch Rate (cells)/(mL*P)</source>
+        <translation type="obsolete">Rychl. množení (M buňek)/(mL*P)</translation>
     </message>
 </context>
 <context>
@@ -6449,7 +6501,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../ui/yeastEditor.ui" line="326"/>
         <source>Min temp</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/yeastEditor.ui" line="337"/>
