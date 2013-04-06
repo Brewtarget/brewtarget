@@ -326,16 +326,15 @@ QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
 
 # Translations
-IF(UPDATE_TRANSLATIONS)
-  # Updates the .ts files with translatable strings, AND creates the binary .qm files
-  QT4_CREATE_TRANSLATION(QM_FILES
-                         ${FILES_TO_TRANSLATE}
-                         ${TRANSLATIONS_FILES}
+FIND_PROGRAM( LUPDATE_CMD lupdate-qt4 )
+IF( LUPDATE_CMD )
+  ADD_CUSTOM_TARGET(
+     update_translations
+     COMMAND ${LUPDATE_CMD} "-no-obsolete" ${FILES_TO_TRANSLATE} "-ts" ${TRANSLATIONS_FILES}
   )
-ELSE()
-  # Creates the .qm files without modifying the .ts files.
-  QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
-ENDIF() 
+ENDIF()
+# Creates the .qm files.
+QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
 
 # Add a target for the QM_FILES so that we can add
 # the translations as a dependency for the executable later.
