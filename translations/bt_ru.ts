@@ -16,7 +16,7 @@
 #</extra-po-header_comment>
     <extra-po-header-last_translator>Sergey VR &lt;prostopivo@mail.ru&gt;</extra-po-header-last_translator>
 <context>
-    <name></name>
+    <name>BrewDayScrollWidget</name>
     <message>
         <source>Style</source>
         <comment>BrewDayScrollWidget|</comment>
@@ -147,6 +147,9 @@
         <comment>BrewDayScrollWidget|</comment>
         <translation>Подогрев воды</translation>
     </message>
+</context>
+<context>
+    <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
         <comment>BrewDayWidget|</comment>
@@ -257,6 +260,9 @@
         <comment>BrewDayWidget|</comment>
         <translation>Этап %1: %2</translation>
     </message>
+</context>
+<context>
+    <name>BrewTargetTreeModel</name>
     <message>
         <source>Name</source>
         <comment>BrewTargetTreeModel|</comment>
@@ -297,6 +303,9 @@
         <comment>BrewTargetTreeModel|</comment>
         <translation>Форма</translation>
     </message>
+</context>
+<context>
+    <name>BrewTargetTreeView</name>
     <message>
         <source>New Recipe</source>
         <comment>BrewTargetTreeView|</comment>
@@ -357,6 +366,9 @@
         <comment>BrewTargetTreeView|</comment>
         <translation>Импортировать</translation>
     </message>
+</context>
+<context>
+    <name>Brewtarget</name>
     <message>
         <source>Default</source>
         <comment>Brewtarget|</comment>
@@ -467,6 +479,9 @@
         <comment>Brewtarget|</comment>
         <translation>Галлоны</translation>
     </message>
+</context>
+<context>
+    <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
         <comment>BtDigitWidget|</comment>
@@ -482,6 +497,9 @@
         <comment>BtDigitWidget|</comment>
         <translation>Слишком высоко для стиля</translation>
     </message>
+</context>
+<context>
+    <name>Database</name>
     <message>
         <source>Merge Database</source>
         <comment>Database|</comment>
@@ -492,6 +510,9 @@
         <comment>Database|</comment>
         <translation>Возможно доступны новые ингридиенты и рецепты. Желаете добавить их в вашу базу данных?</translation>
     </message>
+</context>
+<context>
+    <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
         <comment>EquipmentEditor|</comment>
@@ -527,6 +548,9 @@
         <comment>EquipmentEditor|</comment>
         <translation>Название оборудования:</translation>
     </message>
+</context>
+<context>
+    <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
         <comment>FermentableDialog|</comment>
@@ -537,6 +561,9 @@
         <comment>FermentableDialog|</comment>
         <translation>Название сбраживаемого</translation>
     </message>
+</context>
+<context>
+    <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
         <comment>FermentableItemDelegate|</comment>
@@ -562,6 +589,9 @@
         <comment>FermentableItemDelegate|</comment>
         <translation>Дополнение</translation>
     </message>
+</context>
+<context>
+    <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <comment>FermentableTableModel|</comment>
@@ -632,6 +662,9 @@
         <comment>FermentableTableModel|</comment>
         <translation>Цвет (EBC)</translation>
     </message>
+</context>
+<context>
+    <name>Hop</name>
     <message>
         <source>Mash</source>
         <comment>Hop|</comment>
@@ -682,6 +715,9 @@
         <comment>Hop|</comment>
         <translation>Пробка</translation>
     </message>
+</context>
+<context>
+    <name>HopDialog</name>
     <message>
         <source>Hop name</source>
         <comment>HopDialog|</comment>
@@ -692,6 +728,9 @@
         <comment>HopDialog|</comment>
         <translation>Название хмеля:</translation>
     </message>
+</context>
+<context>
+    <name>HopItemDelegate</name>
     <message>
         <source>Boil</source>
         <comment>HopItemDelegate|</comment>
@@ -732,6 +771,9 @@
         <comment>HopItemDelegate|</comment>
         <translation>Пробка</translation>
     </message>
+</context>
+<context>
+    <name>HopTableModel</name>
     <message>
         <source>Name</source>
         <comment>HopTableModel|</comment>
@@ -762,6 +804,9 @@
         <comment>HopTableModel|</comment>
         <translation>Форма</translation>
     </message>
+</context>
+<context>
+    <name>MainWindow</name>
     <message>
         <source>Open</source>
         <comment>MainWindow|</comment>
@@ -1002,6 +1047,9 @@
         <comment>MainWindow|</comment>
         <translation>Сначала выберите стиль</translation>
     </message>
+</context>
+<context>
+    <name>MaltinessWidget</name>
     <message>
         <source>&lt;b&gt;Cloying&lt;/b&gt;</source>
         <comment>MaltinessWidget|</comment>
@@ -1037,6 +1085,9 @@
         <comment>MaltinessWidget|</comment>
         <translation>&lt;b&gt;Правильно охмелено&lt;/b&gt;</translation>
     </message>
+</context>
+<context>
+    <name>MashDesigner</name>
     <message>
         <source>No Fermentables</source>
         <comment>MashDesigner|</comment>
@@ -1077,6 +1128,9 @@
         <comment>MashDesigner|</comment>
         <translation>Первый этам затора не может быть сварен</translation>
     </message>
+</context>
+<context>
+    <name>MashStepTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <comment>MashStepTableModel|</comment>
@@ -1117,6 +1171,9 @@
         <comment>MashStepTableModel|</comment>
         <translation>Время</translation>
     </message>
+</context>
+<context>
+    <name>MashWizard</name>
     <message>
         <source>Mash thickness (%1/%2)</source>
         <comment>MashWizard|</comment>
@@ -1192,6 +1249,9 @@
         <comment>MashWizard|</comment>
         <translation>У Вас слишком много сусла для кипячения. Я рекомендую изменить размер кипячения путём изменения времени кипячения. Или уменьшения толщины затора.</translation>
     </message>
+</context>
+<context>
+    <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
         <comment>MiscDialog|</comment>
@@ -1202,6 +1262,9 @@
         <comment>MiscDialog|</comment>
         <translation>Разное имя:</translation>
     </message>
+</context>
+<context>
+    <name>MiscItemDelegate</name>
     <message>
         <source>Spice</source>
         <comment>MiscItemDelegate|</comment>
@@ -1257,6 +1320,9 @@
         <comment>MiscItemDelegate|</comment>
         <translation>Бутылирование</translation>
     </message>
+</context>
+<context>
+    <name>MiscTableModel</name>
     <message>
         <source>Name</source>
         <comment>MiscTableModel|</comment>
@@ -1282,6 +1348,9 @@
         <comment>MiscTableModel|</comment>
         <translation>Количество</translation>
     </message>
+</context>
+<context>
+    <name>OptionDialog</name>
     <message>
         <source>Open Directory</source>
         <comment>OptionDialog|</comment>
@@ -1317,6 +1386,9 @@
         <comment>QObject|</comment>
         <translation>Неопределённый тип IBU. %1</translation>
     </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
         <source>Batch Size: %1
 </source>
@@ -1806,6 +1878,9 @@
         <translation>Объём алкоголя: %1%
 </translation>
     </message>
+</context>
+<context>
+    <name>Recipe</name>
     <message>
         <source>Add grains</source>
         <comment>Recipe|</comment>
@@ -2087,6 +2162,9 @@ The final volume in the primary is %1.</source>
         <comment>Recipe|</comment>
         <translation>%1 воды к %2 </translation>
     </message>
+</context>
+<context>
+    <name>RecipeFormatter</name>
     <message>
         <source>unknown style</source>
         <comment>RecipeFormatter|</comment>
@@ -2372,6 +2450,9 @@ The final volume in the primary is %1.</source>
         <comment>RecipeFormatter|</comment>
         <translation>Печать документа</translation>
     </message>
+</context>
+<context>
+    <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
         <comment>RefractoDialog|</comment>
@@ -2382,6 +2463,9 @@ The final volume in the primary is %1.</source>
         <comment>RefractoDialog|</comment>
         <translation>Основанная на данном начальном плато, начальная плотность должна быть %1, но вы ввели %2. Продолжаем с расчитаной начальной плотностью.</translation>
     </message>
+</context>
+<context>
+    <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
         <comment>ScaleRecipeTool|</comment>
@@ -2397,6 +2481,9 @@ The final volume in the primary is %1.</source>
         <comment>ScaleRecipeTool|</comment>
         <translation>Оборудование и затор были сброшены т.к. температура затора не маштабируется. Пожалуйсто перезапустите визард затора.</translation>
     </message>
+</context>
+<context>
+    <name>StyleEditor</name>
     <message>
         <source>Style name</source>
         <comment>StyleEditor|</comment>
@@ -2407,6 +2494,9 @@ The final volume in the primary is %1.</source>
         <comment>StyleEditor|</comment>
         <translation>Название стиля</translation>
     </message>
+</context>
+<context>
+    <name>TimerWidget</name>
     <message>
         <source>Open Sound</source>
         <comment>TimerWidget|</comment>
@@ -2427,6 +2517,9 @@ The final volume in the primary is %1.</source>
         <comment>TimerWidget|</comment>
         <translation>Пуск</translation>
     </message>
+</context>
+<context>
+    <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <comment>WaterTableModel|</comment>
@@ -2477,6 +2570,9 @@ The final volume in the primary is %1.</source>
         <comment>WaterTableModel|</comment>
         <translation>Магнезия (ppm)</translation>
     </message>
+</context>
+<context>
+    <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
         <comment>YeastDialog|</comment>
@@ -2487,6 +2583,9 @@ The final volume in the primary is %1.</source>
         <comment>YeastDialog|</comment>
         <translation>Название дрожжей:</translation>
     </message>
+</context>
+<context>
+    <name>YeastItemDelegate</name>
     <message>
         <source>Ale</source>
         <comment>YeastItemDelegate|</comment>
@@ -2532,6 +2631,9 @@ The final volume in the primary is %1.</source>
         <comment>YeastItemDelegate|</comment>
         <translation>Культура</translation>
     </message>
+</context>
+<context>
+    <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
         <comment>YeastTableModel|</comment>
@@ -2572,6 +2674,9 @@ The final volume in the primary is %1.</source>
         <comment>YeastTableModel|</comment>
         <translation>ID продукта</translation>
     </message>
+</context>
+<context>
+    <name>aboutDialog</name>
     <message>
         <source>About Brewtarget</source>
         <comment>aboutDialog|</comment>
@@ -2670,6 +2775,9 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;значок резервного копирования из темы Nuvola (LGPL)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;значок восстановления из Fatcow Web Hosting &amp;quot;Farm Fresh Icons&amp;quot; (лицензия CC)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
+</context>
+<context>
+    <name>brewDayScrollWidget</name>
     <message>
         <source>Donate</source>
         <comment>aboutDialog|</comment>
@@ -2735,6 +2843,9 @@ p, li { white-space: pre-wrap; }
         <comment>brewDayScrollWidget|</comment>
         <translation>Удалить выбранный этап</translation>
     </message>
+</context>
+<context>
+    <name>brewDayWidget</name>
     <message>
         <source>Brewday Mode</source>
         <comment>brewDayWidget|</comment>
@@ -2810,6 +2921,9 @@ p, li { white-space: pre-wrap; }
         <comment>brewDayWidget|</comment>
         <translation>Вставить</translation>
     </message>
+</context>
+<context>
+    <name>brewNoteWidget</name>
     <message>
         <source>Form</source>
         <comment>brewNoteWidget|</comment>
@@ -2980,11 +3094,17 @@ p, li { white-space: pre-wrap; }
         <comment>brewNoteWidget|</comment>
         <translation>Примечания</translation>
     </message>
+</context>
+<context>
+    <name>btSplashScreen</name>
     <message>
         <source>Form</source>
         <comment>btSplashScreen|</comment>
         <translation>Форма</translation>
     </message>
+</context>
+<context>
+    <name>converterTool</name>
     <message>
         <source>Converter Tool</source>
         <comment>converterTool|</comment>
@@ -3025,6 +3145,9 @@ p, li { white-space: pre-wrap; }
         <comment>converterTool|</comment>
         <translation>Преобразовать</translation>
     </message>
+</context>
+<context>
+    <name>equipmentEditor</name>
     <message>
         <source>Equipment Editor</source>
         <comment>equipmentEditor|</comment>
@@ -3215,6 +3338,9 @@ p, li { white-space: pre-wrap; }
         <comment>equipmentEditor|</comment>
         <translation>Утилизация хмеля </translation>
     </message>
+</context>
+<context>
+    <name>fermentableDialog</name>
     <message>
         <source>Fermentable Database</source>
         <comment>fermentableDialog|</comment>
@@ -3250,6 +3376,9 @@ p, li { white-space: pre-wrap; }
         <comment>fermentableDialog|</comment>
         <translation>Удалить выбранный ингредиент</translation>
     </message>
+</context>
+<context>
+    <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
         <comment>fermentableEditor|</comment>
@@ -3425,6 +3554,9 @@ p, li { white-space: pre-wrap; }
         <comment>fermentableEditor|</comment>
         <translation>Примечания:</translation>
     </message>
+</context>
+<context>
+    <name>hopDialog</name>
     <message>
         <source>Hop Database</source>
         <comment>hopDialog|</comment>
@@ -3455,6 +3587,9 @@ p, li { white-space: pre-wrap; }
         <comment>hopDialog|</comment>
         <translation>Изменить</translation>
     </message>
+</context>
+<context>
+    <name>hopEditor</name>
     <message>
         <source>Remove</source>
         <comment>hopDialog|</comment>
@@ -3640,6 +3775,9 @@ p, li { white-space: pre-wrap; }
         <comment>hopEditor|</comment>
         <translation>Примечания:</translation>
     </message>
+</context>
+<context>
+    <name>htmlViewer</name>
     <message>
         <source>Html Viewer</source>
         <comment>htmlViewer|</comment>
@@ -3650,6 +3788,9 @@ p, li { white-space: pre-wrap; }
         <comment>htmlViewer|</comment>
         <translation>about:blank</translation>
     </message>
+</context>
+<context>
+    <name>instructionWidget</name>
     <message>
         <source>Form</source>
         <comment>instructionWidget|</comment>
@@ -3675,6 +3816,9 @@ p, li { white-space: pre-wrap; }
         <comment>instructionWidget|</comment>
         <translation>Этап завершён</translation>
     </message>
+</context>
+<context>
+    <name>mainWindow</name>
     <message>
         <source>Recipes</source>
         <comment>mainWindow|</comment>
@@ -4250,6 +4394,9 @@ p, li { white-space: pre-wrap; }
         <comment>mainWindow|</comment>
         <translation>Восстановление Базы</translation>
     </message>
+</context>
+<context>
+    <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
         <comment>mashDesigner|</comment>
@@ -4340,6 +4487,9 @@ p, li { white-space: pre-wrap; }
         <comment>mashDesigner|</comment>
         <translation>густота</translation>
     </message>
+</context>
+<context>
+    <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
         <comment>mashEditor|</comment>
@@ -4410,6 +4560,9 @@ p, li { white-space: pre-wrap; }
         <comment>mashEditor|</comment>
         <translation>Теплоемкость Заторника (кал/(гр*С))</translation>
     </message>
+</context>
+<context>
+    <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
         <comment>mashStepEditor|</comment>
@@ -4510,6 +4663,9 @@ p, li { white-space: pre-wrap; }
         <comment>mashStepEditor|</comment>
         <translation>Температура в конце этого шага</translation>
     </message>
+</context>
+<context>
+    <name>mashWizard</name>
     <message>
         <source>Mash Wizard</source>
         <comment>mashWizard|</comment>
@@ -4525,6 +4681,9 @@ p, li { white-space: pre-wrap; }
         <comment>mashWizard|</comment>
         <translation>Густота затора (ничего не вводите)</translation>
     </message>
+</context>
+<context>
+    <name>miscDialog</name>
     <message>
         <source>Misc Database</source>
         <comment>miscDialog|</comment>
@@ -4560,6 +4719,9 @@ p, li { white-space: pre-wrap; }
         <comment>miscDialog|</comment>
         <translation>Удалить выбранный ингредиент</translation>
     </message>
+</context>
+<context>
+    <name>miscEditor</name>
     <message>
         <source>Misc Editor</source>
         <comment>miscEditor|</comment>
@@ -4670,6 +4832,9 @@ p, li { white-space: pre-wrap; }
         <comment>miscEditor|</comment>
         <translation>Примечания:</translation>
     </message>
+</context>
+<context>
+    <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
         <comment>ogAdjuster|</comment>
@@ -4775,6 +4940,9 @@ p, li { white-space: pre-wrap; }
         <comment>ogAdjuster|</comment>
         <translation>Расчитать</translation>
     </message>
+</context>
+<context>
+    <name>optionsDialog</name>
     <message>
         <source>Options</source>
         <comment>optionsDialog|</comment>
@@ -4987,6 +5155,9 @@ p, li { white-space: pre-wrap; }
         <comment>optionsDialog|</comment>
         <translation>Итальянский</translation>
     </message>
+</context>
+<context>
+    <name>pitchDialog</name>
     <message>
         <source>Pitch Rate Calculator</source>
         <comment>pitchDialog|</comment>
@@ -5097,6 +5268,9 @@ p, li { white-space: pre-wrap; }
         <comment>pitchDialog|</comment>
         <translation>Норма засева (млн.клеток/мл*П)</translation>
     </message>
+</context>
+<context>
+    <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
         <comment>primingDialog|</comment>
@@ -5177,6 +5351,9 @@ p, li { white-space: pre-wrap; }
         <comment>primingDialog|</comment>
         <translation>Расчитать</translation>
     </message>
+</context>
+<context>
+    <name>recipeExtrasDialog</name>
     <message>
         <source>Recipe Extras</source>
         <comment>recipeExtrasDialog|</comment>
@@ -5267,6 +5444,9 @@ p, li { white-space: pre-wrap; }
         <comment>recipeExtrasDialog|</comment>
         <translation>Отмена</translation>
     </message>
+</context>
+<context>
+    <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
         <comment>recipeExtrasWidget|</comment>
@@ -5352,6 +5532,9 @@ p, li { white-space: pre-wrap; }
         <comment>recipeExtrasWidget|</comment>
         <translation>Примечания</translation>
     </message>
+</context>
+<context>
+    <name>refractoDialog</name>
     <message>
         <source>Refractometer Tools</source>
         <comment>refractoDialog|</comment>
@@ -5417,6 +5600,9 @@ p, li { white-space: pre-wrap; }
         <comment>refractoDialog|</comment>
         <translation>Начальная плотность (OG) (20С)</translation>
     </message>
+</context>
+<context>
+    <name>scaleRecipeTool</name>
     <message>
         <source>Scale Recipe</source>
         <comment>scaleRecipeTool|</comment>
@@ -5432,6 +5618,9 @@ p, li { white-space: pre-wrap; }
         <comment>scaleRecipeTool|</comment>
         <translation>Новый объем варки</translation>
     </message>
+</context>
+<context>
+    <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
         <comment>styleEditor|</comment>
@@ -5597,11 +5786,17 @@ p, li { white-space: pre-wrap; }
         <comment>styleEditor|</comment>
         <translation>Отменить</translation>
     </message>
+</context>
+<context>
+    <name>timerListDialog</name>
     <message>
         <source>Timers</source>
         <comment>timerListDialog|</comment>
         <translation>Таймеры</translation>
     </message>
+</context>
+<context>
+    <name>timerWidget</name>
     <message>
         <source>Form</source>
         <comment>timerWidget|</comment>
@@ -5642,6 +5837,9 @@ p, li { white-space: pre-wrap; }
         <comment>timerWidget|</comment>
         <translation>ЧЧ:ММ:СС</translation>
     </message>
+</context>
+<context>
+    <name>waterEditor</name>
     <message>
         <source>Dialog</source>
         <comment>waterEditor|</comment>
@@ -5657,6 +5855,9 @@ p, li { white-space: pre-wrap; }
         <comment>waterEditor|</comment>
         <translation>Примечания</translation>
     </message>
+</context>
+<context>
+    <name>yeastDialog</name>
     <message>
         <source>Yeast Database</source>
         <comment>yeastDialog|</comment>
@@ -5692,6 +5893,9 @@ p, li { white-space: pre-wrap; }
         <comment>yeastDialog|</comment>
         <translation>Удалить выбранные дрожжи</translation>
     </message>
+</context>
+<context>
+    <name>yeastEditor</name>
     <message>
         <source>Yeast Editor</source>
         <comment>yeastEditor|</comment>
