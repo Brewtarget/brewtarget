@@ -30,9 +30,6 @@ OPTION( NO_PHONON
 OPTION( NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
         OFF )
-OPTION( UPDATE_TRANSLATIONS
-        "Update source translation *.ts files (WARNING: 'make clean' will delete the source .ts files! Danger!)"
-        OFF)
 #==============================Compile flags===================================
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
