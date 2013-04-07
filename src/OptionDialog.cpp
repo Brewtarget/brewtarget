@@ -62,6 +62,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    languageToButtonMap["nl"] = pushButton_nl;
    languageToButtonMap["pl"] = pushButton_pl;
    languageToButtonMap["pt"] = pushButton_pt;
+   languageToButtonMap["ru"] = pushButton_ru;
 
    // Want you to only be able to select exactly one in each group.
    languageGroup->setExclusive(true);
@@ -84,6 +85,7 @@ OptionDialog::OptionDialog(QWidget* parent)
    languageGroup->addButton(pushButton_nl);
    languageGroup->addButton(pushButton_pl);
    languageGroup->addButton(pushButton_pt);
+   languageGroup->addButton(pushButton_ru);
 
    // Set up the buttons in the colorGroup
    colorGroup->addButton(checkBox_mosher);
