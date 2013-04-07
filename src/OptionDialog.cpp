@@ -73,9 +73,6 @@ OptionDialog::OptionDialog(QWidget* parent)
    gravGroup->setExclusive(true);
    colorUnitGroup->setExclusive(true);
 
-   // Disable certain buttons due to lack of actual language support.
-   pushButton_de->setEnabled(false);
-
    // Set up the buttons in languageGroup;
    languageGroup->addButton(pushButton_ca);
    languageGroup->addButton(pushButton_cs);
