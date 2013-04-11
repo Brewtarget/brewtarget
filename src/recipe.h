@@ -260,8 +260,6 @@ public:
    
    // Calculated getters.
    double points();
-   //! \brief Gets points if the final \c volume is given.
-   double points(double volume);
    double ABV_pct();
    double color_srm();
    double boilGrav();
@@ -306,7 +304,7 @@ public:
    QList<QString> getReagents( QList<Fermentable*> ferms );
    QList<QString> getReagents( QList<MashStep*> msteps );
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
-   QHash<QString,double> calcTotalPoints();
+   QHash<QString,double> calcTotalPoints(bool preBoil = false);
    
 signals:
    //! \brief Emitted when \c name() changes.
