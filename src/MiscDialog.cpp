@@ -93,8 +93,9 @@ void MiscDialog::addMisc(const QModelIndex& index)
          if( selected[i].row() != row )
             return;
       }
-      
-      translated = selected[0];
+     
+      // Always need to translate indices through the proxy 
+      translated = miscTableProxy->mapToSource(selected[0]);
    }
    else
    {
@@ -109,7 +110,7 @@ void MiscDialog::addMisc(const QModelIndex& index)
    
    Misc *misc = miscTableModel->getMisc(translated.row());
    
-   Database::instance().addToRecipe( mainWindow->currentRecipe(), Database::instance().newMisc(misc) );
+   Database::instance().addToRecipe( mainWindow->currentRecipe(), misc );
 }
 
 void MiscDialog::editSelected()

@@ -91,8 +91,6 @@ ELSEIF( WIN32 )
 ENDIF()
 
 # ======================Find Qt4 (>= 4.6.0) for this project===================
-SET( EXT_LIBS "" )
-
 IF( ${BUILD_DESIGNER_PLUGINS} )
    FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebKit QtXml QtDesigner REQUIRED)
 ELSE()
@@ -104,6 +102,7 @@ MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 # Some distros seem to treat Qt and Phonon as separate, so try to find Phonon.
 IF( NOT ${NO_PHONON} )
    FIND_PACKAGE( Phonon REQUIRED )
+   INCLUDE_DIRECTORIES(${PHONON_INCLUDES})
 ENDIF()
 
 # Some extra files for the "make clean" target.
@@ -423,6 +422,8 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
     SET(CPACK_RPM_PACKAGE_GROUP "Applications/Productivity")
     SET(CPACK_RPM_PACKAGE_REQUIRES "qt >= 4.6.0, phonon >= 4.2.0") # NOTE: I'm just guessing here. Somebody needs to check.
+    SET(CPACK_RPM_SPEC_MORE_DEFINE "%define ignore \#")
+    SET(CPACK_RPM_USER_FILELIST "%ignore /usr" "%ignore /usr/local" "%ignore /usr/local/bin" "%ignore /usr/local/share" "%ignore /usr/local/share/applications")
   #============================WINDOWS===============================
   ELSEIF(WIN32)
     # http://www.thegigsite.com/cmake-2.6.0/CMakeCPackOptions.cmake
