@@ -389,8 +389,31 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagCzech.svg</normaloff>:/images/flagCzech.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_ca">
+           <property name="toolTip">
+            <string>Catalan</string>
+           </property>
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../build/brewtarget.qrc">
+             <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -412,7 +435,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagGermany.svg</normaloff>:/images/flagGermany.svg</iconset>
            </property>
            <property name="iconSize">
@@ -435,7 +458,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagUK.svg</normaloff>:/images/flagUK.svg</iconset>
            </property>
            <property name="iconSize">
@@ -465,7 +488,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagSpain.svg</normaloff>:/images/flagSpain.svg</iconset>
            </property>
            <property name="iconSize">
@@ -488,7 +511,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagFrance.svg</normaloff>:/images/flagFrance.svg</iconset>
            </property>
            <property name="iconSize">
@@ -511,31 +534,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagItaly.svg</normaloff>:/images/flagItaly.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_nl">
-           <property name="toolTip">
-            <string>Dutch</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
-             <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -556,16 +556,16 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QPushButton" name="pushButton_ca">
+          <widget class="QPushButton" name="pushButton_nl">
            <property name="toolTip">
-            <string>Catalan</string>
+            <string>Dutch</string>
            </property>
            <property name="text">
-            <string notr="true"/>
+            <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
-             <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
+            <iconset resource="../../build/brewtarget.qrc">
+             <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -587,7 +587,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagPoland.svg</normaloff>:/images/flagPoland.svg</iconset>
            </property>
            <property name="iconSize">
@@ -610,8 +610,31 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../build/brewtarget.qrc">
+            <iconset resource="../../build/brewtarget.qrc">
              <normaloff>:/images/flagPortugal.svg</normaloff>:/images/flagPortugal.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_ru">
+           <property name="toolTip">
+            <string>Russian</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../build/brewtarget.qrc">
+             <normaloff>:/images/flagRussia.svg</normaloff>:/images/flagRussia.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -705,14 +728,12 @@
   <tabstop>pushButton_es</tabstop>
   <tabstop>pushButton_fr</tabstop>
   <tabstop>pushButton_it</tabstop>
-  <tabstop>pushButton_nl</tabstop>
-  <tabstop>pushButton_ca</tabstop>
   <tabstop>pushButton_pl</tabstop>
   <tabstop>pushButton_pt</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="../build/brewtarget.qrc"/>
+  <include location="../../build/brewtarget.qrc"/>
  </resources>
  <connections>
   <connection>

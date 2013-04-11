@@ -40,7 +40,7 @@ class Misc;
 class MiscTableWidget;
 class Recipe;
 
-enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCNUMCOLS /*This one MUST be last*/};
+enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCISWEIGHT, MISCNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class MiscTableModel
