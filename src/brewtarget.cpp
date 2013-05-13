@@ -1164,7 +1164,9 @@ QString Brewtarget::displayColor( double srm, unitDisplay displayUnit, bool show
 {
    QString ret;
 
-   if ( displayUnit == noUnit || displayUnit == displaySrm )
+   if ( displayUnit == noUnit ) 
+      displayUnit = colorUnit == Brewtarget::SRM ? displaySrm : displayEbc;
+   if ( displayUnit == displaySrm )
       ret = showUnits ? QString("%L1 %2").arg(srm,0,'f',1).arg(Units::srm->getUnitName()) : QString("%L1").arg(srm,0,'f',1);
    else
    {
