@@ -84,7 +84,6 @@ public:
    Q_PROPERTY( double projEff_pct READ projEff_pct WRITE setProjEff_pct /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double projABV_pct READ projABV_pct WRITE setProjABV_pct /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double projPoints READ projPoints WRITE setProjPoints /*NOTIFY changed*/ STORED false )
-   Q_PROPERTY( double projFermPoints READ projFermPoints WRITE setProjFermPoints /*NOTIFY changed*/ STORED false )
    Q_PROPERTY( double projAtten READ projAtten WRITE setProjAtten /*NOTIFY changed*/ STORED false )
 
    // Setters
@@ -160,7 +159,6 @@ public:
    void setProjEff_pct(double var);
    void setProjABV_pct(double var);
    void setProjPoints(double var);
-   void setProjFermPoints(double var);
    void setProjAtten(double var);
 
    double projBoilGrav() const;
@@ -173,7 +171,6 @@ public:
    double projEff_pct() const;
    double projABV_pct() const;
    double projPoints() const;
-   double projFermPoints() const;
    double projAtten() const;
    
    /*! Convert a string that may be either "1.040" or "10 P" for example.

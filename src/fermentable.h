@@ -89,9 +89,7 @@ public:
    //! \brief Whether the grains actually is mashed.
    Q_PROPERTY( bool isMashed                 READ isMashed               WRITE setIsMashed               /*NOTIFY changed*/ /*changedIsMashed*/ )
    //! \brief Whether this fermentable is an extract.
-   Q_PROPERTY( bool isExtract                READ isExtract STORED false)
-   //! \brief Whether this fermentable is a sugar. Somewhat redundant, but it makes for nice symetry elsewhere
-   Q_PROPERTY( bool isSugar                  READ isSugar STORED false)
+   Q_PROPERTY( bool isExtract                READ isExtract )
    
    const QString name() const;
    const Type type() const;
@@ -139,10 +137,11 @@ public:
    void setRecommendMash( bool b );
    void setIbuGalPerLb( double num );
    
+   /*** My extensions ***/
    bool isMashed() const;
    bool isExtract();
-   bool isSugar();
    void setIsMashed(bool var);
+   /*** END my extensions ***/
 
 signals:
    

@@ -313,7 +313,6 @@ create table brewnote(
    projected_abv real DEFAULT 0.0,
    projected_atten real DEFAULT 75.0,
    projected_points real DEFAULT 0.0,
-   projected_ferm_points real DEFAULT 0.0,
    boil_off real DEFAULT 0.0,
    final_volume real DEFAULT 0.0,
    notes text DEFAULT '',
