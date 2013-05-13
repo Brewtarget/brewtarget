@@ -191,6 +191,11 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
    }
 
    //styleComboBox->setIndexByStyle(s);
+   // Update the color label text.
+   if (Brewtarget::getColorUnit() == displaySrm)
+      label_10->setText(QString("Color (Lovibond)"));
+   else
+      label_10->setText(QString("Color (EBC)"));
 
    if( updateAll )
    {
@@ -200,14 +205,14 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_styleLetter->setText(s->styleLetter());
 		lineEdit_styleGuide->setText(s->styleGuide());
       comboBox_type->setCurrentIndex(s->type());
-      lineEdit_ogMin->setText(Brewtarget::displayAmount(s->ogMin(), 0));
-      lineEdit_ogMax->setText(Brewtarget::displayAmount(s->ogMax(), 0));
-      lineEdit_fgMin->setText(Brewtarget::displayAmount(s->fgMin(), 0));
-      lineEdit_fgMax->setText(Brewtarget::displayAmount(s->fgMax(), 0));
+      lineEdit_ogMin->setText(Brewtarget::displayOG(s->ogMin(),noUnit,true));
+      lineEdit_ogMax->setText(Brewtarget::displayOG(s->ogMax(),noUnit,true));
+      lineEdit_fgMin->setText(Brewtarget::displayFG(s->fgMin(),s->ogMin(),noUnit,true));
+      lineEdit_fgMax->setText(Brewtarget::displayFG(s->fgMax(),s->ogMax(),noUnit,true));
       lineEdit_ibuMin->setText(Brewtarget::displayAmount(s->ibuMin(), 0));
       lineEdit_ibuMax->setText(Brewtarget::displayAmount(s->ibuMax(), 0));
-      lineEdit_colorMin->setText(Brewtarget::displayAmount(s->colorMin_srm(), 0));
-      lineEdit_colorMax->setText(Brewtarget::displayAmount(s->colorMax_srm(), 0));
+      lineEdit_colorMin->setText(Brewtarget::displayColor(s->colorMin_srm(),noUnit,false));
+      lineEdit_colorMax->setText(Brewtarget::displayColor(s->colorMax_srm(),noUnit,false));
       lineEdit_carbMin->setText(Brewtarget::displayAmount(s->carbMin_vol(), 0));
       lineEdit_carbMax->setText(Brewtarget::displayAmount(s->carbMax_vol(), 0));
       lineEdit_abvMin->setText(Brewtarget::displayAmount(s->abvMin_pct(), 0));
@@ -233,21 +238,21 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
    else if( propName == "type" )
       comboBox_type->setCurrentIndex(val.toInt());
    else if( propName == "ogMin" )
-      lineEdit_ogMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_ogMin->setText(Brewtarget::displayOG(val.toDouble(),noUnit,true));
    else if( propName == "ogMax" )
-      lineEdit_ogMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_ogMax->setText(Brewtarget::displayOG(val.toDouble(),noUnit,true));
    else if( propName == "fgMin" )
-      lineEdit_fgMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_fgMin->setText(Brewtarget::displayFG(val.toDouble(),s->ogMin(), noUnit,true));
    else if( propName == "fgMax" )
-      lineEdit_fgMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_fgMax->setText(Brewtarget::displayFG(val.toDouble(),s->ogMax(), noUnit,true));
    else if( propName == "ibuMin" )
       lineEdit_ibuMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
    else if( propName == "ibuMax" )
       lineEdit_ibuMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
    else if( propName == "colorMin_srm" )
-      lineEdit_colorMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_colorMin->setText(Brewtarget::displayColor(val.toDouble(),noUnit,false));
    else if( propName == "colorMax_srm" )
-      lineEdit_colorMax->setText(Brewtarget::displayAmount(val.toDouble(), 0));
+      lineEdit_colorMax->setText(Brewtarget::displayColor(val.toDouble(),noUnit,false));
    else if( propName == "carbMin_vol" )
       lineEdit_carbMin->setText(Brewtarget::displayAmount(val.toDouble(), 0));
    else if( propName == "carbMax_vol" )
