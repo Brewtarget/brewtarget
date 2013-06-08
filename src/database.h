@@ -698,6 +698,8 @@ private:
    bool cleanupBackupDatabase();
    
    static QList<TableParams> makeTableParams();
+   
+   void updateSchema();
 };
 
 #endif   /* _DATABASE_H */

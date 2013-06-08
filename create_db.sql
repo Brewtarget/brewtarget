@@ -10,6 +10,13 @@
 --       display=0 means the ingredient is in a recipe already and should not
 --                 be shown in a list, available to be put into a recipe.
 BEGIN TRANSACTION;
+
+CREATE TABLE settings( 
+   id integer primary key,
+   version varchar(256)
+);
+INSERT INTO settings VALUES(1,'2.0.2');
+
 create table equipment(
    id integer PRIMARY KEY autoincrement,
    -- BeerXML properties
