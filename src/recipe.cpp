@@ -1548,49 +1548,6 @@ void Recipe::recalcColor_srm()
 
 }
 
-void Recipe::recalcBoilGrav()
-{
-   unsigned int i;
-   Fermentable* ferm;
-   double sugar_kg = 0.0;
-   double sugar_kg_ignoreEfficiency = 0.0;
-   double ret;
-   Fermentable::Type type;
-
-   // Calculate OG
-   QList<Fermentable*> ferms = fermentables();
-   for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
-   {
-      ferm = ferms[i];
-      if( ferm->addAfterBoil() )
-         continue;
-
-      // If we have some sort of non-grain, we have to ignore efficiency.
-      type = ferm->type();
-      if( type==Fermentable::Sugar || type==Fermentable::Extract || type==Fermentable::Dry_Extract )
-         sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
-      else
-         sugar_kg += ferm->equivSucrose_kg();
-   }
-
-   // We might lose some sugar in the form of lauter deadspace.
-   /*** Forget lauter deadspace...this loss is included in efficiency ***/
-
-   // Since the efficiency refers to how much sugar we get into the fermenter,
-   // we need to adjust for that here.
-   sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
-   if( equipment() )
-      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/_finalVolumeNoLosses_l);
-
-   ret = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, boilSize_l()) );
- 
-   if ( ret != _boilGrav )
-   {
-      _boilGrav = ret;
-      emit changed( metaProperty("boilGrav"), _boilGrav );
-   }
-}
-
 void Recipe::recalcIBU()
 {
    unsigned int i;
@@ -1828,68 +1785,69 @@ void Recipe::recalcCalories()
 // other efficiency calculations need access to the maximum theoretical sugars
 // available. The only way I can see of doing that which doesn't suck is to
 // split that calcuation out of recalcOgFg();
-
-QHash<QString,double> Recipe::calcTotalPoints()
+QHash<QString,double> Recipe::calcTotalPoints(bool preBoil)
 {
    int i;
    double sugar_kg_ignoreEfficiency = 0.0;
    double sugar_kg                  = 0.0;
    double nonFermetableSugars_kg    = 0.0;
-   double kettleWort_l              = 0.0;
-   double postBoilWort_l            = 0.0;
-   double ratio                     = 0.0;
 
-   Fermentable::Type fermtype;
    Fermentable* ferm;
 
    QList<Fermentable*> ferms = fermentables();
    QHash<QString,double> ret;
    
-   // _points = 0;
-   // Calculate OG
    for( i = 0; static_cast<int>(i) < ferms.size(); ++i )
    {
       ferm = ferms[i];
 
+      // skip any non-mashed fermentable if this is for the preboil
+      // calculations
+      if ( preBoil && ! ferm->isMashed() )
+         continue;
       // If we have some sort of non-grain, we have to ignore efficiency.
-      fermtype = ferm->type();
-      if( fermtype==Fermentable::Sugar || fermtype==Fermentable::Extract || fermtype==Fermentable::Dry_Extract )
+      if( ferm->isSugar() || ferm->isExtract() )
       {
          sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
          if ( !isFermentableSugar(ferm) )
-         {
            nonFermetableSugars_kg += ferm->equivSucrose_kg();
-         }
       }
       else
          sugar_kg += ferm->equivSucrose_kg();
    }   
    
-   // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
-   if( equipment() != 0 )
-   {
-      
-      kettleWort_l = (_wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
-      postBoilWort_l = equipment()->wortEndOfBoil_l(kettleWort_l);
-      ratio = (postBoilWort_l - equipment()->trubChillerLoss_l()) / postBoilWort_l;
-      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
-         ratio = 1.0;
-      else if( ratio < 0.0 )
-         ratio = 0.0;
-      else if( Algorithms::Instance().isnan(ratio) )
-         ratio = 1.0;
-      // Ignore this again since it should be included in efficiency.
-      //sugar_kg *= ratio;
-      sugar_kg_ignoreEfficiency *= ratio;
-      if ( nonFermetableSugars_kg != 0.0 )
-         nonFermetableSugars_kg *= ratio;
-   }
    ret.insert("sugar_kg", sugar_kg);
    ret.insert("nonFermetableSugars_kg", nonFermetableSugars_kg);
    ret.insert("sugar_kg_ignoreEfficiency", sugar_kg_ignoreEfficiency);
 
    return ret;
 
+}
+
+void Recipe::recalcBoilGrav()
+{
+   double sugar_kg = 0.0;
+   double sugar_kg_ignoreEfficiency = 0.0;
+   double ret;
+   QHash<QString,double> sugars;
+
+   sugars = calcTotalPoints(true);
+   sugar_kg = sugars.value("sugar_kg");
+   sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
+   
+   // Since the efficiency refers to how much sugar we get into the fermenter,
+   // we need to adjust for that here.
+   sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
+   if( equipment() )
+      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/_finalVolumeNoLosses_l);
+
+   ret = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, boilSize_l()) );
+ 
+   if ( ret != _boilGrav )
+   {
+      _boilGrav = ret;
+      emit changed( metaProperty("boilGrav"), _boilGrav );
+   }
 }
 
 void Recipe::recalcOgFg()
@@ -1899,6 +1857,9 @@ void Recipe::recalcOgFg()
    double sugar_kg = 0;
    double sugar_kg_ignoreEfficiency = 0.0;
    double nonFermetableSugars_kg = 0.0;
+   double kettleWort_l = 0.0;
+   double postBoilWort_l = 0.0;
+   double ratio = 0.0;
    double ferm_kg = 0.0;
    double attenuation_pct = 0.0;
    double tmp_og, tmp_fg, tmp_pnts, tmp_ferm_pnts;
@@ -1918,10 +1879,30 @@ void Recipe::recalcOgFg()
    }
 
    // Find out how much sugar we have.
-   sugars = calcTotalPoints();
+   sugars = calcTotalPoints(false);
    sugar_kg                  = sugars.value("sugar_kg");
    sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
    nonFermetableSugars_kg    = sugars.value("nonFermetableSugars_kg");
+
+   // We might lose some sugar in the form of Trub/Chiller loss and lauter deadspace.
+   if( equipment() != 0 )
+   {
+      
+      kettleWort_l = (_wortFromMash_l - equipment()->lauterDeadspace_l()) + equipment()->topUpKettle_l();
+      postBoilWort_l = equipment()->wortEndOfBoil_l(kettleWort_l);
+      ratio = (postBoilWort_l - equipment()->trubChillerLoss_l()) / postBoilWort_l;
+      if( ratio > 1.0 ) // Usually happens when we don't have a mash yet.
+         ratio = 1.0;
+      else if( ratio < 0.0 )
+         ratio = 0.0;
+      else if( Algorithms::Instance().isnan(ratio) )
+         ratio = 1.0;
+      // Ignore this again since it should be included in efficiency.
+      //sugar_kg *= ratio;
+      sugar_kg_ignoreEfficiency *= ratio;
+      if ( nonFermetableSugars_kg != 0.0 )
+         nonFermetableSugars_kg *= ratio;
+   }
 
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
    plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolumeNoLosses_l);

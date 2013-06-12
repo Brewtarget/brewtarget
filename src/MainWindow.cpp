@@ -2470,6 +2470,10 @@ void MainWindow::changeBrewDate()
    {
       BrewNote* target = treeView_recipe->getBrewNote(selected);
 
+      // No idea how this could happen, but I've seen stranger things
+      if ( ! target ) 
+         continue;
+
       // Pop the calendar, get the date. 
       if ( btDatePopup->exec() == QDialog::Accepted )
       {
@@ -2488,3 +2492,24 @@ void MainWindow::changeBrewDate()
    }
 }
 
+void MainWindow::fixBrewNote()
+{
+   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
+   QDateTime newDate;
+
+   foreach(QModelIndex selected, indexes)
+   {
+      BrewNote* target = treeView_recipe->getBrewNote(selected);
+
+      // No idea how this could happen, but I've seen stranger things
+      if ( ! target ) 
+         continue;
+
+      Recipe* noteParent = treeView_recipe->getRecipe( treeView_recipe->getParent(selected));
+
+      if ( ! noteParent ) 
+         continue;
+
+      target->recalculateEff(noteParent);
+   }
+}

@@ -63,6 +63,7 @@ QHash<QString,QString> BrewNote::tagToPropHash()
    propHash["PROJECTED_EFF"] = "projEff_pct" ;
    propHash["PROJECTED_ABV"] = "projABV_pct" ;
    propHash["PROJECTED_POINTS"] = "projPoints" ;
+   propHash["PROJECTED_FERM_POINTS"] = "projFermPoints" ;
    propHash["PROJECTED_ATTEN"] = "projAtten" ;
    propHash["BOIL_OFF"] = "boilOff_l" ;
    propHash["FINAL_VOLUME"] = "finalVolume_l" ;
@@ -100,27 +101,31 @@ void BrewNote::populateNote(Recipe* parent)
    QHash<QString,double> sugars;
    double atten_pct = -1.0;
 
-   // Since we have the recipe, lets set some defaults
-
-   // The order in which these are done is very specific.
-   // Later calls require certain things set first. Do not rearrange this
-   // without good reason and test.
+   // Since we have the recipe, lets set some defaults The order in which
+   // these are done is very specific. Please do not modify them without some
+   // serious testing.
+   
+   // Everything needs volumes of one type or another. But the individual
+   // volumes are fairly independent of anything. Do them all first.
    setProjVolIntoBK_l( parent->boilSize_l() );
+   setVolumeIntoBK_l( parent->boilSize_l() );
+   setPostBoilVolume_l(parent->postBoilVolume_l());
+   setProjVolIntoFerm_l(parent->finalVolume_l());
+   setVolumeIntoFerm_l(parent->finalVolume_l());
+   setFinalVolume_l(parent->finalVolume_l());
 
-   // Just getting the points won't work. parent->points() is already adjusted
-   // for efficiency and it throws off the rest of the calculations. I need
-   // the original theoretical maximum points. I only get the sugars, because
-   // the gravity will change depending on the volume
-   sugars = parent->calcTotalPoints();
+   if ( equip )
+      setBoilOff_l( equip->evapRate_lHr() * ( parent->boilTime_min()/60));
+
+   sugars = parent->calcTotalPoints(true);
    setProjPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
 
-   setPostBoilVolume_l(parent->postBoilVolume_l());
-   setVolumeIntoFerm_l(parent->finalVolume_l());
-   setProjVolIntoFerm_l(parent->finalVolume_l());
+   sugars = parent->calcTotalPoints(false);
+   setProjFermPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
 
+   // Out of the gate, we expect projected to be the measured.
    setSg( parent->boilGrav() );
    setProjBoilGrav(parent->boilGrav() );
-   setVolumeIntoBK_l( parent->boilSize_l() );
 
    if ( mash )
    {
@@ -129,7 +134,6 @@ void BrewNote::populateNote(Recipe* parent)
       if ( mStep )
       {
          double endTemp = mStep->endTemp_c() > 0.0 ? mStep->endTemp_c() : mStep->stepTemp_c();
-         setStrikeTemp_c(mStep->infuseTemp_c());
          setProjStrikeTemp_c(mStep->infuseTemp_c());
 
          setMashFinTemp_c(endTemp);
@@ -152,8 +156,6 @@ void BrewNote::populateNote(Recipe* parent)
    setFg( parent->fg());
    setProjFg( parent->fg() );
 
-   setFinalVolume_l(parent->finalVolume_l());
-
    setProjEff_pct(parent->efficiency_pct());
    setProjABV_pct( parent->ABV_pct());
 
@@ -168,9 +170,23 @@ void BrewNote::populateNote(Recipe* parent)
       atten_pct = 75;
    setProjAtten(atten_pct);
 
-   if ( equip )
-      setBoilOff_l( equip->evapRate_lHr() * ( parent->boilTime_min()/60));
+}
 
+// the v2 release had some bugs in the efficiency calcs. They have been fixed.
+// This should allow the users to redo those calculations
+void BrewNote::recalculateEff(Recipe* parent)
+{
+
+   QHash<QString,double> sugars;
+
+   sugars = parent->calcTotalPoints(true);
+   setProjPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
+
+   sugars = parent->calcTotalPoints(false);
+   setProjFermPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
+
+   calculateEffIntoBK_pct();
+   calculateBrewHouseEff_pct();
 }
 
 BrewNote::BrewNote(BrewNote const& other)
@@ -302,6 +318,23 @@ void BrewNote::setProjPoints(double var)
    set("projPoints", "projected_points", convertPnts); 
 }
 
+void BrewNote::setProjFermPoints(double var)
+{ 
+   double convertPnts;
+   double plato, total_g;
+
+   if ( loading )
+      convertPnts = var;
+   else
+   { 
+      plato = Algorithms::Instance().getPlato(var, projVolIntoFerm_l());
+      total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
+      convertPnts = (total_g - 1.0 ) * 1000;
+   }
+
+   set("projPoints", "projected_ferm_points", convertPnts); 
+}
+
 void BrewNote::setABV(double var)               { set("abv", "abv", var); }
 void BrewNote::setEffIntoBK_pct(double var)     { set("effIntoBK_pct", "eff_into_bk", var); }
 void BrewNote::setBrewhouseEff_pct(double var)  { set("brewhouseEff_pct", "brewhouse_eff", var); }
@@ -354,6 +387,7 @@ double BrewNote::projFg() const          { return get("projected_fg").toDouble()
 double BrewNote::projEff_pct() const         { return get("projected_eff").toDouble(); }
 double BrewNote::projABV_pct() const         { return get("projected_abv").toDouble(); }
 double BrewNote::projPoints() const      { return get("projected_points").toDouble(); }
+double BrewNote::projFermPoints() const      { return get("projected_ferm_points").toDouble(); }
 double BrewNote::projAtten() const       { return get("projected_atten").toDouble(); }
 double BrewNote::boilOff_l() const         { return get("boil_off").toDouble(); }
 
@@ -412,7 +446,7 @@ double BrewNote::calculateBrewHouseEff_pct()
    double expectedPoints, actualPoints;
    double brewhouseEff;
 
-   expectedPoints = projPoints() * projVolIntoFerm_l();
+   expectedPoints = projFermPoints() * projVolIntoFerm_l();
    actualPoints = (og()-1.0) * 1000.0 * volumeIntoFerm_l();
 
    brewhouseEff = actualPoints/expectedPoints * 100.0;
