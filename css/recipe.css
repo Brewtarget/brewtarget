@@ -1,5 +1,6 @@
 body{
    width: 8.5in;
+   margin: auto auto auto 10px; 
 }
 ul { list-style-type:circle; }
 caption 
