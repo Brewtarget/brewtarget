@@ -64,3 +64,4 @@ void CelsiusTempUnitSystem::ensureMapIsSetup()
    isMapSetup = true;
 }
 
+QString CelsiusTempUnitSystem::unitType() { return "SI"; }

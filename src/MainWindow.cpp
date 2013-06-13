@@ -1624,12 +1624,11 @@ void MainWindow::save()
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-   Brewtarget::savePersistentOptions();
-
-   Brewtarget::btSettings.setValue("geometry", saveGeometry());
-   Brewtarget::btSettings.setValue("windowState", saveState());
+   Brewtarget::saveSystemOptions();
+   Brewtarget::setOption("geometry", saveGeometry());
+   Brewtarget::setOption("windowState", saveState());
    if ( recipeObs )
-      Brewtarget::btSettings.setValue("recipeKey", recipeObs->key());
+      Brewtarget::setOption("recipeKey", recipeObs->key());
    
    // After unloading the database, can't make any more queries to it, so first
    // make the main window disappear so that redraw events won't inadvertently

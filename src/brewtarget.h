@@ -198,10 +198,13 @@ public:
    //! \return the color units
    static unitDisplay getColorUnit();
    
-   //! \brief Read options from file.
-   static void readPersistentOptions();
-   //! \brief Save options to file.
-   static void savePersistentOptions();
+   //! \brief Read options from file. This is deprecated, but we need it
+   // around for the conversion
+   static void convertPersistentOptions();
+   //! \brief Read options from options. This replaces readPersistentOptions()
+   static void readSystemOptions();
+   //! \brief Writes the persisten options back to the options store
+   static void saveSystemOptions();
 
    /*!
     *  \brief Loads the brewtarget translator with two letter ISO 639-1 code.
@@ -272,8 +275,8 @@ private:
    static bool ensureDirectoriesExist();
    //! \brief Ensure the datafiles exist.
    static bool ensureDataFilesExist();
-   //! \brief Ensure the option file exists.
-   static bool ensureOptionFileExists();
+   //! \brief Test to see if the option file exists.
+   static bool optionFileExists();
    //! \brief Load translation files.
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.

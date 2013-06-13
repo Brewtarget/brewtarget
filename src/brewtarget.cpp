@@ -151,32 +151,20 @@ bool Brewtarget::copyDataFiles(QString newPath)
    return success;
 }
 
-bool Brewtarget::ensureOptionFileExists()
+bool Brewtarget::optionFileExists()
 {
    QString optionsFileName;
    QFile optionsFile;
-   bool success = true;
 
    optionsFileName = getConfigDir() + "options.xml";
    optionsFile.setFileName(optionsFileName);
 
-   if( !optionsFile.exists() )
-   {
-      success = QFile::copy(Brewtarget::getDataDir() + "options.xml", optionsFileName);
-      if( ! success )
-      {
-         logE(QString("Could not copy \"%1\" to \"%2\"").arg(Brewtarget::getDataDir() + "options.xml").arg(optionsFileName));
-         return false;
-      }
-   }
-
-   return success;
+   return optionsFile.exists();
 }
 
 bool Brewtarget::ensureDataFilesExist()
 {
-   QString optionsFileName, logFileName;
-   QFile optionsFile;
+   QString logFileName;
    bool success = true;
    
    logFile = new QFile();
@@ -234,6 +222,7 @@ void Brewtarget::setLanguage(QString twoLetterLanguage)
    QString dir = QString("%1translations_qm/").arg(getDataDir());
    if( btTrans->load( filename, dir ) )
       qApp->installTranslator(btTrans);
+
 }
 
 const QString& Brewtarget::getCurrentLanguage()
@@ -459,9 +448,14 @@ int Brewtarget::run()
    qApp->processEvents(); // So we can process mouse clicks on splash window.
    
    success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
-   ensureOptionFileExists();
-   readPersistentOptions(); // Read all the options for bt.
 
+   // If the old options file exists, convert it. Otherwise, just get the
+   // system options
+   if (optionFileExists()) 
+      convertPersistentOptions(); 
+   else
+      readSystemOptions();
+      
    if( success )
       success = ensureDataFilesExist(); // Make sure all the files we need exist before starting.
    if( ! success )
@@ -493,7 +487,6 @@ int Brewtarget::run()
       checkForNewVersion(_mainWindow);
 
       ret = qApp->exec();
-      savePersistentOptions();
    }
    
    // Close log file.
@@ -708,8 +701,10 @@ QString Brewtarget::getOptionValue(const QDomDocument& optionsDoc, const QString
    }
 }
 
-void Brewtarget::readPersistentOptions()
+// Read the old options.xml file one more time, then move it out of the way.
+void Brewtarget::convertPersistentOptions()
 {
+   QDir cfgDir = QDir(getConfigDir());
    QFile xmlFile(getConfigDir() + "options.xml");
    optionsDoc = new QDomDocument();
    QDomElement root;
@@ -876,133 +871,171 @@ void Brewtarget::readPersistentOptions()
    delete optionsDoc;
    optionsDoc = 0;
    xmlFile.close();
+
+   // This shouldn't really happen, but lets be sure
+   if( !cfgDir.exists("obsolete") )
+      cfgDir.mkdir("obsolete");
+
+   // copy the old file into obsolete and delete it   
+   cfgDir.cd("obsolete");
+   if( xmlFile.copy(cfgDir.filePath("options.xml")) )
+      xmlFile.remove();
 }
 
-void Brewtarget::savePersistentOptions()
+void Brewtarget::readSystemOptions()
 {
-   QFile xmlFile(getConfigDir() + "options.xml");
-   optionsDoc = new QDomDocument();
-   QDomElement root;
-   QDomNode node, child;
    QString text;
 
-   if( ! xmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate) )
+   //================Version Checking========================
+   checkVersion = option("check_version", QVariant(false)).toBool();
+
+   //=====================Last DB Merge Request======================
+   if( hasOption("last_db_merge_req"))
+      lastDbMergeRequest = QDateTime::fromString(option("last_db_merge_req","").toString(), Qt::ISODate);
+
+   //=====================Language====================
+   if( hasOption("language") )
+      setLanguage(option("language","").toString());
+
+   //=======================Data Dir===========================
+   if( hasOption("user_data_dir") )
+      userDataDir = option("user_data_dir","").toString();
+
+   //=======================Weight=====================
+   text = option("weight_unit_system", "SI").toString();
+   if( text == "Imperial" )
    {
-      log(WARNING, QObject::tr("Could not open %1 for writing").arg(xmlFile.fileName()));
-      return;
+      weightUnitSystem = Imperial;
+      weightSystem = UnitSystems::usWeightUnitSystem();
+   }
+   else if (text == "USCustomary")
+   {
+      weightUnitSystem = USCustomary;
+      weightSystem = UnitSystems::usWeightUnitSystem();
+   }
+   else
+   {
+      weightUnitSystem = SI;
+      weightSystem = UnitSystems::siWeightUnitSystem();
    }
 
-   root = optionsDoc->createElement("options");
+   //===========================Volume=======================
+   text = option("volume_unit_system", "SI").toString();
+   if( text == "Imperial" )
+   {
+      volumeUnitSystem = Imperial;
+      volumeSystem = UnitSystems::imperialVolumeUnitSystem();
+   }
+   else if (text == "USCustomary")
+   {
+      volumeUnitSystem = USCustomary;
+      volumeSystem = UnitSystems::usVolumeUnitSystem();
+   }
+   else
+   {
+      volumeUnitSystem = SI;
+      volumeSystem = UnitSystems::siVolumeUnitSystem();
+   }
 
-   // Version checking.
-   node = optionsDoc->createElement("check_version");
-   child = optionsDoc->createTextNode( checkVersion ? "true" : "false" );
-   node.appendChild(child);
-   root.appendChild(node);
+   //=======================Temp======================
+   text = option("temperature_scale", "SI").toString();
+   if( text == "Fahrenheit" )
+   {
+      tempScale = Fahrenheit;
+      tempSystem = UnitSystems::fahrenheitTempUnitSystem();
+   }
+   else
+   {
+      tempScale = Celsius;
+      tempSystem = UnitSystems::celsiusTempUnitSystem();
+   }
 
-   // Last DB merge request.
-   node = optionsDoc->createElement("last_db_merge_req");
-   child = optionsDoc->createTextNode( lastDbMergeRequest.toString(Qt::ISODate) );
-   node.appendChild(child);
-   root.appendChild(node);
+   //======================Time======================
+   // Set the one and only time system.
+   timeSystem = UnitSystems::timeUnitSystem();
 
-   // User data dir.
-   node = optionsDoc->createElement("user_data_dir");
-   child = optionsDoc->createTextNode( userDataDir );
-   node.appendChild(child);
-   root.appendChild(node);
+   //===================IBU===================
+   text = option("ibu_formula", "tinseth").toString();
+   if( text == "tinseth" )
+      ibuFormula = TINSETH;
+   else if( text == "rager" )
+      ibuFormula = RAGER;
+   else
+   {
+      Brewtarget::log(Brewtarget::ERROR, QString("Bad ibu_formula type: %1").arg(text));
+   }
 
-   // Unit Systems.
-   node = optionsDoc->createElement("weight_unit_system");
-   child = optionsDoc->createTextNode( unitSystemToString(weightUnitSystem) );
-   node.appendChild(child);
-   root.appendChild(node);
+   //========================Color======================
+   text = option("color_formula", "morey").toString();
+   if( text == "morey" )
+      colorFormula = MOREY;
+   else if( text == "daniel" )
+      colorFormula = DANIEL;
+   else if( text == "mosher" )
+      colorFormula = MOSHER;
+   else
+   {
+      Brewtarget::log(Brewtarget::ERROR, QString("Bad color_formula type: %1").arg(text));
+   }
 
-   node = optionsDoc->createElement("volume_unit_system");
-   child = optionsDoc->createTextNode( unitSystemToString(volumeUnitSystem) );
-   node.appendChild(child);
-   root.appendChild(node);
+   //========================Gravity==================
+   usePlato = option("use_plato", false).toBool();
 
-   node = optionsDoc->createElement("temperature_scale");
-   child = optionsDoc->createTextNode( tempScaleToString(tempScale) );
-   node.appendChild(child);
-   root.appendChild(node);
+   //=======================Color unit===================
+   text = option("color_unit", "srm").toString();
+   if( text == "srm" )
+      colorUnit = SRM;
+   else if( text == "ebc" )
+      colorUnit = EBC;
+   else
+      Brewtarget::logW(QString("Bad color_unit type: %1").arg(text));
+}
 
-   // Language
-   node = optionsDoc->createElement("language");
-   child = optionsDoc->createTextNode(getCurrentLanguage());
-   node.appendChild(child);
-   root.appendChild(node);
+void Brewtarget::saveSystemOptions()
+{
+   QString text;
 
-   // IBU formula.
-   node = optionsDoc->createElement("ibu_formula");
-   switch( ibuFormula )
+   setOption("check_version", checkVersion); 
+   setOption("last_db_merge_req", lastDbMergeRequest.toString(Qt::ISODate));
+   setOption("language", getCurrentLanguage());
+   setOption("user_data_dir", userDataDir);
+   setOption("weight_unit_system", weightSystem->unitType());
+   setOption("volume_unit_system",volumeSystem->unitType()); 
+   setOption("temperature_scale", tempSystem->unitType());
+   setOption("use_plato", usePlato);
+
+   switch(ibuFormula)
    {
       case TINSETH:
-         text = "tinseth";
-         break;
+         setOption("ibu_formula", "tinseth");
+         break; 
       case RAGER:
-         text = "rager";
-         break;
-      default:
-         text = "";
-         break;
+         setOption("ibu_formula", "rager");
+         break; 
    }
-   child = optionsDoc->createTextNode(text);
-   node.appendChild(child);
-   root.appendChild(node);
 
-   // Color formula.
-   node = optionsDoc->createElement("color_formula");
-   switch( colorFormula )
+   switch(colorFormula) 
    {
       case MOREY:
-         text = "morey";
+         setOption("color_formula", "morey");
          break;
       case DANIEL:
-         text = "daniel";
+         setOption("color_formula", "daniel");
          break;
       case MOSHER:
-         text = "mosher";
-         break;
-      default:
-         text = "";
+         setOption("color_formula", "mosher");
          break;
    }
-   child = optionsDoc->createTextNode(text);
-   node.appendChild(child);
-   root.appendChild(node);
 
-   // Gravity.
-   node = optionsDoc->createElement("use_plato");
-   if( usePlato )
-      text = "true";
-   else
-      text = "false";
-   child = optionsDoc->createTextNode(text);
-   node.appendChild(child);
-   root.appendChild(node);
-
-   // Color unit.
-   node = optionsDoc->createElement("color_unit");
-   if( colorUnit == SRM )
-      text = "srm";
-   else
-      text = "ebc";
-   child = optionsDoc->createTextNode(text);
-   node.appendChild(child);
-   root.appendChild(node);
-
-   // Add root to document.
-   optionsDoc->appendChild(root);
-
-   // Write file.
-   QTextStream out(&xmlFile);
-   out << optionsDoc->toString();
-
-   xmlFile.close();
-   delete optionsDoc;
-   optionsDoc = 0;
+   switch(colorUnit) 
+   {
+      case SRM:
+         setOption("color_unit", "srm");
+         break; 
+      case EBC:
+         setOption("color_unit", "ebc");
+         break; 
+   }
 }
 
 double Brewtarget::weightQStringToSI(QString qstr, unitDisplay dispUnit)

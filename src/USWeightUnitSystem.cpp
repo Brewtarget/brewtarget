@@ -83,3 +83,5 @@ Unit* USWeightUnitSystem::thicknessUnit()
 {
    return Units::pounds;
 }
+
+QString USWeightUnitSystem::unitType() { return "USCustomary"; }

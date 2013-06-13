@@ -59,6 +59,9 @@ public:
     */
    virtual Unit* thicknessUnit() = 0;
 
+   // \brief Returns the name of the unit
+   virtual QString unitType() = 0;
+
    double qstringToSI(QString qstr, Unit* defUnit);
 
 protected:

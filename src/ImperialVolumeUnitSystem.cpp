@@ -106,3 +106,5 @@ Unit* ImperialVolumeUnitSystem::thicknessUnit()
 {
    return Units::imperial_quarts;
 }
+
+QString ImperialVolumeUnitSystem::unitType() { return "Imperial"; }
