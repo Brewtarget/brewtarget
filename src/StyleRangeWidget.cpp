@@ -45,7 +45,7 @@ StyleRangeWidget::StyleRangeWidget(QWidget* parent)
      _secondaryTicks(1),
      _tooltipText("")
 {
-   setMinimumSize( 32, 16 );
+   setMinimumSize( 32, 32 );
    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
    
    // Generate mouse move events whenever mouse movers over widget.
@@ -101,7 +101,7 @@ void StyleRangeWidget::setTickMarks( double primaryInterval, int secondaryTicks 
 
 QSize StyleRangeWidget::sizeHint() const
 {
-   static const QSize hint(64,16);
+   static const QSize hint(64,32);
    
    return hint;
 }
@@ -117,10 +117,11 @@ void StyleRangeWidget::mouseMoveEvent(QMouseEvent* event)
 void StyleRangeWidget::paintEvent(QPaintEvent* event)
 {
    static const QPalette palette(QApplication::palette());
+   static const int indTextHeight=16;
    static const int rectHeight = 16;
    static const int textWidth  = 48;
    static const int indWidth   = 4;
-   static const QColor bgRectColor(QColor(121,201,121));//(palette.color(QPalette::Active, QPalette::Button));
+   static const QColor bgRectColor(QColor(121,201,121));
    static const QColor fgRectColor(0,127,0);
    static const QColor indColor(QColor(255,255,255));
    static const QColor textColor(0,127,0);
@@ -145,9 +146,15 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
    indLeft     = qBound( 0.f, indX-indWidth/2, rectWidth );
    
    painter.save();
-      painter.setPen(Qt::NoPen);
+
+      // Indicator text.
+      painter.drawText( indLeft*(width()-textWidth-2)/rectWidth - textWidth/2, 0, textWidth, 16, Qt::AlignCenter | Qt::AlignBottom, _valText );
+
       // Scale coordinates so that 'rectWidth' units == width()-textWidth-2 pixels.
       painter.scale( (width()-textWidth-2)/rectWidth, 1.0 );
+      painter.translate(0, indTextHeight);
+      
+      painter.setPen(Qt::NoPen);
       
       // Make sure anything we draw "inside" the "glass rectangle" stays inside.
       QPainterPath clipRect;
@@ -196,7 +203,7 @@ void StyleRangeWidget::paintEvent(QPaintEvent* event)
       }
    painter.restore();
    
-   painter.translate( width() - textWidth, 0 );
+   painter.translate( width() - textWidth, indTextHeight );
    // Draw the text.
    painter.setPen(textColor);
    painter.setFont(textFont);
