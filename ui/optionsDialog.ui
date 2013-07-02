@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -276,17 +276,54 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>IBU Adjustments</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="lineEdit_mashHop">
+              <property name="toolTip">
+               <string>% IBU adjustment</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineEdit_firstWort">
+              <property name="toolTip">
+               <string>% IBU adjustment</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Mash Hop</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>First Wort</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </item>
@@ -389,7 +426,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagCzech.svg</normaloff>:/images/flagCzech.svg</iconset>
            </property>
            <property name="iconSize">
@@ -412,7 +449,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
            </property>
            <property name="iconSize">
@@ -435,7 +472,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagGermany.svg</normaloff>:/images/flagGermany.svg</iconset>
            </property>
            <property name="iconSize">
@@ -458,7 +495,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagUK.svg</normaloff>:/images/flagUK.svg</iconset>
            </property>
            <property name="iconSize">
@@ -488,7 +525,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagSpain.svg</normaloff>:/images/flagSpain.svg</iconset>
            </property>
            <property name="iconSize">
@@ -511,7 +548,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagFrance.svg</normaloff>:/images/flagFrance.svg</iconset>
            </property>
            <property name="iconSize">
@@ -534,7 +571,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagItaly.svg</normaloff>:/images/flagItaly.svg</iconset>
            </property>
            <property name="iconSize">
@@ -564,7 +601,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
            </property>
            <property name="iconSize">
@@ -587,7 +624,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagPoland.svg</normaloff>:/images/flagPoland.svg</iconset>
            </property>
            <property name="iconSize">
@@ -610,7 +647,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagPortugal.svg</normaloff>:/images/flagPortugal.svg</iconset>
            </property>
            <property name="iconSize">
@@ -633,7 +670,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../build/brewtarget.qrc">
+            <iconset>
              <normaloff>:/images/flagRussia.svg</normaloff>:/images/flagRussia.svg</iconset>
            </property>
            <property name="iconSize">

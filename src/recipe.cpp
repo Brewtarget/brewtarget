@@ -1996,6 +1996,8 @@ double Recipe::ibuFromHop(Hop const* hop)
 {
    Equipment* equip = equipment();
    double ibus = 0.0;
+   double fwhAdjust = Brewtarget::option("firstWortHopAdjustment", 1.1).toDouble();
+   double mashHopAdjust = Brewtarget::option("mashHopAdjustment", 0).toDouble();
    
    if( hop == 0 )
       return 0.0;
@@ -2022,7 +2024,9 @@ double Recipe::ibuFromHop(Hop const* hop)
    if( hop->use() == Hop::Boil)
       ibus = IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, minutes );
    else if( hop->use() == Hop::First_Wort )
-      ibus = 1.10 * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, boilTime );
+      ibus = fwhAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, boilTime );
+   else if( hop->use() == Hop::Mash && mashHopAdjust > 0.0 )
+      ibus = mashHopAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, boilTime );
 
    // Adjust for hop form.
    if( hop->form() == Hop::Leaf )
