@@ -286,6 +286,8 @@ void OptionDialog::saveAndClose()
       );
    }
 
+   Brewtarget::setOption("mashHopAdjustment", lineEdit_mashHop->text().toDouble() / 100);
+   Brewtarget::setOption("firstWortHopAdjustment", lineEdit_firstWort->text().toDouble() / 100);
    // Make sure the main window updates.
    if( Brewtarget::mainWindow() )
       Brewtarget::mainWindow()->showChanges();
@@ -389,4 +391,9 @@ void OptionDialog::showChanges()
 
    // Data directory
    lineEdit_dbDir->setText(Brewtarget::getUserDataDir());
+
+   // The IBU modifications. These will all be calculated from a 60 min boil. This is gonna get confusing.
+   lineEdit_mashHop->setText( Brewtarget::displayAmount(Brewtarget::option("mashHopAdjustment",0).toDouble()*100,0,0) );
+   lineEdit_firstWort->setText( Brewtarget::displayAmount(Brewtarget::option("firstWortHopAdjustment", 1.10).toDouble()*100,0,0) );
+
 }
