@@ -148,7 +148,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../build/brewtarget.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>
