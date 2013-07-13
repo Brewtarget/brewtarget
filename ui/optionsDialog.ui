@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -426,7 +426,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagCzech.svg</normaloff>:/images/flagCzech.svg</iconset>
            </property>
            <property name="iconSize">
@@ -449,7 +449,7 @@
             <string notr="true"/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
            </property>
            <property name="iconSize">
@@ -472,7 +472,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagGermany.svg</normaloff>:/images/flagGermany.svg</iconset>
            </property>
            <property name="iconSize">
@@ -495,7 +495,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagUK.svg</normaloff>:/images/flagUK.svg</iconset>
            </property>
            <property name="iconSize">
@@ -525,7 +525,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagSpain.svg</normaloff>:/images/flagSpain.svg</iconset>
            </property>
            <property name="iconSize">
@@ -548,7 +548,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagFrance.svg</normaloff>:/images/flagFrance.svg</iconset>
            </property>
            <property name="iconSize">
@@ -571,7 +571,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagItaly.svg</normaloff>:/images/flagItaly.svg</iconset>
            </property>
            <property name="iconSize">
@@ -601,7 +601,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
            </property>
            <property name="iconSize">
@@ -624,7 +624,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagPoland.svg</normaloff>:/images/flagPoland.svg</iconset>
            </property>
            <property name="iconSize">
@@ -647,7 +647,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagPortugal.svg</normaloff>:/images/flagPortugal.svg</iconset>
            </property>
            <property name="iconSize">
@@ -670,7 +670,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../brewtarget.qrc">
              <normaloff>:/images/flagRussia.svg</normaloff>:/images/flagRussia.svg</iconset>
            </property>
            <property name="iconSize">
@@ -770,7 +770,7 @@
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="../../build/brewtarget.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections>
   <connection>

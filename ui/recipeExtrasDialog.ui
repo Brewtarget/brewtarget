@@ -384,7 +384,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../build/brewtarget.qrc">
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/filesave.svg</normaloff>:/images/filesave.svg</iconset>
        </property>
       </widget>
@@ -404,7 +404,7 @@
   <customwidget>
    <class>BtTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>BtTextEdit.h</header>
+   <header location="global">BtTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -427,7 +427,7 @@
   <tabstop>pushButton_cancel</tabstop>
  </tabstops>
  <resources>
-  <include location="../build/brewtarget.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>
