@@ -235,19 +235,19 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Catégorie</translation>
+        <translation>Catégorie</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Lettre</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Guide</translation>
     </message>
 </context>
 <context>
@@ -302,11 +302,15 @@
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished"></translation>
+        <translation>Changer la date</translation>
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished">Style</translation>
+        <translation>Nouveau style</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -321,7 +325,7 @@
     </message>
     <message>
         <source>SRM</source>
-        <translation type="unfinished"></translation>
+        <translation>SRM</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -333,7 +337,7 @@
     </message>
     <message>
         <source>SI</source>
-        <translation type="unfinished"></translation>
+        <translation>SI</translation>
     </message>
     <message>
         <source>US Customary</source>
@@ -393,11 +397,11 @@
     </message>
     <message>
         <source>Quarts</source>
-        <translation type="unfinished"></translation>
+        <translation>Quarts</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation type="unfinished"></translation>
+        <translation>Gallons</translation>
     </message>
 </context>
 <context>
@@ -450,27 +454,19 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished">Le volume de la cuve renseigné est 0. Ceci peut causer des problèmes.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished">La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished">L&apos;utilisation du Houblon </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished">La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
-    </message>
-    <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">Le volume de la cuve renseigné est 0. Ceci peut causer des problèmes.</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">La taille du brassin renseignée est 0. Ceci peut causer des problèmes.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -697,20 +693,16 @@
         <translation>Sauvegardez</translation>
     </message>
     <message>
-        <source>Sure about that?</source>
-        <translation type="obsolete">Êtes-vous certain?</translation>
-    </message>
-    <message>
-        <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation type="obsolete">Vous êtes sur le point d&apos;éliminer la recette.  C&apos;est ok?</translation>
-    </message>
-    <message>
         <source>Equipment request</source>
         <translation>Requête d&apos;équipement</translation>
     </message>
     <message>
         <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
         <translation>Souhaitez-vous fixer la taille du brassin tel que spécifié par l&apos;équipement?</translation>
+    </message>
+    <message>
+        <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
+        <translation>Voulez-vous régler la taille du lot, la taille ébullition et l&apos;heure à celui demandé par l&apos;équipement?</translation>
     </message>
     <message>
         <source>Delete %1</source>
@@ -781,12 +773,20 @@
         <translation>Copier la levure</translation>
     </message>
     <message>
+        <source>Database Update</source>
+        <translation>Renouveler la base de données</translation>
+    </message>
+    <message>
+        <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
+        <translation>Vous êtes sur le point de mettre à jour la base de données actuelle par une autre. Cela peut apporter des modifications à (mais ne supprime pas) certains de vos ingrédients. Il ne modifiera pas l&apos;une de vos recettes. Continuer?</translation>
+    </message>
+    <message>
         <source>Select Database File</source>
         <translation>Sélectrionner un fichier de base de données</translation>
     </message>
     <message>
-        <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
-        <translation>Voulez-vous régler la taille du lot, la taille ébullition et l&apos;heure à celui demandé par l&apos;équipement?</translation>
+        <source>Brewtarget Database (*.sqlite)</source>
+        <translation>Base de données Brewtarget (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
@@ -819,18 +819,6 @@
     <message>
         <source>For some reason, the operation failed.</source>
         <translation>Cette opération a échoué.</translation>
-    </message>
-    <message>
-        <source>Database Update</source>
-        <translation>Renouveler la base de données</translation>
-    </message>
-    <message>
-        <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation>Vous êtes sur le point de mettre à jour la base de données actuelle par une autre. Cela peut apporter des modifications à (mais ne supprime pas) certains de vos ingrédients. Il ne modifiera pas l&apos;une de vos recettes. Continuer?</translation>
-    </message>
-    <message>
-        <source>Brewtarget Database (*.sqlite)</source>
-        <translation>Base de données Brewtarget (*.sqlite)</translation>
     </message>
     <message>
         <source>Import %1?</source>
@@ -882,19 +870,19 @@
     </message>
     <message>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir un fichier</translation>
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
+        <translation>SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Style</translation>
+        <translation>Style</translation>
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished">Aucun style</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -903,10 +891,6 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Restaurer la base de données</translation>
     </message>
 </context>
 <context>
@@ -1163,11 +1147,7 @@
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Quantité </translation>
-    </message>
-    <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Mauvais modèle d&apos;index de rangée =%1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1394,10 +1374,6 @@
         <translation>Souhaitez-vous désactiver la vérification des nouvelles versions ?</translation>
     </message>
     <message>
-        <source>Could not open %1 for writing</source>
-        <translation>Impossible d&apos;ouvrir %1 pour écriture</translation>
-    </message>
-    <message>
         <source>Database Failure</source>
         <translation>Défaillance de base de données</translation>
     </message>
@@ -1604,26 +1580,6 @@
     <message>
         <source>Style</source>
         <translation type="unfinished">Style</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="obsolete">Efficacité: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
-</source>
-        <translation type="obsolete">ABV: %1%
-</translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="obsolete">Fusionner la base de données</translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="obsolete">Il peut y avoir de nouveaux ingrédients et recettes disponibles. Voulez-vous les ajouter à votre base de données ?</translation>
     </message>
 </context>
 <context>
@@ -3395,6 +3351,14 @@ p, li { white-space: pre-wrap; }
         <translation>À propos</translation>
     </message>
     <message>
+        <source>Miscs</source>
+        <translation>Autres</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation>Levures</translation>
+    </message>
+    <message>
         <source>Boil Time</source>
         <translation>Durée d&apos;ébullition</translation>
     </message>
@@ -3611,14 +3575,6 @@ p, li { white-space: pre-wrap; }
         <translation>Barre d&apos;outils</translation>
     </message>
     <message>
-        <source>Miscs</source>
-        <translation>Autres</translation>
-    </message>
-    <message>
-        <source>Yeasts</source>
-        <translation>Levures</translation>
-    </message>
-    <message>
         <source>Backup Database</source>
         <translation>Sauvegarde informatique de la base de données</translation>
     </message>
@@ -3628,19 +3584,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished">Styles</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished">Empâtage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished">Empâtage</translation>
-    </message>
-    <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Retirer recette</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4001,7 +3953,7 @@ p, li { white-space: pre-wrap; }
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished">Éditeur d&apos;empâtage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mash</source>
@@ -4337,6 +4289,26 @@ p, li { white-space: pre-wrap; }
         <source>Italian</source>
         <translation>Italien</translation>
     </message>
+    <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished">Houblonnage pré-cuisson</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4427,10 +4399,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
         <translation>Taux d&apos;inoculation [M cellules/(mL*P)]</translation>
-    </message>
-    <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="obsolete">Taux d&apos;inoculation [M cellules/(mL*P)]</translation>
     </message>
 </context>
 <context>

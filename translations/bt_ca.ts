@@ -306,7 +306,11 @@
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished">Estil</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -314,6 +318,10 @@
     <message>
         <source>Default</source>
         <translation>Defecte</translation>
+    </message>
+    <message>
+        <source>EBC</source>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>SRM</source>
@@ -395,10 +403,6 @@
         <source>Gallons</source>
         <translation>Galons</translation>
     </message>
-    <message>
-        <source>EBC</source>
-        <translation>EBC</translation>
-    </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
@@ -450,27 +454,19 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished">El volum que has posat és 0. Pot causar problemes.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished">La mida del lot que has posat és 0. Pot causar problemes.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished">Utilització de Llúpol </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished">La mida del lot que has posat és 0. Pot causar problemes.</translation>
-    </message>
-    <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">El volum que has posat és 0. Pot causar problemes.</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">La mida del lot que has posat és 0. Pot causar problemes.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -697,20 +693,16 @@
         <translation>Desar</translation>
     </message>
     <message>
-        <source>Sure about that?</source>
-        <translation type="obsolete">N&apos;està Segur?</translation>
-    </message>
-    <message>
-        <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation type="obsolete">Està apunt d&apos;esborrar la recepta, és correcte?</translation>
-    </message>
-    <message>
         <source>Equipment request</source>
         <translation>Petició d&apos;equip</translation>
     </message>
     <message>
         <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
         <translation>Vol canviar les quantitats del lot i el temps d&apos;ebullició?</translation>
+    </message>
+    <message>
+        <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
+        <translation>Vols configurar la mida del lot, el volum i el temps de bullir al sol·licitat l&apos;equip?</translation>
     </message>
     <message>
         <source>Delete %1</source>
@@ -799,10 +791,6 @@
     <message>
         <source>Recipe name</source>
         <translation>Nom de la recepta</translation>
-    </message>
-    <message>
-        <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
-        <translation>Vols configurar la mida del lot, el volum i el temps de bullir al sol·licitat l&apos;equip?</translation>
     </message>
     <message>
         <source>Recipe name:</source>
@@ -894,7 +882,7 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished">Sense estil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -903,10 +891,6 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Restaurar la Base de Dades</translation>
     </message>
 </context>
 <context>
@@ -1163,11 +1147,7 @@
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Quantitat </translation>
-    </message>
-    <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Índex de model erroni. Fila =%1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1394,10 +1374,6 @@
         <translation>Vols que no et recordi més que existeixen noves versions?</translation>
     </message>
     <message>
-        <source>Could not open %1 for writing</source>
-        <translation>No es pot obrir %1 per escriure</translation>
-    </message>
-    <message>
         <source>Database Failure</source>
         <translation>Error a la base de dades</translation>
     </message>
@@ -1604,26 +1580,6 @@
     <message>
         <source>Style</source>
         <translation type="unfinished">Estil</translation>
-    </message>
-    <message>
-        <source>Efficiency: %1%%
-</source>
-        <translation type="obsolete">Eficiència: %1%
-</translation>
-    </message>
-    <message>
-        <source>ABV: %1%%
-</source>
-        <translation type="obsolete">ABV: %1%
-</translation>
-    </message>
-    <message>
-        <source>Merge Database</source>
-        <translation type="obsolete">Unir la base de dades</translation>
-    </message>
-    <message>
-        <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation type="obsolete">Hi ha nous ingredients i receptes disponibles. Vol afegir-les a la la seva base de dades?</translation>
     </message>
 </context>
 <context>
@@ -3395,6 +3351,14 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Quant a</translation>
     </message>
     <message>
+        <source>Miscs</source>
+        <translation>Ingredients extres</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation>Llevats</translation>
+    </message>
+    <message>
         <source>Boil Time</source>
         <translation>Temps d&apos;ebullició</translation>
     </message>
@@ -3611,14 +3575,6 @@ p, li { white-space: pre-wrap; }
         <translation>Barra d&apos;eines</translation>
     </message>
     <message>
-        <source>Miscs</source>
-        <translation>Ingredients extres</translation>
-    </message>
-    <message>
-        <source>Yeasts</source>
-        <translation>Llevats</translation>
-    </message>
-    <message>
         <source>Backup Database</source>
         <translation>Còpia de seguretat de la base de dades</translation>
     </message>
@@ -3628,19 +3584,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished">&amp;Estils</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished">Maceracions</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished">Maceracions</translation>
-    </message>
-    <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Esborrar recepta</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4001,7 +3953,7 @@ p, li { white-space: pre-wrap; }
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished">Editor de maceració</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mash</source>
@@ -4337,6 +4289,26 @@ p, li { white-space: pre-wrap; }
         <source>Italian</source>
         <translation>Italià</translation>
     </message>
+    <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>pitchDialog</name>
@@ -4427,10 +4399,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
         <translation>Tassa de llevat</translation>
-    </message>
-    <message>
-        <source>Pitch Rate (cells)/(mL*P)</source>
-        <translation type="obsolete">Tassa de llevat</translation>
     </message>
 </context>
 <context>
