@@ -53,6 +53,12 @@ TimerWidget::TimerWidget(QWidget* parent)
    mediaObject->setTransitionTime(0);
    mediaObject->setPrefinishMark(10); // 10 ms.
    Phonon::createPath(mediaObject, audioOutput);
+
+   // The following signal is emitted when we are almost at the end of the sound.
+   // The slot re-queues the same song, so we get a loop. 
+   // This needs to be inside the ifdef -- connecting the mediaObject outside
+   // causes a compile error
+   connect( mediaObject, SIGNAL(prefinishMarkReached(qint32)), this, SLOT(doReplay(qint32)) );
    
 #endif
 
@@ -68,9 +74,6 @@ TimerWidget::TimerWidget(QWidget* parent)
    connect( pushButton_set, SIGNAL(clicked()), this, SLOT(setTimer()) );
    connect( pushButton_startStop, SIGNAL(clicked()), this, SLOT(startStop()) );
    connect( pushButton_sound, SIGNAL(clicked()), this, SLOT(getSound()) );
-   // The following signal is emitted when we are almost at the end of the sound.
-   // The slot re-queues the same song, so we get a loop.
-   connect( mediaObject, SIGNAL(prefinishMarkReached(qint32)), this, SLOT(doReplay(qint32)) );
 
    showChanges();
 }
@@ -218,7 +221,9 @@ void TimerWidget::startStop()
    else
    {
       timer->stop();
+#if !defined(NO_PHONON)
       mediaObject->stop();
+#endif
       stopFlashing();
       pushButton_startStop->setText(tr("Start"));
       start = true;
