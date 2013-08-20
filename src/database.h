@@ -315,7 +315,7 @@ public:
     */
    void updateDatabase(QString const& filename);
    void saveDatabase();
-   void convertFromXml();
+   void convertFromXml(QString dataDir = "");
 
 
    bool isConverted();

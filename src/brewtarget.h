@@ -281,7 +281,9 @@ private:
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.
    static void checkForNewVersion(MainWindow* mw);
-   
+   //! \brief Handles upgrading from a pre v2.0.2 version, which matters because we don't know where the old DB was prior to that version
+   static void upgradePre202db(MainWindow* mw);
+
    //! \brief If this option is false, do not bother the user about new versions.
    static bool checkVersion;
 

@@ -281,7 +281,7 @@ bool Database::loadSuccessful()
    return loadWasSuccessful;
 }
 
-void Database::convertFromXml()
+void Database::convertFromXml(QString dataDir)
 {
 
    // We have two use cases to consider here. The first is a BT
@@ -289,7 +289,13 @@ void Database::convertFromXml()
    // install. I am also trying to protect the developers from double imports.
    // If the old "obsolete" directory exists, don't do anything other than
    // set the converted flag
-   QDir dir(Brewtarget::getUserDataDir());
+   QDir dir;
+
+   if ( dataDir.length() > 0 )
+      dir.setPath(dataDir);
+   else
+      dir.setPath(Brewtarget::getUserDataDir());
+
    // Checking for non-existence is redundant with the new "converted" setting,
    // but better safe than sorry.
    if( !dir.exists("obsolete") )
@@ -300,7 +306,7 @@ void Database::convertFromXml()
       QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
       for ( int i = 0; i < oldFiles.size(); ++i ) 
       {
-         QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
+         QFile oldXmlFile(dir.filePath(oldFiles[i]));
          // If the old file exists, import.
          if( oldXmlFile.exists() )
          {
