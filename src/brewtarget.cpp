@@ -139,65 +139,6 @@ void Brewtarget::checkForNewVersion(MainWindow* mw)
    QObject::connect( reply, SIGNAL(finished()), mw, SLOT(finishCheckingVersion()) );
 }
 
-void Brewtarget::upgradePre202db(MainWindow* mw)
-{
-   int selection;
-   QMessageBox mBox(mw);
-   QFileDialog fDiag(mw);
-   // Yeah, this looks strange. Wait for it
-   QStringList oldDbs;
-   QString srcDir;
-   QFile srcFile;
-   bool worked;
-
-   // Ask the user if they want to upgrade an existing database
-   mBox.setText(tr("Upgrade your database"));
-   mBox.setInformativeText(tr("Select 'Yes' to upgrade a database from a previous version. Select 'No' to either ignore previous databases or if this is a new install"));
-   mBox.setDetailedText(tr("This question will only be asked once when upgrading from something previous to brewtarget v2.0.2 to v2.0.2 or later."));
-   mBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-
-   selection = mBox.exec();
-
-   // If they don't, don't do anything
-   if (selection == QMessageBox::No)
-      return;
-
-   // If they do, we need a file system browser
-   fDiag.setFileMode(QFileDialog::Directory);
-   fDiag.setDirectory(getConfigDir());
-
-   // Do nothing if the user cancels the dialog
-   if ( ! fDiag.exec() )
-      return;
-
-   // selectedFiles returns a QStringList. Just roll with it
-   oldDbs = fDiag.selectedFiles();
-   srcDir = oldDbs.first();
-
-   // Now it gets funky. My problem is that v1.x and v2.x have completely
-   // directory structures. So first I need to determine if this is v2.x or v1.x
-   if ( srcDir.contains(QRegExp("target-1",Qt::CaseInsensitive)))
-   {
-      Database::instance().convertFromXml(srcDir);
-   }
-   // This is actually the harder case. I need to shut the current instance
-   // down, copy the old DB into place and re-open the database. Thankfully,
-   // the database knows its version internally. I am hoping like anything
-   // that the upgrade process will just work.
-   else
-   {
-      Database::instance().unload(false);
-      Database::instance().dropInstance();
-      QDir oldDir(srcDir);
-      srcFile.setFileName(oldDir.filePath("database.sqlite"));
-
-      if (srcFile.exists() )
-         worked = QFile::copy( srcFile.fileName(), getUserDataDir() + "database.sqlite");
-
-      Database::instance().loadSuccessful();
-   }
-}
-
 bool Brewtarget::copyDataFiles(QString newPath)
 {
    QString dbFileName;
@@ -466,7 +407,6 @@ int Brewtarget::run()
 {
    int ret;
    bool success;
-   bool oldConfig = false;
    
    // In Unix, make sure the user isn't running 2 copies.
 #if defined(Q_WS_X11)
@@ -509,14 +449,17 @@ int Brewtarget::run()
    
    success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
 
-   // If the old options file exists, convert it. Otherwise, just get the
-   // system options
-   oldConfig = optionFileExists();
-   if (oldConfig)
-      convertPersistentOptions(); 
+   // This is a hard test. The options file not existing is a good one, but it may only work on Linux
+   // I think I also need to see if the options are in the registry or not
+   if ( ! hasOption("user_data_dir") && optionFileExists())
+   {
+         convertPersistentOptions();
+#ifdef Q_OS_WIN
+         setOption("hadOldConfig", true);
+#endif
+   }
    else
       readSystemOptions();
-
 
    if( success )
       success = ensureDataFilesExist(); // Make sure all the files we need exist before starting.
@@ -537,25 +480,23 @@ int Brewtarget::run()
    // loading the main window.
    if (Database::instance().loadSuccessful())
    {
-#ifdef QT_OS_WIN
-      // If we found options.xml, assume we are upgrading from a
-      // pre-v2.0.2 version. This problem only affects Windows, I think
-      // I don't have a Mac to know for certain
-      if (oldConfig)
-         upgradePre202db(_mainWindow);
-#endif
 
       // See if the user needs to convert from the deprecated XML formats
+      // This only works on non-Windows OSes. And it screws up my other
+      // plans
+#ifndef Q_OS_WIN
       if ( ! Brewtarget::btSettings.contains("converted") )
          Database::instance().convertFromXml();
-      
+#endif
       _mainWindow = new MainWindow();
       
       _mainWindow->setVisible(true);
       splashScreen.finish(_mainWindow);
 
       checkForNewVersion(_mainWindow);
-      ret = qApp->exec();
+      do {
+         ret = qApp->exec();
+      } while (ret == 1000);
    }
    
    // Close log file.
@@ -941,14 +882,18 @@ void Brewtarget::convertPersistentOptions()
    optionsDoc = 0;
    xmlFile.close();
 
+   // Don't do this on Windows. We have extra work to do and creating the
+   // obsolete directory fucks it all up. Not sure why that test is still in here
+#ifndef Q_OS_WIN
    // This shouldn't really happen, but lets be sure
    if( !cfgDir.exists("obsolete") )
       cfgDir.mkdir("obsolete");
 
-   // copy the old file into obsolete and delete it   
+   // copy the old file into obsolete and delete it
    cfgDir.cd("obsolete");
    if( xmlFile.copy(cfgDir.filePath("options.xml")) )
       xmlFile.remove();
+#endif
 }
 
 void Brewtarget::readSystemOptions()
@@ -1335,6 +1280,12 @@ QVariant Brewtarget::option(QString attribute, QVariant default_value, const QOb
       name = attribute;
 
    return btSettings.value(name,default_value);
+}
+
+void Brewtarget::removeOption(QString attribute)
+{
+   if ( hasOption(attribute) )
+        btSettings.remove(attribute);
 }
 
 QString Brewtarget::generateName(QString attribute, const QObject* object, iUnitOps ops)

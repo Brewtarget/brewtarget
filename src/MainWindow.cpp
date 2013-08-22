@@ -102,6 +102,9 @@
 #include "StyleSortFilterProxyModel.h"
 #include "NamedMashEditor.h"
 #include "BtDatePopup.h"
+#if defined(Q_OS_WIN)
+   #include <windows.h>
+#endif
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -111,6 +114,13 @@ MainWindow::MainWindow(QWidget* parent)
 
    QDesktopWidget *desktop = QApplication::desktop();
 
+#ifdef Q_OS_WIN
+   if ( Brewtarget::hasOption("hadOldConfig"))
+   {
+      upgradePre202db();
+      Brewtarget::removeOption("hadOldConfig");
+   }
+#endif
    // Ensure database initializes.
    Database::instance();
 
@@ -2510,5 +2520,89 @@ void MainWindow::fixBrewNote()
          continue;
 
       target->recalculateEff(noteParent);
+   }
+}
+
+void MainWindow::upgradePre202db()
+{
+   QMessageBox mBox(this);
+   QFileDialog fDiag(this);
+   // Yeah, this looks strange. Wait for it
+   QStringList oldDbs;
+   QString srcDir;
+   QFile srcFile;
+
+   // Ask the user if they want to upgrade an existing database
+   mBox.setText(tr("Upgrade your database?"));
+   mBox.setInformativeText(tr("Select 'Yes' to upgrade a database from a previous version. Select 'No' if this is a new install or to ignore previous databases"));
+   mBox.setDetailedText(tr("This question will only be asked once when upgrading from something previous to brewtarget v2.0.2 to v2.0.2 or later."));
+   mBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+
+   // If they don't, don't do anything
+   if (mBox.exec() == QMessageBox::No)
+      return;
+
+   // If they do, we need a file system browser
+   fDiag.setFileMode(QFileDialog::Directory);
+   fDiag.setDirectory(Brewtarget::getConfigDir());
+
+   // Do nothing if the user cancels the dialog
+   if ( ! fDiag.exec() )
+      return;
+
+   // selectedFiles returns a QStringList. Just roll with it
+   oldDbs = fDiag.selectedFiles();
+   srcDir = oldDbs.first();
+
+   // Now it gets funky. My problem is that v1.x and v2.x have completely
+   // directory structures. So first I need to determine if this is v2.x or v1.x
+   if ( srcDir.contains(QRegExp("target-1",Qt::CaseInsensitive)))
+   {
+      QDir oldDir(srcDir);
+      QDir newDir(Brewtarget::getUserDataDir());
+      QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
+
+      for ( int i = 0; i < oldFiles.size(); ++i )
+      {
+         QFile oldXmlFile(oldDir.filePath(oldFiles[i]));
+         QFile newXmlFile(newDir.filePath(oldFiles[i]));
+
+         // This is really bad form. I should take the old XML files out of
+         // the dist, and stop copying them. Once I get this working, I will
+         // hunt that crap down and kill it dead.
+         if ( newXmlFile.exists() )
+            newXmlFile.remove();
+
+         if ( oldXmlFile.exists() )
+            oldXmlFile.copy(newDir.filePath(oldFiles[i]));
+      }
+      Database::instance().convertFromXml();
+      // We need to move the options.xml file out of the way on Windows.
+      QFile options(newDir.filePath("options.xml"));
+      if( options.copy(newDir.filePath("obsolete/options.xml")) )
+         options.remove();
+   }
+   // This is actually the harder case. I need to shut the current instance
+   // down, copy the old DB into place and re-open the database. Thankfully,
+   // the database knows its version internally. I am hoping like anything
+   // that the upgrade process will just work.
+   else
+   {
+      Database::instance().unload(false);
+      Database::instance().dropInstance();
+      QDir oldDir(srcDir);
+      srcFile.setFileName(oldDir.filePath("database.sqlite"));
+
+      if (srcFile.exists() )
+      {
+         QFile tgtFile(Brewtarget::getUserDataDir() + "database.sqlite");
+
+         if ( tgtFile.exists() )
+            DeleteFile( tgtFile.fileName().toStdString().c_str() );
+
+         srcFile.copy(tgtFile.fileName());
+         // I think I need to restart this.
+         qApp->exit(1000);
+      }
    }
 }

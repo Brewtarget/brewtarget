@@ -230,6 +230,7 @@ public:
    static bool  hasOption(QString attribute, const QObject* object = 0, iUnitOps ops = NOOP);
    static void  setOption(QString attribute, QVariant value, const QObject* object = 0, iUnitOps ops = NOOP);
    static QVariant option(QString attribute, QVariant default_value, const QObject* object = 0, iUnitOps = NOOP);
+   static void removeOption(QString attribute);
 
    static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
 
@@ -281,8 +282,6 @@ private:
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.
    static void checkForNewVersion(MainWindow* mw);
-   //! \brief Handles upgrading from a pre v2.0.2 version, which matters because we don't know where the old DB was prior to that version
-   static void upgradePre202db(MainWindow* mw);
 
    //! \brief If this option is false, do not bother the user about new versions.
    static bool checkVersion;
