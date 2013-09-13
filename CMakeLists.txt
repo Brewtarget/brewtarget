@@ -222,7 +222,7 @@ CONFIGURE_FILE( src/config.in src/config.h )
 
 # List of documentation files to be installed.
 SET( brewtarget_DOCS
-     ${ROOTDIR}/README
+     ${ROOTDIR}/README.markdown
      ${ROOTDIR}/COPYRIGHT
      ${ROOTDIR}/doc/manual/index.html
 )
