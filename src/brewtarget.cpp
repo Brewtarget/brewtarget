@@ -450,8 +450,9 @@ int Brewtarget::run()
    success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
 
    // If the old options file exists, convert it. Otherwise, just get the
-   // system options
-   if ( btSettings.contains("hasOldConfig") )
+   // system options. I *think* this will work. The installer copies the old
+   // one into the new place on Windows.
+   if ( optionFileExists())
       convertPersistentOptions(); 
    else
       readSystemOptions();
@@ -868,7 +869,7 @@ void Brewtarget::convertPersistentOptions()
    xmlFile.close();
 
    // Don't do this on Windows. We have extra work to do and creating the
-   // obsolete directory fucks it all up. Not sure why that test is still in here
+   // obsolete directory mess it all up. Not sure why that test is still in here
 #ifndef Q_OS_WIN
    // This shouldn't really happen, but lets be sure
    if( !cfgDir.exists("obsolete") )
@@ -879,9 +880,9 @@ void Brewtarget::convertPersistentOptions()
    if( xmlFile.copy(cfgDir.filePath("options.xml")) )
       xmlFile.remove();
 
+#endif
    // And remove the flag
    btSettings.remove("hasOldConfig");
-#endif
 }
 
 void Brewtarget::readSystemOptions()

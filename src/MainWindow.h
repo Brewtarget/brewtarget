@@ -227,8 +227,6 @@ public slots:
 
    //! \brief Catches a QNetworkReply signal and gets info about any new version available.
    void finishCheckingVersion();
-   //! \brief Handles upgrading from a pre v2.0.2 version, which matters because we don't know where the old DB was prior to that version
-   void upgradePre202db();
 
    void redisplayLabel(QString field);
 
