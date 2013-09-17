@@ -435,6 +435,10 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
     SET( CPACK_PACKAGE_INSTALL_DIRECTORY "Brewtarget-${brewtarget_VERSION_STRING}" )
     SET( CPACK_NSIS_MODIFY_PATH ON )
 
+    # Add some extra modules for CPACK and my wonderous new installer. I
+    # think.
+    SET( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR/win/cmake" ${CMAKE_MODULE_PATH})
+
     # Extra start menu items.
     #SET( CPACK_NSIS_MENU_LINKS
     #     "bin/${brewtarget_EXECUTABLE}" "My Brewtarget"
