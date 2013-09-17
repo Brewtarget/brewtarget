@@ -407,7 +407,6 @@ int Brewtarget::run()
 {
    int ret;
    bool success;
-   bool oldConfig = false;
    
    // In Unix, make sure the user isn't running 2 copies.
 #if defined(Q_WS_X11)
@@ -457,7 +456,6 @@ int Brewtarget::run()
    else
       readSystemOptions();
 
-
    if( success )
       success = ensureDataFilesExist(); // Make sure all the files we need exist before starting.
 
@@ -477,17 +475,18 @@ int Brewtarget::run()
    // loading the main window.
    if (Database::instance().loadSuccessful())
    {
-      // See if the user needs to convert from the deprecated XML formats
       if ( ! Brewtarget::btSettings.contains("converted") )
          Database::instance().convertFromXml();
-      
+
       _mainWindow = new MainWindow();
       
       _mainWindow->setVisible(true);
       splashScreen.finish(_mainWindow);
 
       checkForNewVersion(_mainWindow);
-      ret = qApp->exec();
+      do {
+         ret = qApp->exec();
+      } while (ret == 1000);
    }
    
    // Close log file.
@@ -868,17 +867,21 @@ void Brewtarget::convertPersistentOptions()
    optionsDoc = 0;
    xmlFile.close();
 
+   // Don't do this on Windows. We have extra work to do and creating the
+   // obsolete directory fucks it all up. Not sure why that test is still in here
+#ifndef Q_OS_WIN
    // This shouldn't really happen, but lets be sure
    if( !cfgDir.exists("obsolete") )
       cfgDir.mkdir("obsolete");
 
-   // copy the old file into obsolete and delete it   
+   // copy the old file into obsolete and delete it
    cfgDir.cd("obsolete");
    if( xmlFile.copy(cfgDir.filePath("options.xml")) )
       xmlFile.remove();
 
    // And remove the flag
    btSettings.remove("hasOldConfig");
+#endif
 }
 
 void Brewtarget::readSystemOptions()
@@ -1265,6 +1268,12 @@ QVariant Brewtarget::option(QString attribute, QVariant default_value, const QOb
       name = attribute;
 
    return btSettings.value(name,default_value);
+}
+
+void Brewtarget::removeOption(QString attribute)
+{
+   if ( hasOption(attribute) )
+        btSettings.remove(attribute);
 }
 
 QString Brewtarget::generateName(QString attribute, const QObject* object, iUnitOps ops)

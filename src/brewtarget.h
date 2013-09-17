@@ -230,6 +230,7 @@ public:
    static bool  hasOption(QString attribute, const QObject* object = 0, iUnitOps ops = NOOP);
    static void  setOption(QString attribute, QVariant value, const QObject* object = 0, iUnitOps ops = NOOP);
    static QVariant option(QString attribute, QVariant default_value, const QObject* object = 0, iUnitOps = NOOP);
+   static void removeOption(QString attribute);
 
    static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
 
