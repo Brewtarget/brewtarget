@@ -29,7 +29,10 @@
 
 ;--------------------------------
 ; brewtarget specific modifications
-  
+!include StrFunc.nsh
+
+${StrStr}
+${StrRep}
 
 ;--------------------------------
 ;General
@@ -751,6 +754,7 @@ FunctionEnd
 Var btPath
 var prevInst
 Var targetDir
+Var fileName
 
 ; Set up the browser page. This happens post install, so I'm confused about
 ; what's already on disk and isn't.
@@ -795,42 +799,74 @@ FunctionEnd
 Function btPageLeave
    GetInstDirError $0
 
-
    ; If they selected nothing, send them back to the dialog
    ${If} $0 <> 0
       MessageBox mb_iconstop "You must locate the old brewtarget folder: $0"
       Abort
    ${EndIf}
 
-   ; Create the target data directory if it isn't there???
+   ; Create the target data directory if it isn't there
    ${IfNot} ${FileExists} $targetDir
       CreateDirectory $targetDir
    ${EndIf}
 
-   ${If} $R0 != "" 
-      ; Look for the database, copy if it is there
-      ${If} ${FileExists} "$btPath\database.sqlite"
-         CopyFiles "$btPath\database.sqlite" $targetDir
-      ${Else} ; 1.x upgrade -- copy everything
-         ${If} ${FileExists} "$btPath\database.xml"
-            CopyFiles "$btPath\database.xml" $targetDir
-         ${EndIf}
-         ${If} ${FileExists} "$btPath\mashes.xml"
-            CopyFiles "$btPath\mashes.xml" $targetDir
-         ${EndIf}
-         ${If} ${FileExists} "$btPath\recipes.xml"
-            CopyFiles "$btPath\recipes.xml" $targetDir
-         ${EndIf}
-      ${Endif}
-      ; and we all copy the options file
-      ${If} ${FileExists} "$btPath\options.xml"
-         CopyFiles "$btPath\options.xml" $targetDir
+   ; If the user points us at the program files directory, we have to worry
+   ; about virtual stores
+   ${StrStr} $R0 $btPath $PROGRAMFILES 
+
+   ; We have to worry
+   ${If} $R0 != ""
+      ; Need some more info. 
+      ${StrRep} $R1 $btPath 'c:\' $LOCALAPPDATA
+      ${StrStr} $R2 $btPath 't-2' 
+
+      ; if this is an upgrade from a v2.x, look for sqlite file
+      ${If} $R2 != ""
+         StrCpy $fileName 'database.sqlite'
+      ; if this is an upgrade from a v1.2.x, look for a xml file
+      ${Else}
+         StrCpy $fileName 'database.xml'
       ${EndIf}
 
-      ; Don't set the old config flag if they didn't select an old config
+      ; If there is no data file where the user pointed us,
+      ; look in a virtual store. If its there, use that as the btpath
+      ${IfNot} ${FileExists} "$btPath\$fileName"
+         ${If} ${FileExists} "$R1\$fileName"
+            StrCpy $btPath $R1
+         ; If we can't find anything, warn the user and send them back to the
+         ; selection screen
+         ${Else}
+            MessageBox mb_iconstop "Could not find an existing database ($fileName) in $btPath or $R1"
+            Abort
+         ${EndIf}
+      ${EndIf}
+   ${EndIf}
+
+   ; I dislike the duplicated code. I need to do this better.
+   ${If} ${FileExists} "$btPath\database.sqlite"
+      CopyFiles "$btPath\database.sqlite" $targetDir
+      CopyFiles "$btPath\options.xml" $targetDir
       WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'hadOldConfig' "1"
-      
       MessageBox MB_ICONINFORMATION "Your old databases have been copied into place. Please start brewtarget to have them automatically upgraded."
+   ${Else}
+      ${If} ${FileExists} "$btPath\database.xml"
+         ; database
+         CopyFiles "$btPath\database.xml" $targetDir
+         ; mashes
+         CopyFiles "$btPath\mashes.xml" $targetDir
+         ; recipes
+         CopyFiles "$btPath\recipes.xml" $targetDir
+         ; options file last
+         CopyFiles "$btPath\options.xml" $targetDir
+         ; update the registry, so we know to do the final conversion of the
+         ; options file
+         WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'hadOldConfig' "1"
+         ; Tell the user they are good.
+         MessageBox MB_ICONINFORMATION "Your old databases have been copied into place. Please start brewtarget to have them automatically upgraded."
+      ${Else}
+         MessageBox mb_iconstop "Couldn't find an existing database to copy!"
+         Abort
+      ${EndIf}
    ${EndIf}
    ; Always set the new user_data_dir flag
    ; WriteRegStr HKCU "SOFTWARE\${APP_NAME}\OrganizationDefaults" 'user_data_dir' "$APPDATA\${APP_NAME}\"
@@ -838,6 +874,9 @@ Function btPageLeave
    WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'user_data_dir' "$APPDATA\brewtarget\"
       
 FunctionEnd
+
+;--------------------------------
+; end brewtarget specific modifications
 
 ;--------------------------------
 ; determine admin versus local install
