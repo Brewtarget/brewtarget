@@ -20,6 +20,7 @@
 #include <QIcon>
 #include <QMessageBox>
 #include <QDebug>
+#include <QCloseEvent>
 
 #include "database.h"
 #include "equipment.h"
@@ -81,7 +82,7 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    // Set up the buttons
    connect( pushButton_save, SIGNAL( clicked() ), this, SLOT( save() ) );
    connect( pushButton_new, SIGNAL( clicked() ), this, SLOT( newEquipment() ) );
-   connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( clearAndClose() ) );
+   connect( pushButton_cancel, SIGNAL( clicked() ), this, SLOT( cancel() ) );
    connect( pushButton_remove, SIGNAL( clicked() ), this, SLOT( removeEquipment() ) );
    connect( pushButton_absorption, SIGNAL( clicked() ), this, SLOT( resetAbsorption() ) );
    connect( equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
@@ -219,9 +220,10 @@ void EquipmentEditor::newEquipment()
    show();
 }
 
-void EquipmentEditor::clearAndClose()
+void EquipmentEditor::cancel()
 {
-   clear();
+   setEquipment(obsEquip);
+
    setVisible(false);
 }  
 
@@ -384,4 +386,10 @@ void EquipmentEditor::updateField()
 	// We also need to recalculate the preboil size if a few fields change
 	if ( selection == lineEdit_boilTime || selection == lineEdit_evaporationRate || selection == lineEdit_trubChillerLoss || selection == lineEdit_topUpWater )
 		 updateCheckboxRecord( checkBox_calcBoilVolume->checkState());
+}
+
+void EquipmentEditor::closeEvent(QCloseEvent *event)
+{
+   cancel();
+   event->accept();
 }

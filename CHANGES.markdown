@@ -32,6 +32,8 @@ None
 * Fixed labeling of EBC values when adding new styles [#1173774](https://bugs.launchpad.net/bugs/1173774)
 * Fixed inaccurate color preview [#1177546](https://bugs.launchpad.net/bugs/1177546)
 * Building with `-no-phonon` flag works correctly [#1212921](https://bugs.launchpad.net/bugs/1212921)
+* Equipment editor should no longer show up empty. [#1227787](https://bugs.launchpad.net/brewtarget/+bug/1227787)
+* Closing the equipment editor now always reverts all changes.
 
 ### Incompatibilities
 
