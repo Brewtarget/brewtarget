@@ -943,38 +943,7 @@ void MainWindow::updateRecipeMash()
 
 void MainWindow::updateRecipeEquipment()
 {
-   if( recipeObs == 0 )
-      return;
-
-   // equip may be null.
-   Equipment* equip = equipmentListModel->at(equipmentComboBox->currentIndex());
-   if( equip == 0 )
-      return;
-   // if it isn't, we need to disconnect a few signals here
-//   else 
-//      disconnect( equip, 0, recipeObs, 0 );
-
-   // Notice that we are using a copy from the database.
-   Database::instance().addToRecipe(recipeObs,equip);
-   equipmentButton->setEquipment(equip);
-
-   // Keep the mash tun weight and specific heat up to date.
-   Mash* m = recipeObs->mash();
-   if( m )
-   {
-      m->setTunWeight_kg( equip->tunWeight_kg() );
-      m->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
-   }
-   
-   if( QMessageBox::question(this, tr("Equipment request"),
-                             tr("Would you like to set the batch and boil size to that requested by the equipment?"),
-                             QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
-   {
-      recipeObs->setBatchSize_l( equip->batchSize_l() );
-      recipeObs->setBoilSize_l( equip->boilSize_l() );
-      recipeObs->setBoilTime_min( equip->boilTime_min() );
-      mashEditor->setEquipment(equip);
-   }
+  droppedRecipeEquipment(equipmentListModel->at(equipmentComboBox->currentIndex()));
 }
 
 void MainWindow::droppedRecipeEquipment(Equipment *kit)
@@ -989,6 +958,14 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    // Notice that we are using a copy from the database.
    Database::instance().addToRecipe(recipeObs,kit);
    equipmentButton->setEquipment(kit);
+
+   // Keep the mash tun weight and specific heat up to date.
+   Mash* m = recipeObs->mash();
+   if( m )
+   {
+      m->setTunWeight_kg( kit->tunWeight_kg() );
+      m->setTunSpecificHeat_calGC( kit->tunSpecificHeat_calGC() );
+   }
 
    if( QMessageBox::question(this,
                              tr("Equipment request"),

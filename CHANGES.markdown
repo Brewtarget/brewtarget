@@ -32,6 +32,7 @@ None
 * Fixed labeling of EBC values when adding new styles [#1173774](https://bugs.launchpad.net/bugs/1173774)
 * Fixed inaccurate color preview [#1177546](https://bugs.launchpad.net/bugs/1177546)
 * Building with `-no-phonon` flag works correctly [#1212921](https://bugs.launchpad.net/bugs/1212921)
+* Update mash tun mass and specific heat when equipment is dropped on recipe. [#1233754](https://bugs.launchpad.net/brewtarget/+bug/1233754)
 
 ### Incompatibilities
 
