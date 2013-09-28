@@ -27,6 +27,7 @@ is your single, free, go-to tool when crafting your beer recipes.
 * Jeff Bailey <skydvr38@verizon.net>
 * Piotr Przybyla (przybysh) <przybysh@gmail.com>
 * Chris Hamilton <marker5a@gmail.com>
+* David Grundberg <individ@acc.umu.se>
 
 Author list created with:
 
