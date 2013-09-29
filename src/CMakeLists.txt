@@ -326,6 +326,7 @@ QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 
 # Generate the resource .cpp from the .qrc file.
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
+QT4_ADD_RESOURCES(brewtarget_cfg_QRC_CPP ${brewtarget_cfg_QRC})
 
 # Translations
 FIND_PROGRAM( LUPDATE_CMD lupdate-qt4 )
@@ -358,7 +359,7 @@ ENDIF()
 
 #===========================Create the binary==================================
 
-ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_UIS_H} )
+ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_cfg_QRC_CPP} ${brewtarget_UIS_H} )
 ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
 
 # Link brewtarget against appropriate libraries.

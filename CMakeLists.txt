@@ -11,7 +11,7 @@ SET(brewtarget_EXECUTABLE "brewtarget")
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 2 )
 SET( brewtarget_VERSION_MINOR 0 )
-SET( brewtarget_VERSION_PATCH 1 )
+SET( brewtarget_VERSION_PATCH 2 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
 #===================================Options====================================
@@ -113,8 +113,9 @@ SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 
 #=========================Configure brewtarget.qrc.in==========================
 
-SET( brewtarget_QRC "${CMAKE_CURRENT_BINARY_DIR}/brewtarget.qrc" )
-CONFIGURE_FILE( brewtarget.qrc.in ${brewtarget_QRC} )
+SET( brewtarget_QRC "${CMAKE_CURRENT_SOURCE_DIR}/brewtarget.qrc" )
+SET( brewtarget_cfg_QRC "${CMAKE_CURRENT_BINARY_DIR}/brewtarget_cfg.qrc" )
+CONFIGURE_FILE( brewtarget_cfg.qrc.in ${brewtarget_cfg_QRC} )
 
 #============================Doxygen Custom Target=============================
 FIND_PROGRAM( DOXYGEN_CMD doxygen )
@@ -221,7 +222,7 @@ CONFIGURE_FILE( src/config.in src/config.h )
 
 # List of documentation files to be installed.
 SET( brewtarget_DOCS
-     ${ROOTDIR}/README
+     ${ROOTDIR}/README.markdown
      ${ROOTDIR}/COPYRIGHT
      ${ROOTDIR}/doc/manual/index.html
 )

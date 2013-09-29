@@ -58,8 +58,8 @@ public slots:
    void removeEquipment();
    //! Set the equipment to default values.
    void clear();
-   //! Set defaults and close the dialog.
-   void clearAndClose();
+   //! Close the dialog, throwing away changes.
+   void cancel();
    //! Set absorption back to default.
    void resetAbsorption();
 
@@ -72,6 +72,10 @@ public slots:
    
    void changed(QMetaProperty,QVariant);
    void updateField();
+
+protected:
+   //! User closed the dialog
+   void closeEvent(QCloseEvent *event);
 
 private:
    Equipment* obsEquip;

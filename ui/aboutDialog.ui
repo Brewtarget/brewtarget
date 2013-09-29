@@ -23,9 +23,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-170</y>
-        <width>694</width>
-        <height>570</height>
+        <y>0</y>
+        <width>665</width>
+        <height>646</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -107,7 +107,7 @@ p, li { white-space: pre-wrap; }
         <string>Donate</string>
        </property>
        <property name="icon">
-        <iconset>
+        <iconset resource="../brewtarget.qrc">
          <normaloff>:/images/donate.svg</normaloff>:/images/donate.svg</iconset>
        </property>
       </widget>
@@ -117,7 +117,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="../../../build/brewtarget.qrc"/>
+  <include location="../brewtarget.qrc"/>
  </resources>
  <connections/>
 </ui>

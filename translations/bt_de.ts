@@ -235,7 +235,7 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategory</translation>
+        <translation>Kategorie</translation>
     </message>
     <message>
         <source>Number</source>
@@ -306,7 +306,11 @@
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished">Art</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -450,19 +454,19 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished">Das eingegebene Kesselvolumen ist 0. Dies kann Probleme verursachen.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished">Die von Ihnen angegebene Ansatzgröße ist 0. Das könnte Probleme bereiten.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished">Hopfenausnutzung </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished">Die von Ihnen angegebene Ansatzgröße ist 0. Das könnte Probleme bereiten.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -866,7 +870,7 @@
     </message>
     <message>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei auswählen</translation>
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
@@ -878,19 +882,15 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished">Kein Typ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datenbank wurde umgewandelt/aktualisiert.</translation>
     </message>
     <message>
         <source>The original XML files can be found in </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Datenbank wiederherstellen</translation>
+        <translation>Die ursprünglichen XML-Dateien befinden sich in </translation>
     </message>
 </context>
 <context>
@@ -1139,7 +1139,7 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">Gewicht</translation>
+        <translation>Gewicht</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -1147,7 +1147,7 @@
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Menge </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1158,11 +1158,11 @@
     </message>
     <message>
         <source>Copy Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten kopieren</translation>
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es scheinen keinerlei Dateien in diesem Verzeichnis zu liegen. Deshalb werden Ihre alten Daten hierhin kopiert.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -1216,7 +1216,8 @@
     <message>
         <source>Bitterness: %1 IBUs (%2)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Bitterkeit: %1 IBU (%2)
+</translation>
     </message>
     <message>
         <source>Color: %1 SRM (%2)
@@ -1290,10 +1291,6 @@
         <translation>Zeit</translation>
     </message>
     <message>
-        <source>Form</source>
-        <translation>Formular</translation>
-    </message>
-    <message>
         <source>IBU</source>
         <translation>IBU</translation>
     </message>
@@ -1308,6 +1305,10 @@
 </source>
         <translation>Hefe
 </translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation>Formular</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -1369,11 +1370,7 @@
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open %1 for writing</source>
-        <translation>%1 konnte nicht zum Schreiben geöffnet werden</translation>
+        <translation>Damit aufhören, Sie mit Meldungen über neue Versionen zu nerven?</translation>
     </message>
     <message>
         <source>Database Failure</source>
@@ -1389,7 +1386,7 @@
     </message>
     <message>
         <source>Would you like to save the changes you made?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie die vorgenommenen Änderungen speichern?</translation>
     </message>
     <message>
         <source>Multiple Databases Found</source>
@@ -1405,7 +1402,7 @@
     </message>
     <message>
         <source>Rollback</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurücknehmen (Rollback)</translation>
     </message>
     <message>
         <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
@@ -1465,7 +1462,7 @@
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Abfüllung</translation>
+        <translation>Abfüllung</translation>
     </message>
     <message>
         <source>Spice</source>
@@ -1545,7 +1542,7 @@
     </message>
     <message>
         <source>Recipes</source>
-        <translation type="unfinished">Rezepte</translation>
+        <translation>Rezepte</translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -1684,7 +1681,7 @@
     </message>
     <message>
         <source>First wort hopping</source>
-        <translation type="unfinished"></translation>
+        <translation>Erste Würzehopfung</translation>
     </message>
     <message>
         <source>You should now have %1 wort.</source>
@@ -3295,7 +3292,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">ausgewählte Hefe entfernen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
@@ -3583,15 +3580,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished">Art</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished">Maischen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished">Maischen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3713,7 +3710,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Keine Gerätschaft</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun mass</source>
@@ -3952,7 +3949,7 @@ p, li { white-space: pre-wrap; }
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished">Maisch-Editor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mash</source>
@@ -3960,7 +3957,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">ausgewählte Hefe entfernen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
@@ -3984,7 +3981,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Anmerkungen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun</source>
@@ -3996,7 +3993,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Keine Gerätschaft</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun mass</source>
@@ -4016,7 +4013,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">ausgewählte Hefe entfernen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mash step up</source>
@@ -4281,6 +4278,26 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Italian</source>
         <translation>Italienisch</translation>
+    </message>
+    <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished">Erste Würze</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4669,7 +4686,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">ausgewählte Hefe entfernen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Basic Information</source>
@@ -5008,19 +5025,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Generation Nr.</translation>
+        <translation>Führung Nr.</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Generation in der sich die Hefe befindet</translation>
+        <translation>Die Führung in der sich die Hefe befindet</translation>
     </message>
     <message>
         <source>Max Recultures</source>
-        <translation>Max Generationen</translation>
+        <translation>Max Führungen</translation>
     </message>
     <message>
         <source>Max recultures</source>
-        <translation>Maximal mögliche Anzahl der Generationen für die Hefe</translation>
+        <translation>Maximale Anzahl der Führungen für die Hefe</translation>
     </message>
     <message>
         <source>Add to Secondary</source>

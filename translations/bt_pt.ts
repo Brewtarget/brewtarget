@@ -306,7 +306,11 @@
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -450,11 +454,11 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished">O volume do recipiente que você inseriu é 0. Isso pode causar problemas.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished">O tamanho do lote que você inseriu é 0. Isso pode causar problemas.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
@@ -462,15 +466,7 @@
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished">O tamanho do lote que você inseriu é 0. Isso pode causar problemas.</translation>
-    </message>
-    <message>
-        <source>The tun volume you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">O volume do recipiente que você inseriu é 0. Isso pode causar problemas.</translation>
-    </message>
-    <message>
-        <source>The batch size you entered is 0. This may cause problems.</source>
-        <translation type="obsolete">O tamanho do lote que você inseriu é 0. Isso pode causar problemas.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -697,14 +693,6 @@
         <translation>Salvar</translation>
     </message>
     <message>
-        <source>Sure about that?</source>
-        <translation type="obsolete">Você tem certeza disso?</translation>
-    </message>
-    <message>
-        <source>You are about to obliterate the recipe. Is that ok?</source>
-        <translation type="obsolete">Você está prestes a destruir a receita. Isto está correto?</translation>
-    </message>
-    <message>
         <source>Equipment request</source>
         <translation>Pedido de equipamento</translation>
     </message>
@@ -894,7 +882,7 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -903,10 +891,6 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation type="obsolete">Restaurar banco de dados</translation>
     </message>
 </context>
 <context>
@@ -1163,11 +1147,7 @@
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished">Quantidade </translation>
-    </message>
-    <message>
-        <source>Bad model index. row = %1</source>
-        <translation type="obsolete">Índice de modelo Ruim. linha = %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1196,156 +1176,12 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Directory Problem</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Config directory &quot;%1&quot; cannot be read.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version %1 is now available. Download it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open %1 for writing</source>
-        <translation>Não foi possível abrir %1 para gravação</translation>
-    </message>
-    <message>
         <source>Invalid color formula type: %1</source>
         <translation>Tipo de fórmula de cor inválida:%1</translation>
     </message>
     <message>
-        <source>Database Failure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Database Changes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Would you like to save the changes you made?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Multiple Databases Found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Restore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Rollback</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to rollback to the backup database.  Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database Restore Failure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to restore the backup database. Navigate to &apos;%1&apos; and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Grain</source>
-        <translation>Grão</translation>
-    </message>
-    <message>
-        <source>Sugar</source>
-        <translation>Açucar</translation>
-    </message>
-    <message>
-        <source>Extract</source>
-        <translation>Extrato</translation>
-    </message>
-    <message>
-        <source>Dry Extract</source>
-        <translation>Extrato seco</translation>
-    </message>
-    <message>
-        <source>Adjunct</source>
-        <translation>Adjunto</translation>
-    </message>
-    <message>
-        <source>Boil</source>
-        <translation>Ferver</translation>
-    </message>
-    <message>
-        <source>Mash</source>
-        <translation>Brassagem</translation>
-    </message>
-    <message>
         <source>Unrecognized IBU formula type. %1</source>
         <translation>Tipo de fórmula de IBU não reconhecida. %1</translation>
-    </message>
-    <message>
-        <source>Infusion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Temperature</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Decoction</source>
-        <translation>Decocção</translation>
-    </message>
-    <message>
-        <source>Bottling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Spice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fining</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Water Agent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Herb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Flavor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Batch Size: %1
@@ -1456,10 +1292,6 @@
         <translation>Tempo</translation>
     </message>
     <message>
-        <source>Form</source>
-        <translation>Forma</translation>
-    </message>
-    <message>
         <source>IBU</source>
         <translation>IBU</translation>
     </message>
@@ -1474,6 +1306,10 @@
 </source>
         <translation>Fermento
 </translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Stage</source>
@@ -1512,6 +1348,146 @@
 </source>
         <translation>Instruções
 </translation>
+    </message>
+    <message>
+        <source>Directory Problem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Config directory &quot;%1&quot; cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version %1 is now available. Download it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop bothering you about new versions?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database Failure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to open the database &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Database Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like to save the changes you made?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiple Databases Found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rollback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to rollback to the backup database.  Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database Restore Failure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to restore the backup database. Navigate to &apos;%1&apos; and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grain</source>
+        <translation>Grão</translation>
+    </message>
+    <message>
+        <source>Sugar</source>
+        <translation>Açucar</translation>
+    </message>
+    <message>
+        <source>Extract</source>
+        <translation>Extrato</translation>
+    </message>
+    <message>
+        <source>Dry Extract</source>
+        <translation>Extrato seco</translation>
+    </message>
+    <message>
+        <source>Adjunct</source>
+        <translation>Adjunto</translation>
+    </message>
+    <message>
+        <source>Boil</source>
+        <translation>Ferver</translation>
+    </message>
+    <message>
+        <source>Mash</source>
+        <translation>Brassagem</translation>
+    </message>
+    <message>
+        <source>Infusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Decoction</source>
+        <translation>Decocção</translation>
+    </message>
+    <message>
+        <source>Bottling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fining</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Water Agent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Herb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flavor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ale</source>
@@ -2645,6 +2621,34 @@ p, li { white-space: pre-wrap; }
         <translation>Tamanho do lote</translation>
     </message>
     <message>
+        <source>Boiling Point of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation>Recipiente de brassagem</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation>Volume</translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation>Volume do recipiente de brassagem</translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation>Massa</translation>
+    </message>
+    <message>
+        <source>Mass or weight of mash tun</source>
+        <translation>Massa ou peso do recipiente de brassagem</translation>
+    </message>
+    <message>
+        <source>Specific heat (cal/(g*K))</source>
+        <translation>Calor específico (cal/(g*K))</translation>
+    </message>
+    <message>
         <source>Boiling &amp;&amp; Water</source>
         <translation>Cozimento &amp;&amp; àgua</translation>
     </message>
@@ -2681,36 +2685,8 @@ p, li { white-space: pre-wrap; }
         <translation>Absorção do grão (L/Kg)</translation>
     </message>
     <message>
-        <source>Boiling Point of Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Default Absorption</source>
         <translation>Absorção padrão</translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation>Recipiente de brassagem</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Volume</translation>
-    </message>
-    <message>
-        <source>Volume of mash tun</source>
-        <translation>Volume do recipiente de brassagem</translation>
-    </message>
-    <message>
-        <source>Mass</source>
-        <translation>Massa</translation>
-    </message>
-    <message>
-        <source>Mass or weight of mash tun</source>
-        <translation>Massa ou peso do recipiente de brassagem</translation>
-    </message>
-    <message>
-        <source>Specific heat (cal/(g*K))</source>
-        <translation>Calor específico (cal/(g*K))</translation>
     </message>
     <message>
         <source>Losses</source>
@@ -3218,6 +3194,14 @@ p, li { white-space: pre-wrap; }
         <translation>Amargor (IBU)</translation>
     </message>
     <message>
+        <source>Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation>Cor</translation>
+    </message>
+    <message>
         <source>Boil SG</source>
         <translation>Fervura SG</translation>
     </message>
@@ -3311,7 +3295,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">Remover fermentável selecionado</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
@@ -3362,8 +3346,8 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About &amp;BrewTarget</source>
-        <translation>Sobre o Brewtarget</translation>
+        <source>&amp;About</source>
+        <translation>Sobre</translation>
     </message>
     <message>
         <source>Miscs</source>
@@ -3376,6 +3360,34 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Boil Time</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;File</source>
+        <translation>Arquivo</translation>
+    </message>
+    <message>
+        <source>&amp;Brewday</source>
+        <translation>Brassagem do dia</translation>
+    </message>
+    <message>
+        <source>&amp;Recipe</source>
+        <translation>Receita</translation>
+    </message>
+    <message>
+        <source>&amp;Database</source>
+        <translation>Banco de dados</translation>
+    </message>
+    <message>
+        <source>&amp;View</source>
+        <translation>Ver</translation>
+    </message>
+    <message>
+        <source>&amp;Tools</source>
+        <translation>Ferramentas</translation>
+    </message>
+    <message>
+        <source>About &amp;BrewTarget</source>
+        <translation>Sobre o Brewtarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
@@ -3558,42 +3570,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Cor</translation>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation>Sobre</translation>
-    </message>
-    <message>
-        <source>&amp;File</source>
-        <translation>Arquivo</translation>
-    </message>
-    <message>
-        <source>&amp;Brewday</source>
-        <translation>Brassagem do dia</translation>
-    </message>
-    <message>
-        <source>&amp;Recipe</source>
-        <translation>Receita</translation>
-    </message>
-    <message>
-        <source>&amp;Database</source>
-        <translation>Banco de dados</translation>
-    </message>
-    <message>
-        <source>&amp;View</source>
-        <translation>Ver</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation>Ferramentas</translation>
-    </message>
-    <message>
         <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3607,19 +3583,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished">Brassagem</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished">Triturado</translation>
-    </message>
-    <message>
-        <source>Clear recipe</source>
-        <translation type="obsolete">Nova Receita</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3713,15 +3685,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished">Temperatura de lavagem.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished">Temperatura de lavagem.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished">Temperatura de lavagem.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes</source>
@@ -3741,11 +3713,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Sem Equipamento</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished">Temperatura do Recipiente</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
@@ -3753,7 +3725,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished">Calor específico (cal/(g*K))</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3988,7 +3960,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">Remover etapa selecionada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
@@ -4000,15 +3972,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished">Temperatura de lavagem.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished">Temperatura de lavagem.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished">Temperatura de lavagem.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4024,11 +3996,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Sem Equipamento</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished">Temperatura do Recipiente</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
@@ -4036,7 +4008,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished">Calor específico (cal/(g*K))</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add mash step</source>
@@ -4044,7 +4016,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">Remover fermentável selecionado</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mash step up</source>
@@ -4308,6 +4280,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished">Primeira lupulagem</translation>
+    </message>
+    <message>
+        <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4697,7 +4689,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">Remover etapa selecionada</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Basic Information</source>

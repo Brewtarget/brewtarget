@@ -96,3 +96,5 @@ Unit* SIWeightUnitSystem::thicknessUnit()
 {
    return Units::kilograms;
 }
+
+QString SIWeightUnitSystem::unitType() { return "SI"; }

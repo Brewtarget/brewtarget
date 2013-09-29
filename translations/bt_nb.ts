@@ -235,19 +235,19 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Kategori</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Nummer.</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Brev</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Veiledning</translation>
     </message>
 </context>
 <context>
@@ -258,7 +258,7 @@
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished"></translation>
+        <translation>Brygg nå</translation>
     </message>
     <message>
         <source>Brew Again</source>
@@ -274,7 +274,7 @@
     </message>
     <message>
         <source>New Fermentable</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny gjærbar råvare</translation>
     </message>
     <message>
         <source>New Hop</source>
@@ -302,11 +302,15 @@
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished"></translation>
+        <translation>Endre dato</translation>
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished">Øltype</translation>
+        <translation>Ny øltype</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -878,7 +882,7 @@
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished">Øltype</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
@@ -1139,7 +1143,7 @@
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Kokevolum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Amount Type</source>
@@ -1352,10 +1356,6 @@
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open %1 for writing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2015,7 +2015,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Kokevolum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -2398,7 +2398,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Kokevolum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
@@ -2611,7 +2611,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Kokevolum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
@@ -3564,7 +3564,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished">Øltype</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
@@ -3694,7 +3694,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Nytt utstyr</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun mass</source>
@@ -3977,7 +3977,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Nytt utstyr</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tun mass</source>
@@ -4123,7 +4123,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Kokevolum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Temperature</source>
@@ -4261,6 +4261,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4662,7 +4682,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kategori</translation>
     </message>
     <message>
         <source>Category number</source>

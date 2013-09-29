@@ -308,6 +308,10 @@
         <source>New Style</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Brewtarget</name>
@@ -697,42 +701,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Recipe name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recipe name:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Backup Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Oops!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not copy the files for some reason.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>For some reason, the operation failed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import %1?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -742,26 +710,6 @@
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No mash</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter a unique name for the copy.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please give your mash a name before saving.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -838,6 +786,62 @@
     </message>
     <message>
         <source>Brewtarget Database (*.sqlite)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Backup Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Oops!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not copy the files for some reason.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For some reason, the operation failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No mash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trying to add a mash step without a mash. Please create a mash first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy Recipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter a unique name for the copy.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please give your mash a name before saving.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1172,30 +1176,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Recipes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fermentables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hops</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yeast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Invalid color formula type: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1302,10 +1282,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IBU</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1317,6 +1293,10 @@
     <message>
         <source>Yeast
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1376,10 +1356,6 @@
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not open %1 for writing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1471,6 +1447,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Bottling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Spice</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1492,10 +1472,6 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bottling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1548,6 +1524,30 @@
     </message>
     <message>
         <source>Very High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yeast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2326,6 +2326,14 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Remove currently selected step</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Move currently selected step up</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2339,14 +2347,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove currently selected step</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2602,6 +2602,34 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Boiling Point of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mass or weight of mash tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific heat (cal/(g*K))</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Boiling &amp;&amp; Water</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2638,35 +2666,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Boiling Point of Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Default Absorption</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume of mash tun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mass</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mass or weight of mash tun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specific heat (cal/(g*K))</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3107,10 +3107,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Recipe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3176,6 +3172,10 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Bitterness (IBU)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4122,6 +4122,10 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Temperature</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4131,10 +4135,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4230,10 +4230,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>French</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Dutch</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4243,6 +4239,10 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Polish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4261,6 +4261,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4630,11 +4650,11 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New batch size</source>
+        <source>New efficiency (pct)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New efficiency (pct)</source>
+        <source>New batch size</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4787,19 +4807,19 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set the timer to the specified value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Start/Stop timer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set the timer to the specified value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

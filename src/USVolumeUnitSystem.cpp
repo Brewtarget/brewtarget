@@ -101,8 +101,9 @@ void USVolumeUnitSystem::ensureMapIsSetup()
    isMapSetup = true;
 }
 
-
 Unit* USVolumeUnitSystem::thicknessUnit()
 {
    return Units::us_quarts;
 }
+
+QString USVolumeUnitSystem::unitType() { return "USCustomary"; }

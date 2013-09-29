@@ -212,6 +212,7 @@ public slots:
    //! \brief copies an existing brewnote to a new brewday
    void reBrewNote();
    void changeBrewDate();
+   void fixBrewNote();
 
    //! \brief Open the default browser to Brewtarget's donation page.
    void openDonateLink();

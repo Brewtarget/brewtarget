@@ -73,3 +73,4 @@ void TimeUnitSystem::ensureMapIsSetup()
    isMapSetup = true;
 }
 
+QString TimeUnitSystem::unitType() { return "entropy"; }

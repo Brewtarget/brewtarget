@@ -63,3 +63,4 @@ void FahrenheitTempUnitSystem::ensureMapIsSetup()
    isMapSetup = true;
 }
 
+QString FahrenheitTempUnitSystem::unitType() { return "Fahrenheit"; }

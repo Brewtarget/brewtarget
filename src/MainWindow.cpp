@@ -1602,12 +1602,11 @@ void MainWindow::save()
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-   Brewtarget::savePersistentOptions();
-
-   Brewtarget::btSettings.setValue("geometry", saveGeometry());
-   Brewtarget::btSettings.setValue("windowState", saveState());
+   Brewtarget::saveSystemOptions();
+   Brewtarget::setOption("geometry", saveGeometry());
+   Brewtarget::setOption("windowState", saveState());
    if ( recipeObs )
-      Brewtarget::btSettings.setValue("recipeKey", recipeObs->key());
+      Brewtarget::setOption("recipeKey", recipeObs->key());
    
    // After unloading the database, can't make any more queries to it, so first
    // make the main window disappear so that redraw events won't inadvertently
@@ -2448,6 +2447,10 @@ void MainWindow::changeBrewDate()
    {
       BrewNote* target = treeView_recipe->getBrewNote(selected);
 
+      // No idea how this could happen, but I've seen stranger things
+      if ( ! target ) 
+         continue;
+
       // Pop the calendar, get the date. 
       if ( btDatePopup->exec() == QDialog::Accepted )
       {
@@ -2466,3 +2469,24 @@ void MainWindow::changeBrewDate()
    }
 }
 
+void MainWindow::fixBrewNote()
+{
+   QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
+   QDateTime newDate;
+
+   foreach(QModelIndex selected, indexes)
+   {
+      BrewNote* target = treeView_recipe->getBrewNote(selected);
+
+      // No idea how this could happen, but I've seen stranger things
+      if ( ! target ) 
+         continue;
+
+      Recipe* noteParent = treeView_recipe->getRecipe( treeView_recipe->getParent(selected));
+
+      if ( ! noteParent ) 
+         continue;
+
+      target->recalculateEff(noteParent);
+   }
+}
