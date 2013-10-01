@@ -34,6 +34,7 @@ None
 * Building with `-no-phonon` flag works correctly [#1212921](https://bugs.launchpad.net/bugs/1212921)
 * Equipment editor should no longer show up empty. [#1227787](https://bugs.launchpad.net/brewtarget/+bug/1227787)
 * Closing the equipment editor now always reverts all changes.
+* The mash wizard used to overshot target boil size when ingredients included extract or sugar.[#1233744](https://bugs.launchpad.net/brewtarget/+bug/1233744)
 
 ### Incompatibilities
 
