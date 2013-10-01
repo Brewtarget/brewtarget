@@ -1,6 +1,6 @@
 /*
  * BrewtargetPlugins.h is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2010-2011.
+ * (rocketman768@gmail.com), 2010-2013.
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,12 @@
 
 #include "BrewtargetPlugins.h"
 #include "StyleRangeWidgetPlugin.h"
+#include "IbuGuSliderPlugin.h"
 
 BrewtargetPlugins::BrewtargetPlugins(QObject* parent) : QObject(parent)
 {
-   plugins.append(new StyleRangeWidget(this));
+   plugins.append(new IbuGuSliderPlugin(this));
+   plugins.append(new StyleRangeWidgetPlugin(this));
 }
 
 QList<QDesignerCustomWidgetInterface*> BrewtargetPlugins::customWidgets() const

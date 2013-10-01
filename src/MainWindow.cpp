@@ -752,11 +752,11 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    if( recStyle )
    {
-      styleRangeWidget_og->setStyleRange(recStyle->ogMin(), recStyle->ogMax());
-      styleRangeWidget_fg->setStyleRange(recStyle->fgMin(), recStyle->fgMax());
-      styleRangeWidget_abv->setStyleRange(recStyle->abvMin_pct(), recStyle->abvMax_pct());
-      styleRangeWidget_ibu->setStyleRange(recStyle->ibuMin(), recStyle->ibuMax());
-      styleRangeWidget_srm->setStyleRange(recStyle->colorMin_srm(), recStyle->colorMax_srm());
+      styleRangeWidget_og->setPreferredRange(recStyle->ogMin(), recStyle->ogMax());
+      styleRangeWidget_fg->setPreferredRange(recStyle->fgMin(), recStyle->fgMax());
+      styleRangeWidget_abv->setPreferredRange(recStyle->abvMin_pct(), recStyle->abvMax_pct());
+      styleRangeWidget_ibu->setPreferredRange(recStyle->ibuMin(), recStyle->ibuMax());
+      styleRangeWidget_srm->setPreferredRange(recStyle->colorMin_srm(), recStyle->colorMax_srm());
    }
    
    // Reset all previous recipe shit.
@@ -858,15 +858,15 @@ void MainWindow::showChanges(QMetaProperty* prop)
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
 
-   styleRangeWidget_og->setValue(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
+   styleRangeWidget_og->setValue(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false).toDouble());
    label_boilSG->setText(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
 
-   styleRangeWidget_fg->setValue(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
+   styleRangeWidget_fg->setValue(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()).toDouble());
 
    styleRangeWidget_abv->setValue(recipeObs->ABV_pct());
    styleRangeWidget_ibu->setValue(recipeObs->IBU());
-   styleRangeWidget_srm->setValue(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false));
-   label_ibugu->setText( QString("%1").arg(recipeObs->IBU()/((recipeObs->og()-1)*1000), 0, 'f', 2) );
+   styleRangeWidget_srm->setValue(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false).toDouble());
+   ibuGuSlider->setValue(recipeObs->IBU()/((recipeObs->og()-1)*1000));
    label_calories->setText( QString("%1").arg(recipeObs->calories(),0,'f',0) );
 
    // See if we need to change the mash in the table.
@@ -897,11 +897,11 @@ void MainWindow::updateRecipeStyle()
    if( selected )
    {
       Database::instance().addToRecipe( recipeObs, selected );
-      styleRangeWidget_og->setStyleRange(selected->ogMin(), selected->ogMax());
-      styleRangeWidget_fg->setStyleRange(selected->fgMin(), selected->fgMax());
-      styleRangeWidget_abv->setStyleRange(selected->abvMin_pct(), selected->abvMax_pct());
-      styleRangeWidget_ibu->setStyleRange(selected->ibuMin(), selected->ibuMax());
-      styleRangeWidget_srm->setStyleRange(selected->colorMin_srm(), selected->colorMax_srm());
+      styleRangeWidget_og->setPreferredRange(selected->ogMin(), selected->ogMax());
+      styleRangeWidget_fg->setPreferredRange(selected->fgMin(), selected->fgMax());
+      styleRangeWidget_abv->setPreferredRange(selected->abvMin_pct(), selected->abvMax_pct());
+      styleRangeWidget_ibu->setPreferredRange(selected->ibuMin(), selected->ibuMax());
+      styleRangeWidget_srm->setPreferredRange(selected->colorMin_srm(), selected->colorMax_srm());
    }
 }
 

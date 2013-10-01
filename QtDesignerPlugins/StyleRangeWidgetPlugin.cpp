@@ -93,4 +93,4 @@ QString StyleRangeWidgetPlugin::includeFile() const
    return "StyleRangeWidget.h";
 }
 
-Q_EXPORT_PLUGIN2( stylerangewidgetplugin, StyleRangeWidgetPlugin )
+//Q_EXPORT_PLUGIN2( stylerangewidgetplugin, StyleRangeWidgetPlugin )

@@ -17,34 +17,40 @@ LINK_DIRECTORIES(
 SET( QT_USE_QTDESIGNER TRUE )
 
 SET( SRC_FILES
-    ${SRCDIR}/StyleRangeWidget.cpp
+   ${SRCDIR}/IbuGuSlider.cpp
+   ${SRCDIR}/RangedSlider.cpp
+   ${SRCDIR}/StyleRangeWidget.cpp
 )
 
 SET( MOC_FILES
-    ${SRCDIR}/StyleRangeWidget.h
+   ${SRCDIR}/IbuGuSlider.h
+   ${SRCDIR}/RangedSlider.h
+   ${SRCDIR}/StyleRangeWidget.h
 )
 
 set( UI_FILES
 )
 
 SET( PLUGIN_MOCS
+   BrewtargetPlugins.h
+   IbuGuSliderPlugin.h
    StyleRangeWidgetPlugin.h
 )
 
 SET( PLUGIN_SRCS
+   BrewtargetPlugins.cpp
+   IbuGuSliderPlugin.cpp
    StyleRangeWidgetPlugin.cpp
 )
 
 QT4_WRAP_CPP( GEN_MOC_FILES ${MOC_FILES} ${PLUGIN_MOCS} )
 QT4_WRAP_UI( GEN_UI_FILES ${UI_FILES})
-#QT4_ADD_RESOURCES( GEN_RCC_FILES "${CMAKE_CURRENT_BINARY_DIR}/../brewtarget.qrc")
 
 #========================All Plugins Together==================================
 
 ADD_LIBRARY( brewtargetplugins SHARED
    ${SRC_FILES} 
    ${PLUGIN_SRCS}
-   ${GEN_RCC_FILES}
    ${GEN_UI_FILES}
    ${GEN_MOC_FILES}
 )

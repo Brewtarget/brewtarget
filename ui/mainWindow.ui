@@ -216,8 +216,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>403</height>
+           <width>626</width>
+           <height>391</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -777,22 +777,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="1">
-                     <widget class="QLabel" name="label_ibugu">
-                      <property name="font">
-                       <font>
-                        <family>Sans Serif</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                        <kerning>true</kerning>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>1.0</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="7" column="1">
                      <widget class="QLabel" name="label_calories">
                       <property name="font">
@@ -808,6 +792,9 @@
                        <string>1.0</string>
                       </property>
                      </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="IbuGuSlider" name="ibuGuSlider"/>
                     </item>
                    </layout>
                   </item>
@@ -866,7 +853,7 @@
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_9">
                      <item>
-                      <widget class="BeerColorWidget" name="beerColorWidget"/>
+                      <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
                      </item>
                     </layout>
                    </widget>
@@ -909,7 +896,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -919,7 +906,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -937,8 +924,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>334</height>
+           <width>626</width>
+           <height>348</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1484,7 +1471,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>20</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2023,6 +2010,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>IbuGuSlider</class>
+   <extends>QWidget</extends>
+   <header>IbuGuSlider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>StyleRangeWidget</class>
+   <extends>QWidget</extends>
+   <header>StyleRangeWidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>BeerColorWidget</class>
    <extends>QWidget</extends>
    <header>BeerColorWidget.h</header>
@@ -2038,11 +2035,6 @@
    <header>RecipeExtrasWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>BtDigitWidget</class>
-   <extends>QLabel</extends>
-   <header>BtDigitWidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>BtVolumeLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
@@ -2051,11 +2043,6 @@
    <class>BtGravityLabel</class>
    <extends>QLabel</extends>
    <header>BtLabel.h</header>
-  </customwidget>
-  <customwidget>
-   <class>StyleRangeWidget</class>
-   <extends>QWidget</extends>
-   <header>StyleRangeWidget.h</header>
   </customwidget>
   <customwidget>
    <class>CustomComboBox</class>

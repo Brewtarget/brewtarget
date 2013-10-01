@@ -95,6 +95,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HopTableModel.cpp
     ${SRCDIR}/HtmlViewer.cpp
     ${SRCDIR}/instruction.cpp
+    ${SRCDIR}/IbuGuSlider.cpp
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
     ${SRCDIR}/InstructionWidget.cpp
@@ -121,6 +122,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/PreInstruction.cpp
     ${SRCDIR}/PrimingDialog.cpp
     ${SRCDIR}/QueuedMethod.cpp
+    ${SRCDIR}/RangedSlider.cpp
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeFormatter.cpp
     ${SRCDIR}/RecipeListModel.cpp
@@ -236,6 +238,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/HopEditor.h
     ${SRCDIR}/HopSortFilterProxyModel.h
     ${SRCDIR}/HopTableModel.h
+    ${SRCDIR}/IbuGuSlider.h
     ${SRCDIR}/InstructionWidget.h
     ${SRCDIR}/MainWindow.h
     ${SRCDIR}/MaltinessWidget.h
@@ -257,6 +260,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/PitchDialog.h
     ${SRCDIR}/PrimingDialog.h
     ${SRCDIR}/QueuedMethod.h
+    ${SRCDIR}/RangedSlider.h
     ${SRCDIR}/RecipeExtrasDialog.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h

@@ -22,51 +22,23 @@
 #include <QWidget>
 #include <QSize>
 #include <QString>
+#include "RangedSlider.h"
 class QPaintEvent;
-class QLabel;
 class QMouseEvent;
 
 /*!
  * \brief Widget to display a recipe statistic with "in-range" context from the style.
  * \author Philip G. Lee
  */
-class StyleRangeWidget : public QWidget
+class StyleRangeWidget : public RangedSlider
 {
    Q_OBJECT
 public:
    StyleRangeWidget(QWidget* parent=0);
    
-   //! \brief Set the \c min and \c max values for the style.
-   void setStyleRange( double min, double max );
-   //! \brief Set the \c min and \c max values for the whole widget.
-   void setRange( double min, double max );
-   //! \brief Set the \c precision for displaying values.
-   void setPrecision(int precision);
-   
-   /*!
-    * \brief Set the tick mark intervals.
-    * 
-    * If either parameter is <= 0, then the tick marks are not drawn.
-    * 
-    * \param primaryInterval How often to draw big tick marks.
-    * \param secondaryTicks Number of secondary ticks per primary tick.
-    */
-   void setTickMarks( double primaryInterval, int secondaryTicks = 1 );
-   
-   //! \brief Reimplemented from QWidget.
-   virtual QSize sizeHint() const;
-   
-public slots:
-   //! \brief Set the \c value for the indicator.
-   void setValue(double value);
+//public slots:
    //! \brief Set the \c value for the indicator. Must be convertible to double.
-   void setValue(QString const& value);
-   
-protected:
-   //! \brief Reimplemented from QWidget.
-   virtual void paintEvent(QPaintEvent* event);
-   //! \brief Reimplemented from QWidget for popup on mouseover.
-   virtual void mouseMoveEvent(QMouseEvent* event);
+   //void setValue(QString const& value);
    
 private:
    double _min;
