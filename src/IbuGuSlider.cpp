@@ -5,6 +5,7 @@ IbuGuSlider::IbuGuSlider(QWidget* parent)
 {
    setRange(0,1);
    setPreferredRange(0,0);
+   setPrecision(2);
    
    QLinearGradient bgGrad( QPointF(0,0), QPointF(1,0) );
    bgGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
@@ -41,4 +42,5 @@ void IbuGuSlider::setValue(double value)
       text = tr("Way Hoppy");
    
    setMarkerText(text);
+   RangedSlider::setValue(value);
 }
