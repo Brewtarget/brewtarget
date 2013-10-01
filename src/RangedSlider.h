@@ -38,7 +38,10 @@ public:
    //! \brief Set the \c value for the indicator.
    void setValue(double value);
    
-   //! \brief Set the \c min and \c max values for the preferred range.
+   /*!
+    * \brief Set the \c min and \c max values for the preferred range.
+    * If the \c min and \c max are equal, no preferred range info is shown.
+    */
    void setPreferredRange( double min, double max );
    //! \brief Set the \c min and \c max values for the whole widget.
    void setRange( double min, double max );
