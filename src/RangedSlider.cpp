@@ -176,9 +176,11 @@ void RangedSlider::paintEvent(QPaintEvent* event)
    painter.save();
 
       // Indicator text.
+      QRectF markerTextRect = painter.boundingRect( QRectF(), Qt::AlignCenter | Qt::AlignBottom, _markerTextIsValue? _valText : _markerText );
+      float markerTextLeft = qBound( 0.f, static_cast<float>(indLeft*(width()-textWidth-2)/rectWidth - markerTextRect.width()/2), static_cast<float>(width()-textWidth-2-markerTextRect.width()));
       painter.drawText(
-         indLeft*(width()-textWidth-2)/rectWidth - textWidth/2, 0,
-         textWidth, 16,
+         markerTextLeft, 0,
+         markerTextRect.width(), 16,
          Qt::AlignCenter | Qt::AlignBottom,
          _markerTextIsValue? _valText : _markerText
       );
