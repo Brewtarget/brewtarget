@@ -35,22 +35,6 @@ class StyleRangeWidget : public RangedSlider
    Q_OBJECT
 public:
    StyleRangeWidget(QWidget* parent=0);
-   
-//public slots:
-   //! \brief Set the \c value for the indicator. Must be convertible to double.
-   //void setValue(QString const& value);
-   
-private:
-   double _min;
-   double _max;
-   double _styleMin;
-   double _styleMax;
-   double _val;
-   QString _valText;
-   int _prec;
-   double _tickInterval;
-   int _secondaryTicks;
-   QString _tooltipText;
 };
 
 #endif /*STYLERANGEWIDGET_H*/

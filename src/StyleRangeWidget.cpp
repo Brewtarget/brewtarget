@@ -37,15 +37,7 @@ StyleRangeWidget::StyleRangeWidget(QWidget* parent)
 {
    setBackgroundBrush(QColor(121,201,121));
    setPreferredRangeBrush(QColor(0,127,0));
+   setMarkerTextIsValue(true);
    
    repaint();
 }
-
-/*
-void StyleRangeWidget::setValue(QString const& value)
-{
-   _valText = value;
-   _val = value.toDouble();
-   update();
-}
-*/

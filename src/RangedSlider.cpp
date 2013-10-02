@@ -46,7 +46,8 @@ RangedSlider::RangedSlider(QWidget* parent)
      _tooltipText(""),
      _bgBrush(QColor(255,255,255)),
      _prefRangeBrush(QColor(0,0,0)),
-     _markerBrush(QColor(255,255,255))
+     _markerBrush(QColor(255,255,255)),
+     _markerTextIsValue(false)
 {
    setMinimumSize( 32, 32 );
    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
@@ -114,6 +115,12 @@ void RangedSlider::setMarkerText( QString const& text )
    update();
 }
 
+void RangedSlider::setMarkerTextIsValue(bool val)
+{
+   _markerTextIsValue = val;
+   update();
+}
+
 void RangedSlider::setTickMarks( double primaryInterval, int secondaryTicks )
 {
    _secondaryTicks = (secondaryTicks<1)? 1 : secondaryTicks;
@@ -169,7 +176,12 @@ void RangedSlider::paintEvent(QPaintEvent* event)
    painter.save();
 
       // Indicator text.
-      painter.drawText( indLeft*(width()-textWidth-2)/rectWidth - textWidth/2, 0, textWidth, 16, Qt::AlignCenter | Qt::AlignBottom, _markerText );
+      painter.drawText(
+         indLeft*(width()-textWidth-2)/rectWidth - textWidth/2, 0,
+         textWidth, 16,
+         Qt::AlignCenter | Qt::AlignBottom,
+         _markerTextIsValue? _valText : _markerText
+      );
 
       // Scale coordinates so that 'rectWidth' units == width()-textWidth-2 pixels.
       painter.scale( (width()-textWidth-2)/rectWidth, 1.0 );

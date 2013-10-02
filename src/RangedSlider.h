@@ -56,6 +56,8 @@ public:
    void setMarkerBrush( QBrush const& brush );
    //! \brief Set the text displayed above the marker.
    void setMarkerText( QString const& text );
+   //! \brief If true, the marker text will always be updated to the value given by \c setValue().
+   void setMarkerTextIsValue(bool val);
    
    /*!
     * \brief Set the tick mark intervals.
@@ -91,6 +93,7 @@ private:
    QBrush _bgBrush;
    QBrush _prefRangeBrush;
    QBrush _markerBrush;
+   bool _markerTextIsValue;
 };
 
 #endif /*RANGEDSLIDER_H*/
