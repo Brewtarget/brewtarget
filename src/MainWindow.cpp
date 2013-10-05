@@ -84,7 +84,6 @@
 #include "RefractoDialog.h"
 #include "MashDesigner.h"
 #include "PitchDialog.h"
-#include "MaltinessWidget.h"
 #include "fermentable.h"
 #include "yeast.h"
 #include "brewnote.h"
@@ -260,10 +259,6 @@ MainWindow::MainWindow(QWidget* parent)
    fileSaver->setFileMode(QFileDialog::AnyFile);
    fileSaver->setViewMode(QFileDialog::List);
    fileSaver->setDefaultSuffix(QString("xml"));
-
-   // And test out the maltiness widget.
-   maltWidget = new MaltinessWidget(tabWidget_recipeView);
-   verticalLayout_beerColor->insertWidget( 1, maltWidget );
 
    // Set up HtmlViewer to view documentation.
    htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
@@ -782,7 +777,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    brewDayScrollWidget->setRecipe(recipe);
    //recipeStyleNameButton->setRecipe(recipe);
    equipmentListModel->observeRecipe(recipe);
-   maltWidget->observeRecipe(recipe);
    beerColorWidget->setRecipe(recipe);
    recipeFormatter->setRecipe(recipe);
    ogAdjuster->setRecipe(recipe);

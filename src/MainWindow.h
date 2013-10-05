@@ -48,7 +48,6 @@ class YeastEditor;
 class EquipmentEditor;
 class StyleEditor;
 class OptionDialog;
-class MaltinessWidget;
 class MashEditor;
 class MashStepEditor;
 class MashWizard;
@@ -283,7 +282,6 @@ private:
    YeastDialog* yeastDialog;
    YeastEditor* yeastEditor;
    OptionDialog* optionDialog;
-   MaltinessWidget* maltWidget;
    QDialog* brewDayDialog;
    HtmlViewer* htmlViewer;
    ScaleRecipeTool* recipeScaler;

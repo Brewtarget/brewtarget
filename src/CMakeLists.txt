@@ -100,7 +100,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp
     ${SRCDIR}/InstructionWidget.cpp
     ${SRCDIR}/MainWindow.cpp
-    ${SRCDIR}/MaltinessWidget.cpp
     ${SRCDIR}/mash.cpp
     ${SRCDIR}/MashButton.cpp
     ${SRCDIR}/MashEditor.cpp
@@ -241,7 +240,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/IbuGuSlider.h
     ${SRCDIR}/InstructionWidget.h
     ${SRCDIR}/MainWindow.h
-    ${SRCDIR}/MaltinessWidget.h
     ${SRCDIR}/MashButton.h
     ${SRCDIR}/MashDesigner.h
     ${SRCDIR}/MashEditor.h

@@ -10,11 +10,11 @@ IbuGuSlider::IbuGuSlider(QWidget* parent)
    QLinearGradient bgGrad( QPointF(0,0), QPointF(1,0) );
    bgGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
    //bgGrad.setColorAt( 0, QColor(255,255,255) );
-   bgGrad.setColorAt( (.28+.36)/2.0, QColor(255,126,6) );
-   bgGrad.setColorAt( (.36+.44)/2.0, QColor(246,196,6) );
-   bgGrad.setColorAt( (.44+.53)/2.0, QColor(236,247,7) );
-   bgGrad.setColorAt( (.53+.64)/2.0, QColor(144,249,7) );
-   bgGrad.setColorAt( (.64+.85)/2.0, QColor(7,249,23) );
+   bgGrad.setColorAt( (.28+.36)/2.0, QColor(252,144,48) );
+   bgGrad.setColorAt( (.36+.44)/2.0, QColor(252,204,4) );
+   bgGrad.setColorAt( (.44+.53)/2.0, QColor(243,252,4) );
+   bgGrad.setColorAt( (.53+.64)/2.0, QColor(185,240,120) );
+   bgGrad.setColorAt( (.64+.85)/2.0, QColor(121,201,121) );
    //bgGrad.setColorAt( .85, QColor(255,255,255) );
    
    setBackgroundBrush(bgGrad);
