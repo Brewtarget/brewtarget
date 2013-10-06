@@ -262,6 +262,8 @@ private:
    Style* recStyle;
    Equipment* recEquip;
    
+   QPalette numPalette_old, numPalette_tooLow, numPalette_good, numPalette_tooHigh;
+   
    AboutDialog* dialog_about;
    QFileDialog* fileOpener;
    QFileDialog* fileSaver;

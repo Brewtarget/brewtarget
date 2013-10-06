@@ -116,6 +116,15 @@ MainWindow::MainWindow(QWidget* parent)
    // Set the window title.
    setWindowTitle( QString("Brewtarget - %1").arg(VERSIONSTRING) );
 
+   // Different palettes for some text.
+   numPalette_old = label_calcBatchSize->palette();
+   numPalette_tooLow = numPalette_old;
+   numPalette_tooLow.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 0, 208));
+   numPalette_good = numPalette_old;
+   numPalette_good.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(0, 128, 0));
+   numPalette_tooHigh = numPalette_old;
+   numPalette_tooHigh.setColor(QPalette::Active, QPalette::WindowText, QColor::fromRgb(208, 0, 0));
+   
    // Null out the recipe
    recipeObs = 0;
    
@@ -849,6 +858,20 @@ void MainWindow::showChanges(QMetaProperty* prop)
    label_calcBatchSize->setText(Brewtarget::displayAmount(recipeObs,tab_recipe, "finalVolume_l", Units::liters));
    label_calcBoilSize->setText(Brewtarget::displayAmount(recipeObs, tab_recipe, "boilVolume_l", Units::liters));
 
+   // Color manipulation
+   if( 0.95*recipeObs->batchSize_l() <= recipeObs->finalVolume_l() && recipeObs->finalVolume_l() <= 1.05*recipeObs->batchSize_l() )
+      label_calcBatchSize->setPalette(numPalette_good);
+   else if( recipeObs->finalVolume_l() < 0.95*recipeObs->batchSize_l() )
+      label_calcBatchSize->setPalette(numPalette_tooLow);
+   else
+      label_calcBatchSize->setPalette(numPalette_tooHigh);
+   if( 0.95*recipeObs->boilSize_l() <= recipeObs->boilVolume_l() && recipeObs->boilVolume_l() <= 1.05*recipeObs->boilSize_l() )
+      label_calcBoilSize->setPalette(numPalette_good);
+   else if( recipeObs->boilVolume_l() < 0.95* recipeObs->boilSize_l() )
+      label_calcBoilSize->setPalette(numPalette_tooLow);
+   else
+      label_calcBoilSize->setPalette(numPalette_tooHigh);
+   
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
 
