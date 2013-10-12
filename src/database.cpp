@@ -1135,6 +1135,7 @@ Recipe* Database::newRecipe(Recipe* other)
       addToRecipe( tmp, a );
    
    // Copy style/mash/equipment
+   // Style or equipment might be non-existent but these methods handle that.
    addToRecipe( tmp, other->equipment() );
    addToRecipe( tmp, other->mash() );
    addToRecipe( tmp, other->style() );
@@ -1620,6 +1621,9 @@ void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
 void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
 {
    Style* newStyle;
+
+   if ( s == 0 )
+      return;
    
    if ( ! noCopy )
       newStyle = copy<Style>(s,false,&allStyles);
