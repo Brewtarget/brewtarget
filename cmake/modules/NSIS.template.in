@@ -31,7 +31,7 @@
 ; brewtarget specific modifications
 !include StrFunc.nsh
 
-${StrStr}
+;${StrStr}
 ${StrRep}
 
 ;--------------------------------
