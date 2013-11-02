@@ -1877,7 +1877,7 @@ void Database::updateSchema()
    verq.exec();
 }
 
-void Database::importFromXML(const QString& filename)
+bool Database::importFromXML(const QString& filename)
 {
    unsigned int count;
    int line, col;
@@ -1888,11 +1888,12 @@ void Database::importFromXML(const QString& filename)
    QFile inFile;
    QStringList tags = QStringList() << "EQUIPMENT" << "FERMENTABLE" << "HOP" << "MISC" << "STYLE" << "YEAST" << "WATER" << "MASHS";
    inFile.setFileName(filename);
+   bool ret = true;
    
    if( ! inFile.open(QIODevice::ReadOnly) )
    {
       Brewtarget::logW(QString("Database::importFromXML: Could not open %1 for reading.").arg(filename));
-      return;
+      return false;
    }
 
    if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
@@ -1902,7 +1903,11 @@ void Database::importFromXML(const QString& filename)
    if ( list.count() )
    {
       for(int i = 0; i < list.count(); ++i )
-         recipeFromXml( list.at(i) );
+      {
+         Recipe* temp = recipeFromXml( list.at(i) );
+         if ( ! temp->isValid() )
+            ret = false;
+      }
    }
    else
    {
@@ -1922,46 +1927,80 @@ void Database::importFromXML(const QString& filename)
             else if ( tag == "EQUIPMENT" )
             {
                for(int i = 0; i < list.count(); ++i )
-                  equipmentFromXml( list.at(i) );
+               {
+                  Equipment* temp = equipmentFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
             }
             else if( tag == "FERMENTABLE" )
             {
                for( int i = 0; i < list.count(); ++i )
-                  fermentableFromXml( list.at(i) );
+               {
+                  Fermentable* temp = fermentableFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
+
             }
             else if (tag == "HOP")
             {
                for(int i = 0; i < list.count(); ++i )
-                  hopFromXml( list.at(i) );
+               {
+                  Hop* temp = hopFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
             }
             else if (tag == "MISC")
             {
                for(int i = 0; i < list.count(); ++i )
-                  miscFromXml( list.at(i) );
+               {
+                  Misc* temp = miscFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
             }
             else if( tag == "STYLE" )
             {
                for( int i = 0; i < list.count(); ++i )
-                  styleFromXml( list.at(i) );
+               {
+                  Style* temp = styleFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
             }
             else if (tag == "YEAST")
             {
                for(int i = 0; i < list.count(); ++i )
-                  yeastFromXml( list.at(i) );
+               {
+                  Yeast* temp = yeastFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
             }
             else if( tag == "WATER" )
             {
                for( int i = 0; i < list.count(); ++i )
-                  waterFromXml( list.at(i) );
+               {
+                  Water* temp = waterFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
             }
             else if( tag == "MASHS" )
             {
                for( int i = 0; i < list.count(); ++i )
-                  mashFromXml( list.at(i) );
+               {
+                  Mash* temp = mashFromXml( list.at(i) );
+                  if ( ! temp->isValid() )
+                     ret = false;
+               }
             }
          }
       }
    }
+   return ret;
 }
 
 void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
@@ -3177,11 +3216,14 @@ Fermentable* Database::fermentableFromXml( QDomNode const& node, Recipe* parent 
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<Fermentable::Type>(
-                    Fermentable::types.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setType( static_cast<Fermentable::Type>(
+                       Fermentable::types.indexOf(
+                          n.firstChild().toText().nodeValue()
+                       )
+                    ) );
    if( parent )
       addToRecipe( parent, ret, true );
 
@@ -3278,16 +3320,38 @@ Hop* Database::hopFromXml( QDomNode const& node, Recipe* parent )
   
    // Handle enums separately.
    n = node.firstChildElement("USE");
-   ret->setUse( static_cast<Hop::Use>(getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret)));
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setUse( static_cast<Hop::Use>(getQualifiedHopUseIndex(n.firstChild().toText().nodeValue(), ret)));
+
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<Hop::Type>(getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setType( static_cast<Hop::Type>(getQualifiedHopTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+
    n = node.firstChildElement("FORM");
-   ret->setForm( static_cast<Hop::Form>(
-                    Hop::forms.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
-  
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setForm( static_cast<Hop::Form>(Hop::forms.indexOf(n.firstChild().toText().nodeValue())));
+
+   if ( ! ret->isValid() )
+   {
+      QString name = ret->name();
+      QList<Hop*> matching;
+      getElements<Hop>( matching, QString("name like '%1'").arg(name), Brewtarget::HOPTABLE, allHops );
+
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         Hop* temp = ret;
+         ret = matching.first();
+         ret->setAmount_kg(temp->amount_kg());
+      }
+   }
+
    if( parent )
       addToRecipe( parent, ret, true );
 
@@ -3350,7 +3414,11 @@ Mash* Database::mashFromXml( QDomNode const& node, Recipe* parent )
 
    // Iterate through all the mash steps.
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      mashStepFromXml( n, ret );
+   {
+      MashStep* temp = mashStepFromXml( n, ret );
+      if ( ! temp->isValid() )
+         ret->invalidate();
+   }
 
    blockSignals(false); 
 
@@ -3378,11 +3446,14 @@ MashStep* Database::mashStepFromXml( QDomNode const& node, Mash* parent )
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<MashStep::Type>(
-                    MashStep::types.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setType( static_cast<MashStep::Type>(
+                       MashStep::types.indexOf(
+                          n.firstChild().toText().nodeValue()
+                       )
+                    ) );
   
    ret->blockSignals(false);
    if (! blocked )
@@ -3478,10 +3549,34 @@ Misc* Database::miscFromXml( QDomNode const& node, Recipe* parent )
    
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+   // Assuming these return anything is a bad idea. So far, several other brewing programs are not generating
+   // valid XML.
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setType( static_cast<Misc::Type>(getQualifiedMiscTypeIndex(n.firstChild().toText().nodeValue(), ret)));
+
    n = node.firstChildElement("USE");
-   ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setUse(static_cast<Misc::Use>(getQualifiedMiscUseIndex(n.firstChild().toText().nodeValue(), ret)));
    
+   if ( ! ret->isValid() )
+   {
+      QString name = ret->name();
+      QList<Misc*> matching;
+      getElements<Misc>( matching, QString("name like '%1'").arg(name), Brewtarget::MISCTABLE, allMiscs );
+
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         Misc* temp = ret;
+         ret = matching.first();
+         ret->setAmount( temp->amount() );
+      }
+   }
+
    if( parent )
       addToRecipe( parent, ret, true );
 
@@ -3511,42 +3606,68 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
    // firstchild of the node.
    n = node.firstChildElement("STYLE");
    styleFromXml(n, ret);
+   if ( ! ret->style()->isValid())
+      ret->invalidate();
    
    // Get equipment. equipmentFromXml requires the entire node, not just the
    // first child
    n = node.firstChildElement("EQUIPMENT");
    equipmentFromXml(n, ret);
+   if ( !ret->equipment()->isValid() )
+      ret->invalidate();
    
    // Get hops.
    n = node.firstChildElement("HOPS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      hopFromXml(n, ret);
+   {
+      Hop* temp = hopFromXml(n, ret);
+      if ( ! temp->isValid() )
+         ret->invalidate();
+   }
    
    // Get ferms.
    n = node.firstChildElement("FERMENTABLES");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      fermentableFromXml(n, ret);
+   {
+      Fermentable* temp = fermentableFromXml(n, ret);
+      if ( ! temp->isValid() )
+         ret->invalidate();
+   }
    
    // get mashes. There is only one mash per recipe, so this needs the entire
    // node.
    n = node.firstChildElement("MASH");
    mashFromXml(n, ret);
+   if ( ! ret->mash()->isValid() )
+      ret->invalidate();
 
    // Get miscs.
    n = node.firstChildElement("MISCS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      miscFromXml(n, ret);
+   {
+      Misc* temp = miscFromXml(n, ret);
+      if (! temp->isValid())
+         ret->invalidate();
+   }
    
    // Get yeasts.
    n = node.firstChildElement("YEASTS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
-      yeastFromXml(n, ret);
+   {
+      Yeast* temp = yeastFromXml(n, ret);
+      if ( !temp->isValid() )
+         ret->invalidate();
+   }
    
-   // Get waters.
+   // Get waters. Odd. Waters don't invalidate.
    n = node.firstChildElement("WATERS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
       waterFromXml(n, ret);
-   
+
+   /* That ends the beerXML defined objects. I'm not going to do the
+    * validation for these last two. We write em, and we had better be
+    * writing them properly
+    */
    // Get instructions.
    n = node.firstChildElement("INSTRUCTIONS");
    for( n = n.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -3568,14 +3689,15 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
    bool createdNew = true;
    blockSignals(true); 
    Style* ret;
+   QString name;
+   QList<Style*> matching;
 
    // If we are just importing a style by itself, need to do some dupe-checking.
    if( parent == 0 )
    {
       // Check to see if there is a hop already in the DB with the same name.
       n = node.firstChildElement("NAME");
-      QString name = n.firstChild().toText().nodeValue();
-      QList<Style*> matching;
+      name = n.firstChild().toText().nodeValue();
       getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE, allStyles );
       
       if( matching.length() > 0 )
@@ -3593,12 +3715,28 @@ Style* Database::styleFromXml( QDomNode const& node, Recipe* parent )
 
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<Style::Type>(
-                    Style::types.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
-   
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setType(static_cast<Style::Type>(
+                      Style::types.indexOf(
+                         n.firstChild().toText().nodeValue()
+                      )
+                  ));
+
+   // let's see if I can be clever and find this style in our db
+   if (! ret->isValid() )
+   {
+      name = ret->name();
+      getElements<Style>( matching, QString("name='%1'").arg(name), Brewtarget::STYLETABLE ,allStyles);
+      // If we find a match, discard what we just built and use what's in teh DB instead
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+
+   }
    if( parent )
       addToRecipe( parent, ret );
 
@@ -3659,14 +3797,15 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
    blockSignals(true);
    bool createdNew = true;
    Yeast* ret;
+   QString name;
+   QList<Yeast*> matching;
    
    // If we are just importing a yeast by itself, need to do some dupe-checking.
    if( parent == 0 )
    {
       // Check to see if there is a hop already in the DB with the same name.
       n = node.firstChildElement("NAME");
-      QString name = n.firstChild().toText().nodeValue();
-      QList<Yeast*> matching;
+      name = n.firstChild().toText().nodeValue();
       getElements<Yeast>( matching, QString("name='%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
       
       if( matching.length() > 0 )
@@ -3684,25 +3823,47 @@ Yeast* Database::yeastFromXml( QDomNode const& node, Recipe* parent )
 
    // Handle enums separately.
    n = node.firstChildElement("TYPE");
-   ret->setType( static_cast<Yeast::Type>(
-                    Yeast::types.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setType( static_cast<Yeast::Type>(
+                       Yeast::types.indexOf(
+                          n.firstChild().toText().nodeValue()
+                       )
+                    ) );
    // Handle enums separately.
    n = node.firstChildElement("FORM");
-   ret->setForm( static_cast<Yeast::Form>(
-                    Yeast::forms.indexOf(
-                       n.firstChild().toText().nodeValue()
-                    )
-                 ) );
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setForm( static_cast<Yeast::Form>(
+                       Yeast::forms.indexOf(
+                          n.firstChild().toText().nodeValue()
+                       )
+                    ) );
    // Handle enums separately.
    n = node.firstChildElement("FLOCCULATION");
-   ret->setFlocculation( static_cast<Yeast::Flocculation>(
-                            Yeast::flocculations.indexOf(
-                               n.firstChild().toText().nodeValue()
-                            )
-                         ) );
+   if ( n.firstChild().isNull() )
+      ret->invalidate();
+   else
+      ret->setFlocculation( static_cast<Yeast::Flocculation>(
+                               Yeast::flocculations.indexOf(
+                                  n.firstChild().toText().nodeValue()
+                               )
+                            ) );
+
+   if ( ! ret->isValid() )
+   {
+      name = ret->name();
+      getElements<Yeast>( matching, QString("name like '%1'").arg(name), Brewtarget::YEASTTABLE, allYeasts );
+
+      if( matching.length() > 0 )
+      {
+         createdNew = false;
+         ret = matching.first();
+      }
+   }
+
    if( parent )
       addToRecipe( parent, ret, true );
    
