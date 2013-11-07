@@ -60,9 +60,9 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/brewnote.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
-    ${SRCDIR}/BrewTargetTreeItem.cpp
-    ${SRCDIR}/BrewTargetTreeModel.cpp
-    ${SRCDIR}/BrewTargetTreeView.cpp
+    ${SRCDIR}/btTreeItem.cpp
+    ${SRCDIR}/btTreeModel.cpp
+    ${SRCDIR}/btTreeView.cpp
     ${SRCDIR}/BtTreeFilterProxyModel.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/BtDatePopup.cpp
@@ -212,8 +212,8 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/brewnote.h
     ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/brewtarget.h
-    ${SRCDIR}/BrewTargetTreeModel.h
-    ${SRCDIR}/BrewTargetTreeView.h
+    ${SRCDIR}/btTreeModel.h
+    ${SRCDIR}/btTreeView.h
     ${SRCDIR}/BtTreeFilterProxyModel.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtDatePopup.h

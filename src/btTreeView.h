@@ -1,5 +1,5 @@
 /*
- * BrewTargetTreeView.h is part of Brewtarget and was written by Mik Firestone
+ * btTreeView.h is part of Brewtarget and was written by Mik Firestone
  * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -20,17 +20,17 @@
 #ifndef BREWTARGETTREEVIEW_H_
 #define BREWTARGETTREEVIEW_H_
 
-class BrewTargetTreeView;
+class btTreeView;
 
 #include <QTreeView>
 #include <QWidget>
 #include <QPoint>
 #include <QMouseEvent>
-#include "BrewTargetTreeItem.h"
+#include "btTreeItem.h"
 #include "BtTreeFilterProxyModel.h"
 
 // Forward declarations.
-class BrewTargetTreeModel;
+class btTreeModel;
 class Recipe;
 class Equipment;
 class Fermentable;
@@ -41,19 +41,19 @@ class BrewNote;
 class Style;
 
 /*!
- * \class BrewTargetTreeItem
+ * \class btTreeItem
  * \author Mik Firestone
  *
- * \brief View class for BrewTargetTreeModel.
+ * \brief View class for btTreeModel.
  */
-class BrewTargetTreeView : public QTreeView
+class btTreeView : public QTreeView
 {
    Q_OBJECT
 public:
    //! \brief The standard contructor
-   BrewTargetTreeView(QWidget *parent = 0);
+   btTreeView(QWidget *parent = 0);
    //! \brief returns the model associated with this tree
-   BrewTargetTreeModel* getModel();
+   btTreeModel* getModel();
    //! \brief returns the context menu associated with the \c selected item
    QMenu* getContextMenu(QModelIndex selected);
 
@@ -125,7 +125,7 @@ public:
    void keyPressEvent(QKeyEvent* event);
 
    //! \brief creates a context menu based on the type of tree
-   void setupContextMenu(QWidget* top, QWidget* editor, QMenu* sMenu,int type = BrewTargetTreeItem::RECIPE);
+   void setupContextMenu(QWidget* top, QWidget* editor, QMenu* sMenu,int type = btTreeItem::RECIPE);
 
    // Friend classes. For the most part, the children don't do much beyond
    // contructors and context menus. So far :/
@@ -138,7 +138,7 @@ public:
    friend class StyleTreeView;
 
 private:
-   BrewTargetTreeModel* model;
+   btTreeModel* model;
    BtTreeFilterProxyModel* filter;
    QMenu* contextMenu, *subMenu;
    QPoint dragStart;
@@ -150,8 +150,8 @@ private:
 
 //!
 // \class RecipeTreeView 
-// \brief subclasses BrewTargetTreeView to only show recipes.
-class RecipeTreeView : public BrewTargetTreeView
+// \brief subclasses btTreeView to only show recipes.
+class RecipeTreeView : public btTreeView
 {
    Q_OBJECT
 public:
@@ -163,8 +163,8 @@ public:
 
 //! 
 // \class EquipmentTreeView 
-// \brief subclasses BrewTargetTreeView to only show equipment.
-class EquipmentTreeView : public BrewTargetTreeView
+// \brief subclasses btTreeView to only show equipment.
+class EquipmentTreeView : public btTreeView
 {
    Q_OBJECT
 public:
@@ -175,8 +175,8 @@ public:
 
 //!
 // \class FermentableTreeView 
-// \brief subclasses BrewTargetTreeView to only show fermentables.
-class FermentableTreeView : public BrewTargetTreeView
+// \brief subclasses btTreeView to only show fermentables.
+class FermentableTreeView : public btTreeView
 {
    Q_OBJECT
 public:
@@ -188,8 +188,8 @@ public:
 
 //!
 // \class HopTreeView 
-// \brief subclasses BrewTargetTreeView to only show hops.
-class HopTreeView : public BrewTargetTreeView
+// \brief subclasses btTreeView to only show hops.
+class HopTreeView : public btTreeView
 {
    Q_OBJECT
 public:
@@ -201,8 +201,8 @@ public:
 
 //!
 // \class MiscTreeView 
-// \brief subclasses BrewTargetTreeView to only show miscs.
-class MiscTreeView : public BrewTargetTreeView
+// \brief subclasses btTreeView to only show miscs.
+class MiscTreeView : public btTreeView
 {
    Q_OBJECT
 public:
@@ -213,8 +213,8 @@ public:
 
 //!
 // \class YeastTreeView 
-// \brief subclasses BrewTargetTreeView to only show yeasts.
-class YeastTreeView : public BrewTargetTreeView
+// \brief subclasses btTreeView to only show yeasts.
+class YeastTreeView : public btTreeView
 {
    Q_OBJECT
 public:
@@ -226,8 +226,8 @@ public:
 
 //!
 // \class StyleTreeView 
-// \brief subclasses BrewTargetTreeView to only show styles.
-class StyleTreeView : public BrewTargetTreeView
+// \brief subclasses btTreeView to only show styles.
+class StyleTreeView : public btTreeView
 {
    Q_OBJECT
 public:

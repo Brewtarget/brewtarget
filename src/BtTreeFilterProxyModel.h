@@ -24,9 +24,9 @@ class BtTreeFilterProxyModel;
 
 #include <QSortFilterProxyModel>
 
-#include "BrewTargetTreeModel.h"
-#include "BrewTargetTreeView.h"
-#include "BrewTargetTreeItem.h"
+#include "btTreeModel.h"
+#include "btTreeView.h"
+#include "btTreeItem.h"
 #include "recipe.h"
 #include "equipment.h"
 #include "fermentable.h"
@@ -47,22 +47,22 @@ class BtTreeFilterProxyModel : public QSortFilterProxyModel
    Q_OBJECT
 
 public:
-   BtTreeFilterProxyModel(QObject *parent, BrewTargetTreeModel::TypeMasks mask);
+   BtTreeFilterProxyModel(QObject *parent, btTreeModel::TypeMasks mask);
 
 protected:
    bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
    bool filterAcceptsRow( int source_row, const QModelIndex &source_parent) const;
 
 private:
-   BrewTargetTreeModel::TypeMasks treeMask;
+   btTreeModel::TypeMasks treeMask;
 
-   bool lessThanRecipe(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
-   bool lessThanEquip(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
-   bool lessThanFerment(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
-   bool lessThanMisc(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
-   bool lessThanHop(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
-   bool lessThanYeast(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
-   bool lessThanStyle(BrewTargetTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanRecipe(btTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanEquip(btTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanFerment(btTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanMisc(btTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanHop(btTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanYeast(btTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
+   bool lessThanStyle(btTreeModel* model,const QModelIndex &left, const QModelIndex &right) const;
 };
 
 #endif

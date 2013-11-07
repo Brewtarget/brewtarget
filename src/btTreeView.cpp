@@ -1,5 +1,5 @@
 /*
- * BrewTargetTreeView.cpp is part of Brewtarget and was written by Mik
+ * btTreeView.cpp is part of Brewtarget and was written by Mik
  * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -22,8 +22,8 @@
 #include <QMenu>
 #include <QDebug>
 #include <QHeaderView>
-#include "BrewTargetTreeView.h"
-#include "BrewTargetTreeModel.h"
+#include "btTreeView.h"
+#include "btTreeModel.h"
 #include "BtTreeFilterProxyModel.h"
 #include "database.h"
 #include "recipe.h"
@@ -35,7 +35,7 @@
 #include "brewnote.h"
 #include "style.h"
 
-BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
+btTreeView::btTreeView(QWidget *parent) :
    QTreeView(parent)
 {
    // Set some global properties that all the kids will use.
@@ -46,12 +46,12 @@ BrewTargetTreeView::BrewTargetTreeView(QWidget *parent) :
 
 }
 
-BrewTargetTreeModel* BrewTargetTreeView::getModel()
+btTreeModel* btTreeView::getModel()
 {
    return model;
 }
 
-bool BrewTargetTreeView::removeRow(const QModelIndex &index)
+bool btTreeView::removeRow(const QModelIndex &index)
 {
    QModelIndex modelIndex = filter->mapToSource(index);
    QModelIndex parent = model->parent(modelIndex);
@@ -60,14 +60,14 @@ bool BrewTargetTreeView::removeRow(const QModelIndex &index)
    return model->removeRows(position,1,parent);
 }
 
-bool BrewTargetTreeView::isParent(const QModelIndex& parent, const QModelIndex& child)
+bool btTreeView::isParent(const QModelIndex& parent, const QModelIndex& child)
 {
    QModelIndex modelParent = filter->mapToSource(parent);
    QModelIndex modelChild = filter->mapToSource(child);
    return modelParent == model->parent(modelChild);
 }
 
-QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
+QModelIndex btTreeView::getParent(const QModelIndex& child)
 {
    if ( ! child.isValid() )
       return QModelIndex();
@@ -79,82 +79,82 @@ QModelIndex BrewTargetTreeView::getParent(const QModelIndex& child)
    return QModelIndex();
 }
 
-QModelIndex BrewTargetTreeView::getFirst()
+QModelIndex btTreeView::getFirst()
 {
    return filter->mapFromSource(model->getFirst());
 }
 
-Recipe* BrewTargetTreeView::getRecipe(const QModelIndex &index) const
+Recipe* btTreeView::getRecipe(const QModelIndex &index) const
 {
    return model->getRecipe(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findRecipe(Recipe* rec)
+QModelIndex btTreeView::findRecipe(Recipe* rec)
 {
    return filter->mapFromSource(model->findRecipe(rec));
 }
 
-Equipment* BrewTargetTreeView::getEquipment(const QModelIndex &index) const
+Equipment* btTreeView::getEquipment(const QModelIndex &index) const
 {
    return model->getEquipment(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findEquipment(Equipment* kit)
+QModelIndex btTreeView::findEquipment(Equipment* kit)
 {
    return filter->mapFromSource(model->findEquipment(kit));
 }
 
-Fermentable* BrewTargetTreeView::getFermentable(const QModelIndex &index) const
+Fermentable* btTreeView::getFermentable(const QModelIndex &index) const
 {
    return model->getFermentable(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findFermentable(Fermentable* ferm)
+QModelIndex btTreeView::findFermentable(Fermentable* ferm)
 {
    return filter->mapFromSource(model->findFermentable(ferm));
 }
 
-Hop* BrewTargetTreeView::getHop(const QModelIndex &index) const
+Hop* btTreeView::getHop(const QModelIndex &index) const
 {
    return model->getHop(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findHop(Hop* hop)
+QModelIndex btTreeView::findHop(Hop* hop)
 {
    return filter->mapFromSource(model->findHop(hop));
 }
 
-Misc* BrewTargetTreeView::getMisc(const QModelIndex &index) const
+Misc* btTreeView::getMisc(const QModelIndex &index) const
 {
    return model->getMisc(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findMisc(Misc* misc)
+QModelIndex btTreeView::findMisc(Misc* misc)
 {
    return filter->mapFromSource(model->findMisc(misc));
 }
 
-Yeast* BrewTargetTreeView::getYeast(const QModelIndex &index) const
+Yeast* btTreeView::getYeast(const QModelIndex &index) const
 {
    return model->getYeast(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findYeast(Yeast* yeast)
+QModelIndex btTreeView::findYeast(Yeast* yeast)
 {
    return filter->mapFromSource(model->findYeast(yeast));
 }
 
-Style* BrewTargetTreeView::getStyle(const QModelIndex &index) const
+Style* btTreeView::getStyle(const QModelIndex &index) const
 {
    return model->getStyle(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findStyle(Style* style)
+QModelIndex btTreeView::findStyle(Style* style)
 {
    return filter->mapFromSource(model->findStyle(style));
 }
 
-BrewNote* BrewTargetTreeView::getBrewNote(const QModelIndex &index) const
+BrewNote* btTreeView::getBrewNote(const QModelIndex &index) const
 {
    if ( ! index.isValid() ) 
       return NULL;
@@ -162,17 +162,17 @@ BrewNote* BrewTargetTreeView::getBrewNote(const QModelIndex &index) const
    return model->getBrewNote(filter->mapToSource(index));
 }
 
-QModelIndex BrewTargetTreeView::findBrewNote(BrewNote* bNote)
+QModelIndex btTreeView::findBrewNote(BrewNote* bNote)
 {
    return filter->mapFromSource(model->findBrewNote(bNote));
 }
 
-int BrewTargetTreeView::getType(const QModelIndex &index)
+int btTreeView::getType(const QModelIndex &index)
 {
    return model->getType(filter->mapToSource(index));
 }
 
-void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)
+void btTreeView::mousePressEvent(QMouseEvent *event)
 {
    if (event->button() == Qt::LeftButton)
    {
@@ -184,7 +184,7 @@ void BrewTargetTreeView::mousePressEvent(QMouseEvent *event)
    QTreeView::mousePressEvent(event);
 }
 
-void BrewTargetTreeView::mouseDoubleClickEvent(QMouseEvent *event)
+void btTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
    if (event->button() == Qt::LeftButton)
       doubleClick = true;
@@ -193,7 +193,7 @@ void BrewTargetTreeView::mouseDoubleClickEvent(QMouseEvent *event)
    QTreeView::mouseDoubleClickEvent(event);
 }
 
-void BrewTargetTreeView::mouseMoveEvent(QMouseEvent *event)
+void btTreeView::mouseMoveEvent(QMouseEvent *event)
 {
    // Return if the left button isn't down
    if (!(event->buttons() & Qt::LeftButton))
@@ -213,7 +213,7 @@ void BrewTargetTreeView::mouseMoveEvent(QMouseEvent *event)
    drag->start(Qt::CopyAction);
 } 
 
-void BrewTargetTreeView::keyPressEvent(QKeyEvent *event)
+void btTreeView::keyPressEvent(QKeyEvent *event)
 {
    switch( event->key() )
    {
@@ -221,13 +221,13 @@ void BrewTargetTreeView::keyPressEvent(QKeyEvent *event)
       case Qt::Key_Select:
       case Qt::Key_Enter:
       case Qt::Key_Return:
-         emit BrewTargetTreeView::doubleClicked(selectedIndexes().first());
+         emit btTreeView::doubleClicked(selectedIndexes().first());
          return;
    }
    QTreeView::keyPressEvent(event);
 }
 
-QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes) 
+QMimeData *btTreeView::mimeData(QModelIndexList indexes) 
 {
    QMimeData *mimeData = new QMimeData();
    QByteArray encodedData;
@@ -251,35 +251,35 @@ QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes)
          type = getType(index);
          switch(type)
          {
-            case BrewTargetTreeItem::EQUIPMENT:
+            case btTreeItem::EQUIPMENT:
                equipment = model->getEquipment(index);
                if (equipment)
                {
                   name = equipment->name();
                }
                break;
-            case BrewTargetTreeItem::FERMENTABLE:
+            case btTreeItem::FERMENTABLE:
                fermentable = model->getFermentable(index);
                if (fermentable)
                {
                   name = fermentable->name();
                }
                break;
-            case BrewTargetTreeItem::HOP:
+            case btTreeItem::HOP:
                hop = model->getHop(index);
                if (hop)
                {
                   name = hop->name();
                }
                break;
-            case BrewTargetTreeItem::MISC:
+            case btTreeItem::MISC:
                misc = model->getMisc(index);
                if (misc)
                {
                   name = misc->name();
                }
                break;
-            case BrewTargetTreeItem::YEAST:
+            case btTreeItem::YEAST:
                yeast = model->getYeast(index);
                if (yeast)
                {
@@ -297,7 +297,7 @@ QMimeData *BrewTargetTreeView::mimeData(QModelIndexList indexes)
    return mimeData;
 }
 
-bool BrewTargetTreeView::multiSelected()
+bool btTreeView::multiSelected()
 {
    QModelIndexList selected = selectionModel()->selectedRows();
    bool hasRecipe, hasSomethingElse;
@@ -320,7 +320,7 @@ bool BrewTargetTreeView::multiSelected()
    return hasRecipe && hasSomethingElse;
 }
 
-void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu,int type)
+void btTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu,int type)
 {
 
    contextMenu = new QMenu(this);
@@ -329,7 +329,7 @@ void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *
    switch(type) 
    {
       // the recipe case is a bit more complex, because we need to handle the brewnotes too
-      case BrewTargetTreeItem::RECIPE:
+      case btTreeItem::RECIPE:
          contextMenu->addAction(tr("New Recipe"), editor, SLOT(newRecipe()));
          contextMenu->addAction(tr("Brew It!"), top, SLOT(newBrewNote()));
          contextMenu->addSeparator();
@@ -340,27 +340,27 @@ void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *
          subMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
 
          break;
-      case BrewTargetTreeItem::EQUIPMENT:
+      case btTreeItem::EQUIPMENT:
          contextMenu->addAction(tr("New Equipment"), editor, SLOT(newEquipment()));
          contextMenu->addSeparator();
          break;
-      case BrewTargetTreeItem::FERMENTABLE:
+      case btTreeItem::FERMENTABLE:
          contextMenu->addAction(tr("New Fermentable"), editor, SLOT(newFermentable()));
          contextMenu->addSeparator();
          break;
-      case BrewTargetTreeItem::HOP:
+      case btTreeItem::HOP:
          contextMenu->addAction(tr("New Hop"), editor, SLOT(newHop()));
          contextMenu->addSeparator();
          break;
-      case BrewTargetTreeItem::MISC:
+      case btTreeItem::MISC:
          contextMenu->addAction(tr("New Misc"), editor, SLOT(newMisc()));
          contextMenu->addSeparator();
          break;
-      case BrewTargetTreeItem::STYLE:
+      case btTreeItem::STYLE:
          contextMenu->addAction(tr("New Style"), editor, SLOT(newStyle()));
          contextMenu->addSeparator();
          break;
-      case BrewTargetTreeItem::YEAST:
+      case btTreeItem::YEAST:
          contextMenu->addAction(tr("New Yeast"), editor, SLOT(newYeast()));
          contextMenu->addSeparator();
          break;
@@ -378,9 +378,9 @@ void BrewTargetTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *
    
 }
 
-QMenu* BrewTargetTreeView::getContextMenu(QModelIndex selected)
+QMenu* btTreeView::getContextMenu(QModelIndex selected)
 {
-   if ( getType(selected) == BrewTargetTreeItem::BREWNOTE )
+   if ( getType(selected) == btTreeItem::BREWNOTE )
       return subMenu;
 
    return contextMenu;
@@ -389,10 +389,10 @@ QMenu* BrewTargetTreeView::getContextMenu(QModelIndex selected)
 // Bad form likely
 
 RecipeTreeView::RecipeTreeView(QWidget *parent)
-   : BrewTargetTreeView(parent)
+   : btTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::RECIPEMASK);
-   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::RECIPEMASK);
+   model = new btTreeModel(this, btTreeModel::RECIPEMASK);
+   filter = new BtTreeFilterProxyModel(this, btTreeModel::RECIPEMASK);
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
@@ -405,10 +405,10 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
 }
 
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
-   : BrewTargetTreeView(parent)
+   : btTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::EQUIPMASK);
-   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::EQUIPMASK);
+   model = new btTreeModel(this, btTreeModel::EQUIPMASK);
+   filter = new BtTreeFilterProxyModel(this, btTreeModel::EQUIPMASK);
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
@@ -421,10 +421,10 @@ EquipmentTreeView::EquipmentTreeView(QWidget *parent)
 
 // Icky ick ikcy
 FermentableTreeView::FermentableTreeView(QWidget *parent)
-   : BrewTargetTreeView(parent)
+   : btTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::FERMENTMASK);
-   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::FERMENTMASK);
+   model = new btTreeModel(this, btTreeModel::FERMENTMASK);
+   filter = new BtTreeFilterProxyModel(this, btTreeModel::FERMENTMASK);
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
@@ -438,10 +438,10 @@ FermentableTreeView::FermentableTreeView(QWidget *parent)
 
 // More Ick
 HopTreeView::HopTreeView(QWidget *parent)
-   : BrewTargetTreeView(parent)
+   : btTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::HOPMASK);
-   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::HOPMASK);
+   model = new btTreeModel(this, btTreeModel::HOPMASK);
+   filter = new BtTreeFilterProxyModel(this, btTreeModel::HOPMASK);
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
@@ -454,10 +454,10 @@ HopTreeView::HopTreeView(QWidget *parent)
 
 // Ick some more
 MiscTreeView::MiscTreeView(QWidget *parent)
-   : BrewTargetTreeView(parent)
+   : btTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::MISCMASK);
-   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::MISCMASK);
+   model = new btTreeModel(this, btTreeModel::MISCMASK);
+   filter = new BtTreeFilterProxyModel(this, btTreeModel::MISCMASK);
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
@@ -470,10 +470,10 @@ MiscTreeView::MiscTreeView(QWidget *parent)
 
 // Will this ick never end?
 YeastTreeView::YeastTreeView(QWidget *parent)
-   : BrewTargetTreeView(parent)
+   : btTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::YEASTMASK);
-   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::YEASTMASK);
+   model = new btTreeModel(this, btTreeModel::YEASTMASK);
+   filter = new BtTreeFilterProxyModel(this, btTreeModel::YEASTMASK);
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
@@ -486,10 +486,10 @@ YeastTreeView::YeastTreeView(QWidget *parent)
 
 // Nope. Apparently not, cause I keep adding more
 StyleTreeView::StyleTreeView(QWidget *parent)
-   : BrewTargetTreeView(parent)
+   : btTreeView(parent)
 {
-   model = new BrewTargetTreeModel(this, BrewTargetTreeModel::STYLEMASK);
-   filter = new BtTreeFilterProxyModel(this, BrewTargetTreeModel::STYLEMASK);
+   model = new btTreeModel(this, btTreeModel::STYLEMASK);
+   filter = new BtTreeFilterProxyModel(this, btTreeModel::STYLEMASK);
    filter->setSourceModel(model);
    setModel(filter);
    filter->setDynamicSortFilter(true);

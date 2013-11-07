@@ -1,5 +1,5 @@
 /*
- * BrewTargetTreeModel.h is part of Brewtarget and was written by Mik
+ * btTreeModel.h is part of Brewtarget and was written by Mik
  * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -17,10 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef RECEIPTREEMODEL_H_
-#define RECEIPTREEMODEL_H_
+#ifndef BTTREEMODEL_H_
+#define BTTREEMODEL_H_
 
-class BrewTargetTreeModel;
+class btTreeModel;
 
 #include <QModelIndex>
 #include <QVariant>
@@ -34,8 +34,8 @@ class BrewTargetTreeModel;
 // Forward declarations
 class BeerXMLElement;
 class Recipe;
-class BrewTargetTreeItem;
-class BrewTargetTreeView;
+class btTreeItem;
+class btTreeView;
 class BrewNote;
 class Equipment;
 class Fermentable;
@@ -45,7 +45,7 @@ class Yeast;
 class Style;
 
 /*!
- * \class BrewTargetTreeModel
+ * \class btTreeModel
  * \author Mik Firestone
  *
  * \brief Model for a tree of Recipes, Equipments, Fermentables, Hops, Miscs and Yeasts
@@ -54,7 +54,7 @@ class Style;
  * QAbstractItemModel, so it has to implement some of the virtual methods
  * required.
  */
-class BrewTargetTreeModel : public QAbstractItemModel
+class btTreeModel : public QAbstractItemModel
 {
    Q_OBJECT
 
@@ -83,8 +83,8 @@ public:
       ALLMASK           = 255
    };
    
-   BrewTargetTreeModel(BrewTargetTreeView *parent = 0, TypeMasks type = ALLMASK);
-   virtual ~BrewTargetTreeModel();
+   btTreeModel(btTreeView *parent = 0, TypeMasks type = ALLMASK);
+   virtual ~btTreeModel();
    
    //! \brief Reimplemented from QAbstractItemModel
    virtual QVariant data(const QModelIndex &index, int role) const;
@@ -129,7 +129,7 @@ public:
 
    //! \brief Gets the type of item at \c index
    int getType(const QModelIndex &index);
-   //! \brief Return the type mask for this tree. \sa BrewTargetTreeModel::TypeMasks
+   //! \brief Return the type mask for this tree. \sa btTreeModel::TypeMasks
    int getMask();
 
    //! \brief Get Recipe at \c index.
@@ -221,8 +221,8 @@ private slots:
    void styleRemoved(Style* victim);
 
 private:
-   //! \brief returns the BrewTargetTreeItem at \c index
-   BrewTargetTreeItem *getItem(const QModelIndex &index) const;
+   //! \brief returns the btTreeItem at \c index
+   btTreeItem *getItem(const QModelIndex &index) const;
    //! \brief Loads the data. Empty \c propname means load all trees.
    void loadTreeModel(QString propName = "");
    //! \brief Unloads the data. Empty \c propname means unload all trees.
@@ -260,8 +260,8 @@ private:
    //! \brief returns the \c section header from a style
    QVariant getStyleHeader(int section) const;
    
-   BrewTargetTreeItem* rootItem;
-   BrewTargetTreeView *parentTree;
+   btTreeItem* rootItem;
+   btTreeView *parentTree;
    TypeMasks treeMask;
 
 };

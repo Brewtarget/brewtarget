@@ -1,5 +1,5 @@
 /*
- * BrewTargetTreeItem.h is part of Brewtarget and was written by Mik Firestone
+ * btTreeItem.h is part of Brewtarget and was written by Mik Firestone
  * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -20,7 +20,7 @@
 #ifndef BREWTARGETTREEITEM_H_
 #define BREWTARGETTREEITEM_H_
 
-class BrewTargetTreeItem;
+class btTreeItem;
 
 #include <QSharedPointer>
 #include <QList>
@@ -43,7 +43,7 @@ class Yeast;
 class Style;
 
 /*!
- * \class BrewTargetTreeItem
+ * \class btTreeItem
  * \author Mik Firestone
  *
  * \brief Model for an item in a tree.
@@ -54,7 +54,7 @@ class Style;
  *
  * It does assume that everything being stored can be cast into a QObject.
  */
-class BrewTargetTreeItem
+class btTreeItem
 {
 
 public:
@@ -178,17 +178,17 @@ public:
       NUMTYPES
    };
 
-   friend bool operator==(BrewTargetTreeItem &lhs, BrewTargetTreeItem &rhs);
+   friend bool operator==(btTreeItem &lhs, btTreeItem &rhs);
 
-   //! \brief A constructor that sets the \c type of the BrewTargetTreeItem and
+   //! \brief A constructor that sets the \c type of the btTreeItem and
    // the \c parent
-   BrewTargetTreeItem(int type = NUMTYPES, BrewTargetTreeItem *parent=0 );
-   virtual ~BrewTargetTreeItem();
+   btTreeItem(int type = NUMTYPES, btTreeItem *parent=0 );
+   virtual ~btTreeItem();
 
    //! \brief returns the child at \c number
-   BrewTargetTreeItem *child(int number);       
+   btTreeItem *child(int number);       
    //! \brief returns item's parent
-   BrewTargetTreeItem *parent();
+   btTreeItem *parent();
 
    //! \brief returns item's type
    int getType();
@@ -235,9 +235,9 @@ public:
 
 private:
    /*!  Keep a pointer to the parent tree item. */
-   BrewTargetTreeItem* parentItem;
+   btTreeItem* parentItem;
    /*!  The list of children associated with this item */
-   QList<BrewTargetTreeItem*> childItems;
+   QList<btTreeItem*> childItems;
 
    /*! the type of this item */
    int type;
