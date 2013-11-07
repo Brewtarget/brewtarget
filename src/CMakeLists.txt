@@ -66,6 +66,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtTreeFilterProxyModel.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/BtDatePopup.cpp
+    ${SRCDIR}/btFolder.cpp
     ${SRCDIR}/BtLabel.cpp
     ${SRCDIR}/BtTextEdit.cpp
     ${SRCDIR}/brewtarget.cpp
@@ -217,6 +218,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtTreeFilterProxyModel.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtDatePopup.h
+    ${SRCDIR}/btFolder.h
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtTextEdit.h
     ${SRCDIR}/BtSplashScreen.h

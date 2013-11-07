@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BREWTARGETTREEITEM_H_
-#define BREWTARGETTREEITEM_H_
+#ifndef BTTTREEITEM_H_
+#define BTTTREEITEM_H_
 
 class btTreeItem;
 

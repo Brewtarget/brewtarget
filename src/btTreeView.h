@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BREWTARGETTREEVIEW_H_
-#define BREWTARGETTREEVIEW_H_
+#ifndef BTTREEVIEW_H_
+#define BTTREEVIEW_H_
 
 class btTreeView;
 
