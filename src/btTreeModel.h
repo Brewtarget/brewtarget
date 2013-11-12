@@ -78,12 +78,11 @@ public:
       BREWNOTEMASK      = 64,
       //! Show styles
       STYLEMASK         = 128,
-      //! Show everything -- deprecated. This is a remenant of the original
-      //trees implementation and should not be used
-      ALLMASK           = 255
+      //! folders. This may actually have worked better than expected.
+      FOLDERMASK        = 256
    };
    
-   btTreeModel(btTreeView *parent = 0, TypeMasks type = ALLMASK);
+   btTreeModel(btTreeView *parent = 0, TypeMasks type = RECIPEMASK);
    virtual ~btTreeModel();
    
    //! \brief Reimplemented from QAbstractItemModel
@@ -126,6 +125,8 @@ public:
    bool isBrewNote(const QModelIndex &index);
    //! \brief Test type at \c index.
    bool isStyle(const QModelIndex &index);
+   //! \brief Test type at \c index.
+   bool isFolder(const QModelIndex &index);
 
    //! \brief Gets the type of item at \c index
    int getType(const QModelIndex &index);
@@ -148,6 +149,8 @@ public:
    BrewNote* getBrewNote(const QModelIndex &index) const;
    //! \brief Get Style at \c index.
    Style* getStyle(const QModelIndex &index) const;
+   //! \brief Get folder at \c index
+   btFolder* getFolder(const QModelIndex &index) const;
    //! \brief Get BeerXMLElement at \c index.
    BeerXMLElement* getThing(const QModelIndex &index) const;
 
@@ -165,8 +168,10 @@ public:
    QModelIndex findYeast(Yeast* yeast);
    //! \brief Get index of \c bNote.
    QModelIndex findBrewNote(BrewNote* bNote);
-   //! \brief Get index of \c bNote.
+   //! \brief Get index of \c Style
    QModelIndex findStyle(Style* style);
+   //! \brief Get index of \c Folder
+   QModelIndex findFolder(btFolder* folder);
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal
@@ -185,6 +190,10 @@ private slots:
    void brewNoteAdded(BrewNote* victim);
    //! \brief slot to catch a newStyleSignal
    void styleAdded(Style* victim);
+   //! \brief slot to catch a new folder signal. Folders are odd, because they
+   // can hold .. anything, including other folders. So I need the most generic
+   // pointer I can get. I hope this works.
+   void folderAdded(QObject* victim)
    
    //! \brief slot to catch a changed signal from an equipment
    void equipmentChanged();
@@ -202,6 +211,10 @@ private slots:
    void brewNoteChanged();
    //! \brief slot to catch a changed signal from a style
    void styleChanged();
+   //! \brief slot to catch a changed folder signal. Folders are odd, because they
+   // can hold .. anything, including other folders. So I need the most generic
+   // pointer I can get. I hope this works.
+   void folderChanged(QObject* victim)
    
    //! \brief slot to catch a deletedEquipmentSignal
    void equipmentRemoved(Equipment* victim);
@@ -219,6 +232,10 @@ private slots:
    void brewNoteRemoved(BrewNote* victim);
    //! \brief slot to catch a deletedStyleSignal
    void styleRemoved(Style* victim);
+   //! \brief slot to catch a changed folder signal. Folders are odd, because they
+   // can hold .. anything, including other folders. So I need the most generic
+   // pointer I can get. I hope this works.
+   void folderRemoved(QObject* victim)
 
 private:
    //! \brief returns the btTreeItem at \c index
@@ -259,6 +276,9 @@ private:
    QVariant getYeastHeader(int section) const;
    //! \brief returns the \c section header from a style
    QVariant getStyleHeader(int section) const;
+   //! \brief returns the \c section header for a folder. If that makes sense.
+   // and I'm not sure it does
+   QVariant getFolderHeader(int section) const;
    
    btTreeItem* rootItem;
    btTreeView *parentTree;

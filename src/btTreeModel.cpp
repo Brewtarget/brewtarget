@@ -241,6 +241,9 @@ QVariant btTreeModel::data(const QModelIndex &index, int role) const
    case STYLEMASK:
       maxColumns = btTreeItem::STYLENUMCOLS;
       break;
+   case FOLDERMASK:
+      maxColumns = btTreeItems::FOLDERNUMCOLS;
+      break;
    default:
       // Backwards compatibility. This MUST be fixed prior to releasing the code
       maxColumns = btTreeItem::RECIPENUMCOLS;
@@ -278,9 +281,10 @@ QVariant btTreeModel::headerData(int section, Qt::Orientation orientation, int r
       return getYeastHeader(section);
    case STYLEMASK:
       return getStyleHeader(section);
-   default: // This needs to be fixed later
-      return getRecipeHeader(section);
-
+   case FOLDERMASK:
+      return getFolderHeader(section);
+   default: 
+      return QVariant();
    }
 }
 
@@ -398,6 +402,22 @@ QVariant btTreeModel::getStyleHeader(int section) const
    return QVariant();
 }
 
+QVariant btTreeModel::getFolderHeader(int section) const
+{
+   switch(section) 
+   {
+      case btTreeItem::FOLDERNAMECOL:
+         return QVariant(tr("Name"));
+      case btTreeItem::FOLDERPATH:
+         return QVariant(tr("PATH"));
+      case btTreeItem::FOLDERFULL:
+         return QVariant(tr("FULLPATH"));
+   }
+
+   Brewtarget::logW( QString("btTreeModel::getFolderHeader Bad column: %1").arg(section) );
+   return QVariant();
+}
+
 bool btTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim, int victimType )
 {
    if ( ! parent.isValid() )
@@ -433,18 +453,37 @@ bool btTreeModel::removeRows(int row, int count, const QModelIndex &parent)
    return success;
 }
 
-QModelIndex btTreeModel::findRecipe(Recipe* rec)
+/* All of the find methods are going to require rework so they go down folders
+ * properly
+ */
+QModelIndex btTreeModel::findRecipe(Recipe* rec, btTreeItem parent)
 {
-   btTreeItem* pItem = rootItem->child(0);
+   btTreeItem* pItem;
+   QModelIndex pIndex;
+
    int i;
 
-   if (! rec || (treeMask & RECIPEMASK) == 0)
+   if ( parent == NULL )
+      pItem = rootItem->child(0);
+   else
+      pItem = parent;
+
+   if (! rec || (treeMask & (RECIPEMASK|FOLDERMASK) ) == 0)
       return createIndex(0,0,pItem);
 
+   // Recursion. Wonderful.
    for(i=0; i < pItem->childCount(); ++i)
    {
       if ( pItem->child(i)->getRecipe() == rec )
          return createIndex(i,0,pItem->child(i));
+
+      if ( pItem->child(i)->getType() == btTreeItem::FOLDER )
+      {
+         pIndex = findRecipe(rec,pItem->child(i));
+         if ( pIndex.isValid() )
+            return pIndex;
+      }
+
    }
    return QModelIndex();
 }

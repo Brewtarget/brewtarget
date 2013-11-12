@@ -36,6 +36,7 @@
 #include "misc.h"
 #include "yeast.h"
 #include "style.h"
+#include "btFolder.h"
 
 bool operator==(btTreeItem& lhs, btTreeItem& rhs)
 {
@@ -100,6 +101,8 @@ int btTreeItem::columnCount(int type) const
             return STYLENUMCOLS;
         case BREWNOTE:
             return BREWNUMCOLS;
+        case FOLDER:
+            return FOLDERNUMCOLS;
         default:
          Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::columnCount Bad column: %1").arg(type));
             return 0;
@@ -128,6 +131,8 @@ QVariant btTreeItem::data(int type, int column)
          return dataStyle(column);
       case BREWNOTE:
          return dataBrewNote(column);
+      case FOLDER:
+         return dataFolder(column);
       default:
          Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::data Bad column: %1").arg(column));
          return QVariant();
@@ -355,7 +360,32 @@ QVariant btTreeItem::dataStyle(int column)
          case STYLEGUIDECOL:
                return QVariant(style->styleGuide());
          default :
-            Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataYeast Bad column: %1").arg(column));
+            Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataStyle Bad column: %1").arg(column));
+      }
+   }
+   return QVariant();
+}
+
+QVariant btTreeItem::dataFolder(int column)
+{
+   btFolder* folder = qobject_cast<btFolder*>(thing);
+
+   if ( ! folder && column == FOLDERNAMECOL )
+   {
+      return QVariant(QObject::tr("Folder"));
+   }
+   else 
+   {
+      switch(column)
+      {
+         case FOLDERNAMECOL:
+            return QVariant( folder->name() );
+         case FOLDERPATHCOL:
+            return QVariant( folder->path() );
+         case FOLDERFULLCOL:
+            return QVariant( folder->fullPath() );
+         default :
+            Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataFolder Bad column: %1").arg(column));
       }
    }
    return QVariant();
@@ -421,6 +451,14 @@ Style* btTreeItem::getStyle()
 {
     if ( type == STYLE && thing ) 
        return qobject_cast<Style*>(thing);
+
+    return 0;
+}
+
+btFolder* btTreeItem::getFolder()
+{
+    if ( type == FOLDER && thing ) 
+       return qobject_cast<btFolder*>(thing);
 
     return 0;
 }

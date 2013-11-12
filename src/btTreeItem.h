@@ -41,6 +41,7 @@ class Recipe;
 class Misc;
 class Yeast;
 class Style;
+class btFolder;
 
 /*!
  * \class btTreeItem
@@ -162,6 +163,17 @@ public:
       STYLENUMCOLS
    };
 
+   enum FOLDERITEM {
+      //! Name
+      FOLDERNAMECOL,
+      //! Path
+      FOLDERPATHCOL,
+      //! Full path
+      FOLDERFULLCOL,
+      //! and the standard for the number of columns
+      FOLDERNUMCOLS
+   };
+
    
    /*! 
     * This enum lists the different things that we can store in an item
@@ -175,6 +187,7 @@ public:
       YEAST,
       BREWNOTE,
       STYLE,
+      FOLDER,
       NUMTYPES
    };
 
@@ -224,6 +237,8 @@ public:
    BrewNote*    getBrewNote();
    //! \brief returns the data as a style
    Style*       getStyle();
+   //~ \brief returns data as a folder
+   btFolder*   getFolder();
    //! \brief returns the data as a BeerXMLElement
    BeerXMLElement* getThing();
 
@@ -253,6 +268,7 @@ private:
    QVariant dataYeast(int column);
    QVariant dataBrewNote(int column);
    QVariant dataStyle(int column);
+   QVariant dataFolder(int column);
 
    void setType(int t);
 };
