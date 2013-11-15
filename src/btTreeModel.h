@@ -34,6 +34,7 @@ class btTreeModel;
 // Forward declarations
 class BeerXMLElement;
 class Recipe;
+class btFolder;
 class btTreeItem;
 class btTreeView;
 class BrewNote;
@@ -126,7 +127,7 @@ public:
    //! \brief Test type at \c index.
    bool isStyle(const QModelIndex &index);
    //! \brief Test type at \c index.
-   bool isFolder(const QModelIndex &index);
+   bool isFolder(const QModelIndex &index) const;
 
    //! \brief Gets the type of item at \c index
    int getType(const QModelIndex &index);
@@ -155,7 +156,7 @@ public:
    BeerXMLElement* getThing(const QModelIndex &index) const;
 
    //! \brief Get index of \c rec.
-   QModelIndex findRecipe(Recipe* rec);
+   QModelIndex findRecipe(Recipe* rec, btTreeItem* parent = NULL);
    //! \brief Get index of \c kit.
    QModelIndex findEquipment(Equipment* kit);
    //! \brief Get index of \c ferm.
@@ -193,7 +194,7 @@ private slots:
    //! \brief slot to catch a new folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
-   void folderAdded(QObject* victim)
+   // void folderAdded(QObject* victim);
    
    //! \brief slot to catch a changed signal from an equipment
    void equipmentChanged();
@@ -214,7 +215,7 @@ private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
-   void folderChanged(QObject* victim)
+   //void folderChanged(QObject* victim);
    
    //! \brief slot to catch a deletedEquipmentSignal
    void equipmentRemoved(Equipment* victim);
@@ -235,7 +236,7 @@ private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
-   void folderRemoved(QObject* victim)
+   //void folderRemoved(QObject* victim);
 
 private:
    //! \brief returns the btTreeItem at \c index

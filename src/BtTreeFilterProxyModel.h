@@ -24,6 +24,7 @@ class BtTreeFilterProxyModel;
 
 #include <QSortFilterProxyModel>
 
+#include "btFolder.h"
 #include "btTreeModel.h"
 #include "btTreeView.h"
 #include "btTreeItem.h"

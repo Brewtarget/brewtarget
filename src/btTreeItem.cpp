@@ -370,8 +370,11 @@ QVariant btTreeItem::dataFolder(int column)
 {
    btFolder* folder = qobject_cast<btFolder*>(thing);
 
+
    if ( ! folder && column == FOLDERNAMECOL )
-   {
+      return QVariant(QObject::tr("Folder"));
+
+   if ( ! folder ) {
       return QVariant(QObject::tr("Folder"));
    }
    else 

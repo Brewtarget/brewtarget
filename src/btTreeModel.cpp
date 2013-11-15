@@ -242,7 +242,7 @@ QVariant btTreeModel::data(const QModelIndex &index, int role) const
       maxColumns = btTreeItem::STYLENUMCOLS;
       break;
    case FOLDERMASK:
-      maxColumns = btTreeItems::FOLDERNUMCOLS;
+      maxColumns = btTreeItem::FOLDERNUMCOLS;
       break;
    default:
       // Backwards compatibility. This MUST be fixed prior to releasing the code
@@ -408,9 +408,9 @@ QVariant btTreeModel::getFolderHeader(int section) const
    {
       case btTreeItem::FOLDERNAMECOL:
          return QVariant(tr("Name"));
-      case btTreeItem::FOLDERPATH:
+      case btTreeItem::FOLDERPATHCOL:
          return QVariant(tr("PATH"));
-      case btTreeItem::FOLDERFULL:
+      case btTreeItem::FOLDERFULLCOL:
          return QVariant(tr("FULLPATH"));
    }
 
@@ -456,7 +456,7 @@ bool btTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 /* All of the find methods are going to require rework so they go down folders
  * properly
  */
-QModelIndex btTreeModel::findRecipe(Recipe* rec, btTreeItem parent)
+QModelIndex btTreeModel::findRecipe(Recipe* rec, btTreeItem* parent)
 {
    btTreeItem* pItem;
    QModelIndex pIndex;
@@ -622,12 +622,26 @@ void btTreeModel::loadTreeModel(QString propName)
    {  
       btTreeItem* local = rootItem->child(0);
       QModelIndex ndxLocal = createIndex(0,0,local);
+
+      // test code. Create a folder and try to shove everything underneath it
+      btFolder* toplevel = new btFolder;
+
+      toplevel->setName("topLevel");
+      toplevel->setPath("/");
+      toplevel->setfullPath("/toplevel");
+
+      // Insert the folder into the tree.
+      i = 0;
+      insertRow(i,ndxLocal,toplevel, btTreeItem::FOLDER);
+      temp = local->child(i);
+      ndxLocal = createIndex(i,0,temp);
+      local = temp;
+
       QList<Recipe*> recipes = Database::instance().recipes();
       
-      i = 0;
       foreach( Recipe* rec, recipes )
       {
-         insertRow(i,ndxLocal,rec);
+         insertRow(i,ndxLocal,rec,btTreeItem::RECIPE);
          temp = local->child(i);
 
          // If we have brewnotes, set them up here.
@@ -913,6 +927,12 @@ bool btTreeModel::isBrewNote(const QModelIndex &index)
    return item->getType() == btTreeItem::BREWNOTE;
 }
 
+bool btTreeModel::isFolder(const QModelIndex &index) const
+{
+   btTreeItem* item = getItem(index);
+   return item->getType() == btTreeItem::FOLDER;
+}
+
 int btTreeModel::getType(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
@@ -1042,9 +1062,6 @@ void btTreeModel::equipmentAdded(Equipment* victim)
       return;
 
    btTreeItem* local = rootItem->child(0);
-   // Not quite sure what my logic here was. The index now will be 1,0 in
-   // Item list. Shouldn't this be 0,0?
-   // QModelIndex parent = createIndex(btTreeItem::EQUIPMENT,0,local);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1052,8 +1069,6 @@ void btTreeModel::equipmentAdded(Equipment* victim)
 
    int breadth = rowCount(parent);
 
-   // This goes with the previous commented out statement
-   // insertRow(breadth, createIndex(0,0,local),victim);
    insertRow(breadth,parent,victim);
    observeEquipment(victim);
 }
@@ -1061,14 +1076,11 @@ void btTreeModel::equipmentAdded(Equipment* victim)
 void btTreeModel::equipmentRemoved(Equipment* victim)
 {
    QModelIndex index = findEquipment(victim);
-   // QModelIndex parent = createIndex(btTreeItem::EQUIPMENT,0,rootItem->child(0));
-   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+   QModelIndex pIndex = parent(index);
 
    if ( index.isValid() )
    {
-      // This logic is still escaping me
-      // removeRows(index.row(), 1, createIndex(btTreeItem::EQUIPMENT,0,rootItem->child(0)));
-      removeRows(index.row(), 1, parent );
+      removeRows(index.row(), 1, pIndex );
       disconnect( victim, 0, this, 0 );
    }
 }
@@ -1081,7 +1093,6 @@ void btTreeModel::fermentableAdded(Fermentable* victim)
       return;
 
    btTreeItem* local = rootItem->child(0);
-   // QModelIndex parent = createIndex(btTreeItem::FERMENTABLE,0,local);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1089,7 +1100,6 @@ void btTreeModel::fermentableAdded(Fermentable* victim)
 
    int breadth = rowCount(parent);
 
-   // insertRow(breadth, createIndex(0,0,local),victim);
    insertRow(breadth,parent,victim);
    observeFermentable(victim);
 }
@@ -1097,10 +1107,9 @@ void btTreeModel::fermentableAdded(Fermentable* victim)
 void btTreeModel::fermentableRemoved(Fermentable* victim)
 {
    QModelIndex index = findFermentable(victim);
-   // QModelIndex parent = createIndex(btTreeItem::FERMENTABLE,0,rootItem->child(0));
-   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+   QModelIndex pIndex = parent(index);
 
-   removeRows(index.row(),1,parent);
+   removeRows(index.row(),1,pIndex);
    disconnect( victim, 0, this, 0 );
 }
 
@@ -1110,7 +1119,6 @@ void btTreeModel::hopAdded(Hop* victim)
       return;
 
    btTreeItem* local = rootItem->child(0);
-   // QModelIndex parent = createIndex(btTreeItem::HOP,0,local);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1118,7 +1126,6 @@ void btTreeModel::hopAdded(Hop* victim)
 
    int breadth = rowCount(parent);
 
-   // insertRow(breadth, createIndex(0,0,local),victim);
    insertRow(breadth,parent,victim);
    observeHop(victim);
 }
@@ -1126,10 +1133,9 @@ void btTreeModel::hopAdded(Hop* victim)
 void btTreeModel::hopRemoved(Hop* victim)
 {
    QModelIndex index = findHop(victim);
-   // QModelIndex parent = createIndex(btTreeItem::HOP,0,rootItem->child(0));
-   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+   QModelIndex pIndex = parent(index);
 
-   removeRows(index.row(),1,parent);
+   removeRows(index.row(),1,pIndex);
    disconnect( victim, 0, this, 0 );
 }
 
@@ -1139,7 +1145,6 @@ void btTreeModel::miscAdded(Misc* victim)
       return;
 
    btTreeItem* local = rootItem->child(0);
-   // QModelIndex parent = createIndex(btTreeItem::MISC,0,local);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1147,7 +1152,6 @@ void btTreeModel::miscAdded(Misc* victim)
 
    int breadth = rowCount(parent);
 
-   // insertRow(breadth, createIndex(0,0,local),victim);
    insertRow(breadth,parent,victim);
    observeMisc(victim);
 }
@@ -1155,20 +1159,19 @@ void btTreeModel::miscAdded(Misc* victim)
 void btTreeModel::miscRemoved(Misc* victim)
 {
    QModelIndex index = findMisc(victim);
-   // QModelIndex parent = createIndex(btTreeItem::MISC,0,rootItem->child(0));
-   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+   QModelIndex pIndex = parent(index);
 
    removeRows(index.row(),1,parent);
    disconnect( victim, 0, this, 0 );
 }
 
+// I can no longer assume the parent is at 0,0. 
 void btTreeModel::recipeAdded(Recipe* victim)
 {
    if ( ! victim->display() ) 
       return;
 
    btTreeItem* local = rootItem->child(0);
-   // QModelIndex parent = createIndex(btTreeItem::RECIPE,0,local);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1176,7 +1179,6 @@ void btTreeModel::recipeAdded(Recipe* victim)
 
    int breadth = rowCount(parent);
 
-   // insertRow(breadth, createIndex(0,0,local),victim);
    insertRow(breadth,parent,victim);
    observeRecipe(victim);
 }
@@ -1184,10 +1186,9 @@ void btTreeModel::recipeAdded(Recipe* victim)
 void btTreeModel::recipeRemoved(Recipe* victim)
 {
    QModelIndex index = findRecipe(victim);
-   // QModelIndex parent = createIndex(btTreeItem::RECIPE,0,rootItem->child(0));
-   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+   QModelIndex pIndex = parent(index);
 
-   removeRows(index.row(),1,parent);
+   removeRows(index.row(),1,pIndex);
    disconnect( victim, 0, this, 0 );
 }
 
@@ -1197,7 +1198,6 @@ void btTreeModel::yeastAdded(Yeast* victim)
       return;
 
    btTreeItem* local = rootItem->child(0);
-   // QModelIndex parent = createIndex(btTreeItem::YEAST,0,local);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1205,7 +1205,6 @@ void btTreeModel::yeastAdded(Yeast* victim)
 
    int breadth = rowCount(parent);
 
-   // insertRow(breadth, createIndex(0,0,local),victim);
    insertRow(breadth,parent,victim);
    observeYeast(victim);
 }
@@ -1213,10 +1212,9 @@ void btTreeModel::yeastAdded(Yeast* victim)
 void btTreeModel::yeastRemoved(Yeast* victim)
 {
    QModelIndex index = findYeast(victim);
-   // QModelIndex parent = createIndex(btTreeItem::YEAST,0,rootItem->child(0));
-   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+   QModelIndex pIndex = parent(index);
 
-   removeRows(index.row(),1,parent);
+   removeRows(index.row(),1,pIndex);
    disconnect( victim, 0, this, 0 );
 }
 
@@ -1240,9 +1238,9 @@ void btTreeModel::styleAdded(Style* victim)
 void btTreeModel::styleRemoved(Style* victim)
 {
    QModelIndex index = findStyle(victim);
-   QModelIndex parent = createIndex(0,0,rootItem->child(0));
+   QModelIndex pIndex = parent(index);
 
-   removeRows(index.row(),1,parent);
+   removeRows(index.row(),1,pIndex);
    disconnect( victim, 0, this, 0 );
 }
 

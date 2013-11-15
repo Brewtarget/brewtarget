@@ -62,6 +62,10 @@ bool BtTreeFilterProxyModel::lessThanRecipe(btTreeModel* model, const QModelInde
         model->getType(right) == btTreeItem::BREWNOTE )
       return false;
 
+   // This is a little more awkward.
+   if ( model->getType(left) == btTreeItem::FOLDER ||
+        model->getType(right) == btTreeItem::FOLDER )
+      return true;
 
    Recipe* leftRecipe  = model->getRecipe(left);
    Recipe* rightRecipe = model->getRecipe(right);
@@ -201,7 +205,12 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
       return true;
 
    const btTreeModel* model = qobject_cast<const btTreeModel*>(source_parent.model());
+
    QModelIndex child = model->index(source_row, 0, source_parent);
+
+   if ( model->isFolder(child) ) 
+      return true;
+
    BeerXMLElement* thing = model->getThing(child);
 
    return thing->display();
