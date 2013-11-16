@@ -57,9 +57,10 @@ public:
    BeerXMLElement();
    BeerXMLElement( BeerXMLElement const& other );
 
-   // Everything that inherits from BeerXML has a delete and a display
+   // Everything that inherits from BeerXML has delete, display and a folder
    Q_PROPERTY( bool deleted READ deleted WRITE setDeleted )
    Q_PROPERTY( bool display READ display WRITE setDisplay )
+   Q_PROPERTY( QString folder READ folder WRITE setFolder )
 
    Q_PROPERTY( int key READ key )
    Q_PROPERTY( Brewtarget::DBTable table READ table )
@@ -67,9 +68,14 @@ public:
    //! Convenience method to determine if we are deleted or displayed
    bool deleted() const;
    bool display() const;
+   //! Access to the folder attribute.
+   QString folder() const;
+
    //! And ways to set those flags
    void setDeleted(bool var);
    void setDisplay(bool var);
+   //! and a way to set the folder
+   void setFolder(QString fName);
 
    //! \returns our key in the table we are stored in.
    int key() const;

@@ -40,6 +40,9 @@ bool BeerXMLElement::display() const { return get("display").toBool(); }
 void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var ? 1 : 0); }
 void BeerXMLElement::setDisplay(bool var) { set("display", "display", var ? 1 : 0); }
 
+QString BeerXMLElement::folder() const { return get("folder").toString(); }
+void BeerXMLElement::setFolder(QString fName) { set("folder", "folder", fName); }
+
 int BeerXMLElement::key() const { return _key; }
 
 Brewtarget::DBTable BeerXMLElement::table() const{ return _table; }

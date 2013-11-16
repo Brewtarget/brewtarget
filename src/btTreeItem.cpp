@@ -41,16 +41,16 @@
 bool operator==(btTreeItem& lhs, btTreeItem& rhs)
 {
    // Things of different types are not equal
-   if ( lhs.type != rhs.type )
+   if ( lhs._type != rhs._type )
       return false;
 
-   return lhs.data(lhs.type,0) == rhs.data(rhs.type,0);
+   return lhs.data(lhs._type,0) == rhs.data(rhs._type,0);
 }
 
-btTreeItem::btTreeItem(int type, btTreeItem *parent)
+btTreeItem::btTreeItem(int _type, btTreeItem *parent)
    : parentItem(parent), thing(0)
 {
-   setType(type);
+   setType(_type);
 }
 
 btTreeItem::~btTreeItem()
@@ -71,9 +71,9 @@ btTreeItem* btTreeItem::parent()
    return parentItem;
 }
 
-int btTreeItem::getType()
+int btTreeItem::type()
 {
-    return type;
+    return _type;
 }
 
 int btTreeItem::childCount() const
@@ -81,9 +81,9 @@ int btTreeItem::childCount() const
    return childItems.count();
 }
 
-int btTreeItem::columnCount(int type) const
+int btTreeItem::columnCount(int _type) const
 {
-    switch(type)
+    switch(_type)
     {
         case RECIPE:
             return RECIPENUMCOLS;
@@ -104,16 +104,16 @@ int btTreeItem::columnCount(int type) const
         case FOLDER:
             return FOLDERNUMCOLS;
         default:
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::columnCount Bad column: %1").arg(type));
+         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::columnCount Bad column: %1").arg(_type));
             return 0;
     }
             
 }
 
-QVariant btTreeItem::data(int type, int column)
+QVariant btTreeItem::data(int _type, int column)
 {
 
-   switch(type)
+   switch(_type)
    {
       case RECIPE:
          return dataRecipe(column);
@@ -149,15 +149,15 @@ int btTreeItem::childNumber() const
 void btTreeItem::setData(int t, QObject* d)
 {
    thing = d;
-   type  = t;
+   _type  = t;
 }
 
 QVariant btTreeItem::getData(int column)
 {
-   return data(getType(),column);
+   return data(type(),column);
 }
 
-bool btTreeItem::insertChildren(int position, int count, int type)
+bool btTreeItem::insertChildren(int position, int count, int _type)
 {
    int i;
    if ( position < 0  || position > childItems.size())
@@ -165,7 +165,7 @@ bool btTreeItem::insertChildren(int position, int count, int type)
 
    for(i=0; i < count; ++i)
    {
-      btTreeItem *newItem = new btTreeItem(type,this);
+      btTreeItem *newItem = new btTreeItem(_type,this);
       childItems.insert(position+i,newItem);
    }
 
@@ -396,12 +396,12 @@ QVariant btTreeItem::dataFolder(int column)
 
 void btTreeItem::setType(int t)
 {
-    type = t;
+    _type = t;
 }
 
 Recipe* btTreeItem::getRecipe()
 {
-    if ( type == RECIPE && thing )
+    if ( _type == RECIPE && thing )
         return qobject_cast<Recipe*>(thing);
 
     return 0;
@@ -409,42 +409,42 @@ Recipe* btTreeItem::getRecipe()
 
 Equipment* btTreeItem::getEquipment()
 {
-    if ( type == EQUIPMENT )
+    if ( _type == EQUIPMENT )
        return qobject_cast<Equipment*>(thing);
     return 0;
 }
 
 Fermentable* btTreeItem::getFermentable()
 {
-    if ( type == FERMENTABLE )
+    if ( _type == FERMENTABLE )
        return qobject_cast<Fermentable*>(thing);
     return 0;
 }
 
 Hop* btTreeItem::getHop()
 {
-    if ( type == HOP ) 
+    if ( _type == HOP ) 
        return qobject_cast<Hop*>(thing);
     return 0;
 }
 
 Misc* btTreeItem::getMisc()
 {
-    if ( type == MISC ) 
+    if ( _type == MISC ) 
        return qobject_cast<Misc*>(thing);
     return 0;
 }
 
 Yeast* btTreeItem::getYeast()
 {
-    if ( type == YEAST ) 
+    if ( _type == YEAST ) 
        return qobject_cast<Yeast*>(thing);
     return 0;
 }
 
 BrewNote* btTreeItem::getBrewNote()
 {
-    if ( type == BREWNOTE && thing ) 
+    if ( _type == BREWNOTE && thing ) 
        return qobject_cast<BrewNote*>(thing);
 
     return 0;
@@ -452,7 +452,7 @@ BrewNote* btTreeItem::getBrewNote()
 
 Style* btTreeItem::getStyle()
 {
-    if ( type == STYLE && thing ) 
+    if ( _type == STYLE && thing ) 
        return qobject_cast<Style*>(thing);
 
     return 0;
@@ -460,7 +460,7 @@ Style* btTreeItem::getStyle()
 
 btFolder* btTreeItem::getFolder()
 {
-    if ( type == FOLDER && thing ) 
+    if ( _type == FOLDER && thing ) 
        return qobject_cast<btFolder*>(thing);
 
     return 0;

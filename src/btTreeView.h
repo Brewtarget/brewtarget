@@ -108,7 +108,7 @@ public:
    QModelIndex findBrewNote( BrewNote* bNote);
 
    //! \brief gets the type of the item at \c index. 
-   int getType(const QModelIndex &index);
+   int type(const QModelIndex &index);
 
    //! returns true if a recipe and an ingredient (hop, equipment, etc.) are selected at the same time
    bool multiSelected();

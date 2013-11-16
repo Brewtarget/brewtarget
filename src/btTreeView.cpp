@@ -167,9 +167,9 @@ QModelIndex btTreeView::findBrewNote(BrewNote* bNote)
    return filter->mapFromSource(model->findBrewNote(bNote));
 }
 
-int btTreeView::getType(const QModelIndex &index)
+int btTreeView::type(const QModelIndex &index)
 {
-   return model->getType(filter->mapToSource(index));
+   return model->type(filter->mapToSource(index));
 }
 
 void btTreeView::mousePressEvent(QMouseEvent *event)
@@ -232,7 +232,7 @@ QMimeData *btTreeView::mimeData(QModelIndexList indexes)
    QMimeData *mimeData = new QMimeData();
    QByteArray encodedData;
    QString name = "";
-   int type;
+   int _type;
 
    Fermentable *fermentable = 0;
    Equipment *equipment = 0;
@@ -248,8 +248,8 @@ QMimeData *btTreeView::mimeData(QModelIndexList indexes)
    {
       if (index.isValid())
       {
-         type = getType(index);
-         switch(type)
+         _type = type(index);
+         switch(_type)
          {
             case btTreeItem::EQUIPMENT:
                equipment = model->getEquipment(index);
@@ -289,7 +289,7 @@ QMimeData *btTreeView::mimeData(QModelIndexList indexes)
             default:
                name = "";
         }
-        stream << type << name;
+        stream << _type << name;
       }
    }
 
@@ -380,7 +380,7 @@ void btTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu,in
 
 QMenu* btTreeView::getContextMenu(QModelIndex selected)
 {
-   if ( getType(selected) == btTreeItem::BREWNOTE )
+   if ( type(selected) == btTreeItem::BREWNOTE )
       return subMenu;
 
    return contextMenu;

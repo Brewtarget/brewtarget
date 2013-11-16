@@ -130,7 +130,7 @@ public:
    bool isFolder(const QModelIndex &index) const;
 
    //! \brief Gets the type of item at \c index
-   int getType(const QModelIndex &index);
+   int type(const QModelIndex &index);
    //! \brief Return the type mask for this tree. \sa btTreeModel::TypeMasks
    int getMask();
 
@@ -172,7 +172,12 @@ public:
    //! \brief Get index of \c Style
    QModelIndex findStyle(Style* style);
    //! \brief Get index of \c Folder
-   QModelIndex findFolder(btFolder* folder);
+   // I'm not quite sure of this signature yet. I want something that can:
+   // a) recurse the tree to see if a folder exists
+   // b) return the proper index to the folder if it does
+   // c) optionally create the tree as it goes.
+   // What I don't know is do I send it a QString for the name, or a btFolder?
+   QModelIndex findFolder(QString folder, btTreeItem* parent=NULL, bool create=false, QString pPath = "" );
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal
@@ -280,7 +285,10 @@ private:
    //! \brief returns the \c section header for a folder. If that makes sense.
    // and I'm not sure it does
    QVariant getFolderHeader(int section) const;
-   
+  
+   //! \brief creates a folder tree. It's mostly a helper function.
+   QModelIndex createFolderTree( QStringList dirs, btTreeItem* parent, QString pPath);
+
    btTreeItem* rootItem;
    btTreeView *parentTree;
    TypeMasks treeMask;

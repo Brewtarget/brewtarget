@@ -488,7 +488,7 @@ void MainWindow::deleteSelected()
    // delete updates the database and the indices get recalculated.
    for(at = selected.begin(),end = selected.end();at < end;++at)
    {
-      switch(active->getType(*at))
+      switch(active->type(*at))
       {
          case btTreeItem::RECIPE:
             if ( *at != active->findRecipe(0) && verifyDelete("Recipe",active->getRecipe(*at)->name()))
@@ -523,7 +523,7 @@ void MainWindow::deleteSelected()
                deadNote.append(active->getBrewNote(*at));
             break;
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(treeView_recipe->getType(*at)));
+            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(treeView_recipe->type(*at)));
       }
       if ( confirmDelete == QMessageBox::Cancel )
          return;
@@ -557,7 +557,7 @@ void MainWindow::deleteSelected()
    first = active->getFirst();
    if ( first.isValid() )
    {
-      if (active->getType(first) == btTreeItem::RECIPE)
+      if (active->type(first) == btTreeItem::RECIPE)
          setRecipeByIndex(first);
       setTreeSelection(first);
    }
@@ -586,7 +586,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
    if ( active == 0 )
       return;
 
-   switch( active->getType(index))
+   switch( active->type(index))
    {
       case btTreeItem::RECIPE:
          setRecipeByIndex(index);
@@ -643,7 +643,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
          setBrewNoteByIndex(index);
          break;
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->getType(index)));
+         Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index)));
    }
    treeView_recipe->setCurrentIndex(index);
 }
@@ -1746,7 +1746,7 @@ void MainWindow::dropEvent(QDropEvent *event)
    {
       if ( index.isValid() )
       {
-         type = active->getType(index);
+         type = active->type(index);
          switch(type)
          {
             case btTreeItem::RECIPE:
@@ -1941,7 +1941,7 @@ void MainWindow::copySelected()
    // up the indexes.  This ... is not gonna be pretty.
    for(at = selected.begin(),end = selected.end();at < end;++at)
    {
-      switch(active->getType(*at))
+      switch(active->type(*at))
       {
          case btTreeItem::RECIPE:
             if ( *at == active->findRecipe(0) )
@@ -1980,7 +1980,7 @@ void MainWindow::copySelected()
             break;
             // No Brewnote, because it just doesn't make sense
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::copySelected Unknown type: %1").arg(active->getType(*at)));
+            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::copySelected Unknown type: %1").arg(active->type(*at)));
       }
    }
 
@@ -1999,7 +1999,7 @@ void MainWindow::copySelected()
 
 
    above = active->getFirst();
-   if ( active->getType(above) == btTreeItem::RECIPE )
+   if ( active->type(above) == btTreeItem::RECIPE )
       setRecipeByIndex(above);
    setTreeSelection(above);
 }
@@ -2070,7 +2070,7 @@ void MainWindow::exportSelected()
    for(at = selected.begin(),end = selected.end(); at < end; ++at)
    {
       QModelIndex selection = *at;
-      int type = active->getType(selection);
+      int type = active->type(selection);
 
       switch(type)
       {

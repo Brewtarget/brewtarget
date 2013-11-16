@@ -195,7 +195,7 @@ public:
 
    //! \brief A constructor that sets the \c type of the btTreeItem and
    // the \c parent
-   btTreeItem(int type = NUMTYPES, btTreeItem *parent=0 );
+   btTreeItem(int _type = NUMTYPES, btTreeItem *parent=0 );
    virtual ~btTreeItem();
 
    //! \brief returns the child at \c number
@@ -204,13 +204,13 @@ public:
    btTreeItem *parent();
 
    //! \brief returns item's type
-   int getType();
+   int type();
    //! \brief returns the number of the item's children
    int childCount() const;
    //! \brief returns number of columns associated with the item's \c type
-   int columnCount(int type) const;
+   int columnCount(int _type) const;
    //! \brief returns the data of the item of \c type at \c column
-   QVariant data(int type, int column);        
+   QVariant data(int _type, int column);        
    //! \brief returns the index of the item in it's parents list
    int childNumber() const;
 
@@ -243,7 +243,7 @@ public:
    BeerXMLElement* getThing();
 
    //! \brief inserts \c count new items of \c type, starting at \c position
-   bool insertChildren(int position, int count, int type = RECIPE);
+   bool insertChildren(int position, int count, int _type = RECIPE);
    //! \brief removes \c count items starting at \c position
    bool removeChildren(int position, int count);
 
@@ -255,7 +255,7 @@ private:
    QList<btTreeItem*> childItems;
 
    /*! the type of this item */
-   int type;
+   int _type;
    /*! the data associated with this item */
    QObject* thing;
 

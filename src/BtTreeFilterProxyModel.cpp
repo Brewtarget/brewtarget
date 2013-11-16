@@ -58,13 +58,13 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
 bool BtTreeFilterProxyModel::lessThanRecipe(btTreeModel* model, const QModelIndex &left, const QModelIndex &right) const
 {
    // This is a little awkward.
-   if ( model->getType(left) == btTreeItem::BREWNOTE ||
-        model->getType(right) == btTreeItem::BREWNOTE )
+   if ( model->type(left) == btTreeItem::BREWNOTE ||
+        model->type(right) == btTreeItem::BREWNOTE )
       return false;
 
    // This is a little more awkward.
-   if ( model->getType(left) == btTreeItem::FOLDER ||
-        model->getType(right) == btTreeItem::FOLDER )
+   if ( model->type(left) == btTreeItem::FOLDER ||
+        model->type(right) == btTreeItem::FOLDER )
       return true;
 
    Recipe* leftRecipe  = model->getRecipe(left);

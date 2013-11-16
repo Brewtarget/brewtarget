@@ -23,6 +23,7 @@
 #include <QAbstractItemModel>
 #include <Qt>
 #include <QObject>
+#include <QStringBuilder>
 
 #include "brewtarget.h"
 #include "btTreeItem.h"
@@ -424,7 +425,7 @@ bool btTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim,
       return false;
 
    btTreeItem *pItem = getItem(parent);
-   int type = pItem->getType();
+   int type = pItem->type();
 
    bool success = true;
 
@@ -477,7 +478,7 @@ QModelIndex btTreeModel::findRecipe(Recipe* rec, btTreeItem* parent)
       if ( pItem->child(i)->getRecipe() == rec )
          return createIndex(i,0,pItem->child(i));
 
-      if ( pItem->child(i)->getType() == btTreeItem::FOLDER )
+      if ( pItem->child(i)->type() == btTreeItem::FOLDER )
       {
          pIndex = findRecipe(rec,pItem->child(i));
          if ( pIndex.isValid() )
@@ -610,6 +611,104 @@ QModelIndex btTreeModel::findBrewNote(BrewNote* bNote)
       return QModelIndex();
 }
 
+QModelIndex btTreeModel::createFolderTree( QStringList dirs, btTreeItem* parent, QString pPath)
+{
+   btTreeItem* pItem = parent;
+
+   // Start the loop. We are going to return ndx at the end, so it needs to
+   // be preserved
+   QModelIndex ndx = createIndex(pItem->childCount(),0,pItem);
+   foreach ( QString cur, dirs )
+   {
+      QString fPath;
+      btFolder* temp = new btFolder();
+      int i;
+
+      // If the parent item is a folder, use its full path
+      if ( pItem->type() == btTreeItem::FOLDER )
+         fPath = pItem->getFolder()->fullPath() % "/" % cur;
+      // If it isn't we need the parent path
+      else
+         fPath = pPath % "/" % cur;
+
+      // Set the full path, which will set the name and the path
+      temp->setfullPath(fPath);
+      i = pItem->childCount();
+
+      // Insert the item into the tree
+      insertRow(i, ndx, temp, btTreeItem::FOLDER);
+
+      // Set the parent item to point to the newly created tree
+      pItem = pItem->child(i);
+
+      // And this for the return
+      ndx = createIndex(pItem->childCount(),0,pItem);
+   }
+
+   // May K&R have mercy on my soul
+   return ndx;
+}
+
+/* This one will be a bit twisted, because of the way I want it to work. name
+ * will be a string like "/a/b/c". This method will need to split that into
+ * [a,b,c], pop the first element off, "a", and look in the parent for a folder
+ * with the same name.
+ *
+ * if the folder is found
+ *   and there are things left in the array, recurse using join("/", [a,b])
+ *   and the array is empty, we've found the folder return the QModelIndex
+ *
+ * if the folder is not found, start creating and inserting them. When done,
+ * return the QModelIndex to the lowest item
+ *
+ * NOTE: THIS IS BROKEN AS WRITTEN. A path of /a/a/a/a/a/a should be legal. I
+ * will only find the first one, because I am comparing on name. The
+ * comparison has to be on name and full path?
+ */
+QModelIndex btTreeModel::findFolder( QString name, btTreeItem* parent, bool create, QString pPath )
+{
+   btTreeItem* pItem;
+   QStringList dirs;
+   QString current;
+   int i;
+
+   pItem = parent == NULL ? rootItem->child(0) : parent;
+   dirs = name.split("/");
+
+   current = dirs.takeFirst();
+   for ( i = 0; i < pItem->childCount(); ++i )
+   {
+      btTreeItem* temp = pItem->child(i);
+      // The parent has a folder
+      if ( temp->type() == btTreeItem::FOLDER )
+      {
+         // The folder name matches the part we are looking at
+         if ( current.compare(temp->getFolder()->name()) == 0 )
+         {
+            if ( dirs.isEmpty() ) 
+               return createIndex(i,0,temp);
+            else
+               return findFolder(dirs.join("/"), temp, create, pPath % "/" % current);
+         }
+      }
+   }
+   // If we get here, we found no match.
+
+   // If we are supposed to create something, then lets get busy
+   if ( create )
+   {
+      // push the current dir back on the stack
+      dirs.prepend(current);
+      // And start with the madness
+      return createFolderTree( dirs, pItem, pPath);
+   }
+
+   // If we weren't supposed to create, we drop to here and return an empty
+   // index. 
+   return QModelIndex();
+
+}
+
 void btTreeModel::loadTreeModel(QString propName)
 {
    int i,j;
@@ -620,27 +719,15 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & RECIPEMASK ) && 
         (loadAll || propName == "recipes" ) )
    {  
-      btTreeItem* local = rootItem->child(0);
-      QModelIndex ndxLocal = createIndex(0,0,local);
-
-      // test code. Create a folder and try to shove everything underneath it
-      btFolder* toplevel = new btFolder;
-
-      toplevel->setName("topLevel");
-      toplevel->setPath("/");
-      toplevel->setfullPath("/toplevel");
-
-      // Insert the folder into the tree.
-      i = 0;
-      insertRow(i,ndxLocal,toplevel, btTreeItem::FOLDER);
-      temp = local->child(i);
-      ndxLocal = createIndex(i,0,temp);
-      local = temp;
-
+      QString path = "/a/b/c";
+      QModelIndex ndxLocal = createFolderTree(path.split("/"), rootItem->child(0), "");
+      btTreeItem* local = getItem(ndxLocal);
       QList<Recipe*> recipes = Database::instance().recipes();
-      
+
       foreach( Recipe* rec, recipes )
       {
+         if (! rec->folder().isEmpty() )
+            qDebug() << "name = " << rec->name() << "wants to be in" << rec->folder();
          insertRow(i,ndxLocal,rec,btTreeItem::RECIPE);
          temp = local->child(i);
 
@@ -882,61 +969,61 @@ BeerXMLElement* btTreeModel::getThing(const QModelIndex &index) const
 bool btTreeModel::isRecipe(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::RECIPE;
+   return item->type() == btTreeItem::RECIPE;
 }
 
 bool btTreeModel::isEquipment(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::EQUIPMENT;
+   return item->type() == btTreeItem::EQUIPMENT;
 }
 
 bool btTreeModel::isFermentable(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::FERMENTABLE;
+   return item->type() == btTreeItem::FERMENTABLE;
 }
 
 bool btTreeModel::isHop(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::HOP;
+   return item->type() == btTreeItem::HOP;
 }
 
 bool btTreeModel::isMisc(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::MISC;
+   return item->type() == btTreeItem::MISC;
 }
 
 bool btTreeModel::isYeast(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::YEAST;
+   return item->type() == btTreeItem::YEAST;
 }
 
 bool btTreeModel::isStyle(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::STYLE;
+   return item->type() == btTreeItem::STYLE;
 }
 
 bool btTreeModel::isBrewNote(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::BREWNOTE;
+   return item->type() == btTreeItem::BREWNOTE;
 }
 
 bool btTreeModel::isFolder(const QModelIndex &index) const
 {
    btTreeItem* item = getItem(index);
-   return item->getType() == btTreeItem::FOLDER;
+   return item->type() == btTreeItem::FOLDER;
 }
 
-int btTreeModel::getType(const QModelIndex &index)
+int btTreeModel::type(const QModelIndex &index)
 {
    btTreeItem* item = getItem(index);
-   return item->getType();
+   return item->type();
 }
 
 int btTreeModel::getMask()
@@ -1161,7 +1248,7 @@ void btTreeModel::miscRemoved(Misc* victim)
    QModelIndex index = findMisc(victim);
    QModelIndex pIndex = parent(index);
 
-   removeRows(index.row(),1,parent);
+   removeRows(index.row(),1,pIndex);
    disconnect( victim, 0, this, 0 );
 }
 
