@@ -672,14 +672,16 @@ QModelIndex btTreeModel::findFolder( QString name, btTreeItem* parent, bool crea
    QString current;
    int i;
 
-   pItem = parent == NULL ? rootItem->child(0) : parent;
-   dirs = name.split("/");
+   pItem = parent ? parent : rootItem->child(0);
 
+   dirs = name.split("/");
    current = dirs.takeFirst();
+
    for ( i = 0; i < pItem->childCount(); ++i )
    {
       btTreeItem* temp = pItem->child(i);
       // The parent has a folder
+
       if ( temp->type() == btTreeItem::FOLDER )
       {
          // The folder name matches the part we are looking at
@@ -719,15 +721,27 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & RECIPEMASK ) && 
         (loadAll || propName == "recipes" ) )
    {  
-      QString path = "/a/b/c";
-      QModelIndex ndxLocal = createFolderTree(path.split("/"), rootItem->child(0), "");
-      btTreeItem* local = getItem(ndxLocal);
+      QModelIndex ndxLocal;
+      btTreeItem* local = rootItem->child(0);
       QList<Recipe*> recipes = Database::instance().recipes();
+
 
       foreach( Recipe* rec, recipes )
       {
+         
          if (! rec->folder().isEmpty() )
-            qDebug() << "name = " << rec->name() << "wants to be in" << rec->folder();
+         {
+            ndxLocal = findFolder( rec->folder(), rootItem->child(0), true, "" );
+            local = getItem(ndxLocal);
+            i = local->childCount();
+         }
+         else
+         {
+            local = rootItem->child(0);
+            i = local->childCount();
+            ndxLocal = createIndex(i,0,local);
+         }
+
          insertRow(i,ndxLocal,rec,btTreeItem::RECIPE);
          temp = local->child(i);
 
@@ -742,7 +756,6 @@ void btTreeModel::loadTreeModel(QString propName)
          }
          
          observeRecipe(rec);
-         ++i;
       }
    }
 

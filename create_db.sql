@@ -15,7 +15,7 @@ CREATE TABLE settings(
    id integer primary key,
    version varchar(256)
 );
-INSERT INTO settings VALUES(2,'2.1.0');
+INSERT INTO settings VALUES(1,'2.1.0');
 
 create table equipment(
    id integer PRIMARY KEY autoincrement,

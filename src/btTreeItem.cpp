@@ -78,6 +78,9 @@ int btTreeItem::type()
 
 int btTreeItem::childCount() const
 {
+   if ( childItems.isEmpty() )
+      return 0;
+
    return childItems.count();
 }
 
@@ -374,23 +377,11 @@ QVariant btTreeItem::dataFolder(int column)
    if ( ! folder && column == FOLDERNAMECOL )
       return QVariant(QObject::tr("Folder"));
 
-   if ( ! folder ) {
+   if ( ! folder ) 
       return QVariant(QObject::tr("Folder"));
-   }
-   else 
-   {
-      switch(column)
-      {
-         case FOLDERNAMECOL:
-            return QVariant( folder->name() );
-         case FOLDERPATHCOL:
-            return QVariant( folder->path() );
-         case FOLDERFULLCOL:
-            return QVariant( folder->fullPath() );
-         default :
-            Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataFolder Bad column: %1").arg(column));
-      }
-   }
+   else if ( column == FOLDERNAMECOL )
+      return QVariant( folder->name() );
+
    return QVariant();
 }
 
