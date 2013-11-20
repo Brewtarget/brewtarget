@@ -31,7 +31,7 @@
 ; brewtarget specific modifications
 !include StrFunc.nsh
 
-;${StrStr}
+; ${StrStr}
 ${StrRep}
 
 ;--------------------------------
@@ -812,13 +812,19 @@ Function btPageLeave
 
    ; If the user points us at the program files directory, we have to worry
    ; about virtual stores
-   ${StrStr} $R0 $btPath $PROGRAMFILES 
+   Push $btPath
+   Push $PROGRAMFILES
+   Call StrStr
+   Pop $R0
 
    ; We have to worry
    ${If} $R0 != ""
       ; Need some more info. 
       ${StrRep} $R1 $btPath 'c:\' $LOCALAPPDATA
-      ${StrStr} $R2 $btPath 't-2' 
+      Push $btPath
+      Push "t-2"
+      Call StrStr
+      Pop $R2
 
       ; if this is an upgrade from a v2.x, look for sqlite file
       ${If} $R2 != ""
