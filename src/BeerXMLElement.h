@@ -75,7 +75,7 @@ public:
    void setDeleted(bool var);
    void setDisplay(bool var);
    //! and a way to set the folder
-   void setFolder(QString fName);
+   virtual void setFolder(QString fName);
 
    //! \returns our key in the table we are stored in.
    int key() const;

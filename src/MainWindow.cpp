@@ -642,6 +642,8 @@ void MainWindow::treeActivated(const QModelIndex &index)
       case BtTreeItem::BREWNOTE:
          setBrewNoteByIndex(index);
          break;
+      case BtTreeItem::FOLDER:  // default behavior is fine, but no warning
+         break;
       default:
          Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index)));
    }
@@ -1289,25 +1291,6 @@ void MainWindow::newRecipe()
 
    Recipe* newRec = Database::instance().newRecipe();
 
-   // The trick will be to get the current object's path ( ->folder() if it is
-   // a recipe, ->fullPath() if it is a folder and to set the new recipe's
-   // folder to the same value. 
-   //
-   // But I'm too tired to write this code tonight
-   if ( selection ) {
-      BtTreeView* sent = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-      if ( sent == 0 ) {
-         qDebug() << "Couldn't transform";
-      }
-      else {
-         QModelIndexList indexes = sent->selectionModel()->selectedRows();
-         Recipe* foo = sent->getRecipe(indexes.at(0));
-         if ( foo ) 
-            qDebug() << "sent by " << foo->name();
-         else 
-            qDebug() << "unknown sender";
-      }
-   }
    // Set the following stuff so everything appears nice
    // and the calculations don't divide by zero... things like that.
    newRec->setName(name);
@@ -1327,6 +1310,37 @@ void MainWindow::newRecipe()
       }
    }
 
+   // The trick will be to get the current object's path ( folder() if it is
+   // a recipe, fullPath() if it is a folder ) and to set the new recipe's
+   // folder to the same value. This should be the last thing done
+   if ( selection ) {
+      BtTreeView* sent = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+      if ( sent == 0 ) {
+         qDebug() << "Couldn't transform";
+      }
+      else {
+         QModelIndexList indexes = sent->selectionModel()->selectedRows();
+         if ( sent->type(indexes.at(0)) == BtTreeItem::RECIPE ) 
+         {
+            Recipe* foo = sent->getRecipe(indexes.at(0));
+
+            if ( foo && ! foo->folder().isEmpty()) 
+            {
+               qDebug() << "From a recipe and folder is" << foo->folder();
+               newRec->setFolder( foo->folder() );
+            }
+         }
+         else if ( sent->type(indexes.at(0)) == BtTreeItem::FOLDER ) 
+         {
+            BtFolder* foo = sent->getFolder(indexes.at(0));
+            if ( foo )
+            {
+               qDebug() << "From a folder and fullpath is" << foo->fullPath();
+               newRec->setFolder( foo->fullPath() );
+            }
+         }
+      }
+   }
    setTreeSelection(treeView_recipe->findRecipe(newRec));
    setRecipe(newRec);
 }

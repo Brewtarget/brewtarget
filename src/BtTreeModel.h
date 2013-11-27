@@ -220,7 +220,7 @@ private slots:
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
-   //void folderChanged(QObject* victim);
+   void folderChanged(QString name);
    
    //! \brief slot to catch a deletedEquipmentSignal
    void equipmentRemoved(Equipment* victim);

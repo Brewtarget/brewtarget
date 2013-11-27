@@ -107,6 +107,10 @@ public:
    //! \brief finds the index of the \c brewnote in the tree
    QModelIndex findBrewNote( BrewNote* bNote);
 
+   //! \brief returns the folder at \c index 
+   BtFolder* getFolder(const QModelIndex &index) const;
+   //! \brief finds the index of the \c brewnote in the tree
+   QModelIndex findFolder( BtFolder* folder);
    //! \brief gets the type of the item at \c index. 
    int type(const QModelIndex &index);
 

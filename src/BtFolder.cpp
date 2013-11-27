@@ -19,6 +19,7 @@
 
 #include <QString>
 #include <QRegExp>  // Yeah, you knew that had to happen
+#include <QDebug>
 
 #include "BtFolder.h"
 #include "brewtarget.h"
@@ -45,7 +46,6 @@ void BtFolder::setName(QString var)
 { 
    _name = var; 
    _fullPath = _path.append("/").append(_name);
-
 }
 
 // changing the path changes the fullPath
@@ -58,7 +58,8 @@ void BtFolder::setPath(QString var)
 // changing the full path necessarily changes the name and the path
 void BtFolder::setfullPath(QString var) 
 {
-   QStringList pieces = var.split("/");
+   QStringList pieces = var.split("/", QString::SkipEmptyParts);
+
 
    if ( ! pieces.isEmpty() )
    {
@@ -67,18 +68,19 @@ void BtFolder::setfullPath(QString var)
       _path = pieces.join("/");
 
       _fullPath = var;
+
+   }
+   else 
+   {
+      _name = var;
+      _path = var;
+      _fullPath = var;
    }
 }
 
 bool BtFolder::isFolder(QString var ) 
 {
-   bool ret = false;
 
-   if ( var == _name )
-      ret = true;
-   else if ( var == _fullPath )
-      ret = true;
-
-   return ret;
+   return _fullPath == var;
 }
 

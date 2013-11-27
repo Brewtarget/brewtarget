@@ -631,6 +631,9 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
       else
          fPath = pPath % "/" % cur;
 
+      if ( fPath.compare("/") == 0 )
+         continue;
+
       // Set the full path, which will set the name and the path
       temp->setfullPath(fPath);
       i = pItem->childCount();
@@ -664,6 +667,7 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
  * NOTE: THIS IS BROKEN AS WRITTEN. A path of /a/a/a/a/a/a should be legal. I
  * will only find the first one, because I am comparing on name. The
  * comparison has to be on name and full path?
+ * I think this is fixed, but needs testing.
  */
 QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool create, QString pPath )
 {
@@ -674,7 +678,8 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
    pItem = parent ? parent : rootItem->child(0);
 
-   dirs = name.split("/");
+   dirs = name.split("/", QString::SkipEmptyParts);
+
    current = dirs.takeFirst();
 
    for ( i = 0; i < pItem->childCount(); ++i )
@@ -684,13 +689,14 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
       if ( temp->type() == BtTreeItem::FOLDER )
       {
+         QString fullPath = pPath % "/" % current;
          // The folder name matches the part we are looking at
-         if ( current.compare(temp->getFolder()->name()) == 0 )
+         if ( temp->getFolder()->isFolder(fullPath) )
          {
             if ( dirs.isEmpty() ) 
                return createIndex(i,0,temp);
             else
-               return findFolder(dirs.join("/"), temp, create, pPath % "/" % current);
+               return findFolder(dirs.join("/"), temp, create, fullPath);
          }
       }
    }
@@ -725,10 +731,8 @@ void BtTreeModel::loadTreeModel(QString propName)
       BtTreeItem* local = rootItem->child(0);
       QList<Recipe*> recipes = Database::instance().recipes();
 
-
       foreach( Recipe* rec, recipes )
       {
-         
          if (! rec->folder().isEmpty() )
          {
             ndxLocal = findFolder( rec->folder(), rootItem->child(0), true, "" );
@@ -972,6 +976,13 @@ BrewNote* BtTreeModel::getBrewNote(const QModelIndex &index) const
    return item->getBrewNote();
 }
 
+BtFolder* BtTreeModel::getFolder(const QModelIndex &index) const
+{
+   BtTreeItem* item = getItem(index);
+
+   return item->getFolder();
+}
+
 BeerXMLElement* BtTreeModel::getThing(const QModelIndex &index) const
 {
    BtTreeItem* item = getItem(index);
@@ -1140,6 +1151,35 @@ void BtTreeModel::styleChanged()
    
    QModelIndex ndxRight = createIndex(ndxLeft.row(), columnCount(ndxLeft)-1, ndxLeft.internalPointer());
    emit dataChanged( ndxLeft, ndxRight );
+}
+
+// The actual magic shouldn't be hard. Once we trap the signal, find the
+// recipe, remove it from the parent and add it to the target folder.
+// The uncomfortable part is how to make this more generic? I do not want to
+// write this code once for every type. Like I have so many times already.
+void BtTreeModel::folderChanged(QString name)
+{
+   Recipe* test = qobject_cast<Recipe*>(sender());
+   if ( ! test )
+      return;
+
+   // Find it.
+   QModelIndex ndx = findRecipe(test);
+   QModelIndex pIndex = parent(ndx); // Get the parent
+   int i = getItem(ndx)->childNumber();
+
+   // Remove it
+   removeRows(i, 1, pIndex); // ???
+
+   // Find the new parent
+   ndx = findFolder(test->folder(), rootItem->child(0), false);
+   BtTreeItem* local = getItem(ndx);
+   i = local->childCount();
+
+   insertRow(i,ndx,test,BtTreeItem::RECIPE);
+
+
+   return;
 }
 
 void BtTreeModel::brewNoteChanged()
@@ -1348,7 +1388,8 @@ void BtTreeModel::styleRemoved(Style* victim)
 // confusing
 void BtTreeModel::brewNoteAdded(BrewNote* victim)
 {
-   // Get the brewnote's parent
+   // Get the brewnote's parent. We can't find it in the tree, because we
+   // haven't inserted it yet.
    Recipe *parent = Database::instance().getParentRecipe(victim);
    // Find that recipe in the list
    QModelIndex pInd = findRecipe(parent);
@@ -1405,6 +1446,7 @@ void BtTreeModel::observeMisc(Misc* d)
 void BtTreeModel::observeRecipe(Recipe* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(recipeChanged()) );
+   connect( d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
 }
 
 void BtTreeModel::observeYeast(Yeast* d)

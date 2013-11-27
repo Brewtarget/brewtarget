@@ -167,6 +167,19 @@ QModelIndex BtTreeView::findBrewNote(BrewNote* bNote)
    return filter->mapFromSource(model->findBrewNote(bNote));
 }
 
+BtFolder* BtTreeView::getFolder(const QModelIndex &index) const
+{
+   if ( ! index.isValid() ) 
+      return NULL;
+
+   return model->getFolder(filter->mapToSource(index));
+}
+
+QModelIndex BtTreeView::findFolder(BtFolder* folder)
+{
+   return filter->mapFromSource(model->findFolder(folder->fullPath(), NULL, false));
+}
+
 int BtTreeView::type(const QModelIndex &index)
 {
    return model->type(filter->mapToSource(index));
