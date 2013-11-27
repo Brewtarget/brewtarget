@@ -1,5 +1,5 @@
 /*
- * btTreeModel.cpp is part of Brewtarget and was written by Mik
+ * BtTreeModel.cpp is part of Brewtarget and was written by Mik
  * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -26,9 +26,9 @@
 #include <QStringBuilder>
 
 #include "brewtarget.h"
-#include "btTreeItem.h"
-#include "btTreeModel.h"
-#include "btTreeView.h"
+#include "BtTreeItem.h"
+#include "BtTreeModel.h"
+#include "BtTreeView.h"
 #include "database.h"
 #include "equipment.h"
 #include "fermentable.h"
@@ -39,17 +39,17 @@
 #include "brewnote.h"
 #include "style.h"
 
-btTreeModel::btTreeModel(btTreeView *parent, TypeMasks type)
+BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
    : QAbstractItemModel(parent)
 {
    // Initialize the tree structure
    int items = 0;
 
-   rootItem = new btTreeItem();
+   rootItem = new BtTreeItem();
 
    if ( type & RECIPEMASK)
    {
-      rootItem->insertChildren(items,1,btTreeItem::RECIPE);
+      rootItem->insertChildren(items,1,BtTreeItem::RECIPE);
       connect( &(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)),this, SLOT(recipeAdded(Recipe*)));
       connect( &(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)),this, SLOT(recipeRemoved(Recipe*)));
       // Brewnotes need love too!
@@ -59,35 +59,35 @@ btTreeModel::btTreeModel(btTreeView *parent, TypeMasks type)
 
    if ( type & EQUIPMASK )
    {
-      rootItem->insertChildren(items,1,btTreeItem::EQUIPMENT);
+      rootItem->insertChildren(items,1,BtTreeItem::EQUIPMENT);
       connect( &(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)),this, SLOT(equipmentAdded(Equipment*)));
       connect( &(Database::instance()), SIGNAL(deletedEquipmentSignal(Equipment*)),this, SLOT(equipmentRemoved(Equipment*)));
    }
 
    if ( type & FERMENTMASK )
    {
-      rootItem->insertChildren(items,1,btTreeItem::FERMENTABLE);
+      rootItem->insertChildren(items,1,BtTreeItem::FERMENTABLE);
       connect( &(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)),this, SLOT(fermentableAdded(Fermentable*)));
       connect( &(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)),this, SLOT(fermentableRemoved(Fermentable*)));
    }
 
    if ( type & HOPMASK )
    {
-      rootItem->insertChildren(items,1,btTreeItem::HOP);
+      rootItem->insertChildren(items,1,BtTreeItem::HOP);
       connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)),this, SLOT(hopAdded(Hop*)));
       connect( &(Database::instance()), SIGNAL(deletedHopSignal(Hop*)),this, SLOT(hopRemoved(Hop*)));
    }
 
    if ( type & MISCMASK )
    {
-      rootItem->insertChildren(items,1,btTreeItem::MISC);
+      rootItem->insertChildren(items,1,BtTreeItem::MISC);
       connect( &(Database::instance()), SIGNAL(newMiscSignal(Misc*)),this, SLOT(miscAdded(Misc*)));
       connect( &(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)),this, SLOT(miscRemoved(Misc*)));
    }
 
    if ( type & YEASTMASK )
    {
-      rootItem->insertChildren(items,1,btTreeItem::YEAST);
+      rootItem->insertChildren(items,1,BtTreeItem::YEAST);
 
       connect( &(Database::instance()), SIGNAL(newYeastSignal(Yeast*)),this, SLOT(yeastAdded(Yeast*)));
       connect( &(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)),this, SLOT(yeastRemoved(Yeast*)));
@@ -95,7 +95,7 @@ btTreeModel::btTreeModel(btTreeView *parent, TypeMasks type)
 
    if ( type & STYLEMASK )
    {
-      rootItem->insertChildren(items,1,btTreeItem::STYLE);
+      rootItem->insertChildren(items,1,BtTreeItem::STYLE);
 
       connect( &(Database::instance()), SIGNAL(newStyleSignal(Style*)),this, SLOT(styleAdded(Style*)));
       connect( &(Database::instance()), SIGNAL(deletedStyleSignal(Style*)),this, SLOT(styleRemoved(Style*)));
@@ -106,16 +106,16 @@ btTreeModel::btTreeModel(btTreeView *parent, TypeMasks type)
    loadTreeModel();
 }
 
-btTreeModel::~btTreeModel()
+BtTreeModel::~BtTreeModel()
 {
    delete rootItem;
 }
 
-btTreeItem *btTreeModel::getItem( const QModelIndex &index ) const
+BtTreeItem *BtTreeModel::getItem( const QModelIndex &index ) const
 {
    if ( index.isValid())
    {
-      btTreeItem *item = static_cast<btTreeItem*>(index.internalPointer());
+      BtTreeItem *item = static_cast<BtTreeItem*>(index.internalPointer());
       if (item)
          return item;
    }
@@ -123,42 +123,42 @@ btTreeItem *btTreeModel::getItem( const QModelIndex &index ) const
    return rootItem;
 }
 
-int btTreeModel::rowCount(const QModelIndex &parent) const
+int BtTreeModel::rowCount(const QModelIndex &parent) const
 {
    if (! parent.isValid())
       return rootItem->childCount();
    
-   btTreeItem *pItem = getItem(parent);
+   BtTreeItem *pItem = getItem(parent);
 
    return pItem->childCount();
 }
 
-int btTreeModel::columnCount( const QModelIndex &parent) const
+int BtTreeModel::columnCount( const QModelIndex &parent) const
 {
    switch(treeMask)
    {
    case RECIPEMASK:
-      return btTreeItem::RECIPENUMCOLS;
+      return BtTreeItem::RECIPENUMCOLS;
    case EQUIPMASK:
-      return btTreeItem::EQUIPMENTNUMCOLS;
+      return BtTreeItem::EQUIPMENTNUMCOLS;
    case FERMENTMASK:
-      return btTreeItem::FERMENTABLENUMCOLS;
+      return BtTreeItem::FERMENTABLENUMCOLS;
    case HOPMASK:
-      return btTreeItem::HOPNUMCOLS;
+      return BtTreeItem::HOPNUMCOLS;
    case MISCMASK:
-      return btTreeItem::MISCNUMCOLS;
+      return BtTreeItem::MISCNUMCOLS;
    case YEASTMASK:
-      return btTreeItem::YEASTNUMCOLS;
+      return BtTreeItem::YEASTNUMCOLS;
    case STYLEMASK:
-      return btTreeItem::STYLENUMCOLS;
+      return BtTreeItem::STYLENUMCOLS;
    default:
       return 0;
    }
    // Backwards compatibility. This MUST be fixed before the code goes live.
-   return btTreeItem::RECIPENUMCOLS;
+   return BtTreeItem::RECIPENUMCOLS;
 }
 
-Qt::ItemFlags btTreeModel::flags(const QModelIndex &index) const
+Qt::ItemFlags BtTreeModel::flags(const QModelIndex &index) const
 {
    if (!index.isValid())
       return 0;
@@ -166,9 +166,9 @@ Qt::ItemFlags btTreeModel::flags(const QModelIndex &index) const
    return Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QModelIndex btTreeModel::index( int row, int column, const QModelIndex &parent) const
+QModelIndex BtTreeModel::index( int row, int column, const QModelIndex &parent) const
 {
-   btTreeItem *pItem, *cItem;
+   BtTreeItem *pItem, *cItem;
 
    if ( parent.isValid() && parent.column() != 0)
       return QModelIndex();
@@ -182,9 +182,9 @@ QModelIndex btTreeModel::index( int row, int column, const QModelIndex &parent) 
       return QModelIndex();
 }
 
-QModelIndex btTreeModel::parent(const QModelIndex &index) const
+QModelIndex BtTreeModel::parent(const QModelIndex &index) const
 {
-   btTreeItem *pItem, *cItem;
+   BtTreeItem *pItem, *cItem;
 
    if (!index.isValid())
       return QModelIndex();
@@ -202,10 +202,10 @@ QModelIndex btTreeModel::parent(const QModelIndex &index) const
    return createIndex(pItem->childNumber(),0,pItem);
 }
 
-QModelIndex btTreeModel::getFirst()
+QModelIndex BtTreeModel::getFirst()
 {
    QModelIndex parent;
-   btTreeItem* pItem; 
+   BtTreeItem* pItem; 
 
    // get the first item in the list, which is the place holder
    pItem = rootItem->child(0);
@@ -215,39 +215,39 @@ QModelIndex btTreeModel::getFirst()
    return QModelIndex();
 }
 
-QVariant btTreeModel::data(const QModelIndex &index, int role) const
+QVariant BtTreeModel::data(const QModelIndex &index, int role) const
 {
    int maxColumns;
 
    switch(treeMask)
    {
    case RECIPEMASK:
-      maxColumns = btTreeItem::RECIPENUMCOLS;
+      maxColumns = BtTreeItem::RECIPENUMCOLS;
       break;
    case EQUIPMASK:
-      maxColumns = btTreeItem::EQUIPMENTNUMCOLS;
+      maxColumns = BtTreeItem::EQUIPMENTNUMCOLS;
       break;
    case FERMENTMASK:
-      maxColumns = btTreeItem::FERMENTABLENUMCOLS;
+      maxColumns = BtTreeItem::FERMENTABLENUMCOLS;
       break;
    case HOPMASK:
-      maxColumns = btTreeItem::HOPNUMCOLS;
+      maxColumns = BtTreeItem::HOPNUMCOLS;
       break;
    case MISCMASK:
-      maxColumns = btTreeItem::MISCNUMCOLS;
+      maxColumns = BtTreeItem::MISCNUMCOLS;
       break;
    case YEASTMASK:
-      maxColumns = btTreeItem::YEASTNUMCOLS;
+      maxColumns = BtTreeItem::YEASTNUMCOLS;
       break;
    case STYLEMASK:
-      maxColumns = btTreeItem::STYLENUMCOLS;
+      maxColumns = BtTreeItem::STYLENUMCOLS;
       break;
    case FOLDERMASK:
-      maxColumns = btTreeItem::FOLDERNUMCOLS;
+      maxColumns = BtTreeItem::FOLDERNUMCOLS;
       break;
    default:
       // Backwards compatibility. This MUST be fixed prior to releasing the code
-      maxColumns = btTreeItem::RECIPENUMCOLS;
+      maxColumns = BtTreeItem::RECIPENUMCOLS;
    }
 
    if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= maxColumns)
@@ -256,12 +256,12 @@ QVariant btTreeModel::data(const QModelIndex &index, int role) const
    if ( role != Qt::DisplayRole && role != Qt::EditRole)
       return QVariant();
 
-   btTreeItem *item = getItem(index);
+   BtTreeItem *item = getItem(index);
    return item->getData(index.column());
 }
 
 // This is much better, assuming the rest can be made to work
-QVariant btTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant BtTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    if ( orientation != Qt::Horizontal || role != Qt::DisplayRole )
       return QVariant();
@@ -289,142 +289,142 @@ QVariant btTreeModel::headerData(int section, Qt::Orientation orientation, int r
    }
 }
 
-QVariant btTreeModel::getRecipeHeader(int section) const
+QVariant BtTreeModel::getRecipeHeader(int section) const
 {
    switch(section)
    {
-   case btTreeItem::RECIPENAMECOL:
+   case BtTreeItem::RECIPENAMECOL:
       return QVariant(tr("Name"));
-   case btTreeItem::RECIPEBREWDATECOL:
+   case BtTreeItem::RECIPEBREWDATECOL:
       return QVariant(tr("Brew Date"));
-   case btTreeItem::RECIPESTYLECOL:
+   case BtTreeItem::RECIPESTYLECOL:
       return QVariant(tr("Style"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("btTreeModel::getRecipeHeader Bad column: %1").arg(section));
+   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getRecipeHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
-QVariant btTreeModel::getEquipmentHeader(int section) const
+QVariant BtTreeModel::getEquipmentHeader(int section) const
 {
    switch(section)
    {
-   case btTreeItem::EQUIPMENTNAMECOL:
+   case BtTreeItem::EQUIPMENTNAMECOL:
       return QVariant(tr("Name"));
-   case btTreeItem::EQUIPMENTBOILTIMECOL:
+   case BtTreeItem::EQUIPMENTBOILTIMECOL:
       return QVariant(tr("Boil Time"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("btTreeModel::getEquipmentHeader Bad column: %1").arg(section));
+   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getEquipmentHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
-QVariant btTreeModel::getFermentableHeader(int section) const
+QVariant BtTreeModel::getFermentableHeader(int section) const
 {
    switch(section)
    {
-   case btTreeItem::FERMENTABLENAMECOL:
+   case BtTreeItem::FERMENTABLENAMECOL:
       return QVariant(tr("Name"));
-   case btTreeItem::FERMENTABLECOLORCOL:
+   case BtTreeItem::FERMENTABLECOLORCOL:
       return QVariant(tr("Color"));
-   case btTreeItem::FERMENTABLETYPECOL:
+   case BtTreeItem::FERMENTABLETYPECOL:
       return QVariant(tr("Type"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("btTreeModel::getFermentableHeader Bad column: %1").arg(section));
+   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getFermentableHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
-QVariant btTreeModel::getHopHeader(int section) const
+QVariant BtTreeModel::getHopHeader(int section) const
 {
    switch(section)
    {
-   case btTreeItem::HOPNAMECOL:
+   case BtTreeItem::HOPNAMECOL:
       return QVariant(tr("Name"));
-   case btTreeItem::HOPFORMCOL:
+   case BtTreeItem::HOPFORMCOL:
       return QVariant(tr("Type"));
-   case btTreeItem::HOPUSECOL:
+   case BtTreeItem::HOPUSECOL:
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("btTreeModel::getHopHeader Bad column: %1").arg(section));
+   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getHopHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
-QVariant btTreeModel::getMiscHeader(int section) const
+QVariant BtTreeModel::getMiscHeader(int section) const
 {
    switch(section)
    {
-   case btTreeItem::MISCNAMECOL:
+   case BtTreeItem::MISCNAMECOL:
       return QVariant(tr("Name"));
-   case btTreeItem::MISCTYPECOL:
+   case BtTreeItem::MISCTYPECOL:
       return QVariant(tr("Type"));
-   case btTreeItem::MISCUSECOL:
+   case BtTreeItem::MISCUSECOL:
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("btTreeModel::getMiscHeader Bad column: %1").arg(section));
+   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getMiscHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
-QVariant btTreeModel::getYeastHeader(int section) const
+QVariant BtTreeModel::getYeastHeader(int section) const
 {
    switch(section)
    {
-   case btTreeItem::YEASTNAMECOL:
+   case BtTreeItem::YEASTNAMECOL:
       return QVariant(tr("Name"));
-   case btTreeItem::YEASTTYPECOL:
+   case BtTreeItem::YEASTTYPECOL:
       return QVariant(tr("Type"));
-   case btTreeItem::YEASTFORMCOL:
+   case BtTreeItem::YEASTFORMCOL:
       return QVariant(tr("Form"));
    }
 
-   Brewtarget::logW( QString("btTreeModel::getYeastHeader Bad column: %1").arg(section) );
+   Brewtarget::logW( QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section) );
    return QVariant();
 }
 
-QVariant btTreeModel::getStyleHeader(int section) const
+QVariant BtTreeModel::getStyleHeader(int section) const
 {
    switch(section)
    {
-   case btTreeItem::STYLENAMECOL:
+   case BtTreeItem::STYLENAMECOL:
       return QVariant(tr("Name"));
-   case btTreeItem::STYLECATEGORYCOL:
+   case BtTreeItem::STYLECATEGORYCOL:
       return QVariant(tr("Category"));
-   case btTreeItem::STYLENUMBERCOL:
+   case BtTreeItem::STYLENUMBERCOL:
       return QVariant(tr("Number"));
-   case btTreeItem::STYLELETTERCOL:
+   case BtTreeItem::STYLELETTERCOL:
       return QVariant(tr("Letter"));
-   case btTreeItem::STYLEGUIDECOL:
+   case BtTreeItem::STYLEGUIDECOL:
       return QVariant(tr("Guide"));
    }
 
-   Brewtarget::logW( QString("btTreeModel::getYeastHeader Bad column: %1").arg(section) );
+   Brewtarget::logW( QString("BtTreeModel::getYeastHeader Bad column: %1").arg(section) );
    return QVariant();
 }
 
-QVariant btTreeModel::getFolderHeader(int section) const
+QVariant BtTreeModel::getFolderHeader(int section) const
 {
    switch(section) 
    {
-      case btTreeItem::FOLDERNAMECOL:
+      case BtTreeItem::FOLDERNAMECOL:
          return QVariant(tr("Name"));
-      case btTreeItem::FOLDERPATHCOL:
+      case BtTreeItem::FOLDERPATHCOL:
          return QVariant(tr("PATH"));
-      case btTreeItem::FOLDERFULLCOL:
+      case BtTreeItem::FOLDERFULLCOL:
          return QVariant(tr("FULLPATH"));
    }
 
-   Brewtarget::logW( QString("btTreeModel::getFolderHeader Bad column: %1").arg(section) );
+   Brewtarget::logW( QString("BtTreeModel::getFolderHeader Bad column: %1").arg(section) );
    return QVariant();
 }
 
-bool btTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim, int victimType )
+bool BtTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim, int victimType )
 {
    if ( ! parent.isValid() )
       return false;
 
-   btTreeItem *pItem = getItem(parent);
+   BtTreeItem *pItem = getItem(parent);
    int type = pItem->type();
 
    bool success = true;
@@ -434,7 +434,7 @@ bool btTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim,
    if ( victim && success ) 
    {
       type = victimType == -1 ? type : victimType;
-      btTreeItem* added = pItem->child(row);
+      BtTreeItem* added = pItem->child(row);
       added->setData(type, victim);
    }
    endInsertRows();
@@ -442,9 +442,9 @@ bool btTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim,
    return success;
 }
 
-bool btTreeModel::removeRows(int row, int count, const QModelIndex &parent)
+bool BtTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-   btTreeItem *pItem = getItem(parent);
+   BtTreeItem *pItem = getItem(parent);
    bool success = true;
     
    beginRemoveRows(parent, row, row + count -1 );
@@ -457,9 +457,9 @@ bool btTreeModel::removeRows(int row, int count, const QModelIndex &parent)
 /* All of the find methods are going to require rework so they go down folders
  * properly
  */
-QModelIndex btTreeModel::findRecipe(Recipe* rec, btTreeItem* parent)
+QModelIndex BtTreeModel::findRecipe(Recipe* rec, BtTreeItem* parent)
 {
-   btTreeItem* pItem;
+   BtTreeItem* pItem;
    QModelIndex pIndex;
 
    int i;
@@ -478,7 +478,7 @@ QModelIndex btTreeModel::findRecipe(Recipe* rec, btTreeItem* parent)
       if ( pItem->child(i)->getRecipe() == rec )
          return createIndex(i,0,pItem->child(i));
 
-      if ( pItem->child(i)->type() == btTreeItem::FOLDER )
+      if ( pItem->child(i)->type() == BtTreeItem::FOLDER )
       {
          pIndex = findRecipe(rec,pItem->child(i));
          if ( pIndex.isValid() )
@@ -489,9 +489,9 @@ QModelIndex btTreeModel::findRecipe(Recipe* rec, btTreeItem* parent)
    return QModelIndex();
 }
 
-QModelIndex btTreeModel::findEquipment(Equipment* kit)
+QModelIndex BtTreeModel::findEquipment(Equipment* kit)
 {
-   btTreeItem* pItem = rootItem->child(0);
+   BtTreeItem* pItem = rootItem->child(0);
    int i;
 
    if (! kit || (treeMask & EQUIPMASK) == 0)
@@ -505,9 +505,9 @@ QModelIndex btTreeModel::findEquipment(Equipment* kit)
    return QModelIndex();
 }
 
-QModelIndex btTreeModel::findFermentable(Fermentable* ferm)
+QModelIndex BtTreeModel::findFermentable(Fermentable* ferm)
 {
-   btTreeItem* pItem = rootItem->child(0);
+   BtTreeItem* pItem = rootItem->child(0);
    int i;
 
    if (! ferm || (treeMask & FERMENTMASK) == 0)
@@ -521,9 +521,9 @@ QModelIndex btTreeModel::findFermentable(Fermentable* ferm)
    return QModelIndex();
 }
 
-QModelIndex btTreeModel::findHop(Hop* hop)
+QModelIndex BtTreeModel::findHop(Hop* hop)
 {
-   btTreeItem* pItem = rootItem->child(0);
+   BtTreeItem* pItem = rootItem->child(0);
    int i;
 
    if (! hop || (treeMask & HOPMASK) == 0)
@@ -537,9 +537,9 @@ QModelIndex btTreeModel::findHop(Hop* hop)
    return QModelIndex();
 }
 
-QModelIndex btTreeModel::findMisc(Misc* misc)
+QModelIndex BtTreeModel::findMisc(Misc* misc)
 {
-   btTreeItem* pItem = rootItem->child(0);
+   BtTreeItem* pItem = rootItem->child(0);
    int i;
 
    if (! misc || (treeMask & MISCMASK) == 0)
@@ -553,9 +553,9 @@ QModelIndex btTreeModel::findMisc(Misc* misc)
    return QModelIndex();
 }
 
-QModelIndex btTreeModel::findYeast(Yeast* yeast)
+QModelIndex BtTreeModel::findYeast(Yeast* yeast)
 {
-   btTreeItem* pItem = rootItem->child(0);
+   BtTreeItem* pItem = rootItem->child(0);
    int i;
 
    if (! yeast || (treeMask & YEASTMASK) == 0)
@@ -569,9 +569,9 @@ QModelIndex btTreeModel::findYeast(Yeast* yeast)
    return QModelIndex();
 }
 
-QModelIndex btTreeModel::findStyle(Style* style)
+QModelIndex BtTreeModel::findStyle(Style* style)
 {
-   btTreeItem* pItem = rootItem->child(0);
+   BtTreeItem* pItem = rootItem->child(0);
    int i;
 
    if (! style || (treeMask & STYLEMASK) == 0)
@@ -590,7 +590,7 @@ QModelIndex btTreeModel::findStyle(Style* style)
  * the actual object (e.g., the BrewNote) or the recipe, or the brewnote's
  * place in the recipe.
  */
-QModelIndex btTreeModel::findBrewNote(BrewNote* bNote)
+QModelIndex BtTreeModel::findBrewNote(BrewNote* bNote)
 {
    if (! bNote )
       return QModelIndex();
@@ -600,7 +600,7 @@ QModelIndex btTreeModel::findBrewNote(BrewNote* bNote)
    // Find that recipe in the list
    QModelIndex pInd = findRecipe(parent);
    // and get the associated treeItem
-   btTreeItem* pItem = getItem(pInd);
+   BtTreeItem* pItem = getItem(pInd);
 
 
    QList<BrewNote*> notes = parent->brewNotes();
@@ -611,9 +611,9 @@ QModelIndex btTreeModel::findBrewNote(BrewNote* bNote)
       return QModelIndex();
 }
 
-QModelIndex btTreeModel::createFolderTree( QStringList dirs, btTreeItem* parent, QString pPath)
+QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath)
 {
-   btTreeItem* pItem = parent;
+   BtTreeItem* pItem = parent;
 
    // Start the loop. We are going to return ndx at the end, so it needs to
    // be preserved
@@ -621,11 +621,11 @@ QModelIndex btTreeModel::createFolderTree( QStringList dirs, btTreeItem* parent,
    foreach ( QString cur, dirs )
    {
       QString fPath;
-      btFolder* temp = new btFolder();
+      BtFolder* temp = new BtFolder();
       int i;
 
       // If the parent item is a folder, use its full path
-      if ( pItem->type() == btTreeItem::FOLDER )
+      if ( pItem->type() == BtTreeItem::FOLDER )
          fPath = pItem->getFolder()->fullPath() % "/" % cur;
       // If it isn't we need the parent path
       else
@@ -636,7 +636,7 @@ QModelIndex btTreeModel::createFolderTree( QStringList dirs, btTreeItem* parent,
       i = pItem->childCount();
 
       // Insert the item into the tree
-      insertRow(i, ndx, temp, btTreeItem::FOLDER);
+      insertRow(i, ndx, temp, BtTreeItem::FOLDER);
 
       // Set the parent item to point to the newly created tree
       pItem = pItem->child(i);
@@ -665,9 +665,9 @@ QModelIndex btTreeModel::createFolderTree( QStringList dirs, btTreeItem* parent,
  * will only find the first one, because I am comparing on name. The
  * comparison has to be on name and full path?
  */
-QModelIndex btTreeModel::findFolder( QString name, btTreeItem* parent, bool create, QString pPath )
+QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool create, QString pPath )
 {
-   btTreeItem* pItem;
+   BtTreeItem* pItem;
    QStringList dirs;
    QString current;
    int i;
@@ -679,10 +679,10 @@ QModelIndex btTreeModel::findFolder( QString name, btTreeItem* parent, bool crea
 
    for ( i = 0; i < pItem->childCount(); ++i )
    {
-      btTreeItem* temp = pItem->child(i);
+      BtTreeItem* temp = pItem->child(i);
       // The parent has a folder
 
-      if ( temp->type() == btTreeItem::FOLDER )
+      if ( temp->type() == BtTreeItem::FOLDER )
       {
          // The folder name matches the part we are looking at
          if ( current.compare(temp->getFolder()->name()) == 0 )
@@ -711,10 +711,10 @@ QModelIndex btTreeModel::findFolder( QString name, btTreeItem* parent, bool crea
 
 }
 
-void btTreeModel::loadTreeModel(QString propName)
+void BtTreeModel::loadTreeModel(QString propName)
 {
    int i,j;
-   btTreeItem* temp;
+   BtTreeItem* temp;
 
    bool loadAll = (propName == "");
   
@@ -722,7 +722,7 @@ void btTreeModel::loadTreeModel(QString propName)
         (loadAll || propName == "recipes" ) )
    {  
       QModelIndex ndxLocal;
-      btTreeItem* local = rootItem->child(0);
+      BtTreeItem* local = rootItem->child(0);
       QList<Recipe*> recipes = Database::instance().recipes();
 
 
@@ -742,7 +742,7 @@ void btTreeModel::loadTreeModel(QString propName)
             ndxLocal = createIndex(i,0,local);
          }
 
-         insertRow(i,ndxLocal,rec,btTreeItem::RECIPE);
+         insertRow(i,ndxLocal,rec,BtTreeItem::RECIPE);
          temp = local->child(i);
 
          // If we have brewnotes, set them up here.
@@ -750,7 +750,7 @@ void btTreeModel::loadTreeModel(QString propName)
          j = 0;
          foreach( BrewNote* note, notes )
          {
-            insertRow(j, createIndex(i,0,temp), note, btTreeItem::BREWNOTE);
+            insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE);
             observeBrewNote(note);
             ++j;
          }
@@ -762,7 +762,7 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & EQUIPMASK) &&
       (loadAll || propName == "equipments") )
    {
-      btTreeItem* local = rootItem->child(0);
+      BtTreeItem* local = rootItem->child(0);
       QModelIndex ndxLocal = createIndex(0,0,local);
       QList<Equipment*> equipments = Database::instance().equipments();
       
@@ -778,7 +778,7 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & FERMENTMASK) &&
       (loadAll || propName == "fermentables") )
    {
-      btTreeItem* local = rootItem->child(0);
+      BtTreeItem* local = rootItem->child(0);
       QModelIndex ndxLocal = createIndex(0,0,local);
       QList<Fermentable*> ferms = Database::instance().fermentables();
 
@@ -794,7 +794,7 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & HOPMASK) &&
       (loadAll || propName == "hops") )
    {
-      btTreeItem* local = rootItem->child(0);
+      BtTreeItem* local = rootItem->child(0);
       QModelIndex ndxLocal = createIndex(0,0,local);
       QList<Hop*> hops = Database::instance().hops();
 
@@ -810,7 +810,7 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & MISCMASK) &&
       (loadAll || propName == "miscs") )
    {
-      btTreeItem* local = rootItem->child(0);
+      BtTreeItem* local = rootItem->child(0);
       QModelIndex ndxLocal = createIndex(0,0,local);
       QList<Misc*> miscs = Database::instance().miscs();
 
@@ -826,7 +826,7 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & YEASTMASK) &&
       (loadAll || propName == "yeasts") )
    {
-      btTreeItem* local = rootItem->child(0);
+      BtTreeItem* local = rootItem->child(0);
       QModelIndex ndxLocal = createIndex(0,0,local);
       QList<Yeast*> yeasts = Database::instance().yeasts();
 
@@ -842,7 +842,7 @@ void btTreeModel::loadTreeModel(QString propName)
    if ( (treeMask & STYLEMASK) &&
       (loadAll || propName == "styles") )
    {
-      btTreeItem* local = rootItem->child(0);
+      BtTreeItem* local = rootItem->child(0);
       QModelIndex ndxLocal = createIndex(0,0,local);
       QList<Style*> styles = Database::instance().styles();
 
@@ -855,7 +855,7 @@ void btTreeModel::loadTreeModel(QString propName)
    }
 }
 
-void btTreeModel::unloadTreeModel(QString propName)
+void BtTreeModel::unloadTreeModel(QString propName)
 {
    int breadth;
    QModelIndex parent;
@@ -865,7 +865,7 @@ void btTreeModel::unloadTreeModel(QString propName)
    if ( (treeMask & RECIPEMASK) &&
         (unloadAll || propName == "recipes"))
    {
-      parent = createIndex(btTreeItem::RECIPE,0,rootItem->child(0));
+      parent = createIndex(BtTreeItem::RECIPE,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
@@ -873,7 +873,7 @@ void btTreeModel::unloadTreeModel(QString propName)
    if ((treeMask & EQUIPMASK) &&
       (unloadAll || propName == "equipments"))
    {
-      parent = createIndex(btTreeItem::EQUIPMENT,0,rootItem->child(0));
+      parent = createIndex(BtTreeItem::EQUIPMENT,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
@@ -881,7 +881,7 @@ void btTreeModel::unloadTreeModel(QString propName)
    if ((treeMask & FERMENTMASK) &&
       (unloadAll || propName == "fermentables"))
    {
-      parent = createIndex(btTreeItem::FERMENTABLE,0,rootItem->child(0));
+      parent = createIndex(BtTreeItem::FERMENTABLE,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
@@ -889,162 +889,162 @@ void btTreeModel::unloadTreeModel(QString propName)
    if ((treeMask & HOPMASK) &&
       (unloadAll || propName == "hops"))
    {
-      parent = createIndex(btTreeItem::HOP,0,rootItem->child(0));
+      parent = createIndex(BtTreeItem::HOP,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
    if ((treeMask & MISCMASK) &&
       (unloadAll || propName == "miscs"))
    {
-      parent = createIndex(btTreeItem::MISC,0,rootItem->child(0));
+      parent = createIndex(BtTreeItem::MISC,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
    if ((treeMask & YEASTMASK) &&
       (unloadAll || propName == "yeasts"))
    {
-      parent = createIndex(btTreeItem::YEAST,0,rootItem->child(0));
+      parent = createIndex(BtTreeItem::YEAST,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
    if ((treeMask & STYLEMASK) &&
       (unloadAll || propName == "styles"))
    {
-      parent = createIndex(btTreeItem::STYLE,0,rootItem->child(0));
+      parent = createIndex(BtTreeItem::STYLE,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
 }
 
-Recipe* btTreeModel::getRecipe(const QModelIndex &index) const
+Recipe* BtTreeModel::getRecipe(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getRecipe();
 }
 
-Equipment* btTreeModel::getEquipment(const QModelIndex &index) const
+Equipment* BtTreeModel::getEquipment(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getEquipment();
 }
 
-Fermentable* btTreeModel::getFermentable(const QModelIndex &index) const
+Fermentable* BtTreeModel::getFermentable(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getFermentable();
 }
 
-Hop* btTreeModel::getHop(const QModelIndex &index) const
+Hop* BtTreeModel::getHop(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getHop();
 }
 
-Misc* btTreeModel::getMisc(const QModelIndex &index) const
+Misc* BtTreeModel::getMisc(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getMisc();
 }
 
-Yeast* btTreeModel::getYeast(const QModelIndex &index) const
+Yeast* BtTreeModel::getYeast(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getYeast();
 }
 
-Style* btTreeModel::getStyle(const QModelIndex &index) const
+Style* BtTreeModel::getStyle(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getStyle();
 }
 
-BrewNote* btTreeModel::getBrewNote(const QModelIndex &index) const
+BrewNote* BtTreeModel::getBrewNote(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getBrewNote();
 }
 
-BeerXMLElement* btTreeModel::getThing(const QModelIndex &index) const
+BeerXMLElement* BtTreeModel::getThing(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
 
    return item->getThing();
 }
 
-bool btTreeModel::isRecipe(const QModelIndex &index)
+bool BtTreeModel::isRecipe(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::RECIPE;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::RECIPE;
 }
 
-bool btTreeModel::isEquipment(const QModelIndex &index)
+bool BtTreeModel::isEquipment(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::EQUIPMENT;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::EQUIPMENT;
 }
 
-bool btTreeModel::isFermentable(const QModelIndex &index)
+bool BtTreeModel::isFermentable(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::FERMENTABLE;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::FERMENTABLE;
 }
 
-bool btTreeModel::isHop(const QModelIndex &index)
+bool BtTreeModel::isHop(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::HOP;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::HOP;
 }
 
-bool btTreeModel::isMisc(const QModelIndex &index)
+bool BtTreeModel::isMisc(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::MISC;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::MISC;
 }
 
-bool btTreeModel::isYeast(const QModelIndex &index)
+bool BtTreeModel::isYeast(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::YEAST;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::YEAST;
 }
 
-bool btTreeModel::isStyle(const QModelIndex &index)
+bool BtTreeModel::isStyle(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::STYLE;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::STYLE;
 }
 
-bool btTreeModel::isBrewNote(const QModelIndex &index)
+bool BtTreeModel::isBrewNote(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::BREWNOTE;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::BREWNOTE;
 }
 
-bool btTreeModel::isFolder(const QModelIndex &index) const
+bool BtTreeModel::isFolder(const QModelIndex &index) const
 {
-   btTreeItem* item = getItem(index);
-   return item->type() == btTreeItem::FOLDER;
+   BtTreeItem* item = getItem(index);
+   return item->type() == BtTreeItem::FOLDER;
 }
 
-int btTreeModel::type(const QModelIndex &index)
+int BtTreeModel::type(const QModelIndex &index)
 {
-   btTreeItem* item = getItem(index);
+   BtTreeItem* item = getItem(index);
    return item->type();
 }
 
-int btTreeModel::getMask()
+int BtTreeModel::getMask()
 {
    return treeMask;
 }
 
-void btTreeModel::equipmentChanged()
+void BtTreeModel::equipmentChanged()
 {
    Equipment* d = qobject_cast<Equipment*>(sender());
    if( !d )
@@ -1058,7 +1058,7 @@ void btTreeModel::equipmentChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::fermentableChanged()
+void BtTreeModel::fermentableChanged()
 {
    Fermentable* d = qobject_cast<Fermentable*>(sender());
    if( !d )
@@ -1072,7 +1072,7 @@ void btTreeModel::fermentableChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::hopChanged()
+void BtTreeModel::hopChanged()
 {
    Hop* d = qobject_cast<Hop*>(sender());
    if( !d )
@@ -1086,7 +1086,7 @@ void btTreeModel::hopChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::miscChanged()
+void BtTreeModel::miscChanged()
 {
    Misc* d = qobject_cast<Misc*>(sender());
    if( !d )
@@ -1100,7 +1100,7 @@ void btTreeModel::miscChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::recipeChanged()
+void BtTreeModel::recipeChanged()
 {
    Recipe* d = qobject_cast<Recipe*>(sender());
    if( !d )
@@ -1114,7 +1114,7 @@ void btTreeModel::recipeChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::yeastChanged()
+void BtTreeModel::yeastChanged()
 {
    Yeast* d = qobject_cast<Yeast*>(sender());
    if( !d )
@@ -1128,7 +1128,7 @@ void btTreeModel::yeastChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::styleChanged()
+void BtTreeModel::styleChanged()
 {
    Style* d = qobject_cast<Style*>(sender());
    if( !d )
@@ -1142,7 +1142,7 @@ void btTreeModel::styleChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::brewNoteChanged()
+void BtTreeModel::brewNoteChanged()
 {
    BrewNote* d = qobject_cast<BrewNote*>(sender());
    if( !d )
@@ -1156,12 +1156,12 @@ void btTreeModel::brewNoteChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
-void btTreeModel::equipmentAdded(Equipment* victim)
+void BtTreeModel::equipmentAdded(Equipment* victim)
 {
    if ( ! victim->display() ) 
       return;
 
-   btTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = rootItem->child(0);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1173,7 +1173,7 @@ void btTreeModel::equipmentAdded(Equipment* victim)
    observeEquipment(victim);
 }
 
-void btTreeModel::equipmentRemoved(Equipment* victim)
+void BtTreeModel::equipmentRemoved(Equipment* victim)
 {
    QModelIndex index = findEquipment(victim);
    QModelIndex pIndex = parent(index);
@@ -1185,14 +1185,14 @@ void btTreeModel::equipmentRemoved(Equipment* victim)
    }
 }
 
-void btTreeModel::fermentableAdded(Fermentable* victim)
+void BtTreeModel::fermentableAdded(Fermentable* victim)
 {
    // This is an import edge case. Things are being added to the db that are
    // marked not display. Don't do anything if they are not display
    if ( ! victim->display() ) 
       return;
 
-   btTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = rootItem->child(0);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1204,7 +1204,7 @@ void btTreeModel::fermentableAdded(Fermentable* victim)
    observeFermentable(victim);
 }
 
-void btTreeModel::fermentableRemoved(Fermentable* victim)
+void BtTreeModel::fermentableRemoved(Fermentable* victim)
 {
    QModelIndex index = findFermentable(victim);
    QModelIndex pIndex = parent(index);
@@ -1213,12 +1213,12 @@ void btTreeModel::fermentableRemoved(Fermentable* victim)
    disconnect( victim, 0, this, 0 );
 }
 
-void btTreeModel::hopAdded(Hop* victim)
+void BtTreeModel::hopAdded(Hop* victim)
 {
    if ( ! victim->display() ) 
       return;
 
-   btTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = rootItem->child(0);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1230,7 +1230,7 @@ void btTreeModel::hopAdded(Hop* victim)
    observeHop(victim);
 }
 
-void btTreeModel::hopRemoved(Hop* victim)
+void BtTreeModel::hopRemoved(Hop* victim)
 {
    QModelIndex index = findHop(victim);
    QModelIndex pIndex = parent(index);
@@ -1239,12 +1239,12 @@ void btTreeModel::hopRemoved(Hop* victim)
    disconnect( victim, 0, this, 0 );
 }
 
-void btTreeModel::miscAdded(Misc* victim)
+void BtTreeModel::miscAdded(Misc* victim)
 {
    if ( ! victim->display() ) 
       return;
 
-   btTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = rootItem->child(0);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1256,7 +1256,7 @@ void btTreeModel::miscAdded(Misc* victim)
    observeMisc(victim);
 }
 
-void btTreeModel::miscRemoved(Misc* victim)
+void BtTreeModel::miscRemoved(Misc* victim)
 {
    QModelIndex index = findMisc(victim);
    QModelIndex pIndex = parent(index);
@@ -1266,12 +1266,12 @@ void btTreeModel::miscRemoved(Misc* victim)
 }
 
 // I can no longer assume the parent is at 0,0. 
-void btTreeModel::recipeAdded(Recipe* victim)
+void BtTreeModel::recipeAdded(Recipe* victim)
 {
    if ( ! victim->display() ) 
       return;
 
-   btTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = rootItem->child(0);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1283,7 +1283,7 @@ void btTreeModel::recipeAdded(Recipe* victim)
    observeRecipe(victim);
 }
 
-void btTreeModel::recipeRemoved(Recipe* victim)
+void BtTreeModel::recipeRemoved(Recipe* victim)
 {
    QModelIndex index = findRecipe(victim);
    QModelIndex pIndex = parent(index);
@@ -1292,12 +1292,12 @@ void btTreeModel::recipeRemoved(Recipe* victim)
    disconnect( victim, 0, this, 0 );
 }
 
-void btTreeModel::yeastAdded(Yeast* victim)
+void BtTreeModel::yeastAdded(Yeast* victim)
 {
    if ( ! victim->display() ) 
       return;
 
-   btTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = rootItem->child(0);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1309,7 +1309,7 @@ void btTreeModel::yeastAdded(Yeast* victim)
    observeYeast(victim);
 }
 
-void btTreeModel::yeastRemoved(Yeast* victim)
+void BtTreeModel::yeastRemoved(Yeast* victim)
 {
    QModelIndex index = findYeast(victim);
    QModelIndex pIndex = parent(index);
@@ -1318,12 +1318,12 @@ void btTreeModel::yeastRemoved(Yeast* victim)
    disconnect( victim, 0, this, 0 );
 }
 
-void btTreeModel::styleAdded(Style* victim)
+void BtTreeModel::styleAdded(Style* victim)
 {
    if ( ! victim->display() ) 
       return;
 
-   btTreeItem* local = rootItem->child(0);
+   BtTreeItem* local = rootItem->child(0);
    QModelIndex parent = createIndex(0,0,local);
 
    if ( ! parent.isValid() )
@@ -1335,7 +1335,7 @@ void btTreeModel::styleAdded(Style* victim)
    observeStyle(victim);
 }
 
-void btTreeModel::styleRemoved(Style* victim)
+void BtTreeModel::styleRemoved(Style* victim)
 {
    QModelIndex index = findStyle(victim);
    QModelIndex pIndex = parent(index);
@@ -1346,30 +1346,30 @@ void btTreeModel::styleRemoved(Style* victim)
 
 // BrewNotes get no respect, but they get signals. They also get mighty
 // confusing
-void btTreeModel::brewNoteAdded(BrewNote* victim)
+void BtTreeModel::brewNoteAdded(BrewNote* victim)
 {
    // Get the brewnote's parent
    Recipe *parent = Database::instance().getParentRecipe(victim);
    // Find that recipe in the list
    QModelIndex pInd = findRecipe(parent);
    // and get the associated treeItem
-   btTreeItem* pItem = getItem(pInd);
+   BtTreeItem* pItem = getItem(pInd);
 
    int breadth = pItem->childCount();
-   insertRow(breadth,pInd,victim,btTreeItem::BREWNOTE);
+   insertRow(breadth,pInd,victim,BtTreeItem::BREWNOTE);
    observeBrewNote(victim);
 }
 
 // deleting them is worse. Unfortunately, the blasted brewnote is deleted by
 // the time we get this signal. So we have to rebuild the entire list.
-void btTreeModel::brewNoteRemoved(BrewNote* victim)
+void BtTreeModel::brewNoteRemoved(BrewNote* victim)
 {
    // Get the brewnote's parent recipe
    Recipe *parent = Database::instance().getParentRecipe(victim);
    // Find that recipe's index in the tree
    QModelIndex parentInd = findRecipe(parent);
    // and get the treeItem
-   btTreeItem* parentItem = getItem(parentInd);
+   BtTreeItem* parentItem = getItem(parentInd);
 
    disconnect( victim, 0, this, 0 );
    
@@ -1379,45 +1379,45 @@ void btTreeModel::brewNoteRemoved(BrewNote* victim)
    
    QList<BrewNote*> brewNotes = parent->brewNotes();
    for (int j=0; j < brewNotes.size(); ++j)
-      insertRow(j,parentInd,brewNotes[j],btTreeItem::BREWNOTE);
+      insertRow(j,parentInd,brewNotes[j],BtTreeItem::BREWNOTE);
 }
 
-void btTreeModel::observeEquipment(Equipment* d)
+void BtTreeModel::observeEquipment(Equipment* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(equipmentChanged()) );
 }
 
-void btTreeModel::observeFermentable(Fermentable* d)
+void BtTreeModel::observeFermentable(Fermentable* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(fermentableChanged()) );
 }
 
-void btTreeModel::observeHop(Hop* d)
+void BtTreeModel::observeHop(Hop* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(hopChanged()) );
 }
 
-void btTreeModel::observeMisc(Misc* d)
+void BtTreeModel::observeMisc(Misc* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(miscChanged()) );
 }
 
-void btTreeModel::observeRecipe(Recipe* d)
+void BtTreeModel::observeRecipe(Recipe* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(recipeChanged()) );
 }
 
-void btTreeModel::observeYeast(Yeast* d)
+void BtTreeModel::observeYeast(Yeast* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(yeastChanged()) );
 }
 
-void btTreeModel::observeStyle(Style* d)
+void BtTreeModel::observeStyle(Style* d)
 {
    connect( d, SIGNAL(changedName(QString)), this, SLOT(styleChanged()) );
 }
 
-void btTreeModel::observeBrewNote(BrewNote* d)
+void BtTreeModel::observeBrewNote(BrewNote* d)
 {
    connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(brewNoteChanged()) );
 }  

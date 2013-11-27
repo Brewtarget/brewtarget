@@ -1,5 +1,5 @@
 /*
- * btTreeItem.cpp is part of Brewtarget and was written by Mik
+ * BtTreeItem.cpp is part of Brewtarget and was written by Mik
  * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QVector>
 
-#include "btTreeItem.h"
+#include "BtTreeItem.h"
 #include "brewnote.h"
 #include "brewtarget.h"
 #include "equipment.h"
@@ -36,9 +36,9 @@
 #include "misc.h"
 #include "yeast.h"
 #include "style.h"
-#include "btFolder.h"
+#include "BtFolder.h"
 
-bool operator==(btTreeItem& lhs, btTreeItem& rhs)
+bool operator==(BtTreeItem& lhs, BtTreeItem& rhs)
 {
    // Things of different types are not equal
    if ( lhs._type != rhs._type )
@@ -47,18 +47,18 @@ bool operator==(btTreeItem& lhs, btTreeItem& rhs)
    return lhs.data(lhs._type,0) == rhs.data(rhs._type,0);
 }
 
-btTreeItem::btTreeItem(int _type, btTreeItem *parent)
+BtTreeItem::BtTreeItem(int _type, BtTreeItem *parent)
    : parentItem(parent), thing(0)
 {
    setType(_type);
 }
 
-btTreeItem::~btTreeItem()
+BtTreeItem::~BtTreeItem()
 {
    qDeleteAll(childItems);
 }
 
-btTreeItem* btTreeItem::child(int number)
+BtTreeItem* BtTreeItem::child(int number)
 {
    if ( number < childItems.count() )
       return childItems.value(number);
@@ -66,17 +66,17 @@ btTreeItem* btTreeItem::child(int number)
    return 0;
 }
 
-btTreeItem* btTreeItem::parent()
+BtTreeItem* BtTreeItem::parent()
 {
    return parentItem;
 }
 
-int btTreeItem::type()
+int BtTreeItem::type()
 {
     return _type;
 }
 
-int btTreeItem::childCount() const
+int BtTreeItem::childCount() const
 {
    if ( childItems.isEmpty() )
       return 0;
@@ -84,7 +84,7 @@ int btTreeItem::childCount() const
    return childItems.count();
 }
 
-int btTreeItem::columnCount(int _type) const
+int BtTreeItem::columnCount(int _type) const
 {
     switch(_type)
     {
@@ -107,13 +107,13 @@ int btTreeItem::columnCount(int _type) const
         case FOLDER:
             return FOLDERNUMCOLS;
         default:
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::columnCount Bad column: %1").arg(_type));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::columnCount Bad column: %1").arg(_type));
             return 0;
     }
             
 }
 
-QVariant btTreeItem::data(int _type, int column)
+QVariant BtTreeItem::data(int _type, int column)
 {
 
    switch(_type)
@@ -137,30 +137,30 @@ QVariant btTreeItem::data(int _type, int column)
       case FOLDER:
          return dataFolder(column);
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::data Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::data Bad column: %1").arg(column));
          return QVariant();
     }
 }
 
-int btTreeItem::childNumber() const
+int BtTreeItem::childNumber() const
 {
    if (parentItem)
-      return parentItem->childItems.indexOf(const_cast<btTreeItem*>(this));
+      return parentItem->childItems.indexOf(const_cast<BtTreeItem*>(this));
    return 0;
 }
 
-void btTreeItem::setData(int t, QObject* d)
+void BtTreeItem::setData(int t, QObject* d)
 {
    thing = d;
    _type  = t;
 }
 
-QVariant btTreeItem::getData(int column)
+QVariant BtTreeItem::getData(int column)
 {
    return data(type(),column);
 }
 
-bool btTreeItem::insertChildren(int position, int count, int _type)
+bool BtTreeItem::insertChildren(int position, int count, int _type)
 {
    int i;
    if ( position < 0  || position > childItems.size())
@@ -168,14 +168,14 @@ bool btTreeItem::insertChildren(int position, int count, int _type)
 
    for(i=0; i < count; ++i)
    {
-      btTreeItem *newItem = new btTreeItem(_type,this);
+      BtTreeItem *newItem = new BtTreeItem(_type,this);
       childItems.insert(position+i,newItem);
    }
 
    return true;
 }
 
-bool btTreeItem::removeChildren(int position, int count)
+bool BtTreeItem::removeChildren(int position, int count)
 {
    if ( position < 0 || position + count > childItems.count() )
       return false;
@@ -189,7 +189,7 @@ bool btTreeItem::removeChildren(int position, int count)
    return true;
 }
 
-QVariant btTreeItem::dataRecipe( int column ) 
+QVariant BtTreeItem::dataRecipe( int column ) 
 {
    Recipe* recipe = qobject_cast<Recipe*>(thing);
    switch(column)
@@ -209,12 +209,12 @@ QVariant btTreeItem::dataRecipe( int column )
             return QVariant(recipe->style()->name());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataRecipe Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataRecipe Bad column: %1").arg(column));
    }
    return QVariant();
 }
 
-QVariant btTreeItem::dataEquipment(int column) 
+QVariant BtTreeItem::dataEquipment(int column) 
 {
    Equipment* kit = qobject_cast<Equipment*>(thing);
    switch(column)
@@ -229,12 +229,12 @@ QVariant btTreeItem::dataEquipment(int column)
             return QVariant(kit->boilTime_min());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataEquipment Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataEquipment Bad column: %1").arg(column));
    }
    return QVariant();
 }
 
-QVariant btTreeItem::dataFermentable(int column)
+QVariant BtTreeItem::dataFermentable(int column)
 {
     Fermentable* ferm = qobject_cast<Fermentable*>(thing);
    switch(column)
@@ -253,12 +253,12 @@ QVariant btTreeItem::dataFermentable(int column)
             return QVariant(ferm->color_srm());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataFermentable Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataFermentable Bad column: %1").arg(column));
    }
    return QVariant();
 }
 
-QVariant btTreeItem::dataHop(int column)
+QVariant BtTreeItem::dataHop(int column)
 {
     Hop* hop = qobject_cast<Hop*>(thing);
    switch(column)
@@ -277,12 +277,12 @@ QVariant btTreeItem::dataHop(int column)
             return QVariant(hop->useStringTr());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataHop Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataHop Bad column: %1").arg(column));
    }
    return QVariant();
 }
 
-QVariant btTreeItem::dataMisc(int column)
+QVariant BtTreeItem::dataMisc(int column)
 {
     Misc* misc = qobject_cast<Misc*>(thing);
    switch(column)
@@ -301,12 +301,12 @@ QVariant btTreeItem::dataMisc(int column)
             return QVariant(misc->useStringTr());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataMisc Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataMisc Bad column: %1").arg(column));
    }
    return QVariant();
 }
 
-QVariant btTreeItem::dataYeast(int column)
+QVariant BtTreeItem::dataYeast(int column)
 {
    Yeast* yeast = qobject_cast<Yeast*>(thing);
    switch(column)
@@ -325,12 +325,12 @@ QVariant btTreeItem::dataYeast(int column)
             return QVariant(yeast->formStringTr());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataYeast Bad column: %1").arg(column));
+         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataYeast Bad column: %1").arg(column));
    }
    return QVariant();
 }
 
-QVariant btTreeItem::dataBrewNote(int column)
+QVariant BtTreeItem::dataBrewNote(int column)
 {
    if ( ! thing )
       return QVariant();
@@ -340,7 +340,7 @@ QVariant btTreeItem::dataBrewNote(int column)
    return bNote->brewDate_short();
 }
 
-QVariant btTreeItem::dataStyle(int column)
+QVariant BtTreeItem::dataStyle(int column)
 {
    Style* style = qobject_cast<Style*>(thing);
 
@@ -363,15 +363,15 @@ QVariant btTreeItem::dataStyle(int column)
          case STYLEGUIDECOL:
                return QVariant(style->styleGuide());
          default :
-            Brewtarget::log(Brewtarget::WARNING, QString("btTreeItem::dataStyle Bad column: %1").arg(column));
+            Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataStyle Bad column: %1").arg(column));
       }
    }
    return QVariant();
 }
 
-QVariant btTreeItem::dataFolder(int column)
+QVariant BtTreeItem::dataFolder(int column)
 {
-   btFolder* folder = qobject_cast<btFolder*>(thing);
+   BtFolder* folder = qobject_cast<BtFolder*>(thing);
 
 
    if ( ! folder && column == FOLDERNAMECOL )
@@ -385,12 +385,12 @@ QVariant btTreeItem::dataFolder(int column)
    return QVariant();
 }
 
-void btTreeItem::setType(int t)
+void BtTreeItem::setType(int t)
 {
     _type = t;
 }
 
-Recipe* btTreeItem::getRecipe()
+Recipe* BtTreeItem::getRecipe()
 {
     if ( _type == RECIPE && thing )
         return qobject_cast<Recipe*>(thing);
@@ -398,42 +398,42 @@ Recipe* btTreeItem::getRecipe()
     return 0;
 }
 
-Equipment* btTreeItem::getEquipment()
+Equipment* BtTreeItem::getEquipment()
 {
     if ( _type == EQUIPMENT )
        return qobject_cast<Equipment*>(thing);
     return 0;
 }
 
-Fermentable* btTreeItem::getFermentable()
+Fermentable* BtTreeItem::getFermentable()
 {
     if ( _type == FERMENTABLE )
        return qobject_cast<Fermentable*>(thing);
     return 0;
 }
 
-Hop* btTreeItem::getHop()
+Hop* BtTreeItem::getHop()
 {
     if ( _type == HOP ) 
        return qobject_cast<Hop*>(thing);
     return 0;
 }
 
-Misc* btTreeItem::getMisc()
+Misc* BtTreeItem::getMisc()
 {
     if ( _type == MISC ) 
        return qobject_cast<Misc*>(thing);
     return 0;
 }
 
-Yeast* btTreeItem::getYeast()
+Yeast* BtTreeItem::getYeast()
 {
     if ( _type == YEAST ) 
        return qobject_cast<Yeast*>(thing);
     return 0;
 }
 
-BrewNote* btTreeItem::getBrewNote()
+BrewNote* BtTreeItem::getBrewNote()
 {
     if ( _type == BREWNOTE && thing ) 
        return qobject_cast<BrewNote*>(thing);
@@ -441,7 +441,7 @@ BrewNote* btTreeItem::getBrewNote()
     return 0;
 }
 
-Style* btTreeItem::getStyle()
+Style* BtTreeItem::getStyle()
 {
     if ( _type == STYLE && thing ) 
        return qobject_cast<Style*>(thing);
@@ -449,15 +449,15 @@ Style* btTreeItem::getStyle()
     return 0;
 }
 
-btFolder* btTreeItem::getFolder()
+BtFolder* BtTreeItem::getFolder()
 {
     if ( _type == FOLDER && thing ) 
-       return qobject_cast<btFolder*>(thing);
+       return qobject_cast<BtFolder*>(thing);
 
     return 0;
 }
 
-BeerXMLElement* btTreeItem::getThing()
+BeerXMLElement* BtTreeItem::getThing()
 {
     if ( thing )
         return qobject_cast<BeerXMLElement*>(thing);

@@ -19,10 +19,10 @@
 
 #include "brewtarget.h"
 #include "BtTreeFilterProxyModel.h"
-#include "btTreeModel.h"
-#include "btTreeItem.h"
+#include "BtTreeModel.h"
+#include "BtTreeItem.h"
 
-BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject *parent,btTreeModel::TypeMasks mask ) 
+BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject *parent,BtTreeModel::TypeMasks mask ) 
 : QSortFilterProxyModel(parent),
    treeMask(mask)
 {
@@ -32,22 +32,22 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
                                          const QModelIndex &right) const
 {
 
-   btTreeModel* model = qobject_cast<btTreeModel*>(sourceModel());
+   BtTreeModel* model = qobject_cast<BtTreeModel*>(sourceModel());
    switch( treeMask )
    {
-      case btTreeModel::RECIPEMASK:
+      case BtTreeModel::RECIPEMASK:
         return lessThanRecipe(model,left, right);
-      case btTreeModel::EQUIPMASK:
+      case BtTreeModel::EQUIPMASK:
         return lessThanEquip(model,left, right);
-      case btTreeModel::FERMENTMASK:
+      case BtTreeModel::FERMENTMASK:
         return lessThanFerment(model,left, right);
-      case btTreeModel::HOPMASK:
+      case BtTreeModel::HOPMASK:
         return lessThanHop(model,left, right);
-      case btTreeModel::MISCMASK:
+      case BtTreeModel::MISCMASK:
         return lessThanMisc(model,left, right);
-      case btTreeModel::YEASTMASK:
+      case BtTreeModel::YEASTMASK:
         return lessThanYeast(model,left, right);
-      case btTreeModel::STYLEMASK:
+      case BtTreeModel::STYLEMASK:
         return lessThanStyle(model,left, right);
       default:
         return lessThanRecipe(model,left, right);
@@ -55,16 +55,16 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
     }
 }
 
-bool BtTreeFilterProxyModel::lessThanRecipe(btTreeModel* model, const QModelIndex &left, const QModelIndex &right) const
+bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelIndex &left, const QModelIndex &right) const
 {
    // This is a little awkward.
-   if ( model->type(left) == btTreeItem::BREWNOTE ||
-        model->type(right) == btTreeItem::BREWNOTE )
+   if ( model->type(left) == BtTreeItem::BREWNOTE ||
+        model->type(right) == BtTreeItem::BREWNOTE )
       return false;
 
    // This is a little more awkward.
-   if ( model->type(left) == btTreeItem::FOLDER ||
-        model->type(right) == btTreeItem::FOLDER )
+   if ( model->type(left) == BtTreeItem::FOLDER ||
+        model->type(right) == BtTreeItem::FOLDER )
       return true;
 
    Recipe* leftRecipe  = model->getRecipe(left);
@@ -72,11 +72,11 @@ bool BtTreeFilterProxyModel::lessThanRecipe(btTreeModel* model, const QModelInde
 
    switch(left.column())
    {
-      case btTreeItem::RECIPENAMECOL:
+      case BtTreeItem::RECIPENAMECOL:
          return leftRecipe->name() < rightRecipe->name();
-      case btTreeItem::RECIPEBREWDATECOL:
+      case BtTreeItem::RECIPEBREWDATECOL:
          return leftRecipe->date() < rightRecipe->date();
-      case btTreeItem::RECIPESTYLECOL:
+      case BtTreeItem::RECIPESTYLECOL:
          return leftRecipe->style()->name() < rightRecipe->style()->name();
    }
    // Default will be to just do a name sort. This doesn't likely make sense,
@@ -84,7 +84,7 @@ bool BtTreeFilterProxyModel::lessThanRecipe(btTreeModel* model, const QModelInde
    return leftRecipe->name() < rightRecipe->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanEquip(btTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
    Equipment* leftEquip = model->getEquipment(left);
@@ -93,15 +93,15 @@ bool BtTreeFilterProxyModel::lessThanEquip(btTreeModel* model, const QModelIndex
 
    switch(left.column())
    {
-      case btTreeItem::EQUIPMENTNAMECOL:
+      case BtTreeItem::EQUIPMENTNAMECOL:
          return leftEquip->name() < rightEquip->name();
-      case btTreeItem::EQUIPMENTBOILTIMECOL:
+      case BtTreeItem::EQUIPMENTBOILTIMECOL:
          return leftEquip->boilTime_min() < rightEquip->boilTime_min();
    }
    return leftEquip->name() < rightEquip->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanFerment(btTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
    Fermentable* leftFerment = model->getFermentable(left);
@@ -109,17 +109,17 @@ bool BtTreeFilterProxyModel::lessThanFerment(btTreeModel* model, const QModelInd
 
    switch(left.column())
    {
-      case btTreeItem::FERMENTABLENAMECOL:
+      case BtTreeItem::FERMENTABLENAMECOL:
          return leftFerment->name() < rightFerment->name();
-      case btTreeItem::FERMENTABLETYPECOL:
+      case BtTreeItem::FERMENTABLETYPECOL:
          return leftFerment->type() < rightFerment->type();
-      case btTreeItem::FERMENTABLECOLORCOL:
+      case BtTreeItem::FERMENTABLECOLORCOL:
          return leftFerment->color_srm() < rightFerment->color_srm();
    }
    return leftFerment->name() < rightFerment->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanHop(btTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
    Hop* leftHop = model->getHop(left);
@@ -128,17 +128,17 @@ bool BtTreeFilterProxyModel::lessThanHop(btTreeModel* model, const QModelIndex &
 
    switch(left.column())
    {
-      case btTreeItem::HOPNAMECOL:
+      case BtTreeItem::HOPNAMECOL:
          return leftHop->name() < rightHop->name();
-      case btTreeItem::HOPFORMCOL:
+      case BtTreeItem::HOPFORMCOL:
          return leftHop->form() < rightHop->form();
-      case btTreeItem::HOPUSECOL:
+      case BtTreeItem::HOPUSECOL:
          return leftHop->use() < rightHop->use();
    }
    return leftHop->name() < rightHop->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanMisc(btTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
    Misc* leftMisc = model->getMisc(left);
@@ -147,17 +147,17 @@ bool BtTreeFilterProxyModel::lessThanMisc(btTreeModel* model, const QModelIndex 
 
    switch(left.column())
    {
-      case btTreeItem::MISCNAMECOL:
+      case BtTreeItem::MISCNAMECOL:
          return leftMisc->name() < rightMisc->name();
-      case btTreeItem::MISCTYPECOL:
+      case BtTreeItem::MISCTYPECOL:
          return leftMisc->type() < rightMisc->type();
-      case btTreeItem::MISCUSECOL:
+      case BtTreeItem::MISCUSECOL:
          return leftMisc->use() < rightMisc->use();
    }
    return leftMisc->name() < rightMisc->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanYeast(btTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
    Yeast* leftYeast = model->getYeast(left);
@@ -166,17 +166,17 @@ bool BtTreeFilterProxyModel::lessThanYeast(btTreeModel* model, const QModelIndex
 
    switch(left.column())
    {
-      case btTreeItem::YEASTNAMECOL:
+      case BtTreeItem::YEASTNAMECOL:
          return leftYeast->name() < rightYeast->name();
-      case btTreeItem::YEASTTYPECOL:
+      case BtTreeItem::YEASTTYPECOL:
          return leftYeast->type() < rightYeast->type();
-      case btTreeItem::YEASTFORMCOL:
+      case BtTreeItem::YEASTFORMCOL:
          return leftYeast->form() < rightYeast->form();
    }
    return leftYeast->name() < rightYeast->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanStyle(btTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanStyle(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
    Style* leftStyle = model->getStyle(left);
@@ -185,15 +185,15 @@ bool BtTreeFilterProxyModel::lessThanStyle(btTreeModel* model, const QModelIndex
 
    switch(left.column())
    {
-      case btTreeItem::STYLENAMECOL:
+      case BtTreeItem::STYLENAMECOL:
          return leftStyle->name() < rightStyle->name();
-      case btTreeItem::STYLECATEGORYCOL:
+      case BtTreeItem::STYLECATEGORYCOL:
          return leftStyle->category() < rightStyle->category();
-      case btTreeItem::STYLENUMBERCOL:
+      case BtTreeItem::STYLENUMBERCOL:
          return leftStyle->categoryNumber() < rightStyle->categoryNumber();
-      case btTreeItem::STYLELETTERCOL:
+      case BtTreeItem::STYLELETTERCOL:
          return leftStyle->styleLetter() < rightStyle->styleLetter();
-      case btTreeItem::STYLEGUIDECOL:
+      case BtTreeItem::STYLEGUIDECOL:
          return leftStyle->styleGuide() < rightStyle->styleGuide();
    }
    return leftStyle->name() < rightStyle->name();
@@ -204,7 +204,7 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    if ( !source_parent.isValid() )
       return true;
 
-   const btTreeModel* model = qobject_cast<const btTreeModel*>(source_parent.model());
+   const BtTreeModel* model = qobject_cast<const BtTreeModel*>(source_parent.model());
 
    QModelIndex child = model->index(source_row, 0, source_parent);
 

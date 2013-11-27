@@ -1,5 +1,5 @@
 /*
- * btFolder.cpp is part of Brewtarget and was written by Mik Firestone
+ * BtFolder.cpp is part of Brewtarget and was written by Mik Firestone
  * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -20,28 +20,28 @@
 #include <QString>
 #include <QRegExp>  // Yeah, you knew that had to happen
 
-#include "btFolder.h"
+#include "BtFolder.h"
 #include "brewtarget.h"
 
-btFolder::btFolder() : QObject()
+BtFolder::BtFolder() : QObject()
 {
-   setObjectName("btFolder");
+   setObjectName("BtFolder");
 }
 
-btFolder::btFolder( btFolder const& other ) : QObject()
+BtFolder::BtFolder( BtFolder const& other ) : QObject()
 {
-   setObjectName("btFolder");
+   setObjectName("BtFolder");
    _name = other.name();
    _path = other.path();
    _fullPath = other.fullPath();
 }
 
-QString btFolder::name() const { return _name; }
-QString btFolder::path() const { return _path; }
-QString btFolder::fullPath() const { return _fullPath; }
+QString BtFolder::name() const { return _name; }
+QString BtFolder::path() const { return _path; }
+QString BtFolder::fullPath() const { return _fullPath; }
 
 // changing the name changes the fullPath
-void btFolder::setName(QString var) 
+void BtFolder::setName(QString var) 
 { 
    _name = var; 
    _fullPath = _path.append("/").append(_name);
@@ -49,14 +49,14 @@ void btFolder::setName(QString var)
 }
 
 // changing the path changes the fullPath
-void btFolder::setPath(QString var) 
+void BtFolder::setPath(QString var) 
 { 
    _path = var; 
    _fullPath = _path.append("/").append(_name);
 }
 
 // changing the full path necessarily changes the name and the path
-void btFolder::setfullPath(QString var) 
+void BtFolder::setfullPath(QString var) 
 {
    QStringList pieces = var.split("/");
 
@@ -70,7 +70,7 @@ void btFolder::setfullPath(QString var)
    }
 }
 
-bool btFolder::isFolder(QString var ) 
+bool BtFolder::isFolder(QString var ) 
 {
    bool ret = false;
 

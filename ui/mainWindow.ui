@@ -2561,32 +2561,32 @@
   <customwidget>
    <class>RecipeTreeView</class>
    <extends>QTreeView</extends>
-   <header>btTreeView.h</header>
+   <header>BtTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>EquipmentTreeView</class>
    <extends>QTreeView</extends>
-   <header>btTreeView.h</header>
+   <header>BtTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>FermentableTreeView</class>
    <extends>QTreeView</extends>
-   <header>btTreeView.h</header>
+   <header>BtTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>HopTreeView</class>
    <extends>QTreeView</extends>
-   <header>btTreeView.h</header>
+   <header>BtTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>MiscTreeView</class>
    <extends>QTreeView</extends>
-   <header>btTreeView.h</header>
+   <header>BtTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>YeastTreeView</class>
    <extends>QTreeView</extends>
-   <header>btTreeView.h</header>
+   <header>BtTreeView.h</header>
   </customwidget>
   <customwidget>
    <class>BtColorLabel</class>
@@ -2606,7 +2606,7 @@
   <customwidget>
    <class>StyleTreeView</class>
    <extends>QTreeView</extends>
-   <header location="global">btTreeView.h</header>
+   <header location="global">BtTreeView.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

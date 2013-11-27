@@ -1,5 +1,5 @@
 /*
- * btTreeModel.h is part of Brewtarget and was written by Mik
+ * BtTreeModel.h is part of Brewtarget and was written by Mik
  * Firestone (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -20,7 +20,7 @@
 #ifndef BTTREEMODEL_H_
 #define BTTREEMODEL_H_
 
-class btTreeModel;
+class BtTreeModel;
 
 #include <QModelIndex>
 #include <QVariant>
@@ -34,9 +34,9 @@ class btTreeModel;
 // Forward declarations
 class BeerXMLElement;
 class Recipe;
-class btFolder;
-class btTreeItem;
-class btTreeView;
+class BtFolder;
+class BtTreeItem;
+class BtTreeView;
 class BrewNote;
 class Equipment;
 class Fermentable;
@@ -46,7 +46,7 @@ class Yeast;
 class Style;
 
 /*!
- * \class btTreeModel
+ * \class BtTreeModel
  * \author Mik Firestone
  *
  * \brief Model for a tree of Recipes, Equipments, Fermentables, Hops, Miscs and Yeasts
@@ -55,7 +55,7 @@ class Style;
  * QAbstractItemModel, so it has to implement some of the virtual methods
  * required.
  */
-class btTreeModel : public QAbstractItemModel
+class BtTreeModel : public QAbstractItemModel
 {
    Q_OBJECT
 
@@ -83,8 +83,8 @@ public:
       FOLDERMASK        = 256
    };
    
-   btTreeModel(btTreeView *parent = 0, TypeMasks type = RECIPEMASK);
-   virtual ~btTreeModel();
+   BtTreeModel(BtTreeView *parent = 0, TypeMasks type = RECIPEMASK);
+   virtual ~BtTreeModel();
    
    //! \brief Reimplemented from QAbstractItemModel
    virtual QVariant data(const QModelIndex &index, int role) const;
@@ -131,7 +131,7 @@ public:
 
    //! \brief Gets the type of item at \c index
    int type(const QModelIndex &index);
-   //! \brief Return the type mask for this tree. \sa btTreeModel::TypeMasks
+   //! \brief Return the type mask for this tree. \sa BtTreeModel::TypeMasks
    int getMask();
 
    //! \brief Get Recipe at \c index.
@@ -151,12 +151,12 @@ public:
    //! \brief Get Style at \c index.
    Style* getStyle(const QModelIndex &index) const;
    //! \brief Get folder at \c index
-   btFolder* getFolder(const QModelIndex &index) const;
+   BtFolder* getFolder(const QModelIndex &index) const;
    //! \brief Get BeerXMLElement at \c index.
    BeerXMLElement* getThing(const QModelIndex &index) const;
 
    //! \brief Get index of \c rec.
-   QModelIndex findRecipe(Recipe* rec, btTreeItem* parent = NULL);
+   QModelIndex findRecipe(Recipe* rec, BtTreeItem* parent = NULL);
    //! \brief Get index of \c kit.
    QModelIndex findEquipment(Equipment* kit);
    //! \brief Get index of \c ferm.
@@ -176,8 +176,8 @@ public:
    // a) recurse the tree to see if a folder exists
    // b) return the proper index to the folder if it does
    // c) optionally create the tree as it goes.
-   // What I don't know is do I send it a QString for the name, or a btFolder?
-   QModelIndex findFolder(QString folder, btTreeItem* parent=NULL, bool create=false, QString pPath = "" );
+   // What I don't know is do I send it a QString for the name, or a BtFolder?
+   QModelIndex findFolder(QString folder, BtTreeItem* parent=NULL, bool create=false, QString pPath = "" );
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal
@@ -244,8 +244,8 @@ private slots:
    //void folderRemoved(QObject* victim);
 
 private:
-   //! \brief returns the btTreeItem at \c index
-   btTreeItem *getItem(const QModelIndex &index) const;
+   //! \brief returns the BtTreeItem at \c index
+   BtTreeItem *getItem(const QModelIndex &index) const;
    //! \brief Loads the data. Empty \c propname means load all trees.
    void loadTreeModel(QString propName = "");
    //! \brief Unloads the data. Empty \c propname means unload all trees.
@@ -287,10 +287,10 @@ private:
    QVariant getFolderHeader(int section) const;
   
    //! \brief creates a folder tree. It's mostly a helper function.
-   QModelIndex createFolderTree( QStringList dirs, btTreeItem* parent, QString pPath);
+   QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);
 
-   btTreeItem* rootItem;
-   btTreeView *parentTree;
+   BtTreeItem* rootItem;
+   BtTreeView *parentTree;
    TypeMasks treeMask;
 
 };

@@ -1,5 +1,5 @@
 /*
- * btFolder.h is part of Brewtarget and was written by Mik Firestone
+ * BtFolder.h is part of Brewtarget and was written by Mik Firestone
  * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -20,7 +20,7 @@
 #ifndef BTFOLDER_H
 #define BTFOLDER_H
 
-class btFolder;
+class BtFolder;
 
 #include <QSharedPointer>
 #include <QList>
@@ -32,7 +32,7 @@ class btFolder;
 
 
 /*!
- * \class btFolder
+ * \class BtFolder
  * \author Mik Firestone
  *
  * \brief Item needed to implement folders in the trees
@@ -48,17 +48,17 @@ class btFolder;
  * trees.
  *
  */
-class btFolder : public QObject
+class BtFolder : public QObject
 {
 
    Q_OBJECT
 
 public:
 
-   btFolder();
-   btFolder(btFolder const& other);
+   BtFolder();
+   BtFolder(BtFolder const& other);
 
-   virtual ~btFolder() {}
+   virtual ~BtFolder() {}
 
    // Getters
    QString name() const;

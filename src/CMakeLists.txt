@@ -60,13 +60,13 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/brewnote.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
-    ${SRCDIR}/btTreeItem.cpp
-    ${SRCDIR}/btTreeModel.cpp
-    ${SRCDIR}/btTreeView.cpp
+    ${SRCDIR}/BtTreeItem.cpp
+    ${SRCDIR}/BtTreeModel.cpp
+    ${SRCDIR}/BtTreeView.cpp
     ${SRCDIR}/BtTreeFilterProxyModel.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/BtDatePopup.cpp
-    ${SRCDIR}/btFolder.cpp
+    ${SRCDIR}/BtFolder.cpp
     ${SRCDIR}/BtLabel.cpp
     ${SRCDIR}/BtTextEdit.cpp
     ${SRCDIR}/brewtarget.cpp
@@ -213,12 +213,12 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/brewnote.h
     ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/brewtarget.h
-    ${SRCDIR}/btTreeModel.h
-    ${SRCDIR}/btTreeView.h
+    ${SRCDIR}/BtTreeModel.h
+    ${SRCDIR}/BtTreeView.h
     ${SRCDIR}/BtTreeFilterProxyModel.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtDatePopup.h
-    ${SRCDIR}/btFolder.h
+    ${SRCDIR}/BtFolder.h
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtTextEdit.h
     ${SRCDIR}/BtSplashScreen.h

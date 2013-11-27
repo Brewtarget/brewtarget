@@ -1,5 +1,5 @@
 /*
- * btTreeItem.h is part of Brewtarget and was written by Mik Firestone
+ * BtTreeItem.h is part of Brewtarget and was written by Mik Firestone
  * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -20,7 +20,7 @@
 #ifndef BTTTREEITEM_H_
 #define BTTTREEITEM_H_
 
-class btTreeItem;
+class BtTreeItem;
 
 #include <QSharedPointer>
 #include <QList>
@@ -41,10 +41,10 @@ class Recipe;
 class Misc;
 class Yeast;
 class Style;
-class btFolder;
+class BtFolder;
 
 /*!
- * \class btTreeItem
+ * \class BtTreeItem
  * \author Mik Firestone
  *
  * \brief Model for an item in a tree.
@@ -55,7 +55,7 @@ class btFolder;
  *
  * It does assume that everything being stored can be cast into a QObject.
  */
-class btTreeItem
+class BtTreeItem
 {
 
 public:
@@ -191,17 +191,17 @@ public:
       NUMTYPES
    };
 
-   friend bool operator==(btTreeItem &lhs, btTreeItem &rhs);
+   friend bool operator==(BtTreeItem &lhs, BtTreeItem &rhs);
 
-   //! \brief A constructor that sets the \c type of the btTreeItem and
+   //! \brief A constructor that sets the \c type of the BtTreeItem and
    // the \c parent
-   btTreeItem(int _type = NUMTYPES, btTreeItem *parent=0 );
-   virtual ~btTreeItem();
+   BtTreeItem(int _type = NUMTYPES, BtTreeItem *parent=0 );
+   virtual ~BtTreeItem();
 
    //! \brief returns the child at \c number
-   btTreeItem *child(int number);       
+   BtTreeItem *child(int number);       
    //! \brief returns item's parent
-   btTreeItem *parent();
+   BtTreeItem *parent();
 
    //! \brief returns item's type
    int type();
@@ -238,7 +238,7 @@ public:
    //! \brief returns the data as a style
    Style*       getStyle();
    //~ \brief returns data as a folder
-   btFolder*   getFolder();
+   BtFolder*   getFolder();
    //! \brief returns the data as a BeerXMLElement
    BeerXMLElement* getThing();
 
@@ -250,9 +250,9 @@ public:
 
 private:
    /*!  Keep a pointer to the parent tree item. */
-   btTreeItem* parentItem;
+   BtTreeItem* parentItem;
    /*!  The list of children associated with this item */
-   QList<btTreeItem*> childItems;
+   QList<BtTreeItem*> childItems;
 
    /*! the type of this item */
    int _type;
