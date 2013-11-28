@@ -102,14 +102,20 @@ IF( NOT ${NO_PHONON} )
    INCLUDE_DIRECTORIES(${PHONON_INCLUDES})
 ENDIF()
 
+# Warn if the sqlite plugin is not found.
+IF( NOT QT_QSQLITE_PLUGIN_RELEASE )
+   MESSAGE( WARNING "Qt4 sqlite runtime plugin not found. On Debian, the package is libqt4-sql-sqlite." )
+ENDIF()
+
 # Some extra files for the "make clean" target.
-SET_PROPERTY(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-             PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
-             ".*~$" # Kate backup files.
-             "CMakeLists.txt.user" # From QtCreator I think.
-             "CPackConfig.cmake"
-             "CPackSourceConfig.cmake"
-            )
+SET_PROPERTY(
+   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+   PROPERTY ADDITIONAL_MAKE_CLEAN_FILES
+   ".*~$" # Kate backup files.
+   "CMakeLists.txt.user" # From QtCreator I think.
+   "CPackConfig.cmake"
+   "CPackSourceConfig.cmake"
+)
 
 #=========================Configure brewtarget.qrc.in==========================
 
