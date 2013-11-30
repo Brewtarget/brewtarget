@@ -62,10 +62,27 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
         model->type(right) == BtTreeItem::BREWNOTE )
       return false;
 
-   // This is a little more awkward.
-   if ( model->type(left) == BtTreeItem::FOLDER ||
-        model->type(right) == BtTreeItem::FOLDER )
-      return true;
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::RECIPE)
+   {
+      BtFolder* leftFolder = model->getFolder(left);
+      Recipe*  rightRecipe = model->getRecipe(right);
+
+      return leftFolder->fullPath() < rightRecipe->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::RECIPE)
+   {
+      BtFolder* rightFolder = model->getFolder(right);
+      Recipe*  leftRecipe = model->getRecipe(left);
+      return leftRecipe->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->getFolder(right);
+      BtFolder* leftFolder = model->getFolder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
 
    Recipe* leftRecipe  = model->getRecipe(left);
    Recipe* rightRecipe = model->getRecipe(right);

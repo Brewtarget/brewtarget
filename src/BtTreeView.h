@@ -61,9 +61,9 @@ public:
    bool removeRow(const QModelIndex &index);
    //! \brief returns true if \c parent is the parent of \c child
    bool isParent(const QModelIndex& parent, const QModelIndex& child);
+
    //! \brief returns the parent of \c child
    QModelIndex getParent(const QModelIndex& child);
-
    //! \brief returns the first \c type element in the tree
    QModelIndex getFirst();
 
@@ -109,8 +109,14 @@ public:
 
    //! \brief returns the folder at \c index 
    BtFolder* getFolder(const QModelIndex &index) const;
-   //! \brief finds the index of the \c brewnote in the tree
+   //! \brief finds the index of the \c folder in the tree,but does not create
    QModelIndex findFolder( BtFolder* folder);
+   //! \brief adds a folder to the tree
+   void addFolder( QString folder);
+   //! \brief renames a folder and all of its subitems
+   void renameFolder(BtFolder* victim, QString newName);
+   QString folderName(QModelIndex starter);
+
    //! \brief gets the type of the item at \c index. 
    int type(const QModelIndex &index);
 
@@ -129,7 +135,7 @@ public:
    void keyPressEvent(QKeyEvent* event);
 
    //! \brief creates a context menu based on the type of tree
-   void setupContextMenu(QWidget* top, QWidget* editor, QMenu* sMenu,int type = BtTreeItem::RECIPE);
+   void setupContextMenu(QWidget* top, QWidget* editor, QMenu* sMenu, QMenu* fMenu, int type = BtTreeItem::RECIPE);
 
    // Friend classes. For the most part, the children don't do much beyond
    // contructors and context menus. So far :/
@@ -140,6 +146,9 @@ public:
    friend class MiscTreeView;
    friend class YeastTreeView;
    friend class StyleTreeView;
+
+signals:
+   void folderAdded(BtFolder* victim);
 
 private:
    BtTreeModel* model;

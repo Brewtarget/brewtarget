@@ -109,6 +109,8 @@ public:
 
    //! \brief Get the upper-left index for the tree
    QModelIndex getFirst();
+   //! \brief returns the BtTreeItem at \c index
+   BtTreeItem *getItem(const QModelIndex &index) const;
 
    //! \brief Test type at \c index.
    bool isRecipe(const QModelIndex &index);
@@ -178,6 +180,9 @@ public:
    // c) optionally create the tree as it goes.
    // What I don't know is do I send it a QString for the name, or a BtFolder?
    QModelIndex findFolder(QString folder, BtTreeItem* parent=NULL, bool create=false, QString pPath = "" );
+   //! \brief a new folder . 
+   void addFolder(QString name);
+   void renameFolder(BtFolder* victim, QString name, QString oldPath="");
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal
@@ -196,10 +201,6 @@ private slots:
    void brewNoteAdded(BrewNote* victim);
    //! \brief slot to catch a newStyleSignal
    void styleAdded(Style* victim);
-   //! \brief slot to catch a new folder signal. Folders are odd, because they
-   // can hold .. anything, including other folders. So I need the most generic
-   // pointer I can get. I hope this works.
-   // void folderAdded(QObject* victim);
    
    //! \brief slot to catch a changed signal from an equipment
    void equipmentChanged();
@@ -244,8 +245,6 @@ private slots:
    //void folderRemoved(QObject* victim);
 
 private:
-   //! \brief returns the BtTreeItem at \c index
-   BtTreeItem *getItem(const QModelIndex &index) const;
    //! \brief Loads the data. Empty \c propname means load all trees.
    void loadTreeModel(QString propName = "");
    //! \brief Unloads the data. Empty \c propname means unload all trees.

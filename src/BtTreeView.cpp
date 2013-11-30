@@ -89,6 +89,14 @@ Recipe* BtTreeView::getRecipe(const QModelIndex &index) const
    return model->getRecipe(filter->mapToSource(index));
 }
 
+QString BtTreeView::folderName(QModelIndex index)
+{
+   if ( model->type(filter->mapToSource(index)))
+      return model->getFolder(filter->mapToSource(index))->fullPath();
+
+   return model->getThing(filter->mapToSource(index))->folder();
+}
+
 QModelIndex BtTreeView::findRecipe(Recipe* rec)
 {
    return filter->mapFromSource(model->findRecipe(rec));
@@ -178,6 +186,16 @@ BtFolder* BtTreeView::getFolder(const QModelIndex &index) const
 QModelIndex BtTreeView::findFolder(BtFolder* folder)
 {
    return filter->mapFromSource(model->findFolder(folder->fullPath(), NULL, false));
+}
+
+void BtTreeView::addFolder(QString folder)
+{
+   model->addFolder(folder);
+}
+
+void BtTreeView::renameFolder(BtFolder* victim, QString newName)
+{
+   model->renameFolder(victim,newName);
 }
 
 int BtTreeView::type(const QModelIndex &index)
@@ -333,7 +351,7 @@ bool BtTreeView::multiSelected()
    return hasRecipe && hasSomethingElse;
 }
 
-void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu,int type)
+void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu, QMenu *fMenu, int type)
 {
 
    contextMenu = new QMenu(this);
@@ -379,7 +397,11 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu,in
          break;
    }
 
+   // submenus for new and folders
    contextMenu->addMenu(sMenu);
+   contextMenu->addMenu(fMenu);
+   contextMenu->addSeparator();
+
    // Copy
    contextMenu->addAction(tr("Copy"), top, SLOT(copySelected()));
    // Delete

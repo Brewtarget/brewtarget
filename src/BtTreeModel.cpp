@@ -253,10 +253,18 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
    if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= maxColumns)
       return QVariant();
 
-   if ( role != Qt::DisplayRole && role != Qt::EditRole)
+   if ( role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::DecorationRole)
       return QVariant();
 
    BtTreeItem *item = getItem(index);
+   if ( role == Qt::DecorationRole && index.column() == 0) 
+   {
+      if ( item->type() == BtTreeItem::FOLDER )
+         return QIcon(":images/folder.png");
+      else
+         return QVariant();
+   }
+
    return item->getData(index.column());
 }
 
@@ -429,8 +437,8 @@ bool BtTreeModel::insertRow(int row, const QModelIndex &parent, QObject* victim,
 
    bool success = true;
 
-   beginInsertRows(parent, row, row );
-   success = pItem->insertChildren(row, 1, type);
+   beginInsertRows(parent,row,row);
+   success = pItem->insertChildren(row,1,type);
    if ( victim && success ) 
    {
       type = victimType == -1 ? type : victimType;
@@ -611,6 +619,58 @@ QModelIndex BtTreeModel::findBrewNote(BrewNote* bNote)
       return QModelIndex();
 }
 
+void BtTreeModel::addFolder(QString name) 
+{
+   emit layoutAboutToBeChanged();
+
+   QModelIndex ndx = findFolder(name, rootItem->child(0), true, "");
+   QModelIndex pInd = parent(ndx);
+
+   emit layoutChanged();
+}
+
+void BtTreeModel::renameFolder(BtFolder* victim, QString newName, QString oldPath)
+{
+   QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
+   BtTreeItem* start = getItem(ndx);
+   QString replacePath = oldPath.isEmpty() ? victim->fullPath() : oldPath;
+   int i;
+
+   // Ok. We have a start and an index.
+   for (i=0; i < start->childCount(); ++i)
+   {
+      BtTreeItem* next = start->child(i);
+      // If a folder, recurse
+      if ( next->type() == BtTreeItem::FOLDER ) 
+         renameFolder(next->getFolder(),newName,replacePath);
+      else // Leafnode
+      {
+         layoutAboutToBeChanged();
+
+         QString fPath = next->getThing()->folder();
+   
+         fPath.replace(QRegExp(replacePath),newName);
+         next->getThing()->setFolder(fPath);
+
+         // Remove it
+         removeRows(i, 1, ndx); 
+
+         // Find the new parent
+         QModelIndex indx = findFolder(fPath, rootItem->child(0), true);
+         insertRow(i,indx,next->getThing(),next->type());
+
+         layoutChanged();
+      }
+   }
+   // Last thing is to remove the folder. It will be fascinating to see how
+   // this recurses
+   ndx = findFolder(victim->fullPath(), 0, false);
+   QModelIndex pInd = parent(ndx);
+
+   i = start->childNumber();
+   removeRows(i, 1, pInd); 
+}
+
 QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath)
 {
    BtTreeItem* pItem = parent;
@@ -618,6 +678,7 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
    // Start the loop. We are going to return ndx at the end, so it needs to
    // be preserved
    QModelIndex ndx = createIndex(pItem->childCount(),0,pItem);
+
    foreach ( QString cur, dirs )
    {
       QString fPath;
@@ -627,12 +688,10 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
       // If the parent item is a folder, use its full path
       if ( pItem->type() == BtTreeItem::FOLDER )
          fPath = pItem->getFolder()->fullPath() % "/" % cur;
-      // If it isn't we need the parent path
       else
-         fPath = pPath % "/" % cur;
+         fPath = pPath % "/" % cur; // If it isn't we need the parent path
 
-      if ( fPath.compare("/") == 0 )
-         continue;
+      fPath.replace(QRegExp("//"), "/");
 
       // Set the full path, which will set the name and the path
       temp->setfullPath(fPath);
@@ -664,10 +723,7 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
  * if the folder is not found, start creating and inserting them. When done,
  * return the QModelIndex to the lowest item
  *
- * NOTE: THIS IS BROKEN AS WRITTEN. A path of /a/a/a/a/a/a should be legal. I
- * will only find the first one, because I am comparing on name. The
- * comparison has to be on name and full path?
- * I think this is fixed, but needs testing.
+ * Consider renaming this? findFolder should do just that and no more. 
  */
 QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool create, QString pPath )
 {
@@ -690,8 +746,11 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
       if ( temp->type() == BtTreeItem::FOLDER )
       {
          QString fullPath = pPath % "/" % current;
+         BtFolder* fold = temp->getFolder();
+
+         fullPath.replace(QRegExp("//"), "/");
          // The folder name matches the part we are looking at
-         if ( temp->getFolder()->isFolder(fullPath) )
+         if ( fold->isFolder(fullPath) )
          {
             if ( dirs.isEmpty() ) 
                return createIndex(i,0,temp);
@@ -714,7 +773,6 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
    // If we weren't supposed to create, we drop to here and return an empty
    // index. 
    return QModelIndex();
-
 }
 
 void BtTreeModel::loadTreeModel(QString propName)
@@ -735,7 +793,7 @@ void BtTreeModel::loadTreeModel(QString propName)
       {
          if (! rec->folder().isEmpty() )
          {
-            ndxLocal = findFolder( rec->folder(), rootItem->child(0), true, "" );
+            ndxLocal = findFolder( rec->folder(), rootItem->child(0), true, "/" );
             local = getItem(ndxLocal);
             i = local->childCount();
          }
@@ -1169,7 +1227,7 @@ void BtTreeModel::folderChanged(QString name)
    int i = getItem(ndx)->childNumber();
 
    // Remove it
-   removeRows(i, 1, pIndex); // ???
+   removeRows(i, 1, pIndex); 
 
    // Find the new parent
    ndx = findFolder(test->folder(), rootItem->child(0), false);
@@ -1177,7 +1235,6 @@ void BtTreeModel::folderChanged(QString name)
    i = local->childCount();
 
    insertRow(i,ndx,test,BtTreeItem::RECIPE);
-
 
    return;
 }

@@ -1310,39 +1310,88 @@ void MainWindow::newRecipe()
       }
    }
 
-   // The trick will be to get the current object's path ( folder() if it is
-   // a recipe, fullPath() if it is a folder ) and to set the new recipe's
-   // folder to the same value. This should be the last thing done
+   // a new recipe will be put in a folder if you right click on a recipe or
+   // folder. Otherwise, it goes into the main window?
    if ( selection ) {
       BtTreeView* sent = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-      if ( sent == 0 ) {
-         qDebug() << "Couldn't transform";
-      }
-      else {
+      if ( sent ) 
+      {
          QModelIndexList indexes = sent->selectionModel()->selectedRows();
+         // if you cli
          if ( sent->type(indexes.at(0)) == BtTreeItem::RECIPE ) 
          {
             Recipe* foo = sent->getRecipe(indexes.at(0));
 
             if ( foo && ! foo->folder().isEmpty()) 
-            {
-               qDebug() << "From a recipe and folder is" << foo->folder();
                newRec->setFolder( foo->folder() );
-            }
          }
          else if ( sent->type(indexes.at(0)) == BtTreeItem::FOLDER ) 
          {
             BtFolder* foo = sent->getFolder(indexes.at(0));
             if ( foo )
-            {
-               qDebug() << "From a folder and fullpath is" << foo->fullPath();
                newRec->setFolder( foo->fullPath() );
-            }
          }
       }
    }
    setTreeSelection(treeView_recipe->findRecipe(newRec));
    setRecipe(newRec);
+}
+
+void MainWindow::newFolder()
+{
+   QString dPath;
+   QModelIndexList indexes;
+   QModelIndex starter;
+   // get the currently active tree
+   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+
+   if (! active )
+      return;
+
+   indexes = active->selectionModel()->selectedRows();
+   starter = indexes.at(0);
+
+   // Where to start from
+   dPath = active->folderName(starter);
+
+   QString name = QInputDialog::getText(this, tr("Folder name"),
+                                          tr("Folder name:"),
+                                           QLineEdit::Normal, dPath);
+   if ( name.isEmpty() )
+      return;
+
+   active->addFolder(name);
+}
+
+void MainWindow::renameFolder()
+{
+   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
+   BtFolder* victim;
+   QModelIndexList indexes;
+   QModelIndex starter;
+
+   // If the sender cannot be morphed into a BtTreeView object
+   if ( active == 0 )
+      return;
+
+   // I don't think I can figure out what the behavior will be if you select
+   // many items
+   indexes = active->selectionModel()->selectedRows();
+   starter = indexes.at(0);
+
+   // The item to be renamed
+   // Don't rename anything other than a folder
+   if ( active->type(starter) != BtTreeItem::FOLDER )
+      return;
+
+   victim = active->getFolder(starter);
+   QString newName = QInputDialog::getText(this, tr("Folder name"), tr("Folder name:"),
+                                           QLineEdit::Normal, victim->name());
+
+   newName = victim->path() % "/" % newName;
+
+   // Delgate this work to the tree.
+   active->renameFolder(victim,newName);
 }
 
 void MainWindow::setTreeSelection(QModelIndex item)
@@ -1355,7 +1404,7 @@ void MainWindow::setTreeSelection(QModelIndex item)
    if ( active == 0 )
       active = qobject_cast<BtTreeView*>(treeView_recipe);
 
-   // Couldn't cast the active item to a brwetargettreeview
+   // Couldn't cast the active item to a BtTreeView
    if ( active == 0 )
       return;
 
@@ -1363,7 +1412,6 @@ void MainWindow::setTreeSelection(QModelIndex item)
 
    active->setCurrentIndex(item);
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
-//   treeView_recipe->expand(parent);
    
 }
 
@@ -1386,7 +1434,6 @@ void MainWindow::newBrewNote()
       if( rec != recipeObs )
          setRecipe(rec);
 
-//      BrewNote* bNote = rec->addBrewNote();
       BrewNote* bNote = Database::instance().newBrewNote(rec);
       bNote->populateNote(rec);
       bNote->setBrewDate();
@@ -1410,7 +1457,6 @@ void MainWindow::reBrewNote()
       if (! old || ! rec)
          return;
 
-//      BrewNote* bNote = rec->addBrewNote(old);
       BrewNote* bNote = Database::instance().newBrewNote(old);
       bNote->setBrewDate();
 
@@ -1854,6 +1900,7 @@ void MainWindow::contextMenu(const QPoint &point)
 void MainWindow::setupContextMenu()
 {
    QMenu *sMenu = new QMenu(this);
+   QMenu *fMenu = new QMenu(this);
 
    // Set up the "new" submenu
    sMenu->setTitle(tr("New"));
@@ -1865,14 +1912,20 @@ void MainWindow::setupContextMenu()
    sMenu->addAction(tr("Style"), singleStyleEditor, SLOT(newStyle()));
    sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
 
-   treeView_recipe->setupContextMenu(this,this,sMenu,BtTreeItem::RECIPE);
-   treeView_equip->setupContextMenu(this,equipEditor,sMenu,BtTreeItem::EQUIPMENT);
+   // Setup the folder submenu
+   fMenu->setTitle(tr("Folders"));
+   fMenu->addAction(tr("New"), this, SLOT(newFolder()));
+   fMenu->addAction(tr("Rename"), this, SLOT(renameFolder()));
+//   fMenu->addAction(tr("Delete"), this, SLOT(deleteFolder()));
 
-   treeView_ferm->setupContextMenu(this,fermDialog,sMenu,BtTreeItem::FERMENTABLE);
-   treeView_hops->setupContextMenu(this,hopDialog,sMenu,BtTreeItem::HOP);
-   treeView_misc->setupContextMenu(this,miscDialog,sMenu,BtTreeItem::MISC);
-   treeView_style->setupContextMenu(this,singleStyleEditor,sMenu,BtTreeItem::STYLE);
-   treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,BtTreeItem::YEAST);
+   treeView_recipe->setupContextMenu(this,this,sMenu,fMenu,BtTreeItem::RECIPE);
+   treeView_equip->setupContextMenu(this,equipEditor,sMenu,fMenu,BtTreeItem::EQUIPMENT);
+
+   treeView_ferm->setupContextMenu(this,fermDialog,sMenu,fMenu,BtTreeItem::FERMENTABLE);
+   treeView_hops->setupContextMenu(this,hopDialog,sMenu,fMenu,BtTreeItem::HOP);
+   treeView_misc->setupContextMenu(this,miscDialog,sMenu,fMenu,BtTreeItem::MISC);
+   treeView_style->setupContextMenu(this,singleStyleEditor,sMenu,fMenu,BtTreeItem::STYLE);
+   treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,fMenu,BtTreeItem::YEAST);
 
 }
 

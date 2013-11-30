@@ -189,7 +189,12 @@ public slots:
    void importFiles();
    //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
-   
+  
+   //! \brief Create a new folder
+   void newFolder();
+   void renameFolder();
+   // void deleteFolder();
+
    void deleteSelected();
    void copySelected();
    void exportSelected();
