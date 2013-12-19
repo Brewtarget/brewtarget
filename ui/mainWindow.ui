@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="acceptDrops">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <property name="windowTitle">
    <string notr="true">Brewtarget - $VERSIONSTRING</string>
@@ -65,6 +65,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="acceptDrops">
+           <bool>false</bool>
+          </property>
           <property name="tabPosition">
            <enum>QTabWidget::West</enum>
           </property>
@@ -93,7 +96,11 @@
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
             <item>
-             <widget class="RecipeTreeView" name="treeView_recipe"/>
+             <widget class="RecipeTreeView" name="treeView_recipe">
+              <property name="acceptDrops">
+               <bool>false</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -222,11 +229,20 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
-           <widget class="QTabWidget" name="tabWidget_recipeView">
+           <widget class="BtTabWidget" name="tabWidget_recipeView">
+            <property name="acceptDrops">
+             <bool>true</bool>
+            </property>
             <property name="currentIndex">
              <number>0</number>
             </property>
+            <property name="mimeAccepted" stdset="0">
+             <string notr="true">application/x-brewtarget-recipe</string>
+            </property>
             <widget class="QWidget" name="tab_recipe">
+             <property name="acceptDrops">
+              <bool>true</bool>
+             </property>
              <attribute name="title">
               <string>Recipe</string>
              </attribute>
@@ -1368,7 +1384,7 @@
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_9">
                      <item>
-                      <widget class="BeerColorWidget" name="beerColorWidget"/>
+                      <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
                      </item>
                     </layout>
                    </widget>
@@ -1411,7 +1427,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1421,7 +1437,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1445,7 +1461,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
-           <widget class="QTabWidget" name="tabWidget">
+           <widget class="BtTabWidget" name="tabWidget_ingredients">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -1461,8 +1477,14 @@
             <property name="contextMenuPolicy">
              <enum>Qt::CustomContextMenu</enum>
             </property>
+            <property name="acceptDrops">
+             <bool>true</bool>
+            </property>
             <property name="currentIndex">
              <number>0</number>
+            </property>
+            <property name="mimeAccepted" stdset="0">
+             <string>application/x-brewtarget-ingredient</string>
             </property>
             <widget class="QWidget" name="fermentableTab">
              <attribute name="title">
@@ -2608,6 +2630,12 @@
    <extends>QTreeView</extends>
    <header location="global">BtTreeView.h</header>
   </customwidget>
+  <customwidget>
+   <class>BtTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>BtTabWidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget_Trees</tabstop>
@@ -2630,7 +2658,7 @@
   <tabstop>lineEdit_efficiency</tabstop>
   <tabstop>lineEdit_boilTime</tabstop>
   <tabstop>scrollArea</tabstop>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>tabWidget_ingredients</tabstop>
   <tabstop>fermentableTable</tabstop>
   <tabstop>pushButton_addFerm</tabstop>
   <tabstop>pushButton_removeFerm</tabstop>

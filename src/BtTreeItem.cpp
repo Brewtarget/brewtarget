@@ -465,3 +465,28 @@ BeerXMLElement* BtTreeItem::getThing()
     return 0;
 }
 
+QString BtTreeItem::name()
+{
+   if ( ! thing )
+      return QString();
+   switch(_type)
+   {
+      case RECIPE:
+         return qobject_cast<Recipe*>(thing)->name();
+      case EQUIPMENT:
+         return qobject_cast<Equipment*>(thing)->name();
+      case FERMENTABLE:
+         return qobject_cast<Fermentable*>(thing)->name();
+      case FOLDER:
+         return qobject_cast<BtFolder*>(thing)->name();
+      case HOP:
+         return qobject_cast<Hop*>(thing)->name();
+      case MISC:
+         return qobject_cast<Misc*>(thing)->name();
+      case STYLE:
+         return qobject_cast<Style*>(thing)->name();
+      case YEAST:
+         return qobject_cast<Yeast*>(thing)->name();
+   }
+   return QString();
+}

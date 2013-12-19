@@ -565,21 +565,13 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
    return allRecipes[key];
 }
 
-Recipe* Database::recipe(int key)
-{
-   Recipe* ret;
-   if( allRecipes.contains(key) )
-      ret = allRecipes[key];
-   else
-      ret = 0;
-
-   return ret;
-}
-
-Equipment* Database::equipment(int key)
-{
-   return allEquipments[key];
-}
+Recipe*      Database::recipe(int key)      { return allRecipes[key]; }
+Equipment*   Database::equipment(int key)   { return allEquipments[key]; }
+Fermentable* Database::fermentable(int key) { return allFermentables[key]; }
+Hop*         Database::hop(int key)         { return allHops[key]; }
+Misc*        Database::misc(int key)        { return allMiscs[key]; }
+Style*       Database::style(int key)       { return allStyles[key]; }
+Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
@@ -1564,6 +1556,24 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
       rec->recalcAll();
 }
 
+void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms )
+{
+   if ( ferms.size() == 0 )
+      return;
+
+   foreach (Fermentable* ferm, ferms )
+   {
+      Fermentable* newFerm = addIngredientToRecipe<Fermentable>( rec, ferm,
+                                                    "fermentables",
+                                                    "fermentable_in_recipe",
+                                                    "fermentable_id",
+                                                    false, &allFermentables );
+      connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+   }
+
+   rec->recalcAll();
+}
+
 void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
 {
    Hop* newHop = addIngredientToRecipe<Hop>( rec, hop,
@@ -1573,6 +1583,24 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
                                          noCopy, &allHops );
    connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    rec->recalcIBU();
+}
+
+void Database::addToRecipe( Recipe* rec, QList<Hop*>hops )
+{
+   if ( hops.size() == 0 )
+      return;
+
+   foreach (Hop* hop, hops )
+   {
+      Hop* newHop = addIngredientToRecipe<Hop>( rec, hop,
+                                            "hops",
+                                            "hop_in_recipe",
+                                            "hop_id",
+                                            false, &allHops );
+      connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+   }
+   rec->recalcIBU();
+
 }
 
 void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
@@ -1611,6 +1639,21 @@ void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
       rec->recalcAll();
 }
 
+void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs )
+{
+   if ( miscs.size() == 0 )
+      return;
+
+   foreach (Misc* misc, miscs )
+   {
+      addIngredientToRecipe<Misc>( rec, misc,
+                                   "miscs", "misc_in_recipe",
+                                   "misc_id", false, &allMiscs );
+   }
+   rec->recalcAll();
+
+}
+
 void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
 {
    addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", noCopy, &allWaters );
@@ -1641,6 +1684,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
 }
 
+// Why no connect here?
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
    addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
@@ -1648,6 +1692,21 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
    if ( ! noCopy )
       rec->recalcOgFg();
 }
+
+void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
+{
+   if ( yeasts.size() == 0 )
+      return;
+
+   foreach (Yeast* yeast, yeasts )
+   {
+      addIngredientToRecipe<Yeast>( rec, yeast,
+                                    "yeasts", "yeast_in_recipe",
+                                    "yeast_id", false, &allYeasts );
+   }
+   rec->recalcOgFg();
+}
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )

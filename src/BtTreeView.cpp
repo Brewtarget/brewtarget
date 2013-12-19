@@ -43,6 +43,7 @@ BtTreeView::BtTreeView(QWidget *parent) :
    setContextMenuPolicy(Qt::CustomContextMenu);
    setRootIsDecorated(false);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
+   setDragDropMode(QAbstractItemView::InternalMove);
 
 }
 
@@ -258,73 +259,45 @@ void BtTreeView::keyPressEvent(QKeyEvent *event)
    QTreeView::keyPressEvent(event);
 }
 
-QMimeData *BtTreeView::mimeData(QModelIndexList indexes) 
+QMimeData* BtTreeView::mimeData(QModelIndexList indexes) 
 {
    QMimeData *mimeData = new QMimeData();
    QByteArray encodedData;
    QString name = "";
-   int _type;
-
-   Fermentable *fermentable = 0;
-   Equipment *equipment = 0;
-   Hop *hop = 0;
-   Misc *misc = 0;
-   Yeast *yeast = 0;
+   int _type, id, itsa;
 
    QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
-   // All of the calls like getType, getEquipment, etc. will translate between
-   // the model and the proxy indexes, so we don't have to here
+   // From what I've been able to tell, the drop events are homogenous -- a
+   // single drop event will be all equipment or all recipe or ...
+   itsa = -1;
    foreach (QModelIndex index, indexes)
    {
-      if (index.isValid())
-      {
-         _type = type(index);
-         switch(_type)
-         {
-            case BtTreeItem::EQUIPMENT:
-               equipment = model->getEquipment(index);
-               if (equipment)
-               {
-                  name = equipment->name();
-               }
-               break;
-            case BtTreeItem::FERMENTABLE:
-               fermentable = model->getFermentable(index);
-               if (fermentable)
-               {
-                  name = fermentable->name();
-               }
-               break;
-            case BtTreeItem::HOP:
-               hop = model->getHop(index);
-               if (hop)
-               {
-                  name = hop->name();
-               }
-               break;
-            case BtTreeItem::MISC:
-               misc = model->getMisc(index);
-               if (misc)
-               {
-                  name = misc->name();
-               }
-               break;
-            case BtTreeItem::YEAST:
-               yeast = model->getYeast(index);
-               if (yeast)
-               {
-                  name = yeast->name();
-               }
-               break;
-            default:
-               name = "";
-        }
-        stream << _type << name;
-      }
+
+      if (! index.isValid())
+         continue;
+
+      _type = type(index);
+      name = model->name(filter->mapToSource(index));
+      id   = model->getThing(filter->mapToSource(index))->key();
+      // Save this for later reference
+      if ( _type != BtTreeItem::FOLDER && itsa == -1 )
+         itsa = _type;
+
+      stream << _type << name << id;
    }
 
-   mimeData->setData("application/x-brewtarget", encodedData);
+   // Recipes, equipment and styles get dropped on the recipe pane
+   if ( itsa == BtTreeItem::RECIPE || itsa == BtTreeItem::STYLE || itsa == BtTreeItem::EQUIPMENT ) 
+      name = "application/x-brewtarget-recipe";
+   // Everything other than folders get dropped on the ingredients pane
+   else if ( itsa != -1 )
+      name = "application/x-brewtarget-ingredient";
+   // folders will be handled by themselves.
+   else
+      name = "application/x-brewtarget";
+
+   mimeData->setData(name,encodedData);
    return mimeData;
 }
 

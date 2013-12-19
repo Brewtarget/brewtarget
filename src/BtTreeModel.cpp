@@ -621,12 +621,12 @@ QModelIndex BtTreeModel::findBrewNote(BrewNote* bNote)
 
 void BtTreeModel::addFolder(QString name) 
 {
-   emit layoutAboutToBeChanged();
+   // emit layoutAboutToBeChanged();
 
    QModelIndex ndx = findFolder(name, rootItem->child(0), true, "");
    QModelIndex pInd = parent(ndx);
 
-   emit layoutChanged();
+   // emit layoutChanged();
 }
 
 void BtTreeModel::renameFolder(BtFolder* victim, QString newName, QString oldPath)
@@ -679,6 +679,10 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
    // be preserved
    QModelIndex ndx = createIndex(pItem->childCount(),0,pItem);
 
+   // Need to call this because we are adding different things with different
+   // column counts. Just using the rowsAboutToBeAdded throws ugly errors and
+   // then a sigsegv
+   emit layoutAboutToBeChanged();
    foreach ( QString cur, dirs )
    {
       QString fPath;
@@ -706,6 +710,7 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
       // And this for the return
       ndx = createIndex(pItem->childCount(),0,pItem);
    }
+   emit layoutChanged();
 
    // May K&R have mercy on my soul
    return ndx;
@@ -766,6 +771,7 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
    {
       // push the current dir back on the stack
       dirs.prepend(current);
+      qDebug() << "Calling createFolder with dirs" << dirs;
       // And start with the madness
       return createFolderTree( dirs, pItem, pPath);
    }
@@ -1108,9 +1114,23 @@ int BtTreeModel::type(const QModelIndex &index)
    return item->type();
 }
 
+QString BtTreeModel::name(const QModelIndex &idx)
+{
+   BtTreeItem* item = getItem(idx);
+
+   return item->name();
+
+}
+
 int BtTreeModel::getMask()
 {
    return treeMask;
+}
+
+bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+   qDebug() << "row = " << row << "column" << column;
+   return false;
 }
 
 void BtTreeModel::equipmentChanged()

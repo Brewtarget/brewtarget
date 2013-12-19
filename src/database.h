@@ -169,10 +169,14 @@ public:
    //! Import ingredients from BeerXML documents.
    bool importFromXML(const QString& filename);
    
-   //! Get recipe by key value.
+   //! Get anything by key value.
    Recipe* recipe(int key);
-   //! Get equipment by key value.
    Equipment* equipment(int key);
+   Fermentable* fermentable(int key);
+   Hop* hop(int key);
+   Misc* misc(int key);
+   Style* style(int key);
+   Yeast* yeast(int key);
    
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
@@ -191,6 +195,12 @@ public:
    void addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
+   //
+   //! \brief bulk add to a recipe. 
+   void addToRecipe(Recipe* rec, QList<Fermentable*> ferms);
+   void addToRecipe(Recipe* rec, QList<Hop*> hops);
+   void addToRecipe(Recipe* rec, QList<Misc*> miscs);
+   void addToRecipe(Recipe* rec, QList<Yeast*> yeasts);
    
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList

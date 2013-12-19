@@ -85,7 +85,7 @@ public:
    
    BtTreeModel(BtTreeView *parent = 0, TypeMasks type = RECIPEMASK);
    virtual ~BtTreeModel();
-   
+  
    //! \brief Reimplemented from QAbstractItemModel
    virtual QVariant data(const QModelIndex &index, int role) const;
    //! \brief Reimplemented from QAbstractItemModel
@@ -136,6 +136,10 @@ public:
    //! \brief Return the type mask for this tree. \sa BtTreeModel::TypeMasks
    int getMask();
 
+   // I'm trying to shove some complexity down a few layers.
+   // \!brief returns the name of whatever is at idx
+   QString name(const QModelIndex &idx);
+
    //! \brief Get Recipe at \c index.
    Recipe* getRecipe(const QModelIndex &index) const;
    //! \brief Get Equipment at \c index.
@@ -183,6 +187,12 @@ public:
    //! \brief a new folder . 
    void addFolder(QString name);
    void renameFolder(BtFolder* victim, QString name, QString oldPath="");
+
+   // !\brief accept a drop action.
+   bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+   // !\brief what our supported drop actions are. Don't know if I need the drag option or not?
+   Qt::DropActions supportedDragActions() const { return Qt::MoveAction; }
+   Qt::DropActions supportedDrop() const { return Qt::MoveAction; }
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal

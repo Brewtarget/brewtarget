@@ -405,7 +405,7 @@ QString Brewtarget::getUserDataDir()
 
 int Brewtarget::run()
 {
-   int ret;
+   int ret = 0;
    bool success;
    
    // In Unix, make sure the user isn't running 2 copies.

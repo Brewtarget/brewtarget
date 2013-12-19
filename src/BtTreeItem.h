@@ -247,6 +247,8 @@ public:
    //! \brief removes \c count items starting at \c position
    bool removeChildren(int position, int count);
 
+   //! \brief returns the name. 
+   QString name();
 
 private:
    /*!  Keep a pointer to the parent tree item. */

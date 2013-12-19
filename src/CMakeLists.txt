@@ -60,6 +60,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/brewnote.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
+    ${SRCDIR}/BtTabWidget.cpp
     ${SRCDIR}/BtTreeItem.cpp
     ${SRCDIR}/BtTreeModel.cpp
     ${SRCDIR}/BtTreeView.cpp
@@ -213,6 +214,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/brewnote.h
     ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/brewtarget.h
+    ${SRCDIR}/BtTabWidget.h
     ${SRCDIR}/BtTreeModel.h
     ${SRCDIR}/BtTreeView.h
     ${SRCDIR}/BtTreeFilterProxyModel.h

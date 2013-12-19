@@ -453,6 +453,14 @@ MainWindow::MainWindow(QWidget* parent)
    connect( pushButton_mashDown, SIGNAL( clicked() ), this, SLOT( moveSelectedMashStepDown() ) );
    connect( pushButton_mashRemove, SIGNAL( clicked() ), this, SLOT( removeMash() ) );
 
+   // drag and drop. maybe
+   connect( tabWidget_recipeView, SIGNAL( setRecipe(Recipe*) ), this, SLOT( setRecipe(Recipe*)));
+   connect( tabWidget_recipeView, SIGNAL( setEquipment(Equipment*) ), this, SLOT(droppedRecipeEquipment(Equipment*)));
+   connect( tabWidget_recipeView, SIGNAL( setStyle(Style*) ), this, SLOT(droppedRecipeStyle(Style*)));
+   connect( tabWidget_ingredients, SIGNAL( setFermentables(QList<Fermentable*>) ), this, SLOT(droppedRecipeFermentable(QList<Fermentable*>)));
+   connect( tabWidget_ingredients, SIGNAL( setHops(QList<Hop*>) ), this, SLOT(droppedRecipeHop(QList<Hop*>)));
+   connect( tabWidget_ingredients, SIGNAL( setMiscs(QList<Misc*>) ), this, SLOT(droppedRecipeMisc(QList<Misc*>)));
+   connect( tabWidget_ingredients, SIGNAL( setYeasts(QList<Yeast*>) ), this, SLOT(droppedRecipeYeast(QList<Yeast*>)));
 }
 
 void MainWindow::setupShortCuts()
@@ -558,7 +566,7 @@ void MainWindow::deleteSelected()
    if ( first.isValid() )
    {
       if (active->type(first) == BtTreeItem::RECIPE)
-         setRecipeByIndex(first);
+         setRecipe(first);
       setTreeSelection(first);
    }
 
@@ -589,7 +597,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
    switch( active->type(index))
    {
       case BtTreeItem::RECIPE:
-         setRecipeByIndex(index);
+         setRecipe(index);
          break;
       case BtTreeItem::EQUIPMENT:
          kit = active->getEquipment(index);
@@ -714,7 +722,7 @@ void MainWindow::setBrewNote(BrewNote* bNote)
    tabWidget_recipeView->setCurrentWidget(ni);
 }
 
-void MainWindow::setRecipeByIndex(const QModelIndex &index)
+void MainWindow::setRecipe(const QModelIndex &index)
 {
    Recipe *rec = treeView_recipe->getRecipe(index);
    if( rec )
@@ -982,6 +990,55 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
       recipeObs->setBoilTime_min( kit->boilTime_min() );
       mashEditor->setEquipment(kit);
    }
+}
+
+void MainWindow::droppedRecipeStyle(Style* style)
+{
+   if ( ! recipeObs )
+      return;
+   Database::instance().addToRecipe( recipeObs, style);
+   styleButton->setStyle( style );
+}
+
+// Well, aint this a kick in the pants. Apparently I can't template a slot
+void MainWindow::droppedRecipeFermentable(QList<Fermentable*>ferms)
+{
+   if ( ! recipeObs )
+      return;
+
+   if ( tabWidget_ingredients->currentWidget() != fermentableTab )
+      tabWidget_ingredients->setCurrentWidget(fermentableTab);
+   Database::instance().addToRecipe(recipeObs, ferms);
+}
+
+void MainWindow::droppedRecipeHop(QList<Hop*>hops)
+{
+   if ( ! recipeObs )
+      return;
+
+   if ( tabWidget_ingredients->currentWidget() != hopsTab )
+      tabWidget_ingredients->setCurrentWidget(hopsTab);
+   Database::instance().addToRecipe(recipeObs, hops);
+}
+
+void MainWindow::droppedRecipeMisc(QList<Misc*>miscs)
+{
+   if ( ! recipeObs )
+      return;
+
+   if ( tabWidget_ingredients->currentWidget() != miscTab )
+      tabWidget_ingredients->setCurrentWidget(miscTab);
+   Database::instance().addToRecipe(recipeObs, miscs);
+}
+
+void MainWindow::droppedRecipeYeast(QList<Yeast*>yeasts)
+{
+   if ( ! recipeObs )
+      return;
+
+   if ( tabWidget_ingredients->currentWidget() != yeastTab )
+      tabWidget_ingredients->setCurrentWidget(yeastTab);
+   Database::instance().addToRecipe(recipeObs, yeasts);
 }
 
 void MainWindow::updateRecipeBatchSize()
@@ -1796,78 +1853,6 @@ void MainWindow::print()
    }
 }
 
-void MainWindow::dragEnterEvent(QDragEnterEvent *event)
-{
-   if (event->mimeData()->hasFormat("application/x-brewtarget"))
-      event->acceptProposedAction();
-}
-
-void MainWindow::dropEvent(QDropEvent *event)
-{
-   QModelIndexList indexes;
-   QWidget *last = 0;
-   QString name;
-   BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   int type;
-
-   // Check that the recipe isn't a null pointer.
-   if (recipeObs == 0)
-      return;
-
-   // If the sender cannot be morphed into a BtTreeView object
-   if ( active == 0 )
-      return;
-
-   if (! event->mimeData()->hasFormat("application/x-brewtarget"))
-      return;
-
-   indexes = active->selectionModel()->selectedRows();
-
-   foreach(QModelIndex index, indexes)
-   {
-      if ( index.isValid() )
-      {
-         type = active->type(index);
-         switch(type)
-         {
-            case BtTreeItem::RECIPE:
-               setRecipeByIndex(index);
-               break;
-            case BtTreeItem::EQUIPMENT:
-               droppedRecipeEquipment(active->getEquipment(index));
-               break;
-            // NOTE: addToRecipe() calls the appropriate new* under the covers. Calling it twice caused some odd problems
-            case BtTreeItem::FERMENTABLE:
-               Database::instance().addToRecipe( recipeObs, active->getFermentable(index) );
-               last = fermentableTab;
-               break;
-            case BtTreeItem::HOP:
-               Database::instance().addToRecipe( recipeObs, active->getHop(index));
-               last = hopsTab;
-               break;
-            case BtTreeItem::MISC:
-               Database::instance().addToRecipe( recipeObs, active->getMisc(index) );
-               last = miscTab;
-               break;
-            case BtTreeItem::STYLE:
-               Database::instance().addToRecipe( recipeObs, active->getStyle(index) );
-               styleButton->setStyle(active->getStyle(index));
-               break;
-            case BtTreeItem::YEAST:
-               Database::instance().addToRecipe( recipeObs, active->getYeast(index) );
-               last = yeastTab;
-               break;
-            case BtTreeItem::BREWNOTE:
-               setBrewNoteByIndex(index);
-               break;
-         }
-         event->accept();
-      }
-   }
-   if (last)
-      tabWidget->setCurrentWidget(last);
-}
-
 // We build the menus at start up time.  This just needs to exec the proper
 // menu.  
 void MainWindow::contextMenu(const QPoint &point)
@@ -2088,7 +2073,7 @@ void MainWindow::copySelected()
 
    above = active->getFirst();
    if ( active->type(above) == BtTreeItem::RECIPE )
-      setRecipeByIndex(above);
+      setRecipe(above);
    setTreeSelection(above);
 }
 
