@@ -35,6 +35,7 @@
 
 OptionDialog::OptionDialog(QWidget* parent)
 {
+   int i;
    setupUi(this);
 
    if( parent != 0 )
@@ -61,7 +62,29 @@ OptionDialog::OptionDialog(QWidget* parent)
       "pl" <<
       "pt" <<
       "ru";
-
+   
+   // Do this just to have model indices to set icons.
+   comboBox_lang->addItems(ndxToLangCode);
+   // MUST correspond to ndxToLangCode.
+   langIcons <<
+      QIcon(":images/flagCatalonia.svg") <<
+      QIcon(":images/flagCzech.svg") <<
+      QIcon(":images/flagGermany.svg") <<
+      QIcon(":images/flagUK.svg") <<
+      QIcon(":images/flagSpain.svg") <<
+      QIcon(":images/flagFrance.svg") <<
+      QIcon(":images/flagItaly.svg") <<
+      QIcon(":images/flagNetherlands.svg") <<
+      QIcon(":images/flagPoland.svg") <<
+      QIcon(":images/flagPortugal.svg") <<
+      QIcon(":images/flagRussia.svg");
+   // Set icons.
+   for( i = 0; i < langIcons.size(); ++i )
+      comboBox_lang->setItemIcon(i, langIcons[i]);
+   
+   // Call this here to set up translatable strings.
+   retranslate();
+   
    // Want you to only be able to select exactly one in each group.
    colorGroup->setExclusive(true);
    ibuGroup->setExclusive(true);
@@ -101,9 +124,6 @@ OptionDialog::OptionDialog(QWidget* parent)
    // Color Unit
    colorUnitGroup->addButton(radioButton_srm);
    colorUnitGroup->addButton(radioButton_ebc);
-
-   // Call this here just to set up translatable strings.
-   retranslate();
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
@@ -118,7 +138,6 @@ void OptionDialog::retranslate()
    
    // Retranslate the language combobox.
    // NOTE: the indices MUST correspond to ndxToLangCode.
-   comboBox_lang->clear();
    QStringList langStrings;
    langStrings <<
       tr("Catalan") <<
@@ -132,7 +151,9 @@ void OptionDialog::retranslate()
       tr("Polish") <<
       tr("Portuguese") <<
       tr("Russian");
-   comboBox_lang->addItems(langStrings);
+   int i;
+   for( i = 0; i < langStrings.size(); ++i )
+      comboBox_lang->setItemText(i, langStrings[i]);
 }
 
 void OptionDialog::show()

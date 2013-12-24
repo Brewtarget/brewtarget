@@ -26,6 +26,8 @@ class OptionDialog;
 #include <QAbstractButton>
 #include <QMap>
 #include <QString>
+#include <QVector>
+#include <QIcon>
 #include "ui_optionsDialog.h"
 #include "unit.h"
 
@@ -67,7 +69,7 @@ private:
    QButtonGroup *colorGroup, *ibuGroup;
    QButtonGroup *weightGroup, *volumeGroup, *tempGroup, *gravGroup, *colorUnitGroup;
    QStringList ndxToLangCode;
-   
+   QVector<QIcon> langIcons;
 };
 
 #endif   /* _OPTIONDIALOG_H */
