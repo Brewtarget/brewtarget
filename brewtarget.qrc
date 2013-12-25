@@ -55,9 +55,6 @@
         <file alias="images/title.png">images/title.png</file>
         <file alias="css/brewday.css">css/brewday.css</file>
         <file alias="css/recipe.css">css/recipe.css</file>
-        <file alias="data/database.xml">data/database.xml</file>
-        <file alias="data/recipes.xml">data/recipes.xml</file>
-        <file alias="data/mashs.xml">data/mashs.xml</file>
         <file alias="create_db.sql">create_db.sql</file>
         <file alias="migrations/migrations.xml">migrations/migrations.xml</file>
         <file alias="migrations/migration_2.0.0_to_2.0.2.sql">migrations/migration_2.0.0_to_2.0.2.sql</file>
