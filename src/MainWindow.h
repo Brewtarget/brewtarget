@@ -217,6 +217,9 @@ public slots:
    //! \brief Open the default browser to Brewtarget's donation page.
    void openDonateLink();
 
+   //! \brief Open the default browser to view Brewtarget manual.
+	 void openManual();
+
    //! \brief Merges two database files.
    void updateDatabase();
   
@@ -286,7 +289,6 @@ private:
    QPalette lcdPalette_old, lcdPalette_tooLow, lcdPalette_good, lcdPalette_tooHigh;
    MaltinessWidget* maltWidget;
    QDialog* brewDayDialog;
-   HtmlViewer* htmlViewer;
    ScaleRecipeTool* recipeScaler;
    RecipeFormatter* recipeFormatter;
    OgAdjuster* ogAdjuster;

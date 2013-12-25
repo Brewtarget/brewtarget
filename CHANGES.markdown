@@ -36,6 +36,7 @@ None
 * Closing the equipment editor now always reverts all changes.
 * Update mash tun mass and specific heat when equipment is dropped on recipe. [#1233754](https://bugs.launchpad.net/brewtarget/+bug/1233754)
 * No longer crashes when copying recipe that has no style selected. [#1233745](https://bugs.launchpad.net/brewtarget/+bug/1233745)
+* Made the manual open in a browser. [#1224584](https://bugs.launchpad.net/brewtarget/+bug/1224584).
 
 ### Incompatibilities
 
