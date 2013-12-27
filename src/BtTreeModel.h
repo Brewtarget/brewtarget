@@ -191,8 +191,8 @@ public:
    // !\brief accept a drop action.
    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
    // !\brief what our supported drop actions are. Don't know if I need the drag option or not?
-   Qt::DropActions supportedDragActions() const { return Qt::MoveAction; }
-   Qt::DropActions supportedDrop() const { return Qt::MoveAction; }
+   Qt::DropActions supportedDropActions() const; 
+   QStringList mimeTypes() const;
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal

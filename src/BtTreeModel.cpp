@@ -161,9 +161,9 @@ int BtTreeModel::columnCount( const QModelIndex &parent) const
 Qt::ItemFlags BtTreeModel::flags(const QModelIndex &index) const
 {
    if (!index.isValid())
-      return 0;
+      return Qt::ItemIsDropEnabled;
 
-   return Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+   return Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
 QModelIndex BtTreeModel::index( int row, int column, const QModelIndex &parent) const
@@ -1127,12 +1127,6 @@ int BtTreeModel::getMask()
    return treeMask;
 }
 
-bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
-{
-   qDebug() << "row = " << row << "column" << column;
-   return false;
-}
-
 void BtTreeModel::equipmentChanged()
 {
    Equipment* d = qobject_cast<Equipment*>(sender());
@@ -1540,3 +1534,25 @@ void BtTreeModel::observeBrewNote(BrewNote* d)
 {
    connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(brewNoteChanged()) );
 }  
+
+
+// DRAG AND DROP STUFF
+bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+   qDebug() << "row = " << row << "column" << column;
+   return false;
+}
+
+QStringList BtTreeModel::mimeTypes() const
+{
+   QStringList types;
+   types << "application/x-brewtarget-recipe";
+
+   qDebug() << "types: " << types;
+   return types;
+}
+
+Qt::DropActions BtTreeModel::supportedDropActions() const
+{
+   return Qt::CopyAction | Qt::MoveAction;
+}

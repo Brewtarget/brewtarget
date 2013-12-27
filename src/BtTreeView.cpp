@@ -42,6 +42,10 @@ BtTreeView::BtTreeView(QWidget *parent) :
    setAllColumnsShowFocus(true);
    setContextMenuPolicy(Qt::CustomContextMenu);
    setRootIsDecorated(false);
+
+   setDragEnabled(true);
+   setAcceptDrops(true);
+   setDropIndicatorShown(true);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
    setDragDropMode(QAbstractItemView::InternalMove);
 
