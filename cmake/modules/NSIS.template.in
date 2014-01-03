@@ -762,7 +762,7 @@ PageEx Directory
     DirVar $btPath
     DirVerify leave
     PageCallbacks btPageSkip btPageShow btPageLeave
-    DirText "Select old brewtarget data folder. Press skip if this is a new install,or you want to manually upgrade your database" "Brewtarget Data Folder" "" "Select Brewtarget Data Folder"
+    DirText "Select old brewtarget install folder. Press skip if this is a new install,or you want to manually upgrade your database" "Brewtarget Install Folder" "" "Select Brewtarget Install Folder"
 PageExEnd
 
 ; If we found a key already in the registry, pop a message saying w00t and
@@ -796,6 +796,20 @@ Function btPageShow
 FunctionEnd
 
 ; Do all the copying
+; If this function is called, it means we didn't find the registry key and
+; believe we need to upgrade. The logic works like this:
+;  1. Prompt the user for the path to the brewtarget install
+;  2. If it is brewtarget-2.x, 
+;       search c:\users\[name]\AppData\Local for database.sqlite
+;     else 
+;       search c:\users\[name]\AppData\Local for database.xml
+;  3. If we find it
+;       copy the found file(s) to c:\users\[name]\AppData\Roaming\brewtarget
+;     else
+;       complain and give teh user another chance.
+;  4. Poke the value 
+;  
+
 Function btPageLeave
    GetInstDirError $0
 
@@ -820,7 +834,6 @@ Function btPageLeave
    ; We have to worry
    ${If} $R0 != ""
       ; Need some more info. 
-      ${StrRep} $R1 $btPath 'c:\' $LOCALAPPDATA
       Push $btPath
       Push "t-2"
       Call StrStr
@@ -835,17 +848,19 @@ Function btPageLeave
       ${EndIf}
 
       ; If there is no data file where the user pointed us,
-      ; look in a virtual store. If its there, use that as the btpath
+      ; look for in LOCALAPPDATA
       ${IfNot} ${FileExists} "$btPath\$fileName"
-         ${If} ${FileExists} "$R1\$fileName"
-            StrCpy $btPath $R1
+         ${Locate} "$LOCALAPPDATA" "/M=$fileName" "whereIsDb"
+         ${If} $R4 != ""
+            StrCpy $btPath $R4
          ; If we can't find anything, warn the user and send them back to the
          ; selection screen
          ${Else}
-            MessageBox mb_iconstop "Could not find an existing database ($fileName) in $btPath or $R1"
+            MessageBox mb_iconstop "Could not find an existing database ($fileName) in $btPath"
             Abort
          ${EndIf}
       ${EndIf}
+
    ${EndIf}
 
    ; I dislike the duplicated code. I need to do this better.
@@ -880,6 +895,37 @@ Function btPageLeave
    WriteRegStr HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'user_data_dir' "$APPDATA\brewtarget\"
       
 FunctionEnd
+
+Function whereIsDb
+
+   ; make sure we don't find the roaming stuff.
+   Push $R9
+   Push $APPDATA
+   Call StrStr
+   Pop $R2
+
+   ; In my test machine (which is a bad start example, I know)
+   ; I had xml files in C:\Users\mik\AppData\Local\VirtualStore\Program Files (x86)
+   ; and in C:\Users\mik\AppData\Local\VirtualStore\Program Files (x86)\Brewtarget-1.2.4\data
+   ; I only want the second set of files, not the first.
+   Push $R9
+   Push "data"
+   Call StrStr
+   Pop $R3
+
+   ${If} $R2 == ""
+   ${AndIf} $R3 != ""
+      MessageBox MB_ICONINFORMATION "R7 = $R7"
+      MessageBox MB_ICONINFORMATION "R8 = $R8"
+      MessageBox MB_ICONINFORMATION "R9 = $R9"
+
+      StrCpy $R4 $R8
+      StrCpy $0 StopLocate
+   ${EndIf}
+
+   Push $0
+FunctionEnd
+
 
 ;--------------------------------
 ; end brewtarget specific modifications
