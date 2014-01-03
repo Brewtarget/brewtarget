@@ -915,10 +915,6 @@ Function whereIsDb
 
    ${If} $R2 == ""
    ${AndIf} $R3 != ""
-      MessageBox MB_ICONINFORMATION "R7 = $R7"
-      MessageBox MB_ICONINFORMATION "R8 = $R8"
-      MessageBox MB_ICONINFORMATION "R9 = $R9"
-
       StrCpy $R4 $R8
       StrCpy $0 StopLocate
    ${EndIf}
