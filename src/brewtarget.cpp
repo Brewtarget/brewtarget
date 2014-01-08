@@ -151,17 +151,6 @@ bool Brewtarget::copyDataFiles(QString newPath)
    return success;
 }
 
-bool Brewtarget::optionFileExists()
-{
-   QString optionsFileName;
-   QFile optionsFile;
-
-   optionsFileName = getConfigDir() + "options.xml";
-   optionsFile.setFileName(optionsFileName);
-
-   return optionsFile.exists();
-}
-
 bool Brewtarget::ensureDataFilesExist()
 {
    QString logFileName;
@@ -447,15 +436,15 @@ int Brewtarget::run()
    
    qApp->processEvents(); // So we can process mouse clicks on splash window.
    
-   success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
-
    // If the old options file exists, convert it. Otherwise, just get the
    // system options. I *think* this will work. The installer copies the old
    // one into the new place on Windows.
-   if ( optionFileExists())
+   if ( option("hadOldConfig", false).toBool() )
       convertPersistentOptions(); 
-   else
-      readSystemOptions();
+
+   readSystemOptions();
+
+   success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
 
    if( success )
       success = ensureDataFilesExist(); // Make sure all the files we need exist before starting.
@@ -882,7 +871,7 @@ void Brewtarget::convertPersistentOptions()
 
 #endif
    // And remove the flag
-   btSettings.remove("hasOldConfig");
+   btSettings.remove("hadOldConfig");
 }
 
 void Brewtarget::readSystemOptions()

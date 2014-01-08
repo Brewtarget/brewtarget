@@ -276,8 +276,6 @@ private:
    static bool ensureDirectoriesExist();
    //! \brief Ensure the datafiles exist.
    static bool ensureDataFilesExist();
-   //! \brief Test to see if the option file exists.
-   static bool optionFileExists();
    //! \brief Load translation files.
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.
