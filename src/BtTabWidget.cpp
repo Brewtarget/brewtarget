@@ -67,7 +67,7 @@ void BtTabWidget::dropEvent(QDropEvent *event)
 
    while ( ! dStream.atEnd() )
    {
-      dStream >> _type >> name >> id;
+      dStream >> _type >> id;
       switch( _type ) {
          case BtTreeItem::RECIPE:
             event->acceptProposedAction();

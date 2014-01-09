@@ -42,8 +42,12 @@ BtTreeView::BtTreeView(QWidget *parent) :
    setAllColumnsShowFocus(true);
    setContextMenuPolicy(Qt::CustomContextMenu);
    setRootIsDecorated(false);
+
+   setDragEnabled(true);
+   setAcceptDrops(true);
+   setDropIndicatorShown(true);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
-   setDragDropMode(QAbstractItemView::InternalMove);
+//   setDragDropMode(QAbstractItemView::InternalMove);
 
 }
 
@@ -278,13 +282,12 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
          continue;
 
       _type = type(index);
-      name = model->name(filter->mapToSource(index));
       id   = model->getThing(filter->mapToSource(index))->key();
       // Save this for later reference
       if ( _type != BtTreeItem::FOLDER && itsa == -1 )
          itsa = _type;
 
-      stream << _type << name << id;
+      stream << _type << id;
    }
 
    // Recipes, equipment and styles get dropped on the recipe pane

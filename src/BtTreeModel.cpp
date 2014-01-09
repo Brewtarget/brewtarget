@@ -161,9 +161,9 @@ int BtTreeModel::columnCount( const QModelIndex &parent) const
 Qt::ItemFlags BtTreeModel::flags(const QModelIndex &index) const
 {
    if (!index.isValid())
-      return 0;
+      return Qt::ItemIsDropEnabled;
 
-   return Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+   return Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
 QModelIndex BtTreeModel::index( int row, int column, const QModelIndex &parent) const
@@ -771,7 +771,6 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
    {
       // push the current dir back on the stack
       dirs.prepend(current);
-      qDebug() << "Calling createFolder with dirs" << dirs;
       // And start with the madness
       return createFolderTree( dirs, pItem, pPath);
    }
@@ -783,8 +782,7 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
 void BtTreeModel::loadTreeModel(QString propName)
 {
-   int i,j;
-   BtTreeItem* temp;
+   int i;
 
    bool loadAll = (propName == "");
   
@@ -811,17 +809,9 @@ void BtTreeModel::loadTreeModel(QString propName)
          }
 
          insertRow(i,ndxLocal,rec,BtTreeItem::RECIPE);
-         temp = local->child(i);
 
          // If we have brewnotes, set them up here.
-         QList<BrewNote*> notes = rec->brewNotes();
-         j = 0;
-         foreach( BrewNote* note, notes )
-         {
-            insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE);
-            observeBrewNote(note);
-            ++j;
-         }
+         addBrewNoteSubTree(rec,i,local);
          
          observeRecipe(rec);
       }
@@ -920,6 +910,21 @@ void BtTreeModel::loadTreeModel(QString propName)
         insertRow(i++,ndxLocal,style);
         observeStyle(style);
       }
+   }
+}
+
+void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
+{
+   QList<BrewNote*> notes = rec->brewNotes();
+   BtTreeItem* temp = parent->child(i);
+
+   int j = 0;
+
+   foreach( BrewNote* note, notes )
+   {
+      insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE);
+      observeBrewNote(note);
+      ++j;
    }
 }
 
@@ -1127,12 +1132,6 @@ int BtTreeModel::getMask()
    return treeMask;
 }
 
-bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
-{
-   qDebug() << "row = " << row << "column" << column;
-   return false;
-}
-
 void BtTreeModel::equipmentChanged()
 {
    Equipment* d = qobject_cast<Equipment*>(sender());
@@ -1255,6 +1254,9 @@ void BtTreeModel::folderChanged(QString name)
    i = local->childCount();
 
    insertRow(i,ndx,test,BtTreeItem::RECIPE);
+
+   // If we have brewnotes, set them up here.
+   addBrewNoteSubTree(test,i,local);
 
    return;
 }
@@ -1540,3 +1542,55 @@ void BtTreeModel::observeBrewNote(BrewNote* d)
 {
    connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(brewNoteChanged()) );
 }  
+
+
+// DRAG AND DROP STUFF
+
+bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+   QByteArray encodedData = data->data("application/x-brewtarget-recipe");
+   QDataStream stream( &encodedData, QIODevice::ReadOnly);
+   int _type, id;
+   QList<int> droppedIds;
+   QString target = ""; 
+    
+   if ( isFolder(parent) )
+   {
+      target = getFolder(parent)->fullPath();
+   }
+   else 
+   {
+      BeerXMLElement* thing = getThing(parent);
+      target = thing->folder();
+      if ( target.size() == 0 )
+         return false;
+   }
+ 
+   // If we couldn't figure out where we dropped it, bug out 
+   if ( target.size() == 0 )
+      return false;
+      
+   // pull the ids from the stream
+   while( !stream.atEnd() )
+   {
+      QString text;
+      stream >> _type >> id;
+      Recipe* rec = Database::instance().recipe(id);
+      rec->setFolder(target);
+   }
+
+   return true;
+}
+
+QStringList BtTreeModel::mimeTypes() const
+{
+   QStringList types;
+   types << "application/x-brewtarget-recipe";
+
+   return types;
+}
+
+Qt::DropActions BtTreeModel::supportedDropActions() const
+{
+   return Qt::CopyAction | Qt::MoveAction;
+}

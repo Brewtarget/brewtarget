@@ -191,8 +191,8 @@ public:
    // !\brief accept a drop action.
    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
    // !\brief what our supported drop actions are. Don't know if I need the drag option or not?
-   Qt::DropActions supportedDragActions() const { return Qt::MoveAction; }
-   Qt::DropActions supportedDrop() const { return Qt::MoveAction; }
+   Qt::DropActions supportedDropActions() const; 
+   QStringList mimeTypes() const;
 
 private slots:
    //! \brief slot to catch a newEquipmentSignal
@@ -297,6 +297,9 @@ private:
   
    //! \brief creates a folder tree. It's mostly a helper function.
    QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);
+
+   //! \brief convenience function to add brewnotes to a recipe as a subtree
+   void addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent);
 
    BtTreeItem* rootItem;
    BtTreeView *parentTree;
