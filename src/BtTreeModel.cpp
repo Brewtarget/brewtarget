@@ -1580,7 +1580,6 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int
    }
 
    return true;
-}
 
 QStringList BtTreeModel::mimeTypes() const
 {
