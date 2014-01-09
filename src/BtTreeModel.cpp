@@ -1553,7 +1553,10 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int
    int _type, id;
    QList<int> droppedIds;
    QString target = ""; 
-    
+
+   if ( ! parent.isValid() )
+      return false;
+
    if ( isFolder(parent) )
    {
       target = getFolder(parent)->fullPath();
@@ -1561,6 +1564,13 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int
    else 
    {
       BeerXMLElement* thing = getThing(parent);
+
+      // Did you know there's a space between elements in a tree, and you can
+      // actually drop things there? If somebody drops something there, don't
+      // do anything
+      if ( ! thing ) 
+         return false;
+
       target = thing->folder();
       if ( target.size() == 0 )
          return false;
@@ -1580,6 +1590,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int
    }
 
    return true;
+}
 
 QStringList BtTreeModel::mimeTypes() const
 {
