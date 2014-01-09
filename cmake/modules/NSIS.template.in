@@ -752,9 +752,15 @@ FunctionEnd
 ; brewtarget specific instructions
 
 Var btPath
+Var btPathVersion
 var prevInst
 Var targetDir
 Var fileName
+Var locateHandle
+Var nouse1
+Var nouse2
+
+!include "Locate.nsh"
 
 ; Set up the browser page. This happens post install, so I'm confused about
 ; what's already on disk and isn't.
@@ -811,6 +817,13 @@ FunctionEnd
 ;  
 
 Function btPageLeave
+   ; This is important to have $APPDATA variable
+   ; NOT point to C:\ProgramData
+   ; but to current user's Roaming folder
+   SetShellVarContext current
+   
+   StrCpy $targetDir "$APPDATA\brewtarget"
+   
    GetInstDirError $0
 
    ; If they selected nothing, send them back to the dialog
@@ -847,10 +860,24 @@ Function btPageLeave
          StrCpy $fileName 'database.xml'
       ${EndIf}
 
+	  ; $btPathVersion should be 'Brewtarget-1.2.4', 'Brewtarget-2.0.0', 'Brewtarget-2.0.1' etc.
+	  Push $btPath
+	  Push 'Brewtarget-'
+	  Call StrStr
+	  Pop $btPathVersion
+	  
       ; If there is no data file where the user pointed us,
       ; look for in LOCALAPPDATA
       ${IfNot} ${FileExists} "$btPath\$fileName"
-         ${Locate} "$LOCALAPPDATA" "/M=$fileName" "whereIsDb"
+		 ${locate::Open} "$LOCALAPPDATA" "/M=$fileName" $locateHandle
+		 findloop:
+		 ${locate::Find} $locateHandle $R9 $R8 $R7 $R6 $nouse1 $nouse2
+                 StrCmp $R9 '' stoplocate
+		 Call whereisDb
+		 StrCmp $0 'StopLocate' stoplocate findloop
+		 stoplocate:
+		 ${locate::Close} $locateHandle
+		 ${locate::Unload}
          ${If} $R4 != ""
             StrCpy $btPath $R4
          ; If we can't find anything, warn the user and send them back to the
@@ -913,8 +940,15 @@ Function whereIsDb
    Call StrStr
    Pop $R3
 
+   ; Make sure the file is in a directory with the version number the user selected.
+   Push $R9
+   Push $btPathVersion
+   Call StrStr
+   Pop $R1
+   
    ${If} $R2 == ""
    ${AndIf} $R3 != ""
+   ${AndIf} $R1 != ""
       StrCpy $R4 $R8
       StrCpy $0 StopLocate
    ${EndIf}
@@ -1155,9 +1189,6 @@ inst:
 
   StrCmp "@CPACK_NSIS_MODIFY_PATH@" "ON" 0 noOptionsPage
     !insertmacro MUI_INSTALLOPTIONS_EXTRACT "NSIS.InstallOptions.ini"
-
-  ; some more brewtarget extensions
-   StrCpy $targetDir "$APPDATA\brewtarget"
 
    ReadRegStr $btPath HKCU "SOFTWARE\brewtarget\OrganizationDefaults" 'user_data_dir'
    StrLen $0 $btPath
