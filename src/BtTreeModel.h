@@ -224,7 +224,9 @@ private:
    //! \brief Loads the data. Empty \c propname means load all trees.
    void loadTreeModel(QString propName = "");
    //! \brief Unloads the data. Empty \c propname means unload all trees.
-   void unloadTreeModel(QString propName = "");
+   // I do not think this is called anywhere by anybody. Disabling to see what
+   // happens
+   // void unloadTreeModel(QString propName = "");
    
    void elementAdded(BeerXMLElement* victim);
    void elementRemoved(BeerXMLElement* victim);

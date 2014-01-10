@@ -646,6 +646,11 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
    pItem = parent ? parent : rootItem->child(0);
 
+   // I am assuming asking me to find an empty name means find the root of the
+   // tree.
+   if ( name.isEmpty() )
+      return createIndex(0,0,pItem);
+
    dirs = name.split("/", QString::SkipEmptyParts);
 
    current = dirs.takeFirst();
@@ -775,6 +780,10 @@ void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
    }
 }
 
+/*
+   I think this method is no longer used or required. I am disabling for now.
+   maf
+
 void BtTreeModel::unloadTreeModel(QString propName)
 {
    int breadth;
@@ -782,59 +791,14 @@ void BtTreeModel::unloadTreeModel(QString propName)
 
    bool unloadAll = (propName=="");
    
-   if ( (treeMask & RECIPEMASK) &&
-        (unloadAll || propName == "recipes"))
+   if ( unloadAll )
    {
-      parent = createIndex(BtTreeItem::RECIPE,0,rootItem->child(0));
-      breadth = rowCount(parent);
-      removeRows(0,breadth,parent);
-   }
-
-   if ((treeMask & EQUIPMASK) &&
-      (unloadAll || propName == "equipments"))
-   {
-      parent = createIndex(BtTreeItem::EQUIPMENT,0,rootItem->child(0));
-      breadth = rowCount(parent);
-      removeRows(0,breadth,parent);
-   }
-
-   if ((treeMask & FERMENTMASK) &&
-      (unloadAll || propName == "fermentables"))
-   {
-      parent = createIndex(BtTreeItem::FERMENTABLE,0,rootItem->child(0));
-      breadth = rowCount(parent);
-      removeRows(0,breadth,parent);
-   }
-
-   if ((treeMask & HOPMASK) &&
-      (unloadAll || propName == "hops"))
-   {
-      parent = createIndex(BtTreeItem::HOP,0,rootItem->child(0));
-      breadth = rowCount(parent);
-      removeRows(0,breadth,parent);
-   }
-   if ((treeMask & MISCMASK) &&
-      (unloadAll || propName == "miscs"))
-   {
-      parent = createIndex(BtTreeItem::MISC,0,rootItem->child(0));
-      breadth = rowCount(parent);
-      removeRows(0,breadth,parent);
-   }
-   if ((treeMask & YEASTMASK) &&
-      (unloadAll || propName == "yeasts"))
-   {
-      parent = createIndex(BtTreeItem::YEAST,0,rootItem->child(0));
-      breadth = rowCount(parent);
-      removeRows(0,breadth,parent);
-   }
-   if ((treeMask & STYLEMASK) &&
-      (unloadAll || propName == "styles"))
-   {
-      parent = createIndex(BtTreeItem::STYLE,0,rootItem->child(0));
+      parent = createIndex(0,0,rootItem->child(0));
       breadth = rowCount(parent);
       removeRows(0,breadth,parent);
    }
 }
+*/
 
 Recipe* BtTreeModel::recipe(const QModelIndex &index) const
 {
@@ -1162,14 +1126,8 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
          return false;
 
       target = _thing->folder();
-      if ( target.size() == 0 )
-         return false;
    }
  
-   // If we couldn't figure out where we dropped it, bug out 
-   if ( target.size() == 0 )
-      return false;
-      
    // Pull the stream apart and do that which needs done. Late binding ftw!
    while( !stream.atEnd() )
    {
