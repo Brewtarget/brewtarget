@@ -115,6 +115,10 @@ public:
    void setIngredients( const QString& var );
    void setExamples( const QString& var );
 
+   // folder is the odd man out. It is defined in the parent class, but I need
+   // to over-ride the default behavior. 
+   void setFolder(QString var);
+
    QString name() const;
    QString category() const;
    QString categoryNumber() const;
@@ -142,6 +146,8 @@ public:
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   void changedFolder(QString);
+
    /*
    void changedCategory(QString);
    void changedCategoryNumber(QString);

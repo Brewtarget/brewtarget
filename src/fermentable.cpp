@@ -372,6 +372,12 @@ bool Fermentable::isValidType( const QString& str )
    return (types.indexOf(str) >= 0);
 }
 
+void Fermentable::setFolder( QString var )
+{
+   set( "folder", "folder", var );
+   emit changedFolder(var);
+}
+
 // disabled per-cell work
 /*
 void Fermentable::setDisplayUnit( unitDisplay unit ) 

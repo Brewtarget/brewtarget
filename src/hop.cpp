@@ -266,6 +266,12 @@ void Hop::setMyrcene_pct( double num )
    }
 }
 
+void Hop::setFolder( QString var )
+{
+   set( "folder", "folder", var );
+   emit changedFolder(var);
+}
+
 //============================="GET" METHODS====================================
 
 const QString Hop::name() const

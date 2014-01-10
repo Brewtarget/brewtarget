@@ -294,6 +294,11 @@ void Yeast::setAddToSecondary( bool var )
    set("addToSecondary", "add_to_secondary", var);
 }
 
+void Yeast::setFolder( QString var )
+{
+   set( "folder", "folder", var );
+   emit changedFolder(var);
+}
 //========================OTHER METHODS=========================================
 
 bool Yeast::isValidType(const QString& str) const

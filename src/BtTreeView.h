@@ -53,9 +53,9 @@ public:
    //! \brief The standard contructor
    BtTreeView(QWidget *parent = 0);
    //! \brief returns the model associated with this tree
-   BtTreeModel* getModel();
+   BtTreeModel* model();
    //! \brief returns the context menu associated with the \c selected item
-   QMenu* getContextMenu(QModelIndex selected);
+   QMenu* contextMenu(QModelIndex selected);
 
    //! \brief removes \c index item from the tree returns true if the remove works
    bool removeRow(const QModelIndex &index);
@@ -63,52 +63,40 @@ public:
    bool isParent(const QModelIndex& parent, const QModelIndex& child);
 
    //! \brief returns the parent of \c child
-   QModelIndex getParent(const QModelIndex& child);
+   QModelIndex parent(const QModelIndex& child);
    //! \brief returns the first \c type element in the tree
-   QModelIndex getFirst();
+   QModelIndex first();
+
+   QModelIndex findElement(BeerXMLElement* thing);
 
    //! \brief returns the recipe at \c index 
-   Recipe* getRecipe(const QModelIndex &index) const;
-   //! \brief finds the index of the \c recipe in the tree
-   QModelIndex findRecipe(Recipe* rec);
+   Recipe* recipe(const QModelIndex &index) const;
 
    //! \brief returns the equipment at \c index 
-   Equipment* getEquipment(const QModelIndex &index) const;
-   //! \brief finds the index of the \c equipment in the tree
-   QModelIndex findEquipment(Equipment* kit);
+   Equipment* equipment(const QModelIndex &index) const;
 
    //! \brief returns the fermentable at \c index 
-   Fermentable* getFermentable(const QModelIndex &index) const;
-   //! \brief finds the index of the \c fermentable in the tree
-   QModelIndex findFermentable(Fermentable* ferm);
+   Fermentable* fermentable(const QModelIndex &index) const;
 
    //! \brief returns the hop at \c index 
-   Hop* getHop(const QModelIndex &index) const;
-   //! \brief finds the index of the \c hop in the tree
-   QModelIndex findHop(Hop* hop);
+   Hop* hop(const QModelIndex &index) const;
 
    //! \brief returns the misc at \c index 
-   Misc* getMisc(const QModelIndex &index) const;
-   //! \brief finds the index of the \c misc in the tree
-   QModelIndex findMisc(Misc* misc);
+   Misc* misc(const QModelIndex &index) const;
 
    //! \brief returns the yeast at \c index 
-   Yeast* getYeast(const QModelIndex &index) const;
-   //! \brief finds the index of the \c yeast in the tree
-   QModelIndex findYeast(Yeast* yeast);
+   Yeast* yeast(const QModelIndex &index) const;
 
    //! \brief returns the yeast at \c index 
-   Style* getStyle(const QModelIndex &index) const;
-   //! \brief finds the index of the \c yeast in the tree
-   QModelIndex findStyle(Style* style);
+   Style* style(const QModelIndex &index) const;
 
    //! \brief returns the brewnote at \c index 
-   BrewNote* getBrewNote(const QModelIndex &index) const;
+   BrewNote* brewNote(const QModelIndex &index) const;
    //! \brief finds the index of the \c brewnote in the tree
    QModelIndex findBrewNote( BrewNote* bNote);
 
    //! \brief returns the folder at \c index 
-   BtFolder* getFolder(const QModelIndex &index) const;
+   BtFolder* folder(const QModelIndex &index) const;
    //! \brief finds the index of the \c folder in the tree,but does not create
    QModelIndex findFolder( BtFolder* folder);
    //! \brief adds a folder to the tree
@@ -151,9 +139,9 @@ signals:
    void folderAdded(BtFolder* victim);
 
 private:
-   BtTreeModel* model;
+   BtTreeModel* _model;
    BtTreeFilterProxyModel* filter;
-   QMenu* contextMenu, *subMenu;
+   QMenu* _contextMenu, *subMenu;
    QPoint dragStart;
 
    bool doubleClick;

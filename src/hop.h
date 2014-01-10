@@ -130,9 +130,15 @@ public:
    void setCohumulone_pct( double num );
    void setMyrcene_pct( double num );
 
+   // folder is the odd man out. It is defined in the parent class, but I need
+   // to over-ride the default behavior. 
+   void setFolder(QString var);
+
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
+   void changedFolder(QString);
+
    /*
    void changedAlpha_pct(double);
    void changedAmount_kg(double);

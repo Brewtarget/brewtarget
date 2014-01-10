@@ -65,27 +65,27 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
    // As the models get more complex, so does the sort algorithm
    if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::RECIPE)
    {
-      BtFolder* leftFolder = model->getFolder(left);
-      Recipe*  rightRecipe = model->getRecipe(right);
+      BtFolder* leftFolder = model->folder(left);
+      Recipe*  rightRecipe = model->recipe(right);
 
       return leftFolder->fullPath() < rightRecipe->name();
    }
    else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::RECIPE)
    {
-      BtFolder* rightFolder = model->getFolder(right);
-      Recipe*  leftRecipe = model->getRecipe(left);
+      BtFolder* rightFolder = model->folder(right);
+      Recipe*  leftRecipe = model->recipe(left);
       return leftRecipe->name() < rightFolder->fullPath();
    }
    else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
    {
-      BtFolder* rightFolder = model->getFolder(right);
-      BtFolder* leftFolder = model->getFolder(left);
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
       return leftFolder->fullPath() < rightFolder->fullPath();
    }
 
 
-   Recipe* leftRecipe  = model->getRecipe(left);
-   Recipe* rightRecipe = model->getRecipe(right);
+   Recipe* leftRecipe  = model->recipe(left);
+   Recipe* rightRecipe = model->recipe(right);
 
    switch(left.column())
    {
@@ -104,8 +104,8 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelInde
 bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Equipment* leftEquip = model->getEquipment(left);
-   Equipment* rightEquip = model->getEquipment(right);
+   Equipment* leftEquip = model->equipment(left);
+   Equipment* rightEquip = model->equipment(right);
 
 
    switch(left.column())
@@ -121,8 +121,8 @@ bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel* model, const QModelIndex
 bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Fermentable* leftFerment = model->getFermentable(left);
-   Fermentable* rightFerment = model->getFermentable(right);
+   Fermentable* leftFerment = model->fermentable(left);
+   Fermentable* rightFerment = model->fermentable(right);
 
    switch(left.column())
    {
@@ -139,8 +139,8 @@ bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel* model, const QModelInd
 bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Hop* leftHop = model->getHop(left);
-   Hop* rightHop = model->getHop(right);
+   Hop* leftHop = model->hop(left);
+   Hop* rightHop = model->hop(right);
 
 
    switch(left.column())
@@ -158,8 +158,8 @@ bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel* model, const QModelIndex &
 bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Misc* leftMisc = model->getMisc(left);
-   Misc* rightMisc = model->getMisc(right);
+   Misc* leftMisc = model->misc(left);
+   Misc* rightMisc = model->misc(right);
 
 
    switch(left.column())
@@ -177,8 +177,8 @@ bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel* model, const QModelIndex 
 bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Yeast* leftYeast = model->getYeast(left);
-   Yeast* rightYeast = model->getYeast(right);
+   Yeast* leftYeast = model->yeast(left);
+   Yeast* rightYeast = model->yeast(right);
 
 
    switch(left.column())
@@ -196,8 +196,8 @@ bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel* model, const QModelIndex
 bool BtTreeFilterProxyModel::lessThanStyle(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Style* leftStyle = model->getStyle(left);
-   Style* rightStyle = model->getStyle(right);
+   Style* leftStyle = model->style(left);
+   Style* rightStyle = model->style(right);
 
 
    switch(left.column())
@@ -228,7 +228,7 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    if ( model->isFolder(child) ) 
       return true;
 
-   BeerXMLElement* thing = model->getThing(child);
+   BeerXMLElement* thing = model->thing(child);
 
    return thing->display();
 

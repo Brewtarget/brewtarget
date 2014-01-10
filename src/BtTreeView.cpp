@@ -51,161 +51,131 @@ BtTreeView::BtTreeView(QWidget *parent) :
 
 }
 
-BtTreeModel* BtTreeView::getModel()
+BtTreeModel* BtTreeView::model()
 {
-   return model;
+   return _model;
 }
 
 bool BtTreeView::removeRow(const QModelIndex &index)
 {
    QModelIndex modelIndex = filter->mapToSource(index);
-   QModelIndex parent = model->parent(modelIndex);
+   QModelIndex parent = _model->parent(modelIndex);
    int position       = modelIndex.row();
 
-   return model->removeRows(position,1,parent);
+   return _model->removeRows(position,1,parent);
 }
 
 bool BtTreeView::isParent(const QModelIndex& parent, const QModelIndex& child)
 {
    QModelIndex modelParent = filter->mapToSource(parent);
    QModelIndex modelChild = filter->mapToSource(child);
-   return modelParent == model->parent(modelChild);
+   return modelParent == _model->parent(modelChild);
 }
 
-QModelIndex BtTreeView::getParent(const QModelIndex& child)
+QModelIndex BtTreeView::parent(const QModelIndex& child)
 {
    if ( ! child.isValid() )
       return QModelIndex();
 
    QModelIndex modelChild = filter->mapToSource(child);
    if ( modelChild.isValid())
-      return filter->mapFromSource(model->parent(modelChild));
+      return filter->mapFromSource(_model->parent(modelChild));
 
    return QModelIndex();
 }
 
-QModelIndex BtTreeView::getFirst()
+QModelIndex BtTreeView::first()
 {
-   return filter->mapFromSource(model->getFirst());
+   return filter->mapFromSource(_model->first());
 }
 
-Recipe* BtTreeView::getRecipe(const QModelIndex &index) const
+Recipe* BtTreeView::recipe(const QModelIndex &index) const
 {
-   return model->getRecipe(filter->mapToSource(index));
+   return _model->recipe(filter->mapToSource(index));
 }
 
 QString BtTreeView::folderName(QModelIndex index)
 {
-   if ( model->type(filter->mapToSource(index)))
-      return model->getFolder(filter->mapToSource(index))->fullPath();
+   if ( _model->type(filter->mapToSource(index)))
+      return _model->folder(filter->mapToSource(index))->fullPath();
 
-   return model->getThing(filter->mapToSource(index))->folder();
+   return _model->thing(filter->mapToSource(index))->folder();
 }
 
-QModelIndex BtTreeView::findRecipe(Recipe* rec)
+QModelIndex BtTreeView::findElement(BeerXMLElement* thing)
 {
-   return filter->mapFromSource(model->findRecipe(rec));
+   return filter->mapFromSource(_model->findElement(thing));
 }
 
-Equipment* BtTreeView::getEquipment(const QModelIndex &index) const
+Equipment* BtTreeView::equipment(const QModelIndex &index) const
 {
-   return model->getEquipment(filter->mapToSource(index));
+   return _model->equipment(filter->mapToSource(index));
 }
 
-QModelIndex BtTreeView::findEquipment(Equipment* kit)
+Fermentable* BtTreeView::fermentable(const QModelIndex &index) const
 {
-   return filter->mapFromSource(model->findEquipment(kit));
+   return _model->fermentable(filter->mapToSource(index));
 }
 
-Fermentable* BtTreeView::getFermentable(const QModelIndex &index) const
+Hop* BtTreeView::hop(const QModelIndex &index) const
 {
-   return model->getFermentable(filter->mapToSource(index));
+   return _model->hop(filter->mapToSource(index));
 }
 
-QModelIndex BtTreeView::findFermentable(Fermentable* ferm)
+Misc* BtTreeView::misc(const QModelIndex &index) const
 {
-   return filter->mapFromSource(model->findFermentable(ferm));
+   return _model->misc(filter->mapToSource(index));
 }
 
-Hop* BtTreeView::getHop(const QModelIndex &index) const
+Yeast* BtTreeView::yeast(const QModelIndex &index) const
 {
-   return model->getHop(filter->mapToSource(index));
+   return _model->yeast(filter->mapToSource(index));
 }
 
-QModelIndex BtTreeView::findHop(Hop* hop)
+Style* BtTreeView::style(const QModelIndex &index) const
 {
-   return filter->mapFromSource(model->findHop(hop));
+   return _model->style(filter->mapToSource(index));
 }
 
-Misc* BtTreeView::getMisc(const QModelIndex &index) const
-{
-   return model->getMisc(filter->mapToSource(index));
-}
-
-QModelIndex BtTreeView::findMisc(Misc* misc)
-{
-   return filter->mapFromSource(model->findMisc(misc));
-}
-
-Yeast* BtTreeView::getYeast(const QModelIndex &index) const
-{
-   return model->getYeast(filter->mapToSource(index));
-}
-
-QModelIndex BtTreeView::findYeast(Yeast* yeast)
-{
-   return filter->mapFromSource(model->findYeast(yeast));
-}
-
-Style* BtTreeView::getStyle(const QModelIndex &index) const
-{
-   return model->getStyle(filter->mapToSource(index));
-}
-
-QModelIndex BtTreeView::findStyle(Style* style)
-{
-   return filter->mapFromSource(model->findStyle(style));
-}
-
-BrewNote* BtTreeView::getBrewNote(const QModelIndex &index) const
+BrewNote* BtTreeView::brewNote(const QModelIndex &index) const
 {
    if ( ! index.isValid() ) 
       return NULL;
 
-   return model->getBrewNote(filter->mapToSource(index));
+   return _model->brewNote(filter->mapToSource(index));
 }
 
 QModelIndex BtTreeView::findBrewNote(BrewNote* bNote)
 {
-   return filter->mapFromSource(model->findBrewNote(bNote));
+   return filter->mapFromSource(_model->findBrewNote(bNote));
 }
 
-BtFolder* BtTreeView::getFolder(const QModelIndex &index) const
+BtFolder* BtTreeView::folder(const QModelIndex &index) const
 {
    if ( ! index.isValid() ) 
       return NULL;
 
-   return model->getFolder(filter->mapToSource(index));
+   return _model->folder(filter->mapToSource(index));
 }
 
 QModelIndex BtTreeView::findFolder(BtFolder* folder)
 {
-   return filter->mapFromSource(model->findFolder(folder->fullPath(), NULL, false));
+   return filter->mapFromSource(_model->findFolder(folder->fullPath(), NULL, false));
 }
 
 void BtTreeView::addFolder(QString folder)
 {
-   model->addFolder(folder);
+   _model->addFolder(folder);
 }
 
 void BtTreeView::renameFolder(BtFolder* victim, QString newName)
 {
-   model->renameFolder(victim,newName);
+   _model->renameFolder(victim,newName);
 }
 
 int BtTreeView::type(const QModelIndex &index)
 {
-   return model->type(filter->mapToSource(index));
+   return _model->type(filter->mapToSource(index));
 }
 
 void BtTreeView::mousePressEvent(QMouseEvent *event)
@@ -282,7 +252,7 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
          continue;
 
       _type = type(index);
-      id   = model->getThing(filter->mapToSource(index))->key();
+      id   = _model->thing(filter->mapToSource(index))->key();
       // Save this for later reference
       if ( _type != BtTreeItem::FOLDER && itsa == -1 )
          itsa = _type;
@@ -298,7 +268,7 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
       name = "application/x-brewtarget-ingredient";
    // folders will be handled by themselves.
    else
-      name = "application/x-brewtarget";
+      name = "application/x-brewtarget-folder";
 
    mimeData->setData(name,encodedData);
    return mimeData;
@@ -318,7 +288,7 @@ bool BtTreeView::multiSelected()
    foreach (QModelIndex selection, selected)
    {
       QModelIndex selectModel = filter->mapToSource(selection);
-      if (model->isRecipe(selectModel))
+      if (_model->isRecipe(selectModel))
          hasRecipe = true;
       else
          hasSomethingElse = true;
@@ -330,16 +300,16 @@ bool BtTreeView::multiSelected()
 void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu, QMenu *fMenu, int type)
 {
 
-   contextMenu = new QMenu(this);
+   _contextMenu = new QMenu(this);
    subMenu = new QMenu(this);
 
    switch(type) 
    {
       // the recipe case is a bit more complex, because we need to handle the brewnotes too
       case BtTreeItem::RECIPE:
-         contextMenu->addAction(tr("New Recipe"), editor, SLOT(newRecipe()));
-         contextMenu->addAction(tr("Brew It!"), top, SLOT(newBrewNote()));
-         contextMenu->addSeparator();
+         _contextMenu->addAction(tr("New Recipe"), editor, SLOT(newRecipe()));
+         _contextMenu->addAction(tr("Brew It!"), top, SLOT(newBrewNote()));
+         _contextMenu->addSeparator();
 
          subMenu->addAction(tr("Brew Again"), top, SLOT(reBrewNote()));
          subMenu->addAction(tr("Change date"), top, SLOT(changeBrewDate()));
@@ -348,53 +318,53 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu, Q
 
          break;
       case BtTreeItem::EQUIPMENT:
-         contextMenu->addAction(tr("New Equipment"), editor, SLOT(newEquipment()));
-         contextMenu->addSeparator();
+         _contextMenu->addAction(tr("New Equipment"), editor, SLOT(newEquipment()));
+         _contextMenu->addSeparator();
          break;
       case BtTreeItem::FERMENTABLE:
-         contextMenu->addAction(tr("New Fermentable"), editor, SLOT(newFermentable()));
-         contextMenu->addSeparator();
+         _contextMenu->addAction(tr("New Fermentable"), editor, SLOT(newFermentable()));
+         _contextMenu->addSeparator();
          break;
       case BtTreeItem::HOP:
-         contextMenu->addAction(tr("New Hop"), editor, SLOT(newHop()));
-         contextMenu->addSeparator();
+         _contextMenu->addAction(tr("New Hop"), editor, SLOT(newHop()));
+         _contextMenu->addSeparator();
          break;
       case BtTreeItem::MISC:
-         contextMenu->addAction(tr("New Misc"), editor, SLOT(newMisc()));
-         contextMenu->addSeparator();
+         _contextMenu->addAction(tr("New Misc"), editor, SLOT(newMisc()));
+         _contextMenu->addSeparator();
          break;
       case BtTreeItem::STYLE:
-         contextMenu->addAction(tr("New Style"), editor, SLOT(newStyle()));
-         contextMenu->addSeparator();
+         _contextMenu->addAction(tr("New Style"), editor, SLOT(newStyle()));
+         _contextMenu->addSeparator();
          break;
       case BtTreeItem::YEAST:
-         contextMenu->addAction(tr("New Yeast"), editor, SLOT(newYeast()));
-         contextMenu->addSeparator();
+         _contextMenu->addAction(tr("New Yeast"), editor, SLOT(newYeast()));
+         _contextMenu->addSeparator();
          break;
    }
 
    // submenus for new and folders
-   contextMenu->addMenu(sMenu);
-   contextMenu->addMenu(fMenu);
-   contextMenu->addSeparator();
+   _contextMenu->addMenu(sMenu);
+   _contextMenu->addMenu(fMenu);
+   _contextMenu->addSeparator();
 
    // Copy
-   contextMenu->addAction(tr("Copy"), top, SLOT(copySelected()));
+   _contextMenu->addAction(tr("Copy"), top, SLOT(copySelected()));
    // Delete
-   contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
+   _contextMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
    // export and import
-   contextMenu->addSeparator();
-   contextMenu->addAction(tr("Export"), top, SLOT(exportSelected()));
-   contextMenu->addAction(tr("Import"), top, SLOT(importFiles()));
+   _contextMenu->addSeparator();
+   _contextMenu->addAction(tr("Export"), top, SLOT(exportSelected()));
+   _contextMenu->addAction(tr("Import"), top, SLOT(importFiles()));
    
 }
 
-QMenu* BtTreeView::getContextMenu(QModelIndex selected)
+QMenu* BtTreeView::contextMenu(QModelIndex selected)
 {
    if ( type(selected) == BtTreeItem::BREWNOTE )
       return subMenu;
 
-   return contextMenu;
+   return _contextMenu;
 }
 
 // Bad form likely
@@ -402,13 +372,13 @@ QMenu* BtTreeView::getContextMenu(QModelIndex selected)
 RecipeTreeView::RecipeTreeView(QWidget *parent)
    : BtTreeView(parent)
 {
-   model = new BtTreeModel(this, BtTreeModel::RECIPEMASK);
+   _model = new BtTreeModel(this, BtTreeModel::RECIPEMASK);
    filter = new BtTreeFilterProxyModel(this, BtTreeModel::RECIPEMASK);
-   filter->setSourceModel(model);
+   filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
    
-   setExpanded(findRecipe(0), true);
+   setExpanded(findElement(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    // Resizing before you set the model doesn't do much.
@@ -418,13 +388,13 @@ RecipeTreeView::RecipeTreeView(QWidget *parent)
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
    : BtTreeView(parent)
 {
-   model = new BtTreeModel(this, BtTreeModel::EQUIPMASK);
+   _model = new BtTreeModel(this, BtTreeModel::EQUIPMASK);
    filter = new BtTreeFilterProxyModel(this, BtTreeModel::EQUIPMASK);
-   filter->setSourceModel(model);
+   filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
 
-   setExpanded(findEquipment(0), true);
+   setExpanded(findElement(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
@@ -434,14 +404,14 @@ EquipmentTreeView::EquipmentTreeView(QWidget *parent)
 FermentableTreeView::FermentableTreeView(QWidget *parent)
    : BtTreeView(parent)
 {
-   model = new BtTreeModel(this, BtTreeModel::FERMENTMASK);
+   _model = new BtTreeModel(this, BtTreeModel::FERMENTMASK);
    filter = new BtTreeFilterProxyModel(this, BtTreeModel::FERMENTMASK);
-   filter->setSourceModel(model);
+   filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
   
    filter->dumpObjectInfo(); 
-   setExpanded(findFermentable(0), true);
+   setExpanded(findElement(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
@@ -451,13 +421,13 @@ FermentableTreeView::FermentableTreeView(QWidget *parent)
 HopTreeView::HopTreeView(QWidget *parent)
    : BtTreeView(parent)
 {
-   model = new BtTreeModel(this, BtTreeModel::HOPMASK);
+   _model = new BtTreeModel(this, BtTreeModel::HOPMASK);
    filter = new BtTreeFilterProxyModel(this, BtTreeModel::HOPMASK);
-   filter->setSourceModel(model);
+   filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
    
-   setExpanded(findHop(0), true);
+   setExpanded(findElement(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
@@ -467,13 +437,13 @@ HopTreeView::HopTreeView(QWidget *parent)
 MiscTreeView::MiscTreeView(QWidget *parent)
    : BtTreeView(parent)
 {
-   model = new BtTreeModel(this, BtTreeModel::MISCMASK);
+   _model = new BtTreeModel(this, BtTreeModel::MISCMASK);
    filter = new BtTreeFilterProxyModel(this, BtTreeModel::MISCMASK);
-   filter->setSourceModel(model);
+   filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
    
-   setExpanded(findMisc(0), true);
+   setExpanded(findElement(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
@@ -483,13 +453,13 @@ MiscTreeView::MiscTreeView(QWidget *parent)
 YeastTreeView::YeastTreeView(QWidget *parent)
    : BtTreeView(parent)
 {
-   model = new BtTreeModel(this, BtTreeModel::YEASTMASK);
+   _model = new BtTreeModel(this, BtTreeModel::YEASTMASK);
    filter = new BtTreeFilterProxyModel(this, BtTreeModel::YEASTMASK);
-   filter->setSourceModel(model);
+   filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
    
-   setExpanded(findYeast(0), true);
+   setExpanded(findElement(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);
@@ -499,13 +469,13 @@ YeastTreeView::YeastTreeView(QWidget *parent)
 StyleTreeView::StyleTreeView(QWidget *parent)
    : BtTreeView(parent)
 {
-   model = new BtTreeModel(this, BtTreeModel::STYLEMASK);
+   _model = new BtTreeModel(this, BtTreeModel::STYLEMASK);
    filter = new BtTreeFilterProxyModel(this, BtTreeModel::STYLEMASK);
-   filter->setSourceModel(model);
+   filter->setSourceModel(_model);
    setModel(filter);
    filter->setDynamicSortFilter(true);
    
-   setExpanded(findStyle(0), true);
+   setExpanded(findElement(0), true);
    setSortingEnabled(true);
    sortByColumn(0,Qt::AscendingOrder);
    resizeColumnToContents(0);

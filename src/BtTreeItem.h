@@ -216,31 +216,31 @@ public:
 
    //! \brief provides a wrapper to data() so that the caller doesn't need to
    // know the type of the item
-    QVariant getData(int column);
+   QVariant data(int column);
 
    //! \brief sets the \c t type of the object and the \d data 
    void setData(int t, QObject *d);
 
    //! \brief returns the data as a Recipe
-   Recipe*      getRecipe();
+   Recipe*      recipe();
    //! \brief returns the data as an Equipment
-   Equipment*   getEquipment();
+   Equipment*   equipment();
    //! \brief returns the data as a fermentable
-   Fermentable* getFermentable();
+   Fermentable* fermentable();
    //! \brief returns the data as a hop
-   Hop*         getHop();
+   Hop*         hop();
    //! \brief returns the data as a misc
-   Misc*        getMisc();
+   Misc*        misc();
    //! \brief returns the data as a yeast
-   Yeast*       getYeast();
+   Yeast*       yeast();
    //! \brief returns the data as a brewnote
-   BrewNote*    getBrewNote();
+   BrewNote*    brewNote();
    //! \brief returns the data as a style
-   Style*       getStyle();
+   Style*       style();
    //~ \brief returns data as a folder
-   BtFolder*   getFolder();
+   BtFolder*   folder();
    //! \brief returns the data as a BeerXMLElement
-   BeerXMLElement* getThing();
+   BeerXMLElement* thing();
 
    //! \brief inserts \c count new items of \c type, starting at \c position
    bool insertChildren(int position, int count, int _type = RECIPE);
@@ -259,7 +259,7 @@ private:
    /*! the type of this item */
    int _type;
    /*! the data associated with this item */
-   QObject* thing;
+   QObject* _thing;
 
    /*! helper functions to get the information from the item */
    QVariant dataRecipe(int column);

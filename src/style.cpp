@@ -238,6 +238,11 @@ void Style::setExamples( const QString& var )
    set("examples", "examples", var);
 }
 
+void Style::setFolder( QString var )
+{
+   set( "folder", "folder", var );
+   emit changedFolder(var);
+}
 //============================="GET" METHODS====================================
 QString Style::name() const
 {

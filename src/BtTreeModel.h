@@ -108,9 +108,9 @@ public:
    virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
    //! \brief Get the upper-left index for the tree
-   QModelIndex getFirst();
+   QModelIndex first();
    //! \brief returns the BtTreeItem at \c index
-   BtTreeItem *getItem(const QModelIndex &index) const;
+   BtTreeItem *item(const QModelIndex &index) const;
 
    //! \brief Test type at \c index.
    bool isRecipe(const QModelIndex &index);
@@ -134,49 +134,38 @@ public:
    //! \brief Gets the type of item at \c index
    int type(const QModelIndex &index);
    //! \brief Return the type mask for this tree. \sa BtTreeModel::TypeMasks
-   int getMask();
+   int mask();
 
    // I'm trying to shove some complexity down a few layers.
    // \!brief returns the name of whatever is at idx
    QString name(const QModelIndex &idx);
 
    //! \brief Get Recipe at \c index.
-   Recipe* getRecipe(const QModelIndex &index) const;
+   Recipe* recipe(const QModelIndex &index) const;
    //! \brief Get Equipment at \c index.
-   Equipment* getEquipment(const QModelIndex &index) const;
+   Equipment* equipment(const QModelIndex &index) const;
    //! \brief Get Fermentable at \c index.
-   Fermentable* getFermentable(const QModelIndex &index) const;
+   Fermentable* fermentable(const QModelIndex &index) const;
    //! \brief Get Hop at \c index.
-   Hop* getHop(const QModelIndex &index) const;
+   Hop* hop(const QModelIndex &index) const;
    //! \brief Get Misc at \c index.
-   Misc* getMisc(const QModelIndex &index) const;
+   Misc* misc(const QModelIndex &index) const;
    //! \brief Get Yeast at \c index.
-   Yeast* getYeast(const QModelIndex &index) const;
+   Yeast* yeast(const QModelIndex &index) const;
    //! \brief Get BrewNote at \c index.
-   BrewNote* getBrewNote(const QModelIndex &index) const;
+   BrewNote* brewNote(const QModelIndex &index) const;
    //! \brief Get Style at \c index.
-   Style* getStyle(const QModelIndex &index) const;
+   Style* style(const QModelIndex &index) const;
    //! \brief Get folder at \c index
-   BtFolder* getFolder(const QModelIndex &index) const;
+   BtFolder* folder(const QModelIndex &index) const;
    //! \brief Get BeerXMLElement at \c index.
-   BeerXMLElement* getThing(const QModelIndex &index) const;
+   BeerXMLElement* thing(const QModelIndex &index) const;
 
-   //! \brief Get index of \c rec.
-   QModelIndex findRecipe(Recipe* rec, BtTreeItem* parent = NULL);
-   //! \brief Get index of \c kit.
-   QModelIndex findEquipment(Equipment* kit);
-   //! \brief Get index of \c ferm.
-   QModelIndex findFermentable(Fermentable* ferm);
-   //! \brief Get index of \c hop.
-   QModelIndex findHop(Hop* hop);
-   //! \brief Get index of \c misc.
-   QModelIndex findMisc(Misc* misc);
-   //! \brief Get index of \c yeast.
-   QModelIndex findYeast(Yeast* yeast);
    //! \brief Get index of \c bNote.
    QModelIndex findBrewNote(BrewNote* bNote);
-   //! \brief Get index of \c Style
-   QModelIndex findStyle(Style* style);
+   //! \brief one find method to find them all, and in darkness bind them
+   QModelIndex findElement(BeerXMLElement* thing, BtTreeItem* parent = NULL);
+
    //! \brief Get index of \c Folder
    // I'm not quite sure of this signature yet. I want something that can:
    // a) recurse the tree to see if a folder exists
@@ -195,60 +184,37 @@ public:
    QStringList mimeTypes() const;
 
 private slots:
-   //! \brief slot to catch a newEquipmentSignal
-   void equipmentAdded(Equipment* victim);
-   //! \brief slot to catch a newFermentableSignal
-   void fermentableAdded(Fermentable* victim);
-   //! \brief slot to catch a newHopSignal
-   void hopAdded(Hop* victim);
-   //! \brief slot to catch a newMiscSignal
-   void miscAdded(Misc* victim);
-   //! \brief slot to catch a newRecipeSignal
-   void recipeAdded(Recipe* victim);
-   //! \brief slot to catch a newYeastSignal
-   void yeastAdded(Yeast* victim);
    //! \brief slot to catch a newBrewNoteSignal
    void brewNoteAdded(BrewNote* victim);
-   //! \brief slot to catch a newStyleSignal
-   void styleAdded(Style* victim);
-   
-   //! \brief slot to catch a changed signal from an equipment
-   void equipmentChanged();
-   //! \brief slot to catch a changed signal from a fermentable
-   void fermentableChanged();
-   //! \brief slot to catch a changed signal from a hop
-   void hopChanged();
-   //! \brief slot to catch a changed signal from a misc
-   void miscChanged();
-   //! \brief slot to catch a changed signal from a recipe
-   void recipeChanged();
-   //! \brief slot to catch a changed signal from a yeast
-   void yeastChanged();
    //! \brief slot to catch a changed signal from a brewnote
    void brewNoteChanged();
-   //! \brief slot to catch a changed signal from a style
-   void styleChanged();
+   //! \brief slot to catch a deletedBrewNoteSignal
+   void brewNoteRemoved(BrewNote* victim);
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
    void folderChanged(QString name);
+
+   //! \brief This is as best as I can see to do it. Qt signaling mechanism is
+   //   doing, as I recall, string compares on the signatures. Sigh.
+   void elementAdded(Recipe* victim);
+   void elementAdded(Equipment* victim);
+   void elementAdded(Fermentable* victim);
+   void elementAdded(Hop* victim);
+   void elementAdded(Misc* victim);
+   void elementAdded(Style* victim);
+   void elementAdded(Yeast* victim);
    
-   //! \brief slot to catch a deletedEquipmentSignal
-   void equipmentRemoved(Equipment* victim);
-   //! \brief slot to catch a deletedFermentableSignal
-   void fermentableRemoved(Fermentable* victim);
-   //! \brief slot to catch a deletedHopSignal
-   void hopRemoved(Hop* victim);
-   //! \brief slot to catch a deletedMiscSignal
-   void miscRemoved(Misc* victim);
-   //! \brief slot to catch a deletedRecipeSignal
-   void recipeRemoved(Recipe* victim);
-   //! \brief slot to catch a deletedYeastSignal
-   void yeastRemoved(Yeast* victim);
-   //! \brief slot to catch a deletedBrewNoteSignal
-   void brewNoteRemoved(BrewNote* victim);
-   //! \brief slot to catch a deletedStyleSignal
-   void styleRemoved(Style* victim);
+   void elementChanged();
+
+   void elementRemoved(Recipe* victim);
+   void elementRemoved(Equipment* victim);
+   void elementRemoved(Fermentable* victim);
+   void elementRemoved(Hop* victim);
+   void elementRemoved(Misc* victim);
+   void elementRemoved(Style* victim);
+   void elementRemoved(Yeast* victim);
+
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
@@ -260,41 +226,33 @@ private:
    //! \brief Unloads the data. Empty \c propname means unload all trees.
    void unloadTreeModel(QString propName = "");
    
-   //! \brief connects the changedName() signal from \c Equipment to the equipmentChanged() slot
-   void observeEquipment(Equipment*);
-   //! \brief connects the changedName() signal from \c Fermentable to the fermentableChanged() slot
-   void observeFermentable(Fermentable*);
-   //! \brief connects the changedName() signal from \c Hop to the hopChanged() slot
-   void observeHop(Hop*);
-   //! \brief connects the changedName() signal from \c Misc to the miscChanged() slot
-   void observeMisc(Misc*);
-   //! \brief connects the changedName() signal from \c Recipe to the recipeChanged() slot
-   void observeRecipe(Recipe*);
-   //! \brief connects the changedName() signal from \c Yeast to the yeastChanged() slot
-   void observeYeast(Yeast*);
+   void elementAdded(BeerXMLElement* victim);
+   void elementRemoved(BeerXMLElement* victim);
+
    //! \brief connects the changedName() signal from \c BrewNote to the brewnoteChanged() slot
    void observeBrewNote(BrewNote*);
    //! \brief connects the changedName() signal from \c Style to the styleChanged() slot
-   void observeStyle(Style*);
+   void observeElement(BeerXMLElement*);
    
    //! \brief returns the \c section header from a recipe
-   QVariant getRecipeHeader(int section) const;
+   QVariant recipeHeader(int section) const;
    //! \brief returns the \c section header from an equipment
-   QVariant getEquipmentHeader(int section) const;
+   QVariant equipmentHeader(int section) const;
    //! \brief returns the \c section header from a fermentable
-   QVariant getFermentableHeader(int section) const;
+   QVariant fermentableHeader(int section) const;
    //! \brief returns the \c section header from a hop
-   QVariant getHopHeader(int section) const;
+   QVariant hopHeader(int section) const;
    //! \brief returns the \c section header from a misc
-   QVariant getMiscHeader(int section) const;
+   QVariant miscHeader(int section) const;
    //! \brief returns the \c section header from a yeast
-   QVariant getYeastHeader(int section) const;
+   QVariant yeastHeader(int section) const;
    //! \brief returns the \c section header from a style
-   QVariant getStyleHeader(int section) const;
+   QVariant styleHeader(int section) const;
    //! \brief returns the \c section header for a folder. If that makes sense.
    // and I'm not sure it does
-   QVariant getFolderHeader(int section) const;
+   QVariant folderHeader(int section) const;
   
+   QList<BeerXMLElement*> elements();
    //! \brief creates a folder tree. It's mostly a helper function.
    QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);
 
@@ -304,6 +262,8 @@ private:
    BtTreeItem* rootItem;
    BtTreeView *parentTree;
    TypeMasks treeMask;
+   int _type;
+   QString _mimeType;
 
 };
 
