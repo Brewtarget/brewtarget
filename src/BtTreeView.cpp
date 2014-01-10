@@ -96,7 +96,7 @@ Recipe* BtTreeView::recipe(const QModelIndex &index) const
 
 QString BtTreeView::folderName(QModelIndex index)
 {
-   if ( _model->type(filter->mapToSource(index)))
+   if ( _model->type(filter->mapToSource(index)) == BtTreeItem::FOLDER)
       return _model->folder(filter->mapToSource(index))->fullPath();
 
    return _model->thing(filter->mapToSource(index))->folder();

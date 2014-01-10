@@ -56,49 +56,49 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), SIGNAL(newBrewNoteSignal(BrewNote*)),this, SLOT(brewNoteAdded(BrewNote*)));
          connect( &(Database::instance()), SIGNAL(deletedBrewNoteSignal(BrewNote*)),this, SLOT(brewNoteRemoved(BrewNote*)));
          _type = BtTreeItem::RECIPE;
-         _mimeType = "application-brewtarget-recipe";
+         _mimeType = "application/x-brewtarget-recipe";
          break;
       case EQUIPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::EQUIPMENT);
          connect( &(Database::instance()), SIGNAL(newEquipmentSignal(Equipment*)),this, SLOT(elementAdded(Equipment*)));
          connect( &(Database::instance()), SIGNAL(deletedEquipmentSignal(Equipment*)),this, SLOT(elementRemoved(Equipment*)));
          _type = BtTreeItem::EQUIPMENT;
-         _mimeType = "application-brewtarget-recipe";
+         _mimeType = "application/x-brewtarget-recipe";
          break;
       case FERMENTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::FERMENTABLE);
          connect( &(Database::instance()), SIGNAL(newFermentableSignal(Fermentable*)),this, SLOT(elementAdded(Fermentable*)));
          connect( &(Database::instance()), SIGNAL(deletedFermentableSignal(Fermentable*)),this, SLOT(elementRemoved(Fermentable*)));
          _type = BtTreeItem::FERMENTABLE;
-         _mimeType = "application-brewtarget-ingredient";
+         _mimeType = "application/x-brewtarget-ingredient";
          break;
       case HOPMASK:
          rootItem->insertChildren(items,1,BtTreeItem::HOP);
          connect( &(Database::instance()), SIGNAL(newHopSignal(Hop*)),this, SLOT(elementAdded(Hop*)));
          connect( &(Database::instance()), SIGNAL(deletedHopSignal(Hop*)),this, SLOT(elementRemoved(Hop*)));
          _type = BtTreeItem::HOP;
-         _mimeType = "application-brewtarget-ingredient";
+         _mimeType = "application/x-brewtarget-ingredient";
          break;
       case MISCMASK:
          rootItem->insertChildren(items,1,BtTreeItem::MISC);
          connect( &(Database::instance()), SIGNAL(newMiscSignal(Misc*)),this, SLOT(elementAdded(Misc*)));
          connect( &(Database::instance()), SIGNAL(deletedMiscSignal(Misc*)),this, SLOT(elementRemoved(Misc*)));
          _type = BtTreeItem::MISC;
-         _mimeType = "application-brewtarget-ingredient";
+         _mimeType = "application/x-brewtarget-ingredient";
          break;
       case STYLEMASK:
          rootItem->insertChildren(items,1,BtTreeItem::STYLE);
          connect( &(Database::instance()), SIGNAL(newStyleSignal(Style*)),this, SLOT(elementAdded(Style*)));
          connect( &(Database::instance()), SIGNAL(deletedStyleSignal(Style*)),this, SLOT(elementRemoved(Style*)));
          _type = BtTreeItem::STYLE;
-         _mimeType = "application-brewtarget-recipe";
+         _mimeType = "application/x-brewtarget-recipe";
          break;
       case YEASTMASK:
          rootItem->insertChildren(items,1,BtTreeItem::YEAST);
          connect( &(Database::instance()), SIGNAL(newYeastSignal(Yeast*)),this, SLOT(elementAdded(Yeast*)));
          connect( &(Database::instance()), SIGNAL(deletedYeastSignal(Yeast*)),this, SLOT(elementRemoved(Yeast*)));
          _type = BtTreeItem::YEAST;
-         _mimeType = "application-brewtarget-ingredient";
+         _mimeType = "application/x-brewtarget-ingredient";
          break;
       default:
          Brewtarget::logW(QString("Invalid treemask: %1").arg(type));
@@ -999,7 +999,7 @@ void BtTreeModel::elementChanged()
 // write this code once for every type. Like I have so many times already.
 void BtTreeModel::folderChanged(QString name)
 {
-   BeerXMLElement* test = qobject_cast<Recipe*>(sender());
+   BeerXMLElement* test = qobject_cast<BeerXMLElement*>(sender());
    if ( ! test )
       return;
 
@@ -1016,7 +1016,7 @@ void BtTreeModel::folderChanged(QString name)
    BtTreeItem* local = item(ndx);
    i = local->childCount();
 
-   insertRow(i,ndx,test,BtTreeItem::RECIPE);
+   insertRow(i,ndx,test,_type);
 
    // If we have brewnotes, set them up here.
    if ( treeMask & RECIPEMASK )
@@ -1170,14 +1170,40 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    if ( target.size() == 0 )
       return false;
       
-   // pull the ids from the stream
-   // THIS IS BROKEN AS WRITTEN. NOT EVERYTHING IS A RECIPE.
+   // Pull the stream apart and do that which needs done. Late binding ftw!
    while( !stream.atEnd() )
    {
       QString text;
       stream >> _type >> id;
-      Recipe* rec = Database::instance().recipe(id);
-      rec->setFolder(target);
+      BeerXMLElement* elem;
+      switch(_type) 
+      {
+         case BtTreeItem::RECIPE:
+            elem = Database::instance().recipe(id);
+            break;
+         case BtTreeItem::EQUIPMENT:
+            elem = Database::instance().equipment(id);
+            break;
+         case BtTreeItem::FERMENTABLE:
+            elem = Database::instance().fermentable(id);
+            break;
+         case BtTreeItem::HOP:
+            elem = Database::instance().hop(id);
+            break;
+         case BtTreeItem::MISC:
+            elem = Database::instance().misc(id);
+            break;
+         case BtTreeItem::STYLE:
+            elem = Database::instance().style(id);
+            break;
+         case BtTreeItem::YEAST:
+            elem = Database::instance().yeast(id);
+            break;
+         default:
+            return false;
+      }
+
+      elem->setFolder(target);
    }
 
    return true;
@@ -1187,8 +1213,7 @@ QStringList BtTreeModel::mimeTypes() const
 {
    QStringList types;
    // accept whatever type we like, and folders
-   types << _mimeType;
-   types << "application/x-brewtarget-folder";
+   types << _mimeType << "application/x-brewtarget-folder";
 
    return types;
 }
