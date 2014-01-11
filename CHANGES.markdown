@@ -17,6 +17,7 @@ This is a minor bugfix release.
 
 ### New Features
 
+* Windows installer now does automatic upgrade from previous versions.
 * Replaced language icons with a combobox for selecting language.
 * Added Greek and Chinese translations.
 
@@ -32,6 +33,7 @@ This is a minor bugfix release.
 * Fixed issue causing Fermentable EBC values to be constantly divided by 2 [#1170088](https://bugs.launchpad.net/bugs/1170088)
 * Fixed labeling of EBC values when adding new styles [#1173774](https://bugs.launchpad.net/bugs/1173774)
 * Fixed inaccurate color preview [#1177546](https://bugs.launchpad.net/bugs/1177546)
+* Fixed crashing when importing recipes from Brewmate [#1192269](https://bugs.launchpad.net/bugs/1192269).
 * Building with `-no-phonon` flag works correctly [#1212921](https://bugs.launchpad.net/bugs/1212921)
 * Equipment editor should no longer show up empty. [#1227787](https://bugs.launchpad.net/brewtarget/+bug/1227787)
 * Closing the equipment editor now always reverts all changes.
