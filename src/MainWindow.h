@@ -350,6 +350,7 @@ private:
    void copyThis(Yeast *yeast);
 
    void convertedMsg(); 
+   void importMsg();
 };
 
 #endif   /* _MAINWINDOW_H */

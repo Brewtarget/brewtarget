@@ -26,11 +26,13 @@
 BeerXMLElement::BeerXMLElement()
    : QObject(0), _key(-1), _table(Brewtarget::NOTABLE)
 {
+   valid = true;
 }
 
 BeerXMLElement::BeerXMLElement(BeerXMLElement const& other)
    : QObject(0), _key(other._key), _table(other._table)
 {
+   valid = true;
 }
 
 bool BeerXMLElement::deleted() const { return get("deleted").toBool(); }
@@ -186,4 +188,14 @@ void BeerXMLElement::set( const char* prop_name, const char* col_name, QVariant 
 QVariant BeerXMLElement::get( const char* col_name ) const
 {
    return Database::instance().get( _table, _key, col_name );
+}
+
+bool BeerXMLElement::isValid()
+{
+   return valid;
+}
+
+void BeerXMLElement::invalidate()
+{
+   valid = false;
 }

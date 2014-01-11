@@ -1427,7 +1427,10 @@ void MainWindow::importFiles()
       return;
    
    foreach( QString filename, fileOpener->selectedFiles() )
-      Database::instance().importFromXML(filename);
+   {
+      if ( ! Database::instance().importFromXML(filename) )
+         importMsg();
+   }
    
    showChanges();
 }
@@ -2439,6 +2442,13 @@ void MainWindow::convertedMsg()
    msgBox.setInformativeText( tr("The original XML files can be found in ") + Brewtarget::getUserDataDir() + "obsolete");
    msgBox.exec();
 
+}
+
+void MainWindow::importMsg()
+{
+   QMessageBox msgBox;
+   msgBox.setText( tr("The import contained invalid beerXML. It has been imported, but please make certain it makes sense."));
+   msgBox.exec();
 }
 
 void MainWindow::changeBrewDate()
