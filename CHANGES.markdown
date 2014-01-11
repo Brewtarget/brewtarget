@@ -7,6 +7,8 @@ for consumption by the typical end-user.
 
 ### New Features
 
+* Replaced language icons with a combobox for selecting language.
+
 ### Bug Fixes
 
 ### Incompatibilities
