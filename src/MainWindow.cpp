@@ -101,6 +101,9 @@
 #include "StyleSortFilterProxyModel.h"
 #include "NamedMashEditor.h"
 #include "BtDatePopup.h"
+#if defined(Q_OS_WIN)
+   #include <windows.h>
+#endif
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -2490,3 +2493,4 @@ void MainWindow::fixBrewNote()
       target->recalculateEff(noteParent);
    }
 }
+
