@@ -130,7 +130,7 @@ void MiscDialog::editSelected()
          return;
    }
 
-   Misc* m = miscTableModel->getMisc(row);
+   Misc* m = miscTableModel->getMisc(miscTableProxy->mapToSource(selected[0]).row());
    miscEdit->setMisc(m);
    miscEdit->show();
 }
