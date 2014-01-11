@@ -18,6 +18,7 @@ This is a minor bugfix release.
 ### New Features
 
 * Replaced language icons with a combobox for selecting language.
+* Added Greek and Chinese translations.
 
 ### Bug Fixes
 

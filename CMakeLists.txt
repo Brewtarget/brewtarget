@@ -259,6 +259,7 @@ SET( TRANSLATIONS_FILES
      ${TRANSLATIONSDIR}/bt_cs.ts # Czech
      ${TRANSLATIONSDIR}/bt_de.ts # German
      ${TRANSLATIONSDIR}/bt_en.ts # English
+     ${TRANSLATIONSDIR}/bt_el.ts # Greek
      ${TRANSLATIONSDIR}/bt_es.ts # Spanish
      ${TRANSLATIONSDIR}/bt_fr.ts # French
      ${TRANSLATIONSDIR}/bt_nb.ts # Norwegian Bokmal
@@ -269,6 +270,7 @@ SET( TRANSLATIONS_FILES
      ${TRANSLATIONSDIR}/bt_hu.ts # Hungarian
      ${TRANSLATIONSDIR}/bt_ru.ts # Russian
      ${TRANSLATIONSDIR}/bt_sv.ts # Swedish
+     ${TRANSLATIONSDIR}/bt_zh.ts # Chinese
 )
 
 SET( RCFILE ${WINDIR}/icon.rc )

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="65"
+   height="65"
+   viewBox="-5 -5 1.3 1.3"
+   id="svg3966"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="china.svg">
+  <metadata
+     id="metadata3987">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Flag of the People's Republic of China</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1680"
+     inkscape:window-height="1006"
+     id="namedview3985"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="5.2797306"
+     inkscape:cx="39.732037"
+     inkscape:cy="42.585416"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3966" />
+  <title
+     id="title3968">Flag of the People's Republic of China</title>
+  <defs
+     id="defs3972">
+    <polygon
+       id="s"
+       points="-488533,-158734 488533,-158734 -301930,415571 0,-513674 301930,415571 "
+       transform="scale(1.94676e-6,1.94676e-6)"
+       style="fill:#ffde00" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3803"
+       id="linearGradient3809"
+       x1="155.63599"
+       y1="258.62933"
+       x2="155.63599"
+       y2="285.64468"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient3803">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.52252251;"
+         offset="0"
+         id="stop3805" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop3807" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(0.02,0,0,0.02,6.5350001,-0.79260169)"
+       y2="285.64468"
+       x2="155.63599"
+       y1="258.62933"
+       x1="155.63599"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient4131"
+       xlink:href="#linearGradient3803"
+       inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3803"
+       id="linearGradient4159"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.02,0,0,0.02,-7.5042858,-10.15153)"
+       x1="155.63599"
+       y1="258.62933"
+       x2="155.63599"
+       y2="285.64468" />
+  </defs>
+  <path
+     style="fill:#de2910"
+     d="m -4.9099109,-4.9901784 c -0.04432,0 -0.08,0.03568 -0.08,0.08 l 0,1.12 c 0,0.031458 0.018093,0.058167 0.044375,0.07125 l 1.19125,0 c 0.026282,-0.013083 0.044375,-0.039792 0.044375,-0.07125 l 0,-1.12 c 0,-0.04432 -0.03568,-0.08 -0.08,-0.08 l -1.12,0 z"
+     id="rect3970"
+     inkscape:connector-curvature="0" />
+  <use
+     height="20"
+     width="30"
+     y="0"
+     x="0"
+     xlink:href="#s"
+     transform="matrix(0.192,0,0,0.192,-4.6792859,-4.6789284)"
+     id="use3975" />
+  <use
+     height="20"
+     width="30"
+     y="0"
+     x="0"
+     xlink:href="#s"
+     transform="matrix(-0.03292773,-0.05487955,0.05487955,-0.03292773,-4.3592859,-4.8709284)"
+     id="use3977" />
+  <use
+     height="20"
+     width="30"
+     y="0"
+     x="0"
+     xlink:href="#s"
+     transform="matrix(-0.00905097,-0.06335677,0.06335677,-0.00905097,-4.2312859,-4.7429284)"
+     id="use3979" />
+  <use
+     height="20"
+     width="30"
+     y="0"
+     x="0"
+     xlink:href="#s"
+     transform="matrix(0.01758215,-0.06153753,0.06153753,0.01758215,-4.2312859,-4.5509284)"
+     id="use3981" />
+  <use
+     height="20"
+     width="30"
+     y="0"
+     x="0"
+     xlink:href="#s"
+     transform="matrix(0.03998048,-0.0499756,0.0499756,0.03998048,-4.3592859,-4.4229284)"
+     id="use3983" />
+  <rect
+     style="fill:url(#linearGradient4159);fill-opacity:1;stroke:#000000;stroke-width:0.02;stroke-linejoin:miter;stroke-opacity:1"
+     id="rect2985"
+     width="1.28"
+     height="1.28"
+     x="-4.9899998"
+     y="-4.9899998"
+     rx="0.079999998"
+     ry="0.079999998" />
+</svg>

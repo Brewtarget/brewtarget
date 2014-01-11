@@ -15,8 +15,10 @@
         <file alias="images/exit.svg">images/exit.svg</file>
         <file alias="images/filesave.svg">images/filesave.svg</file>
         <file alias="images/flagCatalonia.svg">images/flagCatalonia.svg</file>
+        <file alias="images/flagChina.svg">images/flagChina.svg</file>
         <file alias="images/flagFrance.svg">images/flagFrance.svg</file>
         <file alias="images/flagGermany.svg">images/flagGermany.svg</file>
+        <file alias="images/flagGreece.svg">images/flagGreece.svg</file>
         <file alias="images/flagItaly.svg">images/flagItaly.svg</file>
         <file alias="images/flagPoland.svg">images/flagPoland.svg</file>
         <file alias="images/flagPortugal.svg">images/flagPortugal.svg</file>
