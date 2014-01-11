@@ -1683,7 +1683,7 @@ void MainWindow::openDonateLink()
 
 void MainWindow::openManual()
 {
-   QUrl url(Brewtarget::getDocDir()+"index.html");
+   QUrl url(Brewtarget::getDataDir()+"brewtarget-manual.html");
    QDesktopServices::openUrl(url);
 }
 

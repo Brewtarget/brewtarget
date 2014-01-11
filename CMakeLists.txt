@@ -159,13 +159,15 @@ ENDIF()
    
 SET( DATAROOTDIR "${EXEC_PREFIX}/share" )
 SET( BINDIR "${EXEC_PREFIX}/bin" )
-SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
+IF( NOT DOCDIR )
+   SET( DOCDIR "${DATAROOTDIR}/doc/${CMAKE_PROJECT_NAME}" )
+ENDIF()
 
 # Actual install directories.
 IF( UNIX AND NOT APPLE )
   SET( DATAPATH "${DATAROOTDIR}/${CMAKE_PROJECT_NAME}" )
   SET( TARGETPATH ${BINDIR} )
-  SET( DOCPATH ${DOCDIR}-${brewtarget_VERSION_STRING} )
+  SET( DOCPATH ${DOCDIR} )
 ELSEIF( WIN32 )
   # Works for regular "make install", but not CPack/NSIS installer.
   #SET( CMAKE_INSTALL_PREFIX "C:/Program Files/brewtarget-${brewtarget_VERSION_STRING}" )
@@ -230,16 +232,15 @@ CONFIGURE_FILE( src/config.in src/config.h )
 SET( brewtarget_DOCS
      ${ROOTDIR}/README.markdown
      ${ROOTDIR}/COPYRIGHT
-     ${ROOTDIR}/doc/manual/index.html
 )
 
 # List of data files to be installed.
 SET( brewtarget_DATA
      ${DATADIR}/default_db.sqlite
-     #${DATADIR}/database.xml
-     #${DATADIR}/mashs.xml
      ${DATADIR}/options.xml
-     #${DATADIR}/recipes.xml
+# Yes, I know this is 'documentation', but Debian policy suggests it should be
+# with the data (see section 12.3 of the policy manual).
+     ${ROOTDIR}/doc/brewtarget-manual.html
 )
 
 # Desktop files to install.
