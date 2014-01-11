@@ -465,9 +465,7 @@ bool BtTreeModel::removeRows(int row, int count, const QModelIndex &parent)
    return success;
 }
 
-/* All of the find methods are going to require rework so they go down folders
- * properly
- */
+// One find method for all things. This .. is nice
 QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
 {
    BtTreeItem* pItem;
@@ -528,14 +526,11 @@ QModelIndex BtTreeModel::findBrewNote(BrewNote* bNote)
 
 void BtTreeModel::addFolder(QString name) 
 {
-   // emit layoutAboutToBeChanged();
-
    QModelIndex ndx = findFolder(name, rootItem->child(0), true, "");
    QModelIndex pInd = parent(ndx);
-
-   // emit layoutChanged();
 }
 
+// THIS CODE IS BROKEN AS OF 11-01-14
 void BtTreeModel::renameFolder(BtFolder* victim, QString newName, QString oldPath)
 {
    QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
@@ -547,26 +542,18 @@ void BtTreeModel::renameFolder(BtFolder* victim, QString newName, QString oldPat
    for (i=0; i < start->childCount(); ++i)
    {
       BtTreeItem* next = start->child(i);
-      // If a folder, recurse
+      // If a folder, recurse. 
       if ( next->type() == BtTreeItem::FOLDER ) 
          renameFolder(next->folder(),newName,replacePath);
       else // Leafnode
       {
          layoutAboutToBeChanged();
+         BeerXMLElement* thg = next->thing();
 
-         QString fPath = next->thing()->folder();
-   
+         QString fPath = thg->folder();
+  
          fPath.replace(QRegExp(replacePath),newName);
-         next->thing()->setFolder(fPath);
-
-         // Remove it
-         removeRows(i, 1, ndx); 
-
-         // Find the new parent
-         QModelIndex indx = findFolder(fPath, rootItem->child(0), true);
-         insertRow(i,indx,next->thing(),next->type());
-
-         layoutChanged();
+         thg->setFolder(fPath);
       }
    }
    // Last thing is to remove the folder. It will be fascinating to see how
@@ -636,6 +623,8 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
  * return the QModelIndex to the lowest item
  *
  * Consider renaming this? findFolder should do just that and no more. 
+ * Yeah, I should
+ * 
  */
 QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool create, QString pPath )
 {
@@ -976,7 +965,7 @@ void BtTreeModel::folderChanged(QString name)
    removeRows(i, 1, pIndex); 
 
    // Find the new parent
-   ndx = findFolder(test->folder(), rootItem->child(0), false);
+   ndx = findFolder(test->folder(), rootItem->child(0), true);
    BtTreeItem* local = item(ndx);
    i = local->childCount();
 
@@ -1003,6 +992,11 @@ void BtTreeModel::brewNoteChanged()
    emit dataChanged( ndxLeft, ndxRight );
 }
 
+/* I don't like this part, but Qt's signal/slot mechanism are pretty
+ * simplistic and do a string compare on signatures. Each one of these one
+ * liners is required to give the right signature and to be able to call
+ * addElement() properly
+ */
 void BtTreeModel::elementAdded(Recipe* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementAdded(Equipment* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementAdded(Fermentable* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
@@ -1011,6 +1005,7 @@ void BtTreeModel::elementAdded(Misc* victim) { elementAdded(qobject_cast<BeerXML
 void BtTreeModel::elementAdded(Style* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementAdded(Yeast* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 
+// I guess this isn't too bad. Better than this same function copied 7 times
 void BtTreeModel::elementAdded(BeerXMLElement* victim)
 {
    BeerXMLElement* fool = qobject_cast<BeerXMLElement*>(victim);
@@ -1099,22 +1094,32 @@ void BtTreeModel::observeBrewNote(BrewNote* d)
 
 // DRAG AND DROP STUFF
 
+// As of 01-10-2014, I need to test a grop with both items and folders. I
+// suspect it will break in the most horrible fashions.
 bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, 
                                int row, int column, const QModelIndex &parent)
 {
-   QByteArray encodedData = data->data(_mimeType);
+   QByteArray encodedData;
+
+   if ( data->hasFormat(_mimeType) )
+      encodedData = data->data(_mimeType);
+   else if ( data->hasFormat("application/x-brewtarget-folder") )
+      encodedData = data->data("application/x-brewtarget-folder");
+   else
+      return false; // Don't know what we got, but we don't want it
+
+
    QDataStream stream( &encodedData, QIODevice::ReadOnly);
-   int _type, id;
+   int oType, id;
    QList<int> droppedIds;
    QString target = ""; 
+   QString name = "";
 
    if ( ! parent.isValid() )
       return false;
 
    if ( isFolder(parent) )
-   {
       target = folder(parent)->fullPath();
-   }
    else 
    {
       BeerXMLElement* _thing = thing(parent);
@@ -1132,9 +1137,9 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
    while( !stream.atEnd() )
    {
       QString text;
-      stream >> _type >> id;
+      stream >> oType >> id >> name;
       BeerXMLElement* elem;
-      switch(_type) 
+      switch(oType) 
       {
          case BtTreeItem::RECIPE:
             elem = Database::instance().recipe(id);
@@ -1157,11 +1162,26 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
          case BtTreeItem::YEAST:
             elem = Database::instance().yeast(id);
             break;
+         case BtTreeItem::FOLDER:
+            break;
          default:
             return false;
       }
 
-      elem->setFolder(target);
+      if ( oType != BtTreeItem::FOLDER ) 
+         elem->setFolder(target);
+      else 
+      {
+         // I need the actual folder object that got dropped.
+         BtFolder* victim = new BtFolder;
+         victim->setfullPath(name);
+
+         BtFolder* topPath = new BtFolder;
+         if (! target.isEmpty() )
+            topPath->setfullPath(target);
+
+         renameFolder(victim, topPath);
+      }
    }
 
    return true;
@@ -1180,3 +1200,49 @@ Qt::DropActions BtTreeModel::supportedDropActions() const
 {
    return Qt::CopyAction | Qt::MoveAction;
 }
+
+void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
+{
+   QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
+   BtTreeItem* start = item(ndx);
+   int i;
+
+   
+   // Ok. We have a start and an index.
+   for (i=0; i < start->childCount(); ++i)
+   {
+      BtTreeItem* next = start->child(i);
+      // If a folder, recurse. 
+      // hold this thought. I *think* parent needs to change each time to
+      // represent the tree we are building. Not sure how we will do that
+      // (concat victim name with parent full path?)
+      if ( next->type() == BtTreeItem::FOLDER ) 
+      {
+         BtFolder* newTop = new BtFolder();
+         newTop->setfullPath(QString("%1%2").arg(topPath->fullPath()).arg(victim->name()));
+         renameFolder(next->folder(),newTop);
+      }
+      else // Leafnode
+      {
+         BeerXMLElement* thg = next->thing();
+
+         QString fPath;
+         // An edge case when dropping the folder on the root window
+         if ( ! topPath ) 
+           fPath = QString("/%1").arg(victim->name());
+         else
+           fPath = QString("%1/%2").arg(topPath->fullPath()).arg(victim->name());
+
+         thg->setFolder(fPath);
+
+      }
+   }
+   // Last thing is to remove the folder. It will be fascinating to see how
+   // this recurses
+   ndx = findFolder(victim->fullPath(), 0, false);
+   QModelIndex pInd = parent(ndx);
+
+   i = start->childNumber();
+   removeRows(i, 1, pInd); 
+}
+

@@ -25,6 +25,7 @@
 #include <QString>
 #include <QObject>
 #include <QVector>
+#include <QDebug>
 
 #include "BtTreeItem.h"
 #include "brewnote.h"

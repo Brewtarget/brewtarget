@@ -75,7 +75,7 @@ public:
    void setDeleted(bool var);
    void setDisplay(bool var);
    //! and a way to set the folder
-   virtual void setFolder(QString fName);
+   virtual void setFolder(QString var, bool signal=true);
 
    //! \returns our key in the table we are stored in.
    int key() const;
@@ -127,6 +127,7 @@ signals:
     * the same signature. Otherwise, everything will silently break.
     */
    void changed(QMetaProperty, QVariant value = QVariant());
+   void changedFolder(QString);
    
 protected:
    

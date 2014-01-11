@@ -41,7 +41,12 @@ void BeerXMLElement::setDeleted(bool var) { set("deleted", "deleted", var ? 1 : 
 void BeerXMLElement::setDisplay(bool var) { set("display", "display", var ? 1 : 0); }
 
 QString BeerXMLElement::folder() const { return get("folder").toString(); }
-void BeerXMLElement::setFolder(QString fName) { set("folder", "folder", fName); }
+void BeerXMLElement::setFolder(QString var, bool signal) 
+{
+   set( "folder", "folder", var );
+   if ( signal )
+      emit changedFolder(var);
+}
 
 int BeerXMLElement::key() const { return _key; }
 

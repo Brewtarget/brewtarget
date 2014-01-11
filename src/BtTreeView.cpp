@@ -252,12 +252,20 @@ QMimeData* BtTreeView::mimeData(QModelIndexList indexes)
          continue;
 
       _type = type(index);
-      id   = _model->thing(filter->mapToSource(index))->key();
-      // Save this for later reference
-      if ( _type != BtTreeItem::FOLDER && itsa == -1 )
-         itsa = _type;
-
-      stream << _type << id;
+      if ( _type != BtTreeItem::FOLDER ) 
+      {
+         id   = _model->thing(filter->mapToSource(index))->key();
+         name = _model->name(filter->mapToSource(index));
+         // Save this for later reference
+         if ( itsa == -1 )
+            itsa = _type;
+      }
+      else 
+      {
+         id = -1;
+         name = _model->folder(filter->mapToSource(index))->fullPath();
+      }
+      stream << _type << id << name;
    }
 
    // Recipes, equipment and styles get dropped on the recipe pane

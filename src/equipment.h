@@ -100,10 +100,6 @@ public:
    void setGrainAbsorption_LKg(double var);
    void setBoilingPoint_c(double var);
 
-   // folder is the odd man out. It is defined in the parent class, but I need
-   // to over-ride the default behavior. 
-   void setFolder(QString var);
-
    // Get
    QString name() const;
    double boilSize_l() const;
@@ -147,7 +143,6 @@ signals:
    void changedNotes(QString);
    void changedGrainAbsorption_LKg(double);
    void changedBoilingPoint_c(double);
-   void changedFolder(QString);
    
 private:
    Equipment();

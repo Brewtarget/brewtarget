@@ -81,10 +81,6 @@ public:
    void setUseFor( const QString &var );
    void setNotes( const QString &var );
    
-   // folder is the odd man out. It is defined in the parent class, but I need
-   // to over-ride the default behavior. 
-   void setFolder(QString var);
-
    // Get
    QString name() const;
    Type type() const;
@@ -103,7 +99,6 @@ signals:
    
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   void changedFolder(QString);
 
    /*
    void changedType(Type);

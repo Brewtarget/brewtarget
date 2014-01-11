@@ -176,6 +176,7 @@ public:
    //! \brief a new folder . 
    void addFolder(QString name);
    void renameFolder(BtFolder* victim, QString name, QString oldPath="");
+   void renameFolder(BtFolder* victim, BtFolder* target);
 
    // !\brief accept a drop action.
    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent);

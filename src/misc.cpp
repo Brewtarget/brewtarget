@@ -164,12 +164,6 @@ void Misc::setNotes( const QString& var )
    set( "notes", "notes", var );
 }
 
-void Misc::setFolder( QString var )
-{
-   set( "folder", "folder", var );
-   emit changedFolder(var);
-}
-
 //========================OTHER METHODS=========================================
 
 bool Misc::isValidUse( const QString& var )

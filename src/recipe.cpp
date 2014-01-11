@@ -1132,12 +1132,6 @@ void Recipe::setKegPrimingFactor( double var )
    set( "kegPrimingFactor", "keg_priming_factor", tmp );
 }
 
-void Recipe::setFolder( QString var )
-{
-   set( "folder", "folder", var );
-   emit changedFolder(var);
-}
-
 //==========================Calculated Getters============================
 
 double Recipe::og()

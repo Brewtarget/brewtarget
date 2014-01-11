@@ -113,7 +113,6 @@ public:
    bool recommendMash() const;
    double ibuGalPerLb() const;
 
-   void setFolder( QString var );
    /* disabled per-cell
    unitDisplay displayUnit() const;
    unitScale displayScale() const;
@@ -149,7 +148,6 @@ signals:
    
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
-   void changedFolder(QString);
    /*
    void changedType( Type newType );
    void changedTypeString( QString newTypeString );

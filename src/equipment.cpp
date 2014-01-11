@@ -437,12 +437,6 @@ void Equipment::setBoilingPoint_c(double var)
    }
 }
 
-void Equipment::setFolder( QString var )
-{
-   set( "folder", "folder", var );
-   emit changedFolder(var);
-}
-
 //============================"GET" METHODS=====================================
 
 QString Equipment::name() const
