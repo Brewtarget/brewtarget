@@ -134,6 +134,8 @@ public slots:
    //! \brief Update Recipe's mash
    void updateRecipeMash();
 
+   //! \brief Close a brewnote tab if we must
+   void closeBrewNote(BrewNote*);
    //! \brief Add given Fermentable to the Recipe.
    void addFermentableToRecipe(Fermentable* ferm);
    //! \brief Remove selected Fermentable from the Recipe.
@@ -325,7 +327,6 @@ private:
    NamedMashEditor* singleNamedMashEditor;
 
    BtDatePopup* btDatePopup;
-   QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 
    //! \brief Currently highlighted fermentable in the fermentable table.
@@ -336,6 +337,9 @@ private:
    Misc* selectedMisc();
    //! \brief Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
+
+   //! \brief Find an open brewnote tab, if it is open
+   BrewNoteWidget* findBrewNoteWidget(BrewNote* b);
 
    //! \brief Scroll to the given \c item in the currently visible item tree.
    void setTreeSelection(QModelIndex item);

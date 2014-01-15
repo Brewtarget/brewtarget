@@ -71,29 +71,20 @@ public:
 
    //! \brief returns the recipe at \c index 
    Recipe* recipe(const QModelIndex &index) const;
-
    //! \brief returns the equipment at \c index 
    Equipment* equipment(const QModelIndex &index) const;
-
    //! \brief returns the fermentable at \c index 
    Fermentable* fermentable(const QModelIndex &index) const;
-
    //! \brief returns the hop at \c index 
    Hop* hop(const QModelIndex &index) const;
-
    //! \brief returns the misc at \c index 
    Misc* misc(const QModelIndex &index) const;
-
    //! \brief returns the yeast at \c index 
    Yeast* yeast(const QModelIndex &index) const;
-
    //! \brief returns the yeast at \c index 
    Style* style(const QModelIndex &index) const;
-
    //! \brief returns the brewnote at \c index 
    BrewNote* brewNote(const QModelIndex &index) const;
-   //! \brief finds the index of the \c brewnote in the tree
-   QModelIndex findBrewNote( BrewNote* bNote);
 
    //! \brief returns the folder at \c index 
    BtFolder* folder(const QModelIndex &index) const;
@@ -125,6 +116,7 @@ public:
    //! \brief creates a context menu based on the type of tree
    void setupContextMenu(QWidget* top, QWidget* editor, QMenu* sMenu, QMenu* fMenu, int type = BtTreeItem::RECIPE);
 
+   void deleteSelected(QModelIndexList selected);
    // Friend classes. For the most part, the children don't do much beyond
    // contructors and context menus. So far :/
    friend class RecipeTreeView;
@@ -146,6 +138,7 @@ private:
 
    bool doubleClick;
 
+   int verifyDelete(int confirmDelete, QString tag, QString name);
    QMimeData *mimeData(QModelIndexList indexes);
 };
 

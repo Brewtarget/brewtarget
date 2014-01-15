@@ -75,7 +75,7 @@ void YeastDialog::removeYeast()
    // proxy model does the heavy lifting, as long as we do the call.
    translated = yeastTableProxy->mapToSource(selected[0]);
    Yeast *yeast = yeastTableModel->getYeast(translated.row());
-   Database::instance().removeYeast(yeast);
+   Database::instance().remove(yeast);
 }
 
 void YeastDialog::addYeast(const QModelIndex& index)

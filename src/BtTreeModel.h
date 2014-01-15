@@ -161,8 +161,6 @@ public:
    //! \brief Get BeerXMLElement at \c index.
    BeerXMLElement* thing(const QModelIndex &index) const;
 
-   //! \brief Get index of \c bNote.
-   QModelIndex findBrewNote(BrewNote* bNote);
    //! \brief one find method to find them all, and in darkness bind them
    QModelIndex findElement(BeerXMLElement* thing, BtTreeItem* parent = NULL);
 
@@ -175,7 +173,10 @@ public:
    QModelIndex findFolder(QString folder, BtTreeItem* parent=NULL, bool create=false, QString pPath = "" );
    //! \brief a new folder . 
    void addFolder(QString name);
-   void renameFolder(BtFolder* victim, QString name, QString oldPath="");
+   //! \brief renames a folder. I think 'renaming a folder' still has some
+   //problems. Does "rename a folder" work on everything or just on folders?
+   //The interface suggests the latter, but the code says the former
+   void renameFolder(BtFolder* victim, QString name);
    void renameFolder(BtFolder* victim, BtFolder* target);
 
    // !\brief accept a drop action.
@@ -185,12 +186,6 @@ public:
    QStringList mimeTypes() const;
 
 private slots:
-   //! \brief slot to catch a newBrewNoteSignal
-   void brewNoteAdded(BrewNote* victim);
-   //! \brief slot to catch a changed signal from a brewnote
-   void brewNoteChanged();
-   //! \brief slot to catch a deletedBrewNoteSignal
-   void brewNoteRemoved(BrewNote* victim);
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic
    // pointer I can get. I hope this works.
@@ -205,6 +200,7 @@ private slots:
    void elementAdded(Misc* victim);
    void elementAdded(Style* victim);
    void elementAdded(Yeast* victim);
+   void elementAdded(BrewNote* victim);
    
    void elementChanged();
 
@@ -215,6 +211,7 @@ private slots:
    void elementRemoved(Misc* victim);
    void elementRemoved(Style* victim);
    void elementRemoved(Yeast* victim);
+   void elementRemoved(BrewNote* victim);
 
    //! \brief slot to catch a changed folder signal. Folders are odd, because they
    // can hold .. anything, including other folders. So I need the most generic

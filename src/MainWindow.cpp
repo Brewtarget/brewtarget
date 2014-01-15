@@ -284,9 +284,6 @@ MainWindow::MainWindow(QWidget* parent)
    // Once more with the context menus too
    setupContextMenu();
 
-   // clear out the brewnotes 
-   brewNotes.clear();
-
    // If we saved a size the last time we ran, use it
    if ( Brewtarget::btSettings.contains("geometry"))
    {
@@ -461,6 +458,10 @@ MainWindow::MainWindow(QWidget* parent)
    connect( tabWidget_ingredients, SIGNAL( setHops(QList<Hop*>) ), this, SLOT(droppedRecipeHop(QList<Hop*>)));
    connect( tabWidget_ingredients, SIGNAL( setMiscs(QList<Misc*>) ), this, SLOT(droppedRecipeMisc(QList<Misc*>)));
    connect( tabWidget_ingredients, SIGNAL( setYeasts(QList<Yeast*>) ), this, SLOT(droppedRecipeYeast(QList<Yeast*>)));
+
+   // No connections from the database yet? Oh FSM, that probably means I'm
+   // doing it wrong again.
+   connect( &(Database::instance()), SIGNAL( deletedBrewNoteSignal(BrewNote*)), this, SLOT( closeBrewNote(BrewNote*)));
 }
 
 void MainWindow::setupShortCuts()
@@ -475,94 +476,11 @@ void MainWindow::deleteSelected()
 {
    QModelIndexList selected; 
    BtTreeView* active = qobject_cast<BtTreeView*>(tabWidget_Trees->currentWidget()->focusWidget());
-   QModelIndex first, top;
-   QList<QModelIndex>::const_iterator at,end;
-   QList<Recipe*> deadRec;
-   QList<Equipment*> deadKit;
-   QList<Fermentable*> deadFerm;
-   QList<Hop*> deadHop;
-   QList<Misc*> deadMisc;
-   QList<Style*> deadStyle;
-   QList<Yeast*> deadYeast;
-   QList<BrewNote*> deadNote;
 
-   if ( active == 0 )
-      return;
+   active->deleteSelected(active->selectionModel()->selectedRows());
 
-   selected = active->selectionModel()->selectedRows();
-
-   confirmDelete = QMessageBox::NoButton;
-   // Get the dead things first.  Deleting as we process the list doesn't work, because the
-   // delete updates the database and the indices get recalculated.
-   for(at = selected.begin(),end = selected.end();at < end;++at)
-   {
-      switch(active->type(*at))
-      {
-         case BtTreeItem::RECIPE:
-            if ( *at != active->findElement(0) && verifyDelete("Recipe",active->recipe(*at)->name()))
-               deadRec.append(active->recipe(*at));
-            break;
-         case BtTreeItem::EQUIPMENT:
-            if (*at != active->findElement(0) && verifyDelete("Equipment",active->equipment(*at)->name()))
-               deadKit.append(active->equipment(*at));
-            break;
-         case BtTreeItem::FERMENTABLE:
-            if (*at != active->findElement(0) && verifyDelete("Fermentable",active->fermentable(*at)->name()))
-               deadFerm.append(active->fermentable(*at));
-            break;
-         case BtTreeItem::HOP:
-            if (*at != active->findElement(0) && verifyDelete("Hop",active->hop(*at)->name()))
-               deadHop.append(active->hop(*at));
-            break;
-         case BtTreeItem::MISC:
-            if (*at != active->findElement(0) && verifyDelete("Misc",active->misc(*at)->name()))
-               deadMisc.append(active->misc(*at));
-            break;
-         case BtTreeItem::STYLE:
-            if (*at != active->findElement(0) && verifyDelete("Style",active->style(*at)->name()))
-               deadStyle.append(active->style(*at));
-            break;
-         case BtTreeItem::YEAST:
-            if (*at != active->findElement(0) && verifyDelete("Yeast",active->yeast(*at)->name()))
-               deadYeast.append(active->yeast(*at));
-            break;
-         case BtTreeItem::BREWNOTE:
-            if (verifyDelete("BrewNote",active->brewNote(*at)->brewDate_short()))
-               deadNote.append(active->brewNote(*at));
-            break;
-         default:
-            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(treeView_recipe->type(*at)));
-      }
-      if ( confirmDelete == QMessageBox::Cancel )
-         return;
-   }
-
-   // Deleting brewnotes is kind of annoying, actually.  But do it before you
-   // delete recipes.  Unpleasant things will happen... I really want to
-   // isolate this so it looks as clean as the others do.
-   for (int i = 0; i < deadNote.count(); ++i)
-   {
-      BrewNoteWidget* ni = brewNotes.value(deadNote.at(i)->key());
-      Recipe* rec = Database::instance().getParentRecipe(deadNote.at(i));
-      int numtab = tabWidget_recipeView->indexOf(ni);  
-
-      // remove it from the recipe and from our internal tracking.
-      rec->removeBrewNote(deadNote.at(i));
-      brewNotes.remove(deadNote.at(i)->key());
-
-      if ( numtab > 2 )
-         tabWidget_recipeView->removeTab(numtab);
-   }
-
-   Database::instance().removeRecipe(deadRec);
-   Database::instance().removeEquipment(deadKit);
-   Database::instance().removeFermentable(deadFerm);
-   Database::instance().removeHop(deadHop);
-   Database::instance().removeMisc(deadMisc);
-   Database::instance().removeStyle(deadStyle);
-   Database::instance().removeYeast(deadYeast);
-
-   first = active->first();
+   // This should be fixed to find the first nonfolder object in the tree
+   QModelIndex first = active->first();
    if ( first.isValid() )
    {
       if (active->type(first) == BtTreeItem::RECIPE)
@@ -684,32 +602,41 @@ void MainWindow::setBrewNoteByIndex(const QModelIndex &index)
    // I think this means a brew note for a different recipe has been selected.
    // We need to select that recipe, which will clear the current tabs
    if (  parent != recipeObs )
-   {
       setRecipe(parent);
-   }
-   else if (brewNotes.contains(bNote->key()))
-   {
-      tabWidget_recipeView->setCurrentWidget(brewNotes.value(bNote->key()));
-      return;
-   }
 
-   ni = new BrewNoteWidget(tabWidget_recipeView);
-   ni->setBrewNote(bNote);
+   ni = findBrewNoteWidget(bNote);
+   if ( ! ni ) 
+   {
+      ni = new BrewNoteWidget(tabWidget_recipeView);
+      ni->setBrewNote(bNote);
+   }
 
    tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
-   brewNotes.insert(bNote->key(), ni);
    tabWidget_recipeView->setCurrentWidget(ni);
 
+}
+
+BrewNoteWidget* MainWindow::findBrewNoteWidget(BrewNote* b)
+{
+   for (int i = 0; i < tabWidget_recipeView->count(); ++i)
+   {
+      if (tabWidget_recipeView->widget(i)->objectName() == "BrewNoteWidget")
+      {
+         BrewNoteWidget* ni = qobject_cast<BrewNoteWidget*>(tabWidget_recipeView->widget(i));
+         if ( ni->isBrewNote(b) ) 
+            return ni;
+      }
+   }
+   return 0;
 }
 
 void MainWindow::setBrewNote(BrewNote* bNote)
 {
    QString tabname;
-   BrewNoteWidget* ni;
+   BrewNoteWidget* ni = findBrewNoteWidget(bNote);
 
-   if (brewNotes.contains(bNote->key()))
+   if ( ni ) 
    {
-      ni = brewNotes.value(bNote->key());
       tabWidget_recipeView->setCurrentWidget(ni);
       return;
    }
@@ -717,7 +644,6 @@ void MainWindow::setBrewNote(BrewNote* bNote)
    ni = new BrewNoteWidget(tabWidget_recipeView);
    ni->setBrewNote(bNote);
 
-   brewNotes.insert(bNote->key(), ni);
    tabWidget_recipeView->addTab(ni,bNote->brewDate_short());
    tabWidget_recipeView->setCurrentWidget(ni);
 }
@@ -732,12 +658,10 @@ void MainWindow::setRecipe(const QModelIndex &index)
 // Can handle null recipes.
 void MainWindow::setRecipe(Recipe* recipe)
 {
+   int tabs = 0;
    // Don't like void pointers.
    if( recipe == 0 )
       return;
-
-   int startTab;
-   QHashIterator<int,BrewNoteWidget*> b(brewNotes);
 
    // Make sure this MainWindow is paying attention...
    if( recipeObs )
@@ -756,19 +680,18 @@ void MainWindow::setRecipe(Recipe* recipe)
 
    // Clean out any brew notes
    tabWidget_recipeView->setCurrentIndex(0);
-   startTab = tabWidget_recipeView->count() - brewNotes.size();
-
-   while( b.hasNext() )
+   // Start closing from the right (highest index) down. Anything else dumps
+   // core in the most unpleasant of fashions
+   tabs = tabWidget_recipeView->count() - 1;
+   for (int i = tabs; i >= 0; --i)
    {
-      b.next();
-      tabWidget_recipeView->removeTab(startTab);
+      if (tabWidget_recipeView->widget(i)->objectName() == "BrewNoteWidget")
+         tabWidget_recipeView->removeTab(i);
    }
-   brewNotes.clear();
  
    // Tell some of our other widgets to observe the new recipe.
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
-   //recipeStyleNameButton->setRecipe(recipe);
    equipmentListModel->observeRecipe(recipe);
    maltWidget->observeRecipe(recipe);
    beerColorWidget->setRecipe(recipe);
@@ -1490,7 +1413,6 @@ void MainWindow::newBrewNote()
       if( rec == 0 )
          continue;
 
-
       // Make sure everything is properly set and selected
       if( rec != recipeObs )
          setRecipe(rec);
@@ -1501,7 +1423,7 @@ void MainWindow::newBrewNote()
 
       setBrewNote(bNote);
 
-      bIndex = treeView_recipe->findBrewNote(bNote);
+      bIndex = treeView_recipe->findElement(bNote);
       if ( bIndex.isValid() )
          setTreeSelection(bIndex);
    }
@@ -1526,7 +1448,7 @@ void MainWindow::reBrewNote()
 
       setBrewNote(bNote);
 
-      setTreeSelection(treeView_recipe->findBrewNote(bNote));
+      setTreeSelection(treeView_recipe->findElement(bNote));
    }
 }
 
@@ -1583,18 +1505,6 @@ bool MainWindow::verifyImport(QString tag, QString name)
 {
    return QMessageBox::question(this, tr("Import %1?").arg(tag), tr("Import %1?").arg(name),
                                 QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;
-}
-
-bool MainWindow::verifyDelete(QString tag, QString name)
-{
-   if ( confirmDelete == QMessageBox::YesToAll )
-      return true;
-
-   confirmDelete = QMessageBox::question(this, tr("Delete %1").arg(tag), tr("Delete %1 %2?").arg(tag).arg(name),
-                                  QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::Cancel,
-                                  QMessageBox::No);
-
-   return (confirmDelete == QMessageBox::Yes || confirmDelete ==  QMessageBox::YesToAll); 
 }
 
 void MainWindow::addMashStep()
@@ -1729,7 +1639,7 @@ void MainWindow::removeMash()
    //remove from db
 
    m->removeAllMashSteps();
-   Database::instance().removeMash(m);
+   Database::instance().remove(m);
    
    Mash* defaultMash = Database::instance().newMash(recipeObs);
    mashStepTableModel->setMash(defaultMash);
@@ -2544,11 +2454,10 @@ void MainWindow::changeBrewDate()
          target->setBrewDate(newDate);
 
          // If this note is open in a tab
-         if (brewNotes.contains(target->key()))
+         BrewNoteWidget* ni = findBrewNoteWidget(target);
+         if ( ni )
          {
-            // Rename it. I hope
-            int tabIndex = tabWidget_recipeView->indexOf(brewNotes.value(target->key()));
-            tabWidget_recipeView->setTabText(tabIndex, target->brewDate_short());
+            tabWidget_recipeView->setTabText(tabWidget_recipeView->indexOf(ni), target->brewDate_short());
             return;
          }
       }
@@ -2575,4 +2484,22 @@ void MainWindow::fixBrewNote()
 
       target->recalculateEff(noteParent);
    }
+}
+
+void MainWindow::closeBrewNote(BrewNote* b)
+{
+   Recipe* parent = Database::instance().getParentRecipe(b);
+
+   // If this isn't the focused recipe, do nothing because there are no tabs
+   // to close.
+   if ( parent != recipeObs )
+      return;
+
+   BrewNoteWidget* ni = findBrewNoteWidget(b);
+
+   if ( ni )
+      tabWidget_recipeView->removeTab( tabWidget_recipeView->indexOf(ni));
+
+   return;
+
 }

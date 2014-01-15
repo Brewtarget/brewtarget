@@ -22,6 +22,7 @@
 #include <QMenu>
 #include <QDebug>
 #include <QHeaderView>
+#include <QMessageBox>
 #include "BtTreeView.h"
 #include "BtTreeModel.h"
 #include "BtTreeFilterProxyModel.h"
@@ -143,11 +144,6 @@ BrewNote* BtTreeView::brewNote(const QModelIndex &index) const
       return NULL;
 
    return _model->brewNote(filter->mapToSource(index));
-}
-
-QModelIndex BtTreeView::findBrewNote(BrewNote* bNote)
-{
-   return filter->mapFromSource(_model->findBrewNote(bNote));
 }
 
 BtFolder* BtTreeView::folder(const QModelIndex &index) const
@@ -373,6 +369,96 @@ QMenu* BtTreeView::contextMenu(QModelIndex selected)
       return subMenu;
 
    return _contextMenu;
+}
+
+int BtTreeView::verifyDelete(int confirmDelete, QString tag, QString name)
+{
+   if ( confirmDelete == QMessageBox::YesToAll )
+      return confirmDelete;
+
+   return QMessageBox::question(this, tr("Delete %1").arg(tag), tr("Delete %1 %2?").arg(tag).arg(name),
+                                  QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::Cancel,
+                                  QMessageBox::No);
+
+}
+
+void BtTreeView::deleteSelected(QModelIndexList selected)
+{
+   QString prompt;
+
+   int confirmDelete = QMessageBox::NoButton;
+   // Get the dead things first.  Deleting as we process the list doesn't work, because the
+   // delete updates the database and the indices get recalculated.
+   foreach( QModelIndex at, selected )
+   {
+      // First, we should translate from proxy to model, because I need this
+      // index a lot.
+      QModelIndex translated = filter->mapToSource(at);
+      // You can't delete the root element
+      if ( translated == findElement(0) )
+         continue;
+      switch(_model->type(translated))
+      {
+         case BtTreeItem::RECIPE:
+            confirmDelete = verifyDelete(confirmDelete,tr("Recipe"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->recipe(translated) );
+            break;
+         case BtTreeItem::EQUIPMENT:
+            confirmDelete = verifyDelete(confirmDelete,tr("Equipment"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->equipment(translated) );
+            break;
+         case BtTreeItem::FERMENTABLE:
+            confirmDelete = verifyDelete(confirmDelete,tr("Fermentable"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->fermentable(translated) );
+            break;
+         case BtTreeItem::HOP:
+            confirmDelete = verifyDelete(confirmDelete,tr("Hop"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->hop(translated) );
+            break;
+         case BtTreeItem::MISC:
+            confirmDelete = verifyDelete(confirmDelete,tr("Misc"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->misc(translated) );
+            break;
+         case BtTreeItem::STYLE:
+            confirmDelete = verifyDelete(confirmDelete,tr("Style"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->style(translated) );
+            break;
+         case BtTreeItem::YEAST:
+            confirmDelete = verifyDelete(confirmDelete,tr("Yeast"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->yeast(translated) );
+            break;
+         case BtTreeItem::BREWNOTE:
+            confirmDelete = verifyDelete(confirmDelete,tr("BrewNote"),_model->brewNote(translated)->brewDate_short());
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               Database::instance().remove( _model->brewNote(translated) );
+            break;
+         default:
+            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(translated)));
+      }
+      if ( confirmDelete == QMessageBox::Cancel )
+         return;
+   }
+
+   // Maybe we don't need this any more. I doubt it, but maybe. We may also
+   // need to suppress signals?
+   /*
+   Database::instance().remove(deadNote);
+
+   Database::instance().remove(deadRec);
+   Database::instance().remove(deadKit);
+   Database::instance().remove(deadFerm);
+   Database::instance().remove(deadHop);
+   Database::instance().remove(deadMisc);
+   Database::instance().remove(deadStyle);
+   Database::instance().remove(deadYeast);
+   */
 }
 
 // Bad form likely

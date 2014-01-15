@@ -53,8 +53,8 @@ BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
          connect( &(Database::instance()), SIGNAL(newRecipeSignal(Recipe*)),this, SLOT(elementAdded(Recipe*)));
          connect( &(Database::instance()), SIGNAL(deletedRecipeSignal(Recipe*)),this, SLOT(elementRemoved(Recipe*)));
          // Brewnotes need love too!
-         connect( &(Database::instance()), SIGNAL(newBrewNoteSignal(BrewNote*)),this, SLOT(brewNoteAdded(BrewNote*)));
-         connect( &(Database::instance()), SIGNAL(deletedBrewNoteSignal(BrewNote*)),this, SLOT(brewNoteRemoved(BrewNote*)));
+         connect( &(Database::instance()), SIGNAL(newBrewNoteSignal(BrewNote*)),this, SLOT(elementAdded(BrewNote*)));
+         connect( &(Database::instance()), SIGNAL(deletedBrewNoteSignal(BrewNote*)),this, SLOT(elementRemoved(BrewNote*)));
          _type = BtTreeItem::RECIPE;
          _mimeType = "application/x-brewtarget-recipe";
          break;
@@ -484,44 +484,19 @@ QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
    // Recursion. Wonderful.
    for(i=0; i < pItem->childCount(); ++i)
    {
+      // If we've found what we are looking for, return
       if ( pItem->child(i)->thing() == thing )
          return createIndex(i,0,pItem->child(i));
 
-      if ( pItem->child(i)->type() == BtTreeItem::FOLDER )
+      // If we have a folder, or we are looking for a brewnote and have a
+      // recipe in hand, recurse
+      if ( pItem->child(i)->type() == BtTreeItem::FOLDER ||
+           (qobject_cast<BrewNote*>(thing) && pItem->child(i)->type() == BtTreeItem::RECIPE ) )
       {
-         pIndex = findElement(thing,pItem->child(i));
-         if ( pIndex.isValid() )
-            return pIndex;
+         return findElement(thing,pItem->child(i));
       }
-
    }
    return QModelIndex();
-}
-
-/* Important lesson here.  When building the index, the pointer needs to be to
- * the child's parent item, as understood by the model.  Not the pointer to
- * the actual object (e.g., the BrewNote) or the recipe, or the brewnote's
- * place in the recipe.
- */
-QModelIndex BtTreeModel::findBrewNote(BrewNote* bNote)
-{
-   if (! bNote )
-      return QModelIndex();
-
-   // Get the brewnote's parent
-   Recipe *parent = Database::instance().getParentRecipe(bNote);
-   // Find that recipe in the list
-   QModelIndex pInd = findElement(parent);
-   // and get the associated treeItem
-   BtTreeItem* pItem = item(pInd);
-
-
-   QList<BrewNote*> notes = parent->brewNotes();
-   int i = notes.indexOf(bNote);
-   if( i > 0 )
-      return createIndex(i,0,pItem->child(i));
-   else
-      return QModelIndex();
 }
 
 void BtTreeModel::addFolder(QString name) 
@@ -530,30 +505,47 @@ void BtTreeModel::addFolder(QString name)
    QModelIndex pInd = parent(ndx);
 }
 
-// THIS CODE IS BROKEN AS OF 11-01-14
-void BtTreeModel::renameFolder(BtFolder* victim, QString newName, QString oldPath)
+// This signature simply creates a BtFolder object and then calls the other
+// form for renameFolder
+void BtTreeModel::renameFolder(BtFolder* victim, QString newName)
+{
+   BtFolder* topPath = new BtFolder();
+   topPath->setfullPath(newName);
+   renameFolder(victim,topPath);
+}
+
+void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
 {
    QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
    BtTreeItem* start = item(ndx);
-   QString replacePath = oldPath.isEmpty() ? victim->fullPath() : oldPath;
    int i;
 
+   
    // Ok. We have a start and an index.
    for (i=0; i < start->childCount(); ++i)
    {
       BtTreeItem* next = start->child(i);
-      // If a folder, recurse. 
+      // If a folder, recurse. We need ot change the parent folder a little,
+      // just so we know where we are moving the leaf nodes to
       if ( next->type() == BtTreeItem::FOLDER ) 
-         renameFolder(next->folder(),newName,replacePath);
+      {
+         BtFolder* newTop = new BtFolder();
+         newTop->setfullPath(QString("%1/%2").arg(topPath->fullPath()).arg(victim->name()));
+         renameFolder(next->folder(),newTop);
+      }
       else // Leafnode
       {
-         layoutAboutToBeChanged();
          BeerXMLElement* thg = next->thing();
 
-         QString fPath = thg->folder();
-  
-         fPath.replace(QRegExp(replacePath),newName);
+         QString fPath;
+         // An edge case when dropping the folder on the root window
+         if ( ! topPath ) 
+           fPath = QString("/%1").arg(victim->name());
+         else
+           fPath = QString("%1/%2").arg(topPath->fullPath()).arg(victim->name());
+
          thg->setFolder(fPath);
+
       }
    }
    // Last thing is to remove the folder. It will be fascinating to see how
@@ -563,6 +555,7 @@ void BtTreeModel::renameFolder(BtFolder* victim, QString newName, QString oldPat
 
    i = start->childNumber();
    removeRows(i, 1, pInd); 
+
 }
 
 QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath)
@@ -764,7 +757,7 @@ void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
    foreach( BrewNote* note, notes )
    {
       insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE);
-      observeBrewNote(note);
+      observeElement(note);
       ++j;
    }
 }
@@ -978,19 +971,6 @@ void BtTreeModel::folderChanged(QString name)
    return;
 }
 
-void BtTreeModel::brewNoteChanged()
-{
-   BrewNote* d = qobject_cast<BrewNote*>(sender());
-   if( !d )
-      return;
-   
-   QModelIndex ndxLeft = findBrewNote(d);
-   if( ! ndxLeft.isValid() )
-      return;
-   
-   QModelIndex ndxRight = createIndex(ndxLeft.row(), columnCount(ndxLeft)-1, ndxLeft.internalPointer());
-   emit dataChanged( ndxLeft, ndxRight );
-}
 
 /* I don't like this part, but Qt's signal/slot mechanism are pretty
  * simplistic and do a string compare on signatures. Each one of these one
@@ -1004,24 +984,32 @@ void BtTreeModel::elementAdded(Hop* victim) { elementAdded(qobject_cast<BeerXMLE
 void BtTreeModel::elementAdded(Misc* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementAdded(Style* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementAdded(Yeast* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
+void BtTreeModel::elementAdded(BrewNote* victim) { elementAdded(qobject_cast<BeerXMLElement*>(victim)); }
 
 // I guess this isn't too bad. Better than this same function copied 7 times
 void BtTreeModel::elementAdded(BeerXMLElement* victim)
 {
-   BeerXMLElement* fool = qobject_cast<BeerXMLElement*>(victim);
-   if ( ! fool->display() ) 
+   QModelIndex pIdx;
+   int lType = _type;
+
+   if ( ! victim->display() ) 
       return;
 
-   BtTreeItem* local = rootItem->child(0);
-   QModelIndex parent = createIndex(0,0,local);
+   if ( qobject_cast<BrewNote*>(victim) )
+   {
+      pIdx = findElement(Database::instance().getParentRecipe(qobject_cast<BrewNote*>(victim)));
+      lType = BtTreeItem::BREWNOTE;
+   }
+   else
+      pIdx = createIndex(0,0,rootItem->child(0));
 
-   if ( ! parent.isValid() )
+   if ( ! pIdx.isValid() )
       return;
 
-   int breadth = rowCount(parent);
+   int breadth = rowCount(pIdx);
 
-   insertRow(breadth,parent,fool);
-   observeElement(fool);
+   insertRow(breadth,pIdx,victim,lType);
+   observeElement(victim);
 }
 
 void BtTreeModel::elementRemoved(Recipe* victim)      { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
@@ -1031,6 +1019,7 @@ void BtTreeModel::elementRemoved(Hop* victim)         { elementRemoved(qobject_c
 void BtTreeModel::elementRemoved(Misc* victim)        { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementRemoved(Style* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
 void BtTreeModel::elementRemoved(Yeast* victim)       { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
+void BtTreeModel::elementRemoved(BrewNote* victim)    { elementRemoved(qobject_cast<BeerXMLElement*>(victim)); }
 
 void BtTreeModel::elementRemoved(BeerXMLElement* victim)
 {
@@ -1041,56 +1030,16 @@ void BtTreeModel::elementRemoved(BeerXMLElement* victim)
    disconnect( victim, 0, this, 0 );
 }
 
-// BrewNotes get no respect, but they get signals. They also get mighty
-// confusing
-void BtTreeModel::brewNoteAdded(BrewNote* victim)
-{
-   // Get the brewnote's parent. We can't find it in the tree, because we
-   // haven't inserted it yet.
-   Recipe *parent = Database::instance().getParentRecipe(victim);
-   // Find that recipe in the list
-   QModelIndex pInd = findElement(parent);
-   // and get the associated treeItem
-   BtTreeItem* pItem = item(pInd);
-
-   int breadth = pItem->childCount();
-   insertRow(breadth,pInd,victim,BtTreeItem::BREWNOTE);
-   observeBrewNote(victim);
-}
-
-// deleting them is worse. Unfortunately, the blasted brewnote is deleted by
-// the time we get this signal. So we have to rebuild the entire list.
-void BtTreeModel::brewNoteRemoved(BrewNote* victim)
-{
-   // Get the brewnote's parent recipe
-   Recipe *parent = Database::instance().getParentRecipe(victim);
-   // Find that recipe's index in the tree
-   QModelIndex parentInd = findElement(parent);
-   // and get the treeItem
-   BtTreeItem* parentItem = item(parentInd);
-
-   disconnect( victim, 0, this, 0 );
-   
-   // If the tree item has children -- brewnotes -- remove them all
-   if ( parentItem->childCount() )
-      removeRows(0,parentItem->childCount(),parentInd);
-   
-   QList<BrewNote*> brewNotes = parent->brewNotes();
-   for (int j=0; j < brewNotes.size(); ++j)
-      insertRow(j,parentInd,brewNotes[j],BtTreeItem::BREWNOTE);
-}
-
 void BtTreeModel::observeElement(BeerXMLElement* d)
 {
-   connect( d, SIGNAL(changedName(QString)), this, SLOT(elementChanged()) );
-   connect( d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
+   if ( qobject_cast<BrewNote*>(d) )
+      connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(elementChanged()) );
+   else 
+   {
+      connect( d, SIGNAL(changedName(QString)), this, SLOT(elementChanged()) );
+      connect( d, SIGNAL(changedFolder(QString)), this, SLOT(folderChanged(QString)));
+   }
 }
-
-void BtTreeModel::observeBrewNote(BrewNote* d)
-{
-   connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(brewNoteChanged()) );
-}  
-
 
 // DRAG AND DROP STUFF
 
@@ -1199,50 +1148,5 @@ QStringList BtTreeModel::mimeTypes() const
 Qt::DropActions BtTreeModel::supportedDropActions() const
 {
    return Qt::CopyAction | Qt::MoveAction;
-}
-
-void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
-{
-   QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
-   BtTreeItem* start = item(ndx);
-   int i;
-
-   
-   // Ok. We have a start and an index.
-   for (i=0; i < start->childCount(); ++i)
-   {
-      BtTreeItem* next = start->child(i);
-      // If a folder, recurse. 
-      // hold this thought. I *think* parent needs to change each time to
-      // represent the tree we are building. Not sure how we will do that
-      // (concat victim name with parent full path?)
-      if ( next->type() == BtTreeItem::FOLDER ) 
-      {
-         BtFolder* newTop = new BtFolder();
-         newTop->setfullPath(QString("%1%2").arg(topPath->fullPath()).arg(victim->name()));
-         renameFolder(next->folder(),newTop);
-      }
-      else // Leafnode
-      {
-         BeerXMLElement* thg = next->thing();
-
-         QString fPath;
-         // An edge case when dropping the folder on the root window
-         if ( ! topPath ) 
-           fPath = QString("/%1").arg(victim->name());
-         else
-           fPath = QString("%1/%2").arg(topPath->fullPath()).arg(victim->name());
-
-         thg->setFolder(fPath);
-
-      }
-   }
-   // Last thing is to remove the folder. It will be fascinating to see how
-   // this recurses
-   ndx = findFolder(victim->fullPath(), 0, false);
-   QModelIndex pInd = parent(ndx);
-
-   i = start->childNumber();
-   removeRows(i, 1, pInd); 
 }
 

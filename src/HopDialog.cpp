@@ -66,7 +66,7 @@ void HopDialog::removeHop()
     }
     modelIndex = hopTableProxy->mapToSource(viewIndex);
     Hop *hop = hopTableModel->getHop(modelIndex.row());
-    Database::instance().removeHop(hop);
+    Database::instance().remove(hop);
 }
 
 void HopDialog::addHop(const QModelIndex& index)
