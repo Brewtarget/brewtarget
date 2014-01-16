@@ -486,14 +486,21 @@ QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
    {
       // If we've found what we are looking for, return
       if ( pItem->child(i)->thing() == thing )
+      {
          return createIndex(i,0,pItem->child(i));
+      }
 
       // If we have a folder, or we are looking for a brewnote and have a
       // recipe in hand, recurse
       if ( pItem->child(i)->type() == BtTreeItem::FOLDER ||
            (qobject_cast<BrewNote*>(thing) && pItem->child(i)->type() == BtTreeItem::RECIPE ) )
       {
-         return findElement(thing,pItem->child(i));
+         QModelIndex found = findElement(thing,pItem->child(i));
+         // This is a bit tricky. Just because nothing came back from what
+         // ever folder we just rabit holed down doesn't mean it can't be
+         // found.
+         if ( found.isValid() )
+            return found;
       }
    }
    return QModelIndex();
@@ -519,7 +526,6 @@ void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
    QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
    BtTreeItem* start = item(ndx);
    int i;
-
    
    // Ok. We have a start and an index.
    for (i=0; i < start->childCount(); ++i)
@@ -623,7 +629,7 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 {
    BtTreeItem* pItem;
    QStringList dirs;
-   QString current;
+   QString current, fullPath;
    int i;
 
    pItem = parent ? parent : rootItem->child(0);
@@ -633,30 +639,51 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
    if ( name.isEmpty() )
       return createIndex(0,0,pItem);
 
+   // Prepare all the variables for the first loop
    dirs = name.split("/", QString::SkipEmptyParts);
-
    current = dirs.takeFirst();
 
-   for ( i = 0; i < pItem->childCount(); ++i )
+   if ( pPath.isEmpty() )
+      fullPath = pPath % "/" % current;
+   else 
+      fullPath = "/" %current;
+
+   fullPath.replace(QRegExp("//"), "/");
+   i = 0;
+
+   // Time to get funky with no recursion!
+   while( i < pItem->childCount() )
    {
-      BtTreeItem* temp = pItem->child(i);
-      // The parent has a folder
-
-      if ( temp->type() == BtTreeItem::FOLDER )
+      BtTreeItem* kid = pItem->child(i);
+      // The kid is a folder
+      if ( kid->type() == BtTreeItem::FOLDER )
       {
-         QString fullPath = pPath % "/" % current;
-         BtFolder* fold = temp->folder();
-
-         fullPath.replace(QRegExp("//"), "/");
          // The folder name matches the part we are looking at
-         if ( fold->isFolder(fullPath) )
+         if ( kid->folder()->isFolder(fullPath) )
          {
+            // If there are no more subtrees to look for, we found it
             if ( dirs.isEmpty() ) 
-               return createIndex(i,0,temp);
+               return createIndex(i,0,kid);
+            // Otherwise, we found a parent folder in our path
             else
-               return findFolder(dirs.join("/"), temp, create, fullPath);
+            {
+               // get the next folder in the path
+               current = dirs.takeFirst();
+               // append that to the fullPath we are looking for
+               fullPath = fullPath % "/" % current;
+               fullPath.replace(QRegExp("//"), "/");
+
+               // Set the parent to the folder
+               pItem = kid;
+               // Reset the counter
+               i = 0;
+               // And do the time warp again!
+               continue;
+            }
          }
       }
+      // If we got this far, it wasn't a folder or it wasn't a match.
+      i++;
    }
    // If we get here, we found no match.
 
@@ -761,26 +788,6 @@ void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
       ++j;
    }
 }
-
-/*
-   I think this method is no longer used or required. I am disabling for now.
-   maf
-
-void BtTreeModel::unloadTreeModel(QString propName)
-{
-   int breadth;
-   QModelIndex parent;
-
-   bool unloadAll = (propName=="");
-   
-   if ( unloadAll )
-   {
-      parent = createIndex(0,0,rootItem->child(0));
-      breadth = rowCount(parent);
-      removeRows(0,breadth,parent);
-   }
-}
-*/
 
 Recipe* BtTreeModel::recipe(const QModelIndex &index) const
 {
@@ -955,7 +962,7 @@ void BtTreeModel::folderChanged(QString name)
    int i = item(ndx)->childNumber();
 
    // Remove it
-   removeRows(i, 1, pIndex); 
+   removeRows(i, 1, pIndex);
 
    // Find the new parent
    ndx = findFolder(test->folder(), rootItem->child(0), true);
