@@ -524,41 +524,52 @@ void BtTreeModel::renameFolder(BtFolder* victim, QString newName)
 void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
 {
    QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
-   BtTreeItem* start = item(ndx);
+   QModelIndex pInd = parent(ndx);
+   QString targetPath = topPath->fullPath() % "/" % victim->name();
+   QPair<QString,BtTreeItem*> f;
+   QList<QPair<QString, BtTreeItem*> > folders;
    int i;
-   
-   // Ok. We have a start and an index.
-   for (i=0; i < start->childCount(); ++i)
+   // This space is important       ^
+
+   BtTreeItem* start = item(ndx);
+   f.first  = targetPath;
+   f.second = start;
+
+   folders.append(f);
+
+   while ( ! folders.isEmpty() )
    {
-      BtTreeItem* next = start->child(i);
-      // If a folder, recurse. We need ot change the parent folder a little,
-      // just so we know where we are moving the leaf nodes to
-      if ( next->type() == BtTreeItem::FOLDER ) 
+      // This looks weird, but it is needed for later
+      f = folders.takeFirst();
+      targetPath = f.first;
+      BtTreeItem* target = f.second;
+
+      qDebug() << "Starting with targetPath =" << targetPath << "start =" << start << "and folders.count() =" << folders.count();
+
+      // Ok. We have a start and an index.
+      for (i=0; i < target->childCount(); ++i)
       {
-         BtFolder* newTop = new BtFolder();
-         newTop->setfullPath(QString("%1/%2").arg(topPath->fullPath()).arg(victim->name()));
-         renameFolder(next->folder(),newTop);
-      }
-      else // Leafnode
-      {
-         BeerXMLElement* thg = next->thing();
-
-         QString fPath;
-         // An edge case when dropping the folder on the root window
-         if ( ! topPath ) 
-           fPath = QString("/%1").arg(victim->name());
-         else
-           fPath = QString("%1/%2").arg(topPath->fullPath()).arg(victim->name());
-
-         thg->setFolder(fPath);
-
+         BtTreeItem* next = target->child(i);
+         // If a folder, push it onto the folders stack for latter processing
+         if ( next->type() == BtTreeItem::FOLDER ) 
+         {
+            QPair<QString,BtTreeItem*> newTarget;
+            newTarget.first = targetPath % "/" % next->name();
+            newTarget.second = next;
+            qDebug() << "Pushing first =" << newTarget.first << "second =" << newTarget.second;
+            folders.append(newTarget);
+         }
+         else // Leafnode
+         {
+            BeerXMLElement* thg = next->thing();
+            qDebug() << "Modifying element with targetPath =" << targetPath;
+            thg->setFolder(targetPath);
+         }
       }
    }
    // Last thing is to remove the folder. It will be fascinating to see how
    // this recurses
-   ndx = findFolder(victim->fullPath(), 0, false);
-   QModelIndex pInd = parent(ndx);
-
+   // ndx = findFolder(victim->fullPath(), 0, false);
    i = start->childNumber();
    removeRows(i, 1, pInd); 
 
