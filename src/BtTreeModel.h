@@ -165,19 +165,13 @@ public:
    QModelIndex findElement(BeerXMLElement* thing, BtTreeItem* parent = NULL);
 
    //! \brief Get index of \c Folder
-   // I'm not quite sure of this signature yet. I want something that can:
-   // a) recurse the tree to see if a folder exists
-   // b) return the proper index to the folder if it does
-   // c) optionally create the tree as it goes.
-   // What I don't know is do I send it a QString for the name, or a BtFolder?
-   QModelIndex findFolder(QString folder, BtTreeItem* parent=NULL, bool create=false, QString pPath = "" );
+   QModelIndex findFolder(QString folder, BtTreeItem* parent=NULL, bool create=false);
    //! \brief a new folder . 
    void addFolder(QString name);
-   //! \brief renames a folder. I think 'renaming a folder' still has some
-   //problems. Does "rename a folder" work on everything or just on folders?
-   //The interface suggests the latter, but the code says the former
+   //! \brief renames a folder
    void renameFolder(BtFolder* victim, QString name);
-   void renameFolder(BtFolder* victim, BtFolder* target);
+   //! \brief deletes a folder and all of its subitems
+   void deleteFolder(QString victim);
 
    // !\brief accept a drop action.
    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent);

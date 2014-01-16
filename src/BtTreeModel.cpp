@@ -506,28 +506,89 @@ QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
 
 void BtTreeModel::addFolder(QString name) 
 {
-   QModelIndex ndx = findFolder(name, rootItem->child(0), true, "");
+   QModelIndex ndx = findFolder(name, rootItem->child(0), true);
    QModelIndex pInd = parent(ndx);
 }
 
-// This signature simply creates a BtFolder object and then calls the other
-// form for renameFolder
-void BtTreeModel::renameFolder(BtFolder* victim, QString newName)
+void BtTreeModel::deleteFolder(QString victim)
 {
-   BtFolder* topPath = new BtFolder();
-   topPath->setfullPath(newName);
-   renameFolder(victim,topPath);
+   QModelIndex ndx = findFolder(victim, 0, false);
+   QModelIndex pInd = parent(ndx);
+   QString targetPath = victim;
+   QPair<QString,BtTreeItem*> f;
+   QList<QPair<QString, BtTreeItem*> > folders;
+   // This space is important       ^
+   int i;
+
+   BtTreeItem* start = item(ndx);
+   f.first  = targetPath;
+   f.second = start;
+
+   folders.append(f);
+
+   while ( ! folders.isEmpty() )
+   {
+      // This looks weird, but it is needed for later
+      f = folders.takeFirst();
+      targetPath = f.first;
+      BtTreeItem* target = f.second;
+
+      // Ok. We have a start and an index.
+      for (i=0; i < target->childCount(); ++i)
+      {
+         BtTreeItem* next = target->child(i);
+         // If a folder, push it onto the folders stack for latter processing
+         if ( next->type() == BtTreeItem::FOLDER ) 
+         {
+            QPair<QString,BtTreeItem*> newTarget;
+            newTarget.first = targetPath % "/" % next->name();
+            newTarget.second = next;
+            folders.append(newTarget);
+         }
+         else // Leafnode
+         {
+            BeerXMLElement* thg = next->thing();
+            // Alas, here we must know what kind of thing we've got so we can
+            // cast it. Brewnotes don't count and we are already handling
+            // folders, so they don't get here either.
+            switch( next->type() )
+            {
+               case BtTreeItem::RECIPE:
+                  Database::instance().remove(qobject_cast<Recipe*>(thg));
+                  break;
+               case BtTreeItem::EQUIPMENT:
+                  Database::instance().remove(qobject_cast<Equipment*>(thg));
+                  break;
+               case BtTreeItem::FERMENTABLE:
+                  Database::instance().remove(qobject_cast<Fermentable*>(thg));
+                  break;
+               case BtTreeItem::HOP:
+                  Database::instance().remove(qobject_cast<Hop*>(thg));
+                  break;
+               case BtTreeItem::MISC:
+                  Database::instance().remove(qobject_cast<Misc*>(thg));
+                  break;
+               case BtTreeItem::YEAST:
+                  Database::instance().remove(qobject_cast<Yeast*>(thg));
+                  break;
+            }
+         }
+      }
+   }
+   // Last thing is to remove the victim. 
+   i = start->childNumber();
+   removeRows(i, 1, pInd); 
 }
 
-void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
+void BtTreeModel::renameFolder(BtFolder* victim, QString newName)
 {
    QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
    QModelIndex pInd = parent(ndx);
-   QString targetPath = topPath->fullPath() % "/" % victim->name();
+   QString targetPath = newName % "/" % victim->name();
    QPair<QString,BtTreeItem*> f;
    QList<QPair<QString, BtTreeItem*> > folders;
-   int i;
    // This space is important       ^
+   int i;
 
    BtTreeItem* start = item(ndx);
    f.first  = targetPath;
@@ -611,27 +672,11 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
    return ndx;
 }
 
-/* This one will be a bit twisted, because of the way I want it to work. name
- * will be a string like "/a/b/c". This method will need to split that into
- * [a,b,c], pop the first element off, "a", and look in the parent for a folder
- * with the same name.
- *
- * if the folder is found
- *   and there are things left in the array, recurse using join("/", [a,b])
- *   and the array is empty, we've found the folder return the QModelIndex
- *
- * if the folder is not found, start creating and inserting them. When done,
- * return the QModelIndex to the lowest item
- *
- * Consider renaming this? findFolder should do just that and no more. 
- * Yeah, I should
- * 
- */
-QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool create, QString pPath )
+QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool create )
 {
    BtTreeItem* pItem;
    QStringList dirs;
-   QString current, fullPath;
+   QString current, fullPath, targetPath;
    int i;
 
    pItem = parent ? parent : rootItem->child(0);
@@ -644,13 +689,9 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
    // Prepare all the variables for the first loop
    dirs = name.split("/", QString::SkipEmptyParts);
    current = dirs.takeFirst();
+   fullPath = "/";
+   targetPath = fullPath % current;
 
-   if ( pPath.isEmpty() )
-      fullPath = pPath % "/" % current;
-   else 
-      fullPath = "/" %current;
-
-   fullPath.replace(QRegExp("//"), "/");
    i = 0;
 
    // Time to get funky with no recursion!
@@ -661,7 +702,7 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
       if ( kid->type() == BtTreeItem::FOLDER )
       {
          // The folder name matches the part we are looking at
-         if ( kid->folder()->isFolder(fullPath) )
+         if ( kid->folder()->isFolder(targetPath) )
          {
             // If there are no more subtrees to look for, we found it
             if ( dirs.isEmpty() ) 
@@ -672,8 +713,8 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
                // get the next folder in the path
                current = dirs.takeFirst();
                // append that to the fullPath we are looking for
-               fullPath = fullPath % "/" % current;
-               fullPath.replace(QRegExp("//"), "/");
+               fullPath = targetPath;
+               targetPath = fullPath % current;
 
                // Set the parent to the folder
                pItem = kid;
@@ -695,7 +736,7 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
       // push the current dir back on the stack
       dirs.prepend(current);
       // And start with the madness
-      return createFolderTree( dirs, pItem, pPath);
+      return createFolderTree( dirs, pItem, fullPath);
    }
 
    // If we weren't supposed to create, we drop to here and return an empty
@@ -755,7 +796,7 @@ void BtTreeModel::loadTreeModel(QString propName)
 
       if (! elem->folder().isEmpty() )
       {
-         ndxLocal = findFolder( elem->folder(), rootItem->child(0), true, "/" );
+         ndxLocal = findFolder( elem->folder(), rootItem->child(0), true );
          local = item(ndxLocal);
          i = local->childCount();
       }
@@ -1134,11 +1175,7 @@ bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
          BtFolder* victim = new BtFolder;
          victim->setfullPath(name);
 
-         BtFolder* topPath = new BtFolder;
-         if (! target.isEmpty() )
-            topPath->setfullPath(target);
-
-         renameFolder(victim, topPath);
+         renameFolder(victim, target);
       }
    }
 

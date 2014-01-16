@@ -439,6 +439,13 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
                Database::instance().remove( _model->brewNote(translated) );
             break;
+         case BtTreeItem::FOLDER:
+            // Maybe more warning that this is recursive and you will only get
+            // prompted on the folder?
+            confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(translated));
+            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+               _model->deleteFolder(_model->folder(translated)->fullPath());
+            break;
          default:
             Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(translated)));
       }
