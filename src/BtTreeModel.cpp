@@ -470,6 +470,7 @@ QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
 {
    BtTreeItem* pItem;
    QModelIndex pIndex;
+   QList<BtTreeItem*> folders;
 
    int i;
 
@@ -481,26 +482,23 @@ QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
    if (! thing )
       return createIndex(0,0,pItem);
 
-   // Recursion. Wonderful.
-   for(i=0; i < pItem->childCount(); ++i)
-   {
-      // If we've found what we are looking for, return
-      if ( pItem->child(i)->thing() == thing )
-      {
-         return createIndex(i,0,pItem->child(i));
-      }
+   folders.append(pItem);
 
-      // If we have a folder, or we are looking for a brewnote and have a
-      // recipe in hand, recurse
-      if ( pItem->child(i)->type() == BtTreeItem::FOLDER ||
-           (qobject_cast<BrewNote*>(thing) && pItem->child(i)->type() == BtTreeItem::RECIPE ) )
+   // Recursion. Wonderful.
+   while ( ! folders.isEmpty() )
+   {
+      BtTreeItem* target = folders.takeFirst();
+      for(i=0; i < target->childCount(); ++i)
       {
-         QModelIndex found = findElement(thing,pItem->child(i));
-         // This is a bit tricky. Just because nothing came back from what
-         // ever folder we just rabit holed down doesn't mean it can't be
-         // found.
-         if ( found.isValid() )
-            return found;
+         // If we've found what we are looking for, return
+         if ( target->child(i)->thing() == thing )
+            return createIndex(i,0,target->child(i));
+
+         // If we have a folder, or we are looking for a brewnote and have a
+         // recipe in hand, push the child onto the stack
+         if ( target->child(i)->type() == BtTreeItem::FOLDER ||
+              (qobject_cast<BrewNote*>(thing) && target->child(i)->type() == BtTreeItem::RECIPE ) )
+            folders.append(target->child(i));
       }
    }
    return QModelIndex();
@@ -544,8 +542,6 @@ void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
       targetPath = f.first;
       BtTreeItem* target = f.second;
 
-      qDebug() << "Starting with targetPath =" << targetPath << "start =" << start << "and folders.count() =" << folders.count();
-
       // Ok. We have a start and an index.
       for (i=0; i < target->childCount(); ++i)
       {
@@ -556,23 +552,18 @@ void BtTreeModel::renameFolder(BtFolder* victim, BtFolder* topPath)
             QPair<QString,BtTreeItem*> newTarget;
             newTarget.first = targetPath % "/" % next->name();
             newTarget.second = next;
-            qDebug() << "Pushing first =" << newTarget.first << "second =" << newTarget.second;
             folders.append(newTarget);
          }
          else // Leafnode
          {
             BeerXMLElement* thg = next->thing();
-            qDebug() << "Modifying element with targetPath =" << targetPath;
             thg->setFolder(targetPath);
          }
       }
    }
-   // Last thing is to remove the folder. It will be fascinating to see how
-   // this recurses
-   // ndx = findFolder(victim->fullPath(), 0, false);
+   // Last thing is to remove the victim. 
    i = start->childNumber();
    removeRows(i, 1, pInd); 
-
 }
 
 QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath)
