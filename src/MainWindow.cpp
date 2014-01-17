@@ -1341,6 +1341,9 @@ void MainWindow::newFolder()
    QString name = QInputDialog::getText(this, tr("Folder name"),
                                           tr("Folder name:"),
                                            QLineEdit::Normal, dPath);
+   // User clicks cancel
+   if (name.isEmpty())
+      return;
    // Do some input validation here.
 
    // Nice little builtin to collapse leading and following white space
@@ -1385,6 +1388,25 @@ void MainWindow::renameFolder()
    QString newName = QInputDialog::getText(this, tr("Folder name"), tr("Folder name:"),
                                            QLineEdit::Normal, victim->name());
 
+   // User clicks cancel
+   if (newName.isEmpty())
+      return;
+   // Do some input validation here.
+
+   // Nice little builtin to collapse leading and following white space
+   newName = newName.simplified(); 
+   if ( newName.isEmpty() )
+   {
+      QMessageBox::critical( this, tr("Bad Name"), 
+                             tr("A folder name must have at least one non-whitespace character in it"));
+      return;
+   }
+
+   if ( newName.split("/", QString::SkipEmptyParts).isEmpty() )
+   {
+      QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
+      return;
+   }
    newName = victim->path() % "/" % newName;
 
    // Delgate this work to the tree.
