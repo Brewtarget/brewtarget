@@ -167,12 +167,15 @@ public:
    //! \brief Get index of \c Folder
    QModelIndex findFolder(QString folder, BtTreeItem* parent=NULL, bool create=false);
    //! \brief a new folder . 
-   void addFolder(QString name);
+   bool addFolder(QString name);
    //! \brief renames a folder
-   void renameFolder(BtFolder* victim, QString name);
-   //! \brief deletes a folder and all of its subitems
-   void deleteFolder(QString victim);
+   bool renameFolder(BtFolder* victim, QString name);
+   //! \brief removes a folder. This could get weird if you don't remove
+   //! everything from it first. This is *intended* to be called from
+   //! deleteSelected().
+   bool removeFolder(QModelIndex ndx);
 
+   QModelIndexList allChildren(QModelIndex parent);
    // !\brief accept a drop action.
    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
    // !\brief what our supported drop actions are. Don't know if I need the drag option or not?
@@ -207,25 +210,18 @@ private slots:
    void elementRemoved(Yeast* victim);
    void elementRemoved(BrewNote* victim);
 
-   //! \brief slot to catch a changed folder signal. Folders are odd, because they
-   // can hold .. anything, including other folders. So I need the most generic
-   // pointer I can get. I hope this works.
-   //void folderRemoved(QObject* victim);
-
 private:
-   //! \brief Loads the data. Empty \c propname means load all trees.
-   void loadTreeModel(QString propName = "");
-   //! \brief Unloads the data. Empty \c propname means unload all trees.
-   // I do not think this is called anywhere by anybody. Disabling to see what
-   // happens
-   // void unloadTreeModel(QString propName = "");
-   
+   //! \brief Loads the tree. 
+   void loadTreeModel();
+  
+   //! \brief add and remove an element from the, respectively. All of the
+   //slots actually call these two methods 
    void elementAdded(BeerXMLElement* victim);
    void elementRemoved(BeerXMLElement* victim);
 
-   //! \brief connects the changedName() signal from \c BrewNote to the brewnoteChanged() slot
-   void observeBrewNote(BrewNote*);
-   //! \brief connects the changedName() signal from \c Style to the styleChanged() slot
+   //! \brief connects the changedName() signal and changedFolder() signals to
+   //! the proper methods for most things, and the same for changedBrewDate
+   //! and brewNotes
    void observeElement(BeerXMLElement*);
    
    //! \brief returns the \c section header from a recipe
@@ -242,10 +238,12 @@ private:
    QVariant yeastHeader(int section) const;
    //! \brief returns the \c section header from a style
    QVariant styleHeader(int section) const;
-   //! \brief returns the \c section header for a folder. If that makes sense.
-   // and I'm not sure it does
+   //! \brief returns the \c section header for a folder. 
    QVariant folderHeader(int section) const;
-  
+ 
+   //! \brief Returns the list of things in a tree (e.g., recipes) as a list
+   //! of BeerXMLElements. It's a convenience method to make loadTree()
+   //! cleaner
    QList<BeerXMLElement*> elements();
    //! \brief creates a folder tree. It's mostly a helper function.
    QModelIndex createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath);

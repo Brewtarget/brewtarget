@@ -39,6 +39,10 @@
 #include "brewnote.h"
 #include "style.h"
 
+// =========================================================================
+// ============================ CLASS STUFF ================================
+// =========================================================================
+
 BtTreeModel::BtTreeModel(BtTreeView *parent, TypeMasks type)
    : QAbstractItemModel(parent)
 {
@@ -113,6 +117,10 @@ BtTreeModel::~BtTreeModel()
 {
    delete rootItem;
 }
+
+// =========================================================================
+// =================== ABSTRACTITEMMODEL STUFF =============================
+// =========================================================================
 
 BtTreeItem *BtTreeModel::item( const QModelIndex &index ) const
 {
@@ -465,6 +473,10 @@ bool BtTreeModel::removeRows(int row, int count, const QModelIndex &parent)
    return success;
 }
 
+// =========================================================================
+// ====================== BREWTARGET STUFF =================================
+// =========================================================================
+
 // One find method for all things. This .. is nice
 QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
 {
@@ -504,92 +516,446 @@ QModelIndex BtTreeModel::findElement(BeerXMLElement* thing, BtTreeItem* parent)
    return QModelIndex();
 }
 
-void BtTreeModel::addFolder(QString name) 
+QList<BeerXMLElement*> BtTreeModel::elements()
 {
-   QModelIndex ndx = findFolder(name, rootItem->child(0), true);
-   QModelIndex pInd = parent(ndx);
+   QList<BeerXMLElement*> elements;
+   switch(treeMask)
+   {
+   case RECIPEMASK:
+      foreach( BeerXMLElement* elem, Database::instance().recipes() )
+         elements.append(elem);
+      break;
+   case EQUIPMASK:
+      foreach( BeerXMLElement* elem, Database::instance().equipments() )
+         elements.append(elem);
+      break;
+   case FERMENTMASK:
+      foreach( BeerXMLElement* elem, Database::instance().fermentables() )
+         elements.append(elem);
+      break;
+   case HOPMASK:
+      foreach( BeerXMLElement* elem, Database::instance().hops() )
+         elements.append(elem);
+      break;
+   case MISCMASK:
+      foreach( BeerXMLElement* elem, Database::instance().miscs() )
+         elements.append(elem);
+      break;
+   case YEASTMASK:
+      foreach( BeerXMLElement* elem, Database::instance().yeasts() )
+         elements.append(elem);
+      break;
+   case STYLEMASK:
+      foreach( BeerXMLElement* elem, Database::instance().styles() )
+         elements.append(elem);
+      break;
+   default:
+      Brewtarget::logW(QString("Invalid treemask: %1").arg(treeMask));
+   }
+   return elements;
 }
 
-void BtTreeModel::deleteFolder(QString victim)
+void BtTreeModel::loadTreeModel()
 {
-   QModelIndex ndx = findFolder(victim, 0, false);
-   QModelIndex pInd = parent(ndx);
-   QString targetPath = victim;
-   QPair<QString,BtTreeItem*> f;
-   QList<QPair<QString, BtTreeItem*> > folders;
-   // This space is important       ^
    int i;
 
-   BtTreeItem* start = item(ndx);
-   f.first  = targetPath;
-   f.second = start;
+   QModelIndex ndxLocal;
+   BtTreeItem* local = rootItem->child(0);
+   QList<BeerXMLElement*> elems = elements();
 
-   folders.append(f);
+   foreach( BeerXMLElement* elem, elems )
+   {
+
+      if (! elem->folder().isEmpty() )
+      {
+         ndxLocal = findFolder( elem->folder(), rootItem->child(0), true );
+         // I cannot imagine this failing, but what the hell
+         if ( ! ndxLocal.isValid() )
+         {
+            Brewtarget::logW("Invalid return from findFolder in loadTreeModel()");
+            continue;
+         }
+         local = item(ndxLocal);
+         i = local->childCount();
+      }
+      else
+      {
+         local = rootItem->child(0);
+         i = local->childCount();
+         ndxLocal = createIndex(i,0,local);
+      }
+
+      if ( ! insertRow(i,ndxLocal,elem,_type) )
+      {
+         Brewtarget::logW("Insert failed in loadTreeModel()");
+         continue;
+      }
+
+      // If we have brewnotes, set them up here.
+      if ( treeMask & RECIPEMASK )
+         addBrewNoteSubTree(qobject_cast<Recipe*>(elem),i,local);
+      
+      observeElement(elem);
+   }
+}
+
+void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
+{
+   QList<BrewNote*> notes = rec->brewNotes();
+   BtTreeItem* temp = parent->child(i);
+
+   int j = 0;
+
+   foreach( BrewNote* note, notes )
+   {
+      // In previous insert loops, we ignore the error and soldier on. So we
+      // will do that here too
+      if ( ! insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE) )
+      {
+         Brewtarget::logW("Brewnote insert failed in loadTreeModel()");
+         continue;
+      }
+      observeElement(note);
+      ++j;
+   }
+}
+
+Recipe* BtTreeModel::recipe(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->recipe();
+}
+
+Equipment* BtTreeModel::equipment(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->equipment();
+}
+
+Fermentable* BtTreeModel::fermentable(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->fermentable();
+}
+
+Hop* BtTreeModel::hop(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->hop();
+}
+
+Misc* BtTreeModel::misc(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->misc();
+}
+
+Yeast* BtTreeModel::yeast(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->yeast();
+}
+
+Style* BtTreeModel::style(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->style();
+}
+
+BrewNote* BtTreeModel::brewNote(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->brewNote();
+}
+
+BtFolder* BtTreeModel::folder(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->folder();
+}
+
+BeerXMLElement* BtTreeModel::thing(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return 0;
+
+   BtTreeItem* _item = item(index);
+
+   return _item->thing();
+}
+
+bool BtTreeModel::isRecipe(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::RECIPE;
+}
+
+bool BtTreeModel::isEquipment(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::EQUIPMENT;
+}
+
+bool BtTreeModel::isFermentable(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::FERMENTABLE;
+}
+
+bool BtTreeModel::isHop(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::HOP;
+}
+
+bool BtTreeModel::isMisc(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::MISC;
+}
+
+bool BtTreeModel::isYeast(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::YEAST;
+}
+
+bool BtTreeModel::isStyle(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::STYLE;
+}
+
+bool BtTreeModel::isBrewNote(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::BREWNOTE;
+}
+
+bool BtTreeModel::isFolder(const QModelIndex &index) const
+{
+   if ( ! index.isValid() )
+      return false;
+
+   BtTreeItem* _item = item(index);
+   return _item->type() == BtTreeItem::FOLDER;
+}
+
+int BtTreeModel::type(const QModelIndex &index)
+{
+   if ( ! index.isValid() )
+      return -1;
+
+   BtTreeItem* _item = item(index);
+   return _item->type();
+}
+
+QString BtTreeModel::name(const QModelIndex &idx)
+{
+   if ( ! idx.isValid() )
+      return "";
+
+   BtTreeItem* _item = item(idx);
+   return _item->name();
+
+}
+
+int BtTreeModel::mask()
+{
+   return treeMask;
+}
+
+// =========================================================================
+// ============================ FOLDER STUFF ===============================
+// =========================================================================
+
+// The actual magic shouldn't be hard. Once we trap the signal, find the
+// recipe, remove it from the parent and add it to the target folder.
+// The uncomfortable part is how to make this more generic? I do not want to
+// write this code once for every type. Like I have so many times already.
+void BtTreeModel::folderChanged(QString name)
+{
+   BeerXMLElement* test = qobject_cast<BeerXMLElement*>(sender());
+   QModelIndex ndx, pIndex;
+
+   if ( ! test )
+      return;
+
+   // Find it.
+   ndx = findElement(test);
+   if ( ! ndx.isValid() )
+   {
+      Brewtarget::logW("folderChanged:: could not find element");
+      return;
+   }
+
+   pIndex = parent(ndx); // Get the parent
+   // If the parent isn't valid, its the root
+   if ( ! pIndex.isValid() )
+      pIndex = createIndex(0,0,rootItem->child(0));
+   
+   int i = item(ndx)->childNumber();
+
+   // Find the new parent
+   // That's awkward, but dropping a folder prolly does need a the folder
+   // created.
+   QModelIndex newNdx = findFolder(test->folder(), rootItem->child(0), true);
+   if ( ! newNdx.isValid() )
+      newNdx = createIndex(0,0,rootItem->child(0));
+   
+   BtTreeItem* local = item(ndx);
+   int j = local->childCount();
+
+   // Remove it
+   if ( ! removeRows(i, 1, pIndex) )
+   {
+      Brewtarget::logW("folderChanged:: could not remove row");
+      return;
+   }
+   if ( !  insertRow(j,newNdx,test,_type) )
+   {
+      Brewtarget::logW("folderChanged:: could not insert row");
+      return;
+   }
+
+   // If we have brewnotes, set them up here.
+   if ( treeMask & RECIPEMASK )
+      addBrewNoteSubTree(qobject_cast<Recipe*>(test),i,local);
+
+   return;
+}
+
+bool BtTreeModel::addFolder(QString name) 
+{
+   QModelIndex ndx = findFolder(name, rootItem->child(0), true);
+   return ndx.isValid();
+}
+
+bool BtTreeModel::removeFolder(QModelIndex ndx)
+{
+   if ( ! ndx.isValid() )
+      return false;
+
+   QModelIndex pInd = parent(ndx);
+
+   if ( ! pInd.isValid() )
+      return false;
+
+   BtTreeItem* start = item(ndx);
+   int i = start->childNumber();
+
+   // Remove the victim. 
+   i = start->childNumber();
+   return removeRows(i, 1, pInd); 
+}
+
+QModelIndexList BtTreeModel::allChildren(QModelIndex ndx)
+{
+   QModelIndexList leafNodes;
+   QList<BtTreeItem*> folders;
+   int i;
+
+   // Don't send an invalid index or something that isn't a folder
+   if ( ! ndx.isValid() || type(ndx) != BtTreeItem::FOLDER )
+      return leafNodes;
+
+   BtTreeItem* start = item(ndx);
+   folders.append(start);
 
    while ( ! folders.isEmpty() )
    {
-      // This looks weird, but it is needed for later
-      f = folders.takeFirst();
-      targetPath = f.first;
-      BtTreeItem* target = f.second;
+      BtTreeItem* target = folders.takeFirst();
 
-      // Ok. We have a start and an index.
       for (i=0; i < target->childCount(); ++i)
       {
          BtTreeItem* next = target->child(i);
-         // If a folder, push it onto the folders stack for latter processing
+         // If a folder, push it onto the folders stack for later processing
          if ( next->type() == BtTreeItem::FOLDER ) 
-         {
-            QPair<QString,BtTreeItem*> newTarget;
-            newTarget.first = targetPath % "/" % next->name();
-            newTarget.second = next;
-            folders.append(newTarget);
-         }
+            folders.append(next);
          else // Leafnode
-         {
-            BeerXMLElement* thg = next->thing();
-            // Alas, here we must know what kind of thing we've got so we can
-            // cast it. Brewnotes don't count and we are already handling
-            // folders, so they don't get here either.
-            switch( next->type() )
-            {
-               case BtTreeItem::RECIPE:
-                  Database::instance().remove(qobject_cast<Recipe*>(thg));
-                  break;
-               case BtTreeItem::EQUIPMENT:
-                  Database::instance().remove(qobject_cast<Equipment*>(thg));
-                  break;
-               case BtTreeItem::FERMENTABLE:
-                  Database::instance().remove(qobject_cast<Fermentable*>(thg));
-                  break;
-               case BtTreeItem::HOP:
-                  Database::instance().remove(qobject_cast<Hop*>(thg));
-                  break;
-               case BtTreeItem::MISC:
-                  Database::instance().remove(qobject_cast<Misc*>(thg));
-                  break;
-               case BtTreeItem::YEAST:
-                  Database::instance().remove(qobject_cast<Yeast*>(thg));
-                  break;
-            }
-         }
+            leafNodes.append(createIndex(i,0,next));
       }
    }
-   // Last thing is to remove the victim. 
-   i = start->childNumber();
-   removeRows(i, 1, pInd); 
+   return leafNodes;
 }
 
-void BtTreeModel::renameFolder(BtFolder* victim, QString newName)
+bool BtTreeModel::renameFolder(BtFolder* victim, QString newName)
 {
    QModelIndex ndx = findFolder(victim->fullPath(), 0, false);
-   QModelIndex pInd = parent(ndx);
+   QModelIndex pInd; 
    QString targetPath = newName % "/" % victim->name();
    QPair<QString,BtTreeItem*> f;
    QList<QPair<QString, BtTreeItem*> > folders;
    // This space is important       ^
    int i;
 
+   if ( ! ndx.isValid() )
+      return false;
+
+   pInd = parent(ndx);
+   if ( ! pInd.isValid() )
+      return false;
+
    BtTreeItem* start = item(ndx);
    f.first  = targetPath;
    f.second = start;
@@ -616,23 +982,20 @@ void BtTreeModel::renameFolder(BtFolder* victim, QString newName)
             folders.append(newTarget);
          }
          else // Leafnode
-         {
-            BeerXMLElement* thg = next->thing();
-            thg->setFolder(targetPath);
-         }
+            next->thing()->setFolder(targetPath);
       }
    }
    // Last thing is to remove the victim. 
    i = start->childNumber();
-   removeRows(i, 1, pInd); 
+   return removeRows(i, 1, pInd); 
 }
 
 QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent, QString pPath)
 {
    BtTreeItem* pItem = parent;
 
-   // Start the loop. We are going to return ndx at the end, so it needs to
-   // be preserved
+   // Start the loop. We are going to return ndx at the end, 
+   // so we need to declare and initialize outside of the loop
    QModelIndex ndx = createIndex(pItem->childCount(),0,pItem);
 
    // Need to call this because we are adding different things with different
@@ -657,8 +1020,12 @@ QModelIndex BtTreeModel::createFolderTree( QStringList dirs, BtTreeItem* parent,
       temp->setfullPath(fPath);
       i = pItem->childCount();
 
-      // Insert the item into the tree
-      insertRow(i, ndx, temp, BtTreeItem::FOLDER);
+      // Insert the item into the tree. If it fails, bug out
+      if ( ! insertRow(i, ndx, temp, BtTreeItem::FOLDER) )
+      {
+         emit layoutChanged();
+         return QModelIndex();
+      }
 
       // Set the parent item to point to the newly created tree
       pItem = pItem->child(i);
@@ -714,7 +1081,7 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
                current = dirs.takeFirst();
                // append that to the fullPath we are looking for
                fullPath = targetPath;
-               targetPath = fullPath % current;
+               targetPath = fullPath % "/" % current;
 
                // Set the parent to the folder
                pItem = kid;
@@ -744,236 +1111,9 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
    return QModelIndex();
 }
 
-QList<BeerXMLElement*> BtTreeModel::elements()
-{
-   QList<BeerXMLElement*> elements;
-   switch(treeMask)
-   {
-   case RECIPEMASK:
-      foreach( BeerXMLElement* elem, Database::instance().recipes() )
-         elements.append(elem);
-      break;
-   case EQUIPMASK:
-      foreach( BeerXMLElement* elem, Database::instance().equipments() )
-         elements.append(elem);
-      break;
-   case FERMENTMASK:
-      foreach( BeerXMLElement* elem, Database::instance().fermentables() )
-         elements.append(elem);
-      break;
-   case HOPMASK:
-      foreach( BeerXMLElement* elem, Database::instance().hops() )
-         elements.append(elem);
-      break;
-   case MISCMASK:
-      foreach( BeerXMLElement* elem, Database::instance().miscs() )
-         elements.append(elem);
-      break;
-   case YEASTMASK:
-      foreach( BeerXMLElement* elem, Database::instance().yeasts() )
-         elements.append(elem);
-      break;
-   case STYLEMASK:
-      foreach( BeerXMLElement* elem, Database::instance().styles() )
-         elements.append(elem);
-      break;
-   default:
-      Brewtarget::logW(QString("Invalid treemask: %1").arg(treeMask));
-   }
-   return elements;
-}
-
-void BtTreeModel::loadTreeModel(QString propName)
-{
-   int i;
-
-   QModelIndex ndxLocal;
-   BtTreeItem* local = rootItem->child(0);
-   QList<BeerXMLElement*> elems = elements();
-
-   foreach( BeerXMLElement* elem, elems )
-   {
-
-      if (! elem->folder().isEmpty() )
-      {
-         ndxLocal = findFolder( elem->folder(), rootItem->child(0), true );
-         local = item(ndxLocal);
-         i = local->childCount();
-      }
-      else
-      {
-         local = rootItem->child(0);
-         i = local->childCount();
-         ndxLocal = createIndex(i,0,local);
-      }
-
-      insertRow(i,ndxLocal,elem,_type);
-
-      // If we have brewnotes, set them up here.
-      if ( treeMask & RECIPEMASK )
-         addBrewNoteSubTree(qobject_cast<Recipe*>(elem),i,local);
-      
-      observeElement(elem);
-   }
-}
-
-void BtTreeModel::addBrewNoteSubTree(Recipe* rec, int i, BtTreeItem* parent)
-{
-   QList<BrewNote*> notes = rec->brewNotes();
-   BtTreeItem* temp = parent->child(i);
-
-   int j = 0;
-
-   foreach( BrewNote* note, notes )
-   {
-      insertRow(j, createIndex(i,0,temp), note, BtTreeItem::BREWNOTE);
-      observeElement(note);
-      ++j;
-   }
-}
-
-Recipe* BtTreeModel::recipe(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->recipe();
-}
-
-Equipment* BtTreeModel::equipment(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->equipment();
-}
-
-Fermentable* BtTreeModel::fermentable(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->fermentable();
-}
-
-Hop* BtTreeModel::hop(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->hop();
-}
-
-Misc* BtTreeModel::misc(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->misc();
-}
-
-Yeast* BtTreeModel::yeast(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->yeast();
-}
-
-Style* BtTreeModel::style(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->style();
-}
-
-BrewNote* BtTreeModel::brewNote(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->brewNote();
-}
-
-BtFolder* BtTreeModel::folder(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->folder();
-}
-
-BeerXMLElement* BtTreeModel::thing(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-
-   return _item->thing();
-}
-
-bool BtTreeModel::isRecipe(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::RECIPE;
-}
-
-bool BtTreeModel::isEquipment(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::EQUIPMENT;
-}
-
-bool BtTreeModel::isFermentable(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::FERMENTABLE;
-}
-
-bool BtTreeModel::isHop(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::HOP;
-}
-
-bool BtTreeModel::isMisc(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::MISC;
-}
-
-bool BtTreeModel::isYeast(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::YEAST;
-}
-
-bool BtTreeModel::isStyle(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::STYLE;
-}
-
-bool BtTreeModel::isBrewNote(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::BREWNOTE;
-}
-
-bool BtTreeModel::isFolder(const QModelIndex &index) const
-{
-   BtTreeItem* _item = item(index);
-   return _item->type() == BtTreeItem::FOLDER;
-}
-
-int BtTreeModel::type(const QModelIndex &index)
-{
-   BtTreeItem* _item = item(index);
-   return _item->type();
-}
-
-QString BtTreeModel::name(const QModelIndex &idx)
-{
-   BtTreeItem* _item = item(idx);
-
-   return _item->name();
-
-}
-
-int BtTreeModel::mask()
-{
-   return treeMask;
-}
+// =========================================================================
+// ============================ SLOT STUFF ===============================
+// =========================================================================
 
 void BtTreeModel::elementChanged()
 {
@@ -988,39 +1128,6 @@ void BtTreeModel::elementChanged()
    QModelIndex ndxRight = createIndex(ndxLeft.row(), columnCount(ndxLeft)-1, ndxLeft.internalPointer());
    emit dataChanged( ndxLeft, ndxRight );
 }
-
-// The actual magic shouldn't be hard. Once we trap the signal, find the
-// recipe, remove it from the parent and add it to the target folder.
-// The uncomfortable part is how to make this more generic? I do not want to
-// write this code once for every type. Like I have so many times already.
-void BtTreeModel::folderChanged(QString name)
-{
-   BeerXMLElement* test = qobject_cast<BeerXMLElement*>(sender());
-   if ( ! test )
-      return;
-
-   // Find it.
-   QModelIndex ndx = findElement(test);
-   QModelIndex pIndex = parent(ndx); // Get the parent
-   int i = item(ndx)->childNumber();
-
-   // Remove it
-   removeRows(i, 1, pIndex);
-
-   // Find the new parent
-   ndx = findFolder(test->folder(), rootItem->child(0), true);
-   BtTreeItem* local = item(ndx);
-   i = local->childCount();
-
-   insertRow(i,ndx,test,_type);
-
-   // If we have brewnotes, set them up here.
-   if ( treeMask & RECIPEMASK )
-      addBrewNoteSubTree(qobject_cast<Recipe*>(test),i,local);
-
-   return;
-}
-
 
 /* I don't like this part, but Qt's signal/slot mechanism are pretty
  * simplistic and do a string compare on signatures. Each one of these one
@@ -1058,7 +1165,9 @@ void BtTreeModel::elementAdded(BeerXMLElement* victim)
 
    int breadth = rowCount(pIdx);
 
-   insertRow(breadth,pIdx,victim,lType);
+   if ( ! insertRow(breadth,pIdx,victim,lType) )
+      return;
+
    observeElement(victim);
 }
 
@@ -1073,15 +1182,30 @@ void BtTreeModel::elementRemoved(BrewNote* victim)    { elementRemoved(qobject_c
 
 void BtTreeModel::elementRemoved(BeerXMLElement* victim)
 {
-   QModelIndex index = findElement(victim);
-   QModelIndex pIndex = parent(index);
+   QModelIndex index,pIndex;
 
-   removeRows(index.row(),1,pIndex);
+   if ( ! victim )
+      return;
+
+   index = findElement(victim);
+   if ( ! index.isValid() )
+      return;
+
+   pIndex = parent(index);
+   if ( ! pIndex.isValid() )
+      return;
+
+   if ( removeRows(index.row(),1,pIndex) )
+      return;
+
    disconnect( victim, 0, this, 0 );
 }
 
 void BtTreeModel::observeElement(BeerXMLElement* d)
 {
+   if ( ! d )
+      return;
+
    if ( qobject_cast<BrewNote*>(d) )
       connect( d, SIGNAL(brewDateChanged(QDateTime)), this, SLOT(elementChanged()) );
    else 
@@ -1091,10 +1215,11 @@ void BtTreeModel::observeElement(BeerXMLElement* d)
    }
 }
 
-// DRAG AND DROP STUFF
 
-// As of 01-10-2014, I need to test a grop with both items and folders. I
-// suspect it will break in the most horrible fashions.
+// =========================================================================
+// ===================== DRAG AND DROP STUFF ===============================
+// =========================================================================
+
 bool BtTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, 
                                int row, int column, const QModelIndex &parent)
 {

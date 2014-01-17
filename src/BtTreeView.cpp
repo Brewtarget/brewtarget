@@ -382,90 +382,94 @@ int BtTreeView::verifyDelete(int confirmDelete, QString tag, QString name)
 
 }
 
+// I should maybe shove this further down the stack. But I prefer to keep the
+// confirmation windows at least this high -- models shouldn't be interacting
+// with users.
 void BtTreeView::deleteSelected(QModelIndexList selected)
 {
    QString prompt;
+   QModelIndexList translated;
 
    int confirmDelete = QMessageBox::NoButton;
-   // Get the dead things first.  Deleting as we process the list doesn't work, because the
-   // delete updates the database and the indices get recalculated.
+   
+   // Translate everything from a proxy index to a model index. This is
+   // important because it allows us to get all the children of a folder. 
    foreach( QModelIndex at, selected )
    {
       // First, we should translate from proxy to model, because I need this
       // index a lot.
-      QModelIndex translated = filter->mapToSource(at);
+      QModelIndex trans = filter->mapToSource(at);
       // You can't delete the root element
-      if ( translated == findElement(0) )
+      if ( trans == findElement(0) )
          continue;
-      switch(_model->type(translated))
+      // Find all the kids in a folder to be deleted, and add them to the list
+      if ( _model->type(trans) == BtTreeItem::FOLDER )
+         translated += _model->allChildren(trans);
+
+      translated.append(trans);
+   }
+
+   qDebug() << translated;
+   foreach( QModelIndex dead, translated )
+   {
+      qDebug() << "Itsa " << _model->type(dead);
+      switch(_model->type(dead))
       {
          case BtTreeItem::RECIPE:
-            confirmDelete = verifyDelete(confirmDelete,tr("Recipe"),_model->name(translated));
+            confirmDelete = verifyDelete(confirmDelete,tr("Recipe"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->recipe(translated) );
+               Database::instance().remove( _model->recipe(dead) );
             break;
          case BtTreeItem::EQUIPMENT:
-            confirmDelete = verifyDelete(confirmDelete,tr("Equipment"),_model->name(translated));
+            confirmDelete = verifyDelete(confirmDelete,tr("Equipment"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->equipment(translated) );
+               Database::instance().remove( _model->equipment(dead) );
             break;
          case BtTreeItem::FERMENTABLE:
-            confirmDelete = verifyDelete(confirmDelete,tr("Fermentable"),_model->name(translated));
+            confirmDelete = verifyDelete(confirmDelete,tr("Fermentable"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->fermentable(translated) );
+               Database::instance().remove( _model->fermentable(dead) );
             break;
          case BtTreeItem::HOP:
-            confirmDelete = verifyDelete(confirmDelete,tr("Hop"),_model->name(translated));
+            confirmDelete = verifyDelete(confirmDelete,tr("Hop"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->hop(translated) );
+               Database::instance().remove( _model->hop(dead) );
             break;
          case BtTreeItem::MISC:
-            confirmDelete = verifyDelete(confirmDelete,tr("Misc"),_model->name(translated));
+            confirmDelete = verifyDelete(confirmDelete,tr("Misc"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->misc(translated) );
+               Database::instance().remove( _model->misc(dead) );
             break;
          case BtTreeItem::STYLE:
-            confirmDelete = verifyDelete(confirmDelete,tr("Style"),_model->name(translated));
+            confirmDelete = verifyDelete(confirmDelete,tr("Style"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->style(translated) );
+               Database::instance().remove( _model->style(dead) );
             break;
          case BtTreeItem::YEAST:
-            confirmDelete = verifyDelete(confirmDelete,tr("Yeast"),_model->name(translated));
+            confirmDelete = verifyDelete(confirmDelete,tr("Yeast"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->yeast(translated) );
+               Database::instance().remove( _model->yeast(dead) );
             break;
          case BtTreeItem::BREWNOTE:
-            confirmDelete = verifyDelete(confirmDelete,tr("BrewNote"),_model->brewNote(translated)->brewDate_short());
+            confirmDelete = verifyDelete(confirmDelete,tr("BrewNote"),_model->brewNote(dead)->brewDate_short());
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->brewNote(translated) );
+               Database::instance().remove( _model->brewNote(dead) );
             break;
          case BtTreeItem::FOLDER:
-            // Maybe more warning that this is recursive and you will only get
-            // prompted on the folder?
-            confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(translated));
+            /* don't prompt to remove teh folder itself. There are some
+             * oddities in this but I will think about how to fix it later
+            confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(dead));
             if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               _model->deleteFolder(_model->folder(translated)->fullPath());
+            */
+               _model->removeFolder( dead );
             break;
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(translated)));
+            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(dead)));
       }
       if ( confirmDelete == QMessageBox::Cancel )
          return;
    }
 
-   // Maybe we don't need this any more. I doubt it, but maybe. We may also
-   // need to suppress signals?
-   /*
-   Database::instance().remove(deadNote);
-
-   Database::instance().remove(deadRec);
-   Database::instance().remove(deadKit);
-   Database::instance().remove(deadFerm);
-   Database::instance().remove(deadHop);
-   Database::instance().remove(deadMisc);
-   Database::instance().remove(deadStyle);
-   Database::instance().remove(deadYeast);
-   */
 }
 
 // Bad form likely
