@@ -1341,9 +1341,22 @@ void MainWindow::newFolder()
    QString name = QInputDialog::getText(this, tr("Folder name"),
                                           tr("Folder name:"),
                                            QLineEdit::Normal, dPath);
-   if ( name.isEmpty() )
-      return;
+   // Do some input validation here.
 
+   // Nice little builtin to collapse leading and following white space
+   name = name.simplified(); 
+   if ( name.isEmpty() )
+   {
+      QMessageBox::critical( this, tr("Bad Name"), 
+                             tr("A folder name must have at least one non-whitespace character in it"));
+      return;
+   }
+
+   if ( name.split("/", QString::SkipEmptyParts).isEmpty() )
+   {
+      QMessageBox::critical( this, tr("Bad Name"), tr("A folder name must have at least one non-/ character in it"));
+      return;
+   }
    active->addFolder(name);
 }
 

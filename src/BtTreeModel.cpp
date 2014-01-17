@@ -1048,13 +1048,21 @@ QModelIndex BtTreeModel::findFolder( QString name, BtTreeItem* parent, bool crea
 
    pItem = parent ? parent : rootItem->child(0);
 
+   // Upstream interfaces should handle this for me, but I like belt and
+   // suspenders
+   name = name.simplified();
    // I am assuming asking me to find an empty name means find the root of the
    // tree.
    if ( name.isEmpty() )
       return createIndex(0,0,pItem);
 
    // Prepare all the variables for the first loop
+
    dirs = name.split("/", QString::SkipEmptyParts);
+
+   if ( dirs.isEmpty() )
+      return QModelIndex();
+
    current = dirs.takeFirst();
    fullPath = "/";
    targetPath = fullPath % current;
