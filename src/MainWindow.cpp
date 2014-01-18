@@ -304,9 +304,10 @@ MainWindow::MainWindow(QWidget* parent)
    {
       int key = Brewtarget::btSettings.value("recipeKey").toInt();
       recipeObs = Database::instance().recipe( key );
+      QModelIndex rIdx = treeView_recipe->findElement(recipeObs);
 
       setRecipe(recipeObs);
-      setTreeSelection(treeView_recipe->findElement(recipeObs));
+      setTreeSelection(rIdx);
    }     
    else
    {
@@ -1430,6 +1431,8 @@ void MainWindow::setTreeSelection(QModelIndex item)
    QModelIndex parent = active->parent(item);
 
    active->setCurrentIndex(item);
+   if ( active->type(parent) == BtTreeItem::FOLDER )
+      active->setExpanded(parent,true);
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
    
 }

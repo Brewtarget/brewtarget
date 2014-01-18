@@ -404,90 +404,73 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
    QModelIndexList translated;
 
    int confirmDelete = QMessageBox::NoButton;
-   
-   // Translate everything from a proxy index to a model index. This is
-   // important because it allows us to get all the children of a folder. 
+  
+   // Time to lay down the boogie 
    foreach( QModelIndex at, selected )
    {
-      // First, we should translate from proxy to model, because I need this
-      // index a lot.
+      // If somebody said cancel, bug out
+      if ( confirmDelete == QMessageBox::Cancel )
+         return;
+
+      // First, we should translate from proxy to model, because I need this index a lot.
       QModelIndex trans = filter->mapToSource(at);
+
       // You can't delete the root element
       if ( trans == findElement(0) )
          continue;
-      // Find all the kids in a folder to be deleted, and add them to the list
-      if ( _model->type(trans) == BtTreeItem::FOLDER )
-         translated += _model->allChildren(trans);
 
-      translated.append(trans);
-   }
-
-   qDebug() << translated;
-   foreach( QModelIndex dead, translated )
-   {
-      qDebug() << "Itsa " << _model->type(dead);
-      switch(_model->type(dead))
+      // If we have alread said "Yes To All", just append and go
+      if ( confirmDelete == QMessageBox::YesToAll )
+      {
+         translated.append(trans);
+         continue;
+      }
+      
+      // Otherwise prompt
+      switch(_model->type(trans))
       {
          case BtTreeItem::RECIPE:
-            confirmDelete = verifyDelete(confirmDelete,tr("Recipe"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->recipe(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("Recipe"),_model->name(trans));
             break;
          case BtTreeItem::EQUIPMENT:
-            confirmDelete = verifyDelete(confirmDelete,tr("Equipment"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->equipment(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("Equipment"),_model->name(trans));
             break;
          case BtTreeItem::FERMENTABLE:
-            confirmDelete = verifyDelete(confirmDelete,tr("Fermentable"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->fermentable(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("Fermentable"),_model->name(trans));
             break;
          case BtTreeItem::HOP:
-            confirmDelete = verifyDelete(confirmDelete,tr("Hop"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->hop(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("Hop"),_model->name(trans));
             break;
          case BtTreeItem::MISC:
-            confirmDelete = verifyDelete(confirmDelete,tr("Misc"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->misc(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("Misc"),_model->name(trans));
             break;
          case BtTreeItem::STYLE:
-            confirmDelete = verifyDelete(confirmDelete,tr("Style"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->style(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("Style"),_model->name(trans));
             break;
          case BtTreeItem::YEAST:
-            confirmDelete = verifyDelete(confirmDelete,tr("Yeast"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->yeast(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("Yeast"),_model->name(trans));
             break;
          case BtTreeItem::BREWNOTE:
-            confirmDelete = verifyDelete(confirmDelete,tr("BrewNote"),_model->brewNote(dead)->brewDate_short());
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-               Database::instance().remove( _model->brewNote(dead) );
+            confirmDelete = verifyDelete(confirmDelete,tr("BrewNote"),_model->brewNote(trans)->brewDate_short());
             break;
          case BtTreeItem::FOLDER:
-            /* don't prompt to remove teh folder itself. There are some
-             * oddities in this but I will think about how to fix it later
-            confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(dead));
-            if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
-            */
-               _model->removeFolder( dead );
+            confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(trans));
             break;
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(dead)));
+            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(trans)));
       }
-      if ( confirmDelete == QMessageBox::Cancel )
-         return;
+      // If they selected "Yes" or "Yes To All", push and loop
+      if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )
+         translated.append(trans);
    }
-
+   // If we get here, call the model to delete the victims
+   _model->deleteSelected(translated);
 }
 
 void BtTreeView::expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx)
 {
    // FUN! I get to map from source this time.
+   // I don't have to check if this is a folder (I think?)
    if ( kindaThing & _type && fIdx.isValid() && ! isExpanded(filter->mapFromSource(fIdx) ))
       setExpanded(filter->mapFromSource(fIdx),true);
 }

@@ -825,6 +825,44 @@ int BtTreeModel::mask()
    return treeMask;
 }
 
+void BtTreeModel::deleteSelected(QModelIndexList victims)
+{
+   QModelIndexList toBeDeleted = victims; // trust me
+
+   while ( ! toBeDeleted.isEmpty() ) 
+   {
+      QModelIndex ndx = toBeDeleted.takeFirst();
+      switch ( type(ndx) ) 
+      {
+         case BtTreeItem::RECIPE:
+            Database::instance().remove( recipe(ndx) );
+            break;
+         case BtTreeItem::EQUIPMENT:
+            Database::instance().remove( equipment(ndx) );
+            break;
+         case BtTreeItem::FERMENTABLE:
+            Database::instance().remove( fermentable(ndx) );
+            break;
+         case BtTreeItem::HOP:
+            Database::instance().remove( hop(ndx) );
+            break;
+         case BtTreeItem::MISC:
+            Database::instance().remove( misc(ndx) );
+            break;
+         case BtTreeItem::YEAST:
+            Database::instance().remove( yeast(ndx) );
+            break;
+         case BtTreeItem::FOLDER:
+            // This one is weird.
+            toBeDeleted += allChildren(ndx);
+            removeFolder(ndx);
+            break;
+         default:
+            Brewtarget::logW(QString("deleteSelected:: unknown type %1").arg(type(ndx)));
+      }
+   }
+}
+
 // =========================================================================
 // ============================ FOLDER STUFF ===============================
 // =========================================================================

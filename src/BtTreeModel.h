@@ -139,6 +139,8 @@ public:
    // I'm trying to shove some complexity down a few layers.
    // \!brief returns the name of whatever is at idx
    QString name(const QModelIndex &idx);
+   //! \brief delete things from the tree/db
+   void deleteSelected(QModelIndexList victims);
 
    //! \brief Get Recipe at \c index.
    Recipe* recipe(const QModelIndex &index) const;
