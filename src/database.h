@@ -104,7 +104,7 @@ public:
 
    /*! Schedule an update of the entry, and call the notification when complete.
     */
-   void updateEntry( Brewtarget::Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
+   void updateEntry( Brewtarget::DBTable table, int key, const char* col_name, QVariant value, QMetaProperty prop, BeerXMLElement* object, bool notify = true );
    
    //! \brief Get the contents of the cell specified by table/key/col_name.
    QVariant get( Brewtarget::DBTable table, int key, const char* col_name )
