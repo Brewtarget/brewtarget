@@ -36,7 +36,7 @@
 #include "brewnote.h"
 #include "style.h"
 
-BtTreeView::BtTreeView(QWidget *parent) :
+BtTreeView::BtTreeView(QWidget *parent, BtTreeModel::TypeMasks type) :
    QTreeView(parent)
 {
    // Set some global properties that all the kids will use.
@@ -48,8 +48,21 @@ BtTreeView::BtTreeView(QWidget *parent) :
    setAcceptDrops(true);
    setDropIndicatorShown(true);
    setSelectionMode(QAbstractItemView::ExtendedSelection);
-//   setDragDropMode(QAbstractItemView::InternalMove);
 
+   _type = type;
+   _model = new BtTreeModel(this, _type);
+   filter = new BtTreeFilterProxyModel(this, _type);
+   filter->setSourceModel(_model);
+   setModel(filter);
+   filter->setDynamicSortFilter(true);
+   
+   setExpanded(findElement(0), true);
+   setSortingEnabled(true);
+   sortByColumn(0,Qt::AscendingOrder);
+   resizeColumnToContents(0);
+
+   // and one wee connection
+   connect( _model, SIGNAL(expandFolder(BtTreeModel::TypeMasks, QModelIndex)), this, SLOT(expandFolder(BtTreeModel::TypeMasks, QModelIndex)));
 }
 
 BtTreeModel* BtTreeView::model()
@@ -472,116 +485,50 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
 
 }
 
+void BtTreeView::expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx)
+{
+   // FUN! I get to map from source this time.
+   if ( kindaThing & _type && fIdx.isValid() && ! isExpanded(filter->mapFromSource(fIdx) ))
+      setExpanded(filter->mapFromSource(fIdx),true);
+}
 // Bad form likely
 
 RecipeTreeView::RecipeTreeView(QWidget *parent)
-   : BtTreeView(parent)
+   : BtTreeView(parent, BtTreeModel::RECIPEMASK)
 {
-   _model = new BtTreeModel(this, BtTreeModel::RECIPEMASK);
-   filter = new BtTreeFilterProxyModel(this, BtTreeModel::RECIPEMASK);
-   filter->setSourceModel(_model);
-   setModel(filter);
-   filter->setDynamicSortFilter(true);
-   
-   setExpanded(findElement(0), true);
-   setSortingEnabled(true);
-   sortByColumn(0,Qt::AscendingOrder);
-   // Resizing before you set the model doesn't do much.
-   resizeColumnToContents(0);
 }
 
 EquipmentTreeView::EquipmentTreeView(QWidget *parent)
-   : BtTreeView(parent)
+   : BtTreeView(parent, BtTreeModel::EQUIPMASK)
 {
-   _model = new BtTreeModel(this, BtTreeModel::EQUIPMASK);
-   filter = new BtTreeFilterProxyModel(this, BtTreeModel::EQUIPMASK);
-   filter->setSourceModel(_model);
-   setModel(filter);
-   filter->setDynamicSortFilter(true);
-
-   setExpanded(findElement(0), true);
-   setSortingEnabled(true);
-   sortByColumn(0,Qt::AscendingOrder);
-   resizeColumnToContents(0);
 }
 
 // Icky ick ikcy
 FermentableTreeView::FermentableTreeView(QWidget *parent)
-   : BtTreeView(parent)
+   : BtTreeView(parent,BtTreeModel::FERMENTMASK)
 {
-   _model = new BtTreeModel(this, BtTreeModel::FERMENTMASK);
-   filter = new BtTreeFilterProxyModel(this, BtTreeModel::FERMENTMASK);
-   filter->setSourceModel(_model);
-   setModel(filter);
-   filter->setDynamicSortFilter(true);
-  
-   filter->dumpObjectInfo(); 
-   setExpanded(findElement(0), true);
-   setSortingEnabled(true);
-   sortByColumn(0,Qt::AscendingOrder);
-   resizeColumnToContents(0);
 }
 
 // More Ick
 HopTreeView::HopTreeView(QWidget *parent)
-   : BtTreeView(parent)
+   : BtTreeView(parent, BtTreeModel::HOPMASK)
 {
-   _model = new BtTreeModel(this, BtTreeModel::HOPMASK);
-   filter = new BtTreeFilterProxyModel(this, BtTreeModel::HOPMASK);
-   filter->setSourceModel(_model);
-   setModel(filter);
-   filter->setDynamicSortFilter(true);
-   
-   setExpanded(findElement(0), true);
-   setSortingEnabled(true);
-   sortByColumn(0,Qt::AscendingOrder);
-   resizeColumnToContents(0);
 }
 
 // Ick some more
 MiscTreeView::MiscTreeView(QWidget *parent)
-   : BtTreeView(parent)
+   : BtTreeView(parent,BtTreeModel::MISCMASK)
 {
-   _model = new BtTreeModel(this, BtTreeModel::MISCMASK);
-   filter = new BtTreeFilterProxyModel(this, BtTreeModel::MISCMASK);
-   filter->setSourceModel(_model);
-   setModel(filter);
-   filter->setDynamicSortFilter(true);
-   
-   setExpanded(findElement(0), true);
-   setSortingEnabled(true);
-   sortByColumn(0,Qt::AscendingOrder);
-   resizeColumnToContents(0);
 }
 
 // Will this ick never end?
 YeastTreeView::YeastTreeView(QWidget *parent)
-   : BtTreeView(parent)
+   : BtTreeView(parent,BtTreeModel::YEASTMASK)
 {
-   _model = new BtTreeModel(this, BtTreeModel::YEASTMASK);
-   filter = new BtTreeFilterProxyModel(this, BtTreeModel::YEASTMASK);
-   filter->setSourceModel(_model);
-   setModel(filter);
-   filter->setDynamicSortFilter(true);
-   
-   setExpanded(findElement(0), true);
-   setSortingEnabled(true);
-   sortByColumn(0,Qt::AscendingOrder);
-   resizeColumnToContents(0);
 }
 
 // Nope. Apparently not, cause I keep adding more
 StyleTreeView::StyleTreeView(QWidget *parent)
-   : BtTreeView(parent)
+   : BtTreeView(parent,BtTreeModel::STYLEMASK)
 {
-   _model = new BtTreeModel(this, BtTreeModel::STYLEMASK);
-   filter = new BtTreeFilterProxyModel(this, BtTreeModel::STYLEMASK);
-   filter->setSourceModel(_model);
-   setModel(filter);
-   filter->setDynamicSortFilter(true);
-   
-   setExpanded(findElement(0), true);
-   setSortingEnabled(true);
-   sortByColumn(0,Qt::AscendingOrder);
-   resizeColumnToContents(0);
 }

@@ -837,6 +837,7 @@ void BtTreeModel::folderChanged(QString name)
 {
    BeerXMLElement* test = qobject_cast<BeerXMLElement*>(sender());
    QModelIndex ndx, pIndex;
+   bool expand = true;
 
    if ( ! test )
       return;
@@ -861,7 +862,10 @@ void BtTreeModel::folderChanged(QString name)
    // created.
    QModelIndex newNdx = findFolder(test->folder(), rootItem->child(0), true);
    if ( ! newNdx.isValid() )
+   {
       newNdx = createIndex(0,0,rootItem->child(0));
+      expand = false;
+   }
    
    BtTreeItem* local = item(ndx);
    int j = local->childCount();
@@ -882,6 +886,8 @@ void BtTreeModel::folderChanged(QString name)
    if ( treeMask & RECIPEMASK )
       addBrewNoteSubTree(qobject_cast<Recipe*>(test),i,local);
 
+   if ( expand )
+      emit expandFolder(treeMask,newNdx);
    return;
 }
 

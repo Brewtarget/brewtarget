@@ -210,6 +210,9 @@ private slots:
    void elementRemoved(Yeast* victim);
    void elementRemoved(BrewNote* victim);
 
+signals:
+   void expandFolder(BtTreeModel::TypeMasks kindofThing, QModelIndex fIdx);
+
 private:
    //! \brief Loads the tree. 
    void loadTreeModel();

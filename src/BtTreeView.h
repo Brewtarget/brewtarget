@@ -51,7 +51,7 @@ class BtTreeView : public QTreeView
    Q_OBJECT
 public:
    //! \brief The standard contructor
-   BtTreeView(QWidget *parent = 0);
+   BtTreeView(QWidget *parent = 0, BtTreeModel::TypeMasks mask = BtTreeModel::RECIPEMASK);
    //! \brief returns the model associated with this tree
    BtTreeModel* model();
    //! \brief returns the context menu associated with the \c selected item
@@ -127,12 +127,13 @@ public:
    friend class YeastTreeView;
    friend class StyleTreeView;
 
-signals:
-   void folderAdded(BtFolder* victim);
+private slots:
+   void expandFolder(BtTreeModel::TypeMasks kindaThing, QModelIndex fIdx);
 
 private:
    BtTreeModel* _model;
    BtTreeFilterProxyModel* filter;
+   BtTreeModel::TypeMasks _type;
    QMenu* _contextMenu, *subMenu;
    QPoint dragStart;
 
