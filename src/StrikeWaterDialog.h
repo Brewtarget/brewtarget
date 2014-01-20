@@ -23,11 +23,11 @@
 #include <QButtonGroup>
 #include "ui_strikeWaterDialog.h"
 
-/*!
- * \class PrimingDialog
- * \author Philip G. Lee
+/*! 
+ * \class StrikeWaterDialog
+ * \author Maxime Lavigne <malavv>
  *
- * \brief Dialog to calculate priming sugar amounts.
+ * \brief Dialog to calculate the amount and temperature of the strike water.
  */
 class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
 {
