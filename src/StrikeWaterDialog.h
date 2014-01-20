@@ -29,7 +29,8 @@
  *
  * \brief Dialog to calculate the amount and temperature of the strike water.
  */
-class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog {
+class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog 
+{
   Q_OBJECT
   public:
     StrikeWaterDialog(QWidget* parent = 0);
@@ -45,4 +46,4 @@ class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog {
     void calculate();
 };
 
-#endif  _STRIKEWATERDIALOG_H
+#endif

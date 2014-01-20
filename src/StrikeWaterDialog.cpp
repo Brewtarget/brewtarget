@@ -17,6 +17,7 @@
 */
 
 #include "StrikeWaterDialog.h"
+#include "brewtarget.h"
 
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 	setupUi(this);
@@ -25,7 +26,10 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 
 StrikeWaterDialog::~StrikeWaterDialog() {}
 
-void StrikeWaterDialog::calculate() {}
+void StrikeWaterDialog::calculate() {
+	InitialResultTxt->setText(Brewtarget::displayAmount(100, Units::grams));
+	MashResultTxt->setText(Brewtarget::displayAmount(99, Units::grams));
+}
 
 double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp,
         double waterToGrain) {
@@ -35,6 +39,6 @@ double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp,
 double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp,
         double grainWeight, double infusionWater, double mashVolume) {
   // Jon Palmer's equation
-  return ((targetTemp - initialTemp)(0.41 * grainWeight + mashVolume)) 
-      / (infusionWater - targetTemp)
+  return ((targetTemp - initialTemp) * (0.41 * grainWeight + mashVolume)) 
+      / (infusionWater - targetTemp);
 }

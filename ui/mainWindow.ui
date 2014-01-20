@@ -216,8 +216,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>403</height>
+           <width>702</width>
+           <height>409</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1368,7 +1368,7 @@
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_9">
                      <item>
-                      <widget class="BeerColorWidget" name="beerColorWidget"/>
+                      <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
                      </item>
                     </layout>
                    </widget>
@@ -1411,7 +1411,7 @@
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget"/>
+               <widget class="RecipeExtrasWidget" name="recipeExtrasWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1421,7 +1421,7 @@
              </attribute>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget"/>
+               <widget class="BrewDayScrollWidget" name="brewDayScrollWidget" native="true"/>
               </item>
              </layout>
             </widget>
@@ -1439,8 +1439,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>644</width>
-           <height>334</height>
+           <width>715</width>
+           <height>316</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1986,7 +1986,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>20</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2067,6 +2067,7 @@
     <addaction name="action_recipeToTextClipboard"/>
     <addaction name="actionRefractometer_Tools"/>
     <addaction name="actionScale_Recipe"/>
+    <addaction name="actionStrikeWater_Calculator"/>
     <addaction name="actionTimers"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
@@ -2514,6 +2515,11 @@
    </property>
    <property name="toolTip">
     <string>Mashes</string>
+   </property>
+  </action>
+  <action name="actionStrikeWater_Calculator">
+   <property name="text">
+    <string>Strike Water Calculator</string>
    </property>
   </action>
  </widget>

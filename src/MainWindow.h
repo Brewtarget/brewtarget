@@ -60,6 +60,7 @@ class OgAdjuster;
 class ConverterTool;
 class TimerListDialog;
 class PrimingDialog;
+class StrikeWaterDialog;
 class RecipeExtrasWidget;
 class RefractoDialog;
 class MashDesigner;
@@ -295,6 +296,7 @@ private:
    ConverterTool* converterTool;
    TimerListDialog* timerListDialog;
    PrimingDialog* primingDialog;
+   StrikeWaterDialog* strikeWaterDialog;
    RefractoDialog* refractoDialog;
    MashDesigner* mashDesigner;
    PitchDialog* pitchDialog;
