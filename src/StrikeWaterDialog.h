@@ -44,6 +44,8 @@ class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
 
   public slots:
     void calculate();
+    void setImperial();
+    void setSi();
 };
 
 #endif
