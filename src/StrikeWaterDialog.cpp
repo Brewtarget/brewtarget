@@ -26,3 +26,15 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 StrikeWaterDialog::~StrikeWaterDialog() {}
 
 void StrikeWaterDialog::calculate() {}
+
+double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp,
+        double waterToGrain) {
+  // Jon Palmer's equation
+  return (.41 / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
+}
+double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp,
+        double grainWeight, double infusionWater, double mashVolume) {
+  // Jon Palmer's equation
+  return ((targetTemp - initialTemp)(0.41 * grainWeight + mashVolume)) 
+      / (infusionWater - targetTemp)
+}

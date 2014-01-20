@@ -29,15 +29,20 @@
  *
  * \brief Dialog to calculate the amount and temperature of the strike water.
  */
-class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
-{
-   Q_OBJECT
-   public:
-      StrikeWaterDialog(QWidget* parent = 0);
-      ~StrikeWaterDialog();
-      
-   public slots:
-      void calculate();
+class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog {
+  Q_OBJECT
+  public:
+    StrikeWaterDialog(QWidget* parent = 0);
+    ~StrikeWaterDialog();
+
+  private:    
+    double initialInfusionSi(double grainTemp, double targetTemp,
+        double waterToGrain);
+    double mashInfusionSi(double initialTemp, double targetTemp,
+        double grainWeight, double infusionWater, double mashVolume);
+
+  public slots:
+    void calculate();
 };
 
 #endif  _STRIKEWATERDIALOG_H
