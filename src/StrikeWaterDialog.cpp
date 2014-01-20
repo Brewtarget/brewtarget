@@ -20,6 +20,7 @@
 
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 	setupUi(this);
+	connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() {}

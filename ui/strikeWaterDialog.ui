@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
+    <width>760</width>
     <height>422</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>641</width>
+     <width>731</width>
      <height>31</height>
     </rect>
    </property>
@@ -64,7 +64,7 @@
     <rect>
      <x>10</x>
      <y>340</y>
-     <width>641</width>
+     <width>581</width>
      <height>81</height>
     </rect>
    </property>
@@ -76,7 +76,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>641</width>
+      <width>581</width>
       <height>72</height>
      </rect>
     </property>
@@ -213,7 +213,7 @@
   <widget class="QWidget" name="verticalLayoutWidget_3">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>430</x>
      <y>50</y>
      <width>281</width>
      <height>231</height>
@@ -309,7 +309,7 @@
   <widget class="Line" name="InfusionsVline">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>360</x>
      <y>50</y>
      <width>20</width>
      <height>271</height>
@@ -324,7 +324,7 @@
     <rect>
      <x>7</x>
      <y>320</y>
-     <width>641</width>
+     <width>741</width>
      <height>20</height>
     </rect>
    </property>
@@ -373,7 +373,7 @@
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>430</x>
      <y>280</y>
      <width>281</width>
      <height>41</height>
@@ -407,6 +407,28 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QPushButton" name="pushButton_calculate">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>360</y>
+     <width>158</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>Calculate</string>
+   </property>
+   <property name="text">
+    <string>Calculate</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <resources/>
