@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QButtonGroup>
 #include "ui_strikeWaterDialog.h"
+#include "unit.h"
 
 /*! 
  * \class StrikeWaterDialog
@@ -32,20 +33,37 @@
 class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog 
 {
   Q_OBJECT
+  Q_PROPERTY( Unit* volume READ volumeUnit WRITE setVolumeUnit )
+  Q_PROPERTY( Unit* weight READ weightUnit WRITE setWeightUnit )
+  Q_PROPERTY( TempScale temp READ tempUnit WRITE setTempUnit )
   public:
     StrikeWaterDialog(QWidget* parent = 0);
     ~StrikeWaterDialog();
 
-  private:    
-    double initialInfusionSi(double grainTemp, double targetTemp,
-        double waterToGrain);
-    double mashInfusionSi(double initialTemp, double targetTemp,
-        double grainWeight, double infusionWater, double mashVolume);
+    Unit* volumeUnit();
+    Unit* weightUnit();
+    TempScale tempUnit();
 
   public slots:
     void calculate();
     void setImperial();
     void setSi();
+    void setVolumeUnit(Unit* unit);
+    void setWeightUnit(Unit* unit);
+    void setTempUnit(TempScale unit);
+
+  private:
+  	Unit* volume;
+  	Unit* weight;
+  	TempScale temp;
+
+    double initialInfusionSi(double grainTemp, double targetTemp,
+        double waterToGrain);
+    double mashInfusionSi(double initialTemp, double targetTemp,
+        double grainWeight, double infusionWater, double mashVolume);
+
+    double computeInitialInfusion();
+    double computeMashInfusion();
 };
 
 #endif

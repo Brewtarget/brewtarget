@@ -16,9 +16,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <limits>
+#include <Algorithms.h>
 #include "StrikeWaterDialog.h"
 #include "brewtarget.h"
-#include "unit.h"
 
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 	setupUi(this);
@@ -41,27 +42,61 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 
 StrikeWaterDialog::~StrikeWaterDialog() {}
 
+Unit* StrikeWaterDialog::volumeUnit() { return volume; }
+Unit* StrikeWaterDialog::weightUnit() { return weight; }
+TempScale StrikeWaterDialog::tempUnit() { return temp; }
+
 void StrikeWaterDialog::calculate() {
-	InitialResultTxt->setText(Brewtarget::displayAmount(100, Units::grams));
-	MashResultTxt->setText(Brewtarget::displayAmount(99, Units::grams));
+	double initial = computeInitialInfusion();
+	double mash = computeMashInfusion();
+    
+	QString initialVal = Algorithms::Instance().isnan(initial) ? "N/A" : "12 gal";
+	QString mashVal = Algorithms::Instance().isnan(mash) ? "N/A" : "12 gal";
+
+	InitialResultTxt->setText(initialVal);
+	InitialResultTxt->setText(mashVal);
+	//MashResultTxt->setText(Brewtarget::displayAmount(99, Units::grams));
 }
 
 void StrikeWaterDialog::setImperial() {
-	int idx = TemperatureSelect->findData(Fahrenheit);
-	if (idx != -1)  TemperatureSelect->setCurrentIndex(idx);
-	idx = VolumeSelect->findData(Units::us_quarts->getUnitName());
-	if (idx != -1)  VolumeSelect->setCurrentIndex(idx);
-	idx = WeightSelect->findData(Units::pounds->getUnitName());
-	if (idx != -1)  WeightSelect->setCurrentIndex(idx);
+	setVolumeUnit(Units::us_quarts);
+	setWeightUnit(Units::pounds);
+	setTempUnit(Fahrenheit);
 }
 
 void StrikeWaterDialog::setSi() {
-	int idx = TemperatureSelect->findData(Celsius);
-	if (idx != -1)  TemperatureSelect->setCurrentIndex(idx);
-	idx = VolumeSelect->findData(Units::liters->getUnitName());
-	if (idx != -1)  VolumeSelect->setCurrentIndex(idx);
-	idx = WeightSelect->findData(Units::kilograms->getUnitName());
-	if (idx != -1)  WeightSelect->setCurrentIndex(idx);
+	setVolumeUnit(Units::liters);
+	setWeightUnit(Units::kilograms);
+	setTempUnit(Celsius);
+}
+
+void StrikeWaterDialog::setVolumeUnit(Unit* unit) {
+  volume = unit;
+  int idx = VolumeSelect->findData(unit->getUnitName());
+  if (idx == -1) return;
+  VolumeSelect->setCurrentIndex(idx);
+}
+
+void StrikeWaterDialog::setWeightUnit(Unit* unit) {
+  weight = unit;
+  int idx = WeightSelect->findData(unit->getUnitName());
+  if (idx == -1) return;
+  WeightSelect->setCurrentIndex(idx);
+}
+
+void StrikeWaterDialog::setTempUnit(TempScale unit) {
+  temp = unit;
+  int idx = TemperatureSelect->findData(unit);
+  if (idx == -1) return;
+  TemperatureSelect->setCurrentIndex(idx);
+}
+
+double StrikeWaterDialog::computeInitialInfusion() {
+  return std::numeric_limits<double>::quiet_NaN();
+}
+
+double StrikeWaterDialog::computeMashInfusion() {
+  return std::numeric_limits<double>::quiet_NaN();
 }
 
 double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp,
