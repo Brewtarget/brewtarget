@@ -24,16 +24,21 @@
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 	setupUi(this);
 
-	TemperatureSelect->addItem(tempScaleToString(Celsius), Celsius);
-	TemperatureSelect->addItem(tempScaleToString(Fahrenheit), Fahrenheit);
+	TemperatureSelect->addItem(Units::celsius->getUnitName(), Units::celsius->getUnitName());
+	TemperatureSelect->addItem(Units::fahrenheit->getUnitName(), Units::fahrenheit->getUnitName());
 
 	VolumeSelect->addItem(Units::liters->getUnitName(), Units::liters->getUnitName());
 	VolumeSelect->addItem(Units::us_quarts->getUnitName(), Units::us_quarts->getUnitName());
 
-    WeightSelect->addItem(Units::kilograms->getUnitName(), Units::kilograms->getUnitName());
-    WeightSelect->addItem(Units::pounds->getUnitName(), Units::pounds->getUnitName());
+  WeightSelect->addItem(Units::kilograms->getUnitName(), Units::kilograms->getUnitName());
+  WeightSelect->addItem(Units::pounds->getUnitName(), Units::pounds->getUnitName());
 
-    setSi();
+  InitialResultTxt->setText("N/A");
+  MashResultTxt->setText("N/A");
+  GrainWeightVal->setText("0");
+  MashVolVal->setText("0");
+
+  setSi();
 
 	connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
 	connect(SetImperialBtn, SIGNAL(clicked()), this, SLOT(setImperial()));
@@ -44,30 +49,33 @@ StrikeWaterDialog::~StrikeWaterDialog() {}
 
 Unit* StrikeWaterDialog::volumeUnit() { return volume; }
 Unit* StrikeWaterDialog::weightUnit() { return weight; }
-TempScale StrikeWaterDialog::tempUnit() { return temp; }
+Unit* StrikeWaterDialog::tempUnit() { return temp; }
 
 void StrikeWaterDialog::calculate() {
 	double initial = computeInitialInfusion();
 	double mash = computeMashInfusion();
     
-	QString initialVal = Algorithms::Instance().isnan(initial) ? "N/A" : "12 gal";
-	QString mashVal = Algorithms::Instance().isnan(mash) ? "N/A" : "12 gal";
+	QString initialVal = Algorithms::Instance().isnan(initial) 
+    ? "N/A" 
+    : Brewtarget::displayAmount(temp->fromSI(initial), NULL) + " " + temp->getUnitName();
+	QString mashVal = Algorithms::Instance().isnan(mash) 
+    ? "N/A" 
+    : Brewtarget::displayAmount(mash, volume);
 
 	InitialResultTxt->setText(initialVal);
-	InitialResultTxt->setText(mashVal);
-	//MashResultTxt->setText(Brewtarget::displayAmount(99, Units::grams));
+	MashResultTxt->setText(mashVal);
 }
 
 void StrikeWaterDialog::setImperial() {
 	setVolumeUnit(Units::us_quarts);
 	setWeightUnit(Units::pounds);
-	setTempUnit(Fahrenheit);
+	setTempUnit(Units::fahrenheit);
 }
 
 void StrikeWaterDialog::setSi() {
 	setVolumeUnit(Units::liters);
 	setWeightUnit(Units::kilograms);
-	setTempUnit(Celsius);
+	setTempUnit(Units::celsius);
 }
 
 void StrikeWaterDialog::setVolumeUnit(Unit* unit) {
@@ -84,15 +92,27 @@ void StrikeWaterDialog::setWeightUnit(Unit* unit) {
   WeightSelect->setCurrentIndex(idx);
 }
 
-void StrikeWaterDialog::setTempUnit(TempScale unit) {
+void StrikeWaterDialog::setTempUnit(Unit* unit) {
   temp = unit;
-  int idx = TemperatureSelect->findData(unit);
+  int idx = TemperatureSelect->findData(unit->getUnitName());
   if (idx == -1) return;
   TemperatureSelect->setCurrentIndex(idx);
 }
 
 double StrikeWaterDialog::computeInitialInfusion() {
-  return std::numeric_limits<double>::quiet_NaN();
+  bool ok;
+  double grainTemp = GrainTempVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();
+  double targetMash = TargetMashVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();
+  double waterToGrain = WaterToGrainVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();
+
+  return initialInfusionSi(
+    temp->toSI(grainTemp), 
+    temp->toSI(targetMash), 
+    waterToGrain * (volume->toSI(1.0) / weight->toSI(1.0))
+  );
 }
 
 double StrikeWaterDialog::computeMashInfusion() {
@@ -101,7 +121,6 @@ double StrikeWaterDialog::computeMashInfusion() {
 
 double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp,
         double waterToGrain) {
-  // Jon Palmer's equation
   return (.41 / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
 }
 double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp,

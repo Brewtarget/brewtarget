@@ -35,14 +35,14 @@ class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
   Q_OBJECT
   Q_PROPERTY( Unit* volume READ volumeUnit WRITE setVolumeUnit )
   Q_PROPERTY( Unit* weight READ weightUnit WRITE setWeightUnit )
-  Q_PROPERTY( TempScale temp READ tempUnit WRITE setTempUnit )
+  Q_PROPERTY( Unit* temp READ tempUnit WRITE setTempUnit )
   public:
     StrikeWaterDialog(QWidget* parent = 0);
     ~StrikeWaterDialog();
 
     Unit* volumeUnit();
     Unit* weightUnit();
-    TempScale tempUnit();
+    Unit* tempUnit();
 
   public slots:
     void calculate();
@@ -50,12 +50,15 @@ class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
     void setSi();
     void setVolumeUnit(Unit* unit);
     void setWeightUnit(Unit* unit);
-    void setTempUnit(TempScale unit);
+    void setTempUnit(Unit* unit);
 
   private:
+    // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
+    // to compensate for the lost to the tun even if the tun is pre-heaten
+    static const double specificHeatBarley = 0.41;
   	Unit* volume;
   	Unit* weight;
-  	TempScale temp;
+  	Unit* temp;
 
     double initialInfusionSi(double grainTemp, double targetTemp,
         double waterToGrain);
