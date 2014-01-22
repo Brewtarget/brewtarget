@@ -272,7 +272,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="ActualMashVal"/>
+       <widget class="QDoubleSpinBox" name="ActualMashVal">
+        <property name="maximum">
+         <double>999.990000000000009</double>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -286,7 +290,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="TargetMashInfVal"/>
+       <widget class="QDoubleSpinBox" name="TargetMashInfVal">
+        <property name="maximum">
+         <double>999.990000000000009</double>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -300,7 +308,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="InfusionWaterVal"/>
+       <widget class="QDoubleSpinBox" name="InfusionWaterVal">
+        <property name="maximum">
+         <double>999.990000000000009</double>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

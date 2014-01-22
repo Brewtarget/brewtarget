@@ -60,7 +60,7 @@ void StrikeWaterDialog::calculate() {
     : Brewtarget::displayAmount(temp->fromSI(initial), NULL) + " " + temp->getUnitName();
 	QString mashVal = Algorithms::Instance().isnan(mash) 
     ? "N/A" 
-    : Brewtarget::displayAmount(mash, volume);
+    : Brewtarget::displayAmount(volume->fromSI(mash), NULL) + " " + volume->getUnitName();
 
 	InitialResultTxt->setText(initialVal);
 	MashResultTxt->setText(mashVal);
@@ -116,16 +116,33 @@ double StrikeWaterDialog::computeInitialInfusion() {
 }
 
 double StrikeWaterDialog::computeMashInfusion() {
-  return std::numeric_limits<double>::quiet_NaN();
+  bool ok;
+  double mashVolVal = MashVolVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();
+  double grainWeightVal = GrainWeightVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();
+  double actualMashVal = ActualMashVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();
+  double targetMashInfVal = TargetMashInfVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();
+  double infusionWaterVal = InfusionWaterVal->text().toDouble(&ok);
+  if (!ok)  return std::numeric_limits<double>::quiet_NaN();  
+  
+  return mashInfusionSi(
+    temp->toSI(actualMashVal), 
+    temp->toSI(targetMashInfVal),
+    weight->toSI(grainWeightVal),
+    temp->toSI(infusionWaterVal),
+    volume->toSI(mashVolVal)
+  );
 }
 
 double StrikeWaterDialog::initialInfusionSi(double grainTemp, double targetTemp,
         double waterToGrain) {
-  return (.41 / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
+  return (specificHeatBarley / waterToGrain) * (targetTemp - grainTemp) + targetTemp;
 }
 double StrikeWaterDialog::mashInfusionSi(double initialTemp, double targetTemp,
         double grainWeight, double infusionWater, double mashVolume) {
-  // Jon Palmer's equation
-  return ((targetTemp - initialTemp) * (0.41 * grainWeight + mashVolume)) 
+  return ((targetTemp - initialTemp) * (specificHeatBarley * grainWeight + mashVolume)) 
       / (infusionWater - targetTemp);
 }
