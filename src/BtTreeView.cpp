@@ -113,7 +113,11 @@ QString BtTreeView::folderName(QModelIndex index)
    if ( _model->type(filter->mapToSource(index)) == BtTreeItem::FOLDER)
       return _model->folder(filter->mapToSource(index))->fullPath();
 
-   return _model->thing(filter->mapToSource(index))->folder();
+   BeerXMLElement* thing = _model->thing(filter->mapToSource(index));
+   if ( thing )
+      return _model->thing(filter->mapToSource(index))->folder();
+   else 
+      return "";
 }
 
 QModelIndex BtTreeView::findElement(BeerXMLElement* thing)

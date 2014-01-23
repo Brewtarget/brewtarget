@@ -913,7 +913,7 @@ void BtTreeModel::folderChanged(QString name)
       expand = false;
    }
    
-   BtTreeItem* local = item(ndx);
+   BtTreeItem* local = item(newNdx);
    int j = local->childCount();
 
    if ( !  insertRow(j,newNdx,test,_type) )
@@ -923,7 +923,7 @@ void BtTreeModel::folderChanged(QString name)
    }
    // If we have brewnotes, set them up here.
    if ( treeMask & RECIPEMASK )
-      addBrewNoteSubTree(qobject_cast<Recipe*>(test),i,local);
+      addBrewNoteSubTree(qobject_cast<Recipe*>(test),j,local);
 
    if ( expand )
       emit expandFolder(treeMask,newNdx);
