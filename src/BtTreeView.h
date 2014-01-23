@@ -114,7 +114,7 @@ public:
    void keyPressEvent(QKeyEvent* event);
 
    //! \brief creates a context menu based on the type of tree
-   void setupContextMenu(QWidget* top, QWidget* editor, QMenu* sMenu, QMenu* fMenu, int type = BtTreeItem::RECIPE);
+   void setupContextMenu(QWidget* top, QWidget* editor );
 
    void deleteSelected(QModelIndexList selected);
    // Friend classes. For the most part, the children don't do much beyond

@@ -869,8 +869,9 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
 
 // The actual magic shouldn't be hard. Once we trap the signal, find the
 // recipe, remove it from the parent and add it to the target folder.
-// The uncomfortable part is how to make this more generic? I do not want to
-// write this code once for every type. Like I have so many times already.
+// It is not easy. Indexes are ephemeral things. We MUST calculate the insert
+// index after we have removed the recipe. BAD THINGS happen otherwise.
+// 
 void BtTreeModel::folderChanged(QString name)
 {
    BeerXMLElement* test = qobject_cast<BeerXMLElement*>(sender());
@@ -895,6 +896,13 @@ void BtTreeModel::folderChanged(QString name)
    
    int i = item(ndx)->childNumber();
 
+   // Remove it
+   if ( ! removeRows(i, 1, pIndex) )
+   {
+      Brewtarget::logW("folderChanged:: could not remove row");
+      return;
+   }
+
    // Find the new parent
    // That's awkward, but dropping a folder prolly does need a the folder
    // created.
@@ -908,18 +916,11 @@ void BtTreeModel::folderChanged(QString name)
    BtTreeItem* local = item(ndx);
    int j = local->childCount();
 
-   // Remove it
-   if ( ! removeRows(i, 1, pIndex) )
-   {
-      Brewtarget::logW("folderChanged:: could not remove row");
-      return;
-   }
    if ( !  insertRow(j,newNdx,test,_type) )
    {
       Brewtarget::logW("folderChanged:: could not insert row");
       return;
    }
-
    // If we have brewnotes, set them up here.
    if ( treeMask & RECIPEMASK )
       addBrewNoteSubTree(qobject_cast<Recipe*>(test),i,local);

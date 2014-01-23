@@ -348,28 +348,6 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionSave, SIGNAL(triggered()), this, SLOT(save()) );
    connect( actionDonate, SIGNAL( triggered() ), this, SLOT( openDonateLink() ) );
 
-   // TreeView for clicks, both double and right
-   connect( treeView_recipe, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_recipe, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
-
-   connect( treeView_equip, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_equip, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
-
-   connect( treeView_ferm, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_ferm, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
-
-   connect( treeView_hops, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_hops, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
-
-   connect( treeView_misc, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_misc, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
-
-   connect( treeView_yeast, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_yeast, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
-
-   connect( treeView_style, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
-   connect( treeView_style, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
-
    // Printing signals/slots.
    // Refactoring is good.  It's like a rye saison fermenting away
    connect( actionRecipePrint, SIGNAL(triggered()), this, SLOT(print()));
@@ -1431,7 +1409,8 @@ void MainWindow::setTreeSelection(QModelIndex item)
    QModelIndex parent = active->parent(item);
 
    active->setCurrentIndex(item);
-   if ( active->type(parent) == BtTreeItem::FOLDER )
+   if ( active->type(parent) == BtTreeItem::FOLDER && !
+         active->isExpanded(parent) )
       active->setExpanded(parent,true);
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
    
@@ -1836,33 +1815,37 @@ void MainWindow::contextMenu(const QPoint &point)
 
 void MainWindow::setupContextMenu()
 {
-   QMenu *sMenu = new QMenu(this);
-   QMenu *fMenu = new QMenu(this);
 
-   // Set up the "new" submenu
-   sMenu->setTitle(tr("New"));
-   sMenu->addAction(tr("Recipe"), this, SLOT(newRecipe()));
-   sMenu->addAction(tr("Equipment"), equipEditor, SLOT(newEquipment()));
-   sMenu->addAction(tr("Fermentable"), fermDialog, SLOT(newFermentable()));
-   sMenu->addAction(tr("Hop"), hopDialog, SLOT(newHop()));
-   sMenu->addAction(tr("Miscellaneous"), miscDialog, SLOT(newMisc()));
-   sMenu->addAction(tr("Style"), singleStyleEditor, SLOT(newStyle()));
-   sMenu->addAction(tr("Yeast"), yeastDialog, SLOT(newYeast()));
+   treeView_recipe->setupContextMenu(this,this);
+   treeView_equip->setupContextMenu(this,equipEditor);
 
-   // Setup the folder submenu
-   fMenu->setTitle(tr("Folders"));
-   fMenu->addAction(tr("New"), this, SLOT(newFolder()));
-   fMenu->addAction(tr("Rename"), this, SLOT(renameFolder()));
-//   fMenu->addAction(tr("Delete"), this, SLOT(deleteFolder()));
+   treeView_ferm->setupContextMenu(this,fermDialog);
+   treeView_hops->setupContextMenu(this,hopDialog);
+   treeView_misc->setupContextMenu(this,miscDialog);
+   treeView_style->setupContextMenu(this,singleStyleEditor);
+   treeView_yeast->setupContextMenu(this,yeastDialog);
 
-   treeView_recipe->setupContextMenu(this,this,sMenu,fMenu,BtTreeItem::RECIPE);
-   treeView_equip->setupContextMenu(this,equipEditor,sMenu,fMenu,BtTreeItem::EQUIPMENT);
+   // TreeView for clicks, both double and right
+   connect( treeView_recipe, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_recipe, SIGNAL(customContextMenuRequested( const QPoint& )), this, SLOT(contextMenu(const QPoint &)));
 
-   treeView_ferm->setupContextMenu(this,fermDialog,sMenu,fMenu,BtTreeItem::FERMENTABLE);
-   treeView_hops->setupContextMenu(this,hopDialog,sMenu,fMenu,BtTreeItem::HOP);
-   treeView_misc->setupContextMenu(this,miscDialog,sMenu,fMenu,BtTreeItem::MISC);
-   treeView_style->setupContextMenu(this,singleStyleEditor,sMenu,fMenu,BtTreeItem::STYLE);
-   treeView_yeast->setupContextMenu(this,yeastDialog,sMenu,fMenu,BtTreeItem::YEAST);
+   connect( treeView_equip, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_equip, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_ferm, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_ferm, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_hops, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_hops, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_misc, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_misc, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_yeast, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_yeast, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
+
+   connect( treeView_style, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(treeActivated(const QModelIndex &)));
+   connect( treeView_style, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenu(const QPoint &)));
 
 }
 

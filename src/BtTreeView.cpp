@@ -314,17 +314,22 @@ bool BtTreeView::multiSelected()
    return hasRecipe && hasSomethingElse;
 }
 
-void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu, QMenu *fMenu, int type)
+void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
 {
+   QMenu*_newMenu = new QMenu(this);
 
    _contextMenu = new QMenu(this);
    subMenu = new QMenu(this);
 
-   switch(type) 
+   _newMenu->setTitle(tr("New"));
+   _contextMenu->addMenu(_newMenu);
+   _contextMenu->addSeparator();
+   switch(_type) 
    {
       // the recipe case is a bit more complex, because we need to handle the brewnotes too
-      case BtTreeItem::RECIPE:
-         _contextMenu->addAction(tr("New Recipe"), editor, SLOT(newRecipe()));
+      case BtTreeModel::RECIPEMASK:
+         _newMenu->addAction(tr("Recipe"), editor, SLOT(newRecipe()));
+
          _contextMenu->addAction(tr("Brew It!"), top, SLOT(newBrewNote()));
          _contextMenu->addSeparator();
 
@@ -334,37 +339,29 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor, QMenu *sMenu, Q
          subMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));
 
          break;
-      case BtTreeItem::EQUIPMENT:
-         _contextMenu->addAction(tr("New Equipment"), editor, SLOT(newEquipment()));
-         _contextMenu->addSeparator();
+      case BtTreeModel::EQUIPMASK:
+         _newMenu->addAction(tr("Equipment"), editor, SLOT(newEquipment()));
          break;
-      case BtTreeItem::FERMENTABLE:
-         _contextMenu->addAction(tr("New Fermentable"), editor, SLOT(newFermentable()));
-         _contextMenu->addSeparator();
+      case BtTreeModel::FERMENTMASK:
+         _newMenu->addAction(tr("Fermentable"), editor, SLOT(newFermentable()));
          break;
-      case BtTreeItem::HOP:
-         _contextMenu->addAction(tr("New Hop"), editor, SLOT(newHop()));
-         _contextMenu->addSeparator();
+      case BtTreeModel::HOPMASK:
+         _newMenu->addAction(tr("Hop"), editor, SLOT(newHop()));
          break;
-      case BtTreeItem::MISC:
-         _contextMenu->addAction(tr("New Misc"), editor, SLOT(newMisc()));
-         _contextMenu->addSeparator();
+      case BtTreeModel::MISCMASK:
+         _newMenu->addAction(tr("Misc"), editor, SLOT(newMisc()));
          break;
-      case BtTreeItem::STYLE:
-         _contextMenu->addAction(tr("New Style"), editor, SLOT(newStyle()));
-         _contextMenu->addSeparator();
+      case BtTreeModel::STYLEMASK:
+         _newMenu->addAction(tr("Style"), editor, SLOT(newStyle()));
          break;
-      case BtTreeItem::YEAST:
-         _contextMenu->addAction(tr("New Yeast"), editor, SLOT(newYeast()));
-         _contextMenu->addSeparator();
+      case BtTreeModel::YEASTMASK:
+         _newMenu->addAction(tr("Yeast"), editor, SLOT(newYeast()));
          break;
+      default:
+         Brewtarget::logW(QString("BtTreeView::setupContextMenu unrecognized mask %1").arg(_type));
    }
 
-   // submenus for new and folders
-   _contextMenu->addMenu(sMenu);
-   _contextMenu->addMenu(fMenu);
-   _contextMenu->addSeparator();
-
+   _newMenu->addAction(tr("Folder"), top, SLOT(newFolder()));
    // Copy
    _contextMenu->addAction(tr("Copy"), top, SLOT(copySelected()));
    // Delete
