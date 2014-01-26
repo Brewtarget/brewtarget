@@ -33,8 +33,8 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
   weightSelect->addItem(Units::kilograms->getUnitName(), Units::kilograms->getUnitName());
   weightSelect->addItem(Units::pounds->getUnitName(), Units::pounds->getUnitName());
 
-  initialResultTxt->setText(tr("N/A");
-  mashResultTxt->setText(tr("N/A");
+  initialResultTxt->setText(tr("N/A"));
+  mashResultTxt->setText(tr("N/A"));
   grainWeightVal->setText("0");
   mashVolVal->setText("0");
 
