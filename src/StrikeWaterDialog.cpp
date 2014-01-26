@@ -43,6 +43,9 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 	connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
 	connect(setImperialBtn, SIGNAL(clicked()), this, SLOT(setImperial()));
 	connect(setSiBtn, SIGNAL(clicked()), this, SLOT(setSi()));
+  connect(temperatureSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(recheckUnits(int)));
+  connect(volumeSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(recheckUnits(int)));
+  connect(weightSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(recheckUnits(int)));
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() {}
@@ -70,16 +73,38 @@ void StrikeWaterDialog::setImperial() {
 	setVolumeUnit(Units::us_quarts);
 	setWeightUnit(Units::pounds);
 	setTempUnit(Units::fahrenheit);
+  waterToGrainUnit->setText(
+    QString("%1/%2").arg(volume->getUnitName(), weight->getUnitName())
+  );
 }
 
 void StrikeWaterDialog::setSi() {
 	setVolumeUnit(Units::liters);
 	setWeightUnit(Units::kilograms);
 	setTempUnit(Units::celsius);
+  waterToGrainUnit->setText(
+    QString("%1/%2").arg(volume->getUnitName(), weight->getUnitName())
+  );
+}
+
+void StrikeWaterDialog::recheckUnits(int i) {
+  setVolumeUnit(volumeSelect->currentText() == Units::liters->getUnitName() 
+    ? (Unit*)Units::liters : (Unit*)Units::us_quarts);
+  setWeightUnit(weightSelect->currentText() == Units::kilograms->getUnitName() 
+    ? (Unit*)Units::kilograms : (Unit*)Units::pounds);
+  setTempUnit(temperatureSelect->currentText() == Units::celsius->getUnitName() 
+    ? (Unit*)Units::celsius : (Unit*)Units::fahrenheit);
+  waterToGrainUnit->setText(
+    QString("%1/%2").arg(volume->getUnitName(), weight->getUnitName())
+  );
 }
 
 void StrikeWaterDialog::setVolumeUnit(Unit* unit) {
   volume = unit;
+
+  mashResultUnit->setText(unit->getUnitName());
+  mashVolUnit->setText(unit->getUnitName());
+  
   int idx = volumeSelect->findData(unit->getUnitName());
   if (idx == -1) return;
   volumeSelect->setCurrentIndex(idx);
@@ -87,6 +112,9 @@ void StrikeWaterDialog::setVolumeUnit(Unit* unit) {
 
 void StrikeWaterDialog::setWeightUnit(Unit* unit) {
   weight = unit;
+
+  grainWeightUnit->setText(unit->getUnitName());
+  
   int idx = weightSelect->findData(unit->getUnitName());
   if (idx == -1) return;
   weightSelect->setCurrentIndex(idx);
@@ -94,6 +122,14 @@ void StrikeWaterDialog::setWeightUnit(Unit* unit) {
 
 void StrikeWaterDialog::setTempUnit(Unit* unit) {
   temp = unit;
+  QString tempUnitStr = QString(QString::fromUtf8("\u00B0%1")).arg(unit->getUnitName());
+  actualMashUnit->setText(tempUnitStr);
+  grainTempUnit->setText(tempUnitStr);
+  infusionWaterUnit->setText(tempUnitStr);
+  initialResultUnit->setText(tempUnitStr);
+  targetMashInfUnit->setText(tempUnitStr);
+  targetMashUnit->setText(tempUnitStr);
+  
   int idx = temperatureSelect->findData(unit->getUnitName());
   if (idx == -1) return;
   temperatureSelect->setCurrentIndex(idx);

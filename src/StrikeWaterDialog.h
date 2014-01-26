@@ -51,6 +51,7 @@ class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
     void setVolumeUnit(Unit* unit);
     void setWeightUnit(Unit* unit);
     void setTempUnit(Unit* unit);
+    void recheckUnits(int i);
 
   private:
     // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
