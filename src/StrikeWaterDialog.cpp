@@ -24,25 +24,25 @@
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 	setupUi(this);
 
-	TemperatureSelect->addItem(Units::celsius->getUnitName(), Units::celsius->getUnitName());
-	TemperatureSelect->addItem(Units::fahrenheit->getUnitName(), Units::fahrenheit->getUnitName());
+	temperatureSelect->addItem(Units::celsius->getUnitName(), Units::celsius->getUnitName());
+	temperatureSelect->addItem(Units::fahrenheit->getUnitName(), Units::fahrenheit->getUnitName());
 
-	VolumeSelect->addItem(Units::liters->getUnitName(), Units::liters->getUnitName());
-	VolumeSelect->addItem(Units::us_quarts->getUnitName(), Units::us_quarts->getUnitName());
+	volumeSelect->addItem(Units::liters->getUnitName(), Units::liters->getUnitName());
+	volumeSelect->addItem(Units::us_quarts->getUnitName(), Units::us_quarts->getUnitName());
 
-  WeightSelect->addItem(Units::kilograms->getUnitName(), Units::kilograms->getUnitName());
-  WeightSelect->addItem(Units::pounds->getUnitName(), Units::pounds->getUnitName());
+  weightSelect->addItem(Units::kilograms->getUnitName(), Units::kilograms->getUnitName());
+  weightSelect->addItem(Units::pounds->getUnitName(), Units::pounds->getUnitName());
 
-  InitialResultTxt->setText("N/A");
-  MashResultTxt->setText("N/A");
-  GrainWeightVal->setText("0");
-  MashVolVal->setText("0");
+  initialResultTxt->setText("N/A");
+  mashResultTxt->setText("N/A");
+  grainWeightVal->setText("0");
+  mashVolVal->setText("0");
 
   setSi();
 
 	connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
-	connect(SetImperialBtn, SIGNAL(clicked()), this, SLOT(setImperial()));
-	connect(SetSiBtn, SIGNAL(clicked()), this, SLOT(setSi()));
+	connect(setImperialBtn, SIGNAL(clicked()), this, SLOT(setImperial()));
+	connect(setSiBtn, SIGNAL(clicked()), this, SLOT(setSi()));
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() {}
@@ -62,8 +62,8 @@ void StrikeWaterDialog::calculate() {
     ? "N/A" 
     : Brewtarget::displayAmount(volume->fromSI(mash), NULL) + " " + volume->getUnitName();
 
-	InitialResultTxt->setText(initialVal);
-	MashResultTxt->setText(mashVal);
+	initialResultTxt->setText(initialVal);
+	mashResultTxt->setText(mashVal);
 }
 
 void StrikeWaterDialog::setImperial() {
@@ -80,32 +80,32 @@ void StrikeWaterDialog::setSi() {
 
 void StrikeWaterDialog::setVolumeUnit(Unit* unit) {
   volume = unit;
-  int idx = VolumeSelect->findData(unit->getUnitName());
+  int idx = volumeSelect->findData(unit->getUnitName());
   if (idx == -1) return;
-  VolumeSelect->setCurrentIndex(idx);
+  volumeSelect->setCurrentIndex(idx);
 }
 
 void StrikeWaterDialog::setWeightUnit(Unit* unit) {
   weight = unit;
-  int idx = WeightSelect->findData(unit->getUnitName());
+  int idx = weightSelect->findData(unit->getUnitName());
   if (idx == -1) return;
-  WeightSelect->setCurrentIndex(idx);
+  weightSelect->setCurrentIndex(idx);
 }
 
 void StrikeWaterDialog::setTempUnit(Unit* unit) {
   temp = unit;
-  int idx = TemperatureSelect->findData(unit->getUnitName());
+  int idx = temperatureSelect->findData(unit->getUnitName());
   if (idx == -1) return;
-  TemperatureSelect->setCurrentIndex(idx);
+  temperatureSelect->setCurrentIndex(idx);
 }
 
 double StrikeWaterDialog::computeInitialInfusion() {
   bool ok;
-  double grainTemp = GrainTempVal->text().toDouble(&ok);
+  double grainTemp = grainTempVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();
-  double targetMash = TargetMashVal->text().toDouble(&ok);
+  double targetMash = targetMashVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();
-  double waterToGrain = WaterToGrainVal->text().toDouble(&ok);
+  double waterToGrain = waterToGrainVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();
 
   return initialInfusionSi(
@@ -117,23 +117,23 @@ double StrikeWaterDialog::computeInitialInfusion() {
 
 double StrikeWaterDialog::computeMashInfusion() {
   bool ok;
-  double mashVolVal = MashVolVal->text().toDouble(&ok);
+  double mashVol = mashVolVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();
-  double grainWeightVal = GrainWeightVal->text().toDouble(&ok);
+  double grainWeight = grainWeightVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();
-  double actualMashVal = ActualMashVal->text().toDouble(&ok);
+  double actualMash = actualMashVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();
-  double targetMashInfVal = TargetMashInfVal->text().toDouble(&ok);
+  double targetMashInf = targetMashInfVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();
-  double infusionWaterVal = InfusionWaterVal->text().toDouble(&ok);
+  double infusionWater = infusionWaterVal->text().toDouble(&ok);
   if (!ok)  return std::numeric_limits<double>::quiet_NaN();  
   
   return mashInfusionSi(
-    temp->toSI(actualMashVal), 
-    temp->toSI(targetMashInfVal),
-    weight->toSI(grainWeightVal),
-    temp->toSI(infusionWaterVal),
-    volume->toSI(mashVolVal)
+    temp->toSI(actualMash), 
+    temp->toSI(targetMashInf),
+    weight->toSI(grainWeight),
+    temp->toSI(infusionWater),
+    volume->toSI(mashVol)
   );
 }
 

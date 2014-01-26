@@ -22,9 +22,9 @@
      <height>31</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="Header">
+   <layout class="QHBoxLayout" name="header">
     <item>
-     <widget class="QLabel" name="InitialInfusionLbl">
+     <widget class="QLabel" name="initialInfusionLbl">
       <property name="font">
        <font>
         <pointsize>12</pointsize>
@@ -41,7 +41,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="MashInfusionLbl">
+     <widget class="QLabel" name="mashInfusionLbl">
       <property name="font">
        <font>
         <pointsize>12</pointsize>
@@ -59,7 +59,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QGroupBox" name="Units">
+  <widget class="QGroupBox" name="units">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -80,60 +80,60 @@
       <height>72</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="UnitsLayout">
+    <layout class="QHBoxLayout" name="unitsLayout">
      <item>
-      <layout class="QHBoxLayout" name="Temperature">
+      <layout class="QHBoxLayout" name="temperature">
        <item>
-        <widget class="QLabel" name="TemperatureLbl">
+        <widget class="QLabel" name="temperatureLbl">
          <property name="text">
           <string>Temperature</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="TemperatureSelect"/>
+        <widget class="QComboBox" name="temperatureSelect"/>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="Volume">
+      <layout class="QHBoxLayout" name="volume">
        <item>
-        <widget class="QLabel" name="VolumeLbl">
+        <widget class="QLabel" name="volumeLbl">
          <property name="text">
           <string>Volume</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="VolumeSelect"/>
+        <widget class="QComboBox" name="volumeSelect"/>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="Weight">
+      <layout class="QHBoxLayout" name="weight">
        <item>
-        <widget class="QLabel" name="WeightLbl">
+        <widget class="QLabel" name="weightLbl">
          <property name="text">
           <string>Weight</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="WeightSelect"/>
+        <widget class="QComboBox" name="weightSelect"/>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="System">
+      <layout class="QVBoxLayout" name="system">
        <item>
-        <widget class="QPushButton" name="SetImperialBtn">
+        <widget class="QPushButton" name="setImperialBtn">
          <property name="text">
           <string>Imperial</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="SetSiBtn">
+        <widget class="QPushButton" name="setSiBtn">
          <property name="text">
           <string>SI</string>
          </property>
@@ -153,18 +153,18 @@
      <height>231</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="InitialInfusion">
+   <layout class="QVBoxLayout" name="initialInfusion">
     <item>
-     <layout class="QHBoxLayout" name="GrainTemp">
+     <layout class="QHBoxLayout" name="grainTemp">
       <item>
-       <widget class="QLabel" name="GrainTempLbl">
+       <widget class="QLabel" name="grainTempLbl">
         <property name="text">
          <string>Original Grain Temp</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="GrainTempVal">
+       <widget class="QDoubleSpinBox" name="grainTempVal">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -173,16 +173,16 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="TargetMash">
+     <layout class="QHBoxLayout" name="targetMash">
       <item>
-       <widget class="QLabel" name="TargetMashLbl">
+       <widget class="QLabel" name="targetMashLbl">
         <property name="text">
          <string>Target Mash Temp</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="TargetMashVal">
+       <widget class="QDoubleSpinBox" name="targetMashVal">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -191,16 +191,16 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="WaterToGrain">
+     <layout class="QHBoxLayout" name="waterToGrain">
       <item>
-       <widget class="QLabel" name="WaterToGrainLbl">
+       <widget class="QLabel" name="waterToGrainLbl">
         <property name="text">
          <string>Water to Grain Ratio</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="WaterToGrainVal">
+       <widget class="QDoubleSpinBox" name="waterToGrainVal">
         <property name="decimals">
          <number>1</number>
         </property>
@@ -219,18 +219,18 @@
      <height>231</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="MashInfusion">
+   <layout class="QVBoxLayout" name="mashInfusion">
     <item>
-     <layout class="QHBoxLayout" name="MashVol">
+     <layout class="QHBoxLayout" name="mashVol">
       <item>
-       <widget class="QLabel" name="MashVolLbl">
+       <widget class="QLabel" name="mashVolLbl">
         <property name="text">
          <string>Mash Volume</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="MashVolVal">
+       <widget class="QLineEdit" name="mashVolVal">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -242,16 +242,16 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="GrainWeight">
+     <layout class="QHBoxLayout" name="grainWeight">
       <item>
-       <widget class="QLabel" name="GrainWeightLbl">
+       <widget class="QLabel" name="grainWeightLbl">
         <property name="text">
          <string>Grain Weight</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="GrainWeightVal">
+       <widget class="QLineEdit" name="grainWeightVal">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -263,16 +263,16 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="ActualMash">
+     <layout class="QHBoxLayout" name="actualMash">
       <item>
-       <widget class="QLabel" name="ActualMashLbl">
+       <widget class="QLabel" name="actualMashLbl">
         <property name="text">
          <string>Actual Mash Temp</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="ActualMashVal">
+       <widget class="QDoubleSpinBox" name="actualMashVal">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -281,16 +281,16 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="TargetMashInf">
+     <layout class="QHBoxLayout" name="targetMashInf">
       <item>
-       <widget class="QLabel" name="TargetMashInfLbl">
+       <widget class="QLabel" name="targetMashInfLbl">
         <property name="text">
          <string>Target Mash Temp</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="TargetMashInfVal">
+       <widget class="QDoubleSpinBox" name="targetMashInfVal">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -299,16 +299,16 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="InfusionWater">
+     <layout class="QHBoxLayout" name="infusionWater">
       <item>
-       <widget class="QLabel" name="InfusionWaterLbl">
+       <widget class="QLabel" name="infusionWaterLbl">
         <property name="text">
          <string>Infusion Water Temp</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="InfusionWaterVal">
+       <widget class="QDoubleSpinBox" name="infusionWaterVal">
         <property name="maximum">
          <double>999.990000000000009</double>
         </property>
@@ -318,7 +318,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="Line" name="InfusionsVline">
+  <widget class="Line" name="infusionsVline">
    <property name="geometry">
     <rect>
      <x>360</x>
@@ -331,7 +331,7 @@
     <enum>Qt::Vertical</enum>
    </property>
   </widget>
-  <widget class="Line" name="UnitsHline">
+  <widget class="Line" name="unitsHline">
    <property name="geometry">
     <rect>
      <x>7</x>
@@ -353,9 +353,9 @@
      <height>41</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="InitialResult">
+   <layout class="QHBoxLayout" name="initialResult">
     <item>
-     <widget class="QLabel" name="InitialResultLbl">
+     <widget class="QLabel" name="initialResultLbl">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -368,7 +368,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="InitialResultTxt">
+     <widget class="QLineEdit" name="initialResultTxt">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -391,9 +391,9 @@
      <height>41</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="MashResult">
+   <layout class="QHBoxLayout" name="mashResult">
     <item>
-     <widget class="QLabel" name="MashResultLbl">
+     <widget class="QLabel" name="mashResultLbl">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -406,7 +406,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="MashResultTxt">
+     <widget class="QLineEdit" name="mashResultTxt">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>
