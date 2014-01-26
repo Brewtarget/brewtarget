@@ -33,8 +33,8 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
   weightSelect->addItem(Units::kilograms->getUnitName(), Units::kilograms->getUnitName());
   weightSelect->addItem(Units::pounds->getUnitName(), Units::pounds->getUnitName());
 
-  initialResultTxt->setText("N/A");
-  mashResultTxt->setText("N/A");
+  initialResultTxt->setText(tr("N/A");
+  mashResultTxt->setText(tr("N/A");
   grainWeightVal->setText("0");
   mashVolVal->setText("0");
 
@@ -59,10 +59,10 @@ void StrikeWaterDialog::calculate() {
 	double mash = computeMashInfusion();
     
 	QString initialVal = Algorithms::Instance().isnan(initial) 
-    ? "N/A" 
+    ? tr("N/A") 
     : Brewtarget::displayAmount(temp->fromSI(initial), NULL) + " " + temp->getUnitName();
 	QString mashVal = Algorithms::Instance().isnan(mash) 
-    ? "N/A" 
+    ? tr("N/A") 
     : Brewtarget::displayAmount(volume->fromSI(mash), NULL) + " " + volume->getUnitName();
 
 	initialResultTxt->setText(initialVal);
