@@ -52,8 +52,10 @@ public:
    QString getTextFormat();
    //! Get an html view.
    QString getHTMLFormat();
-   //! Get a BBCode view.
+   //! Get a BBCode view. Why is this here?
    QString getBBCodeFormat();
+   //! Generate a tooltip for a recipe
+   QString getToolTip(Recipe* rec);
    //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength( QStringList* list );
    //! Prepend a string with spaces until its final length is the given length.

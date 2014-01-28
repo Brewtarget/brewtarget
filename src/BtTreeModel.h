@@ -245,7 +245,10 @@ private:
    QVariant styleHeader(int section) const;
    //! \brief returns the \c section header for a folder. 
    QVariant folderHeader(int section) const;
- 
+
+   //! \brief get a tooltip
+   QVariant toolTipData(const QModelIndex &index) const;
+
    //! \brief Returns the list of things in a tree (e.g., recipes) as a list
    //! of BeerXMLElements. It's a convenience method to make loadTree()
    //! cleaner

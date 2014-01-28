@@ -402,6 +402,57 @@ QString RecipeFormatter::getBBCodeFormat()
    return "";
 }
 
+QString RecipeFormatter::getToolTip(Recipe* rec)
+{
+   QString header;
+   QString body;
+   QString color;
+   QString bitterness;
+   Style* style = 0;
+
+   if ( rec == 0 )
+      return "";
+
+   style = rec->style();
+
+   // Do the style sheet first
+   header = "<html><head><style type=\"text/css\">";
+   header += getCSS();
+   header += "</style></head>";
+
+   body   = "<body>";
+   //body += QString("<h1>%1</h1>").arg(rec->getName()());
+   body += QString("<div id=\"headerdiv\">");
+   body += QString("<table id=\"tooltip\">");
+   body += QString("<caption>%2 (%3%4)</caption>")
+         .arg( style ? style->name() : tr("unknown style"))
+         .arg( style ? style->categoryNumber() : tr("N/A") )
+         .arg( style ? style->styleLetter() : "" );
+
+   // Third row: OG and FG
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+           .arg(tr("OG"))
+           .arg(Brewtarget::displayOG(rec->og(), noUnit, true ));
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2</td></tr>")
+           .arg(tr("FG"))
+           .arg(Brewtarget::displayFG(rec->fg(), rec->og(), noUnit, true));
+
+   // Fourth row: Color and Bitterness.  
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td>")
+           .arg(tr("Color"))
+           .arg(Brewtarget::displayColor(rec->color_srm(),noUnit,true))
+           .arg(Brewtarget::colorFormulaName());
+   body += QString("<td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td></tr>")
+           .arg(tr("IBU"))
+           .arg(Brewtarget::displayAmount(rec->IBU(), 0, 1))
+           .arg(Brewtarget::ibuFormulaName() );
+
+   body += "</table>";
+
+   return header + body;
+
+}
+
 void RecipeFormatter::toTextClipboard()
 {
    QApplication::clipboard()->setText(getTextFormat());
@@ -458,8 +509,6 @@ QString RecipeFormatter::buildTitleTable()
 {
    QString header;
    QString body;
-   QString color;
-   QString bitterness;
    Style* style = 0;
 
    if ( rec == 0 )
@@ -522,42 +571,20 @@ QString RecipeFormatter::buildTitleTable()
            .arg(Brewtarget::displayFG(rec->fg(), rec->og(), noUnit, true));
 
    // Fourth row: ABV and Bitterness.  We need to set the bitterness string up first
-   bitterness = QString("%1 IBU (%2)")
-         .arg( Brewtarget::displayAmount(rec->IBU(), 0, 1) );
-   switch ( Brewtarget::ibuFormula )
-   {
-      case Brewtarget::TINSETH:
-         bitterness = bitterness.arg("Tinseth");
-         break;
-      case Brewtarget::RAGER:
-         bitterness = bitterness.arg("Rager");
-         break;
-       default:
-           bitterness = bitterness.arg(tr("Unknown"));
-   }
    body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2%</td>")
            .arg(tr("ABV"))
            .arg(Brewtarget::displayAmount(rec->ABV_pct(), 0, 1));
-   body += QString("<td class=\"right\">%1</td><td class=\"value\">%2</td></tr>")
-           .arg(tr("Bitterness"))
-           .arg(bitterness);
+   body += QString("<td class=\"right\">%1</td><td class=\"value\">%2 (%3)</td></tr>")
+           .arg(tr("IBU"))
+           .arg(Brewtarget::displayAmount(rec->IBU(), 0, 1))
+           .arg(Brewtarget::ibuFormulaName() );
+
    // Fifth row: Color and calories.  Set up the color string first
-   color = QString("%1 (%2)").arg(Brewtarget::displayColor(rec->color_srm(),noUnit,true));
-   switch( Brewtarget::colorFormula )
-   {
-      case Brewtarget::MOREY:
-         color = color.arg("Morey");
-         break;
-      case Brewtarget::DANIEL:
-         color = color.arg("Daniels");
-         break;
-      case Brewtarget::MOSHER:
-         color = color.arg("Mosher");
-         break;
-   }
-   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2</td>")
+   body += QString("<tr><td class=\"left\">%1</td><td class=\"value\">%2 (%3)</td>")
            .arg(tr("Color"))
-           .arg(color);
+           .arg(Brewtarget::displayColor(rec->color_srm(),noUnit,true))
+           .arg(Brewtarget::colorFormulaName());
+           
    body += QString("<td class=\"right\">%1</td><td class=\"value\">%2</td></tr>")
            .arg(tr("Calories (per 12 oz.)"))
            .arg(Brewtarget::displayAmount(rec->calories(), 0, 0));

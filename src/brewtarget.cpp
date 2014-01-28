@@ -1069,6 +1069,33 @@ double Brewtarget::timeQStringToSI(QString qstr)
    return timeSystem->qstringToSI(qstr);
 }
 
+QString Brewtarget::ibuFormulaName()
+{
+   switch ( ibuFormula )
+   {
+      case Brewtarget::TINSETH:
+         return "Tinseth";
+      case Brewtarget::RAGER:
+         return "Rager";
+   }
+  return tr("Unknown");
+}
+
+QString Brewtarget::colorFormulaName()
+{
+
+   switch( Brewtarget::colorFormula )
+   {
+      case Brewtarget::MOREY:
+         return "Morey";
+      case Brewtarget::DANIEL:
+         return "Daniels";
+      case Brewtarget::MOSHER:
+         return "Mosher";
+   }
+   return tr("Unknown");
+}
+
 bool Brewtarget::hasUnits(QString qstr)
 {
    // accepts X,XXX.YZ (or X.XXX,YZ for EU users) as well as .YZ (or ,YZ) followed by

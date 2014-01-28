@@ -29,6 +29,7 @@
 #include "BtTreeItem.h"
 #include "BtTreeModel.h"
 #include "BtTreeView.h"
+#include "RecipeFormatter.h"
 #include "database.h"
 #include "equipment.h"
 #include "fermentable.h"
@@ -264,6 +265,9 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
    if ( !rootItem || !index.isValid() || index.column() < 0 || index.column() >= maxColumns)
       return QVariant();
 
+   if ( role == Qt::ToolTipRole )
+      return toolTipData(index);
+
    if ( role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::DecorationRole)
       return QVariant();
 
@@ -277,6 +281,23 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
    }
 
    return itm->data(index.column());
+}
+
+QVariant BtTreeModel::toolTipData(const QModelIndex &index) const
+{
+   RecipeFormatter* whiskey = new RecipeFormatter();
+   Recipe* rec;
+
+   switch(treeMask)
+   {
+      case RECIPEMASK:
+         rec = recipe(index);
+         return whiskey->getToolTip(rec);
+      default:
+         return item(index)->name();
+   }
+   return "TOOL!";
+
 }
 
 // This is much better, assuming the rest can be made to work

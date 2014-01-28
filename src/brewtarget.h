@@ -187,6 +187,11 @@ public:
    //! \return SI amount for color string.
    static double colorQStringToSI(QString qstr);
 
+   //! \brief return the bitterness formula's name
+   static QString ibuFormulaName();
+   //! \brief return the color formula name
+   static QString colorFormulaName();
+
    //! \return true iff the string has a valid unit substring at the end.
    static bool hasUnits(QString qstr);
    //! \return the weight system
