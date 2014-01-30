@@ -284,39 +284,3 @@ img
    font-weight:normal;
    text-align:left;
 }
-#tooltip
-{
-   border-collapse:collapse;
-   width:100%;
-   empty-cells:hide;
-}
-#tooltip td
-{
-   border: 0px solid white;
-   padding: 0px 0px 0px 0px;
-   empty-cells:show;
-}
-#tooltip th
-{
-   border: 0px solid white;
-   padding: 3px 7px 2px 7px;
-   font-weight:bold;
-   text-align:left;
-   empty-cells:show;
-}
-#tooltip caption 
-{ 
-    caption-side:bottom; 
-    text-align: center;
-    font-weight:bold;
-}
-#tooltip td.left
-{
-   font-weight:bold;
-   text-align:left;
-}
-#tooltip td.value
-{
-   font-weight:normal;
-   text-align:left;
-}

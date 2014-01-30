@@ -56,6 +56,12 @@ public:
    QString getBBCodeFormat();
    //! Generate a tooltip for a recipe
    QString getToolTip(Recipe* rec);
+   QString getToolTip(Style* style);
+   QString getToolTip(Equipment* kit);
+   QString getToolTip(Fermentable* ferm);
+   QString getToolTip(Hop* hop);
+   QString getToolTip(Misc* misc);
+   QString getToolTip(Yeast* yeast);
    //! Get the maximum number of characters in a list of strings.
    unsigned int getMaxLength( QStringList* list );
    //! Prepend a string with spaces until its final length is the given length.

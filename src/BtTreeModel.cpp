@@ -286,13 +286,23 @@ QVariant BtTreeModel::data(const QModelIndex &index, int role) const
 QVariant BtTreeModel::toolTipData(const QModelIndex &index) const
 {
    RecipeFormatter* whiskey = new RecipeFormatter();
-   Recipe* rec;
 
    switch(treeMask)
    {
       case RECIPEMASK:
-         rec = recipe(index);
-         return whiskey->getToolTip(rec);
+         return whiskey->getToolTip(qobject_cast<Recipe*>(thing(index)));
+      case STYLEMASK:
+         return whiskey->getToolTip( qobject_cast<Style*>(thing(index)));
+      case EQUIPMASK:
+         return whiskey->getToolTip( qobject_cast<Equipment*>(thing(index)));
+      case FERMENTMASK:
+         return whiskey->getToolTip( qobject_cast<Fermentable*>(thing(index)));
+      case HOPMASK:
+         return whiskey->getToolTip( qobject_cast<Hop*>(thing(index)));
+      case MISCMASK:
+         return whiskey->getToolTip( qobject_cast<Misc*>(thing(index)));
+      case YEASTMASK:
+         return whiskey->getToolTip( qobject_cast<Yeast*>(thing(index)));
       default:
          return item(index)->name();
    }
