@@ -95,7 +95,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/HopEditor.cpp
     ${SRCDIR}/HopSortFilterProxyModel.cpp
     ${SRCDIR}/HopTableModel.cpp
-    ${SRCDIR}/HtmlViewer.cpp
     ${SRCDIR}/instruction.cpp
     ${SRCDIR}/IbuMethods.cpp
     ${SRCDIR}/ImperialVolumeUnitSystem.cpp

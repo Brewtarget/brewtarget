@@ -310,7 +310,7 @@
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Přepočítat výtěž.</translation>
     </message>
 </context>
 <context>
@@ -697,10 +697,6 @@
         <translation>Požadavek na vybavení</translation>
     </message>
     <message>
-        <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
-        <translation>Chcete nastavit cílový objem várky a počáteční objem várky dle požadavků vybavení?</translation>
-    </message>
-    <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Chcete nastavit velikost várky, objeml pro chmelovar a čas podle požadavků vybavení?</translation>
     </message>
@@ -891,6 +887,10 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation>Původní soubory XML jsou k dispozici v </translation>
+    </message>
+    <message>
+        <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2233,10 +2233,6 @@ Celkový objem pro hlavní kvašení je %1.</translation>
         <translation>O aplikaci Brewtarget</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Zaslat dar</translation>
-    </message>
-    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2326,6 +2322,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázky serveru, tiskárny, upravit-kopírovat, náhledu-pro-tisk a sloučení z tématu Oxygen (licence CC)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;obrázek zálohování z tématu Nuvola (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
+    <message>
+        <source>Donate</source>
+        <translation>Zaslat dar</translation>
+    </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
@@ -2389,14 +2389,6 @@ p, li { white-space: pre-wrap; }
         <translation>Instrukce</translation>
     </message>
     <message>
-        <source>Remove currently selected step</source>
-        <translation>Odebrat zvolený krok</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Odebrat</translation>
-    </message>
-    <message>
         <source>Move currently selected step up</source>
         <translation>Přesunout zvolený nahoru</translation>
     </message>
@@ -2411,6 +2403,14 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Down</source>
         <translation>Dolů</translation>
+    </message>
+    <message>
+        <source>Remove currently selected step</source>
+        <translation>Odebrat zvolený krok</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Odebrat</translation>
     </message>
     <message>
         <source>Insert step</source>
@@ -2637,6 +2637,10 @@ p, li { white-space: pre-wrap; }
         <translation>Odebrat vybavení</translation>
     </message>
     <message>
+        <source>Set as Default</source>
+        <translation>Nastavit jako Výchozí</translation>
+    </message>
+    <message>
         <source>Required Fields</source>
         <translation>Povinná pole</translation>
     </message>
@@ -2663,34 +2667,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Batch size</source>
         <translation>Objem várky</translation>
-    </message>
-    <message>
-        <source>Boiling Point of Water</source>
-        <translation>Bod varu vody</translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation>Rmutovací pánev</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Objem</translation>
-    </message>
-    <message>
-        <source>Volume of mash tun</source>
-        <translation>Objem rmutovací pánve</translation>
-    </message>
-    <message>
-        <source>Mass</source>
-        <translation>Hmotnost</translation>
-    </message>
-    <message>
-        <source>Mass or weight of mash tun</source>
-        <translation>Hmotnost rmutovací pánve</translation>
-    </message>
-    <message>
-        <source>Specific heat (cal/(g*K))</source>
-        <translation>Spec. teplo (kal.(g*K))</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
@@ -2733,6 +2709,38 @@ p, li { white-space: pre-wrap; }
         <translation>Výchozí nasákavost</translation>
     </message>
     <message>
+        <source>Boiling Point of Water</source>
+        <translation>Bod varu vody</translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation>Využití Chmele </translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation>Rmutovací pánev</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation>Objem</translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation>Objem rmutovací pánve</translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation>Hmotnost</translation>
+    </message>
+    <message>
+        <source>Mass or weight of mash tun</source>
+        <translation>Hmotnost rmutovací pánve</translation>
+    </message>
+    <message>
+        <source>Specific heat (cal/(g*K))</source>
+        <translation>Spec. teplo (kal.(g*K))</translation>
+    </message>
+    <message>
         <source>Losses</source>
         <translation>Ztráty</translation>
     </message>
@@ -2767,14 +2775,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Cancel</source>
         <translation>Zrušit</translation>
-    </message>
-    <message>
-        <source>Set as Default</source>
-        <translation>Nastavit jako Výchozí</translation>
-    </message>
-    <message>
-        <source>Hop Utilization </source>
-        <translation>Využití Chmele </translation>
     </message>
 </context>
 <context>
@@ -3019,14 +3019,6 @@ p, li { white-space: pre-wrap; }
         <translation>Použití</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Chmelovar</translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation>Dry hopping</translation>
-    </message>
-    <message>
         <source>Mash</source>
         <translation>Vystírka (mash hop)</translation>
     </message>
@@ -3035,8 +3027,16 @@ p, li { white-space: pre-wrap; }
         <translation>Vyslazování (first wort)</translation>
     </message>
     <message>
+        <source>Boil</source>
+        <translation>Chmelovar</translation>
+    </message>
+    <message>
         <source>Aroma</source>
         <translation>Aromatický</translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation>Dry hopping</translation>
     </message>
     <message>
         <source>Time</source>
@@ -3059,16 +3059,16 @@ p, li { white-space: pre-wrap; }
         <translation>Forma</translation>
     </message>
     <message>
+        <source>Leaf</source>
+        <translation>Hlávkový</translation>
+    </message>
+    <message>
         <source>Pellet</source>
         <translation>Granulovaný</translation>
     </message>
     <message>
         <source>Plug</source>
         <translation>Lisovaný</translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation>Hlávkový</translation>
     </message>
     <message>
         <source>Beta (%)</source>
@@ -3172,6 +3172,30 @@ p, li { white-space: pre-wrap; }
         <translation>Recepty</translation>
     </message>
     <message>
+        <source>Styles</source>
+        <translation>Styly</translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation>Suroviny</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation>Chmele</translation>
+    </message>
+    <message>
+        <source>Miscs</source>
+        <translation>Přípravky</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation>Kvasnice</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation>Recept</translation>
+    </message>
+    <message>
         <source>Name</source>
         <translation>Název</translation>
     </message>
@@ -3180,52 +3204,60 @@ p, li { white-space: pre-wrap; }
         <translation>Název receptu</translation>
     </message>
     <message>
-        <source>Style</source>
-        <translation>Styl</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Vybavení</translation>
-    </message>
-    <message>
-        <source>Target Batch Size</source>
-        <translation>Cílový objem várky</translation>
-    </message>
-    <message>
-        <source>Target batch size</source>
-        <translation>Požadovaná cílová velikost várky</translation>
-    </message>
-    <message>
-        <source>Calculated Batch Size</source>
-        <translation>Vypočtený cílový objem várky</translation>
-    </message>
-    <message>
         <source>5 gal</source>
         <translation>18 litrů</translation>
-    </message>
-    <message>
-        <source>Target Boil Size</source>
-        <translation>Objem várky před chmelovarem</translation>
     </message>
     <message>
         <source>Target boil size</source>
         <translation>Objem várky před chmelovarem</translation>
     </message>
     <message>
+        <source>Efficiency (%)</source>
+        <translation>Varní výtěžnost (%)</translation>
+    </message>
+    <message>
         <source>Calculated Boil Size</source>
         <translation>Vypočt. obj. várky před chmlv.</translation>
     </message>
     <message>
-        <source>Efficiency (%)</source>
-        <translation>Varní výtěžnost (%)</translation>
+        <source>Calculated Batch Size</source>
+        <translation>Vypočtený cílový objem várky</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
         <translation>Očekávaná varní výtěžnost</translation>
     </message>
     <message>
+        <source>Style</source>
+        <translation>Styl</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation>Délka chmelovaru</translation>
+    </message>
+    <message>
+        <source>Target batch size</source>
+        <translation>Požadovaná cílová velikost várky</translation>
+    </message>
+    <message>
+        <source>Target Batch Size</source>
+        <translation>Cílový objem várky</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation>Vybavení</translation>
+    </message>
+    <message>
+        <source>Target Boil Size</source>
+        <translation>Objem várky před chmelovarem</translation>
+    </message>
+    <message>
         <source>OG</source>
         <translation>Počáteční hustota</translation>
+    </message>
+    <message>
+        <source>Boil SG</source>
+        <translation>Hustota před chmelovarem</translation>
     </message>
     <message>
         <source>FG</source>
@@ -3240,16 +3272,8 @@ p, li { white-space: pre-wrap; }
         <translation>Hořkost (IBU)</translation>
     </message>
     <message>
-        <source>Recipe</source>
-        <translation>Recept</translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Barva</translation>
-    </message>
-    <message>
-        <source>Boil SG</source>
-        <translation>Hustota před chmelovarem</translation>
     </message>
     <message>
         <source>IBU/GU</source>
@@ -3268,10 +3292,6 @@ p, li { white-space: pre-wrap; }
         <translation>Varní list</translation>
     </message>
     <message>
-        <source>Fermentables</source>
-        <translation>Suroviny</translation>
-    </message>
-    <message>
         <source>Add a fermentable</source>
         <translation>Přidat surovinu</translation>
     </message>
@@ -3282,10 +3302,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Edit selected fermentable</source>
         <translation>Upravit zvolenou surovinu</translation>
-    </message>
-    <message>
-        <source>Hops</source>
-        <translation>Chmele</translation>
     </message>
     <message>
         <source>Add hop</source>
@@ -3388,24 +3404,8 @@ p, li { white-space: pre-wrap; }
         <translation>Uložit rmutování</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Zaslat dar</translation>
-    </message>
-    <message>
         <source>&amp;About</source>
         <translation>&amp;Nápověda</translation>
-    </message>
-    <message>
-        <source>Miscs</source>
-        <translation>Přípravky</translation>
-    </message>
-    <message>
-        <source>Yeasts</source>
-        <translation>Kvasnice</translation>
-    </message>
-    <message>
-        <source>Boil Time</source>
-        <translation>Délka chmelovaru</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -3430,6 +3430,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>&amp;Tools</source>
         <translation>Nás&amp;troje</translation>
+    </message>
+    <message>
+        <source>toolBar</source>
+        <translation>nástrojováLišta</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
@@ -3528,6 +3532,14 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Převody jednotek</translation>
     </message>
     <message>
+        <source>Backup Database</source>
+        <translation>Zálohovat databázi</translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation>Obnovit databázi</translation>
+    </message>
+    <message>
         <source>&amp;Copy Recipe</source>
         <translation>&amp;Kopírovat recept</translation>
     </message>
@@ -3616,20 +3628,8 @@ p, li { white-space: pre-wrap; }
         <translation>Odebrat recept</translation>
     </message>
     <message>
-        <source>toolBar</source>
-        <translation>nástrojováLišta</translation>
-    </message>
-    <message>
-        <source>Backup Database</source>
-        <translation>Zálohovat databázi</translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation>Obnovit databázi</translation>
-    </message>
-    <message>
-        <source>Styles</source>
-        <translation>Styly</translation>
+        <source>Donate</source>
+        <translation>Zaslat dar</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
@@ -4187,10 +4187,6 @@ p, li { white-space: pre-wrap; }
         <translation>Použít britské jednotky</translation>
     </message>
     <message>
-        <source>Volume</source>
-        <translation>Objem</translation>
-    </message>
-    <message>
         <source>Temperature</source>
         <translation>Teplota</translation>
     </message>
@@ -4201,6 +4197,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Fahrenheit</source>
         <translation>Fahrenheity</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation>Objem</translation>
     </message>
     <message>
         <source>Gravity</source>
@@ -4255,6 +4255,22 @@ p, li { white-space: pre-wrap; }
         <translation>Ragerův odhad</translation>
     </message>
     <message>
+        <source>IBU Adjustments</source>
+        <translation>Úpravy IBU</translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation>% úprava IBU</translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Directories</source>
         <translation>Adresáře</translation>
     </message>
@@ -4283,6 +4299,10 @@ p, li { white-space: pre-wrap; }
         <translation>Česky</translation>
     </message>
     <message>
+        <source>Catalan</source>
+        <translation>Katalánsky</translation>
+    </message>
+    <message>
         <source>German</source>
         <translation>Německy</translation>
     </message>
@@ -4295,24 +4315,28 @@ p, li { white-space: pre-wrap; }
         <translation>Španělsky</translation>
     </message>
     <message>
-        <source>Dutch</source>
-        <translation>Holandsky</translation>
+        <source>French</source>
+        <translation>Francouzsky</translation>
     </message>
     <message>
-        <source>Catalan</source>
-        <translation>Katalánsky</translation>
+        <source>Italian</source>
+        <translation>Italština</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation>Holandsky</translation>
     </message>
     <message>
         <source>Polish</source>
         <translation>Polsky</translation>
     </message>
     <message>
-        <source>French</source>
-        <translation>Francouzsky</translation>
-    </message>
-    <message>
         <source>Portuguese</source>
         <translation>Portugalsky</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation>Ruština</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4329,30 +4353,6 @@ p, li { white-space: pre-wrap; }
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   poskytněte překlad&lt;/a&gt; aby vaši přátelé mohli používat BrewTarget!
 &lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation>Italština</translation>
-    </message>
-    <message>
-        <source>IBU Adjustments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% IBU adjustment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Hop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4376,6 +4376,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
         <translation>Pro ejly 0,75. Pro ležáky 1,5-2.</translation>
+    </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
+        <translation>Rychl. množení (M buňek)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
@@ -4422,12 +4426,16 @@ p, li { white-space: pre-wrap; }
         <translation>Použito balíčků</translation>
     </message>
     <message>
-        <source># Vials/Smack Packs w/o Starter</source>
-        <translation>Balíčků bez rozkvašení</translation>
-    </message>
-    <message>
         <source>Output</source>
         <translation>Výstup</translation>
+    </message>
+    <message>
+        <source>Billions of Yeast Cells Required</source>
+        <translation>Žádaný počet miliard kvasinek</translation>
+    </message>
+    <message>
+        <source># Vials/Smack Packs w/o Starter</source>
+        <translation>Balíčků bez rozkvašení</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
@@ -4436,14 +4444,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Starter Volume</source>
         <translation>Počáteční objem</translation>
-    </message>
-    <message>
-        <source>Billions of Yeast Cells Required</source>
-        <translation>Žádaný počet miliard kvasinek</translation>
-    </message>
-    <message>
-        <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation>Rychl. množení (M buňek)/(mL*P)</translation>
     </message>
 </context>
 <context>
@@ -4721,12 +4721,12 @@ p, li { white-space: pre-wrap; }
         <translation>Změnit objem</translation>
     </message>
     <message>
-        <source>New efficiency (pct)</source>
-        <translation>Nová výtěžnost (%)</translation>
-    </message>
-    <message>
         <source>New batch size</source>
         <translation>Nový objem várky</translation>
+    </message>
+    <message>
+        <source>New efficiency (pct)</source>
+        <translation>Nová výtěžnost (%)</translation>
     </message>
 </context>
 <context>
@@ -4878,14 +4878,6 @@ p, li { white-space: pre-wrap; }
         <translation>Formulář</translation>
     </message>
     <message>
-        <source>Start/Stop timer</source>
-        <translation>Spustit/zastavit časovač</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>Spustit</translation>
-    </message>
-    <message>
         <source>Set the timer to the specified value</source>
         <translation>Nastavit časovač na určenou hodnotu</translation>
     </message>
@@ -4894,16 +4886,24 @@ p, li { white-space: pre-wrap; }
         <translation>Nastavit</translation>
     </message>
     <message>
+        <source>HH:MM:SS</source>
+        <translation>HH:MM:SS</translation>
+    </message>
+    <message>
+        <source>Start/Stop timer</source>
+        <translation>Spustit/zastavit časovač</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Spustit</translation>
+    </message>
+    <message>
         <source>Set a sound as the alarm</source>
         <translation>Nastavit zvukové upozornění</translation>
     </message>
     <message>
         <source>Sound</source>
         <translation>Zvuk</translation>
-    </message>
-    <message>
-        <source>HH:MM:SS</source>
-        <translation>HH:MM:SS</translation>
     </message>
 </context>
 <context>

@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it">
+<TS version="2.0" language="zh">
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>样式Style</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Data</translation>
+        <translation>日期</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>煮沸时间Boil Time</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation>Efficenza</translation>
+        <translation>效率Efficiency</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Volume di bollitura</translation>
+        <translation>煮沸体积</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Densità Iniziale</translation>
+        <translation>预计比重的</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation>Volume Finale</translation>
+        <translation>最终成交量</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translatorcomment>Densità Iniziale
-</translatorcomment>
-        <translation>Densità Iniziale</translation>
+        <translation>开始比重</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -43,9 +41,7 @@
     </message>
     <message>
         <source>Final Gravity</source>
-        <translatorcomment>Densità Finale
-</translatorcomment>
-        <translation>Densità Finale</translation>
+        <translation>最后比重</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -53,98 +49,94 @@
     </message>
     <message>
         <source>Estimated calories(per 12 oz)</source>
-        <translation>Calorie Stimate(per 340 gr circa)</translation>
+        <translation>估计热量（每12盎司）</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>指令Instructions</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translatorcomment>Finito
-</translatorcomment>
-        <translation>Completato</translation>
+        <translation>完成</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Step</source>
-        <translatorcomment>Step
-</translatorcomment>
-        <translation>Passo</translation>
+        <translation>步驟</translation>
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
-        <translation>Attuale Volume Pre Bollitura</translation>
+        <translation>实际PreBoil体积量</translation>
     </message>
     <message>
         <source>Actual PreBoil Gravity</source>
-        <translation>Attuale Densità Pre Bollitura</translation>
+        <translation>PostBoil 实际比重</translation>
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation>Volume dopo Bollitura</translation>
+        <translation>PostBoil 体积</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
-        <translation>Densità dopo Bollitura</translation>
+        <translation>PostBoil比重</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Volume dentro al fermentatore</translation>
+        <translation>进入发酵罐的体积Volume into fermenter</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Stampa documento</translation>
+        <translation>打印文件</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation>&lt;h2&gt;Note&lt;/h2&gt;</translation>
+        <translation>&lt; h2 &gt;注&lt; / h2 &gt;</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation>Passo %1: %2</translation>
+        <translation>步骤 %1: %2</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation>Aggiunta grani</translation>
+        <translation>添加谷物</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation>Calore dell&apos;acqua</translation>
+        <translation>Heat water加热水</translation>
     </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>样式Style</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Data:</translation>
+        <translation>日期</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Volume di bollitura</translation>
+        <translation>煮沸体积</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Densità Iniziale</translation>
+        <translation>预计比重</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation>Volume Finale</translation>
+        <translation>最终成交量</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation>OG</translation>
+        <translation>开始比重</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>煮沸时间Boil Time</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -152,200 +144,196 @@
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation>Efficenza</translation>
+        <translation>预测效率</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Calorie Stimate(per 340 gr circa)</translation>
+        <translation>估计卡路里（每12盎司）</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>指令Instructions</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation>Completato</translation>
+        <translation>完成</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation>Passo</translation>
+        <translation>步驟</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation>Attuale Volume Pre Bollitura:</translation>
+        <translation>实际预煮体积</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation>Attuale Densità Pre Bollitura:</translation>
+        <translation>实际预熬比重：</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation>Volume dopo Bollitura:</translation>
+        <translation>最后熬煮量</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>Densità dopo Bollitura:</translation>
+        <translation>熬煮后比重</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation>Volume dentro al fermentatore:</translation>
+        <translation>发酵体积：</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>stampa documento</translation>
+        <translation>打印文件</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation>Passo %1: %2</translation>
+        <translation>步骤 %1: %2</translation>
     </message>
 </context>
 <context>
     <name>BrewTargetTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名稱</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Data di birrificazione</translation>
+        <translation>酿造日期</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>样式Style</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>煮沸时间Boil Time</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>颜色Color</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>使用Use</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Categoria</translation>
+        <translation>类别</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>编号</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Letter信</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>指南</translation>
     </message>
 </context>
 <context>
     <name>BrewTargetTreeView</name>
     <message>
         <source>New Recipe</source>
-        <translation>Nuova Ricetta</translation>
+        <translation>新配方</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Birrifica!</translation>
+        <translation>酿造它!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Birrifica ancora</translation>
+        <translation>再次酿造</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Cancella</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation>Nuovi Ingredienti</translation>
+        <translation>新设备</translation>
     </message>
     <message>
         <source>New Fermentable</source>
-        <translation>Nuovo fermentabile</translation>
+        <translation>New Fermentable</translation>
     </message>
     <message>
         <source>New Hop</source>
-        <translation>Nuovo Luppolo</translation>
+        <translation>New Hop跳</translation>
     </message>
     <message>
         <source>New Misc</source>
-        <translation>Nuova Aggiunta</translation>
+        <translation>New Misc杂项</translation>
     </message>
     <message>
         <source>New Yeast</source>
-        <translation>Nuovo Lievito</translation>
+        <translation>酵母</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Copia</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation>Esporta</translation>
+        <translation>出口</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation>Importa</translation>
+        <translation>进口</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished"></translation>
+        <translation>更改日期</translation>
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished"></translation>
+        <translation>新风格</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
+        <translation>重新计算EFF</translation>
     </message>
 </context>
 <context>
     <name>Brewtarget</name>
     <message>
         <source>Default</source>
-        <translation>Default</translation>
+        <translation>默认</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished"></translation>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translatorcomment>Intensità Colore della Birra
-</translatorcomment>
         <translation>SRM</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translatorcomment>Gradi Plato
-</translatorcomment>
-        <translation>Plato</translation>
+        <translation>柏拉图Plato</translation>
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation>Densità Specifica</translation>
+        <translation>比重</translation>
     </message>
     <message>
         <source>SI</source>
@@ -353,552 +341,552 @@
     </message>
     <message>
         <source>US Customary</source>
-        <translation>US Customary</translation>
+        <translation>美国习惯</translation>
     </message>
     <message>
         <source>Milligrams</source>
-        <translation>Milligrammi</translation>
+        <translation>毫克</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation>Grammi</translation>
+        <translation>克</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation>Kilogrammi</translation>
+        <translation>公斤</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation>oncia</translation>
+        <translation>盎司</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation>libra</translation>
+        <translation>英镑</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation>摄氏</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation>华氏</translation>
     </message>
     <message>
         <source>British Imperial</source>
-        <translation type="unfinished"></translation>
+        <translation>英制</translation>
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation>Milliletri</translation>
+        <translation>毫升</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation>Litri</translation>
+        <translation>升</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation>Cucchiaini</translation>
+        <translation>茶匙</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation>Cucchiai da tavola</translation>
+        <translation>汤匙</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation>Tazze</translation>
+        <translation>杯</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation>Quarti</translation>
+        <translation>夸脱</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation>Galloni</translation>
+        <translation>加仑</translation>
     </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>Troopo basso per lo stile.</translation>
+        <translation>过低的风格。</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>Nel range per lo stile.</translation>
+        <translation>在范围的风格</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>Troppo alto per lo stile.</translation>
+        <translation>过高的风格。</translation>
     </message>
 </context>
 <context>
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Unisci database</translation>
+        <translation>合并数据库</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Ci possono essere nuovi ingredienti e ricette disponibili. Vuoi aggiungere questi al database?</translation>
+        <translation>有可能是新的成分和配方。你想添加到你的数据库？</translation>
     </message>
 </context>
 <context>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Assorbimento del grano (%1/%2)</translation>
+        <translation>粮食吸水率(%1/%2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
-        <translation>Avvertimento di volume di Tun</translation>
+        <translation>桶容积警告</translation>
     </message>
     <message>
         <source>Batch Size Warning</source>
-        <translation>Avvertimento della misura</translation>
+        <translation>批量大小警告</translation>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Nome attrezzatura</translation>
+        <translation>设备名称</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Nome attrezzatura:</translation>
+        <translation>设备名称：</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>重量输入为0。这可能导致问题</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>您输入的批次大小为0。这可能导致问题</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>合利用预警</translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>您输入的酒花利用率为0。这可能导致问题</translation>
     </message>
 </context>
 <context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Nome del Fermentabile</translation>
+        <translation>可发酵的名字</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Nome del Fermentabile:</translation>
+        <translation>可发酵的名称:</translation>
     </message>
 </context>
 <context>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation>Grano</translation>
+        <translation>粮食</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Zucchero</translation>
+        <translation>糖</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Estratto</translation>
+        <translation>提取</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Estratto secco</translation>
+        <translation>干浸膏</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Aggiunta</translation>
+        <translation>附属物</translation>
     </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello indicizzazione =%1</translation>
+        <translation>坏榜样指数。排=％1row = %1</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation>Mashed</translation>
+        <translation>捣碎Mashed</translation>
     </message>
     <message>
         <source>Steeped</source>
-        <translation>bagnato</translation>
+        <translation>浸泡</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation>Non mashed</translation>
+        <translation>未捣碎</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation>Tardi</translation>
+        <translation>晚Late</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normale</translation>
+        <translation>正常</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>坏列：％1Bad column: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>金额Amount</translation>
     </message>
     <message>
         <source>Late Addition</source>
-        <translation>Ultima aggiunta</translation>
+        <translation>Late Addition晚除了</translation>
     </message>
     <message>
         <source>Yield %</source>
-        <translation>Prodotto</translation>
+        <translation>率％</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation>Colore (SRM)</translation>
+        <translation>颜色（SR​​ M）</translation>
     </message>
     <message>
         <source>Color (EBC)</source>
-        <translation>Colore (EBC)</translation>
+        <translation>颜色（EBC）</translation>
     </message>
 </context>
 <context>
     <name>Hop</name>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化醪Mash</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primo mosto</translation>
+        <translation>第一麦汁</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>熬</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation>香气</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation>干合</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Amarezza</translation>
+        <translation>苦味</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>entrambi</translation>
+        <translation>两</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>foglia</translation>
+        <translation>叶</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation>丸</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plug</translation>
+        <translation>塞插头Plug</translation>
     </message>
 </context>
 <context>
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Nome Luppolo</translation>
+        <translation>合名Hop name</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Nome Luppolo:</translation>
+        <translation>合名称合名</translation>
     </message>
 </context>
 <context>
     <name>HopItemDelegate</name>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>熬Boil</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation>干Dry Hop</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primo mosto</translation>
+        <translation>第一次麦芽汁First Wort</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation>香气Aroma</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>foglia</translation>
+        <translation>叶Leaf</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation>丸Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plug</translation>
+        <translation>插头Plug</translation>
     </message>
 </context>
 <context>
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation>Alpha</translation>
+        <translation>阿尔法Alpha %</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>使用Use</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>打开Open</translation>
     </message>
     <message>
         <source>BeerXML files (*.xml)</source>
-        <translation>BeerXML files (*.xml)</translation>
+        <translation>BeerXML文件BeerXML files (*.xml)</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>节省Save</translation>
     </message>
     <message>
         <source>Equipment request</source>
-        <translation>Attrezzatura richiesta</translation>
+        <translation>设备的要求Equipment request</translation>
     </message>
     <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
-        <translation>Volete impostare la partita , la quantità di bollitura e il tempo che è richiesto dalle apparecchiature?</translation>
+        <translation>你想批量大小，熬大小和时间设置设备所要求的吗？</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation>Cancella %1</translation>
+        <translation>删除Delete %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation>Cancella %1 %2?</translation>
+        <translation>删除Delete %1 %2?</translation>
     </message>
     <message>
         <source>HTML files (*.html)</source>
-        <translation>HTML files (*.html)</translation>
+        <translation>HTML文件HTML files (*.html)</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>新New</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Ricetta</translation>
+        <translation>食谱</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>设备Equipment</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation>Fermentabile</translation>
+        <translation>发酵Fermentable</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation>Luppolo</translation>
+        <translation>跳Hop</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Aggiunta</translation>
+        <translation>杂项Miscellaneous</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>酵母Yeast</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation>Copia %1</translation>
+        <translation>复制Copy %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation>Inserisci un unico nome per la copia di %1.</translation>
+        <translation>输入一个唯一的名称为％1副本。Enter a unique name for the copy of %1.</translation>
     </message>
     <message>
         <source>Copy Equipment</source>
-        <translation>Copia attrezzatura</translation>
+        <translation>复制设备Copy Equipment</translation>
     </message>
     <message>
         <source>Copy Fermentable</source>
-        <translation>Copia Fermentabile</translation>
+        <translation>复制发酵Copy Fermentable</translation>
     </message>
     <message>
         <source>Copy Hop</source>
-        <translation>Copia Luppolo</translation>
+        <translation>复制合Copy Hop</translation>
     </message>
     <message>
         <source>Copy Miscellaneous</source>
-        <translation>Copia Aggiunta</translation>
+        <translation>复制杂项Copy Miscellaneous</translation>
     </message>
     <message>
         <source>Copy Yeast</source>
-        <translation>Copia Lievito</translation>
+        <translation>复制酵母Copy Yeast</translation>
     </message>
     <message>
         <source>Database Update</source>
-        <translation>Aggiorna Database</translation>
+        <translation>数据库更新原文 Database Update</translation>
     </message>
     <message>
         <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation>Stai per aggiornare il database corrente con un altro. Questo può apportare modifiche (ma non eliminare) alcuni dei vostri ingredienti. Essa non modificherà le tue ricette. Continuare?</translation>
+        <translation>您是来更新当前数据库与另一个。这可能会更改（但不会删除）您的一些成分。它不会修改你的食谱。要继续吗？</translation>
     </message>
     <message>
         <source>Select Database File</source>
-        <translation>Seleziona il file database</translation>
+        <translation>选择数据库文件Select Database File</translation>
     </message>
     <message>
         <source>Brewtarget Database (*.sqlite)</source>
-        <translation>Brewtarget Database (*.sqlite)</translation>
+        <translation>的数据库BrewtargetBrewtarget Database (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
-        <translation>Nome Ricetta</translation>
+        <translation>配方名称Recipe name</translation>
     </message>
     <message>
         <source>Recipe name:</source>
-        <translation>Nome Ricetta:</translation>
+        <translation>配方名称Recipe name:</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation>Backup Database</translation>
+        <translation>备份数据库Backup Database</translation>
     </message>
     <message>
         <source>Oops!</source>
-        <translation>Oops!</translation>
+        <translation>糟糕！Oops!</translation>
     </message>
     <message>
         <source>Could not copy the files for some reason.</source>
-        <translation>Impossibile copiare i file per qualche motivo.</translation>
+        <translation>出于某种原因无法复制的文件。Could not copy the files for some reason</translation>
     </message>
     <message>
         <source>A Warning</source>
-        <translation>Avvertimento</translation>
+        <translation>Å警告A Warning</translation>
     </message>
     <message>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
-        <translation>Questo cancellerà il set corrente di ricette e ingredienti. Vuoi continuare?</translation>
+        <translation>这会抹杀您当前的食谱和配料。你要继续吗？Do you want to continue?</translation>
     </message>
     <message>
         <source>For some reason, the operation failed.</source>
-        <translation>Per qualche ragione, l&apos;operazione non riuscita.</translation>
+        <translation>出于某种原因，操作失败 For some reason, the operation failed.</translation>
     </message>
     <message>
         <source>Import %1?</source>
-        <translation>Importa %1?</translation>
+        <translation>导入％1吗？Import %1?</translation>
     </message>
     <message>
         <source>No mash</source>
-        <translation>No mash</translation>
+        <translation>没有捣烂No mash</translation>
     </message>
     <message>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation>Cercando di aggiungere un passaggio mash senza mash. Si prega di creare un primo mash.</translation>
+        <translation>尝试没有醪中添加醪步骤。请创建醪第一。Trying to add a mash step without a mash.</translation>
     </message>
     <message>
         <source>Copy Recipe</source>
-        <translation>Copia Ricetta</translation>
+        <translation>复制配方Copy Recipe</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy.</source>
-        <translation>Immettere un nome univoco per la copia.</translation>
+        <translation>进入副本的唯一名称。Enter a unique name for the copy.</translation>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Si prega di dare il nome al tuo mash prima di salvare.</translation>
+        <translation>请给你的醪的名称保存之前。Please give your mash a name before saving</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Riavviare</translation>
+        <translation>重新开始Restart</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
-        <translation>Si prega di riavviare Brewtarget.</translation>
+        <translation>请重新启动Brewtarget。</translation>
     </message>
     <message>
         <source>No equipment</source>
-        <translation>1</translation>
+        <translation>没有设备No equipment</translation>
     </message>
     <message>
         <source>You must select or define an equipment profile first.</source>
-        <translation>È necessario selezionare o definire un profilo di primo equipaggiamento.</translation>
+        <translation>你必须选择或定义一个设备概要文件第一。You must select or define an equipment profile first.</translation>
     </message>
     <message>
         <source>No style</source>
-        <translation>Nessun stile</translation>
+        <translation>没有风格</translation>
     </message>
     <message>
         <source>You must select a style first.</source>
-        <translation>È necessario selezionare uno stile.</translation>
+        <translation>你必须选择一个风格第一You must select a style first.。</translation>
     </message>
     <message>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>选择文件</translation>
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
+        <translation>数据库SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stile</translation>
+        <translation>风格</translation>
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation>复制风格</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
-        <translation type="unfinished"></translation>
+        <translation>这个数据库已经转换/升级。</translation>
     </message>
     <message>
         <source>The original XML files can be found in </source>
-        <translation type="unfinished"></translation>
+        <translation>原始的XML文件中可以找到 </translation>
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
@@ -909,308 +897,309 @@
     <name>MaltinessWidget</name>
     <message>
         <source>&lt;b&gt;Cloying&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Stucchevole&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;倒胃口的Cloying&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Extra malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Molto maltato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;额外喝醉了的	Extra malty&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Slightly malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Leggermente maltato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;略喝醉了的Slightly malty&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Balanced&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Bilanciato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;平衡Balanced&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Slightly hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Leggermente Luppolato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;略微跳动的Slightly hoppy&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Extra hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Moltp Luppolato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;额外跳动的Extra hoppy&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Way hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Modo luppolato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;啤酒花的方式Way hoppy&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
     <name>MashDesigner</name>
     <message>
         <source>No Fermentables</source>
-        <translation>Non fermentabili</translation>
+        <translation>没有发酵物</translation>
     </message>
     <message>
         <source>Your recipe must have fermentables to design a mash.</source>
-        <translation>La ricetta deve essere fermentabile per progettare un mosto.</translation>
+        <translation>你的配方必须有设计醪的发酵物。</translation>
     </message>
     <message>
         <source>No Equipment</source>
-        <translation>No attrezzatura</translation>
+        <translation>没有设备</translation>
     </message>
     <message>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
-        <translation>Non è stata impostata un&apos; apparecchiatura per questa ricetta. Non possiamo continuare senza.</translation>
+        <translation>您没有设置一个设备，这个食谱。我们真的无法继续没有之一。</translation>
     </message>
     <message>
         <source>Tun Temp</source>
-        <translation>Temperatura Tun</translation>
+        <translation>屯温度Tun Temp</translation>
     </message>
     <message>
         <source>Enter the temperature of the tun before your first infusion.</source>
-        <translation>Inserisci la temperatura del tun prima della prima infusione.</translation>
+        <translation>输入的温度屯之前，你第一次输液。</translation>
     </message>
     <message>
         <source>Decoction error</source>
-        <translation>Errore Decotto</translation>
+        <translation>汤错误Decoction error</translation>
     </message>
     <message>
         <source>The first mash step cannot be a decoction.</source>
-        <translation>Il primo mash non può essere decotto.</translation>
+        <translation>第一醪步骤不能煎服。</translation>
     </message>
 </context>
 <context>
     <name>MashStepTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello di indice.Riga= %1</translation>
+        <translation>坏榜样指数排=％1row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>坏列Bad column: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Temperatura di infusione</translation>
+        <translation>灌注温度Infusion Temp</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Temperatura Obiettivo</translation>
+        <translation>目标温度Target Temp</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
 </context>
 <context>
     <name>MashWizard</name>
     <message>
         <source>Mash thickness (%1/%2)</source>
-        <translation>Mash spessore (%1/%2)</translation>
+        <translation>醪厚度（1％/2％）Mash thickness (%1/%2)</translation>
     </message>
     <message>
         <source>Bad thickness</source>
-        <translation>Cattivo Spessore</translation>
+        <translation>坏厚度	 Bad thickness</translation>
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
-        <translation>È necessario avere uno spessore positivo mash.</translation>
+        <translation>你必须有一个积极的麦芽浆厚度</translation>
     </message>
     <message>
         <source>No steps</source>
-        <translation>Non ci sono passaggi</translation>
+        <translation>没有步骤</translation>
     </message>
     <message>
         <source>There must be at least one mash step to run the wizard.</source>
-        <translation>Ci deve essere almeno un mash per eseguire la procedura guidata.</translation>
+        <translation>必须有至少一个土豆泥步骤来运行该向导There must be at least one mash step to run the wizard.。</translation>
     </message>
     <message>
         <source>First step</source>
-        <translation>Primo passo</translation>
+        <translation>第一步First step</translation>
     </message>
     <message>
         <source>Your first mash step must be an infusion.</source>
-        <translation>Il primo passo deve essere una mescolanza di infusione.</translation>
+        <translation>你第一醪一步都要输液。Your first mash step must be an infusion.</translation>
     </message>
     <message>
         <source>Mash too thick</source>
-        <translation>Mash troppo spesso</translation>
+        <translation>醪太厚</translation>
     </message>
     <message>
         <source>Your mash is too thick for desired temp. at first step.</source>
-        <translation>Il mosto è troppo spesso per desiderare la temp. al primo passo.</translation>
+        <translation>你醪太厚所需的温度。在第一步骤。</translation>
     </message>
     <message>
         <source>Decoction error</source>
-        <translation>Errore Decotto</translation>
+        <translation>汤错误Decoction error</translation>
     </message>
     <message>
         <source>Something went wrong in decoction calculation.</source>
-        <translation>Qualcosa è andato storto nel calcolo decotto.</translation>
+        <translation>煎剂计算出了错。Something went wrong in decoction calculation.</translation>
     </message>
     <message>
         <source>Sparge temp.</source>
-        <translation>Temperatura di Sparge.</translation>
+        <translation>SPARGE温度。Sparge temp.</translation>
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation>Al fine di colpire il vostro sparge temperatura, l&apos;acqua sparge deve essere al di sopra di ebollizione. Abbassa la temperatura sparge, o consentire per l&apos;acqua sparge più.</translation>
+        <translation>为了打你的喷雾温度，喷雾水必须煮沸以上。喷雾温度降低，或允许更多的喷雾水</translation>
     </message>
     <message>
         <source>Too much wort</source>
-        <translation>Troppo Mosto</translation>
+        <translation>太多的麦汁</translation>
     </message>
     <message>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation>Hai mosto troppo dal mash per il formato ebollizione. Suggerisco l&apos;aumento delle dimensioni ebollizione aumentando il tempo di ebollizione, o ridurre lo spessore mash.</translation>
+        <translation>你有太多的麦汁从熬大小醪。我建议增加熬熬时间，通过增加或减少您的醪厚度尺寸。</translation>
     </message>
 </context>
 <context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Nome Aggiunta</translation>
+        <translation>其他名称</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Nome Aggiunta:</translation>
+        <translation>其他名称：</translation>
     </message>
 </context>
 <context>
     <name>MiscItemDelegate</name>
     <message>
         <source>Spice</source>
-        <translation>Spezie</translation>
+        <translation>香料Spice</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>affinamento</translation>
+        <translation>罚款Fining</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Agente dell&apos;acqua</translation>
+        <translation>水剂Water Agent</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Erba</translation>
+        <translation>草本植物Herb</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Sapore</translation>
+        <translation>味Flavor</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Altro</translation>
+        <translation>其他</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>熬Boil</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>主要</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>次要Secondary</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Imbottigliamento</translation>
+        <translation>装瓶</translation>
     </message>
 </context>
 <context>
     <name>MiscTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>使用Use</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">peso</translation>
+        <translation>重量</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>量体积Volume</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation>金额类型MiscTableModel |</translation>
     </message>
 </context>
 <context>
     <name>OptionDialog</name>
     <message>
         <source>Open Directory</source>
-        <translation>Apri directory</translation>
+        <translation>开放目录</translation>
     </message>
     <message>
         <source>Copy Data</source>
-        <translation>Copia Dta</translation>
+        <translation>复制数据复制数据</translation>
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation>Non sembrano esserci qualsiasi file di dati in questa directory, quindi dovremo copiare i vostri vecchi dati qui.</translation>
+        <translation>似乎是没有任何的数据文件在此目录中，所以我们将在这里复制旧的数据。</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Riavviare</translation>
+        <translation>重新开始</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
-        <translation>Si prega di riavviare Brewtarget.</translation>
+        <translation>请重新启动Brewtarget。</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Invalid color formula type: %1</source>
-        <translation>Formula tipo colore non valido: %1</translation>
+        <translation>无效的颜色配方类型：％1Invalid color formula type: %1</translation>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation>Formula tipo IBU non riconosciuta. %1</translation>
+        <translation>无法识别的IBU公式类型。％1Unrecognized IBU formula type. %1</translation>
     </message>
     <message>
         <source>Batch Size: %1
 </source>
-        <translation>Misura partita: %1
+        <translation>批次大小：％1Batch Size: %1
 </translation>
     </message>
     <message>
         <source>Boil Size: %1
 </source>
-        <translation>Misura bollitura: %1
+        <translation>煮沸大小：％1
+Boil Size: %1
 </translation>
     </message>
     <message>
         <source>Boil Time: %1
 </source>
-        <translation>Tempo Bollitura: %1
+        <translation>煮沸时间：％1Boil Time: %1
 </translation>
     </message>
     <message>
@@ -1228,80 +1217,81 @@
     <message>
         <source>Bitterness: %1 IBUs (%2)
 </source>
-        <translation>Amarezza: %1 IBUs (%2)
+        <translation>苦味：％1 IBUS（％2）Bitterness: %1 IBUs (%2)
 </translation>
     </message>
     <message>
         <source>Color: %1 SRM (%2)
 </source>
-        <translation>Colore: %1 SRM (%2)
+        <translation>颜色：％1 SRM（％2）
+Color: %1 SRM (%2)
 </translation>
     </message>
     <message>
         <source>Fermentables
 </source>
-        <translation>Fermentabile
+        <translation>发酵物
 </translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation>Mashed</translation>
+        <translation>捣碎Mashed</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation>Tardi</translation>
+        <translation>晚Late</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation>Prodotto</translation>
+        <translation>产量Yield</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>颜色Color</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>是</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>No</translation>
+        <translation>否</translation>
     </message>
     <message>
         <source>Total grain: %1
 </source>
-        <translation>Grano Totale: %1
+        <translation>粮食总：％1Total grain: %1
 </translation>
     </message>
     <message>
         <source>Hops
 </source>
-        <translation>Luppoli
+        <translation>酒花Hops
 </translation>
     </message>
     <message>
         <source>Alpha</source>
-        <translation>Alpha</translation>
+        <translation>阿尔法Alpha</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>使用Use</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -1310,552 +1300,552 @@
     <message>
         <source>Misc
 </source>
-        <translation>Aggiunta
+        <translation>杂项Misc
 </translation>
     </message>
     <message>
         <source>Yeast
 </source>
-        <translation>Lievito
+        <translation>酵母
 </translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation>fase</translation>
+        <translation>舞台Stage</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>次要Secondary</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>主要</translation>
     </message>
     <message>
         <source>Mash
 </source>
-        <translation>Mash
+        <translation>捣碎
 </translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temperatura</translation>
+        <translation>温度</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation>Obiettivo</translation>
+        <translation>目标</translation>
     </message>
     <message>
         <source>Notes
 </source>
-        <translation>Note
+        <translation>笔记Notes
 </translation>
     </message>
     <message>
         <source>Instructions
 </source>
-        <translation>Istruzioni
+        <translation>说明
 </translation>
     </message>
     <message>
         <source>Directory Problem</source>
-        <translation>Problema Directory</translation>
+        <translation>目录问题</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be read.</source>
-        <translation>&quot;%1&quot; Non può essere letto.</translation>
+        <translation>“％1”不能被读取。&quot;%1&quot; cannot be read.</translation>
     </message>
     <message>
         <source>Config directory &quot;%1&quot; cannot be read.</source>
-        <translation>Configura Directory %1&quot; non può essere letto.</translation>
+        <translation>配置目录“％1”不能被读取。Config directory &quot;%1&quot; cannot be read.</translation>
     </message>
     <message>
         <source>New Version</source>
-        <translation>Nuova versione</translation>
+        <translation>新版本New Version</translation>
     </message>
     <message>
         <source>Version %1 is now available. Download it?</source>
-        <translation>La versione %1 è ora disponibile. Scaricala?</translation>
+        <translation>版本1％。下载了吗？Version %1 is now available.</translation>
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
+        <translation>停止关于新版本的困扰着你？</translation>
     </message>
     <message>
         <source>Database Failure</source>
-        <translation>Errore del database</translation>
+        <translation>数据库故障</translation>
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation>Errore del database %1&apos;.</translation>
+        <translation>无法打开数据库&apos;％1&apos;。Failed to open the database &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
-        <translation>Salva le modifiche del database</translation>
+        <translation>保存数据库的变化</translation>
     </message>
     <message>
         <source>Would you like to save the changes you made?</source>
-        <translation>Vuoi salvare le modifiche apportate?</translation>
+        <translation>你想保存您所做的更改？</translation>
     </message>
     <message>
         <source>Multiple Databases Found</source>
-        <translation>Più database trovati</translation>
+        <translation>找到多个数据库</translation>
     </message>
     <message>
         <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
-        <translation>Più database sono stati trovati. Vuoi ripristinare le modifiche apportate durante l&apos;ultima sessione Brewtarget o torna indietro di prima che le modifiche della sessione ?</translation>
+        <translation>发现多个数据库。你想恢复在最后Brewtarget期间会话，或者回滚所做的更改前最后一届的变化吗？</translation>
     </message>
     <message>
         <source>Restore</source>
-        <translation>Ripristinare</translation>
+        <translation>恢复</translation>
     </message>
     <message>
         <source>Rollback</source>
-        <translation>torna indietro</translation>
+        <translation>回滚Rollback</translation>
     </message>
     <message>
         <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
-        <translation>Impossibile rimuovere il database temporaneo di backup. Passare a &apos;%1&apos; e rimuovere &apos;tempBackupDatabase.sqlite&apos;.</translation>
+        <translation>无法删除临时备份数据库。导航到“％1”，，并删除&apos;tempBackupDatabase.sqlite&apos;。Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Failed to rollback to the backup database.  Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation>Impossibile tornare indietro al database di backup. Passare a &apos;%1&apos;, togliere &apos;database.sqlite&apos; se esiste, e rinominare &apos;tempBackupDatabase.sqlite&apos; a &apos;database.sqlite&apos;.</translation>
+        <translation>无法回滚到备份数据库。导航到“％1”，删除&apos;database.sqlite&apos;，如果它存在，命名&apos;tempBackupDatabase.sqlite&apos;database.sqlite&apos;。Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Database Restore Failure</source>
-        <translation>Errore del database di ripristino</translation>
+        <translation>数据库恢复失败</translation>
     </message>
     <message>
         <source>Failed to restore the backup database. Navigate to &apos;%1&apos; and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation>Impossibile ripristinare il database di backup. Passare a &apos;%1&apos; e rinominare &apos;tempBackupDatabase.sqlite&apos; a &apos;database.sqlite&apos;.</translation>
+        <translation>无法恢复的备份数据库。导航到&apos;％1&apos;命名&apos;tempBackupDatabase.sqlite&apos;database.sqlite&apos;。Navigate to &apos;%1&apos; and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Grano</translation>
+        <translation>粮食</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Zucchero</translation>
+        <translation>糖</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Estratto</translation>
+        <translation>提取</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Estratto secco</translation>
+        <translation>干浸膏Dry Extract</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Aggiunta</translation>
+        <translation>附属物</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>熬Boil</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation>Infusione</translation>
+        <translation>注入Infusion</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>温度</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation>Decotto</translation>
+        <translation>煎煮Decoction</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation>Imbottigliamento</translation>
+        <translation>装瓶</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation>Spezie</translation>
+        <translation>香料Spice</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>affinamento</translation>
+        <translation>罚款Fining</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Agente dell&apos;acqua</translation>
+        <translation>水剂Water Agent</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Erba</translation>
+        <translation>草本植物Herb</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Sapore</translation>
+        <translation>味Flavor</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Altro</translation>
+        <translation>其他</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation>爱尔Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation>拉格Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Wheat</translation>
+        <translation>小麦Wheat</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vino</translation>
+        <translation>酒酒Wine</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation>香槟Champagne</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Liquido</translation>
+        <translation>Liquid液体</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Secco</translation>
+        <translation>Dry干</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Inclinazione</translation>
+        <translation>Slant偏</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation>Culture文化</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Basso</translation>
+        <translation>低</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Medio</translation>
+        <translation>Medium中</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Alto</translation>
+        <translation>High高</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Molto alto</translation>
+        <translation>Very High非常高</translation>
     </message>
     <message>
         <source>Recipes</source>
-        <translation>Ricette</translation>
+        <translation>Recipes食谱</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>设备Equipment</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Fermentabili</translation>
+        <translation type="unfinished">发酵物Fermentables</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Luppoli</translation>
+        <translation>酒花Hops</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Aggiunta</translation>
+        <translation>杂项Miscellaneous</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>酵母Yeast</translation>
     </message>
     <message>
         <source>Efficiency: %1%
 </source>
-        <translation>Efficenza: %1%
+        <translation>效率：％1％Efficiency: %1%
 </translation>
     </message>
     <message>
         <source>ABV: %1%
 </source>
-        <translation>ABV: %1%
+        <translation>ABV：％1％ABV: %1%
 </translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stile</translation>
+        <translation>样式Style</translation>
     </message>
 </context>
 <context>
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation>Aggiunta grani</translation>
+        <translation>添加谷物</translation>
     </message>
     <message>
         <source>Add </source>
-        <translation>Aggiunta </translation>
+        <translation>加 </translation>
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>al mash tun.</translation>
+        <translation>to the mash tun.到糖化锅。</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation>Calore dell&apos;acqua</translation>
+        <translation>Heat water加热水</translation>
     </message>
     <message>
         <source>Bring </source>
-        <translation>Prtare </translation>
+        <translation>Bring 带来 </translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 acqua a %2, </translation>
+        <translation>%1 water to %2, % 1水% 2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
-        <translation>per infusioni successive.</translation>
+        <translation>for upcoming infusions.对于即将到来的输液</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation>Aggiungi %1 acqua %2 di mash per portarla a %3.</translation>
+        <translation>Add %1 water at %2 to mash to bring it to %3.添加% 1水在% 2捣烂,要把% 3。</translation>
     </message>
     <message>
         <source>Heat mash to %1.</source>
-        <translation>Riscaldare Mosto a %1.</translation>
+        <translation>Heat mash to %1.热压% 1。</translation>
     </message>
     <message>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation>Porta %1 del mosto a bollore e tornare al mash tun per portarla a %2.</translation>
+        <translation>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.带% 1的糖化煮沸并返回到糖化锅带它到% 2。</translation>
     </message>
     <message>
         <source> Hold for %1.</source>
-        <translation> Mantenere la posizione per %1.</translation>
+        <translation> Hold for %1.持有% 1。</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Metti %1 %2 in ebollizione per %3.</translation>
+        <translation>Put %1 %2 into boil for %3.把% 1% 2成煮% 3。</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Metti %1 %2 nel fermentatore per %3.</translation>
+        <translation>将％1％2％3进入发酵罐。Put %1 %2 into fermenter for %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Metti %1 %2 nel primo mosto per %3.</translation>
+        <translation>将第一麦汁％3％1％2。Put %1 %2 into first wort for %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Metti %1 %2 nel mash per %3.</translation>
+        <translation>捣烂％1％2％3。Put %1 %2 into mash for %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Steep %1 %2 nel mosto per %3.</translation>
+        <translation>陡峭的麦汁中的％3％1％2。Steep %1 %2 in wort for %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
-        <translation>Usa %1 %2 per %3</translation>
+        <translation>Use %1 %2 for %3</translation>
     </message>
     <message>
         <source>Hop addition</source>
-        <translation>Aggiunta Luppolo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Usa %1 %2 nell&apos;imbottigliamento per %3.</translation>
+        <translation>％1％2在装瓶％3。Use %1 %2 at bottling for %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Metti %1 %2 nel primario per %3.</translation>
+        <translation>将分为原发性％3％1％2。Put %1 %2 into primary for %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Metti %1 %2 nel secondario per %3.</translation>
+        <translation>将次级％3％1％2。Put %1 %2 into secondary for %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Usa %1 %2 per %3.</translation>
+        <translation>使用％1％2％3。Use %1 %2 for %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Aggiunta materie</translation>
+        <translation>Misc addition把% 1% 2成煮% 3。</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
-        <translation>Fai prima il mosto luppolato con </translation>
+        <translation>Do first wort hopping with 做第一次麦芽汁跳跃 </translation>
     </message>
     <message>
         <source>First wort hopping</source>
-        <translation>Primo mosto luppolato</translation>
+        <translation>First wort hopping第一次麦芽汁跳跃</translation>
     </message>
     <message>
         <source>You should now have %1 wort.</source>
-        <translation>Si drovrebbe avere ora %1 mosto.</translation>
+        <translation>You should now have %1 wort.你现在应该有% 1麦芽汁。</translation>
     </message>
     <message>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation> Aggiung i%1 acqua in pentola portando il volume della pre-ebollizione a %2.</translation>
+        <translation> Add %1 water to the kettle, bringing pre-boil volume to %2.添加% 1水的水壶,把预煮卷% 2。</translation>
     </message>
     <message>
         <source>Pre-boil</source>
-        <translation>Prima della bollitura</translation>
+        <translation>Pre-boil	 Pre-boil</translation>
     </message>
     <message>
         <source>Boil or steep </source>
-        <translation>Bollitura o steep </translation>
+        <translation>Boil or steep 煮沸或陡峭的 </translation>
     </message>
     <message>
         <source>Boil/steep fermentables</source>
-        <translation>Bollitura/steep dei fermentabili</translation>
+        <translation>Boil/steep fermentables煮/陡峭的fermentables</translation>
     </message>
     <message>
         <source>to the boil at knockout.</source>
-        <translation>ad ebollizione a eliminazione diretta.</translation>
+        <translation>to the boil at knockout.在淘汰赛的沸腾。</translation>
     </message>
     <message>
         <source>Knockout additions</source>
-        <translation>aggiungi eliminazione diretta</translation>
+        <translation>Knockout additions淘汰赛添加</translation>
     </message>
     <message>
         <source>You should have %1 wort post-boil.</source>
-        <translation>Si dovrebbe avere %1 nel mosto dopo boollitura.</translation>
+        <translation>你应该有1％的麦汁煮沸后。You should have %1 wort post-boil.</translation>
     </message>
     <message>
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
         <translation>
-Si prevede di perdere %1 per la peridita di refrigerazione.</translation>
+您预计失去1％的凝固物和冷水机组的损失。You anticipate losing %1 to trub and chiller loss.</translation>
     </message>
     <message>
         <source>
 Add %1 top up water into primary.</source>
         <translation>
-Aggiungi %1 per rabboccare acqua nel primario.</translation>
+添加％1顶到初级化妆水。Add %1 top up water into primary.</translation>
     </message>
     <message>
         <source>
 The final volume in the primary is %1.</source>
         <translation>
-Il Volume finale del primo è %1.</translation>
+在主终体积为％1。The final volume in the primary is %1.</translation>
     </message>
     <message>
         <source>Post boil</source>
-        <translation>Dopo Bollitura</translation>
+        <translation>发布熬Post boil</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>煮沸时间Boil time</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation>Non hai configurato l&apos;attrezzatura (che si dovrebbe fare), quindi dimmi il tempo ebollizione.</translation>
+        <translation>你没有配置设备（你真的应该），所以告诉我熬时间。You did not configure an equipment (which you really should), so tell me the boil time.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
-        <translation>Portare il mosto ad ebollizione e tenerilo cos&apos; per %1.</translation>
+        <translation>麦汁煮沸，保持1％。Bring the wort to a boil and hold for %1.</translation>
     </message>
     <message>
         <source>Start boil</source>
-        <translation>Partenza bollitura</translation>
+        <translation>开始沸腾Start boil</translation>
     </message>
     <message>
         <source>Flameout</source>
-        <translation>Spegnimento</translation>
+        <translation>熄火Flameout</translation>
     </message>
     <message>
         <source>Stop boiling the wort.</source>
-        <translation>Ferma la bollitura del mosto.</translation>
+        <translation>停止沸腾麦汁。Stop boiling the wort.</translation>
     </message>
     <message>
         <source>Cool wort and pitch </source>
-        <translation>Mosto freddo e intenso </translation>
+        <translation>冷麦汁和俯仰 Cool wort and pitch </translation>
     </message>
     <message>
         <source>%1 %2 yeast, </source>
-        <translation>%1 %2 Lievito </translation>
+        <translation>％1％2酵母，%1 %2 yeast, </translation>
     </message>
     <message>
         <source>to the primary.</source>
-        <translation>nel primario.</translation>
+        <translation>到主服务器。to the primary.</translation>
     </message>
     <message>
         <source>Pitch yeast</source>
-        <translation>Lievito intenso</translation>
+        <translation>间距酵母Pitch yeast</translation>
     </message>
     <message>
         <source>Let ferment until FG is %1.</source>
-        <translation>Lascia fermentare fino a FG %1.</translation>
+        <translation>让发酵，直到FG是1％。Let ferment until FG is %1.</translation>
     </message>
     <message>
         <source>Ferment</source>
-        <translation>Fermentare</translation>
+        <translation>发酵Ferment</translation>
     </message>
     <message>
         <source>Transfer beer to secondary.</source>
-        <translation>Trasferisci la birra nel secondario.</translation>
+        <translation>二次传输啤酒。Transfer beer to secondary.</translation>
     </message>
     <message>
         <source>Transfer to secondary</source>
-        <translation>Trasferisci al secondario</translation>
+        <translation>转移到二级Transfer to secondary</translation>
     </message>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
-        <translation>Aggiungi %1 %2 per bollire a %3.</translation>
+        <translation>添加％1％2％3烧开。Add %1 %2 to boil at %3.</translation>
     </message>
     <message>
         <source>Raise water to boil and then remove from heat. Stir in  </source>
-        <translation>Sollevare l&apos;acqua ad ebollizione e poi togliere dal fuoco. Mescolare  </translation>
+        <translation>提高水烧开，然后从火上移开。拌入  Raise water to boil and then remove from heat.  </translation>
     </message>
     <message>
         <source>Add Extracts to water</source>
-        <translation>Aggiungi estratti all&apos;acqua</translation>
+        <translation>添加提取到水Add Extracts to water</translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 acqua a %2 </translation>
+        <translation>％2％1水 %1 water to %2 </translation>
     </message>
 </context>
 <context>
     <name>RecipeFormatter</name>
     <message>
         <source>unknown style</source>
-        <translation>Stile sconosciuto</translation>
+        <translation>未知风格unknown style</translation>
     </message>
     <message>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>N / A</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Birraio</translation>
+        <translation>布鲁尔Brewer</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Data</translation>
+        <translation>日期</translation>
     </message>
     <message>
         <source>Batch Size</source>
-        <translation>Misura Partita</translation>
+        <translation>批次大小Batch Size</translation>
     </message>
     <message>
         <source>Boil Size</source>
-        <translation>Misura bollitura</translation>
+        <translation>煮沸尺寸Boil Size</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>煮沸时间Boil Time</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation>Efficenza</translation>
+        <translation>效率Efficiency</translation>
     </message>
     <message>
         <source>OG</source>
@@ -1867,7 +1857,7 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>未知</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -1875,75 +1865,75 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation>Amarezza</translation>
+        <translation>苦Bitterness</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>颜色Color</translation>
     </message>
     <message>
         <source>Calories (per 12 oz.)</source>
-        <translation>Calorie (per 340 gr)</translation>
+        <translation>卡路里（每次12盎司。）Calories (per 12 oz.)</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Fermentabili</translation>
+        <translation>发酵物Fermentables</translation>
     </message>
     <message>
         <source>Total grain:</source>
-        <translation>Grano Totale:</translation>
+        <translation>粮食总：Total grain:</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation>Mashed</translation>
+        <translation>捣碎Mashed</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation>Tardi</translation>
+        <translation>晚Late</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation>Prodotto</translation>
+        <translation>产量Yield</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>是</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>No</translation>
+        <translation>否</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Luppoli</translation>
+        <translation>酒花Hops</translation>
     </message>
     <message>
         <source>Alpha</source>
-        <translation>Alpha</translation>
+        <translation>阿尔法Alpha</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>使用Use</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -1951,298 +1941,298 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation>Aggiunta</translation>
+        <translation>其他</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>酵母Yeast</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation>fase</translation>
+        <translation>舞台Stage</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>次要Secondary</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>主要</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temperatura</translation>
+        <translation>温度</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Temperatura Obiettivo</translation>
+        <translation>目标温度Target Temp</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>指令Instructions</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Data di birrificazione</translation>
+        <translation>酿造日期</translation>
     </message>
     <message>
         <source>Preboil</source>
-        <translation>Prima della bollitura</translation>
+        <translation>Preboil</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Densità Iniziale</translation>
+        <translation>SG</translation>
     </message>
     <message>
         <source>Volume into BK</source>
-        <translation>Volume interno al BK</translation>
+        <translation>卷成BKVolume into BK</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Sospensione Temperatura</translation>
+        <translation>行使温度Strike Temp</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation>Temperatura Finale</translation>
+        <translation>最终温度Final Temp</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>Efficenza in BK</translation>
+        <translation>BK效率成Eff into BK</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>OG Stimato</translation>
+        <translation>预计OGProjected OG</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Dopo Bollitura</translation>
+        <translation>Postboil</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Volume dopo Bollitura</translation>
+        <translation>Postboil体积Postboil Volume</translation>
     </message>
     <message>
         <source>Volume Into Fermenter</source>
-        <translation>Volume dentro al fermentatore</translation>
+        <translation>进入发酵罐的体积Volume Into Fermenter</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Efficenza Birrificio</translation>
+        <translation>啤酒厂效率Brewhouse Eff</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>ABV Stimato</translation>
+        <translation>预计ABVProjected ABV</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation>Post Fermentazione</translation>
+        <translation>Postferment</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>量体积Volume</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>stampa documento</translation>
+        <translation>打印文件</translation>
     </message>
 </context>
 <context>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>OG Corrispondente</translation>
+        <translation>OG不匹配</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
-        <translation>Sulla base del dato plato originale, l&apos;OG deve essere %1, ma tu ha inserito %2. Continuando con il valore calcolato OG.</translation>
+        <translation>根据给定的原始柏拉图，OG应该是1％，但是，你已经进入了2％。继续计算OG。Based on the given original plato, the OG should be %1, but you have entered %2.</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
-        <translation>Ricetta scalata</translation>
+        <translation>配方缩放</translation>
     </message>
     <message>
         <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Il mosto è stato resettato a causa del fatto che le temperature non si è abbassata facilmente. Si prega di eseguire nuovamente la procedura guidata di mosto.</translation>
+        <translation>的糊状物已被复位，因为这样的事实，醪液温度不很容易扩展。请重新运行醪向导。</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Le attrezzature e il mash sono state azzerate a causa del fatto che le temperature non si sono abbassate facilmente. Si prega di eseguire nuovamente la procedura guidata di mosto.</translation>
+        <translation>设备和土豆泥已复位由于这样的事实醪的温度不容易扩展。请重新运行醪向导。</translation>
     </message>
 </context>
 <context>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Nome dello stile</translation>
+        <translation>样式名</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Nome dello Stile:</translation>
+        <translation>风格名称：</translation>
     </message>
 </context>
 <context>
     <name>TimerWidget</name>
     <message>
         <source>Open Sound</source>
-        <translation>Apri Suono</translation>
+        <translation>打开声音</translation>
     </message>
     <message>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
-        <translation>Audio Files (*.wav *.ogg *.mp3 *.aiff)</translation>
+        <translation>音频文件（*。WAV OGG，MP3音乐，AIFF）</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation>停止</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Partenza</translation>
+        <translation>开始</translation>
     </message>
 </context>
 <context>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello indicizzazione. Riga = %1</translation>
+        <translation>坏榜样指数排=％1row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>坏列：％1Bad column: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Calcium (ppm)</source>
-        <translation>Calcio (ppm)</translation>
+        <translation>钙（PPM）Calcium (ppm)</translation>
     </message>
     <message>
         <source>Bicarbonate (ppm)</source>
-        <translation>Bicarbonato (PPM)</translation>
+        <translation>碳酸氢钠（PPM）Bicarbonate (ppm)</translation>
     </message>
     <message>
         <source>Sulfate (ppm)</source>
-        <translation>Solfato (ppm)</translation>
+        <translation>硫酸（PPM）Sulfate (ppm)</translation>
     </message>
     <message>
         <source>Chloride (ppm)</source>
-        <translation>Cloruro (ppm)</translation>
+        <translation>氯化物（PPM）Chloride (ppm)</translation>
     </message>
     <message>
         <source>Sodium (ppm)</source>
-        <translation>Sodio (ppm)</translation>
+        <translation>钠（PPM）Sodium (ppm)</translation>
     </message>
     <message>
         <source>Magnesium (ppm)</source>
-        <translation>Magnesio (ppm)</translation>
+        <translation>镁Magnesium (ppm)</translation>
     </message>
 </context>
 <context>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Nome Lievito</translation>
+        <translation>酵母的名字Yeast name</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Nome lievito:</translation>
+        <translation>酵母的名字:Yeast name:</translation>
     </message>
 </context>
 <context>
     <name>YeastItemDelegate</name>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation>爱尔Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation>拉格Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Wheat</translation>
+        <translation>小麦Wheat</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vino</translation>
+        <translation>酒Wine</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation>香槟Champagne</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Liquido</translation>
+        <translation>Liquid液体</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Secco</translation>
+        <translation>Dry干</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Inclinazione</translation>
+        <translation>Slant偏</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation>Culture文化</translation>
     </message>
 </context>
 <context>
     <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello di indice.Riga= %1</translation>
+        <translation>坏榜样指数排row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>坏列Bad column: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Laboratory</source>
-        <translation>Laboratorio</translation>
+        <translation>实验室Laboratory</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>ID Prodotto</translation>
+        <translation>产品IDProduct ID</translation>
     </message>
 </context>
 <context>
     <name>aboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation>Chi è Brewtaget</translation>
+        <translation>关于BrewtargetAbout Brewtarget</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -2289,172 +2279,215 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2013 by the developers below.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Peter Buelow&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Dan Cavanagh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Mik Firestone&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Guido Carpi (Italian translation)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ester (Catalan translation)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (Polish translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (Portuguese translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jan Grmela (Czech translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alpha tester)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation>Dona</translation>
+        <translation>捐赠Donate</translation>
     </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
-        <translation>Istuzioni generali</translation>
+        <translation>生成指令</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Inserisci passaggio</translation>
+        <translation>插入步骤</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Nome del nuovo Steep</translation>
+        <translation>新的一步名称</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Passo #</translation>
+        <translation>步骤＃</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Il numero in cui il nuovo passo deve essere collocato</translation>
+        <translation>应放置在新的步骤的数目</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Inserisci nuovo step</translation>
+        <translation>插入新的一步Insert the new stepyi</translation>
     </message>
     <message>
         <source>Move steps</source>
-        <translation>Muovi steps</translation>
+        <translation>移动步骤Move steps</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Spostare passo attualmente selezionato in alto</translation>
+        <translation>移动当前选中的加强Move currently selected step up</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Spostare passo attualmente selezionato verso il basso</translation>
+        <translation>移动当前选中下台Move currently selected step down</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Rimuovere passo attualmente selezionato</translation>
+        <translation>删除当前选中的一步Remove currently selected step</translation>
     </message>
 </context>
 <context>
     <name>brewDayWidget</name>
     <message>
         <source>Brewday Mode</source>
-        <translation>Modalità Brewday</translation>
+        <translation>Brewday模式Brewday Mode</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>指令Instructions</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Spostare passo attualmente selezionato in alto</translation>
+        <translation>移动当前选中的加强Move currently selected step up</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Su</translation>
+        <translation>上层Up</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Spostare passo attualmente selezionato verso il basso</translation>
+        <translation>移动当前选中下台Move currently selected step down</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Giù</translation>
+        <translation>下Down</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Rimuovere passo attualmente selezionato</translation>
+        <translation>删除当前选择的步骤Remove currently selected step</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <translation>消除Remove</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Inserisci passaggio</translation>
+        <translation>插入步骤</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Nome del nuovo Steep</translation>
+        <translation>新的一步名称</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Passo #</translation>
+        <translation>步骤＃</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Il numero in cui il nuovo passo deve essere collocato</translation>
+        <translation>应放置在新的步骤的数目</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Inserisci nuovo step</translation>
+        <translation>插入新的一步Insert the new stepyi</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation>Inserisci</translation>
+        <translation>插入</translation>
     </message>
 </context>
 <context>
     <name>brewNoteWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Preboil</source>
-        <translation>Prima della bollitura</translation>
+        <translation>Preboil</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Densità Iniziale</translation>
+        <translation>SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>Densità Iniziale</translation>
+        <translation>Preboil重力Preboil gravity</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>量体积体积Volume</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation>Volume di mosto raccolto</translation>
+        <translation>收集的麦芽汁的体积</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Sospensione Temperatura</translation>
+        <translation>行使温度Strike Temp</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
-        <translation>Temperatura del mosto dopo la pasta in</translation>
+        <translation>糖化温度后的面团Temperature of mash after dough in</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation>Temperatura Finale</translation>
+        <translation>最终温度Final Temp</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation>Temperatura mosto dopo mash out</translation>
+        <translation>混搭出前醪温度</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Dopo Bollitura</translation>
+        <translation>Postboil</translation>
     </message>
     <message>
         <source>OG</source>
@@ -2462,83 +2495,83 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation>Densità dopo Bollitura</translation>
+        <translation>烧开后重力Post boil gravity</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Volume dopo Bollitura</translation>
+        <translation>Postboil体积Postboil Volume</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation>Volume del mosto in ebollizione dopo BK</translation>
+        <translation>在BK卷麦汁煮沸后Volume of wort in BK after boil</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation>Volume di mosto trasferito nel fermentatore</translation>
+        <translation>麦汁量转移到发酵Volume of wort transferred to fermenter</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Volume dentro al fermentatore</translation>
+        <translation>进入发酵罐的体积Volume into fermenter</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation> Temperatura intenso</translation>
+        <translation> 间距温度 Pitch Temp</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation>Temperatura del mosto quando il lievito viene attivato</translation>
+        <translation>麦汁温度时，酵母投Temperature of wort when yeast is pitched</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation>Post Fermentazione</translation>
+        <translation>Postferment</translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation>Densità Finale</translation>
+        <translation>最后重力</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation>Volume di birra da servire nel fusto/bottiglie</translation>
+        <translation>服成桶/瓶啤酒量</translation>
     </message>
     <message>
         <source>Date when the yeast fermented out</source>
-        <translation>Data di fine fermentazione</translation>
+        <translation>酵母发酵时的日期</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
-        <translation>percentuale di efficienza in caldaia di ammostamento</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>Efficenza in BK</translation>
+        <translation>BK效率成Eff into BK</translation>
     </message>
     <message>
         <source>Expected OG, based on measure fg</source>
-        <translation>Prevista OG, sulla base della misura di FG</translation>
+        <translation>预计OG，根据措施FG</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>OG Stimato</translation>
+        <translation>预计OG</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation>Efficenza Birrificio</translation>
+        <translation>啤酒厂效率</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Efficenza Birrificio</translation>
+        <translation>啤酒厂效率Brewhouse Eff</translation>
     </message>
     <message>
         <source>Expected ABV based on OG</source>
-        <translation>ABV atteso sulla base di OG</translation>
+        <translation>根据OG预期ABV</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>ABV Stimato</translation>
+        <translation>预计ABVProjected ABV</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
-        <translation>ABV basato su OG</translation>
+        <translation>ABV基于FGABV based on FG</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -2546,609 +2579,609 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
 </context>
 <context>
     <name>btSplashScreen</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
 </context>
 <context>
     <name>converterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation>Tool per conversione</translation>
+        <translation>转换器工具Converter Tool</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>输入Input</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation>Importo e unità per la conversione</translation>
+        <translation>金额和单位转换Amount and units to convert</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation>Moduli di uscita</translation>
+        <translation>输出单元Output Units</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation>Unità che si desidera convertire in</translation>
+        <translation>你要转换的单位Unit you want to convert to</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>产量Output</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation>uscita di conversione</translation>
+        <translation>输出转换Output conversion</translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation>convertire</translation>
+        <translation>兑换Convert</translation>
     </message>
 </context>
 <context>
     <name>equipmentEditor</name>
     <message>
         <source>Equipment Editor</source>
-        <translation>Editor attrezzature</translation>
+        <translation>设备编辑器Equipment Editor</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>设备Equipment</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation>Rimuovi attrezzatura</translation>
+        <translation>删除设备Remove equipment</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation>Imposta come default</translation>
+        <translation>设置为默认Set as Default</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>必填项Required Fields</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation>Volume pre bollitura</translation>
+        <translation>煮沸前音量Pre-boil volume</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>Se selezionata, provvederemo a calcolare il vostro pre-ebollizione del volume in base alla dimensione del lotto da bollire e all&apos;ora desiderate, velocità di evaporazione, perdite, ecc.</translation>
+        <translation>如果选中，我们将计算你的预熬根据您所需的批处理大小，熬时间，蒸发率，损失等体积</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation>Calcolare il volume di pre-ebollizione</translation>
+        <translation>计算预熬音量Calculate pre-boil volume</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation>Compilare automaticamente in fase di pre-ebollizione del volume</translation>
+        <translation>自动填写预熬货量Automatically fill in pre-boil volume</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation>Dimensione lotto</translation>
+        <translation>批量大小</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation>Bollendo &amp;&amp; Acqua</translation>
+        <translation>水沸腾&amp;&amp;Boiling &amp;&amp; Water</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>煮沸时间Boil time</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation>Tasso di Evaporazione (per ora)</translation>
+        <translation>蒸发率（每小时）Evaporation rate (per hr)</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation>Quanta perdita di acqua per ora</translation>
+        <translation>关闭每小时多少水沸腾How much water boils off per hour</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation>Rabbocco Acqua bollitore</translation>
+        <translation>水壶补足水Kettle top-up water</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation>Quanta acqua si aggiunge al bollitore immediatamente pre-ebollizione</translation>
+        <translation>有多少水立即添加到釜中煮沸前How much water is added to kettle immediately pre-boil</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation>Finale rabbocco acqua</translation>
+        <translation>最终补足水Final top-up water</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation>Acqua aggiunta nel fermentatore</translation>
+        <translation>水加入到发酵罐Water added to fermenter</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation>Assorbimento grano (L/kg)</translation>
+        <translation>谷物吸收（L /公斤）</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation>Assorbimento di default</translation>
+        <translation>默认吸收</translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation>Punto di ebollizione dell&apos;acqua</translation>
+        <translation>水的沸点</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>L&apos;utilizzo di luppolo </translation>
+        <translation>合利用 Hop Utilization </translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation>Mash di tun</translation>
+        <translation>醪屯Mash Tun</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>量体积体积Volume</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation>Volume di mash tun</translation>
+        <translation>糖化桶体积</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation>Massa</translation>
+        <translation>块Mass</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation>Massa o peso di mash tun</translation>
+        <translation>糖化桶的质量或重量Mass or weight of mash tun</translation>
     </message>
     <message>
         <source>Specific heat (cal/(g*K))</source>
-        <translation>Calore Specifico (cal/(g*K))</translation>
+        <translation>比热（千卡/（G* K））Specific heat (cal/(g*K))</translation>
     </message>
     <message>
         <source>Losses</source>
-        <translation>Perdite</translation>
+        <translation>LossesLosses</translation>
     </message>
     <message>
         <source>Kettle to fermenter</source>
-        <translation>Bollitore a fermentatore</translation>
+        <translation>水壶发酵Kettle to fermenter</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation>Mosto perso tra bollitore e fermentatore</translation>
+        <translation>麦汁之间失去水壶和发酵Wort lost between kettle and fermenter</translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation>Separare spazio maorto</translation>
+        <translation>纯净的死亡空间Lauter deadspace</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation>Volume di mosto perso separando lo spazio morto</translation>
+        <translation>体积的麦芽汁输给了纯净的死亡Volume of wort lost to lauter deadspace</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation>Nuovi Ingredienti</translation>
+        <translation>新设备New equipment</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>节省Save</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
     <name>fermentableDialog</name>
     <message>
         <source>Fermentable Database</source>
-        <translation>Database Fermentabile</translation>
+        <translation>可发酵的数据库Fermentable Database</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Aggiungi ingredienti selezionati alla ricetta</translation>
+        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi allla ricetta</translation>
+        <translation>添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Crea nuovo ingrediente</translation>
+        <translation>创建新的成分Create new ingredient</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>新New</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit ingrediente selezionato</translation>
+        <translation>编辑选定的成分Edit selected ingredient</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Rimuovi ingerdiente selezionato</translation>
+        <translation>删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
     <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
-        <translation>Editor Fermentabile</translation>
+        <translation>可发酵的编辑Fermentable Editor</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>必填项Required Fields</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Grano</translation>
+        <translation>粮食</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Zucchero</translation>
+        <translation>糖</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Estratto</translation>
+        <translation>提取</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Estratto secco</translation>
+        <translation>干浸膏Dry Extract</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Aggiunta</translation>
+        <translation>附属物</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Yield (%)</source>
-        <translation>Prodotto</translation>
+        <translation>收益率（％）Yield (%)</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation>Resa rispetto al glucosio</translation>
+        <translation>良品率相比为葡萄糖Yield as compared to glucose</translation>
     </message>
     <message>
         <source>Lovibond</source>
-        <translation>Lovibond</translation>
+        <translation>罗维朋Lovibond</translation>
     </message>
     <message>
         <source>Lovibond rating</source>
-        <translation>Valutazione Lovibond</translation>
+        <translation>罗维朋评级Lovibond rating</translation>
     </message>
     <message>
         <source>Add After Boil</source>
-        <translation>Aggiungi dopo bollitura</translation>
+        <translation>开锅后加入Add After Boil</translation>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation>Questo ingrediente è stato aggiunto dopo bollitura.</translation>
+        <translation>这种成分加入后烧开。This ingredient is added post boil.</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Origine</translation>
+        <translation>来源Origin</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation>Fornitore</translation>
+        <translation>提供者Supplier</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
-        <translation>Grossa/Fine Differenza(%)</translation>
+        <translation>粗/细变化（％）Coarse/Fine Diff (%)</translation>
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation>Resa differenza tra macro e micro macinatura</translation>
+        <translation>粗，细研磨的产量之间的差异Yield difference between coarse and fine grind</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation>Umidità (%)</translation>
+        <translation>水分（％）Moisture (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
-        <translation>Percentuale di Umidità per massa</translation>
+        <translation>水分的质量百分比Moisture percentage by mass</translation>
     </message>
     <message>
         <source>DP (Lintner)</source>
-        <translation>DP (Lintner)</translation>
+        <translation>DP（林特纳）DP (Lintner)</translation>
     </message>
     <message>
         <source>Diastatic power in Lintner</source>
-        <translation>Potere diastasico in Lintner</translation>
+        <translation>林特纳糖化力Diastatic power in Lintner</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation>Proteine (%)</translation>
+        <translation>蛋白质（％）Protein (%)</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
-        <translation>Perecntuale Proteine per massa</translation>
+        <translation>蛋白质的质量百分比Protein percentage by mass</translation>
     </message>
     <message>
         <source>Max In Batch (%)</source>
-        <translation>Max in Lotto (%)</translation>
+        <translation>最大批量（％）Max In Batch (%)</translation>
     </message>
     <message>
         <source>Maximum recommended percentage of total grist</source>
-        <translation>Percentuale massima raccomandata di Grist totale</translation>
+        <translation>推荐的最大百分比总谷物Maximum recommended percentage of total grist</translation>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation>Mash raccomandato</translation>
+        <translation>推荐醪Recommend Mash</translation>
     </message>
     <message>
         <source>Recommend this be mashed</source>
-        <translation>Consiglio questo essere mah</translation>
+        <translation>推荐这捣碎Recommend this be mashed</translation>
     </message>
     <message>
         <source>Is Mashed</source>
-        <translation>Is Mashed</translation>
+        <translation>捣碎Is Mashed</translation>
     </message>
     <message>
         <source>Checked if it is present in mash</source>
-        <translation>Controllato se presente nel mash</translation>
+        <translation>检查，如果它是存在于麦芽浆中Checked if it is present in mash</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation>Amarezza (IBU*gal/lb)</translation>
+        <translation>苦味（IBU加仑/磅）苦（IBU *加仑/磅）</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
-        <translation>Amarezza di estratti pre luppolatura</translation>
+        <translation>预跳上提取的苦味Bitterness of pre-hopped extracts</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>附注：Notes:</translation>
     </message>
 </context>
 <context>
     <name>hopDialog</name>
     <message>
         <source>Hop Database</source>
-        <translation>Database Luppolo</translation>
+        <translation>合数据库</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Aggiungi ingredienti selezionati alla ricetta</translation>
+        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi allla ricetta</translation>
+        <translation>添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>New hop</source>
-        <translation>Nuovo Luppolo</translation>
+        <translation>新一跳New hop</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>新New</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Edit</translation>
+        <translation>编辑Edit</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <translation>消除Remove</translation>
     </message>
 </context>
 <context>
     <name>hopEditor</name>
     <message>
         <source>Hop Editor</source>
-        <translation>Editor Luppolo</translation>
+        <translation>跳编辑Hop Editor</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>必填项Required Fields</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
-        <translation>Alpha (%)</translation>
+        <translation>Alpha (%)α-酸为</translation>
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation>Alpha Acidi come percentuale in massa</translation>
+        <translation>α-酸为质量百分比Alpha acids as percent by mass</translation>
     </message>
     <message>
         <source>Amount </source>
-        <translation>Ammontare </translation>
+        <translation>金额Amount </translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>使用Use</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primo mosto</translation>
+        <translation>第一次麦芽汁First Wort</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>熬Boil</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation>香气</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation>干合Dry Hop</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Amarezza</translation>
+        <translation>苦味	 Bittering</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>entrambi</translation>
+        <translation>两Both</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>foglia</translation>
+        <translation>叶Leaf</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation>丸Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
-        <translation>Plug</translation>
+        <translation>插头Plug</translation>
     </message>
     <message>
         <source>Beta (%)</source>
-        <translation>Beta (%)</translation>
+        <translation>Beta (%)β(%</translation>
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation>Beta Acidi come percentuale in massa</translation>
+        <translation>β氨基酸为质量百分比Beta acids as percent by mass</translation>
     </message>
     <message>
         <source>HSI</source>
-        <translation>HSI</translation>
+        <translation>溪HSI</translation>
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation>Satabilità Luppolo/Indce di Stoccaggio</translation>
+        <translation>啤酒花稳定/存储索引Hop Stability/Storage index</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Origine</translation>
+        <translation>来源Origin</translation>
     </message>
     <message>
         <source>Humulene (%)</source>
-        <translation>Humulene (%)</translation>
+        <translation>蛇麻烯(%)Humulene (%)</translation>
     </message>
     <message>
         <source>Humulene</source>
-        <translation>Humulene</translation>
+        <translation>蛇麻烯Humulene</translation>
     </message>
     <message>
         <source>Caryophyllene (%)</source>
-        <translation>Cariphillene (%)</translation>
+        <translation>石竹烯(%)Caryophyllene (%)</translation>
     </message>
     <message>
         <source>Caryophyllene</source>
-        <translation>Cariphillene</translation>
+        <translation>石竹烯Caryophyllene</translation>
     </message>
     <message>
         <source>Cohumulone (%)</source>
-        <translation>Cohomulone (%)</translation>
+        <translation>草酮（％）Cohumulone (%)</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="unfinished"></translation>
+        <translation>草酮Cohumulone</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
-        <translation>Mircene (%)</translation>
+        <translation>月桂烯（％）Myrcene (%)</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation>Mircene</translation>
+        <translation>月桂烯Myrcene</translation>
     </message>
     <message>
         <source>Substitutes:</source>
-        <translation>Sostituti:</translation>
+        <translation>替补：Substitutes:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>附注：Notes:</translation>
     </message>
 </context>
 <context>
     <name>htmlViewer</name>
     <message>
         <source>Html Viewer</source>
-        <translation>Html Vista</translation>
+        <translation>HTML浏览器Html Viewer</translation>
     </message>
     <message>
         <source>about:blank</source>
-        <translation>about:blank</translation>
+        <translation>关于:空白about:blank</translation>
     </message>
 </context>
 <context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Mostro il tempo</translation>
+        <translation>显示一个计时器Show a timer</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Mostra Timer</translation>
+        <translation>显示计时器Show timer</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Segna questo step completato</translation>
+        <translation>标记完成这一步Mark this step completed</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Step completato</translation>
+        <translation>步骤完成Step completed</translation>
     </message>
 </context>
 <context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
-        <translation>Ricette</translation>
+        <translation>Recipes食谱</translation>
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>样式Styles</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Fermentabili</translation>
+        <translation>发酵物Fermentables</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Luppoli</translation>
+        <translation>酒花Hops</translation>
     </message>
     <message>
         <source>Miscs</source>
@@ -3156,67 +3189,67 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Yeasts</source>
-        <translation>Lieviti</translation>
+        <translation>酵母菌Yeasts</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Ricetta</translation>
+        <translation>食谱</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation>Nome della Ricetta</translation>
+        <translation>配方名称Name of recipe</translation>
     </message>
     <message>
         <source>5 gal</source>
-        <translation>20 lt</translation>
+        <translation>5 gal5加仑</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation>Obiettivo misura bollitura</translation>
+        <translation>目标熬大小的Target boil size</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
-        <translation>Efficenza (%)</translation>
+        <translation>效率(%)Efficiency (%)</translation>
     </message>
     <message>
         <source>Calculated Boil Size</source>
-        <translation>Calcolato la misura di bollitura</translation>
+        <translation>煮多少计算Calculated Boil Size</translation>
     </message>
     <message>
         <source>Calculated Batch Size</source>
-        <translation>Calcolato la misura del lotto</translation>
+        <translation>计算批量大小Calculated Batch Size</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
-        <translation>L&apos;efficienza di estrazione che ci si aspetta</translation>
+        <translation>你期望的萃取效率The extraction efficiency you expect</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>样式Style</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>煮沸时间Boil Time</translation>
     </message>
     <message>
         <source>Target batch size</source>
-        <translation>Obiettivo Lotto Misura</translation>
+        <translation>目标批量大小</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
-        <translation>Obiettivo Lotto Misura</translation>
+        <translation>目标批次大小Target Batch Size</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>设备Equipment</translation>
     </message>
     <message>
         <source>Target Boil Size</source>
-        <translation>Obiettivo misura bollitura</translation>
+        <translation>目标熬尺寸的Target Boil Size</translation>
     </message>
     <message>
         <source>OG</source>
@@ -3224,7 +3257,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Boil SG</source>
-        <translation>Bollitura SG</translation>
+        <translation>煮SGBoil SG</translation>
     </message>
     <message>
         <source>FG</source>
@@ -3236,11 +3269,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Bitterness (IBU)</source>
-        <translation>Amarezza (IBU)</translation>
+        <translation>苦味（IBU）</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>颜色Color</translation>
     </message>
     <message>
         <source>IBU/GU</source>
@@ -3248,135 +3281,135 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation>Calorie/340gr</translation>
+        <translation>卡路里/ 12盎司Calories/12oz</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation>Extra</translation>
+        <translation>额外Extras</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation>Giorno di Birrificazione</translation>
+        <translation>Brewday</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
-        <translation>Aggiungi a Fermentabile</translation>
+        <translation>添加一个可发酵Add a fermentable</translation>
     </message>
     <message>
         <source>Remove selected fermentable</source>
-        <translation>Rimuovi il fermentabile selezionato</translation>
+        <translation>删除选定的发酵Remove selected fermentable</translation>
     </message>
     <message>
         <source>Edit selected fermentable</source>
-        <translation>Edit il fermentabile selezionato</translation>
+        <translation>编辑选定的可发酵Edit selected fermentable</translation>
     </message>
     <message>
         <source>Add hop</source>
-        <translation>Aggiunta Luppolo</translation>
+        <translation>添加酒花Add hop</translation>
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation type="unfinished"></translation>
+        <translation>删除选定的跳Remove selected hop</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
-        <translation>Edit luppolo selezionato</translation>
+        <translation>编辑选择Edit selected hop</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Aggiunta</translation>
+        <translation>杂项Miscellaneous</translation>
     </message>
     <message>
         <source>Add misc</source>
-        <translation>Aggiungi misc</translation>
+        <translation>添加杂项Add misc</translation>
     </message>
     <message>
         <source>Remove selected misc</source>
-        <translation>Rimuovi misc selezionato</translation>
+        <translation>移动选定杂项Remove selected misc</translation>
     </message>
     <message>
         <source>Edit selected misc</source>
-        <translation>Edit misc selezionato</translation>
+        <translation>编辑选定的杂项Edit selected misc</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>酵母Yeast</translation>
     </message>
     <message>
         <source>Add yeast</source>
-        <translation>Aggiungi lievito</translation>
+        <translation>添加酵母Add yeast</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation>Rimuovi lievito selezionato</translation>
+        <translation>删除选定的酵母Remove selected yeast</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation>Edit lievito selezionato</translation>
+        <translation>编辑选择的酵母Edit selected yeast</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Aggiungi step mash</translation>
+        <translation>添加醪步骤“Add mash step</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Rimuovi mash step selezionato</translation>
+        <translation>删除选定的醪步骤</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Rimuovi mash step selezionato</translation>
+        <translation>编辑选定的醪步骤“</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Rimuovi mash step selezionato</translation>
+        <translation>编辑捣烂属性Edit mash properties</translation>
     </message>
     <message>
         <source>Edit mash</source>
-        <translation>Edit mash</translation>
+        <translation>编辑捣烂编辑捣烂</translation>
     </message>
     <message>
         <source>Mash Des</source>
-        <translation>Mash Des</translation>
+        <translation>醪DESMash Des</translation>
     </message>
     <message>
         <source>Invoke the mash wizard</source>
-        <translation>Richiamare la procedura guidata mosto</translation>
+        <translation>调用捣烂向导Invoke the mash wizard</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Mask wiz</translation>
+        <translation>醪WIZMash wiz</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Mash</translation>
+        <translation>Mashs</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Intensificare Mash</translation>
+        <translation>糖化加强Mash step up</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Dimettere Mash</translation>
+        <translation>糖化下台Mash step down</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Salva questo profilo di Mash</translation>
+        <translation>保存此捣烂文件Save this mash profile</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Salva Mash</translation>
+        <translation>保存醪Save Mash</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;About</translation>
+        <translation>关于(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;File</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
@@ -3384,671 +3417,671 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation>&amp;Ricetta</translation>
+        <translation>＆食谱&amp;Recipe</translation>
     </message>
     <message>
         <source>&amp;Database</source>
-        <translation>&amp;Database</translation>
+        <translation>和数据库&amp;Database</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;View</translation>
+        <translation>查看(&amp;V)</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Tools</translation>
+        <translation>&amp;工具</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>工具栏toolBar</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>About &amp;BrewTarget</translation>
+        <translation>关于BrewTargetAbout &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation>Chi è Brewtaget</translation>
+        <translation>关于BrewtargetAbout Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
-        <translation>&amp;Export Recipe</translation>
+        <translation>进出口配方&amp;Export Recipe</translation>
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation>&amp;Fermentables</translation>
+        <translation>发酵物&amp;Fermentables</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation>按Ctrl+ FCtrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>啤酒花&amp;Hops</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
+        <translation>按Ctrl+ HCtrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Miscs</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>按Ctrl+ MCtrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>酵母菌&amp;Yeasts</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation type="unfinished"></translation>
+        <translation>按CTRL + Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>及设备</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation>按Ctrl + E键</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>与样式</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation>按Ctrl + T键</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>退出(&amp;E)</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>按Ctrl + Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>与进口食谱</translation>
     </message>
     <message>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>与选项</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>手动</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>和规模配方</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>配方和文字到剪贴板</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation type="unfinished"></translation>
+        <translation>与OG校正帮助</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>与转换单位</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished">Backup Database</translation>
+        <translation>备份数据库Backup Database</translation>
     </message>
     <message>
         <source>Restore Database</source>
-        <translation>Ripristina Database</translation>
+        <translation>还原数据库</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>复制配方</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>公关及即时通信计算器Pr&amp;iming Calculator</translation>
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>折射工具</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>间距率计算器</translation>
     </message>
     <message>
         <source>Merge Databases</source>
-        <translation>Unire i database</translation>
+        <translation>合并数据库</translation>
     </message>
     <message>
         <source>Select another database to merge into the current one.</source>
-        <translation>Selezionare un altro database da fondere in quello attuale.</translation>
+        <translation>选择另一个数据库合并到当前。</translation>
     </message>
     <message>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>打印(&amp;P)</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>打印前视图</translation>
     </message>
     <message>
         <source>&amp;Export To HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>＆导出为HTML</translation>
     </message>
     <message>
         <source>&amp;Export to HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>＆导出到HTML</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>与备份</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation>Salva tutte le ricette, ingredienti, ecc per una cartella di backup</translation>
+        <translation>所有的配方，配料等保存到备份文件夹</translation>
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>和恢复</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation>Ripristinare ricette, ingredienti, ecc da un backup precedente</translation>
+        <translation>恢复配方，配料，从以前的备份等</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>您是不是要找： Merge 与合并&amp;Merge</translation>
     </message>
     <message>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
-        <translation>Unire un altro set di ricette, ingredienti, ecc nel set corrente</translation>
+        <translation>合并到当前的一组中的另一组的配方，配料，等Merge another set of recipes, ingredients, etc. into the current set</translation>
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>新配方&amp;New Recipe</translation>
     </message>
     <message>
         <source>Timers</source>
-        <translation>Timers</translation>
+        <translation>定时器Timers</translation>
     </message>
     <message>
         <source>Show timers</source>
-        <translation>Mostra Timers</translation>
+        <translation>显示计时器Show timers</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>节省Save</translation>
     </message>
     <message>
         <source>Delete selected</source>
-        <translation>Cancella selezionati</translation>
+        <translation>删除选定的Delete selected</translation>
     </message>
     <message>
         <source>Delete recipe</source>
-        <translation>Cancella ricetta</translation>
+        <translation>删除配方Delete recipe</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation>Dona</translation>
+        <translation>捐赠Donate</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mashs</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation>捣烂Mashes</translation>
     </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>混搭设计Mash Designer</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Temperatura Obiettivo.</translation>
+        <translation>目标温度。Target temp.</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
-        <translation>Partita di Saprge</translation>
+        <translation>批喷雾Batch Sparge</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation>Prossimo</translation>
+        <translation>下一步</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Fine</translation>
+        <translation>完成Finish</translation>
     </message>
     <message>
         <source>Infusion/Decoction Amount</source>
-        <translation>Importo di Infusione/Decotto</translation>
+        <translation>输液/汤量Infusion/Decoction Amount</translation>
     </message>
     <message>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>分钟min</translation>
     </message>
     <message>
         <source>max</source>
-        <translation type="unfinished"></translation>
+        <translation>最大max</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Temperatura di infusione</translation>
+        <translation>灌注温度Infusion Temp</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
-        <translation>Totale Mosto Raccolto</translation>
+        <translation>总收集麦芽汁Total Collected Wort</translation>
     </message>
     <message>
         <source>vol</source>
-        <translation>Vol</translation>
+        <translation>卷vol</translation>
     </message>
     <message>
         <source>Tun Fullness</source>
-        <translation>Pienezza di Tun</translation>
+        <translation>桶丰满Tun Fullness</translation>
     </message>
     <message>
         <source>tunVol</source>
-        <translation type="unfinished"></translation>
+        <translation>tunVol</translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation>Spessore</translation>
+        <translation>厚度thickness</translation>
     </message>
 </context>
 <context>
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>混搭编辑器Mash Editor</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temperatura iniziale del Grano</translation>
+        <translation>初始晶粒温度Initial grain temp</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temperatura di Sparge</translation>
+        <translation>吹扫温度Sparge temp</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Obiettivo Temepratuta di Saprge</translation>
+        <translation>吹扫温度目标Sparge temp target</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>PH Sparge</translation>
+        <translation>喷雾pHSparge pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Tun</translation>
+        <translation>桶Tun</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>初始桶温度Initial tun temp</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation>Prendi i seguenti parametri dalle attrzzature della ricetta.</translation>
+        <translation>以下参数配方的设备。Get following parameters from the recipe&apos;s equipment.</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Da attrezzatura</translation>
+        <translation>设备From Equipment</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Massa Tun</translation>
+        <translation>桶质量Tun mass</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Tun sp.Calore</translation>
+        <translation>桶sp热Tun sp. heat</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Calore specifico di tun (Cal/(g*K))</translation>
+        <translation>桶比热(cal /(g * K))Tun specific heat (cal/(g*K))</translation>
     </message>
 </context>
 <context>
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation>Editor Step Mash</translation>
+        <translation>麦芽浆步骤编辑Mash Step Editor</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation>Infusione</translation>
+        <translation>注入Infusion</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>温度</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation>Decotto</translation>
+        <translation>煎煮Decoction</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Temperatura Obiettivo.</translation>
+        <translation>目标温度。Target temp.</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation>Obiettivo temperatura di questo step</translation>
+        <translation>目标温度Target temp. of this step</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation>Quantità di Infusione</translation>
+        <translation>注入量Infuse Amount</translation>
     </message>
     <message>
         <source>Amount of water to infuse</source>
-        <translation>Quantità d&apos;acqua in infusione</translation>
+        <translation>量的水注入Amount of water to infuse</translation>
     </message>
     <message>
         <source>Infuse temp.</source>
-        <translation>Temperatura di infusione.</translation>
+        <translation>注入温度。Infuse temp.</translation>
     </message>
     <message>
         <source>Temperature of infusion water</source>
-        <translation>Temperatura infusione dell&apos;acqua</translation>
+        <translation>注入水的温度Temperature of infusion water</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation>Quantità decotta</translation>
+        <translation>汤量Decoction Amount</translation>
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation>Quantità di mash da decotto</translation>
+        <translation>数量的麦芽浆来煎Amount of mash to decoct</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
-        <translation>Tempo di condurre il passo</translation>
+        <translation>时间进行的步骤Time to conduct the step</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation>Temperatura di fine lagerizzazione</translation>
+        <translation>临时滞后时间Temp. lag time</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation>Tempo lagerizzazione</translation>
+        <translation>滞后时间Lag time</translation>
     </message>
     <message>
         <source>End temp.</source>
-        <translation>Fine Temp.</translation>
+        <translation>结束临时End temp.</translation>
     </message>
     <message>
         <source>Final temp. of this step</source>
-        <translation>Temperatura finale di questo step</translation>
+        <translation>最后这一步的临时工Final temp. of this step</translation>
     </message>
 </context>
 <context>
     <name>mashWizard</name>
     <message>
         <source>Mash Wizard</source>
-        <translation>Mash Wizard</translation>
+        <translation>糖化向导Mash Wizard</translation>
     </message>
     <message>
         <source>Mash thickness (L/kg)</source>
-        <translation>Spessore Mash (L/kg)</translation>
+        <translation>麦芽浆厚度(L /公斤)Mash thickness (L/kg)</translation>
     </message>
     <message>
         <source>Mash thickness (do not enter any units)</source>
-        <translation>Mash spessore (non inserire alcuna unità)</translation>
+        <translation>麦芽浆厚度(不输入任何单位)Mash thickness (do not enter any units)</translation>
     </message>
 </context>
 <context>
     <name>miscDialog</name>
     <message>
         <source>Misc Database</source>
-        <translation>Database Misc</translation>
+        <translation>Misc数据库Misc Database</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Aggiungi ingredienti selezionati alla ricetta</translation>
+        <translation>选择添加成份，配方添加选定的配方成分Add selected ingredient to recipe</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi allla ricetta</translation>
+        <translation>添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>Create a new ingredient</source>
-        <translation>Crea nuovo ingrediente</translation>
+        <translation>创建一个新的成分Create a new ingredient</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>新New</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit ingrediente selezionato</translation>
+        <translation>编辑选定的成分Edit selected ingredient</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Rimuovi ingerdiente selezionato</translation>
+        <translation>删除选定的成分Remove selected ingredient</translation>
     </message>
 </context>
 <context>
     <name>miscEditor</name>
     <message>
         <source>Misc Editor</source>
-        <translation>Editor Misc</translation>
+        <translation>其他编辑器</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation>Spezie</translation>
+        <translation>香料Spice</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>affinamento</translation>
+        <translation>罚款Fining</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Agente dell&apos;acqua</translation>
+        <translation>水剂Water Agent</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Erba</translation>
+        <translation>草本植物Herb</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Sapore</translation>
+        <translation>味Flavor</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Altro</translation>
+        <translation>其他</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>使用Use</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>熬Boil</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>主要</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>次要Secondary</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation>Imbottigliamento</translation>
+        <translation>装瓶</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>时间Time</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation>Controllare se l&apos;importo indicato è in kg invece di L.</translation>
+        <translation>检查如果上市量（公斤）代替L。</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Importo è il peso?</translation>
+        <translation>金额重量？Amount is weight?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Controlla se la data quantità è peso invece di volume</translation>
+        <translation>检查，如果给定的量是重量，而不是数量</translation>
     </message>
     <message>
         <source>Use for:</source>
-        <translation>Usa per:</translation>
+        <translation>用于：</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>附注：Notes:</translation>
     </message>
 </context>
 <context>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>命名混搭编辑器Named Mash Editor</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mash</translation>
+        <translation>糖化Mash</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">Cancella stile selezionato</translation>
+        <translation>删除选定的风格</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished">Temperatura iniziale del Grano</translation>
+        <translation>初始晶粒温度</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished">Temperatura di Sparge</translation>
+        <translation>吹扫温度Sparge temp</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished">Obiettivo Temepratuta di Saprge</translation>
+        <translation>吹扫温度目标Sparge temp target</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished">PH Sparge</translation>
+        <translation>喷雾pHSparge pH</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Note</translation>
+        <translation>说明Notes</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished">Tun</translation>
+        <translation>桶Tun</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>初始桶温度Initial tun temp</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Da attrezzatura</translation>
+        <translation>设备From Equipment</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished">Massa Tun</translation>
+        <translation>桶质量Tun mass</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="unfinished">Tun sp.Calore</translation>
+        <translation>桶sp热Tun sp. heat</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished">Calore specifico di tun (Cal/(g*K))</translation>
+        <translation>桶比热(cal /(g * K))Tun specific heat (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished">Aggiungi step mash</translation>
+        <translation>添加醪步骤“Add mash step</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">Rimuovi mash step selezionato</translation>
+        <translation>删除选定的醪步骤</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished">Intensificare Mash</translation>
+        <translation>糖化加强Mash step up</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished">Dimettere Mash</translation>
+        <translation>糖化下台下台醪Mash step down</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>Regolazione del volume a Hit OG</translation>
+        <translation>调整音量命中OGAdjust Volume to Hit OG</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>输入Input</translation>
     </message>
     <message>
         <source>SG</source>
@@ -4056,158 +4089,158 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation>Misurata Densità pre ebollizione</translation>
+        <translation>重力测量前熬</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temperatura</translation>
+        <translation>温度</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation>Temperatura dell&apos;SG letta</translation>
+        <translation>温度的SG阅读Temperature of SG reading</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation>Calibrazione temperatura</translation>
+        <translation>校准温度</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation>Temperatura a cui è tarato il densimetro</translation>
+        <translation>温度，比重计校准</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation>-o-</translation>
+        <translation>- 或者 -</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translation>Plato</translation>
+        <translation>柏拉图Plato</translation>
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato (percentuale in massa di saccarosio equivalente)</translation>
+        <translation>柏拉图质量相当于蔗糖（％）Plato (percent by mass of equivalent sucrose)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation>Volume pre bollitura</translation>
+        <translation>煮沸前成交量Pre-Boil Volume</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation>Misurato Volume pre ebollizione</translation>
+        <translation>测量前熬量Measured pre-boil volume</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>产量Output</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation>Correzione OG w/o</translation>
+        <translation>OG W / O型校正OG w/o Correction</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation>OG se bolle come previsto</translation>
+        <translation>OG如果你熬计划OG if you boil as planned</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation>Aggiungere alla bollitura</translation>
+        <translation>添加煮Add to Boil</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation>Quantità di acqua necessaria da aggiungere per determinare OG previsto (o ferma la bollitura se negativo)</translation>
+        <translation>适量的水，你需要添加打计划OG（如果为负或煮沸）Amount of water you need to add to hit planned OG (or boil off if negative)</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation>Misura lotto finale</translation>
+        <translation>F最后一批大小inal Batch Size</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation>Misura lotto stimata dopo correzione</translation>
+        <translation>修正后的预计批量大小Estimated batch size after correction</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcola</translation>
+        <translation>计算Calculate</translation>
     </message>
 </context>
 <context>
     <name>optionsDialog</name>
     <message>
         <source>Options</source>
-        <translation>Opzioni</translation>
+        <translation>选项</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation>Moduli</translation>
+        <translation>单位Units</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation>peso</translation>
+        <translation>重量</translation>
     </message>
     <message>
         <source>Use SI units</source>
-        <translation>Usa unità SI</translation>
+        <translation>使用国际标准单位Use SI units</translation>
     </message>
     <message>
         <source>Use US traditional units</source>
-        <translation>Usa Unità US tradizionali</translation>
+        <translation>用我们传统的单位Use US traditional units</translation>
     </message>
     <message>
         <source>Use British imperial units</source>
-        <translation>Usa unità British imperial</translation>
+        <translation>使用英帝国单位</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>温度</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation>摄氏</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation>华氏</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>量体积体积Volume</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Densità</translation>
+        <translation>重力Gravity</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation>20C/20C Densità Specifica</translation>
+        <translation>20／20℃比重20C/20C Specific Gravity</translation>
     </message>
     <message>
         <source>Plato/Brix/Balling</source>
-        <translation>Plato/Brix/Balling</translation>
+        <translation>柏拉图/糖度/球的Plato/Brix/Balling</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>颜色Color</translation>
     </message>
     <message>
         <source>Use SRM</source>
-        <translation>Usa SRM</translation>
+        <translation>使用SRM</translation>
     </message>
     <message>
         <source>Use EBC</source>
-        <translation>Usa EBC</translation>
+        <translation>使用EBC</translation>
     </message>
     <message>
         <source>Formulas</source>
-        <translation>Formula</translation>
+        <translation>公式</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
-        <translation>Approssimazione di Mosher</translation>
+        <translation>莫舍的近似Mosher&apos;s approximation</translation>
     </message>
     <message>
         <source>Daniels&apos; approximation</source>
-        <translation>Approssimazione di Daniel</translation>
+        <translation>丹尼尔斯逼近Daniels&apos; approximation</translation>
     </message>
     <message>
         <source>Morey&apos;s approximation</source>
-        <translation>Approsimazione di Morey</translation>
+        <translation>莫雷的近似Morey&apos;s approximation</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -4215,95 +4248,95 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
-        <translation>Approssimazione di Tinseth</translation>
+        <translation>廷塞思近似Tinseth&apos;s approximation</translation>
     </message>
     <message>
         <source>Rager&apos;s approximation</source>
-        <translation>Approssimazione di Rager</translation>
+        <translation>狂怒的近似Rager&apos;s approximation</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>IBU调整</translation>
     </message>
     <message>
         <source>% IBU adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation>％布洛芬调整的% IBU adjustment</translation>
     </message>
     <message>
         <source>Mash Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>麦芽浆Mash Hop</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Primo mosto</translation>
+        <translation>第一麦汁</translation>
     </message>
     <message>
         <source>Directories</source>
-        <translation>Elenchi</translation>
+        <translation>目录Directories</translation>
     </message>
     <message>
         <source>Database Directory</source>
-        <translation>Elenchi Database</translation>
+        <translation>数据库目录Database Directory</translation>
     </message>
     <message>
         <source>Where your brewtarget .xml files are.</source>
-        <translation>Sove sono i vostri Files Brewtarget.xml .</translation>
+        <translation>你的brewtarget。xml文件Where your brewtarget .xml files are.</translation>
     </message>
     <message>
         <source>Browse</source>
-        <translation>Sfogliare</translation>
+        <translation>浏览</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Default</translation>
+        <translation>默认Default</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Lingua</translation>
+        <translation>语言</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Ceca</translation>
+        <translation>捷克语Czech</translation>
     </message>
     <message>
         <source>Catalan</source>
-        <translation>Catalana</translation>
+        <translation>加泰罗尼亚Catalan</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Tedesca</translation>
+        <translation>德国人德国</translation>
     </message>
     <message>
         <source>English</source>
-        <translation>Inglese</translation>
+        <translation>英语</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Spagnola</translation>
+        <translation>西班牙语</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Francese</translation>
+        <translation>法语</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Italiano</translation>
+        <translation>意大利的Italian</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation>Olandese</translation>
+        <translation>荷兰人Dutch</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Polacca</translation>
+        <translation>波兰语Polish</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portoghese</translation>
+        <translation>葡萄牙Portuguese</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>俄语</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4326,15 +4359,15 @@ p, li { white-space: pre-wrap; }
     <name>pitchDialog</name>
     <message>
         <source>Pitch Rate Calculator</source>
-        <translation>Passo tasso Calcolatrice</translation>
+        <translation>间距率计算器Pitch Rate Calculator</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>输入Input</translation>
     </message>
     <message>
         <source>Wort Volume</source>
-        <translation>Volume Mosto</translation>
+        <translation>麦汁体积Wort Volume</translation>
     </message>
     <message>
         <source>OG</source>
@@ -4342,41 +4375,39 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation>Per ale, 0.75-1. Per lager, 1.5-2.</translation>
+        <translation>适用于0.75-1啤酒，。对于啤酒，1.5-2。For ales, 0.75-1. For lagers, 1.5-2.</translation>
     </message>
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation>Lievito tasso (M)/(mL*P)</translation>
+        <translation>距率(M细胞)/(mL * P)Pitch Rate (M cells)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
-        <translation>Metodo di aerezione</translation>
+        <translation>曝气法Aeration Method</translation>
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation>Data produzione Lievito</translation>
+        <translation>酵母生产日期Yeast Production Date</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
-        <translation>Vitalità lievito</translation>
+        <translation>酵母活力Yeast Viability</translation>
     </message>
     <message>
         <source>None</source>
-        <translatorcomment>Nessuno
-</translatorcomment>
-        <translation>Niente</translation>
+        <translation>无None</translation>
     </message>
     <message>
         <source>O2 At Start</source>
-        <translation>Partenza con o2</translation>
+        <translation>O2在开始O2 At Start</translation>
     </message>
     <message>
         <source>Stir Plate</source>
-        <translation>Piastra mescolatrice</translation>
+        <translation>搅拌板Stir Plate</translation>
     </message>
     <message>
         <source>MM/dd/yyyy</source>
-        <translation>MM/GG/AAAA</translation>
+        <translation>MM / DD /年MM/dd/yyyy</translation>
     </message>
     <message>
         <source>%</source>
@@ -4384,283 +4415,283 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>文本标签TextLabel</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
-        <translation>Calcola Vitalità dalla data</translation>
+        <translation>计算从日期的可行性Calculate Viability From Date</translation>
     </message>
     <message>
         <source># Vials/Smack Packs Pitched</source>
-        <translation># Fiale/Confezioni Inclinate</translation>
+        <translation>啪＃瓶/包投# Vials/Smack Packs Pitched</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>产量Output</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation>Miliardi di cellule di lievito richieste</translation>
+        <translation>酵母细胞所需的数十亿Billions of Yeast Cells Required</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation># Fiale/Confezioni con o senza starter</translation>
+        <translation>#瓶/打包w / o起动器# Vials/Smack Packs w/o Starter</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
-        <translation>Lievito secco</translation>
+        <translation>干酵母Dry Yeast</translation>
     </message>
     <message>
         <source>Starter Volume</source>
-        <translation>Volume di partenza</translation>
+        <translation>起动器体积Starter Volume</translation>
     </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation>Calcolatore di priming</translation>
+        <translation>启动计算器Priming Calculator</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>输入Input</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
-        <translation>Volume di bitrra raccolto</translation>
+        <translation>收集啤酒销量Collected Beer Volume</translation>
     </message>
     <message>
         <source>Amount of beer to prime</source>
-        <translation>Importo di birra a serata</translation>
+        <translation>数量的啤酒主要Amount of beer to prime</translation>
     </message>
     <message>
         <source>Beer Temperature</source>
-        <translation>Tmperatura birra</translation>
+        <translation>啤酒温度Beer Temperature</translation>
     </message>
     <message>
         <source>Temp of the beer</source>
-        <translation>Temp della birra</translation>
+        <translation>气温啤酒Temp of the beer</translation>
     </message>
     <message>
         <source>Desired Volumes</source>
-        <translation>Volumi desiderati</translation>
+        <translation>所需的量Desired Volumes</translation>
     </message>
     <message>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
-        <translation>Quanti volumi di co2 vuoi (1 L CO2 @ STP per L Birra)</translation>
+        <translation>你想要多少体积的CO2（1 L CO2 @ STP每升啤酒）How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</translation>
     </message>
     <message>
         <source>Glucose Monohydrate (corn sugar)</source>
-        <translation>Glucosio monoidrato (zucchero del mais)</translation>
+        <translation>葡萄糖一水合物（玉米糖）Glucose Monohydrate (corn sugar)</translation>
     </message>
     <message>
         <source>Anhydrous Glucose</source>
-        <translation>glucosio anidro</translation>
+        <translation>无水葡萄糖Anhydrous Glucose</translation>
     </message>
     <message>
         <source>Sucrose (table sugar)</source>
-        <translation>Saccarosio (zucchero da tavola)</translation>
+        <translation>蔗糖（蔗糖）Sucrose (table sugar)</translation>
     </message>
     <message>
         <source>Dry Malt Extract</source>
-        <translation>Estratto di malto secco</translation>
+        <translation>干燥的麦芽提取物Dry Malt Extract</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>产量Output</translation>
     </message>
     <message>
         <source>Prime with</source>
-        <translation>Prime con</translation>
+        <translation>主要与Prime with</translation>
     </message>
     <message>
         <source>How much priming ingredient to use</source>
-        <translation>Quanto ingerdiente per il primg usare</translation>
+        <translation>使用多少吸成分How much priming ingredient to use</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcola</translation>
+        <translation>计算Calculate</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasDialog</name>
     <message>
         <source>Recipe Extras</source>
-        <translation>Ricetta Extra</translation>
+        <translation>配方附加Recipe Extras</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Birraio</translation>
+        <translation>布鲁尔Brewer</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation>Assistente Birraio</translation>
+        <translation>助理。布鲁尔Asst. Brewer</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation>Valutazione assaggio</translation>
+        <translation>味道等级Taste Rating</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Età primaria (giorni)</translation>
+        <translation>小学年龄（天）Primary Age (days)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation>Temperatura primaria</translation>
+        <translation>初级温度Primary Temp</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Età secondaria (giorni)</translation>
+        <translation>中学时代（天）Secondary Age (days)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation>Temperatura secondaria</translation>
+        <translation>二次温度Secondary Temp</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Età terziaria (giorni)</translation>
+        <translation>第三纪（天）Tertiary Age (days)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation>Temperatura terziaria</translation>
+        <translation>第三温度Tertiary Temp</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation>Bottiglia/Fusto età (giorni)</translation>
+        <translation>瓶/桶年龄（天）Bottle/Keg Age (days)</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation>Bottiglia/fusto Temperatura</translation>
+        <translation>瓶/桶温度Bottle/Keg Temp</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Data di prima birrificazione</translation>
+        <translation>首先酿造的日期Date First Brewed</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>dd MMM YYYY</translation>
+        <translation type="unfinished">dd MMM yyyy</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Volume carbonazione</translation>
+        <translation>碳化卷Carbonation Volumes</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Note di asssaggi</translation>
+        <translation>味道注意事项Taste Notes</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Birraio</translation>
+        <translation>布鲁尔Brewer</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation>Assistente Birraio</translation>
+        <translation>助理。布鲁尔Asst. Brewer</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation>Valutazione assaggio</translation>
+        <translation>味道等级Taste Rating</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Età primaria (giorni)</translation>
+        <translation>小学年龄（天）Primary Age (days)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation>Temperatura primaria</translation>
+        <translation>初级温度</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Età secondaria (giorni)</translation>
+        <translation>中学时代（天）Secondary Age (days)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation>Temperatura secondaria</translation>
+        <translation>二次温度Secondary Temp</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Età terziaria (giorni)</translation>
+        <translation>第三纪（天）Tertiary Age (days)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation>Temperatura terziaria</translation>
+        <translation>第三温度Tertiary Temp</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation>Bottiglia/Fusto età (giorni)</translation>
+        <translation>瓶/桶年龄（天）Bottle/Keg Age (days)</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation>Bottiglia/fusto Temperatura</translation>
+        <translation>瓶/桶温度Bottle/Keg Temp</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Data di prima birrificazione</translation>
+        <translation>首先酿造的日期Date First Brewed</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>dd MMM YYYY</translation>
+        <translation>dd MMM yyyy</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Volume carbonazione</translation>
+        <translation>碳化卷Carbonation Volumes</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Note di asssaggi</translation>
+        <translation>味道注意事项Taste Notes</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
 </context>
 <context>
     <name>refractoDialog</name>
     <message>
         <source>Refractometer Tools</source>
-        <translation>Tool Rifrattometri</translation>
+        <translation>折射工具</translation>
     </message>
     <message>
         <source>Inputs</source>
-        <translation>Ingressi</translation>
+        <translation>输入</translation>
     </message>
     <message>
         <source>Original Plato</source>
-        <translation>Plato origianale</translation>
+        <translation>原柏拉图Original Plato</translation>
     </message>
     <message>
         <source>OG (20 C)</source>
-        <translation>OG (20 C)</translation>
+        <translation>OG（20°C）</translation>
     </message>
     <message>
         <source>Current Plato</source>
-        <translation>Plato corrente</translation>
+        <translation>当前柏拉图Current Plato</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcola</translation>
+        <translation>计算Calculate</translation>
     </message>
     <message>
         <source>Outputs</source>
-        <translation>Produzione</translation>
+        <translation>输出</translation>
     </message>
     <message>
         <source>SG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>SG（20C）</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -4668,117 +4699,117 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ABW</source>
-        <translation type="unfinished"></translation>
+        <translation>ABW</translation>
     </message>
     <message>
         <source>Refractive Index</source>
-        <translation>Indice di rifrattometro</translation>
+        <translation>折光指数</translation>
     </message>
     <message>
         <source>Real Extract (Plato)</source>
-        <translation>Estratto reale (Plato)</translation>
+        <translation>实时提取物（柏拉图）</translation>
     </message>
     <message>
         <source>OG (20C)</source>
-        <translation>OG (20 C)</translation>
+        <translation>OG (20C)</translation>
     </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
     <message>
         <source>Scale Recipe</source>
-        <translation>Scala ricetta</translation>
+        <translation>规模配方</translation>
     </message>
     <message>
         <source>New batch size</source>
-        <translation>Nuova dimensione lotto</translation>
+        <translation>新批次大小</translation>
     </message>
     <message>
         <source>New efficiency (pct)</source>
-        <translation>Nuova efficenza (pct)</translation>
+        <translation>新效率（PCT）</translation>
     </message>
 </context>
 <context>
     <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
-        <translation>Editor stile</translation>
+        <translation>样式编辑器</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>样式Style</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Cancella stile selezionato</translation>
+        <translation>删除选定的风格</translation>
     </message>
     <message>
         <source>Basic Information</source>
-        <translation>Informazioni di base</translation>
+        <translation>基本信息Basic Information</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Categoria</translation>
+        <translation>类别</translation>
     </message>
     <message>
         <source>Category number</source>
-        <translation>Numero di categoria</translation>
+        <translation>类别号Category number</translation>
     </message>
     <message>
         <source>Style letter</source>
-        <translation>Stile di lettera</translation>
+        <translation>样式Style letter</translation>
     </message>
     <message>
         <source>Style guide</source>
-        <translation>guida allo stile</translation>
+        <translation>风格指南Style guide</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Type of beverage</source>
-        <translation>Tipo di bevanda</translation>
+        <translation>饮料类型Type of beverage</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation>拉格Lager</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation>爱尔Ale</translation>
     </message>
     <message>
         <source>Mead</source>
-        <translation>Mead</translation>
+        <translation>蜂蜜酒Mead</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Wheat</translation>
+        <translation>小麦Wheat</translation>
     </message>
     <message>
         <source>Mixed</source>
-        <translation>Mix</translation>
+        <translation>混合Mixed</translation>
     </message>
     <message>
         <source>Cider</source>
-        <translation>Sidro</translation>
+        <translation>苹果汁Cider</translation>
     </message>
     <message>
         <source>Vital Statistics</source>
-        <translation>Statistiche Vitali</translation>
+        <translation>至关重要的统计Vital Statistics</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation>Max</translation>
+        <translation>最大Max</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation>Min</translation>
+        <translation>分钟Min</translation>
     </message>
     <message>
         <source>OG</source>
@@ -4790,69 +4821,69 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>IBUs</source>
-        <translation type="unfinished"></translation>
+        <translation>IBUs</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation>Colore (SRM)</translation>
+        <translation>颜色（SR​​ M）</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation type="unfinished"></translation>
+        <translation>碳水化合物（卷）Carb (vols)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABV (pct)</translation>
     </message>
     <message>
         <source>Profile</source>
-        <translation>Profilo</translation>
+        <translation>配置文件</translation>
     </message>
     <message>
         <source>Ingredients</source>
-        <translation>Ingredienti</translation>
+        <translation>成分Ingredients</translation>
     </message>
     <message>
         <source>Examples</source>
-        <translation>Esempi</translation>
+        <translation>例子Examples</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>新New</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>节省Save</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
     <name>timerListDialog</name>
     <message>
         <source>Timers</source>
-        <translation>Timers</translation>
+        <translation>定时器Timers</translation>
     </message>
 </context>
 <context>
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation>Impostare il timer al valore specificato</translation>
+        <translation>设置定时器为指定的值Set the timer to the specified value</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Setta</translation>
+        <translation>沒</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
@@ -4860,224 +4891,224 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished"></translation>
+        <translation>启动/停止计时器Start/Stop timer</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Partenza</translation>
+        <translation>开始</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation>Setta il suono per l&apos;allarme</translation>
+        <translation>设置一个声音警报Set a sound as the alarm</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation>Suono</translation>
+        <translation>声音Sound</translation>
     </message>
 </context>
 <context>
     <name>waterEditor</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialogo</translation>
+        <translation>对话Dialog</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>说明Notes</translation>
     </message>
 </context>
 <context>
     <name>yeastDialog</name>
     <message>
         <source>Yeast Database</source>
-        <translation>Database Lievito</translation>
+        <translation>酵母数据库Yeast Database</translation>
     </message>
     <message>
         <source>Add selected yeast to recipe</source>
-        <translation>Aggiungi lievito selezionato alla ricetta</translation>
+        <translation>添加选定的酵母配方Add selected yeast to recipe</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi alla ricetta</translation>
+        <translation>添加到配方Add to Recipe</translation>
     </message>
     <message>
         <source>Create new yeast</source>
-        <translation>Crea nuovo lievito</translation>
+        <translation>创建新的酵母Create new yeast</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>新New</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation>Edit lievito selezionato</translation>
+        <translation>编辑选择的酵母Edit selected yeast</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation>Rimuovi lievito selezionato</translation>
+        <translation>删除选定的酵母Remove selected yeast</translation>
     </message>
 </context>
 <context>
     <name>yeastEditor</name>
     <message>
         <source>Yeast Editor</source>
-        <translation>Editor Lievito</translation>
+        <translation>酵母编辑</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>必填项Required Fields</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>名Name</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>类型Type</translation>
     </message>
     <message>
         <source>Ale</source>
-        <translation>Ale</translation>
+        <translation>爱尔Ale</translation>
     </message>
     <message>
         <source>Lager</source>
-        <translation>Lager</translation>
+        <translation>拉格Lager</translation>
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Wheat</translation>
+        <translation>小麦Wheat</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vino</translation>
+        <translation>酒Wine</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation>香槟Champagne</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>形式Form</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Liquido</translation>
+        <translation>Liquid液体</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Secco</translation>
+        <translation>Dry干</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Inclinazione</translation>
+        <translation>Slant偏</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation>Culture文化</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>量Amount</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Controllare se l&apos;importo indicato è in kg invece di L.</translation>
+        <translation>如果给定的数量是公斤代替L.检查Check it if the amount given is in kg instead of L.</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Importo è il peso?</translation>
+        <translation>金额重量？Amount is weight?</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Controlla se la data quantità è peso invece di volume</translation>
+        <translation>检查，如果给定的量是重量，而不是数量</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation>Laboratorio</translation>
+        <translation>实验室Lab</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>ID Prodotto</translation>
+        <translation>产品IDProduct ID</translation>
     </message>
     <message>
         <source>Min Temp</source>
-        <translation>Temperatura Minima</translation>
+        <translation>最低温度Min Temp</translation>
     </message>
     <message>
         <source>Min temp</source>
-        <translation>Temperatura Minima</translation>
+        <translation>最小温度Min temp</translation>
     </message>
     <message>
         <source>Max Temp</source>
-        <translation>Temperatura Massima</translation>
+        <translation>最高温度Max Temp</translation>
     </message>
     <message>
         <source>Max temp</source>
-        <translation>Temperatura Massima</translation>
+        <translation>最高温度Max temp</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation>Flocculazione</translation>
+        <translation>絮凝Flocculation</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Basso</translation>
+        <translation>低</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Medio</translation>
+        <translation>Medium中</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Alto</translation>
+        <translation>High高</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Molto alto</translation>
+        <translation>Very High非常高</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Attenuazione (%)</translation>
+        <translation>衰减（%）Attenuation (%)</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Attenuazione apparente come percentuale di punti OG</translation>
+        <translation>明显的衰减为OG点的百分比Apparent attenuation as percentage of OG points</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Riattivato</translation>
+        <translation>时间再培养Times Recultured</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Illievito è stato riattivato</translation>
+        <translation>这种酵母已培养Times this yeast has been recultured</translation>
     </message>
     <message>
         <source>Max Recultures</source>
-        <translation>Massima riattivazione</translation>
+        <translation>最大Recultures的Max Recultures</translation>
     </message>
     <message>
         <source>Max recultures</source>
-        <translation>Massima riattivazione</translation>
+        <translation>Max reculturesMax recultures</translation>
     </message>
     <message>
         <source>Add to Secondary</source>
-        <translation>Aggiungi al secondario</translation>
+        <translation>加入二次Add to Secondary</translation>
     </message>
     <message>
         <source>Checked means add this yeast to secondary instead of primary</source>
-        <translation>Controlla di aggiungere questo lievito secondario invece di primario</translation>
+        <translation>检查手段添加酵母二次代替原Checked means add this yeast to secondary instead of primary</translation>
     </message>
     <message>
         <source>Best For:</source>
-        <translation>Migliore per:</translation>
+        <translation>最好的：Best For:</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>附注：Notes:</translation>
     </message>
 </context>
 </TS>

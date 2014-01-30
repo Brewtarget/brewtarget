@@ -454,11 +454,11 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>Введенный Вами объем заторника равен 0. Это может создать проблемы</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>Введенный Вами размер партии равен 0. Это может создать проблемы</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
@@ -466,7 +466,7 @@
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>Введенный Вами процент использования хмеля равен 0. Это может создать проблемы</translation>
     </message>
 </context>
 <context>
@@ -697,10 +697,6 @@
         <translation>Запрос оборудования</translation>
     </message>
     <message>
-        <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
-        <translation>Желаете приравнять размер затора и кипячения к размеру запрошенного оборудования?</translation>
-    </message>
-    <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Желаете приравнять размер затора, размер кипячения и время к размеру запрошеного оборудования?</translation>
     </message>
@@ -874,7 +870,7 @@
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
+        <translation>SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>Style</source>
@@ -886,10 +882,14 @@
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
-        <translation type="unfinished"></translation>
+        <translation>База данных была преобразована/обновлена.</translation>
     </message>
     <message>
         <source>The original XML files can be found in </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2233,10 +2233,6 @@ The final volume in the primary is %1.</source>
         <translation>О программе Brewtarget</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Пожертвовать</translation>
-    </message>
-    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2282,6 +2278,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donate</source>
+        <translation>Пожертвовать</translation>
     </message>
 </context>
 <context>
@@ -2346,14 +2346,6 @@ p, li { white-space: pre-wrap; }
         <translation>Инструкции</translation>
     </message>
     <message>
-        <source>Remove currently selected step</source>
-        <translation>Удалить выбранный этап</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Удалить</translation>
-    </message>
-    <message>
         <source>Move currently selected step up</source>
         <translation>Переместить выбранный этап вверх</translation>
     </message>
@@ -2368,6 +2360,14 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Down</source>
         <translation>Вниз</translation>
+    </message>
+    <message>
+        <source>Remove currently selected step</source>
+        <translation>Удалить выбранный этап</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Удалить</translation>
     </message>
     <message>
         <source>Insert step</source>
@@ -2594,6 +2594,10 @@ p, li { white-space: pre-wrap; }
         <translation>Удалить оборудование</translation>
     </message>
     <message>
+        <source>Set as Default</source>
+        <translation>По умолчанию</translation>
+    </message>
+    <message>
         <source>Required Fields</source>
         <translation>Обязательные поля</translation>
     </message>
@@ -2620,34 +2624,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Batch size</source>
         <translation>Размер затора</translation>
-    </message>
-    <message>
-        <source>Boiling Point of Water</source>
-        <translation>Точка кипения воды</translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation>Заторник</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Объём</translation>
-    </message>
-    <message>
-        <source>Volume of mash tun</source>
-        <translation>Объём заторника</translation>
-    </message>
-    <message>
-        <source>Mass</source>
-        <translation>Масса</translation>
-    </message>
-    <message>
-        <source>Mass or weight of mash tun</source>
-        <translation>Масса или вес заторника</translation>
-    </message>
-    <message>
-        <source>Specific heat (cal/(g*K))</source>
-        <translation>Удельная теплоёмкость (кал/(г*K))</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
@@ -2690,6 +2666,38 @@ p, li { white-space: pre-wrap; }
         <translation>Впитываемость по умолчанию</translation>
     </message>
     <message>
+        <source>Boiling Point of Water</source>
+        <translation>Точка кипения воды</translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation>Утилизация хмеля </translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation>Заторник</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation>Объём</translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation>Объём заторника</translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation>Масса</translation>
+    </message>
+    <message>
+        <source>Mass or weight of mash tun</source>
+        <translation>Масса или вес заторника</translation>
+    </message>
+    <message>
+        <source>Specific heat (cal/(g*K))</source>
+        <translation>Удельная теплоёмкость (кал/(г*K))</translation>
+    </message>
+    <message>
         <source>Losses</source>
         <translation>Потери</translation>
     </message>
@@ -2724,14 +2732,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Cancel</source>
         <translation>Отменить</translation>
-    </message>
-    <message>
-        <source>Set as Default</source>
-        <translation>По умолчанию</translation>
-    </message>
-    <message>
-        <source>Hop Utilization </source>
-        <translation>Утилизация хмеля </translation>
     </message>
 </context>
 <context>
@@ -2974,14 +2974,6 @@ p, li { white-space: pre-wrap; }
         <translation>Использование</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Кипячение</translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation>Сухое охмеление</translation>
-    </message>
-    <message>
         <source>Mash</source>
         <translation>Затор</translation>
     </message>
@@ -2990,8 +2982,16 @@ p, li { white-space: pre-wrap; }
         <translation>Первое сусло</translation>
     </message>
     <message>
+        <source>Boil</source>
+        <translation>Кипячение</translation>
+    </message>
+    <message>
         <source>Aroma</source>
         <translation>Аромат</translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation>Сухое охмеление</translation>
     </message>
     <message>
         <source>Time</source>
@@ -3014,16 +3014,16 @@ p, li { white-space: pre-wrap; }
         <translation>Форма</translation>
     </message>
     <message>
+        <source>Leaf</source>
+        <translation>Шишковой</translation>
+    </message>
+    <message>
         <source>Pellet</source>
         <translation>Гранулы</translation>
     </message>
     <message>
         <source>Plug</source>
         <translation>Пробка</translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation>Шишковой</translation>
     </message>
     <message>
         <source>Beta (%)</source>
@@ -3127,6 +3127,30 @@ p, li { white-space: pre-wrap; }
         <translation>Рецепты</translation>
     </message>
     <message>
+        <source>Styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation>Сбраживаемое</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation>Хмель</translation>
+    </message>
+    <message>
+        <source>Miscs</source>
+        <translation>Прочее</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation>Дрожжи</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation>Рецепт</translation>
+    </message>
+    <message>
         <source>Name</source>
         <translation>Название</translation>
     </message>
@@ -3135,52 +3159,60 @@ p, li { white-space: pre-wrap; }
         <translation>Название рецепта</translation>
     </message>
     <message>
-        <source>Style</source>
-        <translation>Сорт</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Оборудование</translation>
-    </message>
-    <message>
-        <source>Target Batch Size</source>
-        <translation>Планируемый объем готовой партии</translation>
-    </message>
-    <message>
-        <source>Target batch size</source>
-        <translation>Планируемый объем готовой партии</translation>
-    </message>
-    <message>
-        <source>Calculated Batch Size</source>
-        <translation>Рассчитанный объем готовой партии</translation>
-    </message>
-    <message>
         <source>5 gal</source>
         <translation>18.9л</translation>
-    </message>
-    <message>
-        <source>Target Boil Size</source>
-        <translation>Планируемый объем варки</translation>
     </message>
     <message>
         <source>Target boil size</source>
         <translation>Планируемый объем варки</translation>
     </message>
     <message>
+        <source>Efficiency (%)</source>
+        <translation>Эффективность (%)</translation>
+    </message>
+    <message>
         <source>Calculated Boil Size</source>
         <translation>Рассчитаный объем варки</translation>
     </message>
     <message>
-        <source>Efficiency (%)</source>
-        <translation>Эффективность (%)</translation>
+        <source>Calculated Batch Size</source>
+        <translation>Рассчитанный объем готовой партии</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
         <translation>Ожидаемая эффективность</translation>
     </message>
     <message>
+        <source>Style</source>
+        <translation>Сорт</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation>Время кипячения</translation>
+    </message>
+    <message>
+        <source>Target batch size</source>
+        <translation>Планируемый объем готовой партии</translation>
+    </message>
+    <message>
+        <source>Target Batch Size</source>
+        <translation>Планируемый объем готовой партии</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation>Оборудование</translation>
+    </message>
+    <message>
+        <source>Target Boil Size</source>
+        <translation>Планируемый объем варки</translation>
+    </message>
+    <message>
         <source>OG</source>
         <translation>Начальная плотность (OG)</translation>
+    </message>
+    <message>
+        <source>Boil SG</source>
+        <translation>Плотность при кипячении</translation>
     </message>
     <message>
         <source>FG</source>
@@ -3195,16 +3227,8 @@ p, li { white-space: pre-wrap; }
         <translation>Горечь (IBU)</translation>
     </message>
     <message>
-        <source>Recipe</source>
-        <translation>Рецепт</translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Цвет</translation>
-    </message>
-    <message>
-        <source>Boil SG</source>
-        <translation>Плотность при кипячении</translation>
     </message>
     <message>
         <source>IBU/GU</source>
@@ -3223,10 +3247,6 @@ p, li { white-space: pre-wrap; }
         <translation>День варки</translation>
     </message>
     <message>
-        <source>Fermentables</source>
-        <translation>Сбраживаемое</translation>
-    </message>
-    <message>
         <source>Add a fermentable</source>
         <translation>Добавить компонент</translation>
     </message>
@@ -3237,10 +3257,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Edit selected fermentable</source>
         <translation>Редактировать выбранный ингридиент</translation>
-    </message>
-    <message>
-        <source>Hops</source>
-        <translation>Хмель</translation>
     </message>
     <message>
         <source>Add hop</source>
@@ -3343,24 +3359,8 @@ p, li { white-space: pre-wrap; }
         <translation>Сохранить затирание</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation>Пожертвовать</translation>
-    </message>
-    <message>
         <source>&amp;About</source>
         <translation>&amp;Справка</translation>
-    </message>
-    <message>
-        <source>Miscs</source>
-        <translation>Прочее</translation>
-    </message>
-    <message>
-        <source>Yeasts</source>
-        <translation>Дрожжи</translation>
-    </message>
-    <message>
-        <source>Boil Time</source>
-        <translation>Время кипячения</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -3385,6 +3385,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>&amp;Tools</source>
         <translation>&amp;Инструменты</translation>
+    </message>
+    <message>
+        <source>toolBar</source>
+        <translation>Панель инструментов</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
@@ -3483,6 +3487,14 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Преобразование единиц</translation>
     </message>
     <message>
+        <source>Backup Database</source>
+        <translation>Резервная копия базы данных</translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation>Восстановление Базы</translation>
+    </message>
+    <message>
         <source>&amp;Copy Recipe</source>
         <translation>&amp;Копировать рецепт</translation>
     </message>
@@ -3571,20 +3583,8 @@ p, li { white-space: pre-wrap; }
         <translation>Удалить рецепт</translation>
     </message>
     <message>
-        <source>toolBar</source>
-        <translation>Панель инструментов</translation>
-    </message>
-    <message>
-        <source>Backup Database</source>
-        <translation>Резервная копия базы данных</translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation>Восстановление Базы</translation>
-    </message>
-    <message>
-        <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <source>Donate</source>
+        <translation>Пожертвовать</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
@@ -3993,7 +3993,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished">Начальная температура затора</translation>
+        <translation>Начальная температура в заторнике</translation>
     </message>
     <message>
         <source>From Equipment</source>
@@ -4013,11 +4013,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished">Добавить этап затирания</translation>
+        <translation>Добавить этап сусловарения</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">Удалить выбранный этап затирания</translation>
+        <translation>Удалить выбранный этап сусловарения</translation>
     </message>
     <message>
         <source>Mash step up</source>
@@ -4025,7 +4025,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished">Этап затирания ниже</translation>
+        <translation>Предыдущий этап сусловарения</translation>
     </message>
 </context>
 <context>
@@ -4142,10 +4142,6 @@ p, li { white-space: pre-wrap; }
         <translation>Единицы измерения Великобритании</translation>
     </message>
     <message>
-        <source>Volume</source>
-        <translation>Объём</translation>
-    </message>
-    <message>
         <source>Temperature</source>
         <translation>Температура</translation>
     </message>
@@ -4156,6 +4152,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Fahrenheit</source>
         <translation>Шкала Фаренгейта</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation>Объём</translation>
     </message>
     <message>
         <source>Gravity</source>
@@ -4210,6 +4210,22 @@ p, li { white-space: pre-wrap; }
         <translation>Аппроксимация Рэйджера</translation>
     </message>
     <message>
+        <source>IBU Adjustments</source>
+        <translation>Корректировки горечи по IBU</translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished">Первое сусло</translation>
+    </message>
+    <message>
         <source>Directories</source>
         <translation>Каталоги</translation>
     </message>
@@ -4238,6 +4254,10 @@ p, li { white-space: pre-wrap; }
         <translation>Чешский</translation>
     </message>
     <message>
+        <source>Catalan</source>
+        <translation>Каталанский</translation>
+    </message>
+    <message>
         <source>German</source>
         <translation>Немецкий</translation>
     </message>
@@ -4250,24 +4270,28 @@ p, li { white-space: pre-wrap; }
         <translation>Испанский</translation>
     </message>
     <message>
-        <source>Dutch</source>
-        <translation>Нидерландский</translation>
+        <source>French</source>
+        <translation>Французский</translation>
     </message>
     <message>
-        <source>Catalan</source>
-        <translation>Каталанский</translation>
+        <source>Italian</source>
+        <translation>Итальянский</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation>Нидерландский</translation>
     </message>
     <message>
         <source>Polish</source>
         <translation>Польский</translation>
     </message>
     <message>
-        <source>French</source>
-        <translation>Французский</translation>
-    </message>
-    <message>
         <source>Portuguese</source>
         <translation>Португальский</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4284,30 +4308,6 @@ p, li { white-space: pre-wrap; }
    &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
    пришлите перевод&lt;/a&gt;, чтобы ваши друзья могли пользоваться brewtarget!
 &lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation>Итальянский</translation>
-    </message>
-    <message>
-        <source>IBU Adjustments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% IBU adjustment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Hop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished">Первое сусло</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4331,6 +4331,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
         <translation>Для элей 0.75-1. Для лагеров 1.5-2.</translation>
+    </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
+        <translation>Норма засева (млн.клеток/мл*П)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
@@ -4377,12 +4381,16 @@ p, li { white-space: pre-wrap; }
         <translation># Использовано пакетиков дрожжей</translation>
     </message>
     <message>
-        <source># Vials/Smack Packs w/o Starter</source>
-        <translation># Пакетиков дрожжей без стартера</translation>
-    </message>
-    <message>
         <source>Output</source>
         <translation>Результат</translation>
+    </message>
+    <message>
+        <source>Billions of Yeast Cells Required</source>
+        <translation>Требуется дрожжевых клеток (млрд.)</translation>
+    </message>
+    <message>
+        <source># Vials/Smack Packs w/o Starter</source>
+        <translation># Пакетиков дрожжей без стартера</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
@@ -4391,14 +4399,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Starter Volume</source>
         <translation>Объем стартера</translation>
-    </message>
-    <message>
-        <source>Billions of Yeast Cells Required</source>
-        <translation>Требуется дрожжевых клеток (млрд.)</translation>
-    </message>
-    <message>
-        <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation>Норма засева (млн.клеток/мл*П)</translation>
     </message>
 </context>
 <context>
@@ -4676,12 +4676,12 @@ p, li { white-space: pre-wrap; }
         <translation>Масштабирование рецепта</translation>
     </message>
     <message>
-        <source>New efficiency (pct)</source>
-        <translation>Новая эффективность (%)</translation>
-    </message>
-    <message>
         <source>New batch size</source>
         <translation>Новый объем варки</translation>
+    </message>
+    <message>
+        <source>New efficiency (pct)</source>
+        <translation>Новая эффективность (%)</translation>
     </message>
 </context>
 <context>
@@ -4833,14 +4833,6 @@ p, li { white-space: pre-wrap; }
         <translation>Форма</translation>
     </message>
     <message>
-        <source>Start/Stop timer</source>
-        <translation>Запустить или остановить таймер</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>Пуск</translation>
-    </message>
-    <message>
         <source>Set the timer to the specified value</source>
         <translation>Установить значение таймера</translation>
     </message>
@@ -4849,16 +4841,24 @@ p, li { white-space: pre-wrap; }
         <translation>Установить</translation>
     </message>
     <message>
+        <source>HH:MM:SS</source>
+        <translation>ЧЧ:ММ:СС</translation>
+    </message>
+    <message>
+        <source>Start/Stop timer</source>
+        <translation>Запустить или остановить таймер</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Пуск</translation>
+    </message>
+    <message>
         <source>Set a sound as the alarm</source>
         <translation>Выбрать звуковой сигнал</translation>
     </message>
     <message>
         <source>Sound</source>
         <translation>Звук</translation>
-    </message>
-    <message>
-        <source>HH:MM:SS</source>
-        <translation>ЧЧ:ММ:СС</translation>
     </message>
 </context>
 <context>

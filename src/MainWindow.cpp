@@ -75,7 +75,6 @@
 #include "MiscDialog.h"
 #include "StyleEditor.h"
 #include "OptionDialog.h"
-#include "HtmlViewer.h"
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
 #include "TimerListDialog.h"
@@ -102,6 +101,9 @@
 #include "StyleSortFilterProxyModel.h"
 #include "NamedMashEditor.h"
 #include "BtDatePopup.h"
+#if defined(Q_OS_WIN)
+   #include <windows.h>
+#endif
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -166,7 +168,6 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
    optionDialog = new OptionDialog(this);
-   htmlViewer = new HtmlViewer(this);
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter(this);
    ogAdjuster = new OgAdjuster(this);
@@ -274,9 +275,6 @@ MainWindow::MainWindow(QWidget* parent)
    maltWidget = new MaltinessWidget(tabWidget_recipeView);
    verticalLayout_beerColor->insertWidget( 1, maltWidget );
 
-   // Set up HtmlViewer to view documentation.
-   htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
-
    // Do some magic on the splitter widget to keep the tree from expanding
    splitter_2->setStretchFactor(0,0);
    splitter_2->setStretchFactor(1,1);
@@ -331,7 +329,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );
    connect( actionYeasts, SIGNAL( triggered() ), yeastDialog, SLOT( show() ) );
    connect( actionOptions, SIGNAL( triggered() ), optionDialog, SLOT( show() ) );
-   connect( actionManual, SIGNAL( triggered() ), htmlViewer, SLOT( show() ) );
+   connect( actionManual, SIGNAL( triggered() ), this, SLOT( openManual() ) );
    connect( actionScale_Recipe, SIGNAL( triggered() ), recipeScaler, SLOT( show() ) );
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
    connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
@@ -1493,14 +1491,14 @@ void MainWindow::restoreFromBackup()
       return;
    }
    
-	QString restoreDbFile = QFileDialog::getOpenFileName(this, tr("Choose File"), "", tr("SQLite (*.sqlite)"));
-	bool success = Database::restoreFromFile(restoreDbFile);
+   QString restoreDbFile = QFileDialog::getOpenFileName(this, tr("Choose File"), "", tr("SQLite (*.sqlite)"));
+   bool success = Database::restoreFromFile(restoreDbFile);
    
    if( ! success )
       QMessageBox::warning( this, tr("Oops!"), tr("For some reason, the operation failed.") );
    else
       QMessageBox::information(this, tr("Restart"), tr("Please restart Brewtarget."));
-	 //TODO: do this without requiring restarting :)
+   //TODO: do this without requiring restarting :)
 }
 
 // Imports all the recipes from a file into the database.
@@ -1750,6 +1748,12 @@ void MainWindow::saveMash()
 void MainWindow::openDonateLink()
 {
    QDesktopServices::openUrl(QUrl("http://sourceforge.net/project/project_donations.php?group_id=249733"));
+}
+
+void MainWindow::openManual()
+{
+   QUrl url(Brewtarget::getDataDir()+"brewtarget-manual.html");
+   QDesktopServices::openUrl(url);
 }
 
 // One print function to rule them all. Now we just need to make the menuing

@@ -697,10 +697,6 @@
         <translation>Benötigte Gerätschaft</translation>
     </message>
     <message>
-        <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation>Möchten sie die Chargengröße und das Kochvolumen an die ausgewählte Gerätschaft anpassen?</translation>
     </message>
@@ -846,7 +842,7 @@
     </message>
     <message>
         <source>Restart</source>
-        <translation>Neu starten</translation>
+        <translation>Neustart</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
@@ -891,6 +887,10 @@
     <message>
         <source>The original XML files can be found in </source>
         <translation>Die ursprünglichen XML-Dateien befinden sich in </translation>
+    </message>
+    <message>
+        <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2229,10 +2229,6 @@ The final volume in the primary is %1.</source>
         <translation>Über Brewtarget</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2277,6 +2273,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donate</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2342,14 +2342,6 @@ p, li { white-space: pre-wrap; }
         <translation>Instruktionen</translation>
     </message>
     <message>
-        <source>Remove currently selected step</source>
-        <translation>Den derzeitig gewählten Schritt entfernen</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Entfernen</translation>
-    </message>
-    <message>
         <source>Move currently selected step up</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2364,6 +2356,14 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Down</source>
         <translation>Runter</translation>
+    </message>
+    <message>
+        <source>Remove currently selected step</source>
+        <translation>Den derzeitig gewählten Schritt entfernen</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <source>Insert step</source>
@@ -2590,6 +2590,10 @@ p, li { white-space: pre-wrap; }
         <translation>Ausstattung entfernen</translation>
     </message>
     <message>
+        <source>Set as Default</source>
+        <translation>Als Standard setzen</translation>
+    </message>
+    <message>
         <source>Required Fields</source>
         <translation type="unfinished">Pflichtfelder</translation>
     </message>
@@ -2616,34 +2620,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Batch size</source>
         <translation>Chargengröße</translation>
-    </message>
-    <message>
-        <source>Boiling Point of Water</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Tun</source>
-        <translation>Maischbottich</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation>Volumen</translation>
-    </message>
-    <message>
-        <source>Volume of mash tun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mass</source>
-        <translation>Masse</translation>
-    </message>
-    <message>
-        <source>Mass or weight of mash tun</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Specific heat (cal/(g*K))</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
@@ -2686,6 +2662,38 @@ p, li { white-space: pre-wrap; }
         <translation>Standardabsorption</translation>
     </message>
     <message>
+        <source>Boiling Point of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hop Utilization </source>
+        <translation>Hopfenausnutzung </translation>
+    </message>
+    <message>
+        <source>Mash Tun</source>
+        <translation>Maischbottich</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation>Volumen</translation>
+    </message>
+    <message>
+        <source>Volume of mash tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mass</source>
+        <translation>Masse</translation>
+    </message>
+    <message>
+        <source>Mass or weight of mash tun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Specific heat (cal/(g*K))</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Losses</source>
         <translation>Verluste</translation>
     </message>
@@ -2720,14 +2728,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Cancel</source>
         <translation>Abbruch</translation>
-    </message>
-    <message>
-        <source>Set as Default</source>
-        <translation>Als Standard setzen</translation>
-    </message>
-    <message>
-        <source>Hop Utilization </source>
-        <translation>Hopfenausnutzung </translation>
     </message>
 </context>
 <context>
@@ -2970,14 +2970,6 @@ p, li { white-space: pre-wrap; }
         <translation>Verwende</translation>
     </message>
     <message>
-        <source>Boil</source>
-        <translation>Kochen</translation>
-    </message>
-    <message>
-        <source>Dry Hop</source>
-        <translation>getrockneter Hopfen</translation>
-    </message>
-    <message>
         <source>Mash</source>
         <translation>Maische</translation>
     </message>
@@ -2986,8 +2978,16 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Erste Würze</translation>
     </message>
     <message>
+        <source>Boil</source>
+        <translation>Kochen</translation>
+    </message>
+    <message>
         <source>Aroma</source>
         <translation>Aroma</translation>
+    </message>
+    <message>
+        <source>Dry Hop</source>
+        <translation>getrockneter Hopfen</translation>
     </message>
     <message>
         <source>Time</source>
@@ -3010,16 +3010,16 @@ p, li { white-space: pre-wrap; }
         <translation>Formular</translation>
     </message>
     <message>
+        <source>Leaf</source>
+        <translation>Blatt</translation>
+    </message>
+    <message>
         <source>Pellet</source>
         <translation>Pellet</translation>
     </message>
     <message>
         <source>Plug</source>
         <translation>Niederdruckpellet</translation>
-    </message>
-    <message>
-        <source>Leaf</source>
-        <translation>Blatt</translation>
     </message>
     <message>
         <source>Beta (%)</source>
@@ -3123,6 +3123,30 @@ p, li { white-space: pre-wrap; }
         <translation>Rezepte</translation>
     </message>
     <message>
+        <source>Styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fermentables</source>
+        <translation>Gärgüter</translation>
+    </message>
+    <message>
+        <source>Hops</source>
+        <translation>Hopfen</translation>
+    </message>
+    <message>
+        <source>Miscs</source>
+        <translation>Sonstiges</translation>
+    </message>
+    <message>
+        <source>Yeasts</source>
+        <translation>Hefen</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation>Rezept</translation>
+    </message>
+    <message>
         <source>Name</source>
         <translation>Name</translation>
     </message>
@@ -3131,39 +3155,11 @@ p, li { white-space: pre-wrap; }
         <translation>Name des Rezepts</translation>
     </message>
     <message>
-        <source>Style</source>
-        <translation>Art</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Aussattung</translation>
-    </message>
-    <message>
-        <source>Target Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Target batch size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculated Batch Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>5 gal</source>
         <translation>5 Gallonen</translation>
     </message>
     <message>
-        <source>Target Boil Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Target boil size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Calculated Boil Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3171,12 +3167,48 @@ p, li { white-space: pre-wrap; }
         <translation>Effizienz (%)</translation>
     </message>
     <message>
+        <source>Calculated Boil Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculated Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The extraction efficiency you expect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Art</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation>Kochzeit</translation>
+    </message>
+    <message>
+        <source>Target batch size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Batch Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation>Aussattung</translation>
+    </message>
+    <message>
+        <source>Target Boil Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OG</source>
         <translation>OG</translation>
+    </message>
+    <message>
+        <source>Boil SG</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>FG</source>
@@ -3191,16 +3223,8 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Recipe</source>
-        <translation>Rezept</translation>
-    </message>
-    <message>
         <source>Color</source>
         <translation>Farbe</translation>
-    </message>
-    <message>
-        <source>Boil SG</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>IBU/GU</source>
@@ -3219,10 +3243,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fermentables</source>
-        <translation>Gärgüter</translation>
-    </message>
-    <message>
         <source>Add a fermentable</source>
         <translation>Ein Gärgut zugeben</translation>
     </message>
@@ -3233,10 +3253,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Edit selected fermentable</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hops</source>
-        <translation>Hopfen</translation>
     </message>
     <message>
         <source>Add hop</source>
@@ -3339,24 +3355,8 @@ p, li { white-space: pre-wrap; }
         <translation>Maische speichern</translation>
     </message>
     <message>
-        <source>Donate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;About</source>
         <translation>&amp;Über</translation>
-    </message>
-    <message>
-        <source>Miscs</source>
-        <translation>Sonstiges</translation>
-    </message>
-    <message>
-        <source>Yeasts</source>
-        <translation>Hefen</translation>
-    </message>
-    <message>
-        <source>Boil Time</source>
-        <translation>Kochzeit</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -3381,6 +3381,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>&amp;Tools</source>
         <translation>&amp;Werkzeuge</translation>
+    </message>
+    <message>
+        <source>toolBar</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
@@ -3479,6 +3483,14 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Backup Database</source>
+        <translation>Backup Datenbank</translation>
+    </message>
+    <message>
+        <source>Restore Database</source>
+        <translation>Datenbank wiederherstellen</translation>
+    </message>
+    <message>
         <source>&amp;Copy Recipe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3567,19 +3579,7 @@ p, li { white-space: pre-wrap; }
         <translation>Rezept löschen</translation>
     </message>
     <message>
-        <source>toolBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Backup Database</source>
-        <translation>Backup Datenbank</translation>
-    </message>
-    <message>
-        <source>Restore Database</source>
-        <translation>Datenbank wiederherstellen</translation>
-    </message>
-    <message>
-        <source>Styles</source>
+        <source>Donate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4138,10 +4138,6 @@ p, li { white-space: pre-wrap; }
         <translation>Verwende das Britisches System der Maße und Gewichte</translation>
     </message>
     <message>
-        <source>Volume</source>
-        <translation>Volumen</translation>
-    </message>
-    <message>
         <source>Temperature</source>
         <translation>Temperatur</translation>
     </message>
@@ -4152,6 +4148,10 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Fahrenheit</source>
         <translation>Fahrenheit</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <translation>Volumen</translation>
     </message>
     <message>
         <source>Gravity</source>
@@ -4206,6 +4206,22 @@ p, li { white-space: pre-wrap; }
         <translation>Rager&apos;s Annäherung</translation>
     </message>
     <message>
+        <source>IBU Adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% IBU adjustment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Hop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First Wort</source>
+        <translation type="unfinished">Erste Würze</translation>
+    </message>
+    <message>
         <source>Directories</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4234,6 +4250,10 @@ p, li { white-space: pre-wrap; }
         <translation>Tschechisch</translation>
     </message>
     <message>
+        <source>Catalan</source>
+        <translation>Katalanisch</translation>
+    </message>
+    <message>
         <source>German</source>
         <translation>Deutsch</translation>
     </message>
@@ -4246,24 +4266,28 @@ p, li { white-space: pre-wrap; }
         <translation>Spanisch</translation>
     </message>
     <message>
-        <source>Dutch</source>
-        <translation>Niederländisch</translation>
+        <source>French</source>
+        <translation>Französisch</translation>
     </message>
     <message>
-        <source>Catalan</source>
-        <translation>Katalanisch</translation>
+        <source>Italian</source>
+        <translation>Italienisch</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation>Niederländisch</translation>
     </message>
     <message>
         <source>Polish</source>
         <translation>Polnisch</translation>
     </message>
     <message>
-        <source>French</source>
-        <translation>Französisch</translation>
-    </message>
-    <message>
         <source>Portuguese</source>
         <translation>Portugisisch</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4273,30 +4297,6 @@ p, li { white-space: pre-wrap; }
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation>Italienisch</translation>
-    </message>
-    <message>
-        <source>IBU Adjustments</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>% IBU adjustment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mash Hop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>First Wort</source>
-        <translation type="unfinished">Erste Würze</translation>
-    </message>
-    <message>
-        <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4320,6 +4320,10 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pitch Rate (M cells)/(mL*P)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4367,12 +4371,16 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source># Vials/Smack Packs w/o Starter</source>
+        <source>Output</source>
+        <translation>Ausgabe</translation>
+    </message>
+    <message>
+        <source>Billions of Yeast Cells Required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Output</source>
-        <translation>Ausgabe</translation>
+        <source># Vials/Smack Packs w/o Starter</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Dry Yeast</source>
@@ -4381,14 +4389,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Starter Volume</source>
         <translation>Startervolumen</translation>
-    </message>
-    <message>
-        <source>Billions of Yeast Cells Required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4666,11 +4666,11 @@ p, li { white-space: pre-wrap; }
         <translation>Rezept skalieren</translation>
     </message>
     <message>
-        <source>New efficiency (pct)</source>
+        <source>New batch size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New batch size</source>
+        <source>New efficiency (pct)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4823,14 +4823,6 @@ p, li { white-space: pre-wrap; }
         <translation>Formular</translation>
     </message>
     <message>
-        <source>Start/Stop timer</source>
-        <translation>Starte/Stoppe die Eieruhr</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>Start</translation>
-    </message>
-    <message>
         <source>Set the timer to the specified value</source>
         <translation>Die Eieruhr auf den gesetzten Wert einstellen</translation>
     </message>
@@ -4839,16 +4831,24 @@ p, li { white-space: pre-wrap; }
         <translation>Einstellen</translation>
     </message>
     <message>
+        <source>HH:MM:SS</source>
+        <translation>HH:MM:SS</translation>
+    </message>
+    <message>
+        <source>Start/Stop timer</source>
+        <translation>Starte/Stoppe die Eieruhr</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Start</translation>
+    </message>
+    <message>
         <source>Set a sound as the alarm</source>
         <translation>Einen Alarmton einstellen</translation>
     </message>
     <message>
         <source>Sound</source>
         <translation>Geräusch</translation>
-    </message>
-    <message>
-        <source>HH:MM:SS</source>
-        <translation>HH:MM:SS</translation>
     </message>
 </context>
 <context>

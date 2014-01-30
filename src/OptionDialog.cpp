@@ -35,14 +35,13 @@
 
 OptionDialog::OptionDialog(QWidget* parent)
 {
+   int i;
    setupUi(this);
 
    if( parent != 0 )
    {
       setWindowIcon(parent->windowIcon());
    }
-
-   languageGroup = new QButtonGroup(this);
    colorGroup = new QButtonGroup(this);
    ibuGroup = new QButtonGroup(this);
    weightGroup = new QButtonGroup(this);
@@ -51,21 +50,46 @@ OptionDialog::OptionDialog(QWidget* parent)
    gravGroup = new QButtonGroup(this);
    colorUnitGroup = new QButtonGroup(this);
 
-   // Set up language map.
-   languageToButtonMap["ca"] = pushButton_ca;
-   languageToButtonMap["cs"] = pushButton_cs;
-   languageToButtonMap["de"] = pushButton_de;
-   languageToButtonMap["en"] = pushButton_en;
-   languageToButtonMap["es"] = pushButton_es;
-   languageToButtonMap["fr"] = pushButton_fr;
-   languageToButtonMap["it"] = pushButton_it;
-   languageToButtonMap["nl"] = pushButton_nl;
-   languageToButtonMap["pl"] = pushButton_pl;
-   languageToButtonMap["pt"] = pushButton_pt;
-   languageToButtonMap["ru"] = pushButton_ru;
-
+   ndxToLangCode <<
+      "ca" <<
+      "cs" <<
+      "de" <<
+      "en" <<
+      "el" <<
+      "es" <<
+      "fr" <<
+      "it" <<
+      "nl" <<
+      "pl" <<
+      "pt" <<
+      "ru" <<
+      "zh";
+   
+   // Do this just to have model indices to set icons.
+   comboBox_lang->addItems(ndxToLangCode);
+   // MUST correspond to ndxToLangCode.
+   langIcons <<
+      QIcon(":images/flagCatalonia.svg") <<
+      QIcon(":images/flagCzech.svg") <<
+      QIcon(":images/flagGermany.svg") <<
+      QIcon(":images/flagUK.svg") <<
+      QIcon(":images/flagGreece.svg") <<
+      QIcon(":images/flagSpain.svg") <<
+      QIcon(":images/flagFrance.svg") <<
+      QIcon(":images/flagItaly.svg") <<
+      QIcon(":images/flagNetherlands.svg") <<
+      QIcon(":images/flagPoland.svg") <<
+      QIcon(":images/flagPortugal.svg") <<
+      QIcon(":images/flagRussia.svg") <<
+      QIcon(":images/flagChina.svg");
+   // Set icons.
+   for( i = 0; i < langIcons.size(); ++i )
+      comboBox_lang->setItemIcon(i, langIcons[i]);
+   
+   // Call this here to set up translatable strings.
+   retranslate();
+   
    // Want you to only be able to select exactly one in each group.
-   languageGroup->setExclusive(true);
    colorGroup->setExclusive(true);
    ibuGroup->setExclusive(true);
    weightGroup->setExclusive(true);
@@ -73,19 +97,6 @@ OptionDialog::OptionDialog(QWidget* parent)
    tempGroup->setExclusive(true);
    gravGroup->setExclusive(true);
    colorUnitGroup->setExclusive(true);
-
-   // Set up the buttons in languageGroup;
-   languageGroup->addButton(pushButton_ca);
-   languageGroup->addButton(pushButton_cs);
-   languageGroup->addButton(pushButton_de);
-   languageGroup->addButton(pushButton_en);
-   languageGroup->addButton(pushButton_es);
-   languageGroup->addButton(pushButton_fr);
-   languageGroup->addButton(pushButton_it);
-   languageGroup->addButton(pushButton_nl);
-   languageGroup->addButton(pushButton_pl);
-   languageGroup->addButton(pushButton_pt);
-   languageGroup->addButton(pushButton_ru);
 
    // Set up the buttons in the colorGroup
    colorGroup->addButton(checkBox_mosher);
@@ -117,17 +128,38 @@ OptionDialog::OptionDialog(QWidget* parent)
    // Color Unit
    colorUnitGroup->addButton(radioButton_srm);
    colorUnitGroup->addButton(radioButton_ebc);
-
-   //connect( colorGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeColorFormula(QAbstractButton*) ) );
-   //connect( ibuGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeIbuFormula(QAbstractButton*) ) );
-   //connect( weightGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeWeightUnitSystem(QAbstractButton*) ) );
-   //connect( volumeGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeVolumeUnitSystem(QAbstractButton*) ) );
-   //connect( tempGroup, SIGNAL( buttonClicked(QAbstractButton*) ), this, SLOT( changeTemperatureScale(QAbstractButton*) ) );
-
+   
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( saveAndClose() ) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
    connect( pushButton_dbDirBrowse, SIGNAL( clicked() ), this, SLOT( setDataDir() ) );
    connect( pushButton_dbDirDefault, SIGNAL( clicked() ), this, SLOT( defaultDataDir() ) );
+}
+
+void OptionDialog::retranslate()
+{
+   // Let the Ui take care of its business
+   retranslateUi(this);
+   
+   // Retranslate the language combobox.
+   // NOTE: the indices MUST correspond to ndxToLangCode.
+   QStringList langStrings;
+   langStrings <<
+      tr("Catalan") <<
+      tr("Czech") <<
+      tr("German") <<
+      tr("English") <<
+      tr("Greek") <<
+      tr("Spanish") <<
+      tr("French") <<
+      tr("Italian") <<
+      tr("Dutch") <<
+      tr("Polish") <<
+      tr("Portuguese") <<
+      tr("Russian") <<
+      tr("Chinese");
+   int i;
+   for( i = 0; i < langStrings.size(); ++i )
+      comboBox_lang->setItemText(i, langStrings[i]);
 }
 
 void OptionDialog::show()
@@ -150,11 +182,6 @@ void OptionDialog::defaultDataDir()
 
 void OptionDialog::saveAndClose()
 {
-   /*
-   Brewtarget::weightUnitSystem = weightUnitSystem;
-   Brewtarget::volumeUnitSystem = volumeUnitSystem;
-   Brewtarget::tempScale = temperatureScale;
-   */
    QAbstractButton* button;
    iUnitSystem weightUnitSystem;
    iUnitSystem volumeUnitSystem;
@@ -251,7 +278,7 @@ void OptionDialog::saveAndClose()
    Brewtarget::colorUnit = colorUnit;
 
    // Set the right language.
-   Brewtarget::setLanguage( languageToButtonMap.key(qobject_cast<QPushButton*>(languageGroup->checkedButton())) );
+   Brewtarget::setLanguage( ndxToLangCode[ comboBox_lang->currentIndex() ] );
    
    // Check the new userDataDir.
    newUserDataDir = lineEdit_dbDir->text();
@@ -302,11 +329,11 @@ void OptionDialog::cancel()
 
 void OptionDialog::showChanges()
 {
-   // Check the right language button
-   QPushButton* lButton = languageToButtonMap[Brewtarget::getCurrentLanguage()];
-   if( lButton != 0 )
-      lButton->setChecked(true);
-
+   // Set the right language
+   int ndx = ndxToLangCode.indexOf( Brewtarget::getCurrentLanguage() );
+   if( ndx >= 0 )
+      comboBox_lang->setCurrentIndex(ndx);
+   
    // Check the right color formula box.
    switch( Brewtarget::colorFormula )
    {
@@ -397,3 +424,18 @@ void OptionDialog::showChanges()
    lineEdit_firstWort->setText( Brewtarget::displayAmount(Brewtarget::option("firstWortHopAdjustment", 1.10).toDouble()*100,0,0) );
 
 }
+
+void OptionDialog::changeEvent(QEvent* e)
+{
+   switch( e->type() )
+   {
+      case QEvent::LanguageChange:
+         retranslate();
+         e->accept();
+         break;
+      default:
+         QDialog::changeEvent(e);
+         break;
+   }
+}
+

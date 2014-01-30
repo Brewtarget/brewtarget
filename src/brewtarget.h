@@ -235,6 +235,7 @@ public:
    static bool  hasOption(QString attribute, const QObject* object = 0, iUnitOps ops = NOOP);
    static void  setOption(QString attribute, QVariant value, const QObject* object = 0, iUnitOps ops = NOOP);
    static QVariant option(QString attribute, QVariant default_value, const QObject* object = 0, iUnitOps = NOOP);
+   static void removeOption(QString attribute);
 
    static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
 
@@ -280,13 +281,11 @@ private:
    static bool ensureDirectoriesExist();
    //! \brief Ensure the datafiles exist.
    static bool ensureDataFilesExist();
-   //! \brief Test to see if the option file exists.
-   static bool optionFileExists();
    //! \brief Load translation files.
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.
    static void checkForNewVersion(MainWindow* mw);
-   
+
    //! \brief If this option is false, do not bother the user about new versions.
    static bool checkVersion;
 

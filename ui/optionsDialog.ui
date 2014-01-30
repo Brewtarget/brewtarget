@@ -418,268 +418,30 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_14">
          <item>
-          <widget class="QPushButton" name="pushButton_cs">
-           <property name="toolTip">
-            <string>Czech</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagCzech.svg</normaloff>:/images/flagCzech.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
+          <widget class="QComboBox" name="comboBox_lang">
+           <property name="sizeAdjustPolicy">
+            <enum>QComboBox::AdjustToContents</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_ca">
-           <property name="toolTip">
-            <string>Catalan</string>
-           </property>
-           <property name="text">
-            <string notr="true"/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagCatalonia.svg</normaloff>:/images/flagCatalonia.svg</iconset>
-           </property>
-           <property name="iconSize">
+          <widget class="QLabel" name="label">
+           <property name="minimumSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>200</width>
+             <height>0</height>
             </size>
            </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_de">
-           <property name="toolTip">
-            <string>German</string>
-           </property>
            <property name="text">
-            <string/>
+            <string>&lt;qt&gt;
+   &lt;b&gt;Know another language?&lt;/b&gt;
+   &lt;br&gt;&lt;br&gt;
+   Or, would you like to improve a translation? Help us out and
+  &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
+  provide a translation&lt;/a&gt; so that your friends can use brewtarget!
+&lt;/qt&gt;</string>
            </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagGermany.svg</normaloff>:/images/flagGermany.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_en">
-           <property name="toolTip">
-            <string>English</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagUK.svg</normaloff>:/images/flagUK.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_15">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="pushButton_es">
-           <property name="toolTip">
-            <string>Spanish</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagSpain.svg</normaloff>:/images/flagSpain.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_fr">
-           <property name="toolTip">
-            <string>French</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagFrance.svg</normaloff>:/images/flagFrance.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_it">
-           <property name="toolTip">
-            <string>Italian</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagItaly.svg</normaloff>:/images/flagItaly.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_16">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="pushButton_nl">
-           <property name="toolTip">
-            <string>Dutch</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagNetherlands.svg</normaloff>:/images/flagNetherlands.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_pl">
-           <property name="toolTip">
-            <string>Polish</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagPoland.svg</normaloff>:/images/flagPoland.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_pt">
-           <property name="toolTip">
-            <string>Portuguese</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagPortugal.svg</normaloff>:/images/flagPortugal.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_ru">
-           <property name="toolTip">
-            <string>Russian</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/flagRussia.svg</normaloff>:/images/flagRussia.svg</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="checkable">
+           <property name="wordWrap">
             <bool>true</bool>
            </property>
           </widget>
@@ -693,33 +455,11 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>348</width>
+           <width>300</width>
            <height>20</height>
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>&lt;qt&gt;
-   &lt;b&gt;Know another language?&lt;/b&gt;
-   &lt;br&gt;&lt;br&gt;
-   Or, would you like to improve a translation? Help us out and
-  &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use brewtarget!
-&lt;/qt&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -759,14 +499,6 @@
   <tabstop>lineEdit_dbDir</tabstop>
   <tabstop>pushButton_dbDirBrowse</tabstop>
   <tabstop>pushButton_dbDirDefault</tabstop>
-  <tabstop>pushButton_cs</tabstop>
-  <tabstop>pushButton_de</tabstop>
-  <tabstop>pushButton_en</tabstop>
-  <tabstop>pushButton_es</tabstop>
-  <tabstop>pushButton_fr</tabstop>
-  <tabstop>pushButton_it</tabstop>
-  <tabstop>pushButton_pl</tabstop>
-  <tabstop>pushButton_pt</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>

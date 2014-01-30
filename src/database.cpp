@@ -290,6 +290,7 @@ void Database::convertFromXml()
    // If the old "obsolete" directory exists, don't do anything other than
    // set the converted flag
    QDir dir(Brewtarget::getUserDataDir());
+
    // Checking for non-existence is redundant with the new "converted" setting,
    // but better safe than sorry.
    if( !dir.exists("obsolete") )
@@ -300,7 +301,7 @@ void Database::convertFromXml()
       QStringList oldFiles = QStringList() << "database.xml" << "mashs.xml" << "recipes.xml";
       for ( int i = 0; i < oldFiles.size(); ++i ) 
       {
-         QFile oldXmlFile( Brewtarget::getUserDataDir() + oldFiles[i]);
+         QFile oldXmlFile(Brewtarget::getUserDataDir() + oldFiles[i]);
          // If the old file exists, import.
          if( oldXmlFile.exists() )
          {
@@ -3667,8 +3668,8 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 {
    QDomNode n;
 
-   // Oddly, I don't think we need to block these signals. All of the
-   // subcomponents are, and that should be enough
+   // I was wrong. We need to block signals here. Weird things happen if you don't.
+   blockSignals(true);
 
    // Don't create a new mash -- we do that later
    Recipe* ret = newRecipe(false);
@@ -3754,6 +3755,10 @@ Recipe* Database::recipeFromXml( QDomNode const& node )
 
    // Recalc everything, just for grins and giggles.
    ret->recalcAll();
+   blockSignals(false);
+
+   emit newRecipeSignal(ret);
+
    return ret;
 }
 
