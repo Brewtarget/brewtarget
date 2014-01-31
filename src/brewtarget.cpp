@@ -517,7 +517,7 @@ void Brewtarget::log(LogType lt, QString message)
       m = message;
    
    // First, write out to stderr.
-   std::cerr << m.toStdString() << std::endl;
+   std::cerr << m.toUtf8().constData() << std::endl;
    // Then display it in the GUI's status bar.
    if( _mainWindow && _mainWindow->statusBar() )
       _mainWindow->statusBar()->showMessage(m, 3000);

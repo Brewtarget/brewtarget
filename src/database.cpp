@@ -374,24 +374,14 @@ void Database::unload(bool keepChanges)
    {
       // If load() failed or want to keep the changes, then
       // just keep the database and don't revert to the backup.
-      if (dbFile.exists())
-         dbTempBackupFile.remove();
+      if (dbFile.exists())  dbTempBackupFile.remove();
+	  return;
    }
-   else
-   {
-      // If the user doesn't want to save changes, remove the active database
-      // and restore the backup.
-      dbFile.close();
-
-      // Windows is a real bitch about remove the damn file. AAAAGGGHHHH
-#if defined(Q_WS_WIN)
-      if( CopyFile(dbTempBackupFile.fileName().toStdString().c_str(), dbFile.fileName().toStdString().c_str(), false) )
-         DeleteFile( dbTempBackupFile.fileName().toStdString().c_str() );
-#else
-      dbFile.remove();
-      dbTempBackupFile.rename(dbFileName);
-#endif
-   }
+   // If the user doesn't want to save changes, remove the active database
+   // and restore the backup.
+   dbFile.close();
+   dbFile.remove();
+   dbTempBackupFile.rename(dbFileName);
 }
 
 bool Database::isDirty()
