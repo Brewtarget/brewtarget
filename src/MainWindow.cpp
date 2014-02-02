@@ -80,6 +80,7 @@
 #include "TimerListDialog.h"
 #include "RecipeFormatter.h"
 #include "PrimingDialog.h"
+#include "StrikeWaterDialog.h"
 #include "RefractoDialog.h"
 #include "MashDesigner.h"
 #include "PitchDialog.h"
@@ -174,6 +175,7 @@ MainWindow::MainWindow(QWidget* parent)
    converterTool = new ConverterTool(this);
    timerListDialog = new TimerListDialog(this);
    primingDialog = new PrimingDialog(this);
+   strikeWaterDialog = new StrikeWaterDialog(this);
    refractoDialog = new RefractoDialog(this);
    mashDesigner = new MashDesigner(this);
    pitchDialog = new PitchDialog(this);
@@ -340,6 +342,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionRestore_Database, SIGNAL( triggered() ), this, SLOT( restoreFromBackup() ) );
    connect( actionCopy_Recipe, SIGNAL( triggered() ), this, SLOT( copyRecipe() ) );
    connect( actionPriming_Calculator, SIGNAL( triggered() ), primingDialog, SLOT( show() ) );
+   connect( actionStrikeWater_Calculator, SIGNAL( triggered() ), strikeWaterDialog, SLOT( show() ) );
    connect( actionRefractometer_Tools, SIGNAL( triggered() ), refractoDialog, SLOT( show() ) );
    connect( actionPitch_Rate_Calculator, SIGNAL(triggered()), this, SLOT(showPitchDialog()));
    connect( actionMergeDatabases, SIGNAL(triggered()), this, SLOT(updateDatabase()) );

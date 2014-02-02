@@ -129,6 +129,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
+    ${SRCDIR}/StrikeWaterDialog.cpp
     ${SRCDIR}/style.cpp
     ${SRCDIR}/StyleButton.cpp
     ${SRCDIR}/StyleListModel.cpp
@@ -188,6 +189,7 @@ SET( brewtarget_UIS
     ${UIDIR}/recipeExtrasDialog.ui
     ${UIDIR}/refractoDialog.ui
     ${UIDIR}/scaleRecipeTool.ui
+    ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerListDialog.ui
     ${UIDIR}/timerWidget.ui
@@ -262,6 +264,7 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
     ${SRCDIR}/SetterCommandStack.h
+    ${SRCDIR}/StrikeWaterDialog.h
     ${SRCDIR}/StyleButton.h
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleEditor.h
