@@ -237,7 +237,6 @@ SET( brewtarget_DOCS
 # List of data files to be installed.
 SET( brewtarget_DATA
      ${DATADIR}/default_db.sqlite
-     ${DATADIR}/options.xml
 # Yes, I know this is 'documentation', but Debian policy suggests it should be
 # with the data (see section 12.3 of the policy manual).
      ${ROOTDIR}/doc/brewtarget-manual.html
