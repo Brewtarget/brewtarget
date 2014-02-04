@@ -21,6 +21,10 @@
 #include "StrikeWaterDialog.h"
 #include "brewtarget.h"
 
+// From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
+// to compensate for the lost to the tun even if the tun is pre-heaten
+const double StrikeWaterDialog::specificHeatBarley = 0.41;
+
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 	setupUi(this);
 

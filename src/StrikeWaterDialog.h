@@ -54,9 +54,7 @@ class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog
     void recheckUnits(int i);
 
   private:
-    // From Northern Brewer ~0.38 but Jon Palmer suggest 0.41
-    // to compensate for the lost to the tun even if the tun is pre-heaten
-    static const double specificHeatBarley = 0.41;
+    static const double specificHeatBarley;
   	Unit* volume;
   	Unit* weight;
   	Unit* temp;
