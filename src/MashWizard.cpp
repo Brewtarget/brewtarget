@@ -231,15 +231,31 @@ void MashWizard::wizardry()
       }
    }
    
-   // Now, do a sparge step to get the total volume of the mash up to the boil size.
-   double wortInBoil_l = recObs->wortFromMash_l();
+   // Now, do a sparge step, using just enough water that the total
+   // volume sums up to the target pre-boil size.
+   double spargeWater_l = recObs->boilSize_l() - recObs->wortFromMash_l();
+
    if( recObs->equipment() != 0 )
    {
-      wortInBoil_l += recObs->equipment()->topUpKettle_l();
-      wortInBoil_l -= recObs->equipment()->lauterDeadspace_l();
+      // These variables are part of the boil size but not the wort
+      // size and the wizard should account for that.
+      spargeWater_l += recObs->equipment()->lauterDeadspace_l();
+      spargeWater_l -= recObs->equipment()->topUpKettle_l();
    }
 
-   double spargeWater_l = recObs->boilSize_l() - wortInBoil_l;
+   // Need to account for extract/sugar volume also.
+   QList<Fermentable*> ferms = recObs->fermentables();
+   foreach( Fermentable* f, ferms )
+   {
+      Fermentable::Type type = f->type();
+      if( type == Fermentable::Extract )
+	 spargeWater_l -= f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+      else if( type == Fermentable::Sugar )
+	 spargeWater_l -= f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+      else if( type == Fermentable::Dry_Extract )
+	 spargeWater_l -= f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+   }
+
    if( spargeWater_l >= 0.0 )
    {
       // If the recipe already has a mash step named "Final Batch Sparge",

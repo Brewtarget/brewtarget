@@ -10,6 +10,7 @@ for consumption by the typical end-user.
 ### Bug Fixes
 
 * Windows builds now properly find phonon library [#1226862](https://bugs.launchpad.net/brewtarget/+bug/1226862).
+* Mash wizard does not overshoot target boil size when recipe includes extract or sugar.[#1233744](https://bugs.launchpad.net/brewtarget/+bug/1233744)
 
 ### Incompatibilities
 
