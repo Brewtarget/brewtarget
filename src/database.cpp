@@ -190,6 +190,10 @@ bool Database::load()
    // Store temporary tables in memory.
    QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
    
+   // Update the database if need be. This has to happen before we do anything
+   // else or we dump core 
+   updateSchema();
+   
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
    
@@ -216,9 +220,6 @@ bool Database::load()
       // Update this field.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
-   
-   // Update the database if need be.
-   updateSchema();
    
    // Create and store all pointers.
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );

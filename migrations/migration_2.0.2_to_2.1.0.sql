@@ -9,4 +9,6 @@ ALTER TABLE water ADD COLUMN folder varchar(256) DEFAULT '';
 ALTER TABLE mash ADD COLUMN folder varchar(256) DEFAULT '';
 ALTER TABLE brewnote ADD COLUMN folder varchar(256) DEFAULT '';
 ALTER TABLE recipe ADD COLUMN folder varchar(256) DEFAULT '';
+-- put the default recipes into their own folder, so people can see it
+UPDATE recipe SET folder='/brewtarget' WHERE name LIKE 'Bt:%';
 
