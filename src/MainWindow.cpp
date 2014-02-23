@@ -1683,8 +1683,7 @@ void MainWindow::openDonateLink()
 
 void MainWindow::openManual()
 {
-   QUrl url(Brewtarget::getDataDir()+"brewtarget-manual.html");
-   QDesktopServices::openUrl(url);
+   QDesktopServices::openUrl(QUrl::fromLocalFile(Brewtarget::getDataDir()+"brewtarget-manual.html"));
 }
 
 // One print function to rule them all. Now we just need to make the menuing
