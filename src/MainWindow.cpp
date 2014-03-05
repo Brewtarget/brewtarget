@@ -838,6 +838,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
       label_calcBatchSize->setPalette(lcdPalette_tooLow);
    else
       label_calcBatchSize->setPalette(lcdPalette_tooHigh);
+   
    if( 0.95*recipeObs->boilSize_l() <= recipeObs->boilVolume_l() && recipeObs->boilVolume_l() <= 1.05*recipeObs->boilSize_l() )
       label_calcBoilSize->setPalette(lcdPalette_good);
    else if( recipeObs->boilVolume_l() < 0.95* recipeObs->boilSize_l() )
@@ -847,6 +848,8 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
+
+   lcdNumber_fg->display(Brewtarget::displayFG(fg,og,tab_recipe,false));
    
    // Want to do some manipulation based on selected style.
    if( recStyle != 0 )
@@ -885,8 +888,6 @@ void MainWindow::showChanges(QMetaProperty* prop)
 
    lcdNumber_og->display(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false));
    lcdNumber_boilSG->display(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
-
-   lcdNumber_fg->display(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()));
 
    lcdNumber_abv->display(recipeObs->ABV_pct(), 1);
    lcdNumber_ibu->display(recipeObs->IBU(), 1);
