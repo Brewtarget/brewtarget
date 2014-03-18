@@ -33,34 +33,17 @@
 class StrikeWaterDialog : public QDialog, public Ui::strikeWaterDialog 
 {
   Q_OBJECT
-  Q_PROPERTY( Unit* volume READ volumeUnit WRITE setVolumeUnit )
-  Q_PROPERTY( Unit* weight READ weightUnit WRITE setWeightUnit )
-  Q_PROPERTY( Unit* temp READ tempUnit WRITE setTempUnit )
   public:
     StrikeWaterDialog(QWidget* parent = 0);
     ~StrikeWaterDialog();
 
-    Unit* volumeUnit();
-    Unit* weightUnit();
-    Unit* tempUnit();
-
   public slots:
     void calculate();
-    void setImperial();
-    void setSi();
-    void setVolumeUnit(Unit* unit);
-    void setWeightUnit(Unit* unit);
-    void setTempUnit(Unit* unit);
-    void recheckUnits(int i);
 
   private:
     static const double specificHeatBarley;
-  	Unit* volume;
-  	Unit* weight;
-  	Unit* temp;
 
-    double initialInfusionSi(double grainTemp, double targetTemp,
-        double waterToGrain);
+    double initialInfusionSi(double grainTemp, double targetTemp, double waterToGrain);
     double mashInfusionSi(double initialTemp, double targetTemp,
         double grainWeight, double infusionWater, double mashVolume);
 
