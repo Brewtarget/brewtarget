@@ -15,24 +15,31 @@ to ensure that we do not need some complicated merging process between our
 Launchpad translations are current and can directly overwrite the .ts files'
 translations at any instant without fear of obliterating previous translations.
 
-To update these language files, first get a current snapshot of the Launchpad
-translations at: https://translations.launchpad.net/brewtarget/trunk/+export
+To update these language files, first get a current snapshot of the [Launchpad
+translations](https://translations.launchpad.net/brewtarget/trunk/+export)
 and extract them here in a subdirectory (we will assume lpad/).
 
-1) Convert launchpad files to bt_*.ts files. E.g.
-    $ lconvert lpad/bt-ca.ts -o bt_ca.ts
-2) Run lupdate on bt_*.ts files
-    $ lupdate -no-obsolete ../src/* ../ui/* -ts bt_*.ts
-3) Create .pot and .po files to upload to launchpad
-    $ lconvert bt_ca.ts -o bt-ca.po
-    $ lconvert bt_cs.ts -o bt-cs.po
-    ...
-    $ lconvert bt_en.ts -o bt.pot
-    $ tar -czf bt.tar.gz *.po *.pot 
-4) Upload to Launchpad.
+1. Convert launchpad files to bt_*.ts files. E.g.
+
+        $ lconvert lpad/bt-ca.po -o bt_ca.ts
+
+2. Run lupdate on bt_*.ts files
+
+        $ lupdate -no-obsolete ../src/* ../ui/* -ts bt_*.ts
+
+3. Create .pot and .po files to upload to launchpad
+
+        $ lconvert bt_ca.ts -o bt-ca.po
+        $ lconvert bt_cs.ts -o bt-cs.po
+        ...
+        $ lconvert bt_en.ts -o bt.pot
+        $ tar -czf bt.tar.gz *.po *.pot 
+
+4. Upload to Launchpad.
   - First, need to 'approve' bt.pot in the upload queue and wait for it to
     properly upload. Then, for each .po file, select the 'bt' template and
     correct language before 'approving'.
-4) Clean up.
-    $ rm -rf lpad *.po *.pot bt.tar.gz
+5. Clean up.
+
+        $ rm -rf lpad *.po *.pot bt.tar.gz
 

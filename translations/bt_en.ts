@@ -697,10 +697,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Would you like to set the batch and boil size to that requested by the equipment?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -890,6 +886,10 @@
     </message>
     <message>
         <source>The original XML files can be found in </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

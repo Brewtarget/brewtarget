@@ -110,6 +110,9 @@ public:
       uintptr_t addr = ptrVal.value<uintptr_t>();
       return reinterpret_cast<BeerXMLElement*>(addr);
    }
+
+   bool isValid();
+   void invalidate();
    
 signals:
    /*!
@@ -142,7 +145,11 @@ protected:
    QVariant get( const char* col_name ) const;
    
 private:
-   
+   /*!
+    * \param valid - Indicates if the beerXML element was valid. There is a problem with importing invalid
+    * XML. I'm hoping this helps fix it
+    */
+  bool valid;
 };
 
 

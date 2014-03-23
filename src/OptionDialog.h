@@ -26,6 +26,8 @@ class OptionDialog;
 #include <QAbstractButton>
 #include <QMap>
 #include <QString>
+#include <QVector>
+#include <QIcon>
 #include "ui_optionsDialog.h"
 #include "unit.h"
 
@@ -39,22 +41,35 @@ class OptionDialog : public QDialog, public Ui::optionsDialog
 {
    Q_OBJECT
 public:
+   //! \brief Default constructor.
    OptionDialog(QWidget *parent=0);
 
 public slots:
+   //! \brief Show the dialog.
    void show();
+   //! \brief Save the options and close the dialog.
    void saveAndClose();
+   //! \brief Close dialog without saving options.
    void cancel();
+   //! \brief Pop up a dialog to choose the data directory.
    void setDataDir();
+   //! \brief Reset data directory to default.
    void defaultDataDir();
    
+protected:
+   
+   //! \brief Reimplemented from QWidget.
+   virtual void changeEvent(QEvent* e);
+   
 private:
+   // Update UI strings according to current language.
+   void retranslate();
+   // Update dialog with current options.
    void showChanges();
-   QButtonGroup *languageGroup;
    QButtonGroup *colorGroup, *ibuGroup;
    QButtonGroup *weightGroup, *volumeGroup, *tempGroup, *gravGroup, *colorUnitGroup;
-   //! This map makes correspondences from two-letter language codes ("es" for spanish) to their push buttons.
-   QMap<QString,QPushButton*> languageToButtonMap;
+   QStringList ndxToLangCode;
+   QVector<QIcon> langIcons;
 };
 
 #endif   /* _OPTIONDIALOG_H */

@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="it">
+<TS version="2.0" language="el">
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>Στυλ</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Data</translation>
+        <translation>Ημερομηνία</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>Χρόνος βρασμού</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation>Efficenza</translation>
+        <translation>Απόδοση</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Volume di bollitura</translation>
+        <translation>Όγκος κατά τον βρασμό</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Densità Iniziale</translation>
+        <translation>Πυκνότητα πριν το βρασμό</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation>Volume Finale</translation>
+        <translation>Τελικός όγκος</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translatorcomment>Densità Iniziale
-</translatorcomment>
-        <translation>Densità Iniziale</translation>
+        <translation>Αρχική πυκνότητα</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -43,9 +41,7 @@
     </message>
     <message>
         <source>Final Gravity</source>
-        <translatorcomment>Densità Finale
-</translatorcomment>
-        <translation>Densità Finale</translation>
+        <translation>Τελική πυκνότητα</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -53,98 +49,94 @@
     </message>
     <message>
         <source>Estimated calories(per 12 oz)</source>
-        <translation>Calorie Stimate(per 340 gr circa)</translation>
+        <translation>Θερμίδες κατά προσέγγιση</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>Οδηγίες</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translatorcomment>Finito
-</translatorcomment>
-        <translation>Completato</translation>
+        <translation>Ολοκληρώθηκε</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Step</source>
-        <translatorcomment>Step
-</translatorcomment>
-        <translation>Passo</translation>
+        <translation>Βήμα</translation>
     </message>
     <message>
         <source>Actual PreBoil Volume</source>
-        <translation>Attuale Volume Pre Bollitura</translation>
+        <translation>Ακριβής όγκος προ βρασμού</translation>
     </message>
     <message>
         <source>Actual PreBoil Gravity</source>
-        <translation>Attuale Densità Pre Bollitura</translation>
+        <translation>ακριβής πυκνότητα προ βρασμού</translation>
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation>Volume dopo Bollitura</translation>
+        <translation>Όγκος μετά τον βρασμό</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
-        <translation>Densità dopo Bollitura</translation>
+        <translation>Πυκνότητα μετά τον βρασμό</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Volume dentro al fermentatore</translation>
+        <translation>Όγκος στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Stampa documento</translation>
+        <translation>Εκτύπωση εγγράφου</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Notes&lt;/h2&gt;</source>
-        <translation>&lt;h2&gt;Note&lt;/h2&gt;</translation>
+        <translation>&lt;h2&gt;Σημειώσεις&lt;/h2&gt;</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation>Passo %1: %2</translation>
+        <translation>Βήμα %1: %2</translation>
     </message>
     <message>
         <source>Add grains</source>
-        <translation>Aggiunta grani</translation>
+        <translation>Προσθέστε Σιτηρά</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation>Calore dell&apos;acqua</translation>
+        <translation>Θερμάντε το νερό</translation>
     </message>
 </context>
 <context>
     <name>BrewDayWidget</name>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>Στυλ</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Data:</translation>
+        <translation>Ημερομηνία</translation>
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Volume di bollitura</translation>
+        <translation>Όγκος κατά τον βρασμό</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Densità Iniziale</translation>
+        <translation>Πυκνότητα πριν το βρασμό</translation>
     </message>
     <message>
         <source>Final Volume</source>
-        <translation>Volume Finale</translation>
+        <translation>Τελικός όγκος</translation>
     </message>
     <message>
         <source>Starting Gravity</source>
-        <translation>OG</translation>
+        <translation>Αρχική πυκνότητα</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>Χρόνος βρασμού</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -152,374 +144,370 @@
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation>Efficenza</translation>
+        <translation>Προβλεπόμενη απόδοση</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
-        <translation>Calorie Stimate(per 340 gr circa)</translation>
+        <translation>Θερμίδες κατά προσέγγιση</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>Οδηγίες</translation>
     </message>
     <message>
         <source>Completed</source>
-        <translation>Completato</translation>
+        <translation>Ολοκληρώθηκε</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Step</source>
-        <translation>Passo</translation>
+        <translation>Βήμα</translation>
     </message>
     <message>
         <source>Actual Pre-boil Volume:</source>
-        <translation>Attuale Volume Pre Bollitura:</translation>
+        <translation>Ακριβής Όγκος πριν το Βρασμό</translation>
     </message>
     <message>
         <source>Actual Pre-boil Gravity:</source>
-        <translation>Attuale Densità Pre Bollitura:</translation>
+        <translation>Ακριβής πυκνότητα πριν τον Βρασμό</translation>
     </message>
     <message>
         <source>Post-boil Volume:</source>
-        <translation>Volume dopo Bollitura:</translation>
+        <translation>Όγκος μετά τον Βρασμό</translation>
     </message>
     <message>
         <source>Post-boil Gravity:</source>
-        <translation>Densità dopo Bollitura:</translation>
+        <translation>Πυκνότητα μετά το Βρασμό</translation>
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation>Volume dentro al fermentatore:</translation>
+        <translation>Όγκος στον κάδο Ζύμωσης</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>stampa documento</translation>
+        <translation>Εκτύπωση εγγράφου</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
     <message>
         <source>Step %1: %2</source>
-        <translation>Passo %1: %2</translation>
+        <translation>Βήμα %1: %2</translation>
     </message>
 </context>
 <context>
     <name>BrewTargetTreeModel</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομα</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Data di birrificazione</translation>
+        <translation>Ημέρα Ζυθοποίησης</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>Στυλ</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>Χρόνος βρασμού</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>Χρώμα</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Τύπος</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>Χρήση</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Categoria</translation>
+        <translation>Κατηγορία</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished"></translation>
+        <translation>Αριθμός</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished"></translation>
+        <translation>Γράμμα</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished"></translation>
+        <translation>Οδηγός</translation>
     </message>
 </context>
 <context>
     <name>BrewTargetTreeView</name>
     <message>
         <source>New Recipe</source>
-        <translation>Nuova Ricetta</translation>
+        <translation>Προσθήκη νέας συνταγής</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation>Birrifica!</translation>
+        <translation>Ζυθοποίησε το!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation>Birrifica ancora</translation>
+        <translation>Ζυθοποιήστε πάλι</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Cancella</translation>
+        <translation>Διαγραφή</translation>
     </message>
     <message>
         <source>New Equipment</source>
-        <translation>Nuovi Ingredienti</translation>
+        <translation>Προσθήκη νέου εξοπλισμού</translation>
     </message>
     <message>
         <source>New Fermentable</source>
-        <translation>Nuovo fermentabile</translation>
+        <translation>Προσθήκη νέων ζυμώσιμων</translation>
     </message>
     <message>
         <source>New Hop</source>
-        <translation>Nuovo Luppolo</translation>
+        <translation>Προσθήκη νέου λυκίσκου</translation>
     </message>
     <message>
         <source>New Misc</source>
-        <translation>Nuova Aggiunta</translation>
+        <translation>Προσθήκη στα διάφορα</translation>
     </message>
     <message>
         <source>New Yeast</source>
-        <translation>Nuovo Lievito</translation>
+        <translation>προσθήκη νέας μαγιάς</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Copia</translation>
+        <translation>Αντιγραφή</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation>Esporta</translation>
+        <translation>Εξαγωγή</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation>Importa</translation>
+        <translation>Εισαγωγή</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished"></translation>
+        <translation>Αλλαγή ημερομηνίας</translation>
     </message>
     <message>
         <source>New Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Νέο Στυλ</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
+        <translation>Επαναπροσδιορισμός απόδοσης</translation>
     </message>
 </context>
 <context>
     <name>Brewtarget</name>
     <message>
         <source>Default</source>
-        <translation>Default</translation>
+        <translation>Προεπιλογή</translation>
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished"></translation>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>SRM</source>
-        <translatorcomment>Intensità Colore della Birra
-</translatorcomment>
         <translation>SRM</translation>
     </message>
     <message>
         <source>Plato</source>
-        <translatorcomment>Gradi Plato
-</translatorcomment>
         <translation>Plato</translation>
     </message>
     <message>
         <source>Specific Gravity</source>
-        <translation>Densità Specifica</translation>
+        <translation>Ειδικό Βάρος</translation>
     </message>
     <message>
         <source>SI</source>
-        <translation>SI</translation>
+        <translation>Μετρικό σύστημα</translation>
     </message>
     <message>
         <source>US Customary</source>
-        <translation>US Customary</translation>
+        <translation>Αμερικάνικο σύστημα</translation>
     </message>
     <message>
         <source>Milligrams</source>
-        <translation>Milligrammi</translation>
+        <translation>Χιλιοστόγραμμα</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation>Grammi</translation>
+        <translation>Γραμμάρια</translation>
     </message>
     <message>
         <source>Kilograms</source>
-        <translation>Kilogrammi</translation>
+        <translation>Κιλά</translation>
     </message>
     <message>
         <source>Ounces</source>
-        <translation>oncia</translation>
+        <translation>Ουγκιές</translation>
     </message>
     <message>
         <source>Pounds</source>
-        <translation>libra</translation>
+        <translation>Λίβρες</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation>Κελσίου</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation>Φάρεναϊτ</translation>
     </message>
     <message>
         <source>British Imperial</source>
-        <translation type="unfinished"></translation>
+        <translation>Βρεττανικό μετρικό σύστημα</translation>
     </message>
     <message>
         <source>MilliLiters</source>
-        <translation>Milliletri</translation>
+        <translation>Χιλιοστόλιτρα</translation>
     </message>
     <message>
         <source>Liters</source>
-        <translation>Litri</translation>
+        <translation>Λίτρα</translation>
     </message>
     <message>
         <source>Teaspoons</source>
-        <translation>Cucchiaini</translation>
+        <translation>κουταλιές του γλυκού</translation>
     </message>
     <message>
         <source>Tablespoons</source>
-        <translation>Cucchiai da tavola</translation>
+        <translation>Κουταλιές της σούπας</translation>
     </message>
     <message>
         <source>Cups</source>
-        <translation>Tazze</translation>
+        <translation>Φλιτζάνια</translation>
     </message>
     <message>
         <source>Quarts</source>
-        <translation>Quarti</translation>
+        <translation>Τέταρτα</translation>
     </message>
     <message>
         <source>Gallons</source>
-        <translation>Galloni</translation>
+        <translation>Γαλόνια</translation>
     </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>Troopo basso per lo stile.</translation>
+        <translation>Κάτω από τα παραδεκτά όρια για το στυλ</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>Nel range per lo stile.</translation>
+        <translation>Μέσα στα όρια του στυλ</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>Troppo alto per lo stile.</translation>
+        <translation>Πάνω από τα παραδεκτά όρια για το στυλ</translation>
     </message>
 </context>
 <context>
     <name>Database</name>
     <message>
         <source>Merge Database</source>
-        <translation>Unisci database</translation>
+        <translation>Συγχώνευση της βάσης δεδομένων</translation>
     </message>
     <message>
         <source>There may be new ingredients and recipes available. Would you like to add these to your database?</source>
-        <translation>Ci possono essere nuovi ingredienti e ricette disponibili. Vuoi aggiungere questi al database?</translation>
+        <translation>Πιθανόν να είναι διαθέσιμα νέα συστατικά και συνταγές. Θα θέλατε να προστεθούν στην υπάρχουσα βάση δεδομένων;</translation>
     </message>
 </context>
 <context>
     <name>EquipmentEditor</name>
     <message>
         <source>Grain absorption (%1/%2)</source>
-        <translation>Assorbimento del grano (%1/%2)</translation>
+        <translation>Απορόφηση από τα σιτηρά (%1/%2)</translation>
     </message>
     <message>
         <source>Tun Volume Warning</source>
-        <translation>Avvertimento di volume di Tun</translation>
+        <translation>Προειδοποίηση Ορίων όγκου σκεύους σακχαροποίησης</translation>
     </message>
     <message>
         <source>Batch Size Warning</source>
-        <translation>Avvertimento della misura</translation>
+        <translation>Προειδοποίηση ορίων μεγέθους παρτίδας</translation>
     </message>
     <message>
         <source>Equipment name</source>
-        <translation>Nome attrezzatura</translation>
+        <translation>Όνομα εξοπλισμού</translation>
     </message>
     <message>
         <source>Equipment name:</source>
-        <translation>Nome attrezzatura:</translation>
+        <translation>Όνομα εξοπλισμού</translation>
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>Ο όγκος του σκεύους σακχαροποίησης που έχετε εισάγει είναι 0. Αυτό πιθανόν να προκαλέσει προβλήματα</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>Το μέγεθος της παρτίδας που έχετε εισάγει είναι 0. Αυτό πιθανόν να προκαλέσει προβλήματα</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Προειδοποίηση χρήσης λυκίσκου</translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>Το ποσοστό χρήσης λυκίσκου είναι 0. Αυτό πιθανό να προκαλέσει προβλήματα</translation>
     </message>
 </context>
 <context>
     <name>FermentableDialog</name>
     <message>
         <source>Fermentable name</source>
-        <translation>Nome del Fermentabile</translation>
+        <translation>Ονομασία ζυμώσιμων</translation>
     </message>
     <message>
         <source>Fermentable name:</source>
-        <translation>Nome del Fermentabile:</translation>
+        <translation>Ονομασία ζυμώσιμων</translation>
     </message>
 </context>
 <context>
     <name>FermentableItemDelegate</name>
     <message>
         <source>Grain</source>
-        <translation>Grano</translation>
+        <translation>Σιτηρά</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Zucchero</translation>
+        <translation>Σάκχαρα</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Estratto</translation>
+        <translation>Υγρή Βύνη</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Estratto secco</translation>
+        <translation>Ξηρή Βύνη</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Aggiunta</translation>
+        <translation>Πρόσθετα</translation>
     </message>
 </context>
 <context>
     <name>FermentableTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello indicizzazione =%1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Mashed</source>
@@ -527,51 +515,51 @@
     </message>
     <message>
         <source>Steeped</source>
-        <translation>bagnato</translation>
+        <translation>Steeped</translation>
     </message>
     <message>
         <source>Not mashed</source>
-        <translation>Non mashed</translation>
+        <translation>Not mashed</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation>Tardi</translation>
+        <translation>Στο τέλος</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation>Normale</translation>
+        <translation>Κανονικό</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>Προβληματική στήλη: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Late Addition</source>
-        <translation>Ultima aggiunta</translation>
+        <translation>προσθήκη στο τέλος</translation>
     </message>
     <message>
         <source>Yield %</source>
-        <translation>Prodotto</translation>
+        <translation>Απόδοση %</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation>Colore (SRM)</translation>
+        <translation>Χρώμα (SRM)</translation>
     </message>
     <message>
         <source>Color (EBC)</source>
-        <translation>Colore (EBC)</translation>
+        <translation>Χρώμα (EBC)</translation>
     </message>
 </context>
 <context>
@@ -582,31 +570,31 @@
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primo mosto</translation>
+        <translation>Πρίν το βράσιμο</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>Στο Βράσιμο</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation>Άρωμα</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation>στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Amarezza</translation>
+        <translation>Πικράδα</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>entrambi</translation>
+        <translation>Και τα δύο</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>foglia</translation>
+        <translation>Leaf</translation>
     </message>
     <message>
         <source>Pellet</source>
@@ -621,22 +609,22 @@
     <name>HopDialog</name>
     <message>
         <source>Hop name</source>
-        <translation>Nome Luppolo</translation>
+        <translation>Όνομα λυκίσκου</translation>
     </message>
     <message>
         <source>Hop name:</source>
-        <translation>Nome Luppolo:</translation>
+        <translation>Όνομα λυκίσκου</translation>
     </message>
 </context>
 <context>
     <name>HopItemDelegate</name>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>Στο Βράσιμο</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation>στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -644,15 +632,15 @@
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primo mosto</translation>
+        <translation>Πρίν το βράσιμο</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation>Άρωμα</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>foglia</translation>
+        <translation>Leaf</translation>
     </message>
     <message>
         <source>Pellet</source>
@@ -667,238 +655,238 @@
     <name>HopTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομασία</translation>
     </message>
     <message>
         <source>Alpha %</source>
-        <translation>Alpha</translation>
+        <translation>Alpha %</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>Χρήση</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Open</source>
-        <translation>Apri</translation>
+        <translation>Άνοιγμα</translation>
     </message>
     <message>
         <source>BeerXML files (*.xml)</source>
-        <translation>BeerXML files (*.xml)</translation>
+        <translation>Αρχεία τύπου BeerXML (*.xml)</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Αποθήκευση</translation>
     </message>
     <message>
         <source>Equipment request</source>
-        <translation>Attrezzatura richiesta</translation>
+        <translation>Επιλογή εξοπλισμού</translation>
     </message>
     <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
-        <translation>Volete impostare la partita , la quantità di bollitura e il tempo che è richiesto dalle apparecchiature?</translation>
+        <translation>Θα θέλατε να θέσετε το μέγεθος της παρτίδας το μέγεθος του όγκου βρασμού και τον χρόνο βρασμού σύμφωνα με τον εξοπλισμό;</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation>Cancella %1</translation>
+        <translation>Διαγραφή %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation>Cancella %1 %2?</translation>
+        <translation>Διαγραφή %1 %2?</translation>
     </message>
     <message>
         <source>HTML files (*.html)</source>
-        <translation>HTML files (*.html)</translation>
+        <translation>Αρχεία σε μορφή HTML (*.html)</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>Νέα</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Ricetta</translation>
+        <translation>Συνταγή</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>Εξοπλισμός</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation>Fermentabile</translation>
+        <translation>Ζυμώσιμα</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation>Luppolo</translation>
+        <translation>Λυκίσκος</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Aggiunta</translation>
+        <translation>Διάφορα</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>Μαγιά</translation>
     </message>
     <message>
         <source>Copy %1</source>
-        <translation>Copia %1</translation>
+        <translation>Αντιγραφή %1</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy of %1.</source>
-        <translation>Inserisci un unico nome per la copia di %1.</translation>
+        <translation>Εισάγετε ένα μοναδικό όνομα για την αντιγραφή του %1</translation>
     </message>
     <message>
         <source>Copy Equipment</source>
-        <translation>Copia attrezzatura</translation>
+        <translation>Αντιγραφή εξοπλισμού</translation>
     </message>
     <message>
         <source>Copy Fermentable</source>
-        <translation>Copia Fermentabile</translation>
+        <translation>Αντιγραφή ζυμώσιμων</translation>
     </message>
     <message>
         <source>Copy Hop</source>
-        <translation>Copia Luppolo</translation>
+        <translation>Αντιγραφή Λυκίσκου</translation>
     </message>
     <message>
         <source>Copy Miscellaneous</source>
-        <translation>Copia Aggiunta</translation>
+        <translation>Αντιγραφή διαφόρων</translation>
     </message>
     <message>
         <source>Copy Yeast</source>
-        <translation>Copia Lievito</translation>
+        <translation>Αντιγραφή Μαγιάς</translation>
     </message>
     <message>
         <source>Database Update</source>
-        <translation>Aggiorna Database</translation>
+        <translation>Ενημέρωση της βάσης δεδομένων</translation>
     </message>
     <message>
         <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation>Stai per aggiornare il database corrente con un altro. Questo può apportare modifiche (ma non eliminare) alcuni dei vostri ingredienti. Essa non modificherà le tue ricette. Continuare?</translation>
+        <translation>Πρόκειται να ενημερώσετε την υπάρχουσα βάση δεδομένων με μια άλλη. Αυτό πιθανόν να επιφέρει ( χωρίς να τα διαγράψει) αλλαγές σε κάποια από τα υλικά σας. Δεν πρόκειται να αλλάξει τις συνταγές σας. Να συνεχίσω;</translation>
     </message>
     <message>
         <source>Select Database File</source>
-        <translation>Seleziona il file database</translation>
+        <translation>Επιλέξτε αρχείο βάσης δεδομένων</translation>
     </message>
     <message>
         <source>Brewtarget Database (*.sqlite)</source>
-        <translation>Brewtarget Database (*.sqlite)</translation>
+        <translation>Βάση δεδομένων του Brewtarget (*.sqlite)</translation>
     </message>
     <message>
         <source>Recipe name</source>
-        <translation>Nome Ricetta</translation>
+        <translation>Όνομα συνταγής</translation>
     </message>
     <message>
         <source>Recipe name:</source>
-        <translation>Nome Ricetta:</translation>
+        <translation>Όνομα συνταγής</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation>Backup Database</translation>
+        <translation>Αντίγραφο ασφαλείας βάσης δεδομένων</translation>
     </message>
     <message>
         <source>Oops!</source>
-        <translation>Oops!</translation>
+        <translation>Ουπς!</translation>
     </message>
     <message>
         <source>Could not copy the files for some reason.</source>
-        <translation>Impossibile copiare i file per qualche motivo.</translation>
+        <translation>Για κάποιο λόγο τα αρχεία δεν μπόρεσαν να αντιγραφούν.</translation>
     </message>
     <message>
         <source>A Warning</source>
-        <translation>Avvertimento</translation>
+        <translation>Προειδοποίηση</translation>
     </message>
     <message>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
-        <translation>Questo cancellerà il set corrente di ricette e ingredienti. Vuoi continuare?</translation>
+        <translation>Αυτή η ενέργεια θα διαγράψει τα υπάρχοντα αρχεία των συνταγών και των υλικών σας. Θέλετε να συνεχίσετε;</translation>
     </message>
     <message>
         <source>For some reason, the operation failed.</source>
-        <translation>Per qualche ragione, l&apos;operazione non riuscita.</translation>
+        <translation>Για κάποιο λόγο η ενέργεια απέτυχε.</translation>
     </message>
     <message>
         <source>Import %1?</source>
-        <translation>Importa %1?</translation>
+        <translation>Εισαγωγή %1?</translation>
     </message>
     <message>
         <source>No mash</source>
-        <translation>No mash</translation>
+        <translation>Δεν υπάρχει mash</translation>
     </message>
     <message>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation>Cercando di aggiungere un passaggio mash senza mash. Si prega di creare un primo mash.</translation>
+        <translation>Προσπαθείτε να προσθέσετε ένα βήμα στην διαδικασίας σακχαροποίησης δίχως να έχετε ορίσει διαδικασία. Παρακαλώ δημιουργείστε διαδικασία σακχαροποίησης πρώτα.</translation>
     </message>
     <message>
         <source>Copy Recipe</source>
-        <translation>Copia Ricetta</translation>
+        <translation>Αντιγραφή Συνταγής</translation>
     </message>
     <message>
         <source>Enter a unique name for the copy.</source>
-        <translation>Immettere un nome univoco per la copia.</translation>
+        <translation>Δώστε ένα μοναδικό όνομα για την αντιγραφή</translation>
     </message>
     <message>
         <source>Please give your mash a name before saving.</source>
-        <translation>Si prega di dare il nome al tuo mash prima di salvare.</translation>
+        <translation>Δωστε  στο mash  σας ένα όνομα πριν το αποθηκεύσετε</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Riavviare</translation>
+        <translation>Επανεκκίνηση</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
-        <translation>Si prega di riavviare Brewtarget.</translation>
+        <translation>Παρακαλώ επανεκκινήστε το πρόγραμμα</translation>
     </message>
     <message>
         <source>No equipment</source>
-        <translation>1</translation>
+        <translation>Δεν έχετε επιλέξει εξοπλισμό</translation>
     </message>
     <message>
         <source>You must select or define an equipment profile first.</source>
-        <translation>È necessario selezionare o definire un profilo di primo equipaggiamento.</translation>
+        <translation>Πρώτα πρέπει να επιλέξετε ή να ορίσετε ενα προφίλ εξοπλισμού</translation>
     </message>
     <message>
         <source>No style</source>
-        <translation>Nessun stile</translation>
+        <translation>Δεν έχετε επιλέξει στυλ</translation>
     </message>
     <message>
         <source>You must select a style first.</source>
-        <translation>È necessario selezionare uno stile.</translation>
+        <translation>Πρώτα πρέπει να επιλέξετε ένα στυλ</translation>
     </message>
     <message>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλογή αρχείου</translation>
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
+        <translation>SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stile</translation>
+        <translation>Στυλ</translation>
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Αντιγραφή στυλ</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η βάση δεδομένων έχει αλλαχτεί/αναβαθμιστεί.</translation>
     </message>
     <message>
         <source>The original XML files can be found in </source>
-        <translation type="unfinished"></translation>
+        <translation>Τα πρωτότυπα αρχεία XML  μπορούν να βρεθούν μέσα στο </translation>
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
@@ -909,308 +897,308 @@
     <name>MaltinessWidget</name>
     <message>
         <source>&lt;b&gt;Cloying&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Stucchevole&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Cloying&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Extra malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Molto maltato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Πολύ βυνώδης&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Slightly malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Leggermente maltato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Ελαφρά βυνώδης&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Balanced&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Bilanciato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Σε αρμονία&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Slightly hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Leggermente Luppolato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Slightly hoppy&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Extra hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Moltp Luppolato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Extra hoppy&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Way hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Modo luppolato&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Way hoppy&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
     <name>MashDesigner</name>
     <message>
         <source>No Fermentables</source>
-        <translation>Non fermentabili</translation>
+        <translation>Χωρίς Ζυμώσιμα</translation>
     </message>
     <message>
         <source>Your recipe must have fermentables to design a mash.</source>
-        <translation>La ricetta deve essere fermentabile per progettare un mosto.</translation>
+        <translation>Η συνταγή σας θα πρέπει να έχει ζυμώσιμα για να υπολογίσετε την διαδικασία σακχαροποίησης</translation>
     </message>
     <message>
         <source>No Equipment</source>
-        <translation>No attrezzatura</translation>
+        <translation>Δεν υπάρχει εξοπλισμός</translation>
     </message>
     <message>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
-        <translation>Non è stata impostata un&apos; apparecchiatura per questa ricetta. Non possiamo continuare senza.</translation>
+        <translation>Δεν έχετε επιλέξει εξοπλισμό. Είναι αδύνατον να προχωρήσουμε αν δεν επιλέξετε κάποιον</translation>
     </message>
     <message>
         <source>Tun Temp</source>
-        <translation>Temperatura Tun</translation>
+        <translation>Θερμοκρασία σκεύους σακχαροποίησης</translation>
     </message>
     <message>
         <source>Enter the temperature of the tun before your first infusion.</source>
-        <translation>Inserisci la temperatura del tun prima della prima infusione.</translation>
+        <translation>Εισάγετε την θερμοκρασία του σκεύους σακχαροποίησης πριν την πρώτη έγχυση</translation>
     </message>
     <message>
         <source>Decoction error</source>
-        <translation>Errore Decotto</translation>
+        <translation>σφάλμα κατά το decoction</translation>
     </message>
     <message>
         <source>The first mash step cannot be a decoction.</source>
-        <translation>Il primo mash non può essere decotto.</translation>
+        <translation>Το πρώτο βήμα δεν μπορεί να είναι decoction</translation>
     </message>
 </context>
 <context>
     <name>MashStepTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello di indice.Riga= %1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>Προβληματική στήλη: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Temperatura di infusione</translation>
+        <translation>Θερμοκρασία έγχυσης</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Temperatura Obiettivo</translation>
+        <translation>Ζητούμενη θερμοκρασία</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
 </context>
 <context>
     <name>MashWizard</name>
     <message>
         <source>Mash thickness (%1/%2)</source>
-        <translation>Mash spessore (%1/%2)</translation>
+        <translation>Πυκνότητα σακχαροποίησης (%1/%2)</translation>
     </message>
     <message>
         <source>Bad thickness</source>
-        <translation>Cattivo Spessore</translation>
+        <translation>λανυασμένη πυκνότητα</translation>
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
-        <translation>È necessario avere uno spessore positivo mash.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No steps</source>
-        <translation>Non ci sono passaggi</translation>
+        <translation>Δεν υπάρχουν βήματα</translation>
     </message>
     <message>
         <source>There must be at least one mash step to run the wizard.</source>
-        <translation>Ci deve essere almeno un mash per eseguire la procedura guidata.</translation>
+        <translation>Θα πρέπει να υπάρχει τουλάχιστον ένα βήμα για να τρέξει ο οδηγός</translation>
     </message>
     <message>
         <source>First step</source>
-        <translation>Primo passo</translation>
+        <translation>Πρώτο βήμα</translation>
     </message>
     <message>
         <source>Your first mash step must be an infusion.</source>
-        <translation>Il primo passo deve essere una mescolanza di infusione.</translation>
+        <translation>Το πρώτο σας βήμα πρέπει να είναι απαραίτητα έγχυση</translation>
     </message>
     <message>
         <source>Mash too thick</source>
-        <translation>Mash troppo spesso</translation>
+        <translation>Σακχαροποίηση είναι πολύ πηχτή</translation>
     </message>
     <message>
         <source>Your mash is too thick for desired temp. at first step.</source>
-        <translation>Il mosto è troppo spesso per desiderare la temp. al primo passo.</translation>
+        <translation>Η Σακχαροποίηση είναι πολύ πηχτή για την επιθυμητή θερμοκρασία κατά το πρώτο βήμα.</translation>
     </message>
     <message>
         <source>Decoction error</source>
-        <translation>Errore Decotto</translation>
+        <translation>σφάλμα κατά το decoction</translation>
     </message>
     <message>
         <source>Something went wrong in decoction calculation.</source>
-        <translation>Qualcosa è andato storto nel calcolo decotto.</translation>
+        <translation>Κάτι πήγε στραβά με τον υπολογισμό στο decoction</translation>
     </message>
     <message>
         <source>Sparge temp.</source>
-        <translation>Temperatura di Sparge.</translation>
+        <translation>Θερμοκρασία ψεκάσματος</translation>
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation>Al fine di colpire il vostro sparge temperatura, l&apos;acqua sparge deve essere al di sopra di ebollizione. Abbassa la temperatura sparge, o consentire per l&apos;acqua sparge più.</translation>
+        <translation>Για να επιτύχετε την επιθυμητή θερμοκρασία ψεκάσματος, το νερό θα πρέπει να έχει βράσει. Μειώστε την θερμοκρασία του νερού ή αυξήστε τον όγκο του νερού με το οποίο θα ψεκάσετε</translation>
     </message>
     <message>
         <source>Too much wort</source>
-        <translation>Troppo Mosto</translation>
+        <translation>Πάρα πολύ γλεύκος</translation>
     </message>
     <message>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation>Hai mosto troppo dal mash per il formato ebollizione. Suggerisco l&apos;aumento delle dimensioni ebollizione aumentando il tempo di ebollizione, o ridurre lo spessore mash.</translation>
+        <translation>Έχετε παραπάνω γλεύκος από τον όγκο που θέλετε να βράσετε. Σας προτείνουμε να αυξήσετε τον όγκο βρασμού με το να αυξήσετε το χρόνο βρασμού, ή να μειώσετε την πυκνότητα σακχαροποίησης</translation>
     </message>
 </context>
 <context>
     <name>MiscDialog</name>
     <message>
         <source>Misc name</source>
-        <translation>Nome Aggiunta</translation>
+        <translation>Ονομασία είδους</translation>
     </message>
     <message>
         <source>Misc name:</source>
-        <translation>Nome Aggiunta:</translation>
+        <translation>Ονομασία είδους</translation>
     </message>
 </context>
 <context>
     <name>MiscItemDelegate</name>
     <message>
         <source>Spice</source>
-        <translation>Spezie</translation>
+        <translation>Μπαχαρικά</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>affinamento</translation>
+        <translation>Βελτιωτικά</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Agente dell&apos;acqua</translation>
+        <translation>Ρυθμιστής νερού</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Erba</translation>
+        <translation>Βότανα</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Sapore</translation>
+        <translation>Άρωματικές Ύλες</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Altro</translation>
+        <translation>&apos;Αλλο</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>Στο Βράσιμο</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>Στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>Κατά την πρώτη ζύμωση</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>κατά την δεύτερη ζύμωση</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Imbottigliamento</translation>
+        <translation>Κατά την εμφιάλωση</translation>
     </message>
 </context>
 <context>
     <name>MiscTableModel</name>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>Χρήση</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">peso</translation>
+        <translation>Βάρος</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Όγκος</translation>
     </message>
     <message>
         <source>Amount Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Μονάδα μέτρησης</translation>
     </message>
 </context>
 <context>
     <name>OptionDialog</name>
     <message>
         <source>Open Directory</source>
-        <translation>Apri directory</translation>
+        <translation>Άνοιγμα Καταλόγου</translation>
     </message>
     <message>
         <source>Copy Data</source>
-        <translation>Copia Dta</translation>
+        <translation>Αντιγραφή δεδομένων</translation>
     </message>
     <message>
         <source>There do not seem to be any data files in this directory, so we will copy your old data here.</source>
-        <translation>Non sembrano esserci qualsiasi file di dati in questa directory, quindi dovremo copiare i vostri vecchi dati qui.</translation>
+        <translation>Δεν φαίνεται να υπάρχουν αρχεία σε αυτό τον φάκελο, οπότε θα αντιγράψουμε τα παλιά σας δεδομένα εδώ.</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Riavviare</translation>
+        <translation>Επανεκκίνηση</translation>
     </message>
     <message>
         <source>Please restart Brewtarget.</source>
-        <translation>Si prega di riavviare Brewtarget.</translation>
+        <translation>Παρακαλώ επανεκκινήστε το πρόγραμμα</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Invalid color formula type: %1</source>
-        <translation>Formula tipo colore non valido: %1</translation>
+        <translation>λανθασμένος τύπος φόρμουλας χρώματος: %1</translation>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation>Formula tipo IBU non riconosciuta. %1</translation>
+        <translation>Μη αναγνωρίσiμος τύπος φόρμουλας IBU. %1</translation>
     </message>
     <message>
         <source>Batch Size: %1
 </source>
-        <translation>Misura partita: %1
+        <translation>Όγκος παρτίδας: %1
 </translation>
     </message>
     <message>
         <source>Boil Size: %1
 </source>
-        <translation>Misura bollitura: %1
+        <translation>Όγκος βρασμού: %1
 </translation>
     </message>
     <message>
         <source>Boil Time: %1
 </source>
-        <translation>Tempo Bollitura: %1
+        <translation>Χρόνος βρασμού: %1
 </translation>
     </message>
     <message>
@@ -1228,32 +1216,32 @@
     <message>
         <source>Bitterness: %1 IBUs (%2)
 </source>
-        <translation>Amarezza: %1 IBUs (%2)
+        <translation>Πικράδα: %1 IBUs (%2)
 </translation>
     </message>
     <message>
         <source>Color: %1 SRM (%2)
 </source>
-        <translation>Colore: %1 SRM (%2)
+        <translation>Χρώμα: %1 SRM (%2)
 </translation>
     </message>
     <message>
         <source>Fermentables
 </source>
-        <translation>Fermentabile
+        <translation>Ζυμώσιμα
 </translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Mashed</source>
@@ -1261,34 +1249,34 @@
     </message>
     <message>
         <source>Late</source>
-        <translation>Tardi</translation>
+        <translation>Στο τέλος</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation>Prodotto</translation>
+        <translation>Απόδοση</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>Χρώμα</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Ναι</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Όχι</translation>
     </message>
     <message>
         <source>Total grain: %1
 </source>
-        <translation>Grano Totale: %1
+        <translation>Ολική ποσότητα σιτηρών: %1
 </translation>
     </message>
     <message>
         <source>Hops
 </source>
-        <translation>Luppoli
+        <translation>Λυκίσκος
 </translation>
     </message>
     <message>
@@ -1297,11 +1285,11 @@
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>Χρήση</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -1310,30 +1298,30 @@
     <message>
         <source>Misc
 </source>
-        <translation>Aggiunta
+        <translation>Διαφ.
 </translation>
     </message>
     <message>
         <source>Yeast
 </source>
-        <translation>Lievito
+        <translation>Μαγιά
 </translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation>fase</translation>
+        <translation>Στάδιο</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>κατά την δεύτερη ζύμωση</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>Κατά την πρώτη ζύμωση</translation>
     </message>
     <message>
         <source>Mash
@@ -1343,119 +1331,119 @@
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Target</source>
-        <translation>Obiettivo</translation>
+        <translation>Στόχος</translation>
     </message>
     <message>
         <source>Notes
 </source>
-        <translation>Note
+        <translation>Σημειώσεις
 </translation>
     </message>
     <message>
         <source>Instructions
 </source>
-        <translation>Istruzioni
+        <translation>Οδηγίες
 </translation>
     </message>
     <message>
         <source>Directory Problem</source>
-        <translation>Problema Directory</translation>
+        <translation>Πρόβλημα με το φάκελο</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be read.</source>
-        <translation>&quot;%1&quot; Non può essere letto.</translation>
+        <translation>&quot;%1&quot; δεν μπορεί να διαβαστεί.</translation>
     </message>
     <message>
         <source>Config directory &quot;%1&quot; cannot be read.</source>
-        <translation>Configura Directory %1&quot; non può essere letto.</translation>
+        <translation>Config directory &quot;%1&quot; cannot be read.</translation>
     </message>
     <message>
         <source>New Version</source>
-        <translation>Nuova versione</translation>
+        <translation>Νέα έκδοση</translation>
     </message>
     <message>
         <source>Version %1 is now available. Download it?</source>
-        <translation>La versione %1 è ora disponibile. Scaricala?</translation>
+        <translation>Η νέα έκδοση %1 είναι διαθέσιμη. Να την κατεβάσω?</translation>
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
+        <translation>Να μην σας ξαναενοχλήσω για νέες εκδόσεις;</translation>
     </message>
     <message>
         <source>Database Failure</source>
-        <translation>Errore del database</translation>
+        <translation>Πρόβλημα με την βάση δεδομένων</translation>
     </message>
     <message>
         <source>Failed to open the database &apos;%1&apos;.</source>
-        <translation>Errore del database %1&apos;.</translation>
+        <translation>Δεν ήταν δυνατό να ανοίξει η βάση δεδομένων &apos;%1&apos;.</translation>
     </message>
     <message>
         <source>Save Database Changes</source>
-        <translation>Salva le modifiche del database</translation>
+        <translation>Αποθήκευση των αλλαγών στην βάση δεδομένων</translation>
     </message>
     <message>
         <source>Would you like to save the changes you made?</source>
-        <translation>Vuoi salvare le modifiche apportate?</translation>
+        <translation>θα θέλατε να αποθηκευτούν οι αλλαγές που έγιναν;</translation>
     </message>
     <message>
         <source>Multiple Databases Found</source>
-        <translation>Più database trovati</translation>
+        <translation>Βρέθηκαν πολλαπλές βάσεις δεδομένων</translation>
     </message>
     <message>
         <source>Multiple databases were found.  Do you want to restore the changes you made during your last Brewtarget session, or rollback to before last session&apos;s changes?</source>
-        <translation>Più database sono stati trovati. Vuoi ripristinare le modifiche apportate durante l&apos;ultima sessione Brewtarget o torna indietro di prima che le modifiche della sessione ?</translation>
+        <translation>Βρέθηκαν πολλαπλές βάσεις δεδομένων. Θα θέλατε να επαναφέρετε τις αλλαγές που έγιναν κατά την τελευταία χρήση του προγράμματος ή  να αποκαταστήσω τις αλλαγές πριν από αυτήν;</translation>
     </message>
     <message>
         <source>Restore</source>
-        <translation>Ripristinare</translation>
+        <translation>Επαναφορά</translation>
     </message>
     <message>
         <source>Rollback</source>
-        <translation>torna indietro</translation>
+        <translation>αποκατάσταση</translation>
     </message>
     <message>
         <source>Failed to remove the temporary backup database.  Navigate to &apos;%1&apos; and remove &apos;tempBackupDatabase.sqlite&apos;.</source>
-        <translation>Impossibile rimuovere il database temporaneo di backup. Passare a &apos;%1&apos; e rimuovere &apos;tempBackupDatabase.sqlite&apos;.</translation>
+        <translation>Αποτυχία διαγραφής της προσωρινής βάσης δεδομένων. Πηγαίνετε στο φάκελο  &apos;%1&apos; και αφαιρέστε το αρχείο  &apos;tempBackupDatabase.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Failed to rollback to the backup database.  Navigate to &apos;%1&apos;, remove &apos;database.sqlite&apos; if it exists, and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation>Impossibile tornare indietro al database di backup. Passare a &apos;%1&apos;, togliere &apos;database.sqlite&apos; se esiste, e rinominare &apos;tempBackupDatabase.sqlite&apos; a &apos;database.sqlite&apos;.</translation>
+        <translation>Αποτυχία διαγραφής της προσωρινής βάσης δεδομένων. Πηγαίνετε στο φάκελο  &apos;%1&apos; και αφαιρέστε το αρχείο &apos;database.sqlite&apos; εάν υπάρχει, και μετονομάστε το αρχείο  &apos;tempBackupDatabase.sqlite&apos; σε &apos;database.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Database Restore Failure</source>
-        <translation>Errore del database di ripristino</translation>
+        <translation>Αποτυχία επαναφοράς βάσης δεδομένων</translation>
     </message>
     <message>
         <source>Failed to restore the backup database. Navigate to &apos;%1&apos; and rename &apos;tempBackupDatabase.sqlite&apos; to &apos;database.sqlite&apos;.</source>
-        <translation>Impossibile ripristinare il database di backup. Passare a &apos;%1&apos; e rinominare &apos;tempBackupDatabase.sqlite&apos; a &apos;database.sqlite&apos;.</translation>
+        <translation>Αποτυχία επαναφοράς βάσης δεδομένων   Πηγαίνετε στο φάκελο  &apos;%1&apos;  και μετονομάστε το αρχείο &apos;tempBackupDatabase.sqlite&apos; σε &apos;database.sqlite&apos;.</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Grano</translation>
+        <translation>Σιτηρά</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Zucchero</translation>
+        <translation>Σάκχαρα</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Estratto</translation>
+        <translation>Υγρή Βύνη</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Estratto secco</translation>
+        <translation>Ξηρή Βύνη</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Aggiunta</translation>
+        <translation>Πρόσθετα</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>Στο Βράσιμο</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -1463,43 +1451,43 @@
     </message>
     <message>
         <source>Infusion</source>
-        <translation>Infusione</translation>
+        <translation>Infusion</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation>Decotto</translation>
+        <translation>Decoction</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation>Imbottigliamento</translation>
+        <translation>Κατά την εμφιάλωση</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation>Spezie</translation>
+        <translation>Μπαχαρικά</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>affinamento</translation>
+        <translation>Βελτιωτικά</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Agente dell&apos;acqua</translation>
+        <translation>Ρυθμιστής νερού</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Erba</translation>
+        <translation>Βότανα</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Sapore</translation>
+        <translation>Άρωματικές Ύλες</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Altro</translation>
+        <translation>&apos;Αλλο</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -1515,72 +1503,72 @@
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vino</translation>
+        <translation>Κρασί</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation>Σαμπάνια</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Liquido</translation>
+        <translation>Υγρή</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Secco</translation>
+        <translation>Ξηρή</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Inclinazione</translation>
+        <translation>Slant</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation>Καλιέργεια</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Basso</translation>
+        <translation>Χαμηλή</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Medio</translation>
+        <translation>Μεσαία</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Alto</translation>
+        <translation>Υψηλή</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Molto alto</translation>
+        <translation>Πολύ υψηλή</translation>
     </message>
     <message>
         <source>Recipes</source>
-        <translation>Ricette</translation>
+        <translation>Συνταγές</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>Εξοπλισμός</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Fermentabili</translation>
+        <translation>Ζυμώσιμα</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Luppoli</translation>
+        <translation>Λυκίσκος</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Aggiunta</translation>
+        <translation>Διάφορα</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>Μαγιά</translation>
     </message>
     <message>
         <source>Efficiency: %1%
 </source>
-        <translation>Efficenza: %1%
+        <translation>Απόδοση: %1%
 </translation>
     </message>
     <message>
@@ -1591,271 +1579,271 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stile</translation>
+        <translation>Στυλ</translation>
     </message>
 </context>
 <context>
     <name>Recipe</name>
     <message>
         <source>Add grains</source>
-        <translation>Aggiunta grani</translation>
+        <translation>Προσθέστε Σιτηρά</translation>
     </message>
     <message>
         <source>Add </source>
-        <translation>Aggiunta </translation>
+        <translation>Προσθήκη </translation>
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>al mash tun.</translation>
+        <translation>Στο σκεύος σακχαροποίσης</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation>Calore dell&apos;acqua</translation>
+        <translation>Θερμάντε το νερό</translation>
     </message>
     <message>
         <source>Bring </source>
-        <translation>Prtare </translation>
+        <translation>Φέρτε </translation>
     </message>
     <message>
         <source>%1 water to %2, </source>
-        <translation>%1 acqua a %2, </translation>
+        <translation>%1 το νερό σε  %2, </translation>
     </message>
     <message>
         <source>for upcoming infusions.</source>
-        <translation>per infusioni successive.</translation>
+        <translation>για την έγχυση</translation>
     </message>
     <message>
         <source>Add %1 water at %2 to mash to bring it to %3.</source>
-        <translation>Aggiungi %1 acqua %2 di mash per portarla a %3.</translation>
+        <translation>Προσθέστε %1 νερό στους %2 κατά την σακχαροποίηση για να το φέρετε στους %3.</translation>
     </message>
     <message>
         <source>Heat mash to %1.</source>
-        <translation>Riscaldare Mosto a %1.</translation>
+        <translation>θερμάντε το χυλό στους %1.</translation>
     </message>
     <message>
         <source>Bring %1 of the mash to a boil and return to the mash tun to bring it to %2.</source>
-        <translation>Porta %1 del mosto a bollore e tornare al mash tun per portarla a %2.</translation>
+        <translation>Φέρτε  %1 του χυλού σε βρασμό και επιστρέψτε το στο σκεύος σακχαροποίησης για να το φέρετε στους %2.</translation>
     </message>
     <message>
         <source> Hold for %1.</source>
-        <translation> Mantenere la posizione per %1.</translation>
+        <translation> κρατήστε το για %1.</translation>
     </message>
     <message>
         <source>Put %1 %2 into boil for %3.</source>
-        <translation>Metti %1 %2 in ebollizione per %3.</translation>
+        <translation>Βάλτε %1 %2 για βράσιμο για  %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into fermenter for %3.</source>
-        <translation>Metti %1 %2 nel fermentatore per %3.</translation>
+        <translation>Βάλτε %1 %2 στον κάδο ζύμωσης για %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into first wort for %3.</source>
-        <translation>Metti %1 %2 nel primo mosto per %3.</translation>
+        <translation>Βάλτε  %1 %2 πριν το βρασμό για %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into mash for %3.</source>
-        <translation>Metti %1 %2 nel mash per %3.</translation>
+        <translation>Βάλτε %1 %2 στο σκεύος σακχαροποίησης για %3.</translation>
     </message>
     <message>
         <source>Steep %1 %2 in wort for %3.</source>
-        <translation>Steep %1 %2 nel mosto per %3.</translation>
+        <translation>Μουσκέψτε %1 %2 στο γλεύκος για %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3</source>
-        <translation>Usa %1 %2 per %3</translation>
+        <translation>Χρησιμοποιήστε %1 %2 για %3</translation>
     </message>
     <message>
         <source>Hop addition</source>
-        <translation>Aggiunta Luppolo</translation>
+        <translation>Προσθήκη λυκίσκου</translation>
     </message>
     <message>
         <source>Use %1 %2 at bottling for %3.</source>
-        <translation>Usa %1 %2 nell&apos;imbottigliamento per %3.</translation>
+        <translation>Χρησιμοποιήστε %1 %2 κατά την εμφιάλωση για %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into primary for %3.</source>
-        <translation>Metti %1 %2 nel primario per %3.</translation>
+        <translation>Βάλτε %1 %2 κατά την αρχική ζύμωση για %3.</translation>
     </message>
     <message>
         <source>Put %1 %2 into secondary for %3.</source>
-        <translation>Metti %1 %2 nel secondario per %3.</translation>
+        <translation>Βάλτε %1 %2 κατά την δεύτερη ζύμωση για %3.</translation>
     </message>
     <message>
         <source>Use %1 %2 for %3.</source>
-        <translation>Usa %1 %2 per %3.</translation>
+        <translation>Χρησιμοποιήστε %1 %2 για %3.</translation>
     </message>
     <message>
         <source>Misc addition</source>
-        <translation>Aggiunta materie</translation>
+        <translation>Προσθήκη διαφόρων</translation>
     </message>
     <message>
         <source>Do first wort hopping with </source>
-        <translation>Fai prima il mosto luppolato con </translation>
+        <translation>Προσθέστε τον ακόλουθο λυκίσκο πριν το βρασμό </translation>
     </message>
     <message>
         <source>First wort hopping</source>
-        <translation>Primo mosto luppolato</translation>
+        <translation>Προσθήκη λυκίσκου πριν το βρασμό</translation>
     </message>
     <message>
         <source>You should now have %1 wort.</source>
-        <translation>Si drovrebbe avere ora %1 mosto.</translation>
+        <translation>Τώρα θα πρέπει να έχετε %1 ποσότητα γλεύκους</translation>
     </message>
     <message>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
-        <translation> Aggiung i%1 acqua in pentola portando il volume della pre-ebollizione a %2.</translation>
+        <translation> Προσθέστε %1 νερό στην κατσαρόλα, φέρτε τον όγκο πριν το βράσιμο στους %2</translation>
     </message>
     <message>
         <source>Pre-boil</source>
-        <translation>Prima della bollitura</translation>
+        <translation>πριν το βρασμό</translation>
     </message>
     <message>
         <source>Boil or steep </source>
-        <translation>Bollitura o steep </translation>
+        <translation>Βράστε ή εμποτίστε </translation>
     </message>
     <message>
         <source>Boil/steep fermentables</source>
-        <translation>Bollitura/steep dei fermentabili</translation>
+        <translation>Βράστε/εμποτίστε τα ζυμώσιμα</translation>
     </message>
     <message>
         <source>to the boil at knockout.</source>
-        <translation>ad ebollizione a eliminazione diretta.</translation>
+        <translation>κατά το τέλος του βρασμού</translation>
     </message>
     <message>
         <source>Knockout additions</source>
-        <translation>aggiungi eliminazione diretta</translation>
+        <translation>προσθήκες στο τέλος</translation>
     </message>
     <message>
         <source>You should have %1 wort post-boil.</source>
-        <translation>Si dovrebbe avere %1 nel mosto dopo boollitura.</translation>
+        <translation>Θα πρέπει να έχετε  %1 γλεύκος μετά το βράσιμο.</translation>
     </message>
     <message>
         <source>
 You anticipate losing %1 to trub and chiller loss.</source>
         <translation>
-Si prevede di perdere %1 per la peridita di refrigerazione.</translation>
+Προβλέπεται να υπάρξουν απώλειες %1 από το ίζημα και τον ψύκτη</translation>
     </message>
     <message>
         <source>
 Add %1 top up water into primary.</source>
         <translation>
-Aggiungi %1 per rabboccare acqua nel primario.</translation>
+προσθέστε %1 νερό στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>
 The final volume in the primary is %1.</source>
         <translation>
-Il Volume finale del primo è %1.</translation>
+Ο τελικός όγκος στον κάδο ζύμωσης είναι %1.</translation>
     </message>
     <message>
         <source>Post boil</source>
-        <translation>Dopo Bollitura</translation>
+        <translation>Μετά τον βρασμό</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>Διάρκεια βρασμού</translation>
     </message>
     <message>
         <source>You did not configure an equipment (which you really should), so tell me the boil time.</source>
-        <translation>Non hai configurato l&apos;attrezzatura (che si dovrebbe fare), quindi dimmi il tempo ebollizione.</translation>
+        <translation>Δεν έχετε ρυθμίσει τον εξοπλισμό, ( κανονικά θα έπρεπε), γιαυτό πείτε μου τον χρόνο βρασμού.</translation>
     </message>
     <message>
         <source>Bring the wort to a boil and hold for %1.</source>
-        <translation>Portare il mosto ad ebollizione e tenerilo cos&apos; per %1.</translation>
+        <translation>Φέρτε το γλεύκος σε βρασμό και κρατήστε το έτσι για %1.</translation>
     </message>
     <message>
         <source>Start boil</source>
-        <translation>Partenza bollitura</translation>
+        <translation>Αρχίστε το βράσιμο</translation>
     </message>
     <message>
         <source>Flameout</source>
-        <translation>Spegnimento</translation>
+        <translation>Κλείστε το ρεύμα/γκάζι</translation>
     </message>
     <message>
         <source>Stop boiling the wort.</source>
-        <translation>Ferma la bollitura del mosto.</translation>
+        <translation>Σταματήστε το βράσιμο του γλεύκους</translation>
     </message>
     <message>
         <source>Cool wort and pitch </source>
-        <translation>Mosto freddo e intenso </translation>
+        <translation>Παγώστε το γλεύκος και ρίξτε </translation>
     </message>
     <message>
         <source>%1 %2 yeast, </source>
-        <translation>%1 %2 Lievito </translation>
+        <translation>%1 %2 μαγιά, </translation>
     </message>
     <message>
         <source>to the primary.</source>
-        <translation>nel primario.</translation>
+        <translation>στον πρώτο κάδο ζήμωσης</translation>
     </message>
     <message>
         <source>Pitch yeast</source>
-        <translation>Lievito intenso</translation>
+        <translation>Ρίξτε την μαγιά</translation>
     </message>
     <message>
         <source>Let ferment until FG is %1.</source>
-        <translation>Lascia fermentare fino a FG %1.</translation>
+        <translation>Αφήστε το να ζυμώνει εως ότου το FG είναι %1.</translation>
     </message>
     <message>
         <source>Ferment</source>
-        <translation>Fermentare</translation>
+        <translation>Ζήμωση</translation>
     </message>
     <message>
         <source>Transfer beer to secondary.</source>
-        <translation>Trasferisci la birra nel secondario.</translation>
+        <translation>μεταφέρτε την μπύρα στον δεύτερο κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Transfer to secondary</source>
-        <translation>Trasferisci al secondario</translation>
+        <translation>Μεταφέρτε στον δεύτερο κάδο</translation>
     </message>
     <message>
         <source>Add %1 %2 to boil at %3.</source>
-        <translation>Aggiungi %1 %2 per bollire a %3.</translation>
+        <translation>Προσθέστε %1 %2 για βράσιμο στους %3</translation>
     </message>
     <message>
         <source>Raise water to boil and then remove from heat. Stir in  </source>
-        <translation>Sollevare l&apos;acqua ad ebollizione e poi togliere dal fuoco. Mescolare  </translation>
+        <translation>Βράστε νερό και μετά απομακρύνετέ το από την φωτιά. Ανακατέψτε  </translation>
     </message>
     <message>
         <source>Add Extracts to water</source>
-        <translation>Aggiungi estratti all&apos;acqua</translation>
+        <translation>Προσθέστε τα εκχυλίσματα στο νερό</translation>
     </message>
     <message>
         <source>%1 water to %2 </source>
-        <translation>%1 acqua a %2 </translation>
+        <translation>%1 νερό για %2 </translation>
     </message>
 </context>
 <context>
     <name>RecipeFormatter</name>
     <message>
         <source>unknown style</source>
-        <translation>Stile sconosciuto</translation>
+        <translation>Άγνωστο είδος/τύπος</translation>
     </message>
     <message>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>Μη διαθέσιμο</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Birraio</translation>
+        <translation>Ζυθοποιός</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Data</translation>
+        <translation>Ημερομηνία</translation>
     </message>
     <message>
         <source>Batch Size</source>
-        <translation>Misura Partita</translation>
+        <translation>Όγκος παρτίδας</translation>
     </message>
     <message>
         <source>Boil Size</source>
-        <translation>Misura bollitura</translation>
+        <translation>Όγκος βρασμού</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>Χρόνος βρασμού</translation>
     </message>
     <message>
         <source>Efficiency</source>
-        <translation>Efficenza</translation>
+        <translation>Απόδοση</translation>
     </message>
     <message>
         <source>OG</source>
@@ -1867,7 +1855,7 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Sconosciuto</translation>
+        <translation>Άγνωστο</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -1875,59 +1863,59 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Bitterness</source>
-        <translation>Amarezza</translation>
+        <translation>Πικράδα</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>Χρώμα</translation>
     </message>
     <message>
         <source>Calories (per 12 oz.)</source>
-        <translation>Calorie (per 340 gr)</translation>
+        <translation>Θερμίδες</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Fermentabili</translation>
+        <translation>Ζυμώσιμα</translation>
     </message>
     <message>
         <source>Total grain:</source>
-        <translation>Grano Totale:</translation>
+        <translation>Ολική ποσότητα σιτηρών</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Mashed</source>
-        <translation>Mashed</translation>
+        <translation>στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Late</source>
-        <translation>Tardi</translation>
+        <translation>Στο τέλος</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation>Prodotto</translation>
+        <translation>Απόδοση</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Ναι</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Όχι</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Luppoli</translation>
+        <translation>Λυκίσκος</translation>
     </message>
     <message>
         <source>Alpha</source>
@@ -1935,15 +1923,15 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>Χρήση</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -1951,23 +1939,23 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation>Aggiunta</translation>
+        <translation>Διάφορα</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>Μαγιά</translation>
     </message>
     <message>
         <source>Stage</source>
-        <translation>fase</translation>
+        <translation>Στάδιο</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>κατά την δεύτερη ζύμωση</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>Κατά την πρώτη ζύμωση</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -1975,193 +1963,193 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Temperatura Obiettivo</translation>
+        <translation>Ζητούμενη θερμοκρασία</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>Οδηγίες</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation>Data di birrificazione</translation>
+        <translation>Ημέρα Ζυθοποίησης</translation>
     </message>
     <message>
         <source>Preboil</source>
-        <translation>Prima della bollitura</translation>
+        <translation>Πριν τον βρασμό</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Densità Iniziale</translation>
+        <translation>SG</translation>
     </message>
     <message>
         <source>Volume into BK</source>
-        <translation>Volume interno al BK</translation>
+        <translation>Όγκος στο σκεύος βρασμού</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Sospensione Temperatura</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation>Temperatura Finale</translation>
+        <translation>Τελική Θερμοκρασία</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>Efficenza in BK</translation>
+        <translation>απόδοση στην μαρμίτα</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>OG Stimato</translation>
+        <translation>Προβλεπόμενη Αρχική πυκνότητα</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Dopo Bollitura</translation>
+        <translation>μετά τον βρασμό</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Volume dopo Bollitura</translation>
+        <translation>Όγκος μετά τον βρασμό</translation>
     </message>
     <message>
         <source>Volume Into Fermenter</source>
-        <translation>Volume dentro al fermentatore</translation>
+        <translation>Όγκος στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Efficenza Birrificio</translation>
+        <translation>Απόδοση εξοπλισμού</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>ABV Stimato</translation>
+        <translation>Προβλεπόμενοι ABV</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation>Post Fermentazione</translation>
+        <translation>Μετά την ζύμωση</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>Όγκος</translation>
     </message>
     <message>
         <source>Print Document</source>
-        <translation>stampa documento</translation>
+        <translation>Εκτύπωση εγγράφου</translation>
     </message>
 </context>
 <context>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>OG Corrispondente</translation>
+        <translation>Αναντιστοιχία αρχικής πυκνότητας</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
-        <translation>Sulla base del dato plato originale, l&apos;OG deve essere %1, ma tu ha inserito %2. Continuando con il valore calcolato OG.</translation>
+        <translation>Με βάση τους δεδομένους αρχικούς βαθμούς plato, η αρχική πυκνότητα θα έπρεπε να είναι %1, αλλά έχετε εισάγει %2.  Συνεχίζω με την υπολογισμένη αρχική πυκνότητα</translation>
     </message>
 </context>
 <context>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
-        <translation>Ricetta scalata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Il mosto è stato resettato a causa del fatto che le temperature non si è abbassata facilmente. Si prega di eseguire nuovamente la procedura guidata di mosto.</translation>
+        <translation>Η διαδικασία σακχαροποίησης μηδενίστηκε εξ&apos; αιτίας του γεγονότος ότι οι θερμοκρασίες κατά την σακχαροποίηση δεν αλλάζουν εύκολα.  Χρησιμοποιήστε τον οδηγό σακχαροποίησης για νέα διαδικασία.</translation>
     </message>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
-        <translation>Le attrezzature e il mash sono state azzerate a causa del fatto che le temperature non si sono abbassate facilmente. Si prega di eseguire nuovamente la procedura guidata di mosto.</translation>
+        <translation>Ο εξοπλισμός και η διαδικασία σακχαροποίησης μηδενίστηκαν εξ&apos; αιτίας του γεγονότος ότι οι θερμοκρασίες κατά την σακχαροποίηση δεν αλλάζουν εύκολα.  Χρησιμοποιήστε τον οδηγό σακχαροποίησης για νέα διαδικασία.</translation>
     </message>
 </context>
 <context>
     <name>StyleEditor</name>
     <message>
         <source>Style name</source>
-        <translation>Nome dello stile</translation>
+        <translation>Ονομασία Στυλ</translation>
     </message>
     <message>
         <source>Style name:</source>
-        <translation>Nome dello Stile:</translation>
+        <translation>Όνομασία στυλ:</translation>
     </message>
 </context>
 <context>
     <name>TimerWidget</name>
     <message>
         <source>Open Sound</source>
-        <translation>Apri Suono</translation>
+        <translation>Εισάγετε ήχο</translation>
     </message>
     <message>
         <source>Audio Files (*.wav *.ogg *.mp3 *.aiff)</source>
-        <translation>Audio Files (*.wav *.ogg *.mp3 *.aiff)</translation>
+        <translation>Αρχεία ήχου  (*.wav *.ogg *.mp3 *.aiff)</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation>Διακοπή</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Partenza</translation>
+        <translation>Έναρξη</translation>
     </message>
 </context>
 <context>
     <name>WaterTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello indicizzazione. Riga = %1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>Προβληματική στήλη: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Όνομασία</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Calcium (ppm)</source>
-        <translation>Calcio (ppm)</translation>
+        <translation>Calcium (ppm)</translation>
     </message>
     <message>
         <source>Bicarbonate (ppm)</source>
-        <translation>Bicarbonato (PPM)</translation>
+        <translation>Bicarbonate (ppm)</translation>
     </message>
     <message>
         <source>Sulfate (ppm)</source>
-        <translation>Solfato (ppm)</translation>
+        <translation>Sulfate (ppm)</translation>
     </message>
     <message>
         <source>Chloride (ppm)</source>
-        <translation>Cloruro (ppm)</translation>
+        <translation>Chloride (ppm)</translation>
     </message>
     <message>
         <source>Sodium (ppm)</source>
-        <translation>Sodio (ppm)</translation>
+        <translation>Sodium (ppm)</translation>
     </message>
     <message>
         <source>Magnesium (ppm)</source>
-        <translation>Magnesio (ppm)</translation>
+        <translation>Magnesium (ppm)</translation>
     </message>
 </context>
 <context>
     <name>YeastDialog</name>
     <message>
         <source>Yeast name</source>
-        <translation>Nome Lievito</translation>
+        <translation>Ονομασία μαγιάς</translation>
     </message>
     <message>
         <source>Yeast name:</source>
-        <translation>Nome lievito:</translation>
+        <translation>Ονομασία μαγιάς</translation>
     </message>
 </context>
 <context>
@@ -2180,69 +2168,69 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vino</translation>
+        <translation>Κρασί</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation>Σαμπάνια</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Liquido</translation>
+        <translation>Υγρή</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Secco</translation>
+        <translation>Ξηρή</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Inclinazione</translation>
+        <translation>Slant</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation>Καλιέργεια</translation>
     </message>
 </context>
 <context>
     <name>YeastTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation>Cattivo modello di indice.Riga= %1</translation>
+        <translation>Bad model index. row = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
-        <translation>Cattiva colonna: %1</translation>
+        <translation>Προβληματική στήλη: %1</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Laboratory</source>
-        <translation>Laboratorio</translation>
+        <translation>Εργαστήριο</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>ID Prodotto</translation>
+        <translation>Κωδικός προιόντος</translation>
     </message>
 </context>
 <context>
     <name>aboutDialog</name>
     <message>
         <source>About Brewtarget</source>
-        <translation>Chi è Brewtaget</translation>
+        <translation>Σχετικά με το Brewtarget</translation>
     </message>
     <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -2289,172 +2277,215 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2013 by the developers below.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Peter Buelow&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Dan Cavanagh&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Mik Firestone&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Guido Carpi (Italian translation)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ester (Catalan translation)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (Polish translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (Portuguese translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jan Grmela (Czech translation)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alpha tester)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation>Dona</translation>
+        <translation>Δωρεά</translation>
     </message>
 </context>
 <context>
     <name>brewDayScrollWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Generate Instructions</source>
-        <translation>Istuzioni generali</translation>
+        <translation>Δημιουργία οδηγιών</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Inserisci passaggio</translation>
+        <translation>Εισάγετε βήμα</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Nome del nuovo Steep</translation>
+        <translation>Ονομασία νέου βήματος</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Passo #</translation>
+        <translation>Βήμα #</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Il numero in cui il nuovo passo deve essere collocato</translation>
+        <translation>Σειρά  στην οποία θα μπει το νέο βήμα</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Inserisci nuovo step</translation>
+        <translation>Εισάγετε νέο βήμα</translation>
     </message>
     <message>
         <source>Move steps</source>
-        <translation>Muovi steps</translation>
+        <translation>Μετακίνηση βήματος</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Spostare passo attualmente selezionato in alto</translation>
+        <translation>Μετακίνηση του επιλεγμένου βήματος πάνω</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Spostare passo attualmente selezionato verso il basso</translation>
+        <translation>Μετακίνηση του επιλεγμένου βήματος κάτω</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Rimuovere passo attualmente selezionato</translation>
+        <translation>Διαγραφή του επιλεγμένου βήματος</translation>
     </message>
 </context>
 <context>
     <name>brewDayWidget</name>
     <message>
         <source>Brewday Mode</source>
-        <translation>Modalità Brewday</translation>
+        <translation>Brewday Mode</translation>
     </message>
     <message>
         <source>Instructions</source>
-        <translation>Istruzioni</translation>
+        <translation>Οδηγίες</translation>
     </message>
     <message>
         <source>Move currently selected step up</source>
-        <translation>Spostare passo attualmente selezionato in alto</translation>
+        <translation>Μετακίνηση του επιλεγμένου βήματος πάνω</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation>Su</translation>
+        <translation>Πάνω</translation>
     </message>
     <message>
         <source>Move currently selected step down</source>
-        <translation>Spostare passo attualmente selezionato verso il basso</translation>
+        <translation>Μετακίνηση του επιλεγμένου βήματος κάτω</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation>Giù</translation>
+        <translation>Κάτω</translation>
     </message>
     <message>
         <source>Remove currently selected step</source>
-        <translation>Rimuovere passo attualmente selezionato</translation>
+        <translation>Διαγραφή του επιλεγμένου βήματος</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <translation>Διαγραφή</translation>
     </message>
     <message>
         <source>Insert step</source>
-        <translation>Inserisci passaggio</translation>
+        <translation>Εισάγετε βήμα</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Name of new step</source>
-        <translation>Nome del nuovo Steep</translation>
+        <translation>Ονομασία νέου βήματος</translation>
     </message>
     <message>
         <source>Step #</source>
-        <translation>Passo #</translation>
+        <translation>Βήμα #</translation>
     </message>
     <message>
         <source>The number where the new step should be placed</source>
-        <translation>Il numero in cui il nuovo passo deve essere collocato</translation>
+        <translation>Σειρά  στην οποία θα μπει το νέο βήμα</translation>
     </message>
     <message>
         <source>Insert the new step</source>
-        <translation>Inserisci nuovo step</translation>
+        <translation>Εισάγετε νέο βήμα</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation>Inserisci</translation>
+        <translation>Εισαγωγή</translation>
     </message>
 </context>
 <context>
     <name>brewNoteWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Preboil</source>
-        <translation>Prima della bollitura</translation>
+        <translation>Πριν τον βρασμό</translation>
     </message>
     <message>
         <source>SG</source>
-        <translation>Densità Iniziale</translation>
+        <translation>SG</translation>
     </message>
     <message>
         <source>Preboil gravity</source>
-        <translation>Densità Iniziale</translation>
+        <translation>Πυκνότητα πριν το βρασμό</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>Όγκος</translation>
     </message>
     <message>
         <source>Volume of wort collected</source>
-        <translation>Volume di mosto raccolto</translation>
+        <translation>Όγκος γλεύκους που συλλέχτηκε</translation>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation>Sospensione Temperatura</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
-        <translation>Temperatura del mosto dopo la pasta in</translation>
+        <translation>Θερμοκρασία της σακχαροποίησης μετά την εισαγωγή των σιτηρών</translation>
     </message>
     <message>
         <source>Final Temp</source>
-        <translation>Temperatura Finale</translation>
+        <translation>Τελική Θερμοκρασία</translation>
     </message>
     <message>
         <source>Temperature of mash before mash out</source>
-        <translation>Temperatura mosto dopo mash out</translation>
+        <translation>Θερμοκρασία σακχαροποίησης πριν το τέλος</translation>
     </message>
     <message>
         <source>Postboil</source>
-        <translation>Dopo Bollitura</translation>
+        <translation>μετά τον βρασμό</translation>
     </message>
     <message>
         <source>OG</source>
@@ -2462,83 +2493,83 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Post boil gravity</source>
-        <translation>Densità dopo Bollitura</translation>
+        <translation>πυκνότητα μετά τον βρασμό</translation>
     </message>
     <message>
         <source>Postboil Volume</source>
-        <translation>Volume dopo Bollitura</translation>
+        <translation>Όγκος μετά τον βρασμό</translation>
     </message>
     <message>
         <source>Volume of wort in BK after boil</source>
-        <translation>Volume del mosto in ebollizione dopo BK</translation>
+        <translation>Όγκος στο καζάνι μετά τον βρασμό</translation>
     </message>
     <message>
         <source>Volume of wort transferred to fermenter</source>
-        <translation>Volume di mosto trasferito nel fermentatore</translation>
+        <translation>Όγκος γλεύκους που μεταφέρθηκε στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Volume dentro al fermentatore</translation>
+        <translation>Όγκος στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source> Pitch Temp</source>
-        <translation> Temperatura intenso</translation>
+        <translation> Θερμοκρασία ρίψης της μαγιάς</translation>
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation>Temperatura del mosto quando il lievito viene attivato</translation>
+        <translation>Θερμοκρασία του γλέυκος κατά την ρίψη της μαγιάς</translation>
     </message>
     <message>
         <source>Postferment</source>
-        <translation>Post Fermentazione</translation>
+        <translation>Μετά την ζύμωση</translation>
     </message>
     <message>
         <source>Final gravity</source>
-        <translation>Densità Finale</translation>
+        <translation>Τελική πυκνότητα</translation>
     </message>
     <message>
         <source>Volume of beer into serving keg/bottles</source>
-        <translation>Volume di birra da servire nel fusto/bottiglie</translation>
+        <translation>Όγκος μπύρας σε μποτίλιες</translation>
     </message>
     <message>
         <source>Date when the yeast fermented out</source>
-        <translation>Data di fine fermentazione</translation>
+        <translation>Ημερομηνία που τελείωσε η ζύμωση</translation>
     </message>
     <message>
         <source>percent efficiency into boil kettle</source>
-        <translation>percentuale di efficienza in caldaia di ammostamento</translation>
+        <translation>ποσοστό απόδοσης στην μαρμίτα</translation>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>Efficenza in BK</translation>
+        <translation>απόδοση στην μαρμίτα</translation>
     </message>
     <message>
         <source>Expected OG, based on measure fg</source>
-        <translation>Prevista OG, sulla base della misura di FG</translation>
+        <translation>Αναμενόμενη OG βασισμένη στην μέτρηση της FG</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>OG Stimato</translation>
+        <translation>Προβλεπόμενη Αρχική πυκνότητα</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
-        <translation>Efficenza Birrificio</translation>
+        <translation>Απόδοση εξοπλισμού</translation>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Efficenza Birrificio</translation>
+        <translation>Απόδοση εξοπλισμού</translation>
     </message>
     <message>
         <source>Expected ABV based on OG</source>
-        <translation>ABV atteso sulla base di OG</translation>
+        <translation>Αναμενόμενη ABV  με βάση την OG</translation>
     </message>
     <message>
         <source>Projected ABV</source>
-        <translation>ABV Stimato</translation>
+        <translation>Προβλεπόμενοι ABV</translation>
     </message>
     <message>
         <source>ABV based on FG</source>
-        <translation>ABV basato su OG</translation>
+        <translation>ABV με βάση την FG</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -2546,286 +2577,286 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
 </context>
 <context>
     <name>btSplashScreen</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
 </context>
 <context>
     <name>converterTool</name>
     <message>
         <source>Converter Tool</source>
-        <translation>Tool per conversione</translation>
+        <translation>Εργαλείο μετατροπής</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Εισαγωγή</translation>
     </message>
     <message>
         <source>Amount and units to convert</source>
-        <translation>Importo e unità per la conversione</translation>
+        <translation>Ποσό και μονάδες που θέλετε να μετατραπούν</translation>
     </message>
     <message>
         <source>Output Units</source>
-        <translation>Moduli di uscita</translation>
+        <translation>μετατροπή μονάδων σε</translation>
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation>Unità che si desidera convertire in</translation>
+        <translation>Μοναδες που θελετε να μετατραπούν</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>Μετατροπή</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation>uscita di conversione</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Convert</source>
-        <translation>convertire</translation>
+        <translation>Μετατροπή</translation>
     </message>
 </context>
 <context>
     <name>equipmentEditor</name>
     <message>
         <source>Equipment Editor</source>
-        <translation>Editor attrezzature</translation>
+        <translation>Επεξεργασία εξοπλισμού</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>Εξοπλισμός</translation>
     </message>
     <message>
         <source>Remove equipment</source>
-        <translation>Rimuovi attrezzatura</translation>
+        <translation>Διαγράψτε τον εξοπλισμό</translation>
     </message>
     <message>
         <source>Set as Default</source>
-        <translation>Imposta come default</translation>
+        <translation>Ορισμός ως προκαθορισμένο</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>Απαιτούμενα πεδία</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Pre-boil volume</source>
-        <translation>Volume pre bollitura</translation>
+        <translation>Όγκος πριν το βρασμό</translation>
     </message>
     <message>
         <source>If checked, we will calculate your pre-boil volume based on your desired batch size, boil time, evaporation rate, losses, etc.</source>
-        <translation>Se selezionata, provvederemo a calcolare il vostro pre-ebollizione del volume in base alla dimensione del lotto da bollire e all&apos;ora desiderate, velocità di evaporazione, perdite, ecc.</translation>
+        <translation>Εάν επιλεγεί θα υπολογίσω όγκο πριν το βρασμό με βάση το επιθυμητό μέγεθος παρτίδας, χρόνο βρασμού, ποσοστό εξάτμισης, απώλειες κλπ.</translation>
     </message>
     <message>
         <source>Calculate pre-boil volume</source>
-        <translation>Calcolare il volume di pre-ebollizione</translation>
+        <translation>Υπολογισμός όγκου πριν το βρασμό</translation>
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation>Compilare automaticamente in fase di pre-ebollizione del volume</translation>
+        <translation>Αυτόματη πήρωση όγκου πριν το βρασμό</translation>
     </message>
     <message>
         <source>Batch size</source>
-        <translation>Dimensione lotto</translation>
+        <translation>Μέγεθος παρτίδας</translation>
     </message>
     <message>
         <source>Boiling &amp;&amp; Water</source>
-        <translation>Bollendo &amp;&amp; Acqua</translation>
+        <translation>Βράσιμο &amp;&amp; Νερό</translation>
     </message>
     <message>
         <source>Boil time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>Διάρκεια βρασμού</translation>
     </message>
     <message>
         <source>Evaporation rate (per hr)</source>
-        <translation>Tasso di Evaporazione (per ora)</translation>
+        <translation>Ποσοστό εξάτμισης (ανα ώρα)</translation>
     </message>
     <message>
         <source>How much water boils off per hour</source>
-        <translation>Quanta perdita di acqua per ora</translation>
+        <translation>Πόσο νερό εξατμίζεται ανα ώρα</translation>
     </message>
     <message>
         <source>Kettle top-up water</source>
-        <translation>Rabbocco Acqua bollitore</translation>
+        <translation>Συμπηρωματική ποσότητα νερού την μαρμίτα</translation>
     </message>
     <message>
         <source>How much water is added to kettle immediately pre-boil</source>
-        <translation>Quanta acqua si aggiunge al bollitore immediatamente pre-ebollizione</translation>
+        <translation>Πόσο νερό πρέπει να προστεθεί αμέσως πριν τον βρασμό</translation>
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation>Finale rabbocco acqua</translation>
+        <translation>τελική πλήρωση νερού</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
-        <translation>Acqua aggiunta nel fermentatore</translation>
+        <translation>νερό που προστέθηκε στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Grain Absorption (L/kg)</source>
-        <translation>Assorbimento grano (L/kg)</translation>
+        <translation>Βαθμός απορρόφησης νερού από τα  σιτηρά (L/Kg)</translation>
     </message>
     <message>
         <source>Default Absorption</source>
-        <translation>Assorbimento di default</translation>
+        <translation>Μέση απορρόφηση</translation>
     </message>
     <message>
         <source>Boiling Point of Water</source>
-        <translation>Punto di ebollizione dell&apos;acqua</translation>
+        <translation>Σημείο βρασμού του νερού</translation>
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>L&apos;utilizzo di luppolo </translation>
+        <translation>Χρήση λυκίσκου </translation>
     </message>
     <message>
         <source>Mash Tun</source>
-        <translation>Mash di tun</translation>
+        <translation>Σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>Όγκος</translation>
     </message>
     <message>
         <source>Volume of mash tun</source>
-        <translation>Volume di mash tun</translation>
+        <translation>Όγκος σκεύους σακχαροποίησης</translation>
     </message>
     <message>
         <source>Mass</source>
-        <translation>Massa</translation>
+        <translation>Μάζα</translation>
     </message>
     <message>
         <source>Mass or weight of mash tun</source>
-        <translation>Massa o peso di mash tun</translation>
+        <translation>Μάζα η βάρος σκεύους σακχαροποίησης</translation>
     </message>
     <message>
         <source>Specific heat (cal/(g*K))</source>
-        <translation>Calore Specifico (cal/(g*K))</translation>
+        <translation>Συγκεκριμένη  θερμοκρασία (cal/(g*K))</translation>
     </message>
     <message>
         <source>Losses</source>
-        <translation>Perdite</translation>
+        <translation>Απώλειες</translation>
     </message>
     <message>
         <source>Kettle to fermenter</source>
-        <translation>Bollitore a fermentatore</translation>
+        <translation>Από την μαρμίτα στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Wort lost between kettle and fermenter</source>
-        <translation>Mosto perso tra bollitore e fermentatore</translation>
+        <translation>Γλεύκος που απωλέστηκε από την μαρμίτα στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Lauter deadspace</source>
-        <translation>Separare spazio maorto</translation>
+        <translation>Νεκρός χώρος στο Lauter</translation>
     </message>
     <message>
         <source>Volume of wort lost to lauter deadspace</source>
-        <translation>Volume di mosto perso separando lo spazio morto</translation>
+        <translation>Όγκος γλεύκους που χάθηκε εξ&apos; αιτίας του νεκρού χώρου στο lauter</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
     <message>
         <source>New equipment</source>
-        <translation>Nuovi Ingredienti</translation>
+        <translation>Νέος εξοπλισμός</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Αποθήκευση</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>Ακύρωση</translation>
     </message>
 </context>
 <context>
     <name>fermentableDialog</name>
     <message>
         <source>Fermentable Database</source>
-        <translation>Database Fermentabile</translation>
+        <translation>Βάση δεδομένων ζυμώσιμων</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Aggiungi ingredienti selezionati alla ricetta</translation>
+        <translation>Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi allla ricetta</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>Create new ingredient</source>
-        <translation>Crea nuovo ingrediente</translation>
+        <translation>Δημιουργείστε ένα νέο συστατικό</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>Νέο</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit ingrediente selezionato</translation>
+        <translation>Διόρθωση επιλεγμένου συστατικού</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Rimuovi ingerdiente selezionato</translation>
+        <translation>Διαγραφή επιλεγμένου συστατικού</translation>
     </message>
 </context>
 <context>
     <name>fermentableEditor</name>
     <message>
         <source>Fermentable Editor</source>
-        <translation>Editor Fermentabile</translation>
+        <translation>Διόρθωση Ζυμώσιμων</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>Απαιτούμενα πεδία</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Τύπος</translation>
     </message>
     <message>
         <source>Grain</source>
-        <translation>Grano</translation>
+        <translation>Σιτηρά</translation>
     </message>
     <message>
         <source>Sugar</source>
-        <translation>Zucchero</translation>
+        <translation>Σάκχαρα</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation>Estratto</translation>
+        <translation>Υγρή Βύνη</translation>
     </message>
     <message>
         <source>Dry Extract</source>
-        <translation>Estratto secco</translation>
+        <translation>Ξηρή Βύνη</translation>
     </message>
     <message>
         <source>Adjunct</source>
-        <translation>Aggiunta</translation>
+        <translation>Πρόσθετα</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Yield (%)</source>
-        <translation>Prodotto</translation>
+        <translation>Απόδοση</translation>
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation>Resa rispetto al glucosio</translation>
+        <translation>Απόδοση σε σύγκριση με την γλυκόζη</translation>
     </message>
     <message>
         <source>Lovibond</source>
@@ -2833,39 +2864,39 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Lovibond rating</source>
-        <translation>Valutazione Lovibond</translation>
+        <translation>Lovibond rating</translation>
     </message>
     <message>
         <source>Add After Boil</source>
-        <translation>Aggiungi dopo bollitura</translation>
+        <translation>Προσθήκη μετά τον βρασμό</translation>
     </message>
     <message>
         <source>This ingredient is added post boil.</source>
-        <translation>Questo ingrediente è stato aggiunto dopo bollitura.</translation>
+        <translation>Αυτό το συστατικό προστίθεται μετά το βράσιμο</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Origine</translation>
+        <translation>Προέλευση</translation>
     </message>
     <message>
         <source>Supplier</source>
-        <translation>Fornitore</translation>
+        <translation>Προμηθευτής</translation>
     </message>
     <message>
         <source>Coarse/Fine Diff (%)</source>
-        <translation>Grossa/Fine Differenza(%)</translation>
+        <translation>Χοντροκομμένο/Ψιλοκομμένο Διαφορά (%)</translation>
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation>Resa differenza tra macro e micro macinatura</translation>
+        <translation>Διαφορλά απόδοσης μεταξύ χοντροαλεσμένου και ψιλοαλεσμένου</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
-        <translation>Umidità (%)</translation>
+        <translation>Υγρασία (%)</translation>
     </message>
     <message>
         <source>Moisture percentage by mass</source>
-        <translation>Percentuale di Umidità per massa</translation>
+        <translation>Ποσοστό υγρασίας κατά μάζα</translation>
     </message>
     <message>
         <source>DP (Lintner)</source>
@@ -2873,97 +2904,97 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Diastatic power in Lintner</source>
-        <translation>Potere diastasico in Lintner</translation>
+        <translation>Diastatic power in Lintner</translation>
     </message>
     <message>
         <source>Protein (%)</source>
-        <translation>Proteine (%)</translation>
+        <translation>Πρωτεΐνες</translation>
     </message>
     <message>
         <source>Protein percentage by mass</source>
-        <translation>Perecntuale Proteine per massa</translation>
+        <translation>Ποσοστό πρωτεΐνης με βάση την μάζα</translation>
     </message>
     <message>
         <source>Max In Batch (%)</source>
-        <translation>Max in Lotto (%)</translation>
+        <translation>Μέγιστη ποσότητα ανά παρτίδα (%)</translation>
     </message>
     <message>
         <source>Maximum recommended percentage of total grist</source>
-        <translation>Percentuale massima raccomandata di Grist totale</translation>
+        <translation>Μεγιστη συνιστόμενη ποσότητα</translation>
     </message>
     <message>
         <source>Recommend Mash</source>
-        <translation>Mash raccomandato</translation>
+        <translation>Προτείνεται κατά την σακχαροποίηση</translation>
     </message>
     <message>
         <source>Recommend this be mashed</source>
-        <translation>Consiglio questo essere mah</translation>
+        <translation>Πρότείνεται να σακχαροποιήται</translation>
     </message>
     <message>
         <source>Is Mashed</source>
-        <translation>Is Mashed</translation>
+        <translation>Σακχαροποιήται</translation>
     </message>
     <message>
         <source>Checked if it is present in mash</source>
-        <translation>Controllato se presente nel mash</translation>
+        <translation>Σημειώστε αν πρέπει να βρίσκεται κατά την σακχαροποίηση</translation>
     </message>
     <message>
         <source>Bitterness (IBU*gal/lb)</source>
-        <translation>Amarezza (IBU*gal/lb)</translation>
+        <translation>Πικράδα (IBU*gal/lb)</translation>
     </message>
     <message>
         <source>Bitterness of pre-hopped extracts</source>
-        <translation>Amarezza di estratti pre luppolatura</translation>
+        <translation>Βαθμός πικρότητας εκχυλισμάτων</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>Σημειώσεις:</translation>
     </message>
 </context>
 <context>
     <name>hopDialog</name>
     <message>
         <source>Hop Database</source>
-        <translation>Database Luppolo</translation>
+        <translation>Βάση δεδομένων λυκίσκου</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Aggiungi ingredienti selezionati alla ricetta</translation>
+        <translation>Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi allla ricetta</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>New hop</source>
-        <translation>Nuovo Luppolo</translation>
+        <translation>Νέος λυκίσκος</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>Νέος</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Edit</translation>
+        <translation>Επεξεργασία</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Rimuovi</translation>
+        <translation>Διαγραφή</translation>
     </message>
 </context>
 <context>
     <name>hopEditor</name>
     <message>
         <source>Hop Editor</source>
-        <translation>Editor Luppolo</translation>
+        <translation>Επεξεργασία λυκίσκου</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>Απαιτούμενα πεδία</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Alpha (%)</source>
@@ -2971,67 +3002,67 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Alpha acids as percent by mass</source>
-        <translation>Alpha Acidi come percentuale in massa</translation>
+        <translation>Alpha οξέα σε ποσοστό επί της μάζας</translation>
     </message>
     <message>
         <source>Amount </source>
-        <translation>Ammontare </translation>
+        <translation>Ποσότητα </translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>Χρήση</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>Στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation>Primo mosto</translation>
+        <translation>Πρίν το βράσιμο</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>Στο Βράσιμο</translation>
     </message>
     <message>
         <source>Aroma</source>
-        <translation>Aroma</translation>
+        <translation>Για άρωμα</translation>
     </message>
     <message>
         <source>Dry Hop</source>
-        <translation>Dry Hop</translation>
+        <translation>στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Bittering</source>
-        <translation>Amarezza</translation>
+        <translation>Πικράδα</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation>entrambi</translation>
+        <translation>Και τα δύο</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Leaf</source>
-        <translation>foglia</translation>
+        <translation>σε φύλλα</translation>
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation>Σφαιρίδια</translation>
     </message>
     <message>
         <source>Plug</source>
@@ -3043,7 +3074,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation>Beta Acidi come percentuale in massa</translation>
+        <translation>Beta acids  ως πσοστό επι της μάζας</translation>
     </message>
     <message>
         <source>HSI</source>
@@ -3051,11 +3082,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hop Stability/Storage index</source>
-        <translation>Satabilità Luppolo/Indce di Stoccaggio</translation>
+        <translation>Σταθερότητα λυκίσκου/Αποθήκευση</translation>
     </message>
     <message>
         <source>Origin</source>
-        <translation>Origine</translation>
+        <translation>Προέλευση</translation>
     </message>
     <message>
         <source>Humulene (%)</source>
@@ -3067,156 +3098,156 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Caryophyllene (%)</source>
-        <translation>Cariphillene (%)</translation>
+        <translation>Caryophyllene (%)</translation>
     </message>
     <message>
         <source>Caryophyllene</source>
-        <translation>Cariphillene</translation>
+        <translation>Caryophyllene</translation>
     </message>
     <message>
         <source>Cohumulone (%)</source>
-        <translation>Cohomulone (%)</translation>
+        <translation>Cohumulone (%)</translation>
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="unfinished"></translation>
+        <translation>Cohumulone</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
-        <translation>Mircene (%)</translation>
+        <translation>Myrcene (%)</translation>
     </message>
     <message>
         <source>Myrcene</source>
-        <translation>Mircene</translation>
+        <translation>Myrcene</translation>
     </message>
     <message>
         <source>Substitutes:</source>
-        <translation>Sostituti:</translation>
+        <translation>Υποκατάστατα</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>Σημειώσεις:</translation>
     </message>
 </context>
 <context>
     <name>htmlViewer</name>
     <message>
         <source>Html Viewer</source>
-        <translation>Html Vista</translation>
+        <translation>Html Viewer</translation>
     </message>
     <message>
         <source>about:blank</source>
-        <translation>about:blank</translation>
+        <translation>σχετικά:κενό</translation>
     </message>
 </context>
 <context>
     <name>instructionWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Show a timer</source>
-        <translation>Mostro il tempo</translation>
+        <translation>Χρονόμετρο</translation>
     </message>
     <message>
         <source>Show timer</source>
-        <translation>Mostra Timer</translation>
+        <translation>Εμφάνιση χρονομέτρου</translation>
     </message>
     <message>
         <source>Mark this step completed</source>
-        <translation>Segna questo step completato</translation>
+        <translation>ανήγγειλε αυτό το βήμα ώς ολοκληρωμένο</translation>
     </message>
     <message>
         <source>Step completed</source>
-        <translation>Step completato</translation>
+        <translation>Το βήμα ολοκληρώθηκε</translation>
     </message>
 </context>
 <context>
     <name>mainWindow</name>
     <message>
         <source>Recipes</source>
-        <translation>Ricette</translation>
+        <translation>Συνταγές</translation>
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Στυλ</translation>
     </message>
     <message>
         <source>Fermentables</source>
-        <translation>Fermentabili</translation>
+        <translation>Ζυμώσιμα</translation>
     </message>
     <message>
         <source>Hops</source>
-        <translation>Luppoli</translation>
+        <translation>Λυκίσκος</translation>
     </message>
     <message>
         <source>Miscs</source>
-        <translation>Miscs</translation>
+        <translation>Διάφορα</translation>
     </message>
     <message>
         <source>Yeasts</source>
-        <translation>Lieviti</translation>
+        <translation>Μαγιές</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation>Ricetta</translation>
+        <translation>Συνταγή</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Name of recipe</source>
-        <translation>Nome della Ricetta</translation>
+        <translation>Ονομασία συνταγής</translation>
     </message>
     <message>
         <source>5 gal</source>
-        <translation>20 lt</translation>
+        <translation>5 γαλόνια</translation>
     </message>
     <message>
         <source>Target boil size</source>
-        <translation>Obiettivo misura bollitura</translation>
+        <translation>Όγκος που επιθυμούμε</translation>
     </message>
     <message>
         <source>Efficiency (%)</source>
-        <translation>Efficenza (%)</translation>
+        <translation>Απόδοση (%)</translation>
     </message>
     <message>
         <source>Calculated Boil Size</source>
-        <translation>Calcolato la misura di bollitura</translation>
+        <translation>Υπολογισμένος όγκος βρασμού</translation>
     </message>
     <message>
         <source>Calculated Batch Size</source>
-        <translation>Calcolato la misura del lotto</translation>
+        <translation>Υπολογισμένος όγκος παρτίδας</translation>
     </message>
     <message>
         <source>The extraction efficiency you expect</source>
-        <translation>L&apos;efficienza di estrazione che ci si aspetta</translation>
+        <translation>Πσοστό απόδοσης που περιμένουμε</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>Στυλ</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
+        <translation>Χρόνος βρασμού</translation>
     </message>
     <message>
         <source>Target batch size</source>
-        <translation>Obiettivo Lotto Misura</translation>
+        <translation>Μέγεθος παρτίδας που επιθυμούμε</translation>
     </message>
     <message>
         <source>Target Batch Size</source>
-        <translation>Obiettivo Lotto Misura</translation>
+        <translation>Μέγεθος παρτίδας που επιθυμούμε</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation>Attrezzatura</translation>
+        <translation>Εξοπλισμός</translation>
     </message>
     <message>
         <source>Target Boil Size</source>
-        <translation>Obiettivo misura bollitura</translation>
+        <translation>Μέγεθος όγκου βρασμού που επιθυμούμε</translation>
     </message>
     <message>
         <source>OG</source>
@@ -3224,7 +3255,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Boil SG</source>
-        <translation>Bollitura SG</translation>
+        <translation>SG βρασμού</translation>
     </message>
     <message>
         <source>FG</source>
@@ -3236,11 +3267,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Bitterness (IBU)</source>
-        <translation>Amarezza (IBU)</translation>
+        <translation>Πικρότητα (IBU)</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>Χρώμα</translation>
     </message>
     <message>
         <source>IBU/GU</source>
@@ -3248,91 +3279,91 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Calories/12oz</source>
-        <translation>Calorie/340gr</translation>
+        <translation>Θερμίδες/12 ουγγιές</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation>Extra</translation>
+        <translation>Πρόσθετα</translation>
     </message>
     <message>
         <source>Brewday</source>
-        <translation>Giorno di Birrificazione</translation>
+        <translation>Μέρα ζυθοποίησης</translation>
     </message>
     <message>
         <source>Add a fermentable</source>
-        <translation>Aggiungi a Fermentabile</translation>
+        <translation>Προσθέστε ζυμώσιμα</translation>
     </message>
     <message>
         <source>Remove selected fermentable</source>
-        <translation>Rimuovi il fermentabile selezionato</translation>
+        <translation>Αφαιρέστε το επιλεγμένο ζυμώσιμο</translation>
     </message>
     <message>
         <source>Edit selected fermentable</source>
-        <translation>Edit il fermentabile selezionato</translation>
+        <translation>Επεξεργαστείτε  το επιλεγμένο ζυμώσιμο</translation>
     </message>
     <message>
         <source>Add hop</source>
-        <translation>Aggiunta Luppolo</translation>
+        <translation>Προσθέστε λυκίσκο</translation>
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Αφαιρέστε τον επιλεγμένο λυκίσκο</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
-        <translation>Edit luppolo selezionato</translation>
+        <translation>επεξεργαστείτε τον επιλεγμένο λυκίσκο</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation>Aggiunta</translation>
+        <translation>Διάφορα</translation>
     </message>
     <message>
         <source>Add misc</source>
-        <translation>Aggiungi misc</translation>
+        <translation>προσθέστε διαφ.</translation>
     </message>
     <message>
         <source>Remove selected misc</source>
-        <translation>Rimuovi misc selezionato</translation>
+        <translation>Αφαιρέστε τα επιλεγμένα διαφ.</translation>
     </message>
     <message>
         <source>Edit selected misc</source>
-        <translation>Edit misc selezionato</translation>
+        <translation>Επεξεργαστείτε τα επιλεγμένα διαφ.</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation>Lievito</translation>
+        <translation>Μαγιά</translation>
     </message>
     <message>
         <source>Add yeast</source>
-        <translation>Aggiungi lievito</translation>
+        <translation>Προσθέστε μαγιά</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation>Rimuovi lievito selezionato</translation>
+        <translation>Αφαιρέστε την επιλεγμένη μαγιά</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation>Edit lievito selezionato</translation>
+        <translation>Επεξεργαστείτε την επιλεγμένη μαγιά</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>Σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Aggiungi step mash</translation>
+        <translation>Νέο βήμα σακχαροποίησης</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Rimuovi mash step selezionato</translation>
+        <translation>Αφαιρέστε το επιλεγμένο βήμα σακχαροποίησης</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Rimuovi mash step selezionato</translation>
+        <translation>Επεξεργαστέιτε το επιλεγμένο βήμα σακχαροποίησης</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
-        <translation>Rimuovi mash step selezionato</translation>
+        <translation>Ιδιότητες mash</translation>
     </message>
     <message>
         <source>Edit mash</source>
@@ -3344,621 +3375,621 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Invoke the mash wizard</source>
-        <translation>Richiamare la procedura guidata mosto</translation>
+        <translation>Εκκίνηση του mash wizard</translation>
     </message>
     <message>
         <source>Mash wiz</source>
-        <translation>Mask wiz</translation>
+        <translation>Mash wiz</translation>
     </message>
     <message>
         <source>Mashs</source>
-        <translation>Mash</translation>
+        <translation>Mashs</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Intensificare Mash</translation>
+        <translation>Mash step up</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Dimettere Mash</translation>
+        <translation>Mash step down</translation>
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Salva questo profilo di Mash</translation>
+        <translation>Αποθήκευση αυτού του προφιλ mash</translation>
     </message>
     <message>
         <source>Save Mash</source>
-        <translation>Salva Mash</translation>
+        <translation>Αποθήκευση Mash</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;About</translation>
+        <translation>&amp;Περί</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;File</translation>
+        <translation>&amp;Αρχείο</translation>
     </message>
     <message>
         <source>&amp;Brewday</source>
-        <translation>&amp;Brewday</translation>
+        <translation>&amp;Μέρα ζυθοποίησης</translation>
     </message>
     <message>
         <source>&amp;Recipe</source>
-        <translation>&amp;Ricetta</translation>
+        <translation>&amp;Συνταγή</translation>
     </message>
     <message>
         <source>&amp;Database</source>
-        <translation>&amp;Database</translation>
+        <translation>&amp;Βάση δεδομένων</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;View</translation>
+        <translation>&amp;Προβολή</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Tools</translation>
+        <translation>&amp;Εργαλεία</translation>
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Γραμμή εργαλείων</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
-        <translation>About &amp;BrewTarget</translation>
+        <translation>Σχετικά &amp;BrewTarget</translation>
     </message>
     <message>
         <source>About Brewtarget</source>
-        <translation>Chi è Brewtaget</translation>
+        <translation>Σχετικά με το Brewtarget</translation>
     </message>
     <message>
         <source>&amp;Export Recipe</source>
-        <translation>&amp;Export Recipe</translation>
+        <translation>&amp;Εξαγωγή συνταγής</translation>
     </message>
     <message>
         <source>&amp;Fermentables</source>
-        <translation>&amp;Fermentables</translation>
+        <translation>&amp;Ζυμώσιμα</translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Λυκίσκοι</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Διαφ.</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Μαγιές</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Εξοπλισμός</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Στυλ</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Έξοδος</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Εισαγωγή συνταγών</translation>
     </message>
     <message>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Επιλογές</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>οδηγίες</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Αλλαγή μεγέθους συνταγής</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνταγή  στην επικόλληση  ως &amp;Text</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Βοήθημα διόρθωσης OG</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Μετατροπή μονάδων μέτρησης</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished">Backup Database</translation>
+        <translation>Αντίγραφο ασφαλείας βάσης δεδομένων</translation>
     </message>
     <message>
         <source>Restore Database</source>
-        <translation>Ripristina Database</translation>
+        <translation>Επαναφορά Βάσης Δεδομένων</translation>
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Αντιγραφή Συνταγής</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός ανθρακικού</translation>
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Εργαλεία Διαθλασίμετρου</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Υπολογισμός starter</translation>
     </message>
     <message>
         <source>Merge Databases</source>
-        <translation>Unire i database</translation>
+        <translation>Συγχώνευση βάσεων δεδομένων</translation>
     </message>
     <message>
         <source>Select another database to merge into the current one.</source>
-        <translation>Selezionare un altro database da fondere in quello attuale.</translation>
+        <translation>Επιλέξτε μια άλλη βάση δεδομένων για συγχώνευση με την τρέχουσα</translation>
     </message>
     <message>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Εκτύπωση</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Προεκτύπωση</translation>
     </message>
     <message>
         <source>&amp;Export To HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Εξαγωγή σε HTML</translation>
     </message>
     <message>
         <source>&amp;Export to HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Εξαγωγή σε HTML</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Αντίγραφο ασφαλείας</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
-        <translation>Salva tutte le ricette, ingredienti, ecc per una cartella di backup</translation>
+        <translation>Αποθηκευση όλων των συνταγών, συστατικών, κλπ σε αρχείο ασφαλείας</translation>
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Επαναφορά</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
-        <translation>Ripristinare ricette, ingredienti, ecc da un backup precedente</translation>
+        <translation>επαναφορά συνταγών, συστατικών, κλπ από προηγούμενο αντίγραφο ασφαλείας</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Συγχώνευση</translation>
     </message>
     <message>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
-        <translation>Unire un altro set di ricette, ingredienti, ecc nel set corrente</translation>
+        <translation>Συγχωνευση άλλου σετ συνταγών, συστατικών, κλπ στο παρόν σετ</translation>
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Νέα Συνταγή</translation>
     </message>
     <message>
         <source>Timers</source>
-        <translation>Timers</translation>
+        <translation>Χρονόμετρα</translation>
     </message>
     <message>
         <source>Show timers</source>
-        <translation>Mostra Timers</translation>
+        <translation>Εμφάνισε χρονόμετρα</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Αποθήκευση</translation>
     </message>
     <message>
         <source>Delete selected</source>
-        <translation>Cancella selezionati</translation>
+        <translation>Διαγραφή επιλεγμένου</translation>
     </message>
     <message>
         <source>Delete recipe</source>
-        <translation>Cancella ricetta</translation>
+        <translation>Διαγραφή συνταγής</translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation>Dona</translation>
+        <translation>Δωρεά</translation>
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mashs</translation>
     </message>
     <message>
         <source>Mashes</source>
-        <translation type="unfinished"></translation>
+        <translation>Mashes</translation>
     </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Σχεδιασμός σακχαροποίησης</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Temperatura Obiettivo.</translation>
+        <translation>Επιθυμούμενη θερμοκρασία</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Batch Sparge</source>
-        <translation>Partita di Saprge</translation>
+        <translation>Batch Sparge</translation>
     </message>
     <message>
         <source>Next</source>
-        <translation>Prossimo</translation>
+        <translation>Επόμενο</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Fine</translation>
+        <translation>Λήξη</translation>
     </message>
     <message>
         <source>Infusion/Decoction Amount</source>
-        <translation>Importo di Infusione/Decotto</translation>
+        <translation>Infusion/Decoction Amount</translation>
     </message>
     <message>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>ελ.</translation>
     </message>
     <message>
         <source>max</source>
-        <translation type="unfinished"></translation>
+        <translation>μέγ.</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
-        <translation>Temperatura di infusione</translation>
+        <translation>Θερμοκρασία έγχυσης</translation>
     </message>
     <message>
         <source>Total Collected Wort</source>
-        <translation>Totale Mosto Raccolto</translation>
+        <translation>Συνολικό γλεύκος</translation>
     </message>
     <message>
         <source>vol</source>
-        <translation>Vol</translation>
+        <translation>vol</translation>
     </message>
     <message>
         <source>Tun Fullness</source>
-        <translation>Pienezza di Tun</translation>
+        <translation>σκεύος γεμάτο</translation>
     </message>
     <message>
         <source>tunVol</source>
-        <translation type="unfinished"></translation>
+        <translation>όγκος σκεύους</translation>
     </message>
     <message>
         <source>thickness</source>
-        <translation>Spessore</translation>
+        <translation>πάχος</translation>
     </message>
 </context>
 <context>
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Επεξεργασία σακχαροποίησης</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation>Temperatura iniziale del Grano</translation>
+        <translation>Αρχική θερμοκρασία σιτηρών</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Temperatura di Sparge</translation>
+        <translation>Θερμοκρασία έκπλυσης</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation>Obiettivo Temepratuta di Saprge</translation>
+        <translation>Επιθυμητή θερμοκρασία</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>PH Sparge</translation>
+        <translation>PH έκπλυσης</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation>Tun</translation>
+        <translation>σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Αρχική θερμοκρασία σκεύους</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
-        <translation>Prendi i seguenti parametri dalle attrzzature della ricetta.</translation>
+        <translation>Συμπληρώστε τις παραμέτρους  από τον εξοπλισμό</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation>Da attrezzatura</translation>
+        <translation>Από τον εξοπλισμό</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation>Massa Tun</translation>
+        <translation>μάζα σκεύους</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation>Tun sp.Calore</translation>
+        <translation>Tun sp. heat</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation>Calore specifico di tun (Cal/(g*K))</translation>
+        <translation>Συγκεκριμένη θερμοκρασία σκεύους (cal/(g*K))</translation>
     </message>
 </context>
 <context>
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation>Editor Step Mash</translation>
+        <translation>επεξεργασία βήματος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Infusion</source>
-        <translation>Infusione</translation>
+        <translation>Έγχυση</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Decoction</source>
-        <translation>Decotto</translation>
+        <translation>Decoction</translation>
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Temperatura Obiettivo.</translation>
+        <translation>Επιθυμητή θερμοκρασία</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation>Obiettivo temperatura di questo step</translation>
+        <translation>Επιθυμητή θερμοκρασία αυτού του βήματος</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
-        <translation>Quantità di Infusione</translation>
+        <translation>Ποσότητα έγχυσης</translation>
     </message>
     <message>
         <source>Amount of water to infuse</source>
-        <translation>Quantità d&apos;acqua in infusione</translation>
+        <translation>Ποσότητα νερού για την έγχυση</translation>
     </message>
     <message>
         <source>Infuse temp.</source>
-        <translation>Temperatura di infusione.</translation>
+        <translation>Θερμοκρασία έγχυσης</translation>
     </message>
     <message>
         <source>Temperature of infusion water</source>
-        <translation>Temperatura infusione dell&apos;acqua</translation>
+        <translation>θερμοκρασία του προοριζόμενου για έγχυση νερού</translation>
     </message>
     <message>
         <source>Decoction Amount</source>
-        <translation>Quantità decotta</translation>
+        <translation>Ποσότητα decoction</translation>
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation>Quantità di mash da decotto</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Time to conduct the step</source>
-        <translation>Tempo di condurre il passo</translation>
+        <translation>Χρόνος που απαιτήται για το βήμα αυτό</translation>
     </message>
     <message>
         <source>Temp. lag time</source>
-        <translation>Temperatura di fine lagerizzazione</translation>
+        <translation>Temp. lag time</translation>
     </message>
     <message>
         <source>Lag time</source>
-        <translation>Tempo lagerizzazione</translation>
+        <translation>Lag time</translation>
     </message>
     <message>
         <source>End temp.</source>
-        <translation>Fine Temp.</translation>
+        <translation>Τελ. Θερμ.</translation>
     </message>
     <message>
         <source>Final temp. of this step</source>
-        <translation>Temperatura finale di questo step</translation>
+        <translation>Τελική θερμ. αυτού του βήματος</translation>
     </message>
 </context>
 <context>
     <name>mashWizard</name>
     <message>
         <source>Mash Wizard</source>
-        <translation>Mash Wizard</translation>
+        <translation>Mash wizard</translation>
     </message>
     <message>
         <source>Mash thickness (L/kg)</source>
-        <translation>Spessore Mash (L/kg)</translation>
+        <translation>Mash thickness (L/kg)</translation>
     </message>
     <message>
         <source>Mash thickness (do not enter any units)</source>
-        <translation>Mash spessore (non inserire alcuna unità)</translation>
+        <translation>πυκνότητα σακχαροποίησης. ( μην εισάγετε στοιχεία)</translation>
     </message>
 </context>
 <context>
     <name>miscDialog</name>
     <message>
         <source>Misc Database</source>
-        <translation>Database Misc</translation>
+        <translation>Βάση δεδομένων διαφόρων</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
-        <translation>Aggiungi ingredienti selezionati alla ricetta</translation>
+        <translation>Προσθέστε το επιλεγμένο συστατικό στην συνταγή</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi allla ricetta</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>Create a new ingredient</source>
-        <translation>Crea nuovo ingrediente</translation>
+        <translation>Δημιουργία νέου συστατικού</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>Νέο</translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
-        <translation>Edit ingrediente selezionato</translation>
+        <translation>Διόρθωση επιλεγμένου συστατικού</translation>
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation>Rimuovi ingerdiente selezionato</translation>
+        <translation>Διαγραφή επιλεγμένου συστατικού</translation>
     </message>
 </context>
 <context>
     <name>miscEditor</name>
     <message>
         <source>Misc Editor</source>
-        <translation>Editor Misc</translation>
+        <translation>Επεξεργασία διαφόρων</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Spice</source>
-        <translation>Spezie</translation>
+        <translation>Μπαχαρικά</translation>
     </message>
     <message>
         <source>Fining</source>
-        <translation>affinamento</translation>
+        <translation>Βελτιωτικά</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation>Agente dell&apos;acqua</translation>
+        <translation>Ρυθμιστής νερού</translation>
     </message>
     <message>
         <source>Herb</source>
-        <translation>Erba</translation>
+        <translation>Βότανα</translation>
     </message>
     <message>
         <source>Flavor</source>
-        <translation>Sapore</translation>
+        <translation>Άρωματικές Ύλες</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Altro</translation>
+        <translation>&apos;Αλλο</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation>Usa</translation>
+        <translation>Χρήση</translation>
     </message>
     <message>
         <source>Boil</source>
-        <translation>Bollire</translation>
+        <translation>Στο Βράσιμο</translation>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>Στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Primary</source>
-        <translation>Primario</translation>
+        <translation>Κατά την πρώτη ζύμωση</translation>
     </message>
     <message>
         <source>Secondary</source>
-        <translation>Secondario</translation>
+        <translation>κατά την δεύτερη ζύμωση</translation>
     </message>
     <message>
         <source>Bottling</source>
-        <translation>Imbottigliamento</translation>
+        <translation>Κατά την εμφιάλωση</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Tempo</translation>
+        <translation>Χρόνος</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Check it if the amount listed is in kg instead of L.</source>
-        <translation>Controllare se l&apos;importo indicato è in kg invece di L.</translation>
+        <translation>Τσέκαρε το εαν το ποσό που αναγράφεται είναι σε κιλά αντί για λίτρα</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Importo è il peso?</translation>
+        <translation>Το ποσό αναφέρεται σε βάρος</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Controlla se la data quantità è peso invece di volume</translation>
+        <translation>Τσέκαρε το εαν το αναφερόμενο ποσό είναι βάρος αντί για όγκος</translation>
     </message>
     <message>
         <source>Use for:</source>
-        <translation>Usa per:</translation>
+        <translation>Χρήση για</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>Σημειώσεις:</translation>
     </message>
 </context>
 <context>
@@ -3969,86 +4000,86 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mash</translation>
+        <translation>Mash</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">Cancella stile selezionato</translation>
+        <translation>Διέγραψε το επιλεγμένο στυλ</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished">Temperatura iniziale del Grano</translation>
+        <translation>Αρχική θερμοκρασία σιτηρών</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished">Temperatura di Sparge</translation>
+        <translation>Θερμοκρασία έκπλυσης</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
-        <translation type="unfinished">Obiettivo Temepratuta di Saprge</translation>
+        <translation>Επιθυμητή θερμοκρασία</translation>
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished">PH Sparge</translation>
+        <translation>PH έκπλυσης</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished">Tun</translation>
+        <translation>σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Αρχική θερμοκρασία σκεύους</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Da attrezzatura</translation>
+        <translation>Από τον εξοπλισμό</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished">Massa Tun</translation>
+        <translation>μάζα σκεύους</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
-        <translation type="unfinished">Tun sp.Calore</translation>
+        <translation>Tun sp. heat</translation>
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished">Calore specifico di tun (Cal/(g*K))</translation>
+        <translation>Συγκεκριμένη θερμοκρασία σκεύους (cal/(g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
-        <translation type="unfinished">Aggiungi step mash</translation>
+        <translation>Νέο βήμα σακχαροποίησης</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation type="unfinished">Rimuovi mash step selezionato</translation>
+        <translation>Αφαιρέστε το επιλεγμένο βήμα σακχαροποίησης</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation type="unfinished">Intensificare Mash</translation>
+        <translation>Mash step up</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation type="unfinished">Dimettere Mash</translation>
+        <translation>Mash step down</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>Regolazione del volume a Hit OG</translation>
+        <translation>Ρύθμιση λογκου για να συμπέσει με την OG</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Εισαγωγή</translation>
     </message>
     <message>
         <source>SG</source>
@@ -4056,27 +4087,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Measured gravity pre-boil</source>
-        <translation>Misurata Densità pre ebollizione</translation>
+        <translation>Υπολογισμένη πυκνότητα προ του βρασμού</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
-        <translation>Temperatura dell&apos;SG letta</translation>
+        <translation>Θερμοκρασία της SG</translation>
     </message>
     <message>
         <source>Calibration Temp</source>
-        <translation>Calibrazione temperatura</translation>
+        <translation>Θερμοκρασία ρύθμισης</translation>
     </message>
     <message>
         <source>Temp to which the hydrometer is calibrated</source>
-        <translation>Temperatura a cui è tarato il densimetro</translation>
+        <translation>θερμοκρασία που είναι ρυθμισμένο το υδρόμετρο</translation>
     </message>
     <message>
         <source>-or-</source>
-        <translation>-o-</translation>
+        <translation>-ή-</translation>
     </message>
     <message>
         <source>Plato</source>
@@ -4084,98 +4115,98 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation>Plato (percentuale in massa di saccarosio equivalente)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
-        <translation>Volume pre bollitura</translation>
+        <translation>Όγκος προ-βρασμού</translation>
     </message>
     <message>
         <source>Measured pre-boil volume</source>
-        <translation>Misurato Volume pre ebollizione</translation>
+        <translation>καταμετρημένος προ-βρασμού όγκος</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>Μετατροπή</translation>
     </message>
     <message>
         <source>OG w/o Correction</source>
-        <translation>Correzione OG w/o</translation>
+        <translation>OG  χωρίς διόρθωση</translation>
     </message>
     <message>
         <source>OG if you boil as planned</source>
-        <translation>OG se bolle come previsto</translation>
+        <translation>OG εαν βράσατε κατά το σχέδιο</translation>
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation>Aggiungere alla bollitura</translation>
+        <translation>προσθήκη κατά το βράσιμο</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
-        <translation>Quantità di acqua necessaria da aggiungere per determinare OG previsto (o ferma la bollitura se negativo)</translation>
+        <translation>Ποσότητα νερού που απαιτείται για να επιτευχθεί η OG</translation>
     </message>
     <message>
         <source>Final Batch Size</source>
-        <translation>Misura lotto finale</translation>
+        <translation>Τελικός όγκος γλεύκους</translation>
     </message>
     <message>
         <source>Estimated batch size after correction</source>
-        <translation>Misura lotto stimata dopo correzione</translation>
+        <translation>Προβλεπόμενος όγκος παρτίδας μετά την διόρθωση</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcola</translation>
+        <translation>Υπολογισμός</translation>
     </message>
 </context>
 <context>
     <name>optionsDialog</name>
     <message>
         <source>Options</source>
-        <translation>Opzioni</translation>
+        <translation>Προτιμήσεις</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation>Moduli</translation>
+        <translation>Μετρικό σύστημα</translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation>peso</translation>
+        <translation>Βάρος</translation>
     </message>
     <message>
         <source>Use SI units</source>
-        <translation>Usa unità SI</translation>
+        <translation>Διεθνές μετρικό σύστημα</translation>
     </message>
     <message>
         <source>Use US traditional units</source>
-        <translation>Usa Unità US tradizionali</translation>
+        <translation>μετρικό σύστημα ΗΠΑ</translation>
     </message>
     <message>
         <source>Use British imperial units</source>
-        <translation>Usa unità British imperial</translation>
+        <translation>Βρετανικό μετρικό σύστημα</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Celsius</source>
-        <translation>Celsius</translation>
+        <translation>Κελσίου</translation>
     </message>
     <message>
         <source>Fahrenheit</source>
-        <translation>Fahrenheit</translation>
+        <translation>Φάρεναϊτ</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Volume</translation>
+        <translation>Όγκος</translation>
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Densità</translation>
+        <translation>Βαρύτητα</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
-        <translation>20C/20C Densità Specifica</translation>
+        <translation>20C/20C ειδικό βάρος</translation>
     </message>
     <message>
         <source>Plato/Brix/Balling</source>
@@ -4183,31 +4214,31 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Color</source>
-        <translation>Colore</translation>
+        <translation>Χρώμα</translation>
     </message>
     <message>
         <source>Use SRM</source>
-        <translation>Usa SRM</translation>
+        <translation>Χρήση SRM</translation>
     </message>
     <message>
         <source>Use EBC</source>
-        <translation>Usa EBC</translation>
+        <translation>Χρήση EBC</translation>
     </message>
     <message>
         <source>Formulas</source>
-        <translation>Formula</translation>
+        <translation>Φόρμουλες</translation>
     </message>
     <message>
         <source>Mosher&apos;s approximation</source>
-        <translation>Approssimazione di Mosher</translation>
+        <translation>Προσέγγιση κατά Mosher</translation>
     </message>
     <message>
         <source>Daniels&apos; approximation</source>
-        <translation>Approssimazione di Daniel</translation>
+        <translation>Προσέγγιση κατά Daniel</translation>
     </message>
     <message>
         <source>Morey&apos;s approximation</source>
-        <translation>Approsimazione di Morey</translation>
+        <translation>Προσέγγιση κατά Morey</translation>
     </message>
     <message>
         <source>IBU</source>
@@ -4215,19 +4246,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tinseth&apos;s approximation</source>
-        <translation>Approssimazione di Tinseth</translation>
+        <translation>Προσέγγιση κατά Tinseth</translation>
     </message>
     <message>
         <source>Rager&apos;s approximation</source>
-        <translation>Approssimazione di Rager</translation>
+        <translation>Προσέγγιση κατά Rager</translation>
     </message>
     <message>
         <source>IBU Adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσαρμογή IBU</translation>
     </message>
     <message>
         <source>% IBU adjustment</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσαρμογή IBU</translation>
     </message>
     <message>
         <source>Mash Hop</source>
@@ -4235,75 +4266,75 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished">Primo mosto</translation>
+        <translation>Πρίν το βράσιμο</translation>
     </message>
     <message>
         <source>Directories</source>
-        <translation>Elenchi</translation>
+        <translation>Κατάλογοι</translation>
     </message>
     <message>
         <source>Database Directory</source>
-        <translation>Elenchi Database</translation>
+        <translation>Κατάλογος βάσης δεδομένων</translation>
     </message>
     <message>
         <source>Where your brewtarget .xml files are.</source>
-        <translation>Sove sono i vostri Files Brewtarget.xml .</translation>
+        <translation>Που βρίσκονται τα .xml αρχεία του  brewtarget</translation>
     </message>
     <message>
         <source>Browse</source>
-        <translation>Sfogliare</translation>
+        <translation>Πλοήγηση</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Default</translation>
+        <translation>Προεπιλογή</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Lingua</translation>
+        <translation>Γλώσσα</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation>Ceca</translation>
+        <translation>Τσεχικά</translation>
     </message>
     <message>
         <source>Catalan</source>
-        <translation>Catalana</translation>
+        <translation>Καταλανικά</translation>
     </message>
     <message>
         <source>German</source>
-        <translation>Tedesca</translation>
+        <translation>Γερμανικά</translation>
     </message>
     <message>
         <source>English</source>
-        <translation>Inglese</translation>
+        <translation>Αγγλική</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation>Spagnola</translation>
+        <translation>Ισπανικά</translation>
     </message>
     <message>
         <source>French</source>
-        <translation>Francese</translation>
+        <translation>Γαλλικά</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation>Italiano</translation>
+        <translation>Ιταλικά</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation>Olandese</translation>
+        <translation>Ολλανδικά</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation>Polacca</translation>
+        <translation>Πολωνικά</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation>Portoghese</translation>
+        <translation>Πορτογαλικά</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρώσικα</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4314,11 +4345,11 @@ p, li { white-space: pre-wrap; }
   provide a translation&lt;/a&gt; so that your friends can use brewtarget!
 &lt;/qt&gt;</source>
         <translation>&lt;qt&gt;
-   &lt;b&gt;Know another language?&lt;/b&gt;
+   &lt;b&gt;Γνωρίζεις κάποια άλλη γλώσσα;&lt;/b&gt;
    &lt;br&gt;&lt;br&gt;
-   Or, would you like to improve a translation? Help us out and
+   Ή, θα ήθελες να βελτιώσεις μια ήδη υπάρχουσα μετάφραση; Βοήθησε μας και
   &lt;a href=&quot;https://sourceforge.net/sendmessage.php?touser=938941&quot;&gt;
-  provide a translation&lt;/a&gt; so that your friends can use brewtarget!
+  κάνε μια μετάφραση&lt;/a&gt; ώστε και οι φίλοι σου να μπορούν να χρησιμοποιήσουν το brewtarget!
 &lt;/qt&gt;</translation>
     </message>
 </context>
@@ -4326,15 +4357,15 @@ p, li { white-space: pre-wrap; }
     <name>pitchDialog</name>
     <message>
         <source>Pitch Rate Calculator</source>
-        <translation>Passo tasso Calcolatrice</translation>
+        <translation>Pitch Rate Calculator</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Εισαγωγή</translation>
     </message>
     <message>
         <source>Wort Volume</source>
-        <translation>Volume Mosto</translation>
+        <translation>Όγκος γλεύκους</translation>
     </message>
     <message>
         <source>OG</source>
@@ -4342,41 +4373,39 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>For ales, 0.75-1. For lagers, 1.5-2.</source>
-        <translation>Per ale, 0.75-1. Per lager, 1.5-2.</translation>
+        <translation>Για ales, 0.75-1. Για lagers, 1.5-2.</translation>
     </message>
     <message>
         <source>Pitch Rate (M cells)/(mL*P)</source>
-        <translation>Lievito tasso (M)/(mL*P)</translation>
+        <translation>Pitch Rate (M cells)/(mL*P)</translation>
     </message>
     <message>
         <source>Aeration Method</source>
-        <translation>Metodo di aerezione</translation>
+        <translation>Μέθοδος αερισμού</translation>
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation>Data produzione Lievito</translation>
+        <translation>Ημερομηνία παραγωγής της μαγιάς</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
-        <translation>Vitalità lievito</translation>
+        <translation>Βιωσιμότητα μαγιάς</translation>
     </message>
     <message>
         <source>None</source>
-        <translatorcomment>Nessuno
-</translatorcomment>
-        <translation>Niente</translation>
+        <translation>Καμία</translation>
     </message>
     <message>
         <source>O2 At Start</source>
-        <translation>Partenza con o2</translation>
+        <translation>O2 στο ξεκίνημα</translation>
     </message>
     <message>
         <source>Stir Plate</source>
-        <translation>Piastra mescolatrice</translation>
+        <translation>Stir Plate</translation>
     </message>
     <message>
         <source>MM/dd/yyyy</source>
-        <translation>MM/GG/AAAA</translation>
+        <translation>ΜΜ/ηη/εεεε</translation>
     </message>
     <message>
         <source>%</source>
@@ -4384,263 +4413,263 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
-        <translation>Calcola Vitalità dalla data</translation>
+        <translation>Υπολογισμός βιωσιμότητας από την ημ/νια</translation>
     </message>
     <message>
         <source># Vials/Smack Packs Pitched</source>
-        <translation># Fiale/Confezioni Inclinate</translation>
+        <translation>Φιαλίδια/πακέτα που χρησιμοποιήθηκαν</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>Αποτέλεσμα</translation>
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation>Miliardi di cellule di lievito richieste</translation>
+        <translation>Δισεκατομύρια κυττάρων μαγιάς που χρειάζονται</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
-        <translation># Fiale/Confezioni con o senza starter</translation>
+        <translation>Φιαλίδια/πακέτα χωρίς starter</translation>
     </message>
     <message>
         <source>Dry Yeast</source>
-        <translation>Lievito secco</translation>
+        <translation>Ξηρή μαγιά</translation>
     </message>
     <message>
         <source>Starter Volume</source>
-        <translation>Volume di partenza</translation>
+        <translation>Όγκος starter</translation>
     </message>
 </context>
 <context>
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation>Calcolatore di priming</translation>
+        <translation>Υπολογισμός ανθρακικού</translation>
     </message>
     <message>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Εισαγωγή</translation>
     </message>
     <message>
         <source>Collected Beer Volume</source>
-        <translation>Volume di bitrra raccolto</translation>
+        <translation>Συνολικός όγκος μπύρας</translation>
     </message>
     <message>
         <source>Amount of beer to prime</source>
-        <translation>Importo di birra a serata</translation>
+        <translation>Ποσότητα μπύρας στον κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Beer Temperature</source>
-        <translation>Tmperatura birra</translation>
+        <translation>Θερμοκρασία μπύρας</translation>
     </message>
     <message>
         <source>Temp of the beer</source>
-        <translation>Temp della birra</translation>
+        <translation>Θερμ. μπύρας</translation>
     </message>
     <message>
         <source>Desired Volumes</source>
-        <translation>Volumi desiderati</translation>
+        <translation>Επιθυμητή όγκος ανθρακικού</translation>
     </message>
     <message>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
-        <translation>Quanti volumi di co2 vuoi (1 L CO2 @ STP per L Birra)</translation>
+        <translation>Πόσος όγκος  CO2 θέλετε; (1 L CO2 @ STP ανά L μπύρας)</translation>
     </message>
     <message>
         <source>Glucose Monohydrate (corn sugar)</source>
-        <translation>Glucosio monoidrato (zucchero del mais)</translation>
+        <translation>Glucose Monohydrate (Δεξτρόζη)</translation>
     </message>
     <message>
         <source>Anhydrous Glucose</source>
-        <translation>glucosio anidro</translation>
+        <translation>Anhydrous Glucose</translation>
     </message>
     <message>
         <source>Sucrose (table sugar)</source>
-        <translation>Saccarosio (zucchero da tavola)</translation>
+        <translation>Sucrose (κοινή ζάχαρη)</translation>
     </message>
     <message>
         <source>Dry Malt Extract</source>
-        <translation>Estratto di malto secco</translation>
+        <translation>Ξηρή βύνη</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Produzione</translation>
+        <translation>Αποτέλεσμα</translation>
     </message>
     <message>
         <source>Prime with</source>
-        <translation>Prime con</translation>
+        <translation>Γόμμωση με</translation>
     </message>
     <message>
         <source>How much priming ingredient to use</source>
-        <translation>Quanto ingerdiente per il primg usare</translation>
+        <translation>Πόσο υλικό για την γόμμωση θα χρησιμοποιήσετε</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcola</translation>
+        <translation>Υπολογισμός</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasDialog</name>
     <message>
         <source>Recipe Extras</source>
-        <translation>Ricetta Extra</translation>
+        <translation>Πρόσθετα συνταγής</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Birraio</translation>
+        <translation>Ζυθοποιός</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation>Assistente Birraio</translation>
+        <translation>Βοηθός</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation>Valutazione assaggio</translation>
+        <translation>εκτίμηση γεύσης</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Età primaria (giorni)</translation>
+        <translation>Χρόνος ωρίμασης στον αρχικό κάδο ζήμωσης (ημέρες)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation>Temperatura primaria</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Età secondaria (giorni)</translation>
+        <translation>Χρόνος ωρίμασης στον δεύτερο κάδο ζήμωσης (ημέρες)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation>Temperatura secondaria</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Età terziaria (giorni)</translation>
+        <translation>Χρόνος ωρίμανσης στον τρίτο κάδο ζήμωσης (ημέρες)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation>Temperatura terziaria</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation>Bottiglia/Fusto età (giorni)</translation>
+        <translation>Παλάιωση σε φιάλες/βαρέλια</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation>Bottiglia/fusto Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Data di prima birrificazione</translation>
+        <translation>Ημ/νια αρχικής παρασκευής</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>dd MMM YYYY</translation>
+        <translation>μμ ΜΜ ΕΕΕΕ</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Volume carbonazione</translation>
+        <translation>Βαθμοί Ανθράκωσης</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Note di asssaggi</translation>
+        <translation>Γεύση - Σημειώσεις</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>Ακύρωση</translation>
     </message>
 </context>
 <context>
     <name>recipeExtrasWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Brewer</source>
-        <translation>Birraio</translation>
+        <translation>Ζυθοποιός</translation>
     </message>
     <message>
         <source>Asst. Brewer</source>
-        <translation>Assistente Birraio</translation>
+        <translation>Βοηθός</translation>
     </message>
     <message>
         <source>Taste Rating</source>
-        <translation>Valutazione assaggio</translation>
+        <translation>εκτίμηση γεύσης</translation>
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Età primaria (giorni)</translation>
+        <translation>Χρόνος ωρίμασης στον αρχικό κάδο ζήμωσης (ημέρες)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
-        <translation>Temperatura primaria</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Età secondaria (giorni)</translation>
+        <translation>Χρόνος ωρίμασης στον δεύτερο κάδο ζήμωσης (ημέρες)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
-        <translation>Temperatura secondaria</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Età terziaria (giorni)</translation>
+        <translation>Χρόνος ωρίμανσης στον τρίτο κάδο ζήμωσης (ημέρες)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
-        <translation>Temperatura terziaria</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Bottle/Keg Age (days)</source>
-        <translation>Bottiglia/Fusto età (giorni)</translation>
+        <translation>Παλάιωση σε φιάλες/βαρέλια</translation>
     </message>
     <message>
         <source>Bottle/Keg Temp</source>
-        <translation>Bottiglia/fusto Temperatura</translation>
+        <translation>Θερμοκρασία</translation>
     </message>
     <message>
         <source>Date First Brewed</source>
-        <translation>Data di prima birrificazione</translation>
+        <translation>Ημ/νια αρχικής παρασκευής</translation>
     </message>
     <message>
         <source>dd MMM yyyy</source>
-        <translation>dd MMM YYYY</translation>
+        <translation>μμ ΜΜ ΕΕΕΕ</translation>
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Volume carbonazione</translation>
+        <translation>Βαθμοί Ανθράκωσης</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Note di asssaggi</translation>
+        <translation>Γεύση - Σημειώσεις</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
 </context>
 <context>
     <name>refractoDialog</name>
     <message>
         <source>Refractometer Tools</source>
-        <translation>Tool Rifrattometri</translation>
+        <translation>Διαθλασίμετρο</translation>
     </message>
     <message>
         <source>Inputs</source>
-        <translation>Ingressi</translation>
+        <translation>Εισαγωγή</translation>
     </message>
     <message>
         <source>Original Plato</source>
-        <translation>Plato origianale</translation>
+        <translation>Αρχική Plato</translation>
     </message>
     <message>
         <source>OG (20 C)</source>
@@ -4648,19 +4677,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Current Plato</source>
-        <translation>Plato corrente</translation>
+        <translation>Τρέχουσα Plato</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation>Calcola</translation>
+        <translation>Υπολογισμός</translation>
     </message>
     <message>
         <source>Outputs</source>
-        <translation>Produzione</translation>
+        <translation>Αποτέλεσμα</translation>
     </message>
     <message>
         <source>SG (20C)</source>
-        <translation type="unfinished"></translation>
+        <translation>SG (20C)</translation>
     </message>
     <message>
         <source>ABV</source>
@@ -4668,81 +4697,81 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>ABW</source>
-        <translation type="unfinished"></translation>
+        <translation>ABW</translation>
     </message>
     <message>
         <source>Refractive Index</source>
-        <translation>Indice di rifrattometro</translation>
+        <translation>Refractive Index</translation>
     </message>
     <message>
         <source>Real Extract (Plato)</source>
-        <translation>Estratto reale (Plato)</translation>
+        <translation>Real Extract (Plato)</translation>
     </message>
     <message>
         <source>OG (20C)</source>
-        <translation>OG (20 C)</translation>
+        <translation>OG (20C)</translation>
     </message>
 </context>
 <context>
     <name>scaleRecipeTool</name>
     <message>
         <source>Scale Recipe</source>
-        <translation>Scala ricetta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New batch size</source>
-        <translation>Nuova dimensione lotto</translation>
+        <translation>Μέγεθος νέας παρτίδας</translation>
     </message>
     <message>
         <source>New efficiency (pct)</source>
-        <translation>Nuova efficenza (pct)</translation>
+        <translation>Νέα απόδωση (pct)</translation>
     </message>
 </context>
 <context>
     <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
-        <translation>Editor stile</translation>
+        <translation>Επεξεργαστής στυλ</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Stile</translation>
+        <translation>Στυλ</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation>Cancella stile selezionato</translation>
+        <translation>Διέγραψε το επιλεγμένο στυλ</translation>
     </message>
     <message>
         <source>Basic Information</source>
-        <translation>Informazioni di base</translation>
+        <translation>Βασικές πληροφορίες</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation>Categoria</translation>
+        <translation>Κατηγορία</translation>
     </message>
     <message>
         <source>Category number</source>
-        <translation>Numero di categoria</translation>
+        <translation>Αριθμός κατηγορίας</translation>
     </message>
     <message>
         <source>Style letter</source>
-        <translation>Stile di lettera</translation>
+        <translation>Γράμμα στυλ</translation>
     </message>
     <message>
         <source>Style guide</source>
-        <translation>guida allo stile</translation>
+        <translation>Οδηγός στυλ</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Type of beverage</source>
-        <translation>Tipo di bevanda</translation>
+        <translation>Τύπος αναψυκτικού</translation>
     </message>
     <message>
         <source>Lager</source>
@@ -4754,7 +4783,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mead</source>
-        <translation>Mead</translation>
+        <translation>Υδρόμελο</translation>
     </message>
     <message>
         <source>Wheat</source>
@@ -4762,23 +4791,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mixed</source>
-        <translation>Mix</translation>
+        <translation>Ανάμεικτη</translation>
     </message>
     <message>
         <source>Cider</source>
-        <translation>Sidro</translation>
+        <translation>Μηλίτης</translation>
     </message>
     <message>
         <source>Vital Statistics</source>
-        <translation>Statistiche Vitali</translation>
+        <translation>Κύρια χαρακτηριστικά</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation>Max</translation>
+        <translation>Μέγιστο</translation>
     </message>
     <message>
         <source>Min</source>
-        <translation>Min</translation>
+        <translation>Ελάχιστο</translation>
     </message>
     <message>
         <source>OG</source>
@@ -4790,154 +4819,154 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>IBUs</source>
-        <translation type="unfinished"></translation>
+        <translation>IBUs</translation>
     </message>
     <message>
         <source>Color (SRM)</source>
-        <translation>Colore (SRM)</translation>
+        <translation>Χρώμα (SRM)</translation>
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ανθρακικό (όγκος)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
-        <translation type="unfinished"></translation>
+        <translation>ABV (pct)</translation>
     </message>
     <message>
         <source>Profile</source>
-        <translation>Profilo</translation>
+        <translation>Προφίλ</translation>
     </message>
     <message>
         <source>Ingredients</source>
-        <translation>Ingredienti</translation>
+        <translation>Συστατικά</translation>
     </message>
     <message>
         <source>Examples</source>
-        <translation>Esempi</translation>
+        <translation>Παραδείγματα</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>Νέο</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Salva</translation>
+        <translation>Αποθήκευση</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancella</translation>
+        <translation>Ακύρωση</translation>
     </message>
 </context>
 <context>
     <name>timerListDialog</name>
     <message>
         <source>Timers</source>
-        <translation>Timers</translation>
+        <translation>Χρονόμετρα</translation>
     </message>
 </context>
 <context>
     <name>timerWidget</name>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Set the timer to the specified value</source>
-        <translation>Impostare il timer al valore specificato</translation>
+        <translation>Δώσε συγκεκριμένη τιμή στο χρονόμετρο</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation>Setta</translation>
+        <translation>Ορισμός</translation>
     </message>
     <message>
         <source>HH:MM:SS</source>
-        <translation>HH:MM:SS</translation>
+        <translation>ΩΩ:ΛΛ:ΔΔ</translation>
     </message>
     <message>
         <source>Start/Stop timer</source>
-        <translation type="unfinished"></translation>
+        <translation>Εκκίνηση/Τέλος χρονόμετρου</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Partenza</translation>
+        <translation>Έναρξη</translation>
     </message>
     <message>
         <source>Set a sound as the alarm</source>
-        <translation>Setta il suono per l&apos;allarme</translation>
+        <translation>Όρισε ένα ήχο για ξυπνητήρι</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation>Suono</translation>
+        <translation>Ήχος</translation>
     </message>
 </context>
 <context>
     <name>waterEditor</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialogo</translation>
+        <translation>Πλαίσιο διαλόγου</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Note</translation>
+        <translation>Σημειώσεις</translation>
     </message>
 </context>
 <context>
     <name>yeastDialog</name>
     <message>
         <source>Yeast Database</source>
-        <translation>Database Lievito</translation>
+        <translation>Βάση δεδομένων μαγιάς</translation>
     </message>
     <message>
         <source>Add selected yeast to recipe</source>
-        <translation>Aggiungi lievito selezionato alla ricetta</translation>
+        <translation>Προσθήκη της επιλεγμένης μαγιάς στην συνταγή</translation>
     </message>
     <message>
         <source>Add to Recipe</source>
-        <translation>Aggiungi alla ricetta</translation>
+        <translation>Προσθήκη στην συνταγή</translation>
     </message>
     <message>
         <source>Create new yeast</source>
-        <translation>Crea nuovo lievito</translation>
+        <translation>Καταχώρηση νέας μαγιάς</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Nuovo</translation>
+        <translation>Νέα</translation>
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation>Edit lievito selezionato</translation>
+        <translation>Επεξεργαστείτε την επιλεγμένη μαγιά</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
-        <translation>Rimuovi lievito selezionato</translation>
+        <translation>Αφαιρέστε την επιλεγμένη μαγιά</translation>
     </message>
 </context>
 <context>
     <name>yeastEditor</name>
     <message>
         <source>Yeast Editor</source>
-        <translation>Editor Lievito</translation>
+        <translation>Επεξεργασία στοιχείων μαγιάς</translation>
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Campi obbligatori</translation>
+        <translation>Απαιτούμενα πεδία</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Nome</translation>
+        <translation>Ονομασία</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tipologia</translation>
+        <translation>Είδος</translation>
     </message>
     <message>
         <source>Ale</source>
@@ -4953,131 +4982,131 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Wine</source>
-        <translation>Vino</translation>
+        <translation>Κρασί</translation>
     </message>
     <message>
         <source>Champagne</source>
-        <translation>Champagne</translation>
+        <translation>Σαμπάνια</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Forma</translation>
+        <translation>Μορφή</translation>
     </message>
     <message>
         <source>Liquid</source>
-        <translation>Liquido</translation>
+        <translation>Υγρή</translation>
     </message>
     <message>
         <source>Dry</source>
-        <translation>Secco</translation>
+        <translation>Ξηρή</translation>
     </message>
     <message>
         <source>Slant</source>
-        <translation>Inclinazione</translation>
+        <translation>Slant</translation>
     </message>
     <message>
         <source>Culture</source>
-        <translation>Cultura</translation>
+        <translation>Καλιέργεια</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>Ammontare</translation>
+        <translation>Ποσότητα</translation>
     </message>
     <message>
         <source>Check it if the amount given is in kg instead of L.</source>
-        <translation>Controllare se l&apos;importo indicato è in kg invece di L.</translation>
+        <translation>Έλεγχος εάν η ποσότητα είναι σε κιλά ή λιτρα</translation>
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Importo è il peso?</translation>
+        <translation>Το ποσό αναφέρεται σε βάρος</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Controlla se la data quantità è peso invece di volume</translation>
+        <translation>Τσέκαρε το εαν το αναφερόμενο ποσό είναι βάρος αντί για όγκος</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation>Laboratorio</translation>
+        <translation>Εργαστήριο</translation>
     </message>
     <message>
         <source>Product ID</source>
-        <translation>ID Prodotto</translation>
+        <translation>Κωδικός προιόντος</translation>
     </message>
     <message>
         <source>Min Temp</source>
-        <translation>Temperatura Minima</translation>
+        <translation>Ελαχ. Θερμ.</translation>
     </message>
     <message>
         <source>Min temp</source>
-        <translation>Temperatura Minima</translation>
+        <translation>Ελαχ. Θερμ.</translation>
     </message>
     <message>
         <source>Max Temp</source>
-        <translation>Temperatura Massima</translation>
+        <translation>Μεγ. Θερμ.</translation>
     </message>
     <message>
         <source>Max temp</source>
-        <translation>Temperatura Massima</translation>
+        <translation>Μεγ. Θερμ.</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation>Flocculazione</translation>
+        <translation>Flocculation</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation>Basso</translation>
+        <translation>Χαμηλή</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Medio</translation>
+        <translation>Μεσαία</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Alto</translation>
+        <translation>Υψηλή</translation>
     </message>
     <message>
         <source>Very High</source>
-        <translation>Molto alto</translation>
+        <translation>Πολύ υψηλή</translation>
     </message>
     <message>
         <source>Attenuation (%)</source>
-        <translation>Attenuazione (%)</translation>
+        <translation>Ελάττωση</translation>
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Attenuazione apparente come percentuale di punti OG</translation>
+        <translation>Φαινομενική ελάττωση ως πσοστό επί  OG βαθμών</translation>
     </message>
     <message>
         <source>Times Recultured</source>
-        <translation>Riattivato</translation>
+        <translation>Φορές που επανακαλλιεργήθηκε</translation>
     </message>
     <message>
         <source>Times this yeast has been recultured</source>
-        <translation>Illievito è stato riattivato</translation>
+        <translation>Φορές που αυτή η μαγιά επανακαλλιεργήθηκε</translation>
     </message>
     <message>
         <source>Max Recultures</source>
-        <translation>Massima riattivazione</translation>
+        <translation>Μέγιστος αριθμός επανακαλλιεργιών</translation>
     </message>
     <message>
         <source>Max recultures</source>
-        <translation>Massima riattivazione</translation>
+        <translation>Μέγιστος αριθμός επανακαλλιεργιών</translation>
     </message>
     <message>
         <source>Add to Secondary</source>
-        <translation>Aggiungi al secondario</translation>
+        <translation>Προσθήκη στο δεύτερο κάδο ζύμωσης</translation>
     </message>
     <message>
         <source>Checked means add this yeast to secondary instead of primary</source>
-        <translation>Controlla di aggiungere questo lievito secondario invece di primario</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Best For:</source>
-        <translation>Migliore per:</translation>
+        <translation>Κατάλληλη για :</translation>
     </message>
     <message>
         <source>Notes:</source>
-        <translation>Note:</translation>
+        <translation>Σημειώσεις:</translation>
     </message>
 </context>
 </TS>

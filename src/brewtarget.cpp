@@ -151,17 +151,6 @@ bool Brewtarget::copyDataFiles(QString newPath)
    return success;
 }
 
-bool Brewtarget::optionFileExists()
-{
-   QString optionsFileName;
-   QFile optionsFile;
-
-   optionsFileName = getConfigDir() + "options.xml";
-   optionsFile.setFileName(optionsFileName);
-
-   return optionsFile.exists();
-}
-
 bool Brewtarget::ensureDataFilesExist()
 {
    QString logFileName;
@@ -447,17 +436,19 @@ int Brewtarget::run()
    
    qApp->processEvents(); // So we can process mouse clicks on splash window.
    
+   // If the old options file exists, convert it. Otherwise, just get the
+   // system options. I *think* this will work. The installer copies the old
+   // one into the new place on Windows.
+   if ( option("hadOldConfig", false).toBool() )
+      convertPersistentOptions(); 
+
+   readSystemOptions();
+
    success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
 
-   // If the old options file exists, convert it. Otherwise, just get the
-   // system options
-   if (optionFileExists()) 
-      convertPersistentOptions(); 
-   else
-      readSystemOptions();
-      
    if( success )
       success = ensureDataFilesExist(); // Make sure all the files we need exist before starting.
+
    if( ! success )
       return 1;
 
@@ -474,19 +465,18 @@ int Brewtarget::run()
    // loading the main window.
    if (Database::instance().loadSuccessful())
    {
-      // See if the user needs to convert from the deprecated XML formats
       if ( ! Brewtarget::btSettings.contains("converted") )
          Database::instance().convertFromXml();
-      
+
       _mainWindow = new MainWindow();
       
       _mainWindow->setVisible(true);
-      
       splashScreen.finish(_mainWindow);
 
       checkForNewVersion(_mainWindow);
-
-      ret = qApp->exec();
+      do {
+         ret = qApp->exec();
+      } while (ret == 1000);
    }
    
    // Close log file.
@@ -527,7 +517,7 @@ void Brewtarget::log(LogType lt, QString message)
       m = message;
    
    // First, write out to stderr.
-   std::cerr << m.toStdString() << std::endl;
+   std::cerr << m.toUtf8().constData() << std::endl;
    // Then display it in the GUI's status bar.
    if( _mainWindow && _mainWindow->statusBar() )
       _mainWindow->statusBar()->showMessage(m, 3000);
@@ -745,11 +735,6 @@ void Brewtarget::convertPersistentOptions()
    if( hasOption )
       setLanguage(text);
 
-   //=======================Data Dir===========================
-   text = getOptionValue(*optionsDoc, "user_data_dir", &hasOption);
-   if( hasOption )
-      userDataDir = text;
-
    //=======================Weight=====================
    text = getOptionValue(*optionsDoc, "weight_unit_system", &hasOption);
    if( hasOption )
@@ -872,14 +857,21 @@ void Brewtarget::convertPersistentOptions()
    optionsDoc = 0;
    xmlFile.close();
 
+   // Don't do this on Windows. We have extra work to do and creating the
+   // obsolete directory mess it all up. Not sure why that test is still in here
+#ifndef Q_OS_WIN
    // This shouldn't really happen, but lets be sure
    if( !cfgDir.exists("obsolete") )
       cfgDir.mkdir("obsolete");
 
-   // copy the old file into obsolete and delete it   
+   // copy the old file into obsolete and delete it
    cfgDir.cd("obsolete");
    if( xmlFile.copy(cfgDir.filePath("options.xml")) )
       xmlFile.remove();
+
+#endif
+   // And remove the flag
+   btSettings.remove("hadOldConfig");
 }
 
 void Brewtarget::readSystemOptions()
@@ -1266,6 +1258,12 @@ QVariant Brewtarget::option(QString attribute, QVariant default_value, const QOb
       name = attribute;
 
    return btSettings.value(name,default_value);
+}
+
+void Brewtarget::removeOption(QString attribute)
+{
+   if ( hasOption(attribute) )
+        btSettings.remove(attribute);
 }
 
 QString Brewtarget::generateName(QString attribute, const QObject* object, iUnitOps ops)

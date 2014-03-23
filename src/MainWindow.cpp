@@ -75,7 +75,6 @@
 #include "MiscDialog.h"
 #include "StyleEditor.h"
 #include "OptionDialog.h"
-#include "HtmlViewer.h"
 #include "OgAdjuster.h"
 #include "ConverterTool.h"
 #include "TimerListDialog.h"
@@ -101,6 +100,9 @@
 #include "StyleSortFilterProxyModel.h"
 #include "NamedMashEditor.h"
 #include "BtDatePopup.h"
+#if defined(Q_OS_WIN)
+   #include <windows.h>
+#endif
 
 MainWindow::MainWindow(QWidget* parent)
         : QMainWindow(parent)
@@ -145,7 +147,6 @@ MainWindow::MainWindow(QWidget* parent)
    yeastDialog = new YeastDialog(this);
    yeastEditor = new YeastEditor(this);
    optionDialog = new OptionDialog(this);
-   htmlViewer = new HtmlViewer(this);
    recipeScaler = new ScaleRecipeTool(this);
    recipeFormatter = new RecipeFormatter(this);
    ogAdjuster = new OgAdjuster(this);
@@ -269,9 +270,6 @@ MainWindow::MainWindow(QWidget* parent)
    fileSaver->setViewMode(QFileDialog::List);
    fileSaver->setDefaultSuffix(QString("xml"));
 
-   // Set up HtmlViewer to view documentation.
-   htmlViewer->setHtml(Brewtarget::getDocDir() + "index.html");
-
    // Do some magic on the splitter widget to keep the tree from expanding
    splitter_2->setStretchFactor(0,0);
    splitter_2->setStretchFactor(1,1);
@@ -328,7 +326,7 @@ MainWindow::MainWindow(QWidget* parent)
    connect( actionMiscs, SIGNAL( triggered() ), miscDialog, SLOT( show() ) );
    connect( actionYeasts, SIGNAL( triggered() ), yeastDialog, SLOT( show() ) );
    connect( actionOptions, SIGNAL( triggered() ), optionDialog, SLOT( show() ) );
-   connect( actionManual, SIGNAL( triggered() ), htmlViewer, SLOT( show() ) );
+   connect( actionManual, SIGNAL( triggered() ), this, SLOT( openManual() ) );
    connect( actionScale_Recipe, SIGNAL( triggered() ), recipeScaler, SLOT( show() ) );
    connect( action_recipeToTextClipboard, SIGNAL( triggered() ), recipeFormatter, SLOT( toTextClipboard() ) );
    connect( actionConvert_Units, SIGNAL( triggered() ), converterTool, SLOT( show() ) );
@@ -865,6 +863,7 @@ void MainWindow::showChanges(QMetaProperty* prop)
       label_calcBatchSize->setPalette(numPalette_tooLow);
    else
       label_calcBatchSize->setPalette(numPalette_tooHigh);
+   
    if( 0.95*recipeObs->boilSize_l() <= recipeObs->boilVolume_l() && recipeObs->boilVolume_l() <= 1.05*recipeObs->boilSize_l() )
       label_calcBoilSize->setPalette(numPalette_good);
    else if( recipeObs->boilVolume_l() < 0.95* recipeObs->boilSize_l() )
@@ -879,7 +878,6 @@ void MainWindow::showChanges(QMetaProperty* prop)
    label_boilSG->setText(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
 
    styleRangeWidget_fg->setValue(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()).toDouble());
-
    styleRangeWidget_abv->setValue(recipeObs->ABV_pct());
    styleRangeWidget_ibu->setValue(recipeObs->IBU());
    styleRangeWidget_srm->setValue(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false).toDouble());
@@ -938,38 +936,7 @@ void MainWindow::updateRecipeMash()
 
 void MainWindow::updateRecipeEquipment()
 {
-   if( recipeObs == 0 )
-      return;
-
-   // equip may be null.
-   Equipment* equip = equipmentListModel->at(equipmentComboBox->currentIndex());
-   if( equip == 0 )
-      return;
-   // if it isn't, we need to disconnect a few signals here
-//   else 
-//      disconnect( equip, 0, recipeObs, 0 );
-
-   // Notice that we are using a copy from the database.
-   Database::instance().addToRecipe(recipeObs,equip);
-   equipmentButton->setEquipment(equip);
-
-   // Keep the mash tun weight and specific heat up to date.
-   Mash* m = recipeObs->mash();
-   if( m )
-   {
-      m->setTunWeight_kg( equip->tunWeight_kg() );
-      m->setTunSpecificHeat_calGC( equip->tunSpecificHeat_calGC() );
-   }
-   
-   if( QMessageBox::question(this, tr("Equipment request"),
-                             tr("Would you like to set the batch and boil size to that requested by the equipment?"),
-                             QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
-   {
-      recipeObs->setBatchSize_l( equip->batchSize_l() );
-      recipeObs->setBoilSize_l( equip->boilSize_l() );
-      recipeObs->setBoilTime_min( equip->boilTime_min() );
-      mashEditor->setEquipment(equip);
-   }
+  droppedRecipeEquipment(equipmentListModel->at(equipmentComboBox->currentIndex()));
 }
 
 void MainWindow::droppedRecipeEquipment(Equipment *kit)
@@ -984,6 +951,14 @@ void MainWindow::droppedRecipeEquipment(Equipment *kit)
    // Notice that we are using a copy from the database.
    Database::instance().addToRecipe(recipeObs,kit);
    equipmentButton->setEquipment(kit);
+
+   // Keep the mash tun weight and specific heat up to date.
+   Mash* m = recipeObs->mash();
+   if( m )
+   {
+      m->setTunWeight_kg( kit->tunWeight_kg() );
+      m->setTunSpecificHeat_calGC( kit->tunSpecificHeat_calGC() );
+   }
 
    if( QMessageBox::question(this,
                              tr("Equipment request"),
@@ -1430,14 +1405,14 @@ void MainWindow::restoreFromBackup()
       return;
    }
    
-	QString restoreDbFile = QFileDialog::getOpenFileName(this, tr("Choose File"), "", tr("SQLite (*.sqlite)"));
-	bool success = Database::restoreFromFile(restoreDbFile);
+   QString restoreDbFile = QFileDialog::getOpenFileName(this, tr("Choose File"), "", tr("SQLite (*.sqlite)"));
+   bool success = Database::restoreFromFile(restoreDbFile);
    
    if( ! success )
       QMessageBox::warning( this, tr("Oops!"), tr("For some reason, the operation failed.") );
    else
       QMessageBox::information(this, tr("Restart"), tr("Please restart Brewtarget."));
-	 //TODO: do this without requiring restarting :)
+   //TODO: do this without requiring restarting :)
 }
 
 // Imports all the recipes from a file into the database.
@@ -1447,7 +1422,10 @@ void MainWindow::importFiles()
       return;
    
    foreach( QString filename, fileOpener->selectedFiles() )
-      Database::instance().importFromXML(filename);
+   {
+      if ( ! Database::instance().importFromXML(filename) )
+         importMsg();
+   }
    
    showChanges();
 }
@@ -1696,6 +1674,12 @@ void MainWindow::saveMash()
 void MainWindow::openDonateLink()
 {
    QDesktopServices::openUrl(QUrl("http://sourceforge.net/project/project_donations.php?group_id=249733"));
+}
+
+void MainWindow::openManual()
+{
+   QUrl url(Brewtarget::getDataDir()+"brewtarget-manual.html");
+   QDesktopServices::openUrl(url);
 }
 
 // One print function to rule them all. Now we just need to make the menuing
@@ -2455,6 +2439,13 @@ void MainWindow::convertedMsg()
 
 }
 
+void MainWindow::importMsg()
+{
+   QMessageBox msgBox;
+   msgBox.setText( tr("The import contained invalid beerXML. It has been imported, but please make certain it makes sense."));
+   msgBox.exec();
+}
+
 void MainWindow::changeBrewDate()
 {
    QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
@@ -2507,3 +2498,4 @@ void MainWindow::fixBrewNote()
       target->recalculateEff(noteParent);
    }
 }
+

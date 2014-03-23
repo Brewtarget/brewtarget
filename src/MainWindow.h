@@ -216,6 +216,9 @@ public slots:
    //! \brief Open the default browser to Brewtarget's donation page.
    void openDonateLink();
 
+   //! \brief Open the default browser to view Brewtarget manual.
+	 void openManual();
+
    //! \brief Merges two database files.
    void updateDatabase();
   
@@ -285,7 +288,6 @@ private:
    YeastEditor* yeastEditor;
    OptionDialog* optionDialog;
    QDialog* brewDayDialog;
-   HtmlViewer* htmlViewer;
    ScaleRecipeTool* recipeScaler;
    RecipeFormatter* recipeFormatter;
    OgAdjuster* ogAdjuster;
@@ -347,6 +349,7 @@ private:
    void copyThis(Yeast *yeast);
 
    void convertedMsg(); 
+   void importMsg();
 };
 
 #endif   /* _MAINWINDOW_H */

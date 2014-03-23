@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-build/
-=======
-# Build directory
+# Build directory. Ignore everything but dummyfile
 build/*
->>>>>>> master
+!build/dummyfile
+
