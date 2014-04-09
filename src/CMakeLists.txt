@@ -122,7 +122,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/QueuedMethod.cpp
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeFormatter.cpp
-    ${SRCDIR}/RecipeListModel.cpp
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/SetterCommand.cpp
     ${SRCDIR}/SetterCommandStack.cpp
@@ -258,7 +257,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RecipeExtrasDialog.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
-    ${SRCDIR}/RecipeListModel.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
     ${SRCDIR}/SetterCommandStack.h
