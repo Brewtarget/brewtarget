@@ -48,6 +48,22 @@ Q_DECLARE_METATYPE( QList<Misc*> )
 Q_DECLARE_METATYPE( QList<Yeast*> )
 Q_DECLARE_METATYPE( QList<Water*> )
 
+// TODO: replace with real parsing (Qt5?)
+void parseArgs(QApplication const& app)
+{
+   QStringList args(app.arguments());
+   int i = args.indexOf("--from-xml");
+   if( i >= 0 )
+   {
+      Database::instance().importFromXML(args.at(i+1));
+      Database::dropInstance();
+      // If you know enough to run --from-xml, I am going to assume you know
+      // enough to do it right
+      Brewtarget::setOption("converted", QDate().currentDate().toString());
+      exit(0);
+   }
+}
+
 int main(int argc, char **argv)
 {  
    QApplication app(argc, argv);
@@ -69,18 +85,7 @@ int main(int argc, char **argv)
    qRegisterMetaType< QList<Yeast*> >();
    qRegisterMetaType< QList<Water*> >();
 
-   // TODO: make a command-line parser class.
-   QStringList args(app.arguments());
-   int i = args.indexOf("--from-xml");
-   if( i >= 0 )
-   {
-      Database::instance().importFromXML(args.at(i+1));
-      Database::dropInstance();
-      // If you know enough to run --from-xml, I am going to assume you know
-      // enough to do it right
-      Brewtarget::setOption("converted", QDate().currentDate().toString());
-      return 0;
-   }
-  
-   Brewtarget::run();
+   parseArgs(app);
+   
+   return Brewtarget::run();
 }
