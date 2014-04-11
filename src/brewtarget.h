@@ -255,7 +255,23 @@ private:
    static QString currentLanguage;
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;
+   static QFile pidFile;
 
+   /*!
+    * \brief Run before showing MainWindow, does all system setup.
+    * 
+    * Creates a PID file, sets config directory, reads system options,
+    * ensures the data directories and files exist, loads translations,
+    * and loads database.
+    * 
+    * \returns false if anything goes awry, true if it's ok to start MainWindow
+    */
+   static bool initialize();
+   /*!
+    * \brief Run after QApplication exits to clean up shit, close database, etc.
+    */
+   static void cleanup();
+   
    /*!
     *  \brief Helper to get option values from XML.
     * 

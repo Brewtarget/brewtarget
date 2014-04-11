@@ -59,15 +59,15 @@
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
 
-MainWindow* Brewtarget::_mainWindow;
+MainWindow* Brewtarget::_mainWindow = 0;
 QDomDocument* Brewtarget::optionsDoc;
 QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
 QTextStream* Brewtarget::logStream = 0;
 QFile* Brewtarget::logFile = 0;
 QSettings Brewtarget::btSettings("brewtarget");
-
 bool Brewtarget::userDatabaseDidNotExist = false;
+QFile Brewtarget::pidFile;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
@@ -392,14 +392,12 @@ QString Brewtarget::getUserDataDir()
       return userDataDir + "/";
 }
 
-int Brewtarget::run()
+bool Brewtarget::initialize()
 {
-   int ret;
-   bool success;
    
    // In Unix, make sure the user isn't running 2 copies.
 #if defined(Q_WS_X11)
-   QFile pidFile(QString("%1.pid").arg(getUserDataDir()));
+   pidFile.setFileName(QString("%1.pid").arg(getUserDataDir()));
    if( pidFile.exists() )
    {
       // Read the pid.
@@ -418,7 +416,7 @@ int Brewtarget::run()
       if( procDir.exists() )
       {
          std::cerr << "Brewtarget is already running. PID: " << pid << std::endl;
-         return 1;
+         return false;
       }
    }
    
@@ -431,10 +429,6 @@ int Brewtarget::run()
    pidFile.close();
 #endif
    userDataDir = getConfigDir();
-   BtSplashScreen splashScreen;
-   splashScreen.show();
-   
-   qApp->processEvents(); // So we can process mouse clicks on splash window.
    
    // If the old options file exists, convert it. Otherwise, just get the
    // system options. I *think* this will work. The installer copies the old
@@ -444,22 +438,17 @@ int Brewtarget::run()
 
    readSystemOptions();
 
-   success = ensureDirectoriesExist(); // Make sure all the necessary directories are ok.
-
-   if( success )
-      success = ensureDataFilesExist(); // Make sure all the files we need exist before starting.
-
-   if( ! success )
-      return 1;
+   // Make sure all the necessary directories and files we need exist before starting.
+   bool success;
+   success = ensureDirectoriesExist() && ensureDataFilesExist();
+   if(!success)
+      return false;
 
    loadTranslations(); // Do internationalization.
 
 #if defined(Q_WS_MAC)
-	qt_set_sequence_auto_mnemonic(TRUE); // turns on Mac Keyboard shortcuts
+   qt_set_sequence_auto_mnemonic(TRUE); // turns on Mac Keyboard shortcuts
 #endif
-   qApp->processEvents();
-   splashScreen.showMessage("Loading...");
-   qApp->processEvents();
   
    // Check if the database was successfully loaded before
    // loading the main window.
@@ -467,18 +456,16 @@ int Brewtarget::run()
    {
       if ( ! Brewtarget::btSettings.contains("converted") )
          Database::instance().convertFromXml();
-
-      _mainWindow = new MainWindow();
       
-      _mainWindow->setVisible(true);
-      splashScreen.finish(_mainWindow);
-
-      checkForNewVersion(_mainWindow);
-      do {
-         ret = qApp->exec();
-      } while (ret == 1000);
+      return true;
    }
-   
+   else
+      return false;
+
+}
+
+void Brewtarget::cleanup()
+{
    // Close log file.
    if( logStream )
    {
@@ -501,6 +488,32 @@ int Brewtarget::run()
 #if defined(Q_WS_X11)
    pidFile.remove();
 #endif
+
+}
+
+int Brewtarget::run()
+{
+   int ret = 0;
+   
+   BtSplashScreen splashScreen;
+   splashScreen.show();
+   qApp->processEvents();
+   if( !initialize() )
+   {
+      cleanup();
+      return 1;
+   }
+   
+   _mainWindow = new MainWindow();
+   _mainWindow->setVisible(true);
+   splashScreen.finish(_mainWindow);
+
+   checkForNewVersion(_mainWindow);
+   do {
+      ret = qApp->exec();
+   } while (ret == 1000);
+   
+   cleanup();
 
    return ret;
 }
