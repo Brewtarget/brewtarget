@@ -384,8 +384,17 @@ MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${PHONON_LIBS}" )
 #=================================Tests========================================
 
 QT4_WRAP_CPP( testing_MOC_SRCS ${SRCDIR}/Testing.h )
-ADD_EXECUTABLE( brewtarget_tests ${SRCDIR}/Testing.cpp ${testing_MOC_SRCS})
-TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} )
+ADD_EXECUTABLE(
+   brewtarget_tests
+   ${SRCDIR}/Testing.cpp
+   ${testing_MOC_SRCS}
+   ${brewtarget_SRCS}
+   ${brewtarget_MOC_SRCS}
+   ${brewtarget_QRC_CPP}
+   ${brewtarget_cfg_QRC_CPP}
+   ${brewtarget_UIS_H}
+)
+TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )
 ADD_TEST(
    NAME test
    COMMAND brewtarget_tests

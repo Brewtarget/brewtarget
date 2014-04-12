@@ -3,8 +3,11 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
+#include <QSettings>
+#include <QString>
+#include <QDir>
 
-//#include "brewtarget.h"
+#include "brewtarget.h"
 //#include "MainWindow.h"
 //#include "recipe.h"
 
@@ -30,7 +33,17 @@ private slots:
    
    void initTestCase()
    {
-      //QVERIFY( Brewtarget::initialize() );
+      // Create a different set of options to avoid clobbering real options
+      QCoreApplication::setOrganizationName("brewtarget");
+      QCoreApplication::setOrganizationDomain("brewtarget.org");
+      QCoreApplication::setApplicationName("brewtarget-test");
+      
+      // Set options so that any data modification does not affect any other data
+      Brewtarget::setOption("user_data_dir", QString("%1/brewtarget-test/").arg(QDir::tempPath()));
+      Brewtarget::setOption("color_formula", "morey");
+      Brewtarget::setOption("ibu_formula", "tinseth");
+      
+      QVERIFY( Brewtarget::initialize() );
    }
    
    void cleanupTestCase()

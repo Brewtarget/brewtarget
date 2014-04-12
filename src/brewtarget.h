@@ -83,6 +83,8 @@ class Brewtarget : public QObject
    friend class Unit;
    friend class Database;
    friend class MainWindow;
+   friend class Testing;
+   
 public:
    Brewtarget();
 
@@ -248,7 +250,7 @@ public:
 
    static bool  hasOption(QString attribute, const QObject* object = 0, iUnitOps ops = NOOP);
    static void  setOption(QString attribute, QVariant value, const QObject* object = 0, iUnitOps ops = NOOP);
-   static QVariant option(QString attribute, QVariant default_value, const QObject* object = 0, iUnitOps = NOOP);
+   static QVariant option(QString attribute, QVariant default_value = QVariant(), const QObject* object = 0, iUnitOps = NOOP);
    static void removeOption(QString attribute);
 
    static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
@@ -276,6 +278,35 @@ private:
    static bool userDatabaseDidNotExist;
    static QFile pidFile;
 
+   //! \brief If this option is false, do not bother the user about new versions.
+   static bool checkVersion;
+
+   /*! Stores the date that we last asked the user to merge the
+    *  data-space database to the user-space database.
+    */
+   static QDateTime lastDbMergeRequest;
+
+   //! \brief Where the user says the database files are
+   static QString userDataDir;
+
+   // Options to be edited ONLY by the OptionDialog============================
+   // Whether or not to display plato instead of SG.
+   static bool usePlato;
+   
+   static iUnitSystem weightUnitSystem;
+   static iUnitSystem volumeUnitSystem;
+   
+   static UnitSystem* weightSystem;
+   static UnitSystem* volumeSystem;
+   static UnitSystem* tempSystem;
+   static UnitSystem* timeSystem;
+   
+   static TempScale tempScale;
+   static ColorType colorFormula;
+   static ColorUnitType colorUnit;
+   static IbuType ibuFormula;
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   
    /*!
     * \brief Run before showing MainWindow, does all system setup.
     * 
@@ -315,33 +346,6 @@ private:
    static void loadTranslations();
    //! \brief Checks for a newer version and prompts user to download.
    static void checkForNewVersion(MainWindow* mw);
-
-   //! \brief If this option is false, do not bother the user about new versions.
-   static bool checkVersion;
-
-   /*! Stores the date that we last asked the user to merge the
-    *  data-space database to the user-space database.
-    */
-   static QDateTime lastDbMergeRequest;
-
-   //! \brief Where the user says the database files are
-   static QString userDataDir;
-
-   // These are options that are ONLY to be edited by the OptionDialog.
-   static bool usePlato; // Whether or not to display plato instead of SG.
-   //
-   static iUnitSystem weightUnitSystem;
-   static iUnitSystem volumeUnitSystem;
-   //
-   static UnitSystem* weightSystem;
-   static UnitSystem* volumeSystem;
-   static UnitSystem* tempSystem;
-   static UnitSystem* timeSystem;
-   //
-   static TempScale tempScale;
-   static ColorType colorFormula;
-   static ColorUnitType colorUnit;
-   static IbuType ibuFormula;
 
    // Does this make any sense any longer?
    static UnitSystem* findVolumeUnitSystem(unitDisplay system);

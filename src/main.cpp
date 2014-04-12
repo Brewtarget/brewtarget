@@ -41,9 +41,9 @@ void parseArgs(QApplication const& app)
 int main(int argc, char **argv)
 {  
    QApplication app(argc, argv);
+   app.setOrganizationName("brewtarget");
    app.setApplicationName("brewtarget");
    app.setApplicationVersion(VERSIONSTRING);
-   app.setOrganizationName("Philip G. Lee");
 
    parseArgs(app);
    

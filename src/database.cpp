@@ -312,7 +312,7 @@ void Database::convertFromXml()
          }
       }
    }
-   Brewtarget::btSettings.setValue("converted", QDate().currentDate().toString());
+   Brewtarget::setOption("converted", QDate().currentDate().toString());
    saveDatabase();
 }
 

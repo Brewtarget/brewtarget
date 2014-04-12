@@ -65,14 +65,12 @@ QTranslator* Brewtarget::defaultTrans = new QTranslator();
 QTranslator* Brewtarget::btTrans = new QTranslator();
 QTextStream* Brewtarget::logStream = 0;
 QFile* Brewtarget::logFile = 0;
-QSettings Brewtarget::btSettings("brewtarget");
 bool Brewtarget::userDatabaseDidNotExist = false;
 QFile Brewtarget::pidFile;
 QDateTime Brewtarget::lastDbMergeRequest = QDateTime::fromString("1986-02-24T06:00:00", Qt::ISODate);
 
 QString Brewtarget::currentLanguage = "en";
 QString Brewtarget::userDataDir = getConfigDir();
-
 
 bool Brewtarget::checkVersion = true;
 
@@ -468,7 +466,7 @@ bool Brewtarget::initialize()
    // loading the main window.
    if (Database::instance().loadSuccessful())
    {
-      if ( ! Brewtarget::btSettings.contains("converted") )
+      if ( ! QSettings().contains("converted") )
          Database::instance().convertFromXml();
       
       return true;
@@ -898,7 +896,7 @@ void Brewtarget::convertPersistentOptions()
 
 #endif
    // And remove the flag
-   btSettings.remove("hadOldConfig");
+   QSettings().remove("hadOldConfig");
 }
 
 void Brewtarget::readSystemOptions()
@@ -1260,7 +1258,7 @@ bool Brewtarget::hasOption(QString attribute, const QObject* object, iUnitOps op
    else
       name = attribute;
 
-   return btSettings.contains(name);
+   return QSettings().contains(name);
 }
 
 void Brewtarget::setOption(QString attribute, QVariant value, const QObject* object, iUnitOps ops)
@@ -1272,7 +1270,7 @@ void Brewtarget::setOption(QString attribute, QVariant value, const QObject* obj
    else
       name = attribute;
 
-   btSettings.setValue(name,value);
+   QSettings().setValue(name,value);
 }
 
 QVariant Brewtarget::option(QString attribute, QVariant default_value, const QObject* object, iUnitOps ops)
@@ -1284,13 +1282,13 @@ QVariant Brewtarget::option(QString attribute, QVariant default_value, const QOb
    else
       name = attribute;
 
-   return btSettings.value(name,default_value);
+   return QSettings().value(name,default_value);
 }
 
 void Brewtarget::removeOption(QString attribute)
 {
    if ( hasOption(attribute) )
-        btSettings.remove(attribute);
+        QSettings().remove(attribute);
 }
 
 QString Brewtarget::generateName(QString attribute, const QObject* object, iUnitOps ops)

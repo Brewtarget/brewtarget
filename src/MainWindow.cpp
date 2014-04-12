@@ -286,10 +286,10 @@ MainWindow::MainWindow(QWidget* parent)
    brewNotes.clear();
 
    // If we saved a size the last time we ran, use it
-   if ( Brewtarget::btSettings.contains("geometry"))
+   if ( Brewtarget::hasOption("geometry"))
    {
-      restoreGeometry(Brewtarget::btSettings.value("geometry").toByteArray());
-      restoreState(Brewtarget::btSettings.value("windowState").toByteArray());
+      restoreGeometry(Brewtarget::option("geometry").toByteArray());
+      restoreState(Brewtarget::option("windowState").toByteArray());
    }
    else
    {
@@ -301,9 +301,9 @@ MainWindow::MainWindow(QWidget* parent)
    }
 
    // If we saved the selected recipe name the last time we ran, select it and show it.
-   if (Brewtarget::btSettings.contains("recipeKey"))
+   if (Brewtarget::hasOption("recipeKey"))
    {
-      int key = Brewtarget::btSettings.value("recipeKey").toInt();
+      int key = Brewtarget::option("recipeKey").toInt();
       recipeObs = Database::instance().recipe( key );
 
       setRecipe(recipeObs);
