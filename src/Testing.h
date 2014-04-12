@@ -39,7 +39,7 @@ private slots:
       QCoreApplication::setApplicationName("brewtarget-test");
       
       // Set options so that any data modification does not affect any other data
-      Brewtarget::setOption("user_data_dir", QString("%1/brewtarget-test/").arg(QDir::tempPath()));
+      Brewtarget::setOption("user_data_dir", QDir::tempPath());
       Brewtarget::setOption("color_formula", "morey");
       Brewtarget::setOption("ibu_formula", "tinseth");
       
@@ -48,7 +48,7 @@ private slots:
    
    void cleanupTestCase()
    {
-      //Brewtarget::cleanup();
+      Brewtarget::cleanup();
    }
    
    //! \brief Unit test: verify brewtarget runs
