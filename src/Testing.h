@@ -31,6 +31,7 @@ public:
    
 private slots:
    
+   // Run once before all test cases
    void initTestCase()
    {
       // Create a different set of options to avoid clobbering real options
@@ -46,6 +47,7 @@ private slots:
       QVERIFY( Brewtarget::initialize() );
    }
    
+   // Run once after all test cases
    void cleanupTestCase()
    {
       Brewtarget::cleanup();

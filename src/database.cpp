@@ -91,6 +91,10 @@ Database::Database()
 
 Database::~Database()
 {
+   // If we have not explicitly unloaded, do so now and discard changes.
+   if( QSqlDatabase::database( dbConName, false ).isOpen() )
+      unload(false);
+   
    // Delete all the ingredients floating around.
    qDeleteAll(allBrewNotes);
    qDeleteAll(allEquipments);

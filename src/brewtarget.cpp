@@ -94,33 +94,57 @@ bool Brewtarget::ensureDirectoriesExist()
    bool success;
    QDir dir;
 
+   QString errTitle(QObject::tr("Directory Problem"));
+   QString errText(QObject::tr("\"%1\" cannot be read."));
+   
+   // Check data dir
    dir.setPath(getDataDir());
    if( ! dir.exists() || ! dir.isReadable() )
    {
-      QMessageBox::information(0,
-                               QObject::tr("Directory Problem"),
-                               QObject::tr("\"%1\" cannot be read.").arg(dir.path()));
+      QMessageBox::information(
+         0,
+         errTitle,
+         errText.arg(dir.path())
+      );
       return false;
    }
 
+   // Check doc dir
    dir.setPath(getDocDir());
    if( ! dir.exists() || ! dir.isReadable() )
    {
-      QMessageBox::information(0,
-                               QObject::tr("Directory Problem"),
-                               QObject::tr("\"%1\" cannot be read.").arg(dir.path()));
+      QMessageBox::information(
+         0,
+         errTitle,
+         errText.arg(dir.path())
+      );
       return false;
    }
 
+   // Check config dir
    dir.setPath(getConfigDir(&success));
    if( !success || ! dir.exists() || ! dir.isReadable() )
    {
-      QMessageBox::information(0,
-                               QObject::tr("Directory Problem"),
-                               QObject::tr("Config directory \"%1\" cannot be read.").arg(dir.path()));
+      QMessageBox::information(
+         0,
+         errTitle,
+         errText.arg(dir.path())
+      );
       return false;
    }
 
+   // Check/create user data directory
+   dir.setPath(getUserDataDir());
+   if( !dir.exists() && !dir.mkpath(".") )
+   {
+      QMessageBox::information(
+         0,
+         errTitle,
+         errText.arg(dir.path())
+      );
+      return false;
+   }
+   
    return true;
 }
 
