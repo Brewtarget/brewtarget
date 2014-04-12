@@ -26,8 +26,6 @@
 // need to use this to turn on mac keyboard shortcuts (see http://doc.qt.nokia.com/4.7-snapshot/qtglobal.html#qt_set_sequence_auto_mnemonic)
 extern void qt_set_sequence_auto_mnemonic(bool b);
 
-class Brewtarget;
-
 #include <QObject>
 #include <QApplication>
 #include <QString>
@@ -39,13 +37,34 @@ class Brewtarget;
 #include <QDateTime>
 #include <QSettings>
 #include <QMenu>
+#include <QMetaProperty>
+#include <QList>
 #include "UnitSystem.h"
 
-
 // Forward declarations.
-class MainWindow;
-class Unit;
 class BeerXMLElement;
+class BrewNote;
+class Equipment;
+class Fermentable;
+class Hop;
+class Instruction;
+class MainWindow;
+class Mash;
+class Misc;
+class Style;
+class Unit;
+class Water;
+class Yeast;
+
+// Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
+Q_DECLARE_METATYPE( QMetaProperty )
+Q_DECLARE_METATYPE( QList<BrewNote*> )
+Q_DECLARE_METATYPE( QList<Hop*> )
+Q_DECLARE_METATYPE( QList<Instruction*> )
+Q_DECLARE_METATYPE( QList<Fermentable*> )
+Q_DECLARE_METATYPE( QList<Misc*> )
+Q_DECLARE_METATYPE( QList<Yeast*> )
+Q_DECLARE_METATYPE( QList<Water*> )
 
 /*!
  * \class Brewtarget
@@ -330,6 +349,8 @@ private:
    static UnitSystem* findTemperatureSystem(unitDisplay system);
 
 };
+
+Q_DECLARE_METATYPE( Brewtarget::DBTable )
 
 /*!
  * \mainpage Brewtarget Source Code Documentation

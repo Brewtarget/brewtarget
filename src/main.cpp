@@ -18,35 +18,9 @@
 
 #include <QApplication>
 #include <QStringList>
-#include <QList>
-#include "brewtarget.h"
 #include "config.h"
+#include "brewtarget.h"
 #include "database.h"
-
-#include <QMetaProperty>
-class BrewNote;
-class Equipment;
-class Fermentable;
-class Hop;
-class Instruction;
-class Mash;
-class Misc;
-class Style;
-class Yeast;
-
-// Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
-Q_DECLARE_METATYPE( QMetaProperty )
-Q_DECLARE_METATYPE( Equipment* )
-Q_DECLARE_METATYPE( Mash* )
-Q_DECLARE_METATYPE( Style* )
-Q_DECLARE_METATYPE( Brewtarget::DBTable )
-Q_DECLARE_METATYPE( QList<BrewNote*> )
-Q_DECLARE_METATYPE( QList<Hop*> )
-Q_DECLARE_METATYPE( QList<Instruction*> )
-Q_DECLARE_METATYPE( QList<Fermentable*> )
-Q_DECLARE_METATYPE( QList<Misc*> )
-Q_DECLARE_METATYPE( QList<Yeast*> )
-Q_DECLARE_METATYPE( QList<Water*> )
 
 // TODO: replace with real parsing (Qt5?)
 void parseArgs(QApplication const& app)
@@ -70,20 +44,6 @@ int main(int argc, char **argv)
    app.setApplicationName("brewtarget");
    app.setApplicationVersion(VERSIONSTRING);
    app.setOrganizationName("Philip G. Lee");
-
-   // Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
-   qRegisterMetaType<QMetaProperty>();
-   qRegisterMetaType<Equipment*>();
-   qRegisterMetaType<Mash*>();
-   qRegisterMetaType<Style*>();
-   qRegisterMetaType<Brewtarget::DBTable>();
-   qRegisterMetaType< QList<BrewNote*> >();
-   qRegisterMetaType< QList<Hop*> >();
-   qRegisterMetaType< QList<Instruction*> >();
-   qRegisterMetaType< QList<Fermentable*> >();
-   qRegisterMetaType< QList<Misc*> >();
-   qRegisterMetaType< QList<Yeast*> >();
-   qRegisterMetaType< QList<Water*> >();
 
    parseArgs(app);
    

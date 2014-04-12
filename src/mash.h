@@ -134,6 +134,8 @@ private:
 
 };
 
+Q_DECLARE_METATYPE( Mash* )
+
 inline bool MashPtrLt( Mash* lhs, Mash* rhs)
 {
    return *lhs < *rhs;

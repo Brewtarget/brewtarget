@@ -395,6 +395,20 @@ QString Brewtarget::getUserDataDir()
 bool Brewtarget::initialize()
 {
    
+   // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
+   qRegisterMetaType<QMetaProperty>();
+   qRegisterMetaType<Equipment*>();
+   qRegisterMetaType<Mash*>();
+   qRegisterMetaType<Style*>();
+   qRegisterMetaType<Brewtarget::DBTable>();
+   qRegisterMetaType< QList<BrewNote*> >();
+   qRegisterMetaType< QList<Hop*> >();
+   qRegisterMetaType< QList<Instruction*> >();
+   qRegisterMetaType< QList<Fermentable*> >();
+   qRegisterMetaType< QList<Misc*> >();
+   qRegisterMetaType< QList<Yeast*> >();
+   qRegisterMetaType< QList<Water*> >();
+   
    // In Unix, make sure the user isn't running 2 copies.
 #if defined(Q_WS_X11)
    pidFile.setFileName(QString("%1.pid").arg(getUserDataDir()));

@@ -177,6 +177,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
 };
 
+Q_DECLARE_METATYPE( Style* )
+
 inline bool StylePtrLt( Style* lhs, Style* rhs)
 {
    return *lhs < *rhs;
