@@ -2840,7 +2840,10 @@ void Database::toXml( MashStep* a, QDomDocument& doc, QDomNode& parent )
    mashStepNode.appendChild(tmpNode);
    
    tmpNode = doc.createElement("TYPE");
-   tmpText = doc.createTextNode(a->typeString());
+   if ( (a->type() == MashStep::flySparge) || (a->type() == MashStep::batchSparge ) ) 
+      tmpText = doc.createTextNode(  MashStep::types[0] );
+   else 
+      tmpText = doc.createTextNode(a->typeString());
    tmpNode.appendChild(tmpText);
    mashStepNode.appendChild(tmpNode);
    

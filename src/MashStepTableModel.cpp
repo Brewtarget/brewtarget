@@ -458,10 +458,9 @@ QWidget* MashStepItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
    {
       QComboBox *box = new QComboBox(parent);
 
-      box->addItem("Infusion");
-      box->addItem("Temperature");
-      box->addItem("Decoction");
-      box->setMinimumWidth(box->minimumSizeHint().width());
+      foreach( QString mtype, MashStep::types )
+         box->addItem(mtype);
+
       box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
       return box;

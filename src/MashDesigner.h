@@ -81,6 +81,7 @@ private:
    double getSelectedTemp_c();
 
    bool isBatchSparge();
+   bool isFlySparge();
 
    Recipe* recObs;
    Mash* mash;

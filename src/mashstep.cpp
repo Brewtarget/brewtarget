@@ -21,8 +21,8 @@
 #include "mashstep.h"
 #include "brewtarget.h"
 
-QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction";
-QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction");
+QStringList MashStep::types = QStringList() << "Infusion" << "Temperature" << "Decoction" << "Fly Sparge" << "Batch Sparge";
+QStringList MashStep::typesTr = QStringList() << QObject::tr("Infusion") << QObject::tr("Temperature") << QObject::tr("Decoction") << QObject::tr("Fly Sparge") << QObject::tr("Batch Sparge");
 
 QHash<QString,QString> MashStep::tagToProp = MashStep::tagToPropHash();
 
