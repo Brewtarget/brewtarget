@@ -73,6 +73,11 @@ bool BtTreeFilterProxyModel::lessThanRecipe(BrewTargetTreeModel* model, const QM
       case BrewTargetTreeItem::RECIPEBREWDATECOL:
          return leftRecipe->date() < rightRecipe->date();
       case BrewTargetTreeItem::RECIPESTYLECOL:
+         if ( ! leftRecipe->style() )
+            return true;
+         else if ( ! rightRecipe->style() )
+            return false;
+
          return leftRecipe->style()->name() < rightRecipe->style()->name();
    }
    // Default will be to just do a name sort. This doesn't likely make sense,
