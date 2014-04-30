@@ -15,7 +15,6 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include <limits>
 #include <Algorithms.h>
 #include "StrikeWaterDialog.h"
@@ -33,30 +32,19 @@ StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
 StrikeWaterDialog::~StrikeWaterDialog() {}
 
 void StrikeWaterDialog::calculate() {
-	double initial = computeInitialInfusion();
-	double mash = computeMashInfusion();
-    
-	Unit* vol;
-	switch(Brewtarget::getVolumeUnitSystem()) {
-		case SI: vol = Units::liters; break;
-		case USCustomary: vol = Units::us_quarts; break;
-		case ImperialAndUS: vol = Units::imperial_quarts; break;
-		case Imperial: vol = Units::imperial_quarts; break;
-		case Any: vol = Units::liters; break;
-	}
-
-	QString initialVal = Algorithms::Instance().isnan(initial) ? tr("N/A") : Brewtarget::displayAmount(initial, Units::celsius );
-	QString mashVal = Algorithms::Instance().isnan(mash) ? tr("N/A") : Brewtarget::displayAmount(mash, Units::liters);
-
-	initialResultTxt->setText(initialVal);
-	mashResultTxt->setText(mashVal);
+  double initial = computeInitialInfusion();
+  double mash = computeMashInfusion();
+	initialResultTxt->setText(Algorithms::Instance().isnan(initial) 
+    ? tr("N/A") : Brewtarget::displayAmount(initial, Units::celsius));
+	mashResultTxt->setText(Algorithms::Instance().isnan(mash) 
+    ? tr("N/A") : Brewtarget::displayAmount(mash, Units::liters));
 }
 
 double StrikeWaterDialog::computeInitialInfusion() {
   double grainTemp = Brewtarget::tempQStringToSI(grainTempVal->text());
   double targetMash = Brewtarget::tempQStringToSI(targetMashVal->text());
   double waterVolume = Brewtarget::volQStringToSI(waterVolumeVal->text());
-  double grainWeight = Brewtarget::volQStringToSI(grainWeightInitVal->text());
+  double grainWeight = Brewtarget::weightQStringToSI(grainWeightInitVal->text());
 
   return initialInfusionSi(
     grainTemp, 

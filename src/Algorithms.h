@@ -40,7 +40,7 @@ public:
    }
 
    //! Cross-platform compatible NaN checker.
-   inline bool isnan(double d)
+   inline bool isnan(double d) const
    {
       // If using IEEE floating points, all comparisons with a NaN
       // are false, so the following should be true only if we have
