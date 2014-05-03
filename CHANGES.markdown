@@ -9,6 +9,18 @@ for consumption by the typical end-user.
 
 ### Bug Fixes
 
+### Incompatibilities
+
+## v2.0.3
+
+Minor bugfix release.
+
+### New Features
+
+### Bug Fixes
+
+* Manual button failed to display the manual [#1282618](https://bugs.launchpad.net/brewtarget/+bug/1282618).
+* Selecting FG units did not change displayed units [#128751](https://bugs.launchpad.net/brewtarget/+bug/1287511).
 * Windows builds now properly find phonon library [#1226862](https://bugs.launchpad.net/brewtarget/+bug/1226862).
 * Mash wizard does not overshoot target boil size when recipe includes extract or sugar.[#1233744](https://bugs.launchpad.net/brewtarget/+bug/1233744)
 

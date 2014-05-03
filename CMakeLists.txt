@@ -10,8 +10,8 @@ SET(brewtarget_EXECUTABLE "brewtarget")
 
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 2 )
-SET( brewtarget_VERSION_MINOR 0 )
-SET( brewtarget_VERSION_PATCH 3 )
+SET( brewtarget_VERSION_MINOR 1 )
+SET( brewtarget_VERSION_PATCH 0 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
 #===================================Options====================================
