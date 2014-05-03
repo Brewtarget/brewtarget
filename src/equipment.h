@@ -155,6 +155,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
 };
 
+Q_DECLARE_METATYPE( Equipment* )
+
 inline bool EquipmentPtrLt( Equipment* lhs, Equipment* rhs)
 {
    return *lhs < *rhs;

@@ -72,7 +72,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BtTextEdit.cpp
     ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/BtSplashScreen.cpp
-    #${SRCDIR}/BtSqlQuery.cpp
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
@@ -88,7 +87,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/FermentableDialog.cpp
     ${SRCDIR}/FermentableSortFilterProxyModel.cpp
     ${SRCDIR}/FermentableTableModel.cpp
-    ${SRCDIR}/main.cpp
     ${SRCDIR}/HeatCalculations.cpp
     ${SRCDIR}/hop.cpp
     ${SRCDIR}/HopDialog.cpp
@@ -222,7 +220,6 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtTextEdit.h
     ${SRCDIR}/BtSplashScreen.h
-    #${SRCDIR}/BtSqlQuery.h
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/CustomComboBox.h
     ${SRCDIR}/database.h
@@ -358,7 +355,15 @@ ENDIF()
 
 #===========================Create the binary==================================
 
-ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_cfg_QRC_CPP} ${brewtarget_UIS_H} )
+ADD_EXECUTABLE(
+   ${brewtarget_EXECUTABLE}
+   ${SRCDIR}/main.cpp
+   ${brewtarget_SRCS}
+   ${brewtarget_MOC_SRCS}
+   ${brewtarget_QRC_CPP}
+   ${brewtarget_cfg_QRC_CPP}
+   ${brewtarget_UIS_H}
+)
 ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
 
 # Link brewtarget against appropriate libraries.
@@ -377,6 +382,25 @@ ENDIF()
 # Link brewtarget against Qt libraries defined by QT_LIBRARIES
 TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${PHONON_LIBS} )
 MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${PHONON_LIBS}" )
+
+#=================================Tests========================================
+
+QT4_WRAP_CPP( testing_MOC_SRCS ${SRCDIR}/Testing.h )
+ADD_EXECUTABLE(
+   brewtarget_tests
+   ${SRCDIR}/Testing.cpp
+   ${testing_MOC_SRCS}
+   ${brewtarget_SRCS}
+   ${brewtarget_MOC_SRCS}
+   ${brewtarget_QRC_CPP}
+   ${brewtarget_cfg_QRC_CPP}
+   ${brewtarget_UIS_H}
+)
+TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )
+ADD_TEST(
+   NAME test
+   COMMAND brewtarget_tests
+)
 
 #=================================Installs=====================================
 

@@ -26,8 +26,6 @@
 // need to use this to turn on mac keyboard shortcuts (see http://doc.qt.nokia.com/4.7-snapshot/qtglobal.html#qt_set_sequence_auto_mnemonic)
 extern void qt_set_sequence_auto_mnemonic(bool b);
 
-class Brewtarget;
-
 #include <QObject>
 #include <QApplication>
 #include <QString>
@@ -39,13 +37,34 @@ class Brewtarget;
 #include <QDateTime>
 #include <QSettings>
 #include <QMenu>
+#include <QMetaProperty>
+#include <QList>
 #include "UnitSystem.h"
 
-
 // Forward declarations.
-class MainWindow;
-class Unit;
 class BeerXMLElement;
+class BrewNote;
+class Equipment;
+class Fermentable;
+class Hop;
+class Instruction;
+class MainWindow;
+class Mash;
+class Misc;
+class Style;
+class Unit;
+class Water;
+class Yeast;
+
+// Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
+Q_DECLARE_METATYPE( QMetaProperty )
+Q_DECLARE_METATYPE( QList<BrewNote*> )
+Q_DECLARE_METATYPE( QList<Hop*> )
+Q_DECLARE_METATYPE( QList<Instruction*> )
+Q_DECLARE_METATYPE( QList<Fermentable*> )
+Q_DECLARE_METATYPE( QList<Misc*> )
+Q_DECLARE_METATYPE( QList<Yeast*> )
+Q_DECLARE_METATYPE( QList<Water*> )
 
 /*!
  * \class Brewtarget
@@ -64,6 +83,8 @@ class Brewtarget : public QObject
    friend class Unit;
    friend class Database;
    friend class MainWindow;
+   friend class Testing;
+   
 public:
    Brewtarget();
 
@@ -234,7 +255,7 @@ public:
 
    static bool  hasOption(QString attribute, const QObject* object = 0, iUnitOps ops = NOOP);
    static void  setOption(QString attribute, QVariant value, const QObject* object = 0, iUnitOps ops = NOOP);
-   static QVariant option(QString attribute, QVariant default_value, const QObject* object = 0, iUnitOps = NOOP);
+   static QVariant option(QString attribute, QVariant default_value = QVariant(), const QObject* object = 0, iUnitOps = NOOP);
    static void removeOption(QString attribute);
 
    static QString generateName(QString attribute, const QObject* object, iUnitOps ops);
@@ -260,7 +281,52 @@ private:
    static QString currentLanguage;
    static QSettings btSettings;
    static bool userDatabaseDidNotExist;
+   static QFile pidFile;
 
+   //! \brief If this option is false, do not bother the user about new versions.
+   static bool checkVersion;
+
+   /*! Stores the date that we last asked the user to merge the
+    *  data-space database to the user-space database.
+    */
+   static QDateTime lastDbMergeRequest;
+
+   //! \brief Where the user says the database files are
+   static QString userDataDir;
+
+   // Options to be edited ONLY by the OptionDialog============================
+   // Whether or not to display plato instead of SG.
+   static bool usePlato;
+   
+   static iUnitSystem weightUnitSystem;
+   static iUnitSystem volumeUnitSystem;
+   
+   static UnitSystem* weightSystem;
+   static UnitSystem* volumeSystem;
+   static UnitSystem* tempSystem;
+   static UnitSystem* timeSystem;
+   
+   static TempScale tempScale;
+   static ColorType colorFormula;
+   static ColorUnitType colorUnit;
+   static IbuType ibuFormula;
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   
+   /*!
+    * \brief Run before showing MainWindow, does all system setup.
+    * 
+    * Creates a PID file, sets config directory, reads system options,
+    * ensures the data directories and files exist, loads translations,
+    * and loads database.
+    * 
+    * \returns false if anything goes awry, true if it's ok to start MainWindow
+    */
+   static bool initialize();
+   /*!
+    * \brief Run after QApplication exits to clean up shit, close database, etc.
+    */
+   static void cleanup();
+   
    /*!
     *  \brief Helper to get option values from XML.
     * 
@@ -286,39 +352,14 @@ private:
    //! \brief Checks for a newer version and prompts user to download.
    static void checkForNewVersion(MainWindow* mw);
 
-   //! \brief If this option is false, do not bother the user about new versions.
-   static bool checkVersion;
-
-   /*! Stores the date that we last asked the user to merge the
-    *  data-space database to the user-space database.
-    */
-   static QDateTime lastDbMergeRequest;
-
-   //! \brief Where the user says the database files are
-   static QString userDataDir;
-
-   // These are options that are ONLY to be edited by the OptionDialog.
-   static bool usePlato; // Whether or not to display plato instead of SG.
-   //
-   static iUnitSystem weightUnitSystem;
-   static iUnitSystem volumeUnitSystem;
-   //
-   static UnitSystem* weightSystem;
-   static UnitSystem* volumeSystem;
-   static UnitSystem* tempSystem;
-   static UnitSystem* timeSystem;
-   //
-   static TempScale tempScale;
-   static ColorType colorFormula;
-   static ColorUnitType colorUnit;
-   static IbuType ibuFormula;
-
    // Does this make any sense any longer?
    static UnitSystem* findVolumeUnitSystem(unitDisplay system);
    static UnitSystem* findMassUnitSystem(unitDisplay system);
    static UnitSystem* findTemperatureSystem(unitDisplay system);
 
 };
+
+Q_DECLARE_METATYPE( Brewtarget::DBTable )
 
 /*!
  * \mainpage Brewtarget Source Code Documentation

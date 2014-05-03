@@ -30,6 +30,10 @@ OPTION( NO_PHONON
 OPTION( NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
         OFF )
+
+# Do this right off the bat
+ENABLE_TESTING()
+
 #==============================Compile flags===================================
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
