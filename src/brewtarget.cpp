@@ -394,7 +394,7 @@ QString Brewtarget::getUserDataDir()
 
 int Brewtarget::run()
 {
-   int ret;
+   int ret = 0;
    bool success;
    
    // In Unix, make sure the user isn't running 2 copies.
@@ -1059,6 +1059,33 @@ double Brewtarget::colorQStringToSI(QString qstr)
 double Brewtarget::timeQStringToSI(QString qstr)
 {
    return timeSystem->qstringToSI(qstr);
+}
+
+QString Brewtarget::ibuFormulaName()
+{
+   switch ( ibuFormula )
+   {
+      case Brewtarget::TINSETH:
+         return "Tinseth";
+      case Brewtarget::RAGER:
+         return "Rager";
+   }
+  return tr("Unknown");
+}
+
+QString Brewtarget::colorFormulaName()
+{
+
+   switch( Brewtarget::colorFormula )
+   {
+      case Brewtarget::MOREY:
+         return "Morey";
+      case Brewtarget::DANIEL:
+         return "Daniels";
+      case Brewtarget::MOSHER:
+         return "Mosher";
+   }
+   return tr("Unknown");
 }
 
 bool Brewtarget::hasUnits(QString qstr)

@@ -1,5 +1,5 @@
 /*
- * BrewTargetTreeItem.h is part of Brewtarget and was written by Mik Firestone
+ * BtTreeItem.h is part of Brewtarget and was written by Mik Firestone
  * (mikfire@gmail.com).  Copyright is granted to Philip G. Lee
  * (rocketman768@gmail.com), 2009-2013.
  *
@@ -17,10 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BREWTARGETTREEITEM_H_
-#define BREWTARGETTREEITEM_H_
+#ifndef BTTTREEITEM_H_
+#define BTTTREEITEM_H_
 
-class BrewTargetTreeItem;
+class BtTreeItem;
 
 #include <QSharedPointer>
 #include <QList>
@@ -41,9 +41,10 @@ class Recipe;
 class Misc;
 class Yeast;
 class Style;
+class BtFolder;
 
 /*!
- * \class BrewTargetTreeItem
+ * \class BtTreeItem
  * \author Mik Firestone
  *
  * \brief Model for an item in a tree.
@@ -54,7 +55,7 @@ class Style;
  *
  * It does assume that everything being stored can be cast into a QObject.
  */
-class BrewTargetTreeItem
+class BtTreeItem
 {
 
 public:
@@ -162,6 +163,17 @@ public:
       STYLENUMCOLS
    };
 
+   enum FOLDERITEM {
+      //! Name
+      FOLDERNAMECOL,
+      //! Path
+      FOLDERPATHCOL,
+      //! Full path
+      FOLDERFULLCOL,
+      //! and the standard for the number of columns
+      FOLDERNUMCOLS
+   };
+
    
    /*! 
     * This enum lists the different things that we can store in an item
@@ -175,74 +187,79 @@ public:
       YEAST,
       BREWNOTE,
       STYLE,
+      FOLDER,
       NUMTYPES
    };
 
-   friend bool operator==(BrewTargetTreeItem &lhs, BrewTargetTreeItem &rhs);
+   friend bool operator==(BtTreeItem &lhs, BtTreeItem &rhs);
 
-   //! \brief A constructor that sets the \c type of the BrewTargetTreeItem and
+   //! \brief A constructor that sets the \c type of the BtTreeItem and
    // the \c parent
-   BrewTargetTreeItem(int type = NUMTYPES, BrewTargetTreeItem *parent=0 );
-   virtual ~BrewTargetTreeItem();
+   BtTreeItem(int _type = NUMTYPES, BtTreeItem *parent=0 );
+   virtual ~BtTreeItem();
 
    //! \brief returns the child at \c number
-   BrewTargetTreeItem *child(int number);       
+   BtTreeItem *child(int number);       
    //! \brief returns item's parent
-   BrewTargetTreeItem *parent();
+   BtTreeItem *parent();
 
    //! \brief returns item's type
-   int getType();
+   int type();
    //! \brief returns the number of the item's children
    int childCount() const;
    //! \brief returns number of columns associated with the item's \c type
-   int columnCount(int type) const;
+   int columnCount(int _type) const;
    //! \brief returns the data of the item of \c type at \c column
-   QVariant data(int type, int column);        
+   QVariant data(int _type, int column);        
    //! \brief returns the index of the item in it's parents list
    int childNumber() const;
 
    //! \brief provides a wrapper to data() so that the caller doesn't need to
    // know the type of the item
-    QVariant getData(int column);
+   QVariant data(int column);
 
    //! \brief sets the \c t type of the object and the \d data 
    void setData(int t, QObject *d);
 
    //! \brief returns the data as a Recipe
-   Recipe*      getRecipe();
+   Recipe*      recipe();
    //! \brief returns the data as an Equipment
-   Equipment*   getEquipment();
+   Equipment*   equipment();
    //! \brief returns the data as a fermentable
-   Fermentable* getFermentable();
+   Fermentable* fermentable();
    //! \brief returns the data as a hop
-   Hop*         getHop();
+   Hop*         hop();
    //! \brief returns the data as a misc
-   Misc*        getMisc();
+   Misc*        misc();
    //! \brief returns the data as a yeast
-   Yeast*       getYeast();
+   Yeast*       yeast();
    //! \brief returns the data as a brewnote
-   BrewNote*    getBrewNote();
+   BrewNote*    brewNote();
    //! \brief returns the data as a style
-   Style*       getStyle();
+   Style*       style();
+   //~ \brief returns data as a folder
+   BtFolder*   folder();
    //! \brief returns the data as a BeerXMLElement
-   BeerXMLElement* getThing();
+   BeerXMLElement* thing();
 
    //! \brief inserts \c count new items of \c type, starting at \c position
-   bool insertChildren(int position, int count, int type = RECIPE);
+   bool insertChildren(int position, int count, int _type = RECIPE);
    //! \brief removes \c count items starting at \c position
    bool removeChildren(int position, int count);
 
+   //! \brief returns the name. 
+   QString name();
 
 private:
    /*!  Keep a pointer to the parent tree item. */
-   BrewTargetTreeItem* parentItem;
+   BtTreeItem* parentItem;
    /*!  The list of children associated with this item */
-   QList<BrewTargetTreeItem*> childItems;
+   QList<BtTreeItem*> childItems;
 
    /*! the type of this item */
-   int type;
+   int _type;
    /*! the data associated with this item */
-   QObject* thing;
+   QObject* _thing;
 
    /*! helper functions to get the information from the item */
    QVariant dataRecipe(int column);
@@ -253,6 +270,7 @@ private:
    QVariant dataYeast(int column);
    QVariant dataBrewNote(int column);
    QVariant dataStyle(int column);
+   QVariant dataFolder(int column);
 
    void setType(int t);
 };

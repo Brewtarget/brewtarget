@@ -70,7 +70,7 @@ void MiscDialog::removeMisc()
    }
 
    Misc* m = miscTableModel->getMisc(miscTableProxy->mapToSource(selected[0]).row());
-   Database::instance().removeMisc(m);
+   Database::instance().remove(m);
 }
 
 void MiscDialog::addMisc(const QModelIndex& index)

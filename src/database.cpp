@@ -186,6 +186,10 @@ bool Database::load()
    // Store temporary tables in memory.
    QSqlQuery( "PRAGMA temp_store = MEMORY", sqlDatabase());
    
+   // Update the database if need be. This has to happen before we do anything
+   // else or we dump core 
+   updateSchema();
+   
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
    
@@ -212,9 +216,6 @@ bool Database::load()
       // Update this field.
       Brewtarget::lastDbMergeRequest = QDateTime::currentDateTime();
    }
-   
-   // Update the database if need be.
-   updateSchema();
    
    // Create and store all pointers.
    populateElements( allBrewNotes, Brewtarget::BREWNOTETABLE );
@@ -552,21 +553,13 @@ Recipe* Database::getParentRecipe( BrewNote const* note )
    return allRecipes[key];
 }
 
-Recipe* Database::recipe(int key)
-{
-   Recipe* ret;
-   if( allRecipes.contains(key) )
-      ret = allRecipes[key];
-   else
-      ret = 0;
-
-   return ret;
-}
-
-Equipment* Database::equipment(int key)
-{
-   return allEquipments[key];
-}
+Recipe*      Database::recipe(int key)      { return allRecipes[key]; }
+Equipment*   Database::equipment(int key)   { return allEquipments[key]; }
+Fermentable* Database::fermentable(int key) { return allFermentables[key]; }
+Hop*         Database::hop(int key)         { return allHops[key]; }
+Misc*        Database::misc(int key)        { return allMiscs[key]; }
+Style*       Database::style(int key)       { return allStyles[key]; }
+Yeast*       Database::yeast(int key)       { return allYeasts[key]; }
 
 void Database::swapMashStepOrder(MashStep* m1, MashStep* m2)
 {
@@ -1243,7 +1236,8 @@ void Database::duplicateMashSteps(Mash *oldMash, Mash *newMash)
    emit newMash->mashStepsChanged();
 }
 
-void Database::removeEquipment(Equipment* equip)
+// Ever think I sometimes abuse multiple dispatch?
+void Database::remove(Equipment* equip)
 {
    deleteRecord(Brewtarget::EQUIPTABLE,equip);
    
@@ -1251,7 +1245,7 @@ void Database::removeEquipment(Equipment* equip)
    emit deletedEquipmentSignal(equip);
 }
 
-void Database::removeEquipment(QList<Equipment*> equip)
+void Database::remove(QList<Equipment*> equip)
 {
    if ( equip.empty() )
       return;
@@ -1267,7 +1261,7 @@ void Database::removeEquipment(QList<Equipment*> equip)
    emit changed( metaProperty("equipments"), QVariant() );
 }
 
-void Database::removeFermentable(Fermentable* ferm)
+void Database::remove(Fermentable* ferm)
 {
    deleteRecord(Brewtarget::FERMTABLE,ferm);
    
@@ -1275,7 +1269,7 @@ void Database::removeFermentable(Fermentable* ferm)
    emit deletedFermentableSignal(ferm);
 }
 
-void Database::removeFermentable(QList<Fermentable*> ferm)
+void Database::remove(QList<Fermentable*> ferm)
 {
    if ( ferm.empty() )
       return;
@@ -1292,7 +1286,7 @@ void Database::removeFermentable(QList<Fermentable*> ferm)
    emit changed( metaProperty("fermentables"), QVariant());
 }
 
-void Database::removeHop(Hop* hop)
+void Database::remove(Hop* hop)
 {
    deleteRecord(Brewtarget::HOPTABLE,hop);
    
@@ -1300,7 +1294,7 @@ void Database::removeHop(Hop* hop)
    emit deletedHopSignal(hop);
 }
 
-void Database::removeHop(QList<Hop*> hop)
+void Database::remove(QList<Hop*> hop)
 {
    if ( hop.empty() )
       return;
@@ -1317,7 +1311,7 @@ void Database::removeHop(QList<Hop*> hop)
    emit changed( metaProperty("hops"), QVariant() );
 }
 
-void Database::removeMash(Mash* mash)
+void Database::remove(Mash* mash)
 {
    deleteRecord(Brewtarget::MASHTABLE,mash);
    
@@ -1325,7 +1319,21 @@ void Database::removeMash(Mash* mash)
    emit deletedMashSignal(mash);
 }
 
-void Database::removeMash(QList<Mash*> mash)
+void Database::remove(BrewNote* b)
+{
+   deleteRecord(Brewtarget::BREWNOTETABLE,b);
+   emit deletedBrewNoteSignal(b);
+}
+
+void Database::remove(QList<BrewNote*> notes)
+{
+   if (notes.empty())
+      return;
+   foreach( BrewNote* b, notes )
+      remove(b);
+}
+
+void Database::remove(QList<Mash*> mash)
 {
    if ( mash.empty() )
       return;
@@ -1340,14 +1348,14 @@ void Database::removeMash(QList<Mash*> mash)
    emit changed( metaProperty("mashs"), QVariant() );
 }
 
-void Database::removeMashStep(MashStep* mashStep)
+void Database::remove(MashStep* mashStep)
 {
    deleteRecord(Brewtarget::MASHSTEPTABLE,mashStep);
    
    emit changed( metaProperty("mashSteps"), QVariant() );
 }
 
-void Database::removeMashStep(QList<MashStep*> mashStep)
+void Database::remove(QList<MashStep*> mashStep)
 {
    if ( mashStep.empty() )
       return;
@@ -1361,7 +1369,7 @@ void Database::removeMashStep(QList<MashStep*> mashStep)
    emit changed( metaProperty("mashSteps"), QVariant() );
 }
 
-void Database::removeMisc(Misc* misc)
+void Database::remove(Misc* misc)
 {
    deleteRecord(Brewtarget::MISCTABLE,misc);
    
@@ -1369,7 +1377,7 @@ void Database::removeMisc(Misc* misc)
    emit deletedMiscSignal(misc);
 }
 
-void Database::removeMisc(QList<Misc*> misc)
+void Database::remove(QList<Misc*> misc)
 {
    if ( misc.empty() )
       return;
@@ -1384,7 +1392,7 @@ void Database::removeMisc(QList<Misc*> misc)
    emit changed( metaProperty("miscs"), QVariant());
 }
 
-void Database::removeRecipe(Recipe* rec)
+void Database::remove(Recipe* rec)
 {
    deleteRecord(Brewtarget::RECTABLE,rec);
    
@@ -1392,7 +1400,7 @@ void Database::removeRecipe(Recipe* rec)
    emit deletedRecipeSignal(rec);
 }
 
-void Database::removeRecipe(QList<Recipe*> rec)
+void Database::remove(QList<Recipe*> rec)
 {
    if ( rec.empty() )
       return;
@@ -1407,7 +1415,7 @@ void Database::removeRecipe(QList<Recipe*> rec)
    emit changed( metaProperty("recipes"), QVariant() );
 }
 
-void Database::removeStyle(Style* style)
+void Database::remove(Style* style)
 {
    deleteRecord(Brewtarget::STYLETABLE,style);
    
@@ -1415,7 +1423,7 @@ void Database::removeStyle(Style* style)
    emit deletedStyleSignal(style);
 }
 
-void Database::removeStyle(QList<Style*> style)
+void Database::remove(QList<Style*> style)
 {
    if ( style.empty() )
       return;
@@ -1430,7 +1438,7 @@ void Database::removeStyle(QList<Style*> style)
    emit changed( metaProperty("styles"), QVariant() );
 }
 
-void Database::removeWater(Water* water)
+void Database::remove(Water* water)
 {
    deleteRecord(Brewtarget::WATERTABLE,water);
    
@@ -1438,7 +1446,7 @@ void Database::removeWater(Water* water)
    emit deletedWaterSignal(water);
 }
 
-void Database::removeWater(QList<Water*> water)
+void Database::remove(QList<Water*> water)
 {
    if ( water.empty() )
       return;
@@ -1453,7 +1461,7 @@ void Database::removeWater(QList<Water*> water)
    emit changed( metaProperty("waters"), QVariant());
 }
 
-void Database::removeYeast(Yeast* yeast)
+void Database::remove(Yeast* yeast)
 {
    deleteRecord(Brewtarget::YEASTTABLE,yeast);
    
@@ -1461,7 +1469,7 @@ void Database::removeYeast(Yeast* yeast)
    emit deletedYeastSignal(yeast);
 }
 
-void Database::removeYeast(QList<Yeast*> yeast)
+void Database::remove(QList<Yeast*> yeast)
 {
    if ( yeast.empty() )
       return;
@@ -1551,6 +1559,24 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
       rec->recalcAll();
 }
 
+void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms )
+{
+   if ( ferms.size() == 0 )
+      return;
+
+   foreach (Fermentable* ferm, ferms )
+   {
+      Fermentable* newFerm = addIngredientToRecipe<Fermentable>( rec, ferm,
+                                                    "fermentables",
+                                                    "fermentable_in_recipe",
+                                                    "fermentable_id",
+                                                    false, &allFermentables );
+      connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
+   }
+
+   rec->recalcAll();
+}
+
 void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
 {
    Hop* newHop = addIngredientToRecipe<Hop>( rec, hop,
@@ -1560,6 +1586,24 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
                                          noCopy, &allHops );
    connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    rec->recalcIBU();
+}
+
+void Database::addToRecipe( Recipe* rec, QList<Hop*>hops )
+{
+   if ( hops.size() == 0 )
+      return;
+
+   foreach (Hop* hop, hops )
+   {
+      Hop* newHop = addIngredientToRecipe<Hop>( rec, hop,
+                                            "hops",
+                                            "hop_in_recipe",
+                                            "hop_id",
+                                            false, &allHops );
+      connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
+   }
+   rec->recalcIBU();
+
 }
 
 void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
@@ -1598,6 +1642,21 @@ void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
       rec->recalcAll();
 }
 
+void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs )
+{
+   if ( miscs.size() == 0 )
+      return;
+
+   foreach (Misc* misc, miscs )
+   {
+      addIngredientToRecipe<Misc>( rec, misc,
+                                   "miscs", "misc_in_recipe",
+                                   "misc_id", false, &allMiscs );
+   }
+   rec->recalcAll();
+
+}
+
 void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
 {
    addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", noCopy, &allWaters );
@@ -1628,6 +1687,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
    emit rec->changed( rec->metaProperty("style"), BeerXMLElement::qVariantFromPtr(newStyle) );
 }
 
+// Why no connect here?
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
    addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
@@ -1635,6 +1695,21 @@ void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
    if ( ! noCopy )
       rec->recalcOgFg();
 }
+
+void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
+{
+   if ( yeasts.size() == 0 )
+      return;
+
+   foreach (Yeast* yeast, yeasts )
+   {
+      addIngredientToRecipe<Yeast>( rec, yeast,
+                                    "yeasts", "yeast_in_recipe",
+                                    "yeast_id", false, &allYeasts );
+   }
+   rec->recalcOgFg();
+}
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 void Database::sqlUpdate( Brewtarget::DBTable table, QString const& setClause, QString const& whereClause )

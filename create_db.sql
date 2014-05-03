@@ -15,7 +15,7 @@ CREATE TABLE settings(
    id integer primary key,
    version varchar(256)
 );
-INSERT INTO settings VALUES(1,'2.0.2');
+INSERT INTO settings VALUES(1,'2.1.0');
 
 create table equipment(
    id integer PRIMARY KEY autoincrement,
@@ -41,7 +41,8 @@ create table equipment(
    absorption real DEFAULT 1.085,
    -- Metadata
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT ''
 );
 
 create table fermentable(
@@ -69,7 +70,8 @@ create table fermentable(
    display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT ''
 );
 
 create table hop(
@@ -96,7 +98,8 @@ create table hop(
    display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT ''
 );
 
 create table misc(
@@ -116,7 +119,8 @@ create table misc(
    display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT ''
 );
 
 create table style(
@@ -146,7 +150,8 @@ create table style(
    examples text DEFAULT '',
    -- meta data
    deleted boolean DEFAULT 0,
-   display boolean  DEFAULT 1
+   display boolean  DEFAULT 1,
+   folder varchar(256) DEFAULT ''
 );
 
 create table yeast(
@@ -174,7 +179,8 @@ create table yeast(
    display_scale integer DEFAULT -1,
    -- meta data
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT ''
 );
 
 create table water(
@@ -192,7 +198,8 @@ create table water(
    notes text DEFAULT '',
    -- metadata
    deleted boolean DEFAULT 0,
-   display boolean DEFAULT 1
+   display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT ''
 );
 
 -- The following bt_* tables simply point to ingredients provided by brewtarget.
@@ -257,7 +264,9 @@ create table mash(
    -- Metadata
    deleted boolean DEFAULT 0,
    -- Mashes default to be undisplayed until they are named
-   display boolean DEFAULT 0
+   display boolean DEFAULT 0,
+   -- Does this make any sense?
+   folder varchar(256) DEFAULT ''
 );
 
 create table mashstep(
@@ -287,6 +296,7 @@ create table mashstep(
    foreign key(mash_id) references mash(id)
    -- This is not necessary since we manage these internally in Brewtarget.
    -- unique( mash_id, step_number )
+   -- mashsteps don't get folders, because they don't separate from their mash
 );
 
 -- Completely new non-BeerXML type.
@@ -326,8 +336,10 @@ create table brewnote(
    notes text DEFAULT '',
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT '',
    recipe_id integer,
    foreign key(recipe_id) references recipe(id)
+
 );
 
 -- Completely new non-BeerXML type.
@@ -341,6 +353,7 @@ create table instruction(
    interval real DEFAULT 0.0,
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1
+   -- instructions aren't displayed in trees, and get no folder
 );
 
 create table recipe(
@@ -378,6 +391,7 @@ create table recipe(
    -- Metadata
    deleted boolean DEFAULT 0,
    display boolean DEFAULT 1,
+   folder varchar(256) DEFAULT '',
    -- Relational members
    style_id integer,
    mash_id integer,
