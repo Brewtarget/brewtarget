@@ -97,7 +97,7 @@ void TimerWidget::getSound()
    QString soundFile = QFileDialog::getOpenFileName( qobject_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
     if (! soundFile.isNull()) {
       mediaObject->clearQueue();
-      mediaObject->setCurrentSource(soundFile);
+      mediaObject->setCurrentSource(QUrl::fromLocalFile(soundFile));
       pushButton_sound->setCheckable(true); // indicate a sound is loaded
       pushButton_sound->setChecked(true);
     }
