@@ -7,6 +7,8 @@ for consumption by the typical end-user.
 
 ### New Features
 
+* Folders for organizing recipes [#1109740](https://bugs.launchpad.net/brewtarget/+bug/1109740).
+
 ### Bug Fixes
 
 ### Incompatibilities
