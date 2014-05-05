@@ -299,8 +299,8 @@ void NamedMashEditor::removeMash()
    disconnect(mashObs, 0, this, 0);
    // Delete the mashsteps
    QList<MashStep*> steps = mashObs->mashSteps();
-   Database::instance().removeMashStep(steps);
+   Database::instance().remove(steps);
    // and delete the mash itself
-   Database::instance().removeMash(mashObs);
+   Database::instance().remove(mashObs);
 	setMash(mashListModel->at(newMash));
 }

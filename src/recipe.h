@@ -128,7 +128,7 @@ public:
    Q_PROPERTY( double primingSugarEquiv READ primingSugarEquiv WRITE setPrimingSugarEquiv /*NOTIFY changed*/ /*changedPrimingSugarEquiv*/ )
    //! \brief The factor required to convert the amount of sugar required for bottles to keg (usually about 0.5).
    Q_PROPERTY( double kegPrimingFactor READ kegPrimingFactor WRITE setKegPrimingFactor /*NOTIFY changed*/ /*changedKegPrimingFactor*/ )
-   
+  
    // Calculated stored properties.
    //! \brief The calculated OG.
    Q_PROPERTY( double og READ og WRITE setOg /*NOTIFY changed*/ /*changedOg*/ )

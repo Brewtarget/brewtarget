@@ -133,6 +133,7 @@ public:
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
+
    /*
    void changedAlpha_pct(double);
    void changedAmount_kg(double);

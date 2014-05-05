@@ -74,7 +74,7 @@ void StyleEditor::setStyle( Style* s )
 void StyleEditor::removeStyle()
 {
    if( obsStyle )
-      Database::instance().removeStyle(obsStyle);
+      Database::instance().remove(obsStyle);
 
    setStyle(0);
 }

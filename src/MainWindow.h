@@ -96,8 +96,6 @@ class MainWindow : public QMainWindow, public Ui::mainWindow
 public:
    MainWindow(QWidget* parent=0);
    virtual ~MainWindow() {}
-   //! \brief View the given recipe.
-   void setRecipe(Recipe* recipe);
    //! \brief Get the currently observed recipe.
    Recipe* currentRecipe();
    //! \brief Display a file dialog for writing xml files.
@@ -114,8 +112,11 @@ public slots:
    //! \brief Accepts Recipe changes, and takes appropriate action to show the changes.
    void changed(QMetaProperty,QVariant);
    
-   void setRecipeByIndex(const QModelIndex &index);
    void treeActivated(const QModelIndex &index);
+   //! \brief Set recipe given an QModelIndex
+   void setRecipe(const QModelIndex &index);
+   //! \brief View the given recipe.
+   void setRecipe(Recipe* recipe);
 
    //! \brief Update Recipe name to that given by the relevant widget.
    void updateRecipeName();
@@ -134,6 +135,8 @@ public slots:
    //! \brief Update Recipe's mash
    void updateRecipeMash();
 
+   //! \brief Close a brewnote tab if we must
+   void closeBrewNote(BrewNote*);
    //! \brief Add given Fermentable to the Recipe.
    void addFermentableToRecipe(Fermentable* ferm);
    //! \brief Remove selected Fermentable from the Recipe.
@@ -190,7 +193,12 @@ public slots:
    void importFiles();
    //! \brief Create a duplicate of the current recipe.
    void copyRecipe();
-   
+  
+   //! \brief Create a new folder
+   void newFolder();
+   void renameFolder();
+   // void deleteFolder();
+
    void deleteSelected();
    void copySelected();
    void exportSelected();
@@ -224,11 +232,6 @@ public slots:
    //! \brief Merges two database files.
    void updateDatabase();
   
-   //! \brief decides if we accept the drop event
-   void dragEnterEvent(QDragEnterEvent *event);
-   //! \brief handles the actual drop event
-   void dropEvent(QDropEvent *event);
-
    //! \brief Catches a QNetworkReply signal and gets info about any new version available.
    void finishCheckingVersion();
 
@@ -236,6 +239,14 @@ public slots:
 
    void showEquipmentEditor();
    void showStyleEditor();
+
+   //! \brief Set the equipment based on a drop event
+   void droppedRecipeEquipment(Equipment *kit);
+   void droppedRecipeStyle(Style *style);
+   void droppedRecipeFermentable(QList<Fermentable*>ferms);
+   void droppedRecipeHop(QList<Hop*>hops);
+   void droppedRecipeMisc(QList<Misc*>miscs);
+   void droppedRecipeYeast(QList<Yeast*>yeasts);
 
 protected:
    virtual void closeEvent(QCloseEvent* event);
@@ -320,7 +331,6 @@ private:
    NamedMashEditor* singleNamedMashEditor;
 
    BtDatePopup* btDatePopup;
-   QHash<int, BrewNoteWidget*> brewNotes;
    int confirmDelete;
 
    //! \brief Currently highlighted fermentable in the fermentable table.
@@ -332,11 +342,12 @@ private:
    //! \brief Currently highlighted yeast in the yeast table
    Yeast* selectedYeast();
 
+   //! \brief Find an open brewnote tab, if it is open
+   BrewNoteWidget* findBrewNoteWidget(BrewNote* b);
+
    //! \brief Scroll to the given \c item in the currently visible item tree.
    void setTreeSelection(QModelIndex item);
 
-   //! \brief Set the equipment based on a drop event
-   void droppedRecipeEquipment(Equipment *kit);
    //! \brief Set the keyboard shortcuts.
    void setupShortCuts();
    //! \brief Set the context menus.

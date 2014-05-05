@@ -45,11 +45,11 @@ public:
    virtual ~BrewNoteWidget() {}
 
    void setBrewNote(BrewNote* bNote);
+   bool isBrewNote(BrewNote* note);
 
    void focusOutEvent(QFocusEvent *e);
 
 public slots:
-   void updateBrewDate();
    void updateSG();
    void updateVolumeIntoBK_l();
    void updateStrikeTemp_c();

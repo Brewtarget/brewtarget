@@ -10,8 +10,8 @@ SET(brewtarget_EXECUTABLE "brewtarget")
 
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 2 )
-SET( brewtarget_VERSION_MINOR 0 )
-SET( brewtarget_VERSION_PATCH 2 )
+SET( brewtarget_VERSION_MINOR 1 )
+SET( brewtarget_VERSION_PATCH 0 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
 #===================================Options====================================
@@ -30,6 +30,10 @@ OPTION( NO_PHONON
 OPTION( NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
         OFF )
+
+# Do this right off the bat
+ENABLE_TESTING()
+
 #==============================Compile flags===================================
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )

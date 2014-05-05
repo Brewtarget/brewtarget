@@ -10,6 +10,7 @@ BrewNoteWidget::BrewNoteWidget(QWidget *parent) : QWidget(parent)
 {
    setupUi(this);
    bNoteObs = 0;
+   setObjectName("BrewNoteWidget");
 
    connect(lineEdit_SG,SIGNAL(editingFinished()),this,SLOT(updateSG()));
    connect(lineEdit_volIntoBK,SIGNAL(editingFinished()),this,SLOT(updateVolumeIntoBK_l()));
@@ -74,12 +75,7 @@ void BrewNoteWidget::setBrewNote(BrewNote* bNote)
    }
 }
 
-// TODO: what's this?
-// TODO: In answer to the question, this is a place holder for when I figure
-// out how to allow people to reset the brewdate.
-void BrewNoteWidget::updateBrewDate()
-{
-}
+bool BrewNoteWidget::isBrewNote(BrewNote* note) { return bNoteObs == note; }
 
 void BrewNoteWidget::updateSG()
 {
