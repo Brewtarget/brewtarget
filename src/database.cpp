@@ -1927,8 +1927,12 @@ void Database::updateSchema()
       while( !stream.atEnd() )
       {
          QString statement = stream.readLine().trimmed();
+
          if( statement.isEmpty() )
             continue;
+         if (statement.startsWith("--"))
+            continue;
+
          QSqlQuery q(statement, sqlDatabase());
          if( q.lastError().isValid() )
             Brewtarget::logW( q.lastError().text() );
