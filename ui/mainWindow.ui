@@ -30,7 +30,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../brewtarget.qrc">
-    <normaloff>:/images/brewtarget_icon.svg</normaloff>:/images/brewtarget_icon.svg</iconset>
+    <normaloff>:/images/brewtarget.svg</normaloff>:/images/brewtarget.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -89,7 +89,7 @@
            </property>
            <attribute name="icon">
             <iconset resource="../brewtarget.qrc">
-             <normaloff>:/images/brewtarget_icon.svg</normaloff>:/images/brewtarget_icon.svg</iconset>
+             <normaloff>:/images/brewtarget.svg</normaloff>:/images/brewtarget.svg</iconset>
            </attribute>
            <attribute name="title">
             <string/>
