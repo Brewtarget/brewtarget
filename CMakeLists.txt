@@ -200,9 +200,9 @@ ENDIF()
 
 # If it begins with a '/'
 IF( IS_ABSOLUTE ${DATAROOTDIR} )
-   SET( brewtarget_ICONS_LOCATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+   SET( brewtarget_ICONS_LOCATION "${DATAROOTDIR}/icons/hicolor/scalable/apps/" )
 ELSE()
-   SET( brewtarget_ICONS_LOCATION "/${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+   SET( brewtarget_ICONS_LOCATION "/${DATAROOTDIR}/icons/hicolor/scalable/apps/" )
 ENDIF()
 
 CONFIGURE_FILE( brewtarget.desktop.in brewtarget.desktop )
@@ -255,7 +255,7 @@ SET( brewtarget_DESKTOP
 
 # Icon files to install.
 SET( brewtarget_ICONS
-     ${ROOTDIR}/images/brewtarget_icon.svg
+     ${ROOTDIR}/images/brewtarget.svg
 )
 
 SET( TRANSLATIONS_FILES
@@ -488,7 +488,7 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
    IF( UNIX AND NOT APPLE )
       # Install the icons.
       INSTALL( FILES ${brewtarget_ICONS}
-               DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+               DESTINATION "${DATAROOTDIR}/icons/hicolor/scalable/apps/" )
 
       # Install the .desktop file.
       INSTALL( FILES ${brewtarget_DESKTOP}
