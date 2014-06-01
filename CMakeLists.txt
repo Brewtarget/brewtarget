@@ -196,17 +196,6 @@ ELSEIF( APPLE )
   SET( DOCPATH  "${BT_BUNDLE_DIR}/Contents/Resources/en.lproj" )
 ENDIF()
 
-#=========================Configure brewtarget.desktop=========================
-
-# If it begins with a '/'
-IF( IS_ABSOLUTE ${DATAROOTDIR} )
-   SET( brewtarget_ICONS_LOCATION "${DATAROOTDIR}/icons/hicolor/scalable/apps/" )
-ELSE()
-   SET( brewtarget_ICONS_LOCATION "/${DATAROOTDIR}/icons/hicolor/scalable/apps/" )
-ENDIF()
-
-CONFIGURE_FILE( brewtarget.desktop.in brewtarget.desktop )
-
 #==============================Setup the config.h==============================
 
 # "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
@@ -247,10 +236,8 @@ SET( brewtarget_DATA
 )
 
 # Desktop files to install.
-# This is not prefixed with ${ROOTDIR} b/c it is a configured file that will
-# only exist in the build directory.
 SET( brewtarget_DESKTOP
-     ${CMAKE_CURRENT_BINARY_DIR}/brewtarget.desktop
+     ${ROOTDIR}/brewtarget.desktop
 )
 
 # Icon files to install.
