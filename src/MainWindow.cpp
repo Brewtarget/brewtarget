@@ -62,7 +62,6 @@
 #include "AboutDialog.h"
 #include "database.h"
 #include "YeastDialog.h"
-#include "BeerColorWidget.h"
 #include "config.h"
 #include "unit.h"
 #include "ScaleRecipeTool.h"
@@ -730,7 +729,6 @@ void MainWindow::setRecipe(Recipe* recipe)
    mashWizard->setRecipe(recipe);
    brewDayScrollWidget->setRecipe(recipe);
    equipmentListModel->observeRecipe(recipe);
-   beerColorWidget->setRecipe(recipe);
    recipeFormatter->setRecipe(recipe);
    ogAdjuster->setRecipe(recipe);
    recipeExtrasWidget->setRecipe(recipe);

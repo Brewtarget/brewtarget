@@ -233,8 +233,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>627</width>
-           <height>391</height>
+           <width>645</width>
+           <height>403</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -655,33 +655,6 @@
                    </layout>
                   </item>
                   <item>
-                   <widget class="QFrame" name="frame">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="frameShape">
-                     <enum>QFrame::StyledPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                     <enum>QFrame::Raised</enum>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_9">
-                     <item>
-                      <widget class="BeerColorWidget" name="beerColorWidget" native="true"/>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
                    <spacer name="verticalSpacer_7">
                     <property name="orientation">
                      <enum>Qt::Vertical</enum>
@@ -1018,8 +991,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>627</width>
-           <height>348</height>
+           <width>645</width>
+           <height>334</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1570,8 +1543,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1048</width>
-     <height>27</height>
+     <width>1050</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -2124,11 +2097,6 @@
    <class>StyleRangeWidget</class>
    <extends>QWidget</extends>
    <header>StyleRangeWidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BeerColorWidget</class>
-   <extends>QWidget</extends>
-   <header>BeerColorWidget.h</header>
   </customwidget>
   <customwidget>
    <class>BrewDayScrollWidget</class>
