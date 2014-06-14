@@ -22,6 +22,7 @@
 #define ROOT_PRECISION 0.0000001
 
 #include <QList>
+#include <QColor>
 #include <limits> // For std::numeric_limits
 
 /*!
@@ -40,15 +41,16 @@ public:
    }
 
    //! Cross-platform compatible NaN checker.
-   inline bool isnan(double d) const
+   bool isNan(double d) const
    {
       // If using IEEE floating points, all comparisons with a NaN
       // are false, so the following should be true only if we have
       // a NaN.
       return (d != d);
    }
+   
    //! Cross-platform compatible Inf checker.
-   template<typename T> inline bool isinf(T var)
+   template<typename T> bool isInf(T var)
    {
       return
       (
@@ -112,6 +114,34 @@ public:
    //! \returns additive correction to the 15C hydrometer reading if read at \b celsius
    double hydrometer15CCorrection( double celsius );
 
+   /*!
+    * \brief Return the approximate color for a given SRM value
+    */
+   QColor srmToColor(double srm)
+   {
+      QColor ret;
+      
+      //==========My approximation from a photo and spreadsheet===========
+      //double red = 232.9 * pow( (double)0.93, srm );
+      //double green = (double)-106.25 * log(srm) + 280.9;
+      //
+      //int r = (int)Algorithms::Instance().round(red);
+      //int g = (int)Algorithms::Instance().round(green);
+      //int b = 0;
+      
+      // Philip Lee's approximation from a color swatch and curve fitting.
+      int r = 0.5 + (272.098 - 5.80255*srm); if( r > 253.0 ) r = 253.0;
+      int g = 0.5 + (2.41975e2 - 1.3314e1*srm + 1.881895e-1*srm*srm);
+      int b = 0.5 + (179.3 - 28.7*srm);
+      
+      r = (r < 0) ? 0 : ((r > 255)? 255 : r);
+      g = (g < 0) ? 0 : ((g > 255)? 255 : g);
+      b = (b < 0) ? 0 : ((b > 255)? 255 : b);
+      ret.setRgb( r, g, b );
+
+      return ret;
+   }
+   
    /*!
     * Estimates plato from kg of dissolved sucrose (sugar_kg) and
     * the total wort volume wort_l.

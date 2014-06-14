@@ -34,9 +34,9 @@ StrikeWaterDialog::~StrikeWaterDialog() {}
 void StrikeWaterDialog::calculate() {
   double initial = computeInitialInfusion();
   double mash = computeMashInfusion();
-	initialResultTxt->setText(Algorithms::Instance().isnan(initial) 
+	initialResultTxt->setText(Algorithms::Instance().isNan(initial) 
     ? tr("N/A") : Brewtarget::displayAmount(initial, Units::celsius));
-	mashResultTxt->setText(Algorithms::Instance().isnan(mash) 
+	mashResultTxt->setText(Algorithms::Instance().isNan(mash) 
     ? tr("N/A") : Brewtarget::displayAmount(mash, Units::liters));
 }
 

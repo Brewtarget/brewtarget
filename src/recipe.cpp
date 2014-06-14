@@ -1721,26 +1721,7 @@ void Recipe::recalcGrains_kg()
 
 void Recipe::recalcSRMColor()
 {
-   QColor tmp;
-   /*
-   //==========My approximation from a photo and spreadsheet===========
-   double red = 232.9 * pow( (double)0.93, _color_srm );
-   double green = (double)-106.25 * log(_color_srm) + 280.9;
-
-   int r = (int)Algorithms::Instance().round(red);
-   int g = (int)Algorithms::Instance().round(green);
-   int b = 0;
-   */
-   
-   // Philip Lee's approximation from a color swatch and curve fitting.
-   int r = 0.5 + (272.098 - 5.80255*_color_srm); if( r > 253.0 ) r = 253.0;
-   int g = 0.5 + (2.41975e2 - 1.3314e1*_color_srm + 1.881895e-1*_color_srm*_color_srm);
-   int b = 0.5 + (179.3 - 28.7*_color_srm);
-   
-   r = (r < 0) ? 0 : ((r > 255)? 255 : r);
-   g = (g < 0) ? 0 : ((g > 255)? 255 : g);
-   b = (b < 0) ? 0 : ((b > 255)? 255 : b);
-   tmp.setRgb( r, g, b );
+   QColor tmp = Algorithms::Instance().srmToColor(_color_srm);
 
    if ( tmp != _SRMColor )
    {
@@ -1895,7 +1876,7 @@ void Recipe::recalcOgFg()
          ratio = 1.0;
       else if( ratio < 0.0 )
          ratio = 0.0;
-      else if( Algorithms::Instance().isnan(ratio) )
+      else if( Algorithms::Instance().isNan(ratio) )
          ratio = 1.0;
       // Ignore this again since it should be included in efficiency.
       //sugar_kg *= ratio;

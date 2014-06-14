@@ -594,7 +594,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
    UnitSystem* temp;
 
    // Check for insane values.
-   if( Algorithms::Instance().isnan(amount) || Algorithms::Instance().isinf(amount) )
+   if( Algorithms::Instance().isNan(amount) || Algorithms::Instance().isInf(amount) )
       return "-";
    
    // Special case.
@@ -1153,7 +1153,7 @@ QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnit
 {
    QString ret;
 
-   if( Algorithms::Instance().isnan(og) || Algorithms::Instance().isinf(og) )
+   if( Algorithms::Instance().isNan(og) || Algorithms::Instance().isInf(og) )
       return "-";
    
    // Field settings override defaults
@@ -1199,8 +1199,8 @@ QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bo
 {
    QString ret = "%L1";
 
-   if( Algorithms::Instance().isnan(fg) || Algorithms::Instance().isinf(fg) ||
-       Algorithms::Instance().isnan(og) || Algorithms::Instance().isinf(og)
+   if( Algorithms::Instance().isNan(fg) || Algorithms::Instance().isInf(fg) ||
+       Algorithms::Instance().isNan(og) || Algorithms::Instance().isInf(og)
    )
       return "-";
    

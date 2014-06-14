@@ -42,7 +42,9 @@
 #include <QDesktopServices>
 #include <QNetworkReply>
 #include <QAction>
+#include <QLinearGradient>
 
+#include "Algorithms.h"
 #include "MashStepEditor.h"
 #include "MashStepTableModel.h"
 #include "mash.h"
@@ -176,9 +178,38 @@ MainWindow::MainWindow(QWidget* parent)
    styleRangeWidget_ibu->setPrecision(1);
    styleRangeWidget_ibu->setTickMarks(10, 2);
    
-   styleRangeWidget_srm->setRange(0.0, 60.0);
+   styleRangeWidget_srm->setRange(0.0, 40.0);
    styleRangeWidget_srm->setPrecision(1);
    styleRangeWidget_srm->setTickMarks(10, 2);
+   // Need to change appearance of color slider
+   {
+      // The styleRangeWidget_srm should display beer color in the background
+      QLinearGradient grad( 0,0, 1,0 );
+      grad.setCoordinateMode(QGradient::ObjectBoundingMode);
+      for( int i=0; i <= 40; ++i )
+      {
+         double srm = i;
+         grad.setColorAt( srm/40.0, Algorithms::Instance().srmToColor(srm));
+      }
+      styleRangeWidget_srm->setBackgroundBrush(grad);
+
+      // The styleRangeWidget_srm should display a "window" to show acceptable colors for the style
+      QRadialGradient radGrad( 0.5,0.5, 0.5 );
+      radGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
+      radGrad.setColorAt( 0, QColor(0,0,0,0) );
+      radGrad.setColorAt( 0.9, QColor(0,0,0,0) );
+      radGrad.setColorAt( 1, QColor(0,0,0,255) );
+      styleRangeWidget_srm->setPreferredRangeBrush(radGrad);
+
+      // Half-height "tick" for color marker
+      grad = QLinearGradient( 0,0, 0,1 );
+      grad.setCoordinateMode(QGradient::ObjectBoundingMode);
+      grad.setColorAt( 0, QColor(255,255,255,255) );
+      grad.setColorAt( 0.49, QColor(255,255,255,255) );
+      grad.setColorAt( 0.50, QColor(255,255,255,0) );
+      grad.setColorAt( 1, QColor(255,255,255,0) );
+      styleRangeWidget_srm->setMarkerBrush(grad);
+   }
    
    // Set equipment combo box model.
    equipmentListModel = new EquipmentListModel(equipmentComboBox);
