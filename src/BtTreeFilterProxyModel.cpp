@@ -19,10 +19,10 @@
 
 #include "brewtarget.h"
 #include "BtTreeFilterProxyModel.h"
-#include "BrewTargetTreeModel.h"
-#include "BrewTargetTreeItem.h"
+#include "BtTreeModel.h"
+#include "BtTreeItem.h"
 
-BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject *parent,BrewTargetTreeModel::TypeMasks mask ) 
+BtTreeFilterProxyModel::BtTreeFilterProxyModel(QObject *parent,BtTreeModel::TypeMasks mask ) 
 : QSortFilterProxyModel(parent),
    treeMask(mask)
 {
@@ -32,22 +32,22 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
                                          const QModelIndex &right) const
 {
 
-   BrewTargetTreeModel* model = qobject_cast<BrewTargetTreeModel*>(sourceModel());
+   BtTreeModel* model = qobject_cast<BtTreeModel*>(sourceModel());
    switch( treeMask )
    {
-      case BrewTargetTreeModel::RECIPEMASK:
+      case BtTreeModel::RECIPEMASK:
         return lessThanRecipe(model,left, right);
-      case BrewTargetTreeModel::EQUIPMASK:
+      case BtTreeModel::EQUIPMASK:
         return lessThanEquip(model,left, right);
-      case BrewTargetTreeModel::FERMENTMASK:
+      case BtTreeModel::FERMENTMASK:
         return lessThanFerment(model,left, right);
-      case BrewTargetTreeModel::HOPMASK:
+      case BtTreeModel::HOPMASK:
         return lessThanHop(model,left, right);
-      case BrewTargetTreeModel::MISCMASK:
+      case BtTreeModel::MISCMASK:
         return lessThanMisc(model,left, right);
-      case BrewTargetTreeModel::YEASTMASK:
+      case BtTreeModel::YEASTMASK:
         return lessThanYeast(model,left, right);
-      case BrewTargetTreeModel::STYLEMASK:
+      case BtTreeModel::STYLEMASK:
         return lessThanStyle(model,left, right);
       default:
         return lessThanRecipe(model,left, right);
@@ -55,144 +55,295 @@ bool BtTreeFilterProxyModel::lessThan(const QModelIndex &left,
     }
 }
 
-bool BtTreeFilterProxyModel::lessThanRecipe(BrewTargetTreeModel* model, const QModelIndex &left, const QModelIndex &right) const
+bool BtTreeFilterProxyModel::lessThanRecipe(BtTreeModel* model, const QModelIndex &left, const QModelIndex &right) const
 {
    // This is a little awkward.
-   if ( model->getType(left) == BrewTargetTreeItem::BREWNOTE ||
-        model->getType(right) == BrewTargetTreeItem::BREWNOTE )
+   if ( model->type(left) == BtTreeItem::BREWNOTE ||
+        model->type(right) == BtTreeItem::BREWNOTE )
       return false;
 
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::RECIPE)
+   {
+      BtFolder* leftFolder = model->folder(left);
+      Recipe*  rightRecipe = model->recipe(right);
 
-   Recipe* leftRecipe  = model->getRecipe(left);
-   Recipe* rightRecipe = model->getRecipe(right);
+      return leftFolder->fullPath() < rightRecipe->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::RECIPE)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Recipe*  leftRecipe = model->recipe(left);
+      return leftRecipe->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
+
+   Recipe* leftRecipe  = model->recipe(left);
+   Recipe* rightRecipe = model->recipe(right);
 
    switch(left.column())
    {
-      case BrewTargetTreeItem::RECIPENAMECOL:
+      case BtTreeItem::RECIPENAMECOL:
          return leftRecipe->name() < rightRecipe->name();
-      case BrewTargetTreeItem::RECIPEBREWDATECOL:
+      case BtTreeItem::RECIPEBREWDATECOL:
          return leftRecipe->date() < rightRecipe->date();
-      case BrewTargetTreeItem::RECIPESTYLECOL:
-         return leftRecipe->style()->name() < rightRecipe->style()->name();
+      case BtTreeItem::RECIPESTYLECOL:
+         if ( ! leftRecipe->style() )
+            return true;
+         else if ( ! rightRecipe->style() )
+            return false;
+         else
+            return leftRecipe->style()->name() < rightRecipe->style()->name();
    }
    // Default will be to just do a name sort. This doesn't likely make sense,
    // but it will prevent a lot of warnings.
    return leftRecipe->name() < rightRecipe->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanEquip(BrewTargetTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanEquip(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Equipment* leftEquip = model->getEquipment(left);
-   Equipment* rightEquip = model->getEquipment(right);
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::EQUIPMENT)
+   {
+      BtFolder* leftFolder = model->folder(left);
+      Equipment*  rightEquipment = model->equipment(right);
+
+      return leftFolder->fullPath() < rightEquipment->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::EQUIPMENT)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Equipment*  leftEquipment = model->equipment(left);
+      return leftEquipment->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
+   Equipment* leftEquip = model->equipment(left);
+   Equipment* rightEquip = model->equipment(right);
 
 
    switch(left.column())
    {
-      case BrewTargetTreeItem::EQUIPMENTNAMECOL:
+      case BtTreeItem::EQUIPMENTNAMECOL:
          return leftEquip->name() < rightEquip->name();
-      case BrewTargetTreeItem::EQUIPMENTBOILTIMECOL:
+      case BtTreeItem::EQUIPMENTBOILTIMECOL:
          return leftEquip->boilTime_min() < rightEquip->boilTime_min();
    }
    return leftEquip->name() < rightEquip->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanFerment(BrewTargetTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanFerment(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Fermentable* leftFerment = model->getFermentable(left);
-   Fermentable* rightFerment = model->getFermentable(right);
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::FERMENTABLE)
+   {
+      BtFolder* leftFolder = model->folder(left);
+      Fermentable*  rightFermentable = model->fermentable(right);
+
+      return leftFolder->fullPath() < rightFermentable->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FERMENTABLE)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Fermentable*  leftFermentable = model->fermentable(left);
+      return leftFermentable->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
+   Fermentable* leftFerment = model->fermentable(left);
+   Fermentable* rightFerment = model->fermentable(right);
 
    switch(left.column())
    {
-      case BrewTargetTreeItem::FERMENTABLENAMECOL:
+      case BtTreeItem::FERMENTABLENAMECOL:
          return leftFerment->name() < rightFerment->name();
-      case BrewTargetTreeItem::FERMENTABLETYPECOL:
+      case BtTreeItem::FERMENTABLETYPECOL:
          return leftFerment->type() < rightFerment->type();
-      case BrewTargetTreeItem::FERMENTABLECOLORCOL:
+      case BtTreeItem::FERMENTABLECOLORCOL:
          return leftFerment->color_srm() < rightFerment->color_srm();
    }
    return leftFerment->name() < rightFerment->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanHop(BrewTargetTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanHop(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Hop* leftHop = model->getHop(left);
-   Hop* rightHop = model->getHop(right);
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::HOP)
+   {
+      BtFolder* leftFolder = model->folder(left);
+      Hop*  rightHop = model->hop(right);
+
+      return leftFolder->fullPath() < rightHop->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::HOP)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Hop*  leftHop = model->hop(left);
+      return leftHop->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
+   Hop* leftHop = model->hop(left);
+   Hop* rightHop = model->hop(right);
 
 
    switch(left.column())
    {
-      case BrewTargetTreeItem::HOPNAMECOL:
+      case BtTreeItem::HOPNAMECOL:
          return leftHop->name() < rightHop->name();
-      case BrewTargetTreeItem::HOPFORMCOL:
+      case BtTreeItem::HOPFORMCOL:
          return leftHop->form() < rightHop->form();
-      case BrewTargetTreeItem::HOPUSECOL:
+      case BtTreeItem::HOPUSECOL:
          return leftHop->use() < rightHop->use();
    }
    return leftHop->name() < rightHop->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanMisc(BrewTargetTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanMisc(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Misc* leftMisc = model->getMisc(left);
-   Misc* rightMisc = model->getMisc(right);
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::MISC)
+   {
+      BtFolder* leftFolder = model->folder(left);
+      Misc*  rightMisc = model->misc(right);
 
+      return leftFolder->fullPath() < rightMisc->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::MISC)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Misc*  leftMisc = model->misc(left);
+      return leftMisc->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
+   Misc* leftMisc = model->misc(left);
+   Misc* rightMisc = model->misc(right);
 
    switch(left.column())
    {
-      case BrewTargetTreeItem::MISCNAMECOL:
+      case BtTreeItem::MISCNAMECOL:
          return leftMisc->name() < rightMisc->name();
-      case BrewTargetTreeItem::MISCTYPECOL:
+      case BtTreeItem::MISCTYPECOL:
          return leftMisc->type() < rightMisc->type();
-      case BrewTargetTreeItem::MISCUSECOL:
+      case BtTreeItem::MISCUSECOL:
          return leftMisc->use() < rightMisc->use();
    }
    return leftMisc->name() < rightMisc->name();
 }
 
-bool BtTreeFilterProxyModel::lessThanYeast(BrewTargetTreeModel* model, const QModelIndex &left, 
+bool BtTreeFilterProxyModel::lessThanStyle(BtTreeModel* model, const QModelIndex &left, 
                                          const QModelIndex &right) const
 {
-   Yeast* leftYeast = model->getYeast(left);
-   Yeast* rightYeast = model->getYeast(right);
-
-
-   switch(left.column())
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::STYLE)
    {
-      case BrewTargetTreeItem::YEASTNAMECOL:
-         return leftYeast->name() < rightYeast->name();
-      case BrewTargetTreeItem::YEASTTYPECOL:
-         return leftYeast->type() < rightYeast->type();
-      case BrewTargetTreeItem::YEASTFORMCOL:
-         return leftYeast->form() < rightYeast->form();
+      BtFolder* leftFolder = model->folder(left);
+      Style*  rightStyle = model->style(right);
+
+      return leftFolder->fullPath() < rightStyle->name();
    }
-   return leftYeast->name() < rightYeast->name();
-}
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::STYLE)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Style*  leftStyle = model->style(left);
+      return leftStyle->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
 
-bool BtTreeFilterProxyModel::lessThanStyle(BrewTargetTreeModel* model, const QModelIndex &left, 
-                                         const QModelIndex &right) const
-{
-   Style* leftStyle = model->getStyle(left);
-   Style* rightStyle = model->getStyle(right);
+   Style* leftStyle = model->style(left);
+   Style* rightStyle = model->style(right);
 
 
    switch(left.column())
    {
-      case BrewTargetTreeItem::STYLENAMECOL:
+      case BtTreeItem::STYLENAMECOL:
          return leftStyle->name() < rightStyle->name();
-      case BrewTargetTreeItem::STYLECATEGORYCOL:
+      case BtTreeItem::STYLECATEGORYCOL:
          return leftStyle->category() < rightStyle->category();
-      case BrewTargetTreeItem::STYLENUMBERCOL:
+      case BtTreeItem::STYLENUMBERCOL:
          return leftStyle->categoryNumber() < rightStyle->categoryNumber();
-      case BrewTargetTreeItem::STYLELETTERCOL:
+      case BtTreeItem::STYLELETTERCOL:
          return leftStyle->styleLetter() < rightStyle->styleLetter();
-      case BrewTargetTreeItem::STYLEGUIDECOL:
+      case BtTreeItem::STYLEGUIDECOL:
          return leftStyle->styleGuide() < rightStyle->styleGuide();
    }
    return leftStyle->name() < rightStyle->name();
+}
+
+bool BtTreeFilterProxyModel::lessThanYeast(BtTreeModel* model, const QModelIndex &left, 
+                                         const QModelIndex &right) const
+{
+   // As the models get more complex, so does the sort algorithm
+   if ( model->type(left) == BtTreeItem::FOLDER && model->type(right) == BtTreeItem::YEAST)
+   {
+      BtFolder* leftFolder = model->folder(left);
+      Yeast*  rightYeast = model->yeast(right);
+
+      return leftFolder->fullPath() < rightYeast->name();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::YEAST)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      Yeast*  leftYeast = model->yeast(left);
+      return leftYeast->name() < rightFolder->fullPath();
+   }
+   else if (model->type(right) == BtTreeItem::FOLDER && model->type(left) == BtTreeItem::FOLDER)
+   {
+      BtFolder* rightFolder = model->folder(right);
+      BtFolder* leftFolder = model->folder(left);
+      return leftFolder->fullPath() < rightFolder->fullPath();
+   }
+
+   Yeast* leftYeast = model->yeast(left);
+   Yeast* rightYeast = model->yeast(right);
+
+
+   switch(left.column())
+   {
+      case BtTreeItem::YEASTNAMECOL:
+         return leftYeast->name() < rightYeast->name();
+      case BtTreeItem::YEASTTYPECOL:
+         return leftYeast->type() < rightYeast->type();
+      case BtTreeItem::YEASTFORMCOL:
+         return leftYeast->form() < rightYeast->form();
+   }
+   return leftYeast->name() < rightYeast->name();
 }
 
 bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
@@ -200,9 +351,14 @@ bool BtTreeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex 
    if ( !source_parent.isValid() )
       return true;
 
-   const BrewTargetTreeModel* model = qobject_cast<const BrewTargetTreeModel*>(source_parent.model());
+   const BtTreeModel* model = qobject_cast<const BtTreeModel*>(source_parent.model());
+
    QModelIndex child = model->index(source_row, 0, source_parent);
-   BeerXMLElement* thing = model->getThing(child);
+
+   if ( model->isFolder(child) ) 
+      return true;
+
+   BeerXMLElement* thing = model->thing(child);
 
    return thing->display();
 

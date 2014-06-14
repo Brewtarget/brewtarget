@@ -10,8 +10,8 @@ SET(brewtarget_EXECUTABLE "brewtarget")
 
 #=================================Version======================================
 SET( brewtarget_VERSION_MAJOR 2 )
-SET( brewtarget_VERSION_MINOR 0 )
-SET( brewtarget_VERSION_PATCH 2 )
+SET( brewtarget_VERSION_MINOR 1 )
+SET( brewtarget_VERSION_PATCH 0 )
 SET( brewtarget_VERSION_STRING "${brewtarget_VERSION_MAJOR}.${brewtarget_VERSION_MINOR}.${brewtarget_VERSION_PATCH}" )
 
 #===================================Options====================================
@@ -30,6 +30,10 @@ OPTION( NO_PHONON
 OPTION( NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
         OFF )
+
+# Do this right off the bat
+ENABLE_TESTING()
+
 #==============================Compile flags===================================
 IF( NOT ${NO_MESSING_WITH_FLAGS} )
    IF( CMAKE_COMPILER_IS_GNUCXX )
@@ -192,17 +196,6 @@ ELSEIF( APPLE )
   SET( DOCPATH  "${BT_BUNDLE_DIR}/Contents/Resources/en.lproj" )
 ENDIF()
 
-#=========================Configure brewtarget.desktop=========================
-
-# If it begins with a '/'
-IF( IS_ABSOLUTE ${DATAROOTDIR} )
-   SET( brewtarget_ICONS_LOCATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
-ELSE()
-   SET( brewtarget_ICONS_LOCATION "/${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
-ENDIF()
-
-CONFIGURE_FILE( brewtarget.desktop.in brewtarget.desktop )
-
 #==============================Setup the config.h==============================
 
 # "#define CONFIGDATADIR ${CONFIGDATADIR}$" in config.in will be replaced
@@ -243,15 +236,13 @@ SET( brewtarget_DATA
 )
 
 # Desktop files to install.
-# This is not prefixed with ${ROOTDIR} b/c it is a configured file that will
-# only exist in the build directory.
 SET( brewtarget_DESKTOP
-     ${CMAKE_CURRENT_BINARY_DIR}/brewtarget.desktop
+     ${ROOTDIR}/brewtarget.desktop
 )
 
 # Icon files to install.
 SET( brewtarget_ICONS
-     ${ROOTDIR}/images/brewtarget_icon.svg
+     ${ROOTDIR}/images/brewtarget.svg
 )
 
 SET( TRANSLATIONS_FILES
@@ -484,7 +475,7 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
    IF( UNIX AND NOT APPLE )
       # Install the icons.
       INSTALL( FILES ${brewtarget_ICONS}
-               DESTINATION "${DATAROOTDIR}/icons/${CMAKE_PROJECT_NAME}" )
+               DESTINATION "${DATAROOTDIR}/icons/hicolor/scalable/apps/" )
 
       # Install the .desktop file.
       INSTALL( FILES ${brewtarget_DESKTOP}

@@ -169,10 +169,14 @@ public:
    //! Import ingredients from BeerXML documents.
    bool importFromXML(const QString& filename);
    
-   //! Get recipe by key value.
+   //! Get anything by key value.
    Recipe* recipe(int key);
-   //! Get equipment by key value.
    Equipment* equipment(int key);
+   Fermentable* fermentable(int key);
+   Hop* hop(int key);
+   Misc* misc(int key);
+   Style* style(int key);
+   Yeast* yeast(int key);
    
    // Add a COPY of these ingredients to a recipe, then call the changed()
    // signal corresponding to the appropriate QList
@@ -191,6 +195,12 @@ public:
    void addToRecipe( Recipe* rec, Style* s, bool noCopy = false );
    // NOTE: not possible in this format.
    //void addToRecipe( Recipe* rec, Instruction* ins );
+   //
+   //! \brief bulk add to a recipe. 
+   void addToRecipe(Recipe* rec, QList<Fermentable*> ferms);
+   void addToRecipe(Recipe* rec, QList<Hop*> hops);
+   void addToRecipe(Recipe* rec, QList<Misc*> miscs);
+   void addToRecipe(Recipe* rec, QList<Yeast*> yeasts);
    
    // Remove these from a recipe, then call the changed()
    // signal corresponding to the appropriate QList
@@ -208,28 +218,30 @@ public:
    
    // Mark an item as deleted.
    // NOTE: should these also remove all references to the ingredients?
-   void removeEquipment(Equipment* equip);
-   void removeFermentable(Fermentable* ferm);
-   void removeHop(Hop* hop);
-   void removeMash(Mash* mash);
-   void removeMashStep(MashStep* mashStep);
-   void removeMisc(Misc* misc);
-   void removeRecipe(Recipe* rec);
-   void removeStyle(Style* style);
-   void removeWater(Water* water);
-   void removeYeast(Yeast* yeast);
+   void remove(Equipment* equip);
+   void remove(Fermentable* ferm);
+   void remove(Hop* hop);
+   void remove(Mash* mash);
+   void remove(MashStep* mashStep);
+   void remove(Misc* misc);
+   void remove(Recipe* rec);
+   void remove(Style* style);
+   void remove(Water* water);
+   void remove(Yeast* yeast);
+   void remove(BrewNote* b);
 
    // Or you can mark whole lists as deleted.
-   void removeEquipment(QList<Equipment*> equip);
-   void removeFermentable(QList<Fermentable*> ferm);
-   void removeHop(QList<Hop*> hop);
-   void removeMash(QList<Mash*> mash);
-   void removeMashStep(QList<MashStep*> mashStep);
-   void removeMisc(QList<Misc*> misc);
-   void removeRecipe(QList<Recipe*> rec);
-   void removeStyle(QList<Style*> style);
-   void removeWater(QList<Water*> water);
-   void removeYeast(QList<Yeast*> yeast);
+   void remove(QList<Equipment*> equip);
+   void remove(QList<Fermentable*> ferm);
+   void remove(QList<Hop*> hop);
+   void remove(QList<Mash*> mash);
+   void remove(QList<MashStep*> mashStep);
+   void remove(QList<Misc*> misc);
+   void remove(QList<Recipe*> rec);
+   void remove(QList<Style*> style);
+   void remove(QList<Water*> water);
+   void remove(QList<Yeast*> yeast);
+   void remove(QList<BrewNote*> notes);
 
    //! Get the recipe that this \b note is part of.
    Recipe* getParentRecipe( BrewNote const* note );

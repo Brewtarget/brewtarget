@@ -18,58 +18,13 @@
 
 #include <QApplication>
 #include <QStringList>
-#include <QList>
-#include "brewtarget.h"
 #include "config.h"
+#include "brewtarget.h"
 #include "database.h"
 
-#include <QMetaProperty>
-class BrewNote;
-class Equipment;
-class Fermentable;
-class Hop;
-class Instruction;
-class Mash;
-class Misc;
-class Style;
-class Yeast;
-
-// Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
-Q_DECLARE_METATYPE( QMetaProperty )
-Q_DECLARE_METATYPE( Equipment* )
-Q_DECLARE_METATYPE( Mash* )
-Q_DECLARE_METATYPE( Style* )
-Q_DECLARE_METATYPE( Brewtarget::DBTable )
-Q_DECLARE_METATYPE( QList<BrewNote*> )
-Q_DECLARE_METATYPE( QList<Hop*> )
-Q_DECLARE_METATYPE( QList<Instruction*> )
-Q_DECLARE_METATYPE( QList<Fermentable*> )
-Q_DECLARE_METATYPE( QList<Misc*> )
-Q_DECLARE_METATYPE( QList<Yeast*> )
-Q_DECLARE_METATYPE( QList<Water*> )
-
-int main(int argc, char **argv)
-{  
-   QApplication app(argc, argv);
-   app.setApplicationName("brewtarget");
-   app.setApplicationVersion(VERSIONSTRING);
-   app.setOrganizationName("Philip G. Lee");
-
-   // Need this for changed(QMetaProperty,QVariant) to be emitted across threads.
-   qRegisterMetaType<QMetaProperty>();
-   qRegisterMetaType<Equipment*>();
-   qRegisterMetaType<Mash*>();
-   qRegisterMetaType<Style*>();
-   qRegisterMetaType<Brewtarget::DBTable>();
-   qRegisterMetaType< QList<BrewNote*> >();
-   qRegisterMetaType< QList<Hop*> >();
-   qRegisterMetaType< QList<Instruction*> >();
-   qRegisterMetaType< QList<Fermentable*> >();
-   qRegisterMetaType< QList<Misc*> >();
-   qRegisterMetaType< QList<Yeast*> >();
-   qRegisterMetaType< QList<Water*> >();
-
-   // TODO: make a command-line parser class.
+// TODO: replace with real parsing (Qt5?)
+void parseArgs(QApplication const& app)
+{
    QStringList args(app.arguments());
    int i = args.indexOf("--from-xml");
    if( i >= 0 )
@@ -79,8 +34,18 @@ int main(int argc, char **argv)
       // If you know enough to run --from-xml, I am going to assume you know
       // enough to do it right
       Brewtarget::setOption("converted", QDate().currentDate().toString());
-      return 0;
+      exit(0);
    }
-  
-   Brewtarget::run();
+}
+
+int main(int argc, char **argv)
+{  
+   QApplication app(argc, argv);
+   app.setOrganizationName("brewtarget");
+   app.setApplicationName("brewtarget");
+   app.setApplicationVersion(VERSIONSTRING);
+
+   parseArgs(app);
+   
+   return Brewtarget::run();
 }

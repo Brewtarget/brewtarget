@@ -60,17 +60,18 @@ SET( brewtarget_SRCS
     ${SRCDIR}/BrewDayScrollWidget.cpp
     ${SRCDIR}/brewnote.cpp
     ${SRCDIR}/BrewNoteWidget.cpp
-    ${SRCDIR}/BrewTargetTreeItem.cpp
-    ${SRCDIR}/BrewTargetTreeModel.cpp
-    ${SRCDIR}/BrewTargetTreeView.cpp
+    ${SRCDIR}/BtTabWidget.cpp
+    ${SRCDIR}/BtTreeItem.cpp
+    ${SRCDIR}/BtTreeModel.cpp
+    ${SRCDIR}/BtTreeView.cpp
     ${SRCDIR}/BtTreeFilterProxyModel.cpp
     ${SRCDIR}/BeerColorWidget.cpp
     ${SRCDIR}/BtDatePopup.cpp
+    ${SRCDIR}/BtFolder.cpp
     ${SRCDIR}/BtLabel.cpp
     ${SRCDIR}/BtTextEdit.cpp
     ${SRCDIR}/brewtarget.cpp
     ${SRCDIR}/BtSplashScreen.cpp
-    #${SRCDIR}/BtSqlQuery.cpp
     ${SRCDIR}/CelsiusTempUnitSystem.cpp
     ${SRCDIR}/ColorMethods.cpp
     ${SRCDIR}/ConverterTool.cpp
@@ -86,7 +87,6 @@ SET( brewtarget_SRCS
     ${SRCDIR}/FermentableDialog.cpp
     ${SRCDIR}/FermentableSortFilterProxyModel.cpp
     ${SRCDIR}/FermentableTableModel.cpp
-    ${SRCDIR}/main.cpp
     ${SRCDIR}/HeatCalculations.cpp
     ${SRCDIR}/hop.cpp
     ${SRCDIR}/HopDialog.cpp
@@ -123,13 +123,13 @@ SET( brewtarget_SRCS
     ${SRCDIR}/RangedSlider.cpp
     ${SRCDIR}/recipe.cpp
     ${SRCDIR}/RecipeFormatter.cpp
-    ${SRCDIR}/RecipeListModel.cpp
     ${SRCDIR}/RefractoDialog.cpp
     ${SRCDIR}/SetterCommand.cpp
     ${SRCDIR}/SetterCommandStack.cpp
     ${SRCDIR}/ScaleRecipeTool.cpp
     ${SRCDIR}/SIVolumeUnitSystem.cpp
     ${SRCDIR}/SIWeightUnitSystem.cpp
+    ${SRCDIR}/StrikeWaterDialog.cpp
     ${SRCDIR}/style.cpp
     ${SRCDIR}/StyleButton.cpp
     ${SRCDIR}/StyleListModel.cpp
@@ -190,6 +190,7 @@ SET( brewtarget_UIS
     ${UIDIR}/recipeExtrasDialog.ui
     ${UIDIR}/refractoDialog.ui
     ${UIDIR}/scaleRecipeTool.ui
+    ${UIDIR}/strikeWaterDialog.ui
     ${UIDIR}/styleEditor.ui
     ${UIDIR}/timerListDialog.ui
     ${UIDIR}/timerWidget.ui
@@ -213,15 +214,16 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/brewnote.h
     ${SRCDIR}/BrewNoteWidget.h
     ${SRCDIR}/brewtarget.h
-    ${SRCDIR}/BrewTargetTreeModel.h
-    ${SRCDIR}/BrewTargetTreeView.h
+    ${SRCDIR}/BtTabWidget.h
+    ${SRCDIR}/BtTreeModel.h
+    ${SRCDIR}/BtTreeView.h
     ${SRCDIR}/BtTreeFilterProxyModel.h
     ${SRCDIR}/BtDigitWidget.h
     ${SRCDIR}/BtDatePopup.h
+    ${SRCDIR}/BtFolder.h
     ${SRCDIR}/BtLabel.h
     ${SRCDIR}/BtTextEdit.h
     ${SRCDIR}/BtSplashScreen.h
-    #${SRCDIR}/BtSqlQuery.h
     ${SRCDIR}/ConverterTool.h
     ${SRCDIR}/CustomComboBox.h
     ${SRCDIR}/database.h
@@ -261,10 +263,10 @@ SET( brewtarget_MOC_HEADERS
     ${SRCDIR}/RecipeExtrasDialog.h
     ${SRCDIR}/RecipeExtrasWidget.h
     ${SRCDIR}/RecipeFormatter.h
-    ${SRCDIR}/RecipeListModel.h
     ${SRCDIR}/RefractoDialog.h
     ${SRCDIR}/ScaleRecipeTool.h
     ${SRCDIR}/SetterCommandStack.h
+    ${SRCDIR}/StrikeWaterDialog.h
     ${SRCDIR}/StyleButton.h
     ${SRCDIR}/StyleListModel.h
     ${SRCDIR}/StyleEditor.h
@@ -360,7 +362,15 @@ ENDIF()
 
 #===========================Create the binary==================================
 
-ADD_EXECUTABLE( ${brewtarget_EXECUTABLE} ${brewtarget_SRCS} ${brewtarget_MOC_SRCS} ${brewtarget_QRC_CPP} ${brewtarget_cfg_QRC_CPP} ${brewtarget_UIS_H} )
+ADD_EXECUTABLE(
+   ${brewtarget_EXECUTABLE}
+   ${SRCDIR}/main.cpp
+   ${brewtarget_SRCS}
+   ${brewtarget_MOC_SRCS}
+   ${brewtarget_QRC_CPP}
+   ${brewtarget_cfg_QRC_CPP}
+   ${brewtarget_UIS_H}
+)
 ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
 
 # Link brewtarget against appropriate libraries.
@@ -379,6 +389,25 @@ ENDIF()
 # Link brewtarget against Qt libraries defined by QT_LIBRARIES
 TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${PHONON_LIBS} )
 MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${PHONON_LIBS}" )
+
+#=================================Tests========================================
+
+QT4_WRAP_CPP( testing_MOC_SRCS ${SRCDIR}/Testing.h )
+ADD_EXECUTABLE(
+   brewtarget_tests
+   ${SRCDIR}/Testing.cpp
+   ${testing_MOC_SRCS}
+   ${brewtarget_SRCS}
+   ${brewtarget_MOC_SRCS}
+   ${brewtarget_QRC_CPP}
+   ${brewtarget_cfg_QRC_CPP}
+   ${brewtarget_UIS_H}
+)
+TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )
+ADD_TEST(
+   NAME test
+   COMMAND brewtarget_tests
+)
 
 #=================================Installs=====================================
 

@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file alias="images/backup.png">images/backup.png</file>
-        <file alias="images/brewtarget_icon.svg">images/brewtarget_icon.svg</file>
+        <file alias="images/brewtarget.svg">images/brewtarget.svg</file>
         <file alias="images/bubbles.svg">images/bubbles.svg</file>
         <file alias="images/clipboard.svg">images/clipboard.svg</file>
         <file alias="images/clock.svg">images/clock.svg</file>
@@ -27,6 +27,7 @@
         <file alias="images/flagSpain.svg">images/flagSpain.svg</file>
         <file alias="images/flagUK.svg">images/flagUK.svg</file>
         <file alias="images/flagCzech.svg">images/flagCzech.svg</file>
+        <file alias="images/folder.png">images/folder.png</file>
         <file alias="images/glass2.png">images/glass2.png</file>
         <file alias="images/help-contents.png">images/help-contents.png</file>
         <file alias="images/hydrometer.svg">images/hydrometer.svg</file>
@@ -57,8 +58,10 @@
         <file alias="images/title.png">images/title.png</file>
         <file alias="css/brewday.css">css/brewday.css</file>
         <file alias="css/recipe.css">css/recipe.css</file>
+        <file alias="css/tooltip.css">css/tooltip.css</file>
         <file alias="create_db.sql">create_db.sql</file>
         <file alias="migrations/migrations.xml">migrations/migrations.xml</file>
         <file alias="migrations/migration_2.0.0_to_2.0.2.sql">migrations/migration_2.0.0_to_2.0.2.sql</file>
+        <file alias="migrations/migration_2.0.2_to_2.1.0.sql">migrations/migration_2.0.2_to_2.1.0.sql</file>
     </qresource>
 </RCC>

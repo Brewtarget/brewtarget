@@ -142,6 +142,7 @@ public:
 signals:
    //! \brief Emitted when \c name() changes.
    void changedName(QString);
+
    /*
    void changedCategory(QString);
    void changedCategoryNumber(QString);
@@ -176,6 +177,8 @@ private:
    static QHash<QString,QString> tagToProp;
    static QHash<QString,QString> tagToPropHash();
 };
+
+Q_DECLARE_METATYPE( Style* )
 
 inline bool StylePtrLt( Style* lhs, Style* rhs)
 {

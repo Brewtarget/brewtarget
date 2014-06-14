@@ -40,7 +40,7 @@ MashStepTableModel::MashStepTableModel(QTableView* parent)
 void MashStepTableModel::setMash( Mash* m )
 {
    int i;
-   if( mashObs )
+   if( mashObs && steps.size() > 0)
    {
       beginRemoveRows( QModelIndex(), 0, steps.size()-1 );
       // Remove mashObs and all steps.
@@ -54,16 +54,20 @@ void MashStepTableModel::setMash( Mash* m )
    mashObs = m;
    if( mashObs )
    {
-      QList<MashStep*> tmpSteps = mashObs->mashSteps();
-      beginInsertRows( QModelIndex(), 0, tmpSteps.size()-1 );
-      //connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
+      // This has to happen outside of the if{} block to make sure the mash
+      // signal is connected. Otherwise, empty mashes will never be not empty.
       connect( mashObs, SIGNAL(mashStepsChanged()), this, SLOT(mashChanged()) );
-      steps = tmpSteps;
-      for( i = 0; i < steps.size(); ++i )
-         connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashStepChanged(QMetaProperty,QVariant)) );
-      endInsertRows();
+
+      QList<MashStep*> tmpSteps = mashObs->mashSteps();
+      if(tmpSteps.size() > 0){
+         beginInsertRows( QModelIndex(), 0, tmpSteps.size()-1 );
+         //connect( mashObs, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashChanged(QMetaProperty,QVariant)) );
+         steps = tmpSteps;
+         for( i = 0; i < steps.size(); ++i )
+            connect( steps[i], SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(mashStepChanged(QMetaProperty,QVariant)) );
+         endInsertRows();
+     }
    }
-   //reset(); // Tell everybody that the table has changed.
    
    if( parentTableWidget )
    {
