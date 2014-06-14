@@ -308,6 +308,25 @@
                  <layout class="QVBoxLayout" name="verticalLayout_2">
                   <item>
                    <layout class="QGridLayout" name="gridLayout_2">
+                    <item row="6" column="0">
+                     <widget class="BtVolumeLabel" name="targetBoilSizeLabel">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::CustomContextMenu</enum>
+                      </property>
+                      <property name="text">
+                       <string>Target Boil Size</string>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">boilSize_l</string>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="3" column="1">
                      <layout class="QHBoxLayout" name="horizontalLayout_2">
                       <property name="topMargin">
@@ -588,25 +607,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="0">
-                     <widget class="BtVolumeLabel" name="targetBoilSizeLabel">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="contextMenuPolicy">
-                       <enum>Qt::CustomContextMenu</enum>
-                      </property>
-                      <property name="text">
-                       <string>Target Boil Size</string>
-                      </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">boilSize_l</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="2" column="1">
                      <layout class="QHBoxLayout" name="horizontalLayout_11">
                       <item>
@@ -651,6 +651,58 @@
                        </widget>
                       </item>
                      </layout>
+                    </item>
+                    <item row="10" column="0">
+                     <widget class="BtGravityLabel" name="boilSgLabel">
+                      <property name="contextMenuPolicy">
+                       <enum>Qt::CustomContextMenu</enum>
+                      </property>
+                      <property name="text">
+                       <string>Boil SG</string>
+                      </property>
+                      <property name="editField" stdset="0">
+                       <string notr="true">boilGrav</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="11" column="0">
+                     <widget class="QLabel" name="label_5">
+                      <property name="text">
+                       <string>Calories/12oz</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="10" column="1">
+                     <widget class="QLabel" name="label_boilSG">
+                      <property name="font">
+                       <font>
+                        <family>Sans Serif</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                        <kerning>true</kerning>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>1.0</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="11" column="1">
+                     <widget class="QLabel" name="label_calories">
+                      <property name="font">
+                       <font>
+                        <family>Sans Serif</family>
+                        <pointsize>12</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                        <kerning>true</kerning>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>1.0</string>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </item>
@@ -773,19 +825,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="0">
-                     <widget class="BtGravityLabel" name="boilSgLabel">
-                      <property name="contextMenuPolicy">
-                       <enum>Qt::CustomContextMenu</enum>
-                      </property>
-                      <property name="text">
-                       <string>Boil SG</string>
-                      </property>
-                      <property name="editField" stdset="0">
-                       <string notr="true">boilGrav</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="1" column="0">
                      <widget class="BtGravityLabel" name="fGLabel">
                       <property name="contextMenuPolicy">
@@ -872,22 +911,6 @@
                       </property>
                      </widget>
                     </item>
-                    <item row="6" column="1">
-                     <widget class="QLabel" name="label_boilSG">
-                      <property name="font">
-                       <font>
-                        <family>Sans Serif</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                        <kerning>true</kerning>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>1.0</string>
-                      </property>
-                     </widget>
-                    </item>
                     <item row="5" column="1">
                      <widget class="IbuGuSlider" name="ibuGuSlider" native="true">
                       <property name="sizePolicy">
@@ -907,29 +930,6 @@
                         <width>512</width>
                         <height>16777215</height>
                        </size>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="0">
-                     <widget class="QLabel" name="label_5">
-                      <property name="text">
-                       <string>Calories/12oz</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="7" column="1">
-                     <widget class="QLabel" name="label_calories">
-                      <property name="font">
-                       <font>
-                        <family>Sans Serif</family>
-                        <pointsize>12</pointsize>
-                        <weight>75</weight>
-                        <bold>true</bold>
-                        <kerning>true</kerning>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>1.0</string>
                       </property>
                      </widget>
                     </item>
