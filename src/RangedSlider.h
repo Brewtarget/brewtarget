@@ -22,6 +22,8 @@
 #include <QWidget>
 #include <QSize>
 #include <QString>
+#include <QBrush>
+#include <QPen>
 class QPaintEvent;
 class QMouseEvent;
 
@@ -52,6 +54,8 @@ public:
    void setBackgroundBrush( QBrush const& brush );
    //! \brief Set the brush for the preffered range.
    void setPreferredRangeBrush( QBrush const& brush );
+   //! \brief Set the pen for the preferred range
+   void setPreferredRangePen( QPen const& pen );
    //! \brief Set the brush for the marker.
    void setMarkerBrush( QBrush const& brush );
    //! \brief Set the text displayed above the marker.
@@ -92,6 +96,7 @@ private:
    QString _tooltipText;
    QBrush _bgBrush;
    QBrush _prefRangeBrush;
+   QPen _prefRangePen;
    QBrush _markerBrush;
    bool _markerTextIsValue;
 };

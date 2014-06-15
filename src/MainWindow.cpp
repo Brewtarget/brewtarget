@@ -43,6 +43,8 @@
 #include <QNetworkReply>
 #include <QAction>
 #include <QLinearGradient>
+#include <QBrush>
+#include <QPen>
 
 #include "Algorithms.h"
 #include "MashStepEditor.h"
@@ -193,13 +195,9 @@ MainWindow::MainWindow(QWidget* parent)
       styleRangeWidget_srm->setBackgroundBrush(grad);
 
       // The styleRangeWidget_srm should display a "window" to show acceptable colors for the style
-      QRadialGradient radGrad( 0.5,0.5, 0.5 );
-      radGrad.setCoordinateMode(QGradient::ObjectBoundingMode);
-      radGrad.setColorAt( 0, QColor(0,0,0,0) );
-      radGrad.setColorAt( 0.9, QColor(0,0,0,0) );
-      radGrad.setColorAt( 1, QColor(0,0,0,255) );
-      styleRangeWidget_srm->setPreferredRangeBrush(radGrad);
-
+      styleRangeWidget_srm->setPreferredRangeBrush(QColor(0,0,0,0));
+      styleRangeWidget_srm->setPreferredRangePen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+      
       // Half-height "tick" for color marker
       grad = QLinearGradient( 0,0, 0,1 );
       grad.setCoordinateMode(QGradient::ObjectBoundingMode);

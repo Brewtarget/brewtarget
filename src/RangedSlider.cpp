@@ -46,6 +46,7 @@ RangedSlider::RangedSlider(QWidget* parent)
      _tooltipText(""),
      _bgBrush(QColor(255,255,255)),
      _prefRangeBrush(QColor(0,0,0)),
+     _prefRangePen(Qt::NoPen),
      _markerBrush(QColor(255,255,255)),
      _markerTextIsValue(false)
 {
@@ -100,6 +101,12 @@ void RangedSlider::setBackgroundBrush( QBrush const& brush )
 void RangedSlider::setPreferredRangeBrush( QBrush const& brush )
 {
    _prefRangeBrush = brush;
+   update();
+}
+
+void RangedSlider::setPreferredRangePen( QPen const& pen )
+{
+   _prefRangePen = pen;
    update();
 }
 
@@ -203,8 +210,13 @@ void RangedSlider::paintEvent(QPaintEvent* event)
       painter.setRenderHint(QPainter::Antialiasing,false);
       
       // Draw the style "foreground" rectangle.
-      painter.setBrush(_prefRangeBrush);
-      painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, rectHeight) );
+      painter.save();
+         painter.setBrush(_prefRangeBrush);
+         painter.setPen(_prefRangePen);
+         painter.setRenderHint(QPainter::Antialiasing);
+         //painter.drawRect( QRectF(fgRectLeft, 0, fgRectWidth, rectHeight) );
+         painter.drawRoundedRect( QRectF(fgRectLeft, 0, fgRectWidth, rectHeight), 8,8 );
+      painter.restore();
       
       // Draw the indicator.
       painter.setBrush(_markerBrush);
