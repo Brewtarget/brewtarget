@@ -179,7 +179,7 @@ MainWindow::MainWindow(QWidget* parent)
    styleRangeWidget_ibu->setPrecision(1);
    styleRangeWidget_ibu->setTickMarks(10, 2);
    
-   styleRangeWidget_srm->setRange(0.0, 40.0);
+   styleRangeWidget_srm->setRange(0.0, 44.0);
    styleRangeWidget_srm->setPrecision(1);
    styleRangeWidget_srm->setTickMarks(10, 2);
    // Need to change appearance of color slider
@@ -697,12 +697,17 @@ void MainWindow::setRecipe(Recipe* recipe)
    */
 
    if( recStyle )
-   {
+   {  /*
       styleRangeWidget_og->setPreferredRange(recStyle->ogMin(), recStyle->ogMax());
       styleRangeWidget_fg->setPreferredRange(recStyle->fgMin(), recStyle->fgMax());
+      */
+      
+      styleRangeWidget_og->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "og", Brewtarget::GRAVITY ));
+      styleRangeWidget_fg->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "fg", Brewtarget::GRAVITY ));
+
       styleRangeWidget_abv->setPreferredRange(recStyle->abvMin_pct(), recStyle->abvMax_pct());
       styleRangeWidget_ibu->setPreferredRange(recStyle->ibuMin(), recStyle->ibuMax());
-      styleRangeWidget_srm->setPreferredRange(recStyle->colorMin_srm(), recStyle->colorMax_srm());
+      styleRangeWidget_srm->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "color_srm", Brewtarget::COLOR ));
    }
    
    // Reset all previous recipe shit.
@@ -771,6 +776,40 @@ void MainWindow::changed(QMetaProperty prop, QVariant value)
    showChanges(&prop);
 }
 
+void MainWindow::updateGravitySlider(QString attribute, RangedSlider* slider, double max)
+{
+   unitDisplay dispUnit = (unitDisplay)Brewtarget::option(attribute, noUnit, tab_recipe, Brewtarget::UNIT).toInt();
+
+   if ( dispUnit == noUnit ) 
+      dispUnit = Brewtarget::usePlato ? displayPlato : displaySg;
+
+   slider->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, attribute, Brewtarget::GRAVITY));
+   slider->setRange(         Brewtarget::displayRange(tab_recipe, attribute, 1.000, max, Brewtarget::GRAVITY ));
+   if ( dispUnit == displayPlato )
+   {
+      slider->setPrecision(1);
+      slider->setTickMarks(2,5);
+   }
+   else
+   {
+      slider->setPrecision(3);
+      slider->setTickMarks(0.010, 2);
+   }
+}
+
+void MainWindow::updateColorSlider(QString attribute, RangedSlider* slider)
+{
+   unitDisplay dispUnit = (unitDisplay)Brewtarget::option(attribute, noUnit, tab_recipe, Brewtarget::UNIT).toInt();
+
+   if ( dispUnit == noUnit ) 
+      dispUnit = Brewtarget::colorUnit == Brewtarget::SRM ? displaySrm : displayEbc;
+
+   slider->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, attribute,Brewtarget::COLOR));
+   slider->setRange(Brewtarget::displayRange(tab_recipe, attribute, 1, 44, Brewtarget::COLOR) );
+   slider->setTickMarks( dispUnit == displaySrm ? 10 : 40, 2);
+
+}
+
 void MainWindow::showChanges(QMetaProperty* prop)
 {
    if( recipeObs == 0 )
@@ -813,16 +852,24 @@ void MainWindow::showChanges(QMetaProperty* prop)
    else
       label_calcBoilSize->setPalette(numPalette_tooHigh);
    
+   label_boilSG->setText(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
+
+   updateGravitySlider("og", styleRangeWidget_og, 1.120);
+   styleRangeWidget_og->setValue(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false).toDouble());
+
    QPair<QString, BeerXMLElement*> fg("fg",recipeObs);
    QPair<QString, BeerXMLElement*> og("og", recipeObs);
 
-   styleRangeWidget_og->setValue(Brewtarget::displayOG(recipeObs,tab_recipe,"og",false).toDouble());
-   label_boilSG->setText(Brewtarget::displayOG(recipeObs,tab_recipe,"boilGrav",false));
+   updateGravitySlider("fg", styleRangeWidget_fg, 1.03);
+   styleRangeWidget_fg->setValue(Brewtarget::displayFG(fg, og, tab_recipe,false).toDouble());
 
-   styleRangeWidget_fg->setValue(Brewtarget::displayFG(recipeObs->fg(), recipeObs->og()).toDouble());
    styleRangeWidget_abv->setValue(recipeObs->ABV_pct());
    styleRangeWidget_ibu->setValue(recipeObs->IBU());
+
+   /* Colors need the same basic treatment as gravity */
+   updateColorSlider("color_srm", styleRangeWidget_srm);
    styleRangeWidget_srm->setValue(Brewtarget::displayColor(recipeObs,tab_recipe,"color_srm",false).toDouble());
+
    ibuGuSlider->setValue(recipeObs->IBU()/((recipeObs->og()-1)*1000));
    label_calories->setText( QString("%1").arg(recipeObs->calories(),0,'f',0) );
 
@@ -854,8 +901,10 @@ void MainWindow::updateRecipeStyle()
    if( selected )
    {
       Database::instance().addToRecipe( recipeObs, selected );
-      styleRangeWidget_og->setPreferredRange(selected->ogMin(), selected->ogMax());
-      styleRangeWidget_fg->setPreferredRange(selected->fgMin(), selected->fgMax());
+
+      styleRangeWidget_og->setPreferredRange( Brewtarget::displayRange(selected, tab_recipe, "og", Brewtarget::GRAVITY ));
+      styleRangeWidget_fg->setPreferredRange( Brewtarget::displayRange(selected, tab_recipe, "fg", Brewtarget::GRAVITY ));
+
       styleRangeWidget_abv->setPreferredRange(selected->abvMin_pct(), selected->abvMax_pct());
       styleRangeWidget_ibu->setPreferredRange(selected->ibuMin(), selected->ibuMax());
       styleRangeWidget_srm->setPreferredRange(selected->colorMin_srm(), selected->colorMax_srm());

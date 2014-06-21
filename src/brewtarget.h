@@ -102,11 +102,19 @@ public:
    //! \brief The formula used to get IBUs.
    enum IbuType {TINSETH, RAGER};
    //! \brief Don't know what the fuck this is.
+   //! \brief it helps simplify hasOption, option and setOption. It also helps
+   //  make the calling code more understandable.
    enum iUnitOps {
       NOOP = -1 ,
       SCALE, 
       UNIT
    };
+
+   enum RangeType {
+      GRAVITY,
+      COLOR
+   };
+
    //! \brief The database tables.
    enum DBTable{
       //! None of the tables. 0
@@ -192,6 +200,9 @@ public:
     */
    static QString displayFG( double fg, double og, unitDisplay displayUnit = noUnit, bool showUnits=false );
    static QString displayFG(QPair<QString, BeerXMLElement*> fg, QPair<QString, BeerXMLElement*> og, QObject* object, bool showUnits = false);
+
+   static QPair<double,double> displayRange(BeerXMLElement* element, QObject *object, QString attribute, RangeType _type = GRAVITY);
+   static QPair<double,double> displayRange(QObject *object, QString attribute, double min, double max, RangeType _type = GRAVITY);
 
    //! \brief Display color appropriately.
    static QString displayColor( double srm, unitDisplay displayUnit = noUnit, bool showUnits=false);

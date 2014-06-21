@@ -66,10 +66,15 @@ void RangedSlider::setPreferredRange( double min, double max )
    
    // Only show tooltips if the range has nonzero size.
    setMouseTracking(min < max);
-   
+  
    _tooltipText = QString("%1 - %2").arg(min, 0, 'f', _prec).arg(max, 0, 'f', _prec);
    
    update();
+}
+
+void RangedSlider::setPreferredRange(QPair<double,double> minmax)
+{
+   setPreferredRange( minmax.first, minmax.second );
 }
 
 void RangedSlider::setRange( double min, double max )
@@ -77,6 +82,11 @@ void RangedSlider::setRange( double min, double max )
    _min = min;
    _max = max;
    update();
+}
+
+void RangedSlider::setRange(QPair<double,double> minmax)
+{
+   setRange( minmax.first, minmax.second );
 }
 
 void RangedSlider::setValue(double value)

@@ -1149,6 +1149,47 @@ bool Brewtarget::hasUnits(QString qstr)
    return amtUnit.cap(2).size() > 0;
 }
 
+QPair<double,double> Brewtarget::displayRange(BeerXMLElement* element, QObject *object, QString attribute, RangeType _type)
+{
+   QPair<double,double> range;
+   QString minName = QString("%1%2").arg(attribute).arg("Min");
+   QString maxName = QString("%1%2").arg(attribute).arg("Max");
+
+   if ( _type == GRAVITY )
+   {
+      range.first  = displayOG(element, object, minName, false).toDouble();
+      range.second = displayOG(element, object, maxName, false).toDouble();
+   }
+   else 
+   {
+      range.first = displayColor(element, object, "colorMin_srm", false).toDouble();
+      range.second = displayColor(element, object, "colorMax_srm", false).toDouble();
+   }
+
+   return range;
+}
+
+QPair<double,double> Brewtarget::displayRange(QObject *object, QString attribute, double min, double max, RangeType _type)
+{
+   QPair<double,double> range;
+   unitDisplay displayUnit;
+
+   displayUnit = (unitDisplay)option(attribute, noUnit, object, UNIT).toInt();
+
+   if ( _type == GRAVITY )
+   {
+      range.first = displayOG(min, displayUnit, false).toDouble();
+      range.second = displayOG(max, displayUnit, false).toDouble();
+   }
+   else
+   {
+      range.first = displayColor(min, displayUnit, false).toDouble();
+      range.second = displayColor(max, displayUnit, false).toDouble();
+   }
+
+   return range;
+}
+
 QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnits)
 {
    QString ret;

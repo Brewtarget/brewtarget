@@ -352,6 +352,8 @@ private:
    //! \brief Set the context menus.
    void setupContextMenu();
 
+   void updateGravitySlider(QString attribute, RangedSlider* slider, double max);
+   void updateColorSlider(QString attribute, RangedSlider* slider);
    // Copy methods used by copySelected()
    void copyThis(Recipe *rec);
    void copyThis(Equipment *kit);
