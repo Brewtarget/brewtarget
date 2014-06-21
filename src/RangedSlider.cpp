@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QRectF>
 #include <QFont>
+#include <QFontMetrics>
 #include <QMouseEvent>
 #include <QLabel>
 #include <QToolTip>
@@ -163,14 +164,18 @@ void RangedSlider::mouseMoveEvent(QMouseEvent* event)
 
 void RangedSlider::paintEvent(QPaintEvent* event)
 {
+   static const QFont textFont("Arial", 14, QFont::Black);
+   static const QFontMetrics textFontMetrics(textFont);
    static const QPalette palette(QApplication::palette());
    static const int indTextHeight=16;
    static const int rectHeight = 16;
-   static const int textWidth  = 48;
    static const int indWidth   = 4;
    static const QColor fgRectColor(0,127,0);
    static const QColor textColor(0,127,0);
-   static const QFont textFont("Arial", 14, QFont::Black);
+   
+   // Can't do this: want all the sliders to have exact same width
+   //const int textWidth = textFontMetrics.width(_valText);
+   static const int textWidth = textFontMetrics.width("1.000");
    
    QLinearGradient glassGrad( QPointF(0,0), QPointF(0,rectHeight) );
    glassGrad.setColorAt( 0, QColor(255,255,255,127) );
