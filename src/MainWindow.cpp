@@ -674,35 +674,9 @@ void MainWindow::setRecipe(Recipe* recipe)
    
    recStyle = recipe->style();
    recEquip = recipe->equipment();
-  
-   /* 
-   // BeerXML is stupid and has reduntant fields.
-   // Ensure that recEquip and recipeObs always have the same boil size and time.
-   // NOTE: should probably move this connection code to the Database.
-   if( recEquip )
-   {
-      connect(
-         recEquip,
-         SIGNAL(changedBoilSize_l(double)),
-         recipeObs,
-         SLOT(setBoilSize_l(double))
-      );
-      
-      connect(
-         recEquip,
-         SIGNAL(changedBoilTime_min(double)),
-         recipeObs,
-         SLOT(setBoilTime_min(double))
-      );
-   }
-   */
 
    if( recStyle )
-   {  /*
-      styleRangeWidget_og->setPreferredRange(recStyle->ogMin(), recStyle->ogMax());
-      styleRangeWidget_fg->setPreferredRange(recStyle->fgMin(), recStyle->fgMax());
-      */
-      
+   {
       styleRangeWidget_og->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "og", Brewtarget::GRAVITY ));
       styleRangeWidget_fg->setPreferredRange(Brewtarget::displayRange(recStyle, tab_recipe, "fg", Brewtarget::GRAVITY ));
 

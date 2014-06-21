@@ -34,26 +34,13 @@ class QMouseEvent;
 class RangedSlider : public QWidget
 {
    Q_OBJECT
+   
 public:
    RangedSlider(QWidget* parent=0);
    
-   //! \brief Set the \c value for the indicator.
-   void setValue(double value);
+   Q_PROPERTY( double value READ value WRITE setValue )
    
-   /*!
-    * \brief Set the \c min and \c max values for the preferred range.
-    * If the \c min and \c max are equal, no preferred range info is shown.
-    */
-   void setPreferredRange( double min, double max );
-
-   //! \brief Set the \c min and \c max values for the whole widget.
-   void setRange( double min, double max );
-
-   /*! \brief convenience wrapper for the previous two methods */
-   void setPreferredRange(QPair<double,double> minmax);
-   void setRange(QPair<double,double> minmax);
-   //! \brief Set the \c precision for displaying values.
-   void setPrecision(int precision);
+   double value() const { return _val; }
    
    //! \brief Set the background brush for the widget.
    void setBackgroundBrush( QBrush const& brush );
@@ -78,8 +65,38 @@ public:
     */
    void setTickMarks( double primaryInterval, int secondaryTicks = 1 );
    
+   //! \brief Set the \c precision for displaying values.
+   void setPrecision(int precision);
+   
    //! \brief Reimplemented from QWidget.
    virtual QSize sizeHint() const;
+
+public slots:
+   
+   //! \brief Set the \c value for the indicator.
+   void setValue(double value);
+
+   /*!
+    * \brief Set the range of values considered to be *best*
+    * 
+    * \param range \c range.first and \c range.second are the min and max
+    *        values for the preferred range resp.
+    */
+   void setPreferredRange(QPair<double,double> range);
+   
+   /*!
+    * \brief Set the range of values that the widget displays
+    * 
+    * \param range \c range.first and \c range.second are the min and max
+    *        values for the preferred range resp.
+    */
+   void setRange(QPair<double,double> range);
+   
+   //! \brief Convenience method for setting the widget range
+   void setRange( double min, double max );   
+   
+   //! \brief Convenience method for setting the preferred range
+   void setPreferredRange( double min, double max );
    
 protected:
    //! \brief Reimplemented from QWidget.
