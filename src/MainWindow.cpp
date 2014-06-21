@@ -179,7 +179,8 @@ MainWindow::MainWindow(QWidget* parent)
    styleRangeWidget_ibu->setPrecision(1);
    styleRangeWidget_ibu->setTickMarks(10, 2);
    
-   styleRangeWidget_srm->setRange(0.0, 44.0);
+   const int srmMax = 50;
+   styleRangeWidget_srm->setRange(0.0, static_cast<double>(srmMax));
    styleRangeWidget_srm->setPrecision(1);
    styleRangeWidget_srm->setTickMarks(10, 2);
    // Need to change appearance of color slider
@@ -187,10 +188,10 @@ MainWindow::MainWindow(QWidget* parent)
       // The styleRangeWidget_srm should display beer color in the background
       QLinearGradient grad( 0,0, 1,0 );
       grad.setCoordinateMode(QGradient::ObjectBoundingMode);
-      for( int i=0; i <= 40; ++i )
+      for( int i=0; i <= srmMax; ++i )
       {
          double srm = i;
-         grad.setColorAt( srm/40.0, Algorithms::Instance().srmToColor(srm));
+         grad.setColorAt( srm/static_cast<double>(srmMax), Algorithms::Instance().srmToColor(srm));
       }
       styleRangeWidget_srm->setBackgroundBrush(grad);
 

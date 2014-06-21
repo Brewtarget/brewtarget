@@ -131,7 +131,7 @@ public:
       
       // Philip Lee's approximation from a color swatch and curve fitting.
       int r = 0.5 + (272.098 - 5.80255*srm); if( r > 253.0 ) r = 253.0;
-      int g = 0.5 + (2.41975e2 - 1.3314e1*srm + 1.881895e-1*srm*srm);
+      int g = (srm > 35)? 0 : 0.5 + (2.41975e2 - 1.3314e1*srm + 1.881895e-1*srm*srm);
       int b = 0.5 + (179.3 - 28.7*srm);
       
       r = (r < 0) ? 0 : ((r > 255)? 255 : r);
