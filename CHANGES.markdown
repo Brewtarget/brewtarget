@@ -8,6 +8,8 @@ for consumption by the typical end-user.
 ### New Features
 
 * Folders for organizing recipes [#1109740](https://bugs.launchpad.net/brewtarget/+bug/1109740).
+* Recipe parameter [sliders](https://blueprints.launchpad.net/brewtarget/+spec/recipe-sliders)
+  to make it easier to visualize the value and range of IBUs, color, etc.
 
 ### Bug Fixes
 
