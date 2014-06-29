@@ -1819,8 +1819,6 @@ void Recipe::recalcBoilGrav()
    // Since the efficiency refers to how much sugar we get into the fermenter,
    // we need to adjust for that here.
    sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
-   if( equipment() )
-      sugar_kg = sugar_kg / (1 - equipment()->trubChillerLoss_l()/_finalVolumeNoLosses_l);
 
    ret = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, boilSize_l()) );
  
