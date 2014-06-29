@@ -13,6 +13,8 @@ for consumption by the typical end-user.
 
 ### Bug Fixes
 
+* Boil SG was wrong if kettle losses were not zero [#1328761](https://bugs.launchpad.net/brewtarget/+bug/1328761).
+
 ### Incompatibilities
 
 ## v2.0.3
