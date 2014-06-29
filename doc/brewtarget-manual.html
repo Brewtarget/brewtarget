@@ -159,7 +159,7 @@
    </head>
    <body>
    <div id="content">
-   <h1>Brewtarget 2.0.1 Manual</h1>
+   <h1>Brewtarget 2.1.0 Manual</h1>
 
    <h2>Table of Contents: </h2>
    <ul>
@@ -184,6 +184,7 @@
       <ul>
          <li><a href="#trees">Trees</a></li>
          <ul>
+            <li><a href="#subtree">Folders</a></li>
             <li><a href="#brewnotes">Brewnotes</a></li>
          </ul>
          <li><a href="#ingredtorecipe">Adding Ingredients to Recipes</a></li>
@@ -210,6 +211,14 @@
          <li><a href="#unitsandscale">Contrulling Units and Scale</a></li>
          <li><a href="#caveats">Caveats with Auto-conversion</a></li>
          <li><a href="#supportunits">Units and Abbreviations</a></li>
+      </ul>
+      <li><a href="#newin21">New In Brewtarget v2.1</a></li>
+      <ul>
+         <li><a href="#strikewater">Strike water toolbox</a></li>
+         <li><a href="#sliders">Sliders</a></li>
+         <li><a href="#folders">Folders</a></li>
+         <li><a href="#tooltips">Tooltips</a></li>
+         <li><a href="#droptarget">Better drag and drop</a></li>
       </ul>
       <li><a href="#newin2">New In Brewtarget v2</a></li>
       <ul>
@@ -607,10 +616,10 @@ discard your work.
 
 <a id="generalconcepts"><h1>General Concepts</h1></a>
 <p>
-Brewtarget v2.0 uses an SQLite database of recipes, ingredients, etc.
+Brewtarget v2.x uses an SQLite database of recipes, ingredients, etc.
 If brewtarget should crash unexpectedly, you will be prompted to either
-restore the changes made last session or rollback the database to discard
-the changes in the last session.
+restore the changes made during the last session or rollback the database to
+discard the changes in the last session.
 </p>
 
 <a id="trees"><h2>Trees</h2></a>
@@ -639,11 +648,12 @@ There are 6 tabs:
 </ul>
 
 <p>
-You can right-click almost anywhere on a tree and get a menu of options.
-Depending on where you click, the menus will change a bit. If you right-click
-on a recipe, the first option will be "new recipe". If you right-click on a
-fermentable, the first option will be "new fermentable". Otherwise, the
-available options will be the same.
+You can right-click almost anywhere on a tree and get a menu of options. The
+menu has been significantly simplified in v2.1. The new menu now allows you to
+only create a new item or a folder. The item you can create depends on the
+tree you clicked in. If you right-clicked in the miscellaneous tree, for
+example, you can create a miscellaneous item. Other than that, the menus are
+identical for each tree.
 </p>
 <p>
 You can select multiple items, right-click and then perform an action on the
@@ -651,7 +661,35 @@ entire selected list. The only exception is the &quot;Export&quot; function.
 Limitations in the BeerXML format makes it very difficult to export both recipes
 and anything else at the same time.
 </p>
-
+<p>
+When dragging and dropping an item onto the main window, you must be specific
+with your target. To support folders in v2.1, we had to make brewtarget more
+selective in which drops are allowed on a given bit of the screen. You can
+drop recipes, styles and equipment profiles on the recipe pane; you can only
+drop fermentables, hops, miscellaneous and yeast on the ingredients pane.
+</p>
+<p>
+There is one exception to that rule.
+</p>
+<a id="subtree"><h3>Folders</h3></a>
+We are pleased to announce that brewtarget now supports subtrees and folders
+in the trees. You can nest them arbitrarily deep. You can move folders around
+and their content will move with them. There are a few rules.
+<ol>
+   <li> We develop mostly on linux, so our folder separator is /. You can
+   create an entire tree if you want, like /IPA/BYO/2012/Sept, in one go but
+   you must use forward slashes (/) and not backslashes (\).
+   <li> We cheated in the implementation. Empty folders, or folders that
+   contain only more empty folders, will not be shown after a restart of
+   brewtarget. There are a lot of reasons for this, and we may find a way to
+   fix it later. But for now, if you want a folder to be preserved, make sure
+   you put at least one item in the bottom most folder.
+   <li> Deleting a folder deletes its contents too. You will only get prompted
+   to delete the folder, not each item in the folder.
+   <li> Be careful when dropping a folder. There is a space between items that
+   is not a valid drop target. Nothing will happen if you drop it there, which
+   will likely be somewhat frustrating.
+</ol>
 <a id="brewnotes"><h2>BrewNotes</h2></a>
 <p>
 If you right-click a recipe, you can select an action called &quot;Brew
@@ -770,12 +808,18 @@ order.
 <ol>
    <li> Open the appropriate tree in the left pane. </li>
    <li> Click on the item you wish to add </li>
-   <li> Drag it anywhere in the main part of the window </li>
+   <li> Drag it to the ingredients pane on the main window
    <li> And drop </li>
    <li> The tabs will change if required. E.g., if you drop a hop onto the
    &quot;Fermentables&quot; tab, the focus will change to the &quot;Hops&quot;
    tab. </li>
 </ol>
+We changed the behavior slightly in v2.1. Prior to this release, you could
+pretty much drop anything anywhere and it would do something. You now have to
+specifically target the drop zone. You can only drop recipes, styles and
+equipment profiles on the main recipe pane; you can only drop fermentables,
+hops, miscellaneous and yeast on the ingredients pane. Attempting to drop them
+anywhere else won't work.
 <a id="importingrecipes"><h2>Importing Recipes</h2></a>
 <p>
 You can import other BeerXML recipes (such as, from Beersmith) by using File-&gt;Import Recipes.
@@ -1055,7 +1099,40 @@ fields.
    </tr>
 </table>
 
-   <a id="newin2"><h1>New in this release</h1></a>
+   <a id="newin21"><h1>New in this release</h1></a>
+   <p>
+   Brewtarget 2.1 mostly focuses on updates to the interface. 
+   </p>
+
+   <a id="strikewater"><h2>Strike water toolbox</h2></a>
+   <p>
+   Maxime Lavigne added a new tool to caclulate strike water temperatures
+   outside of the usual mash designer. You can access this from the Tools
+   menu.
+   </p>
+
+   <a id="folders"><h2>Folders</h2></a>
+   <p>
+   You can now create folders to store your recipes, or equipment or
+   fermentables or .... Right click on any tree, select New-&gt;Folder and
+   give it a name. You can then drag recipes (or hops, grains, etc.) into the
+   folder.
+   </p>
+
+   <a id="droptarget"><h2>Drop targets</h2></a>
+   <p>
+   Prior to v2.1, you could drop a recipe anywhere on the screen and it would
+   load that recipe. You must now drag the recipe onto the recipe portion of
+   the main screen.
+   </p>
+
+   <a id="tooltips"><h2>Tool tips</h2></a>
+   <p>
+   You can now hover over any item in a tree (like a recipe, or a fermentable)
+   and a tool tip will be shown giving the basic information about that item.
+   </p>
+
+   <a id="newin2"><h1>New in v2.0</h1></a>
    Brewtarget v2.0 has been long in the making, mostly because we have done a
    massive reworking of the internals. 
    <a id="newdatabase"><h2>SQLite DB</h2></a>
