@@ -58,6 +58,8 @@ public:
    Q_PROPERTY( double alpha_pct READ alpha_pct WRITE setAlpha_pct /*NOTIFY changed*/ /*changedAlpha_pct*/ )
    //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg READ amount_kg WRITE setAmount_kg /*NOTIFY changed*/ /*changedAmount_kg*/ )
+   //! \brief The amount in inventory in kg.
+   Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The \c Use.
    Q_PROPERTY( Use use READ use WRITE setUse /*NOTIFY changed*/ /*changedUse*/ )
    //! \brief The time in minutes that the hop is used.
@@ -88,6 +90,7 @@ public:
    const QString name() const;
    double alpha_pct() const;
    double amount_kg() const;
+   double inventory() const;
    Use use() const;
    const QString useString() const;
    //! \brief A translated use string.
@@ -115,6 +118,7 @@ public:
    void setName( const QString& str );
    void setAlpha_pct( double num );
    void setAmount_kg( double num );
+   void setInventoryAmount( double num );
    void setUse( Use u );
    void setTime_min( double num );
    

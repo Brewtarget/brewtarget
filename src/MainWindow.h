@@ -219,6 +219,9 @@ public slots:
    void newBrewNote();
    //! \brief copies an existing brewnote to a new brewday
    void reBrewNote();
+   void brewItHelper();
+   void brewAgainHelper();
+   void reduceInventory();
    void changeBrewDate();
    void fixBrewNote();
 

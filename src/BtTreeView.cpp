@@ -334,10 +334,10 @@ void BtTreeView::setupContextMenu(QWidget* top, QWidget* editor)
       case BtTreeModel::RECIPEMASK:
          _newMenu->addAction(tr("Recipe"), editor, SLOT(newRecipe()));
 
-         _contextMenu->addAction(tr("Brew It!"), top, SLOT(newBrewNote()));
+         _contextMenu->addAction(tr("Brew It!"), top, SLOT(brewItHelper()));
          _contextMenu->addSeparator();
 
-         subMenu->addAction(tr("Brew Again"), top, SLOT(reBrewNote()));
+         subMenu->addAction(tr("Brew Again"), top, SLOT(brewAgainHelper()));
          subMenu->addAction(tr("Change date"), top, SLOT(changeBrewDate()));
          subMenu->addAction(tr("Recalculate eff"), top, SLOT(fixBrewNote()));
          subMenu->addAction(tr("Delete"), top, SLOT(deleteSelected()));

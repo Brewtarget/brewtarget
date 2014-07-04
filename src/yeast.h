@@ -66,6 +66,8 @@ public:
    Q_PROPERTY( QString formStringTr READ formStringTr )
    //! \brief The amount in either liters or kg depending on \c amountIsWeight().
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
+   //! \brief The amount in inventory in either liters or kg depending on \c amountIsWeight().
+   Q_PROPERTY( double inventory READ inventory WRITE setInventoryQuanta /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief Whether the \c amount() is weight (kg) or volume (liters).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief The lab from which it came.
@@ -100,6 +102,7 @@ public:
    void setType( Type t );
    void setForm( Form f );
    void setAmount( double var );
+   void setInventoryQuanta( int var );
    void setAmountIsWeight( bool var );
    void setLaboratory( const QString& var );
    void setProductID( const QString& var );
@@ -122,6 +125,7 @@ public:
    const QString formString() const;
    const QString formStringTr() const;
    double amount() const;
+   int inventory() const;
    bool amountIsWeight() const;
    QString laboratory() const;
    QString productID() const;

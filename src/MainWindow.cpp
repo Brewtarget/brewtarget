@@ -1462,6 +1462,73 @@ void MainWindow::setTreeSelection(QModelIndex item)
    active->scrollTo(item,QAbstractItemView::PositionAtCenter);
    
 }
+// reduces the inventory by the selected recipes 
+void MainWindow::reduceInventory(){
+	
+	QModelIndexList indexes = treeView_recipe->selectionModel()->selectedRows();
+   	QModelIndex bIndex;
+
+   	foreach(QModelIndex selected, indexes)
+   	{
+      	Recipe*   rec   = treeView_recipe->recipe(selected);
+			if( rec == 0 ){
+         	//try the parent recipe
+				rec = treeView_recipe->recipe(treeView_recipe->parent(selected));
+				if( rec == 0 ){
+					continue;
+				}
+			}
+
+      	// Make sure everything is properly set and selected
+      	if( rec != recipeObs )
+         	setRecipe(rec);	
+
+		int i = 0;
+		//reduce fermentables
+		QList<Fermentable*> flist = rec->fermentables();
+		if(flist.size() > 0){
+			for( i = 0; static_cast<int>(i) < flist.size(); ++i )
+			{
+				double newVal=flist[i]->inventory() - flist[i]->amount_kg();	
+				newVal = (newVal < 0) ? 0 : newVal;
+				flist[i]->setInventoryAmount(newVal); 
+			}
+		}
+		
+		//reduce misc
+		QList<Misc*> mlist = rec->miscs();
+		if(mlist.size() > 0){
+			for( i = 0; static_cast<int>(i) < mlist.size(); ++i )
+			{
+				double newVal=mlist[i]->inventory() - mlist[i]->amount();	
+				newVal = (newVal < 0) ? 0 : newVal;
+				mlist[i]->setInventoryAmount(newVal);
+			}  
+		}
+		//reduce hops
+		QList<Hop*> hlist = rec->hops();	
+		if(hlist.size() > 0){
+			for( i = 0; static_cast<int>(i) < hlist.size(); ++i )
+			{
+				double newVal = hlist[i]->inventory() - hlist[i]->amount_kg();		
+				newVal = (newVal < 0) ? 0 : newVal;
+				hlist[i]->setInventoryAmount(newVal);
+			}  
+		}
+		//reduce yeast
+		QList<Yeast*> ylist = rec->yeasts();	
+		if(ylist.size() > 0){
+			for( i = 0; static_cast<int>(i) < ylist.size(); ++i )
+			{
+				//Yeast inventory is done by quanta not amount
+				int newVal = ylist[i]->inventory() - 1;	
+				newVal = (newVal < 0) ? 0 : newVal;	
+				ylist[i]->setInventoryQuanta(newVal);
+			} 
+		}
+	}
+	
+}
 
 // Need to make sure the recipe tree is active, I think
 void MainWindow::newBrewNote()
@@ -1514,6 +1581,16 @@ void MainWindow::reBrewNote()
 
       setTreeSelection(treeView_recipe->findElement(bNote));
    }
+}
+
+void MainWindow::brewItHelper(){
+	newBrewNote();
+	reduceInventory();
+}
+
+void MainWindow::brewAgainHelper(){
+	reBrewNote();
+	reduceInventory();
 }
 
 void MainWindow::backup()

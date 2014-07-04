@@ -151,6 +151,11 @@ protected:
     */
    QVariant get( const char* col_name ) const;
    
+   void setInventory( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
+   QVariant getInventory( const char* col_name ) const;
+   
+   
+   
 private:
    /*!
     * \param valid - Indicates if the beerXML element was valid. There is a problem with importing invalid

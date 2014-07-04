@@ -65,6 +65,7 @@ void HopEditor::save()
    h->setName(lineEdit_name->text());
    h->setAlpha_pct(lineEdit_alpha->text().toDouble());
    h->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
+   h->setInventoryAmount(Brewtarget::weightQStringToSI(lineEdit_inventory->text()));
    h->setUse(static_cast<Hop::Use>(comboBox_use->currentIndex()));
    h->setTime_min(Brewtarget::timeQStringToSI(lineEdit_time->text()));
    h->setType(static_cast<Hop::Type>(comboBox_type->currentIndex()));
@@ -126,6 +127,11 @@ void HopEditor::showChanges(QMetaProperty* prop)
    }
    if( propName == "amount_kg" || updateAll ) {
       lineEdit_amount->setText(Brewtarget::displayAmount(obsHop->amount_kg(), Units::kilograms));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "inventory" || updateAll ) {
+      lineEdit_inventory->setText(Brewtarget::displayAmount(obsHop->inventory(), Units::kilograms));
       if( ! updateAll )
          return;
    }

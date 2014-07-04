@@ -58,6 +58,8 @@ public:
    Q_PROPERTY( QString typeStringTr          READ typeStringTr           /*WRITE*/                       /*NOTIFY changed*/ /*changedTypeStringTr*/           STORED false )
    //! \brief The amount in kg.
    Q_PROPERTY( double amount_kg              READ amount_kg              WRITE setAmount_kg              /*NOTIFY changed*/ /*changedAmount_kg*/ )
+   //! \brief The amount in inventory in kg.
+   Q_PROPERTY( double inventory              READ inventory              WRITE setInventoryAmount              /*NOTIFY changed*/ /*changedInventory*/ )
    //! \brief The yield (when finely milled) as a percentage of equivalent glucose.
    Q_PROPERTY( double yield_pct              READ yield_pct              WRITE setYield_pct              /*NOTIFY changed*/ /*changedYield_pct*/ )
    //! \brief The color in SRM.
@@ -99,6 +101,7 @@ public:
    //! Returns a translated type string.
    const QString typeStringTr() const;
    double amount_kg() const;
+   double inventory() const;
    double yield_pct() const;
    double color_srm() const;
    bool addAfterBoil() const;
@@ -124,6 +127,7 @@ public:
    void setName( const QString& str );
    void setType( Type t );
    void setAmount_kg( double num );
+   void setInventoryAmount( double num );
    void setYield_pct( double num );
    void setColor_srm( double num );
    
@@ -153,6 +157,7 @@ signals:
    void changedTypeString( QString newTypeString );
    void changedTypeStringTr( QString newTypeStringTr );
    void changedAmount_kg( double newAmount_kg );
+   void changedInventory( double newInventory );
    void changedYield_pct( double newYield_pct );
    void changedColor_srm( double newColor_srm );
    void changedAddAfterBoil( bool newAddAfterBoil );

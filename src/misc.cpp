@@ -40,6 +40,7 @@ QHash<QString,QString> Misc::tagToPropHash()
    propHash["TIME"] = "time";
    propHash["AMOUNT"] = "amount";
    propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
+   propHash["INVENTORY"] = "inventory";
    propHash["USE_FOR"] = "useFor";
    propHash["NOTES"] = "notes";
    return propHash;
@@ -96,6 +97,11 @@ double Misc::amount() const
    return get("amount").toDouble();
 }
 
+double Misc::inventory() const
+{
+   return getInventory("amount").toDouble();
+}
+
 double Misc::time() const
 {
    return get("time").toDouble();
@@ -139,6 +145,14 @@ void Misc::setAmount( double var )
       Brewtarget::logW( QString("Misc: amount < 0: %1").arg(var) );
    else
       set( "amount", "amount", var );
+}
+
+void Misc::setInventoryAmount( double var )
+{
+   if( var < 0.0 )
+      Brewtarget::logW( QString("Misc: inventory < 0: %1").arg(var) );
+   else
+      setInventory("inventory", "amount", var );
 }
 
 void Misc::setTime( double var )

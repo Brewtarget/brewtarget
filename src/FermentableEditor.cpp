@@ -65,6 +65,7 @@ void FermentableEditor::save()
    // order as the combobox.
    obsFerm->setType( static_cast<Fermentable::Type>(comboBox_type->currentIndex()) );
    obsFerm->setAmount_kg(Brewtarget::weightQStringToSI(lineEdit_amount->text()));
+   obsFerm->setInventoryAmount(Brewtarget::weightQStringToSI(lineEdit_inventory->text()));
    obsFerm->setYield_pct(lineEdit_yield->text().toDouble());
    obsFerm->setColor_srm(Brewtarget::colorQStringToSI(lineEdit_color->text()));
    obsFerm->setAddAfterBoil( (checkBox_addAfterBoil->checkState() == Qt::Checked)? true : false );
@@ -133,6 +134,11 @@ void FermentableEditor::showChanges(QMetaProperty* metaProp)
    }
    if( propName == "amount_kg" || updateAll) {
       lineEdit_amount->setText(Brewtarget::displayAmount(obsFerm->amount_kg(), Units::kilograms));
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "inventory" || updateAll) {
+      lineEdit_inventory->setText(Brewtarget::displayAmount(obsFerm->inventory(), Units::kilograms));
       if( ! updateAll )
          return;
    }
