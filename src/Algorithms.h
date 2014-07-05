@@ -48,6 +48,7 @@ public:
    {
    }
    
+   //! \brief Constructs the 0 polynomial with given \c order
    Polynomial( size_t order ) :
       _coeffs(order+1, 0.0)
    {
@@ -148,7 +149,9 @@ class Algorithms
 {
 public:
 
-   //! Cross-platform compatible NaN checker.
+   //===========================Generic stuff==================================
+   
+   //! \brief Cross-platform NaN checker.
    static bool isNan(double d)
    {
       // If using IEEE floating points, all comparisons with a NaN
@@ -157,7 +160,7 @@ public:
       return (d != d);
    }
    
-   //! Cross-platform compatible Inf checker.
+   //! \brief Cross-platform Inf checker.
    template<typename T> static bool isInf(T var)
    {
       return
@@ -168,28 +171,8 @@ public:
       );
    }
    
-   //! Cross-platform rounding.
+   //! \brief Cross-platform rounding.
    static double round(double d);
-
-   /**
-    * A duplicate-removing function for SORTED lists.
-    * equals(T,T) is a function that should return true iff the
-    * two arguments are considered equal in the same sense that
-    * the list is sorted in.
-    * Why isn't this already a member of QList?
-    */
-   template<class T> static void unDup( QList<T>& list, bool (*equals)(T,T) )
-   {
-      int i = 0;
-
-      while( i < list.size() - 1 )
-      {
-         if( equals(list.at(i), list.at(i+1)) )
-            list.removeAt(i+1); // Removes the next item.
-         else
-            i++; // If the adjacent items are unequal, we can advance.
-      }
-   }
 
    //===================Beer-related stuff=====================
    
@@ -231,8 +214,13 @@ public:
    }
    
    /*!
-    * Estimates plato from kg of dissolved sucrose (sugar_kg) and
-    * the total wort volume wort_l.
+    * \brief Given dissolved sugar and wort volume, get SG in Plato
+    * 
+    * Estimates Plato from kg of dissolved sucrose (\c sugar_kg) and
+    * the total wort volume \c wort_l.
+    * 
+    * \param sugar_kg kilograms of dissolved sucrose or equivalent
+    * \param wort_l liters of wort
     */
    static double getPlato( double sugar_kg, double wort_l );
    //! \brief Converts FG to plato, given the OG.
@@ -258,14 +246,16 @@ private:
    // 1.80544064e-8*x^3 - 6.268385468e-6*x^2 + 3.113930471e-5*x + 0.999924134
    static Polynomial waterDensityPoly_C;
    
+   // Polynomial in degrees Celsius that gives the additive hydrometer
+   // correction for a 15C hydrometer when read at a temperature other
+   // than 15C.
    static Polynomial hydroCorrection15CPoly;
 
-   Algorithms();                         // ctor hidden
-   Algorithms(Algorithms const&);             // copy ctor hidden
-   Algorithms& operator=(Algorithms const&);    // assign op. hidden
-   // dtor must be defined in header or linking explodes on undefined reference to ~Algorithms()
-   ~Algorithms(){}                        // dtor hidden
+   // Hide constructors and assignment op.
+   Algorithms(){}
+   Algorithms(Algorithms const&){}
+   Algorithms& operator=(Algorithms const& other){ return *this; }
+   ~Algorithms(){}
 };
-
 
 #endif /* ALGORITHMS_H_ */

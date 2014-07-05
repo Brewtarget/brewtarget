@@ -31,11 +31,6 @@ Polynomial Algorithms::hydroCorrection15CPoly(
    Polynomial() << -0.911045 << -16.2853e-3 << 5.84346e-3 << -15.3243e-6
 );
 
-// Called when Instance() is called, should only initialize once.
-Algorithms::Algorithms()
-{
-}
-
 double Algorithms::round(double d)
 {
    return floor(d+0.5);
