@@ -594,7 +594,7 @@ QString Brewtarget::displayAmount( double amount, Unit* units, int precision, un
    UnitSystem* temp;
 
    // Check for insane values.
-   if( Algorithms::Instance().isNan(amount) || Algorithms::Instance().isInf(amount) )
+   if( Algorithms::isNan(amount) || Algorithms::isInf(amount) )
       return "-";
    
    // Special case.
@@ -1194,7 +1194,7 @@ QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnit
 {
    QString ret;
 
-   if( Algorithms::Instance().isNan(og) || Algorithms::Instance().isInf(og) )
+   if( Algorithms::isNan(og) || Algorithms::isInf(og) )
       return "-";
    
    // Field settings override defaults
@@ -1210,7 +1210,7 @@ QString Brewtarget::displayOG( double og, unitDisplay displayUnit, bool showUnit
    else // Using Plato...
    {
       if( og >= 1.000 ) // Make sure OG is sane.
-         ret = tmp.arg(Algorithms::Instance().SG_20C20C_toPlato(og), 0, 'f', 1);
+         ret = tmp.arg(Algorithms::SG_20C20C_toPlato(og), 0, 'f', 1);
       else
          ret = tmp.arg(0);
    }
@@ -1240,8 +1240,8 @@ QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bo
 {
    QString ret = "%L1";
 
-   if( Algorithms::Instance().isNan(fg) || Algorithms::Instance().isInf(fg) ||
-       Algorithms::Instance().isNan(og) || Algorithms::Instance().isInf(og)
+   if( Algorithms::isNan(fg) || Algorithms::isInf(fg) ||
+       Algorithms::isNan(og) || Algorithms::isInf(og)
    )
       return "-";
    
@@ -1262,10 +1262,10 @@ QString Brewtarget::displayFG( double fg, double og, unitDisplay displayUnit, bo
       {
          // The following shows Plato as it would be on a
          // hydrometer.
-         //plato = Algorithms::Instance().ogFgToPlato( og, fg );
+         //plato = Algorithms::ogFgToPlato( og, fg );
 
          // The following shows ACTUAL Plato
-         plato = Algorithms::Instance().SG_20C20C_toPlato(fg);
+         plato = Algorithms::SG_20C20C_toPlato(fg);
       }
       ret = ret.arg( plato, 0, 'f', 1 );
    }

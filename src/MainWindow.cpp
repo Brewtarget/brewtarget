@@ -191,7 +191,7 @@ MainWindow::MainWindow(QWidget* parent)
       for( int i=0; i <= srmMax; ++i )
       {
          double srm = i;
-         grad.setColorAt( srm/static_cast<double>(srmMax), Algorithms::Instance().srmToColor(srm));
+         grad.setColorAt( srm/static_cast<double>(srmMax), Algorithms::srmToColor(srm));
       }
       styleRangeWidget_srm->setBackgroundBrush(grad);
 
