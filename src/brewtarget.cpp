@@ -1155,7 +1155,11 @@ QPair<double,double> Brewtarget::displayRange(BeerXMLElement* element, QObject *
    QString minName = QString("%1%2").arg(attribute).arg("Min");
    QString maxName = QString("%1%2").arg(attribute).arg("Max");
 
-   if ( _type == GRAVITY )
+   if ( ! element ) {
+      range.first  = 0.0;
+      range.second = 100.0;
+   }
+   else if ( _type == GRAVITY )
    {
       range.first  = displayOG(element, object, minName, false).toDouble();
       range.second = displayOG(element, object, maxName, false).toDouble();
@@ -1225,6 +1229,9 @@ QString Brewtarget::displayOG( BeerXMLElement* element, QObject* object, QString
 {
    double og;
    unitDisplay displayUnit;
+
+   if ( ! element )
+      return "0.0";
 
    if ( element->property(attribute.toLatin1().constData()).canConvert(QVariant::Double) )
    {
