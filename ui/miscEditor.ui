@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>445</width>
+    <width>504</width>
     <height>215</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Misc Editor</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>442</width>
+     <width>501</width>
      <height>211</height>
     </rect>
    </property>
@@ -244,7 +244,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Amount</string>
+           <string>Default Amount</string>
           </property>
          </widget>
         </item>
@@ -316,7 +316,7 @@
         <item>
          <widget class="QLabel" name="label_inventory">
           <property name="text">
-           <string>Inventory</string>
+           <string>Amount in Inventory</string>
           </property>
          </widget>
         </item>

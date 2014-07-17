@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Fermentable Editor</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>244</x>
@@ -275,7 +275,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -381,7 +381,7 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Amount</string>
+            <string>Default Amount</string>
            </property>
           </widget>
          </item>
@@ -523,7 +523,7 @@
       <item>
        <widget class="QLabel" name="label_inventory">
         <property name="text">
-         <string>Inventory</string>
+         <string>Amount in Inventory</string>
         </property>
        </widget>
       </item>

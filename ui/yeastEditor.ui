@@ -168,7 +168,7 @@
            <item>
             <widget class="QLabel" name="label_4">
              <property name="text">
-              <string>Amount</string>
+              <string>Default Amount</string>
              </property>
             </widget>
            </item>
@@ -253,7 +253,7 @@
         <item>
          <widget class="QLabel" name="label_inventory">
           <property name="text">
-           <string>Inventory</string>
+           <string>Quanta in Inventory</string>
           </property>
          </widget>
         </item>
