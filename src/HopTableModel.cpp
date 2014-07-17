@@ -505,6 +505,9 @@ QString HopTableModel::generateName(int column) const
 
    switch(column)
    {
+      case HOPINVENTORYCOL:
+         attribute = "amount_kg";
+         break;
       case HOPAMOUNTCOL:
          attribute = "amount_kg";
          break;

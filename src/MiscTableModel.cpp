@@ -473,6 +473,9 @@ QString MiscTableModel::generateName(int column) const
 
    switch(column)
    {
+      case MISCINVENTORYCOL:
+         attribute = "amount";
+         break;
       case MISCAMOUNTCOL:
          attribute = "amount";
          break;

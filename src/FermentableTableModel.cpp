@@ -542,6 +542,9 @@ QString FermentableTableModel::generateName(int column) const
 
    switch(column)
    {
+      case FERMINVENTORYCOL:
+         attribute = "amount_kg";
+         break;
       case FERMAMOUNTCOL:
          attribute = "amount_kg";
          break;

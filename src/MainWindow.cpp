@@ -2349,6 +2349,9 @@ void MainWindow::fermentableContextMenu(const QPoint &point)
 
    switch(selected)
    {
+      case FERMINVENTORYCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
+         break;
       case FERMAMOUNTCOL:
          menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
          break;
@@ -2392,6 +2395,9 @@ void MainWindow::hopContextMenu(const QPoint &point)
 
    switch(selected)
    {
+      case HOPINVENTORYCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
+         break;
       case HOPAMOUNTCOL:
          menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
          break;
@@ -2476,6 +2482,9 @@ void MainWindow::miscContextMenu(const QPoint &point)
 
    switch(selected)
    {
+      case MISCINVENTORYCOL:
+         menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale); 
+         break;
       case MISCAMOUNTCOL:
          menu = Brewtarget::setupMassMenu(this,currentUnit, currentScale, false); 
          break;
