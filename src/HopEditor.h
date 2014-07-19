@@ -49,6 +49,7 @@ public slots:
    void save();
    //! Clear the dialog and close it.
    void clearAndClose();
+   void updateField();
    void changed(QMetaProperty,QVariant);
 
 private:

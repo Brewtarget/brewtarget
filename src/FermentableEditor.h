@@ -47,6 +47,7 @@ public:
 public slots:
    void save();
    void clearAndClose();
+   void updateField();
    void changed(QMetaProperty,QVariant);
 
 private:

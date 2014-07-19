@@ -31,6 +31,13 @@ FermentableEditor::FermentableEditor( QWidget* parent )
 
    connect( this, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( this, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+   connect( lineEdit_amount, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_yield,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_color,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_coarseFineDiff,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_moisture,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_protein,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_maxInBatch,  SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void FermentableEditor::setFermentable( Fermentable* f )
@@ -97,6 +104,31 @@ void FermentableEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() == obsFerm )
       showChanges(&prop);
+}
+
+void FermentableEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+  
+   if ( field == lineEdit_amount )
+   {
+      val = Brewtarget::weightQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::kilograms));
+   }
+   else if ( field == lineEdit_color ) 
+   {
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayColor(val, noUnit, false));
+   }
+   else 
+   {
+      //Everything else is a %, so just format nicely
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayAmount(val));
+   }
 }
 
 void FermentableEditor::showChanges(QMetaProperty* metaProp)

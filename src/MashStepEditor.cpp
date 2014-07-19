@@ -31,6 +31,14 @@ MashStepEditor::MashStepEditor(QWidget* parent)
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT(saveAndClose()) );
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT(close()) );
    connect( comboBox_type, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(grayOutStuff(const QString &)) );
+
+   connect( lineEdit_stepTemp,        SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_infuseTemp,      SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_endTemp,         SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_infuseAmount,    SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_decoctionAmount, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_stepTime,        SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_rampTime,        SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void MashStepEditor::showChanges(QMetaProperty* metaProp)
@@ -146,6 +154,32 @@ void MashStepEditor::saveAndClose()
    //obs->forceNotify();
 
    setVisible(false);
+}
+
+void MashStepEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+ 
+   if ( field == lineEdit_infuseAmount || field == lineEdit_decoctionAmount )
+   {
+      val = Brewtarget::volQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::liters));
+   }
+   else if ( field == lineEdit_stepTime || field == lineEdit_rampTime ) 
+   {
+      val = Brewtarget::timeQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::minutes));
+   }
+   else 
+   {
+      //Everything else is a temp
+      val = Brewtarget::tempQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount(val, Units::celsius));
+   }
+
 }
 
 void MashStepEditor::grayOutStuff(const QString& text)

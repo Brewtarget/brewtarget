@@ -61,6 +61,8 @@ MashDesigner::MashDesigner(QWidget* parent) : QDialog(parent)
 
    connect( checkBox_batchSparge, SIGNAL(clicked()), this, SLOT(updateMaxAmt()) );
    connect( pushButton_finish, SIGNAL(clicked()), this, SLOT(saveAndClose()) );
+
+   connect( lineEdit_time, SIGNAL(editingFinished()), this, SLOT( updateField()));
 }
 
 void MashDesigner::proceed()
@@ -487,6 +489,8 @@ void MashDesigner::saveTargetTemp()
 {
    double temp = Brewtarget::tempQStringToSI(lineEdit_temp->text());
 
+   // be nice and reset the field so it displays in proper units
+   lineEdit_temp->setText( Brewtarget::displayAmount(temp, Units::celsius));
    if( mashStep != 0 )
       mashStep->setStepTemp_c(temp);
 
@@ -578,3 +582,20 @@ void MashDesigner::typeChanged(int t)
       horizontalSlider_temp->setEnabled(false);
    }
 }
+
+void MashDesigner::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+
+   // Only the time gets abused, but I'm being consistent  
+   if ( field == lineEdit_time ) 
+   {
+      val = Brewtarget::timeQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::minutes));
+   }
+
+}
+

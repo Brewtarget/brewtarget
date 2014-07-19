@@ -237,6 +237,8 @@ public:
    static double timeQStringToSI( QString qstr );
    //! \return SI amount for color string.
    static double colorQStringToSI(QString qstr);
+   //! \return SI (sort of?) amount for density string.
+   static double densityQStringToSI(QString qstr);
 
    //! \brief return the bitterness formula's name
    static QString ibuFormulaName();

@@ -1109,6 +1109,37 @@ double Brewtarget::timeQStringToSI(QString qstr)
    return timeSystem->qstringToSI(qstr);
 }
 
+// This won't be clean like the others because we don't do density as a unit.
+// I suppose I should, but the Unit system gives me a wicked nasty headache
+double Brewtarget::densityQStringToSI(QString qstr)
+{   
+   double var;
+   QString unit;
+   QRegExp numUnit;
+
+   // Try to make some guesses about what is there.
+   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
+   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+
+   numUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
+   numUnit.setCaseSensitivity(Qt::CaseInsensitive);
+
+   if ( qstr.contains(numUnit) )
+   {
+      var  = numUnit.capturedTexts()[1].toDouble();
+      unit = numUnit.capturedTexts()[2];
+   }
+   else 
+      var = qstr.toDouble();
+
+
+   if ( unit.contains("p", Qt::CaseInsensitive) || var > 1.2)
+      return Algorithms::PlatoToSG_20C20C(var);
+
+   return var;
+ 
+}
+
 QString Brewtarget::ibuFormulaName()
 {
    switch ( ibuFormula )

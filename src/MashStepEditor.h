@@ -55,6 +55,7 @@ public slots:
    void grayOutStuff(const QString& text);
    void changed(QMetaProperty, QVariant);
 
+   void updateField();
 private:
    /*! Updates the UI elements effected by the \b metaProp of
     *  the step we are watching. If \b metaProp is null,

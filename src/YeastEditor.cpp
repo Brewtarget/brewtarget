@@ -30,6 +30,11 @@ YeastEditor::YeastEditor( QWidget* parent )
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+
+   connect( lineEdit_amount, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_minTemperature, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_maxTemperature, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_attenuation, SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void YeastEditor::setYeast( Yeast* y )
@@ -96,6 +101,42 @@ void YeastEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() == obsYeast )
       showChanges(&prop);
+}
+
+void YeastEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+  
+   if ( field == lineEdit_amount )
+   {
+      // this is a bit harder, since we have to do something different based
+      // on teh "Amount is weight" box
+      if ( checkBox_amountIsWeight->checkState() == Qt::Checked ) 
+      {
+         val = Brewtarget::weightQStringToSI(field->text());
+         field->setText(Brewtarget::displayAmount( val, Units::kilograms));
+      }
+      else 
+      {
+         val = Brewtarget::volQStringToSI(field->text());
+         field->setText(Brewtarget::displayAmount( val, Units::liters));
+      }
+   }
+   else if ( field == lineEdit_minTemperature ||  field == lineEdit_maxTemperature )
+   {
+      val = Brewtarget::tempQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::celsius));
+   }
+   else 
+   {
+      //Everything else is a %, so just format nicely
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayAmount(val));
+   }
+
 }
 
 void YeastEditor::showChanges(QMetaProperty* metaProp)

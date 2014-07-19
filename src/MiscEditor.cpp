@@ -32,6 +32,9 @@ MiscEditor::MiscEditor( QWidget* parent )
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+
+   connect( lineEdit_time, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_amount, SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void MiscEditor::setMisc( Misc* m )
@@ -89,6 +92,36 @@ void MiscEditor::changed(QMetaProperty prop, QVariant /*val*/)
 {
    if( sender() == obsMisc ) 
       showChanges(&prop);
+}
+
+void MiscEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+  
+   if ( field == lineEdit_amount )
+   {
+      // this is a bit harder, since we have to do something different based
+      // on teh "Amount is weight" box
+      if ( checkBox_isWeight->checkState() == Qt::Checked ) 
+      {
+         val = Brewtarget::weightQStringToSI(field->text());
+         field->setText(Brewtarget::displayAmount( val, Units::kilograms));
+      }
+      else 
+      {
+         val = Brewtarget::volQStringToSI(field->text());
+         field->setText(Brewtarget::displayAmount( val, Units::liters));
+      }
+   }
+   else if ( field == lineEdit_time ) 
+   {
+      val = Brewtarget::timeQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::minutes));
+   }
+
 }
 
 void MiscEditor::showChanges(QMetaProperty* metaProp)

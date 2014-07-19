@@ -52,6 +52,9 @@ public slots:
    //! Set the mash we wish to view/edit.
    void setMash(Mash* mash);
    void setEquipment(Equipment* e);
+
+   //! reformat the display as required
+   void updateField();
    
    void changed(QMetaProperty,QVariant);
 private:

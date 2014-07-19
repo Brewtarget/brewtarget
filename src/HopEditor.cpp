@@ -32,6 +32,14 @@ HopEditor::HopEditor( QWidget* parent )
    
    connect( buttonBox, SIGNAL( accepted() ), this, SLOT( save() ));
    connect( buttonBox, SIGNAL( rejected() ), this, SLOT( clearAndClose() ));
+   connect( lineEdit_amount, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_alpha, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_time, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_beta, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_humulene, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_caryophyllene, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_cohumulone, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_myrcene, SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void HopEditor::setHop( Hop* h )
@@ -91,6 +99,32 @@ void HopEditor::clearAndClose()
 {
    setHop(0);
    setVisible(false); // Hide the window.
+}
+
+void HopEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+  
+   if ( field == lineEdit_amount )
+   {
+      val = Brewtarget::weightQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::kilograms));
+   }
+   else if ( field == lineEdit_time ) 
+   {
+      val = Brewtarget::timeQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::minutes));
+   }
+   else 
+   {
+      //Everything else is a %, so just format nicely
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayAmount(val));
+   }
+
 }
 
 void HopEditor::changed(QMetaProperty prop, QVariant /*val*/)

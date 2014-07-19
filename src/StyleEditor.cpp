@@ -54,6 +54,20 @@ StyleEditor::StyleEditor(QWidget* parent, bool singleStyleEditor)
    connect( styleComboBox, SIGNAL(activated( const QString& )), this, SLOT( styleSelected(const QString&) ) );
 
    setStyle( styleListModel->at(styleComboBox->currentIndex()));
+
+   connect( lineEdit_ogMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_fgMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_ibuMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_colorMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_carbMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_abvMin, SIGNAL(editingFinished()), this, SLOT(updateField()));
+
+   connect( lineEdit_ogMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_fgMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_ibuMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_colorMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_carbMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_abvMax, SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void StyleEditor::setStyle( Style* s )
@@ -168,6 +182,33 @@ void StyleEditor::clear()
    textEdit_ingredients->setText(QString(""));
    textEdit_examples->setText(QString(""));
    textEdit_notes->setText(QString(""));
+}
+
+void StyleEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+
+   if ( field == lineEdit_ogMin || field == lineEdit_fgMin ||
+        field == lineEdit_ogMax || field == lineEdit_fgMax  )
+   {
+      val = Brewtarget::densityQStringToSI(field->text());
+      field->setText(Brewtarget::displayOG( val, noUnit, true));
+   }
+   else if ( field == lineEdit_colorMin || field == lineEdit_colorMax )
+   {
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayColor(val, noUnit, false));
+   }
+   else 
+   {
+      //Everything else is a number, so just format nicely
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayAmount(val));
+   }
+
 }
 
 void StyleEditor::showChanges(QMetaProperty* metaProp)

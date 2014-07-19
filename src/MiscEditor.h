@@ -49,6 +49,7 @@ public slots:
    //! Clear dialog and close.
    void clearAndClose();
    void changed(QMetaProperty,QVariant);
+   void updateField();
    
 private:
    Misc* obsMisc;

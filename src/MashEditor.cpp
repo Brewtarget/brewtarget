@@ -32,6 +32,13 @@ MashEditor::MashEditor(QWidget* parent) : QDialog(parent), mashObs(0)
    connect(pushButton_fromEquipment, SIGNAL(clicked()), this, SLOT(fromEquipment()) );
    connect(this, SIGNAL(accepted()), this, SLOT(saveAndClose()) );
    connect(this, SIGNAL(rejected()), this, SLOT(closeEditor()) );
+
+   connect( lineEdit_grainTemp,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_spargeTemp, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_tunTemp,    SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_tunMass,    SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_spargePh,   SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_tunSpHeat,  SIGNAL(editingFinished()), this, SLOT(updateField()));
 }
 
 void MashEditor::showEditor()
@@ -171,6 +178,34 @@ void MashEditor::showChanges(QMetaProperty* prop)
       if( ! updateAll )
          return;
    }
+}
+
+void MashEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+ 
+   // temps first 
+   if ( field == lineEdit_grainTemp || field == lineEdit_spargeTemp || field == lineEdit_tunTemp )
+   {
+      val = Brewtarget::tempQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::celsius));
+   }
+   else if ( field == lineEdit_tunMass ) 
+   {
+      // odd ball
+      val = Brewtarget::weightQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::kilograms));
+   }
+   else 
+   {
+      //just format everything else nicely
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayAmount(val));
+   }
+
 }
 
 void MashEditor::clear()

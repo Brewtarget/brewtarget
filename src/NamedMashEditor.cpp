@@ -74,6 +74,42 @@ NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool s
    connect(pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMash()));
 	
 	setMash(mashListModel->at(mashComboBox->currentIndex()));
+
+   connect( lineEdit_grainTemp,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_spargeTemp, SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_tunTemp,    SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_tunMass,    SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_spargePh,   SIGNAL(editingFinished()), this, SLOT(updateField()));
+   connect( lineEdit_tunSpHeat,  SIGNAL(editingFinished()), this, SLOT(updateField()));
+
+}
+
+void NamedMashEditor::updateField()
+{
+
+   QObject* selection = sender();
+   QLineEdit* field = qobject_cast<QLineEdit*>(selection);
+   double val;
+ 
+   // temps first 
+   if ( field == lineEdit_grainTemp || field == lineEdit_spargeTemp || field == lineEdit_tunTemp )
+   {
+      val = Brewtarget::tempQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::celsius));
+   }
+   else if ( field == lineEdit_tunMass ) 
+   {
+      // odd ball
+      val = Brewtarget::weightQStringToSI(field->text());
+      field->setText(Brewtarget::displayAmount( val, Units::kilograms));
+   }
+   else 
+   {
+      //just format everything else nicely
+      val = field->text().toDouble();
+      field->setText(Brewtarget::displayAmount(val));
+   }
+
 }
 
 void NamedMashEditor::showEditor()
