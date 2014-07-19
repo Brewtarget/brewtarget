@@ -20,105 +20,41 @@
 #include "Algorithms.h"
 #include "PhysicalConstants.h"
 
-// Called when Instance() is called, should only initialize once.
-Algorithms::Algorithms()
-{
-   PlatoFromSG_20C20C_order = 3;
-   PlatoFromSG_20C20C[0] = -616.868;
-   PlatoFromSG_20C20C[1] = 1111.14;
-   PlatoFromSG_20C20C[2] = -630.272;
-   PlatoFromSG_20C20C[3] = 135.997;
-
-   waterDensityPoly_C_order = 5;
-   waterDensityPoly_C[0] = 0.9999776532;
-   waterDensityPoly_C[1] = 6.557692037e-5;
-   waterDensityPoly_C[2] = -1.007534371e-5;
-   waterDensityPoly_C[3] = 1.372076106e-7;
-   waterDensityPoly_C[4] = -1.414581892e-9;
-   waterDensityPoly_C[5] = 5.6890971e-12;
-
-   hydroCorrection15CPoly_order = 3;
-   hydroCorrection15CPoly[0] = -0.911045;
-   hydroCorrection15CPoly[1] = -16.2853e-3;
-   hydroCorrection15CPoly[2] = 5.84346e-3;
-   hydroCorrection15CPoly[3] = -15.3243e-6;
-}
+Polynomial Algorithms::platoFromSG_20C20C(
+   Polynomial() << -616.868 << 1111.14 << -630.272 << 135.997
+);
+Polynomial Algorithms::waterDensityPoly_C(
+   Polynomial() << 0.9999776532 << 6.557692037e-5 << -1.007534371e-5
+      << 1.372076106e-7 << -1.414581892e-9 << 5.6890971e-12
+);
+Polynomial Algorithms::hydroCorrection15CPoly(
+   Polynomial() << -0.911045 << -16.2853e-3 << 5.84346e-3 << -15.3243e-6
+);
 
 double Algorithms::round(double d)
 {
    return floor(d+0.5);
 }
 
-inline double Algorithms::intPow( double base, unsigned int pow )
-{
-   double ret = 1;
-   for(; pow > 0; pow--)
-      ret *= base;
-
-   return ret;
-}
-
-double Algorithms::polyEval( double* poly, unsigned int order, double x )
-{
-   double ret = 0.0;
-
-   for( ; order > 0; --order )
-   {
-      ret += poly[order] * intPow( x, order );
-   }
-   ret += poly[0];
-
-   return ret;
-}
-
-double Algorithms::rootFind( double* poly, unsigned int order, double x0, double x1 )
-{
-   double guesses[] = { x0, x1 };
-   double newGuess = x0;
-   double maxAllowableSeparation = qAbs( x0 - x1 ) * 1e3;
-
-   while( qAbs( guesses[0] - guesses[1] ) > ROOT_PRECISION )
-   {
-      newGuess = guesses[1] - (guesses[1] - guesses[0]) * polyEval( poly, order, guesses[1]) / ( polyEval( poly, order, guesses[1]) - polyEval( poly, order, guesses[0]) );
-
-      guesses[0] = guesses[1];
-      guesses[1] = newGuess;
-
-      if( qAbs( guesses[0] - guesses[1] ) > maxAllowableSeparation )
-         return HUGE_VAL;
-   }
-
-   return newGuess;
-}
-
 double Algorithms::hydrometer15CCorrection( double celsius )
 {
-   return polyEval( hydroCorrection15CPoly,hydroCorrection15CPoly_order, celsius ) * (double)1e-3;
+   return hydroCorrection15CPoly.eval(celsius) * 1e-3;
 }
 
 double Algorithms::SG_20C20C_toPlato( double sg )
 {
-   return polyEval(PlatoFromSG_20C20C, PlatoFromSG_20C20C_order, sg );
+   return platoFromSG_20C20C.eval(sg);
 }
 
 double Algorithms::PlatoToSG_20C20C( double plato )
 {
-   double* poly = new double[PlatoFromSG_20C20C_order+1];
-   double ret;
-   unsigned int i;
-
    // Copy the polynomial, cuz we need to alter it.
-   for( i = 0; i <= PlatoFromSG_20C20C_order; ++i )
-   {
-      poly[i] = PlatoFromSG_20C20C[i];
-   }
+   Polynomial poly(platoFromSG_20C20C);
 
    // After this, finding the root of the polynomial will be finding the SG.
    poly[0] -= plato;
 
-   ret = rootFind( poly, PlatoFromSG_20C20C_order, 1.000, 1.050 );
-   delete[] poly;
-   return ret;
+   return poly.rootFind( 1.000, 1.050 );
 }
 
 double Algorithms::getPlato( double sugar_kg, double wort_l )
@@ -130,7 +66,7 @@ double Algorithms::getPlato( double sugar_kg, double wort_l )
 
 double Algorithms::getWaterDensity_kgL( double celsius )
 {
-   return polyEval(waterDensityPoly_C, waterDensityPoly_C_order, celsius);
+   return waterDensityPoly_C.eval(celsius);
 }
 
 double Algorithms::getABVBySGPlato( double sg, double plato )
@@ -171,12 +107,13 @@ double Algorithms::ogFgToPlato( double og, double fg )
 {
    double sp = SG_20C20C_toPlato( og );
 
-   double poly[4] = {1.001843 - 0.002318474*sp - 0.000007775*sp*sp - 0.000000034*sp*sp*sp - fg,
-                     0.00574,
-                     0.00003344,
-                     0.000000086};
+   Polynomial poly(
+      Polynomial()
+         << 1.001843 - 0.002318474*sp - 0.000007775*sp*sp - 0.000000034*sp*sp*sp - fg
+         << 0.00574 << 0.00003344 << 0.000000086
+   );
 
-   return rootFind(poly, 3, 3, 5);
+   return poly.rootFind(3, 5);
 }
 
 double Algorithms::refractiveIndex( double plato )

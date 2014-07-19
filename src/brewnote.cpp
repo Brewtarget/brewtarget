@@ -234,7 +234,7 @@ double BrewNote::translateSG(QString qstr)
 
 
    if ( unit.contains("p", Qt::CaseInsensitive) || var > 1.2)
-      return Algorithms::Instance().PlatoToSG_20C20C(var);
+      return Algorithms::PlatoToSG_20C20C(var);
 
    return var;
 }
@@ -310,8 +310,8 @@ void BrewNote::setProjPoints(double var)
       convertPnts = var;
    else
    { 
-      plato = Algorithms::Instance().getPlato(var, projVolIntoBK_l());
-      total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
+      plato = Algorithms::getPlato(var, projVolIntoBK_l());
+      total_g = Algorithms::PlatoToSG_20C20C( plato );
       convertPnts = (total_g - 1.0 ) * 1000;
    }
 
@@ -327,8 +327,8 @@ void BrewNote::setProjFermPoints(double var)
       convertPnts = var;
    else
    { 
-      plato = Algorithms::Instance().getPlato(var, projVolIntoFerm_l());
-      total_g = Algorithms::Instance().PlatoToSG_20C20C( plato );
+      plato = Algorithms::getPlato(var, projVolIntoFerm_l());
+      total_g = Algorithms::PlatoToSG_20C20C( plato );
       convertPnts = (total_g - 1.0 ) * 1000;
    }
 

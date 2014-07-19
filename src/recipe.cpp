@@ -1721,7 +1721,7 @@ void Recipe::recalcGrains_kg()
 
 void Recipe::recalcSRMColor()
 {
-   QColor tmp = Algorithms::Instance().srmToColor(_color_srm);
+   QColor tmp = Algorithms::srmToColor(_color_srm);
 
    if ( tmp != _SRMColor )
    {
@@ -1820,7 +1820,7 @@ void Recipe::recalcBoilGrav()
    // we need to adjust for that here.
    sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
 
-   ret = Algorithms::Instance().PlatoToSG_20C20C( Algorithms::Instance().getPlato(sugar_kg, boilSize_l()) );
+   ret = Algorithms::PlatoToSG_20C20C( Algorithms::getPlato(sugar_kg, boilSize_l()) );
  
    if ( ret != _boilGrav )
    {
@@ -1874,7 +1874,7 @@ void Recipe::recalcOgFg()
          ratio = 1.0;
       else if( ratio < 0.0 )
          ratio = 0.0;
-      else if( Algorithms::Instance().isNan(ratio) )
+      else if( Algorithms::isNan(ratio) )
          ratio = 1.0;
       // Ignore this again since it should be included in efficiency.
       //sugar_kg *= ratio;
@@ -1884,17 +1884,17 @@ void Recipe::recalcOgFg()
    }
 
    sugar_kg = sugar_kg * efficiency_pct()/100.0 + sugar_kg_ignoreEfficiency;
-   plato = Algorithms::Instance().getPlato( sugar_kg, _finalVolumeNoLosses_l);
+   plato = Algorithms::getPlato( sugar_kg, _finalVolumeNoLosses_l);
 
-   tmp_og = Algorithms::Instance().PlatoToSG_20C20C( plato );
+   tmp_og = Algorithms::PlatoToSG_20C20C( plato );
    tmp_pnts = (tmp_og-1)*1000.0;
    if ( nonFermetableSugars_kg != 0.0 )
    {
       ferm_kg = sugar_kg - nonFermetableSugars_kg;
-      plato = Algorithms::Instance().getPlato( ferm_kg, _finalVolumeNoLosses_l);
-      _og_fermentable = Algorithms::Instance().PlatoToSG_20C20C( plato );
-      plato = Algorithms::Instance().getPlato( nonFermetableSugars_kg, _finalVolumeNoLosses_l); 
-      tmp_ferm_pnts = ((Algorithms::Instance().PlatoToSG_20C20C( plato ))-1)*1000.0;
+      plato = Algorithms::getPlato( ferm_kg, _finalVolumeNoLosses_l);
+      _og_fermentable = Algorithms::PlatoToSG_20C20C( plato );
+      plato = Algorithms::getPlato( nonFermetableSugars_kg, _finalVolumeNoLosses_l); 
+      tmp_ferm_pnts = ((Algorithms::PlatoToSG_20C20C( plato ))-1)*1000.0;
    }
    else
    {

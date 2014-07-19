@@ -56,30 +56,30 @@ void RefractoDialog::calculate()
    if( ! haveCP )
       return;
 
-   ri = Algorithms::Instance().refractiveIndex(currentPlato);
+   ri = Algorithms::refractiveIndex(currentPlato);
    lineEdit_ri->setText(Brewtarget::displayAmount(ri));
 
    if( (!haveOG) && haveOP )
    {
-         inputOG = Algorithms::Instance().PlatoToSG_20C20C( originalPlato );
+         inputOG = Algorithms::PlatoToSG_20C20C( originalPlato );
          lineEdit_inputOG->setText(Brewtarget::displayAmount(inputOG));
    }
    else if( (!haveOP) && haveOG )
    {
-      originalPlato = Algorithms::Instance().SG_20C20C_toPlato( inputOG );
+      originalPlato = Algorithms::SG_20C20C_toPlato( inputOG );
       lineEdit_op->setText(Brewtarget::displayAmount(originalPlato));
    }
    else if( (!haveOP) && (!haveOG) )
       return; // Can't do much if we don't have OG or OP.
 
-   og = Algorithms::Instance().PlatoToSG_20C20C( originalPlato );
+   og = Algorithms::PlatoToSG_20C20C( originalPlato );
    if( originalPlato != currentPlato )
-     sg = Algorithms::Instance().sgByStartingPlato( originalPlato, currentPlato );
+     sg = Algorithms::sgByStartingPlato( originalPlato, currentPlato );
    else
      sg = og;
-   re = Algorithms::Instance().realExtract( sg, currentPlato );
-   abv = Algorithms::Instance().getABVBySGPlato( sg, currentPlato );
-   abw = Algorithms::Instance().getABWBySGPlato( sg, currentPlato );
+   re = Algorithms::realExtract( sg, currentPlato );
+   abv = Algorithms::getABVBySGPlato( sg, currentPlato );
+   abw = Algorithms::getABWBySGPlato( sg, currentPlato );
 
    // Warn the user if the inputOG and calculated og don't match.
    if( qAbs(og - inputOG) > 0.002 )

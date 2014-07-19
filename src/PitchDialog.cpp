@@ -69,7 +69,7 @@ void PitchDialog::calculate()
    double og = lineEdit_OG->text().toDouble(&ok);
    double vol_l = Brewtarget::volQStringToSI(lineEdit_vol->text());
    //ok &= tmp;
-   double plato = Algorithms::Instance().SG_20C20C_toPlato(og);
+   double plato = Algorithms::SG_20C20C_toPlato(og);
 
    if( !ok )
       return;
