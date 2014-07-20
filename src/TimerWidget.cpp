@@ -21,6 +21,7 @@
 #include <QChar>
 #include <QFileDialog>
 #include <QDir>
+#include <QUrl>
 #include <iostream>
 #include "brewtarget.h"
 
