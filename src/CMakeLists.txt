@@ -77,6 +77,7 @@ SET( brewtarget_SRCS
     ${SRCDIR}/ConverterTool.cpp
     ${SRCDIR}/CustomComboBox.cpp
     ${SRCDIR}/database.cpp
+    ${SRCDIR}/DatabaseSchemaHelper.cpp
     ${SRCDIR}/equipment.cpp
     ${SRCDIR}/EquipmentButton.cpp
     ${SRCDIR}/EquipmentListModel.cpp
@@ -308,17 +309,6 @@ SET( FILES_TO_TRANSLATE
 #   ENDFOREACH()
 #ENDIF()
 
-#======================Some Custom Targets/Commands============================
-
-# Creates a target for ${CMAKE_CURRENT_BINARY_DIR}/blankdb.sqlite needed by
-# the brewtarget.qrc resource file.
-ADD_CUSTOM_COMMAND( OUTPUT blankdb.sqlite
-                    COMMAND ${RM_COMMAND} ARGS ${RM_ARGS} "blankdb.sqlite" # Need to remove it if it exists first.
-                    COMMAND ${SQLITE3_CMD} ARGS "blankdb.sqlite" "<" "${ROOTDIR}/create_db.sql"
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                    MAIN_DEPENDENCY "${ROOTDIR}/create_db.sql"
-)
-
 #==================================Qt Junk=====================================
 
 # Create the moc sources from the headers.
@@ -329,7 +319,6 @@ QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 
 # Generate the resource .cpp from the .qrc file.
 QT4_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
-QT4_ADD_RESOURCES(brewtarget_cfg_QRC_CPP ${brewtarget_cfg_QRC})
 
 # Translations
 FIND_PROGRAM( LUPDATE_CMD lupdate-qt4 )
@@ -368,7 +357,6 @@ ADD_EXECUTABLE(
    ${brewtarget_SRCS}
    ${brewtarget_MOC_SRCS}
    ${brewtarget_QRC_CPP}
-   ${brewtarget_cfg_QRC_CPP}
    ${brewtarget_UIS_H}
 )
 ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
@@ -400,7 +388,6 @@ ADD_EXECUTABLE(
    ${brewtarget_SRCS}
    ${brewtarget_MOC_SRCS}
    ${brewtarget_QRC_CPP}
-   ${brewtarget_cfg_QRC_CPP}
    ${brewtarget_UIS_H}
 )
 TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )

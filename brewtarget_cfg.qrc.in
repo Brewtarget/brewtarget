@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="blankdb.sqlite">${CMAKE_CURRENT_BINARY_DIR}/src/blankdb.sqlite</file>
-    </qresource>
-</RCC>

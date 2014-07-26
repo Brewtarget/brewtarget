@@ -124,8 +124,6 @@ SET_PROPERTY(
 #=========================Configure brewtarget.qrc.in==========================
 
 SET( brewtarget_QRC "${CMAKE_CURRENT_SOURCE_DIR}/brewtarget.qrc" )
-SET( brewtarget_cfg_QRC "${CMAKE_CURRENT_BINARY_DIR}/brewtarget_cfg.qrc" )
-CONFIGURE_FILE( brewtarget_cfg.qrc.in ${brewtarget_cfg_QRC} )
 
 #============================Doxygen Custom Target=============================
 FIND_PROGRAM( DOXYGEN_CMD doxygen )

@@ -753,7 +753,8 @@ private:
    
    static QList<TableParams> makeTableParams();
    
-   void updateSchema();
+   // Returns true if the schema gets updated, false otherwise.
+   bool updateSchema();
 };
 
 #endif   /* _DATABASE_H */
