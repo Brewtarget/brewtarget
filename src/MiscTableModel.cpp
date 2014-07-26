@@ -215,6 +215,12 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
             return QVariant( Brewtarget::displayAmount(row->time(), Units::minutes) );
          else
             return QVariant();
+      case MISCINVENTORYCOL:
+         if( role != Qt::DisplayRole )
+            return QVariant();
+
+         unit = displayUnit(index.column());
+         return QVariant( Brewtarget::displayAmount(row->inventory(), row->amountIsWeight()? (Unit*)Units::kilograms : (Unit*)Units::liters, 3, unit, noScale ) );
       case MISCAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
@@ -249,6 +255,8 @@ QVariant MiscTableModel::headerData( int section, Qt::Orientation orientation, i
             return QVariant(tr("Use"));
          case MISCTIMECOL:
             return QVariant(tr("Time"));
+         case MISCINVENTORYCOL:
+            return QVariant(tr("Inventory"));
          case MISCAMOUNTCOL:
             return QVariant(tr("Amount"));
          case MISCISWEIGHT:
@@ -315,6 +323,15 @@ bool MiscTableModel::setData( const QModelIndex& index, const QVariant& value, i
       case MISCTIMECOL:
          if( value.canConvert(QVariant::String) )
             row->setTime( Brewtarget::timeQStringToSI(value.toString()) );
+         else
+            return false;
+         break;
+      case MISCINVENTORYCOL:
+         unit = displayUnit(col);
+         if( value.canConvert(QVariant::String) )
+            row->setInventoryAmount( row->amountIsWeight() ? 
+                            Brewtarget::weightQStringToSI(value.toString(),unit) : 
+                            Brewtarget::volQStringToSI(value.toString(),unit) );
          else
             return false;
          break;
@@ -456,6 +473,9 @@ QString MiscTableModel::generateName(int column) const
 
    switch(column)
    {
+      case MISCINVENTORYCOL:
+         attribute = "amount";
+         break;
       case MISCAMOUNTCOL:
          attribute = "amount";
          break;

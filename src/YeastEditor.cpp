@@ -65,6 +65,8 @@ void YeastEditor::save()
    y->setForm(static_cast<Yeast::Form>(comboBox_form->currentIndex()));
    y->setAmountIsWeight( (checkBox_amountIsWeight->checkState() == Qt::Checked)? true : false );
    y->setAmount( y->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()) );
+   y->setInventoryQuanta( lineEdit_inventory->text().toInt() );
+
 
    y->setLaboratory( lineEdit_laboratory->text() );
    y->setProductID( lineEdit_productID->text() );
@@ -132,6 +134,11 @@ void YeastEditor::showChanges(QMetaProperty* metaProp)
    }
    if( propName == "amount" || updateAll ) {
       lineEdit_amount->setText( Brewtarget::displayAmount(obsYeast->amount(), (obsYeast->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters ) );
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "inventory" || updateAll ) {
+      lineEdit_inventory->setText( QString::number(obsYeast->inventory()) );
       if( ! updateAll )
          return;
    }

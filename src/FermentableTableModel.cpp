@@ -282,6 +282,19 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
             return QVariant(row->type());
          else
             return QVariant();
+      case FERMINVENTORYCOL:
+         if( role != Qt::DisplayRole )
+            return QVariant();
+
+         // Figure out which unit to use. The cell-specific code is on hold
+         // unit  = row->displayUnit()  == noUnit ? displayUnit(col)  : row->displayUnit(); 
+         // scale = row->displayScale() == noScale ? displayScale(col) : row->displayScale(); 
+         
+         // So just query the columns
+         unit  = displayUnit(col);
+         scale = displayScale(col); 
+
+         return QVariant( Brewtarget::displayAmount(row->inventory(), Units::kilograms, 3, unit, scale) );
       case FERMAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
@@ -345,6 +358,8 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
             return QVariant(tr("Name"));
          case FERMTYPECOL:
             return QVariant(tr("Type"));
+         case FERMINVENTORYCOL:
+            return QVariant(tr("Inventory"));
          case FERMAMOUNTCOL:
             return QVariant(tr("Amount"));
          case FERMISMASHEDCOL:
@@ -527,6 +542,9 @@ QString FermentableTableModel::generateName(int column) const
 
    switch(column)
    {
+      case FERMINVENTORYCOL:
+         attribute = "amount_kg";
+         break;
       case FERMAMOUNTCOL:
          attribute = "amount_kg";
          break;
@@ -566,6 +584,16 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          if( value.canConvert(QVariant::Int) )
          {
             row->setType( static_cast<Fermentable::Type>(value.toInt()));
+            return true;
+         }
+         else
+            return false;
+      case FERMINVENTORYCOL:
+         if( value.canConvert(QVariant::String) )
+         {
+            row->setInventoryAmount( Brewtarget::weightQStringToSI(value.toString(),displayUnit(FERMINVENTORYCOL)));
+            if( rowCount() > 0 )
+               headerDataChanged( Qt::Vertical, 0, rowCount()-1 ); // Need to re-show header (grain percent).
             return true;
          }
          else

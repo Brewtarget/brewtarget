@@ -264,6 +264,14 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
             return QVariant( Brewtarget::displayAmount(row->alpha_pct(), 0) );
          else
             return QVariant();
+      case HOPINVENTORYCOL:
+         if( role != Qt::DisplayRole )
+            return QVariant();
+         unit = displayUnit(col);
+         scale = displayScale(col);
+
+         return QVariant(Brewtarget::displayAmount(row->inventory(), Units::kilograms, 3, unit, scale));
+
       case HOPAMOUNTCOL:
          if( role != Qt::DisplayRole )
             return QVariant();
@@ -307,6 +315,8 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
             return QVariant(tr("Name"));
          case HOPALPHACOL:
             return QVariant(tr("Alpha %"));
+		 case HOPINVENTORYCOL:
+            return QVariant(tr("Inventory"));
          case HOPAMOUNTCOL:
             return QVariant(tr("Amount"));
          case HOPUSECOL:
@@ -361,6 +371,19 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          if( value.canConvert(QVariant::Double) )
          {
             row->setAlpha_pct( value.toDouble() );
+            headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
+            return true;
+         }
+         else
+            return false;
+      case HOPINVENTORYCOL:
+         if( value.canConvert(QVariant::String) )
+         {
+            val = value.toString();
+            if (!Brewtarget::hasUnits(val))
+               val = QString("%1%2").arg(val).arg( Brewtarget::getWeightUnitSystem() == SI ? "g" : "oz");
+
+            row->setInventoryAmount( Brewtarget::weightQStringToSI(val));
             headerDataChanged( Qt::Vertical, index.row(), index.row() ); // Need to re-show header (IBUs).
             return true;
          }
@@ -482,6 +505,9 @@ QString HopTableModel::generateName(int column) const
 
    switch(column)
    {
+      case HOPINVENTORYCOL:
+         attribute = "amount_kg";
+         break;
       case HOPAMOUNTCOL:
          attribute = "amount_kg";
          break;

@@ -35,6 +35,7 @@ QHash<QString,QString> Hop::tagToPropHash()
    propHash["NAME"] = "name";
    propHash["ALPHA"] = "alpha_pct";
    propHash["AMOUNT"] = "amount_kg";
+   propHash["INVENTORY"] = "inventory";
    //propHash["USE"] = "use";
    propHash["TIME"] = "time_min";
    propHash["NOTES"] = "notes";
@@ -139,6 +140,18 @@ void Hop::setAmount_kg( double num )
    else
    {
       set("amount_kg", "amount", num);
+   }
+}
+void Hop::setInventoryAmount( double num )
+{
+   if( num < 0.0 )
+   {
+      Brewtarget::logW( QString("Hop: inventory < 0: %1").arg(num) );
+      return;
+   }
+   else
+   {
+      setInventory("inventory", "amount", num);
    }
 }
 
@@ -281,6 +294,11 @@ double Hop::alpha_pct() const
 double Hop::amount_kg() const
 {
    return get("amount").toDouble();
+}
+
+double Hop::inventory() const
+{
+   return getInventory("amount").toDouble();
 }
 
 Hop::Use Hop::use() const

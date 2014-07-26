@@ -32,7 +32,7 @@ class HopItemDelegate;
 #include "hop.h"
 #include "recipe.h"
 
-enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
+enum{HOPNAMECOL, HOPALPHACOL, HOPINVENTORYCOL, HOPAMOUNTCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class HopTableModel

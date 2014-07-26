@@ -162,6 +162,25 @@ public:
    Misc* newMisc(Misc* other);
    Style* newStyle(Style* other);
    Yeast* newYeast(Yeast* other);
+   
+   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   /* This links ingredients with the same name. 
+	* The first displayed ingredient in the database is assumed to be the parent.
+	*/
+   void populateChildTablesByName(Brewtarget::DBTable table);
+   // Runs populateChildTablesByName for each 
+   void populateChildTablesByName();
+   //! \returns the key of the parent ingredient
+   int getParentID(Brewtarget::DBTable table, int childKey);
+   //! \returns the key to the inventory table for a given ingredient
+   int getInventoryID(Brewtarget::DBTable table, int key);
+   //! \returns the parent table number from the hash
+   Brewtarget::DBTable getChildTable(Brewtarget::DBTable table);
+   //! \returns the inventory table number from the hash
+   Brewtarget::DBTable getInventoryTable(Brewtarget::DBTable table);
+   //! Inserts an new inventory row in the appropriate table
+   void newInventory(Brewtarget::DBTable invForTable, int invForID);
+      
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   
    //! \brief Copies all of the mashsteps from \c oldMash to \c newMash
@@ -380,6 +399,10 @@ private:
    static QHash<Brewtarget::DBTable,QString> tableNamesHash();
    static QHash<QString,Brewtarget::DBTable> classNameToTable;
    static QHash<QString,Brewtarget::DBTable> classNameToTableHash();
+   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToChildTable;
+   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToChildTableHash();
+   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTable;
+   static QHash<Brewtarget::DBTable,Brewtarget::DBTable> tableToInventoryTableHash();
    static QHash<QThread*,QString> threadToDbCon; // Each thread should use a distinct database connection.
    
    static const QList<TableParams> tableParams;
@@ -537,6 +560,7 @@ private:
       QString propName,
       QString relTableName,
       QString ingKeyName,
+	  QString childTableName,
       bool noCopy = false,
       QHash<int,T*>* keyHash = 0,
       bool doNotDisplay = true
@@ -594,7 +618,25 @@ private:
          q.finish();
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
       }
-      
+	  
+	  //Put this in the <ing_type>_children table.
+	  if(childTableName != "instruction_children"){
+		 q.prepare( QString("INSERT INTO `%1` (`parent_id`, `child_id`) VALUES (:parent, :child)")
+					.arg(childTableName)
+				  );
+		 q.bindValue(":parent", ing->key());
+		 q.bindValue(":child", newIng->key());
+		 if( q.exec() )
+		 {
+			q.finish();
+			emit rec->changed( rec->metaProperty(propName), QVariant() );
+		 }
+		 else
+		 {
+			q.finish();
+			Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
+		 }
+	  }
       dirty = true; 
       return newIng;
    }

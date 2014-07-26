@@ -69,6 +69,7 @@ void MiscEditor::save()
    m->setTime(Brewtarget::timeQStringToSI(lineEdit_time->text()));
    m->setAmountIsWeight( (checkBox_isWeight->checkState() == Qt::Checked)? true : false );
    m->setAmount( m->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_amount->text()) : Brewtarget::volQStringToSI(lineEdit_amount->text()));
+   m->setInventoryAmount( m->amountIsWeight() ? Brewtarget::weightQStringToSI(lineEdit_inventory->text()) : Brewtarget::volQStringToSI(lineEdit_inventory->text()));
    m->setUseFor(textEdit_useFor->toPlainText());
    m->setNotes( textEdit_notes->toPlainText() );
 
@@ -140,6 +141,12 @@ void MiscEditor::showChanges(QMetaProperty* metaProp)
    if( propName == "amountIsWeight" || updateAll )
    {
       checkBox_isWeight->setCheckState( obsMisc->amountIsWeight()? Qt::Checked : Qt::Unchecked );
+      if( ! updateAll )
+         return;
+   }
+   if( propName == "inventory" || updateAll )
+   {
+      lineEdit_inventory->setText(Brewtarget::displayAmount(obsMisc->inventory(), (obsMisc->amountIsWeight()) ? (Unit*)Units::kilograms : (Unit*)Units::liters  ));
       if( ! updateAll )
          return;
    }

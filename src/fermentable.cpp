@@ -35,6 +35,7 @@ QHash<QString,QString> Fermentable::tagToPropHash()
    // NOTE: since type is actually stored as a string (not integer), have to handle separately.
    //propHash["TYPE"] = "type";
    propHash["AMOUNT"] = "amount_kg";
+   propHash["INVENTORY"] = "inventory";
    propHash["YIELD"] = "yield_pct";
    propHash["COLOR"] = "color_srm";
    propHash["ADD_AFTER_BOIL"] = "addAfterBoil";
@@ -217,6 +218,7 @@ const QString Fermentable::typeStringTr() const
    return typesTr.at(type());
 }
 double Fermentable::amount_kg() const { return get("amount").toDouble(); }
+double Fermentable::inventory() const { return getInventory("amount").toDouble(); }
 double Fermentable::yield_pct() const { return get("yield").toDouble(); }
 double Fermentable::color_srm() const { return get("color").toDouble(); }
 
@@ -274,6 +276,18 @@ void Fermentable::setAmount_kg( double num )
    else
    {
       set("amount_kg", "amount", num);
+   }
+}
+void Fermentable::setInventoryAmount( double num )
+{
+   if( num < 0.0 )
+   {
+      Brewtarget::logW( QString("Fermentable: negative inventory: %1").arg(num) );
+      return;
+   }
+   else
+   {
+      setInventory("inventory", "amount", num);
    }
 }
 void Fermentable::setYield_pct( double num )

@@ -72,6 +72,8 @@ QString Database::dbTempBackupFileName;
 QString Database::dbConName;
 QHash<Brewtarget::DBTable,QString> Database::tableNames = Database::tableNamesHash();
 QHash<QString,Brewtarget::DBTable> Database::classNameToTable = Database::classNameToTableHash();
+QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTable = Database::tableToChildTableHash();
+QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTable = Database::tableToInventoryTableHash();
 const QList<TableParams> Database::tableParams = Database::makeTableParams();
 
 QHash< QThread*, QString > Database::_threadToConnection;
@@ -961,7 +963,7 @@ Instruction* Database::newInstruction(Recipe* rec)
    emit changed( metaProperty("instructions"), QVariant() );
    
    // Add without copying to "instruction_in_recipe"
-   addIngredientToRecipe<Instruction>( rec, tmp, "instructions", "instruction_in_recipe", "instruction_id", true, 0, false );
+   addIngredientToRecipe<Instruction>( rec, tmp, "instructions", "instruction_in_recipe", "instruction_id", "instruction_children", true, 0, false );
    
    return tmp;
 }
@@ -1511,6 +1513,94 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
    dirty = true; 
 }
 
+// Inventory functions ========================================================
+
+//This links ingredients with the same name. 
+//The first displayed ingredient in the database is assumed to be the parent.
+//TODO: make the child_id column UNIQUE in the database
+void Database::populateChildTablesByName(Brewtarget::DBTable table){
+	Brewtarget::logW( "Populating Children Ingredient Links" );
+		
+	QString queryString = QString(
+		"SELECT DISTINCT name FROM %1"
+	).arg(tableNames[table]);
+	QSqlQuery nameq( queryString, sqlDatabase() );
+	while (nameq.next()) {
+		QString name = nameq.record().value(0).toString();
+		queryString = QString(
+			"SELECT id FROM %1 WHERE ( name='%2' AND display=1 ) ORDER BY id ASC LIMIT 1"
+		).arg(tableNames[table]).arg(name);
+		QSqlQuery parentq( queryString, sqlDatabase() );
+		parentq.first();
+		QString parentID = parentq.record().value("id").toString();
+		queryString = QString(
+			"SELECT id FROM %1 WHERE ( name='%2' AND display=0 ) ORDER BY id ASC"
+		).arg(tableNames[table]).arg(name);
+		QSqlQuery childrenq( queryString, sqlDatabase() );
+		while (childrenq.next()) {
+			QString childID = childrenq.record().value("id").toString();
+			queryString = QString(
+				"INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)"
+			).arg(tableNames[tableToChildTable[table]]).arg(parentID).arg(childID);
+			QSqlQuery insertq( queryString, sqlDatabase() );
+		}
+   }
+	
+}
+// populate ingredient tables
+void Database::populateChildTablesByName(){
+	populateChildTablesByName(Brewtarget::FERMTABLE);
+	populateChildTablesByName(Brewtarget::HOPTABLE);
+	populateChildTablesByName(Brewtarget::MISCTABLE);
+	populateChildTablesByName(Brewtarget::YEASTTABLE);
+}
+//Returns the key of the parent ingredient
+int Database::getParentID(Brewtarget::DBTable table, int childKey){
+	int ret;
+	//child_id is expected to be unique in table
+	QString queryString = QString(
+		"SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1"
+	).arg(tableNames[tableToChildTable[table]]).arg(childKey);
+   
+	QSqlQuery q( queryString, sqlDatabase() );
+	q.first();
+   ret = q.record().value("parent_id").toInt();
+	if(ret==0){
+		return childKey;
+	}else{
+		return ret;
+	}
+}
+//Returns the key to the inventory table for a given ingredient
+int Database::getInventoryID(Brewtarget::DBTable table, int key){
+	int ret;
+	QString queryString = QString(
+		"SELECT id FROM %1 WHERE %2_id = '%3' LIMIT 1"
+	).arg(tableNames[tableToInventoryTable[table]]).arg(tableNames[table]).arg(getParentID(table, key));
+   QSqlQuery q( queryString, sqlDatabase() );
+   q.first();
+	ret = q.record().value("id").toInt();
+   return ret;
+}
+//Returns the parent table number from the hash
+Brewtarget::DBTable Database::getChildTable(Brewtarget::DBTable table){
+	return tableToChildTable[table];
+}
+//Returns the inventory table number from the hash
+Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table){
+	return tableToInventoryTable[table];
+}
+//create a new inventory row
+void Database::newInventory(Brewtarget::DBTable invForTable, int invForID){
+	QString invTable = tableNames[tableToInventoryTable[invForTable]];
+	
+	QString queryString = QString(
+		"INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)"
+	).arg(invTable).arg(tableNames[invForTable]).arg(getParentID(invForTable, invForID));
+	QSqlQuery q( queryString, sqlDatabase() );
+   
+}
+
 // Add to recipe ==============================================================
 void Database::addToRecipe( Recipe* rec, Equipment* e, bool noCopy )
 {
@@ -1555,6 +1645,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
                                                  "fermentables",
                                                  "fermentable_in_recipe",
                                                  "fermentable_id",
+																 "fermentable_children",
                                                  noCopy, &allFermentables );
    connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    // recalcAll is very expensive. When doing a massive import, don't do it
@@ -1574,6 +1665,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms )
                                                     "fermentables",
                                                     "fermentable_in_recipe",
                                                     "fermentable_id",
+																    "fermentable_children",
                                                     false, &allFermentables );
       connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    }
@@ -1587,6 +1679,7 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
                                          "hops",
                                          "hop_in_recipe",
                                          "hop_id",
+													  "hop_children",
                                          noCopy, &allHops );
    connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    rec->recalcIBU();
@@ -1603,6 +1696,7 @@ void Database::addToRecipe( Recipe* rec, QList<Hop*>hops )
                                             "hops",
                                             "hop_in_recipe",
                                             "hop_id",
+                                            "hop_children",
                                             false, &allHops );
       connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    }
@@ -1641,7 +1735,7 @@ void Database::addToRecipe( Recipe* rec, Mash* m, bool noCopy )
 
 void Database::addToRecipe( Recipe* rec, Misc* m, bool noCopy )
 {
-   addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", noCopy, &allMiscs );
+   addIngredientToRecipe<Misc>( rec, m, "miscs", "misc_in_recipe", "misc_id", "misc_children", noCopy, &allMiscs );
    if (! noCopy ) 
       rec->recalcAll();
 }
@@ -1655,7 +1749,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs )
    {
       addIngredientToRecipe<Misc>( rec, misc,
                                    "miscs", "misc_in_recipe",
-                                   "misc_id", false, &allMiscs );
+                                   "misc_id", "misc_children", false, &allMiscs );
    }
    rec->recalcAll();
 
@@ -1663,7 +1757,7 @@ void Database::addToRecipe( Recipe* rec, QList<Misc*>miscs )
 
 void Database::addToRecipe( Recipe* rec, Water* w, bool noCopy )
 {
-   addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", noCopy, &allWaters );
+   addIngredientToRecipe<Water>( rec, w, "waters", "water_in_recipe", "water_id", "water_children", noCopy, &allWaters );
    if (! noCopy ) 
       rec->recalcAll();
 }
@@ -1694,7 +1788,7 @@ void Database::addToRecipe( Recipe* rec, Style* s, bool noCopy )
 // Why no connect here?
 void Database::addToRecipe( Recipe* rec, Yeast* y, bool noCopy )
 {
-   addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", noCopy, &allYeasts );
+   addIngredientToRecipe<Yeast>( rec, y, "yeasts", "yeast_in_recipe", "yeast_id", "yeast_children", noCopy, &allYeasts );
 
    if ( ! noCopy )
       rec->recalcOgFg();
@@ -1709,7 +1803,7 @@ void Database::addToRecipe( Recipe* rec, QList<Yeast*>yeasts )
    {
       addIngredientToRecipe<Yeast>( rec, yeast,
                                     "yeasts", "yeast_in_recipe",
-                                    "yeast_id", false, &allYeasts );
+                                    "yeast_id", "yeast_children", false, &allYeasts );
    }
    rec->recalcOgFg();
 }
@@ -1772,6 +1866,17 @@ QHash<Brewtarget::DBTable,QString> Database::tableNamesHash()
    tmp[ Brewtarget::WATERTABLE ] = "water";
    tmp[ Brewtarget::YEASTTABLE ] = "yeast";
    
+   //inventory tables
+   tmp[ Brewtarget::FERMINVTABLE ] = "fermentable_in_inventory";
+   tmp[ Brewtarget::HOPINVTABLE ] = "hop_in_inventory";
+   tmp[ Brewtarget::MISCINVTABLE ] = "misc_in_inventory";
+   tmp[ Brewtarget::YEASTINVTABLE ] = "yeast_in_inventory";
+   //parent child ingredient tables
+   tmp[ Brewtarget::FERMCHILDTABLE ] = "fermentable_children";
+   tmp[ Brewtarget::HOPCHILDTABLE ] = "hop_children";
+   tmp[ Brewtarget::MISCCHILDTABLE ] = "misc_children";
+   tmp[ Brewtarget::YEASTCHILDTABLE ] = "yeast_children";
+   
    return tmp;
 }
 
@@ -1791,6 +1896,30 @@ QHash<QString,Brewtarget::DBTable> Database::classNameToTableHash()
    tmp["Style"] = Brewtarget::STYLETABLE;
    tmp["Water"] = Brewtarget::WATERTABLE;
    tmp["Yeast"] = Brewtarget::YEASTTABLE;
+   
+   return tmp;
+}
+
+QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToChildTableHash()
+{
+   QHash<Brewtarget::DBTable,Brewtarget::DBTable> tmp;
+   
+   tmp[Brewtarget::FERMTABLE] = Brewtarget::FERMCHILDTABLE;
+   tmp[Brewtarget::HOPTABLE] = Brewtarget::HOPCHILDTABLE;
+   tmp[Brewtarget::MISCTABLE] = Brewtarget::MISCCHILDTABLE;
+   tmp[Brewtarget::YEASTTABLE] = Brewtarget::YEASTCHILDTABLE;
+   
+   return tmp;
+}
+
+QHash<Brewtarget::DBTable,Brewtarget::DBTable> Database::tableToInventoryTableHash()
+{
+   QHash<Brewtarget::DBTable,Brewtarget::DBTable> tmp;
+   
+   tmp[Brewtarget::FERMTABLE] = Brewtarget::FERMINVTABLE;
+   tmp[Brewtarget::HOPTABLE] = Brewtarget::HOPINVTABLE;
+   tmp[Brewtarget::MISCTABLE] = Brewtarget::MISCINVTABLE;
+   tmp[Brewtarget::YEASTTABLE] = Brewtarget::YEASTINVTABLE;
    
    return tmp;
 }
@@ -1941,6 +2070,18 @@ void Database::updateSchema()
       curVer = nextVer;
    }
    
+	//populate ingredient links
+	int repopChild = 0;
+	QSqlQuery popchildq( "SELECT repopulateChildrenOnNextStart FROM settings WHERE id=1", sqlDatabase() );
+   if( popchildq.next() )
+      repopChild = popchildq.record().value("repopulateChildrenOnNextStart").toInt();
+ 	
+	if(repopChild == 1){
+		populateChildTablesByName();
+		QSqlQuery popchildq( "UPDATE settings SET repopulateChildrenOnNextStart = 0", sqlDatabase() );
+   
+	}
+	
    // Save the current version to the database.
    verq.prepare("UPDATE settings SET version=:version WHERE id=1");
    verq.bindValue(":version", curVer);

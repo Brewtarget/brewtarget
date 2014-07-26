@@ -254,6 +254,13 @@ QVariant YeastTableModel::data( const QModelIndex& index, int role ) const
          return QVariant(row->form());
       else
          return QVariant();
+      case YEASTINVENTORYCOL:
+      if( role != Qt::DisplayRole )
+         return QVariant();
+
+      unit  = displayUnit(index.column());
+
+      return QVariant( row->inventory() );
       case YEASTAMOUNTCOL:
       if( role != Qt::DisplayRole )
          return QVariant();
@@ -287,6 +294,8 @@ QVariant YeastTableModel::headerData( int section, Qt::Orientation orientation, 
             return QVariant(tr("Type"));
          case YEASTFORMCOL:
             return QVariant(tr("Form"));
+         case YEASTINVENTORYCOL:
+            return QVariant(tr("Inventory"));
          case YEASTAMOUNTCOL:
             return QVariant(tr("Amount"));
          case YEASTLABCOL:
@@ -363,6 +372,15 @@ bool YeastTableModel::setData( const QModelIndex& index, const QVariant& value, 
          if( value.canConvert(QVariant::Int) )
          {
             row->setForm(static_cast<Yeast::Form>(value.toInt()));
+            return true;
+         }
+         else
+            return false;
+      case YEASTINVENTORYCOL:
+         if( value.canConvert(QVariant::String) )
+         {
+            unit = displayUnit(YEASTINVENTORYCOL);
+            row->setInventoryQuanta( value.toInt() );
             return true;
          }
          else

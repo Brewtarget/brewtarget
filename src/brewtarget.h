@@ -142,7 +142,26 @@ public:
       //! In the Water table. 11
       WATERTABLE,
       //! In the Yeast table. 12
-      YEASTTABLE
+      YEASTTABLE,
+	  
+	  //! In the Fermentable Inventory table. 13
+      FERMINVTABLE,
+      //! In the Hop Inventory table. 14
+      HOPINVTABLE,
+      //! In the Misc Inventory table. 15
+      MISCINVTABLE,			  
+	  //! In the Yeast Inventory table. 16
+      YEASTINVTABLE,
+	  
+      //! In the Fermentable Parent Child Relationship table. 17
+      FERMCHILDTABLE,
+      //! In the Hop Parent Child Relationship table. 18
+      HOPCHILDTABLE,
+      //! In the Misc Parent Child Relationship table. 19
+      MISCCHILDTABLE,			  
+	  //! In the Yeast Parent Child Relationship table. 20
+      YEASTCHILDTABLE
+	  		  
    };
    
    //! \return the data directory

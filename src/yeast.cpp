@@ -35,6 +35,7 @@ QHash<QString,QString> Yeast::tagToPropHash()
    //propHash["TYPE"] = "type";
    //propHash["FORM"] = "form";
    propHash["AMOUNT"] = "amount";
+   propHash["INVENTORY"] = "inventory";
    propHash["AMOUNT_IS_WEIGHT"] = "amountIsWeight";
    propHash["LABORATORY"] = "laboratory";
    propHash["PRODUCT_ID"] = "productID";
@@ -118,6 +119,11 @@ const QString Yeast::formStringTr() const
 double Yeast::amount() const
 {
    return get("amount").toDouble();
+}
+
+int Yeast::inventory() const
+{
+   return getInventory("quanta").toInt();
 }
 
 bool Yeast::amountIsWeight() const
@@ -217,6 +223,14 @@ void Yeast::setAmount( double var )
       Brewtarget::logW( QString("Yeast: amount < 0: %1").arg(var) );
    else
       set("amount", "amount", var);
+}
+
+void Yeast::setInventoryQuanta( int var )
+{
+   if( var < 0.0 )
+      Brewtarget::logW( QString("Yeast: inventory < 0: %1").arg(var) );
+   else
+      setInventory("inventory", "quanta", var);
 }
 
 void Yeast::setAmountIsWeight( bool var )

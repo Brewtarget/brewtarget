@@ -64,6 +64,8 @@ public:
    Q_PROPERTY( double time READ time WRITE setTime /*NOTIFY changed*/ /*changedTime*/ )
    //! \brief The amount in either kg or L, depending on \c amountIsWeight().
    Q_PROPERTY( double amount READ amount WRITE setAmount /*NOTIFY changed*/ /*changedAmount*/ )
+   //! \brief The amount in inventory in either kg or L, depending on \c amountIsWeight().
+   Q_PROPERTY( double inventory READ inventory WRITE setInventoryAmount /*NOTIFY changed*/ /*changedAmount*/ )
    //! \brief Whether the amount is weight (kg), or volume (L).
    Q_PROPERTY( bool amountIsWeight READ amountIsWeight WRITE setAmountIsWeight /*NOTIFY changed*/ /*changedAmountIsWeight*/ )
    //! \brief What to use it for.
@@ -76,6 +78,7 @@ public:
    void setType( Type t );
    void setUse( Use u );
    void setAmount( double var );
+   void setInventoryAmount( double var );
    void setTime( double var );
    void setAmountIsWeight( bool var );
    void setUseFor( const QString &var );
@@ -90,6 +93,7 @@ public:
    const QString useString() const;
    const QString useStringTr() const;
    double amount() const;
+   double inventory() const;
    double time() const;
    bool amountIsWeight() const;
    QString useFor() const;
