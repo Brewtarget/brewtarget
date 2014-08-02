@@ -93,6 +93,9 @@ public:
    //! \brief Should be called when we are about to close down.
    void unload(bool keepChanges = true);
 
+   //! \brief Create a blank database in the given file
+   static bool createBlank(QString const& filename);
+   
 	//! backs up database to 'dir' in chosen directory
    static bool backupToDir(QString dir);
 

@@ -290,6 +290,27 @@ bool Database::load()
    return true;
 }
 
+bool Database::createBlank(QString const& filename)
+{
+   {
+      QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE", "blank");
+      sqldb.setDatabaseName(filename);
+      bool dbIsOpen = sqldb.open();
+      if( ! dbIsOpen )
+      {
+         Brewtarget::logW(QString("Database::createBlank(): could not open '%1'").arg(filename));
+         return false;
+      }
+      
+      DatabaseSchemaHelper::create(sqldb);
+      
+      sqldb.close();
+   } // sqldb gets destroyed as it goes out of scope before removeDatabase()
+   
+   QSqlDatabase::removeDatabase( "blank" );
+   return true;
+}
+
 bool Database::loadSuccessful()
 {
    return loadWasSuccessful;
