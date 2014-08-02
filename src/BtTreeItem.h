@@ -218,7 +218,7 @@ public:
    // know the type of the item
    QVariant data(int column);
 
-   //! \brief sets the \c t type of the object and the \d data 
+   //! \brief sets the \c t type of the object and the \c d data
    void setData(int t, QObject *d);
 
    //! \brief returns the data as a Recipe

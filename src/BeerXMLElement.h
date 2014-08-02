@@ -137,11 +137,13 @@ protected:
    Brewtarget::DBTable _table;
 
    /*!
-    * \param prop_name - A meta-property name
-    * \param col_name - The appropriate column in the table.
+    * \param prop_name A meta-property name
+    * \param col_name The appropriate column in the table.
+    * \param value the new value
+    * \param notify true to call NOTIFY method associated with \c prop_name
     * Should do the following:
     * 1) Set the appropriate value in the appropriate table row.
-    * 2) Call the NOTIFY method associated with \b prop_name if \b notify == true.
+    * 2) Call the NOTIFY method associated with \c prop_name if \c notify == true.
     */
    void set( const char* prop_name, const char* col_name, QVariant const& value, bool notify = true );
    

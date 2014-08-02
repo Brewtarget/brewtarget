@@ -208,9 +208,7 @@ public:
    //void addInstruction( Instruction* ins );
    void removeInstruction( Instruction* ins );
    /*!
-    * \brief Swap instructions j and k.
-    * \param j some integer less than getNumInstructions()
-    * \param k some integer less than getNumInstructions()
+    * \brief Swap instructions \c ins1 and \c ins2
     */
    void swapInstructions( Instruction* ins1, Instruction* ins2 );
    //! \brief Remove all instructions.

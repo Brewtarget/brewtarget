@@ -21,14 +21,6 @@
 #include "brewtarget.h"
 #include <QSettings>
 #include <QDebug>
-
-/*! \brief Initialize the BtTextEdit with the parent and do some things with the type
- * \param parent - QWidget* to the parent object
- * \param lType - the type of label: none, gravity, mass or volume
- * \return the initialized widget
- * \todo Not sure if I can get the name of the widget being created.
- *       Not sure how to signal the parent to redisplay
- */
  
 BtTextEdit::BtTextEdit(QWidget *parent)
 {

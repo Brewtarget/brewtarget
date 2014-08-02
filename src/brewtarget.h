@@ -191,11 +191,11 @@ public:
    static QString displayAmount( double amount, Unit* units=0, int precision=3, 
                                  unitDisplay displayUnit = noUnit, unitScale displayScale = noScale );
    /*!
-    *  \brief Displays an amount in the appropriate units.
+    * \brief Displays an amount in the appropriate units.
     * 
-    *  \param amount the amount to display
-    *  \param units the units that \c amount is in
-    *  \param precision how many decimal places
+    * \param element Element whose amount we wish to display
+    * \param attribute the \c QObject::property of \c element that returns the
+    *        amount we wish to display
     */
    static QString displayAmount( BeerXMLElement* element, QObject* object, QString attribute, Unit* units=0, int precision=3 );
 

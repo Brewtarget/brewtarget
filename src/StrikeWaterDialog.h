@@ -26,7 +26,7 @@
 
 /*! 
  * \class StrikeWaterDialog
- * \author Maxime Lavigne <malavv>
+ * \author Maxime Lavigne
  *
  * \brief Dialog to calculate the amount and temperature of the strike water.
  */
