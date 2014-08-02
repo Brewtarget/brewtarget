@@ -18,18 +18,46 @@
 
 #include <QApplication>
 #include <QStringList>
+#include <QHash>
 #include "config.h"
 #include "brewtarget.h"
 #include "database.h"
 
-// TODO: replace with real parsing (Qt5?)
+// TODO: replace with real parsing (Qt5)
 void parseArgs(QApplication const& app)
 {
+   int i;
    QStringList args(app.arguments());
-   int i = args.indexOf("--from-xml");
-   if( i >= 0 )
+   QHash< QString, QString > optionValue;
+   
+   // Parse the args into option/value pairs
+   for( i = 0; i < args.size(); ++i )
    {
-      Database::instance().importFromXML(args.at(i+1));
+      QString option(args.at(i));
+      QString value;
+      
+      // All options start with '-'
+      if( !option.startsWith("-") )
+         continue;
+      
+      if( i+1 < args.size() )
+      {
+         // If the arg following the current one is not an option, it is a
+         // value.
+         if( !args.at(i+1).startsWith("-") )
+         {
+            value = args.at(i+1);
+            ++i;
+         }
+      }
+      
+      optionValue.insert(option, value);
+   }
+   
+   // --from-xml
+   if( optionValue.contains("--from-xml") )
+   {
+      Database::instance().importFromXML(optionValue["--from-xml"]);
       Database::dropInstance();
       // If you know enough to run --from-xml, I am going to assume you know
       // enough to do it right
