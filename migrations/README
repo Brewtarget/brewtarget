@@ -1,4 +1,0 @@
-## Note to Developers
-
-Due to limitations with QSqlQuery parsing, each statement in a migration must
-be on a single line.

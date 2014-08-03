@@ -64,6 +64,13 @@ void parseArgs(QApplication const& app)
       Brewtarget::setOption("converted", QDate().currentDate().toString());
       exit(0);
    }
+   
+   // --create-blank
+   if( optionValue.contains("--create-blank") )
+   {
+      Database::createBlank(optionValue["--create-blank"]);
+      exit(0);
+   }
 }
 
 int main(int argc, char **argv)

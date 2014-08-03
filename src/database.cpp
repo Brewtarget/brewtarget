@@ -60,6 +60,7 @@
 #include "QueuedMethod.h"
 #include "SetterCommand.h"
 #include "SetterCommandStack.h"
+#include "DatabaseSchemaHelper.h"
 
 // Static members.
 Database* Database::dbInstance = 0;
@@ -115,6 +116,8 @@ Database::~Database()
 bool Database::load()
 {
    bool dbIsOpen;
+   bool createFromScratch=false;
+   bool schemaUpdated=false;
    
    // Set file names.
    dbFileName = (Brewtarget::getUserDataDir() + "database.sqlite");
@@ -147,12 +150,9 @@ bool Database::load()
    {
       Brewtarget::userDatabaseDidNotExist = true;
       
-      // If there's no dataDbFile, create dbFile from scratch.
+      // Have to wait until db is open before creating from scratch.
       if( !dataDbFile.exists() )
-      {
-         QFile::copy( ":/blankdb.sqlite", dbFileName );
-         QFile::setPermissions( dbFileName, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup );
-      }
+         createFromScratch = true;
       else
       {
          dataDbFile.copy(dbFileName);
@@ -181,6 +181,15 @@ bool Database::load()
       // TODO: if we can't open the database, what should we do?
       return false;
    }
+   
+   // Database is open, so can create from scratch if needed
+   if(createFromScratch)
+   {
+      bool success = DatabaseSchemaHelper::create(sqldb);
+      if( !success )
+         Brewtarget::logE("DatabaseSchemaHelper::create() failed");
+   }
+   
    // Associate this db with the current thread.
    _threadToConnection.insert(QThread::currentThread(), sqldb.connectionName());
    _threadToConnectionMutex.unlock();
@@ -194,7 +203,7 @@ bool Database::load()
    
    // Update the database if need be. This has to happen before we do anything
    // else or we dump core 
-   updateSchema();
+   schemaUpdated = updateSchema();
    
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
@@ -275,7 +284,30 @@ bool Database::load()
          connect( *m, SIGNAL(changed(QMetaProperty,QVariant)), *l, SLOT(acceptMashStepChange(QMetaProperty,QVariant)) );
    }
 
-   dirty = false;
+   // The database MUST be saved if we created from scratch.
+   // It SHOULD be saved if the schema was updated.
+   dirty = createFromScratch | schemaUpdated;
+   return true;
+}
+
+bool Database::createBlank(QString const& filename)
+{
+   {
+      QSqlDatabase sqldb = QSqlDatabase::addDatabase("QSQLITE", "blank");
+      sqldb.setDatabaseName(filename);
+      bool dbIsOpen = sqldb.open();
+      if( ! dbIsOpen )
+      {
+         Brewtarget::logW(QString("Database::createBlank(): could not open '%1'").arg(filename));
+         return false;
+      }
+      
+      DatabaseSchemaHelper::create(sqldb);
+      
+      sqldb.close();
+   } // sqldb gets destroyed as it goes out of scope before removeDatabase()
+   
+   QSqlDatabase::removeDatabase( "blank" );
    return true;
 }
 
@@ -2003,71 +2035,18 @@ QList<Yeast*> Database::yeasts()
    return tmp;
 }
 
-void Database::updateSchema()
+bool Database::updateSchema()
 {
-   int line, col;
-   QDomDocument xmlDoc;
-   QDomElement element;
-   QDomNodeList list;
-   QString err;
-   QFile inFile;
-   inFile.setFileName(":migrations/migrations.xml");
-   // Key is current version, value is (migration-file, next version).
-   QHash<QString, QPair<QString, QString> > migHash;
-   QString curVer, nextVer, migFile;
+   int currentVersion = DatabaseSchemaHelper::currentVersion( sqlDatabase() );
+   int newVersion = DatabaseSchemaHelper::dbVersion;
+   bool doUpdate = currentVersion < newVersion;
    
-   // Open the XML file describing the migrations.
-   if( ! inFile.open(QIODevice::ReadOnly) )
+   if( doUpdate )
    {
-      Brewtarget::logW(QString("Database::updateSchema: Could not open %1 for reading.").arg(inFile.fileName()));
-      return;
-   }
-   if( ! xmlDoc.setContent(&inFile, false, &err, &line, &col) )
-      Brewtarget::logW(QString("Database::updateSchema: Bad document formatting in %1 %2:%3. %4").arg(inFile.fileName()).arg(line).arg(col).arg(err) );
-   
-   // Process the list of available migrations.
-   list = xmlDoc.elementsByTagName("migration");
-   for( int i = 0; i < list.count(); ++i )
-   {
-      element = list.at(i).toElement();
-      curVer = element.attribute("from");
-      nextVer = element.attribute("to");
-      migFile = QString(":migrations/%1").arg(element.firstChild().toText().nodeValue().trimmed());
-      
-      migHash.insert( curVer, qMakePair(migFile, nextVer) );
-   }
-   
-   // Determine the current version.
-   QSqlQuery verq( "SELECT version FROM settings WHERE id=1", sqlDatabase() );
-   if( verq.next() )
-      curVer = verq.record().value("version").toString();
-   else
-      curVer = "2.0.0";
-   
-   // Keep applying migrations and walking the list until there are no more to apply.
-   while( migHash.contains(curVer) )
-   {
-      QFile migFile(migHash[curVer].first);
-      migFile.open(QFile::ReadOnly);
-      nextVer = migHash[curVer].second;
-      QTextStream stream(&migFile);
-      
-      // Hope that each line is its own statement.
-      while( !stream.atEnd() )
-      {
-         QString statement = stream.readLine().trimmed();
-
-         if( statement.isEmpty() )
-            continue;
-         if (statement.startsWith("--"))
-            continue;
-
-         QSqlQuery q(statement, sqlDatabase());
-         if( q.lastError().isValid() )
-            Brewtarget::logW( q.lastError().text() );
-      }
-      
-      curVer = nextVer;
+      bool success = DatabaseSchemaHelper::migrate( currentVersion, newVersion, sqlDatabase() );
+      if( !success )
+         Brewtarget::logE(QString("Database migration %1->%2 failed").arg(currentVersion).arg(newVersion));
+      dirty = true;
    }
    
 	//populate ingredient links
@@ -2082,10 +2061,7 @@ void Database::updateSchema()
    
 	}
 	
-   // Save the current version to the database.
-   verq.prepare("UPDATE settings SET version=:version WHERE id=1");
-   verq.bindValue(":version", curVer);
-   verq.exec();
+	return doUpdate;
 }
 
 bool Database::importFromXML(const QString& filename)

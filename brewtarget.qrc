@@ -60,8 +60,5 @@
         <file alias="css/recipe.css">css/recipe.css</file>
         <file alias="css/tooltip.css">css/tooltip.css</file>
         <file alias="create_db.sql">create_db.sql</file>
-        <file alias="migrations/migrations.xml">migrations/migrations.xml</file>
-        <file alias="migrations/migration_2.0.0_to_2.0.2.sql">migrations/migration_2.0.0_to_2.0.2.sql</file>
-        <file alias="migrations/migration_2.0.2_to_2.1.0.sql">migrations/migration_2.0.2_to_2.1.0.sql</file>
     </qresource>
 </RCC>
