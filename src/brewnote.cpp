@@ -130,21 +130,24 @@ void BrewNote::populateNote(Recipe* parent)
    if ( mash )
    {
       steps = mash->mashSteps();
-      mStep = steps.at(0);
-      if ( mStep )
+      if ( ! steps.isEmpty() )
       {
-         double endTemp = mStep->endTemp_c() > 0.0 ? mStep->endTemp_c() : mStep->stepTemp_c();
-         setProjStrikeTemp_c(mStep->infuseTemp_c());
+         mStep = steps.at(0);
+         if ( mStep )
+         {
+            double endTemp = mStep->endTemp_c() > 0.0 ? mStep->endTemp_c() : mStep->stepTemp_c();
+            setProjStrikeTemp_c(mStep->infuseTemp_c());
 
-         setMashFinTemp_c(endTemp);
-         setProjMashFinTemp_c(endTemp);
-      }
+            setMashFinTemp_c(endTemp);
+            setProjMashFinTemp_c(endTemp);
+         }
 
-      if ( steps.size() - 2 > 0 )
-      {
-         mStep = steps.at( steps.size() - 2 );
-         setMashFinTemp_c( mStep->endTemp_c());
-         setProjMashFinTemp_c( mStep->endTemp_c());
+         if ( steps.size() - 2 > 0 )
+         {
+            mStep = steps.at( steps.size() - 2 );
+            setMashFinTemp_c( mStep->endTemp_c());
+            setProjMashFinTemp_c( mStep->endTemp_c());
+         }
       }
    }
 
