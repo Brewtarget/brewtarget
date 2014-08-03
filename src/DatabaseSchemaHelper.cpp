@@ -992,7 +992,10 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
 {
    QSqlQuery q(db);
    bool ret = true;
- 
+
+   // NOTE: use this to debug your migration
+#define CHECKQUERY if(!ret) qDebug() << QString("ERROR: %1\nQUERY: %2").arg(q.lastError().text()).arg(q.lastQuery());
+
    // NOTE: Add a new case when adding a new schema change
    switch(oldVersion)
    {
@@ -1285,6 +1288,7 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
    }
    
    return ret;
+#undef CHECKQUERY
 }
 
 bool DatabaseSchemaHelper::migrate(int oldVersion, int newVersion, QSqlDatabase db)
