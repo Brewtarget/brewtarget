@@ -351,13 +351,21 @@ ENDIF()
 
 #===========================Create the binary==================================
 
-ADD_EXECUTABLE(
-   ${brewtarget_EXECUTABLE}
-   ${SRCDIR}/main.cpp
+# This creates a "library" of object files so that we do not have to recompile
+# the source files once per target, but rather, just once EVER.
+ADD_LIBRARY(
+   btobjlib
+   OBJECT
    ${brewtarget_SRCS}
    ${brewtarget_MOC_SRCS}
    ${brewtarget_QRC_CPP}
    ${brewtarget_UIS_H}
+)
+
+ADD_EXECUTABLE(
+   ${brewtarget_EXECUTABLE}
+   ${SRCDIR}/main.cpp
+   $<TARGET_OBJECTS:btobjlib>
 )
 ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
 
@@ -385,10 +393,7 @@ ADD_EXECUTABLE(
    brewtarget_tests
    ${SRCDIR}/Testing.cpp
    ${testing_MOC_SRCS}
-   ${brewtarget_SRCS}
-   ${brewtarget_MOC_SRCS}
-   ${brewtarget_QRC_CPP}
-   ${brewtarget_UIS_H}
+   $<TARGET_OBJECTS:btobjlib>
 )
 TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )
 ADD_TEST(
