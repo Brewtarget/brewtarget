@@ -59,6 +59,5 @@
         <file alias="css/brewday.css">css/brewday.css</file>
         <file alias="css/recipe.css">css/recipe.css</file>
         <file alias="css/tooltip.css">css/tooltip.css</file>
-        <file alias="create_db.sql">create_db.sql</file>
     </qresource>
 </RCC>
