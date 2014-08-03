@@ -14,6 +14,7 @@ for consumption by the typical end-user.
 ### Bug Fixes
 
 * Boil SG was wrong if kettle losses were not zero [#1328761](https://bugs.launchpad.net/brewtarget/+bug/1328761).
+* Extract recipes crash brew-it [#1340484](https://bugs.launchpad.net/brewtarget/+bug/1340484)
 
 ### Incompatibilities
 
