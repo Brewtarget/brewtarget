@@ -208,120 +208,6 @@
     </message>
 </context>
 <context>
-    <name>BrewTargetTreeModel</name>
-    <message>
-        <source>Name</source>
-        <translation>Nome</translation>
-    </message>
-    <message>
-        <source>Brew Date</source>
-        <translation>Data di birrificazione</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Stile</translation>
-    </message>
-    <message>
-        <source>Boil Time</source>
-        <translation>Tempo di bollitura</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Colore</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Tipologia</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Usa</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Forma</translation>
-    </message>
-    <message>
-        <source>Category</source>
-        <translation type="unfinished">Categoria</translation>
-    </message>
-    <message>
-        <source>Number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Letter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BrewTargetTreeView</name>
-    <message>
-        <source>New Recipe</source>
-        <translation>Nuova Ricetta</translation>
-    </message>
-    <message>
-        <source>Brew It!</source>
-        <translation>Birrifica!</translation>
-    </message>
-    <message>
-        <source>Brew Again</source>
-        <translation>Birrifica ancora</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation>Cancella</translation>
-    </message>
-    <message>
-        <source>New Equipment</source>
-        <translation>Nuovi Ingredienti</translation>
-    </message>
-    <message>
-        <source>New Fermentable</source>
-        <translation>Nuovo fermentabile</translation>
-    </message>
-    <message>
-        <source>New Hop</source>
-        <translation>Nuovo Luppolo</translation>
-    </message>
-    <message>
-        <source>New Misc</source>
-        <translation>Nuova Aggiunta</translation>
-    </message>
-    <message>
-        <source>New Yeast</source>
-        <translation>Nuovo Lievito</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Copia</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation>Esporta</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation>Importa</translation>
-    </message>
-    <message>
-        <source>Change date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Style</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recalculate eff</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Brewtarget</name>
     <message>
         <source>Default</source>
@@ -329,7 +215,7 @@
     </message>
     <message>
         <source>EBC</source>
-        <translation type="unfinished"></translation>
+        <translation>EBC</translation>
     </message>
     <message>
         <source>SRM</source>
@@ -385,7 +271,7 @@
     </message>
     <message>
         <source>British Imperial</source>
-        <translation type="unfinished"></translation>
+        <translation>Imperiali Britanniche</translation>
     </message>
     <message>
         <source>MilliLiters</source>
@@ -415,6 +301,10 @@
         <source>Gallons</source>
         <translation>Galloni</translation>
     </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Sconosciuto</translation>
+    </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
@@ -429,6 +319,148 @@
     <message>
         <source>Too high for style.</source>
         <translation>Troppo alto per lo stile.</translation>
+    </message>
+</context>
+<context>
+    <name>BtTreeModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished">Data di birrificazione</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Stile</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Tempo di bollitura</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Colore</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Tipologia</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation type="unfinished">Usa</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Forma</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">Categoria</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Numero</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="unfinished">Lettera</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Guida</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BtTreeView</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Nuovo</translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Ricetta</translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Birrifica!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Birrifica ancora</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Modifica data</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Cancella</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Attrezzatura</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished">Fermentabile</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished">Luppolo</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished">Aggiunta</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Stile</translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished">Lievito</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Copia</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Esporta</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Importa</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Cancella %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">Cancella %1 %2?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -466,19 +498,19 @@
     </message>
     <message>
         <source>The tun volume you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>Il volume della botte che hai inserito è 0. Ciò potrebbe causare problemi.</translation>
     </message>
     <message>
         <source>The batch size you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>La quantità inserita è 0. Ciò potrebbe causare problemi</translation>
     </message>
     <message>
         <source>Hop Utilization Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Avviso Utilizzo del Luppolo</translation>
     </message>
     <message>
         <source>The hop utilization percentage you entered is 0. This may cause problems</source>
-        <translation type="unfinished"></translation>
+        <translation>La percentuale di luppolo che hai inserito è 0. Ciò potrebbe causare problemi</translation>
     </message>
 </context>
 <context>
@@ -573,6 +605,10 @@
         <source>Color (EBC)</source>
         <translation>Colore (EBC)</translation>
     </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Hop</name>
@@ -598,7 +634,7 @@
     </message>
     <message>
         <source>Bittering</source>
-        <translation type="unfinished">Amarezza</translation>
+        <translation>Amarezza</translation>
     </message>
     <message>
         <source>Both</source>
@@ -689,6 +725,41 @@
         <source>Form</source>
         <translation>Forma</translation>
     </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>IbuGuSlider</name>
+    <message>
+        <source>Cloying</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extra Malty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slightly Malty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Balanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slightly Hoppy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extra Hoppy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Way Hoppy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -713,44 +784,8 @@
         <translation>Volete impostare la partita , la quantità di bollitura e il tempo che è richiesto dalle apparecchiature?</translation>
     </message>
     <message>
-        <source>Delete %1</source>
-        <translation>Cancella %1</translation>
-    </message>
-    <message>
-        <source>Delete %1 %2?</source>
-        <translation>Cancella %1 %2?</translation>
-    </message>
-    <message>
         <source>HTML files (*.html)</source>
         <translation>HTML files (*.html)</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Nuovo</translation>
-    </message>
-    <message>
-        <source>Recipe</source>
-        <translation>Ricetta</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Attrezzatura</translation>
-    </message>
-    <message>
-        <source>Fermentable</source>
-        <translation>Fermentabile</translation>
-    </message>
-    <message>
-        <source>Hop</source>
-        <translation>Luppolo</translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation>Aggiunta</translation>
-    </message>
-    <message>
-        <source>Yeast</source>
-        <translation>Lievito</translation>
     </message>
     <message>
         <source>Copy %1</source>
@@ -878,62 +913,47 @@
     </message>
     <message>
         <source>Choose File</source>
-        <translation type="unfinished"></translation>
+        <translation>Scegli File</translation>
     </message>
     <message>
         <source>SQLite (*.sqlite)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation type="unfinished">Stile</translation>
+        <translation>SQLite (*.sqlite)</translation>
     </message>
     <message>
         <source>Copy Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia Stile</translation>
     </message>
     <message>
         <source>The database has been converted/upgraded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il database è stato convertito/aggiornato.</translation>
     </message>
     <message>
         <source>The original XML files can be found in </source>
-        <translation type="unfinished"></translation>
+        <translation>I file XML originali si trovano in </translation>
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
+        <translation>L&apos;importazione conteneva dati beerXML non validi. Sono stati importati, ma si prega di assicurarsi che abbiano senso.</translation>
+    </message>
+    <message>
+        <source>Folder name</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MaltinessWidget</name>
     <message>
-        <source>&lt;b&gt;Cloying&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Stucchevole&lt;/b&gt;</translation>
+        <source>Folder name:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Extra malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Molto maltato&lt;/b&gt;</translation>
+        <source>Bad Name</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Slightly malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Leggermente maltato&lt;/b&gt;</translation>
+        <source>A folder name must have at least one non-whitespace character in it</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Balanced&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Bilanciato&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Slightly hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Leggermente Luppolato&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Extra hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Moltp Luppolato&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Way hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Modo luppolato&lt;/b&gt;</translation>
+        <source>A folder name must have at least one non-/ character in it</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1124,7 +1144,7 @@
     </message>
     <message>
         <source>Bottling</source>
-        <translation type="unfinished">Imbottigliamento</translation>
+        <translation>Imbottigliamento</translation>
     </message>
 </context>
 <context>
@@ -1151,14 +1171,18 @@
     </message>
     <message>
         <source>Weight</source>
-        <translation type="unfinished">peso</translation>
+        <translation>Peso</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation type="unfinished">Volume</translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <source>Amount Type</source>
+        <translation>Tipo di Quantità</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1183,6 +1207,58 @@
     <message>
         <source>Please restart Brewtarget.</source>
         <translation>Si prega di riavviare Brewtarget.</translation>
+    </message>
+    <message>
+        <source>Catalan</source>
+        <translation type="unfinished">Catalana</translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished">Ceca</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished">Tedesca</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="unfinished">Inglese</translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="unfinished">Spagnola</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="unfinished">Francese</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished">Italiano</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation type="unfinished">Olandese</translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="unfinished">Polacca</translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation type="unfinished">Portoghese</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1370,10 +1446,6 @@
         <translation>&quot;%1&quot; Non può essere letto.</translation>
     </message>
     <message>
-        <source>Config directory &quot;%1&quot; cannot be read.</source>
-        <translation>Configura Directory %1&quot; non può essere letto.</translation>
-    </message>
-    <message>
         <source>New Version</source>
         <translation>Nuova versione</translation>
     </message>
@@ -1383,7 +1455,7 @@
     </message>
     <message>
         <source>Stop bothering you about new versions?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi non essere più avvisato del rilascio delle nuove versioni?</translation>
     </message>
     <message>
         <source>Database Failure</source>
@@ -1591,7 +1663,11 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stile</translation>
+        <translation>Stile</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1866,16 +1942,8 @@ Il Volume finale del primo è %1.</translation>
         <translation>FG</translation>
     </message>
     <message>
-        <source>Unknown</source>
-        <translation>Sconosciuto</translation>
-    </message>
-    <message>
         <source>ABV</source>
         <translation>ABV</translation>
-    </message>
-    <message>
-        <source>Bitterness</source>
-        <translation>Amarezza</translation>
     </message>
     <message>
         <source>Color</source>
@@ -2053,6 +2121,42 @@ Il Volume finale del primo è %1.</translation>
         <source>Print Document</source>
         <translation>stampa documento</translation>
     </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">Categoria</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Guida</translation>
+    </message>
+    <message>
+        <source>BoilTime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lab</source>
+        <translation type="unfinished">Laboratorio</translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flocculation</source>
+        <translation type="unfinished">Flocculazione</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
@@ -2078,6 +2182,13 @@ Il Volume finale del primo è %1.</translation>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>Le attrezzature e il mash sono state azzerate a causa del fatto che le temperature non si sono abbassate facilmente. Si prega di eseguire nuovamente la procedura guidata di mosto.</translation>
+    </message>
+</context>
+<context>
+    <name>StrikeWaterDialog</name>
+    <message>
+        <source>N/A</source>
+        <translation type="unfinished">N/A</translation>
     </message>
 </context>
 <context>
@@ -2237,6 +2348,10 @@ Il Volume finale del primo è %1.</translation>
         <source>Product ID</source>
         <translation>ID Prodotto</translation>
     </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>aboutDialog</name>
@@ -2245,20 +2360,38 @@ Il Volume finale del primo è %1.</translation>
         <translation>Chi è Brewtaget</translation>
     </message>
     <message>
+        <source>Donate</source>
+        <translation>Dona</translation>
+    </message>
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2013 by the developers below.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget: for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2014 by the following developers.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Peter Buelow&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Dan Cavanagh&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Mik Firestone&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt; - Lead developer&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mik Firestone &amp;lt;mikfire@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dan Cavanagh &amp;lt;dan@dancavanagh.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rob Taylor &amp;lt;robtaylor@floopily.org&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Kregg K &amp;lt;gigatropolis@yahoo.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;A.J. Drobnich &amp;lt;aj.drobnich@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ted Wright &amp;lt;tedwright@users.sourceforge.net&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Charles Fourneau (plut0nium) &amp;lt;charles.fourneau@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Peter Buelow &amp;lt;goballstate@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Maxime Lavigne &amp;lt;duguigne@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;David Grundberg &amp;lt;individ@acc.umu.se&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Tim Payne &amp;lt;swstim@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Luke Vincent &amp;lt;luke.r.vincent@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Eric Tamme &amp;lt;etamme@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Julein &amp;lt;j2bweb@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Jeff Bailey &amp;lt;skydvr38@verizon.net&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Piotr Przybyla (przybysh) &amp;lt;przybysh@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Chris Hamilton &amp;lt;marker5a@gmail.com&amp;gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -2275,25 +2408,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Guido Carpi (Italian translation)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ester (Catalan translation)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (Portuguese translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jan Grmela (Czech translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alpha tester)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;https://www.gitorious.org/brewtarget&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;www.gitorious.org/brewtarget&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Donate</source>
-        <translation>Dona</translation>
     </message>
 </context>
 <context>
@@ -2774,7 +2890,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove selected ingredient</source>
-        <translation type="unfinished">Rimuovi ingerdiente selezionato</translation>
+        <translation>Rimuovi ingerdiente selezionato</translation>
     </message>
 </context>
 <context>
@@ -2919,6 +3035,18 @@ p, li { white-space: pre-wrap; }
         <source>Notes:</source>
         <translation>Note:</translation>
     </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>hopDialog</name>
@@ -2972,10 +3100,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Alpha acids as percent by mass</source>
         <translation>Alpha Acidi come percentuale in massa</translation>
-    </message>
-    <message>
-        <source>Amount </source>
-        <translation>Ammontare </translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3079,7 +3203,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Cohumulone</source>
-        <translation type="unfinished"></translation>
+        <translation>Coumulone</translation>
     </message>
     <message>
         <source>Myrcene (%)</source>
@@ -3096,6 +3220,18 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes:</source>
         <translation>Note:</translation>
+    </message>
+    <message>
+        <source>Default Amount </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3140,7 +3276,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stili</translation>
     </message>
     <message>
         <source>Fermentables</source>
@@ -3276,7 +3412,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove selected hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi luppolo selezionato</translation>
     </message>
     <message>
         <source>Edit selected hop</source>
@@ -3400,7 +3536,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra degli strumenti</translation>
     </message>
     <message>
         <source>About &amp;BrewTarget</source>
@@ -3420,67 +3556,67 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <source>&amp;Hops</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Luppoli</translation>
     </message>
     <message>
         <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
         <source>&amp;Miscs</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Miscellanea</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>&amp;Yeasts</source>
-        <translation type="unfinished"></translation>
+        <translation>L&amp;ieviti</translation>
     </message>
     <message>
         <source>Ctrl+Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Y</translation>
     </message>
     <message>
         <source>&amp;Equipments</source>
-        <translation type="unfinished"></translation>
+        <translation>Strum&amp;enti</translation>
     </message>
     <message>
         <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <source>&amp;Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stili</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+T</translation>
     </message>
     <message>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Esci</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>&amp;Import Recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importa Ricette</translation>
     </message>
     <message>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Opzioni</translation>
     </message>
     <message>
         <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Manuale</translation>
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
@@ -3488,19 +3624,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Ricetta negli Appunti come &amp;Testo</translation>
     </message>
     <message>
         <source>&amp;OG Correction Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aiuto Correzione Gravità &amp;Originale</translation>
     </message>
     <message>
         <source>&amp;Convert Units</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Converti Unità</translation>
     </message>
     <message>
         <source>Backup Database</source>
-        <translation type="unfinished">Backup Database</translation>
+        <translation>Backup del Database</translation>
     </message>
     <message>
         <source>Restore Database</source>
@@ -3508,7 +3644,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Copy Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Copia Ricetta</translation>
     </message>
     <message>
         <source>Pr&amp;iming Calculator</source>
@@ -3516,7 +3652,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>Strumenti &amp;Refrattometro</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
@@ -3532,23 +3668,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stampa</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Antepri&amp;ma di Stampa</translation>
     </message>
     <message>
         <source>&amp;Export To HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Esporta In HTML</translation>
     </message>
     <message>
         <source>&amp;Export to HTML</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Esporta in HTML</translation>
     </message>
     <message>
         <source>&amp;Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Backup</translation>
     </message>
     <message>
         <source>Save all recipes, ingredients, etc. to a backup folder</source>
@@ -3556,7 +3692,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ripristina</translation>
     </message>
     <message>
         <source>Restore recipes, ingredients, etc. from a previous backup</source>
@@ -3564,7 +3700,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Merge</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Unisci</translation>
     </message>
     <message>
         <source>Merge another set of recipes, ingredients, etc. into the current set</source>
@@ -3572,7 +3708,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;New Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nuova Ricetta</translation>
     </message>
     <message>
         <source>Timers</source>
@@ -3600,10 +3736,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Mashs</source>
-        <translation type="unfinished"></translation>
+        <translation>A&amp;mmosta</translation>
     </message>
     <message>
         <source>Mashes</source>
+        <translation>Ammostamenti</translation>
+    </message>
+    <message>
+        <source>1.0</source>
+        <translation type="unfinished">1.0</translation>
+    </message>
+    <message>
+        <source>application/x-brewtarget-ingredient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strike Water Calculator</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3611,7 +3759,7 @@ p, li { white-space: pre-wrap; }
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation type="unfinished"></translation>
+        <translation>Progettazione Ammostamenti</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3647,15 +3795,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>min</source>
-        <translation type="unfinished"></translation>
+        <translation>min</translation>
     </message>
     <message>
         <source>max</source>
-        <translation type="unfinished"></translation>
+        <translation>max</translation>
     </message>
     <message>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>Infusion Temp</source>
@@ -3675,7 +3823,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>tunVol</source>
-        <translation type="unfinished"></translation>
+        <translation>VolBotte</translation>
     </message>
     <message>
         <source>thickness</source>
@@ -3686,7 +3834,7 @@ p, li { white-space: pre-wrap; }
     <name>mashEditor</name>
     <message>
         <source>Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor Ammostamenti</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3718,7 +3866,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp iniziale botte</translation>
     </message>
     <message>
         <source>Get following parameters from the recipe&apos;s equipment.</source>
@@ -3960,6 +4108,18 @@ p, li { white-space: pre-wrap; }
         <source>Notes:</source>
         <translation>Note:</translation>
     </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>namedMashEditor</name>
@@ -3969,23 +4129,23 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash</source>
-        <translation type="unfinished">Mash</translation>
+        <translation>Ammostatura</translation>
     </message>
     <message>
         <source>Delete selected style</source>
-        <translation type="unfinished">Cancella stile selezionato</translation>
+        <translation>Elimina stile selezionato</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Initial grain temp</source>
-        <translation type="unfinished">Temperatura iniziale del Grano</translation>
+        <translation>Temp iniziale chicchi</translation>
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation type="unfinished">Temperatura di Sparge</translation>
+        <translation>Temperatura di Sparge</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
@@ -3993,27 +4153,27 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation type="unfinished">PH Sparge</translation>
+        <translation>pH di Sparge</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Note</translation>
+        <translation>Note</translation>
     </message>
     <message>
         <source>Tun</source>
-        <translation type="unfinished">Tun</translation>
+        <translation>Botte</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Temp iniziale botte</translation>
     </message>
     <message>
         <source>From Equipment</source>
-        <translation type="unfinished">Da attrezzatura</translation>
+        <translation>Dall&apos;attrezzatura</translation>
     </message>
     <message>
         <source>Tun mass</source>
-        <translation type="unfinished">Massa Tun</translation>
+        <translation>Massa Botte</translation>
     </message>
     <message>
         <source>Tun sp. heat</source>
@@ -4021,7 +4181,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tun specific heat (cal/(g*K))</source>
-        <translation type="unfinished">Calore specifico di tun (Cal/(g*K))</translation>
+        <translation>Calore specifico botte (cal/g*K))</translation>
     </message>
     <message>
         <source>Add mash step</source>
@@ -4260,50 +4420,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Language</source>
         <translation>Lingua</translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation>Ceca</translation>
-    </message>
-    <message>
-        <source>Catalan</source>
-        <translation>Catalana</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation>Tedesca</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation>Inglese</translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation>Spagnola</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation>Francese</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation>Italiano</translation>
-    </message>
-    <message>
-        <source>Dutch</source>
-        <translation>Olandese</translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation>Polacca</translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation>Portoghese</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4699,6 +4815,69 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>strikeWaterDialog</name>
+    <message>
+        <source>Strike Water Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial Infusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Original Grain Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Mash Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weight of Grain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Infusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Volume of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grain Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual Mash Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Infusion Water Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished">Calcola</translation>
+    </message>
+    <message>
+        <source>Strike Water Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume to add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: This calculator assumes a preheated mash tun.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>styleEditor</name>
     <message>
         <source>Style Editor</source>
@@ -5078,6 +5257,18 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes:</source>
         <translation>Note:</translation>
+    </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in inventory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

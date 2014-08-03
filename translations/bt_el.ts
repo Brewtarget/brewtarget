@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Heat water</source>
-        <translation>Θερμάντε το νερό</translation>
+        <translation>Ζεστάνετε το νερό</translation>
     </message>
 </context>
 <context>
@@ -200,120 +200,6 @@
     </message>
 </context>
 <context>
-    <name>BrewTargetTreeModel</name>
-    <message>
-        <source>Name</source>
-        <translation>Όνομα</translation>
-    </message>
-    <message>
-        <source>Brew Date</source>
-        <translation>Ημέρα Ζυθοποίησης</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Στυλ</translation>
-    </message>
-    <message>
-        <source>Boil Time</source>
-        <translation>Χρόνος βρασμού</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation>Χρώμα</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Τύπος</translation>
-    </message>
-    <message>
-        <source>Use</source>
-        <translation>Χρήση</translation>
-    </message>
-    <message>
-        <source>Form</source>
-        <translation>Μορφή</translation>
-    </message>
-    <message>
-        <source>Category</source>
-        <translation>Κατηγορία</translation>
-    </message>
-    <message>
-        <source>Number</source>
-        <translation>Αριθμός</translation>
-    </message>
-    <message>
-        <source>Letter</source>
-        <translation>Γράμμα</translation>
-    </message>
-    <message>
-        <source>Guide</source>
-        <translation>Οδηγός</translation>
-    </message>
-</context>
-<context>
-    <name>BrewTargetTreeView</name>
-    <message>
-        <source>New Recipe</source>
-        <translation>Προσθήκη νέας συνταγής</translation>
-    </message>
-    <message>
-        <source>Brew It!</source>
-        <translation>Ζυθοποίησε το!</translation>
-    </message>
-    <message>
-        <source>Brew Again</source>
-        <translation>Ζυθοποιήστε πάλι</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation>Διαγραφή</translation>
-    </message>
-    <message>
-        <source>New Equipment</source>
-        <translation>Προσθήκη νέου εξοπλισμού</translation>
-    </message>
-    <message>
-        <source>New Fermentable</source>
-        <translation>Προσθήκη νέων ζυμώσιμων</translation>
-    </message>
-    <message>
-        <source>New Hop</source>
-        <translation>Προσθήκη νέου λυκίσκου</translation>
-    </message>
-    <message>
-        <source>New Misc</source>
-        <translation>Προσθήκη στα διάφορα</translation>
-    </message>
-    <message>
-        <source>New Yeast</source>
-        <translation>προσθήκη νέας μαγιάς</translation>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation>Αντιγραφή</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation>Εξαγωγή</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation>Εισαγωγή</translation>
-    </message>
-    <message>
-        <source>Change date</source>
-        <translation>Αλλαγή ημερομηνίας</translation>
-    </message>
-    <message>
-        <source>New Style</source>
-        <translation>Νέο Στυλ</translation>
-    </message>
-    <message>
-        <source>Recalculate eff</source>
-        <translation>Επαναπροσδιορισμός απόδοσης</translation>
-    </message>
-</context>
-<context>
     <name>Brewtarget</name>
     <message>
         <source>Default</source>
@@ -345,11 +231,11 @@
     </message>
     <message>
         <source>Milligrams</source>
-        <translation>Χιλιοστόγραμμα</translation>
+        <translation>Χιλ/μα</translation>
     </message>
     <message>
         <source>Grams</source>
-        <translation>Γραμμάρια</translation>
+        <translation>Γραμ.</translation>
     </message>
     <message>
         <source>Kilograms</source>
@@ -403,20 +289,166 @@
         <source>Gallons</source>
         <translation>Γαλόνια</translation>
     </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Άγνωστο</translation>
+    </message>
 </context>
 <context>
     <name>BtDigitWidget</name>
     <message>
         <source>Too low for style.</source>
-        <translation>Κάτω από τα παραδεκτά όρια για το στυλ</translation>
+        <translation>Κάτω από τα όρια του στυλ</translation>
     </message>
     <message>
         <source>In range for style.</source>
-        <translation>Μέσα στα όρια του στυλ</translation>
+        <translation>Στα όρια του στυλ</translation>
     </message>
     <message>
         <source>Too high for style.</source>
-        <translation>Πάνω από τα παραδεκτά όρια για το στυλ</translation>
+        <translation>Πάνω από τα όρια του στυλ</translation>
+    </message>
+</context>
+<context>
+    <name>BtTreeModel</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Brew Date</source>
+        <translation type="unfinished">Ημέρα Ζυθοποίησης</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Στυλ</translation>
+    </message>
+    <message>
+        <source>Boil Time</source>
+        <translation type="unfinished">Χρόνος βρασμού</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Χρώμα</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation type="unfinished">Χρήση</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Μορφή</translation>
+    </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">Κατηγορία</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation type="unfinished">Αριθμός</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation type="unfinished">Γράμμα</translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Οδηγός</translation>
+    </message>
+    <message>
+        <source>PATH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FULLPATH</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BtTreeView</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recipe</source>
+        <translation type="unfinished">Συνταγή</translation>
+    </message>
+    <message>
+        <source>Brew It!</source>
+        <translation type="unfinished">Ζυθοποίησε το!</translation>
+    </message>
+    <message>
+        <source>Brew Again</source>
+        <translation type="unfinished">Ζυθοποιήστε πάλι</translation>
+    </message>
+    <message>
+        <source>Change date</source>
+        <translation type="unfinished">Αλλαγή ημερομηνίας</translation>
+    </message>
+    <message>
+        <source>Recalculate eff</source>
+        <translation type="unfinished">Επαναπροσδιορισμός απόδοσης</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Διαγραφή</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Εξοπλισμός</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation type="unfinished">Ζυμώσιμα</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation type="unfinished">Λυκίσκος</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished">Διαφ.</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Στυλ</translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation type="unfinished">Μαγιά</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished">Αντιγραφή</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation type="unfinished">Εξαγωγή</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation type="unfinished">Εισαγωγή</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="unfinished">Διαγραφή %1</translation>
+    </message>
+    <message>
+        <source>Delete %1 %2?</source>
+        <translation type="unfinished">Διαγραφή %1 %2?</translation>
+    </message>
+    <message>
+        <source>BrewNote</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -561,12 +593,16 @@
         <source>Color (EBC)</source>
         <translation>Χρώμα (EBC)</translation>
     </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Hop</name>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>Στο σκεύος σακχ/σης</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -598,7 +634,7 @@
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation>Σφαιρίδια</translation>
     </message>
     <message>
         <source>Plug</source>
@@ -628,7 +664,7 @@
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>Στο σκεύος σακχ/σης</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -644,7 +680,7 @@
     </message>
     <message>
         <source>Pellet</source>
-        <translation>Pellet</translation>
+        <translation>Σφαιρίδια</translation>
     </message>
     <message>
         <source>Plug</source>
@@ -677,6 +713,41 @@
         <source>Form</source>
         <translation>Μορφή</translation>
     </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>IbuGuSlider</name>
+    <message>
+        <source>Cloying</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extra Malty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slightly Malty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Balanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slightly Hoppy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extra Hoppy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Way Hoppy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -698,47 +769,11 @@
     </message>
     <message>
         <source>Would you like to set the batch size, boil size and time to that requested by the equipment?</source>
-        <translation>Θα θέλατε να θέσετε το μέγεθος της παρτίδας το μέγεθος του όγκου βρασμού και τον χρόνο βρασμού σύμφωνα με τον εξοπλισμό;</translation>
-    </message>
-    <message>
-        <source>Delete %1</source>
-        <translation>Διαγραφή %1</translation>
-    </message>
-    <message>
-        <source>Delete %1 %2?</source>
-        <translation>Διαγραφή %1 %2?</translation>
+        <translation>Θα θέλατε να ορίσετε το μέγεθος της παρτίδας τον όγκο του βρασμού και τον χρόνο βρασμού σύμφωνα με τον εξοπλισμό;</translation>
     </message>
     <message>
         <source>HTML files (*.html)</source>
         <translation>Αρχεία σε μορφή HTML (*.html)</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation>Νέα</translation>
-    </message>
-    <message>
-        <source>Recipe</source>
-        <translation>Συνταγή</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation>Εξοπλισμός</translation>
-    </message>
-    <message>
-        <source>Fermentable</source>
-        <translation>Ζυμώσιμα</translation>
-    </message>
-    <message>
-        <source>Hop</source>
-        <translation>Λυκίσκος</translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation>Διάφορα</translation>
-    </message>
-    <message>
-        <source>Yeast</source>
-        <translation>Μαγιά</translation>
     </message>
     <message>
         <source>Copy %1</source>
@@ -774,7 +809,7 @@
     </message>
     <message>
         <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation>Πρόκειται να ενημερώσετε την υπάρχουσα βάση δεδομένων με μια άλλη. Αυτό πιθανόν να επιφέρει ( χωρίς να τα διαγράψει) αλλαγές σε κάποια από τα υλικά σας. Δεν πρόκειται να αλλάξει τις συνταγές σας. Να συνεχίσω;</translation>
+        <translation>Πρόκειται να ενημερώσετε την υπάρχουσα βάση δεδομένων με μια άλλη. Αυτό πιθανόν να επιφέρει ( χωρίς να τα διαγράψει) αλλαγές σε κάποια από τα υλικά σας. Δεν πρόκειται να αλλάξουν οι συνταγές σας. Να συνεχίσω;</translation>
     </message>
     <message>
         <source>Select Database File</source>
@@ -826,7 +861,7 @@
     </message>
     <message>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation>Προσπαθείτε να προσθέσετε ένα βήμα στην διαδικασίας σακχαροποίησης δίχως να έχετε ορίσει διαδικασία. Παρακαλώ δημιουργείστε διαδικασία σακχαροποίησης πρώτα.</translation>
+        <translation>Προσπαθείτε να προσθέσετε ένα βήμα στην διαδικασίας σακχαροποίησης (mash)  δίχως να έχετε ορίσει διαδικασία. Παρακαλώ δημιουργείστε διαδικασία σακχαροποίησης πρώτα.</translation>
     </message>
     <message>
         <source>Copy Recipe</source>
@@ -873,10 +908,6 @@
         <translation>SQLite (*.sqlite)</translation>
     </message>
     <message>
-        <source>Style</source>
-        <translation>Στυλ</translation>
-    </message>
-    <message>
         <source>Copy Style</source>
         <translation>Αντιγραφή στυλ</translation>
     </message>
@@ -890,38 +921,27 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
+        <translation>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</translation>
+    </message>
+    <message>
+        <source>Folder name</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>MaltinessWidget</name>
     <message>
-        <source>&lt;b&gt;Cloying&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Cloying&lt;/b&gt;</translation>
+        <source>Folder name:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Extra malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Πολύ βυνώδης&lt;/b&gt;</translation>
+        <source>Bad Name</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Slightly malty&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Ελαφρά βυνώδης&lt;/b&gt;</translation>
+        <source>A folder name must have at least one non-whitespace character in it</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Balanced&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Σε αρμονία&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Slightly hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Slightly hoppy&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Extra hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Extra hoppy&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Way hoppy&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Way hoppy&lt;/b&gt;</translation>
+        <source>A folder name must have at least one non-/ character in it</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -932,7 +952,7 @@
     </message>
     <message>
         <source>Your recipe must have fermentables to design a mash.</source>
-        <translation>Η συνταγή σας θα πρέπει να έχει ζυμώσιμα για να υπολογίσετε την διαδικασία σακχαροποίησης</translation>
+        <translation>Η συνταγή σας θα πρέπει να έχει ζυμώσιμα για να υπολογίσετε την διαδικασία σακχαροποίησης (mashing)</translation>
     </message>
     <message>
         <source>No Equipment</source>
@@ -1002,11 +1022,11 @@
     </message>
     <message>
         <source>Bad thickness</source>
-        <translation>λανυασμένη πυκνότητα</translation>
+        <translation>Λανθασμένη πυκνότητα</translation>
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρέπει να έχετε θετική πυκνότητα μάζας</translation>
     </message>
     <message>
         <source>No steps</source>
@@ -1046,7 +1066,7 @@
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation>Για να επιτύχετε την επιθυμητή θερμοκρασία ψεκάσματος, το νερό θα πρέπει να έχει βράσει. Μειώστε την θερμοκρασία του νερού ή αυξήστε τον όγκο του νερού με το οποίο θα ψεκάσετε</translation>
+        <translation>Για να επιτύχετε την επιθυμητή θερμοκρασία ψεκάσματος, το νερό θα πρέπει να είναι πάνω από τα επίπεδα βρασμού. Μειώστε την θερμοκρασία του νερού ή αυξήστε τον όγκο του νερού με το οποίο θα ψεκάσετε</translation>
     </message>
     <message>
         <source>Too much wort</source>
@@ -1149,6 +1169,10 @@
         <source>Amount Type</source>
         <translation>Μονάδα μέτρησης</translation>
     </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
@@ -1171,6 +1195,58 @@
     <message>
         <source>Please restart Brewtarget.</source>
         <translation>Παρακαλώ επανεκκινήστε το πρόγραμμα</translation>
+    </message>
+    <message>
+        <source>Catalan</source>
+        <translation type="unfinished">Καταλανική</translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished">Τσεχικά</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="unfinished">Γερμανική</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="unfinished">Αγγλική</translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="unfinished">Ισπανική</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="unfinished">Γαλλική</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="unfinished">Ιταλική</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation type="unfinished">Ολλανδική</translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="unfinished">Πολωνική</translation>
+    </message>
+    <message>
+        <source>Portuguese</source>
+        <translation type="unfinished">Πορτογαλική</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished">Ρωσικά</translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1356,10 +1432,6 @@
     <message>
         <source>&quot;%1&quot; cannot be read.</source>
         <translation>&quot;%1&quot; δεν μπορεί να διαβαστεί.</translation>
-    </message>
-    <message>
-        <source>Config directory &quot;%1&quot; cannot be read.</source>
-        <translation>Config directory &quot;%1&quot; cannot be read.</translation>
     </message>
     <message>
         <source>New Version</source>
@@ -1581,6 +1653,10 @@
         <source>Style</source>
         <translation>Στυλ</translation>
     </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -1594,11 +1670,11 @@
     </message>
     <message>
         <source>to the mash tun.</source>
-        <translation>Στο σκεύος σακχαροποίσης</translation>
+        <translation>Στο σκεύος σακχαροποίησης</translation>
     </message>
     <message>
         <source>Heat water</source>
-        <translation>Θερμάντε το νερό</translation>
+        <translation>Ζεστάνετε το νερό</translation>
     </message>
     <message>
         <source>Bring </source>
@@ -1714,7 +1790,7 @@
     </message>
     <message>
         <source>You should have %1 wort post-boil.</source>
-        <translation>Θα πρέπει να έχετε  %1 γλεύκος μετά το βράσιμο.</translation>
+        <translation>Θα πρέπει να έχετε  %1 γλεύκους μετά το βράσιμο.</translation>
     </message>
     <message>
         <source>
@@ -1815,7 +1891,7 @@ The final volume in the primary is %1.</source>
     <name>RecipeFormatter</name>
     <message>
         <source>unknown style</source>
-        <translation>Άγνωστο είδος/τύπος</translation>
+        <translation>Άγνωστο είδος/στυλ</translation>
     </message>
     <message>
         <source>N/A</source>
@@ -1854,16 +1930,8 @@ The final volume in the primary is %1.</source>
         <translation>FG</translation>
     </message>
     <message>
-        <source>Unknown</source>
-        <translation>Άγνωστο</translation>
-    </message>
-    <message>
         <source>ABV</source>
         <translation>ABV</translation>
-    </message>
-    <message>
-        <source>Bitterness</source>
-        <translation>Πικράδα</translation>
     </message>
     <message>
         <source>Color</source>
@@ -1939,7 +2007,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Misc</source>
-        <translation>Διάφορα</translation>
+        <translation>Διαφ.</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -1959,15 +2027,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Mash</source>
-        <translation>Mash</translation>
+        <translation>Στο σκεύος σακχ/σης</translation>
     </message>
     <message>
         <source>Temp</source>
-        <translation>Θερμοκρασία</translation>
+        <translation>Θερμ.</translation>
     </message>
     <message>
         <source>Target Temp</source>
-        <translation>Ζητούμενη θερμοκρασία</translation>
+        <translation>Ζητούμενη θερμ.</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -1995,7 +2063,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Strike Temp</translation>
     </message>
     <message>
         <source>Final Temp</source>
@@ -2003,11 +2071,11 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>απόδοση στην μαρμίτα</translation>
+        <translation>απόδ. στην μαρμίτα</translation>
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>Προβλεπόμενη Αρχική πυκνότητα</translation>
+        <translation>Προβλεπόμενη OG</translation>
     </message>
     <message>
         <source>Postboil</source>
@@ -2023,7 +2091,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Απόδοση εξοπλισμού</translation>
+        <translation>Απόδ. εξοπλισμού</translation>
     </message>
     <message>
         <source>Projected ABV</source>
@@ -2041,12 +2109,48 @@ The final volume in the primary is %1.</source>
         <source>Print Document</source>
         <translation>Εκτύπωση εγγράφου</translation>
     </message>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished">Κατηγορία</translation>
+    </message>
+    <message>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Guide</source>
+        <translation type="unfinished">Οδηγός</translation>
+    </message>
+    <message>
+        <source>BoilTime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lab</source>
+        <translation type="unfinished">Εργαστήριο/Εταιρία</translation>
+    </message>
+    <message>
+        <source>Attenuation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flocculation</source>
+        <translation type="unfinished">Flocculation</translation>
+    </message>
 </context>
 <context>
     <name>RefractoDialog</name>
     <message>
         <source>OG Mismatch</source>
-        <translation>Αναντιστοιχία αρχικής πυκνότητας</translation>
+        <translation>Αναντιστοιχία OG</translation>
     </message>
     <message>
         <source>Based on the given original plato, the OG should be %1, but you have entered %2. Continuing with the calculated OG.</source>
@@ -2057,7 +2161,7 @@ The final volume in the primary is %1.</source>
     <name>ScaleRecipeTool</name>
     <message>
         <source>Recipe Scaled</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναπροσαρμογή συνταγής</translation>
     </message>
     <message>
         <source>The mash has been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
@@ -2066,6 +2170,13 @@ The final volume in the primary is %1.</source>
     <message>
         <source>The equipment and mash have been reset due to the fact that mash temperatures do not scale easily. Please re-run the mash wizard.</source>
         <translation>Ο εξοπλισμός και η διαδικασία σακχαροποίησης μηδενίστηκαν εξ&apos; αιτίας του γεγονότος ότι οι θερμοκρασίες κατά την σακχαροποίηση δεν αλλάζουν εύκολα.  Χρησιμοποιήστε τον οδηγό σακχαροποίησης για νέα διαδικασία.</translation>
+    </message>
+</context>
+<context>
+    <name>StrikeWaterDialog</name>
+    <message>
+        <source>N/A</source>
+        <translation type="unfinished">Μη διαθέσιμο</translation>
     </message>
 </context>
 <context>
@@ -2219,11 +2330,15 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Laboratory</source>
-        <translation>Εργαστήριο</translation>
+        <translation>Εργαστήριο/Εταιρία</translation>
     </message>
     <message>
         <source>Product ID</source>
         <translation>Κωδικός προιόντος</translation>
+    </message>
+    <message>
+        <source>Inventory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2233,20 +2348,38 @@ The final volume in the primary is %1.</source>
         <translation>Σχετικά με το Brewtarget</translation>
     </message>
     <message>
+        <source>Donate</source>
+        <translation>Δωρεά</translation>
+    </message>
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2013 by the developers below.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget: for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2014 by the following developers.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Peter Buelow&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Dan Cavanagh&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Mik Firestone&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt; - Lead developer&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Mik Firestone &amp;lt;mikfire@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Dan Cavanagh &amp;lt;dan@dancavanagh.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rob Taylor &amp;lt;robtaylor@floopily.org&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Kregg K &amp;lt;gigatropolis@yahoo.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;A.J. Drobnich &amp;lt;aj.drobnich@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ted Wright &amp;lt;tedwright@users.sourceforge.net&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Charles Fourneau (plut0nium) &amp;lt;charles.fourneau@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Peter Buelow &amp;lt;goballstate@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Maxime Lavigne &amp;lt;duguigne@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;David Grundberg &amp;lt;individ@acc.umu.se&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Tim Payne &amp;lt;swstim@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Luke Vincent &amp;lt;luke.r.vincent@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Eric Tamme &amp;lt;etamme@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Julein &amp;lt;j2bweb@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Jeff Bailey &amp;lt;skydvr38@verizon.net&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Piotr Przybyla (przybysh) &amp;lt;przybysh@gmail.com&amp;gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Chris Hamilton &amp;lt;marker5a@gmail.com&amp;gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -2263,68 +2396,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Guido Carpi (Italian translation)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ester (Catalan translation)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (Portuguese translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jan Grmela (Czech translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alpha tester)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;Brewtarget %1&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget, for developing beer recipes.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Copyright 2009-2013 by the developers below.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Developers&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Peter Buelow&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Dan Cavanagh&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Mik Firestone&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Philip G. Lee &amp;lt;rocketman768@gmail.com&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Copyright (GPLv3)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is free software: you can redistribute it and/or modify&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;it under the terms of the GNU General Public License as published by&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;the Free Software Foundation, either version 3 of the License, or&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;(at your option) any later version.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget is distributed in the hope that it will be useful,&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;but WITHOUT ANY WARRANTY; without even the implied warranty of&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;GNU General Public License for more details.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;You should have received a copy of the GNU General Public License&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;along with Brewtarget.  If not, see &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.gnu.org/licenses/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Source Code&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;http://brewtarget.sourceforge.net&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;brewtarget.sourceforge.net&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;; font-weight:600; text-decoration: underline;&quot;&gt;Special Thanks&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Guido Carpi (Italian translation)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ester (Catalan translation)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Marc Cote (French translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Pawel Fiedor (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Admiro (Polish translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Edu Engler (Portuguese translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Jan Grmela (Czech translation)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Randy Brace (alpha tester)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://finalgravitypodcast.com&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;Final Gravity Podcasts&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Glenn Tinseth &amp;lt;&lt;/span&gt;&lt;a href=&quot;http://www.realbeer.com/hops&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.realbeer.com/hops&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;server, printer, edit-copy, document-print-preview and merge images from Oxygen theme (CC license)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;backup image from Nuvola theme (LGPL)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Donate</source>
-        <translation>Δωρεά</translation>
+&lt;p style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Courier New,courier&apos;;&quot;&gt;Brewtarget&apos;s source code can be downloaded at &lt;/span&gt;&lt;a href=&quot;https://www.gitorious.org/brewtarget&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; text-decoration: underline; color:#0057ae;&quot;&gt;www.gitorious.org/brewtarget&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2469,7 +2542,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Strike Temp</source>
-        <translation type="unfinished"></translation>
+        <translation>Strike Temp</translation>
     </message>
     <message>
         <source>Temperature of mash after dough in</source>
@@ -2517,7 +2590,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Temperature of wort when yeast is pitched</source>
-        <translation>Θερμοκρασία του γλέυκος κατά την ρίψη της μαγιάς</translation>
+        <translation>Θερμοκρασία του γλέυκους κατά την ρίψη της μαγιάς</translation>
     </message>
     <message>
         <source>Postferment</source>
@@ -2541,7 +2614,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Eff into BK</source>
-        <translation>απόδοση στην μαρμίτα</translation>
+        <translation>απόδ. στην μαρμίτα</translation>
     </message>
     <message>
         <source>Expected OG, based on measure fg</source>
@@ -2549,7 +2622,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Projected OG</source>
-        <translation>Προβλεπόμενη Αρχική πυκνότητα</translation>
+        <translation>Προβλεπόμενη OG</translation>
     </message>
     <message>
         <source>Brewhouse efficiency</source>
@@ -2557,7 +2630,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Brewhouse Eff</source>
-        <translation>Απόδοση εξοπλισμού</translation>
+        <translation>Απόδ. εξοπλισμού</translation>
     </message>
     <message>
         <source>Expected ABV based on OG</source>
@@ -2607,15 +2680,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Unit you want to convert to</source>
-        <translation>Μοναδες που θελετε να μετατραπούν</translation>
+        <translation>Μονάδες που θέλετε να μετατραπούν</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation>Μετατροπή</translation>
+        <translation>Αποτέλεσμα</translation>
     </message>
     <message>
         <source>Output conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Μετατροπή αποτελέσματος</translation>
     </message>
     <message>
         <source>Convert</source>
@@ -2642,7 +2715,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Απαιτούμενα πεδία</translation>
+        <translation>Υποχρεωτικά πεδία</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2662,7 +2735,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Automatically fill in pre-boil volume</source>
-        <translation>Αυτόματη πήρωση όγκου πριν το βρασμό</translation>
+        <translation>Αυτόματη πλήρωση όγκου πριν το βρασμό</translation>
     </message>
     <message>
         <source>Batch size</source>
@@ -2694,7 +2767,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Final top-up water</source>
-        <translation>τελική πλήρωση νερού</translation>
+        <translation>τελική προσθήκη νερού</translation>
     </message>
     <message>
         <source>Water added to fermenter</source>
@@ -2781,7 +2854,7 @@ p, li { white-space: pre-wrap; }
     <name>fermentableDialog</name>
     <message>
         <source>Fermentable Database</source>
-        <translation>Βάση δεδομένων ζυμώσιμων</translation>
+        <translation>Αρχείο ζυμώσιμων</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2856,7 +2929,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Yield as compared to glucose</source>
-        <translation>Απόδοση σε σύγκριση με την γλυκόζη</translation>
+        <translation>Απόδοση σε σύγκριση με  γλυκόζη</translation>
     </message>
     <message>
         <source>Lovibond</source>
@@ -2888,7 +2961,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Yield difference between coarse and fine grind</source>
-        <translation>Διαφορλά απόδοσης μεταξύ χοντροαλεσμένου και ψιλοαλεσμένου</translation>
+        <translation>Διαφορά απόδοσης μεταξύ χοντροαλεσμένου και ψιλοαλεσμένου</translation>
     </message>
     <message>
         <source>Moisture (%)</source>
@@ -2950,12 +3023,24 @@ p, li { white-space: pre-wrap; }
         <source>Notes:</source>
         <translation>Σημειώσεις:</translation>
     </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>hopDialog</name>
     <message>
         <source>Hop Database</source>
-        <translation>Βάση δεδομένων λυκίσκου</translation>
+        <translation>Κατάλογος λυκίσκων</translation>
     </message>
     <message>
         <source>Add selected ingredient to recipe</source>
@@ -2990,7 +3075,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Απαιτούμενα πεδία</translation>
+        <translation>Υποχρεωτικά πεδία</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3003,10 +3088,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Alpha acids as percent by mass</source>
         <translation>Alpha οξέα σε ποσοστό επί της μάζας</translation>
-    </message>
-    <message>
-        <source>Amount </source>
-        <translation>Ποσότητα </translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3074,7 +3155,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Beta acids as percent by mass</source>
-        <translation>Beta acids  ως πσοστό επι της μάζας</translation>
+        <translation>Οξέα Beta  ως πσοστό επι της μάζας</translation>
     </message>
     <message>
         <source>HSI</source>
@@ -3127,6 +3208,18 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes:</source>
         <translation>Σημειώσεις:</translation>
+    </message>
+    <message>
+        <source>Default Amount </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3355,11 +3448,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Αφαιρέστε το επιλεγμένο βήμα σακχαροποίησης</translation>
+        <translation>Αφαιρέστε το επιλεγμένο βήμα σακχ/σης</translation>
     </message>
     <message>
         <source>Edit selected mash step</source>
-        <translation>Επεξεργαστέιτε το επιλεγμένο βήμα σακχαροποίησης</translation>
+        <translation>Επεξεργαστέιτε το επιλεγμένο βήμα mash</translation>
     </message>
     <message>
         <source>Edit mash properties</source>
@@ -3395,7 +3488,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Save this mash profile</source>
-        <translation>Αποθήκευση αυτού του προφιλ mash</translation>
+        <translation>Αποθήκευση αυτού του προφιλ σακχ/σης</translation>
     </message>
     <message>
         <source>Save Mash</source>
@@ -3403,7 +3496,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;Περί</translation>
+        <translation>&amp;Σχετικά</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -3515,7 +3608,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Scale Recipe</source>
-        <translation>&amp;Αλλαγή μεγέθους συνταγής</translation>
+        <translation>&amp;Μετατροπή συνταγής</translation>
     </message>
     <message>
         <source>Recipe to Clipboard as &amp;Text</source>
@@ -3547,7 +3640,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>&amp;Refractometer Tools</source>
-        <translation>Εργαλεία Διαθλασίμετρου</translation>
+        <translation>Διαθλασίμετρο</translation>
     </message>
     <message>
         <source>&amp;Pitch Rate Calculator</source>
@@ -3567,7 +3660,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation>Προεκτύπωση</translation>
+        <translation>Print Pre&amp;view</translation>
     </message>
     <message>
         <source>&amp;Export To HTML</source>
@@ -3637,12 +3730,24 @@ p, li { white-space: pre-wrap; }
         <source>Mashes</source>
         <translation>Mashes</translation>
     </message>
+    <message>
+        <source>1.0</source>
+        <translation type="unfinished">1.0</translation>
+    </message>
+    <message>
+        <source>application/x-brewtarget-ingredient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strike Water Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>mashDesigner</name>
     <message>
         <source>Mash Designer</source>
-        <translation>Σχεδιασμός σακχαροποίησης</translation>
+        <translation>Σχεδιασμός σακχ/σης</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3654,7 +3759,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Επιθυμούμενη θερμοκρασία</translation>
+        <translation>Επιθυμητή θερμ.</translation>
     </message>
     <message>
         <source>Time</source>
@@ -3678,7 +3783,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>min</source>
-        <translation>ελ.</translation>
+        <translation>ελαχ.</translation>
     </message>
     <message>
         <source>max</source>
@@ -3729,7 +3834,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Θερμοκρασία έκπλυσης</translation>
+        <translation>Θερμοκρασία ψεκασμού</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
@@ -3737,7 +3842,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>PH έκπλυσης</translation>
+        <translation>PH ψεκασμού</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -3745,7 +3850,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tun</source>
-        <translation>σκεύος σακχαροποίησης</translation>
+        <translation>σκεύος σακχ/σης</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -3776,7 +3881,7 @@ p, li { white-space: pre-wrap; }
     <name>mashStepEditor</name>
     <message>
         <source>Mash Step Editor</source>
-        <translation>επεξεργασία βήματος σακχαροποίησης</translation>
+        <translation>επεξεργασία βήματος σακχ/σης</translation>
     </message>
     <message>
         <source>Name</source>
@@ -3800,11 +3905,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Target temp.</source>
-        <translation>Επιθυμητή θερμοκρασία</translation>
+        <translation>Επιθυμητή θερμ.</translation>
     </message>
     <message>
         <source>Target temp. of this step</source>
-        <translation>Επιθυμητή θερμοκρασία αυτού του βήματος</translation>
+        <translation>Επιθυμητή θερμ. αυτού του βήματος</translation>
     </message>
     <message>
         <source>Infuse Amount</source>
@@ -3828,7 +3933,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Amount of mash to decoct</source>
-        <translation type="unfinished"></translation>
+        <translation>Ποσότητα γλεύκους για decoction</translation>
     </message>
     <message>
         <source>Time</source>
@@ -3949,7 +4054,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash</source>
-        <translation>Στο σκεύος σακχαροποίησης</translation>
+        <translation>Στο σκεύος σακχ/σης</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -3977,7 +4082,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Amount is weight?</source>
-        <translation>Το ποσό αναφέρεται σε βάρος</translation>
+        <translation>Το ποσό αναφέρεται σε βάρος;</translation>
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
@@ -3991,12 +4096,24 @@ p, li { white-space: pre-wrap; }
         <source>Notes:</source>
         <translation>Σημειώσεις:</translation>
     </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount in inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>namedMashEditor</name>
     <message>
         <source>Named Mash Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Named Mash Editor</translation>
     </message>
     <message>
         <source>Mash</source>
@@ -4016,7 +4133,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sparge temp</source>
-        <translation>Θερμοκρασία έκπλυσης</translation>
+        <translation>Θερμοκρασία ψεκασμού</translation>
     </message>
     <message>
         <source>Sparge temp target</source>
@@ -4024,7 +4141,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Sparge pH</source>
-        <translation>PH έκπλυσης</translation>
+        <translation>PH ψεκασμού</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4032,7 +4149,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tun</source>
-        <translation>σκεύος σακχαροποίησης</translation>
+        <translation>σκεύος σακχ/σης</translation>
     </message>
     <message>
         <source>Initial tun temp</source>
@@ -4056,26 +4173,26 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Add mash step</source>
-        <translation>Νέο βήμα σακχαροποίησης</translation>
+        <translation>Νέο βήμα σακχ/σης</translation>
     </message>
     <message>
         <source>Remove selected mash step</source>
-        <translation>Αφαιρέστε το επιλεγμένο βήμα σακχαροποίησης</translation>
+        <translation>Αφαιρέστε το επιλεγμένο βήμα σακχ/σης</translation>
     </message>
     <message>
         <source>Mash step up</source>
-        <translation>Mash step up</translation>
+        <translation>Βήμα σακχ/σης πάνω</translation>
     </message>
     <message>
         <source>Mash step down</source>
-        <translation>Mash step down</translation>
+        <translation>βήμα σακχ/σης  κάτω</translation>
     </message>
 </context>
 <context>
     <name>ogAdjuster</name>
     <message>
         <source>Adjust Volume to Hit OG</source>
-        <translation>Ρύθμιση λογκου για να συμπέσει με την OG</translation>
+        <translation>Ρύθμιση όγκου για να συμπέσει με την OG</translation>
     </message>
     <message>
         <source>Input</source>
@@ -4091,7 +4208,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Temp</source>
-        <translation>Θερμοκρασία</translation>
+        <translation>Θερμ.</translation>
     </message>
     <message>
         <source>Temperature of SG reading</source>
@@ -4115,7 +4232,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Plato (percent by mass of equivalent sucrose)</source>
-        <translation type="unfinished"></translation>
+        <translation>Plato (percent by mass of equivalent sucrose)</translation>
     </message>
     <message>
         <source>Pre-Boil Volume</source>
@@ -4139,7 +4256,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Add to Boil</source>
-        <translation>προσθήκη κατά το βράσιμο</translation>
+        <translation>προσθήκη στο βράσιμο</translation>
     </message>
     <message>
         <source>Amount of water you need to add to hit planned OG (or boil off if negative)</source>
@@ -4162,11 +4279,11 @@ p, li { white-space: pre-wrap; }
     <name>optionsDialog</name>
     <message>
         <source>Options</source>
-        <translation>Προτιμήσεις</translation>
+        <translation>Επιλογές</translation>
     </message>
     <message>
         <source>Units</source>
-        <translation>Μετρικό σύστημα</translation>
+        <translation>Μονάδες</translation>
     </message>
     <message>
         <source>Weight</source>
@@ -4202,7 +4319,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Gravity</source>
-        <translation>Βαρύτητα</translation>
+        <translation>Πυκνότητα</translation>
     </message>
     <message>
         <source>20C/20C Specific Gravity</source>
@@ -4258,11 +4375,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>% IBU adjustment</source>
-        <translation>Προσαρμογή IBU</translation>
+        <translation>% Προσαρμογή IBU</translation>
     </message>
     <message>
         <source>Mash Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Mash Hop</translation>
     </message>
     <message>
         <source>First Wort</source>
@@ -4291,50 +4408,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Language</source>
         <translation>Γλώσσα</translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation>Τσεχικά</translation>
-    </message>
-    <message>
-        <source>Catalan</source>
-        <translation>Καταλανικά</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation>Γερμανικά</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation>Αγγλική</translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation>Ισπανικά</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation>Γαλλικά</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation>Ιταλικά</translation>
-    </message>
-    <message>
-        <source>Dutch</source>
-        <translation>Ολλανδικά</translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation>Πολωνικά</translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation>Πορτογαλικά</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation>Ρώσικα</translation>
     </message>
     <message>
         <source>&lt;qt&gt;
@@ -4385,7 +4458,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Yeast Production Date</source>
-        <translation>Ημερομηνία παραγωγής της μαγιάς</translation>
+        <translation>Ημερομηνία παραγωγής μαγιάς</translation>
     </message>
     <message>
         <source>Yeast Viability</source>
@@ -4413,7 +4486,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>TextLabel</source>
-        <translation>TextLabel</translation>
+        <translation>Ετικέτα</translation>
     </message>
     <message>
         <source>Calculate Viability From Date</source>
@@ -4429,7 +4502,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Billions of Yeast Cells Required</source>
-        <translation>Δισεκατομύρια κυττάρων μαγιάς που χρειάζονται</translation>
+        <translation>Δισ. κυττάρων μαγιάς που χρειάζονται</translation>
     </message>
     <message>
         <source># Vials/Smack Packs w/o Starter</source>
@@ -4448,7 +4521,7 @@ p, li { white-space: pre-wrap; }
     <name>primingDialog</name>
     <message>
         <source>Priming Calculator</source>
-        <translation>Υπολογισμός ανθρακικού</translation>
+        <translation>Υπολογισμός CO2</translation>
     </message>
     <message>
         <source>Input</source>
@@ -4460,7 +4533,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Amount of beer to prime</source>
-        <translation>Ποσότητα μπύρας στον κάδο ζύμωσης</translation>
+        <translation>Ποσότητα μπύρας για γόμωση</translation>
     </message>
     <message>
         <source>Beer Temperature</source>
@@ -4472,7 +4545,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Desired Volumes</source>
-        <translation>Επιθυμητή όγκος ανθρακικού</translation>
+        <translation>Επιθυμητή ποσότητα CO2</translation>
     </message>
     <message>
         <source>How many volumes of CO2 you want (1 L CO2 @ STP per L beer)</source>
@@ -4484,7 +4557,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Anhydrous Glucose</source>
-        <translation>Anhydrous Glucose</translation>
+        <translation>Άνυδρη γλυκόζη</translation>
     </message>
     <message>
         <source>Sucrose (table sugar)</source>
@@ -4500,7 +4573,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Prime with</source>
-        <translation>Γόμμωση με</translation>
+        <translation>Γόμωση με</translation>
     </message>
     <message>
         <source>How much priming ingredient to use</source>
@@ -4531,7 +4604,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Χρόνος ωρίμασης στον αρχικό κάδο ζήμωσης (ημέρες)</translation>
+        <translation>Ωρίμανση στον αρχικό κάδο ζήμωσης  (ημέρες)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
@@ -4539,7 +4612,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Χρόνος ωρίμασης στον δεύτερο κάδο ζήμωσης (ημέρες)</translation>
+        <translation>Ωρίμανση στον δεύτευρο κάδο  (ημέρες)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
@@ -4547,7 +4620,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Χρόνος ωρίμανσης στον τρίτο κάδο ζήμωσης (ημέρες)</translation>
+        <translation>Ωρίμανση στον τρίτο κάδο (ημέρες)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
@@ -4571,11 +4644,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Βαθμοί Ανθράκωσης</translation>
+        <translation>Βαθμοί CO2</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Γεύση - Σημειώσεις</translation>
+        <translation>σημειώσεις σχετικά με την γεύση</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4606,7 +4679,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Primary Age (days)</source>
-        <translation>Χρόνος ωρίμασης στον αρχικό κάδο ζήμωσης (ημέρες)</translation>
+        <translation>Ωρίμανση στον αρχικό κάδο ζήμωσης  (ημέρες)</translation>
     </message>
     <message>
         <source>Primary Temp</source>
@@ -4614,7 +4687,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Secondary Age (days)</source>
-        <translation>Χρόνος ωρίμασης στον δεύτερο κάδο ζήμωσης (ημέρες)</translation>
+        <translation>Ωρίμανση στον δεύτευρο κάδο  (ημέρες)</translation>
     </message>
     <message>
         <source>Secondary Temp</source>
@@ -4622,7 +4695,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Tertiary Age (days)</source>
-        <translation>Χρόνος ωρίμανσης στον τρίτο κάδο ζήμωσης (ημέρες)</translation>
+        <translation>Ωρίμανση στον τρίτο κάδο (ημέρες)</translation>
     </message>
     <message>
         <source>Tertiary Temp</source>
@@ -4646,11 +4719,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Carbonation Volumes</source>
-        <translation>Βαθμοί Ανθράκωσης</translation>
+        <translation>Βαθμοί CO2</translation>
     </message>
     <message>
         <source>Taste Notes</source>
-        <translation>Γεύση - Σημειώσεις</translation>
+        <translation>σημειώσεις σχετικά με την γεύση</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -4716,15 +4789,78 @@ p, li { white-space: pre-wrap; }
     <name>scaleRecipeTool</name>
     <message>
         <source>Scale Recipe</source>
-        <translation type="unfinished"></translation>
+        <translation>Μετατροπή Συνταγής</translation>
     </message>
     <message>
         <source>New batch size</source>
-        <translation>Μέγεθος νέας παρτίδας</translation>
+        <translation>Νέο μέγεθος</translation>
     </message>
     <message>
         <source>New efficiency (pct)</source>
         <translation>Νέα απόδωση (pct)</translation>
+    </message>
+</context>
+<context>
+    <name>strikeWaterDialog</name>
+    <message>
+        <source>Strike Water Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Initial Infusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Original Grain Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Target Mash Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weight of Grain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mash Infusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Volume of Water</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grain Weight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Actual Mash Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Infusion Water Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate</source>
+        <translation type="unfinished">Υπολογισμός</translation>
+    </message>
+    <message>
+        <source>Strike Water Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume to add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: This calculator assumes a preheated mash tun.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4787,7 +4923,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Wheat</translation>
+        <translation>Σιτάρι</translation>
     </message>
     <message>
         <source>Mixed</source>
@@ -4803,7 +4939,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Max</source>
-        <translation>Μέγιστο</translation>
+        <translation>Max</translation>
     </message>
     <message>
         <source>Min</source>
@@ -4827,7 +4963,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Carb (vols)</source>
-        <translation>Ανθρακικό (όγκος)</translation>
+        <translation>Ανθρακ. (ατμ)</translation>
     </message>
     <message>
         <source>ABV (pct)</source>
@@ -4943,7 +5079,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Edit selected yeast</source>
-        <translation>Επεξεργαστείτε την επιλεγμένη μαγιά</translation>
+        <translation>Επεξεργασία επιλεγμένης μαγιάς</translation>
     </message>
     <message>
         <source>Remove selected yeast</source>
@@ -4958,7 +5094,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Required Fields</source>
-        <translation>Απαιτούμενα πεδία</translation>
+        <translation>Υποχρεωτικά πεδία</translation>
     </message>
     <message>
         <source>Name</source>
@@ -4978,7 +5114,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Wheat</source>
-        <translation>Wheat</translation>
+        <translation>Σταρένια</translation>
     </message>
     <message>
         <source>Wine</source>
@@ -5022,11 +5158,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Checked if the given amount is weight instead of volume</source>
-        <translation>Τσέκαρε το εαν το αναφερόμενο ποσό είναι βάρος αντί για όγκος</translation>
+        <translation>Τσέκαρε  εάν το νούμερο αναφέρεται σε βάρος αντί για όγκο</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation>Εργαστήριο</translation>
+        <translation>Εργαστήριο/Εταιρία</translation>
     </message>
     <message>
         <source>Product ID</source>
@@ -5074,7 +5210,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Apparent attenuation as percentage of OG points</source>
-        <translation>Φαινομενική ελάττωση ως πσοστό επί  OG βαθμών</translation>
+        <translation>Φαινομενική ελάττωση πυκνότητας ως πσοστό επί  OG βαθμών</translation>
     </message>
     <message>
         <source>Times Recultured</source>
@@ -5098,7 +5234,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Checked means add this yeast to secondary instead of primary</source>
-        <translation type="unfinished"></translation>
+        <translation>Σε περίπτωση τσεκαρίσματος η μαγιά προστίθεται στο δεύτερο κάδο</translation>
     </message>
     <message>
         <source>Best For:</source>
@@ -5107,6 +5243,18 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Notes:</source>
         <translation>Σημειώσεις:</translation>
+    </message>
+    <message>
+        <source>Default Amount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in Inventory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quanta in inventory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
