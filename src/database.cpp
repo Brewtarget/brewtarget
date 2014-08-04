@@ -1,17 +1,27 @@
 /*
- * database.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2013.
+ * database.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2009-2014
+ * - A.J. Drobnich <aj.drobnich@gmail.com>
+ * - Dan Cavanagh <dan@dancavanagh.com>
+ * - David Grundberg <individ@acc.umu.se>
+ * - Kregg K <gigatropolis@yahoo.com>
+ * - Luke Vincent <luke.r.vincent@gmail.com>
+ * - Maxime Lavigne <duguigne@gmail.com>
+ * - Mik Firestone <mikfire@gmail.com>
+ * - Philip Greggory Lee <rocketman768@gmail.com>
+ * - Rob Taylor <robtaylor@floopily.org>
+ * - Samuel Östling <MrOstling@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * Brewtarget is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */

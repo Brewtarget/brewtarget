@@ -1,7 +1,15 @@
+#!/bin/bash
+
+FILE=$1
+
+FILENAME=$(basename $FILE)
+AUTHORS=$(git log --format=' * - %aN <%aE>' $FILE | sort -u)
+
+cat <<EOF
 /*
- * ConverterTool.cpp is part of Brewtarget, and is Copyright the following
+ * $FILENAME is part of Brewtarget, and is Copyright the following
  * authors 2009-2014
- * - Philip Greggory Lee <rocketman768@gmail.com>
+$AUTHORS
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +24,4 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "ConverterTool.h"
-#include "unit.h"
-
-ConverterTool::ConverterTool(QWidget* parent) : QDialog(parent)
-{
-   setupUi(this);
-   
-   connect( pushButton_convert, SIGNAL(clicked()), this, SLOT(convert()) );
-}
-
-void ConverterTool::convert()
-{
-   outputLineEdit->setText(Unit::convert(inputLineEdit->text(), outputUnitsLineEdit->text()));
-}
+EOF

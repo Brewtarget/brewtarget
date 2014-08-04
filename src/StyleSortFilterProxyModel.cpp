@@ -1,6 +1,7 @@
 /*
- * StyleSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright
- * Philip G. Lee (rocketman768@gmail.com, 2010-2013.
+ * StyleSortFilterProxyModel.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2009-2014
+ * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

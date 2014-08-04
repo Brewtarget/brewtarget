@@ -1,12 +1,15 @@
 /*
- * MashComboBox.cpp is part of Brewtarget, and is Copyright Philip G. Lee
- * (rocketman768@gmail.com), 2009-2013.
+ * MashComboBox.cpp is part of Brewtarget, and is Copyright the following
+ * authors 2009-2014
+ * - Jeff Bailey <skydvr38@verizon.net>
+ * - Julein <j2bweb@gmail.com>
+ * - Philip Greggory Lee <rocketman768@gmail.com>
  *
  * Brewtarget is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * Brewtarget is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
