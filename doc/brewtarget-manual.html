@@ -182,6 +182,7 @@
       </ul>
       <li><a href="#generalconcepts">General Concepts</a></li>
       <ul>
+         <li><a href="#inventry">Inventory</a></li>
          <li><a href="#trees">Trees</a></li>
          <ul>
             <li><a href="#subtree">Folders</a></li>
@@ -214,8 +215,9 @@
       </ul>
       <li><a href="#newin21">New In Brewtarget v2.1</a></li>
       <ul>
+         <li><a href="#inventory">Inventory</a></li>
          <li><a href="#strikewater">Strike water toolbox</a></li>
-         <li><a href="#sliders">Sliders</a></li>
+         <li><a href="#sliders">Bubbles</a></li>
          <li><a href="#folders">Folders</a></li>
          <li><a href="#tooltips">Tooltips</a></li>
          <li><a href="#droptarget">Better drag and drop</a></li>
@@ -233,34 +235,73 @@
 <a id="walkthrough"><h1>A Walkthrough</h1></a>
 <p>
 I figure it's probably easier to demonstrate the features of the program rather than try to explain
-every single concept. So, here we will create a nice American Amber Ale, trying to touch on as many
+every single concept. We will create a nice American Amber Ale, trying to touch on as many
 features as possible.
 </p>
 
 <a id="settingoptions"><h2>Setting Options</h2></a>
 <p>
-Brewtarget's options are in Tools-&gt;Options. Here you should set your preferences for the unit
-system you wish to use, and which formulae you want to use in creating your recipes. For the purposes
-of this walkthrough, set the units to US traditional, temperature to Fahrenheit, gravity to specific gravity,
-color to Morey, and IBU to Tinseth. 
+Brewtarget's options are in Tools-&gt;Options. 
+<figure>
+   <img src="images/toolsToOptions.png" alt="Click Tools, select Options">
+   <figcaption>Fig 1. Select Options</figcaption>
+</figure>
+Here you should set your preferences for the unit system you wish to use, and
+which formulae you want to use in creating your recipes. For the purposes of
+this walkthrough, go to the units tab and set weight and volume 
+to US traditional, temperature to Fahrenheit, gravity to specific gravity,
+and color to SRM.
+<figure>
+   <img src="images/optionsUnits.jpg" alt="Units tab">
+   <figcaption>Fig2. Units</figcaption>
+</figure>
 </p>
+
 <p class="critical"><strong>Note</strong>: if you choose Plato for gravity, then all the displayed FG
 numbers are <kbd>not</kbd> corrected. So, the displayed FG reflects the actual FG: not what you will see if
 you use your refractometer.
 </p>
 
-<a id="newequipment"><h2>Defining Your Equipment</h2></a>
-<p>Never <kbd>ever</kbd> try to formulate a recipe without setting up an equipment record.
-Having an equipment record for your recipe is very important in Brewtarget. It contains a lot of
-information about your <i>particular</i> setup, and helps Brewtarget better estimate your results. </p>
-<p> Click on View-&gt;Equipments to bring up the Equipment Editor, or go to the
-equipment tree, right click and select "New Equipment". At the bottom, press
-the green plus and enter the name you wish to give it. Check &quot;calculate
-pre-boil volume&quot;, and enter as many of these fields as you can. When
-done, press the diskette button at the bottom of the dialog to save.
+On the Formulas tab, set Color to "Morey's" and "IBU" to Tinseth. The screen
+should look like:
+<figure>
+   <img src="images/optionsFormulas.jpg" alt="Formulas tab">
+   <figcaption>Fig3. Formulas</figcaption>
+</figure>
 
+
+
+<a id="newequipment"><h2>Defining Your Equipment</h2></a>
+<p>Never <kbd>ever</kbd> try to formulate a recipe without setting up an equipment profile.
+Having an equipment profile for your recipe is very important in Brewtarget. It contains a lot of
+information about your <i>particular</i> setup, and helps Brewtarget make better estimates. 
+</p>
+<p> There are three ways to create a new equipment profile. You can click
+View-&gt;Equipments to open the equipment editor; 
+<figure>
+   <img src="images/viewToEquip.jpg" alt="Click view, select Equipment"> 
+   <figcaption>Fig4. Equipment</figcaption>
+</figure>
+you can click the Equipment icon in the tool bar 
+<figure>
+   <img src="images/equipToolBar.jpg" alt="Click the boil kettle">
+   <figcaption>Fig5. Equipment Toolbar</figcaption>
+</figure>
+or you can open the equipment tree, right click and select "new".
+<figure>
+   <img src="images/equipTreeRightClick.jpg" alt="Right click, select new and equipment">
+   <figcaption>Fig6. Equipment Tree</figcaption>
+</figure>
 </p>
 
+<p>If you use the first two methods, you need to click the blue "+" at the
+bottom of the window to create a new profile. After you click the plus, or if
+you started from the equipment tree, you will need to provide a name for the
+profile. Once you have done that, press Ok.
+</p>
+
+<p>
+Fill out as many of these fields as you can. 
 <table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
    <tr>
       <th>Section</th>
@@ -291,12 +332,14 @@ done, press the diskette button at the bottom of the dialog to save.
    <tr>
       <td class="td"></td>
       <td class="td"><kbd>Calculate pre-boil volume</kbd></td>
-      <td class="td">Based on the boil time, losses, and water additions, automatically calculate the pre-boil volume instead of entering it by hand.</td>
+      <td class="td">Automatically calculate the pre-boil volume based on boil
+         time, losses, and water additions, instead of entering it by hand.
+      </td> 
    </tr>
    <tr>
       <td class="td"></td>
       <td class="td"><kbd>Batch size</kbd></td>
-      <td class="td">How much wort you want to end up in the primary fermenter</td>
+      <td class="td">How much wort you want in the primary fermenter</td>
    </tr>
    <tr>
       <td colspan="3" class="td"><strong>Boiling &amp; Water</strong></td>
@@ -317,7 +360,7 @@ done, press the diskette button at the bottom of the dialog to save.
       <td class="td"></td>
       <td class="td"><kbd>Kettle top-up water</kbd></td>
       <td class="td">Amount of water you usually add directly to the kettle
-         before boiling.  For <kbd>extract recipes</kbd>, this should be equal to
+         before boiling. For <kbd>extract recipes</kbd>, this should be equal to
          the boil volume.</td>
    </tr>
    <tr>
@@ -389,6 +432,18 @@ done, press the diskette button at the bottom of the dialog to save.
 
 </p>
 
+<p>
+When done, press the diskette
+button at the bottom of the dialog to save the new profile. You should have
+something like this.
+<figure>
+   <img src="images/equipMyequipment.jpg" alt="Right click, select new and equipment">
+   <figcaption>Fig7. My Equipment Profile</figcaption>
+</figure>
+
+
+</p>
+
 <a id="newrecipe"><h3>Making a New Recipe</h3></a>
 <p>
 Click on either File-&gt;&quot;New Recipe&quot;, click the blue plus in the
@@ -404,55 +459,91 @@ default profile, you won't need to do anything else.
 </p>
 
 <p> 
-Otherwise, choose the equipment profile you set up in the <a
-href="#newequipment">New Equipment</a> section from the Equipment drop-down
-list.  You can also drag it from the tree on the left and drop it on the
-recipe. After selecting or dropping the equipment, you will be asked if you
-want to set the batch and boil size of the recipe to that of the equipment.
-Click &quot;Yes&quot;.
+Otherwise, choose the equipment profile you set up in the <a href="#newequipment">New Equipment</a> 
+section from the Equipment drop-down list. You can also drag it from the tree
+on the left and drop it on the recipe. After selecting or dropping the
+equipment, you will be asked if you want to set the batch and boil size of the
+recipe to that of the equipment. Click &quot;Yes&quot;.
 </p>
 
 <a id="setstyles"><h2>Selecting the Style</h2></a>
 <p>
-Brewtarget comes pre-loaded with all of the BJCP styles. This means you can
+Brewtarget comes pre-loaded with all of the BJCP styles. You can
 check your recipe against the guidelines for the particular style you are
-trying to make. To do this, select &quot; American Amber Ale&quot; from the
-Style drop down list. You will notice that the numbers flanking the
-OG, FG, ABV, Bitterness, and Color fields have changed. These blue and red numbers
-reflect the lower and upper bounds of these parameters for the style. The
-middle number for each row is the current estimate for your recipe. If the
-number is blue, it means it is too low; red means too high, and green means
-in range for the style. If you choose, you can create your own styles
-in the View-&gt;Styles dialog. You can also view descriptions of the
-particular style and recommended ingredients there.
+brewing. To do this, select &quot; American Amber Ale&quot; from the
+Style drop down list. 
 </p>
+
+<p>
+You will notice that the bubbles in the right pane changed. 
+<figure>
+   <img src="images/beforeStyle.jpg" alt="Before">
+   <figcaption>Fig8. Before style</figcaption>
+</figure>
+
+<figure>
+   <img src="images/afterStyle.jpg" alt="Before">
+   <figcaption>Fig8. After style</figcaption>
+</figure>
+The dark green bubbles show the expected range for the style you selected. The
+color bubble shows the expected colors for the style. Since we haven't added
+any grains,
+hops or yeast to our beer yet, they don't show anything else.
+</p>
+
 
 <a id="addingingredients"><h2>Adding Ingredients</h2></a>
 <p>
 Open the &quot;Fermentable&quot; tree in the left pane (denoted with a barley icon),
-and drag'n'drop the &quot;Pale Malt (2 row) US&quot;, &quot;Caramel/Crystal Malt - 80L&quot; onto the recipe pane.
+<figure>
+   <img src="images/fermentableTree.jpg" alt="The list of fermentables">
+   <figcaption>Fig8. Fermentable Tree</figcaption>
+</figure>
 <p>
-Back at the main window, you will see those two malts in your recipe. Click on the Crystal 80's &quot;Mashed&quot;
-checkbox to tell it that we want to have this in the mash (this malt can also be simply steeped).
+and drag'n'drop the 
+<ul>
+   <li>Briess 2 Row Brewers Malt</li> 
+   <li>Briess Caramel Malt 80L</li>
+</ul>
+onto the Fermentables pane. No, this isn't an endorsement of Briess, they are
+simply right at the top and easy to see. In versions previous to brewtarget
+v2.1, you could have dropped them anywhere on the recipe to add the
+fermentables. This version requires you be more selective, but it has
+benefits.
+<p>
+Back at the main window, you will see those two malts in your recipe. Click on
+the Crystal 80's &quot;Mashed&quot; checkbox to tell it that we want to have
+this in the mash (this malt can also be simply steeped). You should have this:
+<figure>
+   <img src="images/afterFermentables.jpg" alt="The list of fermentables">
+   <figcaption>Fig8. Fermentable Tree</figcaption>
+</figure>
+
 </p>
 <p>
 <h3>Units</h3>
 Here's a cool feature about Brewtarget: you can enter amounts of stuff in
-pretty much any units you want.  Let's see what I mean. Double-click the
-2-row's &quot;amount&quot; cell and enter &quot;4.536 kg&quot;. You will see
-that it immediately gets converted into &quot;10.000 lb&quot; if you're using
-US units. For the Crystal 80, tell it &quot;32 oz&quot; and watch it get
-converted into &quot;2.000 lb&quot;. You can change US/English/SI preferences
-in Tools-&gt;Options. Please see <a href="#supportunits">Supported Units</a>
-in this document to see the correct abbreviation for each unit.
+pretty much any units you want. Double-click the 2-row's &quot;amount&quot;
+cell and enter &quot;4.536 kg&quot;. You will see that it immediately gets
+converted into &quot;10.000 lb&quot; if you're using US units. For the Caramel
+80, tell it &quot;32 oz&quot; and watch it get converted into &quot;2.000
+lb&quot;. You can change US/English/SI preferences in Tools-&gt;Options.
+Please see <a href="#supportunits">Supported Units</a> in this document to see
+the correct abbreviation for each unit.
 <p>
 <h3>Controlling units</h3>
 You can control this feature for each of the main tables and fields in the
-display. For example, lets say you use a refractometer to measure your SG and
-OG, but you use a hydrometer to measure the FG. In the options, select
-&quot;Brix/Plato&quot; as the system default. In the main window, right
-click on the &quot;FG&quot; label and select &quot;Specific Gravity&quot; OG and SG will still be
-shown in Brix, but the FG will now display in specific gravity.
+display. For example, say you use a refractometer to measure your OG, 
+but you use a hydrometer to measure the SG and FG. In the main window, right
+click on the &quot;OG&quot; label and select &quot;Plato&quot; 
+<figure>
+   <img src="images/ogUnits.jpg" alt="menu for controlling units">
+   <figcaption>Fig9. Select Plato</figcaption>
+</figure>
+FG
+and SG will still be shown in specific gravity, but the OG will now display in
+Brix.
+
 </p>
 <p>
 This feature works on all of the fields in the main window and on brewnotes by
@@ -460,43 +551,70 @@ right-clicking on the label for the field. It works on the fermentables, hops,
 miscellaneous, yeast and mash tables by right-clicking on the header for the
 column. It works for any field for which it makes sense. For example, you can
 specify the units for amount, infusion temp and target temp on the mash table
-but not for the time. Additionally, this feature may not be fully implemented
-in all of the tables, editors and tools. 
+but not for the time. This feature is not fully implemented in all of the
+tables, editors and tools. We are working on it.
 </p>
 <p>
 <h3>Controlling scale</h3>
 Additionally, you can control the scaling where it makes sense. For example,
 assume you always want your fermentables in the table to displayed in grams.
-Right click on the &quot;Amount&quot; column in the table. Select &quot;Default&quot; if your
-system default is SI, or select SI. Then click on the &quot;Scale&quot; submenu and you
-can select &quot;Default&quot; &quot;Milligrams&quot; &quot;Grams&quot; or
-&quot;Kilograms&quot; Selecting the first option will give you the default
-brewtarget behavior. The other three choices will force
-brewtarget to automatically scale the weights appropriately.
+Right click on the &quot;Amount&quot; column in the table. 
+
+Assuming you are following the tutorial, select select SI. Then click on the
+&quot;Scale&quot; submenu and you can select &quot;Default&quot;
+&quot;Milligrams&quot; &quot;Grams&quot; or &quot;Kilograms&quot; Selecting
+the first option will give you the default brewtarget behavior. The other
+three choices will force brewtarget to automatically scale the weights
+appropriately.
+<figure>
+   <img src="images/scaleFermentable.jpg" alt="menu for controlling scale">
+   <figcaption>Fig10. Select SI and then grams</figcaption>
+</figure>
+
 </p>
 <p class="important"><strong>Important</strong>: do not forget that you SHOULD
 enter the unit suffix (lb, kg, L, mL, etc.) for the amount boxes in
 brewtarget. If you do not, brewtarget will try to guess what you mean based on
 your defaults and what field you are editting. The guessing is pretty good,
 but you should not rely on it. In this case, brewtarget will assume that
-fermentables are entered in either lbs or kg, depending on the default units
-you have chosen. 
+fermentables are entered in either lbs, even if the display is set to kg.
 </p>
 <p>
-Now you should notice something different about the OG, FG, etc., displayed in
-the main window.  The OG now reads 1.052, and it is green which indicates
-&quot;to style&quot; as dictated by the amber ale style we chose. However, the
-FG is red, which means it's too high, the ABV is blue which means it is too
-low, and the Color number is green: just right. The glass of beer to the right
-represents the approximate color of your beer, and the thing right below that
-which reads &quot;Cloying&quot; is the maltiness indicator (based on IBU/GU
-ratio which now shows 0).  You shouldn't take the maltiness indicator too
-seriously; it is just a general guide.
+Now you should notice something different about the bubbles in the main
+window. The OG bubble now has a white line with "12.2" above it, within the
+dark green bubble. This means the OG is within the range defined by the
+American Amber style.
+</p>
+<p>
+The FG, though, is way off to the right of the bubble and nowhere near the
+dark green bubble. This means the FG is too high for the style. The ABV is
+pegged at zero, far to the right of the &quot;to style&quot; range. We will
+fix this once we add a yeast and a mash schedule to the recipe.
+</p>
+<p>
+The color bubble now has a white line within the &quot;to style&quot; range.
+Those upgrading may notice that the glass has been removed. We liked the
+bubbles better.
+</p>
+<p>
+Finally, the IBU/GU meter shows the beer as 0 and cloying. You shouldn't take
+this bubble too seriously, but it does provide a general guide on how balanced
+your beer is.
 </p>
 <p>
 Now, go to the Hops tab and add 1 oz Cascade at 1 hr, 1 oz Cascade at 15 min, and 1 oz Cascade at 5 min. The IBUs should
-be about 32.4, and in the green. Add WLP001 yeast to the recipe. Now everything should be in
-the green.
+be about 33.4, and in the green. 
+<figure>
+   <img src="images/afterHops.jpg" alt="Add some hops">
+   <figcaption>Fig11. Added some hops</figcaption>
+</figure>
+</p>
+<p>
+Add WLP001 yeast to the recipe. Now everything should be in the green.
+<figure>
+   <img src="images/afterYeast.jpg" alt="Add the yeast">
+   <figcaption>Fig12. Added some yeast</figcaption>
+</figure>
 </p>
 
 <a id="makemash"><h2>Making a Mash</h2></a>
@@ -513,49 +631,103 @@ approximate answer. After setting the mash addition volumes, you will get a
 real answer.
 </p>
 <p>
-Click on &quot;Edit Mash&quot; and give it a name. Notice that you can enter the initial grain temp, sparge
-temp and initial tun temp here. Entering these as accurately as possible will give you the best chance
-to nail your temperatures. To set tun mass and specific heat, you should click &quot;From Equipment&quot;.
-You can save this mash profile by pressing &quot;Save Mash&quot; at the bottom of the mash tab. It
-will be saved under the name you gave it in the &quot;Edit mash&quot; dialog. You can
-recall a mash profile by selecting it in the appropriate drop down box.
-From here, there are two ways to create the mash.
+Switch to the Mash tab in the main window. Click on &quot;Edit Mash&quot; and
+give it a name. You can enter the initial grain temp, sparge temp and initial
+tun temp here. Entering these as accurately as possible will give you the best
+chance to nail your temperatures. To set tun mass and specific heat, you
+should click &quot;From Equipment&quot;. 
+<figure>
+   <img src="images/nameTheMash.jpg" alt="Set up the mash parameters">
+   <figcaption>Fig13. Set up the mash</figcaption>
+</figure>
+</p>
+<p>
+You can save this mash profile by pressing &quot;Save
+Mash&quot; at the bottom of the mash tab. It will be saved under the name you
+gave it in the &quot;Edit mash&quot; dialog. You can recall a mash profile by
+selecting it in the appropriate drop down box. From here, there are two ways
+to create the mash.
 </p>
 
 <a id="mashwiz"><h3>Method 1: Mash wiz</h3></a>
 <p>
 Go to the mash tab and click the blue plus. Name it &quot;Protein&quot; and
-click &quot;OK&quot;. Double click its &quot;Target Temp&quot; cell and change
-to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;.
-This means we want to hit a target temperature of 121 F for 20 minutes. Do the
-same for a &quot;Conversion&quot; step at &quot;152 F&quot; for &quot;1
-hr&quot;.
+click &quot;OK&quot;. 
+<figure>
+   <img src="images/mashStepProtein.jpg" alt="Name the protein rest">
+   <figcaption>Fig14a. Protein step</figcaption>
+</figure>
+
 </p>
 <p>
+Double click its &quot;Target Temp&quot; cell and change
+to &quot;121 F&quot;, and change the &quot;Time&quot; to &quot;20 min&quot;.
+This means we want to hit a target temperature of 121 F for 20 minutes. 
+<figure>
+   <img src="images/mashProtein.jpg" alt="Protein rest">
+   <figcaption>Fig14b. Protein step</figcaption>
+</figure>
+
+</p>
+<p>
+Do the
+same for a &quot;Conversion&quot; step at &quot;152 F&quot; for &quot;1
+hr&quot;.
+<figure>
+   <img src="images/mashStepConversion.jpg" alt="Conversion ">
+   <figcaption>Fig15a. Conversion step</figcaption>
+</figure>
+<figure>
+   <img src="images/mashConversion.jpg" alt="Conversion ">
+   <figcaption>Fig15b. Conversion step</figcaption>
+</figure>
+
+<p>
 The mash wiz is for quickly and easily getting the correct mash temperatures
-and volumes for a single batch sparge mash.  Click on the &quot;Mash wiz&quot;
-button, and give it a mash thickness of 1.25 qt/lb.  The mash wizard just did
-3 things for you: calculated infusion volumes, infusion temps, and gave you a
-sparge step that will make you hit your pre-boil volume. <b>NOTE</b>: you
-don't have to actually sparge with all of the sparge water, but can put a
-portion directly into the kettle depending on how you like to sparge. 
+and volumes for a single batch sparge mash. Click on the &quot;Mash wiz&quot;
+button, and give it a mash thickness of 1.25 qt/lb. 
+<figure>
+   <img src="images/mashWizard.jpg" alt="Mash wizard input">
+   <figcaption>Fig16. Mash wizard</figcaption>
+</figure>
+</p>
+<p>
+When you select &quot;OK&quot;, the mash wizard does 3 things for you:
+calculated infusion volumes, infusion temps, and gave you a sparge step that
+will make you hit your pre-boil volume. 
+<figure>
+   <img src="images/afterMashWizard.jpg" alt="Mash wizard results">
+   <figcaption>Fig17. Mash wizard results</figcaption>
+</figure>
 </p>
 <p>
 Now Brewtarget is not lying anymore about the calculated boil volume and batch
 size. You can see any of the infusion temperatures under the &quot;Infusion
-Temp&quot; column.  
+Temp&quot; column. 
+</p>
+<p class="important">
+You don't have to actually sparge with all of the sparge
+water, but can put a portion directly into the kettle depending on how you
+like to sparge. You can also split the sparge water into multiple sparge
+batches. Fly sparging should understand the &quot;final batch sparge&quot; to
+indicate the volume of sparge water they should collect.
+</p>
 <p class="important">Since your equipment and recipe might change, you should
 always do the mash wizard after recalling a saved mash profile.
 </p>
 
 <a id="mashdesigner"><h3>Method 2: Mash designer</h3></a>
 <p>
-The mash designer is for more advanced users. It can be used to create pretty much any mash schedule
-you desire with however many sparges, and at whatever infusion temp or volume you desire. To enter it,
-just click the &quot;Mash Des&quot; button. It is not necessary to add all of the steps beforehand
-as we did with the mash wiz. A dialog will ask you for the temperature of the
+The mash designer is for more advanced users. It can be used to create any mash schedule
+you desire with however many sparges, and at whatever infusion temp or volume you desire. To start it,
+just click the &quot;Mash Des&quot; button.  A dialog will ask you for the temperature of the
 tun before the first infusion, so enter 70 F and continue.
+<figure>
+   <img src="images/mashDesignerTunTemp.jpg" alt="Mash designer start">
+   <figcaption>Fig18a. Mash designer start</figcaption>
+</figure>
 </p>
+
 <p>
 We are now looking at the parameters for the first infusion. Enter &quot;Protein&quot; for the name,
 leave the type at &quot;Infusion&quot;, enter &quot;121 F&quot; for &quot;Target temp.&quot;, and
@@ -570,17 +742,48 @@ will absorb all of the infusion's water and could absorb more. So, slowly move t
 slider until the infusion ratio reaches about 1.25 qt/lb.
 </p>
 <p>
+<figure>
+   <img src="images/mashDesignerProtein.jpg" alt="Mash designer protein">
+   <figcaption>Fig18b. Mash designer </figcaption>
+</figure>
 You should see that the tun is about half full, and we have reached 1.9 gal of the 6.25 gal that we
-plan to collect pre-boil. Click &quot;Next&quot;. Title this step &quot;Conversion&quot; and set the
-target temp to 152 F and the time to 1 hr. Slowly move the temp slider all the way to 212 F. Click
-&quot;Next&quot;. Entitle this step &quot;Batch Sparge&quot;. Click the &quot;Batch Sparge&quot;
-checkbox, set the target temp to 165 F, and the time to 15 min. You will notice that the tun fullness
-has gone down, simulating that you have drained the tun of liquid; this is the purpose of the checkbox.
-Move the amount slider slowly to the right until the total collected wort reaches about 6.25 gal.
-<p class="important">If you exceed the target collected wort volume, the progress bar will still show 100 percent, so be
-careful and pay attention to the text which shows the actual collected wort. Click &quot;Finish&quot;
-to return to the main window.
+plan to collect pre-boil. Click &quot;Next&quot;. 
 </p>
+
+<p>
+Name this step &quot;Conversion&quot; and set the target temp to 152 F and the
+time to 1 hr. Slowly move the temp slider all the way to 212 F. 
+<figure>
+   <img src="images/mashDesignerConversion.jpg" alt="Mash designer conversion">
+   <figcaption>Fig18c. Mash designer </figcaption>
+</figure>
+Click &quot;Next&quot;. 
+</p>
+<p>
+Name this step &quot;Batch Sparge&quot;. Click the &quot;Batch Sparge&quot;
+checkbox, set the target temp to 165 F, and the time to 15 min. You will
+notice that the tun fullness has gone down, simulating that you have drained
+the tun of liquid; this is the purpose of the checkbox.  Move the amount
+slider slowly to the right until the total collected wort reaches about 6.25
+gal.
+</p>
+<p class="important">
+If you exceed the target collected wort volume, the
+progress bar will still show 100 percent, so be careful and pay attention to
+the text which shows the actual collected wort. 
+<figure>
+   <img src="images/mashDesignerBatch.jpg" alt="Mash designer conversion">
+   <figcaption>Fig18d. Mash designer </figcaption>
+</figure>
+</p>
+<p>
+Finally, click &quot;Finish&quot; to return to the main window.
+<figure>
+   <img src="images/afterMashDesigner.jpg" alt="Mash designer finished">
+   <figcaption>Fig18e. Mash designer </figcaption>
+</figure>
+</p>
+
 
 <a id="brewdaymode"><h2>Brewday Mode</h2></a>
 <p>
@@ -622,6 +825,31 @@ restore the changes made during the last session or rollback the database to
 discard the changes in the last session.
 </p>
 
+<a id="inventry"><h2>Inventory Tracking</h2></a>
+I somehow feel that should in a larger font.
+<p>
+Of all the requested features for brewtarget, inventory tracking
+has to be the most requested. From out of nowhere,
+mrostling made it all work. I'm impressed and you should be too.
+</p>
+
+<h3>How It Works</h3>
+<p>
+The mechanism is pretty straight forward. Open up the item you want to record
+your inventory, say &quot;Briess 2 Row Brewers Malt&quot;. Towards the bottom
+of the left hand side, enter the amount you have in inventory. On any recipe
+you have used this malt, you can now see what you have in inventory. 
+</p>
+<p>
+Every time you use the <a href="#brewnotes">&quot;Brew It!&quot;</a>
+functionality, the amount in inventory is reduced by the amount the recipe
+uses.
+</p>
+<p class="important">
+Be somewhat careful. We do not provide warning (yet) if your recipe calls for
+2 kg of crystal 80, but you only have 1 kg in inventory.
+</p>
+
 <a id="trees"><h2>Trees</h2></a>
 <p>
 The application window is split into three major panes: the trees, the recipe
@@ -636,7 +864,7 @@ recipe in the main window.
 
 There are 6 tabs:
 <ul>
-   <li>Recipes - this tree shows all your recipes.  You can drag'n'drop the
+   <li>Recipes - this tree shows all your recipes. You can drag'n'drop the
    recipe onto the main window and that recipe will be loaded. Each recipe
    will also show any associated brewnotes.</li>
    <li>Equipment - this shows all your defined kit. You can drag'n'drop a
@@ -705,7 +933,7 @@ predict what you brew.
 <p>
 The values are preloaded based on the recipe as written. As you move through
 your brewday, you can record the actual numbers. The calculated values in the
-middle of the screen will change based on those inputs.  For example, if you
+middle of the screen will change based on those inputs. For example, if you
 expected an SG of 1.036 but only got 1.032 the projected OG, ABV and ABV will
 all change to reflect the lower SG.
 </p>
@@ -954,7 +1182,7 @@ fields.
    <a id="supportunits"><h3>Supported Units</h3></a>
    <h4>US Customary and British Imperial Units</h4>
    <p class="important"> The abbreviations are the same as for US Customary and British Imperial units, but they denote the
-   appropriate quantity in each system.  
+   appropriate quantity in each system. 
    </p>
 <table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
    <tr>
@@ -997,7 +1225,7 @@ fields.
    <tr>
       <td class="td"></td>
       <td class="td"><kbd>Tablespoon</kbd></td>
-      <td class="td">tbsp</td>
+      <td class="td">tbs</td>
    </tr>
    <tr>
       <td class="td"></td>
@@ -1101,9 +1329,27 @@ fields.
 
    <a id="newin21"><h1>New in this release</h1></a>
    <p>
-   Brewtarget 2.1 mostly focuses on updates to the interface. 
+   Brewtarget 2.1 focuses on updates to the interface. Two of the most
+   commonly requested features have been implemented in this release.
+   Subfolders in the trees, and inventory.
    </p>
 
+   <a id="inveotry"><h2>Inventory tracking</h2></a>
+   <p>
+   Of all the features requested in brewtarget, this is the most popular. I
+   wish rocketman or I could take credit for doing this, but it all goes to
+   mrostling. From out of nowhere, mrostling submitted an almost perfect patch
+   to implement this feature.
+   </p>
+
+   <a id="sliders"><h2>Bubbles</h2></a>
+   <p>
+   The main interface has received a significant face lift by removing the
+   numbers on the right of the recipe pane. They have been replaced by sliders
+   showing where in the spectrum your beer falls. This has also resulted in
+   the glass going away, and the boil SG and Calories/12oz moving to the left
+   of that pane.
+   </p>
    <a id="strikewater"><h2>Strike water toolbox</h2></a>
    <p>
    Maxime Lavigne added a new tool to caclulate strike water temperatures
