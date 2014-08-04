@@ -36,7 +36,7 @@
 #include "brewtarget.h"
 
 HopTableModel::HopTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent), colFlags(HOPNUMCOLS), recObs(0), parentTableWidget(parent), showIBUs(false)
+   : QAbstractTableModel(parent), colFlags(HOPNUMCOLS), _inventoryEditable(false), recObs(0), parentTableWidget(parent), showIBUs(false)
 {
    hopObs.clear();
    setObjectName("hopTable");
@@ -46,6 +46,8 @@ HopTableModel::HopTableModel(QTableView* parent, bool editable)
    {
       if( i == HOPNAMECOL )
          colFlags[i] = Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      else if( i == HOPINVENTORYCOL )
+         colFlags[i] = Qt::ItemIsEnabled;
       else
          colFlags[i] = Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
             Qt::ItemIsEnabled;

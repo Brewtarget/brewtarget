@@ -36,6 +36,7 @@ MiscDialog::MiscDialog(MainWindow* parent)
    setupUi(this);
 
    miscTableModel = new MiscTableModel(miscTableWidget, false);
+   miscTableModel->setInventoryEditable(true);
    miscTableProxy = new MiscSortFilterProxyModel(miscTableWidget);
    miscTableProxy->setSourceModel(miscTableModel);
    miscTableWidget->setModel(miscTableProxy);

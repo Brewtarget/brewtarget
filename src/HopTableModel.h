@@ -23,6 +23,7 @@ class HopTableModel;
 class HopItemDelegate;
 
 #include <QAbstractTableModel>
+#include <Qt>
 #include <QWidget>
 #include <QModelIndex>
 #include <QVariant>
@@ -32,7 +33,7 @@ class HopItemDelegate;
 #include "hop.h"
 #include "recipe.h"
 
-enum{HOPNAMECOL, HOPALPHACOL, HOPINVENTORYCOL, HOPAMOUNTCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
+enum{HOPNAMECOL, HOPALPHACOL, HOPAMOUNTCOL, HOPINVENTORYCOL, HOPFORMCOL, HOPUSECOL, HOPTIMECOL, HOPNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class HopTableModel
@@ -60,6 +61,13 @@ public:
    Hop* getHop(unsigned int i);
    //! \brief Clear the model.
    void removeAll();
+   
+   /*!
+    * \brief True if the inventory column should be editable, false otherwise.
+    * 
+    * The default is that the inventory column is not editable
+    */
+   void setInventoryEditable( bool var ) { _inventoryEditable = var; colFlags[HOPINVENTORYCOL] = Qt::ItemIsEnabled | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags); }
    
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -93,6 +101,7 @@ public slots:
    
 private:
    QVector<Qt::ItemFlags> colFlags;
+   bool _inventoryEditable;
    QList<Hop*> hopObs;
    Recipe* recObs;
    QTableView* parentTableWidget;

@@ -37,6 +37,7 @@ HopDialog::HopDialog(MainWindow* parent)
    setupUi(this);
 
    hopTableModel = new HopTableModel(hopTableWidget, false);
+   hopTableModel->setInventoryEditable(true);
    hopTableProxy = new HopSortFilterProxyModel(hopTableWidget);
    hopTableProxy->setSourceModel(hopTableModel);
    hopTableWidget->setModel(hopTableProxy);

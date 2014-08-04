@@ -27,7 +27,7 @@
 #include "recipe.h"
 
 MiscTableModel::MiscTableModel(QTableView* parent, bool editable)
-   : QAbstractTableModel(parent), editable(editable), recObs(0), parentTableWidget(parent)
+   : QAbstractTableModel(parent), editable(editable), _inventoryEditable(false), recObs(0), parentTableWidget(parent)
 {
    miscObs.clear();
 }
@@ -279,6 +279,8 @@ Qt::ItemFlags MiscTableModel::flags(const QModelIndex& index ) const
          return defaults;
       case MISCISWEIGHT:
          return defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
+      case MISCINVENTORYCOL:
+         return (defaults | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags));
       default:
          return defaults | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags);
    }

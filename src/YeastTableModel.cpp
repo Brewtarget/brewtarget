@@ -36,7 +36,7 @@
 #include "recipe.h"
 
 YeastTableModel::YeastTableModel(QTableView* parent, bool editable)
-: QAbstractTableModel(parent), editable(editable), parentTableWidget(parent), recObs(0)
+: QAbstractTableModel(parent), editable(editable), _inventoryEditable(false), parentTableWidget(parent), recObs(0)
 {
    yeastObs.clear();
 }
@@ -318,6 +318,8 @@ Qt::ItemFlags YeastTableModel::flags(const QModelIndex& index ) const
    {
       case YEASTNAMECOL:
          return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+      case YEASTINVENTORYCOL:
+         return (Qt::ItemIsEnabled | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags));
       default:
          return Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) | Qt::ItemIsDragEnabled |
             Qt::ItemIsEnabled;

@@ -37,6 +37,7 @@ FermentableDialog::FermentableDialog(MainWindow* parent)
    setupUi(this);
 
    fermTableModel = new FermentableTableModel(fermentableTableWidget, false);
+   fermTableModel->setInventoryEditable(true);
    fermTableProxy = new FermentableSortFilterProxyModel(fermentableTableWidget);
    fermTableProxy->setSourceModel(fermTableModel);
    fermentableTableWidget->setModel(fermTableProxy);

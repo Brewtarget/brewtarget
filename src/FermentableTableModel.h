@@ -37,7 +37,7 @@ class FermentableItemDelegate;
 class Fermentable;
 class Recipe;
 
-enum{FERMNAMECOL, FERMTYPECOL, FERMINVENTORYCOL, FERMAMOUNTCOL, FERMISMASHEDCOL, FERMAFTERBOIL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
+enum{FERMNAMECOL, FERMTYPECOL, FERMAMOUNTCOL, FERMINVENTORYCOL, FERMISMASHEDCOL, FERMAFTERBOIL, FERMYIELDCOL, FERMCOLORCOL, FERMNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class FermentableTableModel
@@ -64,7 +64,13 @@ public:
    Fermentable* getFermentable(unsigned int i);
    //! \brief True if you want to display percent of each grain in the row header.
    void setDisplayPercentages( bool var );
-
+   /*!
+    * \brief True if the inventory column should be editable, false otherwise.
+    * 
+    * The default is that the inventory column is not editable
+    */
+   void setInventoryEditable( bool var ) { _inventoryEditable = var; }
+   
    unitDisplay displayUnit(int column) const;
    unitScale displayScale(int column) const;
    void setDisplayUnit(int column, unitDisplay displayUnit);
@@ -101,6 +107,7 @@ private:
    QString generateName(int column) const;
    
    bool editable;
+   bool _inventoryEditable;
    QList<Fermentable*> fermObs;
    Recipe* recObs;
    bool displayPercentages;

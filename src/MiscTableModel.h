@@ -40,7 +40,7 @@ class Misc;
 class MiscTableWidget;
 class Recipe;
 
-enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCINVENTORYCOL, MISCAMOUNTCOL, MISCISWEIGHT, MISCNUMCOLS /*This one MUST be last*/};
+enum{MISCNAMECOL, MISCTYPECOL, MISCUSECOL, MISCTIMECOL, MISCAMOUNTCOL, MISCINVENTORYCOL, MISCISWEIGHT, MISCNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class MiscTableModel
@@ -65,6 +65,13 @@ public:
    Misc* getMisc(unsigned int i);
    //! \brief Clear the model.
    void removeAll();
+   
+   /*!
+    * \brief True if the inventory column should be editable, false otherwise.
+    * 
+    * The default is that the inventory column is not editable
+    */
+   void setInventoryEditable( bool var ) { _inventoryEditable = var; }
    
    //! \brief Reimplemented from QAbstractTableModel
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -97,6 +104,7 @@ private slots:
 
 private:
    bool editable;
+   bool _inventoryEditable;
    QList<Misc*> miscObs;
    Recipe* recObs;
    QTableView* parentTableWidget;

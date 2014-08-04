@@ -36,6 +36,7 @@ YeastDialog::YeastDialog(MainWindow* parent)
    setupUi(this);
 
    yeastTableModel = new YeastTableModel(yeastTableWidget, false);
+   yeastTableModel->setInventoryEditable(true);
    yeastTableProxy = new YeastSortFilterProxyModel(yeastTableWidget);
    yeastTableProxy->setSourceModel(yeastTableModel);
    yeastTableWidget->setModel(yeastTableProxy);

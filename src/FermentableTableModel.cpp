@@ -44,7 +44,8 @@
 FermentableTableModel::FermentableTableModel(QTableView* parent, bool editable)
    : QAbstractTableModel(parent), 
      parentTableWidget(parent), 
-     editable(editable), 
+     editable(editable),
+     _inventoryEditable(false),
      recObs(0), 
      displayPercentages(false), 
      totalFermMass_kg(0)
@@ -399,26 +400,31 @@ Qt::ItemFlags FermentableTableModel::flags(const QModelIndex& index ) const
    int col = index.column();
    Fermentable* row = fermObs[index.row()];
    
-   if( col == FERMISMASHEDCOL )
+   switch(col)
    {
-      // Ensure that being mashed and being a late addition are mutually exclusive.
-      if( !row->addAfterBoil() )
-         return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
-      else
-         return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
+      case FERMISMASHEDCOL:
+         // Ensure that being mashed and being a late addition are mutually exclusive.
+         if( !row->addAfterBoil() )
+            return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
+         else
+            return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
+         break;
+      case FERMAFTERBOIL:
+         // Ensure that being mashed and being a late addition are mutually exclusive.
+         if( !row->isMashed() )
+            return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
+         else
+            return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
+         break;
+      case FERMNAMECOL:
+         return (defaults | Qt::ItemIsSelectable);
+         break;
+      case FERMINVENTORYCOL:
+         return (defaults | (_inventoryEditable ? Qt::ItemIsEditable : Qt::NoItemFlags));
+         break;
+      default:
+         return (defaults | Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) );
    }
-   else if( col == FERMAFTERBOIL )
-   {
-      // Ensure that being mashed and being a late addition are mutually exclusive.
-      if( !row->isMashed() )
-         return (defaults | (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags));
-      else
-         return (editable ? Qt::ItemIsUserCheckable : Qt::NoItemFlags);
-   }
-   else if(  col == FERMNAMECOL )
-      return (defaults | Qt::ItemIsSelectable);
-   else
-      return (defaults | Qt::ItemIsSelectable | (editable ? Qt::ItemIsEditable : Qt::NoItemFlags) );
 }
 
 /* --maf--

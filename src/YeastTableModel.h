@@ -38,7 +38,7 @@ class Yeast;
 class YeastTableWidget;
 class Recipe;
 
-enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEASTINVENTORYCOL, YEASTAMOUNTCOL, YEASTNUMCOLS /*This one MUST be last*/};
+enum{ YEASTNAMECOL, YEASTLABCOL, YEASTPRODIDCOL, YEASTTYPECOL, YEASTFORMCOL, YEASTAMOUNTCOL, YEASTINVENTORYCOL, YEASTNUMCOLS /*This one MUST be last*/};
 
 /*!
  * \class YeastTableModel
@@ -64,6 +64,13 @@ public:
    //! \brief Clear the model.
    void removeAll();
 
+   /*!
+    * \brief True if the inventory column should be editable, false otherwise.
+    * 
+    * The default is that the inventory column is not editable
+    */
+   void setInventoryEditable( bool var ) { _inventoryEditable = var; }
+   
    //! \brief Reimplemented from QAbstractTableModel.
    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
    //! \brief Reimplemented from QAbstractTableModel.
@@ -95,6 +102,7 @@ private slots:
    
 private:
    bool editable;
+   bool _inventoryEditable;
    QList<Yeast*> yeastObs;
    QTableView* parentTableWidget;
    Recipe* recObs;
