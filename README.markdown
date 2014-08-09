@@ -41,6 +41,7 @@ Author list created with:
 * [Project development page](https://launchpad.net/brewtarget)
 * [Bug tracker](https://bugs.launchpad.net/brewtarget)
 * [Developers team](https://launchpad.net/~brewtarget-devs)
+* [Developers Wiki](https://gitorious.org/brewtarget/pages/Home)
 
 ## Compiling and Installing
 
