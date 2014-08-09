@@ -1031,52 +1031,52 @@ bool DatabaseSchemaHelper::migrateNext(int oldVersion, QSqlDatabase db)
          // Add 'folder' column to some tables
          ret &= q.exec(
             ALTERTABLE + SEP + tableEquipment + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableFermentable + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableHop + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableMisc + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableStyle + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableYeast + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableWater + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableMash + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableBrewnote + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          ret &= q.exec(
             ALTERTABLE + SEP + tableRecipe + SEP +
-            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + "''"
+            ADDCOLUMN + SEP + "folder" + SEP + TYPETEXT + SEP + DEFAULT + " ''"
          );
          
          // Put the "Bt:.*" recipes into /brewtarget folder
@@ -1301,11 +1301,20 @@ bool DatabaseSchemaHelper::migrate(int oldVersion, int newVersion, QSqlDatabase 
    
    bool ret = true;
    
-   bool hasTransaction = db.transaction();
+   // Start a transaction
+   db.transaction();
+   
    for( ; oldVersion < newVersion && ret; ++oldVersion )
       ret &= migrateNext(oldVersion, db);
-   if( hasTransaction )
+   
+   // If any statement failed to execute, rollback database to last good state.
+   if( ret )
       ret &= db.commit();
+   else
+   {
+      Brewtarget::logE("Rolling back");
+      db.rollback();
+   }
    
    return ret;
 }

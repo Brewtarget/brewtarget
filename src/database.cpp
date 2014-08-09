@@ -203,7 +203,17 @@ bool Database::load()
    
    // Update the database if need be. This has to happen before we do anything
    // else or we dump core 
-   schemaUpdated = updateSchema();
+   bool schemaErr = false;
+   schemaUpdated = updateSchema(&schemaErr);
+   if( schemaErr )
+   {
+      QMessageBox::critical(
+         0,
+         QObject::tr("Database Failure"),
+         QObject::tr("Failed to update the database")
+      );
+      return false;
+   }
    
    // Initialize the SELECT * query hashes.
    selectAll = Database::selectAllHash();
@@ -2035,7 +2045,7 @@ QList<Yeast*> Database::yeasts()
    return tmp;
 }
 
-bool Database::updateSchema()
+bool Database::updateSchema(bool* err)
 {
    int currentVersion = DatabaseSchemaHelper::currentVersion( sqlDatabase() );
    int newVersion = DatabaseSchemaHelper::dbVersion;
@@ -2045,7 +2055,12 @@ bool Database::updateSchema()
    {
       bool success = DatabaseSchemaHelper::migrate( currentVersion, newVersion, sqlDatabase() );
       if( !success )
+      {
          Brewtarget::logE(QString("Database migration %1->%2 failed").arg(currentVersion).arg(newVersion));
+         if( err )
+            *err = true;
+         return false;
+      }
       dirty = true;
    }
    
@@ -2061,6 +2076,8 @@ bool Database::updateSchema()
    
 	}
 	
+   if( err )
+      *err = false;
 	return doUpdate;
 }
 
