@@ -72,8 +72,8 @@ NamedMashEditor::NamedMashEditor(QWidget* parent, MashStepEditor* editor, bool s
    // finally, the combo box and the remove mash button
    connect(mashComboBox, SIGNAL(activated(const QString&)), this, SLOT(mashSelected(const QString&)));
    connect(pushButton_remove, SIGNAL(clicked()), this, SLOT(removeMash()));
-	
-	setMash(mashListModel->at(mashComboBox->currentIndex()));
+   
+   setMash(mashListModel->at(mashComboBox->currentIndex()));
 
    connect( lineEdit_grainTemp,  SIGNAL(editingFinished()), this, SLOT(updateField()));
    connect( lineEdit_spargeTemp, SIGNAL(editingFinished()), this, SLOT(updateField()));
@@ -328,7 +328,7 @@ void NamedMashEditor::removeMash()
 {
    if ( ! mashObs )
       return;
-	
+   
    int newMash = mashComboBox->currentIndex() - 1;
 
    // I *think* we want to disconnect the mash first?
@@ -338,5 +338,5 @@ void NamedMashEditor::removeMash()
    Database::instance().remove(steps);
    // and delete the mash itself
    Database::instance().remove(mashObs);
-	setMash(mashListModel->at(newMash));
+   setMash(mashListModel->at(newMash));
 }

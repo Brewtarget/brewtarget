@@ -420,7 +420,7 @@ void Database::unload(bool keepChanges)
       // If load() failed or want to keep the changes, then
       // just keep the database and don't revert to the backup.
       if (dbFile.exists())  dbTempBackupFile.remove();
-	  return;
+     return;
    }
    // If the user doesn't want to save changes, remove the active database
    // and restore the backup.
@@ -498,8 +498,8 @@ bool Database::restoreFromFile(QString newDbFileStr)
    QString newDbFileName = prefix + "database.sqlite";
    QFile newDbFile(newDbFileName);
    */
-	
-	QFile newDbFile(newDbFileStr);
+   
+   QFile newDbFile(newDbFileStr);
    // Fail if we can't find file.
    if( !newDbFile.exists() )
       return false;
@@ -1561,85 +1561,85 @@ void Database::updateEntry( Brewtarget::DBTable table, int key, const char* col_
 //The first displayed ingredient in the database is assumed to be the parent.
 //TODO: make the child_id column UNIQUE in the database
 void Database::populateChildTablesByName(Brewtarget::DBTable table){
-	Brewtarget::logW( "Populating Children Ingredient Links" );
-		
-	QString queryString = QString(
-		"SELECT DISTINCT name FROM %1"
-	).arg(tableNames[table]);
-	QSqlQuery nameq( queryString, sqlDatabase() );
-	while (nameq.next()) {
-		QString name = nameq.record().value(0).toString();
-		queryString = QString(
-			"SELECT id FROM %1 WHERE ( name='%2' AND display=1 ) ORDER BY id ASC LIMIT 1"
-		).arg(tableNames[table]).arg(name);
-		QSqlQuery parentq( queryString, sqlDatabase() );
-		parentq.first();
-		QString parentID = parentq.record().value("id").toString();
-		queryString = QString(
-			"SELECT id FROM %1 WHERE ( name='%2' AND display=0 ) ORDER BY id ASC"
-		).arg(tableNames[table]).arg(name);
-		QSqlQuery childrenq( queryString, sqlDatabase() );
-		while (childrenq.next()) {
-			QString childID = childrenq.record().value("id").toString();
-			queryString = QString(
-				"INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)"
-			).arg(tableNames[tableToChildTable[table]]).arg(parentID).arg(childID);
-			QSqlQuery insertq( queryString, sqlDatabase() );
-		}
+   Brewtarget::logW( "Populating Children Ingredient Links" );
+      
+   QString queryString = QString(
+      "SELECT DISTINCT name FROM %1"
+   ).arg(tableNames[table]);
+   QSqlQuery nameq( queryString, sqlDatabase() );
+   while (nameq.next()) {
+      QString name = nameq.record().value(0).toString();
+      queryString = QString(
+         "SELECT id FROM %1 WHERE ( name='%2' AND display=1 ) ORDER BY id ASC LIMIT 1"
+      ).arg(tableNames[table]).arg(name);
+      QSqlQuery parentq( queryString, sqlDatabase() );
+      parentq.first();
+      QString parentID = parentq.record().value("id").toString();
+      queryString = QString(
+         "SELECT id FROM %1 WHERE ( name='%2' AND display=0 ) ORDER BY id ASC"
+      ).arg(tableNames[table]).arg(name);
+      QSqlQuery childrenq( queryString, sqlDatabase() );
+      while (childrenq.next()) {
+         QString childID = childrenq.record().value("id").toString();
+         queryString = QString(
+            "INSERT OR REPLACE INTO %1 (parent_id, child_id) VALUES (%2, %3)"
+         ).arg(tableNames[tableToChildTable[table]]).arg(parentID).arg(childID);
+         QSqlQuery insertq( queryString, sqlDatabase() );
+      }
    }
-	
+   
 }
 // populate ingredient tables
 void Database::populateChildTablesByName(){
-	populateChildTablesByName(Brewtarget::FERMTABLE);
-	populateChildTablesByName(Brewtarget::HOPTABLE);
-	populateChildTablesByName(Brewtarget::MISCTABLE);
-	populateChildTablesByName(Brewtarget::YEASTTABLE);
+   populateChildTablesByName(Brewtarget::FERMTABLE);
+   populateChildTablesByName(Brewtarget::HOPTABLE);
+   populateChildTablesByName(Brewtarget::MISCTABLE);
+   populateChildTablesByName(Brewtarget::YEASTTABLE);
 }
 //Returns the key of the parent ingredient
 int Database::getParentID(Brewtarget::DBTable table, int childKey){
-	int ret;
-	//child_id is expected to be unique in table
-	QString queryString = QString(
-		"SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1"
-	).arg(tableNames[tableToChildTable[table]]).arg(childKey);
+   int ret;
+   //child_id is expected to be unique in table
+   QString queryString = QString(
+      "SELECT parent_id FROM %1 WHERE child_id = %2 LIMIT 1"
+   ).arg(tableNames[tableToChildTable[table]]).arg(childKey);
    
-	QSqlQuery q( queryString, sqlDatabase() );
-	q.first();
+   QSqlQuery q( queryString, sqlDatabase() );
+   q.first();
    ret = q.record().value("parent_id").toInt();
-	if(ret==0){
-		return childKey;
-	}else{
-		return ret;
-	}
+   if(ret==0){
+      return childKey;
+   }else{
+      return ret;
+   }
 }
 //Returns the key to the inventory table for a given ingredient
 int Database::getInventoryID(Brewtarget::DBTable table, int key){
-	int ret;
-	QString queryString = QString(
-		"SELECT id FROM %1 WHERE %2_id = '%3' LIMIT 1"
-	).arg(tableNames[tableToInventoryTable[table]]).arg(tableNames[table]).arg(getParentID(table, key));
+   int ret;
+   QString queryString = QString(
+      "SELECT id FROM %1 WHERE %2_id = '%3' LIMIT 1"
+   ).arg(tableNames[tableToInventoryTable[table]]).arg(tableNames[table]).arg(getParentID(table, key));
    QSqlQuery q( queryString, sqlDatabase() );
    q.first();
-	ret = q.record().value("id").toInt();
+   ret = q.record().value("id").toInt();
    return ret;
 }
 //Returns the parent table number from the hash
 Brewtarget::DBTable Database::getChildTable(Brewtarget::DBTable table){
-	return tableToChildTable[table];
+   return tableToChildTable[table];
 }
 //Returns the inventory table number from the hash
 Brewtarget::DBTable Database::getInventoryTable(Brewtarget::DBTable table){
-	return tableToInventoryTable[table];
+   return tableToInventoryTable[table];
 }
 //create a new inventory row
 void Database::newInventory(Brewtarget::DBTable invForTable, int invForID){
-	QString invTable = tableNames[tableToInventoryTable[invForTable]];
-	
-	QString queryString = QString(
-		"INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)"
-	).arg(invTable).arg(tableNames[invForTable]).arg(getParentID(invForTable, invForID));
-	QSqlQuery q( queryString, sqlDatabase() );
+   QString invTable = tableNames[tableToInventoryTable[invForTable]];
+   
+   QString queryString = QString(
+      "INSERT OR REPLACE INTO %1 (%2_id) VALUES (%3)"
+   ).arg(invTable).arg(tableNames[invForTable]).arg(getParentID(invForTable, invForID));
+   QSqlQuery q( queryString, sqlDatabase() );
    
 }
 
@@ -1687,7 +1687,7 @@ void Database::addToRecipe( Recipe* rec, Fermentable* ferm, bool noCopy )
                                                  "fermentables",
                                                  "fermentable_in_recipe",
                                                  "fermentable_id",
-																 "fermentable_children",
+                                                 "fermentable_children",
                                                  noCopy, &allFermentables );
    connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    // recalcAll is very expensive. When doing a massive import, don't do it
@@ -1707,7 +1707,7 @@ void Database::addToRecipe( Recipe* rec, QList<Fermentable*>ferms )
                                                     "fermentables",
                                                     "fermentable_in_recipe",
                                                     "fermentable_id",
-																    "fermentable_children",
+                                                    "fermentable_children",
                                                     false, &allFermentables );
       connect( newFerm, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptFermChange(QMetaProperty,QVariant)) );
    }
@@ -1721,7 +1721,7 @@ void Database::addToRecipe( Recipe* rec, Hop* hop, bool noCopy )
                                          "hops",
                                          "hop_in_recipe",
                                          "hop_id",
-													  "hop_children",
+                                         "hop_children",
                                          noCopy, &allHops );
    connect( newHop, SIGNAL(changed(QMetaProperty,QVariant)), rec, SLOT(acceptHopChange(QMetaProperty,QVariant)));
    rec->recalcIBU();
@@ -2064,21 +2064,21 @@ bool Database::updateSchema(bool* err)
       dirty = true;
    }
    
-	//populate ingredient links
-	int repopChild = 0;
-	QSqlQuery popchildq( "SELECT repopulateChildrenOnNextStart FROM settings WHERE id=1", sqlDatabase() );
+   //populate ingredient links
+   int repopChild = 0;
+   QSqlQuery popchildq( "SELECT repopulateChildrenOnNextStart FROM settings WHERE id=1", sqlDatabase() );
    if( popchildq.next() )
       repopChild = popchildq.record().value("repopulateChildrenOnNextStart").toInt();
- 	
-	if(repopChild == 1){
-		populateChildTablesByName();
-		QSqlQuery popchildq( "UPDATE settings SET repopulateChildrenOnNextStart = 0", sqlDatabase() );
    
-	}
-	
+   if(repopChild == 1){
+      populateChildTablesByName();
+      QSqlQuery popchildq( "UPDATE settings SET repopulateChildrenOnNextStart = 0", sqlDatabase() );
+   
+   }
+   
    if( err )
       *err = false;
-	return doUpdate;
+   return doUpdate;
 }
 
 bool Database::importFromXML(const QString& filename)

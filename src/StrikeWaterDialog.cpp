@@ -25,8 +25,8 @@
 const double StrikeWaterDialog::specificHeatBarley = 0.41;
 
 StrikeWaterDialog::StrikeWaterDialog(QWidget* parent) : QDialog(parent) {
-	setupUi(this);
-	connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
+   setupUi(this);
+   connect(pushButton_calculate, SIGNAL(clicked()), this, SLOT(calculate()));
 }
 
 StrikeWaterDialog::~StrikeWaterDialog() {}
@@ -34,9 +34,9 @@ StrikeWaterDialog::~StrikeWaterDialog() {}
 void StrikeWaterDialog::calculate() {
   double initial = computeInitialInfusion();
   double mash = computeMashInfusion();
-	initialResultTxt->setText(Algorithms::isNan(initial) 
+  initialResultTxt->setText(Algorithms::isNan(initial) 
     ? tr("N/A") : Brewtarget::displayAmount(initial, Units::celsius));
-	mashResultTxt->setText(Algorithms::isNan(mash) 
+  mashResultTxt->setText(Algorithms::isNan(mash) 
     ? tr("N/A") : Brewtarget::displayAmount(mash, Units::liters));
 }
 

@@ -87,12 +87,12 @@ EquipmentEditor::EquipmentEditor(QWidget* parent, bool singleEquipEditor)
    connect( pushButton_absorption, SIGNAL( clicked() ), this, SLOT( resetAbsorption() ) );
    connect( equipmentComboBox, SIGNAL(activated(const QString&)), this, SLOT( equipmentSelected() ) );
 
-	// Check boxen
+   // Check boxen
    connect(checkBox_calcBoilVolume, SIGNAL(stateChanged(int)), this, SLOT(updateCheckboxRecord(int)));
    connect(checkBox_defaultEquipment, SIGNAL(stateChanged(int)), this, SLOT(updateDefaultEquipment(int)));
-	
-	// make sure the dialog gets populated the first time it's opened from the menu
-	equipmentSelected();
+   
+   // make sure the dialog gets populated the first time it's opened from the menu
+   equipmentSelected();
 }
 
 void EquipmentEditor::setEquipment( Equipment* e )
@@ -302,23 +302,23 @@ void EquipmentEditor::showChanges()
 
 void EquipmentEditor::updateCheckboxRecord(int state)
 {
-	 if ( state == Qt::Checked )
-	 {
-		 double bar = calcBatchSize();
+    if ( state == Qt::Checked )
+    {
+       double bar = calcBatchSize();
        lineEdit_boilSize->setText( Brewtarget::displayAmount(bar, Units::liters));
-	 }
+    }
 }
 
 double EquipmentEditor::calcBatchSize()
 {
    double size, topUp, trubLoss, time, evapRate;
-	size = Brewtarget::volQStringToSI(lineEdit_batchSize->text());
-	topUp = Brewtarget::volQStringToSI(lineEdit_topUpWater->text());
-	trubLoss = Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text());
-	time = Brewtarget::timeQStringToSI(lineEdit_boilTime->text());
-	evapRate = Brewtarget::volQStringToSI(lineEdit_evaporationRate->text());
+   size = Brewtarget::volQStringToSI(lineEdit_batchSize->text());
+   topUp = Brewtarget::volQStringToSI(lineEdit_topUpWater->text());
+   trubLoss = Brewtarget::volQStringToSI(lineEdit_trubChillerLoss->text());
+   time = Brewtarget::timeQStringToSI(lineEdit_boilTime->text());
+   evapRate = Brewtarget::volQStringToSI(lineEdit_evaporationRate->text());
 
-	return size - topUp + trubLoss + (time/(double)60)*evapRate;
+   return size - topUp + trubLoss + (time/(double)60)*evapRate;
 }
 
 void EquipmentEditor::updateDefaultEquipment(int state)
@@ -353,39 +353,39 @@ void EquipmentEditor::updateField()
 
    if ( field == lineEdit_boilTime )
    {
-	  foo = Brewtarget::timeQStringToSI(field->text());
-	  field->setText(Brewtarget::displayAmount(foo, Units::minutes) );
+     foo = Brewtarget::timeQStringToSI(field->text());
+     field->setText(Brewtarget::displayAmount(foo, Units::minutes) );
    }
    else if ( field == lineEdit_tunWeight )
    {
-	  foo = Brewtarget::weightQStringToSI(field->text());
+     foo = Brewtarget::weightQStringToSI(field->text());
      field->setText( Brewtarget::displayAmount(foo, Units::kilograms) );
    }
    else if ( field == lineEdit_boilingPoint )
    {
-	   foo = Brewtarget::tempQStringToSI(field->text());
-	   field->setText( Brewtarget::displayAmount(foo, Units::celsius));
+      foo = Brewtarget::tempQStringToSI(field->text());
+      field->setText( Brewtarget::displayAmount(foo, Units::celsius));
    }
    else if ( field == lineEdit_grainAbsorption )
    {
       // Just reformat in a pleasing fashion
       foo = lineEdit_grainAbsorption->text().toDouble(); 
-		lineEdit_grainAbsorption->setText( Brewtarget::displayAmount(foo) );
+      lineEdit_grainAbsorption->setText( Brewtarget::displayAmount(foo) );
    }
    else if ( field == lineEdit_hopUtilization || field == lineEdit_tunSpecificHeat )
    {
-	   foo = field->text().toDouble();
-	   field->setText( Brewtarget::displayAmount(foo));
+      foo = field->text().toDouble();
+      field->setText( Brewtarget::displayAmount(foo));
    }
    else
    {
-	  foo = Brewtarget::volQStringToSI(field->text());
-	  field->setText( Brewtarget::displayAmount(foo, Units::liters) );
+     foo = Brewtarget::volQStringToSI(field->text());
+     field->setText( Brewtarget::displayAmount(foo, Units::liters) );
    }
 
-	// We also need to recalculate the preboil size if a few fields change
-	if ( selection == lineEdit_boilTime || selection == lineEdit_evaporationRate || selection == lineEdit_trubChillerLoss || selection == lineEdit_topUpWater )
-		 updateCheckboxRecord( checkBox_calcBoilVolume->checkState());
+   // We also need to recalculate the preboil size if a few fields change
+   if ( selection == lineEdit_boilTime || selection == lineEdit_evaporationRate || selection == lineEdit_trubChillerLoss || selection == lineEdit_topUpWater )
+       updateCheckboxRecord( checkBox_calcBoilVolume->checkState());
 }
 
 void EquipmentEditor::closeEvent(QCloseEvent *event)

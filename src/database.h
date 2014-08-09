@@ -96,7 +96,7 @@ public:
    //! \brief Create a blank database in the given file
    static bool createBlank(QString const& filename);
    
-	//! backs up database to 'dir' in chosen directory
+   //! backs up database to 'dir' in chosen directory
    static bool backupToDir(QString dir);
 
    //! \brief Reverts database to that of chosen file.
@@ -168,8 +168,8 @@ public:
    
    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    /* This links ingredients with the same name. 
-	* The first displayed ingredient in the database is assumed to be the parent.
-	*/
+   * The first displayed ingredient in the database is assumed to be the parent.
+   */
    void populateChildTablesByName(Brewtarget::DBTable table);
    // Runs populateChildTablesByName for each 
    void populateChildTablesByName();
@@ -563,7 +563,7 @@ private:
       QString propName,
       QString relTableName,
       QString ingKeyName,
-	  QString childTableName,
+     QString childTableName,
       bool noCopy = false,
       QHash<int,T*>* keyHash = 0,
       bool doNotDisplay = true
@@ -621,25 +621,25 @@ private:
          q.finish();
          Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
       }
-	  
-	  //Put this in the <ing_type>_children table.
-	  if(childTableName != "instruction_children"){
-		 q.prepare( QString("INSERT INTO `%1` (`parent_id`, `child_id`) VALUES (:parent, :child)")
-					.arg(childTableName)
-				  );
-		 q.bindValue(":parent", ing->key());
-		 q.bindValue(":child", newIng->key());
-		 if( q.exec() )
-		 {
-			q.finish();
-			emit rec->changed( rec->metaProperty(propName), QVariant() );
-		 }
-		 else
-		 {
-			q.finish();
-			Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
-		 }
-	  }
+     
+     //Put this in the <ing_type>_children table.
+     if(childTableName != "instruction_children"){
+       q.prepare( QString("INSERT INTO `%1` (`parent_id`, `child_id`) VALUES (:parent, :child)")
+               .arg(childTableName)
+              );
+       q.bindValue(":parent", ing->key());
+       q.bindValue(":child", newIng->key());
+       if( q.exec() )
+       {
+         q.finish();
+         emit rec->changed( rec->metaProperty(propName), QVariant() );
+       }
+       else
+       {
+         q.finish();
+         Brewtarget::logW( QString("Database::addIngredientToRecipe: %1.").arg(q.lastError().text()) );
+       }
+     }
       dirty = true; 
       return newIng;
    }

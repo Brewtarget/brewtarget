@@ -47,7 +47,7 @@ public:
    virtual ~EquipmentEditor() {}
    //! Edit the given equipment.
    void setEquipment( Equipment* e );
-	double calcBatchSize();
+   double calcBatchSize();
 
 public slots:
    //! Save the changes to the equipment.

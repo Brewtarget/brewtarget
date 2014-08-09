@@ -229,7 +229,7 @@ public slots:
    void openDonateLink();
 
    //! \brief Open the default browser to view Brewtarget manual.
-	 void openManual();
+    void openManual();
 
    //! \brief Merges two database files.
    void updateDatabase();

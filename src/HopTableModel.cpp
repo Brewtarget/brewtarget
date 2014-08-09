@@ -317,7 +317,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
             return QVariant(tr("Name"));
          case HOPALPHACOL:
             return QVariant(tr("Alpha %"));
-		 case HOPINVENTORYCOL:
+       case HOPINVENTORYCOL:
             return QVariant(tr("Inventory"));
          case HOPAMOUNTCOL:
             return QVariant(tr("Amount"));

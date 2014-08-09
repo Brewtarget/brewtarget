@@ -249,11 +249,11 @@ void MashWizard::wizardry()
    {
       Fermentable::Type type = f->type();
       if( type == Fermentable::Extract )
-	 spargeWater_l -= f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
+         spargeWater_l -= f->amount_kg() / PhysicalConstants::liquidExtractDensity_kgL;
       else if( type == Fermentable::Sugar )
-	 spargeWater_l -= f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
+         spargeWater_l -= f->amount_kg() / PhysicalConstants::sucroseDensity_kgL;
       else if( type == Fermentable::Dry_Extract )
-	 spargeWater_l -= f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
+         spargeWater_l -= f->amount_kg() / PhysicalConstants::dryExtractDensity_kgL;
    }
 
    if( spargeWater_l >= 0.0 )

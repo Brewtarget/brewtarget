@@ -244,7 +244,7 @@ void StyleEditor::showChanges(QMetaProperty* metaProp)
       lineEdit_category->setText(s->category());
       lineEdit_categoryNumber->setText(s->categoryNumber());
       lineEdit_styleLetter->setText(s->styleLetter());
-		lineEdit_styleGuide->setText(s->styleGuide());
+      lineEdit_styleGuide->setText(s->styleGuide());
       comboBox_type->setCurrentIndex(s->type());
       lineEdit_ogMin->setText(Brewtarget::displayOG(s->ogMin(),noUnit,true));
       lineEdit_ogMax->setText(Brewtarget::displayOG(s->ogMax(),noUnit,true));

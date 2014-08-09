@@ -459,13 +459,13 @@ PreInstruction Recipe::addExtracts(double timeRemaining)
    size = flist.size();
    for( i = 0; static_cast<int>(i) < size; ++i )
    {
-     Fermentable* ferm = flist[i];
-     if ( ferm->isExtract() )
-     {
-	str += QString("%1 %2, ")
-	    .arg(Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms))
-	    .arg(ferm->name());
-     }
+      Fermentable* ferm = flist[i];
+      if ( ferm->isExtract() )
+      {
+         str += QString("%1 %2, ")
+            .arg(Brewtarget::displayAmount(ferm->amount_kg(), Units::kilograms))
+            .arg(ferm->name());
+      }
    }
    str += ".";
 
