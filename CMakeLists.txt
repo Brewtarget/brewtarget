@@ -231,6 +231,35 @@ SET( brewtarget_DATA
 # Yes, I know this is 'documentation', but Debian policy suggests it should be
 # with the data (see section 12.3 of the policy manual).
      ${ROOTDIR}/doc/brewtarget-manual.html
+     ${ROOTDIR}/doc/images/afterFermentables.jpg
+     ${ROOTDIR}/doc/images/afterHops.jpg
+     ${ROOTDIR}/doc/images/afterMashDesigner.jpg
+     ${ROOTDIR}/doc/images/afterMashWizard.jpg
+     ${ROOTDIR}/doc/images/afterStyle.jpg
+     ${ROOTDIR}/doc/images/afterYeast.jpg
+     ${ROOTDIR}/doc/images/beforeStyle.jpg
+     ${ROOTDIR}/doc/images/equipeditor.jpg
+     ${ROOTDIR}/doc/images/equipMyequipment.jpg
+     ${ROOTDIR}/doc/images/equipToolBar.jpg
+     ${ROOTDIR}/doc/images/equipTreeRightClick.jpg
+     ${ROOTDIR}/doc/images/fermentableTree.jpg
+     ${ROOTDIR}/doc/images/mashConversion.jpg
+     ${ROOTDIR}/doc/images/mashDesignerBatch.jpg
+     ${ROOTDIR}/doc/images/mashDesignerConversion.jpg
+     ${ROOTDIR}/doc/images/mashDesignerProtein.jpg
+     ${ROOTDIR}/doc/images/mashDesignerTunTemp.jpg
+     ${ROOTDIR}/doc/images/mashProtein.jpg
+     ${ROOTDIR}/doc/images/mashStepConversion.jpg
+     ${ROOTDIR}/doc/images/mashStepProtein.jpg
+     ${ROOTDIR}/doc/images/mashWizard.jpg
+     ${ROOTDIR}/doc/images/nameTheMash.jpg
+     ${ROOTDIR}/doc/images/ogUnits.jpg
+     ${ROOTDIR}/doc/images/optionsFormulas.jpg
+     ${ROOTDIR}/doc/images/optionsUnits.jpg
+     ${ROOTDIR}/doc/images/scaleFermentable.jpg
+     ${ROOTDIR}/doc/images/toolsToOptions.png
+     ${ROOTDIR}/doc/images/viewToEquip.jpg
+      
 )
 
 # Desktop files to install.
