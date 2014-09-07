@@ -93,9 +93,9 @@ ENDIF()
 
 # ======================Find Qt4 (>= 4.6.0) for this project===================
 IF( ${BUILD_DESIGNER_PLUGINS} )
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebKit QtXml QtDesigner REQUIRED)
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebKit QtXml QtDesigner REQUIRED)
 ELSE()
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtSvg QtWebkit QtXml REQUIRED)
+   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml REQUIRED)
 ENDIF()
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
