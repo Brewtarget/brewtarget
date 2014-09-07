@@ -1968,28 +1968,29 @@ double Recipe::ibuFromHop(Hop const* hop)
    double AArating = hop->alpha_pct()/100.0;
    double grams = hop->amount_kg()*1000.0;
    double minutes = hop->time_min();
-   double boilGrav_final = _boilGrav; 
    // Assume 100% utilization until further notice
    double hopUtilization = 1.0;
    // Assume 60 min boil until further notice
    int boilTime = 60;
-   double avgBoilGrav;
+
+   // NOTE: we used to carefully calculate the average boil gravity and use it in the
+   // IBU calculations. However, due to John Palmer
+   // (http://homebrew.stackexchange.com/questions/7343/does-wort-gravity-affect-hop-utilization),
+   // it seems more appropriate to just use the OG directly, since it is the total
+   // amount of break material that truly affects the IBUs.
    
    if( equip )
    {
-      boilGrav_final = _boilVolume_l / equip->wortEndOfBoil_l( _boilVolume_l ) * (_boilGrav-1) + 1;
       hopUtilization = equip->hopUtilization_pct() / 100.0;
       boilTime = equip->boilTime_min();
    }
    
-   avgBoilGrav = (_boilGrav + boilGrav_final) / 2;
-   
    if( hop->use() == Hop::Boil)
-      ibus = IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, minutes );
+      ibus = IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, minutes );
    else if( hop->use() == Hop::First_Wort )
-      ibus = fwhAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, boilTime );
+      ibus = fwhAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
    else if( hop->use() == Hop::Mash && mashHopAdjust > 0.0 )
-      ibus = mashHopAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, avgBoilGrav, boilTime );
+      ibus = mashHopAdjust * IbuMethods::getIbus( AArating, grams, _finalVolumeNoLosses_l, _og, boilTime );
 
    // Adjust for hop form.
    if( hop->form() == Hop::Leaf )
