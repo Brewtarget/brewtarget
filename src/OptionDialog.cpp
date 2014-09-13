@@ -82,7 +82,7 @@ OptionDialog::OptionDialog(QWidget* parent)
       QIcon(":images/flagItaly.svg") <<
       QIcon(":images/flagNetherlands.svg") <<
       QIcon(":images/flagPoland.svg") <<
-      QIcon(":images/flagPortugal.svg") <<
+      QIcon(":images/flagBrazil.svg") <<
       QIcon(":images/flagRussia.svg") <<
       QIcon(":images/flagChina.svg");
    // Set icons.
