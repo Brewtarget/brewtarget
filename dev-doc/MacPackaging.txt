@@ -1,0 +1,38 @@
+# Mac Bundle Packaging
+
+Basic steps are:
+
+    $ rm -r /Applications/brewtarget.app
+    $ cmake -DDO_RELEASE_BUILD=ON -DCMAKE_OSX_ARCHITECTURES=x86_64
+    $ make
+
+This makes /Applications/brewtarget.app
+
+    $ make install
+
+The following seems unnecessary. I tried to do it and the error message suggested the
+frameworks had already been copied (and they had).
+
+    $ make addframeworks
+
+Most of the time, the SVG image format plugin will not automagically be
+copied to the app. So, manually copy
+
+    /Developer/Applications/Qt/plugins/imageformats/libqsvg.dylib
+    /Developer/Applications/Qt/plugins/iconengines/libqsvgicon.dylib
+
+to
+
+    /Applications/brewtarget.app/Contents/PlugIns/imageformats/libqsvg.dylib
+    /Applications/brewtarget.app/Contents/PlugIns/iconengines/libqsvgicon.dylib
+
+If your Qt installation is not in the same place as mine, figure it out with
+
+    $ qmake -query
+
+Use the Apple "Disk Utility" to create a 100 MB disk image. Mount it and copy
+brewtarget.app to it. Also, make a shortcut to /Applications and move it to the
+mounted disk image as well. Eject the image, and use the Disk Utility to
+convert the image to a compressed disk image.
+
+From within OSX, scp the installer to the host machine to get it out.
