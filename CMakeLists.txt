@@ -136,12 +136,6 @@ IF( DOXYGEN_CMD )
                    )
 ENDIF()
 
-#=============================Database Custom Target===========================
-FIND_PROGRAM( SQLITE3_CMD sqlite3 )
-IF( NOT SQLITE3_CMD )
-   MESSAGE( FATAL_ERROR "Did not find sqlite3 to make the database." )
-ENDIF()
-
 #=========================Detect Debian======================================== 
 IF( EXISTS "/etc/debian_version" )
   MESSAGE( STATUS "Debian detected..." )
