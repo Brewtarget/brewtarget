@@ -337,6 +337,8 @@ ADD_CUSTOM_TARGET(translations DEPENDS ${QM_FILES})
 
 #============================Icon for Windows==================================
 
+SET(brewtarget_ICON "")
+
 IF( WIN32 AND MINGW )
   ADD_CUSTOM_COMMAND(OUTPUT ${WINDIR}/icon.o
                      COMMAND windres.exe -I${CMAKE_CURRENT_SOURCE_DIR}
@@ -344,9 +346,9 @@ IF( WIN32 AND MINGW )
                      -o${WINDIR}/icon.o
                      DEPENDS ${RCFILE}
   )
-  SET(brewtarget_SRCS ${brewtarget_SRCS} ${WINDIR}/icon.o)
+  SET(brewtarget_ICON ${WINDIR}/icon.o)
 ELSEIF(WIN32)
-  SET(brewtarget_SRCS ${brewtarget_SRCS} ${RCFILE})
+  SET(brewtarget_ICON ${RCFILE})
 ENDIF()
 
 #===========================Create the binary==================================
@@ -365,6 +367,7 @@ ADD_LIBRARY(
 ADD_EXECUTABLE(
    ${brewtarget_EXECUTABLE}
    ${SRCDIR}/main.cpp
+   ${brewtarget_ICON}
    $<TARGET_OBJECTS:btobjlib>
 )
 ADD_DEPENDENCIES( ${brewtarget_EXECUTABLE} translations )
