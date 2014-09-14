@@ -15,6 +15,11 @@ for consumption by the typical end-user.
 
 * Boil SG was wrong if kettle losses were not zero [#1328761](https://bugs.launchpad.net/brewtarget/+bug/1328761).
 * Extract recipes crash brew-it [#1340484](https://bugs.launchpad.net/brewtarget/+bug/1340484)
+* Incorrect abbreviation in manual [#1224236](https://bugs.launchpad.net/bugs/1224236).
+* Bad IBUs for extract recipes [#1286655](https://bugs.launchpad.net/bugs/1286655).
+* "Brew It" fails for extract recipes [#1340484](https://bugs.launchpad.net/bugs/1340484).
+* Missing icons for some distributions [#1346342](https://bugs.launchpad.net/bugs/1346342).
+* Failed to launch on OSX with case-sensitive filesystems [#1259374](https://bugs.launchpad.net/bugs/1259374).
 
 ### Incompatibilities
 
