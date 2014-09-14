@@ -85,7 +85,7 @@
     </message>
     <message>
         <source>Volume into fermenter</source>
-        <translation>Množství do spilky</translation>
+        <translation>Spílaný objem</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -184,7 +184,7 @@
     </message>
     <message>
         <source>Volume in fermenter:</source>
-        <translation>Množství do spilky:</translation>
+        <translation>Objem ve spilce:</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -291,7 +291,7 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Neznámá</translation>
+        <translation>Neznámý</translation>
     </message>
 </context>
 <context>
@@ -313,51 +313,51 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum vaření</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Styl</translation>
+        <translation>Styl</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Délka chmelovaru</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Barva</translation>
+        <translation>Barva</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Druh</translation>
+        <translation>Druh</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished">Použití</translation>
+        <translation>Použití</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Forma</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategorie</translation>
+        <translation>Kategorie</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Číslo</translation>
+        <translation>Číslo</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Písmeno</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Průvodce</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PATH</source>
@@ -372,79 +372,79 @@
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nový</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
+        <translation>Recept</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Uvařit!</translation>
+        <translation>Uvařit!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Uvařit znovu</translation>
+        <translation>Uvařit znovu</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Datum změny</translation>
+        <translation>Datum změny</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Přepočítat výtěž.</translation>
+        <translation>Přepočít. výtěž.</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Odstranit</translation>
+        <translation>Smazat</translation>
     </message>
     <message>
         <source>Equipment</source>
-        <translation type="unfinished">Vybavení</translation>
+        <translation>Vybavení</translation>
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Surovina</translation>
+        <translation>Zkvasitelné</translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Chmel</translation>
+        <translation>Chmel</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished">Přípravky</translation>
+        <translation>Přípravky</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Styl</translation>
+        <translation>Styl</translation>
     </message>
     <message>
         <source>Yeast</source>
-        <translation type="unfinished">Kvasnice</translation>
+        <translation>Kvasnice</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresář</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Kopírovat</translation>
+        <translation>Kopírovat</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportovat</translation>
+        <translation>Exportovat</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importovat</translation>
+        <translation>Importovat</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Odebrat %1</translation>
+        <translation>Smazat %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Odebrat %1 %2?</translation>
+        <translation>Smazat %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -595,7 +595,7 @@
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sklad</translation>
     </message>
 </context>
 <context>
@@ -715,38 +715,38 @@
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sklad</translation>
     </message>
 </context>
 <context>
     <name>IbuGuSlider</name>
     <message>
         <source>Cloying</source>
-        <translation type="unfinished"></translation>
+        <translation>Sladké</translation>
     </message>
     <message>
         <source>Extra Malty</source>
-        <translation type="unfinished"></translation>
+        <translation>Výrazně sladové</translation>
     </message>
     <message>
         <source>Slightly Malty</source>
-        <translation type="unfinished"></translation>
+        <translation>Mírně sladové</translation>
     </message>
     <message>
         <source>Balanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvážené</translation>
     </message>
     <message>
         <source>Slightly Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahořklé</translation>
     </message>
     <message>
         <source>Extra Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation>Výrazně hořké</translation>
     </message>
     <message>
         <source>Way Hoppy</source>
-        <translation type="unfinished"></translation>
+        <translation>Extra hořké</translation>
     </message>
 </context>
 <context>
@@ -921,27 +921,27 @@
     </message>
     <message>
         <source>The import contained invalid beerXML. It has been imported, but please make certain it makes sense.</source>
-        <translation type="unfinished"></translation>
+        <translation>Importovaná data obsahovala neplaté beerXML. Byla importována, ujistěte se však, že dávají smysl.</translation>
     </message>
     <message>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název adresáře</translation>
     </message>
     <message>
         <source>Folder name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Název adresáře:</translation>
     </message>
     <message>
         <source>Bad Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Chybný název</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation type="unfinished"></translation>
+        <translation>Název adresáře musí obsahovat alespoň jeden neprázdný znak</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
-        <translation type="unfinished"></translation>
+        <translation>Název adresáře musí obsahovat alespoň jeden nelomítkový znak</translation>
     </message>
 </context>
 <context>
@@ -1171,7 +1171,7 @@
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sklad</translation>
     </message>
 </context>
 <context>
@@ -1198,55 +1198,55 @@
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished">Katalánsky</translation>
+        <translation>Katalánština</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished">Česky</translation>
+        <translation>Čeština</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">Německy</translation>
+        <translation>Němčina</translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Anglicky</translation>
+        <translation>Angličtina</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Řečtina</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">Španělsky</translation>
+        <translation>Španělština</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">Francouzsky</translation>
+        <translation>Francouzština</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished">Italština</translation>
+        <translation>Italština</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished">Holandsky</translation>
+        <translation>Holandština</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">Polsky</translation>
+        <translation>Polština</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">Portugalsky</translation>
+        <translation>Portugalština</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished">Ruština</translation>
+        <translation>Ruština</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Čínština</translation>
     </message>
 </context>
 <context>
@@ -1655,6 +1655,10 @@
     </message>
     <message>
         <source>Folder</source>
+        <translation>Adresář</translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1971,7 +1975,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Yield</source>
-        <translation>Využití</translation>
+        <translation>Výtěžnost</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -2111,15 +2115,15 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategorie</translation>
+        <translation>Kategorie</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kód</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Průvodce</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BoilTime</source>
@@ -2127,23 +2131,23 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Beta</source>
-        <translation type="unfinished"></translation>
+        <translation>Beta</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation type="unfinished">Laboratoř</translation>
+        <translation>Laboratoř</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation>Prokvašení</translation>
     </message>
     <message>
         <source>Id</source>
-        <translation type="unfinished"></translation>
+        <translation>Id</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation type="unfinished">Flokulace</translation>
+        <translation>Flokulace</translation>
     </message>
 </context>
 <context>
@@ -2176,7 +2180,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     <name>StrikeWaterDialog</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished">Není známo</translation>
+        <translation>Neznáme</translation>
     </message>
 </context>
 <context>
@@ -2338,7 +2342,7 @@ Celkový objem pro hlavní kvašení je %1.</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sklad</translation>
     </message>
 </context>
 <context>
@@ -2787,7 +2791,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Hop Utilization </source>
-        <translation>Využití Chmele </translation>
+        <translation>Výtěžnost chmele </translation>
     </message>
     <message>
         <source>Mash Tun</source>
@@ -3027,15 +3031,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Výchozí množství</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Množství na skladě</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Množství na skladě</translation>
     </message>
 </context>
 <context>
@@ -3213,15 +3217,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount </source>
-        <translation type="unfinished"></translation>
+        <translation>Výchozí množtví </translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Množství na skladě</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Množství na skladě</translation>
     </message>
 </context>
 <context>
@@ -3734,15 +3738,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>1.0</source>
-        <translation type="unfinished">1.0</translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>application/x-brewtarget-ingredient</source>
-        <translation type="unfinished"></translation>
+        <translation>application/x-brewtarget-ingredient</translation>
     </message>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Výpočet nálevu</translation>
     </message>
 </context>
 <context>
@@ -4100,15 +4104,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Výchozí množství</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Množství na skladě</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Množství na skladě</translation>
     </message>
 </context>
 <context>
@@ -4381,11 +4385,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Mash Hop</source>
-        <translation type="unfinished"></translation>
+        <translation>Mash Hop (do vystírky)</translation>
     </message>
     <message>
         <source>First Wort</source>
-        <translation type="unfinished"></translation>
+        <translation>First wort (do předku)</translation>
     </message>
     <message>
         <source>Directories</source>
@@ -4806,7 +4810,7 @@ p, li { white-space: pre-wrap; }
     <name>strikeWaterDialog</name>
     <message>
         <source>Strike Water Calculator</source>
-        <translation type="unfinished"></translation>
+        <translation>Výpočet nálevu</translation>
     </message>
     <message>
         <source>Initial Infusion</source>
@@ -4814,19 +4818,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Teplota sladu</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Cílová teplota rmutu</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation type="unfinished"></translation>
+        <translation>Hmožnost sladu</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Objem vody</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
@@ -4834,15 +4838,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Celkový objem vody</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Hmotnost sladu</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Skutečná teplota rmutu</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
@@ -4850,19 +4854,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Spočítat</translation>
+        <translation>Vypočítat</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Teplota nálevu</translation>
     </message>
     <message>
         <source>Volume to add</source>
-        <translation type="unfinished"></translation>
+        <translation>Množství k přidání</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozn.: Tato kalkulačka uvažuje předehřátou rmutovací pánev.</translation>
     </message>
 </context>
 <context>
@@ -5248,7 +5252,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Výchozí množství</translation>
     </message>
     <message>
         <source>Quanta in Inventory</source>

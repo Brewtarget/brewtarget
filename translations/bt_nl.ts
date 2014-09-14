@@ -291,7 +291,7 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Onbekend</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1206,11 +1206,11 @@
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">Duits</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Engels</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Greek</source>
@@ -1218,11 +1218,11 @@
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">Spaans</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">Frans</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Italian</source>
@@ -1234,11 +1234,11 @@
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">Pools</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">Portugees</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Russian</source>
@@ -1652,6 +1652,10 @@
     </message>
     <message>
         <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -321,7 +321,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">样式Style</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -416,7 +416,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">样式Style</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -1657,6 +1657,10 @@ Color: %1 SRM (%2)
     </message>
     <message>
         <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

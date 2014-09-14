@@ -291,7 +291,7 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Неизвестный</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -321,7 +321,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сорт</translation>
     </message>
     <message>
         <source>Boil Time</source>
@@ -380,11 +380,11 @@
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Вари</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Сварить снова</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Change date</source>
@@ -396,7 +396,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -404,11 +404,11 @@
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Сбраживаемое</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Хмель</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Misc</source>
@@ -416,7 +416,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сорт</translation>
     </message>
     <message>
         <source>Yeast</source>
@@ -428,23 +428,23 @@
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Копировать</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Экспортировать</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Импортировать</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Удаление %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Удалить %1 %2?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -1198,19 +1198,19 @@
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished">Каталанский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished">Чешский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">Немецкий</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Английский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Greek</source>
@@ -1218,27 +1218,27 @@
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">Испанский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">Французский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished">Итальянский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished">Нидерландский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">Польский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">Португальский</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Russian</source>
@@ -1651,10 +1651,14 @@
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сорт</translation>
     </message>
     <message>
         <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

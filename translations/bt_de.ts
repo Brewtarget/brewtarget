@@ -77,7 +77,7 @@
     </message>
     <message>
         <source>PostBoil Volume</source>
-        <translation>Volumen nach dem Kochen</translation>
+        <translation>Ausschlagmenge</translation>
     </message>
     <message>
         <source>PostBoil Gravity</source>
@@ -120,11 +120,11 @@
     </message>
     <message>
         <source>Boil Volume</source>
-        <translation>Brauvolumen</translation>
+        <translation>Sudvolumen</translation>
     </message>
     <message>
         <source>Preboil Gravity</source>
-        <translation>Vorkochdichte</translation>
+        <translation>spezifische Dichte vor dem Kochen</translation>
     </message>
     <message>
         <source>Final Volume</source>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Predicted Efficiency</source>
-        <translation>Geschätzte Effiziens</translation>
+        <translation>geschätze Ausbeute</translation>
     </message>
     <message>
         <source>Estimated calories (per 12 oz)</source>
@@ -291,7 +291,7 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Unbekannt</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -317,7 +317,7 @@
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tag des Braus</translation>
     </message>
     <message>
         <source>Style</source>
@@ -345,7 +345,7 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kategory</translation>
     </message>
     <message>
         <source>Number</source>
@@ -380,11 +380,11 @@
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Jetzt brauen!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Erneut brauen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Change date</source>
@@ -396,19 +396,19 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Equipment</source>
+        <translation type="unfinished">Aussattung</translation>
+    </message>
+    <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Gärgut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Hopfen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Misc</source>
@@ -428,23 +428,23 @@
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">%1 löschen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Lösche %1 %2?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -809,7 +809,7 @@
     </message>
     <message>
         <source>You are about to update the current database with another one. This may make changes to (but will not delete) some of your ingredients. It will not modify any of your recipes. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie sind dabei derzeitige Datenbank mit einer anderen zu aktualisieren. Dieses kann einige Bestandteile ändern, wird sie aber nicht löschen. Ihre Rezepte werden nicht verändert. Weiter?</translation>
     </message>
     <message>
         <source>Select Database File</source>
@@ -845,7 +845,7 @@
     </message>
     <message>
         <source>This will obliterate your current set of recipes and ingredients. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieses wird Ihre derzeitige Sammlung von Rezepten und Bestandteilen tilgen. Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>For some reason, the operation failed.</source>
@@ -861,7 +861,7 @@
     </message>
     <message>
         <source>Trying to add a mash step without a mash. Please create a mash first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie versuchen eine Maischeschritt hinzuzufügen ohne eine Maische zu definieren. Bitte erstellen Sie zuerst eine Maische.</translation>
     </message>
     <message>
         <source>Copy Recipe</source>
@@ -889,7 +889,7 @@
     </message>
     <message>
         <source>You must select or define an equipment profile first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie müssen zuerst ein Gerätschaftsprofile auswählen oder erstellen.</translation>
     </message>
     <message>
         <source>No style</source>
@@ -960,7 +960,7 @@
     </message>
     <message>
         <source>You have not set an equipment for this recipe. We really cannot continue without one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie haben keine Gerätschaft für dieses Rezept gewählt. Sie können nicht ohne fortfahren.</translation>
     </message>
     <message>
         <source>Tun Temp</source>
@@ -983,7 +983,7 @@
     <name>MashStepTableModel</name>
     <message>
         <source>Bad model index. row = %1</source>
-        <translation type="unfinished">Fehlerhafter »model index«. Zeile = %1</translation>
+        <translation>Fehlerhafter »model index«. Zeile = %1</translation>
     </message>
     <message>
         <source>Bad column: %1</source>
@@ -1022,11 +1022,11 @@
     </message>
     <message>
         <source>Bad thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>Falsche Dichte</translation>
     </message>
     <message>
         <source>You must have a positive mash thickness.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie benötigen eine Maischedichte über 1.</translation>
     </message>
     <message>
         <source>No steps</source>
@@ -1034,7 +1034,7 @@
     </message>
     <message>
         <source>There must be at least one mash step to run the wizard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie benötigen mindestens eine Maischeschritt um die automatischen Assistenten laufen zu lassen.</translation>
     </message>
     <message>
         <source>First step</source>
@@ -1050,7 +1050,7 @@
     </message>
     <message>
         <source>Your mash is too thick for desired temp. at first step.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ihre Maische is zu dick für die gewünschte Temperatur in ersten Schritt.</translation>
     </message>
     <message>
         <source>Decoction error</source>
@@ -1066,7 +1066,7 @@
     </message>
     <message>
         <source>In order to hit your sparge temp, the sparge water must be above boiling. Lower your sparge temp, or allow for more sparge water.</source>
-        <translation type="unfinished"></translation>
+        <translation>Um die Läutertemperatur zu erreichen müßte das Läuterwasser mehr als kochen. Senken Sie die Läutertemperatur oder erhöhen Sie die Menge des Läuterwassers.</translation>
     </message>
     <message>
         <source>Too much wort</source>
@@ -1074,7 +1074,7 @@
     </message>
     <message>
         <source>You have too much wort from the mash for your boil size. I suggest increasing the boil size by increasing the boil time, or reducing your mash thickness.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie haben zu viel Würze aus ihrer Maische für ihren Ansatz. Vergrößern Sie den Ansatz indem Sie die Kochzeit erhöhen oder reduzieren Sie die Maischedichte.</translation>
     </message>
 </context>
 <context>
@@ -1096,11 +1096,11 @@
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation>Schönung</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation>Wasserzusatzmittel</translation>
     </message>
     <message>
         <source>Herb</source>
@@ -1198,19 +1198,19 @@
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished">Katalanisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished">Tschechisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">Deutsch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Englisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Greek</source>
@@ -1218,27 +1218,27 @@
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">Spanisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">Französisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished">Italienisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished">Niederländisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">Polnisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">Portugisisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Russian</source>
@@ -1253,11 +1253,11 @@
     <name>QObject</name>
     <message>
         <source>Invalid color formula type: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Falscher Farbtyp: %1</translation>
     </message>
     <message>
         <source>Unrecognized IBU formula type. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter IBU-Typ. %1</translation>
     </message>
     <message>
         <source>Batch Size: %1
@@ -1304,7 +1304,8 @@
     <message>
         <source>Fermentables
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Gärgut
+</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1542,11 +1543,11 @@
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schönung</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wasserzusatzmittel</translation>
     </message>
     <message>
         <source>Herb</source>
@@ -1656,6 +1657,10 @@
         <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Failed to update the database</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -1761,7 +1766,7 @@
     </message>
     <message>
         <source>You should now have %1 wort.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie sollten nun %1 Würze haben.</translation>
     </message>
     <message>
         <source> Add %1 water to the kettle, bringing pre-boil volume to %2.</source>
@@ -2107,7 +2112,7 @@ The final volume in the primary is %1.</source>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kategory</translation>
     </message>
     <message>
         <source>Code</source>
@@ -4022,11 +4027,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Fining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schönung</translation>
     </message>
     <message>
         <source>Water Agent</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wasserzusatzmittel</translation>
     </message>
     <message>
         <source>Herb</source>
@@ -5080,7 +5085,7 @@ p, li { white-space: pre-wrap; }
     <name>yeastEditor</name>
     <message>
         <source>Yeast Editor</source>
-        <translation>Hefe Editor</translation>
+        <translation>Hefe-Editor</translation>
     </message>
     <message>
         <source>Required Fields</source>

@@ -1640,6 +1640,10 @@
         <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Failed to update the database</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>

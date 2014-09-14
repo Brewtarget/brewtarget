@@ -291,7 +291,7 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Ismeretlen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -345,19 +345,19 @@
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategória</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Szám</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Levél</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Útmutató</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PATH</source>
@@ -372,31 +372,31 @@
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Új</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Mehet!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Újrafőzni</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Időpont módosítás</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Újraszámol (kihozatal)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Törlés</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -404,11 +404,11 @@
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Erjeszthető anyag</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Komló</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Misc</source>
@@ -428,23 +428,23 @@
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Másol</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportálás</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importálás</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Törlés %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Törlés %1 %2?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -1657,6 +1657,10 @@
         <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Failed to update the database</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Recipe</name>
@@ -2111,7 +2115,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategória</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Code</source>
@@ -2119,7 +2123,7 @@ Végleges mennyiség az elsődleges erjesztőben: %1</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Útmutató</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BoilTime</source>
@@ -2870,7 +2874,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Új</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
@@ -3056,7 +3060,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Új</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit</source>
@@ -3284,7 +3288,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Recept</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
@@ -3995,7 +3999,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Új</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit selected ingredient</source>
@@ -4881,7 +4885,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished">Kategória</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Category number</source>
@@ -4981,7 +4985,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Új</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save</source>
@@ -5069,7 +5073,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Új</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit selected yeast</source>

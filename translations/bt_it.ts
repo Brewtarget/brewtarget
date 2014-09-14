@@ -303,7 +303,7 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Sconosciuto</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -361,15 +361,15 @@
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Numero</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Lettera</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Guida</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PATH</source>
@@ -392,15 +392,15 @@
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Birrifica!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Birrifica ancora</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Modifica data</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Recalculate eff</source>
@@ -408,7 +408,7 @@
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Cancella</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equipment</source>
@@ -416,11 +416,11 @@
     </message>
     <message>
         <source>Fermentable</source>
-        <translation type="unfinished">Fermentabile</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hop</source>
-        <translation type="unfinished">Luppolo</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Misc</source>
@@ -440,23 +440,23 @@
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copia</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Esporta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importa</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Cancella %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Cancella %1 %2?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -1210,19 +1210,19 @@
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished">Catalana</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished">Ceca</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">Tedesca</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Inglese</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Greek</source>
@@ -1230,27 +1230,27 @@
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">Spagnola</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">Francese</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished">Italiano</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished">Olandese</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">Polacca</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">Portoghese</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Russian</source>
@@ -1667,6 +1667,10 @@
     </message>
     <message>
         <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2131,7 +2135,7 @@ Il Volume finale del primo è %1.</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Guida</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BoilTime</source>

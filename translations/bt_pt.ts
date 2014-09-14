@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="br_FR">
+<TS version="2.0" language="pt">
 <context>
     <name>BrewDayScrollWidget</name>
     <message>
@@ -291,7 +291,7 @@
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished">Desconhecido</translation>
+        <translation>Desconhecido</translation>
     </message>
 </context>
 <context>
@@ -313,51 +313,51 @@
     <name>BtTreeModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Brew Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data da brassagem</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Boil Time</source>
-        <translation type="unfinished">Tempo de Fervura</translation>
+        <translation>Tempo de Fervura</translation>
     </message>
     <message>
         <source>Color</source>
-        <translation type="unfinished">Cor</translation>
+        <translation>Cor</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Use</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formulário</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Categori­a</translation>
     </message>
     <message>
         <source>Number</source>
-        <translation type="unfinished">Número</translation>
+        <translation>Número</translation>
     </message>
     <message>
         <source>Letter</source>
-        <translation type="unfinished">Carta</translation>
+        <translation>Letra</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Guia</translation>
+        <translation>Guia</translation>
     </message>
     <message>
         <source>PATH</source>
@@ -365,86 +365,86 @@
     </message>
     <message>
         <source>FULLPATH</source>
-        <translation type="unfinished"></translation>
+        <translation>FULLPATH</translation>
     </message>
 </context>
 <context>
     <name>BtTreeView</name>
     <message>
         <source>New</source>
-        <translation type="unfinished">Novo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <source>Recipe</source>
-        <translation type="unfinished">Receita</translation>
+        <translation>Receita</translation>
     </message>
     <message>
         <source>Brew It!</source>
-        <translation type="unfinished">Fazer Cerveja!</translation>
+        <translation>Inicie Produção de Cerveja!</translation>
     </message>
     <message>
         <source>Brew Again</source>
-        <translation type="unfinished">Fazer Receita de Cerveja Novamente</translation>
+        <translation>Fazer cerveja novamente</translation>
     </message>
     <message>
         <source>Change date</source>
-        <translation type="unfinished">Mudar Data</translation>
+        <translation>Alterar a data</translation>
     </message>
     <message>
         <source>Recalculate eff</source>
-        <translation type="unfinished">Recalcular eff</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="unfinished">Excluir</translation>
-    </message>
-    <message>
-        <source>Equipment</source>
-        <translation type="unfinished">Equipamento</translation>
-    </message>
-    <message>
-        <source>Fermentable</source>
-        <translation type="unfinished">Fermentável</translation>
-    </message>
-    <message>
-        <source>Hop</source>
-        <translation type="unfinished">Lúpulo</translation>
-    </message>
-    <message>
-        <source>Misc</source>
-        <translation type="unfinished">Adjunto</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation type="unfinished">Estilo</translation>
-    </message>
-    <message>
-        <source>Yeast</source>
-        <translation type="unfinished">Levedura</translation>
-    </message>
-    <message>
-        <source>Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Delete</source>
+        <translation>Excluir</translation>
+    </message>
+    <message>
+        <source>Equipment</source>
+        <translation>Equipamento</translation>
+    </message>
+    <message>
+        <source>Fermentable</source>
+        <translation>Fermentescível</translation>
+    </message>
+    <message>
+        <source>Hop</source>
+        <translation>Lúpulo</translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation>Diversos</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Estilo</translation>
+    </message>
+    <message>
+        <source>Yeast</source>
+        <translation>Levedura</translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation>Pasta</translation>
+    </message>
+    <message>
         <source>Copy</source>
-        <translation type="unfinished">Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation type="unfinished">Exportar</translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished">Importar</translation>
+        <translation>Importar</translation>
     </message>
     <message>
         <source>Delete %1</source>
-        <translation type="unfinished">Excluir %1</translation>
+        <translation>Excluir %1</translation>
     </message>
     <message>
         <source>Delete %1 %2?</source>
-        <translation type="unfinished">Excluir %1 %2?</translation>
+        <translation>Excluir %1 %2?</translation>
     </message>
     <message>
         <source>BrewNote</source>
@@ -595,7 +595,7 @@
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Inventário</translation>
     </message>
 </context>
 <context>
@@ -715,14 +715,14 @@
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Inventário</translation>
     </message>
 </context>
 <context>
     <name>IbuGuSlider</name>
     <message>
         <source>Cloying</source>
-        <translation type="unfinished"></translation>
+        <translation>Enjoativo</translation>
     </message>
     <message>
         <source>Extra Malty</source>
@@ -730,11 +730,11 @@
     </message>
     <message>
         <source>Slightly Malty</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligeiramente Maltado</translation>
     </message>
     <message>
         <source>Balanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Equilibrado</translation>
     </message>
     <message>
         <source>Slightly Hoppy</source>
@@ -925,23 +925,23 @@
     </message>
     <message>
         <source>Folder name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da pasta</translation>
     </message>
     <message>
         <source>Folder name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da pasta:</translation>
     </message>
     <message>
         <source>Bad Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome Inválido</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-whitespace character in it</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome da pasta deve possuir pelo menos um caractere diferente de espaço</translation>
     </message>
     <message>
         <source>A folder name must have at least one non-/ character in it</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome da pasta deve possuir pelo menos um caractere diferente de /</translation>
     </message>
 </context>
 <context>
@@ -1171,7 +1171,7 @@
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Inventário</translation>
     </message>
 </context>
 <context>
@@ -1198,55 +1198,55 @@
     </message>
     <message>
         <source>Catalan</source>
-        <translation type="unfinished">Catalão</translation>
+        <translation>Catalão</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished">Tcheco</translation>
+        <translation>Tcheco</translation>
     </message>
     <message>
         <source>German</source>
-        <translation type="unfinished">Alemão</translation>
+        <translation>Alemão</translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Inglês</translation>
+        <translation>Inglês</translation>
     </message>
     <message>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Grego</translation>
     </message>
     <message>
         <source>Spanish</source>
-        <translation type="unfinished">Espanhol</translation>
+        <translation>Espanhol</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished">Francês</translation>
+        <translation>Francês</translation>
     </message>
     <message>
         <source>Italian</source>
-        <translation type="unfinished">Italiano</translation>
+        <translation>Italiano</translation>
     </message>
     <message>
         <source>Dutch</source>
-        <translation type="unfinished">Holandês</translation>
+        <translation>Holandês</translation>
     </message>
     <message>
         <source>Polish</source>
-        <translation type="unfinished">Polonês</translation>
+        <translation>Polonês</translation>
     </message>
     <message>
         <source>Portuguese</source>
-        <translation type="unfinished">Português</translation>
+        <translation>Português (Portugal)</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished">Russo</translation>
+        <translation>Russo</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinês</translation>
     </message>
 </context>
 <context>
@@ -1655,6 +1655,10 @@
     </message>
     <message>
         <source>Folder</source>
+        <translation>Pasta</translation>
+    </message>
+    <message>
+        <source>Failed to update the database</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2111,39 +2115,39 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Categori­a</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Código</translation>
     </message>
     <message>
         <source>Guide</source>
-        <translation type="unfinished">Guia</translation>
+        <translation>Guia</translation>
     </message>
     <message>
         <source>BoilTime</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempo de Fervura</translation>
     </message>
     <message>
         <source>Beta</source>
-        <translation type="unfinished"></translation>
+        <translation>Beta</translation>
     </message>
     <message>
         <source>Lab</source>
-        <translation type="unfinished">Laboratório</translation>
+        <translation>Laboratório</translation>
     </message>
     <message>
         <source>Attenuation</source>
-        <translation type="unfinished"></translation>
+        <translation>Atenuação</translation>
     </message>
     <message>
         <source>Id</source>
-        <translation type="unfinished"></translation>
+        <translation>Id</translation>
     </message>
     <message>
         <source>Flocculation</source>
-        <translation type="unfinished">Floculação</translation>
+        <translation>Floculação</translation>
     </message>
 </context>
 <context>
@@ -2176,7 +2180,7 @@ O volume final do fermentador primário é %1.</translation>
     <name>StrikeWaterDialog</name>
     <message>
         <source>N/A</source>
-        <translation type="unfinished">N/A</translation>
+        <translation>N/A</translation>
     </message>
 </context>
 <context>
@@ -2338,7 +2342,7 @@ O volume final do fermentador primário é %1.</translation>
     </message>
     <message>
         <source>Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Inventário</translation>
     </message>
 </context>
 <context>
@@ -3025,15 +3029,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade Padrão</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade no inventário</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade no inventário</translation>
     </message>
 </context>
 <context>
@@ -3211,15 +3215,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount </source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade Padrão </translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade no inventário</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade no inventário</translation>
     </message>
 </context>
 <context>
@@ -3732,7 +3736,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>1.0</source>
-        <translation type="unfinished">1.0</translation>
+        <translation>1.0</translation>
     </message>
     <message>
         <source>application/x-brewtarget-ingredient</source>
@@ -4098,15 +4102,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade Padrão</translation>
     </message>
     <message>
         <source>Amount in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade no inventário</translation>
     </message>
     <message>
         <source>Amount in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade no inventário</translation>
     </message>
 </context>
 <context>
@@ -4808,47 +4812,47 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Initial Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusão Inicial</translation>
     </message>
     <message>
         <source>Original Grain Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura Original dos Grãos</translation>
     </message>
     <message>
         <source>Target Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura Alvo do Mosto</translation>
     </message>
     <message>
         <source>Weight of Grain</source>
-        <translation type="unfinished"></translation>
+        <translation>Peso dos Grãos</translation>
     </message>
     <message>
         <source>Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume de Água</translation>
     </message>
     <message>
         <source>Mash Infusion</source>
-        <translation type="unfinished"></translation>
+        <translation>Infusão do Mosto</translation>
     </message>
     <message>
         <source>Total Volume of Water</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume Total de Água</translation>
     </message>
     <message>
         <source>Grain Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Peso dos Grãos</translation>
     </message>
     <message>
         <source>Actual Mash Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura Atual do Mosto</translation>
     </message>
     <message>
         <source>Infusion Water Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura de Infusão da Água</translation>
     </message>
     <message>
         <source>Calculate</source>
-        <translation type="unfinished">Calcular</translation>
+        <translation>Calcular</translation>
     </message>
     <message>
         <source>Strike Water Temperature</source>
@@ -4856,7 +4860,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Volume to add</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume a ser adicionado</translation>
     </message>
     <message>
         <source>Note: This calculator assumes a preheated mash tun.</source>
@@ -5246,15 +5250,15 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Default Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade Padrão</translation>
     </message>
     <message>
         <source>Quanta in Inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade em estoque</translation>
     </message>
     <message>
         <source>Quanta in inventory</source>
-        <translation type="unfinished"></translation>
+        <translation>Quantidade em estoque</translation>
     </message>
 </context>
 </TS>
