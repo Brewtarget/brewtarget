@@ -63,7 +63,8 @@ ELSE()
 ENDIF()
 
 IF( APPLE AND NOT CMAKE_OSX_ARCHITECTURES )
-   SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary. 
+   SET( CMAKE_OSX_ARCHITECTURES x86_64 ) # Build intel 64-bit binary. 
+   #SET( CMAKE_OSX_ARCHITECTURES i386 x86_64 ) # Build intel binary. 
    #SET( CMAKE_OSX_ARCHITECTURES ppc i386 ppc64 x86_64 ) # Build universal binary.
 ENDIF()
 
@@ -95,7 +96,13 @@ ENDIF()
 IF( ${BUILD_DESIGNER_PLUGINS} )
    FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebKit QtXml QtDesigner REQUIRED)
 ELSE()
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml REQUIRED)
+   # This is a major kludge, but linking with QtSvg is the easiest way to get
+   # an app that includes the svg image format plugin that works.
+   IF( APPLE )
+      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml QtSvg REQUIRED)
+   ELSE()
+      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml REQUIRED)
+   ENDIF()
 ENDIF()
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
@@ -225,35 +232,6 @@ SET( brewtarget_DATA
 # Yes, I know this is 'documentation', but Debian policy suggests it should be
 # with the data (see section 12.3 of the policy manual).
      ${ROOTDIR}/doc/brewtarget-manual.html
-     ${ROOTDIR}/doc/images/afterFermentables.jpg
-     ${ROOTDIR}/doc/images/afterHops.jpg
-     ${ROOTDIR}/doc/images/afterMashDesigner.jpg
-     ${ROOTDIR}/doc/images/afterMashWizard.jpg
-     ${ROOTDIR}/doc/images/afterStyle.jpg
-     ${ROOTDIR}/doc/images/afterYeast.jpg
-     ${ROOTDIR}/doc/images/beforeStyle.jpg
-     ${ROOTDIR}/doc/images/equipeditor.jpg
-     ${ROOTDIR}/doc/images/equipMyequipment.jpg
-     ${ROOTDIR}/doc/images/equipToolBar.jpg
-     ${ROOTDIR}/doc/images/equipTreeRightClick.jpg
-     ${ROOTDIR}/doc/images/fermentableTree.jpg
-     ${ROOTDIR}/doc/images/mashConversion.jpg
-     ${ROOTDIR}/doc/images/mashDesignerBatch.jpg
-     ${ROOTDIR}/doc/images/mashDesignerConversion.jpg
-     ${ROOTDIR}/doc/images/mashDesignerProtein.jpg
-     ${ROOTDIR}/doc/images/mashDesignerTunTemp.jpg
-     ${ROOTDIR}/doc/images/mashProtein.jpg
-     ${ROOTDIR}/doc/images/mashStepConversion.jpg
-     ${ROOTDIR}/doc/images/mashStepProtein.jpg
-     ${ROOTDIR}/doc/images/mashWizard.jpg
-     ${ROOTDIR}/doc/images/nameTheMash.jpg
-     ${ROOTDIR}/doc/images/ogUnits.jpg
-     ${ROOTDIR}/doc/images/optionsFormulas.jpg
-     ${ROOTDIR}/doc/images/optionsUnits.jpg
-     ${ROOTDIR}/doc/images/scaleFermentable.jpg
-     ${ROOTDIR}/doc/images/toolsToOptions.png
-     ${ROOTDIR}/doc/images/viewToEquip.jpg
-      
 )
 
 # Desktop files to install.
@@ -482,6 +460,8 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
 
    # Install the data.
    INSTALL( FILES ${brewtarget_DATA}
+            DESTINATION ${DATAPATH} )
+   INSTALL( DIRECTORY ${ROOTDIR}/doc/images
             DESTINATION ${DATAPATH} )
 
    # Install the documentation.
