@@ -883,6 +883,9 @@ void BtTreeModel::deleteSelected(QModelIndexList victims)
          case BtTreeItem::YEAST:
             Database::instance().remove( yeast(ndx) );
             break;
+         case BtTreeItem::BREWNOTE:
+            Database::instance().remove( brewNote(ndx) );
+            break;
          case BtTreeItem::FOLDER:
             // This one is weird.
             toBeDeleted += allChildren(ndx);
