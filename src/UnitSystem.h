@@ -46,14 +46,15 @@ public:
     * 'amount' of type 'units' in this UnitSystem. This string should also
     * be recognized by qstringToSI()
     */
-   virtual QString displayAmount( double amount, Unit* units = 0, unitScale scale = noScale ) = 0;
+   QString displayAmount( double amount, Unit* units, unitScale scale = noScale );
 
    /*!
     * qstringToSI() should convert 'qstr' (consisting of a decimal amount,
     * followed by a unit string) to the appropriate SI amount under this
     * UnitSystem.
     */
-   virtual double qstringToSI( QString qstr ) = 0;
+   double qstringToSI(QString qstr, Unit* defUnit = 0, bool force = false);
+
 
    /*!
     * Returns the unit associated with thickness. If this unit system is
@@ -61,20 +62,21 @@ public:
     * quarts.
     */
    virtual Unit* thicknessUnit() = 0;
+   virtual void  loadMap() = 0;
 
    // \brief Returns the name of the unit
    virtual QString unitType() = 0;
 
-   double qstringToSI(QString qstr, Unit* defUnit);
 
 protected:
    static const int fieldWidth;
    static const char format;
    static const int precision;
-   static QMap<QString, Unit*> nameToUnit;
+
+   UnitType _type;
    QRegExp amtUnit;
 
-   Unit* getUnit(const QString& name);
+   QMap<unitScale, Unit*> scaleToUnit;
 
 };
 

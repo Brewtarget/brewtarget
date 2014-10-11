@@ -21,68 +21,18 @@
 #include "SIVolumeUnitSystem.h"
 #include <QStringList>
 #include <cmath>
-
-bool SIVolumeUnitSystem::isMapSetup = false;
+#include "unit.h"
 
 SIVolumeUnitSystem::SIVolumeUnitSystem()
    : UnitSystem()
 {
+   _type = Volume;
 }
 
-QString SIVolumeUnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
+void SIVolumeUnitSystem::loadMap()
 {
-   QString SIUnitName = units->getSIUnitName();
-   double SIAmount = units->toSI( amount );
-   QString ret;
-
-   // Special cases. Make sure the unit isn't null and that we're
-   // dealing with volume.
-   if( units == 0 || SIUnitName.compare("L") != 0 )
-      return QString("%L1").arg(amount, fieldWidth, format, precision);
-
-   switch(scale)
-   {
-      case extrasmall:
-         ret = QString("%L1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
-         break;
-      case small:
-         ret = QString("%L1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
-         break;
-      default:
-         if( qAbs(SIAmount) < Units::liters->toSI(1.0) ) // If less than 1 L, display mL.
-            ret = QString("%L1 %2").arg(Units::milliliters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::milliliters->getUnitName());
-         else // Otherwise, display liters.
-            ret = QString("%L1 %2").arg(Units::liters->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::liters->getUnitName());
-   }
-
-   return ret;
-}
-
-double SIVolumeUnitSystem::qstringToSI( QString qstr )
-{
-   ensureMapIsSetup();
-
-   return UnitSystem::qstringToSI(qstr, Units::liters);
-}
-
-void SIVolumeUnitSystem::ensureMapIsSetup()
-{
-   // If it is setup, return now.
-   if( isMapSetup )
-      return;
-
-   // Ok, map was not setup, so set it up.
-   nameToUnit.insert(Units::liters->getUnitName(), Units::liters);
-   nameToUnit.insert(Units::milliliters->getUnitName(), Units::milliliters);
-
-   // Assume that "gal" "qt" etc. refer to the US versions.
-   nameToUnit.insert(Units::us_gallons->getUnitName(), Units::us_gallons);
-   nameToUnit.insert(Units::us_quarts->getUnitName(), Units::us_quarts);
-   nameToUnit.insert(Units::us_cups->getUnitName(), Units::us_cups);
-   nameToUnit.insert(Units::us_tablespoons->getUnitName(), Units::us_tablespoons);
-   nameToUnit.insert(Units::us_teaspoons->getUnitName(), Units::us_teaspoons);
-
-   isMapSetup = true;
+   scaleToUnit.insert(extrasmall, Units::milliliters);
+   scaleToUnit.insert(small, Units::liters);
 }
 
 Unit* SIVolumeUnitSystem::thicknessUnit()

@@ -19,51 +19,18 @@
  */
 
 #include "CelsiusTempUnitSystem.h"
+#include "unit.h"
 #include <QStringList>
-
-bool CelsiusTempUnitSystem::isMapSetup = false;
 
 CelsiusTempUnitSystem::CelsiusTempUnitSystem()
    : UnitSystem()
 {
+   _type = Temp;
 }
 
-//! scale is ignored, but must be here to satisfy the virtuals
-QString CelsiusTempUnitSystem::displayAmount( double amount, Unit* units, unitScale scale)
+void CelsiusTempUnitSystem::loadMap()
 {
-   QString SIUnitName = units->getSIUnitName();
-   double SIAmount = units->toSI( amount );
-   QString ret;
-
-   // Special cases. Make sure the unit isn't null and that we're
-   // dealing with temperature.
-   if( units == 0 || SIUnitName.compare("C") != 0 )
-      return QString("%L1").arg(amount, fieldWidth, format, precision);
-
-   ret = QString("%L1 %2").arg(Units::celsius->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::celsius->getUnitName());
-
-   return ret;
-}
-
-double CelsiusTempUnitSystem::qstringToSI( QString qstr )
-{
-   ensureMapIsSetup();
-   return UnitSystem::qstringToSI(qstr,Units::celsius);
-}
-
-void CelsiusTempUnitSystem::ensureMapIsSetup()
-{
-   // If it is setup, return now.
-   if( isMapSetup )
-      return;
-
-   // Ok, map was not setup, so set it up.
-
-   nameToUnit.insert(Units::celsius->getUnitName(), Units::celsius);
-   nameToUnit.insert(Units::kelvin->getUnitName(), Units::kelvin);
-   nameToUnit.insert(Units::fahrenheit->getUnitName(), Units::fahrenheit);
-
-   isMapSetup = true;
+   scaleToUnit.insert(without,Units::celsius);
 }
 
 QString CelsiusTempUnitSystem::unitType() { return "SI"; }

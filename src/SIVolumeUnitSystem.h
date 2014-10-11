@@ -30,14 +30,10 @@ class SIVolumeUnitSystem : public UnitSystem
 {
 public:
    SIVolumeUnitSystem();
-   QString displayAmount( double amount, Unit* units = 0, unitScale scale = noScale ); /* Inherited from UnitSystem */
-   double qstringToSI( QString qstr ); /* Inherited from UnitSystem */
    Unit* thicknessUnit(); /* Inherited from UnitSystem */
    QString unitType();
 
-private:
-   static void ensureMapIsSetup();
-   static bool isMapSetup;
+   void loadMap();
 };
 
 #endif /*_SIVOLUMEUNITSYSTEM_H*/

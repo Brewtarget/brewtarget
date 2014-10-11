@@ -53,6 +53,7 @@ class KelvinUnit;
 #include <string>
 #include <map>
 #include <QMultiMap>
+#include <QRegExp>
 
 enum UnitType
 {
@@ -88,7 +89,8 @@ enum unitScale
    small = 1,
    medium = 2,
    large = 3,
-   extralarge = 4
+   extralarge = 4,
+   without=1000
 };
 
 enum unitDisplay
@@ -147,18 +149,19 @@ class Unit : public QObject
 
       virtual const int getUnitType() const = 0;//{ return 0; }
       virtual const int getUnitOrTempSystem() const = 0;// { return 0; }
+      virtual const double boundary() const = 0;
 
-      static double convert( double amount, QString& fromUnit, QString& toUnit );
-      static QString convert( QString qstr, QString toUnit );
-      //! Returns SI. Places unit in \b *unit
-      static double qstringToSI( QString qstr, Unit** unit = 0, bool mathCurrentSystem = true );
+      static QString convert(QString qstr, QString toUnit);
+      static Unit* getUnit(QString& name, bool matchCurrentSystem = true);
+      static double qstringToSI( QString qstr, Unit* unit = 0, bool mathCurrentSystem = true );
 
    private:
-      static Unit* getUnit(QString& name, bool matchCurrentSystem = true);
 
       static QMultiMap<QString, Unit*> nameToUnit;
       static bool isMapSetup;
       static void setupMap();
+      static QString unitFromString(QString qstr);
+      static double valueFromString(QString qstr);
 };
 
 // ================ Weight/Mass ================
@@ -174,6 +177,7 @@ class KilogramUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; };
       const int getUnitOrTempSystem() const { return SI; };
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -192,6 +196,7 @@ class GramUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; };
       const int getUnitOrTempSystem() const { return SI; };
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -210,6 +215,7 @@ class MilligramUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; };
       const int getUnitOrTempSystem() const { return SI; };
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -228,6 +234,7 @@ class PoundUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; }
       const int getUnitOrTempSystem() const { return ImperialAndUS; }
+      const double boundary() const { return 1.0; };
       
    private:
       QString unitName;
@@ -246,6 +253,7 @@ class OunceUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Mass; }
       const int getUnitOrTempSystem() const { return ImperialAndUS; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -265,6 +273,7 @@ class LiterUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return SI; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -283,6 +292,7 @@ class MilliliterUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return SI; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -301,7 +311,8 @@ class USBarrelUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
-      
+      const double boundary() const { return 1.0; };
+
    private:
       QString unitName;
       QString SIUnitName;
@@ -319,6 +330,7 @@ class USGallonUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -337,6 +349,7 @@ class USQuartUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -355,6 +368,7 @@ class USCupUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
+      const double boundary() const { return 0.25; }
 
    private:
       QString unitName;
@@ -373,6 +387,7 @@ class ImperialBarrelUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
+      const double boundary() const { return 1.0; };
       
    private:
       QString unitName;
@@ -391,6 +406,7 @@ class ImperialGallonUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -409,6 +425,7 @@ class ImperialQuartUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -427,6 +444,7 @@ class ImperialCupUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
+      const double boundary() const { return 0.25; }
 
    private:
       QString unitName;
@@ -445,6 +463,7 @@ class ImperialTablespoonUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -463,6 +482,7 @@ class ImperialTeaspoonUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return Imperial; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -481,6 +501,7 @@ class USTablespoonUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -499,6 +520,7 @@ class USTeaspoonUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Volume; }
       const int getUnitOrTempSystem() const { return USCustomary; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -518,6 +540,7 @@ class SecondUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Time; }
       const int getUnitOrTempSystem() const { return Any; }
+      const double boundary() const { return 90.0; };
 
    private:
       QString unitName;
@@ -536,6 +559,7 @@ class MinuteUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Time; }
       const int getUnitOrTempSystem() const { return Any; }
+      const double boundary() const { return 1.0; };
       
    private:
       QString unitName;
@@ -554,6 +578,7 @@ class HourUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Time; }
       const int getUnitOrTempSystem() const { return Any; }
+      const double boundary() const { return 2.0; }
 
    private:
       QString unitName;
@@ -572,6 +597,7 @@ public:
    const QString getSIUnitName() const { return SIUnitName; }
    const int getUnitType() const { return Time; }
    const int getUnitOrTempSystem() const { return Any; }
+   const double boundary() const { return 1.0; };
 
 private:
    QString unitName;
@@ -592,6 +618,7 @@ class CelsiusUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Temp; }
       const int getUnitOrTempSystem() const { return Celsius; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -610,6 +637,7 @@ class KelvinUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Temp; }
       const int getUnitOrTempSystem() const { return Kelvin; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -628,6 +656,7 @@ class FahrenheitUnit : public Unit
       const QString getSIUnitName() const { return SIUnitName; }
       const int getUnitType() const { return Temp; }
       const int getUnitOrTempSystem() const { return Fahrenheit; }
+      const double boundary() const { return 1.0; };
 
    private:
       QString unitName;
@@ -648,6 +677,7 @@ public:
    const QString getSIUnitName() const { return SIUnitName; }
    const int getUnitType() const { return Color; }
    const int getUnitOrTempSystem() const { return Any; }
+   const double boundary() const { return 1.0; };
 
 private:
    QString unitName;
@@ -668,6 +698,7 @@ public:
    const QString getSIUnitName() const { return SIUnitName; }
    const int getUnitType() const { return Color; }
    const int getUnitOrTempSystem() const { return Any; }
+   const double boundary() const { return 1.0; };
 
 private:
    QString unitName;

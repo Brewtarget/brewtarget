@@ -21,64 +21,19 @@
 #include "USWeightUnitSystem.h"
 #include <QStringList>
 #include <cmath>
-
-bool USWeightUnitSystem::isMapSetup = false;
+#include "unit.h"
+#include <QDebug>
 
 USWeightUnitSystem::USWeightUnitSystem()
 {
+   _type = Mass;
 }
 
-QString USWeightUnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
+void USWeightUnitSystem::loadMap()
 {
-   QString SIUnitName = units->getSIUnitName();
-   double SIAmount = units->toSI( amount );
-   QString ret;
 
-   // Special cases. Make sure the unit isn't null and that we're
-   // dealing with mass.
-   if( units == 0 || SIUnitName.compare("kg") != 0 )
-      return QString("%L1").arg(amount, fieldWidth, format, precision);
-
-   switch(scale)
-   {
-      case extrasmall:
-         ret = QString("%L1 %2").arg(Units::ounces->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::ounces->getUnitName());
-         break;
-      case small:
-         ret = QString("%L1 %2").arg(Units::pounds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::pounds->getUnitName());
-         break;
-      default:
-         if( qAbs(SIAmount) < Units::pounds->toSI(1.0) ) // If less than 1 pound, display ounces.
-            ret = QString("%L1 %2").arg(Units::ounces->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::ounces->getUnitName());
-         else // Otherwise, display pounds.
-            ret = QString("%L1 %2").arg(Units::pounds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::pounds->getUnitName());
-   }
-
-   return ret;
-}
-
-double USWeightUnitSystem::qstringToSI( QString qstr )
-{
-   ensureMapIsSetup();
-
-   return UnitSystem::qstringToSI(qstr,Units::pounds);
-}
-
-void USWeightUnitSystem::ensureMapIsSetup()
-{
-   // If it is setup, return now.
-   if( isMapSetup )
-      return;
-
-   // Ok, map was not setup, so set it up.
-   nameToUnit.insert(Units::kilograms->getUnitName(), Units::kilograms);
-   nameToUnit.insert(Units::grams->getUnitName(), Units::grams);
-   nameToUnit.insert(Units::milligrams->getUnitName(), Units::milligrams);
-
-   nameToUnit.insert(Units::pounds->getUnitName(), Units::pounds);
-   nameToUnit.insert(Units::ounces->getUnitName(), Units::ounces);
-
-   isMapSetup = true;
+   scaleToUnit.insert(extrasmall,Units::ounces);
+   scaleToUnit.insert(small,Units::pounds);
 }
 
 Unit* USWeightUnitSystem::thicknessUnit()

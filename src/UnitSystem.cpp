@@ -23,11 +23,12 @@
 #include <QRegExp>
 #include <QString>
 #include <QLocale>
+#include <QDebug>
+#include "unit.h"
 
 const int UnitSystem::fieldWidth = 0;
 const char UnitSystem::format = 'f';
 const int UnitSystem::precision = 3;
-QMap<QString, Unit*> UnitSystem::nameToUnit;
 
 UnitSystem::UnitSystem()
 {
@@ -41,11 +42,12 @@ UnitSystem::UnitSystem()
    amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
 }
 
-double UnitSystem::qstringToSI(QString qstr, Unit* defUnit)
+double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
 {
    bool convOk = true;
    double amt = 0.0;
    Unit* u = defUnit;
+   Unit* found = 0;
 
    if (amtUnit.indexIn(qstr) == -1)
       return 0.0;
@@ -56,17 +58,49 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit)
    
    QString unit = amtUnit.cap(2);
 
-   if ( unit.size() > 0 && getUnit(unit) )
-      u = getUnit(unit);
+   found = Unit::getUnit(unit,false);
+   if ( ! force && found )
+      u = found;
+
+   if ( u == 0 )
+      return -1.0;
 
    return u->toSI(amt);
 }
 
-Unit* UnitSystem::getUnit(const QString& name)
+QString UnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
 {
-   if( nameToUnit.count(name) < 1 )
-      return 0;
-   else
-      return nameToUnit[name];
-}
+   double SIAmount = units->toSI( amount );
+   double absSIAmount = qAbs(SIAmount);
+   Unit* last = 0;
 
+   QString ret;
+
+   // Special cases. Make sure the unit isn't null and that we're
+   // dealing with volume.
+   if( units == 0 || units->getUnitType() != _type)
+      return QString("%L1").arg(amount, fieldWidth, format, precision);
+
+   if ( scaleToUnit.empty() )
+      loadMap();
+
+   if ( scaleToUnit.contains(scale) )
+   {
+      Unit* bob = scaleToUnit.value(scale);
+      return QString("%L1 %2").arg(bob->fromSI(SIAmount), fieldWidth, format, precision).arg(bob->getUnitName());
+   }
+
+   foreach( unitScale key, scaleToUnit.keys() )
+   {
+      Unit* bob = scaleToUnit.value(key);
+      double boundary = bob->boundary();
+
+      if ( last && absSIAmount < bob->toSI(boundary) )
+         return QString("%L1 %2").arg(last->fromSI(SIAmount), fieldWidth, format, precision).arg(last->getUnitName());
+
+      last = bob;
+   }
+   // If we get here, use the largest unit available
+   return QString("%L1 %2").arg(last->fromSI(SIAmount), fieldWidth, format, precision).arg(last->getUnitName());
+
+}
