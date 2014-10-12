@@ -35,6 +35,7 @@ public:
    QString unitType(); 
 
    void loadMap();
+   Unit* unit();
 };
 
 #endif /*_SIWEIGHTUNITSYSTEM_H*/

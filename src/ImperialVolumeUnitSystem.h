@@ -34,6 +34,7 @@ public:
    QString unitType();
 
    void loadMap();
+   Unit* unit();
 };
 
 #endif /*_IMPERIALVOLUMEUNITSYSTEM_H*/

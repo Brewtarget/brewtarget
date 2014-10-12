@@ -90,6 +90,7 @@ enum unitScale
    medium = 2,
    large = 3,
    extralarge = 4,
+   huge = 5,
    without=1000
 };
 

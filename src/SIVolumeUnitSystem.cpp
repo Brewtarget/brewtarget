@@ -40,4 +40,5 @@ Unit* SIVolumeUnitSystem::thicknessUnit()
    return Units::liters;
 }
 
+Unit* SIVolumeUnitSystem::unit() { return Units::liters; };
 QString SIVolumeUnitSystem::unitType() { return "SI"; }

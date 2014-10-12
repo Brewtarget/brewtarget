@@ -33,6 +33,8 @@ void TimeUnitSystem::loadMap()
    scaleToUnit.insert(extrasmall,Units::seconds);
    scaleToUnit.insert(small,Units::minutes);
    scaleToUnit.insert(medium,Units::hours);
+   scaleToUnit.insert(large,Units::days);
 }
 
+Unit* TimeUnitSystem::unit() { return Units::minutes; };
 QString TimeUnitSystem::unitType() { return "entropy"; }

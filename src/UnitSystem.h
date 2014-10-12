@@ -55,13 +55,13 @@ public:
     */
    double qstringToSI(QString qstr, Unit* defUnit = 0, bool force = false);
 
-
    /*!
     * Returns the unit associated with thickness. If this unit system is
     * US weight, it would return lb. If it were US volume, it would return
     * quarts.
     */
    virtual Unit* thicknessUnit() = 0;
+   virtual Unit* unit() = 0;
    virtual void  loadMap() = 0;
 
    // \brief Returns the name of the unit

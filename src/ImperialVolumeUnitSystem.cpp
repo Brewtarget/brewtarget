@@ -36,6 +36,7 @@ void ImperialVolumeUnitSystem::loadMap()
    scaleToUnit.insert(medium,Units::imperial_cups);
    scaleToUnit.insert(large,Units::imperial_quarts);
    scaleToUnit.insert(extralarge,Units::imperial_gallons);
+   scaleToUnit.insert(huge,Units::imperial_barrels);
 }
 
 Unit* ImperialVolumeUnitSystem::thicknessUnit()
@@ -43,4 +44,5 @@ Unit* ImperialVolumeUnitSystem::thicknessUnit()
    return Units::imperial_quarts;
 }
 
+Unit* ImperialVolumeUnitSystem::unit() { return Units::imperial_gallons; };
 QString ImperialVolumeUnitSystem::unitType() { return "Imperial"; }

@@ -41,4 +41,5 @@ Unit* USWeightUnitSystem::thicknessUnit()
    return Units::pounds;
 }
 
+Unit* USWeightUnitSystem::unit() { return Units::pounds; };
 QString USWeightUnitSystem::unitType() { return "USCustomary"; }

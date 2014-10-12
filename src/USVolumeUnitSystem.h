@@ -33,8 +33,8 @@ public:
    Unit* thicknessUnit(); /* Inherited from UnitSystem */
    QString unitType();
 
-
    void loadMap();
+   Unit* unit();
 };
 
 #endif /*_USVOLUMEUNITSYSTEM_H*/

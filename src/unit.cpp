@@ -34,21 +34,24 @@ bool Unit::isMapSetup = false;
 KilogramUnit* Units::kilograms = new KilogramUnit();
 GramUnit* Units::grams = new GramUnit();
 MilligramUnit* Units::milligrams = new MilligramUnit();
+
 PoundUnit* Units::pounds = new PoundUnit();
 OunceUnit* Units::ounces = new OunceUnit();
 // === Volume ===
 LiterUnit* Units::liters = new LiterUnit();
 MilliliterUnit* Units::milliliters = new MilliliterUnit();
+
 USBarrelUnit* Units::us_barrels = new USBarrelUnit();
 USGallonUnit* Units::us_gallons = new USGallonUnit();
 USQuartUnit* Units::us_quarts = new USQuartUnit();
 USCupUnit* Units::us_cups = new USCupUnit();
+USTablespoonUnit* Units::us_tablespoons = new USTablespoonUnit();
+USTeaspoonUnit* Units::us_teaspoons = new USTeaspoonUnit();
+
 ImperialBarrelUnit* Units::imperial_barrels = new ImperialBarrelUnit();
 ImperialGallonUnit* Units::imperial_gallons = new ImperialGallonUnit();
 ImperialQuartUnit* Units::imperial_quarts = new ImperialQuartUnit();
 ImperialCupUnit* Units::imperial_cups = new ImperialCupUnit();
-USTablespoonUnit* Units::us_tablespoons = new USTablespoonUnit();
-USTeaspoonUnit* Units::us_teaspoons = new USTeaspoonUnit();
 ImperialTablespoonUnit* Units::imperial_tablespoons = new ImperialTablespoonUnit();
 ImperialTeaspoonUnit* Units::imperial_teaspoons = new ImperialTeaspoonUnit();
 // === Time ===

@@ -1088,19 +1088,19 @@ void Brewtarget::saveSystemOptions()
 double Brewtarget::weightQStringToSI(QString qstr, unitDisplay dispUnit)
 {
    UnitSystem* temp = findMassUnitSystem(dispUnit);
-   return temp->qstringToSI(qstr);
+   return temp->qstringToSI(qstr, temp->unit(),true);
 }
 
 double Brewtarget::volQStringToSI(QString qstr, unitDisplay dispUnit)
 {
    UnitSystem* temp = findVolumeUnitSystem(dispUnit);
-   return temp->qstringToSI(qstr);
+   return temp->qstringToSI(qstr,temp->unit(), true);
 }
 
 double Brewtarget::tempQStringToSI(QString qstr, unitDisplay dispUnit)
 {
    UnitSystem* temp = findTemperatureSystem(dispUnit);
-   return temp->qstringToSI(qstr);
+   return temp->qstringToSI(qstr, temp->unit(),true);
 }
 
 double Brewtarget::colorQStringToSI(QString qstr)
@@ -1113,7 +1113,7 @@ double Brewtarget::colorQStringToSI(QString qstr)
 
 double Brewtarget::timeQStringToSI(QString qstr)
 {
-   return timeSystem->qstringToSI(qstr);
+   return timeSystem->qstringToSI(qstr, timeSystem->unit());
 }
 
 // This won't be clean like the others because we don't do density as a unit.
@@ -1565,6 +1565,7 @@ QMenu* Brewtarget::setupVolumeMenu(QWidget* parent, unitDisplay unit, unitScale 
          generateAction(sMenu, tr("Cups"), medium, scale);
          generateAction(sMenu, tr("Quarts"), large, scale);
          generateAction(sMenu, tr("Gallons"), extralarge, scale);
+         generateAction(sMenu, tr("Barrels"), huge, scale);
          break;
    }
    sMenu->setTitle("Scale");

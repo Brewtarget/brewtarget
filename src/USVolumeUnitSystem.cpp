@@ -35,6 +35,7 @@ void USVolumeUnitSystem::loadMap()
    scaleToUnit.insert(medium,Units::us_cups);
    scaleToUnit.insert(large,Units::us_quarts);
    scaleToUnit.insert(extralarge,Units::us_gallons);
+   scaleToUnit.insert(huge,Units::us_barrels);
 }
 
 Unit* USVolumeUnitSystem::thicknessUnit()
@@ -42,4 +43,5 @@ Unit* USVolumeUnitSystem::thicknessUnit()
    return Units::us_quarts;
 }
 
+Unit* USVolumeUnitSystem::unit() { return Units::us_gallons; };
 QString USVolumeUnitSystem::unitType() { return "USCustomary"; }
