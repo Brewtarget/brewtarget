@@ -2220,6 +2220,168 @@ bool Database::importFromXML(const QString& filename)
 void Database::toXml( BrewNote* a, QDomDocument& doc, QDomNode& parent )
 {
    // TODO: implement
+   QDomElement bNode;
+   QDomElement tmpElement;
+   QDomText tmpText;
+
+   bNode = doc.createElement("BREWNOTE");
+
+   tmpElement = doc.createElement("BREWDATE");
+   tmpText = doc.createTextNode(a->brewDate_str());
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("DATE_FERMENTED_OUT");
+   tmpText = doc.createTextNode(a->fermentDate_str());
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("VERSION");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->version()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("SG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->sg()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("VOLUME_INTO_BK");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->volumeIntoBK_l()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("STRIKE_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->strikeTemp_c()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("MASH_FINAL_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->mashFinTemp_c()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("OG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->og()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("POST_BOIL_VOLUME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->postBoilVolume_l()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("VOLUME_INTO_FERMENTER");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->volumeIntoFerm_l()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PITCH_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->pitchTemp_c()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("FG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->fg()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("EFF_INTO_BK");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->effIntoBK_pct()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PREDICTED_OG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->calculateOg()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("BREWHOUSE_EFF");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->brewhouseEff_pct()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PREDICTED_ABV");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->calculateABV_pct()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("ACTUAL_ABV");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->abv()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_BOIL_GRAV");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projBoilGrav()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_STRIKE_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projStrikeTemp_c()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_MASH_FIN_TEMP");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projMashFinTemp_c()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_VOL_INTO_BK");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projVolIntoBK_l()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_OG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projOg()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_VOL_INTO_FERM");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projVolIntoFerm_l()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_FG");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projFg()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_EFF");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projEff_pct()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_ABV");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projABV_pct()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_POINTS");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projPoints()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("PROJECTED_ATTEN");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->projAtten()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("BOIL_OFF");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->boilOff_l()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("FINAL_VOLUME");
+   tmpText = doc.createTextNode(BeerXMLElement::text(a->finalVolume_l()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   tmpElement = doc.createElement("NOTES");
+   tmpText = doc.createTextNode(QString("%1").arg(a->notes()));
+   tmpElement.appendChild(tmpText);
+   bNode.appendChild(tmpElement);
+
+   parent.appendChild(bNode);
 }
 
 void Database::toXml( Equipment* a, QDomDocument& doc, QDomNode& parent )
@@ -3325,7 +3487,7 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
       else
       {
          //if( showWarnings )
-         //   Brewtarget::logW(QString("Database::fromXML: Unsupported property: %1. Line %2").arg(xmlTag).arg(node.lineNumber()) );
+         //  Brewtarget::logW(QString("Database::fromXML: Unsupported property: %1. Line %2").arg(xmlTag).arg(node.lineNumber()) );
       }
    }
 
