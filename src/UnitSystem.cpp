@@ -50,20 +50,29 @@ double UnitSystem::qstringToSI(QString qstr, Unit* defUnit, bool force)
    Unit* found = 0;
 
    if (amtUnit.indexIn(qstr) == -1)
+   {
       return 0.0;
+   }
 
    amt = QLocale().toDouble(amtUnit.cap(1), &convOk);
    if( !convOk )
+   {
       amt = QLocale::c().toDouble(amtUnit.cap(1));
+   }
    
    QString unit = amtUnit.cap(2);
 
    found = Unit::getUnit(unit,false);
+
    if ( ! force && found )
+   {
       u = found;
+   }
 
    if ( u == 0 )
+   {
       return -1.0;
+   }
 
    return u->toSI(amt);
 }

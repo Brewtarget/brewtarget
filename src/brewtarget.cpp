@@ -1085,22 +1085,22 @@ void Brewtarget::saveSystemOptions()
    }
 }
 
-double Brewtarget::weightQStringToSI(QString qstr, unitDisplay dispUnit)
+double Brewtarget::weightQStringToSI(QString qstr, unitDisplay dispUnit, bool force)
 {
    UnitSystem* temp = findMassUnitSystem(dispUnit);
-   return temp->qstringToSI(qstr, temp->unit(),true);
+   return temp->qstringToSI(qstr, temp->unit(),force);
 }
 
-double Brewtarget::volQStringToSI(QString qstr, unitDisplay dispUnit)
+double Brewtarget::volQStringToSI(QString qstr, unitDisplay dispUnit, bool force)
 {
    UnitSystem* temp = findVolumeUnitSystem(dispUnit);
-   return temp->qstringToSI(qstr,temp->unit(), true);
+   return temp->qstringToSI(qstr,temp->unit(), force);
 }
 
-double Brewtarget::tempQStringToSI(QString qstr, unitDisplay dispUnit)
+double Brewtarget::tempQStringToSI(QString qstr, unitDisplay dispUnit,bool force)
 {
    UnitSystem* temp = findTemperatureSystem(dispUnit);
-   return temp->qstringToSI(qstr, temp->unit(),true);
+   return temp->qstringToSI(qstr, temp->unit(),force);
 }
 
 double Brewtarget::colorQStringToSI(QString qstr)
