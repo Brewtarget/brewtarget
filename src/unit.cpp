@@ -323,7 +323,7 @@ double MilligramUnit::fromSI( double amt ) const
 // === Pounds ===
 PoundUnit::PoundUnit()
 {
-   unitName = "lbs";
+   unitName = "lb";
    SIUnitName = "kg";
 }
 
