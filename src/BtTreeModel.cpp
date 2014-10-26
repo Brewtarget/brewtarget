@@ -1255,6 +1255,20 @@ void BtTreeModel::elementAdded(BeerXMLElement* victim)
    if ( ! insertRow(breadth,pIdx,victim,lType) )
       return;
 
+   // We need some special processing here to add brewnotes on a recipe import
+   if ( qobject_cast<Recipe*>(victim) ) {
+      Recipe* parent = qobject_cast<Recipe*>(victim);
+      QList<BrewNote*> notes = parent->brewNotes();
+
+      if ( notes.size() )
+      {
+         pIdx = findElement(parent);
+         lType = BtTreeItem::BREWNOTE;
+         int row = 0;
+         foreach (BrewNote* note, notes)
+            insertRow(row++,pIdx,note,lType);
+      }
+   }
    observeElement(victim);
 }
 
