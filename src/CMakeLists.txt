@@ -385,10 +385,6 @@ IF( WIN32 AND MINGW )
    SET_TARGET_PROPERTIES( ${brewtarget_EXECUTABLE} PROPERTIES LINK_FLAGS "-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -mthreads -Wl,-subsystem,windows")
 ENDIF()
 
-# Link brewtarget against Qt libraries defined by QT_LIBRARIES
-#TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${PHONON_LIBS} )
-#MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${PHONON_LIBS}" )
-
 QT5_USE_MODULES( ${brewtarget_EXECUTABLE}
    Widgets
    Network
@@ -402,15 +398,6 @@ QT5_USE_MODULES( ${brewtarget_EXECUTABLE}
 
 TARGET_LINK_LIBRARIES(
    ${brewtarget_EXECUTABLE}
-
-#   ${Qt5Widgets_LIBRARIES}
-#   ${Qt5Network_LIBRARIES}
-#   ${Qt5PrintSupport_LIBRARIES}
-#   ${Qt5Qml_LIBRARIES}
-#   ${Qt5Sql_LIBRARIES}
-#   ${Qt5Xml_LIBRARIES}
-#   ${Qt5WebKit_LIBRARIES}
-#   ${Qt5WebKitWidgets_LIBRARIES}
    ${PHONON_LIBRARIES}
 )
 MESSAGE( STATUS "Libraries: ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Sql_LIBRARIES}  ${Qt5Xml_LIBRARIES} ${Qt5WebKit_LIBRARIES} ${PHONON_LIBRARIES}" )
@@ -425,18 +412,21 @@ ADD_EXECUTABLE(
    ${testing_MOC_SRCS}
    $<TARGET_OBJECTS:btobjlib>
 )
-#TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )
+
+QT5_USE_MODULES(
+   brewtarget_tests
+   Widgets
+   Network
+   PrintSupport
+   Qml
+   Sql
+   Xml
+   WebKit
+   WebKitWidgets
+   Test
+)
 TARGET_LINK_LIBRARIES(
    brewtarget_tests
-   ${Qt5Widgets_LIBRARIES}
-   ${Qt5Network_LIBRARIES}
-   ${Qt5PrintSupport_LIBRARIES}
-   ${Qt5Qml_LIBRARIES}
-   ${Qt5Sql_LIBRARIES}
-   ${Qt5Xml_LIBRARIES}
-   ${Qt5WebKit_LIBRARIES}
-   ${Qt5WebKitWidgets_LIBRARIES}
-   ${Qt5Test_LIBRARIES}
    ${PHONON_LIBRARIES}
 )
 ADD_TEST(
