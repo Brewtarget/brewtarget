@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
 # Put all the required Qt dirs in the includes. 
 #   That isn't quite what this include does. QT_USE_FILE references
 #   a cmake macro include, which is good but not required.
-INCLUDE(${QT_USE_FILE})
+#INCLUDE(${QT_USE_FILE})
 
 # (ADD_PCH_RULE  _header_filename _src_list)
 # Version 7/26/2010
@@ -311,25 +311,25 @@ SET( FILES_TO_TRANSLATE
 
 #==================================Qt Junk=====================================
 
-# Create the moc sources from the headers.
-QT4_WRAP_CPP(brewtarget_MOC_SRCS ${brewtarget_MOC_HEADERS})
-
 # Create the ui_*.h files from the *.ui files.
-QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
-
+QT5_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
 # Generate the resource .cpp from the .qrc file.
-QT4_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
+QT5_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
+QT5_ADD_RESOURCES(brewtarget_cfg_QRC_CPP ${brewtarget_cfg_QRC})
 
 # Translations
-FIND_PROGRAM( LUPDATE_CMD lupdate-qt4 )
-IF( LUPDATE_CMD )
-  ADD_CUSTOM_TARGET(
-     update_translations
-     COMMAND ${LUPDATE_CMD} "-no-obsolete" ${FILES_TO_TRANSLATE} "-ts" ${TRANSLATIONS_FILES}
-  )
-ENDIF()
 # Creates the .qm files.
-QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
+QT5_CREATE_TRANSLATION(${TRANSLATIONS_FILES} ${FILES_TO_TRANSLATE})
+
+
+# Create the moc sources from the headers.
+#QT4_WRAP_CPP(brewtarget_MOC_SRCS ${brewtarget_MOC_HEADERS})
+# Create the ui_*.h files from the *.ui files.
+#QT4_WRAP_UI(brewtarget_UIS_H ${brewtarget_UIS})
+# Generate the resource .cpp from the .qrc file.
+#QT4_ADD_RESOURCES(brewtarget_QRC_CPP ${brewtarget_QRC})
+# Creates the .qm files.
+#QT4_ADD_TRANSLATION(QM_FILES ${TRANSLATIONS_FILES})
 
 # Add a target for the QM_FILES so that we can add
 # the translations as a dependency for the executable later.
@@ -386,19 +386,59 @@ IF( WIN32 AND MINGW )
 ENDIF()
 
 # Link brewtarget against Qt libraries defined by QT_LIBRARIES
-TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${PHONON_LIBS} )
-MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${PHONON_LIBS}" )
+#TARGET_LINK_LIBRARIES( ${brewtarget_EXECUTABLE} ${QT_LIBRARIES} ${PHONON_LIBS} )
+#MESSAGE( STATUS "Libraries: ${QT_LIBRARIES} ${PHONON_LIBS}" )
+
+QT5_USE_MODULES( ${brewtarget_EXECUTABLE}
+   Widgets
+   Network
+   PrintSupport
+   Qml
+   Sql
+   Xml
+   WebKit
+   WebKitWidgets
+)
+
+TARGET_LINK_LIBRARIES(
+   ${brewtarget_EXECUTABLE}
+
+#   ${Qt5Widgets_LIBRARIES}
+#   ${Qt5Network_LIBRARIES}
+#   ${Qt5PrintSupport_LIBRARIES}
+#   ${Qt5Qml_LIBRARIES}
+#   ${Qt5Sql_LIBRARIES}
+#   ${Qt5Xml_LIBRARIES}
+#   ${Qt5WebKit_LIBRARIES}
+#   ${Qt5WebKitWidgets_LIBRARIES}
+   ${PHONON_LIBRARIES}
+)
+MESSAGE( STATUS "Libraries: ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Sql_LIBRARIES}  ${Qt5Xml_LIBRARIES} ${Qt5WebKit_LIBRARIES} ${PHONON_LIBRARIES}" )
+
 
 #=================================Tests========================================
 
-QT4_WRAP_CPP( testing_MOC_SRCS ${SRCDIR}/Testing.h )
+#QT4_WRAP_CPP( testing_MOC_SRCS ${SRCDIR}/Testing.h )
 ADD_EXECUTABLE(
    brewtarget_tests
    ${SRCDIR}/Testing.cpp
    ${testing_MOC_SRCS}
    $<TARGET_OBJECTS:btobjlib>
 )
-TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )
+#TARGET_LINK_LIBRARIES( brewtarget_tests ${QT_LIBRARIES} ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} )
+TARGET_LINK_LIBRARIES(
+   brewtarget_tests
+   ${Qt5Widgets_LIBRARIES}
+   ${Qt5Network_LIBRARIES}
+   ${Qt5PrintSupport_LIBRARIES}
+   ${Qt5Qml_LIBRARIES}
+   ${Qt5Sql_LIBRARIES}
+   ${Qt5Xml_LIBRARIES}
+   ${Qt5WebKit_LIBRARIES}
+   ${Qt5WebKitWidgets_LIBRARIES}
+   ${Qt5Test_LIBRARIES}
+   ${PHONON_LIBRARIES}
+)
 ADD_TEST(
    NAME test
    COMMAND brewtarget_tests
