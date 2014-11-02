@@ -132,6 +132,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
 };
 
+Q_DECLARE_METATYPE( QList<Misc*> )
+
 inline bool MiscPtrLt( Misc* lhs, Misc* rhs)
 {
    return lhs->name() < rhs->name();

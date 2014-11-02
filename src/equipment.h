@@ -25,12 +25,6 @@
 #include <QDomNode>
 #include "BeerXMLElement.h"
 
-// Forward declarations.
-class Equipment;
-class EquipmentException;
-bool operator<(Equipment &e1, Equipment &e2);
-bool operator==(Equipment &e1, Equipment &e2);
-
 /*!
  * \class Equipment
  * \author Philip G. Lee
@@ -159,6 +153,9 @@ private:
 };
 
 Q_DECLARE_METATYPE( Equipment* )
+
+bool operator<(Equipment &e1, Equipment &e2);
+bool operator==(Equipment &e1, Equipment &e2);
 
 inline bool EquipmentPtrLt( Equipment* lhs, Equipment* rhs)
 {

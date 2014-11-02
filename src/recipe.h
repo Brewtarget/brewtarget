@@ -49,6 +49,7 @@ class Water;
 class Instruction;
 class PreInstruction;
 class BrewNote;
+class MashStep;
 
 //! \brief Compares recipes based on name.
 bool operator<(Recipe &r1, Recipe &r2 );

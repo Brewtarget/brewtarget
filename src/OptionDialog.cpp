@@ -287,7 +287,7 @@ void OptionDialog::saveAndClose()
    newUserDataDir = lineEdit_dbDir->text();
 
    // Make sure the dir ends with a "/" or "\"
-#if defined(Q_WS_X11) || defined(Q_WS_MAC)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
    if( !newUserDataDir.endsWith("/") )
       newUserDataDir += "/";
 #else
@@ -366,45 +366,45 @@ void OptionDialog::showChanges()
    switch( Brewtarget::weightUnitSystem )
    {
       case Imperial:
-         weight_imperial->setChecked(TRUE);
+         weight_imperial->setChecked(true);
          break;
       case USCustomary:
-         weight_us->setChecked(TRUE);
+         weight_us->setChecked(true);
          break;
       case SI:
       default:
-         weight_si->setChecked(TRUE);
+         weight_si->setChecked(true);
    }
 
    // Check the right volume unit system box.
    switch( Brewtarget::volumeUnitSystem )
    {
       case Imperial:
-         volume_imperial->setChecked(TRUE);
+         volume_imperial->setChecked(true);
          break;
       case USCustomary:
-         volume_us->setChecked(TRUE);
+         volume_us->setChecked(true);
          break;
       case SI:
       default:
-         volume_si->setChecked(TRUE);
+         volume_si->setChecked(true);
    }
 
    // Check gravity.
    if( Brewtarget::usePlato )
-      radioButton_plato->setChecked(TRUE);
+      radioButton_plato->setChecked(true);
    else
-      radioButton_sg->setChecked(TRUE);
+      radioButton_sg->setChecked(true);
 
    // Temp.
    switch( Brewtarget::tempScale )
    {
       case Fahrenheit:
-         fahrenheit->setChecked(TRUE);
+         fahrenheit->setChecked(true);
          break;
       case Celsius:
       default:
-         celsius->setChecked(TRUE);
+         celsius->setChecked(true);
          break;
   }
 

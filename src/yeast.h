@@ -185,6 +185,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
 };
 
+Q_DECLARE_METATYPE( QList<Yeast*> )
+
 inline bool YeastPtrLt( Yeast* lhs, Yeast* rhs)
 {
    return *lhs < *rhs;

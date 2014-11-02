@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QMimeData>
 #include "BtTreeView.h"
 #include "BtTreeModel.h"
 #include "BtTreeFilterProxyModel.h"

@@ -178,6 +178,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
 };
 
+Q_DECLARE_METATYPE( QList<Hop*> )
+
 inline bool HopPtrLt( Hop* lhs, Hop* rhs)
 {
    return *lhs < *rhs;

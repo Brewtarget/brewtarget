@@ -102,8 +102,6 @@ void MashStepTableModel::mashStepChanged(QMetaProperty prop, QVariant val)
       emit dataChanged( QAbstractItemModel::createIndex(i, 0),
                         QAbstractItemModel::createIndex(i, MASHSTEPNUMCOLS-1));
    }
-   else
-      reset();
    
    if( parentTableWidget )
    {

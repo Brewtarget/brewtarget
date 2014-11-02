@@ -28,11 +28,6 @@
 #include <QStringList>
 #include <QDate>
 
-#include "equipment.h"
-#include "mash.h"
-#include "mashstep.h"
-#include "yeast.h"
-
 #include "BeerXMLElement.h"
 
 // Forward declarations;
@@ -203,6 +198,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
    static QHash<QString,QString> tagToProp;
 };
+
+Q_DECLARE_METATYPE( QList<BrewNote*> )
 
 inline bool BrewNotePtrLt( BrewNote* lhs, BrewNote* rhs)
 {
