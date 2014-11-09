@@ -21,87 +21,22 @@
 #include "ImperialVolumeUnitSystem.h"
 #include <QStringList>
 #include <cmath>
-
-bool ImperialVolumeUnitSystem::isMapSetup = false;
+#include "unit.h"
 
 ImperialVolumeUnitSystem::ImperialVolumeUnitSystem()
    : UnitSystem()
 {
+   _type = Volume;
 }
 
-QString ImperialVolumeUnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
+void ImperialVolumeUnitSystem::loadMap()
 {
-   QString SIUnitName = units->getSIUnitName();
-   double SIAmount = units->toSI( amount );
-   double absSIAmount = qAbs(SIAmount);
-   QString ret;
-
-   // Special cases. Make sure the unit isn't null and that we're
-   // dealing with volume.
-   if( units == 0 || SIUnitName.compare("L") != 0 )
-      return QString("%L1").arg(amount, fieldWidth, format, precision);
-
-   // The scale needs to override everything. If I select "imperial
-   // teaspoons", I don't care how big or small the value it. Display it in
-   // that scale
-   switch( scale ) 
-   {
-      case extrasmall:
-         ret = QString("%L1 %2").arg(Units::imperial_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_teaspoons->getUnitName());
-         break;
-      case small:
-         ret = QString("%L1 %2").arg(Units::imperial_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_tablespoons->getUnitName());
-         break;
-      case medium:
-         ret = QString("%L1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
-         break;
-      case large:
-         ret = QString("%L1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
-         break;
-      case extralarge:
-         ret = QString("%L1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());
-         break;
-      default:
-         if( absSIAmount < Units::imperial_tablespoons->toSI(1.0) ) // If less than 1 tbsp, show tsp
-            ret = QString("%L1 %2").arg(Units::imperial_teaspoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_teaspoons->getUnitName());
-         else if( absSIAmount < Units::imperial_cups->toSI(0.25) ) // If less than 1/4 cup, show tbsp
-            ret = QString("%L1 %2").arg(Units::imperial_tablespoons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_tablespoons->getUnitName());
-         else if( absSIAmount < Units::imperial_quarts->toSI(1.0) ) // If less than 1 qt, show imperial_cups
-            ret = QString("%L1 %2").arg(Units::imperial_cups->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_cups->getUnitName());
-         else if( absSIAmount < Units::imperial_gallons->toSI(1.0) ) // If less than 1 gallon, show imperial_quarts
-            ret = QString("%L1 %2").arg(Units::imperial_quarts->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_quarts->getUnitName());
-         else if( absSIAmount < Units::imperial_barrels->toSI(1.0) ) // If less than 1 barrel, show gallons.
-            ret = QString("%L1 %2").arg(Units::imperial_gallons->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_gallons->getUnitName());
-         else
-            ret = QString("%L1 %2").arg(Units::imperial_barrels->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::imperial_barrels->getUnitName());
-   }
-
-   return ret;
-}
-
-double ImperialVolumeUnitSystem::qstringToSI( QString qstr )
-{
-   ensureMapIsSetup();
-   return UnitSystem::qstringToSI(qstr,Units::imperial_gallons);
-}
-
-void ImperialVolumeUnitSystem::ensureMapIsSetup()
-{
-   // If it is setup, return now.
-   if( isMapSetup )
-      return;
-
-   nameToUnit.insert(Units::liters->getUnitName(), Units::liters);
-   nameToUnit.insert(Units::milliliters->getUnitName(), Units::milliliters);
-
-   nameToUnit.insert(Units::imperial_barrels->getUnitName(), Units::imperial_barrels);
-   nameToUnit.insert(Units::imperial_gallons->getUnitName(), Units::imperial_gallons);
-   nameToUnit.insert(Units::imperial_quarts->getUnitName(), Units::imperial_quarts);
-   nameToUnit.insert(Units::imperial_cups->getUnitName(), Units::imperial_cups);
-   nameToUnit.insert(Units::imperial_tablespoons->getUnitName(), Units::imperial_tablespoons);
-   nameToUnit.insert(Units::imperial_teaspoons->getUnitName(), Units::imperial_teaspoons);
-
-   isMapSetup = true;
+   scaleToUnit.insert(extrasmall,Units::imperial_teaspoons);
+   scaleToUnit.insert(small,Units::imperial_tablespoons);
+   scaleToUnit.insert(medium,Units::imperial_cups);
+   scaleToUnit.insert(large,Units::imperial_quarts);
+   scaleToUnit.insert(extralarge,Units::imperial_gallons);
+   scaleToUnit.insert(huge,Units::imperial_barrels);
 }
 
 Unit* ImperialVolumeUnitSystem::thicknessUnit()
@@ -109,4 +44,5 @@ Unit* ImperialVolumeUnitSystem::thicknessUnit()
    return Units::imperial_quarts;
 }
 
+Unit* ImperialVolumeUnitSystem::unit() { return Units::imperial_gallons; };
 QString ImperialVolumeUnitSystem::unitType() { return "Imperial"; }

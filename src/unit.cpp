@@ -22,6 +22,7 @@
 #include <QStringList>
 #include <string>
 #include <iostream>
+#include <QRegExp>
 #include <QDebug>
 #include "unit.h"
 #include "brewtarget.h"
@@ -33,21 +34,24 @@ bool Unit::isMapSetup = false;
 KilogramUnit* Units::kilograms = new KilogramUnit();
 GramUnit* Units::grams = new GramUnit();
 MilligramUnit* Units::milligrams = new MilligramUnit();
+
 PoundUnit* Units::pounds = new PoundUnit();
 OunceUnit* Units::ounces = new OunceUnit();
 // === Volume ===
 LiterUnit* Units::liters = new LiterUnit();
 MilliliterUnit* Units::milliliters = new MilliliterUnit();
+
 USBarrelUnit* Units::us_barrels = new USBarrelUnit();
 USGallonUnit* Units::us_gallons = new USGallonUnit();
 USQuartUnit* Units::us_quarts = new USQuartUnit();
 USCupUnit* Units::us_cups = new USCupUnit();
+USTablespoonUnit* Units::us_tablespoons = new USTablespoonUnit();
+USTeaspoonUnit* Units::us_teaspoons = new USTeaspoonUnit();
+
 ImperialBarrelUnit* Units::imperial_barrels = new ImperialBarrelUnit();
 ImperialGallonUnit* Units::imperial_gallons = new ImperialGallonUnit();
 ImperialQuartUnit* Units::imperial_quarts = new ImperialQuartUnit();
 ImperialCupUnit* Units::imperial_cups = new ImperialCupUnit();
-USTablespoonUnit* Units::us_tablespoons = new USTablespoonUnit();
-USTeaspoonUnit* Units::us_teaspoons = new USTeaspoonUnit();
 ImperialTablespoonUnit* Units::imperial_tablespoons = new ImperialTablespoonUnit();
 ImperialTeaspoonUnit* Units::imperial_teaspoons = new ImperialTeaspoonUnit();
 // === Time ===
@@ -63,27 +67,96 @@ KelvinUnit* Units::kelvin = new KelvinUnit();
 SRMUnit* Units::srm = new SRMUnit();
 EBCUnit* Units::ebc = new EBCUnit();
 
-// Return the equivalent of 'amount' 'fromUnit's in 'toUnit's.
-double Unit::convert( double amount, QString& fromUnit, QString& toUnit )
+QString Unit::unitFromString(QString qstr)
 {
-   double SI;
+   QRegExp amtUnit;
+
+   // Make sure we get the right decimal point (. or ,) and the right grouping
+   // separator (, or .). Some locales write 1.000,10 and other write
+   // 1,000.10. We need to catch both
+   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
+   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+
+   amtUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
+   amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
+
+   // if the regex dies, return 0.0
+   if (amtUnit.indexIn(qstr) == -1)
+      return QString("?");
+
+   // Get the unit from the second capture
+   return amtUnit.cap(2);
+
+}
+
+double Unit::valueFromString(QString qstr)
+{
+   bool convOk = true;
+   QRegExp amtUnit;
+   double amt;
+
+   // Make sure we get the right decimal point (. or ,) and the right grouping
+   // separator (, or .). Some locales write 1.000,10 and other write
+   // 1,000.10. We need to catch both
+   QString decimal = QRegExp::escape( QLocale::system().decimalPoint());
+   QString grouping = QRegExp::escape(QLocale::system().groupSeparator());
+
+   amtUnit.setPattern("((?:\\d+" + grouping + ")?\\d+(?:" + decimal + "\\d+)?|" + decimal + "\\d+)\\s*(\\w+)?");
+   amtUnit.setCaseSensitivity(Qt::CaseInsensitive);
+
+   // if the regex dies, return 0.0
+   if (amtUnit.indexIn(qstr) == -1)
+      return 0.0;
+
+   // Attempt to translate the first capture to a double using the current
+   // Locale
+   amt = QLocale().toDouble(amtUnit.cap(1), &convOk);
+
+   // If that fails, attemp to convert it as a C locale
+   if( !convOk )
+      amt = QLocale::c().toDouble(amtUnit.cap(1));
+
+   return amt;
+}
+
+// Return a
+QString Unit::convert(QString qstr, QString toUnit)
+{
+   if( ! Unit::isMapSetup )
+      Unit::setupMap();
+
+   // Force the unit to be what I say
+   QString fName = unitFromString(qstr);
+   Unit* f = getUnit(fName);
+   double si = qstringToSI( qstr, f, false );
+   Unit* u = getUnit(toUnit, false);
+
+   if( u == 0 || f == 0 || u->getUnitType() != f->getUnitType() )
+      return QString("%1 ?").arg(Brewtarget::displayAmount(si));
+   else
+      return QString("%1 %2").arg(Brewtarget::displayAmount(u->fromSI(si))).arg(toUnit);
+}
+
+// Translates something like "5.0 gal" into the appropriate SI units.
+double Unit::qstringToSI( QString qstr, Unit* defUnit, bool force )
+{
+   double amt = 0.0;
+   Unit* u = defUnit;
 
    if( ! Unit::isMapSetup )
       Unit::setupMap();
 
-   // TODO: warn somebody if the units aren't in the map.
-   Unit* f;
-   Unit* t;
+   amt = valueFromString(qstr);
+   QString unit = unitFromString(qstr);
 
-   f = getUnit(fromUnit);
-   t = getUnit(toUnit, false);
+   // If we haven't decided to force the issue,
+   //       and we were able to get the unit from the string
+   //       and we can find that unit in the nameToUnit map
+   // then get that unit
+   if ( ! force && unit.size() > 0 && getUnit(unit) )
+      u = getUnit(unit);
 
-   // Freak out if we can't find the units or if they're not the same type.
-   if( f == 0 || t == 0  || f->getUnitType() != t->getUnitType() )
-      return 0.0;
-
-   SI = f->toSI(amount);
-   return t->fromSI(SI);
+   return u->toSI(amt);
 }
 
 // Gets the unit with the appropriate name. Select the one consistent
@@ -92,9 +165,16 @@ double Unit::convert( double amount, QString& fromUnit, QString& toUnit )
 Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
 {
    Unit* u;
+
+   if( ! Unit::isMapSetup )
+      Unit::setupMap();
+
    QMap<QString, Unit*>::iterator i = nameToUnit.find(name);
 
    // First, try to find a unit consistent with the measurement system.
+   // For example, if you enter "5 gal" and the default volume system is
+   // "British Imperial", we will find Units::imperial_gallons instead of
+   // Units::us_gallons
    for( ; i != nameToUnit.end() && i.key() == name; ++i )
    {
       u = i.value();
@@ -128,12 +208,16 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
          return u;
    }
 
+   // If we got here, we either couldn't find anything specific. In that case,
+   // reset the iterator and just try to find the best USCustomer or Any
+   // match.
    i = nameToUnit.find(name);
 
    // Now, just try to find a unit with the USCustomary or Any system.
    for( ; i != nameToUnit.end() && i.key() == name; ++i )
    {
       u = i.value();
+
       if( u == 0 )
          continue;
 
@@ -144,59 +228,6 @@ Unit* Unit::getUnit(QString& name, bool matchCurrentSystem)
    }
 
    return 0;
-}
-
-// Translates something like "5.0 gal" into the appropriate SI units.
-double Unit::qstringToSI( QString qstr, Unit** unit, bool matchCurrentSystem )
-{
-   if( ! Unit::isMapSetup )
-      Unit::setupMap();
-
-   QStringList list1 = qstr.split(" ");
-
-   if( list1.size() < 1 ) // Didn't even provide a number.
-      return 0.0;
-   else if( list1.size() < 2  ) // Only provided a number.
-   {
-      // If we don't have units, just assume we're dealing with mass.
-      switch(Brewtarget::weightUnitSystem)
-      {
-         case USCustomary:
-         case Imperial:
-            return Units::pounds->toSI(list1[0].toDouble());
-
-         case SI:
-         default:
-            return list1[0].toDouble();
-      }
-   }
-   else // Provided a number and unit.
-   {
-      Unit* u = getUnit(list1[1], matchCurrentSystem);
-      if( unit != 0 )
-         *unit = u;
-      
-      if( u == 0 ) // Invalid unit since it's not in the map.
-         return list1[0].toDouble(); // Assume units are already SI.
-      else
-         return u->toSI(list1[0].toDouble());
-   }
-}
-
-// Return a
-QString Unit::convert(QString qstr, QString toUnit)
-{
-   if( ! Unit::isMapSetup )
-      Unit::setupMap();
-
-   Unit* f;
-   double si = qstringToSI( qstr, &f, false );
-   Unit* u = getUnit(toUnit, false);
-   
-   if( u == 0 || f == 0 || u->getUnitType() != f->getUnitType() )
-      return QString("%1 ?").arg(Brewtarget::displayAmount(si));
-   else
-      return QString("%1 %2").arg(Brewtarget::displayAmount(u->fromSI(si))).arg(toUnit);
 }
 
 void Unit::setupMap()
@@ -227,6 +258,7 @@ void Unit::setupMap()
    Unit::nameToUnit.insert(Units::minutes->getUnitName(), Units::minutes);
    Unit::nameToUnit.insert(Units::hours->getUnitName(), Units::hours);
    Unit::nameToUnit.insert(Units::days->getUnitName(), Units::days);
+
    Unit::nameToUnit.insert(Units::celsius->getUnitName(), Units::celsius);
    Unit::nameToUnit.insert(Units::kelvin->getUnitName(), Units::kelvin);
    Unit::nameToUnit.insert(Units::fahrenheit->getUnitName(), Units::fahrenheit);

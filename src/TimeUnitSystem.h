@@ -30,15 +30,11 @@ class TimeUnitSystem : public UnitSystem
 {
 public:
    TimeUnitSystem();
-   QString displayAmount( double amount, Unit* units = 0, unitScale scale = noScale ); /* Inherited from UnitSystem */
-   double qstringToSI( QString qstr ); /* Inherited from UnitSystem */
    Unit* thicknessUnit(){ return 0; }
    QString unitType();
 
-private:
-   static void ensureMapIsSetup();
-
-   static bool isMapSetup;
+   void loadMap();
+   Unit* unit();
 };
 
 #endif /*_TIMEUNITSYSTEM_H*/

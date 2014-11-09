@@ -26,6 +26,8 @@
 #include "CelsiusTempUnitSystem.h"
 #include "FahrenheitTempUnitSystem.h"
 #include "TimeUnitSystem.h"
+#include "unit.h"
+#include <QDebug>
 
 USWeightUnitSystem* UnitSystems::usWeightUnitSystem()
 {

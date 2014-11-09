@@ -21,58 +21,20 @@
 #include "TimeUnitSystem.h"
 #include <QStringList>
 #include <cmath>
-
-bool TimeUnitSystem::isMapSetup = false;
+#include "unit.h"
 
 TimeUnitSystem::TimeUnitSystem()
 {
+   _type = Time;
 }
 
-QString TimeUnitSystem::displayAmount( double amount, Unit* units, unitScale scale )
+void TimeUnitSystem::loadMap()
 {
-   QString SIUnitName = units->getSIUnitName();
-   double SIAmount = units->toSI( amount );
-   double absSIAmount = qAbs(SIAmount);
-   QString ret;
-
-   // Special cases. Make sure the unit isn't null and that we're
-   // dealing with time.
-   if( units == 0 || SIUnitName.compare("min") != 0 )
-      return QString("%L1").arg(amount, fieldWidth, format, precision);
-
-   if( absSIAmount < Units::minutes->toSI(1.0) ) // Less than a minute, show seconds.
-      ret = QString("%L1 %2").arg(Units::seconds->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::seconds->getUnitName());
-   else if( absSIAmount < Units::hours->toSI(2.0) ) // Less than two hours, show minutes.
-      ret = QString("%L1 %2").arg(Units::minutes->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::minutes->getUnitName());
-   else if( absSIAmount < Units::days->toSI(1.0) )// Show hours.
-      ret = QString("%L1 %2").arg(Units::hours->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::hours->getUnitName());
-   else
-      ret = QString("%L1 %2").arg(Units::days->fromSI(SIAmount), fieldWidth, format, precision).arg(Units::days->getUnitName());
-
-   return ret;
+   scaleToUnit.insert(extrasmall,Units::seconds);
+   scaleToUnit.insert(small,Units::minutes);
+   scaleToUnit.insert(medium,Units::hours);
+   scaleToUnit.insert(large,Units::days);
 }
 
-double TimeUnitSystem::qstringToSI( QString qstr )
-{
-   ensureMapIsSetup();
-
-   return UnitSystem::qstringToSI(qstr,Units::minutes);
-}
-
-void TimeUnitSystem::ensureMapIsSetup()
-{
-   // If it is setup, return now.
-   if( isMapSetup )
-      return;
-
-   // Ok, map was not setup, so set it up.
-
-   nameToUnit.insert(Units::seconds->getUnitName(), Units::seconds);
-   nameToUnit.insert(Units::minutes->getUnitName(), Units::minutes);
-   nameToUnit.insert(Units::hours->getUnitName(), Units::hours);
-   nameToUnit.insert(Units::days->getUnitName(), Units::days);
-
-   isMapSetup = true;
-}
-
+Unit* TimeUnitSystem::unit() { return Units::minutes; };
 QString TimeUnitSystem::unitType() { return "entropy"; }
