@@ -112,6 +112,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
 };
 
+Q_DECLARE_METATYPE( QList<Water*> )
+
 inline bool WaterPtrLt( Water* lhs, Water* rhs)
 {
    return *lhs < *rhs;

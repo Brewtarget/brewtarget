@@ -55,6 +55,7 @@
 #include <QLinearGradient>
 #include <QBrush>
 #include <QPen>
+#include <QDesktopWidget>
 
 #include "Algorithms.h"
 #include "MashStepEditor.h"
@@ -2156,12 +2157,12 @@ QFile* MainWindow::openForWrite( QString filterStr, QString defaultSuff)
    const char* filename;
    QFile* outFile = new QFile();
 
-   fileSaver->setFilter( filterStr );
+   fileSaver->setNameFilter( filterStr );
    fileSaver->setDefaultSuffix( defaultSuff );
 
    if( fileSaver->exec() )
    {
-      filename = fileSaver->selectedFiles()[0].toAscii();
+      filename = fileSaver->selectedFiles()[0].toLatin1();
       outFile->setFileName(filename);
 
       if( ! outFile->open(QIODevice::WriteOnly | QIODevice::Truncate) )

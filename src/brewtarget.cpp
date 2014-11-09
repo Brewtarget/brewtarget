@@ -65,6 +65,9 @@
 #include "ImperialVolumeUnitSystem.h"
 #include "BtSplashScreen.h"
 #include "MainWindow.h"
+#include "mash.h"
+#include "instruction.h"
+#include "water.h"
 
 MainWindow* Brewtarget::_mainWindow = 0;
 QDomDocument* Brewtarget::optionsDoc;
@@ -274,19 +277,21 @@ TempScale Brewtarget::getTemperatureScale()
 QString Brewtarget::getDataDir()
 {
    QString dir = qApp->applicationDirPath();
-#if defined(Q_WS_X11) // Linux OS.
+#if defined(Q_OS_LINUX) // Linux OS.
 
    dir = QString(CONFIGDATADIR);
    
-#elif defined(Q_WS_MAC) // MAC OS.
+#elif defined(Q_OS_MAC) // MAC OS.
 
    // We should be inside an app bundle.
    dir += "/../Resources/";
 
-#else // Windows OS.
+#elif defined(Q_OS_WIN) // Windows OS.
 
    dir += "/../data/";
 
+#else
+# error "Unsupported OS"
 #endif
 
    if( ! dir.endsWith('/') )
@@ -298,19 +303,21 @@ QString Brewtarget::getDataDir()
 QString Brewtarget::getDocDir()
 {
    QString dir = qApp->applicationDirPath();
-#if defined(Q_WS_X11) // Linux OS.
+#if defined(Q_OS_LINUX) // Linux OS.
 
    dir = QString(CONFIGDOCDIR);
 
-#elif defined(Q_WS_MAC) // MAC OS.
+#elif defined(Q_OS_MAC) // MAC OS.
 
    // We should be inside an app bundle.
    dir += "/../Resources/en.lproj/";
 
-#else // Windows OS.
+#elif defined(Q_OS_WIN) // Windows OS.
 
    dir += "/../doc/";
 
+#else
+# error "Unsupported OS"
 #endif
 
    if( ! dir.endsWith('/') )
@@ -321,7 +328,7 @@ QString Brewtarget::getDocDir()
 
 QString Brewtarget::getConfigDir(bool *success)
 {
-#if defined(Q_WS_X11) || defined(Q_WS_MAC) // Linux OS or Mac OS.
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC) // Linux OS or Mac OS.
 
    QDir dir;
    QFileInfo fileInfo;
@@ -397,7 +404,7 @@ QString Brewtarget::getConfigDir(bool *success)
       *success = true;
    return dir.absolutePath() + "/";
 
-#else // Windows OS.
+#elif defined(Q_OS_WIN) // Windows OS.
 
    QDir dir;
    // This is the bin/ directory.
@@ -410,7 +417,10 @@ QString Brewtarget::getConfigDir(bool *success)
       *success = true;
    return dir.absolutePath() + "/";
 
+#else
+# error "Unsupported OS"
 #endif
+
 }
 
 QString Brewtarget::getUserDataDir()
@@ -438,7 +448,7 @@ bool Brewtarget::initialize()
    qRegisterMetaType< QList<Water*> >();
    
    // In Unix, make sure the user isn't running 2 copies.
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
    pidFile.setFileName(QString("%1.pid").arg(getUserDataDir()));
    if( pidFile.exists() )
    {
@@ -488,7 +498,7 @@ bool Brewtarget::initialize()
 
    loadTranslations(); // Do internationalization.
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
    qt_set_sequence_auto_mnemonic(TRUE); // turns on Mac Keyboard shortcuts
 #endif
   
@@ -527,7 +537,7 @@ void Brewtarget::cleanup()
    delete _mainWindow;
    
    Database::dropInstance();
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
    pidFile.remove();
 #endif
 

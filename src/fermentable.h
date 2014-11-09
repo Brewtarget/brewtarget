@@ -190,6 +190,8 @@ private:
    static QHash<QString,QString> tagToPropHash();
 };
 
+Q_DECLARE_METATYPE( QList<Fermentable*> )
+
 inline bool FermentablePtrLt( Fermentable* lhs, Fermentable* rhs)
 {
    return *lhs < *rhs;

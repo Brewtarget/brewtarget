@@ -135,7 +135,7 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <property name="numDigits">
+          <property name="digitCount">
            <number>8</number>
           </property>
           <property name="segmentStyle">

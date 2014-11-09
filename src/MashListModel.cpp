@@ -23,6 +23,7 @@
 #include "style.h"
 #include "database.h"
 #include "recipe.h"
+#include "mash.h"
 
 MashListModel::MashListModel(QWidget* parent)
    : QAbstractListModel(parent), recipe(0)

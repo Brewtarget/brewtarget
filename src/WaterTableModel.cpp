@@ -91,9 +91,10 @@ void WaterTableModel::addWater(Water* water)
    )
       return;
    
+   beginInsertRows( QModelIndex(), waterObs.size(), waterObs.size() );
    waterObs.append(water);
    connect( water, SIGNAL(changed(QMetaProperty,QVariant)), this, SLOT(changed(QMetaProperty,QVariant)) );
-   reset(); // Tell everybody that the table has changed.
+   endInsertRows();
    
    if(parentTableWidget)
    {
@@ -140,9 +141,10 @@ void WaterTableModel::removeWater(Water* water)
    i = waterObs.indexOf(water);
    if( i >= 0 )
    {
+      beginRemoveRows( QModelIndex(), i, i );
       disconnect( water, 0, this, 0 );
       waterObs.removeAt(i);
-      reset(); // Tell everybody the table has changed.
+      endRemoveRows();
          
       if(parentTableWidget)
       {

@@ -24,6 +24,7 @@
 #include <Qt>
 #include <QObject>
 #include <QStringBuilder>
+#include <QMimeData>
 
 #include "brewtarget.h"
 #include "BtTreeItem.h"

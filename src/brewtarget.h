@@ -46,30 +46,11 @@ extern void qt_set_sequence_auto_mnemonic(bool b);
 #include <QList>
 #include "UnitSystem.h"
 
-// Forward declarations.
 class BeerXMLElement;
-class BrewNote;
-class Equipment;
-class Fermentable;
-class Hop;
-class Instruction;
 class MainWindow;
-class Mash;
-class Misc;
-class Style;
-class Unit;
-class Water;
-class Yeast;
 
 // Need these for changed(QMetaProperty,QVariant) to be emitted across threads.
 Q_DECLARE_METATYPE( QMetaProperty )
-Q_DECLARE_METATYPE( QList<BrewNote*> )
-Q_DECLARE_METATYPE( QList<Hop*> )
-Q_DECLARE_METATYPE( QList<Instruction*> )
-Q_DECLARE_METATYPE( QList<Fermentable*> )
-Q_DECLARE_METATYPE( QList<Misc*> )
-Q_DECLARE_METATYPE( QList<Yeast*> )
-Q_DECLARE_METATYPE( QList<Water*> )
 
 /*!
  * \class Brewtarget

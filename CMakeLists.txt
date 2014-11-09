@@ -92,30 +92,70 @@ ELSEIF( WIN32 )
    SET( RM_ARGS "" )
 ENDIF()
 
-# ======================Find Qt4 (>= 4.6.0) for this project===================
-IF( ${BUILD_DESIGNER_PLUGINS} )
-   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebKit QtXml QtDesigner REQUIRED)
-ELSE()
-   # This is a major kludge, but linking with QtSvg is the easiest way to get
-   # an app that includes the svg image format plugin that works.
-   IF( APPLE )
-      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml QtSvg REQUIRED)
-   ELSE()
-      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml REQUIRED)
-   ENDIF()
+#==================================Find Qt5====================================
+
+# Automatically run moc on source files when necessary
+SET(CMAKE_AUTOMOC ON)
+# As moc files are generated in the binary dir, tell CMake
+# to always look for includes there:
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+FIND_PACKAGE(Qt5Core REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5Widgets REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5Network REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Network_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5PrintSupport REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5PrintSupport_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5Qml REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Qml_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5Sql REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Sql_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5WebKit REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5WebKit_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5WebKitWidgets REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5WebKitWidgets_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5Xml REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Xml_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5Test REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
+
+FIND_PACKAGE(Qt5LinguistTools REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5LinguistTools_INCLUDE_DIRS})
+
+# Fuckin Qt5 requires -fPIC if Qt5 itself was built with -fPIC
+IF(Qt5_POSITION_INDEPENDENT_CODE)
+   SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ENDIF()
+
+#IF( ${BUILD_DESIGNER_PLUGINS} )
+#   FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebKit QtXml QtDesigner REQUIRED)
+#ELSE()
+#   # This is a major kludge, but linking with QtSvg is the easiest way to get
+#   # an app that includes the svg image format plugin that works.
+#   IF( APPLE )
+#      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml QtSvg REQUIRED)
+#   ELSE()
+#      FIND_PACKAGE(Qt4 4.6.0 COMPONENTS QtCore QtGui QtNetwork QtSql QtWebkit QtXml REQUIRED)
+#   ENDIF()
+#ENDIF()
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
 
-# Some distros seem to treat Qt and Phonon as separate, so try to find Phonon.
+# Find Phonon.
 IF( NOT ${NO_PHONON} )
-   FIND_PACKAGE( Phonon REQUIRED )
+   FIND_PACKAGE(Phonon4Qt5 REQUIRED)
    INCLUDE_DIRECTORIES(${PHONON_INCLUDES})
-ENDIF()
-
-# Warn if the sqlite plugin is not found.
-IF( NOT QT_QSQLITE_PLUGIN_RELEASE )
-   MESSAGE( WARNING "Qt4 sqlite runtime plugin not found. On Debian, the package is libqt4-sql-sqlite." )
 ENDIF()
 
 # Some extra files for the "make clean" target.
