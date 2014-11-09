@@ -460,7 +460,7 @@ void BtTreeView::deleteSelected(QModelIndexList selected)
             confirmDelete = verifyDelete(confirmDelete,tr("Folder"),_model->name(trans));
             break;
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(trans)));
+            Brewtarget::logW( QString("MainWindow::deleteSelected Unknown type: %1").arg(_model->type(trans)));
       }
       // If they selected "Yes" or "Yes To All", push and loop
       if ( confirmDelete == QMessageBox::Yes || confirmDelete == QMessageBox::YesToAll )

@@ -267,7 +267,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)fermObs.size() )
    {
-      Brewtarget::log(Brewtarget::ERROR, tr("Bad model index. row = %1").arg(index.row()));
+      Brewtarget::logE(tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -347,7 +347,7 @@ QVariant FermentableTableModel::data( const QModelIndex& index, int role ) const
 
          return QVariant( Brewtarget::displayColor(row->color_srm(), unit, false) );
       default :
-         Brewtarget::log(Brewtarget::ERROR, tr("Bad column: %1").arg(col));
+         Brewtarget::logE(tr("Bad column: %1").arg(col));
          return QVariant();
    }
 }
@@ -383,7 +383,7 @@ QVariant FermentableTableModel::headerData( int section, Qt::Orientation orienta
             else
                return QVariant(tr("Color (EBC)"));
          default:
-            Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
+            Brewtarget::logW(tr("Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -659,7 +659,7 @@ bool FermentableTableModel::setData( const QModelIndex& index, const QVariant& v
          else
             return false;
       default:
-         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
+         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return false;
    }
 }

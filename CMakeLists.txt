@@ -1,5 +1,6 @@
 PROJECT(brewtarget)
-cmake_minimum_required(VERSION 2.8.8)
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8.8 )
+CMAKE_POLICY( VERSION 2.8.11 )
 
 # Creates a Makefile.
 # NOTE: cmake . -DCMAKE_INSTALL_PREFIX=/tmp/blah && make DESTDIR=/foo
@@ -132,6 +133,11 @@ INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
 
 FIND_PACKAGE(Qt5LinguistTools REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5LinguistTools_INCLUDE_DIRS})
+
+# Need to find SVG component to locate svg dlls later
+IF(WIN32)
+   FIND_PACKAGE(Qt5Svg REQUIRED)
+ENDIF()
 
 # Fuckin Qt5 requires -fPIC if Qt5 itself was built with -fPIC
 IF(Qt5_POSITION_INDEPENDENT_CODE)
@@ -344,40 +350,58 @@ SET( brewtarget_MAC_ICNS "${ROOTDIR}/mac/BrewtargetIcon.icns" )
 #==========================Find dlls for Win32=================================
 
 IF( WIN32 )
-   SET( Qt_DLLs
-        ${QT_BINARY_DIR}/phonon4.dll
-        ${QT_BINARY_DIR}/QtCore4.dll
-        ${QT_BINARY_DIR}/QtGui4.dll
-        ${QT_BINARY_DIR}/QtNetwork4.dll
-        ${QT_BINARY_DIR}/QtSvg4.dll
-        ${QT_BINARY_DIR}/QtSql4.dll
-        ${QT_BINARY_DIR}/QtWebKit4.dll
-        ${QT_BINARY_DIR}/QtXml4.dll
-   )
-   
-   SET( SQL_Drivers_DLLs
-        ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll
-   )
+   GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION)
+   GET_TARGET_PROPERTY(QtWidgets_location Qt5::Widgets LOCATION)
+   GET_TARGET_PROPERTY(QtNetwork_location Qt5::Network LOCATION)
+   GET_TARGET_PROPERTY(QtPrintSupport_location Qt5::PrintSupport LOCATION)
+   GET_TARGET_PROPERTY(QtQml_location Qt5::Qml LOCATION)
+   GET_TARGET_PROPERTY(QtSql_location Qt5::Sql LOCATION)
+   GET_TARGET_PROPERTY(QtXml_location Qt5::Xml LOCATION)
+   GET_TARGET_PROPERTY(QtWebKit_location Qt5::WebKit LOCATION)
 
+   GET_TARGET_PROPERTY(QtSqliteDriver_location Qt5::QSQLiteDriverPlugin LOCATION)
+
+   GET_TARGET_PROPERTY(QtQgif_location Qt5::QGifPlugin LOCATION)
+   GET_TARGET_PROPERTY(QtQico_location Qt5::QICOPlugin LOCATION)
+   GET_TARGET_PROPERTY(QtQjpeg_location Qt5::QJpegPlugin LOCATION)
+   GET_TARGET_PROPERTY(QtQmng_location Qt5::QMngPlugin LOCATION)
+   GET_TARGET_PROPERTY(QtQsvg_location Qt5::QSvgPlugin LOCATION)
+   GET_TARGET_PROPERTY(QtQtiff_location Qt5::QTiffPlugin LOCATION)
+
+   GET_TARGET_PROPERTY(QtQsvgIcon_location Qt5::QSvgIconPlugin LOCATION)
+
+   SET( Qt_DLLs
+        #${QT_BINARY_DIR}/phonon4.dll
+        ${QtCore_location}
+        ${QtWidgets_location}
+        ${QtNetwork_location}
+        ${QtPrintSupport_location}
+        ${QtQml_location}
+        ${QtSql_location}
+        ${QtXml_location}
+        ${QtWebKit_location}
+   )
+   SET( SQL_Drivers_DLLs
+        ${QtSqliteDriver_location}
+   )
    SET( Phonon_Backend_DLLs
-        ${QT_PLUGINS_DIR}/phonon_backend/phonon_ds94.dll
+        #${QT_PLUGINS_DIR}/phonon_backend/phonon_ds94.dll
    )
    SET( Image_Formats_DLLs
-        ${QT_PLUGINS_DIR}/imageformats/qgif4.dll
-        ${QT_PLUGINS_DIR}/imageformats/qico4.dll
-        ${QT_PLUGINS_DIR}/imageformats/qjpeg4.dll
-        ${QT_PLUGINS_DIR}/imageformats/qmng4.dll
-        ${QT_PLUGINS_DIR}/imageformats/qsvg4.dll
-        ${QT_PLUGINS_DIR}/imageformats/qtiff4.dll
+        ${QtQgif_location}
+        ${QtQico_location}
+        ${QtQjpeg_location}
+        ${QtQmng_location}
+        ${QtQsvg_location}
+        ${QtQtiff_location}
    )
    SET( Icon_Engines_DLLs
-        ${QT_PLUGINS_DIR}/iconengines/qsvgicon4.dll
+        ${QtQsvgIcon_location}
    )
-
    # Find extra MinGW-specific dlls.
    IF( MINGW )
       IF( NOT MINGW_BIN_DIR )
-         FIND_PATH(MINGW_BIN_DIR "mingw32-c++.exe")
+         FIND_PATH(MINGW_BIN_DIR "mingw32-make.exe")
       ENDIF()
      
      IF( NOT EXISTS ${MINGW_BIN_DIR} )
@@ -387,7 +411,7 @@ IF( WIN32 )
              ${Qt_DLLs}
              ${MINGW_BIN_DIR}/libgcc_s_dw2-1.dll
              ${MINGW_BIN_DIR}/libstdc++-6.dll
-             ${MINGW_BIN_DIR}/mingwm10.dll
+             ${MINGW_BIN_DIR}/libwinpthread-1.dll
         )
      ENDIF()
    ENDIF()

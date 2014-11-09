@@ -42,7 +42,7 @@ double ColorMethods::mcuToSrm(double mcu)
       case Brewtarget::MOSHER:
          return mosher(mcu);
       default:
-         Brewtarget::log( Brewtarget::ERROR, QObject::tr("Invalid color formula type: %1").arg(Brewtarget::colorFormula) );
+         Brewtarget::logE(QObject::tr("Invalid color formula type: %1").arg(Brewtarget::colorFormula) );
          return morey(mcu);
    }
 }

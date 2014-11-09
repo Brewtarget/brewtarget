@@ -216,7 +216,7 @@ void MashWizard::wizardry()
          if( r < 0 || r > 1 )
          {
             QMessageBox::critical(this, tr("Decoction error"), tr("Something went wrong in decoction calculation.") );
-            Brewtarget::log(Brewtarget::ERROR, QString("Decoction: r=%1").arg(r));
+            Brewtarget::logE(QString("Decoction: r=%1").arg(r));
             return;
          }
 

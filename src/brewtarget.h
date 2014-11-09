@@ -77,9 +77,9 @@ public:
    //! \brief The log level of a message.
    enum LogType{
           //! Just a warning.
-          WARNING,
+          LogType_WARNING,
           //! Full-blown error.
-          ERROR
+          LogType_ERROR
    };
    //! \brief The formula used to get beer color.
    enum ColorType {MOSHER, DANIEL, MOREY};

@@ -586,7 +586,7 @@ void MainWindow::treeActivated(const QModelIndex &index)
       case BtTreeItem::FOLDER:  // default behavior is fine, but no warning
          break;
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index)));
+         Brewtarget::logW(QString("MainWindow::treeActivated Unknown type %1.").arg(treeView_recipe->type(index)));
    }
    treeView_recipe->setCurrentIndex(index);
 }
@@ -2128,7 +2128,7 @@ void MainWindow::copySelected()
             break;
             // No Brewnote, because it just doesn't make sense
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("MainWindow::copySelected Unknown type: %1").arg(active->type(*at)));
+            Brewtarget::logW(QString("MainWindow::copySelected Unknown type: %1").arg(active->type(*at)));
       }
    }
 

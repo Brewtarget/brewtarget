@@ -108,7 +108,7 @@ int BtTreeItem::columnCount(int _type) const
         case FOLDER:
             return FOLDERNUMCOLS;
         default:
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::columnCount Bad column: %1").arg(_type));
+         Brewtarget::logW( QString("BtTreeItem::columnCount Bad column: %1").arg(_type));
             return 0;
     }
             
@@ -138,7 +138,7 @@ QVariant BtTreeItem::data(int _type, int column)
       case FOLDER:
          return dataFolder(column);
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::data Bad column: %1").arg(column));
+         Brewtarget::logW( QString("BtTreeItem::data Bad column: %1").arg(column));
          return QVariant();
     }
 }
@@ -210,7 +210,7 @@ QVariant BtTreeItem::dataRecipe( int column )
             return QVariant(recipe->style()->name());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataRecipe Bad column: %1").arg(column));
+         Brewtarget::logW( QString("BtTreeItem::dataRecipe Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -230,7 +230,7 @@ QVariant BtTreeItem::dataEquipment(int column)
             return QVariant(kit->boilTime_min());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataEquipment Bad column: %1").arg(column));
+         Brewtarget::logW( QString("BtTreeItem::dataEquipment Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -254,7 +254,7 @@ QVariant BtTreeItem::dataFermentable(int column)
             return QVariant(ferm->color_srm());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataFermentable Bad column: %1").arg(column));
+         Brewtarget::logW( QString("BtTreeItem::dataFermentable Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -278,7 +278,7 @@ QVariant BtTreeItem::dataHop(int column)
             return QVariant(hop->useStringTr());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataHop Bad column: %1").arg(column));
+         Brewtarget::logW( QString("BtTreeItem::dataHop Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -302,7 +302,7 @@ QVariant BtTreeItem::dataMisc(int column)
             return QVariant(misc->useStringTr());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataMisc Bad column: %1").arg(column));
+         Brewtarget::logW( QString("BtTreeItem::dataMisc Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -326,7 +326,7 @@ QVariant BtTreeItem::dataYeast(int column)
             return QVariant(yeast->formStringTr());
          break;
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataYeast Bad column: %1").arg(column));
+         Brewtarget::logW( QString("BtTreeItem::dataYeast Bad column: %1").arg(column));
    }
    return QVariant();
 }
@@ -364,7 +364,7 @@ QVariant BtTreeItem::dataStyle(int column)
          case STYLEGUIDECOL:
                return QVariant(style->styleGuide());
          default :
-            Brewtarget::log(Brewtarget::WARNING, QString("BtTreeItem::dataStyle Bad column: %1").arg(column));
+            Brewtarget::logW( QString("BtTreeItem::dataStyle Bad column: %1").arg(column));
       }
    }
    return QVariant();

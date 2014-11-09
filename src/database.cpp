@@ -3437,7 +3437,7 @@ void Database::fromXml(BeerXMLElement* element, QHash<QString,QString> const& xm
    {
       if( ! node.isElement() )
       {
-         Brewtarget::log(Brewtarget::WARNING, QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
+         Brewtarget::logW( QString("Node at line %1 is not an element.").arg(textNode.lineNumber()) );
          continue;
       }
       

@@ -240,7 +240,7 @@ QVariant MiscTableModel::data( const QModelIndex& index, int role ) const
          else
             return QVariant();
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("Bad model index. column = %1").arg(index.column()));
+         Brewtarget::logW(QString("Bad model index. column = %1").arg(index.column()));
    }
    return QVariant();
 }

@@ -253,7 +253,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)hopObs.size() )
    {
-      Brewtarget::log(Brewtarget::WARNING, QString("Bad model index. row = %1").arg(index.row()));
+      Brewtarget::logW(QString("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -307,7 +307,7 @@ QVariant HopTableModel::data( const QModelIndex& index, int role ) const
         else
            return QVariant();
       default :
-         Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::data Bad column: %1").arg(index.column()));
+         Brewtarget::logW(QString("HopTableModel::data Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -333,7 +333,7 @@ QVariant HopTableModel::headerData( int section, Qt::Orientation orientation, in
          case HOPFORMCOL:
             return QVariant(tr("Form"));
          default:
-            Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::headerdata Bad column: %1").arg(section));
+            Brewtarget::logW(QString("HopTableModel::headerdata Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -436,7 +436,7 @@ bool HopTableModel::setData( const QModelIndex& index, const QVariant& value, in
          else
             return false;
       default:
-         Brewtarget::log(Brewtarget::WARNING, QString("HopTableModel::setdata Bad column: %1").arg(index.column()));
+         Brewtarget::logW(QString("HopTableModel::setdata Bad column: %1").arg(index.column()));
          return false;
    }
 }

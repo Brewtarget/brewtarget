@@ -352,7 +352,7 @@ QVariant BtTreeModel::recipeHeader(int section) const
       return QVariant(tr("Style"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getRecipeHeader Bad column: %1").arg(section));
+   Brewtarget::logW( QString("BtTreeModel::getRecipeHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
@@ -366,7 +366,7 @@ QVariant BtTreeModel::equipmentHeader(int section) const
       return QVariant(tr("Boil Time"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getEquipmentHeader Bad column: %1").arg(section));
+   Brewtarget::logW( QString("BtTreeModel::getEquipmentHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
@@ -382,7 +382,7 @@ QVariant BtTreeModel::fermentableHeader(int section) const
       return QVariant(tr("Type"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getFermentableHeader Bad column: %1").arg(section));
+   Brewtarget::logW( QString("BtTreeModel::getFermentableHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
@@ -398,7 +398,7 @@ QVariant BtTreeModel::hopHeader(int section) const
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getHopHeader Bad column: %1").arg(section));
+   Brewtarget::logW( QString("BtTreeModel::getHopHeader Bad column: %1").arg(section));
    return QVariant();
 }
 
@@ -414,7 +414,7 @@ QVariant BtTreeModel::miscHeader(int section) const
       return QVariant(tr("Use"));
    }
 
-   Brewtarget::log(Brewtarget::WARNING, QString("BtTreeModel::getMiscHeader Bad column: %1").arg(section));
+   Brewtarget::logW( QString("BtTreeModel::getMiscHeader Bad column: %1").arg(section));
    return QVariant();
 }
 

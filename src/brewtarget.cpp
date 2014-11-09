@@ -574,9 +574,9 @@ void Brewtarget::log(LogType lt, QString message)
 {
    QString m;
    
-   if( lt == WARNING )
+   if( lt == LogType_WARNING )
       m = QString("WARNING: %1").arg(message);
-   else if( lt == ERROR )
+   else if( lt == LogType_ERROR )
       m = QString("ERROR: %1").arg(message);
    else
       m = message;
@@ -594,12 +594,12 @@ void Brewtarget::log(LogType lt, QString message)
 
 void Brewtarget::logE( QString message )
 {
-   log( ERROR, message );
+   log( LogType_ERROR, message );
 }
 
 void Brewtarget::logW( QString message )
 {
-   log( WARNING, message );
+   log( LogType_WARNING, message );
 }
 
 // Displays "amount" of units "units" in the proper format.
@@ -773,13 +773,13 @@ void Brewtarget::convertPersistentOptions()
    if( ! xmlFile.open(QIODevice::ReadOnly) )
    {
       // Now we know we can't open it.
-      log(WARNING, QString("Could not open %1 for reading.").arg(xmlFile.fileName()));
+      logW(QString("Could not open %1 for reading.").arg(xmlFile.fileName()));
       // Try changing the permissions
       return;
    }
 
    if( ! optionsDoc->setContent(&xmlFile, false, &err, &line, &col) )
-      log(WARNING, QString("Bad document formatting in %1 %2:%3").arg(xmlFile.fileName()).arg(line).arg(col));
+      logW(QString("Bad document formatting in %1 %2:%3").arg(xmlFile.fileName()).arg(line).arg(col));
 
    root = optionsDoc->documentElement();
 
@@ -872,7 +872,7 @@ void Brewtarget::convertPersistentOptions()
          ibuFormula = RAGER;
       else
       {
-         Brewtarget::log(Brewtarget::ERROR, QString("Bad ibu_formula type: %1").arg(text));
+         Brewtarget::logE(QString("Bad ibu_formula type: %1").arg(text));
       }
    }
 
@@ -888,7 +888,7 @@ void Brewtarget::convertPersistentOptions()
          colorFormula = MOSHER;
       else
       {
-         Brewtarget::log(Brewtarget::ERROR, QString("Bad color_formula type: %1").arg(text));
+         Brewtarget::logE(QString("Bad color_formula type: %1").arg(text));
       }
    }
 
@@ -1019,7 +1019,7 @@ void Brewtarget::readSystemOptions()
       ibuFormula = RAGER;
    else
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Bad ibu_formula type: %1").arg(text));
+      Brewtarget::logE(QString("Bad ibu_formula type: %1").arg(text));
    }
 
    //========================Color======================
@@ -1032,7 +1032,7 @@ void Brewtarget::readSystemOptions()
       colorFormula = MOSHER;
    else
    {
-      Brewtarget::log(Brewtarget::ERROR, QString("Bad color_formula type: %1").arg(text));
+      Brewtarget::logE(QString("Bad color_formula type: %1").arg(text));
    }
 
    //========================Gravity==================

@@ -197,7 +197,7 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)waterObs.size() )
    {
-      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
+      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -226,7 +226,7 @@ QVariant WaterTableModel::data( const QModelIndex& index, int role ) const
       case WATERMAGNESIUMCOL:
          return QVariant( Brewtarget::displayAmount(row->magnesium_ppm(), 0) );
       default :
-         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
+         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
@@ -254,7 +254,7 @@ QVariant WaterTableModel::headerData( int section, Qt::Orientation orientation, 
          case WATERMAGNESIUMCOL:
             return QVariant(tr("Magnesium (ppm)"));
          default:
-            Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(section));
+            Brewtarget::logW(tr("Bad column: %1").arg(section));
             return QVariant();
       }
    }
@@ -351,7 +351,7 @@ bool WaterTableModel::setData( const QModelIndex& index, const QVariant& value, 
          else
             return false;
       default:
-         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
+         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return false;
    }
 }

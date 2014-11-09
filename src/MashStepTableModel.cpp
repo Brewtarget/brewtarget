@@ -133,7 +133,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
    // Ensure the row is ok.
    if( index.row() >= (int)(steps.size()) )
    {
-      Brewtarget::log(Brewtarget::WARNING, tr("Bad model index. row = %1").arg(index.row()));
+      Brewtarget::logW(tr("Bad model index. row = %1").arg(index.row()));
       return QVariant();
    }
    else
@@ -168,7 +168,7 @@ QVariant MashStepTableModel::data( const QModelIndex& index, int role ) const
       case MASHSTEPTIMECOL:
          return QVariant( Brewtarget::displayAmount(row->stepTime_min(), Units::minutes) );
       default :
-         Brewtarget::log(Brewtarget::WARNING, tr("Bad column: %1").arg(index.column()));
+         Brewtarget::logW(tr("Bad column: %1").arg(index.column()));
          return QVariant();
    }
 }
