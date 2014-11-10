@@ -20,22 +20,15 @@
  */
 
 #ifndef _TIMERWIDGET_H
-#define   _TIMERWIDGET_H
-
-class TimerWidget;
+#define _TIMERWIDGET_H
 
 #include "ui_timerWidget.h"
 #include <QWidget>
 #include <QTimer>
 #include <QString>
 #include <QPalette>
-
-#if !defined(NO_PHONON)
-
- #include <phonon/mediaobject.h>
- #include <phonon/audiooutput.h>
-
-#endif
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 /*!
  * \class TimerWidget
@@ -63,12 +56,6 @@ public slots:
    void flash();
    void getSound();
 
-private slots:
-   /*!
-    * Puts another copy of the file on queue to be played.
-    */
-   void doReplay(qint32 msecToEnd);
-
 signals:
    void timerDone();
    void timerSet(QString text);
@@ -84,12 +71,8 @@ private:
    QTimer* timer;
    QTimer* flashTimer;
    QPalette paletteOld, paletteNew;
-   #if !defined(NO_PHONON)
-
-    Phonon::MediaObject *mediaObject;
-    Phonon::AudioOutput *audioOutput;
-
-   #endif
+   QMediaPlayer* mediaPlayer;
+   QMediaPlaylist* playlist;
    bool oldColors;
 };
 

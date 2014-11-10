@@ -387,6 +387,7 @@ ENDIF()
 
 QT5_USE_MODULES( ${brewtarget_EXECUTABLE}
    Widgets
+   Multimedia
    Network
    PrintSupport
    Qml
@@ -395,13 +396,6 @@ QT5_USE_MODULES( ${brewtarget_EXECUTABLE}
    WebKit
    WebKitWidgets
 )
-
-TARGET_LINK_LIBRARIES(
-   ${brewtarget_EXECUTABLE}
-   ${PHONON_LIBRARIES}
-)
-MESSAGE( STATUS "Libraries: ${Qt5Widgets_LIBRARIES} ${Qt5Network_LIBRARIES} ${Qt5PrintSupport_LIBRARIES} ${Qt5Qml_LIBRARIES} ${Qt5Sql_LIBRARIES}  ${Qt5Xml_LIBRARIES} ${Qt5WebKit_LIBRARIES} ${PHONON_LIBRARIES}" )
-
 
 #=================================Tests========================================
 
@@ -416,6 +410,7 @@ ADD_EXECUTABLE(
 QT5_USE_MODULES(
    brewtarget_tests
    Widgets
+   Multimedia
    Network
    PrintSupport
    Qml
@@ -425,10 +420,7 @@ QT5_USE_MODULES(
    WebKitWidgets
    Test
 )
-TARGET_LINK_LIBRARIES(
-   brewtarget_tests
-   ${PHONON_LIBRARIES}
-)
+
 ADD_TEST(
    NAME test
    COMMAND brewtarget_tests

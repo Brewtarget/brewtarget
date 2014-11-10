@@ -41,33 +41,22 @@ TimerWidget::TimerWidget(QWidget* parent)
      flashTimer(new QTimer(this)),
      paletteOld(),
      paletteNew(),
-#if !defined(NO_PHONON)
-     mediaObject(new Phonon::MediaObject(this)),
-     audioOutput(new Phonon::AudioOutput(Phonon::MusicCategory, this)),
-#endif
+     mediaPlayer(new QMediaPlayer(this)),
+     playlist(new QMediaPlaylist(mediaPlayer)),
      oldColors(true)
 {
    setupUi(this);
 
-   timer->setInterval(1000); // One second between timeouts.
+   // One second between timeouts.
+   timer->setInterval(1000);
    flashTimer->setInterval(500);
 
    // PlaceholderText only exists in Qt 4.7 or greater.
    //lineEdit->setPlaceholderText( tr("HH:MM:SS") );
 
-#if !defined(NO_PHONON)
-
-   mediaObject->setTransitionTime(0);
-   mediaObject->setPrefinishMark(10); // 10 ms.
-   Phonon::createPath(mediaObject, audioOutput);
-
-   // The following signal is emitted when we are almost at the end of the sound.
-   // The slot re-queues the same song, so we get a loop. 
-   // This needs to be inside the ifdef -- connecting the mediaObject outside
-   // causes a compile error
-   connect( mediaObject, SIGNAL(prefinishMarkReached(qint32)), this, SLOT(doReplay(qint32)) );
-   
-#endif
+   playlist->setPlaybackMode(QMediaPlaylist::Loop);
+   mediaPlayer->setVolume(100);
+   mediaPlayer->setPlaylist(playlist);
 
    paletteOld = lcdNumber->palette();
    paletteNew = QPalette(paletteOld);
@@ -87,28 +76,30 @@ TimerWidget::TimerWidget(QWidget* parent)
 
 TimerWidget::~TimerWidget()
 {
-}
-
-void TimerWidget::doReplay(qint32 /*msecToEnd*/)
-{
-   #if !defined(NO_PHONON)
-     mediaObject->enqueue( mediaObject->currentSource() );
-   #endif
+   mediaPlayer->stop();
+   playlist->clear();
 }
 
 void TimerWidget::getSound()
 {
    QDir soundsDir = QString("%1sounds/").arg(Brewtarget::getDataDir());
-
-   #if !defined(NO_PHONON)
    QString soundFile = QFileDialog::getOpenFileName( qobject_cast<QWidget*>(this), tr("Open Sound"), soundsDir.exists() ? soundsDir.canonicalPath() : "", tr("Audio Files (*.wav *.ogg *.mp3 *.aiff)") );
-    if (! soundFile.isNull()) {
-      mediaObject->clearQueue();
-      mediaObject->setCurrentSource(QUrl::fromLocalFile(soundFile));
-      pushButton_sound->setCheckable(true); // indicate a sound is loaded
-      pushButton_sound->setChecked(true);
-    }
-   #endif
+
+   if( soundFile.isNull() )
+   {
+      Brewtarget::logW("Null sound file.");
+      return;
+   }
+
+   if( !playlist->clear() )
+      Brewtarget::logW(playlist->errorString());
+   if( !playlist->addMedia(QUrl::fromLocalFile(soundFile)) )
+      Brewtarget::logW(playlist->errorString());
+   playlist->setCurrentIndex(0);
+
+   // Indicate a sound is loaded
+   pushButton_sound->setCheckable(true);
+   pushButton_sound->setChecked(true);
 }
 
 QString TimerWidget::getTimerValue()
@@ -125,16 +116,12 @@ void TimerWidget::flash()
    else
       lcdNumber->setPalette(paletteNew);
 
-   // Update doesn't repaint when the window is out of focus...
-   //lcdNumber->update();
    lcdNumber->repaint();
 }
 
 void TimerWidget::setTimer()
 {
-   #if !defined(NO_PHONON)
-    mediaObject->stop();
-   #endif
+   mediaPlayer->stop();
    stopFlashing();
 
    setTimer(lineEdit->text());
@@ -153,12 +140,7 @@ void TimerWidget::endTimer()
    timer->stop();
    flashTimer->start();
 
-   #if !defined(NO_PHONON)
-    mediaObject->play();
-   #endif
-
-   //pushButton_startStop->setText("Start");
-   //start = true;
+   mediaPlayer->play();
 }
 
 void TimerWidget::setTimer(QString text)
@@ -228,9 +210,7 @@ void TimerWidget::startStop()
    else
    {
       timer->stop();
-#if !defined(NO_PHONON)
-      mediaObject->stop();
-#endif
+      mediaPlayer->stop();
       stopFlashing();
       pushButton_startStop->setText(tr("Start"));
       start = true;

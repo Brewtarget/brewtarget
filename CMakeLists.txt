@@ -22,12 +22,6 @@ OPTION( BUILD_DESIGNER_PLUGINS
 OPTION( DO_RELEASE_BUILD
         "If on, will do a release build. Otherwise, debug build."
         OFF )
-OPTION( ENABLE_PROFILING
-        "If on, builds with necessary profiling options."
-        OFF )
-OPTION( NO_PHONON
-        "If on, does not build any Phonon code."
-        OFF )
 OPTION( NO_MESSING_WITH_FLAGS
         "On means do not add any build flags whatsoever. May override other options."
         OFF )
@@ -47,14 +41,6 @@ IF( NOT ${NO_MESSING_WITH_FLAGS} )
       SET( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -pipe" )
       SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pipe" )
    ENDIF()
-
-   IF( ${ENABLE_PROFILING} )
-      SET( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -pg" )
-   ENDIF()
-ENDIF()
-
-IF( ${NO_PHONON} )
-   ADD_DEFINITIONS( -DNO_PHONON )
 ENDIF()
 
 IF( ${DO_RELEASE_BUILD} )
@@ -128,6 +114,9 @@ INCLUDE_DIRECTORIES(${Qt5WebKitWidgets_INCLUDE_DIRS})
 FIND_PACKAGE(Qt5Xml REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Xml_INCLUDE_DIRS})
 
+FIND_PACKAGE(Qt5Multimedia REQUIRED)
+INCLUDE_DIRECTORIES(${Qt5Multimedia_INCLUDE_DIRS})
+
 FIND_PACKAGE(Qt5Test REQUIRED)
 INCLUDE_DIRECTORIES(${Qt5Test_INCLUDE_DIRS})
 
@@ -157,12 +146,6 @@ ENDIF()
 #ENDIF()
 
 MESSAGE( STATUS "CMAKE_SYSTEM_INCLUDE_PATH: ${CMAKE_SYSTEM_INCLUDE_PATH}" )
-
-# Find Phonon.
-IF( NOT ${NO_PHONON} )
-   FIND_PACKAGE(Phonon4Qt5 REQUIRED)
-   INCLUDE_DIRECTORIES(${PHONON_INCLUDES})
-ENDIF()
 
 # Some extra files for the "make clean" target.
 SET_PROPERTY(
@@ -312,35 +295,36 @@ SET( TRANSLATIONS_FILES
 SET( RCFILE ${WINDIR}/icon.rc )
 
 SET( brewtarget_SOUNDS
-     ${DATADIR}/sounds/45minLeft.mp3
-     ${DATADIR}/sounds/addFuckinHops.mp3
-     ${DATADIR}/sounds/aromaHops.mp3
-     ${DATADIR}/sounds/bitteringHops.mp3
-     ${DATADIR}/sounds/checkBoil.mp3
-     ${DATADIR}/sounds/checkFirstRunnings.mp3
-     ${DATADIR}/sounds/checkGravity.mp3
-     ${DATADIR}/sounds/checkHydrometer.mp3
-     ${DATADIR}/sounds/checkMashTemps.mp3
-     ${DATADIR}/sounds/checkTemp.mp3
-     ${DATADIR}/sounds/clarifyingAgent.mp3
-     ${DATADIR}/sounds/cleanup.mp3
-     ${DATADIR}/sounds/closeFuckinValves.mp3
-     ${DATADIR}/sounds/closeValves.mp3
-     ${DATADIR}/sounds/doughIn.mp3
-     ${DATADIR}/sounds/drinkAnotherHomebrew.mp3
-     ${DATADIR}/sounds/drinkHomebrew.mp3
-     ${DATADIR}/sounds/emptyMashTun.mp3
-     ${DATADIR}/sounds/extraPropane.mp3
-     ${DATADIR}/sounds/flameout.mp3
-     ${DATADIR}/sounds/flavorHops.mp3
-     ${DATADIR}/sounds/heatWater.mp3
-     ${DATADIR}/sounds/mashHops.mp3
-     ${DATADIR}/sounds/pitchYeast.mp3
-     ${DATADIR}/sounds/sanitize.mp3
-     ${DATADIR}/sounds/sparge.mp3
-     ${DATADIR}/sounds/startBurner.mp3
-     ${DATADIR}/sounds/startChill.mp3
-     ${DATADIR}/sounds/stirMash.mp3
+     ${DATADIR}/sounds/45minLeft.ogg
+     ${DATADIR}/sounds/addFuckinHops.ogg
+     ${DATADIR}/sounds/aromaHops.ogg
+     ${DATADIR}/sounds/beep.ogg
+     ${DATADIR}/sounds/bitteringHops.ogg
+     ${DATADIR}/sounds/checkBoil.ogg
+     ${DATADIR}/sounds/checkFirstRunnings.ogg
+     ${DATADIR}/sounds/checkGravity.ogg
+     ${DATADIR}/sounds/checkHydrometer.ogg
+     ${DATADIR}/sounds/checkMashTemps.ogg
+     ${DATADIR}/sounds/checkTemp.ogg
+     ${DATADIR}/sounds/clarifyingAgent.ogg
+     ${DATADIR}/sounds/cleanup.ogg
+     ${DATADIR}/sounds/closeFuckinValves.ogg
+     ${DATADIR}/sounds/closeValves.ogg
+     ${DATADIR}/sounds/doughIn.ogg
+     ${DATADIR}/sounds/drinkAnotherHomebrew.ogg
+     ${DATADIR}/sounds/drinkHomebrew.ogg
+     ${DATADIR}/sounds/emptyMashTun.ogg
+     ${DATADIR}/sounds/extraPropane.ogg
+     ${DATADIR}/sounds/flameout.ogg
+     ${DATADIR}/sounds/flavorHops.ogg
+     ${DATADIR}/sounds/heatWater.ogg
+     ${DATADIR}/sounds/mashHops.ogg
+     ${DATADIR}/sounds/pitchYeast.ogg
+     ${DATADIR}/sounds/sanitize.ogg
+     ${DATADIR}/sounds/sparge.ogg
+     ${DATADIR}/sounds/startBurner.ogg
+     ${DATADIR}/sounds/startChill.ogg
+     ${DATADIR}/sounds/stirMash.ogg
 )
 
 SET( brewtarget_INFO_PLIST "${ROOTDIR}/mac/Info.plist" )
@@ -371,7 +355,6 @@ IF( WIN32 )
    GET_TARGET_PROPERTY(QtQsvgIcon_location Qt5::QSvgIconPlugin LOCATION)
 
    SET( Qt_DLLs
-        #${QT_BINARY_DIR}/phonon4.dll
         ${QtCore_location}
         ${QtWidgets_location}
         ${QtNetwork_location}
@@ -383,9 +366,6 @@ IF( WIN32 )
    )
    SET( SQL_Drivers_DLLs
         ${QtSqliteDriver_location}
-   )
-   SET( Phonon_Backend_DLLs
-        #${QT_PLUGINS_DIR}/phonon_backend/phonon_ds94.dll
    )
    SET( Image_Formats_DLLs
         ${QtQgif_location}
@@ -553,8 +533,6 @@ IF( NOT ${BUILD_DESIGNER_PLUGINS} )
                DESTINATION "bin" )
       INSTALL( FILES ${SQL_Drivers_DLLs}
                DESTINATION "bin/sqldrivers" )
-      INSTALL( FILES ${Phonon_Backend_DLLs}
-               DESTINATION "bin/phonon_backend" )
       INSTALL( FILES ${Image_Formats_DLLs}
                DESTINATION "bin/imageformats" )
       INSTALL( FILES ${Icon_Engines_DLLs}
