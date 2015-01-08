@@ -354,17 +354,17 @@ typedef signed short int16_t;
 # define INT32_MIN INT32_C(0x80000000)
 #endif
 #ifndef int32_t
-#if ((LONG_MAX == INT32_MAX) || defined (S_SPLINT_S)) && ! defined(__FreeBSD__)
-typedef signed long int32_t;
-# define INT32_C(v) v ## L
-# ifndef PRINTF_INT32_MODIFIER
-#  define PRINTF_INT32_MODIFIER "l"
-# endif
-#elif (INT_MAX == INT32_MAX)
+#if (INT_MAX == INT32_MAX)
 typedef signed int int32_t;
 # define INT32_C(v) v
 # ifndef PRINTF_INT32_MODIFIER
 #  define PRINTF_INT32_MODIFIER ""
+# endif
+#elif ((LONG_MAX == INT32_MAX) || defined (S_SPLINT_S)) && ! defined(__FreeBSD__)
+typedef signed long int32_t;
+# define INT32_C(v) v ## L
+# ifndef PRINTF_INT32_MODIFIER
+#  define PRINTF_INT32_MODIFIER "l"
 # endif
 #elif (SHRT_MAX == INT32_MAX)
 typedef signed short int32_t;
