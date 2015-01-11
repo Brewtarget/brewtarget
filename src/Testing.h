@@ -27,6 +27,7 @@
 #include <QDir>
 
 #include "brewtarget.h"
+#include "pstdint.h"
 //#include "MainWindow.h"
 //#include "recipe.h"
 
@@ -72,6 +73,24 @@ private slots:
       Brewtarget::cleanup();
    }
    
+   //! \brief Verify pstdint.h is sane
+   void pstdintTest()
+   {
+      QVERIFY( sizeof(int8_t) == 1 );
+      QVERIFY( sizeof(int16_t) == 2 );
+      QVERIFY( sizeof(int32_t) == 4 );
+#ifdef stdint_int64_defined
+      QVERIFY( sizeof(int64_t) == 8 );
+#endif
+
+      QVERIFY( sizeof(uint8_t) == 1 );
+      QVERIFY( sizeof(uint16_t) == 2 );
+      QVERIFY( sizeof(uint32_t) == 4 );
+#ifdef stdint_int64_defined
+      QVERIFY( sizeof(uint64_t) == 8 );
+#endif
+   }
+
    //! \brief Unit test: verify brewtarget runs
    void runTest()
    {
