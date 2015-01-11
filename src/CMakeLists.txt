@@ -169,7 +169,6 @@ SET( brewtarget_SRCS
 # TODO: can I somehow have a separate CMakeLists.txt
 # in the ui/ directory instead of here?
 SET( brewtarget_UIS
-    ${UIDIR}/aboutDialog.ui
     ${UIDIR}/brewDayWidget.ui
     ${UIDIR}/brewDayScrollWidget.ui
     ${UIDIR}/brewNoteWidget.ui
