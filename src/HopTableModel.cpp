@@ -553,10 +553,9 @@ void HopTableModel::contextMenu(const QPoint &point)
 }
 
 // Returns null on failure.
-Hop* HopTableModel::getHop(unsigned int i){
-    //std::cerr << "HopTableModel::getHop( " << i << "/" << hopObs.size()  << " )" << std::endl;
-    if(!(hopObs.isEmpty())){
-        if(static_cast<int>(i) < hopObs.size())
+Hop* HopTableModel::getHop(int i) {
+    if(!(hopObs.isEmpty())) {
+        if(i >= 0 && i < hopObs.size())
             return hopObs[i];
     }
     else

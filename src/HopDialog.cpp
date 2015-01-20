@@ -59,18 +59,25 @@ HopDialog::HopDialog(MainWindow* parent)
 
 void HopDialog::removeHop()
 {
-    QModelIndex modelIndex, viewIndex;
-    QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
-    // Qlist requires this check before using member functions per doc
-    if(!(selected.isEmpty())){
-    // Make sure only one row is selected.
-        if(selected.size() == 1){
-            viewIndex = selected[0]; // [] or .at() prefered to .value()
-        }
-    }
-    modelIndex = hopTableProxy->mapToSource(viewIndex);
-    Hop *hop = hopTableModel->getHop(modelIndex.row());
-    Database::instance().remove(hop);
+   QModelIndex modelIndex, viewIndex;
+   QModelIndexList selected = hopTableWidget->selectionModel()->selectedIndexes();
+   int row, size, i;
+
+   size = selected.size();
+   if (size == 0)
+      return;
+
+   // Make sure only one row is selected.
+   row = selected[0].row();
+   for (i = 1; i < size; ++i)
+   {
+      if (selected[i].row() != row)
+         return;
+   }
+   modelIndex = hopTableProxy->mapToSource(selected[0]);
+   Hop *hop = hopTableModel->getHop(modelIndex.row());
+   if (hop)
+      Database::instance().remove(hop);
 }
 
 void HopDialog::addHop(const QModelIndex& index)

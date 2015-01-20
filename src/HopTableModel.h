@@ -62,7 +62,7 @@ public:
    //! \brief Watch all the \c hops for changes.
    void addHops(QList<Hop*> hops);
    //! \brief Return the \c i-th hop in the model.
-   Hop* getHop(unsigned int i);
+   Hop* getHop(int i);
    //! \brief Clear the model.
    void removeAll();
    
