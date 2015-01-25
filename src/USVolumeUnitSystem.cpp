@@ -30,12 +30,12 @@ USVolumeUnitSystem::USVolumeUnitSystem()
 
 void USVolumeUnitSystem::loadMap()
 {
-   scaleToUnit.insert(extrasmall,Units::us_teaspoons);
-   scaleToUnit.insert(small,Units::us_tablespoons);
-   scaleToUnit.insert(medium,Units::us_cups);
-   scaleToUnit.insert(large,Units::us_quarts);
-   scaleToUnit.insert(extralarge,Units::us_gallons);
-   scaleToUnit.insert(huge,Units::us_barrels);
+   scaleToUnit.insert(scaleExtraSmall,Units::us_teaspoons);
+   scaleToUnit.insert(scaleSmall,Units::us_tablespoons);
+   scaleToUnit.insert(scaleMedium,Units::us_cups);
+   scaleToUnit.insert(scaleLarge,Units::us_quarts);
+   scaleToUnit.insert(scaleExtraLarge,Units::us_gallons);
+   scaleToUnit.insert(scaleHuge,Units::us_barrels);
 }
 
 Unit* USVolumeUnitSystem::thicknessUnit()

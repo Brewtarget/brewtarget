@@ -31,9 +31,9 @@ SIWeightUnitSystem::SIWeightUnitSystem()
 
 void SIWeightUnitSystem::loadMap()
 {
-   scaleToUnit.insert(extrasmall,Units::milligrams);
-   scaleToUnit.insert(small, Units::grams);
-   scaleToUnit.insert(medium, Units::kilograms);
+   scaleToUnit.insert(scaleExtraSmall,Units::milligrams);
+   scaleToUnit.insert(scaleSmall, Units::grams);
+   scaleToUnit.insert(scaleMedium, Units::kilograms);
 }
 
 Unit* SIWeightUnitSystem::thicknessUnit()

@@ -30,10 +30,10 @@ TimeUnitSystem::TimeUnitSystem()
 
 void TimeUnitSystem::loadMap()
 {
-   scaleToUnit.insert(extrasmall,Units::seconds);
-   scaleToUnit.insert(small,Units::minutes);
-   scaleToUnit.insert(medium,Units::hours);
-   scaleToUnit.insert(large,Units::days);
+   scaleToUnit.insert(scaleExtraSmall,Units::seconds);
+   scaleToUnit.insert(scaleSmall,Units::minutes);
+   scaleToUnit.insert(scaleMedium,Units::hours);
+   scaleToUnit.insert(scaleLarge,Units::days);
 }
 
 Unit* TimeUnitSystem::unit() { return Units::minutes; };

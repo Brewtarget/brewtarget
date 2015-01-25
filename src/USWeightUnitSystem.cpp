@@ -32,8 +32,8 @@ USWeightUnitSystem::USWeightUnitSystem()
 void USWeightUnitSystem::loadMap()
 {
 
-   scaleToUnit.insert(extrasmall,Units::ounces);
-   scaleToUnit.insert(small,Units::pounds);
+   scaleToUnit.insert(scaleExtraSmall,Units::ounces);
+   scaleToUnit.insert(scaleSmall,Units::pounds);
 }
 
 Unit* USWeightUnitSystem::thicknessUnit()

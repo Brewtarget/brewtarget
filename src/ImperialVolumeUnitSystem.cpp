@@ -31,12 +31,12 @@ ImperialVolumeUnitSystem::ImperialVolumeUnitSystem()
 
 void ImperialVolumeUnitSystem::loadMap()
 {
-   scaleToUnit.insert(extrasmall,Units::imperial_teaspoons);
-   scaleToUnit.insert(small,Units::imperial_tablespoons);
-   scaleToUnit.insert(medium,Units::imperial_cups);
-   scaleToUnit.insert(large,Units::imperial_quarts);
-   scaleToUnit.insert(extralarge,Units::imperial_gallons);
-   scaleToUnit.insert(huge,Units::imperial_barrels);
+   scaleToUnit.insert(scaleExtraSmall,Units::imperial_teaspoons);
+   scaleToUnit.insert(scaleSmall,Units::imperial_tablespoons);
+   scaleToUnit.insert(scaleMedium,Units::imperial_cups);
+   scaleToUnit.insert(scaleLarge,Units::imperial_quarts);
+   scaleToUnit.insert(scaleExtraLarge,Units::imperial_gallons);
+   scaleToUnit.insert(scaleHuge,Units::imperial_barrels);
 }
 
 Unit* ImperialVolumeUnitSystem::thicknessUnit()

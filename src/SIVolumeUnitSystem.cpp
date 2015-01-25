@@ -31,8 +31,8 @@ SIVolumeUnitSystem::SIVolumeUnitSystem()
 
 void SIVolumeUnitSystem::loadMap()
 {
-   scaleToUnit.insert(extrasmall, Units::milliliters);
-   scaleToUnit.insert(small, Units::liters);
+   scaleToUnit.insert(scaleExtraSmall, Units::milliliters);
+   scaleToUnit.insert(scaleSmall, Units::liters);
 }
 
 Unit* SIVolumeUnitSystem::thicknessUnit()

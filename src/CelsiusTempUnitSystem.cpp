@@ -30,7 +30,7 @@ CelsiusTempUnitSystem::CelsiusTempUnitSystem()
 
 void CelsiusTempUnitSystem::loadMap()
 {
-   scaleToUnit.insert(without,Units::celsius);
+   scaleToUnit.insert(scaleWithout,Units::celsius);
 }
 
 Unit* CelsiusTempUnitSystem::unit() { return Units::celsius; };

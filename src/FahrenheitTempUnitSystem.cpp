@@ -30,7 +30,7 @@ FahrenheitTempUnitSystem::FahrenheitTempUnitSystem()
 
 void FahrenheitTempUnitSystem::loadMap()
 {
-   scaleToUnit.insert(without,Units::fahrenheit);
+   scaleToUnit.insert(scaleWithout,Units::fahrenheit);
 }
 
 Unit* FahrenheitTempUnitSystem::unit() { return Units::fahrenheit; };

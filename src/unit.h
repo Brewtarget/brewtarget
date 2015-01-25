@@ -85,13 +85,13 @@ enum TempScale
 enum unitScale
 {
    noScale = -1,
-   extrasmall = 0,
-   small = 1,
-   medium = 2,
-   large = 3,
-   extralarge = 4,
-   huge = 5,
-   without=1000
+   scaleExtraSmall = 0,
+   scaleSmall = 1,
+   scaleMedium = 2,
+   scaleLarge = 3,
+   scaleExtraLarge = 4,
+   scaleHuge = 5,
+   scaleWithout=1000
 };
 
 enum unitDisplay
