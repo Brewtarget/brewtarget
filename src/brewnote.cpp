@@ -121,10 +121,10 @@ void BrewNote::populateNote(Recipe* parent)
    if ( equip )
       setBoilOff_l( equip->evapRate_lHr() * ( parent->boilTime_min()/60));
 
-   sugars = parent->calcTotalPoints(true);
+   sugars = parent->calcTotalPoints();
    setProjPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
 
-   sugars = parent->calcTotalPoints(false);
+   sugars = parent->calcTotalPoints();
    setProjFermPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
 
    // Out of the gate, we expect projected to be the measured.
@@ -186,10 +186,10 @@ void BrewNote::recalculateEff(Recipe* parent)
 
    QHash<QString,double> sugars;
 
-   sugars = parent->calcTotalPoints(true);
+   sugars = parent->calcTotalPoints();
    setProjPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
 
-   sugars = parent->calcTotalPoints(false);
+   sugars = parent->calcTotalPoints();
    setProjFermPoints(sugars.value("sugar_kg") + sugars.value("sugar_kg_ignoreEfficiency"));
 
    calculateEffIntoBK_pct();

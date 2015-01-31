@@ -307,7 +307,7 @@ public:
    QList<QString> getReagents( QList<Fermentable*> ferms );
    QList<QString> getReagents( QList<MashStep*> msteps );
    QList<QString> getReagents( QList<Hop*> hops, bool firstWort = false );
-   QHash<QString,double> calcTotalPoints(bool preBoil = false);
+   QHash<QString,double> calcTotalPoints();
    
 signals:
    //! \brief Emitted when \c name() changes.

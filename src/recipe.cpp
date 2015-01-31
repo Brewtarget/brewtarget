@@ -1770,12 +1770,14 @@ void Recipe::recalcCalories()
 // other efficiency calculations need access to the maximum theoretical sugars
 // available. The only way I can see of doing that which doesn't suck is to
 // split that calcuation out of recalcOgFg();
-QHash<QString,double> Recipe::calcTotalPoints(bool preBoil)
+QHash<QString,double> Recipe::calcTotalPoints()
 {
    int i;
    double sugar_kg_ignoreEfficiency = 0.0;
    double sugar_kg                  = 0.0;
    double nonFermetableSugars_kg    = 0.0;
+   double lateAddition_kg           = 0.0;
+   double lateAddition_kg_ignoreEff = 0.0;
 
    Fermentable* ferm;
 
@@ -1786,24 +1788,31 @@ QHash<QString,double> Recipe::calcTotalPoints(bool preBoil)
    {
       ferm = ferms[i];
 
-      // skip any non-mashed fermentable if this is for the preboil
-      // calculations
-      if ( preBoil && ! ferm->isMashed() )
-         continue;
       // If we have some sort of non-grain, we have to ignore efficiency.
       if( ferm->isSugar() || ferm->isExtract() )
       {
          sugar_kg_ignoreEfficiency += ferm->equivSucrose_kg();
+
+         if (ferm->addAfterBoil())
+            lateAddition_kg_ignoreEff += ferm->equivSucrose_kg();
+
          if ( !isFermentableSugar(ferm) )
            nonFermetableSugars_kg += ferm->equivSucrose_kg();
       }
       else
+      {
          sugar_kg += ferm->equivSucrose_kg();
+
+         if (ferm->addAfterBoil())
+            lateAddition_kg += ferm->equivSucrose_kg();
+      }
    }   
    
    ret.insert("sugar_kg", sugar_kg);
    ret.insert("nonFermetableSugars_kg", nonFermetableSugars_kg);
    ret.insert("sugar_kg_ignoreEfficiency", sugar_kg_ignoreEfficiency);
+   ret.insert("lateAddition_kg", lateAddition_kg);
+   ret.insert("lateAddition_kg_ignoreEff", lateAddition_kg_ignoreEff);
 
    return ret;
 
@@ -1813,16 +1822,20 @@ void Recipe::recalcBoilGrav()
 {
    double sugar_kg = 0.0;
    double sugar_kg_ignoreEfficiency = 0.0;
+   double lateAddition_kg           = 0.0;
+   double lateAddition_kg_ignoreEff = 0.0;
    double ret;
    QHash<QString,double> sugars;
 
-   sugars = calcTotalPoints(true);
+   sugars = calcTotalPoints();
    sugar_kg = sugars.value("sugar_kg");
    sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
+   lateAddition_kg = sugars.value("ateAddition_kg");
+   lateAddition_kg_ignoreEff = sugars.value("lateAddition_kg_ignoreEff");
    
    // Since the efficiency refers to how much sugar we get into the fermenter,
    // we need to adjust for that here.
-   sugar_kg = (efficiency_pct()/100.0 * sugar_kg + sugar_kg_ignoreEfficiency);
+   sugar_kg = (efficiency_pct()/100.0 * (sugar_kg - lateAddition_kg) + sugar_kg_ignoreEfficiency - lateAddition_kg_ignoreEff);
 
    ret = Algorithms::PlatoToSG_20C20C( Algorithms::getPlato(sugar_kg, boilSize_l()) );
  
@@ -1862,7 +1875,7 @@ void Recipe::recalcOgFg()
    }
 
    // Find out how much sugar we have.
-   sugars = calcTotalPoints(false);
+   sugars = calcTotalPoints();
    sugar_kg                  = sugars.value("sugar_kg");
    sugar_kg_ignoreEfficiency = sugars.value("sugar_kg_ignoreEfficiency");
    nonFermetableSugars_kg    = sugars.value("nonFermetableSugars_kg");
